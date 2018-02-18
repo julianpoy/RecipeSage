@@ -4,11 +4,31 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cors = require('cors');
+var fs = require('fs');
+
+if (fs.existsSync("./config/config.json")) {
+    console.log("config.json found");
+} else {
+    var content = fs.readFileSync('./config/config-template.json');
+    fs.writeFileSync('./config/config.json', content);
+    console.log("config.json initialized");
+}
+var appConfig = require('./config/config.json');
+
+// Database and schemas
+var mongo = require('mongodb');
+var db = require('./models/db');
+var users = require('./models/user');
+var sessions = require('./models/session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+app.options('*', cors());
+app.use(cookieParser());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +40,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+var frontendDir = appConfig.frontendDir || '../Frontend/www';
+app.use(express.static(path.join(__dirname, frontendDir)));
 
 app.use('/', index);
 app.use('/users', users);
