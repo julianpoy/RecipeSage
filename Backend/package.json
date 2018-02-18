@@ -12,9 +12,11 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "jade": "~1.11.0",
+    "moment": "^2.20.1",
     "mongodb": "^3.0.2",
     "mongoose": "^5.0.6",
     "morgan": "~1.9.0",
+    "nodemailer": "^4.4.2",
     "serve-favicon": "~2.4.5"
   }
 }
