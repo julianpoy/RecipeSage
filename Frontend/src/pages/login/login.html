@@ -7,12 +7,40 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>login</ion-title>
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Login</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-list>
 
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="!showLogin">
+      <ion-label floating>Confirm Password</ion-label>
+      <ion-input type="password"></ion-input>
+    </ion-item>
+
+    <div padding>
+    	<button ion-button block (click)="auth()">{{ showLogin ? "Login" : "Signup" }}</button>
+		</div>
+
+		<div>
+    	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Signup instead" : "Login instead" }}</button>
+		</div>
+
+  </ion-list>
 </ion-content>
