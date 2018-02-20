@@ -125,6 +125,8 @@ router.put(
       updatedUser.password = hash;
       updatedUser.salt = salt;
     }
+    
+    updatedUser.updated = Date.now();
 
     var setUser = {
       $set: updatedUser

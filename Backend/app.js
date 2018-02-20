@@ -19,11 +19,15 @@ var appConfig = require('./config/config.json');
 // Database and schemas
 var mongo = require('mongodb');
 var db = require('./models/db');
-var users = require('./models/user');
-var sessions = require('./models/session');
+var userSchema = require('./models/user');
+var sessionSchema = require('./models/session');
+var recipeSchema = require('./models/recipe');
+var labelSchema = require('./models/label');
 
+// Routes
 var index = require('./routes/index');
 var users = require('./routes/users');
+var recipes = require('./routes/recipes');
 
 var app = express();
 
@@ -46,6 +50,7 @@ app.use(express.static(path.join(__dirname, frontendDir)));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/recipes', recipes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

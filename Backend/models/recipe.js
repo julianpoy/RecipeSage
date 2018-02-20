@@ -1,18 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var User = new Schema({
-  name: {
-      type: String
+var Recipe = new Schema({
+  accountId: {
+    type: String
   },
-  email: {
-      type: String
-  },
-  password: {
-      type: String
-  },
-  salt: {
-      type: String
+	title: {
+    type: String
   },
   created: {
     type: Date,
@@ -24,4 +18,4 @@ var User = new Schema({
   }
 });
 
-mongoose.model('User', User);
+mongoose.model('Recipe', Recipe);
