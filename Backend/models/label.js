@@ -9,9 +9,9 @@ var Label = new Schema({
   title: {
     type: String
   },
-  dumps: [{
+  recipes: [{
     type: String,
-    ref: 'Dump'
+    ref: 'Recipe'
   }],
   created: {
     type: Date,

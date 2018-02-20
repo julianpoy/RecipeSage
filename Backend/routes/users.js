@@ -12,7 +12,11 @@ var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 
 /* Log in user */
-router.post('/login', function(req, res, next) {
+router.post(
+  '/login',
+  cors(),
+  function(req, res, next) {
+
   User.findOne({
     email: req.body.email.toLowerCase()
   })
@@ -28,7 +32,7 @@ router.post('/login', function(req, res, next) {
       });
     } else {
       //Hash the requested password and salt
-      var hash = crypto.pbkdf2Sync(req.body.password, user.salt, 10000, 512);
+      var hash = crypto.pbkdf2Sync(req.body.password, user.salt, 10000, 512, 'sha512');
       //Compare to stored hash
       if (hash == user.password) {
         SessionService.generateSession(user._id, 'user', function(token, session) {
@@ -47,8 +51,12 @@ router.post('/login', function(req, res, next) {
   });
 });
 
-/* Join as a user */
-router.post('/join', function(req, res, next) {
+/* Register as a user */
+router.post(
+  '/register',
+  cors(),
+  function(req, res, next) {
+
   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
   if (!emailRegex.test(req.body.email)) {
     res.status(412).json({
@@ -71,7 +79,7 @@ router.post('/join', function(req, res, next) {
         //Create a random salt
         var salt = crypto.randomBytes(128).toString('base64');
         //Create a unique hash from the provided password and salt
-        var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512);
+        var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512, 'sha512');
         //Create a new user with the assembled information
         var newUser = new User({
           email: req.body.email.toLowerCase(),
@@ -121,7 +129,7 @@ router.put(
       //Create a random salt
       var salt = crypto.randomBytes(128).toString('base64');
       //Create a unique hash from the provided password and salt
-      var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512);
+      var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512, 'sha512');
       updatedUser.password = hash;
       updatedUser.salt = salt;
     }

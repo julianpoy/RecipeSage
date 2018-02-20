@@ -1,37 +1,28 @@
-<!--
-  Generated template for the LoginPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
   	<button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Login</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
   <ion-list>
-
     <ion-item>
       <ion-label floating>Email</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input [(ngModel)]="email" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input type="password"></ion-input>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="!showLogin">
       <ion-label floating>Confirm Password</ion-label>
-      <ion-input type="password"></ion-input>
+      <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
 
     <div padding>
@@ -41,6 +32,8 @@
 		<div>
     	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Signup instead" : "Login instead" }}</button>
 		</div>
+		
+		{{ errorMessage }}
 
   </ion-list>
 </ion-content>
