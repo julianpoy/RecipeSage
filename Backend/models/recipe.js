@@ -8,6 +8,33 @@ var Recipe = new Schema({
 	title: {
     type: String
   },
+  description: {
+    type: String
+  },
+  yield: {
+    type: String
+  },
+  activeTime: {
+    type: String
+  },
+  totalTime: {
+    type: String
+  },
+  source: {
+    type: String
+  },
+  url: {
+    type: String
+  },
+  notes: {
+    type: String
+  },
+  ingredients: {
+    type: String
+  },
+  instructions: {
+    type: String
+  },
   created: {
     type: Date,
     default: Date.now

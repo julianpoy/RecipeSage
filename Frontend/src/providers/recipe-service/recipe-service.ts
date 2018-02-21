@@ -1,15 +1,26 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
-/*
-  Generated class for the RecipeServiceProvider provider.
+import { Label } from '../label-service/label-service';
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+export interface Recipe {
+  _id: string;
+  title: string;
+  description: string;
+  yield: string;
+  activeTime: string;
+  totalTime: string;
+  source: string;
+  url: string;
+  notes: string;
+  ingredients: string;
+  instructions: string;
+  labels: Label[];
+}
+
 @Injectable()
 export class RecipeServiceProvider {
 
@@ -33,7 +44,7 @@ export class RecipeServiceProvider {
     };
     
     return this.http
-    .get(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
+    .get<Recipe[]>(this.base + 'recipes/' + this.getTokenQuery(), httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)
@@ -77,7 +88,7 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .delete(this.base + 'recipes/' + data.recipeId + this.getTokenQuery(), data, httpOptions)
+    .delete(this.base + 'recipes/' + data.recipeId + this.getTokenQuery(), httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)

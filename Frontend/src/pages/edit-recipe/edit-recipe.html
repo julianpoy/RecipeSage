@@ -7,12 +7,75 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>editRecipe</ion-title>
+    <ion-title>Recipe Details</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-item>
+    <ion-label floating>Title</ion-label>
+    <ion-input [(ngModel)]="recipe.title" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Description</ion-label>
+    <ion-textarea [(ngModel)]="recipe.description" type="text" value=""></ion-textarea>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Yield</ion-label>
+    <ion-input [(ngModel)]="recipe.yield" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Active Time</ion-label>
+    <ion-input [(ngModel)]="recipe.activeTime" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Total Time</ion-label>
+    <ion-input [(ngModel)]="recipe.totalTime" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Source</ion-label>
+    <ion-input [(ngModel)]="recipe.source" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>URL</ion-label>
+    <ion-input [(ngModel)]="recipe.url" type="text" value=""></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Notes</ion-label>
+    <ion-textarea rows="4" [(ngModel)]="recipe.notes" type="text" value=""></ion-textarea>
+  </ion-item>
+  
+  <!--<div *ngFor="let ingredient of recipe.ingredients; let i = index">-->
+  <!--  <ion-item>-->
+  <!--    <ion-label floating>Quantity</ion-label>-->
+  <!--    <ion-input [(ngModel)]="recipe.ingredients[i]" type="text" value=""></ion-input>-->
+  <!--  </ion-item>-->
+  <!--  <ion-item>-->
+  <!--    <ion-label floating>Title</ion-label>-->
+  <!--    <ion-input [(ngModel)]="recipe.ingredients[i]" type="text" value=""></ion-input>-->
+  <!--  </ion-item>-->
+  <!--</div>-->
+  
+  <ion-item>
+    <ion-label floating>Ingredients</ion-label>
+    <ion-textarea rows="10" [(ngModel)]="recipe.ingredients" type="text" value=""></ion-textarea>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Instructions</ion-label>
+    <ion-textarea rows="10" [(ngModel)]="recipe.instructions" type="text" value=""></ion-textarea>
+  </ion-item>
+  
+  <div padding>
+  	<button ion-button block (click)="save()">{{ recipe._id ? "Save" : "Create" }}</button>
+	</div>
 </ion-content>

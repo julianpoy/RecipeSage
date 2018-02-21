@@ -1,0 +1,70 @@
+<!--
+  Generated template for the RecipePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ recipe.title }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-item>
+      <ion-thumbnail item-start>
+        <img src="https://static01.nyt.com/images/2017/03/24/dining/24COOKING-CLASSICPANCAKES/24COOKING-CLASSICPANCAKES-articleLarge.jpg">
+      </ion-thumbnail>
+      <h2>{{ recipe.title }}</h2>
+      <p>{{ recipe.description }}</p>
+    </ion-item>
+  
+    <!--<ion-card-content>-->
+    <!--  <p>{{ recipe.description }}</p>-->
+    <!--</ion-card-content>-->
+    
+    <ion-item text-wrap>
+      <ion-icon name="book" item-start large></ion-icon>
+      <h2>Ingredients</h2>
+      <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient"></p>
+    </ion-item>
+    
+    <ion-item text-wrap>
+      <ion-label color="primary" floating>Scale</ion-label>
+      <ion-input (input)='setScale($event.target.value)' type="text" value="1"></ion-input>
+    </ion-item>
+    
+    <ion-item text-wrap>
+      <ion-icon name="list" item-start large></ion-icon>
+      <h2>Instructions</h2>
+      <p>
+        {{ recipe.instructions }}
+      </p>
+    </ion-item>
+  
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-left clear small>
+          <ion-icon name="create"></ion-icon>
+          <div>Edit</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-left clear small>
+          <ion-icon name="contact"></ion-icon>
+          <div>Share</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <ion-note>
+          Created on {{ recipe.created }}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  
+  </ion-card>
+</ion-content>

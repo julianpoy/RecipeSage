@@ -40,7 +40,7 @@ router.post(
       });
     } else {
       Label.findOneAndUpdate({
-        user_id: res.locals.session.accountId,
+        accountId: res.locals.session.accountId,
         title: req.body.title
       }, {
         $addToSet: {
@@ -72,7 +72,7 @@ router.get(
   function(req, res, next) {
 
   Label.find({
-    user_id: res.locals.session.accountId
+    accountId: res.locals.session.accountId
   })
   .populate('recipes')
   .exec(function(err, labels) {

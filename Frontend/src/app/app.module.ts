@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
+import { RecipePage } from '../pages/recipe/recipe';
 import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -22,6 +23,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     HomePage,
     ListPage,
     LoginPage,
+    RecipePage,
     EditRecipePage
   ],
   imports: [
@@ -36,6 +38,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     HomePage,
     ListPage,
     LoginPage,
+    RecipePage,
     EditRecipePage
   ],
   providers: [

@@ -1,15 +1,13 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
-/*
-  Generated class for the LabelServiceProvider provider.
+export interface Label {
+  _id: string;
+}
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class LabelServiceProvider {
   
@@ -33,7 +31,7 @@ export class LabelServiceProvider {
     };
     
     return this.http
-    .get(this.base + 'labels/' + this.getTokenQuery(), data, httpOptions)
+    .get(this.base + 'labels/' + this.getTokenQuery(), httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)

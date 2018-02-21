@@ -22,20 +22,29 @@ router.post(
   var session = res.locals.session;
 
   new Recipe({
-    user_id: session.accountId,
-		title: req.body.title
-  }).save(function(err, dump, count) {
+    accountId: session.accountId,
+		title: req.body.title,
+    description: req.body.description,
+    yield: req.body.yield,
+    activeTime: req.body.activeTime,
+    totalTime: req.body.totalTime,
+    source: req.body.source,
+    url: req.body.url,
+    notes: req.body.notes,
+    ingredients: req.body.ingredients,
+    instructions: req.body.instructions
+  }).save(function(err, recipe) {
     if (err) {
       res.status(500).send("Error saving the recipe!");
     } else {
-      dump = dump.toObject();
-      dump.labels = [];
-      res.status(201).json(dump);
+      recipe = recipe.toObject();
+      recipe.labels = [];
+      res.status(201).json(recipe);
     }
   });
 });
 
-//Get all of a user's links
+//Get all of a user's recipes
 router.get(
   '/',
   cors(),
@@ -44,10 +53,10 @@ router.get(
   function(req, res, next) {
 
   Recipe.find({
-    user_id: res.locals.session.accountId
+    accountId: res.locals.session.accountId
   }).sort('title').lean().exec(function(err, recipes) {
     if (err) {
-      res.status(500).send("Couldn't search the database for dumps!");
+      res.status(500).send("Couldn't search the database for recipes!");
     } else {
       
       var labelPromises = [];
@@ -80,7 +89,7 @@ router.get(
 });
 
 
-//Update a link
+//Update a recipe
 router.put(
   '/:id',
   cors(),
@@ -90,7 +99,7 @@ router.put(
   
   Recipe.findOne({
     _id: req.params.id,
-    user_id: res.locals.session.accountId
+    accountId: res.locals.session.accountId
   }, function(err, recipe) {
     if (err) {
       res.status(500).json({
@@ -101,7 +110,17 @@ router.put(
         msg: "Recipe with that ID does not exist!"
       });
     } else {
-      recipe.title = req.body.title;
+      if (typeof req.body.title === 'string') recipe.title = req.body.title;
+      if (typeof req.body.description === 'string') recipe.description = req.body.description;
+      if (typeof req.body.yield === 'string') recipe.yield = req.body.yield;
+      if (typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
+      if (typeof req.body.totalTime === 'string') recipe.totalTime = req.body.totalTime;
+      if (typeof req.body.source === 'string') recipe.source = req.body.source;
+      if (typeof req.body.url === 'string') recipe.url = req.body.url;
+      if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
+      if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
+      if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+
       recipe.updated = Date.now();
 
       recipe.save(function(err, recipe) {
@@ -119,7 +138,7 @@ router.delete('/:id', function(req, res) {
   
   Recipe.findOne({
     _id: req.params.id,
-    user_id: res.locals.session.accountId
+    accountId: res.locals.session.accountId
   }, function(err, recipe) {
     if (err) {
       res.status(500).send({
@@ -137,8 +156,8 @@ router.delete('/:id', function(req, res) {
           });
         } else {
           Label.find({
-            user_id: res.locals.session.accountId,
-            dumps: req.params.id
+            accountId: res.locals.session.accountId,
+            recipes: req.params.id
           }).select("_id").lean().exec(function(err, labels) {
             if (err) {
               res.status(500).json({
@@ -156,7 +175,7 @@ router.delete('/:id', function(req, res) {
                   Label.findByIdAndUpdate(
                     label._id, {
                       $pull: {
-                        dumps: recipe._id
+                        recipes: recipe._id
                       }
                     }, {
                       new: true
@@ -164,7 +183,7 @@ router.delete('/:id', function(req, res) {
                     if (err) {
                       reject(500, "Couldn't search the database for labels during delete!");
                     } else {
-                      if (label.dumps.length == 0) {
+                      if (label.recipes.length == 0) {
                         label.remove(function(err, label) {
                           if (err) {
                             reject("Couldn't delete empty label!");
