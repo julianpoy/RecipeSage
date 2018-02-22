@@ -1,16 +1,10 @@
-<!--
-  Generated template for the EditRecipePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Recipe Details</ion-title>
+    <ion-title>{{ recipe._id ? 'Edit Recipe' : 'New Recipe' }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -72,6 +66,11 @@
     <ion-textarea rows="4" [(ngModel)]="recipe.notes" type="text" value=""></ion-textarea>
   </ion-item>
   
+  <br />
+  
+  <ion-item *ngIf="!recipe._id" text-wrap>
+    <p>You'll be able to add categories/labels after the recipe is created.</p>
+  </ion-item>
   <div padding>
   	<button ion-button block (click)="save()">{{ recipe._id ? "Save" : "Create" }}</button>
 	</div>

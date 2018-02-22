@@ -146,6 +146,10 @@ export class RecipePage {
     });
   }
   
+  printRecipe() {
+    window.print();
+  }
+  
   prettyDateTime(datetime) {
     return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
   }

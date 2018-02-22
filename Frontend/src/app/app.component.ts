@@ -30,8 +30,8 @@ export class MyApp {
     ];
 
     var loggedInPages = [
-      { title: 'Recipes', component: HomePage },
-      { title: 'Create Recipe', component: EditRecipePage },
+      { title: 'My Recipes', component: HomePage },
+      { title: 'Add Recipe', component: EditRecipePage },
       { title: 'Logout', component: LoginPage }
     ];
     

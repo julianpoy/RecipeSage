@@ -3,6 +3,7 @@ import { NavController, LoadingController, ToastController } from 'ionic-angular
 
 import { LoginPage } from '../login/login';
 import { RecipePage } from '../recipe/recipe';
+import { EditRecipePage } from '../edit-recipe/edit-recipe';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
@@ -62,5 +63,8 @@ export class HomePage {
       recipe: recipe
     });
   }
-
+  
+  newRecipe() {
+    this.navCtrl.push(EditRecipePage);
+  }
 }

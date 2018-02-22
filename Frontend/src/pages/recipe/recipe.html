@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ recipe.title }}</ion-title>
+    <ion-title>Recipe Details - {{ recipe.title }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -86,7 +86,7 @@
         </button>
       </ion-col>
       <ion-col center text-center>
-        <button ion-button icon-left clear small>
+        <button (click)="printRecipe()" ion-button icon-left clear small>
           <ion-icon name="print"></ion-icon>
           <div>Print</div>
         </button>
