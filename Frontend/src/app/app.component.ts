@@ -20,15 +20,28 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage },
-      { title: 'Login', component: LoginPage },
-      { title: 'Create Recipe', component: EditRecipePage }
+  }
+  
+  navList() {
+    var pages = [];
+    
+    var loggedOutPages = [
+      { title: 'Login', component: LoginPage }
     ];
 
+    var loggedInPages = [
+      { title: 'Recipes', component: HomePage },
+      { title: 'Create Recipe', component: EditRecipePage },
+      { title: 'Logout', component: LoginPage }
+    ];
+    
+    if (localStorage.getItem('token')) {
+      pages = pages.concat(loggedInPages);
+    } else {
+      pages = pages.concat(loggedOutPages);
+    }
+
+    return pages;
   }
 
   initializeApp() {

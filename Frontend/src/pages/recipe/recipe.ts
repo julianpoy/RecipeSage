@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController } from 'ionic-angular';
 
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
 import { HomePage } from '../home/home';
@@ -31,6 +31,7 @@ export class RecipePage {
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider) {
@@ -128,10 +129,18 @@ export class RecipePage {
       loading.dismiss();
       switch(err.status) {
         case 404:
-          me.errorMessage = 'Can\'t find the recipe you\'re trying to delete.';
+          let errorToast = me.toastCtrl.create({
+            message: 'Can\'t find the recipe you\'re trying to delete.',
+            duration: 8000
+          });
+          errorToast.present();
           break;
         default:
-          me.errorMessage = 'An unexpected error occured. Please try again.';
+          let errorToast = me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 8000
+          });
+          errorToast.present();
           break;
       }
     });

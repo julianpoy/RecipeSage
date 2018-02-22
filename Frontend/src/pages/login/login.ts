@@ -35,6 +35,8 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
     
     this.errorMessage = '';
+    
+    localStorage.removeItem('token');
   }
 
   toggleLogin() {
