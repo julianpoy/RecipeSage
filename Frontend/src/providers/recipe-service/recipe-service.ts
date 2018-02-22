@@ -106,7 +106,7 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .delete(this.base + 'recipes/' + data.recipeId + this.getTokenQuery(), httpOptions)
+    .delete(this.base + 'recipes/' + data._id + this.getTokenQuery(), httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)

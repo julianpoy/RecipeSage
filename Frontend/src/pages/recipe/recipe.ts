@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
-import { Recipe } from '../../providers/recipe-service/recipe-service';
+import { HomePage } from '../home/home';
+import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
@@ -18,6 +19,7 @@ import fractionjs from 'fraction.js';
 @Component({
   selector: 'page-recipe',
   templateUrl: 'recipe.html',
+  providers: [ RecipeServiceProvider ]
 })
 export class RecipePage {
 
@@ -26,7 +28,12 @@ export class RecipePage {
   
   scale: Number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public navParams: NavParams,
+    public recipeService: RecipeServiceProvider) {
     this.recipe = navParams.get('recipe') || <Recipe>{};
     
     this.scale = 1;
@@ -80,6 +87,53 @@ export class RecipePage {
   editRecipe() {
     this.navCtrl.push(EditRecipePage, {
       recipe: this.recipe
+    });
+  }
+  
+  deleteRecipe() {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'This will permanently delete the recipe from your account. This action is irreversible.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this._deleteRecipe();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+  
+  private _deleteRecipe() {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Deleting this recipe...'
+    });
+  
+    loading.present();
+    
+    this.recipeService.remove(this.recipe).subscribe(function(response) {
+      loading.dismiss();
+      
+      me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 404:
+          me.errorMessage = 'Can\'t find the recipe you\'re trying to delete.';
+          break;
+        default:
+          me.errorMessage = 'An unexpected error occured. Please try again.';
+          break;
+      }
     });
   }
   

@@ -186,7 +186,12 @@ router.put(
   });
 });
 
-router.delete('/:id', function(req, res) {
+router.delete(
+  '/:id',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res) {
   
   Recipe.findOne({
     _id: req.params.id,
