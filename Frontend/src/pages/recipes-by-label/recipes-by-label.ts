@@ -1,35 +1,38 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 import { RecipePage } from '../recipe/recipe';
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
+@IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html',
-  providers: [ RecipeServiceProvider ]
+  selector: 'page-recipes-by-label',
+  templateUrl: 'recipes-by-label.html',
 })
-export class HomePage {
+export class RecipesByLabelPage {
   
-  recipes: Recipe[];
+  labels: Label[];
 
   showSearch: boolean;
   searchText: string;
-  
-  constructor(
-    public navCtrl: NavController,
+
+  constructor(public navCtrl: NavController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    public recipeService: RecipeServiceProvider) {
+    public recipeService: RecipeServiceProvider,
+    public labelService: LabelServiceProvider) {
     this.loadRecipes();
     
     this.searchText = '';
     this.showSearch = false;
-    
-    localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad RecipesByLabelPage');
   }
   
   loadRecipes() {
@@ -41,10 +44,10 @@ export class HomePage {
   
     loading.present();
     
-    this.recipeService.fetch().subscribe(function(response) {
+    this.labelService.fetch().subscribe(function(response) {
       loading.dismiss();
 
-      me.recipes = response;      
+      me.labels = response;      
     }, function(err) {
       loading.dismiss();
 
@@ -76,5 +79,10 @@ export class HomePage {
   
   toggleSearch() {
     this.showSearch = !this.showSearch;
+  }
+  
+  toggleLabel(label) {
+    if (!label.expand) label.expand = true;
+    else label.expand = false;
   }
 }

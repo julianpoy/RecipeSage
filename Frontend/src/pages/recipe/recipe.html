@@ -33,7 +33,7 @@
 
     <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
   
-    <ion-item text-wrap>
+    <ion-item class="ingredients" text-wrap>
       <ion-icon name="book" item-start large></ion-icon>
       <h2>Ingredients</h2>
       <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient"></p>
@@ -41,7 +41,7 @@
     </ion-item>
     
     <ion-item *ngIf="ingredients && ingredients.length > 0" text-wrap>
-      <ion-label color="primary" floating>Scale</ion-label>
+      <ion-label color="primary" floating>Ingredient Scale</ion-label>
       <ion-input (input)='setScale($event.target.value)' type="text" value="1"></ion-input>
     </ion-item>
     
@@ -55,6 +55,24 @@
       <ion-icon name="paper" item-start large></ion-icon>
       <h2>Notes</h2>
       <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+    </ion-item>
+    
+    <br /><br /><br />
+    
+    <ion-item *ngIf="recipe.labels && recipe.labels.length > 0" class="labels" no-margin text-wrap>
+      <ion-icon name="pricetag" item-start large></ion-icon>
+      <h2>Labels</h2>
+      <p>
+        <span *ngFor="let label of recipe.labels">
+          <ion-icon class="delete-label" (click)="deleteLabel(label)" name="trash" item-start></ion-icon>
+          {{ label.title }} &nbsp;&nbsp;
+        </span>
+      </p>
+    </ion-item>
+    
+    <ion-item>
+      <!--<ion-label stacked>Add label</ion-label>-->
+      <ion-input [(ngModel)]="newLabel" (keydown)="labelFieldKeydown($event)" placeholder="Add Label" type="text" value=""></ion-input>
     </ion-item>
     
     <br />

@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { RecipesByLabelPage } from '../pages/recipes-by-label/recipes-by-label';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { RecipePage } from '../pages/recipe/recipe';
@@ -23,6 +24,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
   declarations: [
     MyApp,
     HomePage,
+    RecipesByLabelPage,
     ListPage,
     LoginPage,
     RecipePage,
@@ -39,6 +41,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
   entryComponents: [
     MyApp,
     HomePage,
+    RecipesByLabelPage,
     ListPage,
     LoginPage,
     RecipePage,

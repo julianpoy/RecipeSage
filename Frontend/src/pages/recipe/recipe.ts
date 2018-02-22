@@ -4,22 +4,16 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
 import { HomePage } from '../home/home';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
-
-/**
- * Generated class for the RecipePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
   selector: 'page-recipe',
   templateUrl: 'recipe.html',
-  providers: [ RecipeServiceProvider ]
+  providers: [ RecipeServiceProvider, LabelServiceProvider ]
 })
 export class RecipePage {
 
@@ -27,6 +21,8 @@ export class RecipePage {
   ingredients: any;
   
   scale: number;
+  
+  newLabel: string;
 
   constructor(
     public navCtrl: NavController,
@@ -34,7 +30,8 @@ export class RecipePage {
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
-    public recipeService: RecipeServiceProvider) {
+    public recipeService: RecipeServiceProvider,
+    public labelService: LabelServiceProvider) {
     this.recipe = navParams.get('recipe') || <Recipe>{};
     
     this.scale = 1;
@@ -154,6 +151,107 @@ export class RecipePage {
       duration: 2000
     });
     errorToast.present();
+  }
+  
+  labelFieldKeydown(event) {
+    if (event.keyCode === 13) {
+      this.addLabel();
+    }
+  }
+  
+  addLabel() {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Adding label...'
+    });
+  
+    loading.present();
+
+    this.labelService.create({
+      recipeId: this.recipe._id,
+      title: this.newLabel
+    }).subscribe(function(response) {
+      loading.dismiss();
+      
+      me.recipe.labels.push(response);
+      
+      me.newLabel = '';
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 404:
+          me.toastCtrl.create({
+            message: 'Can\'t find the recipe you\'re trying to add a label to. Please try again or reload this recipe page.',
+            duration: 4000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 4000
+          }).present();
+          break;
+      }
+    });
+  }
+  
+  deleteLabel(label) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'This will permanently delete the label "' + label.title + '" from this recipe. This action is irreversible.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this._deleteLabel(label);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+  
+  private _deleteLabel(label) {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Deleting label...'
+    });
+  
+    loading.present();
+    
+    console.log(label)
+    
+    label.recipeId = this.recipe._id;
+
+    this.labelService.remove(label).subscribe(function(response) {
+      loading.dismiss();
+      
+      var idx = me.recipe.labels.indexOf(label);
+      me.recipe.labels.splice(idx, 1);
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 404:
+          me.toastCtrl.create({
+            message: 'Can\'t find the recipe you\'re trying to delete a label from. Please try again or reload this recipe page.',
+            duration: 4000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 4000
+          }).present();
+          break;
+      }
+    });
   }
   
   prettyDateTime(datetime) {

@@ -1,0 +1,71 @@
+<!--
+  Generated template for the RecipesByLabelPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  
+    <ion-title>My Recipes By Label</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngIf="showSearch">
+      <ion-label floating>Search for label</ion-label>
+      <ion-input [(ngModel)]="searchText" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item-group *ngFor="let label of labels">
+      <ion-item-divider class="labelSection" (click)="toggleLabel(label)" color="light">{{ label.title }}</ion-item-divider>
+      <div *ngIf="label.expand">
+        <ion-item-sliding *ngFor="let recipe of label.recipes | basicFilter:searchText" class="recipeItem">
+          <ion-item (click)="openRecipe(recipe)">
+            <ion-thumbnail *ngIf="recipe.image" item-start>
+              <img src="{{ recipe.image.location }}">
+            </ion-thumbnail>
+            <h2>{{ recipe.title }}</h2>
+            <p>{{ recipe.description }}</p>
+            <p *ngIf="recipe.labels && recipe.labels.length > 0">
+              Labels: <span *ngFor="let label of recipe.labels">{{ label.title }} </span>
+            </p>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="secondary">
+              <ion-icon name="text"></ion-icon>
+              Edit
+            </button>
+            <button ion-button color="secondary">
+              <ion-icon name="call"></ion-icon>
+              Share
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
+    </ion-item-group>
+    
+    <ion-item *ngIf="!labels || labels.length === 0" text-wrap text-center>
+      <p>
+        Welcome to ChefBook!<br />
+        It looks like you have no recipes yet.<br />
+        Click the button in the bottom right corner to add one!
+      </p>
+    </ion-item>
+  </ion-list>
+  
+  <ion-fab right bottom>
+    <button (click)="newRecipe()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
+    <!--<ion-fab-list side="left">-->
+    <!--  <button ion-fab><ion-icon name="create"></ion-icon></button>-->
+    <!--  <button ion-fab><ion-icon name="link"></ion-icon></button>-->
+    <!--</ion-fab-list>-->
+  </ion-fab>
+</ion-content>

@@ -18,20 +18,23 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list>
     <ion-item *ngIf="showSearch">
       <ion-label floating>Search title or description</ion-label>
       <ion-input [(ngModel)]="searchText" type="text"></ion-input>
     </ion-item>
 
-    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText">
+    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText" class="recipeItem">
       <ion-item (click)="openRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image" item-start>
           <img src="{{ recipe.image.location }}">
         </ion-thumbnail>
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
+        <p *ngIf="recipe.labels && recipe.labels.length > 0">
+          Labels: <span *ngFor="let label of recipe.labels">{{ label.title }} </span>
+        </p>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button color="secondary">

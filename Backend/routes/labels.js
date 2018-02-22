@@ -95,7 +95,7 @@ router.delete(
   function(req, res) {
 
   Label.findOneAndUpdate({
-    _id: req.body.labelId,
+    _id: req.query.labelId,
     accountId: res.locals.session.accountId
   }, {
     $pull: { 'recipes': req.query.recipeId } // Pull the dump out of the array
@@ -111,7 +111,7 @@ router.delete(
         msg: "Label does not exist!"
       });
     } else {
-      if(label.dumps.length == 0){
+      if(label.recipes.length == 0){
         label.remove(function(err, data){
           if (err) {
             res.status(500).send("Could not remove empty label.");

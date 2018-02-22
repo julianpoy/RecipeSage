@@ -6,4 +6,21 @@ page-recipe {
   .item-md.item-block.fixPaperPush .item-inner {
     margin-left: 20px;
   }
+  
+  .ingredients {
+    ion-label {
+      margin: 0;
+    }
+  }
+  
+  .labels {
+    
+    ion-label {
+      margin: 0;
+    }
+    
+    .delete-label {
+      cursor: pointer;
+    }
+  }
 }

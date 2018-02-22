@@ -60,7 +60,7 @@ export class LabelServiceProvider {
     };
 
     return this.http
-    .delete(this.base + 'labels/' + this.getTokenQuery(), httpOptions)
+    .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data._id + '&recipeId=' + data.recipeId, httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)

@@ -28,6 +28,7 @@ var labelSchema = require('./models/label');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var recipes = require('./routes/recipes');
+var labels = require('./routes/labels');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.use(express.static(path.join(__dirname, frontendDir)));
 app.use('/', index);
 app.use('/users', users);
 app.use('/recipes', recipes);
+app.use('/labels', labels);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
