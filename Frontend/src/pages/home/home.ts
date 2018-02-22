@@ -16,12 +16,18 @@ export class HomePage {
   
   recipes: Recipe[];
 
+  showSearch: boolean;
+  searchText: string;
+
   constructor(
     public navCtrl: NavController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider) {
     this.loadRecipes();
+    
+    this.searchText = '';
+    this.showSearch = false;
     
     localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
   }
@@ -66,5 +72,9 @@ export class HomePage {
   
   newRecipe() {
     this.navCtrl.push(EditRecipePage);
+  }
+  
+  toggleSearch() {
+    this.showSearch = !this.showSearch;
   }
 }

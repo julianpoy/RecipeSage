@@ -13,13 +13,13 @@ import { UserServiceProvider } from '../../providers/user-service/user-service';
 })
 export class LoginPage {
 
-  email: String;
-  password: String;
-  confirmPassword: String;
+  email: string;
+  password: string;
+  confirmPassword: string;
 
-  showLogin: Boolean;
+  showLogin: boolean;
   
-  errorMessage: String;
+  errorMessage: string;
 
   constructor(
     public navCtrl: NavController,

@@ -22,7 +22,7 @@ export class EditRecipePage {
   
   recipe: Recipe;
   
-  errorMessage: String;
+  errorMessage: string;
   
   rawImageFile: any;
 

@@ -26,7 +26,7 @@ export class RecipePage {
   recipe: Recipe;
   ingredients: any;
   
-  scale: Number;
+  scale: number;
 
   constructor(
     public navCtrl: NavController,
@@ -129,18 +129,16 @@ export class RecipePage {
       loading.dismiss();
       switch(err.status) {
         case 404:
-          let errorToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'Can\'t find the recipe you\'re trying to delete.',
-            duration: 8000
-          });
-          errorToast.present();
+            duration: 4000
+          }).present();
           break;
         default:
-          let errorToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'An unexpected error occured. Please try again.',
-            duration: 8000
-          });
-          errorToast.present();
+            duration: 4000
+          }).present();
           break;
       }
     });
@@ -148,6 +146,14 @@ export class RecipePage {
   
   printRecipe() {
     window.print();
+  }
+  
+  shareRecipe() {
+    let errorToast = this.toastCtrl.create({
+      message: 'Coming soon!',
+      duration: 2000
+    });
+    errorToast.present();
   }
   
   prettyDateTime(datetime) {

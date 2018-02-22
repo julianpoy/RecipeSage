@@ -3,6 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -11,8 +13,8 @@ import { LoginPage } from '../pages/login/login';
 import { RecipePage } from '../pages/recipe/recipe';
 import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { BasicFilterPipe } from '../pipes/basic-filter/basic-filter';
+
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { LabelServiceProvider } from '../providers/label-service/label-service';
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
@@ -24,7 +26,8 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     ListPage,
     LoginPage,
     RecipePage,
-    EditRecipePage
+    EditRecipePage,
+    BasicFilterPipe
   ],
   imports: [
     BrowserModule,

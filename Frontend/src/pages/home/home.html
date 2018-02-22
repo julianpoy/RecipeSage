@@ -1,15 +1,31 @@
 <ion-header>
   <ion-navbar>
+    <!--<button ion-button icon-only menuToggle>-->
+    <!--  <ion-icon name="menu"></ion-icon>-->
+    <!--</button>-->
+    
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+    
     <ion-title>My Recipes</ion-title>
+    
+    <ion-buttons end>
+      <button ion-button (click)="toggleSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-list>
-    <ion-item-sliding *ngFor="let recipe of recipes">
+    <ion-item *ngIf="showSearch">
+      <ion-label floating>Search title or description</ion-label>
+      <ion-input [(ngModel)]="searchText" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText">
       <ion-item (click)="openRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image" item-start>
           <img src="{{ recipe.image.location }}">
