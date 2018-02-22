@@ -16,24 +16,31 @@
 <ion-content padding>
   <ion-card>
     <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://static01.nyt.com/images/2017/03/24/dining/24COOKING-CLASSICPANCAKES/24COOKING-CLASSICPANCAKES-articleLarge.jpg">
+      <ion-thumbnail *ngIf="recipe.image" item-start>
+        <img src="{{ recipe.image.location }}">
       </ion-thumbnail>
       <h2>{{ recipe.title }}</h2>
       <p>{{ recipe.description }}</p>
     </ion-item>
-  
-    <!--<ion-card-content>-->
-    <!--  <p>{{ recipe.description }}</p>-->
-    <!--</ion-card-content>-->
     
+    <ion-card-content>
+      <p *ngIf="recipe.yield">Yield: {{ recipe.yield }}</p> 
+      <p *ngIf="recipe.activeTime">Active Time: {{ recipe.activeTime }}</p> 
+      <p *ngIf="recipe.totalTime">Total Time: {{ recipe.totalTime }}</p>  
+      <p *ngIf="recipe.source">Source: {{ recipe.source }}</p>  
+      <p *ngIf="recipe.url"><a href="{{ recipe.url }}">{{ recipe.url }}</a></p> 
+    </ion-card-content>
+
+    <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
+  
     <ion-item text-wrap>
       <ion-icon name="book" item-start large></ion-icon>
       <h2>Ingredients</h2>
       <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient"></p>
+      <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
     </ion-item>
     
-    <ion-item text-wrap>
+    <ion-item *ngIf="ingredients && ingredients.length > 0" text-wrap>
       <ion-label color="primary" floating>Scale</ion-label>
       <ion-input (input)='setScale($event.target.value)' type="text" value="1"></ion-input>
     </ion-item>
@@ -41,28 +48,48 @@
     <ion-item text-wrap>
       <ion-icon name="list" item-start large></ion-icon>
       <h2>Instructions</h2>
+      <p class="pre">{{ recipe.instructions || 'No Instructions' }}</p>
+    </ion-item>
+    
+    <ion-item class="fixPaperPush" *ngIf="recipe.notes" text-wrap>
+      <ion-icon name="paper" item-start large></ion-icon>
+      <h2>Notes</h2>
+      <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+    </ion-item>
+    
+    <br />
+    
+    <ion-item>
       <p>
-        {{ recipe.instructions }}
+        Created on {{ prettyDateTime(recipe.created) }}<br />
+        Last edited on {{ prettyDateTime(recipe.updated) }}
       </p>
     </ion-item>
   
     <ion-row>
-      <ion-col>
-        <button ion-button icon-left clear small>
+      <ion-col center text-center>
+        <button (click)="editRecipe()" ion-button icon-left clear small>
           <ion-icon name="create"></ion-icon>
           <div>Edit</div>
         </button>
       </ion-col>
-      <ion-col>
+      <ion-col center text-center>
+        <button (click)="editRecipe()" ion-button icon-left clear small>
+          <ion-icon name="trash"></ion-icon>
+          <div>Delete</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
         <button ion-button icon-left clear small>
           <ion-icon name="contact"></ion-icon>
           <div>Share</div>
         </button>
       </ion-col>
       <ion-col center text-center>
-        <ion-note>
-          Created on {{ recipe.created }}
-        </ion-note>
+        <button ion-button icon-left clear small>
+          <ion-icon name="print"></ion-icon>
+          <div>Print</div>
+        </button>
       </ion-col>
     </ion-row>
   

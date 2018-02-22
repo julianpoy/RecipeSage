@@ -14,6 +14,11 @@
 
 
 <ion-content padding>
+  <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
+  <div padding>
+  	<button ion-button block (click)="filePicker()">{{ filePickerText() }}</button>
+  </div>
+  
   <ion-item>
     <ion-label floating>Title</ion-label>
     <ion-input [(ngModel)]="recipe.title" type="text" value=""></ion-input>
@@ -50,22 +55,6 @@
   </ion-item>
   
   <ion-item>
-    <ion-label floating>Notes</ion-label>
-    <ion-textarea rows="4" [(ngModel)]="recipe.notes" type="text" value=""></ion-textarea>
-  </ion-item>
-  
-  <!--<div *ngFor="let ingredient of recipe.ingredients; let i = index">-->
-  <!--  <ion-item>-->
-  <!--    <ion-label floating>Quantity</ion-label>-->
-  <!--    <ion-input [(ngModel)]="recipe.ingredients[i]" type="text" value=""></ion-input>-->
-  <!--  </ion-item>-->
-  <!--  <ion-item>-->
-  <!--    <ion-label floating>Title</ion-label>-->
-  <!--    <ion-input [(ngModel)]="recipe.ingredients[i]" type="text" value=""></ion-input>-->
-  <!--  </ion-item>-->
-  <!--</div>-->
-  
-  <ion-item>
     <ion-label floating>Ingredients</ion-label>
     <ion-textarea rows="10" [(ngModel)]="recipe.ingredients" type="text" value=""></ion-textarea>
   </ion-item>
@@ -73,6 +62,11 @@
   <ion-item>
     <ion-label floating>Instructions</ion-label>
     <ion-textarea rows="10" [(ngModel)]="recipe.instructions" type="text" value=""></ion-textarea>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label floating>Notes</ion-label>
+    <ion-textarea rows="4" [(ngModel)]="recipe.notes" type="text" value=""></ion-textarea>
   </ion-item>
   
   <div padding>

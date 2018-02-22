@@ -11,8 +11,8 @@
   <ion-list>
     <ion-item-sliding *ngFor="let recipe of recipes">
       <ion-item (click)="openRecipe(recipe)">
-        <ion-thumbnail item-start>
-          <img src="https://static01.nyt.com/images/2017/03/24/dining/24COOKING-CLASSICPANCAKES/24COOKING-CLASSICPANCAKES-articleLarge.jpg">
+        <ion-thumbnail *ngIf="recipe.image" item-start>
+          <img src="{{ recipe.image.location }}">
         </ion-thumbnail>
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>

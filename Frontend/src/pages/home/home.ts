@@ -21,6 +21,8 @@ export class HomePage {
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider) {
     this.loadRecipes();
+    
+    localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
   }
   
   loadRecipes() {

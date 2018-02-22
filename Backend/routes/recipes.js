@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
+var aws = require('aws-sdk');
+var multer = require('multer');
+var multerS3 = require('multer-s3');
 
 // DB
 var mongoose = require('mongoose');
@@ -10,6 +13,29 @@ var Label = mongoose.model('Label');
 // Service
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
+var config = require('../config/config.json');
+
+var s3 = new aws.S3();
+aws.config.update({
+  accessKeyId: config.aws.accessKeyId,
+  secretAccessKey: config.aws.secretAccessKey,
+  subregion: config.aws.region,
+});
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    dirname: '/',
+    bucket: config.aws.bucket,
+    acl: 'public-read',
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
+  })
+});
 
 //Create a new recipe
 router.post(
@@ -17,6 +43,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
+  upload.single('image'),
   function(req, res, next) {
 
   var session = res.locals.session;
@@ -32,7 +59,8 @@ router.post(
     url: req.body.url,
     notes: req.body.notes,
     ingredients: req.body.ingredients,
-    instructions: req.body.instructions
+    instructions: req.body.instructions,
+    image: req.file
   }).save(function(err, recipe) {
     if (err) {
       res.status(500).send("Error saving the recipe!");
@@ -88,6 +116,15 @@ router.get(
   });
 });
 
+function deleteS3Object(key, success, fail){
+  s3.deleteObject({
+    Bucket: config.aws.bucket,
+    Key: key
+  }, function(err, data) {
+    if (err) fail(err);
+    else success(data);
+  });
+}
 
 //Update a recipe
 router.put(
@@ -95,6 +132,7 @@ router.put(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
+  upload.single('image'),
   function(req, res) {
   
   Recipe.findOne({
@@ -120,6 +158,20 @@ router.put(
       if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
       if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
       if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+      
+      // Check if user uploaded a new image. If so, delete the old image to save space and $$
+      if (req.file) {
+        // Remove old (replaced) image from our S3 bucket
+        if (recipe.image && recipe.image.key) {
+          deleteS3Object(recipe.image.key, function() {
+            console.log("Cleaned old image from s3", recipe.image.key);
+          }, function(err) {
+            console.log("Error cleaning old image from s3 ", err, err.stack);
+          });
+        }
+
+        recipe.image = req.file;
+      }
 
       recipe.updated = Date.now();
 
@@ -155,6 +207,15 @@ router.delete('/:id', function(req, res) {
             msg: "Couldn't delete recipe from database"
           });
         } else {
+          // Remove image from our S3 bucket
+          if (recipe.image && recipe.image.key) {
+            deleteS3Object(recipe.image.key, function() {
+              console.log("Cleaned image from s3 after recipe delete ", recipe.image.key);
+            }, function(err) {
+              console.log("Error cleaning image from s3 after recipe delete ", err, err.stack);
+            });
+          }
+
           Label.find({
             accountId: res.locals.session.accountId,
             recipes: req.params.id

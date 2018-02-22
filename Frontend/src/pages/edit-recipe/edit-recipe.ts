@@ -23,13 +23,16 @@ export class EditRecipePage {
   recipe: Recipe;
   
   errorMessage: String;
+  
+  rawImageFile: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
     public recipeService: RecipeServiceProvider) {
-    this.recipe = <Recipe>{};
+    // this.recipe = <Recipe>{};
+    this.recipe = navParams.get('recipe') || <Recipe>{};
     
     this.errorMessage = '';
   }
@@ -38,6 +41,15 @@ export class EditRecipePage {
     console.log('ionViewDidLoad EditRecipePage');
     
     this.errorMessage = '';
+  }
+  
+  setFile(event) {
+    let files = event.srcElement.files
+    if (!files) {
+      return
+    }
+    
+    this.recipe.imageFile = files[0];
   }
   
   save() {
@@ -85,6 +97,20 @@ export class EditRecipePage {
             break;
         }
       });
+    }
+  }
+  
+  filePicker() {
+    document.getElementById('filePicker').click();
+  }
+  
+  filePickerText() {
+    if (this.recipe.imageFile) {
+      return this.recipe.imageFile.name + ' Selected';
+    } else if (this.recipe.image) {
+      return 'Choose new image';
+    } else {
+      return 'Choose image';
     }
   }
 

@@ -1,3 +1,9 @@
 page-recipe {
-
+  .pre {
+    white-space: pre;
+  }
+  
+  .item-md.item-block.fixPaperPush .item-inner {
+    margin-left: 20px;
+  }
 }

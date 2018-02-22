@@ -19,6 +19,8 @@ export interface Recipe {
   ingredients: string;
   instructions: string;
   labels: Label[];
+  image: any;
+  imageFile: any;
 }
 
 @Injectable()
@@ -52,28 +54,44 @@ export class RecipeServiceProvider {
   }
 
   create(data) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      })
-    };
+    let formData: FormData = new FormData();
+    if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
+    
+    delete data.imageFile;
+    
+    for (var i = 0; i < Object.keys(data).length; i++) {
+      var key = Object.keys(data)[i];
+      var val = data[key];
+      
+      formData.append(key, val); 
+    }
+
+    const httpOptions = {};
 
     return this.http
-    .post(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
+    .post(this.base + 'recipes/' + this.getTokenQuery(), formData, httpOptions)
     .pipe(
       catchError(this.handleError)
     );
   }
   
   update(data) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      })
-    };
+    let formData: FormData = new FormData();
+    if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
+
+    delete data.imageFile;
+
+    for (var i = 0; i < Object.keys(data).length; i++) {
+      var key = Object.keys(data)[i];
+      var val = data[key];
+      
+      formData.append(key, val); 
+    }
+
+    const httpOptions = {};
 
     return this.http
-    .put(this.base + 'recipes/' + data.recipeId + this.getTokenQuery(), data, httpOptions)
+    .put(this.base + 'recipes/' + data._id + this.getTokenQuery(), formData, httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { EditRecipePage } from '../edit-recipe/edit-recipe';
 import { Recipe } from '../../providers/recipe-service/recipe-service';
 
+import * as moment from 'moment';
 import fractionjs from 'fraction.js';
 
 /**
@@ -73,5 +75,15 @@ export class RecipePage {
     }
     
     this.ingredients = lines;
+  }
+  
+  editRecipe() {
+    this.navCtrl.push(EditRecipePage, {
+      recipe: this.recipe
+    });
+  }
+  
+  prettyDateTime(datetime) {
+    return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
   }
 }

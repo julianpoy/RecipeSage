@@ -1,4 +1,10 @@
 {
   "frontendDir": "../Frontend/www",
-  "frontendBaseURL": "/"
+  "frontendBaseURL": "/",
+  "aws": {
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "region": "us-west-2",
+    "bucket": "chefbook-dev"
+  }
 }
