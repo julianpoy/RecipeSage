@@ -69,12 +69,12 @@ router.get(
       .then(function (result) {
         recipes.push(result);
         
-        // if (idx+1 < urls.length) {
-        //   loadNext(nightmare, recipes, urls, idx+1);
-        // } else {
+        if (idx+1 < urls.length) {
+          loadNext(nightmare, recipes, urls, idx+1);
+        } else {
           console.log('DONE', recipes);
           saveRecipes(res.locals.session.accountId, recipes);
-        // }
+        }
       })
       .catch(function (error) {
         console.error('Search failed:', error);
