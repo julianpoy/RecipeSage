@@ -113,6 +113,25 @@ export class RecipeServiceProvider {
     );
   }
   
+  scrapePepperplate(data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .get(this.base
+      + 'scrape/pepperplate'
+      + this.getTokenQuery()
+      + '&username=' + encodeURIComponent(data.username)
+      + '&password=' + encodeURIComponent(data.password)
+    , httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+  
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

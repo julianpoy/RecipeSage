@@ -13,6 +13,7 @@ import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { RecipePage } from '../pages/recipe/recipe';
 import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
+import { ImportPage } from '../pages/import/import';
 
 import { BasicFilterPipe } from '../pipes/basic-filter/basic-filter';
 
@@ -29,6 +30,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     LoginPage,
     RecipePage,
     EditRecipePage,
+    ImportPage,
     BasicFilterPipe
   ],
   imports: [
@@ -45,7 +47,8 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     ListPage,
     LoginPage,
     RecipePage,
-    EditRecipePage
+    EditRecipePage,
+    ImportPage
   ],
   providers: [
     StatusBar,

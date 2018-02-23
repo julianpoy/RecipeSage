@@ -97,7 +97,9 @@ router.get(
       console.error('Search failed:', error);
     });
 
-  res.status(200).send("Starting scrape...");
+  res.status(200).json({
+    msg: "Starting scrape..."
+  });
 });
 
 function sendURLToS3(url, callback) {

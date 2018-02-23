@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Import Your Recipes</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <p>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label floating>Pepperplate Email/Username</ion-label>
+      <ion-input name="pepperplate-username" [(ngModel)]="username" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Pepperplate Password</ion-label>
+      <ion-input name="pepperplate-password" [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+    
+    <ion-item text-wrap>
+      <p>
+        The import task can take several minutes and depends on the availability of Pepperplate servers.<br />
+        We can't guarantee Pepperplate will be up or running quickly, so this can take a few minutes.<br />
+        You will only see the imported recipes in your library once the full import task is complete.<br />
+        If you don't see any recipes appear within a few minutes, here are a few possible causes:<br />
+        1) Your username/password combination for Pepperplate is incorrect<br />
+        2) Pepperplate is down or partially unavailable
+      </p>
+    </ion-item>
+
+    <div padding>
+    	<button ion-button block (click)="scrapePepperplate()">Start Import</button>
+		</div>
+		
+		{{ errorMessage }}
+
+  </ion-list>
+</ion-content>

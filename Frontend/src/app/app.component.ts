@@ -8,6 +8,7 @@ import { RecipesByLabelPage } from '../pages/recipes-by-label/recipes-by-label';
 import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
+import { ImportPage } from '../pages/import/import';
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +35,7 @@ export class MyApp {
       { title: 'My Recipes', component: HomePage },
       { title: 'My Labels', component: RecipesByLabelPage },
       { title: 'Add Recipe', component: EditRecipePage },
+      { title: 'Import', component: ImportPage },
       { title: 'Logout', component: LoginPage }
     ];
     
