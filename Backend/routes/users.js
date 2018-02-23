@@ -58,9 +58,13 @@ router.post(
   function(req, res, next) {
 
   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-  if (!emailRegex.test(req.body.email)) {
+  if (!emailRegex.test(req.body.email) || req.body.email.length === 0) {
     res.status(412).json({
       msg: "Email is not valid!"
+    });
+  } else if (req.body.password.length < 6) {
+    res.status(411).json({
+      msg: "Password is too short!"
     });
   } else {
     //Check if a user with that email already exists
@@ -82,6 +86,7 @@ router.post(
         var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512, 'sha512');
         //Create a new user with the assembled information
         var newUser = new User({
+          name: req.body.name,
           email: req.body.email.toLowerCase(),
           password: hash,
           salt: salt
@@ -114,7 +119,7 @@ router.put(
   function(req, res, next) {
   
   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-  if (req.body.email && !emailRegex.test(req.body.email)) {
+  if (req.body.email && (!emailRegex.test(req.body.email) || req.body.email.length < 1)) {
     res.status(412).json({
       msg: "Email is not valid!"
     });
@@ -124,6 +129,7 @@ router.put(
 
     var updatedUser = {};
 
+    if (req.body.name && typeof req.body.name === 'string') updatedUser.name = req.body.name;
     if (req.body.email && typeof req.body.email === 'string') updatedUser.email = req.body.email;
     if (req.body.password && typeof req.body.password === 'string') {
       //Create a random salt
