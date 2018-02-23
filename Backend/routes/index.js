@@ -44,7 +44,7 @@ router.get(
   });
   
   function loadNext(nightmare, recipes, urls, idx) {
-    console.log('Loading next... ', urls, urls[idx])
+    console.log('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
     
     nightmare
       .goto(urls[idx])
