@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
-import { RecipePage } from '../recipe/recipe';
-import { EditRecipePage } from '../edit-recipe/edit-recipe';
-
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
@@ -53,7 +49,7 @@ export class RecipesByLabelPage {
 
       switch(err.status) {
         case 401:
-          me.navCtrl.setRoot(LoginPage, {}, {animate: true, direction: 'forward'});
+          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
           let errorToast = me.toastCtrl.create({
@@ -68,13 +64,13 @@ export class RecipesByLabelPage {
   
   openRecipe(recipe) {
     // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
-    this.navCtrl.push(RecipePage, {
+    this.navCtrl.push('RecipePage', {
       recipe: recipe
     });
   }
   
   newRecipe() {
-    this.navCtrl.push(EditRecipePage);
+    this.navCtrl.push('EditRecipePage');
   }
   
   toggleSearch() {

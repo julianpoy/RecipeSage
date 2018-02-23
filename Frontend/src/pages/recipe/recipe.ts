@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController } from 'ionic-angular';
 
-import { EditRecipePage } from '../edit-recipe/edit-recipe';
-import { HomePage } from '../home/home';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
@@ -12,6 +10,7 @@ import fractionjs from 'fraction.js';
 @IonicPage()
 @Component({
   selector: 'page-recipe',
+  segment: 'recipe/:recipe_id',
   templateUrl: 'recipe.html',
   providers: [ RecipeServiceProvider, LabelServiceProvider ]
 })
@@ -32,7 +31,19 @@ export class RecipePage {
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
-    this.recipe = navParams.get('recipe') || <Recipe>{};
+
+    if (navParams.get('recipe_id')) {
+      var recipeId = navParams.get('recipe_id');
+      
+      //TODO: In future, get single recipe here. For now, redirect to homepage
+      this.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+    } else {
+      this.recipe = navParams.get('recipe') || <Recipe>{};
+      
+      if (!this.recipe._id) {
+        this.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+      }
+    }
     
     this.scale = 1;
     
@@ -83,7 +94,7 @@ export class RecipePage {
   }
   
   editRecipe() {
-    this.navCtrl.push(EditRecipePage, {
+    this.navCtrl.push('EditRecipePage', {
       recipe: this.recipe
     });
   }
@@ -121,7 +132,7 @@ export class RecipePage {
     this.recipeService.remove(this.recipe).subscribe(function(response) {
       loading.dismiss();
       
-      me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+      me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
       switch(err.status) {

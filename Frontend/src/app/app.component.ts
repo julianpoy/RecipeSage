@@ -3,39 +3,39 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { RecipesByLabelPage } from '../pages/recipes-by-label/recipes-by-label';
-import { LoginPage } from '../pages/login/login';
-import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
-import { ImportPage } from '../pages/import/import';
-
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any;
 
   pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
+    
+    if(localStorage.getItem('token')) {
+      this.rootPage = 'HomePage';
+    }else{
+      this.rootPage = 'LoginPage';
+    }
   }
   
   navList() {
     var pages = [];
     
     var loggedOutPages = [
-      { title: 'Login', component: LoginPage }
+      { title: 'Login', component: 'LoginPage' }
     ];
 
     var loggedInPages = [
-      { title: 'My Recipes', component: HomePage },
-      { title: 'My Labels', component: RecipesByLabelPage },
-      { title: 'Add Recipe', component: EditRecipePage },
-      { title: 'Import', component: ImportPage },
-      { title: 'Logout', component: LoginPage }
+      { title: 'My Recipes', component: 'HomePage' },
+      { title: 'My Labels', component: 'RecipesByLabelPage' },
+      { title: 'Add Recipe', component: 'EditRecipePage' },
+      { title: 'Import', component: 'ImportPage' },
+      { title: 'Logout', component: 'LoginPage' }
     ];
     
     if (localStorage.getItem('token')) {

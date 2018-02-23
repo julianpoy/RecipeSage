@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 
-import { HomePage } from '../home/home';
-
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
 /**
@@ -66,7 +64,7 @@ export class EditRecipePage {
       this.recipeService.update(this.recipe).subscribe(function(response) {
         loading.dismiss();
         
-        me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+        me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
@@ -82,7 +80,7 @@ export class EditRecipePage {
       this.recipeService.create(this.recipe).subscribe(function(response) {
         loading.dismiss();
         
-        me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+        me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
         switch(err.status) {

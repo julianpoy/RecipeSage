@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 
-import { HomePage } from '../home/home';
-
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
 @IonicPage()
@@ -64,7 +62,7 @@ export class LoginPage {
         
         localStorage.setItem('token', response.token);
         
-        me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+        me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
@@ -89,7 +87,7 @@ export class LoginPage {
           
           localStorage.setItem('token', response.token);
           
-          me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+          me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
         }, function(err) {
           loading.dismiss();
           switch(err.status) {

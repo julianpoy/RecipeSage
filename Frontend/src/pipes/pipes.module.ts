@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BasicFilterPipe } from './basic-filter/basic-filter';
 @NgModule({
-	declarations: [BasicFilterPipe],
+	declarations: [
+		BasicFilterPipe
+	],
 	imports: [],
-	exports: [BasicFilterPipe]
+	exports: [
+		BasicFilterPipe
+	]
 })
 export class PipesModule {}

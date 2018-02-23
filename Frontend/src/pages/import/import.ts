@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
-import { HomePage } from '../home/home';
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 
 @IonicPage()
@@ -47,7 +46,7 @@ export class ImportPage {
         duration: 4000
       }).present();
       
-      me.navCtrl.setRoot(HomePage, {}, {animate: true, direction: 'forward'});
+      me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
       switch(err.status) {

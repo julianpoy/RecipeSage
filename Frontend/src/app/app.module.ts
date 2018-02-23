@@ -7,15 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { RecipesByLabelPage } from '../pages/recipes-by-label/recipes-by-label';
-import { ListPage } from '../pages/list/list';
-import { LoginPage } from '../pages/login/login';
-import { RecipePage } from '../pages/recipe/recipe';
-import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
-import { ImportPage } from '../pages/import/import';
-
-import { BasicFilterPipe } from '../pipes/basic-filter/basic-filter';
+import { PipesModule } from '../pipes/pipes.module';
 
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { LabelServiceProvider } from '../providers/label-service/label-service';
@@ -23,32 +15,18 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
 
 @NgModule({
   declarations: [
-    MyApp,
-    HomePage,
-    RecipesByLabelPage,
-    ListPage,
-    LoginPage,
-    RecipePage,
-    EditRecipePage,
-    ImportPage,
-    BasicFilterPipe
+    MyApp
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    HomePage,
-    RecipesByLabelPage,
-    ListPage,
-    LoginPage,
-    RecipePage,
-    EditRecipePage,
-    ImportPage
+    MyApp
   ],
   providers: [
     StatusBar,
