@@ -39,7 +39,8 @@ router.get(
   var loginLink = 'https://www.pepperplate.com/login.aspx';
 
   var nightmare = Nightmare({
-    show: true
+    show: true,
+    executionTimeout: 300000
   });
   
   function loadNext(nightmare, recipes, urls, idx) {
@@ -80,6 +81,8 @@ router.get(
         console.error('Search failed:', error);
       });
   }
+  
+  console.log("starting nightmare...")
  
   nightmare
     .goto(loginLink)
@@ -88,9 +91,21 @@ router.get(
     .click('#cphMain_loginForm_ibSubmit')
     .wait('.reclistnav')
     .evaluate(function () {
-      return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
+      return new Promise(function(resolve, reject) {
+        var interval = setInterval(function() {
+        	var loadMore = document.getElementById('loadmorelink');
+        	if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display !== 'block') {
+      		  clearInterval(interval);
+      		  resolve([].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href }))
+      		  // return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
+          } else {
+      		  loadMore.click();
+          }
+        }, 700);
+      });
     })
     .then(function(results){
+      console.log("got to loadnext ", results, results.length)
       loadNext(nightmare, [], results, 0);
     })
     .catch(function (error) {
