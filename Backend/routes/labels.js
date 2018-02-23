@@ -11,7 +11,7 @@ var Label = mongoose.model('Label');
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 
-//Add a label to a dump
+//Add a label to a recipe
 router.post(
   '/',
   cors(),
