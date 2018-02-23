@@ -122,20 +122,25 @@ function sendURLToS3(url, callback) {
       ACL: 'public-read',
       Body: body // buffer
     }, function(err, response) {
-      var img = {
-        fieldname: "image",
-        originalname: 'pepperplate-image.jpg',
-        mimetype: contentType,
-        size: contentLength,
-        bucket: config.aws.bucket,
-        key: key,
-        acl: "public-read",
-        metadata: {
-          fieldName: "image"
-        },
-        location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-        etag: response.ETag
+      var img;
+
+      if (!err) {
+        img = {
+          fieldname: "image",
+          originalname: 'pepperplate-image.jpg',
+          mimetype: contentType,
+          size: contentLength,
+          bucket: config.aws.bucket,
+          key: key,
+          acl: "public-read",
+          metadata: {
+            fieldName: "image"
+          },
+          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+          etag: response.ETag
+        }
       }
+      
       callback(err, img)
     });
   });
