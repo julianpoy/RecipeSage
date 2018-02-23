@@ -74,7 +74,7 @@ router.get(
           // Give pepperplate some resting time
           setTimeout(function() {
             loadNext(nightmare, recipes, urls, idx+1);
-          }, 500);
+          }, 100);
         } else {
           console.log('DONE', recipes);
           saveRecipes(res.locals.session.accountId, recipes);
