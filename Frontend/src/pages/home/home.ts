@@ -28,8 +28,6 @@ export class HomePage {
     
     this.searchText = '';
     this.showSearch = false;
-    
-    localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
   }
   
   loadRecipes() {

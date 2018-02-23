@@ -31,7 +31,7 @@ export class RecipeServiceProvider {
   constructor(public http: HttpClient) {
     console.log('Hello RecipeServiceProvider Provider');
     
-    this.base = localStorage.getItem('base') || '/';
+    this.base = localStorage.getItem('base') || 'https://recipesage.com:3030/';
   }
   
   getTokenQuery() {
