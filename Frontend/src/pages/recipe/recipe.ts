@@ -18,6 +18,7 @@ import fractionjs from 'fraction.js';
 export class RecipePage {
 
   recipe: Recipe;
+  recipeId: string;
   ingredients: any;
   
   scale: number;
