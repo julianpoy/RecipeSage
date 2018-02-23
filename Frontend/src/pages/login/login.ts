@@ -10,23 +10,21 @@ import { UserServiceProvider } from '../../providers/user-service/user-service';
   providers: [ UserServiceProvider ]
 })
 export class LoginPage {
+  name: string = '';
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
-  email: string;
-  password: string;
-  confirmPassword: string;
-
-  showLogin: boolean;
+  showLogin: boolean = true;
   
-  errorMessage: string;
+  errorMessage: string = '';
 
   constructor(
     public navCtrl: NavController,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
     public userService: UserServiceProvider) {
-    this.showLogin = true;
-    
-    this.errorMessage = '';
+
   }
 
   ionViewDidLoad() {
@@ -44,6 +42,24 @@ export class LoginPage {
   }
 
   auth() {
+    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+    if (!this.showLogin && !emailRegex.test(this.email)) {
+      this.errorMessage = 'Please enter a valid email address.';
+      return;
+    } else if (!this.showLogin && this.name.length < 1) {
+      this.errorMessage = 'Please enter a name (you can enter a nickname!)';
+      return;
+    } else if (this.password.length === 0) { 
+      this.errorMessage = 'Please enter a password.';
+      return;
+    } else if (!this.showLogin && this.password.length < 6) {
+      this.errorMessage = 'Please enter a password at least 6 characters long.';
+      return;
+    } else if (this.email.length === 0) {
+      this.errorMessage = 'Please enter your email address.';
+      return;
+    }
+    
     var me = this;
     this.errorMessage = '';
     
@@ -80,6 +96,7 @@ export class LoginPage {
     } else {
       if (this.password === this.confirmPassword) {
         this.userService.register({
+          name: this.name,
           email: this.email,
           password: this.password
         }).subscribe(function(response) {
