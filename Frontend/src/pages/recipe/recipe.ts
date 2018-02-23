@@ -99,7 +99,8 @@ export class RecipePage {
     
     var lines = this.recipe.ingredients.match(/[^\r\n]+/g);
     
-    var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
+    // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
+    var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
     
     for (var i = 0; i < lines.length; i++) {
       var matches = lines[i].match(measurementRegexp);
@@ -107,16 +108,25 @@ export class RecipePage {
       
       var measurement = matches[0];
       
-      var scaledMeasurement = fractionjs(measurement).mul(this.scale);
+      try {
+        var measurementParts = measurement.split(/-|to/);
+        
+        for (var j = 0; j < measurementParts.length; j++) {
+          // console.log(measurementParts[j].trim())
+          var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(this.scale);
 
-      // Preserve original fraction format if entered
-      if (measurement.indexOf('/') > -1) {
-        scaledMeasurement = scaledMeasurement.toFraction(true);
+          // Preserve original fraction format if entered
+          if (measurementParts[j].indexOf('/') > -1) {
+            scaledMeasurement = scaledMeasurement.toFraction(true);
+          }
+          
+          measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
+        }
+        
+        lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
+      } catch(e) {
+        console.log("failed to parse", e)
       }
-      
-      scaledMeasurement = '<b>' + scaledMeasurement + '</b>';
-      
-      lines[i] = lines[i].replace(measurementRegexp, scaledMeasurement);
     }
     
     this.ingredients = lines;
