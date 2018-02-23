@@ -7,9 +7,11 @@ ionic build browser --prod
 if [ $? -eq 0 ]; then
     echo OK
     
-    ssh root@kondeo.com 'cd /var/www/recipesage.com; rm -rf ./*'
+    ssh julian@kondeo.com 'cd /var/www/recipesage.com; rm -rf ./*; cd ~/Projects/chefbook; git pull; forever restartall'
 
-    scp -r ./platforms/browser/www/* root@kondeo.com:/var/www/recipesage.com
+    cp ./src/assets/recipesage-white.png ./platforms/browser/www/screen
+
+    scp -r ./platforms/browser/www/* julian@kondeo.com:/var/www/recipesage.com
 else
     echo FAIL
 fi
