@@ -116,6 +116,36 @@ router.get(
   });
 });
 
+//Get a single recipe
+router.get(
+  '/:recipeId',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+
+  Recipe.findOne({
+    accountId: res.locals.session.accountId,
+    _id: req.params.recipeId
+  }).lean().exec(function(err, recipe) {
+    if (err) {
+      res.status(500).send("Couldn't search the database for recipe!");
+    } else {
+      Label.find({
+        recipes: recipe._id
+      }).lean().exec(function(err, labels) {
+        if (err) {
+          res.status(500).send("Could not query DB for labels.");
+        } else {
+          recipe.labels = labels;
+  
+          res.status(200).json(recipe);
+        }
+      });
+    }
+  });
+});
+
 function deleteS3Object(key, success, fail){
   s3.deleteObject({
     Bucket: config.aws.bucket,

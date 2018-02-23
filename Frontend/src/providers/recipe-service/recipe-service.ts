@@ -52,6 +52,21 @@ export class RecipeServiceProvider {
       catchError(this.handleError)
     );
   }
+  
+  fetchById(recipeId) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    
+    return this.http
+    .get<Recipe>(this.base + 'recipes/' + recipeId + this.getTokenQuery(), httpOptions)
+    .pipe(
+      retry(3),
+      catchError(this.handleError)
+    );
+  }
 
   create(data) {
     let formData: FormData = new FormData();

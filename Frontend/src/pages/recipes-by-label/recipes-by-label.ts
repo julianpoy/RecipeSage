@@ -65,7 +65,8 @@ export class RecipesByLabelPage {
   openRecipe(recipe) {
     // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
-      recipe: recipe
+      recipe: recipe,
+      recipeId: recipe._id
     });
   }
   

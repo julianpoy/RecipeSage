@@ -7,10 +7,11 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
 
-@IonicPage()
+@IonicPage({
+  segment: 'recipe/:recipeId',
+})
 @Component({
   selector: 'page-recipe',
-  segment: 'recipe/:recipe_id',
   templateUrl: 'recipe.html',
   providers: [ RecipeServiceProvider, LabelServiceProvider ]
 })
@@ -31,23 +32,50 @@ export class RecipePage {
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
+      
+    this.recipeId = navParams.get('recipeId');
+    this.recipe = navParams.get('recipe') || <Recipe>{};
 
-    if (navParams.get('recipe_id')) {
-      var recipeId = navParams.get('recipe_id');
-      
-      //TODO: In future, get single recipe here. For now, redirect to homepage
-      this.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
-    } else {
-      this.recipe = navParams.get('recipe') || <Recipe>{};
-      
-      if (!this.recipe._id) {
-        this.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
-      }
+    if (!this.recipe._id) {
+      this.loadRecipe();
     }
     
     this.scale = 1;
     
     this.applyScale();
+  }
+  
+  loadRecipe() {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Loading recipes...'
+    });
+  
+    loading.present();
+    
+    this.recipeService.fetchById(this.recipeId).subscribe(function(response) {
+      loading.dismiss();
+
+      me.recipe = response;
+      
+      me.applyScale();
+    }, function(err) {
+      loading.dismiss();
+
+      switch(err.status) {
+        case 401:
+          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          break;
+        default:
+          let errorToast = me.toastCtrl.create({
+            message: 'An unexpected error occured. Please restart application.',
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
+    });
   }
 
   ionViewDidLoad() {
