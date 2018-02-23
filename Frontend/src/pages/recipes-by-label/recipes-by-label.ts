@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 import { RecipePage } from '../recipe/recipe';
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
 
-import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
 @IonicPage()

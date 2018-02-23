@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { RecipesByLabelPage } from '../pages/recipes-by-label/recipes-by-label';
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
 import { ImportPage } from '../pages/import/import';

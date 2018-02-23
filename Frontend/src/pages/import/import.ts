@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
-import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 
 @IonicPage()
 @Component({

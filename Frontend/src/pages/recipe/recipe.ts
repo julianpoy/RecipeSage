@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 import { EditRecipePage } from '../edit-recipe/edit-recipe';
 import { HomePage } from '../home/home';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
-import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
+import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
