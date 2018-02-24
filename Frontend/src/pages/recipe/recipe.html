@@ -52,13 +52,13 @@
     <ion-item text-wrap>
       <ion-icon name="list" item-start large></ion-icon>
       <h2>Instructions</h2>
-      <p class="pre">{{ recipe.instructions || 'No Instructions' }}</p>
+      <p class="pre" text-wrap>{{ recipe.instructions || 'No Instructions' }}</p>
     </ion-item>
     
     <ion-item class="fixPaperPush" *ngIf="recipe.notes" text-wrap>
       <ion-icon name="paper" item-start large></ion-icon>
       <h2>Notes</h2>
-      <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+      <p class="pre" text-wrap>{{ recipe.notes || 'No Notes' }}</p>
     </ion-item>
     
     <br /><br /><br />
