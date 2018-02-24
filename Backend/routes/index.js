@@ -188,6 +188,8 @@ function saveRecipes(accountId, recipes) {
         } else {
           for (var i = 0; i < recipe.rawCategories.length; i++) {
             let rawCategory = recipe.rawCategories[i];
+            
+            if (rawCategory.length === 0) continue;
 
             Label.findOneAndUpdate({
               accountId: accountId,
