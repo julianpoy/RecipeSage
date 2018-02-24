@@ -42,9 +42,9 @@ export class RecipePage {
       this.instructions = this.recipe.instructions.split(/\r?\n/); 
     }
 
-    if (!this.recipe._id) {
-      this.loadRecipe();
-    }
+    // if (!this.recipe._id) {
+    this.loadRecipe();
+    // }
     
     this.applyScale();
   }
