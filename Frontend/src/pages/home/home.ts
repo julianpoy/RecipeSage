@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
