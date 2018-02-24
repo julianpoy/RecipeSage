@@ -20,6 +20,10 @@ export class HomePage {
   
   imageLoadOffset: number = 20;
   
+  viewType: string = localStorage.getItem('viewType') || 'cards';
+  
+  viewTypes: string[] = ['list', 'cards'];
+  
   constructor(
     public navCtrl: NavController,
     public loadingCtrl: LoadingController,
@@ -76,5 +80,17 @@ export class HomePage {
   
   toggleSearch() {
     this.showSearch = !this.showSearch;
+  }
+  
+  nextViewType() {
+    var viewTypeIdx = this.viewTypes.indexOf(this.viewType);
+    
+    viewTypeIdx++;
+
+    if (viewTypeIdx === this.viewTypes.length) viewTypeIdx = 0;
+    
+    this.viewType = this.viewTypes[viewTypeIdx];
+    
+    localStorage.setItem('viewType', this.viewType);
   }
 }

@@ -2,4 +2,8 @@ page-home {
   .recipeItem {
     cursor: pointer;
   }
+  
+  ion-content.content {
+    background-color: rgb(220, 220, 220);
+  }
 }

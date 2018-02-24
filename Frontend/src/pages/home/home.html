@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="navBar">
     <!--<button ion-button icon-only menuToggle>-->
     <!--  <ion-icon name="menu"></ion-icon>-->
     <!--</button>-->
@@ -11,20 +11,16 @@
     <ion-title>My Recipes</ion-title>
     
     <ion-buttons end>
-      <button ion-button (click)="toggleSearch()">
-        <ion-icon name="search"></ion-icon>
+      <button ion-button (click)="nextViewType()">
+        <ion-icon *ngIf="viewType == 'cards'" name="apps"></ion-icon>
+        <ion-icon *ngIf="viewType == 'list'" name="list"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content #container>
-  <ion-list>
-    <ion-item *ngIf="showSearch">
-      <ion-label floating>Search title or description</ion-label>
-      <ion-input [(ngModel)]="searchText" type="text"></ion-input>
-    </ion-item>
-
+  <ion-list *ngIf="viewType === 'list'">
     <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText" class="recipeItem">
       <ion-item (click)="openRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image" item-start>
@@ -61,6 +57,34 @@
       </p>
     </ion-item>
   </ion-list>
+  
+  <ion-grid *ngIf="viewType === 'cards'">
+    <ion-row>
+      <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let recipe of recipes">
+        <ion-card style="height: 100%">
+          <ion-item>
+            <ion-thumbnail *ngIf="recipe.image" item-start>
+              <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">
+            </ion-thumbnail>
+            <h2 text-wrap>{{ recipe.title }}</h2>
+          </ion-item>
+          <!--<ion-thumbnail *ngIf="recipe.image" item-start>-->
+            <!--<img src="{{ recipe.image.location }}">-->
+          <!--  <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">-->
+          <!--</ion-thumbnail>-->
+          <!--<ion-card-header>{{ recipe.title }}</ion-card-header>-->
+          <ion-card-content>
+            <p *ngIf="recipe.description && recipe.description.length > 0">
+              {{ recipe.description }}
+            </p>
+            <p *ngIf="recipe.labels && recipe.labels.length > 0">
+              Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   
   <ion-fab right bottom>
     <button (click)="newRecipe()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
