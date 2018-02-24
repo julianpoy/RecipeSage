@@ -48,7 +48,7 @@ router.post(
     } else {
       Label.findOneAndUpdate({
         accountId: res.locals.session.accountId,
-        title: req.body.title
+        title: req.body.title.toLowerCase()
       }, {
         $addToSet: {
           "recipes": recipe._id

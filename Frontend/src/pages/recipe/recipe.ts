@@ -245,7 +245,7 @@ export class RecipePage {
 
     this.labelService.create({
       recipeId: this.recipe._id,
-      title: this.newLabel
+      title: this.newLabel.toLowerCase()
     }).subscribe(function(response) {
       loading.dismiss();
       
