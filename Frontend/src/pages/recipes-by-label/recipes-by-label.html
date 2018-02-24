@@ -36,7 +36,7 @@
             <h2>{{ recipe.title }}</h2>
             <p>{{ recipe.description }}</p>
             <p *ngIf="recipe.labels && recipe.labels.length > 0">
-              Labels: <span *ngFor="let label of recipe.labels">{{ label.title }} </span>
+              Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
             </p>
           </ion-item>
           <ion-item-options side="right">
