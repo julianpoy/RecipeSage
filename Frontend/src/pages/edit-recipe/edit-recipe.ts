@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
@@ -20,25 +20,20 @@ export class EditRecipePage {
   
   recipe: Recipe;
   
-  errorMessage: string;
-  
   rawImageFile: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public recipeService: RecipeServiceProvider) {
     // this.recipe = <Recipe>{};
     this.recipe = navParams.get('recipe') || <Recipe>{};
-    
-    this.errorMessage = '';
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditRecipePage');
-    
-    this.errorMessage = '';
   }
   
   setFile(event) {
@@ -51,9 +46,16 @@ export class EditRecipePage {
   }
   
   save() {
-    var me = this;
-    this.errorMessage = '';
+    if (!this.recipe.title || this.recipe.title.length === 0) {
+      this.toastCtrl.create({
+        message: 'Please provide a recipe title (the only required field).',
+        duration: 6000
+      }).present();
+      return;
+    }
     
+    var me = this;
+
     let loading = this.loadingCtrl.create({
       content: 'Saving your recipe...'
     });
@@ -72,10 +74,16 @@ export class EditRecipePage {
         loading.dismiss();
         switch(err.status) {
           case 401:
-            me.errorMessage = 'That password doesn\'t match the email address you entered.';
+            me.toastCtrl.create({
+              message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+              duration: 6000
+            }).present();
             break;
           default:
-            me.errorMessage = 'An unexpected error occured. Please try again.';
+            me.toastCtrl.create({
+              message: 'An unexpected error occured. Please try again.',
+              duration: 6000
+            }).present();
             break;
         }
       });
@@ -87,14 +95,23 @@ export class EditRecipePage {
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
-          case 404:
-            me.errorMessage = 'I can\'t find an account with that email address.';
-            break;
           case 401:
-            me.errorMessage = 'That password doesn\'t match the email address you entered.';
+            me.toastCtrl.create({
+              message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+              duration: 6000
+            }).present();
+            break;
+          case 412:
+            me.toastCtrl.create({
+              message: 'Please provide a recipe title (the only required field).',
+              duration: 6000
+            }).present();
             break;
           default:
-            me.errorMessage = 'An unexpected error occured. Please try again.';
+            me.toastCtrl.create({
+              message: 'An unexpected error occured. Please try again.',
+              duration: 6000
+            }).present();
             break;
         }
       });

@@ -43,17 +43,23 @@ export class ImportPage {
       
       me.toastCtrl.create({
         message: 'We\'ve started importing your recipes! This may take a few minutes, and you won\'t see anything added until we\'re done.',
-        duration: 4000
+        duration: 6000
       }).present();
       
       me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
         default:
           me.toastCtrl.create({
             message: 'An unexpected error occured. Please try again.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
       }

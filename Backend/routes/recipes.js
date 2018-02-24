@@ -37,6 +37,16 @@ var upload = multer({
   })
 });
 
+function deleteS3Object(key, success, fail){
+  s3.deleteObject({
+    Bucket: config.aws.bucket,
+    Key: key
+  }, function(err, data) {
+    if (err) fail(err);
+    else success(data);
+  });
+}
+
 //Create a new recipe
 router.post(
   '/',
@@ -45,31 +55,45 @@ router.post(
   MiddlewareService.validateUser,
   upload.single('image'),
   function(req, res, next) {
-
-  var session = res.locals.session;
-
-  new Recipe({
-    accountId: session.accountId,
-		title: req.body.title,
-    description: req.body.description,
-    yield: req.body.yield,
-    activeTime: req.body.activeTime,
-    totalTime: req.body.totalTime,
-    source: req.body.source,
-    url: req.body.url,
-    notes: req.body.notes,
-    ingredients: req.body.ingredients,
-    instructions: req.body.instructions,
-    image: req.file
-  }).save(function(err, recipe) {
-    if (err) {
-      res.status(500).send("Error saving the recipe!");
+    
+  if (!req.body.title || req.body.title.length === 0) {
+    if (req.file && req.file.key) {
+      deleteS3Object(req.file.key, function() {
+        console.log("Cleaned s3 image after precondition failure");
+        res.status(412).send("Recipe title must be provided.");
+      }, function() {
+        console.log("Failed to clean s3 image after precondition failure!");
+        res.status(500).send("Original error: 412 - recipe title must be provided. While processing, there was another error: could not delete uploaded image from S3!");
+      });
     } else {
-      recipe = recipe.toObject();
-      recipe.labels = [];
-      res.status(201).json(recipe);
+      res.status(412).send("Recipe title must be provided.");
     }
-  });
+  } else {
+    var session = res.locals.session;
+
+    new Recipe({
+      accountId: session.accountId,
+  		title: req.body.title,
+      description: req.body.description,
+      yield: req.body.yield,
+      activeTime: req.body.activeTime,
+      totalTime: req.body.totalTime,
+      source: req.body.source,
+      url: req.body.url,
+      notes: req.body.notes,
+      ingredients: req.body.ingredients,
+      instructions: req.body.instructions,
+      image: req.file
+    }).save(function(err, recipe) {
+      if (err) {
+        res.status(500).send("Error saving the recipe!");
+      } else {
+        recipe = recipe.toObject();
+        recipe.labels = [];
+        res.status(201).json(recipe);
+      }
+    });
+  }
 });
 
 //Get all of a user's recipes
@@ -145,16 +169,6 @@ router.get(
     }
   });
 });
-
-function deleteS3Object(key, success, fail){
-  s3.deleteObject({
-    Bucket: config.aws.bucket,
-    Key: key
-  }, function(err, data) {
-    if (err) fail(err);
-    else success(data);
-  });
-}
 
 //Update a recipe
 router.put(

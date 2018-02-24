@@ -21,9 +21,9 @@ export class RecipePage {
   recipeId: string;
   ingredients: any;
   
-  scale: number;
+  scale: number = 1;
   
-  newLabel: string;
+  newLabel: string = '';
 
   constructor(
     public navCtrl: NavController,
@@ -40,8 +40,6 @@ export class RecipePage {
     if (!this.recipe._id) {
       this.loadRecipe();
     }
-    
-    this.scale = 1;
     
     this.applyScale();
   }
@@ -175,16 +173,22 @@ export class RecipePage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
         case 404:
           me.toastCtrl.create({
             message: 'Can\'t find the recipe you\'re trying to delete.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
             message: 'An unexpected error occured. Please try again.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
       }
@@ -198,7 +202,7 @@ export class RecipePage {
   shareRecipe() {
     let errorToast = this.toastCtrl.create({
       message: 'Coming soon!',
-      duration: 2000
+      duration: 4000
     });
     errorToast.present();
   }
@@ -214,6 +218,14 @@ export class RecipePage {
   }
   
   addLabel() {
+    if (this.newLabel.length === 0) {
+      this.toastCtrl.create({
+        message: 'Please enter a label and press enter to label this recipe.',
+        duration: 6000
+      }).present();
+      return;
+    }
+    
     var me = this;
     
     let loading = this.loadingCtrl.create({
@@ -235,16 +247,22 @@ export class RecipePage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
         case 404:
           me.toastCtrl.create({
             message: 'Can\'t find the recipe you\'re trying to add a label to. Please try again or reload this recipe page.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
             message: 'An unexpected error occured. Please try again.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
       }
@@ -296,13 +314,13 @@ export class RecipePage {
         case 404:
           me.toastCtrl.create({
             message: 'Can\'t find the recipe you\'re trying to delete a label from. Please try again or reload this recipe page.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
             message: 'An unexpected error occured. Please try again.',
-            duration: 4000
+            duration: 6000
           }).present();
           break;
       }

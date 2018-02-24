@@ -18,6 +18,13 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
+    
+  if (!req.body.title || req.body.title.length === 0) {
+    res.status(412).json({
+      msg: "Label title must be provided."
+    });
+    return;
+  }
   
   Recipe.findOneAndUpdate({
     accountId: res.locals.session.accountId,
