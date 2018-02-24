@@ -16,14 +16,17 @@
       <ion-input [(ngModel)]="name" type="text"></ion-input>
     </ion-item>
     
+    <input style="display: none;" name="email" />
+    <input style="display: none;" name="password" />
+    
     <ion-item>
       <ion-label floating>Email</ion-label>
-      <ion-input [(ngModel)]="email" type="text"></ion-input>
+      <ion-input autocomplete="off" autofill="off" [(ngModel)]="email" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
+      <ion-input autocomplete="off" autofill="off" [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="!showLogin">

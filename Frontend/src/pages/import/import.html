@@ -14,18 +14,23 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <p>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
+      <p text-wrap>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
     </ion-item>
+    
+    <input style="display: none;" name="username" />
+    <input style="display: none;" name="password" />
     
     <ion-item>
       <ion-label floating>Pepperplate Email/Username</ion-label>
-      <ion-input name="pepperplate-username" [(ngModel)]="username" type="text"></ion-input>
+      <ion-input autocomplete="off" autofill="off" [(ngModel)]="username" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Pepperplate Password</ion-label>
-      <ion-input name="pepperplate-password" [(ngModel)]="password" type="password"></ion-input>
+      <ion-input autocomplete="off" autofill="off" [(ngModel)]="password" type="password"></ion-input>
     </ion-item>
+    
+    <br /><br />
     
     <ion-item text-wrap>
       <p>
