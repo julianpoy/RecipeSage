@@ -23,12 +23,12 @@
 
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="password" type="password"></ion-input>
+      <ion-input [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="!showLogin">
       <ion-label floating>Confirm Password</ion-label>
-      <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
+      <ion-input [(ngModel)]="confirmPassword" (keyup.enter)="auth()" type="password"></ion-input>
     </ion-item>
 
     <div padding>
