@@ -228,6 +228,7 @@ export class RecipePage {
     }).subscribe(function(response) {
       loading.dismiss();
       
+      if (!me.recipe.labels) me.recipe.labels = [];
       me.recipe.labels.push(response);
       
       me.newLabel = '';
