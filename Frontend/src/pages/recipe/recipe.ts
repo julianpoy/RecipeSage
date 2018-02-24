@@ -209,6 +209,10 @@ export class RecipePage {
     }
   }
   
+  labelFieldSubmit() {
+    this.addLabel();
+  }
+  
   addLabel() {
     var me = this;
     

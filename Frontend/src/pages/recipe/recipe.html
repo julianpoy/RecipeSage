@@ -76,7 +76,7 @@
     
     <ion-item>
       <!--<ion-label stacked>Add label</ion-label>-->
-      <ion-input [(ngModel)]="newLabel" (keydown)="labelFieldKeydown($event)" placeholder="Add Label" type="text" value=""></ion-input>
+      <ion-input [(ngModel)]="newLabel" (keyup.enter)="labelFieldSubmit()" placeholder="Add Label" type="text" value=""></ion-input>
     </ion-item>
     
     <br />
