@@ -91,7 +91,10 @@ export class EditRecipePage {
       this.recipeService.create(this.recipe).subscribe(function(response) {
         loading.dismiss();
         
-        me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+        me.navCtrl.setRoot('RecipePage', {
+          recipe: response,
+          recipeId: response._id
+        }, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
