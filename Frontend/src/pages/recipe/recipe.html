@@ -52,7 +52,8 @@
     <ion-item text-wrap>
       <ion-icon name="list" item-start large></ion-icon>
       <h2>Instructions</h2>
-      <p class="pre" text-wrap>{{ recipe.instructions || 'No Instructions' }}</p>
+      <p *ngFor="let instruction of instructions; let idx = index" text-wrap><b>{{ idx+1 }}.</b> {{ instruction }}</p>
+      <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
     </ion-item>
     
     <ion-item class="fixPaperPush" *ngIf="recipe.notes" text-wrap>

@@ -20,6 +20,7 @@ export class RecipePage {
   recipe: Recipe;
   recipeId: string;
   ingredients: any;
+  instructions: string[];
   
   scale: number = 1;
   
@@ -36,6 +37,10 @@ export class RecipePage {
       
     this.recipeId = navParams.get('recipeId');
     this.recipe = navParams.get('recipe') || <Recipe>{};
+    
+    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
+      this.instructions = this.recipe.instructions.split(/\r?\n/); 
+    }
 
     if (!this.recipe._id) {
       this.loadRecipe();
@@ -57,6 +62,10 @@ export class RecipePage {
       loading.dismiss();
 
       me.recipe = response;
+      
+      if (me.recipe.instructions && me.recipe.instructions.length > 0) {
+        me.instructions = me.recipe.instructions.split(/\r?\n/); 
+      }
       
       me.applyScale();
     }, function(err) {
