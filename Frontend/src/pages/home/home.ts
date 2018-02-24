@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
+
+import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
@@ -7,7 +10,7 @@ import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/re
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ RecipeServiceProvider ]
+  providers: [ LazyLoadImageDirective, RecipeServiceProvider ]
 })
 export class HomePage {
   
@@ -15,6 +18,8 @@ export class HomePage {
 
   showSearch: boolean;
   searchText: string;
+  
+  imageLoadOffset: number = 20;
   
   constructor(
     public navCtrl: NavController,
@@ -26,7 +31,7 @@ export class HomePage {
     this.searchText = '';
     this.showSearch = false;
   }
-  
+
   loadRecipes() {
     var me = this;
     

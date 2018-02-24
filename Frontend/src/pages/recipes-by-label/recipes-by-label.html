@@ -17,7 +17,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content #container>
   <ion-list>
     <ion-item *ngIf="showSearch">
       <ion-label floating>Search for label</ion-label>
@@ -30,7 +30,8 @@
         <ion-item-sliding *ngFor="let recipe of label.recipes | basicFilter:searchText" class="recipeItem">
           <ion-item (click)="openRecipe(recipe)">
             <ion-thumbnail *ngIf="recipe.image" item-start>
-              <img src="{{ recipe.image.location }}">
+              <!--<img src="{{ recipe.image.location }}">-->
+              <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">
             </ion-thumbnail>
             <h2>{{ recipe.title }}</h2>
             <p>{{ recipe.description }}</p>

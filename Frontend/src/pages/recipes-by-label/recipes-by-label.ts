@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 
+import { LazyLoadImageDirective } from 'ng-lazyload-image';
+
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
@@ -8,6 +10,7 @@ import { LabelServiceProvider, Label } from '../../providers/label-service/label
 @Component({
   selector: 'page-recipes-by-label',
   templateUrl: 'recipes-by-label.html',
+  providers: [ LazyLoadImageDirective, RecipeServiceProvider, LabelServiceProvider ]
 })
 export class RecipesByLabelPage {
   
@@ -15,6 +18,8 @@ export class RecipesByLabelPage {
 
   showSearch: boolean;
   searchText: string;
+  
+  imageLoadOffset: number = 20;
 
   constructor(public navCtrl: NavController,
     public loadingCtrl: LoadingController,

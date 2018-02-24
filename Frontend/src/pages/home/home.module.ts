@@ -3,13 +3,16 @@ import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 import { PipesModule } from './../../pipes/pipes.module';
 
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+
 @NgModule({
   declarations: [
     HomePage,
   ],
   imports: [
     IonicPageModule.forChild(HomePage),
-    PipesModule
+    PipesModule,
+    LazyLoadImageModule
   ],
 })
 export class HomePageModule {}
