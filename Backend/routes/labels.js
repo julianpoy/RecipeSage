@@ -74,6 +74,7 @@ router.get(
   Label.find({
     accountId: res.locals.session.accountId
   })
+  .sort('title')
   .populate('recipes')
   .exec(function(err, labels) {
     if (err) {
