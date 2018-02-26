@@ -3,6 +3,7 @@ var router = express.Router();
 var cors = require('cors');
 var aws = require('aws-sdk');
 var multer = require('multer');
+var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
 var request = require('request');
 
@@ -25,18 +26,41 @@ aws.config.update({
 });
 
 var upload = multer({
-  storage: multerS3({
-    s3: s3,
+  storage: multerImager({
     dirname: '/',
     bucket: config.aws.bucket,
-    acl: 'public-read',
-    metadata: function (req, file, cb) {
-      cb(null, {fieldName: file.fieldname});
+    accessKeyId: config.aws.accessKeyId,
+    secretAccessKey: config.aws.secretAccessKey,
+    region: config.aws.region,
+    filename: function (req, file, cb) {  // [Optional]: define filename (default: random)
+      cb(null, Date.now())                // i.e. with a timestamp
+    },                                    //
+    gm: {                                 // [Optional]: define graphicsmagick options
+      width: 200,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
+      // height: 200,
+      options: '!',
+      format: 'png'                       // Default: jpg
     },
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString())
+    s3 : {                                // [Optional]: define s3 options
+      ACL: 'public-read',
+      Metadata: {
+        'acl': 'public-read'
+      }
     }
   })
+  
+  // multerS3({
+  //   s3: s3,
+  //   dirname: '/',
+  //   bucket: config.aws.bucket,
+  //   acl: 'public-read',
+  //   metadata: function (req, file, cb) {
+  //     cb(null, {fieldName: file.fieldname});
+  //   },
+  //   key: function (req, file, cb) {
+  //     cb(null, Date.now().toString())
+  //   }
+  // })
 });
 
 function deleteS3Object(key, success, fail){
