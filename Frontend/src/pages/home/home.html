@@ -8,14 +8,14 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     
-    <ion-title>My Recipes</ion-title>
+    <ion-title>{{ folderTitle }}</ion-title>
     
-    <ion-buttons end>
-      <button ion-button (click)="nextViewType()">
-        <ion-icon *ngIf="viewType == 'cards'" name="apps"></ion-icon>
-        <ion-icon *ngIf="viewType == 'list'" name="list"></ion-icon>
-      </button>
-    </ion-buttons>
+    <!--<ion-buttons end>-->
+    <!--  <button ion-button (click)="nextViewType()">-->
+    <!--    <ion-icon *ngIf="viewType == 'cards'" name="apps"></ion-icon>-->
+    <!--    <ion-icon *ngIf="viewType == 'list'" name="list"></ion-icon>-->
+    <!--  </button>-->
+    <!--</ion-buttons>-->
   </ion-navbar>
 </ion-header>
 
@@ -29,6 +29,11 @@
         </ion-thumbnail>
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
+        
+        <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+          <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+        </p>
+        
         <p *ngIf="recipe.labels && recipe.labels.length > 0">
           Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
         </p>
@@ -49,11 +54,18 @@
       </ion-item-options>
     </ion-item-sliding>
     
-    <ion-item *ngIf="!recipes || recipes.length === 0" text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0)" text-wrap text-center>
       <p>
         Welcome to Recipe Sage!<br />
         It looks like you have no recipes yet.<br />
         Click the button in the bottom right corner to add one!
+      </p>
+    </ion-item>
+    
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0)" text-wrap text-center>
+      <p>
+        Your inbox is empty.<br />
+        When someone sends you a recipe, it will show up here!
       </p>
     </ion-item>
   </ion-list>
@@ -86,7 +98,7 @@
     </ion-row>
   </ion-grid>
   
-  <ion-fab right bottom>
+  <ion-fab *ngIf="folder !== 'inbox'" right bottom>
     <button (click)="newRecipe()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
     <!--<ion-fab-list side="left">-->
     <!--  <button ion-fab><ion-icon name="create"></ion-icon></button>-->

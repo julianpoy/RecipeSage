@@ -4,9 +4,11 @@ var cors = require('cors');
 var aws = require('aws-sdk');
 var multer = require('multer');
 var multerS3 = require('multer-s3');
+var request = require('request');
 
 // DB
 var mongoose = require('mongoose');
+var User = mongoose.model('User');
 var Recipe = mongoose.model('Recipe');
 var Label = mongoose.model('Label');
 
@@ -47,6 +49,51 @@ function deleteS3Object(key, success, fail){
   });
 }
 
+// Dupe from index.js
+function sendURLToS3(url, callback) {
+  request({
+    url: url,
+    encoding: null
+  }, function(err, res, body) {
+    if (err)
+      return callback(err, res);
+
+    var key = new Date().getTime().toString();
+    
+    var contentType = res.headers['content-type'];
+    var contentLength = res.headers['content-length'];
+    console.log(contentType, contentLength)
+
+    s3.putObject({
+      Bucket: config.aws.bucket,
+      Key: key,
+      ACL: 'public-read',
+      Body: body // buffer
+    }, function(err, response) {
+      var img;
+
+      if (!err) {
+        img = {
+          fieldname: "image",
+          originalname: 'recipe-sage-img.jpg',
+          mimetype: contentType,
+          size: contentLength,
+          bucket: config.aws.bucket,
+          key: key,
+          acl: "public-read",
+          metadata: {
+            fieldName: "image"
+          },
+          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+          etag: response.ETag
+        }
+      }
+      
+      callback(err, img)
+    });
+  });
+}
+
 //Create a new recipe
 router.post(
   '/',
@@ -55,8 +102,15 @@ router.post(
   MiddlewareService.validateUser,
   upload.single('image'),
   function(req, res, next) {
-    
+  
+  var folder = 'main'; // Default folder
+  if (req.body.destinationUserEmail) { //We're sending the recipe to someone else
+    folder = 'inbox';
+  }
+
+  // Check for title
   if (!req.body.title || req.body.title.length === 0) {
+    // Clean up image if we created one to save space
     if (req.file && req.file.key) {
       deleteS3Object(req.file.key, function() {
         console.log("Cleaned s3 image after precondition failure");
@@ -69,29 +123,79 @@ router.post(
       res.status(412).send("Recipe title must be provided.");
     }
   } else {
-    var session = res.locals.session;
-
-    new Recipe({
-      accountId: session.accountId,
-  		title: req.body.title,
-      description: req.body.description,
-      yield: req.body.yield,
-      activeTime: req.body.activeTime,
-      totalTime: req.body.totalTime,
-      source: req.body.source,
-      url: req.body.url,
-      notes: req.body.notes,
-      ingredients: req.body.ingredients,
-      instructions: req.body.instructions,
-      image: req.file
-    }).save(function(err, recipe) {
-      if (err) {
-        res.status(500).send("Error saving the recipe!");
+    // Load up destination user (if we're doing a share request)
+    var findDestinationUserPromise = new Promise(function(resolve, reject) {
+      if (req.body.destinationUserEmail) {
+        User.findOne({ email: req.body.destinationUserEmail }).exec(function(err, user) {
+          if (err) {
+            reject(500, 'Could not search DB for destination user.');
+          } else if (!user) {
+            reject(404, 'Could not find destination user under that ID.');
+          } else {
+            resolve(user);
+          }
+        })
       } else {
-        recipe = recipe.toObject();
-        recipe.labels = [];
-        res.status(201).json(recipe);
+        resolve(null);
       }
+    });
+    
+    // After we've found (or not found) the destination user, continue
+    findDestinationUserPromise.then(function(alternateDestinationUser) {
+      var validatedDestinationAccountId = res.locals.session.accountId;
+      var fromUser = null;
+      if (alternateDestinationUser) {
+        validatedDestinationAccountId = alternateDestinationUser._id;
+        fromUser = res.locals.session.accountId;
+      }
+
+      // Support for imageURLs instead of image files
+      var uploadByURLPromise = new Promise(function(resolve, reject) {
+        if (req.body.imageURL) {
+          sendURLToS3(req.body.imageURL, function(err, img) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(img);
+            }
+          });
+        } else {
+          resolve(null);
+        }  
+      });
+      
+      uploadByURLPromise.then(function(img) {
+        var uploadedFile = img || req.file;
+        
+        new Recipe({
+          accountId: validatedDestinationAccountId,
+      		title: req.body.title,
+          description: req.body.description,
+          yield: req.body.yield,
+          activeTime: req.body.activeTime,
+          totalTime: req.body.totalTime,
+          source: req.body.source,
+          url: req.body.url,
+          notes: req.body.notes,
+          ingredients: req.body.ingredients,
+          instructions: req.body.instructions,
+          image: uploadedFile,
+          folder: folder,
+          fromUser: fromUser
+        }).save(function(err, recipe) {
+          if (err) {
+            res.status(500).send("Error saving the recipe!");
+          } else {
+            recipe = recipe.toObject();
+            recipe.labels = [];
+            res.status(201).json(recipe);
+          }
+        });
+      }, function() {
+        res.status(500).send("Error uploading image via URL!");
+      });
+    }, function(errCode, err) {
+      res.status(errCode).send(err);
     });
   }
 });
@@ -105,8 +209,13 @@ router.get(
   function(req, res, next) {
 
   Recipe.find({
-    accountId: res.locals.session.accountId
-  }).sort('title').lean().exec(function(err, recipes) {
+    accountId: res.locals.session.accountId,
+    folder: req.query.folder
+  })
+  .sort('title')
+  .populate('fromUser', 'name email')
+  .lean()
+  .exec(function(err, recipes) {
     if (err) {
       res.status(500).send("Couldn't search the database for recipes!");
     } else {
@@ -151,7 +260,10 @@ router.get(
   Recipe.findOne({
     accountId: res.locals.session.accountId,
     _id: req.params.recipeId
-  }).lean().exec(function(err, recipe) {
+  })
+  .populate('fromUser', 'name email')
+  .lean()
+  .exec(function(err, recipe) {
     if (err) {
       res.status(500).send("Couldn't search the database for recipe!");
     } else {
@@ -202,6 +314,7 @@ router.put(
       if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
       if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
       if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+      if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
       
       // Check if user uploaded a new image. If so, delete the old image to save space and $$
       if (req.file) {

@@ -22,6 +22,10 @@
     </ion-item>
     
     <ion-card-content>
+      <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+        <b>This recipe was sent to you by {{ recipe.fromUser.name || recipe.fromUser.email }}</b><br />
+        Add this recipe to your recipes by clicking the button at the bottom of the page.<br /><br />
+      </p>
       <p *ngIf="recipe.yield">Yield: {{ recipe.yield }}</p> 
       <p *ngIf="recipe.activeTime">Active Time: {{ recipe.activeTime }}</p> 
       <p *ngIf="recipe.totalTime">Total Time: {{ recipe.totalTime }}</p>  
@@ -69,7 +73,7 @@
       </p>
     </ion-item>
     
-    <ion-item>
+    <ion-item *ngIf="recipe.folder !== 'inbox'">
       <!--<ion-label stacked>Add label</ion-label>-->
       <ion-input [(ngModel)]="newLabel" (keyup.enter)="labelFieldSubmit()" placeholder="Add Label" type="text" value=""></ion-input>
     </ion-item>
@@ -82,8 +86,27 @@
         Last edited on {{ prettyDateTime(recipe.updated) }}
       </p>
     </ion-item>
+    
+    <div *ngIf="recipe.folder === 'inbox'" padding>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
+          	<button ion-button icon-left block (click)="moveToFolder('main')">
+          	  <ion-icon name="cloud-download"></ion-icon>
+          	  Save This Recipe to My Recipes
+          	</button>
+          </ion-col>
+          <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
+          	<button color="danger" ion-button icon-left block (click)="deleteRecipe()">
+        	    <ion-icon name="trash"></ion-icon>
+          	  Delete
+        	  </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  	</div>
   
-    <ion-row>
+    <ion-row *ngIf="recipe.folder === 'main'">
       <ion-col center text-center>
         <button (click)="editRecipe()" ion-button icon-left clear small>
           <ion-icon name="create"></ion-icon>
@@ -98,7 +121,7 @@
       </ion-col>
       <ion-col center text-center>
         <button (click)="shareRecipe()" ion-button icon-left clear small>
-          <ion-icon name="contact"></ion-icon>
+          <ion-icon name="share"></ion-icon>
           <div>Share</div>
         </button>
       </ion-col>

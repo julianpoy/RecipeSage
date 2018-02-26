@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
-@IonicPage()
+@IonicPage({
+  segment: 'list/:folder',
+})
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
@@ -20,15 +22,30 @@ export class HomePage {
   
   imageLoadOffset: number = 20;
   
-  viewType: string = localStorage.getItem('viewType') || 'cards';
+  viewType: string = localStorage.getItem('viewType') || 'list';
   
   viewTypes: string[] = ['list', 'cards'];
   
+  folder: string;
+  folderTitle: string;
+  
   constructor(
     public navCtrl: NavController,
+    public navParams: NavParams,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider) {
+      
+    this.folder = navParams.get('folder') || 'main';
+    switch(this.folder) {
+      case 'inbox':
+        this.folderTitle = 'Inbox';
+        break;
+      default:
+        this.folderTitle = 'My Recipes';
+        break;
+    }
+    
     this.loadRecipes();
     
     this.searchText = '';
@@ -44,7 +61,7 @@ export class HomePage {
   
     loading.present();
     
-    this.recipeService.fetch().subscribe(function(response) {
+    this.recipeService.fetch(this.folder).subscribe(function(response) {
       loading.dismiss();
 
       me.recipes = response;      

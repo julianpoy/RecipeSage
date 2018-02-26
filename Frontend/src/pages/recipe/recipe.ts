@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController, ModalController } from 'ionic-angular';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
@@ -30,6 +30,7 @@ export class RecipePage {
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
+    public modalCtrl: ModalController,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
@@ -177,8 +178,8 @@ export class RecipePage {
     
     this.recipeService.remove(this.recipe).subscribe(function(response) {
       loading.dismiss();
-      
-      me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+
+      me.navCtrl.setRoot('HomePage', { folder: me.recipe.folder }, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
@@ -209,11 +210,53 @@ export class RecipePage {
   }
   
   shareRecipe() {
-    let errorToast = this.toastCtrl.create({
-      message: 'Coming soon!',
-      duration: 4000
+    // let errorToast = this.toastCtrl.create({
+    //   message: 'Coming soon!',
+    //   duration: 4000
+    // });
+    // errorToast.present();
+    
+    let shareModal = this.modalCtrl.create('ShareModalPage', { recipe: this.recipe });
+    shareModal.present();
+  }
+  
+  moveToFolder(folderName) {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Loading...'
     });
-    errorToast.present();
+  
+    loading.present();
+    
+    this.recipe.folder = folderName;
+    
+    console.log(this.recipe)
+
+    this.recipeService.update(this.recipe).subscribe(function(response) {
+      loading.dismiss();
+      
+      me.navCtrl.setRoot('RecipePage', {
+        recipe: response,
+        recipeId: response._id
+      }, {animate: true, direction: 'forward'});
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
   }
   
   labelFieldKeydown(event) {

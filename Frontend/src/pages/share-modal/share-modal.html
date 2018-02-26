@@ -1,0 +1,69 @@
+<ion-header>
+  
+  <ion-navbar>
+    <ion-title>Share Recipe</ion-title>
+    
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+      <ion-item>
+        <ion-avatar *ngIf="recipe.image" item-start>
+          <img src="{{ recipe.image.location }}">
+        </ion-avatar>
+        <h2>{{ recipe.title }}</h2>
+        <p text-wrap>
+          When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.
+        </p>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label floating>Recipient Email</ion-label>
+        <ion-input [(ngModel)]="destinationUserEmail"></ion-input>
+      </ion-item>
+      
+      <div *ngIf="recents.length > 0" padding-left padding-top>
+        <p>Recents:</p>
+      </div>
+
+      <ion-grid *ngIf="recents.length > 0">
+        <ion-row>
+          <ion-col col-12 col-md-6 col-lg-4 col-xl-4 *ngFor="let recipient of recents">
+            <ion-card>
+              <ion-item text-center>
+                <button (click)="destinationUserEmail = recipient" ion-button icon-left clear small>
+                  <div>{{ recipient }}</div>
+                </button>
+              </ion-item>
+              
+              <ion-row>
+                <ion-col text-center>
+                  <button (click)="removeRecent(recipient)" ion-button icon-left clear small>
+                    <ion-icon name="contact"></ion-icon>
+                    <div>Forget</div>
+                  </button>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+  </ion-list>
+</ion-content>
+
+<ion-footer padding>
+  <button ion-button icon-left block (click)="send()">
+    <ion-icon name="send"></ion-icon>
+    Send
+  </button>
+</ion-footer>

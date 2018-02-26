@@ -78,7 +78,7 @@ export class LoginPage {
         
         localStorage.setItem('token', response.token);
         
-        me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+        me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
@@ -104,7 +104,7 @@ export class LoginPage {
           
           localStorage.setItem('token', response.token);
           
-          me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+          me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
         }, function(err) {
           loading.dismiss();
           switch(err.status) {

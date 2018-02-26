@@ -21,6 +21,10 @@ export interface Recipe {
   labels: Label[];
   image: any;
   imageFile: any;
+  imageURL: string;
+  destinationUserEmail: string;
+  fromUser: any;
+  folder: string;
 }
 
 @Injectable()
@@ -38,15 +42,18 @@ export class RecipeServiceProvider {
     return '?token=' + localStorage.getItem('token');
   }
   
-  fetch() {
+  fetch(folder) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
     
+    var url = this.base + 'recipes/' + this.getTokenQuery();
+    if (folder) url += '&folder=' + folder;
+    
     return this.http
-    .get<Recipe[]>(this.base + 'recipes/' + this.getTokenQuery(), httpOptions)
+    .get<Recipe[]>(url, httpOptions)
     .pipe(
       retry(3),
       catchError(this.handleError)
@@ -85,6 +92,24 @@ export class RecipeServiceProvider {
 
     return this.http
     .post(this.base + 'recipes/' + this.getTokenQuery(), formData, httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  share(data) {
+    if (!data.destinationUserEmail) throw 'DestinationUserEmail required for share operation';
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    if (data.image) data.imageURL = data.image.location;
+
+    return this.http
+    .post(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
     .pipe(
       catchError(this.handleError)
     );

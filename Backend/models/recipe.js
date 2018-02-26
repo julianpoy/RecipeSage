@@ -38,6 +38,14 @@ var Recipe = new Schema({
   image: {
     // Multer-S3 Object    
   },
+  folder: {
+    type: String,
+    default: 'main'
+  },
+  fromUser: {
+    type: String,
+    ref: 'User'
+  },
   created: {
     type: Date,
     default: Date.now

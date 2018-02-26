@@ -1,0 +1,117 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController, ToastController, LoadingController } from 'ionic-angular';
+
+import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+
+@IonicPage()
+@Component({
+  selector: 'page-share-modal',
+  templateUrl: 'share-modal.html',
+})
+export class ShareModalPage {
+  
+  recipe: Recipe;
+  
+  destinationUserEmail: string;
+  
+  recents: string[] = [];
+
+  constructor(
+  public navCtrl: NavController,
+  public navParams: NavParams,
+  public toastCtrl: ToastController,
+  public loadingCtrl: LoadingController,
+  public recipeService: RecipeServiceProvider,
+  public viewCtrl: ViewController) {
+    this.recipe = navParams.get('recipe');
+    
+    if (localStorage.getItem('recents')) {
+      this.recents = JSON.parse(localStorage.getItem('recents'));
+    }
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ShareModalPage');
+  }
+  
+  cancel() {
+    this.viewCtrl.dismiss();
+  }
+  
+  removeRecent(email) {
+    if (this.recents.indexOf(email) > -1) {
+      this.recents.splice(this.recents.indexOf(email), 1);
+      
+      localStorage.setItem('recents', JSON.stringify(this.recents));
+    }
+  }
+  
+  send() {
+    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+    if (!this.destinationUserEmail || this.destinationUserEmail.length === 0) {
+      let errorToast = this.toastCtrl.create({
+        message: 'Please enter the email address of the user you\'d like to send this recipe to.',
+        duration: 6000
+      });
+      errorToast.present();
+      return;
+    } else if (!emailRegex.test(this.destinationUserEmail)) {
+      let errorToast = this.toastCtrl.create({
+        message: 'Please enter a valid email address.',
+        duration: 6000
+      });
+      errorToast.present();
+      return;
+    }
+    
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Sending recipe...'
+    });
+  
+    loading.present();
+    
+    this.recipe.destinationUserEmail = this.destinationUserEmail;
+    
+    this.recipeService.share(this.recipe).subscribe(function(response) {
+      if (me.recents.indexOf(me.destinationUserEmail) === -1) {
+        me.recents.push(me.destinationUserEmail);
+        
+        localStorage.setItem('recents', JSON.stringify(me.recents));
+      }
+      
+      loading.dismiss();
+
+      me.cancel();
+      
+      me.toastCtrl.create({
+        message: 'Successfully sent recipe to recipient.',
+        duration: 6000
+      }).present();
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        case 404:
+          me.toastCtrl.create({
+            message: 'I couldn\'t find a Recipe Sage user with that email address.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
+
+}

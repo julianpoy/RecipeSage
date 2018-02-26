@@ -8,19 +8,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
-  rootPage: any;
+  
+  rootPage: string = 'HomePage';
+  rootPageParams: any = { folder: 'main' };
 
   pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
     
-    if(localStorage.getItem('token')) {
-      this.rootPage = 'HomePage';
-    }else{
-      this.rootPage = 'LoginPage';
-    }
+    // this.navCtrl.setRoot('HomePage', { folder: 'main' });
   }
   
   navList() {
@@ -31,8 +28,9 @@ export class MyApp {
     ];
 
     var loggedInPages = [
-      { title: 'My Recipes', component: 'HomePage' },
+      { title: 'My Recipes', component: 'HomePage', navData: { folder: 'main' } },
       { title: 'My Labels', component: 'RecipesByLabelPage' },
+      { title: 'Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Add Recipe', component: 'EditRecipePage' },
       { title: 'Import', component: 'ImportPage' },
       { title: 'Logout', component: 'LoginPage' }
@@ -53,12 +51,18 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      
+      // if(localStorage.getItem('token')) {
+      //   this.nav.setRoot('HomePage', { folder: 'main' });
+      // }else{
+      //   this.nav.setRoot('LoginPage');
+      // }
     });
   }
 
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.nav.setRoot(page.component, page.navData);
   }
 }

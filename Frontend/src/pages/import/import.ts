@@ -46,7 +46,7 @@ export class ImportPage {
         duration: 6000
       }).present();
       
-      me.navCtrl.setRoot('HomePage', {}, {animate: true, direction: 'forward'});
+      me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
