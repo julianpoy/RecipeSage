@@ -34,6 +34,7 @@
         </ion-thumbnail>
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>
+        <p *ngIf="recipe.source && viewOptions.showSource">Source: {{ recipe.source }}</p>
         
         <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
           <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>

@@ -29,12 +29,7 @@ export class HomePage {
   folder: string;
   folderTitle: string;
   
-  viewOptions: any = {
-    showLabels: JSON.parse(localStorage.getItem('showLabels') || true),
-    showImages: JSON.parse(localStorage.getItem('showImages') || true),
-    showSource: JSON.parse(localStorage.getItem('showSource') || false),
-    sortByLabel: JSON.parse(localStorage.getItem('sortByLabel') || false)
-  };
+  viewOptions: any;
   
   constructor(
     public navCtrl: NavController,
@@ -53,11 +48,36 @@ export class HomePage {
         this.folderTitle = 'My Recipes';
         break;
     }
-
+    
+    this.loadViewOptions();
     this.loadRecipes();
     
     this.searchText = '';
     this.showSearch = false;
+  }
+  
+  loadViewOptions() {
+    var defaults = {
+      showLabels: true,
+      showImages: true,
+      showSource: false,
+      sortByLabel: false,
+    }
+    
+    this.viewOptions = {
+      showLabels: JSON.parse(localStorage.getItem('showLabels')),
+      showImages: JSON.parse(localStorage.getItem('showImages')),
+      showSource: JSON.parse(localStorage.getItem('showSource')),
+      sortByLabel: JSON.parse(localStorage.getItem('sortByLabel')),
+    }
+    
+    for (var key in this.viewOptions) {
+      if (this.viewOptions.hasOwnProperty(key)) {
+        if (this.viewOptions[key] == null) {
+          this.viewOptions[key] = defaults[key];
+        }
+      }
+    }
   }
 
   loadRecipes() {
@@ -100,7 +120,6 @@ export class HomePage {
   }
   
   presentPopover(event) {
-    console.log(this.viewOptions)
     let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
 
     popover.present({
