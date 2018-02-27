@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, PopoverController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
@@ -29,9 +29,17 @@ export class HomePage {
   folder: string;
   folderTitle: string;
   
+  viewOptions: any = {
+    showLabels: JSON.parse(localStorage.getItem('showLabels') || true),
+    showImages: JSON.parse(localStorage.getItem('showImages') || true),
+    showSource: JSON.parse(localStorage.getItem('showSource') || false),
+    sortByLabel: JSON.parse(localStorage.getItem('sortByLabel') || false)
+  };
+  
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider) {
@@ -45,7 +53,7 @@ export class HomePage {
         this.folderTitle = 'My Recipes';
         break;
     }
-    
+
     this.loadRecipes();
     
     this.searchText = '';
@@ -88,6 +96,15 @@ export class HomePage {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe._id
+    });
+  }
+  
+  presentPopover(event) {
+    console.log(this.viewOptions)
+    let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
+
+    popover.present({
+      ev: event
     });
   }
   

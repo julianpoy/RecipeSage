@@ -16,6 +16,11 @@
     <!--    <ion-icon *ngIf="viewType == 'list'" name="list"></ion-icon>-->
     <!--  </button>-->
     <!--</ion-buttons>-->
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -23,7 +28,7 @@
   <ion-list *ngIf="viewType === 'list'">
     <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText" class="recipeItem">
       <ion-item (click)="openRecipe(recipe)">
-        <ion-thumbnail *ngIf="recipe.image" item-start>
+        <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
           <!--<img src="{{ recipe.image.location }}">-->
           <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">
         </ion-thumbnail>
@@ -34,7 +39,7 @@
           <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
         </p>
         
-        <p *ngIf="recipe.labels && recipe.labels.length > 0">
+        <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels">
           Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
         </p>
       </ion-item>
@@ -74,8 +79,8 @@
     <ion-row>
       <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let recipe of recipes">
         <ion-card style="height: 100%">
-          <ion-item>
-            <ion-thumbnail *ngIf="recipe.image" item-start>
+          <ion-item text-wrap>
+            <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
               <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">
             </ion-thumbnail>
             <h2 text-wrap>{{ recipe.title }}</h2>

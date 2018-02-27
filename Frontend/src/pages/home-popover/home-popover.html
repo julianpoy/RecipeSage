@@ -1,0 +1,53 @@
+<ion-list no-border>
+  <ion-list-header>
+    Options
+  </ion-list-header>
+
+  <!--<ion-item>-->
+  <!--  <ion-icon name='pricetag' item-start></ion-icon>-->
+  <!--  Show labels-->
+  <!--  <ion-note item-end>-->
+  <!--  To the moon-->
+  <!--  </ion-note>-->
+  <!--</ion-item>-->
+
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showLabels" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Labels
+    </ion-label>
+    <ion-icon name='pricetag' item-start></ion-icon>
+  </ion-item>
+  
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showImages" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Images
+    </ion-label>
+    <ion-icon name='image' item-start></ion-icon>
+  </ion-item>
+
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showSource" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Source
+    </ion-label>
+    <ion-icon name='link' item-start></ion-icon>
+  </ion-item>
+  
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.sortByLabel" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Sort by Label
+    </ion-label>
+    <ion-icon name='image' item-start></ion-icon>
+  </ion-item>
+
+  <!--<ion-item>-->
+  <!--  <ion-icon name='flask' item-start></ion-icon>-->
+  <!--  Potions-->
+  <!--  <ion-note item-end>-->
+  <!--  Poisonous-->
+  <!--  </ion-note>-->
+  <!--</ion-item>-->
+</ion-list>
