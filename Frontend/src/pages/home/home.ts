@@ -118,9 +118,9 @@ export class HomePage {
   }
   
   requestNotifications() {
-    if (Notification.permission === 'denied') return;
+    if ((<any>Notification).permission === 'denied') return;
 
-    if (Notification.permission === 'granted') {
+    if ((<any>Notification).permission === 'granted') {
       this.messagingService.enableNotifications();
       return;
     }
