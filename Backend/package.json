@@ -12,6 +12,7 @@
     "cors": "^2.8.4",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "firebase-admin": "^5.9.1",
     "jade": "~1.11.0",
     "moment": "^2.20.1",
     "mongodb": "^3.0.2",

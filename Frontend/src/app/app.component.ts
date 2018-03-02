@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -13,11 +15,43 @@ export class MyApp {
   rootPageParams: any = { folder: 'main' };
 
   pages: Array<{title: string, component: any}>;
+  
+  inboxCount: number;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public events: Events,
+    public splashScreen: SplashScreen,
+    public toastCtrl: ToastController,
+    public recipeService: RecipeServiceProvider) {
     this.initializeApp();
     
     // this.navCtrl.setRoot('HomePage', { folder: 'main' });
+    
+    this.loadInboxCount();
+    
+    var me = this;
+    events.subscribe('recipe:inbox:new', (recipe) => {
+      this.loadInboxCount();
+
+      var message = (recipe.fromUser.name || recipe.fromUser.email) + ' sent you a recipe: ' + recipe.title;
+      
+      let toast = me.toastCtrl.create({
+        message: message,
+        duration: 7000,
+        showCloseButton: true,
+        closeButtonText: 'View'
+      });
+      toast.present();
+      
+      toast.onDidDismiss((data, role) => {    
+        console.log('Dismissed toast');
+        if (role== "close") {
+          me.nav.setRoot('RecipePage', { recipeId: recipe._id });
+        }
+      });
+    });
   }
   
   navList() {
@@ -43,6 +77,16 @@ export class MyApp {
     }
 
     return pages;
+  }
+  
+  loadInboxCount() {
+    var me = this;
+
+    this.recipeService.fetch('inbox').subscribe(function(response) {
+      me.inboxCount = response.length;
+      
+      me.events.publish('recipe:inbox:count', me.inboxCount);
+    }, function() {});
   }
 
   initializeApp() {

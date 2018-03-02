@@ -21,7 +21,10 @@ var User = new Schema({
   updated: {
     type: Date,
     default: Date.now
-  }
+  },
+  fcmTokens: [{
+    type: String
+  }]
 });
 
 mongoose.model('User', User);

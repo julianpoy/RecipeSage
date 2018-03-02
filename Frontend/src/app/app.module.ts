@@ -12,6 +12,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { LabelServiceProvider } from '../providers/label-service/label-service';
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
+import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserServiceProvider,
     LabelServiceProvider,
-    RecipeServiceProvider
+    RecipeServiceProvider,
+    MessagingServiceProvider
   ]
 })
 export class AppModule {}

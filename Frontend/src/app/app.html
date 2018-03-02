@@ -9,6 +9,7 @@
     <ion-list>
       <button menuClose ion-item *ngFor="let p of navList()" (click)="openPage(p)">
         {{p.title}}
+        <ion-badge *ngIf="p.title === 'Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
       </button>
     </ion-list>
   </ion-content>

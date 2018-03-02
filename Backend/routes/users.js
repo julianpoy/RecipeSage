@@ -155,6 +155,11 @@ router.put(
           msg: "Could not update user"
         });
       } else {
+        user = user.toObject();
+        
+        delete user.password;
+        delete user.salt;
+        
         res.status(200).json(user);
       }
     });
@@ -238,6 +243,142 @@ router.get(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
   res.status(200).send('Ok');
+});
+
+router.post(
+  '/fcm/token',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+    
+    if (!req.body.fcmToken) {
+      res.status(412).send('fcmToken required');
+      return;
+    }
+
+    var revokeTokenPromise = new Promise(function(resolveRevokeToken, rejectRevokeToken) {
+      User.find({
+        fcmTokens: req.body.fcmToken,
+        _id: { $ne: res.locals.session.accountId }
+      }).exec(function(err, users) {
+        if (err) {
+          console.log(err)
+          res.status(500).json({
+            msg: "Couldn't search the database for users!"
+          });
+        } else if (!users) {
+          resolveRevokeToken();
+        } else {
+          var userPromises = [];
+          
+          for (var i = 0; i < users.length; i++) {
+            let user = users[i];
+            
+            userPromises.push(new Promise(function(resolve, reject) {
+              User.findByIdAndUpdate(
+                user._id, {
+                  $pull: {
+                    fcmTokens: req.body.fcmToken
+                  }
+                }, {
+                new: true
+              }).exec(function(err, updatedUser) {
+                if (err) {
+                  reject(500, "Couldn't search the database for users during fcm revoke!");
+                } else {
+                  resolve();
+                }
+              });
+            }));
+          }
+          
+          Promise.all(userPromises).then(function() {
+            resolveRevokeToken();
+          }, function() {
+            rejectRevokeToken();
+          });
+        }
+      });
+    });
+    
+    revokeTokenPromise.then(function() {
+      if (res.locals.user.fcmTokens && res.locals.user.fcmTokens.indexOf(req.body.fcmToken) > -1) {
+        var user = res.locals.user.toObject();
+        
+        delete user.password;
+        delete user.salt;
+
+        res.status(200).json(user);
+        return;
+      }
+
+      User.findOneAndUpdate({
+        _id: res.locals.session.accountId
+      }, {
+        $addToSet: {
+          "fcmTokens": req.body.fcmToken
+        }
+      }, {
+        safe: true,
+        upsert: false, // Create if not exists
+        new: true // Return updated, not original
+      }, function(err, user) {
+        if (err) {
+          res.status(500).json({
+            msg: "Couldn't add to the database!"
+          });
+        } else {
+          user = user.toObject();
+        
+          delete user.password;
+          delete user.salt;
+
+          res.status(201).json(user);
+        }
+      });
+    });
+});
+
+router.delete(
+  '/fcm/token',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+    
+    if (!req.query.fcmToken) {
+      res.status(412).send('fcmToken required');
+      return;
+    } else if (!res.locals.user.fcmTokens || res.locals.user.fcmTokens.indexOf(req.query.fcmToken) === -1) {
+      res.status(404).send('fcmToken not found');
+      return;
+    }
+    
+    User.findOneAndUpdate({
+      _id: res.locals.session.accountId
+    }, {
+      $pull: {
+        'fcmTokens': req.query.fcmToken
+      }
+    }, {
+      safe: true,
+      upsert: false, // Create if not exists
+      new: true // Return updated, not original
+    }, function(err, user) {
+      if (err) {
+        res.status(500).json({
+          msg: "Couldn't query the database!"
+        });
+      } else {
+        user = user.toObject();
+        
+        delete user.password;
+        delete user.salt;
+
+        res.status(200).json(user);
+      }
+    });
 });
 
 module.exports = router;

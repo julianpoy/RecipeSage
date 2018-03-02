@@ -1,3 +1,4 @@
 node_modules
 
 config/config.json
+config/firebase-credentials.json

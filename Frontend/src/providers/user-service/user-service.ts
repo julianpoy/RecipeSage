@@ -62,6 +62,42 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
+  
+  saveFCMToken(key) {
+    
+    console.log("attempting save")
+    var data = {
+      fcmToken: key
+    };
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .post(this.base + 'users/fcm/token' + this.getTokenQuery(), data, httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  removeFCMToken(key) {
+    console.log("attempting delete")
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .delete(this.base + 'users/fcm/token' + this.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key), httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

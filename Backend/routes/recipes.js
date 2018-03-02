@@ -16,6 +16,7 @@ var Label = mongoose.model('Label');
 // Service
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
+var FirebaseService = require('../services/firebase');
 var config = require('../config/config.json');
 
 var s3 = new aws.S3();
@@ -118,6 +119,19 @@ function sendURLToS3(url, callback) {
   });
 }
 
+function dispatchShareNotification(user, recipe) {
+  if (user.fcmTokens) {
+    var message = {
+      type: "recipe:inbox:new",
+      recipe: JSON.stringify(recipe)
+    }
+    
+    for (var i = 0; i < user.fcmTokens.length; i++) {
+      FirebaseService.sendMessage(user.fcmTokens[i], message);
+    }
+  }
+}
+
 //Create a new recipe
 router.post(
   '/',
@@ -210,9 +224,17 @@ router.post(
           if (err) {
             res.status(500).send("Error saving the recipe!");
           } else {
-            recipe = recipe.toObject();
-            recipe.labels = [];
-            res.status(201).json(recipe);
+            var serializedRecipe = recipe.toObject();
+            serializedRecipe.labels = [];
+            res.status(201).json(serializedRecipe);
+            
+            if (alternateDestinationUser) {
+              recipe.populate('fromUser', 'name email', function(err, populatedRecipe) {
+                if (!err) {
+                  dispatchShareNotification(alternateDestinationUser, populatedRecipe);
+                }
+              })
+            }
           }
         });
       }, function() {

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController, PopoverController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -11,7 +12,7 @@ import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/re
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ LazyLoadImageDirective, RecipeServiceProvider ]
+  providers: [ LazyLoadImageDirective ]
 })
 export class HomePage {
   
@@ -34,10 +35,13 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public events: Events,
     public popoverCtrl: PopoverController,
     public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
     public toastCtrl: ToastController,
-    public recipeService: RecipeServiceProvider) {
+    public recipeService: RecipeServiceProvider,
+    public messagingService: MessagingServiceProvider) {
       
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
@@ -92,7 +96,9 @@ export class HomePage {
     this.recipeService.fetch(this.folder).subscribe(function(response) {
       loading.dismiss();
 
-      me.recipes = response;      
+      me.recipes = response;
+
+      me.requestNotifications();
     }, function(err) {
       loading.dismiss();
 
@@ -109,6 +115,33 @@ export class HomePage {
           break;
       }
     });
+  }
+  
+  requestNotifications() {
+    if (Notification.permission === 'denied') return;
+
+    if (Notification.permission === 'granted') {
+      this.messagingService.enableNotifications();
+      return;
+    }
+
+    let alert = this.alertCtrl.create({
+      title: 'Notification Permissions',
+      subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br />After dismissing this popup, you will be prompted to enable notification access.',
+      buttons: [{
+        text: 'Cancel',
+        handler: () => {
+          console.log('Disagree clicked');
+        }
+      },
+      {
+        text: 'Ok',
+        handler: () => {
+          this.messagingService.enableNotifications();
+        }
+      }]
+    });
+    alert.present();
   }
   
   openRecipe(recipe) {

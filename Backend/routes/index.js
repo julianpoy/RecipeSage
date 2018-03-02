@@ -12,6 +12,7 @@ var Label = mongoose.model('Label');
 
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
+var FirebaseService = require('../services/firebase');
 var config = require('../config/config.json');
 
 var s3 = new aws.S3();
