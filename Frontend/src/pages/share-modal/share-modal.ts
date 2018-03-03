@@ -57,16 +57,16 @@ export class ShareModalPage {
     
     var me = this;
     
-    var recentEmails = JSON.parse(localStorage.getItem('recents'));
+    var recentContactsRaw = JSON.parse(localStorage.getItem('recents'));
 
     var recentContacts = [];
 
     var promises = [];
     
-    for (var i = 0; i < recentEmails.length; i++) {
-      let recentEmail = recentEmails[i];
+    for (var i = 0; i < recentContactsRaw.length; i++) {
+      let raw = recentContactsRaw[i];
       promises.push(new Promise(function(resolve, reject) {
-        me.userService.getUserByEmail(recentEmail).subscribe(function(response) {
+        me.userService.getUserByEmail(raw.email).subscribe(function(response) {
           recentContacts.push({
             name: response.name,
             email: response.email
@@ -74,7 +74,8 @@ export class ShareModalPage {
           resolve();
         }, function(err) {
           recentContacts.push({
-            email: recentEmail
+            name: raw.name,
+            email: raw.email
           });
           resolve();
         });
@@ -135,7 +136,10 @@ export class ShareModalPage {
     
     this.recipeService.share(this.recipe).subscribe(function(response) {
       if (me.recents.indexOf(me.destinationUserEmail) === -1) {
-        me.recents.push(me.destinationUserEmail);
+        me.recents.push({
+          name: me.destinationUserName,
+          email: me.destinationUserEmail
+        });
         
         localStorage.setItem('recents', JSON.stringify(me.recents));
       }

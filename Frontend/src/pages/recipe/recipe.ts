@@ -86,7 +86,7 @@ export class RecipePage {
           errorToast.present();
           break;
         default:
-          let errorToast = me.toastCtrl.create({
+          errorToast = me.toastCtrl.create({
             message: 'An unexpected error occured. Please restart application.',
             duration: 30000
           });
