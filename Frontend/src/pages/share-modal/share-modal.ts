@@ -17,7 +17,7 @@ export class ShareModalPage {
   destinationUserName: string = '';
   searchingForDestinationUser: boolean = false;
   
-  recents: string[] = [];
+  recents: any[] = [];
   
   autofillTimeout: any;
 
@@ -67,10 +67,15 @@ export class ShareModalPage {
       let recentEmail = recentEmails[i];
       promises.push(new Promise(function(resolve, reject) {
         me.userService.getUserByEmail(recentEmail).subscribe(function(response) {
-          recentContacts.push(response.name || response.email);
+          recentContacts.push({
+            name: response.name,
+            email: response.email
+          });
           resolve();
         }, function(err) {
-          recentContacts.push(recentEmail);
+          recentContacts.push({
+            email: recentEmail
+          });
           resolve();
         });
       }));
@@ -88,7 +93,7 @@ export class ShareModalPage {
     
     var me = this;
     this.autofillTimeout = setTimeout(function() {
-      me.userService.getUserByEmail(me.destinationUserEmail).subscribe(function(response) {
+      me.userService.getUserByEmail(me.destinationUserEmail.trim()).subscribe(function(response) {
         me.destinationUserName = response.name || response.email;
         me.searchingForDestinationUser = false;
       }, function(err) {
@@ -99,8 +104,10 @@ export class ShareModalPage {
   }
   
   send() {
+    this.destinationUserEmail = this.destinationUserEmail.trim();
+
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-    if (!this.destinationUserEmail || this.destinationUserEmail.length === 0) {
+    if (this.destinationUserEmail.length === 0) {
       let errorToast = this.toastCtrl.create({
         message: 'Please enter the email address of the user you\'d like to send this recipe to.',
         duration: 6000

@@ -50,8 +50,8 @@
           <ion-col col-12 col-md-6 col-lg-4 col-xl-4 *ngFor="let recipient of recents">
             <ion-card>
               <ion-item text-center>
-                <button (click)="destinationUserEmail = recipient" ion-button icon-left clear small>
-                  <div>{{ recipient }}</div>
+                <button (click)="destinationUserEmail = recipient.email; autofillUserName()" ion-button icon-left clear small>
+                  <div>{{ recipient.name || recipient.email }}</div>
                 </button>
               </ion-item>
               

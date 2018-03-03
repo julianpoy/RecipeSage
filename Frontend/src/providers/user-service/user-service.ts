@@ -109,7 +109,6 @@ export class UserServiceProvider {
     return this.http
     .get(this.base + 'users/by-email?email=' + encodeURIComponent(email), httpOptions)
     .pipe(
-      retry(1),
       catchError(this.handleError)
     );
   }
