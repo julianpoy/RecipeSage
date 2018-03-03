@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController, LoadingController } from 'ionic-angular';
 
+import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
 @IonicPage()
@@ -22,12 +23,11 @@ export class ShareModalPage {
   public toastCtrl: ToastController,
   public loadingCtrl: LoadingController,
   public recipeService: RecipeServiceProvider,
+  public userService: UserServiceProvider,
   public viewCtrl: ViewController) {
     this.recipe = navParams.get('recipe');
     
-    if (localStorage.getItem('recents')) {
-      this.recents = JSON.parse(localStorage.getItem('recents'));
-    }
+    this.loadRecents();
   }
 
   ionViewDidLoad() {
@@ -44,6 +44,41 @@ export class ShareModalPage {
       
       localStorage.setItem('recents', JSON.stringify(this.recents));
     }
+  }
+  
+  loadRecents() {
+    if (!localStorage.getItem('recents')) {
+      return;
+    }
+    
+    var me = this;
+    
+    var recentEmails = JSON.parse(localStorage.getItem('recents'));
+
+    var recentContacts = [];
+
+    var promises = [];
+    
+    console.log(recentEmails)
+    
+    for (var i = 0; i < recentEmails.length; i++) {
+      let recentEmail = recentEmails[i];
+      promises.push(new Promise(function(resolve, reject) {
+        console.log("loading promise", me.userService)
+        me.userService.getUserByEmail(recentEmail).subscribe(function(response) {
+          console.log("received response", response)
+          recentContacts.push(response.name || response.email);
+          resolve();
+        }, function(err) {
+          recentContacts.push(recentEmail);
+          resolve();
+        });
+      }));
+    }
+    
+    Promise.all(promises).then(function() {
+      me.recents = recentContacts;
+    }, function() {});
   }
   
   send() {

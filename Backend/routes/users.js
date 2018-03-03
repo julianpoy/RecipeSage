@@ -11,6 +11,31 @@ var config = require('../config/config.json');
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 
+/* Get public user listing by email */
+router.get(
+  '/by-email',
+  cors(),
+  function(req, res, next) {
+
+  User.findOne({
+    email: req.query.email
+  })
+  .select('_id name email')
+  .exec(function(err, user) {
+    if (err) {
+      res.status(500).json({
+        msg: "Couldn't search the database for user!"
+      });
+    } else if (!user) {
+      res.status(404).json({
+        msg: "No user with that email!"
+      });
+    } else {
+      res.status(200).json(user);
+    }
+  });
+});
+
 /* Log in user */
 router.post(
   '/login',

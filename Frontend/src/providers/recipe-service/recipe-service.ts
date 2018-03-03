@@ -55,7 +55,7 @@ export class RecipeServiceProvider {
     return this.http
     .get<Recipe[]>(url, httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -70,7 +70,7 @@ export class RecipeServiceProvider {
     return this.http
     .get<Recipe>(this.base + 'recipes/' + recipeId + this.getTokenQuery(), httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -133,7 +133,7 @@ export class RecipeServiceProvider {
     return this.http
     .put(this.base + 'recipes/' + data._id + this.getTokenQuery(), formData, httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -148,7 +148,7 @@ export class RecipeServiceProvider {
     return this.http
     .delete(this.base + 'recipes/' + data._id + this.getTokenQuery(), httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }

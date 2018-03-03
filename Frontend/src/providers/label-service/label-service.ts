@@ -33,7 +33,7 @@ export class LabelServiceProvider {
     return this.http
     .get(this.base + 'labels/' + this.getTokenQuery(), httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -62,7 +62,7 @@ export class LabelServiceProvider {
     return this.http
     .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data._id + '&recipeId=' + data.recipeId, httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }

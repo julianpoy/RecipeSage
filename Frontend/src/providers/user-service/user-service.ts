@@ -43,7 +43,7 @@ export class UserServiceProvider {
     return this.http
     .post(this.base + 'users/login', data, httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -58,7 +58,7 @@ export class UserServiceProvider {
     return this.http
     .put(this.base + 'users/' + this.getTokenQuery(), data, httpOptions)
     .pipe(
-      retry(3),
+      retry(1),
       catchError(this.handleError)
     );
   }
@@ -95,6 +95,21 @@ export class UserServiceProvider {
     return this.http
     .delete(this.base + 'users/fcm/token' + this.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key), httpOptions)
     .pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  getUserByEmail(email) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .get(this.base + 'users/by-email?email=' + encodeURIComponent(email), httpOptions)
+    .pipe(
+      retry(1),
       catchError(this.handleError)
     );
   }
