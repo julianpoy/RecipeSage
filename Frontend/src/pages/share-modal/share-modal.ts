@@ -13,9 +13,13 @@ export class ShareModalPage {
   
   recipe: Recipe;
   
-  destinationUserEmail: string;
+  destinationUserEmail: string = '';
+  destinationUserName: string = '';
+  searchingForDestinationUser: boolean = false;
   
   recents: string[] = [];
+  
+  autofillTimeout: any;
 
   constructor(
   public navCtrl: NavController,
@@ -59,14 +63,10 @@ export class ShareModalPage {
 
     var promises = [];
     
-    console.log(recentEmails)
-    
     for (var i = 0; i < recentEmails.length; i++) {
       let recentEmail = recentEmails[i];
       promises.push(new Promise(function(resolve, reject) {
-        console.log("loading promise", me.userService)
         me.userService.getUserByEmail(recentEmail).subscribe(function(response) {
-          console.log("received response", response)
           recentContacts.push(response.name || response.email);
           resolve();
         }, function(err) {
@@ -79,6 +79,23 @@ export class ShareModalPage {
     Promise.all(promises).then(function() {
       me.recents = recentContacts;
     }, function() {});
+  }
+  
+  autofillUserName() {
+    this.searchingForDestinationUser = true;
+
+    if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
+    
+    var me = this;
+    this.autofillTimeout = setTimeout(function() {
+      me.userService.getUserByEmail(me.destinationUserEmail).subscribe(function(response) {
+        me.destinationUserName = response.name || response.email;
+        me.searchingForDestinationUser = false;
+      }, function(err) {
+        me.destinationUserName = '';
+        me.searchingForDestinationUser = false;
+      });
+    }, 500);
   }
   
   send() {

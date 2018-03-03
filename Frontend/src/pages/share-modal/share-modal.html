@@ -28,8 +28,18 @@
       
       <ion-item>
         <ion-label floating>Recipient Email</ion-label>
-        <ion-input [(ngModel)]="destinationUserEmail"></ion-input>
+        <ion-input [(ngModel)]="destinationUserEmail" (ngModelChange)='autofillUserName()'></ion-input>
       </ion-item>
+      
+      <p *ngIf="destinationUserEmail.length > 0 && !searchingForDestinationUser" padding-left padding-top>
+        {{ destinationUserName ? 'User found: ' + destinationUserName : "No user found with that email..." }}
+      </p>
+      <p *ngIf="destinationUserEmail.length == 0 && !searchingForDestinationUser" padding-left padding-top>
+        Enter an email address to search for a user
+      </p>
+      <p *ngIf="searchingForDestinationUser" padding-left padding-top>
+        Searcing for user...
+      </p>
       
       <div *ngIf="recents.length > 0" padding-left padding-top>
         <p>Recents:</p>
