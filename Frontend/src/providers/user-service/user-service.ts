@@ -16,7 +16,7 @@ export class UserServiceProvider {
   }
   
   getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
+    return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
   }
   
   register(data) {
@@ -107,7 +107,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'users/by-email?email=' + encodeURIComponent(email), httpOptions)
+    .get(this.base + 'users/by-email' + this.getTokenQuery() + '&email=' + encodeURIComponent(email), httpOptions)
     .pipe(
       catchError(this.handleError)
     );

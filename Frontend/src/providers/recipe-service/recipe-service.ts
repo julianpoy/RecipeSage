@@ -40,7 +40,7 @@ export class RecipeServiceProvider {
   }
   
   getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
+    return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
   }
   
   fetch(folder) {
