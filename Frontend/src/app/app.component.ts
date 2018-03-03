@@ -52,6 +52,14 @@ export class MyApp {
         }
       });
     });
+    
+    events.subscribe('recipe:inbox:deleted', () => {
+      this.loadInboxCount();
+    });
+    
+    events.subscribe('recipe:inbox:saved', () => {
+      this.loadInboxCount();
+    });
   }
   
   navList() {

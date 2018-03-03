@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController, ModalController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController, ModalController } from 'ionic-angular';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
@@ -31,6 +31,7 @@ export class RecipePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public events: Events,
     public loadingCtrl: LoadingController,
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
@@ -75,6 +76,14 @@ export class RecipePage {
       switch(err.status) {
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          break;
+        case 404:
+          let errorToast = me.toastCtrl.create({
+            message: 'Recipe not found. Does this recipe URL exist?',
+            duration: 30000,
+            dismissOnPageChange: true
+          });
+          errorToast.present();
           break;
         default:
           let errorToast = me.toastCtrl.create({
@@ -178,6 +187,8 @@ export class RecipePage {
     
     this.recipeService.remove(this.recipe).subscribe(function(response) {
       loading.dismiss();
+      
+      if (me.recipe.folder === 'inbox') me.events.publish('recipe:inbox:deleted', response);
 
       me.navCtrl.setRoot('HomePage', { folder: me.recipe.folder }, {animate: true, direction: 'forward'});
     }, function(err) {
@@ -235,6 +246,8 @@ export class RecipePage {
 
     this.recipeService.update(this.recipe).subscribe(function(response) {
       loading.dismiss();
+      
+      if (me.recipe.folder === 'inbox') me.events.publish('recipe:inbox:saved', response);
       
       me.navCtrl.setRoot('RecipePage', {
         recipe: response,

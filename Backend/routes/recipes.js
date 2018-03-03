@@ -312,6 +312,8 @@ router.get(
   .exec(function(err, recipe) {
     if (err) {
       res.status(500).send("Couldn't search the database for recipe!");
+    } else if (!recipe) {
+      res.status(404).send("Recipe with that ID not found!");
     } else {
       Label.find({
         recipes: recipe._id
