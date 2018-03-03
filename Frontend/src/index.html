@@ -6,10 +6,19 @@
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
+  <meta name="msapplication-config" content="assets/icon/browserconfig.xml">
 
-  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icon/favicon-16x16.png">
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon/apple-touch-icon.png">
+  <link rel="mask-icon" href="assets/icon/safari-pinned-tab.svg" color="#353b48">
+  <link rel="shortcut icon" href="assets/icon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#353b48">
+  
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4e8ef7">
+  <meta name="theme-color" content="#353b48">
 
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,7 +39,7 @@
     }
   </script>
 
-  <link href="build/main.css" rel="stylesheet">
+  <link href="build/main.css?rev=1.0.0b2" rel="stylesheet">
 
 </head>
 <body>
@@ -39,14 +48,14 @@
   <ion-app></ion-app>
 
   <!-- The polyfills js is generated during the build process -->
-  <script src="build/polyfills.js"></script>
+  <script src="build/polyfills.js?rev=1.0.0b2"></script>
 
   <!-- The vendor js is generated during the build process
        It contains all of the dependencies in node_modules -->
-  <script src="build/vendor.js"></script>
+  <script src="build/vendor.js?rev=1.0.0b2"></script>
 
   <!-- The main bundle js is generated during the build process -->
-  <script src="build/main.js"></script>
+  <script src="build/main.js?rev=1.0.0b2"></script>
 
 </body>
 </html>

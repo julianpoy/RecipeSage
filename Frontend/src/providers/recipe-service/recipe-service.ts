@@ -1,3 +1,4 @@
+import { Events } from 'ionic-angular';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 // import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -32,7 +33,7 @@ export class RecipeServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public events: Events) {
     console.log('Hello RecipeServiceProvider Provider');
     
     this.base = localStorage.getItem('base') || 'https://recipesage.com:3030/';
@@ -90,11 +91,19 @@ export class RecipeServiceProvider {
 
     const httpOptions = {};
 
-    return this.http
-    .post(this.base + 'recipes/' + this.getTokenQuery(), formData, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    );
+    var me = this;
+    return {
+      subscribe: function(resolve, reject) {
+        me.http
+        .post(me.base + 'recipes/' + me.getTokenQuery(), formData, httpOptions)
+        .pipe(
+          catchError(me.handleError)
+        ).subscribe(function(response) {
+          me.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
   }
   
   share(data) {
@@ -108,11 +117,19 @@ export class RecipeServiceProvider {
 
     if (data.image) data.imageURL = data.image.location;
 
-    return this.http
-    .post(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    );
+    var me = this;
+    return {
+      subscribe: function(resolve, reject) {
+        me.http
+        .post(me.base + 'recipes/' + me.getTokenQuery(), data, httpOptions)
+        .pipe(
+          catchError(me.handleError)
+        ).subscribe(function(response) {
+          me.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
   }
   
   update(data) {
@@ -129,13 +146,21 @@ export class RecipeServiceProvider {
     }
 
     const httpOptions = {};
-
-    return this.http
-    .put(this.base + 'recipes/' + data._id + this.getTokenQuery(), formData, httpOptions)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    );
+    
+    var me = this;
+    return {
+      subscribe: function(resolve, reject) {
+        me.http
+        .put(me.base + 'recipes/' + data._id + me.getTokenQuery(), formData, httpOptions)
+        .pipe(
+          retry(1),
+          catchError(me.handleError)
+        ).subscribe(function(response) {
+          me.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
   }
   
   remove(data) {
@@ -145,12 +170,20 @@ export class RecipeServiceProvider {
       })
     };
 
-    return this.http
-    .delete(this.base + 'recipes/' + data._id + this.getTokenQuery(), httpOptions)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    );
+    var me = this;
+    return {
+      subscribe: function(resolve, reject) {
+        me.http
+        .delete(me.base + 'recipes/' + data._id + me.getTokenQuery(), httpOptions)
+        .pipe(
+          retry(1),
+          catchError(me.handleError)
+        ).subscribe(function(response) {
+          me.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
   }
   
   scrapePepperplate(data) {

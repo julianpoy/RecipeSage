@@ -53,11 +53,15 @@ export class MyApp {
       });
     });
     
-    events.subscribe('recipe:inbox:deleted', () => {
+    events.subscribe('recipe:created', () => {
       this.loadInboxCount();
     });
     
-    events.subscribe('recipe:inbox:saved', () => {
+    events.subscribe('recipe:updated', () => {
+      this.loadInboxCount();
+    });
+    
+    events.subscribe('recipe:deleted', () => {
       this.loadInboxCount();
     });
   }

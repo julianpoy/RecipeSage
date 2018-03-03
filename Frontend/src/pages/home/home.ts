@@ -54,10 +54,28 @@ export class HomePage {
     }
     
     this.loadViewOptions();
-    this.loadRecipes();
+    
+    // var me = this;
+    // events.subscribe('recipe:generalUpdate', () => {
+    //   me.loadRecipes();
+    // });
     
     this.searchText = '';
     this.showSearch = false;
+  }
+  
+  ionViewWillEnter() {
+    let loading = this.loadingCtrl.create({
+      content: 'Loading recipes...'
+    });
+  
+    loading.present();
+    
+    this.loadRecipes().then(function() {
+      loading.dismiss();
+    }, function() {
+      loading.dismiss();
+    });
   }
   
   loadViewOptions() {
@@ -87,33 +105,29 @@ export class HomePage {
   loadRecipes() {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...'
-    });
-  
-    loading.present();
-    
-    this.recipeService.fetch(this.folder).subscribe(function(response) {
-      loading.dismiss();
-
-      me.recipes = response;
-
-      me.requestNotifications();
-    }, function(err) {
-      loading.dismiss();
-
-      switch(err.status) {
-        case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
-          break;
-        default:
-          let errorToast = me.toastCtrl.create({
-            message: 'An unexpected error occured. Please restart application.',
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+    return new Promise(function(resolve, reject) {
+      me.recipeService.fetch(me.folder).subscribe(function(response) {
+        me.recipes = response;
+        
+        resolve();
+        
+        me.requestNotifications();
+      }, function(err) {
+        reject();
+        
+        switch(err.status) {
+          case 401:
+            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            break;
+          default:
+            let errorToast = me.toastCtrl.create({
+              message: 'An unexpected error occured. Please restart application.',
+              duration: 30000
+            });
+            errorToast.present();
+            break;
+        }
+      });
     });
   }
   
