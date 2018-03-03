@@ -99,13 +99,14 @@ export class RecipeServiceProvider {
         .pipe(
           catchError(me.handleError)
         ).subscribe(function(response) {
+          me.events.publish('recipe:created');
           me.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
       }
     }
   }
-  
+
   share(data) {
     if (!data.destinationUserEmail) throw 'DestinationUserEmail required for share operation';
 
@@ -156,6 +157,7 @@ export class RecipeServiceProvider {
           retry(1),
           catchError(me.handleError)
         ).subscribe(function(response) {
+          me.events.publish('recipe:updated');
           me.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
@@ -179,6 +181,7 @@ export class RecipeServiceProvider {
           retry(1),
           catchError(me.handleError)
         ).subscribe(function(response) {
+          me.events.publish('recipe:deleted');
           me.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
