@@ -18,7 +18,7 @@ router.get(
   function(req, res, next) {
 
   User.findOne({
-    email: req.query.email
+    email: req.query.email.trim().toLowerCase()
   })
   .select('_id name email')
   .exec(function(err, user) {

@@ -132,15 +132,23 @@ export class ShareModalPage {
   
     loading.present();
     
+    this.destinationUserEmail = this.destinationUserEmail.trim().toLowerCase();
     this.recipe.destinationUserEmail = this.destinationUserEmail;
     
     this.recipeService.share(this.recipe).subscribe(function(response) {
-      if (me.recents.indexOf(me.destinationUserEmail) === -1) {
+      var recentExists = false;
+      for (var i = 0; i < me.recents.length; i++) {
+        if (me.recents[i].email === me.destinationUserEmail) {
+          recentExists = true;
+          break;
+        }
+      }
+      if (!recentExists) {
         me.recents.push({
           name: me.destinationUserName,
           email: me.destinationUserEmail
         });
-        
+
         localStorage.setItem('recents', JSON.stringify(me.recents));
       }
       
