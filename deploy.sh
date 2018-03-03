@@ -7,7 +7,7 @@ ionic build browser --prod
 if [ $? -eq 0 ]; then
     echo OK
     
-    ssh julian@kondeo.com 'cd /var/www/recipesage.com; rm -rf ./*; cd ~/Projects/chefbook; git pull; forever restartall'
+    ssh julian@kondeo.com 'cd /var/www/recipesage.com; rm -rf ./*; cd ~/Projects/chefbook; git pull; cd Backend; npm install; forever restartall'
 
     cp ./src/assets/recipesage-white.png ./platforms/browser/www/screen
 
