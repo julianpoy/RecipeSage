@@ -3,11 +3,18 @@
   "short_name": "RecipeSage",
   "start_url": "index.html",
   "display": "standalone",
-  "icons": [{
-    "src": "assets/imgs/logo_green.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }],
+  "icons": [
+    {
+      "src": "assets/icon/android-chrome-192x192.png?v=xQzbJxx3oP",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon/android-chrome-512x512.png?v=xQzbJxx3oP",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
   "background_color": "#353b48",
   "theme_color": "#353b48",
   "gcm_sender_id": "103953800507"
