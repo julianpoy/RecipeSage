@@ -37,16 +37,13 @@ export class RecipePage {
     public labelService: LabelServiceProvider) {
       
     this.recipeId = navParams.get('recipeId');
-    this.recipe = navParams.get('recipe') || <Recipe>{};
-    
-    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-      this.instructions = this.recipe.instructions.split(/\r?\n/); 
-    }
+    this.recipe = <Recipe>{};
 
     this.applyScale();
   }
   
   ionViewWillEnter() {
+    this.recipe = <Recipe>{};
     // if (!this.recipe._id) {
     this.loadRecipe();
     // }
