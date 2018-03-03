@@ -60,6 +60,12 @@ export class HomePage {
     //   me.loadRecipes();
     // });
     
+    events.subscribe('recipe:inbox:new', (recipe) => {
+      if (this.folder === 'inbox') {
+        this.loadRecipes();
+      }
+    });
+    
     this.searchText = '';
     this.showSearch = false;
   }

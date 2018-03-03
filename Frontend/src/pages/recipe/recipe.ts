@@ -43,18 +43,20 @@ export class RecipePage {
       this.instructions = this.recipe.instructions.split(/\r?\n/); 
     }
 
+    this.applyScale();
+  }
+  
+  ionViewWillEnter() {
     // if (!this.recipe._id) {
     this.loadRecipe();
     // }
-    
-    this.applyScale();
   }
   
   loadRecipe() {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...'
+      content: 'Loading recipe...'
     });
   
     loading.present();
