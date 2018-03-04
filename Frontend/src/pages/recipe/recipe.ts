@@ -71,7 +71,7 @@ export class RecipePage {
     var me = this;
     
     return new Promise(function(resolve, reject) {
-      this.recipeService.fetchById(this.recipeId).subscribe(function(response) {
+      me.recipeService.fetchById(me.recipeId).subscribe(function(response) {
         me.recipe = response;
         
         if (me.recipe.instructions && me.recipe.instructions.length > 0) {
