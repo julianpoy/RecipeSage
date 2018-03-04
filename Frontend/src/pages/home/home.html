@@ -26,6 +26,9 @@
 </ion-header>
 
 <ion-content #container>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list *ngIf="viewType === 'list'">
     <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:searchText" class="recipeItem">
       <ion-item (click)="openRecipe(recipe)">

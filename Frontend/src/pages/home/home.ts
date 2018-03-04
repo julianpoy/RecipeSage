@@ -84,6 +84,14 @@ export class HomePage {
     });
   }
   
+  refresh(refresher) {
+    this.loadRecipes().then(function() {
+      refresher.complete();
+    }, function() {
+      refresher.complete();
+    });
+  }
+  
   loadViewOptions() {
     var defaults = {
       showLabels: true,

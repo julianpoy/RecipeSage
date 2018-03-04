@@ -43,54 +43,68 @@ export class RecipePage {
   }
   
   ionViewWillEnter() {
-    this.recipe = <Recipe>{};
-    // if (!this.recipe._id) {
-    this.loadRecipe();
-    // }
-  }
-  
-  loadRecipe() {
-    var me = this;
-    
     let loading = this.loadingCtrl.create({
       content: 'Loading recipe...'
     });
   
     loading.present();
     
-    this.recipeService.fetchById(this.recipeId).subscribe(function(response) {
+    this.recipe = <Recipe>{};
+    // if (!this.recipe._id) {
+    this.loadRecipe().then(function() {
       loading.dismiss();
-
-      me.recipe = response;
-      
-      if (me.recipe.instructions && me.recipe.instructions.length > 0) {
-        me.instructions = me.recipe.instructions.split(/\r?\n/); 
-      }
-      
-      me.applyScale();
-    }, function(err) {
+    }, function() {
       loading.dismiss();
-
-      switch(err.status) {
-        case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
-          break;
-        case 404:
-          let errorToast = me.toastCtrl.create({
-            message: 'Recipe not found. Does this recipe URL exist?',
-            duration: 30000,
-            dismissOnPageChange: true
-          });
-          errorToast.present();
-          break;
-        default:
-          errorToast = me.toastCtrl.create({
-            message: 'An unexpected error occured. Please restart application.',
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+    });
+    // }
+  }
+  
+  refresh(loader) {
+    this.loadRecipe().then(function() {
+      loader.complete();
+    }, function() {
+      loader.complete();
+    });
+  }
+  
+  loadRecipe() {
+    var me = this;
+    
+    return new Promise(function(resolve, reject) {
+      this.recipeService.fetchById(this.recipeId).subscribe(function(response) {
+        me.recipe = response;
+        
+        if (me.recipe.instructions && me.recipe.instructions.length > 0) {
+          me.instructions = me.recipe.instructions.split(/\r?\n/); 
+        }
+        
+        me.applyScale();
+        
+        resolve();
+      }, function(err) {
+        switch(err.status) {
+          case 401:
+            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            break;
+          case 404:
+            let errorToast = me.toastCtrl.create({
+              message: 'Recipe not found. Does this recipe URL exist?',
+              duration: 30000,
+              dismissOnPageChange: true
+            });
+            errorToast.present();
+            break;
+          default:
+            errorToast = me.toastCtrl.create({
+              message: 'An unexpected error occured. Please restart application.',
+              duration: 30000
+            });
+            errorToast.present();
+            break;
+        }
+        
+        reject();
+      });
     });
   }
 

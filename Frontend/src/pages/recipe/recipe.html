@@ -12,6 +12,9 @@
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card>
     <ion-item>
       <ion-thumbnail *ngIf="recipe.image" item-start>
