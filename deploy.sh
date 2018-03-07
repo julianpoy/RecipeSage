@@ -2,7 +2,7 @@
 
 cd Frontend
 
-ionic build browser --prod
+ionic build --prod
 
 if [ $? -eq 0 ]; then
     echo OK
