@@ -26,6 +26,7 @@
     "@ionic/pro": "1.0.19",
     "@ionic/storage": "2.1.3",
     "@types/firebase": "^3.2.1",
+    "blueimp-load-image": "^2.18.0",
     "cordova-android": "7.0.0",
     "cordova-browser": "5.0.3",
     "cordova-plugin-device": "^2.0.1",
