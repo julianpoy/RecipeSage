@@ -18,3 +18,17 @@
 .bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
 }
+
+ion-thumbnail img {
+  object-fit: cover;
+}
+
+.platform-core ion-thumbnail {
+  width: 200px;
+  height: 200px;
+  
+  img {
+    width: 200px;
+    height: 200px;
+  }
+}
