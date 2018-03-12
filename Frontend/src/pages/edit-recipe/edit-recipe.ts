@@ -37,50 +37,29 @@ export class EditRecipePage {
       return
     }
     
-    console.log("hi1", files[0])
-    
     this.recipe.imageFile = files[0];
     
     var me = this;
     var loadingImage = loadImage(
         files[0],
         function (renderedCanvas, exif) {
-          var dataURL = renderedCanvas.toDataURL(me.recipe.imageFile.type, 0.5);
-          var blob = <any>me.dataURItoBlob(dataURL);
-          blob.name = me.recipe.imageFile.name;
-          me.recipe.imageFile = blob;
+          renderedCanvas.toBlob(function(myBlob) {
+            myBlob.name = me.recipe.imageFile.name;
+            me.recipe.imageFile = myBlob;
+            
+            console.log('Local conversion complete');
+          }, 'image/jpeg', 1);
         },
         {
           maxWidth: 200,
-          orientation: true,
-          canvas: false
+          canvas: true,
+          orientation: true
         }
     );
-    // loadingImage.onload =
-    loadingImage.onerror = function(err, err2) {
-      console.log(err, err2)
+
+    loadingImage.onerror = function(err) {
+      console.log('Local conversion failed', err)
     };
-    console.log("hi55")
-  }
-  
-  dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type:mimeString});
   }
   
   save() {
