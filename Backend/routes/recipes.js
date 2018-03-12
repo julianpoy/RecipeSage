@@ -40,7 +40,21 @@ var upload = multer({
       width: 200,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
       // height: 200,
       options: '',
-      format: 'png'                       // Default: jpg
+      format: 'jpg',                      // Default: jpg - Unused by our processor 
+      process: function(gm, options, inputStream, outputStream) {
+        var gmObj = gm(inputStream);
+        gmObj.size({ bufferStream: true }, (err, size) => {
+          if (err || size.width > 400) {
+            gmObj.resize(options.gm.width , options.gm.height , options.gm.options)
+            .autoOrient()
+            .stream()
+            .pipe(outputStream);
+          } else {
+            gmObj.stream()
+            .pipe(outputStream);
+          }
+        });
+      }
     },
     s3 : {                                // [Optional]: define s3 options
       ACL: 'public-read',
