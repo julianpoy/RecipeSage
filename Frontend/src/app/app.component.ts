@@ -29,6 +29,10 @@ export class MyApp {
     
     // this.navCtrl.setRoot('HomePage', { folder: 'main' });
     
+    if (window.location.href.toLowerCase().indexOf('dev') > -1) {
+      localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
+    }
+    
     this.loadInboxCount();
     
     var me = this;
