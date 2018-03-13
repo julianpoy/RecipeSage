@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Observable, Subject } from 'rxjs'
 import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
@@ -37,7 +37,7 @@ export class HomePage {
   
   
   //Lazy load reqs
-  @ViewChild('container') container: ElementRef;
+  @ViewChild('container') container: any;
   updateSearchResult$: any;
   scrollAndSearch$: any;
   
