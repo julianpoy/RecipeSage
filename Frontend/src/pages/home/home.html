@@ -65,7 +65,7 @@
       </ion-item-options>
     </ion-item-sliding>
     
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0)" text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" text-wrap text-center>
       <p>
         Welcome to Recipe Sage!<br />
         It looks like you have no recipes yet.<br />
@@ -73,10 +73,18 @@
       </p>
     </ion-item>
     
-    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0)" text-wrap text-center>
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0" text-wrap text-center>
       <p>
         Your inbox is empty.<br />
         When someone sends you a recipe, it will show up here!
+      </p>
+    </ion-item>
+    
+    <ion-item *ngIf="(!recipes || recipes.length === 0) && searchText.length > 0" text-wrap text-center>
+      <p>
+        No search results.<br /><br />
+        Search includes:<br />
+        Title, description, source, ingredients, instructions, and notes.
       </p>
     </ion-item>
   </ion-list>
