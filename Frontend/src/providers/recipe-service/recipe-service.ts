@@ -20,6 +20,7 @@ export interface Recipe {
   ingredients: string;
   instructions: string;
   labels: Label[];
+  labels_flatlist: string;
   image: any;
   imageFile: any;
   imageURL: string;
