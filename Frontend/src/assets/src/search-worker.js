@@ -15,7 +15,8 @@ var options = {
     "source",
     "ingredients",
     "instructions",
-    "notes"
+    "notes",
+    "labels_flatlist"
   ]
 };
 
@@ -26,7 +27,19 @@ self.addEventListener("message", function(e) {
   var message = JSON.parse(e.data);
   if (message.op === 'init') {
     recipes = message.data;
-    fuse = new Fuse(message.data, options);
+    
+    recipes = recipes.map(function(el) {
+      if (el.labels.length > 0) {
+        el.labels_flatlist = el.labels.map(function(label) {
+          return label.title;
+        }).join(', ');
+      } else {
+        el.labels_flatlist = '';
+      }
+      return el;
+    });
+    
+    fuse = new Fuse(recipes, options);
   } else if (message.op === 'search') {
     if (message.data.trim().length > 0) {
       var results = fuse.search(message.data);
