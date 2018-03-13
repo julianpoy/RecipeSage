@@ -2,11 +2,10 @@ self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.0/fuse.mi
 
 var options = {
   shouldSort: true,
-  findAllMatches: true,
   includeScore: true,
   threshold: 0.6,
   location: 0,
-  distance: 20,
+  distance: 200,
   maxPatternLength: 32,
   minMatchCharLength: 1,
   keys: [
