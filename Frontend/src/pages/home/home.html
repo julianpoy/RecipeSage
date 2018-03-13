@@ -35,7 +35,7 @@
       <ion-item (click)="openRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
           <!--<img src="{{ recipe.image.location }}">-->
-          <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="container.ionScroll">
+          <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="scrollAndSearch$">
         </ion-thumbnail>
         <h2>{{ recipe.title }}</h2>
         <p>{{ recipe.description }}</p>

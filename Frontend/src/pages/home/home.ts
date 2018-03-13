@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs'
 import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
@@ -33,6 +34,12 @@ export class HomePage {
   viewOptions: any;
   
   searchWorker: any;
+  
+  
+  //Lazy load reqs
+  @ViewChild('container') container: ElementRef;
+  updateSearchResult$: any;
+  scrollAndSearch$: any;
   
   constructor(
     public navCtrl: NavController,
@@ -84,6 +91,14 @@ export class HomePage {
     }, function() {
       loading.dismiss();
     });
+  }
+  
+  ngAfterViewInit() {
+    this.updateSearchResult$ = new Subject();
+    this.scrollAndSearch$ = Observable.merge(
+      this.container.ionScroll,
+      this.updateSearchResult$
+    );
   }
   
   refresh(refresher) {
@@ -138,6 +153,10 @@ export class HomePage {
           if (message.op === 'results') {
             me.recipes = message.data;
           }
+          // After render loop
+          setTimeout(function() {
+            me.updateSearchResult$.next();
+          });
         }
         
         if (me.searchText) {
