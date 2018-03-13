@@ -32,6 +32,8 @@ export class HomePage {
   
   viewOptions: any;
   
+  searchWorker: any;
+  
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -123,6 +125,25 @@ export class HomePage {
       me.recipeService.fetch(me.folder).subscribe(function(response) {
         me.recipes = response;
         
+        if (me.searchWorker) me.searchWorker.terminate();
+        me.searchWorker = new Worker('assets/src/search-worker.js');
+        
+        me.searchWorker.postMessage(JSON.stringify({
+          op: 'init',
+          data: me.recipes
+        }));
+        
+        me.searchWorker.onmessage = function(e) {
+          var message = JSON.parse(e.data);
+          if (message.op === 'results') {
+            me.recipes = message.data;
+          }
+        }
+        
+        if (me.searchText) {
+          me.search(me.searchText);
+        }
+        
         resolve();
         
         me.requestNotifications();
@@ -194,6 +215,14 @@ export class HomePage {
   
   toggleSearch() {
     this.showSearch = !this.showSearch;
+  }
+  
+  search(text) {
+    this.searchText = text;
+    this.searchWorker.postMessage(JSON.stringify({
+      op: 'search',
+      data: text
+    }));
   }
   
   nextViewType() {
