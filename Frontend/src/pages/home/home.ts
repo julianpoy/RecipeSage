@@ -225,6 +225,10 @@ export class HomePage {
     }));
   }
   
+  trackByFn(index, item) {
+    return item._id;
+  }
+  
   nextViewType() {
     var viewTypeIdx = this.viewTypes.indexOf(this.viewType);
     
