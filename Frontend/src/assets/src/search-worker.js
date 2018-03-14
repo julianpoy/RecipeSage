@@ -1,26 +1,8 @@
-self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.0/fuse.min.js');
+self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.6/lunr.min.js');
 
-var options = {
-  shouldSort: true,
-  includeScore: true,
-  threshold: 0.6,
-  location: 0,
-  distance: 200,
-  maxPatternLength: 32,
-  minMatchCharLength: 1,
-  keys: [
-    "title",
-    "description",
-    "source",
-    "ingredients",
-    "instructions",
-    "notes",
-    "labels_flatlist"
-  ]
-};
-
-var fuse;
+var l;
 var recipes;
+var recipesById;
 
 self.addEventListener("message", function(e) {
   var message = JSON.parse(e.data);
@@ -38,15 +20,33 @@ self.addEventListener("message", function(e) {
       return el;
     });
     
-    fuse = new Fuse(recipes, options);
+    recipesById = recipes.reduce(function(map, el) {
+      map[el._id] = el;
+  	  return map;
+    }, {});
+    
+    l = lunr(function () {
+      this.ref('_id');
+      this.field("title");
+      this.field("description");
+      this.field("source");
+      this.field("ingredients");
+      this.field("instructions");
+      this.field("notes");
+      this.field("labels_flatlist");
+    
+      recipes.forEach(function (recipe) {
+        this.add(recipe);
+      }, this);
+    });
   } else if (message.op === 'search') {
     if (message.data.trim().length > 0) {
-      var results = fuse.search(message.data);
+      var results = l.search(message.data);
       
       results = results.map(function(el) {
-      	var recipe = el.item;
-      	recipe.score = el.score;
-      	return recipe;
+        var recipe = recipesById[el.ref];
+        recipe.score = el.score;
+        return recipe;
       });
       
       postMessage(JSON.stringify({
