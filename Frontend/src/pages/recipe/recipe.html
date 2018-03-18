@@ -20,8 +20,8 @@
       <ion-thumbnail *ngIf="recipe.image" item-start>
         <img src="{{ recipe.image.location }}">
       </ion-thumbnail>
-      <h2>{{ recipe.title }}</h2>
-      <p>{{ recipe.description }}</p>
+      <h2 text-wrap>{{ recipe.title }}</h2>
+      <p text-wrap>{{ recipe.description }}</p>
     </ion-item>
     
     <ion-card-content>
