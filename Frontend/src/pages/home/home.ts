@@ -186,7 +186,7 @@ export class HomePage {
   }
   
   requestNotifications() {
-    if ((<any>Notification).permission === 'denied') return;
+    if (!('Notification' in window) || (<any>Notification).permission === 'denied') return;
 
     if ((<any>Notification).permission === 'granted') {
       this.messagingService.enableNotifications();
