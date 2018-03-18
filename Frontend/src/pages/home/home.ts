@@ -195,15 +195,9 @@ export class HomePage {
 
     let alert = this.alertCtrl.create({
       title: 'Notification Permissions',
-      subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br />After dismissing this popup, you will be prompted to enable notification access.',
+      subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
       buttons: [{
-        text: 'Cancel',
-        handler: () => {
-          console.log('Disagree clicked');
-        }
-      },
-      {
-        text: 'Ok',
+        text: 'Continue',
         handler: () => {
           this.messagingService.enableNotifications();
         }
