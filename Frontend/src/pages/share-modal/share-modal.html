@@ -35,7 +35,7 @@
         {{ destinationUserName ? 'User found: ' + destinationUserName : "No user found with that email..." }}
       </p>
       <p *ngIf="destinationUserEmail.length == 0 && !searchingForDestinationUser" padding-left padding-top>
-        Enter an email address to search for a user
+        Enter an email address to search for a user <span *ngIf="recents.length > 0">or select a recent contact below</span>
       </p>
       <p *ngIf="searchingForDestinationUser" padding-left padding-top>
         Searcing for user...
@@ -47,7 +47,7 @@
 
       <ion-grid *ngIf="recents.length > 0">
         <ion-row>
-          <ion-col col-12 col-md-6 col-lg-4 col-xl-4 *ngFor="let recipient of recents">
+          <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 *ngFor="let recipient of recents">
             <ion-card>
               <ion-item text-center>
                 <button (click)="destinationUserEmail = recipient.email; autofillUserName()" ion-button icon-left clear small>
@@ -58,7 +58,7 @@
               <ion-row>
                 <ion-col text-center>
                   <button (click)="removeRecent(recipient)" ion-button icon-left clear small>
-                    <ion-icon name="contact"></ion-icon>
+                    <ion-icon name="trash"></ion-icon>
                     <div>Forget</div>
                   </button>
                 </ion-col>
