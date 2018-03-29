@@ -253,6 +253,7 @@ export class HomePage {
   }
   
   search(text) {
+    if (!text) text = '';
     this.searchText = text;
     this.searchWorker.postMessage(JSON.stringify({
       op: 'search',
