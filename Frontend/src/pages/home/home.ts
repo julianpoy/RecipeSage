@@ -195,7 +195,7 @@ export class HomePage {
     
     
     if (!localStorage.getItem('notificationExplainationShown')) {
-      localStorage.setItem('notificationExplainationShown', true);
+      localStorage.setItem('notificationExplainationShown', 'true');
       var me = this;
   
       let alert = this.alertCtrl.create({
