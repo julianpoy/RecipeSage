@@ -115,7 +115,7 @@ export class RecipePage {
   setScale(scale) {
     if (!scale || scale <= 0) scale = 1;
     
-    scale = parseInt(scale) || 1;
+    scale = parseFloat(scale) || 1;
     
     this.scale = scale;
 
