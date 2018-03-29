@@ -119,7 +119,10 @@ export class RecipePage {
     
     this.scale = scale;
 
-    this.applyScale();
+    var me = this;
+    setTimeout(function() {
+      me.applyScale();
+    }, 0);
   }
   
   applyScale() {
