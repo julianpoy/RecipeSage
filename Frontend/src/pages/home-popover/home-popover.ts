@@ -16,9 +16,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class HomePopoverPage {
 
   viewOptions: any;
+  
+  sortUpdateListener: any;
+  
+  homeRef: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.viewOptions = navParams.get('viewOptions');
+    this.sortUpdateListener = navParams.get('sortUpdateListener');
+    this.homeRef = navParams.get('homeRef');
   }
 
   ionViewDidLoad() {
@@ -29,6 +35,10 @@ export class HomePopoverPage {
     localStorage.setItem('showLabels', this.viewOptions.showLabels);
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
-    localStorage.setItem('sortByLabel', this.viewOptions.sortByLabel);
+    localStorage.setItem('sortBy', this.viewOptions.sortBy);
+  }
+  
+  updateSort() {
+    this.sortUpdateListener.call(this.homeRef);
   }
 }

@@ -114,14 +114,14 @@ export class HomePage {
       showLabels: true,
       showImages: true,
       showSource: false,
-      sortByLabel: false,
+      sortBy: 'title',
     }
     
     this.viewOptions = {
       showLabels: JSON.parse(localStorage.getItem('showLabels')),
       showImages: JSON.parse(localStorage.getItem('showImages')),
       showSource: JSON.parse(localStorage.getItem('showSource')),
-      sortByLabel: JSON.parse(localStorage.getItem('sortByLabel')),
+      sortBy: localStorage.getItem('sortBy'),
     }
     
     for (var key in this.viewOptions) {
@@ -137,7 +137,7 @@ export class HomePage {
     var me = this;
     
     return new Promise(function(resolve, reject) {
-      me.recipeService.fetch(me.folder).subscribe(function(response) {
+      me.recipeService.fetch(me.folder, me.viewOptions.sortBy).subscribe(function(response) {
         me.recipes = response;
         
         if (me.searchWorker) me.searchWorker.terminate();
@@ -236,8 +236,13 @@ export class HomePage {
     });
   }
   
+  sortUpdateListener() {
+    this.viewOptions.sortBy = localStorage.getItem('sortBy') || 'title';
+    this.loadRecipes();
+  }
+  
   presentPopover(event) {
-    let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
+    let popover = this.popoverCtrl.create('HomePopoverPage', { homeRef: this, viewOptions: this.viewOptions, sortUpdateListener: this.sortUpdateListener });
 
     popover.present({
       ev: event

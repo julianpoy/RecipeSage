@@ -272,7 +272,7 @@ router.get(
     accountId: res.locals.session.accountId,
     folder: req.query.folder
   })
-  .sort('title')
+  .sort(req.query.sort || 'title')
   .populate('fromUser', 'name email')
   .lean()
   .exec(function(err, recipes) {

@@ -3,14 +3,6 @@
     Options
   </ion-list-header>
 
-  <!--<ion-item>-->
-  <!--  <ion-icon name='pricetag' item-start></ion-icon>-->
-  <!--  Show labels-->
-  <!--  <ion-note item-end>-->
-  <!--  To the moon-->
-  <!--  </ion-note>-->
-  <!--</ion-item>-->
-
   <ion-item>
     <ion-toggle [(ngModel)]="viewOptions.showLabels" (ngModelChange)="saveViewOptions()"></ion-toggle>
     <ion-label>
@@ -36,18 +28,15 @@
   </ion-item>
   
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.sortByLabel" (ngModelChange)="saveViewOptions()"></ion-toggle>
-    <ion-label>
-      Sort by Label
-    </ion-label>
-    <ion-icon name='image' item-start></ion-icon>
+    <ion-icon name='list' item-start></ion-icon>
+    <ion-label>Sort by</ion-label>
+    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions(); updateSort();">
+      <ion-option value="title">Title</ion-option>
+      <!--<ion-option value="label">Label</ion-option>-->
+      <ion-option value="-created">Created Desc</ion-option>
+      <ion-option value="created">Created Asc</ion-option>
+      <ion-option value="-updated">Updated Desc</ion-option>
+      <ion-option value="updated">Updated Asc</ion-option>
+    </ion-select>
   </ion-item>
-
-  <!--<ion-item>-->
-  <!--  <ion-icon name='flask' item-start></ion-icon>-->
-  <!--  Potions-->
-  <!--  <ion-note item-end>-->
-  <!--  Poisonous-->
-  <!--  </ion-note>-->
-  <!--</ion-item>-->
 </ion-list>
