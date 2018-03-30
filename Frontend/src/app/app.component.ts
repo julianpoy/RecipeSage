@@ -17,6 +17,8 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
   
   inboxCount: number;
+  
+  version: number = (<any>window).version;
 
   constructor(
     public platform: Platform,
