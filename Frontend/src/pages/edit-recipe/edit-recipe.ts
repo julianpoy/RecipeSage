@@ -82,11 +82,16 @@ export class EditRecipePage {
     if (this.recipe._id) {
       this.recipeService.update(this.recipe).subscribe(function(response) {
         loading.dismiss();
-        
-        me.navCtrl.setRoot('RecipePage', {
+
+        // Remove the recipe list page (old version) AND the recipe edit page from the stack
+        me.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response._id
-        }, {animate: true, direction: 'forward'});
+        }).then(() => {
+          const startIndex = me.navCtrl.getActive().index - 2;
+          if (startIndex < 0) return;
+          me.navCtrl.remove(startIndex, 2);
+        });
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
@@ -108,10 +113,15 @@ export class EditRecipePage {
       this.recipeService.create(this.recipe).subscribe(function(response) {
         loading.dismiss();
         
-        me.navCtrl.setRoot('RecipePage', {
+        // Remove the recipe create page from the stack
+        me.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response._id
-        }, {animate: true, direction: 'forward'});
+        }).then(() => {
+          const startIndex = me.navCtrl.getActive().index - 1;
+          if (startIndex < 0) return;
+          me.navCtrl.remove(startIndex, 1);
+        });
       }, function(err) {
         loading.dismiss();
         switch(err.status) {
