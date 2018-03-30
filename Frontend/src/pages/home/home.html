@@ -31,39 +31,41 @@
   </ion-refresher>
   <ion-searchbar (ionInput)="search($event.target.value)"></ion-searchbar>
   <ion-list *ngIf="viewType === 'list'">
-    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:viewOptions.selectedLabels.join() + viewOptions.sortBy + searchText:filterOptions; trackBy: trackByFn" class="recipeItem">
-      <ion-item (click)="openRecipe(recipe)">
-        <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
-          <!--<img src="{{ recipe.image.location }}">-->
-          <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="scrollAndSearch$">
-        </ion-thumbnail>
-        <h2 text-wrap>{{ recipe.title }}</h2>
-        <p text-wrap>{{ recipe.description }}</p>
-        <p *ngIf="recipe.source && viewOptions.showSource" text-wrap>Source: {{ recipe.source }}</p>
-        
-        <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-          <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
-        </p>
-        
-        <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" text-wrap>
-          Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
-        </p>
-      </ion-item>
-      <ion-item-options side="right">
-        <button ion-button color="primary">
-          <ion-icon name="create"></ion-icon>
-          Edit
-        </button>
-        <button ion-button color="warning">
-          <ion-icon name="trash"></ion-icon>
-          Edit
-        </button>
-        <button ion-button color="secondary">
-          <ion-icon name="contact"></ion-icon>
-          Share
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+    <div #recipeListContainer>
+      <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:viewOptions.selectedLabels.join() + viewOptions.sortBy + searchText:filterOptions as filteredRecipes; trackBy: trackByFn" class="recipeItem">
+        <ion-item (click)="openRecipe(recipe)">
+          <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
+            <!--<img src="{{ recipe.image.location }}">-->
+            <img [lazyLoad]="recipe.image.location" [offset]="imageLoadOffset" [scrollObservable]="scrollAndSearch$">
+          </ion-thumbnail>
+          <h2 text-wrap>{{ recipe.title }}</h2>
+          <p text-wrap>{{ recipe.description }}</p>
+          <p *ngIf="recipe.source && viewOptions.showSource" text-wrap>Source: {{ recipe.source }}</p>
+          
+          <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+            <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+          </p>
+          
+          <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" text-wrap>
+            Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
+          </p>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="primary">
+            <ion-icon name="create"></ion-icon>
+            Edit
+          </button>
+          <button ion-button color="warning">
+            <ion-icon name="trash"></ion-icon>
+            Edit
+          </button>
+          <button ion-button color="secondary">
+            <ion-icon name="contact"></ion-icon>
+            Share
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
     
     <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" text-wrap text-center>
       <p>
@@ -80,7 +82,7 @@
       </p>
     </ion-item>
     
-    <ion-item *ngIf="(!recipes || recipes.length === 0) && searchText.length > 0" text-wrap text-center>
+    <ion-item *ngIf="recipeListContainer.children.length === 0 && searchText.length > 0" text-wrap text-center>
       <p>
         No search results.<br /><br />
         Search includes:<br />
