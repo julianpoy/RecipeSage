@@ -25,7 +25,8 @@ export class BasicFilterPipe implements PipeTransform {
 
     if (filteredRecipes[0].score) {
       return filteredRecipes.sort(function(a: any, b: any) {
-        return a.score > b.score;
+        if (a.score = b.score) return 0;
+        return a.score < b.score ? 1 : -1;
       });
     }
     
@@ -45,12 +46,14 @@ export class BasicFilterPipe implements PipeTransform {
           }
         case "created":
         case "updated":
+          if (Date.parse(aV) === Date.parse(bV)) return 0;
           if (desc) {
             return Date.parse(aV) < Date.parse(bV) ? 1 : -1;
           } else {
             return Date.parse(aV) > Date.parse(bV) ? 1 : -1;
           }
         default:
+          if (aV === bV) return 0;
           if (desc) {
             return aV < bV ? 1 : -1;
           } else {
