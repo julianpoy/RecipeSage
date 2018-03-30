@@ -112,6 +112,20 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
+  
+  checkForUpdate(params) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .get(this.base + 'info/' + this.getTokenQuery() + '&version=' + encodeURIComponent(params.version), httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

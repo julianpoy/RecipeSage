@@ -24,6 +24,7 @@
     "nightmare": "^2.10.0",
     "nodemailer": "^4.4.2",
     "request": "^2.83.0",
+    "semver": "^5.5.0",
     "serve-favicon": "~2.4.5"
   }
 }

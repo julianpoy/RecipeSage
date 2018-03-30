@@ -9,19 +9,21 @@ export class BasicFilterPipe implements PipeTransform {
       return recipes;
     }
     
+    setTimeout(options.onchange, 0);
+    
     var filteredRecipes = recipes;
     
-    if (options.selectedLabels && options.selectedLabels.length > 0) {
+    if (options.viewOptions.selectedLabels && options.viewOptions.selectedLabels.length > 0) {
       filteredRecipes = recipes.filter(function(el) {
         return el.labels.some(function(label) {
-          return options.selectedLabels.indexOf(label.title) > -1;
+          return options.viewOptions.selectedLabels.indexOf(label.title) > -1;
         });
       });
     }
     
     return filteredRecipes.sort(function(a: any, b: any) {
-      var desc = options.sortBy.indexOf('-') == 0;
-      var sortField = desc ? options.sortBy.substr(1) : options.sortBy;
+      var desc = options.viewOptions.sortBy.indexOf('-') == 0;
+      var sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
       
       var aV = a[sortField];
       var bV = b[sortField];

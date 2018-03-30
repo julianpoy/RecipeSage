@@ -6,6 +6,7 @@ import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
+import { UserServiceProvider } from '../../providers/user-service/user-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -31,7 +32,8 @@ export class HomePage {
   folder: string;
   folderTitle: string;
   
-  viewOptions: any;
+  viewOptions: any = {};
+  filterOptions: any = {};
   
   searchWorker: any;
   
@@ -50,6 +52,7 @@ export class HomePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
+    public userService: UserServiceProvider,
     public messagingService: MessagingServiceProvider) {
       
     this.folder = navParams.get('folder') || 'main';
@@ -63,7 +66,14 @@ export class HomePage {
     }
     
     this.loadViewOptions();
-    
+    this.filterOptions.viewOptions = this.viewOptions;
+    var me = this;
+    this.filterOptions.onchange = function() {
+      try {
+        me.updateSearchResult$.next();
+      } catch(e){}
+    }
+
     // var me = this;
     // events.subscribe('recipe:generalUpdate', () => {
     //   me.loadRecipes();
@@ -77,6 +87,14 @@ export class HomePage {
     
     this.searchText = '';
     this.showSearch = false;
+    
+    this.userService.checkForUpdate({
+      version: (<any>window).version
+    }).subscribe(function(response) {
+      if (response.updateAvailable) {
+        (<any>window).location.reload(true);
+      }
+    }, function() {});
   }
   
   ionViewWillEnter() {
@@ -117,14 +135,12 @@ export class HomePage {
       sortBy: '-title',
       selectedLabels: [],
     }
-    
-    this.viewOptions = {
-      showLabels: JSON.parse(localStorage.getItem('showLabels')),
-      showImages: JSON.parse(localStorage.getItem('showImages')),
-      showSource: JSON.parse(localStorage.getItem('showSource')),
-      sortBy: localStorage.getItem('sortBy'),
-      selectedLabels: [],
-    }
+
+    this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
+    this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
+    this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
+    this.viewOptions.sortBy = localStorage.getItem('sortBy');
+    this.viewOptions.selectedLabels = [];
     
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {

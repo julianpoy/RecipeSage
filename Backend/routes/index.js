@@ -4,6 +4,7 @@ var request = require('request');
 var Nightmare = require('nightmare');
 var cors = require('cors');
 var aws = require('aws-sdk');
+var semver = require('semver');
 
 // DB
 var mongoose = require('mongoose');
@@ -22,9 +23,19 @@ aws.config.update({
   subregion: config.aws.region,
 });
 
+var CURRENT_CLIENT_VERSION = '1.0.0';
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+});
+
+router.get('/info', function(req, res, next) {
+  var updateAvailable = semver.compare(CURRENT_CLIENT_VERSION, req.query.version) > 0;
+  
+  res.status(200).json({
+    updateAvailable: updateAvailable
+  });
 });
 
 router.get(
