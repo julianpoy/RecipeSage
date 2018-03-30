@@ -301,6 +301,15 @@ router.get(
       }
       
       Promise.all(labelPromises).then(function() {
+        if (req.query.labels && req.query.labels.length > 0) {
+          var allowableLabels = req.query.labels.split(',');
+          recipes = recipes.filter(function(el) {
+            return el.labels.some(function(label) {
+              return allowableLabels.indexOf(label.title) > -1;
+            })
+          });
+        }
+
         res.status(200).json(recipes);
       }, function() {
         res.status(500).send("Could not query DB for labels.");
