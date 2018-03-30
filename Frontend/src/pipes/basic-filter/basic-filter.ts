@@ -19,24 +19,36 @@ export class BasicFilterPipe implements PipeTransform {
       });
     }
     
-    return filteredRecipes.sort(function(a, b) {
+    return filteredRecipes.sort(function(a: any, b: any) {
       var desc = options.sortBy.indexOf('-') == 0;
       var sortField = desc ? options.sortBy.substr(1) : options.sortBy;
       
       var aV = a[sortField];
-      var bV = b[sortField].toLowerCase();
-      if (typeof aV === 'string') {
-        if (desc) {
-          return aV.toLowerCase().localeCompare(bV.toLowerCase()) < 0;
-        } else {
-          return aV.toLowerCase().localeCompare(bV.toLowerCase()) > 0;
-        }
-      } else {
-        if (desc) {
-          return aV < bV;
-        } else {
-          return aV > bV;
-        }
+      var bV = b[sortField];
+      
+      switch(sortField) {
+        case "title":
+          if (desc) {
+            return aV.toLowerCase().localeCompare(bV.toLowerCase());
+          } else {
+            return bV.toLowerCase().localeCompare(aV.toLowerCase());
+          }
+          break;
+        case "created":
+        case "updated":
+          if (desc) {
+            return Date.parse(aV) < Date.parse(bV) ? 1 : -1;
+          } else {
+            return Date.parse(aV) > Date.parse(bV) ? 1 : -1;
+          }
+          break;
+        default:
+          if (desc) {
+            return aV < bV ? 1 : -1;
+          } else {
+            return aV > bV ? 1 : -1;
+          }
+          break;
       }
     });
   }

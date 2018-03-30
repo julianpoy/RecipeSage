@@ -114,7 +114,7 @@ export class HomePage {
       showLabels: true,
       showImages: true,
       showSource: false,
-      sortBy: 'title',
+      sortBy: '-title',
       selectedLabels: [],
     }
     

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
@@ -14,7 +14,7 @@ export class HomePopoverPage {
   
   labels: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public labelService: LabelServiceProvider) {
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public navParams: NavParams, public labelService: LabelServiceProvider) {
     this.viewOptions = navParams.get('viewOptions');
   }
 
