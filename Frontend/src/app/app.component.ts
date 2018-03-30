@@ -98,7 +98,7 @@ export class MyApp {
   loadInboxCount() {
     var me = this;
 
-    this.recipeService.fetch('inbox').subscribe(function(response) {
+    this.recipeService.fetch({ folder: 'inbox' }).subscribe(function(response) {
       me.inboxCount = response.length;
       
       me.events.publish('recipe:inbox:count', me.inboxCount);

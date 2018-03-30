@@ -30,13 +30,21 @@
   <ion-item>
     <ion-icon name='list' item-start></ion-icon>
     <ion-label>Sort by</ion-label>
-    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions(); updateSort();">
+    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
       <ion-option value="title">Title</ion-option>
       <!--<ion-option value="label">Label</ion-option>-->
       <ion-option value="-created">Created Desc</ion-option>
       <ion-option value="created">Created Asc</ion-option>
       <ion-option value="-updated">Updated Desc</ion-option>
       <ion-option value="updated">Updated Asc</ion-option>
+    </ion-select>
+  </ion-item>
+  
+  <ion-item>
+    <ion-icon name='funnel' item-start></ion-icon>
+    <ion-label>Filter by label</ion-label>
+    <ion-select [(ngModel)]="viewOptions.selectedLabels" (ngModelChange)="saveViewOptions();" multiple="true">
+      <ion-option *ngFor="let label of labels">{{ label.title }}</ion-option>
     </ion-select>
   </ion-item>
 </ion-list>

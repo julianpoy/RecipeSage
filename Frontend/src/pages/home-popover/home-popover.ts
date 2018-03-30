@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the HomePopoverPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
 @IonicPage()
 @Component({
@@ -17,18 +12,32 @@ export class HomePopoverPage {
 
   viewOptions: any;
   
-  sortUpdateListener: any;
-  
-  homeRef: any;
+  labels: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public labelService: LabelServiceProvider) {
     this.viewOptions = navParams.get('viewOptions');
-    this.sortUpdateListener = navParams.get('sortUpdateListener');
-    this.homeRef = navParams.get('homeRef');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePopoverPage');
+    
+    var me = this;
+    this.labelService.fetch().subscribe(function(response) {
+      me.labels = response;
+    }, function(err) {
+      switch(err.status) {
+        case 401:
+          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          break;
+        default:
+          let errorToast = me.toastCtrl.create({
+            message: 'An unexpected error occured. Please restart application.',
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
+    });
   }
   
   saveViewOptions() {
@@ -36,9 +45,5 @@ export class HomePopoverPage {
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
     localStorage.setItem('sortBy', this.viewOptions.sortBy);
-  }
-  
-  updateSort() {
-    this.sortUpdateListener.call(this.homeRef);
   }
 }

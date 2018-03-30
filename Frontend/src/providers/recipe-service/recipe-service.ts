@@ -44,7 +44,7 @@ export class RecipeServiceProvider {
     return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
   }
   
-  fetch(folder, sortBy) {
+  fetch(options) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -52,8 +52,9 @@ export class RecipeServiceProvider {
     };
     
     var url = this.base + 'recipes/' + this.getTokenQuery();
-    if (folder) url += '&folder=' + folder;
-    if (sortBy) url += '&sort=' + sortBy;
+    if (options.folder) url += '&folder=' + options.folder;
+    if (options.sortBy) url += '&sort=' + options.sortBy;
+    if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     
     return this.http
     .get<Recipe[]>(url, httpOptions)
