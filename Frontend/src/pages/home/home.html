@@ -31,7 +31,7 @@
   </ion-refresher>
   <ion-searchbar (ionInput)="search($event.target.value)"></ion-searchbar>
   <ion-list *ngIf="viewType === 'list'">
-    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:viewOptions.selectedLabels.join() + viewOptions.sortBy:filterOptions; trackBy: trackByFn" class="recipeItem">
+    <ion-item-sliding *ngFor="let recipe of recipes | basicFilter:viewOptions.selectedLabels.join() + viewOptions.sortBy + searchText:filterOptions; trackBy: trackByFn" class="recipeItem">
       <ion-item (click)="openRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
           <!--<img src="{{ recipe.image.location }}">-->

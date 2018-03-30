@@ -41,7 +41,9 @@ self.addEventListener("message", function(e) {
     });
   } else if (message.op === 'search') {
     if (message.data.trim().length > 0) {
-      var results = l.search(message.data);
+      var txt = message.data.trim();
+
+      var results = l.search(txt + '*');
       
       results = results.map(function(el) {
         var recipe = recipesById[el.ref];
@@ -54,9 +56,14 @@ self.addEventListener("message", function(e) {
         data: results
       }));
     } else {
+      var results = recipes.map(function(el) {
+        delete el.score;
+        return el;
+      });
+      
       postMessage(JSON.stringify({
         op: 'results',
-        data: recipes
+        data: results
       }));
     }
   }

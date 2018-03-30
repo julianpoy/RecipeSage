@@ -27,6 +27,7 @@ export interface Recipe {
   destinationUserEmail: string;
   fromUser: any;
   folder: string;
+  score: number;
 }
 
 @Injectable()

@@ -5,10 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class BasicFilterPipe implements PipeTransform {
   transform(recipes: any[], filter: string, options: any) {
-    if (!recipes || !options) {
+    if (!recipes || recipes.length === 0 || !options) {
       return recipes;
     }
-    
+
     setTimeout(options.onchange, 0);
     
     var filteredRecipes = recipes;
@@ -18,6 +18,14 @@ export class BasicFilterPipe implements PipeTransform {
         return el.labels.some(function(label) {
           return options.viewOptions.selectedLabels.indexOf(label.title) > -1;
         });
+      });
+    }
+    
+    if (filteredRecipes.length === 0) return filteredRecipes;
+
+    if (filteredRecipes[0].score) {
+      return filteredRecipes.sort(function(a: any, b: any) {
+        return a.score > b.score;
       });
     }
     
