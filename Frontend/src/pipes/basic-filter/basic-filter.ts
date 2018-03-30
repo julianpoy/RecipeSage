@@ -33,7 +33,6 @@ export class BasicFilterPipe implements PipeTransform {
           } else {
             return bV.toLowerCase().localeCompare(aV.toLowerCase());
           }
-          break;
         case "created":
         case "updated":
           if (desc) {
@@ -41,14 +40,12 @@ export class BasicFilterPipe implements PipeTransform {
           } else {
             return Date.parse(aV) > Date.parse(bV) ? 1 : -1;
           }
-          break;
         default:
           if (desc) {
             return aV < bV ? 1 : -1;
           } else {
             return aV > bV ? 1 : -1;
           }
-          break;
       }
     });
   }
