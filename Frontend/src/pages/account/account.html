@@ -1,0 +1,48 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Account Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <br />
+  
+  <input style="display: none;" name="email" />
+  <input style="display: none;" name="password" />
+  
+  <ion-item>
+    <ion-input autocomplete="off" autofill="off" type="text" placeholder="Full Name or Nickname" [(ngModel)]="account.name" (ngModelChange)="nameChanged = true"></ion-input>
+    <button *ngIf="nameChanged" (click)="saveName()" ion-button item-right>
+      Save Name
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <ion-input autocomplete="off" autofill="off" type="text" placeholder="Email address" [(ngModel)]="account.email" (ngModelChange)="emailChanged = true"></ion-input>
+    <button *ngIf="emailChanged" (click)="saveEmail()" ion-button item-right>
+      Save Email
+    </button>
+  </ion-item>
+  
+  <ion-item>
+    <ion-input autocomplete="off" autofill="off" type="password" placeholder="Password" [(ngModel)]="account.password" (ngModelChange)="passwordChanged = true;"></ion-input>
+  </ion-item>
+  
+  <ion-item *ngIf="passwordChanged">
+    <ion-input autocomplete="off" autofill="off" type="password" [(ngModel)]="account.confirmPassword" placeholder="Confirm Password"></ion-input>
+    <button ion-button (click)="savePassword()" item-right>
+      Save Password
+    </button>
+  </ion-item>
+  
+  <br />
+  
+  <ion-item no-lines text-wrap>
+    <p>
+      To change something here, tap the field, edit it, and press the save button that appears.
+    </p>
+  </ion-item>
+</ion-content>

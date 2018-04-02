@@ -85,6 +85,7 @@ export class MyApp {
       { title: 'Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Add Recipe', component: 'EditRecipePage' },
       { title: 'Import', component: 'ImportPage' },
+      { title: 'Account', component: 'AccountPage' },
       { title: 'Logout', component: 'LoginPage' }
     ];
     

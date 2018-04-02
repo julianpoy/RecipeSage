@@ -113,6 +113,20 @@ export class UserServiceProvider {
     );
   }
   
+  me() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .get(this.base + 'users/' + this.getTokenQuery(), httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+  
   checkForUpdate(params) {
     const httpOptions = {
       headers: new HttpHeaders({

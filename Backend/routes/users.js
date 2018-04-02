@@ -11,6 +11,26 @@ var config = require('../config/config.json');
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 
+router.get(
+  '/',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+  
+  // Manually construct fields to avoid sending sensitive info
+  var user = {
+    _id: res.locals.user._id,
+    name: res.locals.user.name,
+    email: res.locals.user.email,
+    created: res.locals.user.created,
+    updated: res.locals.user.updated
+  };
+  
+  res.status(200).json(user);
+
+});
+
 /* Get public user listing by email */
 router.get(
   '/by-email',
@@ -173,15 +193,16 @@ router.put(
 
     User.update({
       _id: accountId
-    }, setUser)
+    }, setUser, {
+      new: true
+    })
+    .lean()
     .exec(function(err, user) {
       if (err) {
         res.status(500).json({
           msg: "Could not update user"
         });
       } else {
-        user = user.toObject();
-        
         delete user.password;
         delete user.salt;
         
