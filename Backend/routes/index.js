@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/info', function(req, res, next) {
+router.get('/info', cors(), function(req, res, next) {
   var updateAvailable = semver.compare(CURRENT_CLIENT_VERSION, req.query.version) > 0;
   
   res.status(200).json({
