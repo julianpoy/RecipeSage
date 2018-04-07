@@ -23,7 +23,9 @@ export class LabelServiceProvider {
     return '?token=' + localStorage.getItem('token');
   }
   
-  fetch() {
+  fetch(populate?: boolean) {
+    var populateQuery = populate ? '&populate=true' : '';
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -31,7 +33,7 @@ export class LabelServiceProvider {
     };
     
     return this.http
-    .get(this.base + 'labels/' + this.getTokenQuery(), httpOptions)
+    .get(this.base + 'labels/' + this.getTokenQuery() + populateQuery, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)

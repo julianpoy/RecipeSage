@@ -45,7 +45,7 @@ export class RecipesByLabelPage {
   
     loading.present();
     
-    this.labelService.fetch().subscribe(function(response) {
+    this.labelService.fetch(true).subscribe(function(response) {
       loading.dismiss();
 
       me.labels = response;      

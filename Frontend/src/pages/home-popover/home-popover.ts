@@ -22,7 +22,7 @@ export class HomePopoverPage {
     console.log('ionViewDidLoad HomePopoverPage');
     
     var me = this;
-    this.labelService.fetch().subscribe(function(response) {
+    this.labelService.fetch(true).subscribe(function(response) {
       me.labels = response;
     }, function(err) {
       switch(err.status) {

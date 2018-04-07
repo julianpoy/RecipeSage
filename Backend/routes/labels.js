@@ -70,7 +70,7 @@ router.post(
   });
 });
 
-//Get all of a user's labels with dumps
+//Get all of a user's labels
 router.get(
   '/',
   cors(),
@@ -78,12 +78,13 @@ router.get(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-  Label.find({
+  var query = Label.find({
     accountId: res.locals.session.accountId
-  })
-  .sort('title')
-  .populate('recipes')
-  .exec(function(err, labels) {
+  }).sort('title');
+  
+  if (req.query.populate) query.populate('recipes');
+
+  query.exec(function(err, labels) {
     if (err) {
       res.status(500).json({
         msg: "Could not query database for labels."
