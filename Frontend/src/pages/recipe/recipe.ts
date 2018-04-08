@@ -24,8 +24,12 @@ export class RecipePage {
   
   scale: number = 1;
   
-  newLabel: string = '';
-
+  existingLabels: any = [];
+  existingLabelsByTitle: any = {};
+  selectedLabels: any = [];
+  
+  select2: any;
+  
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -57,6 +61,8 @@ export class RecipePage {
       loading.dismiss();
     });
     // }
+    
+    this.loadLabels();
   }
   
   refresh(loader) {
@@ -107,9 +113,112 @@ export class RecipePage {
       });
     });
   }
+  
+  loadLabels() {
+    var me = this;
+    this.labelService.fetch().subscribe(function(response) {
+      me.existingLabels = response;
+      
+      me.existingLabels.sort(function(a, b) {
+        if (a.recipes.length === b.recipes.length) return 0;
+        return a.recipes.length > b.recipes.length ? -1 : 1;
+      });
+      
+      for(var i = 0; i < me.existingLabels.length; i++) {
+        if (me.existingLabels[i].recipes.indexOf(me.recipeId) > -1) {
+          me.selectedLabels.push(me.existingLabels[i].title);
+        }
+        
+        me.existingLabelsByTitle[me.existingLabels[i].title] = me.existingLabels[i];
+      }
+      
+      me.reloadSelect2.call(me);
+    }, function(err) {
+      switch(err.status) {
+        default:
+          let errorToast = me.toastCtrl.create({
+            message: 'An unexpected error occured. Please restart application.',
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
+    });
+  }
+  
+  loadSelect2() {
+    var me = this;
+    var labels = me.existingLabels.map(function(el) {
+      return {
+        id: el._id,
+        text: el.title
+      };
+    });
+    
+    function formatLabelSelectItem(state) {
+      if (!state.id) {
+        return state.text;
+      }
+  
+      var hintEl;
+      if (me.existingLabelsByTitle[state.text]) {
+        hintEl = '<span class="result-hint">Click to add</span>';
+      } else {
+        hintEl = '<span class="result-hint">Click to create</span>';
+      }
+  
+      var $state = $(
+        '<span>' + state.text + '</span>' + hintEl
+      );
+      return $state;
+    }
+    
+    console.log(labels)
+    
+    me.select2 = $('#labelSelect').select2({
+      placeholder: 'Type to select labels',
+      tags: true,
+      width: '100%',
+      templateResult: formatLabelSelectItem,
+      // allowClear: true,
+      data: labels,
+      dropdownParent: $('#labelSelectParent')
+    }).on('select2:selecting', function (e) {
+      var labelTitle = e.params.args.data.text;
+      console.log(e);
+      me.addLabel(labelTitle);
+      e.preventDefault();
+    }).on('select2:unselecting', function (e) {
+      var labelTitle = e.params.args.data.text;
+      console.log(labelTitle);
+      me.deleteLabel(me.existingLabelsByTitle[labelTitle]);
+      e.preventDefault();
+    });
+    
+    var select = me.selectedLabels.map(function(el) {
+      return me.existingLabelsByTitle[el]._id;
+    });
+    console.log(select)
+    me.select2.val(select).trigger('change');
+  }
+  
+  destroySelect2() {
+    this.select2.off('select2:selecting');
+    this.select2.off('select2:unselecting');
+    this.select2.select2('destroy');
+  }
+  
+  reloadSelect2() {
+    this.destroySelect2.call(this);
+    // Clean up all select2 fake elements
+    $('#labelSelect option').not('option[id]').remove();
+    this.loadSelect2.call(this);
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RecipePage');
+    
+    this.loadSelect2();
   }
   
   setScale(scale) {
@@ -283,18 +392,13 @@ export class RecipePage {
     });
   }
   
-  labelFieldKeydown(event) {
-    if (event.keyCode === 13) {
-      this.addLabel();
+  addLabel(title) {
+    if (this.selectedLabels.indexOf(title) > -1) {
+      this.reloadSelect2.call(this);
+      return;
     }
-  }
-  
-  labelFieldSubmit() {
-    this.addLabel();
-  }
-  
-  addLabel() {
-    if (this.newLabel.length === 0) {
+
+    if (title.length === 0) {
       this.toastCtrl.create({
         message: 'Please enter a label and press enter to label this recipe.',
         duration: 6000
@@ -312,14 +416,20 @@ export class RecipePage {
 
     this.labelService.create({
       recipeId: this.recipe._id,
-      title: this.newLabel.toLowerCase()
+      title: title.toLowerCase()
     }).subscribe(function(response) {
       loading.dismiss();
       
       if (!me.recipe.labels) me.recipe.labels = [];
-      me.recipe.labels.push(response);
+      if (me.recipe.labels.indexOf(response) === -1) me.recipe.labels.push(response);
+      if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
       
-      me.newLabel = '';
+      if (!me.existingLabelsByTitle[response.title]) {
+        me.existingLabels.push(response);
+        me.existingLabelsByTitle[response.title] = response;
+      }
+      
+      setTimeout(function() { me.reloadSelect2.call(me); });
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
@@ -382,8 +492,22 @@ export class RecipePage {
     this.labelService.remove(label).subscribe(function(response) {
       loading.dismiss();
       
-      var idx = me.recipe.labels.indexOf(label);
+      var idx = me.recipe.labels.indexOf(response._id);
       me.recipe.labels.splice(idx, 1);
+      
+      idx = me.selectedLabels.indexOf(label.title);
+      me.selectedLabels.splice(idx, 1);
+
+      if(label.recipes.length === 1 && label.recipes[0] === me.recipeId) {
+        idx = me.existingLabels.indexOf(label);
+        me.existingLabels.splice(idx, 1);
+        
+        delete me.existingLabelsByTitle[label.title];
+      } else {
+        label.recipes = response.recipes;
+      }
+      
+      me.reloadSelect2.call(me);
     }, function(err) {
       loading.dismiss();
       switch(err.status) {

@@ -64,21 +64,36 @@
     </ion-item>
     
     <br /><br /><br />
-    
+
     <ion-item *ngIf="recipe.labels && recipe.labels.length > 0" class="labels" no-margin text-wrap>
       <ion-icon name="pricetag" item-start large></ion-icon>
       <h2>Labels</h2>
-      <p>
-        <span *ngFor="let label of recipe.labels">
-          <ion-icon class="delete-label" (click)="deleteLabel(label)" name="trash" item-start></ion-icon>
-          {{ label.title }} &nbsp;&nbsp;
-        </span>
-      </p>
+      <!--<p>-->
+        <!--<span *ngFor="let label of recipe.labels">-->
+        <!--  <ion-icon class="delete-label" (click)="deleteLabel(label)" name="trash" item-start></ion-icon>-->
+        <!--  {{ label.title }} &nbsp;&nbsp;-->
+        <!--</span>-->
+        <!--<select class="form-control" data-trigger name="choices-multiple-default" id="choices-multiple-default" placeholder="This is a placeholder"-->
+        <!--multiple>-->
+        <!--  <option value="Dropdown item 1" selected>Dropdown item 1</option>-->
+        <!--  <option value="Dropdown item 2">Dropdown item 2</option>-->
+        <!--  <option value="Dropdown item 3">Dropdown item 3</option>-->
+        <!--  <option value="Dropdown item 4" disabled>Dropdown item 4</option>-->
+        <!--</select>-->
+        
+      <!--</p>-->
     </ion-item>
     
+    <div id='labelSelectParent'>
+      <!--<select id='labelSelect' [(ngModel)]="selectedLabels" multiple>-->
+      <!--  <option *ngFor='let label of existingLabels' id='{{ label._id }}' [ngValue]='label.title'>{{ label.title }}</option>-->
+      <!--</select>-->
+      <select id='labelSelect' multiple>
+      </select>
+    </div>
     <ion-item *ngIf="recipe.folder !== 'inbox'">
       <!--<ion-label stacked>Add label</ion-label>-->
-      <ion-input [(ngModel)]="newLabel" (keyup.enter)="labelFieldSubmit()" placeholder="Add Label" type="text" value=""></ion-input>
+      <!--<ion-input [(ngModel)]="newLabel" (keyup.enter)="labelFieldSubmit()" placeholder="Add Label" type="text" value=""></ion-input>-->
     </ion-item>
     
     <br />
