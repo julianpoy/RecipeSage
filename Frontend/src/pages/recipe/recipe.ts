@@ -7,6 +7,8 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
 
+var $ = (<any>window).$;
+
 @IonicPage({
   segment: 'recipe/:recipeId',
 })
