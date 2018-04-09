@@ -90,8 +90,24 @@ export class HomePage {
     
     this.searchText = '';
     this.showSearch = false;
-    
-    this.userService.checkForUpdate({
+
+    this.checkForUpdate();
+  }
+  
+  checkForUpdate() {
+    window['isUpdateAvailable']
+  	.then(isAvailable => {
+  		if (isAvailable) {
+    		// 	const toast = this.toastCtrl.create({
+    		// 		message: 'New Update available! Reload the webapp to see the latest juicy changes.',
+    		// 		position: 'bottom',
+    		// 		showCloseButton: true,
+    		// 	});
+    		// 	toast.present();
+  		  (<any>window).location.reload(true);
+  		}
+  	});
+  	this.userService.checkForUpdate({
       version: (<any>window).version
     }).subscribe(function(response) {
       if (response.updateAvailable) {
