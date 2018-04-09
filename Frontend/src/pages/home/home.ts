@@ -95,23 +95,34 @@ export class HomePage {
   }
   
   checkForUpdate() {
+    var toast;
+    
+    function promptToUpdate() {
+      if (toast) return;
+
+      toast = this.toastCtrl.create({
+  			message: 'New update available!',
+  			position: 'bottom',
+  			showCloseButton: true,
+  			closeButtonText: "Update"
+  		});
+  		toast.onDidDismiss(() => {
+  	    (<any>window).location.reload(true);
+      });
+  		toast.present();
+    }
+
     window['isUpdateAvailable']
   	.then(isAvailable => {
   		if (isAvailable) {
-    		// 	const toast = this.toastCtrl.create({
-    		// 		message: 'New Update available! Reload the webapp to see the latest juicy changes.',
-    		// 		position: 'bottom',
-    		// 		showCloseButton: true,
-    		// 	});
-    		// 	toast.present();
-  		  (<any>window).location.reload(true);
+  		  promptToUpdate();
   		}
   	});
   	this.userService.checkForUpdate({
       version: (<any>window).version
     }).subscribe(function(response) {
       if (response.updateAvailable) {
-        (<any>window).location.reload(true);
+        promptToUpdate();
       }
     }, function() {});
   }
