@@ -43,7 +43,17 @@ self.addEventListener("message", function(e) {
     if (message.data.trim().length > 0) {
       var txt = message.data.trim();
 
-      var results = l.search(txt + '*');
+      var results = l.search(txt);
+      
+      // Expand the search to autocomplete
+      if (results.length === 0) {
+        results = l.search(txt + '*');
+        
+        // Expand to single distance fuzzy
+        if (results.length === 0) {
+          results = l.search(txt + '~1');
+        }
+      }
       
       results = results.map(function(el) {
         var recipe = recipesById[el.ref];
