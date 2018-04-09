@@ -88,8 +88,27 @@
       <!--<select id='labelSelect' [(ngModel)]="selectedLabels" multiple>-->
       <!--  <option *ngFor='let label of existingLabels' id='{{ label._id }}' [ngValue]='label.title'>{{ label.title }}</option>-->
       <!--</select>-->
-      <select id='labelSelect' multiple>
-      </select>
+      <!--<select id='labelSelect' multiple>-->
+      <!--</select>-->
+      <tag-input
+        [(ngModel)]="selectedLabels"
+        [placeholder]="'Add a label'"
+        [secondaryPlaceholder]="existingLabels.length > 0 ? 'Create or select a label' : 'Create a label'"
+        [animationDuration]="{enter: '1ms', leave: '1ms'}"
+        [clearOnBlur]="true"
+        (onAdd)="onLabelAdded($event)"
+        (onRemove)="onLabelRemoved($event)">
+        <tag-input-dropdown
+          [autocompleteItems]="existingLabels"
+          [showDropdownIfEmpty]="true"
+          [keepOpen]="false"
+          [matchingFn]="labelMatch"
+          [minimumTextLength]="0">
+          <ng-template let-item="item" let-index="index">
+            {{ item.display }}
+          </ng-template>
+        </tag-input-dropdown>
+      </tag-input>
     </div>
     <ion-item *ngIf="recipe.folder !== 'inbox'">
       <!--<ion-label stacked>Add label</ion-label>-->

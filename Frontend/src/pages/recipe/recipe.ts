@@ -7,8 +7,6 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
 
-var $ = (<any>window).$;
-
 @IonicPage({
   segment: 'recipe/:recipeId',
 })
@@ -26,11 +24,9 @@ export class RecipePage {
   
   scale: number = 1;
   
+  labelObjectsByTitle: any = {};
   existingLabels: any = [];
-  existingLabelsByTitle: any = {};
   selectedLabels: any = [];
-  
-  select2: any;
   
   constructor(
     public navCtrl: NavController,
@@ -119,22 +115,20 @@ export class RecipePage {
   loadLabels() {
     var me = this;
     this.labelService.fetch().subscribe(function(response) {
-      me.existingLabels = response;
-      
-      me.existingLabels.sort(function(a, b) {
-        if (a.recipes.length === b.recipes.length) return 0;
-        return a.recipes.length > b.recipes.length ? -1 : 1;
-      });
-      
-      for(var i = 0; i < me.existingLabels.length; i++) {
-        if (me.existingLabels[i].recipes.indexOf(me.recipeId) > -1) {
-          me.selectedLabels.push(me.existingLabels[i].title);
-        }
+      for (var i = 0; i < response.length; i++) {
+        var label = response[i];
+        me.existingLabels.push(label.title);
+        me.labelObjectsByTitle[label.title] = label;
         
-        me.existingLabelsByTitle[me.existingLabels[i].title] = me.existingLabels[i];
+        if (label.recipes.indexOf(me.recipeId) > -1) {
+          me.selectedLabels.push(label.title);
+        }
       }
-      
-      me.reloadSelect2.call(me);
+
+      me.existingLabels.sort(function(a, b) {
+        if (me.labelObjectsByTitle[a].recipes.length === me.labelObjectsByTitle[b].recipes.length) return 0;
+        return me.labelObjectsByTitle[a].recipes.length > me.labelObjectsByTitle[b].recipes.length ? -1 : 1;
+      });
     }, function(err) {
       switch(err.status) {
         default:
@@ -147,80 +141,9 @@ export class RecipePage {
       }
     });
   }
-  
-  loadSelect2() {
-    var me = this;
-    var labels = me.existingLabels.map(function(el) {
-      return {
-        id: el._id,
-        text: el.title
-      };
-    });
-    
-    function formatLabelSelectItem(state) {
-      if (!state.id) {
-        return state.text;
-      }
-  
-      var hintEl;
-      if (me.existingLabelsByTitle[state.text]) {
-        hintEl = '<span class="result-hint">Click to add</span>';
-      } else {
-        hintEl = '<span class="result-hint">Click to create</span>';
-      }
-  
-      var $state = $(
-        '<span>' + state.text + '</span>' + hintEl
-      );
-      return $state;
-    }
-    
-    console.log(labels)
-    
-    me.select2 = $('#labelSelect').select2({
-      placeholder: 'Type to select labels',
-      tags: true,
-      width: '100%',
-      templateResult: formatLabelSelectItem,
-      // allowClear: true,
-      data: labels,
-      dropdownParent: $('#labelSelectParent')
-    }).on('select2:selecting', function (e) {
-      var labelTitle = e.params.args.data.text;
-      console.log(e);
-      me.addLabel(labelTitle);
-      e.preventDefault();
-    }).on('select2:unselecting', function (e) {
-      var labelTitle = e.params.args.data.text;
-      console.log(labelTitle);
-      me.deleteLabel(me.existingLabelsByTitle[labelTitle]);
-      e.preventDefault();
-    });
-    
-    var select = me.selectedLabels.map(function(el) {
-      return me.existingLabelsByTitle[el]._id;
-    });
-    console.log(select)
-    me.select2.val(select).trigger('change');
-  }
-  
-  destroySelect2() {
-    this.select2.off('select2:selecting');
-    this.select2.off('select2:unselecting');
-    this.select2.select2('destroy');
-  }
-  
-  reloadSelect2() {
-    this.destroySelect2.call(this);
-    // Clean up all select2 fake elements
-    $('#labelSelect option').not('option[id]').remove();
-    this.loadSelect2.call(this);
-  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RecipePage');
-    
-    this.loadSelect2();
   }
   
   setScale(scale) {
@@ -394,12 +317,29 @@ export class RecipePage {
     });
   }
   
-  addLabel(title) {
-    if (this.selectedLabels.indexOf(title) > -1) {
-      this.reloadSelect2.call(this);
-      return;
-    }
+  labelMatch(value, target) {
+    return target.display.toLowerCase().indexOf(value.toLowerCase()) > -1;
+    // return true;
+  }
+  
+  onLabelAdded(e) {
+    var title = e.display;
 
+    // if (this.existingLabels.indexOf(title) === -1) this.existingLabels.push(title);
+    
+    this.addLabel(title);
+  }
+  
+  onLabelRemoved(e) {
+    var title = e.display || e;
+    var label = this.labelObjectsByTitle[title];
+
+    if (label) {
+      this.deleteLabel(label);
+    }
+  }
+  
+  addLabel(title) {
     if (title.length === 0) {
       this.toastCtrl.create({
         message: 'Please enter a label and press enter to label this recipe.',
@@ -424,14 +364,8 @@ export class RecipePage {
       
       if (!me.recipe.labels) me.recipe.labels = [];
       if (me.recipe.labels.indexOf(response) === -1) me.recipe.labels.push(response);
-      if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
-      
-      if (!me.existingLabelsByTitle[response.title]) {
-        me.existingLabels.push(response);
-        me.existingLabelsByTitle[response.title] = response;
-      }
-      
-      setTimeout(function() { me.reloadSelect2.call(me); });
+ 
+      me.labelObjectsByTitle[response.title] = response;
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
@@ -465,7 +399,9 @@ export class RecipePage {
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => {}
+          handler: () => {
+            this.selectedLabels.push(label.title);
+          }
         },
         {
           text: 'Delete',
@@ -487,29 +423,21 @@ export class RecipePage {
   
     loading.present();
     
-    console.log(label)
-    
     label.recipeId = this.recipe._id;
 
     this.labelService.remove(label).subscribe(function(response) {
       loading.dismiss();
       
-      var idx = me.recipe.labels.indexOf(response._id);
-      me.recipe.labels.splice(idx, 1);
-      
-      idx = me.selectedLabels.indexOf(label.title);
-      me.selectedLabels.splice(idx, 1);
-
       if(label.recipes.length === 1 && label.recipes[0] === me.recipeId) {
-        idx = me.existingLabels.indexOf(label);
-        me.existingLabels.splice(idx, 1);
-        
-        delete me.existingLabelsByTitle[label.title];
+        var i = me.existingLabels.indexOf(label.title);
+        me.existingLabels.splice(i, 1);
+        delete me.labelObjectsByTitle[label.title];
       } else {
         label.recipes = response.recipes;
       }
-      
-      me.reloadSelect2.call(me);
+
+      var idx = me.recipe.labels.indexOf(response);
+      me.recipe.labels.splice(idx, 1);
     }, function(err) {
       loading.dismiss();
       switch(err.status) {

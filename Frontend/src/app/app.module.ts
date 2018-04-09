@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -14,6 +14,9 @@ import { LabelServiceProvider } from '../providers/label-service/label-service';
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 
+import { TagInputModule } from 'ngx-chips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     MyApp
@@ -23,7 +26,10 @@ import { MessagingServiceProvider } from '../providers/messaging-service/messagi
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     FormsModule,
-    PipesModule
+    ReactiveFormsModule,
+    PipesModule,
+    TagInputModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
