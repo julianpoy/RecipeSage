@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { Observable, Subject } from 'rxjs'
 import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
@@ -37,6 +37,8 @@ export class HomePage {
   
   searchWorker: any;
   
+  searchResultContainer: any;
+  searchResultsAfterFilterLen: number = -1;
   
   //Lazy load reqs
   @ViewChild('container') container: any;
@@ -44,6 +46,7 @@ export class HomePage {
   scrollAndSearch$: any;
   
   constructor(
+    private cdRef:ChangeDetectorRef,
     public navCtrl: NavController,
     public navParams: NavParams,
     public events: Events,
@@ -97,6 +100,10 @@ export class HomePage {
     }, function() {});
   }
   
+  ionViewDidLoad() {
+    this.searchResultContainer = document.getElementById('recipeListContainer');
+  }
+  
   ionViewWillEnter() {
     let loading = this.loadingCtrl.create({
       content: 'Loading recipes...',
@@ -118,6 +125,18 @@ export class HomePage {
       this.container.ionScroll,
       this.updateSearchResult$
     );
+  }
+  
+  ngAfterViewChecked() {
+    if (this.searchResultContainer) {
+      var len = this.searchResultContainer.children.length;
+      if (len !== this.searchResultsAfterFilterLen) {
+        this.searchResultsAfterFilterLen = len;
+        this.cdRef.detectChanges();
+      }
+    } else {
+      this.searchResultsAfterFilterLen = -1;
+    }
   }
   
   refresh(refresher) {
