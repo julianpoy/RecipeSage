@@ -5,7 +5,9 @@ import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/re
 
 import loadImage from 'blueimp-load-image';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-edit-recipe',
   templateUrl: 'edit-recipe.html',

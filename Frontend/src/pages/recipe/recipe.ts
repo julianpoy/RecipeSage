@@ -9,6 +9,7 @@ import fractionjs from 'fraction.js';
 
 @IonicPage({
   segment: 'recipe/:recipeId',
+  priority: 'high'
 })
 @Component({
   selector: 'page-recipe',

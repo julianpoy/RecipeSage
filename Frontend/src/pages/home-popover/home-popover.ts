@@ -3,7 +3,9 @@ import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angu
 
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'high'
+})
 @Component({
   selector: 'page-home-popover',
   templateUrl: 'home-popover.html',

@@ -4,7 +4,9 @@ import { IonicPage, NavController, NavParams, ViewController, ToastController, L
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-share-modal',
   templateUrl: 'share-modal.html',

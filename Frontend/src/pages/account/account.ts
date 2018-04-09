@@ -3,7 +3,9 @@ import { IonicPage, LoadingController, ToastController, NavController, NavParams
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-account',
   templateUrl: 'account.html',

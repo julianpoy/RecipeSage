@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-import',
   templateUrl: 'import.html',

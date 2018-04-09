@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'high'
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

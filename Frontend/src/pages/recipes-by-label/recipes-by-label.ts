@@ -6,7 +6,9 @@ import { LazyLoadImageDirective } from 'ng-lazyload-image';
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-recipes-by-label',
   templateUrl: 'recipes-by-label.html',
