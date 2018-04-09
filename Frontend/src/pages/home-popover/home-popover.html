@@ -44,7 +44,7 @@
     <ion-icon name='funnel' item-start></ion-icon>
     <ion-label>Filter by label</ion-label>
     <ion-select [(ngModel)]="viewOptions.selectedLabels" (ngModelChange)="saveViewOptions();" multiple="true">
-      <ion-option *ngFor="let label of labels">{{ label.title }}</ion-option>
+      <ion-option *ngFor="let label of labels" [value]="label.title">{{ label.title }} ({{ label.recipes.length }})</ion-option>
     </ion-select>
   </ion-item>
 </ion-list>
