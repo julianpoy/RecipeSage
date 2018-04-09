@@ -23,7 +23,7 @@ aws.config.update({
   subregion: config.aws.region,
 });
 
-var CURRENT_CLIENT_VERSION = '1.0.4';
+var CURRENT_CLIENT_VERSION = '1.0.5';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
