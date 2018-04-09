@@ -28,6 +28,7 @@ export class RecipePage {
   labelObjectsByTitle: any = {};
   existingLabels: any = [];
   selectedLabels: any = [];
+  showAutocomplete: boolean = false;
   
   constructor(
     public navCtrl: NavController,
@@ -318,26 +319,13 @@ export class RecipePage {
     });
   }
   
-  labelMatch(value, target) {
-    return target.display.toLowerCase().indexOf(value.toLowerCase()) > -1;
-    // return true;
-  }
-  
-  onLabelAdded(e) {
-    var title = e.display;
-
-    // if (this.existingLabels.indexOf(title) === -1) this.existingLabels.push(title);
-    
-    this.addLabel(title);
-  }
-  
-  onLabelRemoved(e) {
-    var title = e.display || e;
-    var label = this.labelObjectsByTitle[title];
-
-    if (label) {
-      this.deleteLabel(label);
+  toggleAutocomplete(show, event?) {
+    if (event && event.relatedTarget) {
+      if (event.relatedTarget.className.indexOf('suggestion') > -1) {
+        return;
+      }
     }
+    this.showAutocomplete = show;
   }
   
   addLabel(title) {
@@ -366,6 +354,7 @@ export class RecipePage {
       
       if (!me.recipe.labels) me.recipe.labels = [];
       if (me.recipe.labels.indexOf(response) === -1) me.recipe.labels.push(response);
+      if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
  
       me.labelObjectsByTitle[response.title] = response;
     }, function(err) {
@@ -439,8 +428,11 @@ export class RecipePage {
         label.recipes = response.recipes;
       }
 
-      var idx = me.recipe.labels.indexOf(response);
-      me.recipe.labels.splice(idx, 1);
+      var rIdx = me.recipe.labels.indexOf(response);
+      me.recipe.labels.splice(rIdx, 1);
+      
+      var idx = me.selectedLabels.indexOf(response.title);
+      me.selectedLabels.splice(idx, 1);
     }, function(err) {
       loading.dismiss();
       switch(err.status) {

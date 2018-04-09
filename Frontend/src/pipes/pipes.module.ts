@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BasicFilterPipe } from './basic-filter/basic-filter';
+import { LabelAutocompleteFilterPipe } from './label-autocomplete-filter/label-autocomplete-filter';
 @NgModule({
 	declarations: [
-		BasicFilterPipe
+		BasicFilterPipe,
+		LabelAutocompleteFilterPipe
 	],
 	imports: [],
 	exports: [
-		BasicFilterPipe
+		BasicFilterPipe,
+		LabelAutocompleteFilterPipe
 	]
 })
 export class PipesModule {}

@@ -41,8 +41,6 @@
     "ionicons": "3.0.0",
     "moment": "^2.20.1",
     "ng-lazyload-image": "^3.4.2",
-    "ng2-material-dropdown": "^0.9.5",
-    "ngx-chips": "^1.7.3",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"

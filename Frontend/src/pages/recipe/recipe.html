@@ -71,25 +71,53 @@
     </ion-item>
     
     <div id='labelSelectParent' *ngIf="recipe.folder !== 'inbox'">
-      <tag-input
-        [(ngModel)]="selectedLabels"
-        [placeholder]="'Add a label'"
-        [secondaryPlaceholder]="existingLabels.length > 0 ? 'Create or select a label' : 'Create a label'"
-        [animationDuration]="{enter: '1ms', leave: '1ms'}"
-        [clearOnBlur]="true"
-        (onAdd)="onLabelAdded($event)"
-        (onRemove)="onLabelRemoved($event)">
-        <tag-input-dropdown
-          [autocompleteItems]="existingLabels"
-          [showDropdownIfEmpty]="true"
-          [keepOpen]="false"
-          [matchingFn]="labelMatch"
-          [minimumTextLength]="0">
-          <ng-template let-item="item" let-index="index">
-            {{ item.display }}
-          </ng-template>
-        </tag-input-dropdown>
-      </tag-input>
+      <!--<tag-input-->
+      <!--  [(ngModel)]="selectedLabels"-->
+      <!--  [placeholder]="'Add a label'"-->
+      <!--  [secondaryPlaceholder]="existingLabels.length > 0 ? 'Create or select a label' : 'Create a label'"-->
+      <!--  [animationDuration]="{enter: '1ms', leave: '1ms'}"-->
+      <!--  [clearOnBlur]="true"-->
+      <!--  (onAdd)="onLabelAdded($event)"-->
+      <!--  (onRemove)="onLabelRemoved($event)">-->
+      <!--  <tag-input-dropdown-->
+      <!--    [autocompleteItems]="existingLabels"-->
+      <!--    [showDropdownIfEmpty]="true"-->
+      <!--    [keepOpen]="false"-->
+      <!--    [matchingFn]="labelMatch"-->
+      <!--    [minimumTextLength]="0">-->
+      <!--    <ng-template let-item="item" let-index="index">-->
+      <!--      {{ item.display }}-->
+      <!--    </ng-template>-->
+      <!--  </tag-input-dropdown>-->
+      <!--</tag-input>-->
+      
+      <div class="labels">
+        <span class="label" *ngFor="let label of selectedLabels">
+          <ion-icon class="delete-label" (click)="deleteLabel(labelObjectsByTitle[label])" name="trash" item-start></ion-icon>
+          {{ label }}
+        </span>
+      </div>
+      
+      <input
+        [(ngModel)]='pendingLabel'
+        (focus)='toggleAutocomplete(true)'
+        (focusout)='toggleAutocomplete(false, $event)'
+        (blur)='toggleAutocomplete(false, $event)'
+        (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
+        placeholder="Create or select label"
+        #labelInputField
+        id="labelInputField" />
+      <div class="autocomplete" *ngIf="showAutocomplete">
+        <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1" (click)="addLabel(pendingLabel)">
+          {{ pendingLabel }}<span class="hint">Click to create</span>
+        </button>
+        <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+          {{ pendingLabel }}<span class="hint">Already added</span>
+        </button>
+        <button class="suggestion" *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels" (click)="addLabel(label)">
+          {{ label }}<span class="hint">Click to add</span>
+        </button>
+      </div>
     </div>
     
     <br />

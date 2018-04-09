@@ -14,7 +14,6 @@ import { LabelServiceProvider } from '../providers/label-service/label-service';
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 
-import { TagInputModule } from 'ngx-chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -30,7 +29,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    TagInputModule,
     BrowserAnimationsModule
   ],
   bootstrap: [IonicApp],
