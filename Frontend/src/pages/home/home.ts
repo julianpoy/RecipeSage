@@ -97,10 +97,11 @@ export class HomePage {
   checkForUpdate() {
     var toast;
     
+    var me = this;
     function promptToUpdate() {
       if (toast) return;
 
-      toast = this.toastCtrl.create({
+      toast = me.toastCtrl.create({
   			message: 'New update available!',
   			position: 'bottom',
   			showCloseButton: true,
