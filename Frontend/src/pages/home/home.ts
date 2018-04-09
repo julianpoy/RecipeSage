@@ -99,7 +99,8 @@ export class HomePage {
   
   ionViewWillEnter() {
     let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...'
+      content: 'Loading recipes...',
+      dismissOnPageChange: true
     });
   
     loading.present();

@@ -40,7 +40,8 @@ export class RecipesByLabelPage {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...'
+      content: 'Loading recipes...',
+      dismissOnPageChange: true
     });
   
     loading.present();

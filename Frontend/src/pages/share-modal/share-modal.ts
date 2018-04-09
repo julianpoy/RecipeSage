@@ -127,7 +127,8 @@ export class ShareModalPage {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Sending recipe...'
+      content: 'Sending recipe...',
+      dismissOnPageChange: true
     });
   
     loading.present();

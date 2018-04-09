@@ -30,7 +30,8 @@ export class ImportPage {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Starting import...'
+      content: 'Starting import...',
+      dismissOnPageChange: true
     });
   
     loading.present();

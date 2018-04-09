@@ -351,7 +351,8 @@ export class RecipePage {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Adding label...'
+      content: 'Adding label...',
+      dismissOnPageChange: true
     });
   
     loading.present();
@@ -418,7 +419,8 @@ export class RecipePage {
     var me = this;
     
     let loading = this.loadingCtrl.create({
-      content: 'Deleting label...'
+      content: 'Deleting label...',
+      dismissOnPageChange: true
     });
   
     loading.present();

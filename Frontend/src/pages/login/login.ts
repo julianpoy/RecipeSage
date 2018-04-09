@@ -64,7 +64,8 @@ export class LoginPage {
     this.errorMessage = '';
     
     let loading = this.loadingCtrl.create({
-      content: 'Authenticating...'
+      content: 'Authenticating...',
+      dismissOnPageChange: true
     });
   
     loading.present();

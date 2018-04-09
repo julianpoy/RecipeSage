@@ -74,7 +74,8 @@ export class EditRecipePage {
     var me = this;
 
     let loading = this.loadingCtrl.create({
-      content: 'Saving your recipe...'
+      content: 'Saving your recipe...',
+      dismissOnPageChange: true
     });
   
     loading.present();
