@@ -23,12 +23,14 @@ var userSchema = require('./models/user');
 var sessionSchema = require('./models/session');
 var recipeSchema = require('./models/recipe');
 var labelSchema = require('./models/label');
+var messageSchema = require('./models/message');
 
 // Routes
 var index = require('./routes/index');
 var users = require('./routes/users');
 var recipes = require('./routes/recipes');
 var labels = require('./routes/labels');
+var messages = require('./routes/messages');
 
 var app = express();
 
@@ -53,6 +55,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/recipes', recipes);
 app.use('/labels', labels);
+app.use('/messages', messages);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

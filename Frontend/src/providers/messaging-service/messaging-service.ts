@@ -1,10 +1,26 @@
+import * as firebase from 'firebase';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+// import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Injectable } from '@angular/core';
+import { catchError, retry } from 'rxjs/operators';
+
 import { Injectable } from '@angular/core';
 
 import { Events, ToastController } from 'ionic-angular';
 
-import * as firebase from 'firebase';
-
 import { UserServiceProvider } from '../../providers/user-service/user-service';
+
+export interface Message {
+  _id: string;
+  from: any;
+  to: any;
+  body: string;
+  created_at: any;
+  updated_at: any;
+  read: boolean;
+  recipe: any;
+}
 
 @Injectable()
 export class MessagingServiceProvider {
@@ -12,11 +28,15 @@ export class MessagingServiceProvider {
   private unsubscribeOnTokenRefresh = () => {};
   private fcmToken: any;
   
+  base: any;
+  
   constructor(
   public events: Events,
   public userService: UserServiceProvider,
   public toastCtrl: ToastController) {
     console.log('Hello MessagingServiceProvider Provider');
+    
+    this.base = localStorage.getItem('base') || 'https://recipesage.com/api/';
     
     if ((<any>window).swRegistration) {
       console.log("Has service worker registration. Beginning setup.")
@@ -40,6 +60,61 @@ export class MessagingServiceProvider {
         }
       });
     }
+  }
+  
+  getTokenQuery() {
+    return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
+  }
+  
+  fetch(from?) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    
+    var url = this.base + 'messages/' + this.getTokenQuery();
+    if (from) url += '&from=' + from;
+    
+    return this.http
+    .get<Message[]>(url, httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  create(data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .post(this.base + 'messages/', data, httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  markAsRead(from?) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    
+    var url = this.base + 'messages/read/' + this.getTokenQuery();
+    if (from) url += '&from=' + from;
+    
+    return this.http
+    .get<Message[]>(url, httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
   }
   
   public enableNotifications() {
