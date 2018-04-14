@@ -1,18 +1,44 @@
-<!--
-  Generated template for the MessageThreadPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>messageThread</ion-title>
+  <ion-navbar color="navBar">
+    <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content #content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div>
+    <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages">
+      <div class="chat" *ngIf="!message.recipe">
+        <span>
+          {{ message.body }}
+        </span>
+      </div>
+      <div class="recipe" *ngIf="message.recipe" (click)="openRecipe(message.recipe)">
+        <ion-item (click)="openRecipe(message.recipe)" no-lines>
+          <ion-avatar *ngIf="message.recipe.image" item-start>
+            <img src="{{ message.recipe.image.location }}">
+          </ion-avatar>
+          <h2 text-wrap>{{ message.recipe.title }}</h2>
+          <p class="description">{{ message.recipe.description }}</p>
+          <p class="description">Click to open</p>
+        </ion-item>
+      </div>
+    </div>
+  </div>
 </ion-content>
+
+<ion-footer>
+  <form ng-submit="sendMessage()">
+    <ion-item>
+      <ion-input name="body" [(ngModel)]="pendingMessage" type="text" placeholder="{{ messagePlaceholder }}"></ion-input>
+      <button type="submit" (click)="sendMessage()" ion-button clear item-end>
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-item>
+  </form>
+</ion-footer>

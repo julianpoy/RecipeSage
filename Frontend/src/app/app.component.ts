@@ -53,8 +53,30 @@ export class MyApp {
       
       toast.onDidDismiss((data, role) => {    
         console.log('Dismissed toast');
-        if (role== "close") {
+        if (role == "close") {
           me.nav.setRoot('RecipePage', { recipeId: recipe._id });
+        }
+      });
+    });
+    
+    events.subscribe('messages:new', (message) => {
+      if (me.nav.getActive().name === 'MessageThreadPage' || me.nav.getActive().name === 'MessagesPage') return;
+      var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
+      
+      var myMessage = message;
+      
+      let toast = me.toastCtrl.create({
+        message: notification,
+        duration: 7000,
+        showCloseButton: true,
+        closeButtonText: 'View'
+      });
+      toast.present();
+      
+      toast.onDidDismiss((data, role) => {    
+        console.log('Dismissed toast');
+        if (role == "close") {
+          me.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser._id });
         }
       });
     });
@@ -82,7 +104,8 @@ export class MyApp {
     var loggedInPages = [
       { title: 'My Recipes', component: 'HomePage', navData: { folder: 'main' } },
       { title: 'My Labels', component: 'RecipesByLabelPage' },
-      { title: 'Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
+      { title: 'Messages', component: 'MessagesPage' },
+      { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Add Recipe', component: 'EditRecipePage' },
       { title: 'Import', component: 'ImportPage' },
       { title: 'Account', component: 'AccountPage' },

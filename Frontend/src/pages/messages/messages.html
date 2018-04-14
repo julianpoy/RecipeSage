@@ -1,18 +1,26 @@
-<!--
-  Generated template for the MessagesPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
+  <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
 
-  <ion-navbar>
-    <ion-title>messages</ion-title>
+    <ion-title>Messages</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item *ngFor="let thread of threads" (click)="openThread(thread)">
+      <ion-icon name="text" item-start></ion-icon> 
+      <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
+      <p><b>{{ thread.messages[0].from._id === thread.otherUser._id ? thread.messages[0].from.name || thread.messages[0].from.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
+    </ion-item>
+  </ion-list>
+  
+  <ion-fab right bottom>
+    <button (click)="newThread()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 </ion-content>

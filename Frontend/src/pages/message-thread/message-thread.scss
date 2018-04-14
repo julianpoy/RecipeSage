@@ -1,3 +1,54 @@
 page-message-thread {
-
+  .message {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    
+    .chat {
+      display: inline-block;
+      background: whitesmoke;
+      padding: 10px;
+      border-radius: 20px;
+      
+      span {
+        color: black;
+      }
+    }
+    
+    .recipe {
+      width: 60%;
+      border-radius: 20px;
+      background: whitesmoke;
+      
+      ion-item {
+        background: transparent;
+      }
+    }
+    
+    &.me {
+      text-align: right;
+      
+      .chat {
+        background: #00a8ff;
+        
+        span {
+          color: white;
+        }
+      }
+      
+      .recipe {
+        margin-left: 40%;
+        background: #00a8ff;
+        
+        ion-item {
+          h2 {
+            color: white;
+          }
+          
+          .description {
+            color: white;
+          }
+        }
+      }
+    }
+  }
 }

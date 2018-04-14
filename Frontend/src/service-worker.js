@@ -64,6 +64,19 @@ messaging.setBackgroundMessageHandler(function(message) {
       };
 
       return self.registration.showNotification(title, notificationOptions);
+    case 'messages:new':
+      var message = JSON.parse(message.data.message);
+      
+      var from = (message.otherUser.name || message.otherUser.email);
+      
+      notificationOptions.body = message.body;
+      // notificationOptions.icon = recipe.image.location;
+      notificationOptions.click_action = self.registration.scope + '#/messages/' + message.otherUser._id;
+      notificationOptions.data = {
+        otherUserId: message.otherUser._id
+      };
+
+      return self.registration.showNotification(from, notificationOptions);
   }
 });
 
@@ -86,7 +99,11 @@ self.addEventListener('notificationclick', function(event) {
           return client.focus();  
       }
       if (clients.openWindow) {
-        return clients.openWindow(self.registration.scope + '#/recipe/' + event.notification.data.recipeId);  
+        if (event.notification.data.recipeId) {
+          return clients.openWindow(self.registration.scope + '#/recipe/' + event.notification.data.recipeId);  
+        } else if (event.notification.data.otherUserId) {
+          return clients.openWindow(self.registration.scope + '#/messages/' + event.notification.data.otherUserId);
+        }
       }
     })
   );

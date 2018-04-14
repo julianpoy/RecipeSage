@@ -5,8 +5,6 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
-import { Injectable } from '@angular/core';
-
 import { Events, ToastController } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
@@ -31,6 +29,7 @@ export class MessagingServiceProvider {
   base: any;
   
   constructor(
+  public http: HttpClient,
   public events: Events,
   public userService: UserServiceProvider,
   public toastCtrl: ToastController) {
@@ -57,6 +56,11 @@ export class MessagingServiceProvider {
             var recipe = JSON.parse(message.data.recipe);
             
             me.events.publish('recipe:inbox:new', recipe);
+          case 'messages:new':
+            console.log("continuing here")
+            var message = JSON.parse(message.data.message);
+
+            me.events.publish('messages:new', message);
         }
       });
     }
@@ -74,7 +78,28 @@ export class MessagingServiceProvider {
     };
     
     var url = this.base + 'messages/' + this.getTokenQuery();
-    if (from) url += '&from=' + from;
+    if (from) url += '&user=' + from;
+    
+    return this.http
+    .get<Message[]>(url, httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  threads(options?) {
+    options = options || {};
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    
+    var url = this.base + 'messages/threads/' + this.getTokenQuery();
+    if (!options.includeMessages) url += '&light=true';
+    if (options.messageLimit) url += '&limit=' + options.messageLimit;
     
     return this.http
     .get<Message[]>(url, httpOptions)
@@ -92,7 +117,7 @@ export class MessagingServiceProvider {
     };
 
     return this.http
-    .post(this.base + 'messages/', data, httpOptions)
+    .post(this.base + 'messages/' + this.getTokenQuery(), data, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -167,6 +192,24 @@ export class MessagingServiceProvider {
       }, function(err) {
         this.updateToken();
       });;
+    });
+  }
+  
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an ErrorObservable with a user-facing error message
+    return new ErrorObservable({
+      msg: 'Something bad happened; please try again later.',
+      status: error.status
     });
   }
 

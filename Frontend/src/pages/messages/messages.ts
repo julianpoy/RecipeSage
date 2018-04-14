@@ -1,25 +1,87 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, Events } from 'ionic-angular';
 
-/**
- * Generated class for the MessagesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-messages',
   templateUrl: 'messages.html',
 })
 export class MessagesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  threads: any = [];
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public events: Events,
+    public toastCtrl: ToastController,
+    public modalCtrl: ModalController,
+    public messagingService: MessagingServiceProvider) {
+      
+    events.subscribe('messages:new', (message) => {
+      this.loadThreads().then(function() {}, function() {});
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MessagesPage');
   }
+  
+  ionViewWillEnter() {
+    this.loadThreads().then(function() {}, function() {});
+  }
+  
+  refresh(refresher) {
+    this.loadThreads().then(function() {
+      refresher.complete();
+    }, function() {
+      refresher.complete();
+    });
+  }
 
+  loadThreads() {
+    var me = this;
+    
+    return new Promise(function(resolve, reject) {
+      me.messagingService.threads({
+        includeMessages: true,
+        messageLimit: 1
+      }).subscribe(function(response) {
+        me.threads = response;
+
+        resolve();
+      }, function(err) {
+        reject();
+        
+        switch(err.status) {
+          case 401:
+            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            break;
+          default:
+            let errorToast = me.toastCtrl.create({
+              message: 'An unexpected error occured. Please restart application.',
+              duration: 30000
+            });
+            errorToast.present();
+            break;
+        }
+      });
+    });
+  }
+  
+  openThread(thread) {
+    this.navCtrl.push('MessageThreadPage', {
+      thread: thread,
+      otherUserId: thread.otherUser._id
+    });
+  }
+  
+  newThread() {
+    let modal = this.modalCtrl.create('NewMessageModalPage');
+    modal.present();
+  }
 }

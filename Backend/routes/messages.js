@@ -20,6 +20,13 @@ var MiddlewareService = require('../services/middleware');
 var FirebaseService = require('../services/firebase');
 var config = require('../config/config.json');
 
+var s3 = new aws.S3();
+aws.config.update({
+  accessKeyId: config.aws.accessKeyId,
+  secretAccessKey: config.aws.secretAccessKey,
+  subregion: config.aws.region,
+});
+
 // Dupe from index.js
 function sendURLToS3(url, callback) {
   request({
@@ -65,10 +72,11 @@ function sendURLToS3(url, callback) {
   });
 }
 
-function dispatchMessageNotification(user) {
+function dispatchMessageNotification(user, message) {
   if (user.fcmTokens) {
     var message = {
-      type: "messages:new"
+      type: "messages:new",
+      message: JSON.stringify(message)
     }
     
     for (var i = 0; i < user.fcmTokens.length; i++) {
@@ -135,6 +143,7 @@ router.post(
   MiddlewareService.validateUser,
   function(req, res, next) {
   
+  console.log(req.body.to)
   User.findById(req.body.to).exec(function(err, recipient) {
     if (err) {
       res.status(500).send('Could not search DB for user.');
@@ -154,14 +163,32 @@ router.post(
           from: res.locals.session.accountId,
           to: req.body.to,
           body: req.body.body,
-          recipeId: sharedRecipeId
+          recipe: sharedRecipeId
         }).save(function(err, message) {
           if (err) {
             res.status(500).send("Error saving the recipe!");
           } else {
-            res.status(201).json(message);
-            
-            dispatchMessageNotification(recipient);
+            message.populate('to from', 'name email', function(err, message) {
+              if (err) {
+                res.status(500).send("Error gathering message to/from!");
+              } else {
+                message.populate('recipe', function(err, message) {
+                  if (err) {
+                    res.status(500).send("Error gathering message recipe!");
+                  } else {
+                    message = message.toObject();
+                    
+                    // For sender (just sent)
+                    message.otherUser = message.to;
+                    res.status(201).json(message);
+                    
+                    // Alert for recipient (now receiving via notification)
+                    message.otherUser = message.from;
+                    dispatchMessageNotification(recipient, message);
+                  }
+                });
+              }
+            });
           }
         });
       }
@@ -192,7 +219,7 @@ router.get(
   }
 
   Message.find(query)
-  .sort('updated')
+  .sort('-created')
   .populate('to', 'name email')
   .populate('from', 'name email')
   .lean()
@@ -200,26 +227,32 @@ router.get(
     if (err) {
       res.status(500).send("Couldn't search the database for recipes!");
     } else {
-      // var conversations = [];
-      
-      
-      
+      // console.log(messages)
       var conversationsByUser = messages.reduce(function(acc, el, i) {
         var otherUser;
-        if (el.to._id === res.locals.session.accountId) {
+        if (el.to._id.toString() === res.locals.session.accountId) {
           otherUser = el.from;
         } else {
           otherUser = el.to;
         }
         
-        if (!acc[otherUser]) {
-          acc[otherUser] = {
-            user: otherUser,
-            messages: []
+        el.otherUser = otherUser;
+        
+        if (!acc[otherUser._id]) {
+          acc[otherUser._id] = {
+            otherUser: otherUser,
+            messageCount: 0
           }
+          
+          // Do not fill messages for light requests
+          if (!req.query.light) acc[otherUser._id].messages = [];
         }
         
-        acc[otherUser].messages.push(el);
+        // Do not fill messages for light requests
+        if (!req.query.light && !(req.query.limit && acc[otherUser._id].messageCount >= req.query.limit)) acc[otherUser._id].messages.push(el);
+        acc[otherUser._id].messageCount += 1;
+
+        return acc;
       }, {});
       
       var conversations = [];
@@ -240,6 +273,13 @@ router.get(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
+    
+  if (!req.query.user) {
+    res.status(400).send('User parameter required.');
+    return;
+  }
+  
+  var messageLimit = req.query.messageLimit ? parseInt(req.query.messageLimit, 10) : 100;
 
   var query = {
     $or: [
@@ -250,13 +290,27 @@ router.get(
 
   Message.find(query)
   .sort('updated')
+  .limit(messageLimit)
   .populate('to', 'name email')
   .populate('from', 'name email')
+  .populate('recipe')
   .lean()
   .exec(function(err, messages) {
     if (err) {
       res.status(500).send("Couldn't search the database for recipes!");
     } else {
+      messages = messages.map(function(el) {
+        var otherUser;
+        if (el.to._id.toString() === res.locals.session.accountId) {
+          otherUser = el.from;
+        } else {
+          otherUser = el.to;
+        }
+        
+        el.otherUser = otherUser;
+        
+        return el;
+      });
       res.status(200).json(messages);
     }
   });
