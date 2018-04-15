@@ -113,15 +113,13 @@ export class ShareModalPage {
   
     loading.present();
     
-    var me = this;
-    
     this.messagingService.create({
       to: this.recipientId,
       body: '',
       recipeId: this.recipe._id
     }).subscribe(function(response) {
       me.navCtrl.setRoot('MessageThreadPage', {
-        user: me.recipientId
+        otherUserId: me.recipientId
       }, {animate: true, direction: 'forward'});
     }, function(err) {
       switch(err.status) {
@@ -136,56 +134,6 @@ export class ShareModalPage {
           errorToast.present();
           break;
       }
-    })
-    
-    // this.recipeService.share(this.recipe).subscribe(function(response) {
-    //   var recentExists = false;
-    //   for (var i = 0; i < me.recents.length; i++) {
-    //     if (me.recents[i].email === me.destinationUserEmail) {
-    //       recentExists = true;
-    //       break;
-    //     }
-    //   }
-    //   if (!recentExists) {
-    //     me.recents.push({
-    //       name: me.destinationUserName,
-    //       email: me.destinationUserEmail
-    //     });
-
-    //     localStorage.setItem('recents', JSON.stringify(me.recents));
-    //   }
-      
-    //   loading.dismiss();
-
-    //   me.cancel();
-      
-    //   me.toastCtrl.create({
-    //     message: 'Successfully sent recipe to recipient.',
-    //     duration: 6000
-    //   }).present();
-    // }, function(err) {
-    //   loading.dismiss();
-    //   switch(err.status) {
-    //     case 401:
-    //       me.toastCtrl.create({
-    //         message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
-    //         duration: 6000
-    //       }).present();
-    //       break;
-    //     case 404:
-    //       me.toastCtrl.create({
-    //         message: 'I couldn\'t find a Recipe Sage user with that email address.',
-    //         duration: 6000
-    //       }).present();
-    //       break;
-    //     default:
-    //       me.toastCtrl.create({
-    //         message: 'An unexpected error occured. Please try again.',
-    //         duration: 6000
-    //       }).present();
-    //       break;
-    //   }
-    // });
+    });
   }
-
 }
