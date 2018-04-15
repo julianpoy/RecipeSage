@@ -62,7 +62,7 @@ export class NewMessageModalPage {
       body: this.message
     }).subscribe(function(response) {
       me.navCtrl.setRoot('MessageThreadPage', {
-        user: me.recipientId
+        otherUserId: me.recipientId
       }, {animate: true, direction: 'forward'});
     }, function(err) {
       switch(err.status) {
