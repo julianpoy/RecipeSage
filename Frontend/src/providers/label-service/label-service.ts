@@ -16,7 +16,7 @@ export class LabelServiceProvider {
   constructor(public http: HttpClient) {
     console.log('Hello LabelServiceProvider Provider');
     
-    this.base = localStorage.getItem('base') || 'https://recipesage.com/api/';
+    this.base = localStorage.getItem('base') || '/api/';
   }
   
   getTokenQuery() {

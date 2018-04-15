@@ -35,7 +35,7 @@ export class MessagingServiceProvider {
   public toastCtrl: ToastController) {
     console.log('Hello MessagingServiceProvider Provider');
     
-    this.base = localStorage.getItem('base') || 'https://recipesage.com/api/';
+    this.base = localStorage.getItem('base') || '/api/';
     
     if ((<any>window).swRegistration) {
       console.log("Has service worker registration. Beginning setup.")
