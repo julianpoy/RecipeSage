@@ -1,6 +1,7 @@
 {
   "frontendDir": "../Frontend/www",
   "frontendBaseURL": "/",
+  "db": "chefBook",
   "aws": {
     "accessKeyId": "",
     "secretAccessKey": "",
