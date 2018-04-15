@@ -31,22 +31,18 @@
         <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
       </ion-item>
       
-      <p *ngIf="recipientName.length > 0 && !searchingForRecipient" padding-left padding-top>
+      <p *ngIf="recipientName.length > 0 && !searchingForRecipient" padding-left padding-bottom>
         {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
       </p>
-      <p *ngIf="recipientName.length == 0 && !searchingForRecipient" padding-left padding-top>
+      <p *ngIf="recipientName.length == 0 && !searchingForRecipient" padding-left padding-bottom>
         Enter an email address to search for a user <span *ngIf="threads.length > 0">or select a conversation below</span>
       </p>
-      <p *ngIf="searchingForRecipient" padding-left padding-top>
+      <p *ngIf="searchingForRecipient" padding-left padding-bottom>
         Searcing for user...
       </p>
       
-      <div *ngIf="threads.length > 0" padding-left padding-top>
-        <p>Existing conversations:</p>
-      </div>
-      
-      <ion-list radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
-        <ion-list-header>
+      <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
+        <ion-list-header style="margin-bottom: 0;" no-lines>
           Existing Conversations
         </ion-list-header>
       
@@ -72,7 +68,7 @@
 </ion-content>
 
 <ion-footer padding>
-  <button ion-button icon-left block (click)="send()">
+  <button ion-button icon-left block (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send"></ion-icon>
     Send
   </button>
