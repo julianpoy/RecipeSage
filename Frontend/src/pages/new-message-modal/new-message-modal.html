@@ -41,7 +41,7 @@
 </ion-content>
 
 <ion-footer padding>
-  <button ion-button icon-left block (click)="send()">
+  <button ion-button icon-left block (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send"></ion-icon>
     Send
   </button>
