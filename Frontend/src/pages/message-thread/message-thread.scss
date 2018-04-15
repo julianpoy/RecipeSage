@@ -8,9 +8,12 @@ page-message-thread {
       background: whitesmoke;
       padding: 10px;
       border-radius: 20px;
+      text-align: left;
+      max-width: 60%;
       
       span {
         color: black;
+        white-space: pre-wrap;
       }
     }
     

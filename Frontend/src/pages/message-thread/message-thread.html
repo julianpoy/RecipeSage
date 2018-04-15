@@ -14,9 +14,7 @@
   <div>
     <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages">
       <div class="chat" *ngIf="!message.recipe">
-        <span>
-          {{ message.body }}
-        </span>
+        <span style="white-space: pre-wrap;">{{ message.body }}</span>
       </div>
       <div class="recipe" *ngIf="message.recipe" (click)="openRecipe(message.recipe)">
         <ion-item (click)="openRecipe(message.recipe)" no-lines>
@@ -35,7 +33,7 @@
 <ion-footer>
   <form ng-submit="sendMessage()">
     <ion-item>
-      <ion-input name="body" [(ngModel)]="pendingMessage" type="text" placeholder="{{ messagePlaceholder }}"></ion-input>
+      <ion-textarea name="body" [(ngModel)]="pendingMessage" type="text" placeholder="{{ messagePlaceholder }}"></ion-textarea>
       <button type="submit" (click)="sendMessage()" ion-button clear item-end>
         <ion-icon name="send"></ion-icon>
       </button>
