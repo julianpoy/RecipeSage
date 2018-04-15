@@ -80,4 +80,7 @@ export class NewMessageModalPage {
     })
   }
 
+  cancel() {
+    this.navCtrl.pop();
+  }
 }
