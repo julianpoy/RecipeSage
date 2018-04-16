@@ -17,6 +17,10 @@ var Message = new Schema({
     type: String,
     ref: 'Recipe'
   },
+  originalRecipe: {
+    type: String,
+    ref: 'Recipe'
+  },
   created: {
     type: Date,
     default: Date.now

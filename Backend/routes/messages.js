@@ -163,7 +163,8 @@ router.post(
           from: res.locals.session.accountId,
           to: req.body.to,
           body: req.body.body,
-          recipe: sharedRecipeId
+          recipe: sharedRecipeId,
+          originalRecipe: req.body.recipeId
         }).save(function(err, message) {
           if (err) {
             res.status(500).send("Error saving the recipe!");
@@ -172,7 +173,7 @@ router.post(
               if (err) {
                 res.status(500).send("Error gathering message to/from!");
               } else {
-                message.populate('recipe', function(err, message) {
+                message.populate('recipe originalRecipe', function(err, message) {
                   if (err) {
                     res.status(500).send("Error gathering message recipe!");
                   } else {
@@ -294,6 +295,7 @@ router.get(
   .populate('to', 'name email')
   .populate('from', 'name email')
   .populate('recipe')
+  .populate('originalRecipe')
   .lean()
   .exec(function(err, messages) {
     if (err) {

@@ -1,9 +1,11 @@
 <ion-header>
-
   <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    
     <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -13,17 +15,38 @@
   </ion-refresher>
   <div>
     <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages">
-      <div class="chat" *ngIf="!message.recipe">
+      <div class="chat" *ngIf="!message.recipe && message.recipe !== null">
         <span style="white-space: pre-wrap;">{{ message.body }}</span>
       </div>
-      <div class="recipe" *ngIf="message.recipe" (click)="openRecipe(message.recipe)">
-        <ion-item (click)="openRecipe(message.recipe)" no-lines>
+      <div class="recipe" *ngIf="(message.recipe || message.recipe === null) && message.from._id === message.otherUser._id">
+        <!-- RECIPIENT -->
+        <ion-item *ngIf="message.recipe" (click)="openRecipe(message.recipe)" no-lines>
           <ion-avatar *ngIf="message.recipe.image" item-start>
             <img src="{{ message.recipe.image.location }}">
           </ion-avatar>
           <h2 text-wrap>{{ message.recipe.title }}</h2>
           <p class="description">{{ message.recipe.description }}</p>
           <p class="description">Click to open</p>
+        </ion-item>
+        <ion-item *ngIf="!message.recipe" no-lines>
+          <h2 text-wrap>Recipe deleted</h2>
+          <p class="description">Your copy of this recipe no longer exists</p>
+        </ion-item>
+      </div>
+
+      <div class="recipe" *ngIf="(message.originalRecipe || message.originalRecipe === null) && message.from._id !== message.otherUser._id">
+        <!-- SENDER -->
+        <ion-item *ngIf="message.originalRecipe" (click)="openRecipe(message.originalRecipe)" no-lines>
+          <ion-avatar *ngIf="message.originalRecipe.image" item-start>
+            <img src="{{ message.originalRecipe.image.location }}">
+          </ion-avatar>
+          <h2 text-wrap>{{ message.originalRecipe.title }}</h2>
+          <p class="description">{{ message.originalRecipe.description }}</p>
+          <p class="description">A copy of this recipe was sent</p>
+        </ion-item>
+        <ion-item *ngIf="!message.originalRecipe" no-lines>
+          <h2 text-wrap>Recipe deleted</h2>
+          <p class="description">Your copy of this recipe no longer exists</p>
         </ion-item>
       </div>
     </div>
