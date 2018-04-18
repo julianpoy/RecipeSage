@@ -22,6 +22,10 @@ var User = new Schema({
     type: Date,
     default: Date.now
   },
+  lastLogin: {
+    type: Date,
+    default: Date.now
+  },
   fcmTokens: [{
     type: String
   }]

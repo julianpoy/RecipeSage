@@ -65,7 +65,6 @@ router.post(
   User.findOne({
     email: req.body.email.toLowerCase()
   })
-  .select('password salt')
   .exec(function(err, user) {
     if (err) {
       res.status(500).json({
@@ -76,6 +75,14 @@ router.post(
         msg: "Wrong email!"
       });
     } else {
+      user.lastLogin = Date.now();
+
+      user.save(function(err) {
+        if (err) {
+          console.log("Could not update user lastLogin");
+        }
+      });
+
       //Hash the requested password and salt
       var hash = crypto.pbkdf2Sync(req.body.password, user.salt, 10000, 512, 'sha512');
       //Compare to stored hash
