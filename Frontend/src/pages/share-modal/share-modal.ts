@@ -61,7 +61,10 @@ export class ShareModalPage {
         
         switch(err.status) {
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            me.viewCtrl.dismiss({
+              destination: 'LoginPage',
+              setRoot: true
+            });
             break;
           default:
             let errorToast = me.toastCtrl.create({
@@ -118,13 +121,20 @@ export class ShareModalPage {
       body: '',
       recipeId: this.recipe._id
     }).subscribe(function(response) {
-      me.navCtrl.setRoot('MessageThreadPage', {
-        otherUserId: me.recipientId
-      }, {animate: true, direction: 'forward'});
+      me.viewCtrl.dismiss({
+        destination: 'MessageThreadPage',
+        routingData: {
+          otherUserId: me.recipientId
+        },
+        setRoot: false
+      });
     }, function(err) {
       switch(err.status) {
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          me.viewCtrl.dismiss({
+            destination: 'LoginPage',
+            setRoot: true
+          });
           break;
         default:
           let errorToast = me.toastCtrl.create({

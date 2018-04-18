@@ -81,7 +81,15 @@ export class MessagesPage {
   }
   
   newThread() {
+    var me = this;
     let modal = this.modalCtrl.create('NewMessageModalPage');
     modal.present();
+    modal.onDidDismiss(data => {
+      if (data.setRoot) {
+        me.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
+      } else {
+        me.navCtrl.push(data.destination, data.routingData);
+      }
+    });
   }
 }

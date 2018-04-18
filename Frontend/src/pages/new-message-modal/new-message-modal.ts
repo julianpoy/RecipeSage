@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, NavParams, ToastController } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
@@ -24,6 +24,7 @@ export class NewMessageModalPage {
 
   constructor(
     public navCtrl: NavController,
+    public viewCtrl: ViewController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
     public userService: UserServiceProvider,
@@ -61,13 +62,20 @@ export class NewMessageModalPage {
       to: this.recipientId,
       body: this.message
     }).subscribe(function(response) {
-      me.navCtrl.setRoot('MessageThreadPage', {
-        otherUserId: me.recipientId
-      }, {animate: true, direction: 'forward'});
+      me.viewCtrl.dismiss({
+        destination: 'MessageThreadPage',
+        routingData: {
+          otherUserId: me.recipientId
+        },
+        setRoot: false
+      });
     }, function(err) {
       switch(err.status) {
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          me.viewCtrl.dismiss({
+            destination: 'LoginPage',
+            setRoot: true
+          });
           break;
         default:
           let errorToast = me.toastCtrl.create({
@@ -81,6 +89,6 @@ export class NewMessageModalPage {
   }
 
   cancel() {
-    this.navCtrl.pop();
+    this.viewCtrl.dismiss();
   }
 }

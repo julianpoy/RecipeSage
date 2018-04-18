@@ -276,8 +276,17 @@ export class RecipePage {
     // });
     // errorToast.present();
     
+    var me = this;
+
     let shareModal = this.modalCtrl.create('ShareModalPage', { recipe: this.recipe });
     shareModal.present();
+    shareModal.onDidDismiss(data => {
+      if (data.setRoot) {
+        me.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
+      } else {
+        me.navCtrl.push(data.destination, data.routingData);
+      }
+    });
   }
   
   moveToFolder(folderName) {
