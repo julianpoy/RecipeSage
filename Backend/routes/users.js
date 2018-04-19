@@ -75,30 +75,34 @@ router.post(
         msg: "Wrong email!"
       });
     } else {
-      user.lastLogin = Date.now();
-
-      user.save(function(err) {
+      user.validatePassword(req.body.password, function(err, isValid) {
         if (err) {
-          console.log("Could not update user lastLogin");
+          res.status(500).json({
+            msg: "Couldn't validate the database user password!"
+          });
+        } else if (!isValid) {
+          res.status(401).json({
+            msg: "Password is incorrect!"
+          });
+        } else {
+          SessionService.generateSession(user._id, 'user', function(token, session) {
+            res.status(200).json({
+              token: token
+            });
+          }, function(err) {
+            res.status(err.status).json(err);
+          });
+          
+          // Update lastLogin
+          user.lastLogin = Date.now();
+  
+          user.save(function(err) {
+            if (err) {
+              console.log("Could not update user after login");
+            }
+          });
         }
       });
-
-      //Hash the requested password and salt
-      var hash = crypto.pbkdf2Sync(req.body.password, user.salt, 10000, 512, 'sha512');
-      //Compare to stored hash
-      if (hash == user.password) {
-        SessionService.generateSession(user._id, 'user', function(token, session) {
-          res.status(200).json({
-            token: token
-          });
-        }, function(err) {
-          res.status(err.status).json(err);
-        });
-      } else {
-        res.status(401).json({
-          msg: "Password is incorrect!"
-        });
-      }
     }
   });
 });
@@ -132,30 +136,28 @@ router.post(
           msg: "Account with that email address already exists!"
         });
       } else {
-        //Create a random salt
-        var salt = crypto.randomBytes(128).toString('base64');
-        //Create a unique hash from the provided password and salt
-        var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512, 'sha512');
-        //Create a new user with the assembled information
-        var newUser = new User({
-          name: req.body.name,
-          email: req.body.email.toLowerCase(),
-          password: hash,
-          salt: salt
-        }).save(function(err, newUser) {
-          if (err) {
-            res.status(500).json({
-              msg: "Error saving user to DB!"
-            });
-          } else {
-            SessionService.generateSession(newUser._id, 'user', function(token, session) {
-              res.status(200).json({
-                token: token
+        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
+          var newUser = new User({
+            name: req.body.name,
+            email: req.body.email.toLowerCase(),
+            password: hashedPasswordData.hash,
+            salt: hashedPasswordData.salt,
+            passwordVersion: hashedPasswordData.version
+          }).save(function(err, newUser) {
+            if (err) {
+              res.status(500).json({
+                msg: "Error saving user to DB!"
               });
-            }, function(err) {
-              res.status(err.status).json(err);
-            });
-          }
+            } else {
+              SessionService.generateSession(newUser._id, 'user', function(token, session) {
+                res.status(200).json({
+                  token: token
+                });
+              }, function(err) {
+                res.status(err.status).json(err);
+              });
+            }
+          });
         });
       }
     });
@@ -184,38 +186,42 @@ router.put(
     if (req.body.name && typeof req.body.name === 'string') updatedUser.name = req.body.name;
     if (req.body.email && typeof req.body.email === 'string') updatedUser.email = req.body.email;
     if (req.body.password && typeof req.body.password === 'string') {
-      //Create a random salt
-      var salt = crypto.randomBytes(128).toString('base64');
-      //Create a unique hash from the provided password and salt
-      var hash = crypto.pbkdf2Sync(req.body.password, salt, 10000, 512, 'sha512');
-      updatedUser.password = hash;
-      updatedUser.salt = salt;
+      User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
+        updatedUser.password = hashedPasswordData.hash;
+        updatedUser.salt = hashedPasswordData.salt;
+        updatedUser.passwordVersion = hashedPasswordData.version;
+        save();
+      });
+    } else {
+      save();
     }
     
     updatedUser.updated = Date.now();
-
-    var setUser = {
-      $set: updatedUser
-    }
-
-    User.update({
-      _id: accountId
-    }, setUser, {
-      new: true
-    })
-    .lean()
-    .exec(function(err, user) {
-      if (err) {
-        res.status(500).json({
-          msg: "Could not update user"
-        });
-      } else {
-        delete user.password;
-        delete user.salt;
-        
-        res.status(200).json(user);
+    
+    function save() {
+      var setUser = {
+        $set: updatedUser
       }
-    });
+  
+      User.update({
+        _id: accountId
+      }, setUser, {
+        new: true
+      })
+      .lean()
+      .exec(function(err, user) {
+        if (err) {
+          res.status(500).json({
+            msg: "Could not update user"
+          });
+        } else {
+          delete user.password;
+          delete user.salt;
+          
+          res.status(200).json(user);
+        }
+      }); 
+    }
   }
 });
 
