@@ -7,7 +7,7 @@ admin.initializeApp({
   databaseURL: "https://chef-book.firebaseio.com"
 });
 
-exports.sendMessage = function(fcmToken, payload) {
+exports.sendMessage = function(fcmToken, payload, success, fail) {
   var message = {
     data: payload,
     token: fcmToken
@@ -16,8 +16,10 @@ exports.sendMessage = function(fcmToken, payload) {
   admin.messaging().send(message)
   .then((response) => {
     console.log('Successfully sent message:', response);
+    success(response);
   })
   .catch((error) => {
     console.log('Error sending message:', error);
+    fail(error);
   });
 }

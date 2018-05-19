@@ -141,7 +141,10 @@ function dispatchShareNotification(user, recipe) {
     }
     
     for (var i = 0; i < user.fcmTokens.length; i++) {
-      FirebaseService.sendMessage(user.fcmTokens[i], message);
+      let token = user.fcmTokens[i];
+      FirebaseService.sendMessage(token, message, function() {}, function() {
+        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
+      });
     }
   }
 }
