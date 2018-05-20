@@ -188,6 +188,7 @@ router.post(
                     
                     // Alert for recipient (now receiving via notification)
                     message.otherUser = message.from;
+
                     dispatchMessageNotification(recipient, message);
                   }
                 });
@@ -293,7 +294,7 @@ router.get(
   }
 
   Message.find(query)
-  .sort('updated')
+  .sort({ updated: -1 })
   .limit(messageLimit)
   .populate('to', 'name email')
   .populate('from', 'name email')
@@ -315,7 +316,8 @@ router.get(
         el.otherUser = otherUser;
         
         return el;
-      });
+      }).reverse();
+
       res.status(200).json(messages);
     }
   });
