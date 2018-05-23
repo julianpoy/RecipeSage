@@ -11,8 +11,12 @@
 
 <ion-content padding>
   <ion-list>
-    <input style="border: none; height: 0; width: 0;" name="email" />
-    <input style="border: none; height: 0; width: 0;" name="password" />
+    <ion-item style="position: absolute; width: 0px; height: 0px;">
+      <label for="fakeEmail">Email</label>
+      <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
+      <label for="fakePassword">Password</label>
+      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" />
+    </ion-item>
 
     <ion-item *ngIf="!showLogin">
       <ion-label floating>Full Name or Nickname</ion-label>
@@ -21,7 +25,7 @@
     
     <ion-item>
       <ion-label floating>Email</ion-label>
-      <ion-input autocomplete="off" autofill="off" [(ngModel)]="email" type="text"></ion-input>
+      <ion-input role="presentation" autocomplete="off" autofill="off" [(ngModel)]="email" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
