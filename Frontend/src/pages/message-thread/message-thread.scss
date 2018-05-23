@@ -7,7 +7,8 @@ page-message-thread {
       display: inline-block;
       background: whitesmoke;
       padding: 10px;
-      border-radius: 20px;
+      // border-radius: 20px;
+      border-radius: 6px;
       text-align: left;
       max-width: 60%;
       
@@ -19,7 +20,8 @@ page-message-thread {
     
     .recipe {
       width: 60%;
-      border-radius: 20px;
+      // border-radius: 20px;
+      border-radius: 6px;
       background: whitesmoke;
       
       ion-item {
