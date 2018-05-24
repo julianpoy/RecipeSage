@@ -15,7 +15,7 @@
       <label for="fakeEmail">Email</label>
       <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
       <label for="fakePassword">Password</label>
-      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" />
+      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" type="password" />
     </ion-item>
 
     <ion-item *ngIf="!showLogin">
@@ -30,7 +30,7 @@
 
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input autocomplete="off" autofill="off" [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
+      <ion-input role="presentation" autocomplete="off" autofill="off" [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="!showLogin">
