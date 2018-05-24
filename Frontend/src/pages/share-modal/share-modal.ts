@@ -45,7 +45,9 @@ export class ShareModalPage {
   }
   
   cancel() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss({
+      destination: false
+    });
   }
   
   loadThreads() {
