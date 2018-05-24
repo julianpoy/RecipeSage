@@ -52,12 +52,7 @@ export class MessagingServiceProvider {
         console.log("received message", message)
         
         switch(message.data.type) {
-          case 'recipe:inbox:new':
-            var recipe = JSON.parse(message.data.recipe);
-            
-            me.events.publish('recipe:inbox:new', recipe);
           case 'messages:new':
-            console.log("continuing here")
             var message = JSON.parse(message.data.message);
 
             me.events.publish('messages:new', message);

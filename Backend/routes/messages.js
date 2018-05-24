@@ -72,16 +72,31 @@ function sendURLToS3(url, callback) {
   });
 }
 
-function dispatchMessageNotification(user, message) {
+function dispatchMessageNotification(user, fullMessage) {
   if (user.fcmTokens) {
     var message = {
+      _id: fullMessage._id,
+      body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
+      otherUser: fullMessage.otherUser,
+      from: fullMessage.from,
+      to: fullMessage.to
+    };
+    
+    if (fullMessage.recipe) {
+      message.recipe = {
+        _id: fullMessage.recipe._id,
+        title: fullMessage.recipe.title
+      };
+    }
+    
+    var notification = {
       type: "messages:new",
       message: JSON.stringify(message)
-    }
+    };
     
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, function() {}, function() {
+      FirebaseService.sendMessage(token, notification, function() {}, function() {
         User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
       });
     }

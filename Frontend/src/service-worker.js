@@ -60,21 +60,25 @@ messaging.setBackgroundMessageHandler(function(message) {
       notificationOptions.icon = recipe.image.location;
       notificationOptions.click_action = self.registration.scope + '#/recipe/' + recipe._id;
       notificationOptions.data = {
+        type: message.data.type,
         recipeId: recipe._id
       };
+      notificationOptions.tag = message.data.type + '-' + recipe._id;
 
       return self.registration.showNotification(title, notificationOptions);
     case 'messages:new':
-      var message = JSON.parse(message.data.message);
+      var messageObj = JSON.parse(message.data.message);
       
-      var from = (message.otherUser.name || message.otherUser.email);
+      var from = (messageObj.otherUser.name || messageObj.otherUser.email);
       
-      notificationOptions.body = message.body;
+      notificationOptions.body = messageObj.body;
       // notificationOptions.icon = recipe.image.location;
-      notificationOptions.click_action = self.registration.scope + '#/messages/' + message.otherUser._id;
+      notificationOptions.click_action = self.registration.scope + '#/messages/' + messageObj.otherUser._id;
       notificationOptions.data = {
-        otherUserId: message.otherUser._id
+        type: message.data.type,
+        otherUserId: messageObj.otherUser._id
       };
+      notificationOptions.tag = message.data.type + '-' + messageObj.otherUser._id;
 
       return self.registration.showNotification(from, notificationOptions);
   }

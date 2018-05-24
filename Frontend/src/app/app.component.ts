@@ -38,28 +38,31 @@ export class MyApp {
     this.loadInboxCount();
     
     var me = this;
-    events.subscribe('recipe:inbox:new', (recipe) => {
-      this.loadInboxCount();
+    // events.subscribe('messages:new', (message) => {
+    //   if (!message.recipe) return;
 
-      var message = (recipe.fromUser.name || recipe.fromUser.email) + ' sent you a recipe: ' + recipe.title;
+    //   this.loadInboxCount();
+
+    //   var message = (message.recipe.fromUser.name || message.recipe.fromUser.email) + ' sent you a recipe: ' + message.recipe.title;
       
-      let toast = me.toastCtrl.create({
-        message: message,
-        duration: 7000,
-        showCloseButton: true,
-        closeButtonText: 'View'
-      });
-      toast.present();
+    //   let toast = me.toastCtrl.create({
+    //     message: message,
+    //     duration: 7000,
+    //     showCloseButton: true,
+    //     closeButtonText: 'View'
+    //   });
+    //   toast.present();
       
-      toast.onDidDismiss((data, role) => {    
-        console.log('Dismissed toast');
-        if (role == "close") {
-          me.nav.setRoot('RecipePage', { recipeId: recipe._id });
-        }
-      });
-    });
+    //   toast.onDidDismiss((data, role) => {    
+    //     console.log('Dismissed toast');
+    //     if (role == "close") {
+    //       me.nav.setRoot('RecipePage', { recipeId: recipe._id });
+    //     }
+    //   });
+    // });
     
     events.subscribe('messages:new', (message) => {
+      console.log("this came in")
       if (me.nav.getActive().name === 'MessageThreadPage' || me.nav.getActive().name === 'MessagesPage') return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
       

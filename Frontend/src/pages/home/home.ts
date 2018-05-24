@@ -82,8 +82,8 @@ export class HomePage {
     //   me.loadRecipes();
     // });
     
-    events.subscribe('recipe:inbox:new', (recipe) => {
-      if (this.folder === 'inbox') {
+    events.subscribe('messages:new', (message) => {
+      if (message.recipe && this.folder === 'inbox') {
         this.loadRecipes();
       }
     });

@@ -12,6 +12,8 @@ exports.sendMessage = function(fcmToken, payload, success, fail) {
     data: payload,
     token: fcmToken
   };
+  
+  console.log(message)
 
   admin.messaging().send(message)
   .then((response) => {
