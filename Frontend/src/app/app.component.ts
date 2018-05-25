@@ -87,7 +87,7 @@ export class MyApp {
       // { title: 'My Labels', component: 'RecipesByLabelPage' },
       { title: 'Messages', component: 'MessagesPage' },
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
-      { title: 'Add Recipe', component: 'EditRecipePage' },
+      { title: 'Create Recipe', component: 'EditRecipePage' },
       { title: 'Import', component: 'ImportPage' },
       { title: 'Account', component: 'AccountPage' },
       { title: 'Logout', component: 'LoginPage' }
