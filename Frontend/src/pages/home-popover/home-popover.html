@@ -33,10 +33,10 @@
     <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
       <ion-option value="-title">Title</ion-option>
       <!--<ion-option value="label">Label</ion-option>-->
-      <ion-option value="-created">Created Desc</ion-option>
-      <ion-option value="created">Created Asc</ion-option>
-      <ion-option value="-updated">Updated Desc</ion-option>
-      <ion-option value="updated">Updated Asc</ion-option>
+      <ion-option value="-created">Created (newest first)</ion-option>
+      <ion-option value="created">Created (oldest first)</ion-option>
+      <ion-option value="-updated">Updated (newest first)</ion-option>
+      <ion-option value="updated">Updated (oldest first)</ion-option>
     </ion-select>
   </ion-item>
   
