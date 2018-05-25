@@ -11,8 +11,8 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
   
-  rootPage: string = 'HomePage';
-  rootPageParams: any = { folder: 'main' };
+  rootPage: string = 'WelcomePage';
+  // rootPageParams: any = { folder: 'main' };
 
   pages: Array<{title: string, component: any}>;
   
@@ -123,7 +123,7 @@ export class MyApp {
       //   this.nav.setRoot('HomePage', { folder: 'main' });
       // }else{
       //   this.nav.setRoot('LoginPage');
-      // }
+      // } 
     });
   }
 

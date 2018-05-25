@@ -10,6 +10,7 @@ import { UserServiceProvider } from '../../providers/user-service/user-service';
 
 @IonicPage({
   segment: 'list/:folder',
+  priority: 'high',
 })
 @Component({
   selector: 'page-home',
