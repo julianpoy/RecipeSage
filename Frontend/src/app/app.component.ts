@@ -84,7 +84,7 @@ export class MyApp {
 
     var loggedInPages = [
       { title: 'My Recipes', component: 'HomePage', navData: { folder: 'main' } },
-      { title: 'My Labels', component: 'RecipesByLabelPage' },
+      // { title: 'My Labels', component: 'RecipesByLabelPage' },
       { title: 'Messages', component: 'MessagesPage' },
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Add Recipe', component: 'EditRecipePage' },
