@@ -51,21 +51,6 @@ messaging.setBackgroundMessageHandler(function(message) {
   var notificationOptions = {};
   
   switch(message.data.type) {
-    case 'recipe:inbox:new':
-      var recipe = JSON.parse(message.data.recipe);
-      
-      var title = (recipe.fromUser.name || recipe.fromUser.email);
-      
-      notificationOptions.body = (recipe.fromUser.name || recipe.fromUser.email) + ' sent you a recipe. Click to open "' + recipe.title + '"';
-      notificationOptions.icon = recipe.image.location;
-      notificationOptions.click_action = self.registration.scope + '#/recipe/' + recipe._id;
-      notificationOptions.data = {
-        type: message.data.type,
-        recipeId: recipe._id
-      };
-      notificationOptions.tag = message.data.type + '-' + recipe._id;
-
-      return self.registration.showNotification(title, notificationOptions);
     case 'messages:new':
       var messageObj = JSON.parse(message.data.message);
       
