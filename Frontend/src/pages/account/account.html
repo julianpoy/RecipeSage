@@ -11,8 +11,8 @@
 <ion-content padding>
   <br />
   
-  <input style="display: none;" name="email" />
-  <input style="display: none;" name="password" />
+  <input style="display: none;" name="email" type="text" />
+  <input style="display: none;" name="password" type="password" />
   
   <ion-item>
     <ion-input autocomplete="off" autofill="off" type="text" placeholder="Full Name or Nickname" [(ngModel)]="account.name" (ngModelChange)="nameChanged = true"></ion-input>
