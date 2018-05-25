@@ -38,31 +38,9 @@ export class MyApp {
     this.loadInboxCount();
     
     var me = this;
-    // events.subscribe('messages:new', (message) => {
-    //   if (!message.recipe) return;
 
-    //   this.loadInboxCount();
-
-    //   var message = (message.recipe.fromUser.name || message.recipe.fromUser.email) + ' sent you a recipe: ' + message.recipe.title;
-      
-    //   let toast = me.toastCtrl.create({
-    //     message: message,
-    //     duration: 7000,
-    //     showCloseButton: true,
-    //     closeButtonText: 'View'
-    //   });
-    //   toast.present();
-      
-    //   toast.onDidDismiss((data, role) => {    
-    //     console.log('Dismissed toast');
-    //     if (role == "close") {
-    //       me.nav.setRoot('RecipePage', { recipeId: recipe._id });
-    //     }
-    //   });
-    // });
-    
     events.subscribe('messages:new', (message) => {
-      console.log("this came in")
+      console.log("active is", me.nav.getActive().name, me.nav.getActive());
       if (me.nav.getActive().name === 'MessageThreadPage' || me.nav.getActive().name === 'MessagesPage') return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
       
