@@ -79,7 +79,7 @@ export class MyApp {
     var pages = [];
     
     var loggedOutPages = [
-      { title: 'Login', component: 'LoginPage' }
+      { title: 'Signup/Login', component: 'LoginPage' }
     ];
 
     var loggedInPages = [
