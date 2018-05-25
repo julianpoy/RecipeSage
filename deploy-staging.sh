@@ -9,7 +9,7 @@ if [ $? -eq 0 ]; then
     
     ssh julian@kondeo.com 'cd /var/www/staging.recipesage.com; rm -rf ./*; cd ~/Projects/chefbook-staging; git pull; cd Backend; npm install; forever restartall'
 
-    cp ./src/assets/splash-353b48.png ./platforms/browser/www/screen
+    cp ./src/assets/transparent-square.png ./platforms/browser/www/screen
 
     scp -r ./platforms/browser/www/* julian@kondeo.com:/var/www/staging.recipesage.com
 else
