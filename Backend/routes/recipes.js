@@ -36,7 +36,7 @@ router.post(
 
   // Check for title
   if (!req.body.title || req.body.title.length === 0) {
-    // Clean up image if we created one to save space
+    // This request is bad due to no title, but we already uploaded an image for it. Delete the image before erroring out
     if (req.file && req.file.key) {
       UtilService.deleteS3Object(req.file.key, function() {
         console.log("Cleaned s3 image after precondition failure");
@@ -49,91 +49,53 @@ router.post(
       res.status(412).send("Recipe title must be provided.");
     }
   } else {
-    // Load up destination user (if we're doing a share request)
-    var findDestinationUserPromise = new Promise(function(resolve, reject) {
-      if (req.body.destinationUserEmail) {
-        User.findOne({ email: req.body.destinationUserEmail }).exec(function(err, user) {
+    // Support for imageURLs instead of image files
+    var uploadByURLPromise = new Promise(function(resolve, reject) {
+      if (req.body.imageURL) {
+        UtilService.sendURLToS3(req.body.imageURL, function(err, img) {
           if (err) {
-            reject(500, 'Could not search DB for destination user.');
-          } else if (!user) {
-            reject(404, 'Could not find destination user under that ID.');
+            reject(err);
           } else {
-            resolve(user);
+            resolve(img);
           }
-        })
+        });
       } else {
         resolve(null);
-      }
+      }  
     });
     
-    // After we've found (or not found) the destination user, continue
-    findDestinationUserPromise.then(function(alternateDestinationUser) {
-      var validatedDestinationAccountId = res.locals.session.accountId;
-      var fromUser = null;
-      if (alternateDestinationUser) {
-        validatedDestinationAccountId = alternateDestinationUser._id;
-        fromUser = res.locals.session.accountId;
-      }
-
-      // Support for imageURLs instead of image files
-      var uploadByURLPromise = new Promise(function(resolve, reject) {
-        if (req.body.imageURL) {
-          UtilService.sendURLToS3(req.body.imageURL, function(err, img) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(img);
-            }
-          });
-        } else {
-          resolve(null);
-        }  
-      });
+    uploadByURLPromise.then(function(img) {
+      var uploadedFile = img || req.file;
       
-      uploadByURLPromise.then(function(img) {
-        var uploadedFile = img || req.file;
-        
-        UtilService.findTitle(null, req.body.title, 1, function(adjustedTitle) {
-          new Recipe({
-            accountId: validatedDestinationAccountId,
-        		title: adjustedTitle,
-            description: req.body.description,
-            yield: req.body.yield,
-            activeTime: req.body.activeTime,
-            totalTime: req.body.totalTime,
-            source: req.body.source,
-            url: req.body.url,
-            notes: req.body.notes,
-            ingredients: req.body.ingredients,
-            instructions: req.body.instructions,
-            image: uploadedFile,
-            folder: folder,
-            fromUser: fromUser
-          }).save(function(err, recipe) {
-            if (err) {
-              res.status(500).send("Error saving the recipe!");
-            } else {
-              var serializedRecipe = recipe.toObject();
-              serializedRecipe.labels = [];
-              res.status(201).json(serializedRecipe);
-              
-              if (alternateDestinationUser) {
-                recipe.populate('fromUser', 'name email', function(err, populatedRecipe) {
-                  if (!err) {
-                    UtilService.dispatchShareNotification(alternateDestinationUser, populatedRecipe);
-                  }
-                })
-              }
-            }
-          });
-        }, function(err) {
-          res.status(500).send("Could not avoid duplicate title!");
+      UtilService.findTitle(res.locals.session.accountId, null, req.body.title, 1, function(adjustedTitle) {
+        new Recipe({
+          accountId: res.locals.session.accountId,
+      		title: adjustedTitle,
+          description: req.body.description,
+          yield: req.body.yield,
+          activeTime: req.body.activeTime,
+          totalTime: req.body.totalTime,
+          source: req.body.source,
+          url: req.body.url,
+          notes: req.body.notes,
+          ingredients: req.body.ingredients,
+          instructions: req.body.instructions,
+          image: uploadedFile,
+          folder: folder
+        }).save(function(err, recipe) {
+          if (err) {
+            res.status(500).send("Error saving the recipe!");
+          } else {
+            var serializedRecipe = recipe.toObject();
+            serializedRecipe.labels = [];
+            res.status(201).json(serializedRecipe);
+          }
         });
-      }, function() {
-        res.status(500).send("Error uploading image via URL!");
+      }, function(err) {
+        res.status(500).send("Could not avoid duplicate title!");
       });
-    }, function(errCode, err) {
-      res.status(errCode).send(err);
+    }, function() {
+      res.status(500).send("Error uploading image via URL!");
     });
   }
 });
@@ -280,7 +242,7 @@ router.put(
 
       recipe.updated = Date.now();
 
-      UtilService.findTitle(recipe._id, req.body.title || recipe.title, 1, function(adjustedTitle) {
+      UtilService.findTitle(res.locals.session.accountId, recipe._id, req.body.title || recipe.title, 1, function(adjustedTitle) {
         recipe.title = adjustedTitle;
 
         recipe.save(function(err, recipe) {
