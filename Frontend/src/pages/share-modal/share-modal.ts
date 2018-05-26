@@ -123,6 +123,7 @@ export class ShareModalPage {
       body: '',
       recipeId: this.recipe._id
     }).subscribe(function(response) {
+      loading.dismiss();
       me.viewCtrl.dismiss({
         destination: 'MessageThreadPage',
         routingData: {
@@ -131,6 +132,7 @@ export class ShareModalPage {
         setRoot: false
       });
     }, function(err) {
+      loading.dismiss();
       switch(err.status) {
         case 401:
           me.viewCtrl.dismiss({
