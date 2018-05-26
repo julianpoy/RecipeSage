@@ -211,7 +211,7 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
   }
 }
 
-exports.findTitle = function findTitle(id, basename, ctr, success, fail) {
+exports.findTitle = function findTitle(userId, recipeId, basename, ctr, success, fail) {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
@@ -219,13 +219,14 @@ exports.findTitle = function findTitle(id, basename, ctr, success, fail) {
     adjustedTitle = basename + ' (' + ctr + ')';
   }
   Recipe.findOne({
-    _id: { $ne: id },
+    _id: { $ne: recipeId },
+    accountId: userId,
     title: adjustedTitle
   }).exec(function(err, dupe) {
     if (err) {
       fail(err);
     } else if (dupe) {
-      findTitle(id, basename, ctr + 1, success, fail);
+      findTitle(userId, recipeId, basename, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
     }
