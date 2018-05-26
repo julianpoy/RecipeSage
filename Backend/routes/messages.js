@@ -18,141 +18,8 @@ var Message = mongoose.model('Message');
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 var FirebaseService = require('../services/firebase');
+var UtilService = require('../services/util');
 var config = require('../config/config.json');
-
-var s3 = new aws.S3();
-aws.config.update({
-  accessKeyId: config.aws.accessKeyId,
-  secretAccessKey: config.aws.secretAccessKey,
-  subregion: config.aws.region,
-});
-
-// Dupe from index.js
-function sendURLToS3(url, callback) {
-  request({
-    url: url,
-    encoding: null
-  }, function(err, res, body) {
-    if (err)
-      return callback(err, res);
-
-    var key = new Date().getTime().toString();
-    
-    var contentType = res.headers['content-type'];
-    var contentLength = res.headers['content-length'];
-    console.log(contentType, contentLength)
-
-    s3.putObject({
-      Bucket: config.aws.bucket,
-      Key: key,
-      ACL: 'public-read',
-      Body: body // buffer
-    }, function(err, response) {
-      var img;
-
-      if (!err) {
-        img = {
-          fieldname: "image",
-          originalname: 'recipe-sage-img.jpg',
-          mimetype: contentType,
-          size: contentLength,
-          bucket: config.aws.bucket,
-          key: key,
-          acl: "public-read",
-          metadata: {
-            fieldName: "image"
-          },
-          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-          etag: response.ETag
-        }
-      }
-      
-      callback(err, img)
-    });
-  });
-}
-
-function dispatchMessageNotification(user, fullMessage) {
-  if (user.fcmTokens) {
-    var message = {
-      _id: fullMessage._id,
-      body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
-      otherUser: fullMessage.otherUser,
-      from: fullMessage.from,
-      to: fullMessage.to
-    };
-    
-    if (fullMessage.recipe) {
-      message.recipe = {
-        _id: fullMessage.recipe._id,
-        title: fullMessage.recipe.title
-      };
-    }
-    
-    var notification = {
-      type: "messages:new",
-      message: JSON.stringify(message)
-    };
-    
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, notification, function() {}, function() {
-        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
-      });
-    }
-  }
-}
-
-function shareRecipe(recipeId, senderId, recipientId, resolve, reject) {
-  Recipe.findById(recipeId).lean().exec(function(err, recipe) {
-    if (err) {
-      reject(500, 'Could not search DB for recipe.');
-    } else if (!recipe) {
-      reject(404, 'Could not find recipe under that ID.');
-    } else {
-      var uploadByURLPromise = new Promise(function(resolve, reject) {
-        if (recipe.image && recipe.image.location) {
-          sendURLToS3(recipe.image.location, function(err, img) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(img);
-            }
-          });
-        } else {
-          resolve(null);
-        }  
-      });
-      
-      uploadByURLPromise.then(function(img) {
-        new Recipe({
-          accountId: recipientId,
-      		title: recipe.title,
-          description: recipe.description,
-          yield: recipe.yield,
-          activeTime: recipe.activeTime,
-          totalTime: recipe.totalTime,
-          source: recipe.source,
-          url: recipe.url,
-          notes: recipe.notes,
-          ingredients: recipe.ingredients,
-          instructions: recipe.instructions,
-          image: img,
-          folder: 'inbox',
-          fromUser: senderId
-        }).save(function(err, sharedRecipe) {
-          if (err) {
-            reject(500, "Error saving the recipe!");
-          } else {
-            resolve(sharedRecipe);
-          }
-        });
-      }, function() {
-        reject(500, "Error uploading image via URL!");
-      });
-    }
-  });
-}
 
 router.post(
   '/',
@@ -169,7 +36,7 @@ router.post(
       res.status(404).send('Could not find user under that ID.');
     } else {
       function shareRecipeStep() {
-        shareRecipe(req.body.recipeId, res.locals.session.accountId, req.body.to, function(sharedRecipe) {
+        UtilService.shareRecipe(req.body.recipeId, res.locals.session.accountId, req.body.to, function(sharedRecipe) {
           createMessageStep(sharedRecipe._id);
         }, function(status, message) {
           res.status(status).send(message);
@@ -204,7 +71,7 @@ router.post(
                     // Alert for recipient (now receiving via notification)
                     message.otherUser = message.from;
 
-                    dispatchMessageNotification(recipient, message);
+                    UtilService.dispatchMessageNotification(recipient, message);
                   }
                 });
               }

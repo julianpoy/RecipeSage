@@ -17,145 +17,8 @@ var Label = mongoose.model('Label');
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 var FirebaseService = require('../services/firebase');
+var UtilService = require('../services/util');
 var config = require('../config/config.json');
-
-var s3 = new aws.S3();
-aws.config.update({
-  accessKeyId: config.aws.accessKeyId,
-  secretAccessKey: config.aws.secretAccessKey,
-  subregion: config.aws.region,
-});
-
-var upload = multer({
-  storage: multerImager({
-    dirname: '/',
-    bucket: config.aws.bucket,
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
-    region: config.aws.region,
-    filename: function (req, file, cb) {  // [Optional]: define filename (default: random)
-      cb(null, Date.now())                // i.e. with a timestamp
-    },                                    //
-    gm: {                                 // [Optional]: define graphicsmagick options
-      width: 200,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
-      // height: 200,
-      options: '',
-      format: 'jpg',                      // Default: jpg - Unused by our processor 
-      process: function(gm, options, inputStream, outputStream) {
-        var gmObj = gm(inputStream);
-        gmObj.size({ bufferStream: true }, (err, size) => {
-          if (err || size.width > 400) {
-            gmObj.resize(options.gm.width , options.gm.height , options.gm.options)
-            .autoOrient()
-            .stream()
-            .pipe(outputStream);
-          } else {
-            gmObj.stream()
-            .pipe(outputStream);
-          }
-        });
-      }
-    },
-    s3 : {                                // [Optional]: define s3 options
-      ACL: 'public-read',
-      Metadata: {
-        'acl': 'public-read'
-      }
-    }
-  })
-});
-
-function deleteS3Object(key, success, fail){
-  s3.deleteObject({
-    Bucket: config.aws.bucket,
-    Key: key
-  }, function(err, data) {
-    if (err) fail(err);
-    else success(data);
-  });
-}
-
-// Dupe from index.js
-function sendURLToS3(url, callback) {
-  request({
-    url: url,
-    encoding: null
-  }, function(err, res, body) {
-    if (err)
-      return callback(err, res);
-
-    var key = new Date().getTime().toString();
-    
-    var contentType = res.headers['content-type'];
-    var contentLength = res.headers['content-length'];
-    console.log(contentType, contentLength)
-
-    s3.putObject({
-      Bucket: config.aws.bucket,
-      Key: key,
-      ACL: 'public-read',
-      Body: body // buffer
-    }, function(err, response) {
-      var img;
-
-      if (!err) {
-        img = {
-          fieldname: "image",
-          originalname: 'recipe-sage-img.jpg',
-          mimetype: contentType,
-          size: contentLength,
-          bucket: config.aws.bucket,
-          key: key,
-          acl: "public-read",
-          metadata: {
-            fieldName: "image"
-          },
-          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-          etag: response.ETag
-        }
-      }
-      
-      callback(err, img)
-    });
-  });
-}
-
-function dispatchShareNotification(user, recipe) {
-  if (user.fcmTokens) {
-    var message = {
-      type: "recipe:inbox:new",
-      recipe: JSON.stringify(recipe)
-    }
-    
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, function() {}, function() {
-        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
-      });
-    }
-  }
-}
-
-function findTitle(id, basename, ctr, success, fail) {
-  var adjustedTitle;
-  if (ctr == 1) {
-    adjustedTitle = basename;
-  } else {
-    adjustedTitle = basename + ' (' + ctr + ')';
-  }
-  Recipe.findOne({
-    _id: { $ne: id },
-    title: adjustedTitle
-  }).exec(function(err, dupe) {
-    if (err) {
-      fail(err);
-    } else if (dupe) {
-      findTitle(id, basename, ctr + 1, success, fail);
-    } else {
-      success(adjustedTitle);
-    }
-  });
-}
 
 //Create a new recipe
 router.post(
@@ -163,7 +26,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  upload.single('image'),
+  UtilService.upload.single('image'),
   function(req, res, next) {
   
   var folder = 'main'; // Default folder
@@ -175,7 +38,7 @@ router.post(
   if (!req.body.title || req.body.title.length === 0) {
     // Clean up image if we created one to save space
     if (req.file && req.file.key) {
-      deleteS3Object(req.file.key, function() {
+      UtilService.deleteS3Object(req.file.key, function() {
         console.log("Cleaned s3 image after precondition failure");
         res.status(412).send("Recipe title must be provided.");
       }, function() {
@@ -215,7 +78,7 @@ router.post(
       // Support for imageURLs instead of image files
       var uploadByURLPromise = new Promise(function(resolve, reject) {
         if (req.body.imageURL) {
-          sendURLToS3(req.body.imageURL, function(err, img) {
+          UtilService.sendURLToS3(req.body.imageURL, function(err, img) {
             if (err) {
               reject(err);
             } else {
@@ -230,7 +93,7 @@ router.post(
       uploadByURLPromise.then(function(img) {
         var uploadedFile = img || req.file;
         
-        findTitle(null, req.body.title, 1, function(adjustedTitle) {
+        UtilService.findTitle(null, req.body.title, 1, function(adjustedTitle) {
           new Recipe({
             accountId: validatedDestinationAccountId,
         		title: adjustedTitle,
@@ -257,7 +120,7 @@ router.post(
               if (alternateDestinationUser) {
                 recipe.populate('fromUser', 'name email', function(err, populatedRecipe) {
                   if (!err) {
-                    dispatchShareNotification(alternateDestinationUser, populatedRecipe);
+                    UtilService.dispatchShareNotification(alternateDestinationUser, populatedRecipe);
                   }
                 })
               }
@@ -374,7 +237,7 @@ router.put(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  upload.single('image'),
+  UtilService.upload.single('image'),
   function(req, res) {
   
   Recipe.findOne({
@@ -405,7 +268,7 @@ router.put(
       if (req.file) {
         // Remove old (replaced) image from our S3 bucket
         if (recipe.image && recipe.image.key) {
-          deleteS3Object(recipe.image.key, function() {
+          UtilService.deleteS3Object(recipe.image.key, function() {
             console.log("Cleaned old image from s3", recipe.image.key);
           }, function(err) {
             console.log("Error cleaning old image from s3 ", err, err.stack);
@@ -417,7 +280,7 @@ router.put(
 
       recipe.updated = Date.now();
 
-      findTitle(recipe._id, req.body.title || recipe.title, 1, function(adjustedTitle) {
+      UtilService.findTitle(recipe._id, req.body.title || recipe.title, 1, function(adjustedTitle) {
         recipe.title = adjustedTitle;
 
         recipe.save(function(err, recipe) {
@@ -462,7 +325,7 @@ router.delete(
         } else {
           // Remove image from our S3 bucket
           if (recipe.image && recipe.image.key) {
-            deleteS3Object(recipe.image.key, function() {
+            UtilService.deleteS3Object(recipe.image.key, function() {
               console.log("Cleaned image from s3 after recipe delete ", recipe.image.key);
             }, function(err) {
               console.log("Error cleaning image from s3 after recipe delete ", err, err.stack);
