@@ -139,4 +139,10 @@ export class MessageThreadPage {
       recipeId: recipe._id
     });
   }
+  
+  onMessageKeyUp(event) {
+    if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+      this.sendMessage();
+    }
+  }
 }

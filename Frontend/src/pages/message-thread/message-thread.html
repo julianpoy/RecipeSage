@@ -56,7 +56,7 @@
 <ion-footer>
   <form ng-submit="sendMessage()">
     <ion-item>
-      <ion-textarea name="body" [(ngModel)]="pendingMessage" type="text" placeholder="{{ messagePlaceholder }}"></ion-textarea>
+      <ion-textarea name="body" [(ngModel)]="pendingMessage" (keyup)="onMessageKeyUp($event)" type="text" placeholder="{{ messagePlaceholder }}"></ion-textarea>
       <button type="submit" (click)="sendMessage()" ion-button clear item-end>
         <ion-icon name="send"></ion-icon>
       </button>
