@@ -3,6 +3,9 @@ import { Nav, Platform, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { MessagesPage } from '../pages/messages/messages';
+import { MessageThreadPage } from '../pages/message-thread/message-thread';
+
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 
 @Component({
@@ -40,8 +43,7 @@ export class MyApp {
     var me = this;
 
     events.subscribe('messages:new', (message) => {
-      console.log("active is", me.nav.getActive().name, me.nav.getActive());
-      if (me.nav.getActive().name === 'MessageThreadPage' || me.nav.getActive().name === 'MessagesPage') return;
+      if (me.nav.getActive().instance instanceof MessageThreadPage || me.nav.getActive().instance instanceof MessagesPage) return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
       
       var myMessage = message;
