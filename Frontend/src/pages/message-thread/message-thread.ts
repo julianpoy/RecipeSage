@@ -20,6 +20,7 @@ export class MessageThreadPage {
   otherUserId: string = '';
   pendingMessage: string = '';
   messagePlaceholder: string = 'Message...';
+  reloading: boolean = false;
   
   isViewLoaded: boolean = true;
 
@@ -56,6 +57,17 @@ export class MessageThreadPage {
   
   ionViewWillLeave() {
     this.isViewLoaded = false;
+  }
+  
+  reload() {
+    this.reloading = true;
+
+    var me = this;
+    this.loadMessages().then(function() {
+      me.reloading = false;
+    }, function() {
+      me.reloading = false;
+    });
   }
   
   refresh(refresher) {

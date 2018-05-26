@@ -5,6 +5,12 @@
     </button>
     
     <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
+    
+    <ion-buttons end>
+      <button class="reload" [ngClass]="{ reloading: reloading }" ion-button icon-only (click)="reload()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
