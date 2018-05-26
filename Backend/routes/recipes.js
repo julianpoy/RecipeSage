@@ -63,19 +63,6 @@ var upload = multer({
       }
     }
   })
-  
-  // multerS3({
-  //   s3: s3,
-  //   dirname: '/',
-  //   bucket: config.aws.bucket,
-  //   acl: 'public-read',
-  //   metadata: function (req, file, cb) {
-  //     cb(null, {fieldName: file.fieldname});
-  //   },
-  //   key: function (req, file, cb) {
-  //     cb(null, Date.now().toString())
-  //   }
-  // })
 });
 
 function deleteS3Object(key, success, fail){
@@ -147,6 +134,27 @@ function dispatchShareNotification(user, recipe) {
       });
     }
   }
+}
+
+function findTitle(id, basename, ctr, success, fail) {
+  var adjustedTitle;
+  if (ctr == 1) {
+    adjustedTitle = basename;
+  } else {
+    adjustedTitle = basename + ' (' + ctr + ')';
+  }
+  Recipe.findOne({
+    _id: { $ne: id },
+    title: adjustedTitle
+  }).exec(function(err, dupe) {
+    if (err) {
+      fail(err);
+    } else if (dupe) {
+      findTitle(id, basename, ctr + 1, success, fail);
+    } else {
+      success(adjustedTitle);
+    }
+  });
 }
 
 //Create a new recipe
@@ -222,37 +230,41 @@ router.post(
       uploadByURLPromise.then(function(img) {
         var uploadedFile = img || req.file;
         
-        new Recipe({
-          accountId: validatedDestinationAccountId,
-      		title: req.body.title,
-          description: req.body.description,
-          yield: req.body.yield,
-          activeTime: req.body.activeTime,
-          totalTime: req.body.totalTime,
-          source: req.body.source,
-          url: req.body.url,
-          notes: req.body.notes,
-          ingredients: req.body.ingredients,
-          instructions: req.body.instructions,
-          image: uploadedFile,
-          folder: folder,
-          fromUser: fromUser
-        }).save(function(err, recipe) {
-          if (err) {
-            res.status(500).send("Error saving the recipe!");
-          } else {
-            var serializedRecipe = recipe.toObject();
-            serializedRecipe.labels = [];
-            res.status(201).json(serializedRecipe);
-            
-            if (alternateDestinationUser) {
-              recipe.populate('fromUser', 'name email', function(err, populatedRecipe) {
-                if (!err) {
-                  dispatchShareNotification(alternateDestinationUser, populatedRecipe);
-                }
-              })
+        findTitle(null, req.body.title, 1, function(adjustedTitle) {
+          new Recipe({
+            accountId: validatedDestinationAccountId,
+        		title: adjustedTitle,
+            description: req.body.description,
+            yield: req.body.yield,
+            activeTime: req.body.activeTime,
+            totalTime: req.body.totalTime,
+            source: req.body.source,
+            url: req.body.url,
+            notes: req.body.notes,
+            ingredients: req.body.ingredients,
+            instructions: req.body.instructions,
+            image: uploadedFile,
+            folder: folder,
+            fromUser: fromUser
+          }).save(function(err, recipe) {
+            if (err) {
+              res.status(500).send("Error saving the recipe!");
+            } else {
+              var serializedRecipe = recipe.toObject();
+              serializedRecipe.labels = [];
+              res.status(201).json(serializedRecipe);
+              
+              if (alternateDestinationUser) {
+                recipe.populate('fromUser', 'name email', function(err, populatedRecipe) {
+                  if (!err) {
+                    dispatchShareNotification(alternateDestinationUser, populatedRecipe);
+                  }
+                })
+              }
             }
-          }
+          });
+        }, function(err) {
+          res.status(500).send("Could not avoid duplicate title!");
         });
       }, function() {
         res.status(500).send("Error uploading image via URL!");
@@ -378,7 +390,6 @@ router.put(
         msg: "Recipe with that ID does not exist!"
       });
     } else {
-      if (typeof req.body.title === 'string') recipe.title = req.body.title;
       if (typeof req.body.description === 'string') recipe.description = req.body.description;
       if (typeof req.body.yield === 'string') recipe.yield = req.body.yield;
       if (typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
@@ -406,12 +417,18 @@ router.put(
 
       recipe.updated = Date.now();
 
-      recipe.save(function(err, recipe) {
-        if (err) {
-          res.status(500).send("Could not save updated recipe!");
-        } else {
-          res.status(200).json(recipe);
-        }
+      findTitle(recipe._id, req.body.title || recipe.title, 1, function(adjustedTitle) {
+        recipe.title = adjustedTitle;
+
+        recipe.save(function(err, recipe) {
+          if (err) {
+            res.status(500).send("Could not save updated recipe!");
+          } else {
+            res.status(200).json(recipe);
+          }
+        });
+      }, function(err) {
+        res.status(500).send("Could avoid duplicate title!");
       });
     }
   });
