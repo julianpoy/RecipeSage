@@ -20,7 +20,7 @@ aws.config.update({
   subregion: config.aws.region,
 });
 
-exports.sendURLToS3 = function sendURLToS3(url, callback) {
+function sendURLToS3(url, callback) {
   request({
     url: url,
     encoding: null
@@ -63,57 +63,7 @@ exports.sendURLToS3 = function sendURLToS3(url, callback) {
     });
   });
 }
-
-exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject) {
-  Recipe.findById(recipeId).lean().exec(function(err, recipe) {
-    if (err) {
-      reject(500, 'Could not search DB for recipe.');
-    } else if (!recipe) {
-      reject(404, 'Could not find recipe under that ID.');
-    } else {
-      var uploadByURLPromise = new Promise(function(resolve, reject) {
-        if (recipe.image && recipe.image.location) {
-          sendURLToS3(recipe.image.location, function(err, img) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(img);
-            }
-          });
-        } else {
-          resolve(null);
-        }  
-      });
-      
-      uploadByURLPromise.then(function(img) {
-        new Recipe({
-          accountId: recipientId,
-      		title: recipe.title,
-          description: recipe.description,
-          yield: recipe.yield,
-          activeTime: recipe.activeTime,
-          totalTime: recipe.totalTime,
-          source: recipe.source,
-          url: recipe.url,
-          notes: recipe.notes,
-          ingredients: recipe.ingredients,
-          instructions: recipe.instructions,
-          image: img,
-          folder: 'inbox',
-          fromUser: senderId
-        }).save(function(err, sharedRecipe) {
-          if (err) {
-            reject(500, "Error saving the recipe!");
-          } else {
-            resolve(sharedRecipe);
-          }
-        });
-      }, function() {
-        reject(500, "Error uploading image via URL!");
-      });
-    }
-  });
-}
+exports.sendURLToS3 = sendURLToS3;
 
 exports.upload = multer({
   storage: multerImager({
@@ -164,6 +114,7 @@ exports.deleteS3Object = function(key, success, fail){
   });
 }
 
+// Deprecated
 exports.dispatchShareNotification = function(user, recipe) {
   if (user.fcmTokens) {
     var message = {
@@ -211,7 +162,7 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
   }
 }
 
-exports.findTitle = function findTitle(userId, recipeId, basename, ctr, success, fail) {
+function findTitle(userId, recipeId, basename, ctr, success, fail) {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
@@ -229,6 +180,62 @@ exports.findTitle = function findTitle(userId, recipeId, basename, ctr, success,
       findTitle(userId, recipeId, basename, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
+    }
+  });
+}
+exports.findTitle = findTitle;
+
+exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject) {
+  Recipe.findById(recipeId).lean().exec(function(err, recipe) {
+    if (err) {
+      reject(500, 'Could not search DB for recipe.');
+    } else if (!recipe) {
+      reject(404, 'Could not find recipe under that ID.');
+    } else {
+      var uploadByURLPromise = new Promise(function(resolve, reject) {
+        if (recipe.image && recipe.image.location) {
+          sendURLToS3(recipe.image.location, function(err, img) {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(img);
+            }
+          });
+        } else {
+          resolve(null);
+        }
+      });
+      
+      uploadByURLPromise.then(function(img) {
+        findTitle(recipientId, null, recipe.title, 1, function(adjustedTitle) {
+          new Recipe({
+            accountId: recipientId,
+        		title: adjustedTitle,
+            description: recipe.description,
+            yield: recipe.yield,
+            activeTime: recipe.activeTime,
+            totalTime: recipe.totalTime,
+            source: recipe.source,
+            url: recipe.url,
+            notes: recipe.notes,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions,
+            image: img,
+            folder: 'inbox',
+            fromUser: senderId
+          }).save(function(err, sharedRecipe) {
+            if (err) {
+              reject(500, "Error saving the recipe!");
+            } else {
+              resolve(sharedRecipe);
+            }
+          });
+        }, function() {
+          reject(500, "Could not avoid duplicate title!");
+        });
+      }, function() {
+        reject(500, "Error uploading image via URL!");
+      });
     }
   });
 }
