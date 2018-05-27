@@ -11,13 +11,9 @@ page-recipe {
     ion-label {
       margin: 0;
     }
-  }
-  
-  .ingredientScale {
-    width: 10em;
     
-    .item-inner {
-      box-shadow: inset 0 -1px 0 0 #dedede;
+    .scale {
+      cursor: pointer;
     }
   }
   

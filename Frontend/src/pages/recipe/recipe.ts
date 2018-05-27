@@ -148,6 +148,36 @@ export class RecipePage {
     console.log('ionViewDidLoad RecipePage');
   }
   
+  changeScale() {
+    var me = this;
+
+    let alert = this.alertCtrl.create({
+      title: 'Recipe Scale',
+      message: 'Enter any decimal number',
+      inputs: [
+        {
+          name: 'scale',
+          value: me.scale,
+          placeholder: 'Scale'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Apply',
+          handler: (data) => {
+            me.setScale(data.scale);
+          }
+        }
+      ]
+    });
+
+    alert.present();
+  }
+  
   setScale(scale) {
     if (!scale || scale <= 0) scale = 1;
     

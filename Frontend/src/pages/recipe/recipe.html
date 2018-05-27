@@ -43,11 +43,7 @@
       <h2>Ingredients</h2>
       <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient"></p>
       <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
-    </ion-item>
-    
-    <ion-item class="ingredientScale" *ngIf="ingredients && ingredients.length > 0" text-wrap>
-      <ion-label color="primary" floating>Ingredient Scale</ion-label>
-      <ion-input (input)='setScale($event.target.value)' type="text" value="1"></ion-input>
+      <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
     </ion-item>
     
     <ion-item text-wrap>
