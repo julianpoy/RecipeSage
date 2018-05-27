@@ -435,7 +435,7 @@ export class RecipePage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            this.selectedLabels.push(label.title);
+            // this.selectedLabels.push(label.title);
           }
         },
         {
