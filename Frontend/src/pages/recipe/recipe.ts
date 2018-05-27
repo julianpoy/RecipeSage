@@ -159,7 +159,7 @@ export class RecipePage {
       inputs: [
         {
           name: 'scale',
-          value: me.scale,
+          value: me.scale.toString(),
           placeholder: 'Scale'
         },
       ],
@@ -392,9 +392,9 @@ export class RecipePage {
     }
 
     if (this.autocompleteSelectionIdx === -1) {
-      document.getElementById('labelInputField').focus();
+      (document.getElementById('labelInputField') as HTMLElement).focus();
     } else {
-      suggestions[this.autocompleteSelectionIdx].focus();
+      (suggestions[this.autocompleteSelectionIdx] as HTMLElement).focus();
     }
   }
   
