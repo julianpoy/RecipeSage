@@ -1,11 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
-var aws = require('aws-sdk');
-var multer = require('multer');
-var multerImager = require('multer-imager');
-var multerS3 = require('multer-s3');
-var request = require('request');
 
 // DB
 var mongoose = require('mongoose');
@@ -15,11 +10,8 @@ var Label = mongoose.model('Label');
 var Message = mongoose.model('Message');
 
 // Service
-var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
-var FirebaseService = require('../services/firebase');
 var UtilService = require('../services/util');
-var config = require('../config/config.json');
 
 router.post(
   '/',

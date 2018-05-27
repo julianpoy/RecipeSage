@@ -8,7 +8,6 @@ var Recipe = mongoose.model('Recipe');
 var Label = mongoose.model('Label');
 
 // Services
-var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 
 //Add a label to a recipe

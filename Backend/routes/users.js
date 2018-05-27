@@ -1,12 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var crypto = require('crypto');
 var cors = require('cors');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-var Session = mongoose.model('Session');
 var nodemailer = require('nodemailer');
-var config = require('../config/config.json');
 
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
