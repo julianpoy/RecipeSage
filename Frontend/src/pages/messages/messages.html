@@ -13,7 +13,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngFor="let thread of threads" (click)="openThread(thread)">
+    <ion-item class="thread" *ngFor="let thread of threads" (click)="openThread(thread)">
       <ion-icon name="text" item-start></ion-icon> 
       <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
       <p><b>{{ thread.messages[0].from._id === thread.otherUser._id ? thread.messages[0].from.name || thread.messages[0].from.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
