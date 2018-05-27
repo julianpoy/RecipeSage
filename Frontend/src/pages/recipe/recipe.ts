@@ -399,6 +399,8 @@ export class RecipePage {
       if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
  
       me.labelObjectsByTitle[response.title] = response;
+      
+      me.toggleAutocomplete(false);
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
@@ -426,8 +428,8 @@ export class RecipePage {
   
   deleteLabel(label) {
     let alert = this.alertCtrl.create({
-      title: 'Confirm Delete',
-      message: 'This will permanently delete the label "' + label.title + '" from this recipe. This action is irreversible.',
+      title: 'Confirm Label Removal',
+      message: 'This will remove the label "' + label.title + '" from this recipe.',
       buttons: [
         {
           text: 'Cancel',
@@ -437,7 +439,7 @@ export class RecipePage {
           }
         },
         {
-          text: 'Delete',
+          text: 'Remove',
           handler: () => {
             this._deleteLabel(label);
           }
