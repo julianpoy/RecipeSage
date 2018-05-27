@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var request = require('request');
 var Nightmare = require('nightmare');
 var cors = require('cors');
 var aws = require('aws-sdk');
@@ -11,18 +10,8 @@ var mongoose = require('mongoose');
 var Recipe = mongoose.model('Recipe');
 var Label = mongoose.model('Label');
 
-var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
-var FirebaseService = require('../services/firebase');
 var UtilService = require('../services/util');
-var config = require('../config/config.json');
-
-var s3 = new aws.S3();
-aws.config.update({
-  accessKeyId: config.aws.accessKeyId,
-  secretAccessKey: config.aws.secretAccessKey,
-  subregion: config.aws.region,
-});
 
 var CURRENT_CLIENT_VERSION = '1.0.7';
 
@@ -134,7 +123,7 @@ router.get(
         }
     
         if (recipe.imageURL) {
-          sendURLToS3(recipes[i].imageURL, function(err, image) {
+          UtilService.sendURLToS3(recipes[i].imageURL, function(err, image) {
             console.log("Image response: ", err, image)
             
             if (err) {
@@ -262,49 +251,5 @@ router.get(
     msg: "Starting scrape..."
   });
 });
-
-function sendURLToS3(url, callback) {
-  request({
-    url: url,
-    encoding: null
-  }, function(err, res, body) {
-    if (err)
-      return callback(err, res);
-
-    var key = new Date().getTime().toString();
-    
-    var contentType = res.headers['content-type'];
-    var contentLength = res.headers['content-length'];
-    console.log(contentType, contentLength)
-
-    s3.putObject({
-      Bucket: config.aws.bucket,
-      Key: key,
-      ACL: 'public-read',
-      Body: body // buffer
-    }, function(err, response) {
-      var img;
-
-      if (!err) {
-        img = {
-          fieldname: "image",
-          originalname: 'pepperplate-image.jpg',
-          mimetype: contentType,
-          size: contentLength,
-          bucket: config.aws.bucket,
-          key: key,
-          acl: "public-read",
-          metadata: {
-            fieldName: "image"
-          },
-          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-          etag: response.ETag
-        }
-      }
-      
-      callback(err, img)
-    });
-  });
-}
 
 module.exports = router;
