@@ -329,6 +329,7 @@ export class HomePage {
         },
         {
           text: 'Delete',
+          cssClass: 'alertDanger',
           handler: () => {
             this._deleteRecipe(recipe);
           }
