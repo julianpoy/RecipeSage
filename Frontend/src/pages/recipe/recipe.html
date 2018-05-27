@@ -99,18 +99,26 @@
         (focus)='toggleAutocomplete(true)'
         (focusout)='toggleAutocomplete(false, $event)'
         (blur)='toggleAutocomplete(false, $event)'
+        (keyup)="labelFieldKeyUp($event)"
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         #labelInputField
         id="labelInputField" />
-      <div class="autocomplete" *ngIf="showAutocomplete">
-        <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1" (click)="addLabel(pendingLabel)">
-          {{ pendingLabel }}<span class="hint">Click to create</span>
+      <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
+        <button
+          class="suggestion"
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1"
+          (click)="addLabel(pendingLabel)">{{ pendingLabel }}<span class="hint">Click to create</span>
         </button>
-        <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+        <button
+          class="suggestion"
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
           {{ pendingLabel }}<span class="hint">Already added</span>
         </button>
-        <button class="suggestion" *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels" (click)="addLabel(label)">
+        <button
+          class="suggestion"
+          *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
+          (click)="addLabel(label)">
           {{ label }}<span class="hint">Click to add</span>
         </button>
       </div>

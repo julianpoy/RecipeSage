@@ -28,7 +28,9 @@ export class RecipePage {
   labelObjectsByTitle: any = {};
   existingLabels: any = [];
   selectedLabels: any = [];
+  pendingLabel: string = '';
   showAutocomplete: boolean = false;
+  autocompleteSelectionIdx: number = -1;
   
   constructor(
     public navCtrl: NavController,
@@ -368,6 +370,32 @@ export class RecipePage {
       }
     }
     this.showAutocomplete = show;
+    this.autocompleteSelectionIdx = -1;
+  }
+  
+  labelFieldKeyUp(event) {
+    // Only listen for up or down arrow
+    if (event.keyCode !== 38 && event.keyCode !== 40) return;
+
+    // Get all suggestions (including click to create)
+    var suggestions = document.getElementsByClassName('autocomplete')[0].children;
+
+    // If result list size was reduced, do not overflow
+    if (this.autocompleteSelectionIdx > suggestions.length - 1) this.autocompleteSelectionIdx = suggestions.length - 1;
+
+    if (event.keyCode === 40 && this.autocompleteSelectionIdx < suggestions.length - 1) {
+      // Arrow Down
+      this.autocompleteSelectionIdx++;
+    } else if (event.keyCode === 38 && this.autocompleteSelectionIdx >= 0) {
+      // Arrow Up
+      this.autocompleteSelectionIdx--;
+    }
+
+    if (this.autocompleteSelectionIdx === -1) {
+      document.getElementById('labelInputField').focus();
+    } else {
+      suggestions[this.autocompleteSelectionIdx].focus();
+    }
   }
   
   addLabel(title) {
@@ -401,6 +429,7 @@ export class RecipePage {
       me.labelObjectsByTitle[response.title] = response;
       
       me.toggleAutocomplete(false);
+      me.pendingLabel = '';
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
