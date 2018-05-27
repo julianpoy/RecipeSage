@@ -11,9 +11,9 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <ion-list>
-    <ion-item>
+    <ion-item no-lines>
       <p text-wrap>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
     </ion-item>
     
@@ -36,7 +36,7 @@
     
     <br /><br />
     
-    <ion-item text-wrap>
+    <ion-item text-wrap no-lines>
       <p>
         The import task can take several minutes and depends on the availability of Pepperplate servers.<br />
         You will only see the imported recipes in your library once the full import task is complete.<br />
@@ -48,8 +48,10 @@
     <div padding>
     	<button ion-button block (click)="scrapePepperplate()">Start Import</button>
 		</div>
-		
-		{{ errorMessage }}
+	
+	  <div padding>
+		  {{ errorMessage }}
+		</div>	
 
   </ion-list>
 </ion-content>

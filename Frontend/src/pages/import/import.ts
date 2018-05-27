@@ -13,8 +13,10 @@ import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-ser
 })
 export class ImportPage {
   
-  username: string;
-  password: string;
+  username: string = '';
+  password: string = '';
+  
+  errorMessage: string = '';
 
   constructor(
     public navCtrl: NavController,
@@ -29,6 +31,16 @@ export class ImportPage {
   }
   
   scrapePepperplate() {
+    if (this.username.trim().length === 0) {
+      this.errorMessage = 'Please enter your pepperplate email/username.';
+      return;
+    }
+    
+    if (this.password.trim().length === 0) {
+      this.errorMessage = 'Please enter your pepperplate password.';
+      return;
+    }
+    
     var me = this;
     
     let loading = this.loadingCtrl.create({
