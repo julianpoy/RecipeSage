@@ -13,6 +13,14 @@ page-recipe {
     }
   }
   
+  .ingredientScale {
+    width: 10em;
+    
+    .item-inner {
+      box-shadow: inset 0 -1px 0 0 #dedede;
+    }
+  }
+  
   #labelSelectParent {
     padding-left: 16px;
     padding-right: 16px;
