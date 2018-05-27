@@ -17,8 +17,12 @@
       <p text-wrap>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
     </ion-item>
     
-    <input style="display: none;" name="username" />
-    <input style="display: none;" name="password" />
+    <ion-item style="position: absolute; width: 0px; height: 0px;">
+      <label for="fakeEmail">Email</label>
+      <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
+      <label for="fakePassword">Password</label>
+      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" type="password" />
+    </ion-item>
     
     <ion-item>
       <ion-label floating>Pepperplate Email/Username</ion-label>
