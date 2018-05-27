@@ -51,17 +51,17 @@
           </p>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button color="primary">
+          <button ion-button color="primary" (click)="editRecipe(recipe)">
             <ion-icon name="create"></ion-icon>
+            &nbsp;&nbsp;&nbsp;
             Edit
+            &nbsp;&nbsp;&nbsp;
           </button>
-          <button ion-button color="warning">
+          <button ion-button color="danger" (click)="deleteRecipe(recipe)">
             <ion-icon name="trash"></ion-icon>
-            Edit
-          </button>
-          <button ion-button color="secondary">
-            <ion-icon name="contact"></ion-icon>
-            Share
+            &nbsp;
+            Delete
+            &nbsp;
           </button>
         </ion-item-options>
       </ion-item-sliding>

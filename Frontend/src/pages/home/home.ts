@@ -311,6 +311,71 @@ export class HomePage {
     });
   }
   
+  editRecipe(recipe) {
+    this.navCtrl.push('EditRecipePage', {
+      recipe: recipe
+    });
+  }
+  
+  deleteRecipe(recipe) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'This will permanently delete the recipe from your account. This action is irreversible.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this._deleteRecipe(recipe);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+  
+  private _deleteRecipe(recipe) {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Deleting recipe...'
+    });
+  
+    loading.present();
+    
+    this.recipeService.remove(recipe).subscribe(function(response) {
+      loading.dismiss();
+      
+      me.loadRecipes();
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        case 404:
+          me.toastCtrl.create({
+            message: 'Can\'t find the recipe you\'re trying to delete.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
+  
   presentPopover(event) {
     let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
 
