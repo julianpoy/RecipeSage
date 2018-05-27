@@ -64,6 +64,51 @@ export class MyApp {
       });
     });
     
+    events.subscribe('import:pepperplate:complete', (message) => {
+      var notification = 'Your recipes have been imported from Pepperplate.';
+      
+      let toast = me.toastCtrl.create({
+        message: notification,
+        duration: 10000,
+        showCloseButton: true,
+        closeButtonText: 'Close'
+      });
+      toast.present();
+    });
+    
+    events.subscribe('import:pepperplate:failed', (reason) => {
+      var notification = '';
+      if (reason === 'timeout') {
+        notification += 'Import failed: Pepperplate service is unavailable right now.';
+      } else if (reason === 'invalidCredentials') {
+        notification += 'Import failed: Incorrect Pepperplate username or password.';
+      } else if (reason === 'saving') {
+        notification += 'Import failed: An error occured while fetching the recipes. Please try again later.';
+      } else {
+        return;
+      }
+      
+      let toast = me.toastCtrl.create({
+        message: notification,
+        duration: 15000,
+        showCloseButton: true,
+        closeButtonText: 'Close'
+      });
+      toast.present();
+    });
+    
+    events.subscribe('import:pepperplate:working', (message) => {
+      var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
+      
+      let toast = me.toastCtrl.create({
+        message: notification,
+        duration: 7000,
+        showCloseButton: true,
+        closeButtonText: 'Close'
+      });
+      toast.present();
+    });
+    
     events.subscribe('recipe:created', () => {
       this.loadInboxCount();
     });

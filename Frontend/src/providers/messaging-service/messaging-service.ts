@@ -49,13 +49,19 @@ export class MessagingServiceProvider {
       
       var me = this;
       this.messaging.onMessage(function(message: any) {
-        console.log("received message", message)
+        console.log("received foreground FCM: ", message)
         
         switch(message.data.type) {
           case 'messages:new':
             var message = JSON.parse(message.data.message);
 
-            me.events.publish('messages:new', message);
+            return me.events.publish('messages:new', message);
+          case 'import:pepperplate:complete':
+            return me.events.publish('import:pepperplate:complete');
+          case 'import:pepperplate:failed':
+            return me.events.publish('import:pepperplate:failed', message.data.reason);
+          case 'import:pepperplate:working':
+            return me.events.publish('import:pepperplate:working');
         }
       });
     }

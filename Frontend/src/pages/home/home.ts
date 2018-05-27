@@ -89,6 +89,10 @@ export class HomePage {
       }
     });
     
+    events.subscribe('import:pepperplate:complete', () => {
+      this.loadRecipes();
+    });
+    
     this.searchText = '';
     this.showSearch = false;
 

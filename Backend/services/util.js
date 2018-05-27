@@ -131,6 +131,33 @@ exports.dispatchShareNotification = function(user, recipe) {
   }
 }
 
+exports.dispatchImportNotification = function(user, status, reason) {
+  var type;
+  if (status === 0) {
+    type = 'complete';
+  } else if (status === 1) {
+    type = 'failed';
+  } else if (status === 2) {
+    type = 'working';
+  } else {
+    return;
+  }
+
+  if (user.fcmTokens) {
+    var message = {
+      type: "import:pepperplate:" + type,
+      reason: reason || 'status'
+    }
+
+    for (var i = 0; i < user.fcmTokens.length; i++) {
+      let token = user.fcmTokens[i];
+      FirebaseService.sendMessage(token, message, function() {}, function() {
+        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
+      });
+    }
+  }
+}
+
 exports.dispatchMessageNotification = function(user, fullMessage) {
   if (user.fcmTokens) {
     var message = {

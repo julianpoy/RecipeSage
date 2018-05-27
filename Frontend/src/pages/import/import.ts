@@ -45,7 +45,7 @@ export class ImportPage {
       loading.dismiss();
       
       me.toastCtrl.create({
-        message: 'We\'ve started importing your recipes! This may take a few minutes, and you won\'t see anything added until we\'re done.',
+        message: 'We\'ll start importing your recipes shortly! We\'ll alert you when the process begins.',
         duration: 6000
       }).present();
       

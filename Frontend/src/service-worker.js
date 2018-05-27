@@ -66,6 +66,56 @@ messaging.setBackgroundMessageHandler(function(message) {
       notificationOptions.tag = message.data.type + '-' + messageObj.otherUser._id;
 
       return self.registration.showNotification(from, notificationOptions);
+    case 'import:pepperplate:complete':
+      notificationOptions.body = 'Your recipes have been imported from Pepperplate.';
+      // notificationOptions.icon = recipe.image.location;
+      // notificationOptions.click_action = self.registration.scope + '#/messages/' + messageObj.otherUser._id;
+      notificationOptions.data = {
+        type: message.data.type,
+        // otherUserId: messageObj.otherUser._id
+      };
+      notificationOptions.tag = 'import:pepperplate';
+
+      return self.registration.showNotification('Import complete!', notificationOptions);
+    case 'import:pepperplate:failed':
+      // Reasons:
+      // timeout
+      // invalidCredentials
+      // saving
+      var messageObj = JSON.parse(message.data.message);
+      
+      var body = '';
+      if (messageObj.reason === 'timeout') {
+        body += 'Pepperplate service is unavailable right now.';
+      } else if (messageObj.reason === 'invalidCredentials') {
+        body += 'Incorrect Pepperplate username or password.';
+      } else if (messageObj.reason === 'saving') {
+        body += 'An error occured while fetching the recipes. Please try again later.';
+      } else {
+        return;
+      }
+      
+      notificationOptions.body = body;
+      // notificationOptions.icon = recipe.image.location;
+      // notificationOptions.click_action = self.registration.scope + '#/messages/' + messageObj.otherUser._id;
+      notificationOptions.data = {
+        type: message.data.type,
+        // otherUserId: messageObj.otherUser._id
+      };
+      notificationOptions.tag = 'import:pepperplate';
+
+      return self.registration.showNotification('Import failed', notificationOptions);
+    case 'import:pepperplate:working':
+      notificationOptions.body = 'Your Pepperplate recipes are being imported into RecipeSage';
+      // notificationOptions.icon = recipe.image.location;
+      // notificationOptions.click_action = self.registration.scope + '#/messages/' + messageObj.otherUser._id;
+      notificationOptions.data = {
+        type: message.data.type,
+        // otherUserId: messageObj.otherUser._id
+      };
+      notificationOptions.tag = 'import:pepperplate';
+
+      return self.registration.showNotification('Import in progress', notificationOptions);
   }
 });
 
