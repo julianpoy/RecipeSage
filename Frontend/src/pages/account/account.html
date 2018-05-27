@@ -4,36 +4,44 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     
-    <ion-title>Account Details</ion-title>
+    <ion-title>Account Settings</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <br />
   
-  <input style="display: none;" name="email" type="text" />
-  <input style="display: none;" name="password" type="password" />
+  <ion-item style="position: absolute; width: 0px; height: 0px;">
+      <label for="fakeEmail">Email</label>
+      <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
+      <label for="fakePassword">Password</label>
+      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" type="password" />
+    </ion-item>
   
   <ion-item>
-    <ion-input autocomplete="off" autofill="off" type="text" placeholder="Full Name or Nickname" [(ngModel)]="account.name" (ngModelChange)="nameChanged = true"></ion-input>
+    <ion-label stacked>Name/Nickname</ion-label>
+    <ion-input autocomplete="off" autofill="off" type="text" [(ngModel)]="account.name" (ngModelChange)="nameChanged = true"></ion-input>
     <button *ngIf="nameChanged" (click)="saveName()" ion-button item-right>
       Save Name
     </button>
   </ion-item>
 
   <ion-item>
-    <ion-input autocomplete="off" autofill="off" type="text" placeholder="Email address" [(ngModel)]="account.email" (ngModelChange)="emailChanged = true"></ion-input>
+    <ion-label stacked>Email</ion-label>
+    <ion-input autocomplete="off" autofill="off" type="text" [(ngModel)]="account.email" (ngModelChange)="emailChanged = true"></ion-input>
     <button *ngIf="emailChanged" (click)="saveEmail()" ion-button item-right>
       Save Email
     </button>
   </ion-item>
   
   <ion-item>
-    <ion-input autocomplete="off" autofill="off" type="password" placeholder="Password" [(ngModel)]="account.password" (ngModelChange)="passwordChanged = true;"></ion-input>
+    <ion-label stacked>Password</ion-label>
+    <ion-input autocomplete="off" autofill="off" type="password" [(ngModel)]="account.password" (ngModelChange)="passwordChanged = true;"></ion-input>
   </ion-item>
   
   <ion-item *ngIf="passwordChanged">
-    <ion-input autocomplete="off" autofill="off" type="password" [(ngModel)]="account.confirmPassword" placeholder="Confirm Password"></ion-input>
+    <ion-label stacked>Confirm Password</ion-label>
+    <ion-input autocomplete="off" autofill="off" type="password" [(ngModel)]="account.confirmPassword"></ion-input>
     <button ion-button (click)="savePassword()" item-right>
       Save Password
     </button>
