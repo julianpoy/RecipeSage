@@ -135,8 +135,8 @@ export class MyApp {
       { title: 'Messages', component: 'MessagesPage' },
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Create Recipe', component: 'EditRecipePage' },
-      { title: 'Import', component: 'ImportPage' },
-      { title: 'Account', component: 'AccountPage' },
+      { title: 'Settings', component: 'SettingsPage' },
+      { title: 'About & Support', component: 'AboutPage' },
       { title: 'Logout', component: 'LoginPage' }
     ];
     
