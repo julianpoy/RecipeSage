@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
+var xmljs = require("xml-js");
 
 // DB
 var mongoose = require('mongoose');
@@ -147,6 +148,94 @@ router.get(
         res.status(500).send("Could not query DB for labels.");
       });
     }
+  });
+});
+
+router.get(
+  '/export',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res) {
+  
+  Recipe.find({
+    accountId: res.locals.accountId
+  }).lean().exec(function(err, recipes) {
+    
+    var labelPromises = [];
+
+    for (var i = 0; i < recipes.length; i++) {
+      let recipe = recipes[i];
+      
+      labelPromises.push(new Promise(function(resolve, reject) {
+        Label.find({
+          recipes: recipe._id
+        }).lean().exec(function(err, labels) {
+          if (err) {
+            reject(500, "Couldn't search the database for labels!");
+          } else {
+            if (req.query.format === 'txt') {
+              recipe.labels = labels.map(function(el){
+                return el.title;
+              }).join(',');
+            } else {
+              recipe.labels = labels;
+            }
+    
+            resolve();
+          }
+        });
+      }));
+    }
+    
+    Promise.all(labelPromises).then(function() {
+      var data;
+      var mimetype;
+  
+      switch(req.query.format) {
+        case 'json':
+          data = JSON.stringify(recipes);
+          mimetype = 'application/json';
+          break;
+        case 'xml':
+          data = xmljs.json2xml(recipes, {compact: true, ignoreComment: true, spaces: 4});
+          mimetype = 'text/xml';
+          break;
+        case 'txt':
+          data = '';
+          
+          for (var i = 0; i < recipes.length; i++) {
+            let recipe = recipes[i];
+            for (var key in recipe) {
+              if (recipe.hasOwnProperty(key)) {
+                data += key + ': ';
+                data += recipe[key] + '\r\n';
+              }
+              
+            }
+            data += '\r\n';
+          }
+          
+          res.charset = 'UTF-8';
+          mimetype = 'text/plain';
+          break;
+        default:
+          res.status(400).send('Unknown export format. Please send json, xml, or txt.');
+          return;
+      }
+      
+      res.setHeader('Content-disposition', 'attachment; filename=recipes-' + Date.now() + '.' + req.query.format);
+      res.setHeader('Content-type', mimetype);
+      res.write(data, function (err) {
+        if (err) {
+          console.log("Could not write data response for export task.");
+        }
+  
+        res.end();
+      });
+    }, function() {
+      res.status(500).send("Could not query DB for labels.");
+    });
   });
 });
 
