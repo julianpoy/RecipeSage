@@ -8,7 +8,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
