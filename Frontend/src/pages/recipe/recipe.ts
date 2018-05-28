@@ -135,6 +135,9 @@ export class RecipePage {
       });
     }, function(err) {
       switch(err.status) {
+        case 401:
+          // Ignore, handled by main loader
+          break;
         default:
           let errorToast = me.toastCtrl.create({
             message: 'An unexpected error occured. Please restart application.',
