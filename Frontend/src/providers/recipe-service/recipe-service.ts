@@ -45,6 +45,10 @@ export class RecipeServiceProvider {
     return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
   }
   
+  getExportURL(format) {
+    return this.base + 'recipes/export' + this.getTokenQuery() + '&format=' + format;
+  }
+  
   fetch(options) {
     const httpOptions = {
       headers: new HttpHeaders({
