@@ -1,6 +1,7 @@
 page-welcome {
   .photoHolder {
-    height: 200px;
+    // height: 200px;
+    height: 30%;
     overflow: hidden;
   }
   
@@ -12,5 +13,12 @@ page-welcome {
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
+  }
+  
+  @media only screen and (min-width:769px) { 
+    .photoHolder {
+  	  height: 35%;
+  	 // height: 400px;
+    }
   }
 }
