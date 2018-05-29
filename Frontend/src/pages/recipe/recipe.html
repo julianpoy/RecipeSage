@@ -33,7 +33,7 @@
       <p *ngIf="recipe.activeTime">Active Time: {{ recipe.activeTime }}</p> 
       <p *ngIf="recipe.totalTime">Total Time: {{ recipe.totalTime }}</p>  
       <p *ngIf="recipe.source">Source: {{ recipe.source }}</p>  
-      <p *ngIf="recipe.url"><a href="{{ recipe.url }}">{{ recipe.url }}</a></p> 
+      <p *ngIf="recipe.url"><a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></p> 
     </ion-card-content>
 
     <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
