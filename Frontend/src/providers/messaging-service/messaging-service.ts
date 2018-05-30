@@ -67,6 +67,10 @@ export class MessagingServiceProvider {
     }
   }
   
+  isNotificationsEnabled() {
+    return ('Notification' in window) && ((<any>Notification).permission === 'granted');
+  }
+  
   getTokenQuery() {
     return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
   }

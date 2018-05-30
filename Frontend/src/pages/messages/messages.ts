@@ -13,6 +13,8 @@ import { MessagingServiceProvider } from '../../providers/messaging-service/mess
 export class MessagesPage {
 
   threads: any = [];
+  
+  notificationsEnabled: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -22,6 +24,11 @@ export class MessagesPage {
     public modalCtrl: ModalController,
     public messagingService: MessagingServiceProvider) {
       
+    this.notificationsEnabled = this.messagingService.isNotificationsEnabled();
+    if (!this.notificationsEnabled) {
+      this.messagingService.enableNotifications();
+    }
+
     events.subscribe('messages:new', (message) => {
       this.loadThreads().then(function() {}, function() {});
     });
