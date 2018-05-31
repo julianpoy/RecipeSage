@@ -22,7 +22,7 @@
   <div>
     <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages">
       <div class="chat" *ngIf="!message.recipe && message.recipe !== null">
-        <span style="white-space: pre-wrap;">{{ message.body }}</span>
+        <span [innerHTML]="parseMessage(message.body)"></span>
       </div>
       <div class="recipe" *ngIf="(message.recipe || message.recipe === null) && message.from._id === message.otherUser._id">
         <!-- RECIPIENT -->

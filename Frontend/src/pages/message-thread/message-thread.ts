@@ -157,4 +157,17 @@ export class MessageThreadPage {
       this.sendMessage();
     }
   }
+  
+  parseMessage(message) {
+    var updated = message;
+    
+    updated = (<any>window).linkifyStr(updated, {
+      target: {
+        url: '_blank'
+      },
+      className: 'linkified'
+    });
+    
+    return updated;
+  }
 }
