@@ -44,10 +44,10 @@ export class LoginPage {
   }
 
   auth() {
-    if (!this.showLogin) this.name = (document.getElementById('name') as HTMLElement).value;
-    this.email = (document.getElementById('email') as HTMLElement).value;
-    this.password = (document.getElementById('password') as HTMLElement).value;
-    if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLElement).value;
+    if (!this.showLogin) this.name = (document.getElementById('name') as HTMLInputElement).value;
+    this.email = (document.getElementById('email') as HTMLInputElement).value;
+    this.password = (document.getElementById('password') as HTMLInputElement).value;
+    if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
     
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
