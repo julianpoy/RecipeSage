@@ -57,7 +57,12 @@ messaging.setBackgroundMessageHandler(function(message) {
       var from = (messageObj.otherUser.name || messageObj.otherUser.email);
       
       notificationOptions.body = messageObj.body;
-      // notificationOptions.icon = recipe.image.location;
+      if (messageObj.recipe) {
+        notificationOptions.body = 'Shared a recipe with you: ' + messageObj.recipe.title;
+        notificationOptions.icon = messageObj.recipe.image.location;
+      }
+      notificationOptions.icon = notificationOptions.icon || 'https://recipesage.com/assets/imgs/logo_green.png';
+
       notificationOptions.click_action = self.registration.scope + '#/messages/' + messageObj.otherUser._id;
       notificationOptions.data = {
         type: message.data.type,
