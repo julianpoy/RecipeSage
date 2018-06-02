@@ -122,6 +122,26 @@ export class MyApp {
     events.subscribe('recipe:deleted', () => {
       this.loadInboxCount();
     });
+    
+    var hidden, visibilityChange; 
+    if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+      hidden = "hidden";
+      visibilityChange = "visibilitychange";
+    } else if (typeof (<any>document).msHidden !== "undefined") {
+      hidden = "msHidden";
+      visibilityChange = "msvisibilitychange";
+    } else if (typeof (<any>document).webkitHidden !== "undefined") {
+      hidden = "webkitHidden";
+      visibilityChange = "webkitvisibilitychange";
+    }
+    
+    document.addEventListener(visibilityChange, function() {
+      if (document[hidden]) {
+        me.events.publish('application:multitasking:paused');
+      } else {
+        me.events.publish('application:multitasking:resumed');
+      }
+    }, false);
   }
   
   navList() {
