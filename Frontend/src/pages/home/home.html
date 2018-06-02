@@ -51,10 +51,16 @@
           </p>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button color="primary" (click)="editRecipe(recipe)">
+          <button *ngIf="folder === 'main'" ion-button color="primary" (click)="editRecipe(recipe)">
             <ion-icon name="create"></ion-icon>
             &nbsp;&nbsp;&nbsp;
             Edit
+            &nbsp;&nbsp;&nbsp;
+          </button>
+          <button *ngIf="folder === 'inbox'" ion-button color="primary" (click)="moveRecipe(recipe, 'main')">
+            <ion-icon name="cloud-download"></ion-icon>
+            &nbsp;&nbsp;&nbsp;
+            Save to My Recipes
             &nbsp;&nbsp;&nbsp;
           </button>
           <button ion-button color="danger" (click)="deleteRecipe(recipe)">

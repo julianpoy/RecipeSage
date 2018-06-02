@@ -317,6 +317,40 @@ export class HomePage {
     });
   }
   
+  moveRecipe(recipe, folderName) {
+    var me = this;
+    
+    let loading = this.loadingCtrl.create({
+      content: 'Loading...'
+    });
+  
+    loading.present();
+    
+    recipe.folder = folderName;
+    
+    this.recipeService.update(recipe).subscribe(function(response) {
+      loading.dismiss();
+      
+      me.loadRecipes().then(function() {}, function() {});
+    }, function(err) {
+      loading.dismiss();
+      switch(err.status) {
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
+  
   deleteRecipe(recipe) {
     let alert = this.alertCtrl.create({
       title: 'Confirm Delete',
