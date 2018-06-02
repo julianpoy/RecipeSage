@@ -82,10 +82,20 @@ export class MessageThreadPage {
     var me = this;
     if (delay) {
       setTimeout(function() {
-        me.content.scrollToBottom(300);
+        me.content.scrollToBottom(0);
+        me.content.getNativeElement().style.opacity = 1;
       });
     } else {
-      this.content.scrollToBottom(300);
+      this.content.scrollToBottom(0);
+      this.content.getNativeElement().style.opacity = 1;
+    }
+  }
+  
+  keyboardOpened() {
+    var me = this;
+    window.onresize = function() {
+      me.scrollToBottom.call(me, true);
+      window.onresize = null;
     }
   }
   
@@ -96,10 +106,10 @@ export class MessageThreadPage {
       me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
         me.messages = response;
         
-        console.log(me.content)
+        me.content.getNativeElement().style.opacity = 0;
         
         me.scrollToBottom.call(me, true);
-
+        
         resolve();
       }, function(err) {
         reject();
