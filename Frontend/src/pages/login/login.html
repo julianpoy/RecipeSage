@@ -10,43 +10,48 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item style="position: absolute; width: 0px; height: 0px;">
-      <label for="fakeEmail">Email</label>
-      <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
-      <label for="fakePassword">Password</label>
-      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" type="password" />
-    </ion-item>
-
-    <ion-item *ngIf="!showLogin">
-      <ion-label floating>Full Name or Nickname</ion-label>
-      <ion-input [(ngModel)]="name" type="text"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input role="presentation" autocomplete="off" autofill="off" [(ngModel)]="email" type="text"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input role="presentation" autocomplete="off" autofill="off" [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="!showLogin">
-      <ion-label floating>Confirm Password</ion-label>
-      <ion-input [(ngModel)]="confirmPassword" (keyup.enter)="auth()" type="password"></ion-input>
-    </ion-item>
-
-    <div padding>
-    	<button ion-button block (click)="auth()">{{ showLogin ? "Login" : "Signup" }}</button>
-		</div>
-
-		<div>
-    	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Signup instead" : "Login instead" }}</button>
-		</div>
-		
-		{{ errorMessage }}
-
-  </ion-list>
+  <div class="auth-container">
+    <ion-list>
+      <div class="auth-entry">
+        <div *ngIf="!showLogin">
+          <label>
+            Full Name or Nickname<br />
+            <input id="name" type="text" />
+          </label>
+          <br /><br />
+        </div>
+  
+        <label>
+          Email<br />
+          <input id="email" type="text" />
+        </label>
+        <br /><br />
+  
+        <label>
+          Password<br />
+          <input id="password" (keyup.enter)="showLogin && auth()" type="password" />
+        </label>
+        <br /><br />
+  
+        <div *ngIf="!showLogin">
+          <label>
+            Confirm Password<br />
+            <input id="confirmPassword" (keyup.enter)="auth()" type="password" />
+          </label>
+          <br /><br />
+        </div>
+      </div>
+  
+      <div padding>
+      	<button ion-button block (click)="auth()">{{ showLogin ? "Login" : "Signup" }}</button>
+  		</div>
+  
+  		<div>
+      	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Signup instead" : "Login instead" }}</button>
+  		</div>
+  		
+  		{{ errorMessage }}
+  
+    </ion-list>
+  </div>
 </ion-content>
