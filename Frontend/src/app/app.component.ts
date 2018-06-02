@@ -36,6 +36,8 @@ export class MyApp {
     
     if (window.location.href.toLowerCase().indexOf('dev') > -1) {
       localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
+    } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
+      localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
     }
     
     this.loadInboxCount();
