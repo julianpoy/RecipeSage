@@ -171,8 +171,13 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
     if (fullMessage.recipe) {
       message.recipe = {
         _id: fullMessage.recipe._id,
-        title: fullMessage.recipe.title
+        title: fullMessage.recipe.title,
+        image: {}
       };
+      
+      if (fullMessage.recipe.image) {
+        message.recipe.image.location = fullMessage.recipe.image.location;
+      }
     }
     
     var notification = {
