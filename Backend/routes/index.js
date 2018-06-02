@@ -13,7 +13,7 @@ var Label = mongoose.model('Label');
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 
-var CURRENT_CLIENT_VERSION = '1.0.7';
+var CURRENT_CLIENT_VERSION = '1.1.0';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
