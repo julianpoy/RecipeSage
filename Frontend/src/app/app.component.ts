@@ -79,19 +79,19 @@ export class MyApp {
   initEventListeners() {
     var me = this;
 
-    events.subscribe('recipe:created', () => {
+    this.events.subscribe('recipe:created', () => {
       this.loadInboxCount();
     });
     
-    events.subscribe('recipe:updated', () => {
+    this.events.subscribe('recipe:updated', () => {
       this.loadInboxCount();
     });
     
-    events.subscribe('recipe:deleted', () => {
+    this.events.subscribe('recipe:deleted', () => {
       this.loadInboxCount();
     });
     
-    events.subscribe('messages:new', (message) => {
+    this.events.subscribe('messages:new', (message) => {
       if (me.nav.getActive().instance instanceof MessageThreadPage || me.nav.getActive().instance instanceof MessagesPage) return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
       
@@ -113,7 +113,7 @@ export class MyApp {
       });
     });
     
-    events.subscribe('import:pepperplate:complete', (message) => {
+    this.events.subscribe('import:pepperplate:complete', (message) => {
       var notification = 'Your recipes have been imported from Pepperplate.';
       
       let toast = me.toastCtrl.create({
@@ -125,7 +125,7 @@ export class MyApp {
       toast.present();
     });
     
-    events.subscribe('import:pepperplate:failed', (reason) => {
+    this.events.subscribe('import:pepperplate:failed', (reason) => {
       var notification = '';
       if (reason === 'timeout') {
         notification += 'Import failed: Pepperplate service is unavailable right now.';
@@ -146,7 +146,7 @@ export class MyApp {
       toast.present();
     });
     
-    events.subscribe('import:pepperplate:working', (message) => {
+    this.events.subscribe('import:pepperplate:working', (message) => {
       var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
       
       let toast = me.toastCtrl.create({
