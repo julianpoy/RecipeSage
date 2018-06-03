@@ -89,6 +89,8 @@ export class NewMessageModalPage {
   }
 
   cancel() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss({
+      destination: false
+    });
   }
 }
