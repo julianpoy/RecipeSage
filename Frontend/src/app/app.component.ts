@@ -7,6 +7,7 @@ import { MessagesPage } from '../pages/messages/messages';
 import { MessageThreadPage } from '../pages/message-thread/message-thread';
 
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
+import { UserServiceProvider } from '../providers/user-service/user-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,21 +30,67 @@ export class MyApp {
     public events: Events,
     public splashScreen: SplashScreen,
     public toastCtrl: ToastController,
-    public recipeService: RecipeServiceProvider) {
+    public recipeService: RecipeServiceProvider,
+    public userService: UserServiceProvider) {
+    
     this.initializeApp();
-    
-    // this.navCtrl.setRoot('HomePage', { folder: 'main' });
-    
-    if (window.location.href.toLowerCase().indexOf('dev') > -1) {
-      localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
-    } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
-      localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
-    }
-    
+
     this.loadInboxCount();
+    this.checkForUpdate();
+    this.initEventListeners();
+    this.initEventDispatchers();
+    this.initDevBase();
+  }
+  
+  checkForUpdate() {
+    var toast;
     
     var me = this;
+    function promptToUpdate() {
+      if (toast) return;
 
+      toast = me.toastCtrl.create({
+  			message: 'New update available!',
+  			position: 'bottom',
+  			showCloseButton: true,
+  			closeButtonText: "Update"
+  		});
+  		toast.onDidDismiss(() => {
+  	    (<any>window).location.reload(true);
+      });
+  		toast.present();
+    }
+
+    window['isUpdateAvailable']
+  	.then(isAvailable => {
+  		if (isAvailable) {
+  		  promptToUpdate();
+  		}
+  	});
+  	this.userService.checkForUpdate({
+      version: (<any>window).version
+    }).subscribe(function(response) {
+      if (response.updateAvailable) {
+        promptToUpdate();
+      }
+    }, function() {});
+  }
+  
+  initEventListeners() {
+    var me = this;
+
+    events.subscribe('recipe:created', () => {
+      this.loadInboxCount();
+    });
+    
+    events.subscribe('recipe:updated', () => {
+      this.loadInboxCount();
+    });
+    
+    events.subscribe('recipe:deleted', () => {
+      this.loadInboxCount();
+    });
+    
     events.subscribe('messages:new', (message) => {
       if (me.nav.getActive().instance instanceof MessageThreadPage || me.nav.getActive().instance instanceof MessagesPage) return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
@@ -110,19 +157,11 @@ export class MyApp {
       });
       toast.present();
     });
-    
-    events.subscribe('recipe:created', () => {
-      this.loadInboxCount();
-    });
-    
-    events.subscribe('recipe:updated', () => {
-      this.loadInboxCount();
-    });
-    
-    events.subscribe('recipe:deleted', () => {
-      this.loadInboxCount();
-    });
-    
+  }
+  
+  initEventDispatchers() {
+    var me = this;
+
     var hidden, visibilityChange; 
     if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
       hidden = "hidden";
@@ -142,6 +181,14 @@ export class MyApp {
         me.events.publish('application:multitasking:resumed');
       }
     }, false);
+  }
+  
+  initDevBase() {
+    if (window.location.href.toLowerCase().indexOf('dev') > -1) {
+      localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
+    } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
+      localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
+    }
   }
   
   navList() {

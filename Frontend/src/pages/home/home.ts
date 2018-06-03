@@ -95,42 +95,6 @@ export class HomePage {
     
     this.searchText = '';
     this.showSearch = false;
-
-    this.checkForUpdate();
-  }
-  
-  checkForUpdate() {
-    var toast;
-    
-    var me = this;
-    function promptToUpdate() {
-      if (toast) return;
-
-      toast = me.toastCtrl.create({
-  			message: 'New update available!',
-  			position: 'bottom',
-  			showCloseButton: true,
-  			closeButtonText: "Update"
-  		});
-  		toast.onDidDismiss(() => {
-  	    (<any>window).location.reload(true);
-      });
-  		toast.present();
-    }
-
-    window['isUpdateAvailable']
-  	.then(isAvailable => {
-  		if (isAvailable) {
-  		  promptToUpdate();
-  		}
-  	});
-  	this.userService.checkForUpdate({
-      version: (<any>window).version
-    }).subscribe(function(response) {
-      if (response.updateAvailable) {
-        promptToUpdate();
-      }
-    }, function() {});
   }
   
   ionViewDidLoad() {
