@@ -58,7 +58,11 @@ export class MessageThreadPage {
     if (!this.otherUserId) {
       this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
     } else {
-      this.loadMessages().then(function() {}, function() {});
+      var me = this;
+      me.content.getNativeElement().style.opacity = 0;
+      this.loadMessages().then(function() {
+        me.content.getNativeElement().style.opacity = 1;
+      }, function() {});
     }
   }
   
@@ -85,16 +89,17 @@ export class MessageThreadPage {
     });
   }
   
-  scrollToBottom(delay?) {
+  scrollToBottom(delay?, callback?) {
     var me = this;
     if (delay) {
       setTimeout(function() {
         me.content.scrollToBottom(0);
-        me.content.getNativeElement().style.opacity = 1;
+        if (callback) {
+          callback.call(me);
+        }
       });
     } else {
       this.content.scrollToBottom(0);
-      this.content.getNativeElement().style.opacity = 1;
     }
   }
   
@@ -117,11 +122,9 @@ export class MessageThreadPage {
       me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
         me.messages = response;
         
-        me.content.getNativeElement().style.opacity = 0;
-        
-        me.scrollToBottom.call(me, true);
-        
-        resolve();
+        me.scrollToBottom.call(me, true, function() {
+          resolve();
+        });
       }, function(err) {
         reject();
         
