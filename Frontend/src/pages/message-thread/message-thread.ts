@@ -41,7 +41,7 @@ export class MessageThreadPage {
     });
 
     events.subscribe('application:multitasking:resumed', () => {
-      me.loadMessages().then(function() {
+      me.loadMessages.call(me).then(function() {
         me.changeDetector.detectChanges();
       }, function() {});
     });
@@ -59,8 +59,8 @@ export class MessageThreadPage {
       this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
     } else {
       var me = this;
-      me.content.getNativeElement().style.opacity = 0;
-      this.loadMessages().then(function() {
+      this.content.getNativeElement().style.opacity = 0;
+      this.loadMessages.call(this, true).then(function() {
         me.content.getNativeElement().style.opacity = 1;
       }, function() {});
     }
@@ -74,7 +74,7 @@ export class MessageThreadPage {
     this.reloading = true;
 
     var me = this;
-    this.loadMessages().then(function() {
+    this.loadMessages.call(this).then(function() {
       me.reloading = false;
     }, function() {
       me.reloading = false;
@@ -82,31 +82,32 @@ export class MessageThreadPage {
   }
   
   refresh(refresher) {
-    this.loadMessages().then(function() {
+    this.loadMessages.call(this).then(function() {
       refresher.complete();
     }, function() {
       refresher.complete();
     });
   }
   
-  scrollToBottom(delay?, callback?) {
+  scrollToBottom(animate?, delay?, callback?) {
+    var animationDuration = animate ? 300 : 0;
     var me = this;
     if (delay) {
       setTimeout(function() {
-        me.content.scrollToBottom(0);
+        me.content.scrollToBottom(animationDuration);
         if (callback) {
           callback.call(me);
         }
       });
     } else {
-      this.content.scrollToBottom(0);
+      this.content.scrollToBottom(animationDuration);
     }
   }
   
   keyboardOpened() {
     var me = this;
     window.onresize = function() {
-      me.scrollToBottom.call(me, true);
+      me.scrollToBottom.call(me, false, true);
       window.onresize = null;
     }
   }
@@ -115,14 +116,14 @@ export class MessageThreadPage {
     return item._id;
   }
   
-  loadMessages() {
+  loadMessages(isInitialLoad?) {
     var me = this;
     
     return new Promise(function(resolve, reject) {
       me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
         me.messages = response;
         
-        me.scrollToBottom.call(me, true, function() {
+        me.scrollToBottom.call(me, !isInitialLoad, true, function() {
           resolve();
         });
       }, function(err) {
@@ -153,7 +154,7 @@ export class MessageThreadPage {
 
       me.messages.push(response);
 
-      me.scrollToBottom.call(me, true);
+      me.scrollToBottom.call(me, true, true);
     }, function(err) {
       me.messagePlaceholder = 'Message...';
       me.pendingMessage = myMessage;
