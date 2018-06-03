@@ -58,6 +58,7 @@ export class HomePage {
     public recipeService: RecipeServiceProvider,
     public userService: UserServiceProvider,
     public messagingService: MessagingServiceProvider) {
+    var me = this;
       
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
@@ -68,21 +69,17 @@ export class HomePage {
         this.folderTitle = 'My Recipes';
         break;
     }
+
     
     this.loadViewOptions();
     this.filterOptions.viewOptions = this.viewOptions;
-    var me = this;
+    // Refresh search results whenever filters change
     this.filterOptions.onchange = function() {
       try {
         me.updateSearchResult$.next();
       } catch(e){}
     }
 
-    // var me = this;
-    // events.subscribe('recipe:generalUpdate', () => {
-    //   me.loadRecipes();
-    // });
-    
     events.subscribe('messages:new', (message) => {
       if (message.recipe && this.folder === 'inbox') {
         this.loadRecipes();
