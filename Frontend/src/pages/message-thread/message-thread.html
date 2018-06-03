@@ -20,7 +20,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div>
-    <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages">
+    <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages; trackBy: trackByFn">
       <div class="chat" *ngIf="!message.recipe && message.recipe !== null">
         <span [innerHTML]="parseMessage(message.body)"></span>
       </div>

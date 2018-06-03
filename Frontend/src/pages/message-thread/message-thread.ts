@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
@@ -25,6 +25,7 @@ export class MessageThreadPage {
   isViewLoaded: boolean = true;
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     public navCtrl: NavController,
     public navParams: NavParams,
     public events: Events,
@@ -37,6 +38,18 @@ export class MessageThreadPage {
       if (!me.isViewLoaded || message.otherUser._id !== me.otherUserId) return;
 
       me.loadMessages.call(me).then(function() {}, function() {});
+    });
+
+    events.subscribe('application:multitasking:resumed', () => {
+      me.loadMessages().then(function() {
+        me.changeDetector.detectChanges();
+      }, function() {});
+    });
+    
+    events.subscribe('application:multitasking:paused', () => {
+      me.loadMessages().then(function() {
+        me.changeDetector.detectChanges();
+      }, function() {});
     });
   }
 
@@ -97,6 +110,10 @@ export class MessageThreadPage {
       me.scrollToBottom.call(me, true);
       window.onresize = null;
     }
+  }
+  
+  trackByFn(index, item) {
+    return item._id;
   }
   
   loadMessages() {
