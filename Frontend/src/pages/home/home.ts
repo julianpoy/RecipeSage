@@ -20,6 +20,7 @@ import { UserServiceProvider } from '../../providers/user-service/user-service';
 export class HomePage {
   
   recipes: Recipe[];
+  initialLoadComplete: boolean = false;
 
   showSearch: boolean;
   searchText: string;
@@ -106,7 +107,9 @@ export class HomePage {
   
     loading.present();
     
+    var me = this;
     this.loadRecipes().then(function() {
+      me.initialLoadComplete = true;
       loading.dismiss();
     }, function() {
       loading.dismiss();
