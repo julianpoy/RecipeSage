@@ -41,6 +41,8 @@ export class MessageThreadPage {
     });
 
     events.subscribe('application:multitasking:resumed', () => {
+      if (!me.isViewLoaded) return;
+
       me.loadMessages.call(me).then(function() {
         me.changeDetector.detectChanges();
       }, function() {});
@@ -129,6 +131,7 @@ export class MessageThreadPage {
       }, function(err) {
         reject();
         
+        if (!me.isViewLoaded) return;
         switch(err.status) {
           default:
             me.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
