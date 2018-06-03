@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -24,7 +25,7 @@ export class RecipesByLabelPage {
   imageLoadOffset: number = 20;
 
   constructor(public navCtrl: NavController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
@@ -41,12 +42,7 @@ export class RecipesByLabelPage {
   loadRecipes() {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.labelService.fetch(true).subscribe(function(response) {
       loading.dismiss();

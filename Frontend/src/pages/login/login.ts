@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'high'
@@ -23,7 +24,7 @@ export class LoginPage {
 
   constructor(
     public navCtrl: NavController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public navParams: NavParams,
     public userService: UserServiceProvider) {
 
@@ -70,12 +71,7 @@ export class LoginPage {
     var me = this;
     this.errorMessage = '';
     
-    let loading = this.loadingCtrl.create({
-      content: 'Authenticating...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     if (this.showLogin) {
       this.userService.login({

@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 
 import { MyApp } from './app.component';
 import { PipesModule } from '../pipes/pipes.module';
@@ -15,6 +16,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoadingServiceProvider } from '../providers/loading-service/loading-service';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    LoadingBarModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +45,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UserServiceProvider,
     LabelServiceProvider,
     RecipeServiceProvider,
-    MessagingServiceProvider
+    MessagingServiceProvider,
+    LoadingServiceProvider
   ]
 })
 export class AppModule {}

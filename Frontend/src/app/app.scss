@@ -36,3 +36,7 @@ ion-thumbnail img {
 .alertDanger {
   color: map-get($colors, danger) !important;
 }
+
+#loading-bar-spinner {
+  display: none !important;
+}

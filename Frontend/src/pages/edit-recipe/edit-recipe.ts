@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 import loadImage from 'blueimp-load-image';
 
@@ -23,7 +24,7 @@ export class EditRecipePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public recipeService: RecipeServiceProvider) {
     // this.recipe = <Recipe>{};
     this.recipe = navParams.get('recipe') || <Recipe>{};
@@ -74,13 +75,8 @@ export class EditRecipePage {
     }
     
     var me = this;
-
-    let loading = this.loadingCtrl.create({
-      content: 'Saving your recipe...',
-      dismissOnPageChange: true
-    });
   
-    loading.present();
+    var loading = this.loadingService.start();
 
     if (this.recipe._id) {
       this.recipeService.update(this.recipe).subscribe(function(response) {

@@ -1,12 +1,13 @@
 import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { Observable, Subject } from 'rxjs'
-import { Events, IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, PopoverController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -53,7 +54,7 @@ export class HomePage {
     public navParams: NavParams,
     public events: Events,
     public popoverCtrl: PopoverController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
@@ -100,12 +101,7 @@ export class HomePage {
   }
   
   ionViewWillEnter() {
-    let loading = this.loadingCtrl.create({
-      content: 'Loading recipes...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     var me = this;
     this.loadRecipes().then(function() {
@@ -284,11 +280,7 @@ export class HomePage {
   moveRecipe(recipe, folderName) {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Loading...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     recipe.folder = folderName;
     
@@ -340,11 +332,7 @@ export class HomePage {
   private _deleteRecipe(recipe) {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Deleting recipe...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.recipeService.remove(recipe).subscribe(function(response) {
       loading.dismiss();

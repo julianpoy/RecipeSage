@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -22,17 +23,13 @@ export class AccountPage {
 
   constructor(
     public navCtrl: NavController,
-    public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public navParams: NavParams,
+    public loadingService: LoadingServiceProvider,
     public userService: UserServiceProvider) {
 
-    let loading = this.loadingCtrl.create({
-      content: 'Loading account info...'
-    });
+    var loading = this.loadingService.start();
   
-    loading.present();
-    
     var me = this;
     this.userService.me().subscribe(function(response) {
       loading.dismiss();
@@ -60,11 +57,7 @@ export class AccountPage {
   }
   
   saveName() {
-    let loading = this.loadingCtrl.create({
-      content: 'Saving updated name...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     var me = this;
     this.userService.update({
@@ -107,11 +100,7 @@ export class AccountPage {
       tst.present();
     }
 
-    let loading = this.loadingCtrl.create({
-      content: 'Saving updated email...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     var me = this;
     this.userService.update({
@@ -160,11 +149,7 @@ export class AccountPage {
       tst.present();
     }
     
-    let loading = this.loadingCtrl.create({
-      content: 'Saving updated password...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     var me = this;
     this.userService.update({

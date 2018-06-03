@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -30,7 +31,7 @@ export class ShareModalPage {
   public navCtrl: NavController,
   public navParams: NavParams,
   public toastCtrl: ToastController,
-  public loadingCtrl: LoadingController,
+  public loadingService: LoadingServiceProvider,
   public messagingService: MessagingServiceProvider,
   public recipeService: RecipeServiceProvider,
   public userService: UserServiceProvider,
@@ -111,12 +112,7 @@ export class ShareModalPage {
   send() {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Sending recipe...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.messagingService.create({
       to: this.recipientId,

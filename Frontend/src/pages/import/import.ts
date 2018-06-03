@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -20,7 +21,7 @@ export class ImportPage {
 
   constructor(
     public navCtrl: NavController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
     public navParams: NavParams) {
@@ -43,12 +44,7 @@ export class ImportPage {
     
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Starting import...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.recipeService.scrapePepperplate({
       username: this.username,

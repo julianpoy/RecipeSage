@@ -1,3 +1,5 @@
+<ngx-loading-bar includeSpinner="false"></ngx-loading-bar>
+
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar color="navBar">
@@ -26,6 +28,7 @@
   </ion-footer>
 
 </ion-menu>
+
 
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" [rootParams]="rootPageParams" #content swipeBackEnabled="false"></ion-nav>

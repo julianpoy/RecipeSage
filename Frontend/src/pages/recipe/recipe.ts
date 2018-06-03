@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, ModalController } from 'ionic-angular';
 
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
+import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
 import * as moment from 'moment';
 import fractionjs from 'fraction.js';
@@ -37,7 +38,7 @@ export class RecipePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
-    public loadingCtrl: LoadingController,
+    public loadingService: LoadingServiceProvider,
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
@@ -49,11 +50,7 @@ export class RecipePage {
   }
   
   ionViewWillEnter() {
-    let loading = this.loadingCtrl.create({
-      content: 'Loading recipe...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.recipe = <Recipe>{};
     // if (!this.recipe._id) {
@@ -266,11 +263,7 @@ export class RecipePage {
   private _deleteRecipe() {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Deleting this recipe...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.recipeService.remove(this.recipe).subscribe(function(response) {
       loading.dismiss();
@@ -330,11 +323,7 @@ export class RecipePage {
   moveToFolder(folderName) {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Loading...'
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     this.recipe.folder = folderName;
     
@@ -412,12 +401,7 @@ export class RecipePage {
     
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Adding label...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
 
     this.labelService.create({
       recipeId: this.recipe._id,
@@ -484,12 +468,7 @@ export class RecipePage {
   private _deleteLabel(label) {
     var me = this;
     
-    let loading = this.loadingCtrl.create({
-      content: 'Deleting label...',
-      dismissOnPageChange: true
-    });
-  
-    loading.present();
+    var loading = this.loadingService.start();
     
     label.recipeId = this.recipe._id;
 
