@@ -45,12 +45,6 @@ export class MessageThreadPage {
         me.changeDetector.detectChanges();
       }, function() {});
     });
-    
-    events.subscribe('application:multitasking:paused', () => {
-      me.loadMessages().then(function() {
-        me.changeDetector.detectChanges();
-      }, function() {});
-    });
   }
 
   ionViewDidLoad() {
