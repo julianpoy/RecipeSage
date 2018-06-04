@@ -2,10 +2,17 @@
   "frontendDir": "../Frontend/www",
   "frontendBaseURL": "/",
   "db": "chefBook",
+  "environment": "dev",
   "aws": {
     "accessKeyId": "",
     "secretAccessKey": "",
     "region": "us-west-2",
     "bucket": "chefbook-dev"
+  },
+  "gcm": {
+    "keypair": ""
+  },
+  "sentry": {
+    "dsn": ""
   }
 }

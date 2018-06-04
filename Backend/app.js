@@ -6,15 +6,21 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
+var Raven = require('raven');
 
 if (fs.existsSync("./config/config.json")) {
-    console.log("config.json found");
+  console.log("config.json found");
 } else {
-    var content = fs.readFileSync('./config/config-template.json');
-    fs.writeFileSync('./config/config.json', content);
-    console.log("config.json initialized");
+  var content = fs.readFileSync('./config/config-template.json');
+  fs.writeFileSync('./config/config.json', content);
+  console.log("config.json initialized");
 }
 var appConfig = require('./config/config.json');
+
+Raven.config(appConfig.sentry.dsn, {
+  environment: appConfig.environment,
+  release: '1.1.0'
+}).install();
 
 // Database and schemas
 var mongo = require('mongodb');
@@ -33,6 +39,7 @@ var labels = require('./routes/labels');
 var messages = require('./routes/messages');
 
 var app = express();
+app.use(Raven.requestHandler());
 
 app.options('*', cors());
 app.use(cookieParser());
@@ -56,6 +63,8 @@ app.use('/users', users);
 app.use('/recipes', recipes);
 app.use('/labels', labels);
 app.use('/messages', messages);
+
+app.use(Raven.errorHandler());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
