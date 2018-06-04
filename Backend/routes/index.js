@@ -166,7 +166,7 @@ router.get(
           yield: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerHTML,
           activeTime: (document.getElementById('cphMiddle_cphMain_lblActiveTime') || {}).innerHTML,
           totalTime: (document.getElementById('cphMiddle_cphMain_lblTotalTime') || {}).innerHTML,
-          source: (document.getElementById('cphMiddle_cphMain_lblSource') || {}).innerHTML,
+          source: (document.getElementById('cphMiddle_cphMain_hlSource') || {}).innerHTML,
           url: (document.getElementById('cphMiddle_cphSidebar_hlOriginalRecipe') || {}).href,
           notes: (document.getElementById('cphMiddle_cphMain_lblNotes') || {}).innerHTML,
           ingredients: [].slice.call(document.querySelectorAll('.inggroups li ul li span.content')).map(function(el) { return el.innerText }).join("\r\n"),
