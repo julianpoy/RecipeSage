@@ -161,16 +161,16 @@ router.get(
       .wait('#cphMiddle_cphMain_lblTitle')
       .evaluate(function () {
         var els = {
-          title: (document.getElementById('cphMiddle_cphMain_lblTitle') || {}).innerHTML,
-          // description: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerHTML,
-          yield: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerHTML,
-          activeTime: (document.getElementById('cphMiddle_cphMain_lblActiveTime') || {}).innerHTML,
-          totalTime: (document.getElementById('cphMiddle_cphMain_lblTotalTime') || {}).innerHTML,
-          source: (document.getElementById('cphMiddle_cphMain_hlSource') || {}).innerHTML,
+          title: (document.getElementById('cphMiddle_cphMain_lblTitle') || {}).innerText,
+          // description: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerText,
+          yield: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerText,
+          activeTime: (document.getElementById('cphMiddle_cphMain_lblActiveTime') || {}).innerText,
+          totalTime: (document.getElementById('cphMiddle_cphMain_lblTotalTime') || {}).innerText,
+          source: (document.getElementById('cphMiddle_cphMain_hlSource') || {}).innerText,
           url: (document.getElementById('cphMiddle_cphSidebar_hlOriginalRecipe') || {}).href,
-          notes: (document.getElementById('cphMiddle_cphMain_lblNotes') || {}).innerHTML,
+          notes: (document.getElementById('cphMiddle_cphMain_lblNotes') || {}).innerText,
           ingredients: [].slice.call(document.querySelectorAll('.inggroups li ul li span.content')).map(function(el) { return el.innerText }).join("\r\n"),
-          instructions: [].slice.call(document.querySelectorAll('.dirgroups li ol li span')).map(function(el) { return el.innerHTML }).join("\r\n"),
+          instructions: [].slice.call(document.querySelectorAll('.dirgroups li ol li span')).map(function(el) { return el.innerText }).join("\r\n"),
           imageURL: (document.getElementById('cphMiddle_cphMain_imgRecipeThumb') || { src: '' }).src,
           rawCategories: (document.querySelector('#cphMiddle_cphMain_pnlTags span') || { innerText: '' }).innerText.split(',').map(function(el) { return el.trim() })
         }
