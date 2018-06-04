@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
+var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
@@ -37,9 +38,12 @@ router.post(
     upsert: false // Do not create a new recipe if not exists
   }, function(err, recipe) {
     if (err) {
-      res.status(500).json({
-        msg: "Couldn't search/update the dump!"
-      });
+      var payload = {
+        msg: "Couldn't search/update recipe!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!recipe) {
       res.status(404).json({
         msg: "Recipe with specified ID does not exist!"
@@ -58,9 +62,12 @@ router.post(
         new: true // Return updated, not original
       }, function(err, label) {
         if (err) {
-          res.status(500).json({
-            msg: "Couldn't add to the database!"
-          });
+          var payload = {
+            msg: "Couldn't add label to recipe!"
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else {
           res.status(201).json(label);
         }
@@ -85,9 +92,12 @@ router.get(
 
   query.exec(function(err, labels) {
     if (err) {
-      res.status(500).json({
-        msg: "Could not query database for labels."
-      });
+      var payload = {
+        msg: "Couldn't query database for labels."
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else {
       res.status(200).json(labels);
     }
@@ -111,9 +121,12 @@ router.delete(
     new: true // Grab the updated document, not the original
   }, function(err, label) {
     if (err) {
-      res.status(500).json({
+      var payload = {
         msg: "Couldn't search the database for label!"
-      });
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!label) {
       res.status(404).json({
         msg: "Label does not exist!"
@@ -122,7 +135,12 @@ router.delete(
       if(label.recipes.length == 0){
         label.remove(function(err, data){
           if (err) {
-            res.status(500).send("Could not remove empty label.");
+            var payload = {
+              msg: "Couldn't remove empty label."
+            };
+            res.status(500).json(payload);
+            payload.err = err;
+            Raven.captureException(payload);
           } else {
             res.status(200).json(data);
           }

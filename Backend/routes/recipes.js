@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var cors = require('cors');
 var xmljs = require("xml-js");
+var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
@@ -36,7 +37,11 @@ router.post(
         res.status(412).send("Recipe title must be provided.");
       }, function() {
         console.log("Failed to clean s3 image after precondition failure!");
-        res.status(500).send("Original error: 412 - recipe title must be provided. While processing, there was another error: could not delete uploaded image from S3!");
+        var payload = {
+          msg: "Original error: 412 - recipe title must be provided. While processing, there was another error: could not delete uploaded image from S3!"
+        };
+        res.status(500).json(payload);
+        Raven.captureException(payload);
       });
     } else {
       res.status(412).send("Recipe title must be provided.");
@@ -77,7 +82,12 @@ router.post(
           folder: folder
         }).save(function(err, recipe) {
           if (err) {
-            res.status(500).send("Error saving the recipe!");
+            var payload = {
+              msg: "Error saving recipe!"
+            };
+            res.status(500).json(payload);
+            payload.err = err;
+            Raven.captureException(payload);
           } else {
             var serializedRecipe = recipe.toObject();
             serializedRecipe.labels = [];
@@ -85,10 +95,20 @@ router.post(
           }
         });
       }, function(err) {
-        res.status(500).send("Could not avoid duplicate title!");
+        var payload = {
+          msg: "Could not avoid duplicate title!"
+        };
+        res.status(500).json(payload);
+        payload.err = err;
+        Raven.captureException(payload);
       });
-    }, function() {
-      res.status(500).send("Error uploading image via URL!");
+    }, function(err) {
+      var payload = {
+        msg: "Error uploading image via URL!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     });
   }
 });
@@ -110,7 +130,12 @@ router.get(
   .lean()
   .exec(function(err, recipes) {
     if (err) {
-      res.status(500).send("Couldn't search the database for recipes!");
+      var payload = {
+        msg: "Couldn't search the database for recipes!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else {
       
       var labelPromises = [];
@@ -123,7 +148,12 @@ router.get(
             recipes: recipe._id
           }).lean().exec(function(err, labels) {
             if (err) {
-              reject(500, "Couldn't search the database for labels!");
+              var payload = {
+                msg: "Couldn't search database for labels!"
+              };
+              reject(500, payload.msg);
+              payload.err = err;
+              Raven.captureException(payload);
             } else {
               recipe.labels = labels;
       
@@ -144,8 +174,13 @@ router.get(
         }
 
         res.status(200).json(recipes);
-      }, function() {
-        res.status(500).send("Could not query DB for labels.");
+      }, function(err) {
+        var payload = {
+          msg: "Could not query DB for labels."
+        };
+        res.status(500).json(payload);
+        payload.err = err;
+        Raven.captureException(payload);
       });
     }
   });
@@ -172,7 +207,12 @@ router.get(
           recipes: recipe._id
         }).lean().exec(function(err, labels) {
           if (err) {
-            reject(500, "Couldn't search the database for labels!");
+            var payload = {
+              msg: "Couldn't search the database for labels!"
+            };
+            reject(500, payload.msg);
+            payload.err = err;
+            Raven.captureException(payload);
           } else {
             if (req.query.format === 'txt') {
               recipe.labels = labels.map(function(el){
@@ -233,8 +273,13 @@ router.get(
   
         res.end();
       });
-    }, function() {
-      res.status(500).send("Could not query DB for labels.");
+    }, function(err) {
+      var payload = {
+        msg: "Could not query DB for labels."
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     });
   });
 });
@@ -255,7 +300,12 @@ router.get(
   .lean()
   .exec(function(err, recipe) {
     if (err) {
-      res.status(500).send("Couldn't search the database for recipe!");
+      var payload = {
+        msg: "Couldn't search the database for recipe!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!recipe) {
       res.status(404).send("Recipe with that ID not found!");
     } else {
@@ -263,7 +313,12 @@ router.get(
         recipes: recipe._id
       }).lean().exec(function(err, labels) {
         if (err) {
-          res.status(500).send("Could not query DB for labels.");
+          var payload = {
+            msg: "Could not query DB for labels."
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else {
           recipe.labels = labels;
   
@@ -288,9 +343,12 @@ router.put(
     accountId: res.locals.session.accountId
   }, function(err, recipe) {
     if (err) {
-      res.status(500).json({
+      var payload = {
         msg: "Couldn't search the database for recipe!"
-      });
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!recipe) {
       res.status(404).json({
         msg: "Recipe with that ID does not exist!"
@@ -314,7 +372,12 @@ router.put(
           UtilService.deleteS3Object(recipe.image.key, function() {
             console.log("Cleaned old image from s3", recipe.image.key);
           }, function(err) {
-            console.log("Error cleaning old image from s3 ", err, err.stack);
+            var payload = {
+              msg: "Error cleaning old image from s3 ",
+              err: err
+            };
+            console.log(payload);
+            Raven.captureException(payload);
           });
         }
 
@@ -328,13 +391,23 @@ router.put(
 
         recipe.save(function(err, recipe) {
           if (err) {
-            res.status(500).send("Could not save updated recipe!");
+            var payload = {
+              msg: "Could not save updated recipe!"
+            };
+            res.status(500).json(payload);
+            payload.err = err;
+            Raven.captureException(payload);
           } else {
             res.status(200).json(recipe);
           }
         });
       }, function(err) {
-        res.status(500).send("Could avoid duplicate title!");
+        var payload = {
+          msg: "Could avoid duplicate title!"
+        };
+        res.status(500).json(payload);
+        payload.err = err;
+        Raven.captureException(payload);
       });
     }
   });
@@ -352,9 +425,12 @@ router.delete(
     accountId: res.locals.session.accountId
   }, function(err, recipe) {
     if (err) {
-      res.status(500).send({
+      var payload = {
         msg: "Couldn't search the database for recipe!"
-      });
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!recipe) {
       res.status(404).json({
         msg: "Recipe with specified ID does not exist!"
@@ -362,16 +438,24 @@ router.delete(
     } else {
       recipe.remove(function(err, recipe) {
         if (err) {
-          res.status(500).json({
+          var payload = {
             msg: "Couldn't delete recipe from database"
-          });
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else {
           // Remove image from our S3 bucket
           if (recipe.image && recipe.image.key) {
             UtilService.deleteS3Object(recipe.image.key, function() {
               console.log("Cleaned image from s3 after recipe delete ", recipe.image.key);
             }, function(err) {
-              console.log("Error cleaning image from s3 after recipe delete ", err, err.stack);
+              var payload = {
+                msg: "Error cleaning image from s3 after recipe delete ",
+                err: err
+              };
+              console.log(payload);
+              Raven.captureException(payload);
             });
           }
 
@@ -380,9 +464,12 @@ router.delete(
             recipes: req.params.id
           }).select("_id").lean().exec(function(err, labels) {
             if (err) {
-              res.status(500).json({
+              var payload = {
                 msg: "Couldn't search the database for labels!"
-              });
+              };
+              res.status(500).json(payload);
+              payload.err = err;
+              Raven.captureException(payload);
             } else if (!labels) {
               res.status(200).json(recipe);
             } else {
@@ -401,12 +488,22 @@ router.delete(
                       new: true
                     }).exec(function(err, label) {
                     if (err) {
-                      reject(500, "Couldn't search the database for labels during delete!");
+                      var payload = {
+                        msg: "Couldn't search the database for labels during delete!"
+                      };
+                      reject(500, payload.msg);
+                      payload.err = err;
+                      Raven.captureException(payload);
                     } else {
                       if (label.recipes.length == 0) {
                         label.remove(function(err, label) {
                           if (err) {
-                            reject("Couldn't delete empty label!");
+                            var payload = {
+                              msg: "Couldn't delete empty label!"
+                            };
+                            reject(payload.msg);
+                            payload.err = err;
+                            Raven.captureException(payload);
                           } else {
                             resolve();
                           }
@@ -421,8 +518,13 @@ router.delete(
               
               Promise.all(labelPromises).then(function() {
                 res.status(200).json(recipe);
-              }, function() {
-                res.status(500).send("Could not delete labels from DB.");
+              }, function(err) {
+                var payload = {
+                  msg: "Could not delete labels from DB."
+                };
+                res.status(500).json(payload);
+                payload.err = err;
+                Raven.captureException(payload);
               });
             }
           });

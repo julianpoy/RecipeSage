@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
+var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
@@ -23,7 +24,12 @@ router.post(
   console.log(req.body.to)
   User.findById(req.body.to).exec(function(err, recipient) {
     if (err) {
-      res.status(500).send('Could not search DB for user.');
+      var payload = {
+        msg: 'Could not search DB for user.'
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!recipient) {
       res.status(404).send('Could not find user under that ID.');
     } else {
@@ -44,15 +50,30 @@ router.post(
           originalRecipe: req.body.recipeId
         }).save(function(err, message) {
           if (err) {
-            res.status(500).send("Error saving the recipe!");
+            var payload = {
+              msg: "Error saving recipe!"
+            };
+            res.status(500).json(payload);
+            payload.err = err;
+            Raven.captureException(payload);
           } else {
             message.populate('to from', 'name email', function(err, message) {
               if (err) {
-                res.status(500).send("Error gathering message to/from!");
+                var payload = {
+                  msg: "Error populating message to/from!"
+                };
+                res.status(500).json(payload);
+                payload.err = err;
+                Raven.captureException(payload);
               } else {
                 message.populate('recipe originalRecipe', function(err, message) {
                   if (err) {
-                    res.status(500).send("Error gathering message recipe!");
+                    var payload = {
+                      msg: "Error populating message recipe!"
+                    };
+                    res.status(500).json(payload);
+                    payload.err = err;
+                    Raven.captureException(payload);
                   } else {
                     message = message.toObject();
                     
@@ -104,7 +125,12 @@ router.get(
   .lean()
   .exec(function(err, messages) {
     if (err) {
-      res.status(500).send("Couldn't search the database for recipes!");
+      var payload = {
+        msg: "Couldn't search the database for message threads!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else {
       // console.log(messages)
       var conversationsByUser = messages.reduce(function(acc, el, i) {
@@ -177,7 +203,12 @@ router.get(
   .lean()
   .exec(function(err, messages) {
     if (err) {
-      res.status(500).send("Couldn't search the database for recipes!");
+      var payload = {
+        msg: "Couldn't search the database for messages!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else {
       messages = messages.map(function(el) {
         var otherUser;

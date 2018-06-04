@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     crypto = require('crypto'),
     Session = mongoose.model('Session'),
-    moment = require('moment');
+    moment = require('moment'),
+    Raven = require('raven');
 
 //Checks if a token exists, and returns the corrosponding accountId
 exports.validateSession = function(token, type, success, fail) {
@@ -33,12 +34,14 @@ exports.validateSession = function(token, type, success, fail) {
         .select('accountId type assignmentId created')
         .exec(function(err, session) {
             if (err) {
-                fail({
+                var payload = {
                     msg: "Could not search database for session!",
                     status: 500
-                });
+                };
+                fail(payload);
+                payload.err = err;
+                Raven.captureException(payload);
             } else if (!session) {
-                console.log("hi")
                 fail({
                     msg: "Session is not valid!",
                     status: 401
@@ -57,7 +60,12 @@ exports.validateSession = function(token, type, success, fail) {
 
                     session.update(updateCmd).exec(function(err, session){
                       if(err){
-                        console.log("Error reading database when extending user token!");
+                        var payload = {
+                            msg: "Error reading database when extending user token!",
+                            err: err
+                        }
+                        console.log(payload);
+                        Raven.captureException(payload);
                       }
                     });
                 }
@@ -68,7 +76,16 @@ exports.validateSession = function(token, type, success, fail) {
         var removeOld = {
             created: {"$lt": moment().subtract(expiry.period, expiry.unit)}
         }
-        Session.find(removeOld).remove().exec();
+        Session.find(removeOld).remove().exec(function(err) {
+            if (err) {
+                var payload = {
+                    msg: "Error removing old sessions!",
+                    err: err
+                }
+                console.log(payload);
+                Raven.captureException(payload);
+            }
+        });
 };
 
 //Creates a token and returns the token if successful
@@ -83,10 +100,13 @@ exports.generateSession = function(accountId, type, success, fail) {
         created: Date.now()
     }).save(function(err, session) {
         if (err) {
-            fail({
+            var payload = {
                 msg: "Could not add session to DB!",
                 status: 500
-            });
+            }
+            fail(payload);
+            payload.err = err;
+            Raven.captureException(payload);
         } else {
             success(token, session);
         }
@@ -98,7 +118,14 @@ exports.deleteSession = function(token, success, fail) {
     Session.findOne({
         token: token
     }).remove(function(err){
-      if(err) fail(err);
-      else success();
+      if (err) {
+        var payload = {
+            msg: "Could not delete session!",
+            status: 500
+        }
+        fail(payload);
+        payload.err = err;
+        Raven.captureException(payload);
+      } else success();
     });
 };
