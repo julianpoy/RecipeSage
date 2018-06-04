@@ -5,6 +5,8 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 @Injectable()
 export class LoadingServiceProvider {
 
+  REQUEST_COMPLETE_DELAY: number = 150;
+
   constructor(private loadingBar: LoadingBarService) {
     console.log('Hello LoadingServiceProvider Provider');
   }
@@ -15,7 +17,9 @@ export class LoadingServiceProvider {
     var me = this;
     return {
       dismiss: function() {
-        me.loadingBar.complete();
+        setTimeout(function() {
+          me.loadingBar.complete();
+        }, me.REQUEST_COMPLETE_DELAY);
       }
     }
   }
