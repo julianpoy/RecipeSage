@@ -4,7 +4,6 @@ var User = mongoose.model('User');
 
 exports.validateSession = function(types) {
   return function(req, res, next) {
-    console.log("token", req.query.token)
     SessionService.validateSession(req.query.token, types, function(accountId, session) {
       res.locals.accountId = accountId;
       res.locals.session = session;
