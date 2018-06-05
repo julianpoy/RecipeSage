@@ -507,6 +507,7 @@ export class RecipePage {
   }
   
   prettyDateTime(datetime) {
-    return datetime.toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' });
+    if (!datetime) return '';
+    return (new Date(datetime)).toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' });
   }
 }
