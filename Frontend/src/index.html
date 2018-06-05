@@ -42,9 +42,10 @@
         })
         .catch(err => console.error('Error', err));
         
-        navigator.serviceWorker.addEventListener('controllerchange', function() {
-          if (window.onSWUpdate) window.onSWUpdate.call(null);
-        });
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (window.onSWUpdate) window.onSWUpdate.call(null);
+        else window.location.reload();
+      });
     }
   </script>
   
@@ -81,7 +82,7 @@
     // 			})
     // 			.catch(err => console.error('[SW ERROR]', err));
     // 	}
-    });
+    // });
   </script>
   
   <script>
