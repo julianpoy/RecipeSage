@@ -2,7 +2,7 @@
  * Check out https://googlechromelabs.github.io/sw-toolbox/ for
  * more info on how to use sw-toolbox to custom configure your service worker.
  */
-var swVersion = '1.1.0';
+var swVersion = '1.1.0~0003';
 
 'use strict';
 importScripts('./build/sw-toolbox.js');
@@ -11,27 +11,39 @@ self.toolbox.options.cache = {
   name: 'ionic-cache'
 };
 
-// pre-cache our key assets
+// Pre-cache our key assets. These get cached during the 'install' event
 self.toolbox.precache(
   [
-    // './build/main.js',
-    // './build/vendor.js',
-    // './build/main.css',
-    // './build/polyfills.js',
-    // 'index.html',
-    // 'manifest.json'
+    // Central app assets
+    './build/0.js',
+    './build/main.js',
+    './build/vendor.js',
+    './build/main.css',
+    './build/polyfills.js',
+    './assets/stockphotos/chicken-salad.jpg',
+    './assets/recipesage-white-trimmed.png',
+    './assets/fonts/roboto-regular.woff2',
+    './assets/fonts/roboto-medium.woff2',
+    './assets/fonts/ionicons.woff2?v=3.0.0-alpha.3',
+    'index.html',
+    'manifest.json',
+    // External packages
+    'https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.6/lunr.min.js'
   ]
 );
 
-// dynamically cache any other local assets
-// self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
-self.toolbox.router.any('/*', self.toolbox.networkFirst);
-// self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
-// self.toolbox.router.any('/*', self.toolbox.networkOnly);
+// Cache all API requests but rely on network first for latest data
+self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
+self.toolbox.router.any('/chefbook-backend/*', self.toolbox.networkFirst);
 
-// for any other requests go to the network, cache,
-// and then only use that cached resource if your user goes offline
-// self.toolbox.router.default = self.toolbox.networkOnly;
+// All static assets can have a race
+self.toolbox.router.any('/*', self.toolbox.fastest);
+
+// Danger! Be aware we're using fastest for ALL OTHER ASSETS
+// This is an accepted risk since we clear the entire cache during an update job
+self.toolbox.router.default = self.toolbox.fastest;
 
 // ==== FIREBASE MESSAGING ====
 
