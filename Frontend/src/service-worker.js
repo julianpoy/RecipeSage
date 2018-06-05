@@ -25,7 +25,8 @@ self.toolbox.precache(
 
 // dynamically cache any other local assets
 // self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
-self.toolbox.router.any('/*', self.toolbox.fastest);
+self.toolbox.router.any('/*', self.toolbox.networkFirst);
+// self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
 // self.toolbox.router.any('/*', self.toolbox.networkOnly);
 
 // for any other requests go to the network, cache,
@@ -175,7 +176,7 @@ self.addEventListener('install', function(event) {
   // Skips waiting for browser reload and forces new service worker load
   self.skipWaiting();
    
-  console.log("Service worker updated!qqq")
+  console.log("Service worker updated!")
 });
 
 // self.addEventListener('fetch', function(event) {
