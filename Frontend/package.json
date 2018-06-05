@@ -29,7 +29,6 @@
     "@ngx-loading-bar/core": "^2.1.0",
     "@types/firebase": "^3.2.1",
     "blueimp-load-image": "^2.18.0",
-    "cordova-android": "7.0.0",
     "cordova-browser": "5.0.3",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
@@ -61,8 +60,7 @@
       "cordova-plugin-fcm": {}
     },
     "platforms": [
-      "browser",
-      "android"
+      "browser"
     ]
   }
 }
