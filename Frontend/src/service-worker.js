@@ -2,7 +2,7 @@
  * Check out https://googlechromelabs.github.io/sw-toolbox/ for
  * more info on how to use sw-toolbox to custom configure your service worker.
  */
-
+var swVersion = '1.1.0';
 
 'use strict';
 importScripts('./build/sw-toolbox.js');
@@ -25,12 +25,12 @@ self.toolbox.precache(
 
 // dynamically cache any other local assets
 // self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
-// self.toolbox.router.any('/*', self.toolbox.fastest);
-self.toolbox.router.any('/*', self.toolbox.networkOnly);
+self.toolbox.router.any('/*', self.toolbox.fastest);
+// self.toolbox.router.any('/*', self.toolbox.networkOnly);
 
 // for any other requests go to the network, cache,
 // and then only use that cached resource if your user goes offline
-self.toolbox.router.default = self.toolbox.networkOnly;
+// self.toolbox.router.default = self.toolbox.networkOnly;
 
 // ==== FIREBASE MESSAGING ====
 
@@ -152,5 +152,34 @@ self.addEventListener('notificationclick', function(event) {
     })
   );
 });
+
+self.addEventListener('activate', function(event) {
+  // Claim all clients
+  self.clients.claim();
+
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          // Returning true removes cache
+          return true;
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
+
+self.addEventListener('install', function(event) {
+  // Skips waiting for browser reload and forces new service worker load
+  self.skipWaiting();
+   
+  console.log("Service worker updated!qqq")
+});
+
+// self.addEventListener('fetch', function(event) {
+//   event.respondWith(fetch(event.request));
+// });
 
 console.log("Service worker mounted");

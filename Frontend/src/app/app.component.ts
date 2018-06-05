@@ -49,7 +49,7 @@ export class MyApp {
     function promptToUpdate() {
       if (toast) return;
 
-      toast = me.toastCtrl.create({
+      toast = this.toastCtrl.create({
   			message: 'New update available!',
   			position: 'bottom',
   			showCloseButton: true,
@@ -61,19 +61,9 @@ export class MyApp {
   		toast.present();
     }
 
-    window['isUpdateAvailable']
-  	.then(isAvailable => {
-  		if (isAvailable) {
-  		  promptToUpdate();
-  		}
-  	});
-  	this.userService.checkForUpdate({
-      version: (<any>window).version
-    }).subscribe(function(response) {
-      if (response.updateAvailable) {
-        promptToUpdate();
-      }
-    }, function() {});
+    window['onSWUpdate'] = function() {
+		  promptToUpdate.call(me);
+  	};
   }
   
   initEventListeners() {
