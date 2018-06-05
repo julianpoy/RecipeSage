@@ -19,7 +19,7 @@ var appConfig = require('./config/config.json');
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '1.1.0'
+  release: '1.1.1'
 }).install();
 
 // Database and schemas
