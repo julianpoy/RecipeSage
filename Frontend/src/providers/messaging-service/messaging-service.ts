@@ -72,7 +72,7 @@ export class MessagingServiceProvider {
   }
   
   getTokenQuery() {
-    return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
+    return '?token=' + localStorage.getItem('token');
   }
   
   fetch(from?) {

@@ -16,7 +16,7 @@ export class UserServiceProvider {
   }
   
   getTokenQuery() {
-    return '?token=' + localStorage.getItem('token') + '&r=' + Date.now();
+    return '?token=' + localStorage.getItem('token');
   }
   
   register(data) {
