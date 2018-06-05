@@ -5,7 +5,6 @@ import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/re
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 
-import * as moment from 'moment';
 import fractionjs from 'fraction.js';
 
 @IonicPage({
@@ -508,6 +507,6 @@ export class RecipePage {
   }
   
   prettyDateTime(datetime) {
-    return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
+    return datetime.toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' });
   }
 }
