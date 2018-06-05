@@ -56,7 +56,7 @@ export class MyApp {
   			closeButtonText: "Update"
   		});
   		toast.onDidDismiss(() => {
-  	    (<any>window).location.reload(true);
+  	    (<any>window).location.reload();
       });
   		toast.present();
     }
