@@ -162,10 +162,17 @@ export class MessageThreadPage {
       me.messagePlaceholder = 'Message...';
       me.pendingMessage = myMessage;
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         default:
           let errorToast = me.toastCtrl.create({
-            message: 'Sending failed.',
-            duration: 3000
+            message: 'Failed to send message.',
+            duration: 5000
           });
           errorToast.present();
           break;

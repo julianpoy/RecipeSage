@@ -63,6 +63,13 @@ export class ShareModalPage {
         reject();
         
         switch(err.status) {
+          case 0:
+            let offlineToast = me.toastCtrl.create({
+              message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
           case 401:
             me.viewCtrl.dismiss({
               destination: 'LoginPage',
@@ -130,6 +137,13 @@ export class ShareModalPage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.viewCtrl.dismiss({
             destination: 'LoginPage',

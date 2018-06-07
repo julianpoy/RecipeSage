@@ -38,6 +38,13 @@ export class AccountPage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
@@ -70,12 +77,19 @@ export class AccountPage {
       
       let tst = me.toastCtrl.create({
         message: 'Profile name was updated.',
-        duration: 3000
+        duration: 5000
       });
       tst.present();
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
@@ -94,10 +108,11 @@ export class AccountPage {
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
     if (this.account.email.length === 0 || !emailRegex.test(this.account.email)) {
       let tst = this.toastCtrl.create({
-        message: 'Email does not appear to be valid.',
-        duration: 3000
+        message: 'Please enter a valid email address.',
+        duration: 5000
       });
       tst.present();
+      return;
     }
 
     var loading = this.loadingService.start();
@@ -113,12 +128,19 @@ export class AccountPage {
       
       let tst = me.toastCtrl.create({
         message: 'Email address was updated.',
-        duration: 3000
+        duration: 5000
       });
       tst.present();
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
@@ -137,16 +159,17 @@ export class AccountPage {
     if (this.account.password !== this.account.confirmPassword) {
       let tst = this.toastCtrl.create({
         message: 'Passwords do not match.',
-        duration: 3000
+        duration: 5000
       });
       tst.present();
       return;
     } else if (this.account.password.length < 6) {
       let tst = this.toastCtrl.create({
         message: 'Password must be 6 characters or longer.',
-        duration: 3000
+        duration: 5000
       });
       tst.present();
+      return;
     }
     
     var loading = this.loadingService.start();
@@ -162,12 +185,19 @@ export class AccountPage {
       
       let tst = me.toastCtrl.create({
         message: 'Password was updated.',
-        duration: 3000
+        duration: 5000
       });
       tst.present();
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;

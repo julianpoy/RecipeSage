@@ -205,6 +205,13 @@ export class HomePage {
         reject();
         
         switch(err.status) {
+          case 0:
+            let offlineToast = me.toastCtrl.create({
+              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
           case 401:
             me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
             break;

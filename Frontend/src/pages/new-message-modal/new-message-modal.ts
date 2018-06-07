@@ -47,9 +47,20 @@ export class NewMessageModalPage {
         me.searching = false;
         me.recipientId = response._id;
       }, function(err) {
-        me.recipientName = '';
-        me.recipientId = '';
-        me.searching = false;
+        switch(err.status) {
+          case 0:
+            let offlineToast = me.toastCtrl.create({
+              message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
+          default:
+            me.recipientName = '';
+            me.recipientId = '';
+            me.searching = false;
+            break;
+        }
       });
     }, 500);
   }
@@ -71,6 +82,13 @@ export class NewMessageModalPage {
       });
     }, function(err) {
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           me.viewCtrl.dismiss({
             destination: 'LoginPage',

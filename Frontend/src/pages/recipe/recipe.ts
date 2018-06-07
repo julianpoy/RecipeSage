@@ -87,6 +87,13 @@ export class RecipePage {
         resolve();
       }, function(err) {
         switch(err.status) {
+          case 0:
+            let offlineToast = me.toastCtrl.create({
+              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
           case 401:
             me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
             break;
@@ -131,6 +138,13 @@ export class RecipePage {
       });
     }, function(err) {
       switch(err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
         case 401:
           // Ignore, handled by main loader
           break;
@@ -298,12 +312,6 @@ export class RecipePage {
   }
   
   shareRecipe() {
-    // let errorToast = this.toastCtrl.create({
-    //   message: 'Coming soon!',
-    //   duration: 4000
-    // });
-    // errorToast.present();
-    
     var me = this;
 
     let shareModal = this.modalCtrl.create('ShareModalPage', { recipe: this.recipe });
