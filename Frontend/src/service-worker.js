@@ -13,6 +13,11 @@ workbox.precaching.precacheAndRoute([{
   "url": "assets/fonts/ionicons.woff2?v=4.1.1"
 }]);
 
+workbox.routing.registerRoute(
+  new RegExp('(\/api\/.*)|(\/chefbook-backend\/.*)'),
+  workbox.strategies.networkFirst()
+);
+
 // ==== FIREBASE MESSAGING ====
 
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
