@@ -10,11 +10,13 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "dist": "shx rm -rf www/* && npm run build --prod && node ./cache-busting.js && workbox injectManifest && npm run compress",
+    "dist": "shx rm -rf www/* && npm run build --prod && npm run purifycss && node ./cache-busting.js && workbox injectManifest && npm run compress",
     "open": "http-server www -o -a 0.0.0.0 -p 1234 -g -c-1",
-    "compress": "bread-compressor -a gzip -l 4 www"
+    "compress": "bread-compressor -a gzip www",
+    "purifycss": "purifycss www/build/main.css www/build/*.js --info --min --out www/build/main.css --whitelist .bar-button-default"
   },
   "config": {
+    "ionic_sass": "./sass.config.js",
     "ionic_copy": "./copy.config.js",
     "ionic_webpack": "./webpack.config.js"
   },
@@ -52,6 +54,7 @@
     "@ionic/app-scripts": "3.1.8",
     "bread-compressor-cli": "^1.0.0",
     "http-server": "^0.11.1",
+    "purify-css": "^1.2.5",
     "rev-hash": "^2.0.0",
     "shx": "^0.2.2",
     "typescript": "2.4.2",
