@@ -176,7 +176,7 @@ export class HomePage {
         me.recipes = response;
         
         if (me.searchWorker) me.searchWorker.terminate();
-        me.searchWorker = new Worker('assets/src/search-worker.js?rev=1.0.0b8');
+        me.searchWorker = new Worker('assets/src/search-worker.js');
         
         me.searchWorker.postMessage(JSON.stringify({
           op: 'init',

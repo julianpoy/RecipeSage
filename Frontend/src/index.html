@@ -36,53 +36,17 @@
           function updateSW() {
             window.swRegistration.update();
           }
-          var UPDATE_INTERVAL = 1000 * 60 * 20; // EVERY 20 MINUTES
+          var UPDATE_INTERVAL = 1000 * 60 * 30; // EVERY 30 MINUTES
           setInterval(updateSW, UPDATE_INTERVAL);
           updateSW();
         })
         .catch(err => console.error('Error', err));
-        
+
       navigator.serviceWorker.addEventListener('controllerchange', function() {
         if (window.onSWUpdate) window.onSWUpdate.call(null);
-        else window.location.reload();
+        else window.location.reload(true);
       });
     }
-  </script>
-  
-  <script>
-    // make the whole serviceworker process into a promise so later on we can
-    // listen to it and in case new content is available a toast will be shown
-    // window.isUpdateAvailable = new Promise(function(resolve, reject) {
-    // 	// lazy way of disabling service workers while developing
-    // 	if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
-    // 	  console.log("serviceworker exists")
-    // 		// register service worker file
-    // 		navigator.serviceWorker.register('service-worker.js')
-    // 			.then(reg => {
-    // 			  console.log("registered")
-    // 				reg.onupdatefound = () => {
-    // 				  console.log("update found")
-    // 					const installingWorker = reg.installing;
-    // 					installingWorker.onstatechange = () => {
-    // 					  console.log("state changed")
-    // 						switch (installingWorker.state) {
-    // 							case 'installed':
-    // 							  console.log("installed")
-    // 								if (navigator.serviceWorker.controller) {
-    // 									// new update available
-    // 									resolve(true);
-    // 								} else {
-    // 									// no update available
-    // 									resolve(false);
-    // 								}
-    // 								break;
-    // 						}
-    // 					};
-    // 				};
-    // 			})
-    // 			.catch(err => console.error('[SW ERROR]', err));
-    // 	}
-    // });
   </script>
   
   <script>
@@ -112,7 +76,7 @@
     window.version = '1.1.1';
   </script>
 
-  <link href="build/main.css" rel="stylesheet">
+  <link href="build/main.css" rel="stylesheet" async>
 
 </head>
 <body>
@@ -123,7 +87,9 @@
   </noscript>
 
   <!-- Ionic's root component and where the app will load -->
-  <ion-app></ion-app>
+  <main>
+    <ion-app></ion-app>
+  </main>
 
   <!-- The polyfills js is generated during the build process -->
   <script src="build/polyfills.js"></script>

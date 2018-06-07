@@ -1,7 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events, ToastController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MessagesPage } from '../pages/messages/messages';
 import { MessageThreadPage } from '../pages/message-thread/message-thread';
@@ -26,9 +24,7 @@ export class MyApp {
 
   constructor(
     public platform: Platform,
-    public statusBar: StatusBar,
     public events: Events,
-    public splashScreen: SplashScreen,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
     public userService: UserServiceProvider) {
@@ -43,26 +39,34 @@ export class MyApp {
   }
   
   checkForUpdate() {
-    var toast;
+    // var toast;
     
     var me = this;
-    function promptToUpdate() {
-      if (toast) return;
+    // function promptToUpdate() {
+    //   if (toast) return;
 
-      toast = this.toastCtrl.create({
-  			message: 'New update available!',
-  			position: 'bottom',
-  			showCloseButton: true,
-  			closeButtonText: "Update"
-  		});
-  		toast.onDidDismiss(() => {
-  	    (<any>window).location.reload();
-      });
-  		toast.present();
-    }
+    //   toast = this.toastCtrl.create({
+  		// 	message: 'New update available!',
+  		// 	position: 'bottom',
+  		// 	showCloseButton: true,
+  		// 	closeButtonText: "Update"
+  		// });
+  		// toast.onDidDismiss(() => {
+  	 //   (<any>window).location.reload(true);
+    //   });
+  		// toast.present();
+    // }
 
     window['onSWUpdate'] = function() {
-		  promptToUpdate.call(me);
+		  // promptToUpdate.call(me);
+		  console.log("Update is waiting for pause...")
+		  if ((<any>window).isHidden()) {
+  	    (<any>window).location.reload(true);
+		  } else {
+  		  me.events.subscribe('application:multitasking:paused', () => {
+    	    (<any>window).location.reload(true);
+        });
+		  }
   	};
   }
   
@@ -164,6 +168,10 @@ export class MyApp {
       visibilityChange = "webkitvisibilitychange";
     }
     
+    (<any>window).isHidden = function() {
+      return document[hidden];
+    }
+    
     document.addEventListener(visibilityChange, function() {
       if (document[hidden]) {
         me.events.publish('application:multitasking:paused');
@@ -174,7 +182,7 @@ export class MyApp {
   }
   
   initDevBase() {
-    if (window.location.href.toLowerCase().indexOf('dev') > -1) {
+    if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
       localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
     } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
       localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
@@ -219,11 +227,11 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.splashScreen.hide();
+    // this.splashScreen.hide();
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
+      // this.statusBar.styleDefault();
       
       // if(localStorage.getItem('token')) {
       //   this.nav.setRoot('HomePage', { folder: 'main' });

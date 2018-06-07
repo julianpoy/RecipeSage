@@ -1,49 +1,17 @@
-/**
- * Check out https://googlechromelabs.github.io/sw-toolbox/ for
- * more info on how to use sw-toolbox to custom configure your service worker.
- */
-var swVersion = '1.1.1~0001';
-
 'use strict';
-importScripts('./build/sw-toolbox.js');
 
-self.toolbox.options.cache = {
-  name: 'ionic-cache'
-};
-
-// Pre-cache our key assets. These get cached during the 'install' event
-self.toolbox.precache(
-  [
-    // Central app assets
-    './build/0.js',
-    './build/main.js',
-    './build/vendor.js',
-    './build/main.css',
-    './build/polyfills.js',
-    './assets/stockphotos/chicken-salad.jpg',
-    './assets/recipesage-white-trimmed.png',
-    './assets/fonts/roboto-regular.woff2',
-    './assets/fonts/roboto-medium.woff2',
-    './assets/fonts/ionicons.woff2?v=3.0.0-alpha.3',
-    'index.html',
-    'manifest.json',
-    // External packages
-    'https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.6/lunr.min.js'
-  ]
-);
-
-// Cache all API requests but rely on network first for latest data
-self.toolbox.router.any('/api/*', self.toolbox.networkFirst);
-self.toolbox.router.any('/chefbook-backend/*', self.toolbox.networkFirst);
-
-// All static assets can have a race
-self.toolbox.router.any('/*', self.toolbox.fastest);
-
-// Danger! Be aware we're using fastest for ALL OTHER ASSETS
-// This is an accepted risk since we clear the entire cache during an update job
-self.toolbox.router.default = self.toolbox.fastest;
+importScripts('workbox-3.2.0/workbox-sw.js');
+/* global workbox */
+workbox.setConfig({
+  debug: false,
+  modulePathPrefix: 'workbox-3.2.0/'
+});
+workbox.skipWaiting();
+workbox.clientsClaim();
+workbox.precaching.precacheAndRoute([]);
+workbox.precaching.precacheAndRoute([{
+  "url": "assets/fonts/ionicons.woff2?v=4.1.1"
+}]);
 
 // ==== FIREBASE MESSAGING ====
 
@@ -165,34 +133,5 @@ self.addEventListener('notificationclick', function(event) {
     })
   );
 });
-
-self.addEventListener('activate', function(event) {
-  // Claim all clients
-  self.clients.claim();
-
-  event.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.filter(function(cacheName) {
-          // Returning true removes cache
-          return true;
-        }).map(function(cacheName) {
-          return caches.delete(cacheName);
-        })
-      );
-    })
-  );
-});
-
-self.addEventListener('install', function(event) {
-  // Skips waiting for browser reload and forces new service worker load
-  self.skipWaiting();
-   
-  console.log("Service worker updated!")
-});
-
-// self.addEventListener('fetch', function(event) {
-//   event.respondWith(fetch(event.request));
-// });
 
 console.log("Service worker mounted");
