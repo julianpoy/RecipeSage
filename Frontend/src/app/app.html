@@ -1,37 +1,39 @@
 <ngx-loading-bar includeSpinner="false"></ngx-loading-bar>
 
-<ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar color="navBar">
-      <ion-title>Recipe Sage</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of navList()" (click)="openPage(p)">
-        {{p.title}}
-        <ion-badge *ngIf="p.title === 'Recipe Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
-      </button>
-      <button menuClose ion-item *ngIf="isLoggedIn()" (click)="logout()">
-        Logout
-      </button>
-    </ion-list>
-  </ion-content>
+<ion-split-pane [when]="config.enableSplitPane && isScreenSideTabSize()">
+  <ion-menu [content]="content">
+    <ion-header>
+      <ion-toolbar color="navBar">
+        <ion-title>Recipe Sage</ion-title>
+      </ion-toolbar>
+    </ion-header>
   
-  <ion-footer>
-    <ion-toolbar>
+    <ion-content>
+      <ion-list>
+        <button menuClose ion-item *ngFor="let p of navList()" (click)="openPage(p)">
+          {{p.title}}
+          <ion-badge *ngIf="p.title === 'Recipe Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
+        </button>
+        <button menuClose ion-item *ngIf="isLoggedIn()" (click)="logout()">
+          Logout
+        </button>
+      </ion-list>
+    </ion-content>
+    
+    <ion-footer>
+      <ion-toolbar>
+          
+          <p>
+          &nbsp;&nbsp;v{{ version }}<br />
+          &nbsp;&nbsp;<a href="https://www.kondeo.com">Kondeo Software</a>  
+          </p>
         
-        <p>
-        &nbsp;&nbsp;v{{ version }}<br />
-        &nbsp;&nbsp;<a href="https://www.kondeo.com">Kondeo Software</a>  
-        </p>
-      
-    </ion-toolbar>
-  </ion-footer>
-
-</ion-menu>
-
-
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
-<ion-nav [root]="rootPage" [rootParams]="rootPageParams" #content swipeBackEnabled="false"></ion-nav>
+      </ion-toolbar>
+    </ion-footer>
+  
+  </ion-menu>
+  
+  
+  <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+  <ion-nav main [root]="rootPage" [rootParams]="rootPageParams" #content swipeBackEnabled="false"></ion-nav>
+</ion-split-pane>

@@ -15,6 +15,7 @@ import { MessagingServiceProvider } from '../providers/messaging-service/messagi
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingServiceProvider } from '../providers/loading-service/loading-service';
+import { ConfigServiceProvider } from '../providers/config-service/config-service';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { LoadingServiceProvider } from '../providers/loading-service/loading-ser
     LabelServiceProvider,
     RecipeServiceProvider,
     MessagingServiceProvider,
-    LoadingServiceProvider
+    LoadingServiceProvider,
+    ConfigServiceProvider
   ]
 })
 export class AppModule {}

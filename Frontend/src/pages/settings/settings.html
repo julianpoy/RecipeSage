@@ -13,6 +13,11 @@
 
 <ion-content>
   <ion-list>
+    <ion-item *ngIf="isScreenSideTabSize()">
+      <ion-icon name="list" item-start></ion-icon>
+      <ion-label>Enable SplitPane on Large Devices</ion-label>
+      <ion-toggle [(ngModel)]="config.enableSplitPane" (ngModelChange)="configService.saveConfig()"></ion-toggle>
+    </ion-item>
     <button ion-item (click)="goTo('ImportPage')">
       <ion-icon name="cloud-upload" item-start></ion-icon>
       Import Recipe Data
