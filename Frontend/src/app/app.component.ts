@@ -6,6 +6,7 @@ import { MessageThreadPage } from '../pages/message-thread/message-thread';
 
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
+import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -27,6 +28,7 @@ export class MyApp {
     public events: Events,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
+    public messagingService: MessagingServiceProvider,
     public userService: UserServiceProvider) {
     
     this.initializeApp();
@@ -193,6 +195,7 @@ export class MyApp {
     var pages = [];
     
     var loggedOutPages = [
+      { title: 'Welcome', component: 'WelcomePage' },
       { title: 'Signup/Login', component: 'LoginPage' }
     ];
 
@@ -203,8 +206,7 @@ export class MyApp {
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Create Recipe', component: 'EditRecipePage' },
       { title: 'Settings', component: 'SettingsPage' },
-      { title: 'About & Support', component: 'AboutPage' },
-      { title: 'Logout', component: 'LoginPage' }
+      { title: 'About & Support', component: 'AboutPage' }
     ];
     
     if (localStorage.getItem('token')) {
@@ -245,5 +247,13 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component, page.navData);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+
+    this.messagingService.disableNotifications();
+
+    this.openPage('LoginPage');
   }
 }
