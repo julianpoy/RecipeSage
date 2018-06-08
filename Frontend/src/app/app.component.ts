@@ -209,13 +209,17 @@ export class MyApp {
       { title: 'About & Support', component: 'AboutPage' }
     ];
     
-    if (localStorage.getItem('token')) {
+    if (this.isLoggedIn()) {
       pages = pages.concat(loggedInPages);
     } else {
       pages = pages.concat(loggedOutPages);
     }
 
     return pages;
+  }
+
+  isLoggedIn() {
+    return localStorage.getItem('token') ? true : false;
   }
   
   loadInboxCount() {
