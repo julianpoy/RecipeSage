@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ConfigServiceProvider } from '../../providers/config-service/config-service';
+
+/**
+ * Generated class for the SettingsPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage({
   priority: 'low'
@@ -11,12 +17,7 @@ import { ConfigServiceProvider } from '../../providers/config-service/config-ser
 })
 export class SettingsPage {
 
-  config: any = this.configService.getConfig()
-
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public configService: ConfigServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -25,9 +26,5 @@ export class SettingsPage {
   
   goTo(state) {
     this.navCtrl.push(state);
-  }
-
-  isScreenSideTabSize() {
-    return window.matchMedia("(min-width: 768px)").matches;
   }
 }

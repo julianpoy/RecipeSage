@@ -7,7 +7,6 @@ import { MessageThreadPage } from '../pages/message-thread/message-thread';
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
-import { ConfigServiceProvider } from '../providers/config-service/config-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,13 +23,10 @@ export class MyApp {
   
   version: number = (<any>window).version;
 
-  config: any = this.configService.getConfig();
-
   constructor(
     public platform: Platform,
     public events: Events,
     public toastCtrl: ToastController,
-    public configService: ConfigServiceProvider,
     public recipeService: RecipeServiceProvider,
     public messagingService: MessagingServiceProvider,
     public userService: UserServiceProvider) {
@@ -228,10 +224,6 @@ export class MyApp {
 
   isLoggedIn() {
     return localStorage.getItem('token') ? true : false;
-  }
-
-  isScreenSideTabSize() {
-    return window.matchMedia("(min-width: 768px)").matches;
   }
   
   loadInboxCount() {
