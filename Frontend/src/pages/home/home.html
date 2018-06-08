@@ -74,22 +74,23 @@
     </div>
 
     <div *ngIf="initialLoadComplete">
-      <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" text-wrap text-center>
+      <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
         <p>
-          Welcome to Recipe Sage!<br />
-          It looks like you have no recipes yet.<br />
+          Welcome to Recipe Sage!<br /><br />
+          This is your recipe list.<br />
+          It looks like you don't have any recipes yet.<br />
           Click the button in the bottom right corner to add one!
         </p>
       </ion-item>
       
-      <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0" text-wrap text-center>
+      <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
         <p>
           Your inbox is empty.<br />
           When someone sends you a recipe, it will show up here!
         </p>
       </ion-item>
       
-      <ion-item *ngIf="searchResultsAfterFilterLen === 0 && searchText.length > 0" text-wrap text-center>
+      <ion-item *ngIf="searchResultsAfterFilterLen === 0 && searchText.length > 0" no-lines text-wrap text-center>
         <p>
           No search results.<br /><br />
           Search includes:<br />
