@@ -3,6 +3,7 @@ var multer = require('multer');
 var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
 var request = require('request');
+var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
@@ -220,7 +221,12 @@ exports.findTitle = findTitle;
 exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject) {
   Recipe.findById(recipeId).lean().exec(function(err, recipe) {
     if (err) {
-      reject(500, 'Could not search DB for recipe.');
+      var payload = {
+        msg: 'Could not search DB for recipe.',
+        err: err
+      };
+      reject(500, payload);
+      Raven.captureException(payload);
     } else if (!recipe) {
       reject(404, 'Could not find recipe under that ID.');
     } else {
@@ -228,7 +234,13 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject)
         if (recipe.image && recipe.image.location) {
           sendURLToS3(recipe.image.location, function(err, img) {
             if (err) {
+              var payload = {
+                msg: 'Could not send URL to s3.',
+                err: err,
+                img: img
+              };
               reject(err);
+              Raven.captureException(payload);
             } else {
               resolve(img);
             }
@@ -257,16 +269,31 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject)
             fromUser: senderId
           }).save(function(err, sharedRecipe) {
             if (err) {
-              reject(500, "Error saving the recipe!");
+              var payload = {
+                msg: "Error saving the recipe!",
+                err: err
+              }
+              reject(500, payload.msg);
+              Raven.captureException(payload);
             } else {
               resolve(sharedRecipe);
             }
           });
-        }, function() {
-          reject(500, "Could not avoid duplicate title!");
+        }, function(err) {
+          var payload = {
+            msg: "Could not avoid duplicate title!",
+            err: err
+          };
+          reject(500, payload.msg);
+          Raven.captureException(payload);
         });
-      }, function() {
-        reject(500, "Error uploading image via URL!");
+      }, function(err) {
+        var payload = {
+          msg: "Error uploading image via URL!",
+          err: err
+        }
+        reject(500, payload);
+        Raven.captureException(payload);
       });
     }
   });
