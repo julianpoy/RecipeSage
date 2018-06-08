@@ -258,10 +258,13 @@ export class MyApp {
   }
 
   logout() {
+    this.messagingService.disableNotifications();
+    
     localStorage.removeItem('token');
 
-    this.messagingService.disableNotifications();
-
-    this.openPage('LoginPage');
+    this.openPage({
+      component: 'WelcomePage',
+      navData: {}
+    });
   }
 }
