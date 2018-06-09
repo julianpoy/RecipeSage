@@ -200,7 +200,8 @@ export class MyApp {
     
     var loggedOutPages = [
       { title: 'Welcome', component: 'WelcomePage' },
-      { title: 'Signup/Login', component: 'LoginPage' }
+      { title: 'Log In', component: 'LoginPage' },
+      { title: 'Create an Account', component: 'LoginPage', navData: { register: true } }
     ];
 
     var loggedInPages = [

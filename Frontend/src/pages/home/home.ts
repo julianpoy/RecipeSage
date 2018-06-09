@@ -300,7 +300,7 @@ export class HomePage {
       switch(err.status) {
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
             duration: 6000
           }).present();
           break;
@@ -350,7 +350,7 @@ export class HomePage {
       switch(err.status) {
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please logout and login using the side menu.',
+            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
             duration: 6000
           }).present();
           break;

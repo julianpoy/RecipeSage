@@ -21,8 +21,12 @@ export class WelcomePage {
     console.log('ionViewDidLoad WelcomePage');
   }
   
-  goToAuth() {
-    this.navCtrl.push('LoginPage');
+  goToAuth(type) {
+    let register = type === 'register';
+
+    this.navCtrl.push('LoginPage', {
+      register: register
+    });
   }
 
 }

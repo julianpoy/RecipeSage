@@ -28,6 +28,9 @@ export class LoginPage {
     public navParams: NavParams,
     public userService: UserServiceProvider) {
 
+    if (navParams.get('register')) {
+      this.showLogin = false;
+    }
   }
 
   ionViewDidLoad() {

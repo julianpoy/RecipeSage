@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>Login</ion-title>
+    <ion-title>{{ showLogin ? 'Log In' : 'Create an Account' }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -43,11 +43,11 @@
       </div>
   
       <div padding>
-      	<button ion-button block (click)="auth()">{{ showLogin ? "Login" : "Signup" }}</button>
+      	<button ion-button block (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</button>
   		</div>
   
   		<div>
-      	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Signup instead" : "Login instead" }}</button>
+      	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</button>
   		</div>
   		
   		{{ errorMessage }}
