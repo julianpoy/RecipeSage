@@ -229,6 +229,8 @@ export class MyApp {
   loadInboxCount() {
     var me = this;
 
+    if (!localStorage.getItem('token')) return;
+
     this.recipeService.fetch({ folder: 'inbox' }).subscribe(function(response) {
       me.inboxCount = response.length;
       
