@@ -86,10 +86,7 @@ export class LoginPage {
         loading.dismiss();
         switch(err.status) {
           case 0:
-            me.toastCtrl.create({
-              message: 'It looks like you\'re offline.',
-              duration: 5000
-            }).present();
+            me.errorMessage = 'It looks like you\'re offline right now.';
             break;
           case 404:
             me.errorMessage = 'I can\'t find an account with that email address.';
@@ -118,10 +115,7 @@ export class LoginPage {
           loading.dismiss();
           switch(err.status) {
             case 0:
-              me.toastCtrl.create({
-                message: 'It looks like you\'re offline.',
-                duration: 5000
-              }).present();
+              me.errorMessage = 'It looks like you\'re offline right now.';
               break;
             case 412:
               me.errorMessage = 'Please enter an email address.';
