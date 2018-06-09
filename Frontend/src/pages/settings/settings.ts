@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
 
 @IonicPage({
   priority: 'low'
@@ -13,6 +13,7 @@ export class SettingsPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public toastCtrl: ToastController,
     public alertCtrl: AlertController) {
   }
 
