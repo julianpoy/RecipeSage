@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
+var compression = require('compression');
 
 if (fs.existsSync("./config/config.json")) {
   console.log("config.json found");
@@ -40,6 +41,8 @@ var messages = require('./routes/messages');
 
 var app = express();
 app.use(Raven.requestHandler());
+
+app.use(compression());
 
 app.options('*', cors());
 app.use(cookieParser());

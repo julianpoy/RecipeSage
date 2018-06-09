@@ -8,6 +8,7 @@
   "dependencies": {
     "aws-sdk": "^2.200.0",
     "body-parser": "~1.18.2",
+    "compression": "^1.7.2",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "debug": "~2.6.9",
