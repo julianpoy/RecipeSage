@@ -14,7 +14,7 @@
         <ion-badge *ngIf="p.title === 'Recipe Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
       </button>
       <button menuClose ion-item *ngIf="isLoggedIn()" (click)="logout()">
-        Logout
+        Log Out
       </button>
     </ion-list>
   </ion-content>
