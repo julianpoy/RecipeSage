@@ -47,7 +47,7 @@ workbox.routing.registerRoute(
     cacheName: 's3-image-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxEntries: 20
+        maxEntries: 40
       }),
     ],
   })
