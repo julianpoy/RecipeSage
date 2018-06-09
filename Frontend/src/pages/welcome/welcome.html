@@ -14,7 +14,12 @@
 
 <ion-content>
   <div class="photoHolder">
-    <img src="assets/stockphotos/chicken-salad.jpg" />
+    <picture>
+      <source media="(min-width: 1921px)" srcset="assets/stockphotos/chicken-salad-original.jpg">
+      <source media="(min-width: 1281px)" srcset="assets/stockphotos/chicken-salad-1920.jpg">
+      <source media="(min-width: 641px)" srcset="assets/stockphotos/chicken-salad-1280.jpg">
+      <img src="assets/stockphotos/chicken-salad-640.jpg" alt="Chicken Salad">
+    </picture>
   </div>
   <div class="welcomeContent" padding>
     <h2>Welcome to Recipe Sage!</h2>
