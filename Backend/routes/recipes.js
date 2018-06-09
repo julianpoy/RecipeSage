@@ -130,7 +130,8 @@ router.get(
   // Only waste time on populating the other user if the query is in inbox
   if (req.query.folder === 'inbox') q.populate('fromUser', 'name email');
 
-  q.lean()
+  q.select('title description source image folder fromUser created updated')
+  .lean()
   .exec(function(err, recipes) {
     if (err) {
       var payload = {
@@ -140,7 +141,10 @@ router.get(
       payload.err = err;
       Raven.captureException(payload);
     } else {
-      Label.find().lean().exec(function(err, labels) {
+      Label.find()
+      .select('title recipes')
+      .lean()
+      .exec(function(err, labels) {
         if (err) {
           var payload = {
             msg: "Couldn't search the database for labels!"
@@ -155,6 +159,7 @@ router.get(
             for (var j = 0; j < label.recipes.length; j++) {
               labelsByRecipe[label.recipes[j]] = label;
             }
+            delete label.recipes; // Clean out before sending to client
           }
           
           var labelFilter;
