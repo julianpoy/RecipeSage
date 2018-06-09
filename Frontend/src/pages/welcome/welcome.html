@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <img src="assets/recipesage-white-trimmed.png" style="display:inline-block" height="40px" />
+      <img src="assets/recipesage-white-trimmed.png" alt="Recipe Sage Logo" style="display:inline-block" height="40px" />
       <!--Recipe Sage-->
     </ion-title>
   </ion-navbar>
@@ -38,15 +38,24 @@
     - Import recipes from Pepperplate<br />
     - Share and interact with other users<br />
     
-    <br />
+    <br /><br /><br />
     
-    Create an account by clicking the button below!
+    <button ion-button icon-start (click)="goToAuth('reg')" style="margin: 0;">
+      <ion-icon name="ios-leaf"></ion-icon>
+      Create an account
+    </button>
     
+    <br /><br />
+    
+    <button ion-button icon-start (click)="goToAuth('login')" style="margin: 0;">
+      <ion-icon name="ios-nutrition"></ion-icon>
+      Login
+    </button>
   </div>
   
   
 </ion-content>
 
-<ion-footer>
+<!-- <ion-footer>
   <button ion-button full (click)="goToAuth()" style="margin: 0;">Signup or Login</button>
-</ion-footer>
+</ion-footer> -->
