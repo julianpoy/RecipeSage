@@ -121,13 +121,16 @@ router.get(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-  Recipe.find({
+  var q = Recipe.find({
     accountId: res.locals.session.accountId,
     folder: req.query.folder
   })
-  .sort(req.query.sort || 'title')
-  .populate('fromUser', 'name email')
-  .lean()
+  .sort(req.query.sort || 'title');
+
+  // Only waste time on populating the other user if the query is in inbox
+  if (req.query.folder === 'inbox') q.populate('fromUser', 'name email');
+
+  q.lean()
   .exec(function(err, recipes) {
     if (err) {
       var payload = {
@@ -137,50 +140,45 @@ router.get(
       payload.err = err;
       Raven.captureException(payload);
     } else {
-      
-      var labelPromises = [];
-      
-      for (var i = 0; i < recipes.length; i++) {
-        let recipe = recipes[i];
-        
-        labelPromises.push(new Promise(function(resolve, reject) {
-          Label.find({
-            recipes: recipe._id
-          }).lean().exec(function(err, labels) {
-            if (err) {
-              var payload = {
-                msg: "Couldn't search database for labels!"
-              };
-              reject(500, payload.msg);
-              payload.err = err;
-              Raven.captureException(payload);
-            } else {
-              recipe.labels = labels;
-      
-              resolve();
+      Label.find().lean().exec(function(err, labels) {
+        if (err) {
+          var payload = {
+            msg: "Couldn't search the database for labels!"
+          };
+          res.status(500, payload);
+          payload.err = err;
+          Raven.captureException(payload);
+        } else {
+          var labelsByRecipe = {};
+          for (var i = 0; i < labels.length; i++) {
+            let label = labels[i];
+            for (var j = 0; j < label.recipes.length; j++) {
+              labelsByRecipe[label.recipes[j]] = label;
             }
-          });
-        }));
-      }
-      
-      Promise.all(labelPromises).then(function() {
-        if (req.query.labels && req.query.labels.length > 0) {
-          var allowableLabels = req.query.labels.split(',');
-          recipes = recipes.filter(function(el) {
-            return el.labels.some(function(label) {
-              return allowableLabels.indexOf(label.title) > -1;
-            })
-          });
-        }
+          }
+          
+          var labelFilter;
+          if (req.query.labels && req.query.labels.length > 0) labelFilter = req.query.labels.split(',');
 
-        res.status(200).json(recipes);
-      }, function(err) {
-        var payload = {
-          msg: "Could not query DB for labels."
-        };
-        res.status(500).json(payload);
-        payload.err = err;
-        Raven.captureException(payload);
+          for (var i = 0; i < recipes.length; i++) {
+            let recipe = recipes[i];
+
+            recipe.labels = labelsByRecipe[recipe._id];
+
+            if (labelFilter) {
+              let containsIllegal = recipe.labels.some(function (label) {
+                return allowableLabels.indexOf(label.title) > -1;
+              });
+
+              if (containsIllegal) {
+                recipes.splice(i, 1);
+                i = i - 1;
+              }
+            }
+          }
+          
+          res.status(200).json(recipes);
+        }
       });
     }
   });
