@@ -65,7 +65,7 @@ module.exports = {
     /\.(wp).(scss)$/i,
     // Exclude list from https://julienrenaux.fr/2017/07/20/optimized-ionic-angular-css-bundle-for-pwas/
     // /(action-sheet|alert|backdrop|badge|button|card|checkbox|chip|datetime|fab|grid|icon|img|infinite-scroll|input|item|label|list|loading|menu|modal|note|picker|popover|radio|range|refresher|searchbar|segment|select|show-hide-when|slides|split-pane|spinner|tabs|toast|toggle|virtual-scroll|cordova)/i,
-    /(action-sheet|checkbox|chip|datetime|img|infinite-scroll|loading|note|picker|range|segment|slides|split-pane|tabs|toggle|virtual-scroll|cordova)/i,
+    /(action-sheet|checkbox|chip|datetime|img|infinite-scroll|loading|note|picker|range|segment|slides|split-pane|tabs|virtual-scroll|cordova)/i,
   ],
 
   /**
