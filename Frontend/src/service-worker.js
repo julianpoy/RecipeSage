@@ -14,7 +14,7 @@ workbox.precaching.precacheAndRoute([{
 }]);
 
 workbox.routing.registerRoute(
-  new RegExp('(\/api\/.*)|(\/chefbook-backend\/.*)'),
+  new RegExp('/api/'),
   workbox.strategies.networkFirst()
 );
 
