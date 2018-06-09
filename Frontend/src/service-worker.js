@@ -9,13 +9,48 @@ workbox.setConfig({
 workbox.skipWaiting();
 workbox.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
-workbox.precaching.precacheAndRoute([{
-  "url": "assets/fonts/ionicons.woff2?v=4.1.1"
-}]);
+workbox.precaching.precacheAndRoute([
+  {
+    "url": "assets/fonts/ionicons.woff2?v=4.1.1",
+    "revision": '383676'
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify.min.js"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.6/lunr.min.js"
+  }
+]);
 
+// API calls should always fetch the newest if available. Fall back on cache for offline support.
+// Limit the maxiumum age so that requests aren't too stale.
 workbox.routing.registerRoute(
   new RegExp('/api/'),
-  workbox.strategies.networkFirst()
+  workbox.strategies.networkFirst({
+    cacheName: 'api-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * 3, // 3 Days
+      }),
+    ]
+  })
+);
+
+// S3 assets don't share ID's so we can cache them indefinitely
+// Limit the cache to a maximum number of entries so as not to consume too much storage
+workbox.routing.registerRoute(
+  new RegExp('https://chefbook-prod\.s3\.amazonaws\.com/|https://chefbook-prod\.s3\.us-west-2\.amazonaws\.com/'),
+  workbox.strategies.cacheFirst({
+    cacheName: 's3-image-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 20
+      }),
+    ],
+  })
 );
 
 // ==== FIREBASE MESSAGING ====
