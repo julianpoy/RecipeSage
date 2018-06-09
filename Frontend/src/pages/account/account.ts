@@ -39,11 +39,10 @@ export class AccountPage {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
             duration: 5000
-          });
-          offlineToast.present();
+          }).present();
           break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
@@ -84,11 +83,10 @@ export class AccountPage {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
             duration: 5000
-          });
-          offlineToast.present();
+          }).present();
           break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
@@ -135,11 +133,10 @@ export class AccountPage {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
             duration: 5000
-          });
-          offlineToast.present();
+          }).present();
           break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
@@ -192,11 +189,10 @@ export class AccountPage {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
+          me.toastCtrl.create({
             message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
             duration: 5000
-          });
-          offlineToast.present();
+          }).present();
           break;
         case 401:
           me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});

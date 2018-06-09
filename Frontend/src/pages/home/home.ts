@@ -298,6 +298,12 @@ export class HomePage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          }).present();
+          break;
         case 401:
           me.toastCtrl.create({
             message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
@@ -348,6 +354,12 @@ export class HomePage {
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
+        case 0:
+          me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          }).present();
+          break;
         case 401:
           me.toastCtrl.create({
             message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
