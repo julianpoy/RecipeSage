@@ -33,7 +33,6 @@ function sendURLToS3(url, callback) {
     
     var contentType = res.headers['content-type'];
     var contentLength = res.headers['content-length'];
-    console.log(contentType, contentLength)
 
     s3.putObject({
       Bucket: config.aws.bucket,

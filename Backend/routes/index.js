@@ -4,6 +4,7 @@ var Nightmare = require('nightmare');
 var cors = require('cors');
 var aws = require('aws-sdk');
 var semver = require('semver');
+var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
@@ -35,6 +36,10 @@ router.get(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
+  Raven.captureMessage('Starting import job', {
+    level: 'info'
+  });
+
   var username = req.query.username;
   var password = req.query.password;
   
@@ -49,6 +54,7 @@ router.get(
   function setWorkerTimeout() {
     return setTimeout(function() {
       UtilService.dispatchImportNotification(res.locals.user, 1, 'timeout');
+      Raven.captureException('Import job failed');
     }, WORKER_TIMEOUT_INTERVAL);
   }
   var workerTimeout = setWorkerTimeout();
@@ -76,7 +82,7 @@ router.get(
             image: image
           }).save(function(err, savedRecipe) {
             if (err) {
-              console.log("Error saving recipe on import: ", err);
+              Raven.captureException(err);
               fail();
             } else {
               var labelPromises = [];
@@ -103,7 +109,8 @@ router.get(
                     new: true // Return updated, not original
                   }, function(err, label) {
                     if (err) {
-                      console.log("Error saving label on import: ", err, rawCategory);
+                      Raven.captureException(err);
+                      Raven.captureException(rawCategory);
                       rejectLabel();
                     } else {
                       resolveLabel();
@@ -124,14 +131,14 @@ router.get(
     
         if (recipe.imageURL) {
           UtilService.sendURLToS3(recipes[i].imageURL, function(err, image) {
-            console.log("Image response: ", err, image)
-            
             if (err) {
+              Raven.captureException(err);
               reject();
             } else {
               saveRecipe(image, function() {
                 resolve();
-              }, function() {
+              }, function(err) {
+                Raven.captureException(err);
                 reject();
               });
             }
@@ -139,7 +146,8 @@ router.get(
         } else {
           saveRecipe(null, function() {
             resolve();
-          }, function() {
+          }, function(err) {
+            Raven.captureException(err);
             reject();
           });
         }
@@ -148,13 +156,17 @@ router.get(
     
     Promise.all(savePromises).then(function() {
       UtilService.dispatchImportNotification(res.locals.user, 0);
+      Raven.captureMessage('Import job completed succesfully', {
+        level: 'info'
+      });
     }, function() {
       UtilService.dispatchImportNotification(res.locals.user, 1, 'saving');
+      Raven.captureException('Import job failed');
     });
   };
   
   function loadNext(nightmare, recipes, urls, idx) {
-    console.log('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
+    // Raven.captureMessage('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
     
     nightmare
       .goto(urls[idx])
@@ -190,8 +202,6 @@ router.get(
             loadNext(nightmare, recipes, urls, idx+1);
           }, 100); // MUST BE SIGNIFICANTLY LESS THAN WORKER TIMEOUT
         } else {
-          console.log('DONE', recipes);
-          
           // Finally, clear the worker timeout completely
           clearTimeout(workerTimeout);
           
@@ -201,12 +211,10 @@ router.get(
       .catch(function (error) {
         clearTimeout(workerTimeout);
         UtilService.dispatchImportNotification(res.locals.user, 1, 'timeout');
-        console.error('Search failed:', error);
+        Raven.captureException(error);
       });
   }
   
-  console.log("starting nightmare...")
- 
   nightmare
     .goto(loginLink)
     .type('#cphMain_loginForm_tbEmail', username)
@@ -228,7 +236,7 @@ router.get(
       });
     })
     .then(function(results){
-      console.log("got to loadnext ", results, results.length)
+      // Raven.captureMessage("got to loadnext ", results, results.length);
 
       // Reset worker timeout
       clearTimeout(workerTimeout);
@@ -242,9 +250,8 @@ router.get(
     })
     .catch(function (error) {
       clearTimeout(workerTimeout);
-      console.log("caught well!")
       UtilService.dispatchImportNotification(res.locals.user, 1, 'invalidCredentials');
-      console.error('Search failed:', error);
+      Raven.captureException(error);
     });
 
   res.status(200).json({

@@ -21,7 +21,6 @@ router.post(
   MiddlewareService.validateUser,
   function(req, res, next) {
   
-  console.log(req.body.to)
   User.findById(req.body.to).exec(function(err, recipient) {
     if (err) {
       var payload = {
@@ -132,7 +131,6 @@ router.get(
       payload.err = err;
       Raven.captureException(payload);
     } else {
-      // console.log(messages)
       var conversationsByUser = messages.reduce(function(acc, el, i) {
         var otherUser;
         if (el.to._id.toString() === res.locals.session.accountId) {

@@ -4,6 +4,7 @@ var cors = require('cors');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var nodemailer = require('nodemailer');
+var Raven = require('raven');
 
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
@@ -40,9 +41,12 @@ router.get(
   .select('_id name email')
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({
+      var payload = {
         msg: "Couldn't search the database for user!"
-      });
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!user) {
       res.status(404).json({
         msg: "No user with that email!"
@@ -64,9 +68,12 @@ router.post(
   })
   .exec(function(err, user) {
     if (err) {
-      res.status(500).json({
+      var payload = {
         msg: "Couldn't search the database for user!"
-      });
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     } else if (!user) {
       res.status(404).json({
         msg: "Wrong email!"
@@ -74,9 +81,12 @@ router.post(
     } else {
       user.validatePassword(req.body.password, function(err, isValid) {
         if (err) {
-          res.status(500).json({
+          var payload = {
             msg: "Couldn't validate the database user password!"
-          });
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else if (!isValid) {
           res.status(401).json({
             msg: "Password is incorrect!"
@@ -95,7 +105,7 @@ router.post(
   
           user.save(function(err) {
             if (err) {
-              console.log("Could not update user after login");
+              Raven.captureException("Could not update user after login");
             }
           });
         }
@@ -127,7 +137,12 @@ router.post(
     .select('_id')
     .exec(function(err, user) {
       if (err) {
-        res.status(500).send('Could not query database for preexisting user');
+        var payload = {
+          msg: 'Could not query database for preexisting user'
+        };
+        res.status(500).json(payload);
+        payload.err = err;
+        Raven.captureException(payload);
       } else if (user) {
         res.status(406).json({
           msg: "Account with that email address already exists!"
@@ -142,9 +157,12 @@ router.post(
             passwordVersion: hashedPasswordData.version
           }).save(function(err, newUser) {
             if (err) {
-              res.status(500).json({
+              var payload = {
                 msg: "Error saving user to DB!"
-              });
+              };
+              res.status(500).json(payload);
+              payload.err = err;
+              Raven.captureException(payload);
             } else {
               SessionService.generateSession(newUser._id, 'user', function(token, session) {
                 res.status(200).json({
@@ -152,6 +170,7 @@ router.post(
                 });
               }, function(err) {
                 res.status(err.status).json(err);
+                Raven.captureException(err);
               });
             }
           });
@@ -208,9 +227,12 @@ router.put(
       .lean()
       .exec(function(err, user) {
         if (err) {
-          res.status(500).json({
+          var payload = {
             msg: "Could not update user"
-          });
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else {
           delete user.password;
           delete user.salt;
@@ -319,10 +341,12 @@ router.post(
         _id: { $ne: res.locals.session.accountId }
       }).exec(function(err, users) {
         if (err) {
-          console.log(err)
-          res.status(500).json({
+          var payload = {
             msg: "Couldn't search the database for users!"
-          });
+          };
+          res.status(500).json(payload);
+          payload.err = err;
+          Raven.captureException(payload);
         } else if (!users) {
           resolveRevokeToken();
         } else {
@@ -342,6 +366,7 @@ router.post(
               }).exec(function(err, updatedUser) {
                 if (err) {
                   reject(500, "Couldn't search the database for users during fcm revoke!");
+                  Raven.captureException(err);
                 } else {
                   resolve();
                 }
@@ -384,6 +409,7 @@ router.post(
           res.status(500).json({
             msg: "Couldn't add to the database!"
           });
+          Raven.captureException(err);
         } else {
           user = user.toObject();
         
@@ -426,6 +452,7 @@ router.delete(
         res.status(500).json({
           msg: "Couldn't query the database!"
         });
+        Raven.captureException(err);
       } else {
         user = user.toObject();
         

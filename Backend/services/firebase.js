@@ -13,15 +13,11 @@ exports.sendMessage = function(fcmToken, payload, success, fail) {
     token: fcmToken
   };
   
-  console.log(message)
-
   admin.messaging().send(message)
   .then((response) => {
-    console.log('Successfully sent message:', response);
     success(response);
   })
   .catch((error) => {
-    console.log('Error sending message:', error);
     fail(error);
   });
 }

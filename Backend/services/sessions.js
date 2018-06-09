@@ -64,7 +64,6 @@ exports.validateSession = function(token, type, success, fail) {
                             msg: "Error reading database when extending user token!",
                             err: err
                         }
-                        console.log(payload);
                         Raven.captureException(payload);
                       }
                     });
@@ -82,7 +81,6 @@ exports.validateSession = function(token, type, success, fail) {
                     msg: "Error removing old sessions!",
                     err: err
                 }
-                console.log(payload);
                 Raven.captureException(payload);
             }
         });

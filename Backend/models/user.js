@@ -92,8 +92,6 @@ User.methods.updatePassword = function(password, cb) {
     me.passwordVersion = data.version;
     me.updated = Date.now();
     
-    console.log("got here")
-
     me.save(cb);
   });
 }

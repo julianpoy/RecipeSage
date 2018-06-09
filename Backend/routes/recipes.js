@@ -33,12 +33,11 @@ router.post(
     // This request is bad due to no title, but we already uploaded an image for it. Delete the image before erroring out
     if (req.file && req.file.key) {
       UtilService.deleteS3Object(req.file.key, function() {
-        console.log("Cleaned s3 image after precondition failure");
         res.status(412).send("Recipe title must be provided.");
-      }, function() {
-        console.log("Failed to clean s3 image after precondition failure!");
+      }, function(err) {
         var payload = {
-          msg: "Original error: 412 - recipe title must be provided. While processing, there was another error: could not delete uploaded image from S3!"
+          msg: "Original error: 412 - recipe title must be provided. While processing, there was another error: could not delete uploaded image from S3!",
+          err: err
         };
         res.status(500).json(payload);
         Raven.captureException(payload);
@@ -272,7 +271,7 @@ router.get(
       res.setHeader('Content-type', mimetype);
       res.write(data, function (err) {
         if (err) {
-          console.log("Could not write data response for export task.");
+          Raven.captureException("Could not write data response for export task.");
         }
   
         res.end();
@@ -373,14 +372,12 @@ router.put(
       if (req.file) {
         // Remove old (replaced) image from our S3 bucket
         if (recipe.image && recipe.image.key) {
-          UtilService.deleteS3Object(recipe.image.key, function() {
-            console.log("Cleaned old image from s3", recipe.image.key);
-          }, function(err) {
+          UtilService.deleteS3Object(recipe.image.key, function() {}, function(err) {
             var payload = {
               msg: "Error cleaning old image from s3 ",
-              err: err
+              err: err,
+              key: recipe.image.key
             };
-            console.log(payload);
             Raven.captureException(payload);
           });
         }
@@ -451,14 +448,12 @@ router.delete(
         } else {
           // Remove image from our S3 bucket
           if (recipe.image && recipe.image.key) {
-            UtilService.deleteS3Object(recipe.image.key, function() {
-              console.log("Cleaned image from s3 after recipe delete ", recipe.image.key);
-            }, function(err) {
+            UtilService.deleteS3Object(recipe.image.key, function() {}, function(err) {
               var payload = {
                 msg: "Error cleaning image from s3 after recipe delete ",
-                err: err
+                err: err,
+                key: recipe.image.key
               };
-              console.log(payload);
               Raven.captureException(payload);
             });
           }
