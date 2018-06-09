@@ -157,7 +157,8 @@ router.get(
           for (var i = 0; i < labels.length; i++) {
             let label = labels[i];
             for (var j = 0; j < label.recipes.length; j++) {
-              labelsByRecipe[label.recipes[j]] = label;
+              if (!labelsByRecipe[label.recipes[j]]) labelsByRecipe[label.recipes[j]] = [label];
+              else labelsByRecipe[label.recipes[j]].push(label);
             }
             delete label.recipes; // Clean out before sending to client
           }
@@ -168,7 +169,7 @@ router.get(
           for (var i = 0; i < recipes.length; i++) {
             let recipe = recipes[i];
 
-            recipe.labels = labelsByRecipe[recipe._id];
+            recipe.labels = labelsByRecipe[recipe._id] || [];
 
             if (labelFilter) {
               let containsIllegal = recipe.labels.some(function (label) {
