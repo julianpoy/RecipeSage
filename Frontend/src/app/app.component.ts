@@ -47,7 +47,7 @@ export class MyApp {
     this.events.subscribe('application:multitasking:paused', () => {
       setTimeout(function() {
         window.updateSW();
-      }, 10);
+      });
     });
 
     window['onSWUpdate'] = function() {
