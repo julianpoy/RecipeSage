@@ -34,33 +34,23 @@ export class MyApp {
     this.initializeApp();
 
     this.loadInboxCount();
-    this.checkForUpdate();
+    this.initUpdateListeners();
     this.initEventListeners();
     this.initEventDispatchers();
     this.initDevBase();
   }
   
-  checkForUpdate() {
-    // var toast;
-    
+  initUpdateListeners() {
     var me = this;
-    // function promptToUpdate() {
-    //   if (toast) return;
 
-    //   toast = this.toastCtrl.create({
-  		// 	message: 'New update available!',
-  		// 	position: 'bottom',
-  		// 	showCloseButton: true,
-  		// 	closeButtonText: "Update"
-  		// });
-  		// toast.onDidDismiss(() => {
-  	 //   (<any>window).location.reload(true);
-    //   });
-  		// toast.present();
-    // }
+    // When user pauses app (device locks, switches tabs, etc) try to update SW
+    this.events.subscribe('application:multitasking:paused', () => {
+      setTimeout(function() {
+        window.updateSW();
+      }, 10);
+    });
 
     window['onSWUpdate'] = function() {
-		  // promptToUpdate.call(me);
 		  console.log("Update is waiting for pause...")
 		  if ((<any>window).isHidden()) {
   	    (<any>window).location.reload(true);

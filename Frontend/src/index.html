@@ -28,17 +28,20 @@
   <!--<script src="cordova.js"></script>-->
 
   <script>
+    window.updateSW = function() {
+      if (!window.swRegistration) return;
+
+      window.swRegistration.update();
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then((registration) => {
           window.swRegistration = registration;
           
-          function updateSW() {
-            window.swRegistration.update();
-          }
           var UPDATE_INTERVAL = 1000 * 60 * 10; // EVERY 10 MINUTES
-          setInterval(updateSW, UPDATE_INTERVAL);
-          updateSW();
+          setInterval(window.updateSW, UPDATE_INTERVAL);
+          window.updateSW();
         })
         .catch(err => console.error('Error', err));
 
