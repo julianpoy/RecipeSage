@@ -28,10 +28,18 @@
   <!--<script src="cordova.js"></script>-->
 
   <script>
-    window.updateSW = function() {
-      if (!window.swRegistration) return;
+    window.updateSW = function(resolve, reject) {
+      resolve = resolve || function() {};
+      reject = reject || function() {};
 
-      window.swRegistration.update();
+      if (!window.swRegistration) {
+        reject();
+        return;
+      }
+
+      var updatePromise = window.swRegistration.update();
+
+      updatePromise.then(resolve, reject);
     }
 
     if ('serviceWorker' in navigator) {

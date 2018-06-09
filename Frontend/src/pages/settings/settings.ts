@@ -1,12 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SettingsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 @IonicPage({
   priority: 'low'
@@ -17,7 +10,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -26,5 +22,36 @@ export class SettingsPage {
   
   goTo(state) {
     this.navCtrl.push(state);
+  }
+
+  checkForUpdate() {
+    var me = this;
+
+    (<any>window).updateSW(function() {
+      let alert = me.alertCtrl.create({
+        title: 'App will reload',
+        subTitle: 'The app will reload to check for an update.',
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Continue',
+            handler: () => {
+              (<any>window).location.reload(true);
+            }
+          }]
+      });
+      alert.present();
+    }, function() {
+      let toast = me.toastCtrl.create({
+        message: 'We were unable to check for an update at this time.',
+        duration: 4000
+      });
+      
+      toast.present();
+    });
   }
 }
