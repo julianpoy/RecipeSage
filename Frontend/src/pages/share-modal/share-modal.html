@@ -31,10 +31,11 @@
         <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
       </ion-item>
       
-      <p *ngIf="recipientName.length > 0 && !searchingForRecipient" padding-left padding-bottom>
-        {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
+      <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
+        <span *ngIf="recipientName">User found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
+        <span *ngIf="!recipientName">No user found with that email address.</span>
       </p>
-      <p *ngIf="recipientName.length == 0 && !searchingForRecipient" padding-left padding-bottom>
+      <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
         Enter an email address to search for a user <span *ngIf="threads.length > 0">or select a conversation below</span>
       </p>
       <p *ngIf="searchingForRecipient" padding-left padding-bottom>
