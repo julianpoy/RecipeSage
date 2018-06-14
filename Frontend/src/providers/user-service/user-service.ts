@@ -48,6 +48,21 @@ export class UserServiceProvider {
     );
   }
   
+  logout() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http
+      .post(this.base + 'users/login' + this.getTokenQuery(), {}, httpOptions)
+      .pipe(
+        retry(3),
+        catchError(this.handleError)
+      );
+  }
+
   update(data) {
     const httpOptions = {
       headers: new HttpHeaders({

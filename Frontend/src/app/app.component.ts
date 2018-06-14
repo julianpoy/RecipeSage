@@ -250,14 +250,36 @@ export class MyApp {
     this.nav.setRoot(page.component, page.navData);
   }
 
-  logout() {
-    this.messagingService.disableNotifications();
+  _logout() {
     
     localStorage.removeItem('token');
-
+    
     this.openPage({
       component: 'WelcomePage',
       navData: {}
+    });
+  }
+  
+  logout() {
+    this.messagingService.disableNotifications();
+
+    var me = this;
+    this.userService.logout().subscribe(function() {
+      me._logout.call(me);
+    }, function(err) {
+      switch (err.status) {
+        case 0:
+        case 401:
+        case 404:
+          me._logout.call(me);
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
     });
   }
 }

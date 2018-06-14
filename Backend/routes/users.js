@@ -244,6 +244,20 @@ router.put(
   }
 });
 
+router.post(
+  '/logout',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function (req, res) {
+    SessionService.deleteSession(res.locals.session.token, function() {
+      res.status(200).send('Session invalidated. User is now logged out.');
+    }, function(err) {
+      res.status(err.status).send(err);
+      Raven.captureException(err);
+    });
+  });
+
 /* User forgot password */
 // router.post('/forgot', function(req, res, next) {
 //   //Find a user with the email requested. Select salt and password
