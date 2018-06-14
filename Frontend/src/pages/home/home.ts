@@ -199,8 +199,6 @@ export class HomePage {
         }
         
         resolve();
-        
-        me.requestNotifications();
       }, function(err) {
         reject();
         
@@ -225,49 +223,6 @@ export class HomePage {
         }
       });
     });
-  }
-  
-  requestNotifications() {
-    if (!('Notification' in window) || (<any>Notification).permission === 'denied') return;
-
-    if ((<any>Notification).permission === 'granted') {
-      this.messagingService.enableNotifications();
-      return;
-    }
-    
-    
-    if (!localStorage.getItem('notificationExplainationShown')) {
-      localStorage.setItem('notificationExplainationShown', 'true');
-      var me = this;
-  
-      let alert = this.alertCtrl.create({
-        title: 'Notification Permissions',
-        subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
-        buttons: [{
-          text: 'Continue',
-          handler: () => {
-            try {
-              me.messagingService.enableNotifications();
-            } catch(e) {
-              let error = this.alertCtrl.create({
-                title: 'Could not enable notifications',
-                subTitle: 'Please enable notifications for this site manually within your browser settings if you wish to receive inbox notifications.',
-                buttons: [{
-                  text: 'Ok',
-                  handler: () => {}
-                }]
-              });
-              error.present();
-            }
-          }
-        }]
-      });
-      alert.present();
-    } else {
-      try {
-        this.messagingService.enableNotifications();
-      } catch(e) {}
-    }
   }
   
   openRecipe(recipe) {

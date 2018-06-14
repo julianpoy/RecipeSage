@@ -5,7 +5,7 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
-import { Events, ToastController } from 'ionic-angular';
+import { Events, ToastController, AlertController } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
@@ -32,23 +32,24 @@ export class MessagingServiceProvider {
   public http: HttpClient,
   public events: Events,
   public userService: UserServiceProvider,
+  public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
     console.log('Hello MessagingServiceProvider Provider');
     
     this.base = localStorage.getItem('base') || '/api/';
     
-    if ((<any>window).swRegistration) {
+    var me = this;
+    var onSWRegsitration = function() {
       console.log("Has service worker registration. Beginning setup.")
       var config = {
         messagingSenderId: "1064631313987"
       };
       firebase.initializeApp(config);
   
-      this.messaging = firebase.messaging();
-      this.messaging.useServiceWorker((<any>window).swRegistration);
+      me.messaging = firebase.messaging();
+      me.messaging.useServiceWorker((<any>window).swRegistration);
       
-      var me = this;
-      this.messaging.onMessage(function(message: any) {
+      me.messaging.onMessage(function(message: any) {
         console.log("received foreground FCM: ", message)
         
         switch(message.data.type) {
@@ -65,6 +66,8 @@ export class MessagingServiceProvider {
         }
       });
     }
+    if ((<any>window).swRegistration) onSWRegsitration.call(null);
+    else (<any>window).onSWRegistration = onSWRegsitration;
   }
   
   isNotificationsEnabled() {
@@ -146,8 +149,50 @@ export class MessagingServiceProvider {
       catchError(this.handleError)
     );
   }
+
+  requestNotifications() {
+    if (!('Notification' in window) || (<any>Notification).permission === 'denied' || !this.messaging) return;
+
+    if ((<any>Notification).permission === 'granted') {
+      this.enableNotifications();
+      return;
+    }
+
+    if (!localStorage.getItem('notificationExplainationShown')) {
+      localStorage.setItem('notificationExplainationShown', 'true');
+      var me = this;
+
+      let alert = this.alertCtrl.create({
+        title: 'Notification Permissions',
+        subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
+        buttons: [{
+          text: 'Continue',
+          handler: () => {
+            try {
+              me.enableNotifications();
+            } catch (e) {
+              let error = this.alertCtrl.create({
+                title: 'Could not enable notifications',
+                subTitle: 'Please enable notifications for this site manually within your browser settings if you wish to receive inbox notifications.',
+                buttons: [{
+                  text: 'Ok',
+                  handler: () => { }
+                }]
+              });
+              error.present();
+            }
+          }
+        }]
+      });
+      alert.present();
+    } else {
+      this.enableNotifications();
+    }
+  }
   
-  public enableNotifications() {
+  private enableNotifications() {
+    if (!this.messaging) return;
+
     console.log('Requesting permission...');
     return this.messaging.requestPermission().then(() => {
       console.log('Permission granted');
@@ -160,6 +205,8 @@ export class MessagingServiceProvider {
   }
 
   public disableNotifications() {
+    if (!this.messaging) return;
+
     this.unsubscribeOnTokenRefresh();
     this.unsubscribeOnTokenRefresh = () => {};
     return this.userService.removeFCMToken(this.fcmToken).subscribe(function(response) {

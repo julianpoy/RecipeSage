@@ -14,7 +14,7 @@ export class MessagesPage {
 
   threads: any = [];
   
-  notificationsEnabled: boolean = false;
+  isNotificationsEnabled: any;
 
   constructor(
     public navCtrl: NavController,
@@ -24,10 +24,9 @@ export class MessagesPage {
     public modalCtrl: ModalController,
     public messagingService: MessagingServiceProvider) {
       
-    this.notificationsEnabled = this.messagingService.isNotificationsEnabled();
-    if (!this.notificationsEnabled) {
-      this.messagingService.enableNotifications();
-    }
+    this.isNotificationsEnabled = this.messagingService.isNotificationsEnabled;
+
+    this.messagingService.requestNotifications();
 
     events.subscribe('messages:new', (message) => {
       this.loadThreads().then(function() {}, function() {});
