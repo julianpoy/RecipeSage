@@ -151,8 +151,11 @@ export class MessagingServiceProvider {
   }
 
   requestNotifications() {
-    if (!('Notification' in window) || (<any>Notification).permission === 'denied' || !this.messaging) return;
+    const notificationsSupported = 'Notification' in window;
+    const notificationsDenied = (<any>Notification).permission === 'denied';
+    if (!this.messaging || !notificationsSupported || notificationsDenied) return;
 
+    // Skip the prompt if permissions are already granted
     if ((<any>Notification).permission === 'granted') {
       this.enableNotifications();
       return;
@@ -163,26 +166,19 @@ export class MessagingServiceProvider {
       var me = this;
 
       let alert = this.alertCtrl.create({
-        title: 'Notification Permissions',
-        subTitle: 'To notify you when your contacts send you recipes, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
-        buttons: [{
-          text: 'Continue',
-          handler: () => {
-            try {
+        title: 'Requires Notification Permissions',
+        subTitle: 'To notify you when your contacts send you messages, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
+        buttons: [
+          {
+            text: 'Cancel'
+          },
+          {
+            text: 'Continue',
+            handler: () => {
               me.enableNotifications();
-            } catch (e) {
-              let error = this.alertCtrl.create({
-                title: 'Could not enable notifications',
-                subTitle: 'Please enable notifications for this site manually within your browser settings if you wish to receive inbox notifications.',
-                buttons: [{
-                  text: 'Ok',
-                  handler: () => { }
-                }]
-              });
-              error.present();
             }
           }
-        }]
+        ]
       });
       alert.present();
     } else {
@@ -190,6 +186,7 @@ export class MessagingServiceProvider {
     }
   }
   
+  // Grab token and setup FCM
   private enableNotifications() {
     if (!this.messaging) return;
 
