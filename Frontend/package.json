@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
-    "bread-compressor-cli": "^1.0.0",
+    "bread-compressor-cli": "^1.0.2",
     "http-server": "^0.11.1",
     "purify-css": "^1.2.5",
     "rev-hash": "^2.0.0",
