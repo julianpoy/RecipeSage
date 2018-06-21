@@ -33,7 +33,7 @@ workbox.routing.registerRoute(
     cacheName: 'api-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 60 * 60 * 24 * 3, // 3 Days
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days, equal to our session invalidation
       }),
     ]
   })
