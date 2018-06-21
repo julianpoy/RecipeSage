@@ -2,25 +2,33 @@ page-recipe {
   .pre {
     white-space: pre;
   }
-  
+
   .item-md.item-block.fixPaperPush .item-inner {
     margin-left: 20px;
   }
-  
+
   .ingredients {
     ion-label {
       margin: 0;
     }
-    
+
     .scale {
       cursor: pointer;
     }
   }
-  
+
+  .meta {
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   #labelSelectParent {
     padding-left: 16px;
     padding-right: 16px;
-    
+
     .labels {
       margin-bottom: 5px;
 
@@ -30,23 +38,23 @@ page-recipe {
         margin-right: 7px;
         padding: 8px;
         line-height: 37px;
-        
+
         ion-icon {
           margin-right: 4px;
           vertical-align: middle;
         }
       }
     }
-    
+
     input {
       border: none;
       border-bottom: 1px solid lightgrey;
       padding: 7px;
-      
+
       width: 100%;
       max-width: 600px;
     }
-    
+
     .autocomplete {
       box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       max-width: 600px;
@@ -59,15 +67,15 @@ page-recipe {
         background-color: white;
         width: 100%;
         text-align: left;
-        
+
         &:hover {
           background-color: #00a8ff;
         }
-        
+
         &:focus {
           background-color: #00a8ff;
         }
-        
+
         .hint {
           float: right;
         }
