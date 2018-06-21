@@ -49,9 +49,7 @@ export class MyApp {
 
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
-      setTimeout(function() {
-        (<any>window).updateSW();
-      });
+      (<any>window).updateSW();
     });
 
     window['onSWUpdate'] = function() {
