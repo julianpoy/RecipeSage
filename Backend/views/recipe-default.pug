@@ -1,0 +1,120 @@
+html
+  head
+    title= recipe.title
+    link(href="https://fonts.googleapis.com/css?family=Lora|Lato", rel="stylesheet")
+    style(type='text/css').
+      body {
+        margin: 1.6cm;
+        font-family: 'Lora', serif;
+      }
+
+      .sans {
+        font-family: 'Lato', sans-serif;
+      }
+
+      @media print {
+        body {margin: 1.6cm;}
+        @page {margin: 0;}
+      }
+
+      .ingredient {
+        font-weight: bold;
+        margin-top: 0px;
+        margin-bottom: 10px;
+      }
+
+      .instruction {
+        margin-top: 0;
+        margin-bottom: 30px;
+      }
+
+      .meta {
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+        padding: 8px;
+      }
+
+      .image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      table {
+        width: 100%;
+      }
+
+      .leftCol {
+        width: 200px;
+        padding-right: 20px;
+      }
+  body
+    table(class='table1')
+      tbody
+        tr
+          if recipe.image && recipe.image.location
+            td(class='leftCol')
+              img(class='image', src= recipe.image.location)
+          td
+            h1(class='sans')= recipe.title
+            if recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield
+              p(class='meta')
+                if recipe.source
+                  span= recipe.source
+                  if recipe.activeTime || recipe.totalTime || recipe.yield
+                    span &nbsp;&nbsp;|&nbsp;&nbsp;
+                if recipe.activeTime
+                  span= recipe.activeTime
+                  if recipe.totalTime || recipe.yield
+                    span &nbsp;&nbsp;|&nbsp;&nbsp;
+                if recipe.totalTime
+                  span= recipe.totalTime
+                  if recipe.yield
+                    span &nbsp;&nbsp;|&nbsp;&nbsp;
+                if recipe.yield
+                  span= recipe.yield
+            p= recipe.description
+            if recipe.labels
+              -var labelIdx = 0
+              each label in recipe.labels
+                i= label.title
+                if ++labelIdx < recipe.labels.length
+                  i ,&nbsp;
+    br
+    table(class='table2')
+      tbody
+        tr
+          if recipe.ingredients
+            td(class='leftCol sans', valign='top')
+              each ingredient in recipe.ingredients
+                p(class='ingredient')= ingredient
+          if recipe.instructions
+            td(valign='top')
+              -var instructionIdx = 0
+              each instruction in recipe.instructions
+                p(class='instruction')
+                  b(class='sans')= ++instructionIdx
+                  span &nbsp;&nbsp;&nbsp;
+                  span= instruction
+    br
+    br
+
+    if recipe.notes
+      b(class='sans') Notes:
+      p= recipe.notes
+      br
+
+
+    if recipe.url
+      b(class='sans') Source URL:&nbsp;
+      p= recipe.url
+      br
+
+    p
+      i Printed on&nbsp;
+      i= date
+
+  script(type='text/javascript').
+    window.print();
+    window.onafterprint = window.close;

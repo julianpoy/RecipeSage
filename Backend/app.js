@@ -38,6 +38,7 @@ var users = require('./routes/users');
 var recipes = require('./routes/recipes');
 var labels = require('./routes/labels');
 var messages = require('./routes/messages');
+var print = require('./routes/print');
 
 var app = express();
 app.use(Raven.requestHandler());
@@ -66,6 +67,7 @@ app.use('/users', users);
 app.use('/recipes', recipes);
 app.use('/labels', labels);
 app.use('/messages', messages);
+app.use('/print', print);
 
 app.use(Raven.errorHandler());
 

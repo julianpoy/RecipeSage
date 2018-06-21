@@ -22,16 +22,16 @@ export class RecipePage {
   recipeId: string;
   ingredients: any;
   instructions: string[];
-  
+
   scale: number = 1;
-  
+
   labelObjectsByTitle: any = {};
   existingLabels: any = [];
   selectedLabels: any = [];
   pendingLabel: string = '';
   showAutocomplete: boolean = false;
   autocompleteSelectionIdx: number = -1;
-  
+
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -41,16 +41,16 @@ export class RecipePage {
     public navParams: NavParams,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
-      
+
     this.recipeId = navParams.get('recipeId');
     this.recipe = <Recipe>{};
 
     this.applyScale();
   }
-  
+
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    
+
     this.recipe = <Recipe>{};
     // if (!this.recipe._id) {
     this.loadRecipe().then(function() {
@@ -59,10 +59,10 @@ export class RecipePage {
       loading.dismiss();
     });
     // }
-    
+
     this.loadLabels();
   }
-  
+
   refresh(loader) {
     this.loadRecipe().then(function() {
       loader.complete();
@@ -70,20 +70,20 @@ export class RecipePage {
       loader.complete();
     });
   }
-  
+
   loadRecipe() {
     var me = this;
-    
+
     return new Promise(function(resolve, reject) {
       me.recipeService.fetchById(me.recipeId).subscribe(function(response) {
         me.recipe = response;
-        
+
         if (me.recipe.instructions && me.recipe.instructions.length > 0) {
-          me.instructions = me.recipe.instructions.split(/\r?\n/); 
+          me.instructions = me.recipe.instructions.split(/\r?\n/);
         }
-        
+
         me.applyScale();
-        
+
         resolve();
       }, function(err) {
         switch(err.status) {
@@ -113,12 +113,12 @@ export class RecipePage {
             errorToast.present();
             break;
         }
-        
+
         reject();
       });
     });
   }
-  
+
   loadLabels() {
     var me = this;
     this.labelService.fetch().subscribe(function(response) {
@@ -126,7 +126,7 @@ export class RecipePage {
         var label = response[i];
         me.existingLabels.push(label.title);
         me.labelObjectsByTitle[label.title] = label;
-        
+
         if (label.recipes.indexOf(me.recipeId) > -1) {
           me.selectedLabels.push(label.title);
         }
@@ -162,7 +162,7 @@ export class RecipePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad RecipePage');
   }
-  
+
   changeScale() {
     var me = this;
 
@@ -194,12 +194,12 @@ export class RecipePage {
 
     alert.present();
   }
-  
+
   setScale(scale) {
     if (!scale || scale <= 0) scale = 1;
-    
+
     scale = parseFloat(scale) || 1;
-    
+
     this.scale = scale;
 
     var me = this;
@@ -207,25 +207,25 @@ export class RecipePage {
       me.applyScale();
     }, 0);
   }
-  
+
   applyScale() {
-    
+
     if (!this.recipe.ingredients) return;
-    
+
     var lines = this.recipe.ingredients.match(/[^\r\n]+/g);
-    
+
     // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
     var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
-    
+
     for (var i = 0; i < lines.length; i++) {
       var matches = lines[i].match(measurementRegexp);
       if (!matches || matches.length === 0) continue;
-      
+
       var measurement = matches[0];
-      
+
       try {
         var measurementParts = measurement.split(/-|to/);
-        
+
         for (var j = 0; j < measurementParts.length; j++) {
           // console.log(measurementParts[j].trim())
           var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(this.scale);
@@ -234,25 +234,25 @@ export class RecipePage {
           if (measurementParts[j].indexOf('/') > -1) {
             scaledMeasurement = scaledMeasurement.toFraction(true);
           }
-          
+
           measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
         }
-        
+
         lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
       } catch(e) {
         console.log("failed to parse", e)
       }
     }
-    
+
     this.ingredients = lines;
   }
-  
+
   editRecipe() {
     this.navCtrl.push('EditRecipePage', {
       recipe: this.recipe
     });
   }
-  
+
   deleteRecipe() {
     let alert = this.alertCtrl.create({
       title: 'Confirm Delete',
@@ -274,12 +274,12 @@ export class RecipePage {
     });
     alert.present();
   }
-  
+
   private _deleteRecipe() {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.recipeService.remove(this.recipe).subscribe(function(response) {
       loading.dismiss();
 
@@ -314,11 +314,11 @@ export class RecipePage {
       }
     });
   }
-  
+
   printRecipe() {
-    window.print();
+    this.recipeService.print(this.recipe, 'default');
   }
-  
+
   shareRecipe() {
     var me = this;
 
@@ -334,19 +334,19 @@ export class RecipePage {
       }
     });
   }
-  
+
   moveToFolder(folderName) {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.recipe.folder = folderName;
-    
+
     console.log(this.recipe)
 
     this.recipeService.update(this.recipe).subscribe(function(response) {
       loading.dismiss();
-      
+
       me.navCtrl.setRoot('RecipePage', {
         recipe: response,
         recipeId: response._id
@@ -375,7 +375,7 @@ export class RecipePage {
       }
     });
   }
-  
+
   toggleAutocomplete(show, event?) {
     if (event && event.relatedTarget) {
       if (event.relatedTarget.className.indexOf('suggestion') > -1) {
@@ -385,7 +385,7 @@ export class RecipePage {
     this.showAutocomplete = show;
     this.autocompleteSelectionIdx = -1;
   }
-  
+
   labelFieldKeyUp(event) {
     // Only listen for up or down arrow
     if (event.keyCode !== 38 && event.keyCode !== 40) return;
@@ -410,7 +410,7 @@ export class RecipePage {
       (suggestions[this.autocompleteSelectionIdx] as HTMLElement).focus();
     }
   }
-  
+
   addLabel(title) {
     if (title.length === 0) {
       this.toastCtrl.create({
@@ -419,9 +419,9 @@ export class RecipePage {
       }).present();
       return;
     }
-    
+
     var me = this;
-    
+
     var loading = this.loadingService.start();
 
     this.labelService.create({
@@ -429,13 +429,13 @@ export class RecipePage {
       title: title.toLowerCase()
     }).subscribe(function(response) {
       loading.dismiss();
-      
+
       if (!me.recipe.labels) me.recipe.labels = [];
       if (me.recipe.labels.indexOf(response) === -1) me.recipe.labels.push(response);
       if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
- 
+
       me.labelObjectsByTitle[response.title] = response;
-      
+
       me.toggleAutocomplete(false);
       me.pendingLabel = '';
     }, function(err) {
@@ -468,7 +468,7 @@ export class RecipePage {
       }
     });
   }
-  
+
   deleteLabel(label) {
     let alert = this.alertCtrl.create({
       title: 'Confirm Label Removal',
@@ -491,17 +491,17 @@ export class RecipePage {
     });
     alert.present();
   }
-  
+
   private _deleteLabel(label) {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     label.recipeId = this.recipe._id;
 
     this.labelService.remove(label).subscribe(function(response) {
       loading.dismiss();
-      
+
       if(label.recipes.length === 1 && label.recipes[0] === me.recipeId) {
         var i = me.existingLabels.indexOf(label.title);
         me.existingLabels.splice(i, 1);
@@ -512,7 +512,7 @@ export class RecipePage {
 
       var rIdx = me.recipe.labels.indexOf(response);
       me.recipe.labels.splice(rIdx, 1);
-      
+
       var idx = me.selectedLabels.indexOf(response.title);
       me.selectedLabels.splice(idx, 1);
     }, function(err) {
@@ -539,7 +539,7 @@ export class RecipePage {
       }
     });
   }
-  
+
   prettyDateTime(datetime) {
     if (!datetime) return '';
     return (new Date(datetime)).toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' });

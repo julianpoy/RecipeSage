@@ -37,30 +37,30 @@ export class RecipeServiceProvider {
 
   constructor(public http: HttpClient, public events: Events) {
     console.log('Hello RecipeServiceProvider Provider');
-    
+
     this.base = localStorage.getItem('base') || '/api/';
   }
-  
+
   getTokenQuery() {
     return '?token=' + localStorage.getItem('token');
   }
-  
+
   getExportURL(format) {
     return this.base + 'recipes/export' + this.getTokenQuery() + '&format=' + format;
   }
-  
+
   fetch(options) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    
+
     var url = this.base + 'recipes/' + this.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
     if (options.sortBy) url += '&sort=' + options.sortBy;
     if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
-    
+
     return this.http
     .get<Recipe[]>(url, httpOptions)
     .pipe(
@@ -68,14 +68,14 @@ export class RecipeServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   fetchById(recipeId) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    
+
     return this.http
     .get<Recipe>(this.base + 'recipes/' + recipeId + this.getTokenQuery(), httpOptions)
     .pipe(
@@ -87,14 +87,14 @@ export class RecipeServiceProvider {
   create(data) {
     let formData: FormData = new FormData();
     if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
-    
+
     delete data.imageFile;
-    
+
     for (var i = 0; i < Object.keys(data).length; i++) {
       var key = Object.keys(data)[i];
       var val = data[key];
-      
-      formData.append(key, val); 
+
+      formData.append(key, val);
     }
 
     const httpOptions = {};
@@ -140,7 +140,7 @@ export class RecipeServiceProvider {
       }
     }
   }
-  
+
   update(data) {
     let formData: FormData = new FormData();
     if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
@@ -150,12 +150,12 @@ export class RecipeServiceProvider {
     for (var i = 0; i < Object.keys(data).length; i++) {
       var key = Object.keys(data)[i];
       var val = data[key];
-      
-      formData.append(key, val); 
+
+      formData.append(key, val);
     }
 
     const httpOptions = {};
-    
+
     var me = this;
     return {
       subscribe: function(resolve, reject) {
@@ -172,7 +172,7 @@ export class RecipeServiceProvider {
       }
     }
   }
-  
+
   remove(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -196,7 +196,11 @@ export class RecipeServiceProvider {
       }
     }
   }
-  
+
+  print(recipe, template) {
+    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe._id + '&template=' + template);
+  }
+
   scrapePepperplate(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -215,7 +219,7 @@ export class RecipeServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
