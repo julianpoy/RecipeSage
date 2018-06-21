@@ -31,7 +31,7 @@ exports.validateSession = function(token, type, success, fail) {
     query.created = {"$gte": moment().subtract(expiry.period, expiry.unit).toDate() };
 
     Session.findOne(query)
-        .select('accountId type assignmentId created')
+        .select('token accountId type assignmentId created')
         .exec(function(err, session) {
             if (err) {
                 var payload = {
@@ -113,9 +113,9 @@ exports.generateSession = function(accountId, type, success, fail) {
 
 //Creates a token and returns the token if successful
 exports.deleteSession = function(token, success, fail) {
-    Session.findOne({
+    Session.findOneAndRemove({
         token: token
-    }).remove(function(err){
+    }).exec(function(err){
       if (err) {
         var payload = {
             msg: "Could not delete session!",
