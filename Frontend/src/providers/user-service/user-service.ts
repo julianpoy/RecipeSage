@@ -56,7 +56,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-      .post(this.base + 'users/login' + this.getTokenQuery(), {}, httpOptions)
+      .post(this.base + 'users/logout' + this.getTokenQuery(), {}, httpOptions)
       .pipe(
         retry(3),
         catchError(this.handleError)

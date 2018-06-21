@@ -251,7 +251,9 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res) {
     SessionService.deleteSession(res.locals.session.token, function() {
-      res.status(200).send('Session invalidated. User is now logged out.');
+      res.status(200).json({
+        msg: 'Session invalidated. User is now logged out.'
+      });
     }, function(err) {
       res.status(err.status).send(err);
       Raven.captureException(err);
