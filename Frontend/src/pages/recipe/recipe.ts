@@ -168,7 +168,7 @@ export class RecipePage {
 
     let alert = this.alertCtrl.create({
       title: 'Recipe Scale',
-      message: 'Enter any decimal number',
+      message: 'Enter a number or fraction to scale the recipe',
       inputs: [
         {
           name: 'scale',
@@ -184,7 +184,9 @@ export class RecipePage {
         {
           text: 'Apply',
           handler: (data) => {
-            me.setScale(data.scale);
+            let parsed = fractionjs(data.scale).valueOf();
+            let rounded = Number(parsed.toFixed(3));
+            me.setScale(rounded);
           }
         }
       ]
