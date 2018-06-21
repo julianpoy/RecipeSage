@@ -7,6 +7,12 @@ page-recipe {
     margin-left: 20px;
   }
 
+  .ingredientsInstructionsGrid {
+    ion-col {
+      margin-bottom: 10px;
+    }
+  }
+
   .ingredients {
     ion-label {
       margin: 0;
@@ -14,6 +20,33 @@ page-recipe {
 
     .scale {
       cursor: pointer;
+    }
+
+    ion-label {
+      margin-top: 0;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .ingredient {
+      color: #3f3f3f;
+    }
+  }
+
+  .instructions {
+    ion-label {
+      margin-top: 0;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .instruction {
+      margin-bottom: 15px;
+      color: #3f3f3f;
     }
   }
 

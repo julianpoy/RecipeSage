@@ -55,20 +55,29 @@
 
     <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
 
-    <ion-item class="ingredients" text-wrap>
-      <ion-icon name="book" item-start large></ion-icon>
-      <h2>Ingredients</h2>
-      <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient"></p>
-      <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
-      <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
-    </ion-item>
-
-    <ion-item text-wrap>
-      <ion-icon name="list" item-start large></ion-icon>
-      <h2>Instructions</h2>
-      <p *ngFor="let instruction of instructions; let idx = index" text-wrap><b>{{ idx+1 }}.</b> {{ instruction }}</p>
-      <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
-    </ion-item>
+    <ion-grid class="ingredientsInstructionsGrid">
+      <ion-row align-items-start>
+        <ion-col col-12 col-sm-5>
+          <ion-item class="ingredients" text-wrap>
+            <ion-icon name="book" item-start large></ion-icon>
+            <h2>Ingredients</h2>
+            <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient" class="ingredient"></p>
+            <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
+            <p>
+              <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
+            </p>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-7>
+          <ion-item class="instructions" text-wrap>
+            <ion-icon name="list" item-start large></ion-icon>
+            <h2>Instructions</h2>
+            <p *ngFor="let instruction of instructions; let idx = index" class="instruction" text-wrap><b>{{ idx+1 }} &nbsp;</b> {{ instruction }}</p>
+            <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
     <ion-item class="fixPaperPush" *ngIf="recipe.notes" text-wrap>
       <ion-icon name="paper" item-start large></ion-icon>
