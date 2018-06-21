@@ -204,9 +204,11 @@ export class MessagingServiceProvider {
   public disableNotifications() {
     if (!this.messaging) return;
 
+    var token = this.fcmToken;
+
     this.unsubscribeOnTokenRefresh();
     this.unsubscribeOnTokenRefresh = () => {};
-    return this.userService.removeFCMToken(this.fcmToken).subscribe(function(response) {
+    return this.userService.removeFCMToken(token).subscribe(function(response) {
       console.log("deleted FCM token", response);
     }, function(err) {
       console.log("failed to delete FCM token", err);

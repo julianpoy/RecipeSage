@@ -38,6 +38,10 @@ export class MyApp {
     this.initEventListeners();
     this.initEventDispatchers();
     this.initDevBase();
+
+    if ((<any>Notification).permission === 'granted' && this.isLoggedIn()) {
+      this.messagingService.requestNotifications();
+    }
   }
   
   initUpdateListeners() {

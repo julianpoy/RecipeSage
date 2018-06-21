@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 
 @IonicPage({
   priority: 'high'
@@ -25,6 +26,7 @@ export class LoginPage {
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
+    public messagingService: MessagingServiceProvider,
     public navParams: NavParams,
     public userService: UserServiceProvider) {
 
@@ -80,6 +82,10 @@ export class LoginPage {
         loading.dismiss();
         
         localStorage.setItem('token', response.token);
+
+        if ((<any>Notification).permission === 'granted') {
+          me.messagingService.requestNotifications();
+        }
         
         me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
       }, function(err) {
@@ -109,6 +115,10 @@ export class LoginPage {
           loading.dismiss();
           
           localStorage.setItem('token', response.token);
+
+          if ((<any>Notification).permission === 'granted') {
+            me.messagingService.requestNotifications();
+          }
           
           me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
         }, function(err) {
