@@ -4,19 +4,12 @@ var mongoose = require('mongoose'),
     moment = require('moment'),
     Raven = require('raven');
 
+var SESSION_VALIDITY_LENGTH = 7; // Initial session validity time
+var SET_GRACE_WHEN = 5; // Set token expiry equal to grace period if session will expire in X days
+var SESSION_GRACE_PERIOD = 7; // Should always be more than SET_GRACE_WHEN
+
 //Checks if a token exists, and returns the corrosponding accountId
 exports.validateSession = function(token, type, success, fail) {
-    // token = '15c9b215fb8f0398564dd15dbef489cf1ae02625c5768602b44f25ab1f15534adc4f2d88bef307a2efe35d2597e6888a'
-    var expiry = {
-        period: 3,
-        unit: "day"
-    }
-    var grace = {
-        period: 1,
-        unit: "days",
-        add: 3
-    }
-
     var query;
     if(typeof type == "string"){
         query = {
@@ -28,10 +21,10 @@ exports.validateSession = function(token, type, success, fail) {
         }
     }
     query.token = token;
-    query.created = {"$gte": moment().subtract(expiry.period, expiry.unit).toDate() };
+    query.expires = {"$gte": Date.now() };
 
     Session.findOne(query)
-        .select('token accountId type assignmentId created')
+        .select('token accountId type expires')
         .exec(function(err, session) {
             if (err) {
                 var payload = {
@@ -49,12 +42,12 @@ exports.validateSession = function(token, type, success, fail) {
             } else {
                 success(session.accountId, session);
 
-                //Check if session is within 15 minutes of expiring
-                if(moment(session.created).subtract(grace.period, grace.unit).isBefore(moment().subtract(expiry.period, expiry.unit))){
-                    //If session is about to expire, add 30 more minutes of valid time
+                // Extend the session expiry if necessary
+                if (moment(session.expires).subtract(SET_GRACE_WHEN, "days").isBefore(moment())) {
                     var updateCmd = {
                         $set: {
-                            created: moment(session.created).add(grace.add, grace.unit)
+                            updated: Date.now(),
+                            expires: moment().add(SESSION_GRACE_PERIOD, "days")
                         }
                     }
 
@@ -73,7 +66,7 @@ exports.validateSession = function(token, type, success, fail) {
 
         //Clean out all old items
         var removeOld = {
-            created: {"$lt": moment().subtract(expiry.period, expiry.unit)}
+            expires: {"$lt": Date.now()}
         }
         Session.find(removeOld).remove().exec(function(err) {
             if (err) {
@@ -95,7 +88,9 @@ exports.generateSession = function(accountId, type, success, fail) {
         accountId: accountId,
         type: type,
         token: token,
-        created: Date.now()
+        created: Date.now(),
+        updated: Date.now(),
+        expires: moment().add(SESSION_VALIDITY_LENGTH, "days")
     }).save(function(err, session) {
         if (err) {
             var payload = {

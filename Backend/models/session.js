@@ -12,6 +12,14 @@ var Session = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  updated: {
+    type: Date,
+    default: Date.now
+  },
+  expires: {
+    type: Date,
+    default: Date.now
   }
 });
 
