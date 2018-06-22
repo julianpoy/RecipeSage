@@ -6,6 +6,19 @@ page-recipe {
   .ingredientsInstructionsGrid {
     padding-left: 0;
 
+    .ingredientsCol {
+      max-width: 215px;
+    }
+
+    @media (min-width: 576px) {
+      .instructionsCol[col-sm-auto] {
+        flex: 0 0;
+        flex-grow: 1;
+        max-width: 700px;
+        width: auto;
+      }
+    }
+
     ion-col {
       margin-bottom: 10px;
     }
