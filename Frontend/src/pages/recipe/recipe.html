@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>Recipe Details - {{ recipe.title }}</ion-title>
+    <ion-title>{{ recipe.title }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,46 +21,66 @@
         <img src="{{ recipe.image.location }}">
       </ion-thumbnail>
       <h2 text-wrap>{{ recipe.title }}</h2>
-      <p class='meta' text-wrap>
-        {{ recipe.source }}
 
-        <span *ngIf="recipe.activeTime || recipe.totalTime || recipe.yield">
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-        </span>
-
-        {{ recipe.activeTime }}
-
-        <span *ngIf="recipe.totalTime || recipe.yield">
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-        </span>
-
-        {{ recipe.totalTime }}
-
-        <span *ngIf="recipe.yield">
-          &nbsp;&nbsp;|&nbsp;&nbsp;
-        </span>
-
-        {{ recipe.yield }}
-      </p>
+      <ion-grid class="meta" showWhen="core">
+        <ion-row>
+          <ion-col col-auto>
+            <p text-wrap><b>Source: </b>{{ recipe.source }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p text-wrap><b>Active Time: </b>{{ recipe.activeTime }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p text-wrap><b>Total Time: </b>{{ recipe.totalTime }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p text-wrap><b>Yield: </b>{{ recipe.yield }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <p text-wrap>{{ recipe.description }}</p>
     </ion-item>
 
-    <ion-card-content>
-      <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+    <div showWhen="mobile" padding-left padding-right>
+      <ion-grid class="meta">
+        <ion-row>
+          <ion-col col-auto>
+            <p>
+              <b>Source: </b>{{ recipe.source }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p>
+              <b>Active Time: </b>{{ recipe.activeTime }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p>
+              <b>Total Time: </b>{{ recipe.totalTime }}</p>
+          </ion-col>
+          <ion-col col-auto>
+            <p>
+              <b>Yield: </b>{{ recipe.yield }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+      <p text-wrap>
         <b>This recipe was sent to you by {{ recipe.fromUser.name || recipe.fromUser.email }}</b><br />
         Add this recipe to your recipes by clicking the button at the bottom of the page.<br /><br />
       </p>
-      <p *ngIf="recipe.url">Source URL: <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></p>
-    </ion-card-content>
+    </ion-item>
 
     <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
 
     <ion-grid class="ingredientsInstructionsGrid">
       <ion-row align-items-start>
         <ion-col col-12 col-sm-5>
-          <ion-item class="ingredients" text-wrap>
+          <ion-item>
             <ion-icon name="book" item-start large></ion-icon>
-            <h2>Ingredients</h2>
+            <p>Ingredients</p>
+          </ion-item>
+          <ion-item class="ingredients" text-wrap>
             <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient" class="ingredient"></p>
             <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
             <p>
@@ -69,9 +89,11 @@
           </ion-item>
         </ion-col>
         <ion-col col-12 col-sm-7>
-          <ion-item class="instructions" text-wrap>
+          <ion-item>
             <ion-icon name="list" item-start large></ion-icon>
-            <h2>Instructions</h2>
+            <p>Instructions</p>
+          </ion-item>
+          <ion-item class="instructions" text-wrap>
             <p *ngFor="let instruction of instructions; let idx = index" class="instruction" text-wrap><b>{{ idx+1 }} &nbsp;</b> {{ instruction }}</p>
             <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
           </ion-item>
@@ -79,17 +101,20 @@
       </ion-row>
     </ion-grid>
 
-    <ion-item class="fixPaperPush" *ngIf="recipe.notes" text-wrap>
-      <ion-icon name="paper" item-start large></ion-icon>
-      <h2>Notes</h2>
-      <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
-    </ion-item>
-
-    <br />
+    <div *ngIf="recipe.notes">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>Notes</p>
+      </ion-item>
+      <ion-item text-wrap>
+        <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+      </ion-item>
+      <br />
+    </div>
 
     <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels" no-margin text-wrap>
       <ion-icon name="pricetag" item-start large></ion-icon>
-      <h2>Labels</h2>
+      <p>Labels</p>
     </ion-item>
 
     <div id='labelSelectParent' *ngIf="recipe.folder !== 'inbox'">
@@ -153,6 +178,11 @@
     <br />
 
     <ion-item>
+      <p *ngIf="recipe.url">
+        <b>Source URL:</b>
+        <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a>
+        <br /><br />
+      </p>
       <p>
         Created on {{ prettyDateTime(recipe.created) }}<br />
         Last edited on {{ prettyDateTime(recipe.updated) }}

@@ -3,11 +3,9 @@ page-recipe {
     white-space: pre;
   }
 
-  .item-md.item-block.fixPaperPush .item-inner {
-    margin-left: 20px;
-  }
-
   .ingredientsInstructionsGrid {
+    padding-left: 0;
+
     ion-col {
       margin-bottom: 10px;
     }
@@ -53,9 +51,8 @@ page-recipe {
   .meta {
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;
-    padding: 8px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
   }
 
   #labelSelectParent {
