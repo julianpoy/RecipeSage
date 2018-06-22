@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>{{ recipe.title }}</ion-title>
+    <ion-title>Recipe Details - {{ recipe.title }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -25,7 +25,11 @@
       <ion-grid class="meta" showWhen="core">
         <ion-row>
           <ion-col col-auto>
-            <p text-wrap><b>Source: </b>{{ recipe.source }}</p>
+            <p text-wrap>
+              <b>Source:</b>
+              <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
+              <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
+            </p>
           </ion-col>
           <ion-col col-auto>
             <p text-wrap><b>Active Time: </b>{{ recipe.activeTime }}</p>
@@ -46,7 +50,10 @@
         <ion-row>
           <ion-col col-auto>
             <p>
-              <b>Source: </b>{{ recipe.source }}</p>
+              <b>Source:</b>
+              <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
+              <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
+            </p>
           </ion-col>
           <ion-col col-auto>
             <p>
@@ -178,11 +185,6 @@
     <br />
 
     <ion-item>
-      <p *ngIf="recipe.url">
-        <b>Source URL:</b>
-        <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a>
-        <br /><br />
-      </p>
       <p>
         Created on {{ prettyDateTime(recipe.created) }}<br />
         Last edited on {{ prettyDateTime(recipe.updated) }}
