@@ -316,7 +316,8 @@ export class RecipePage {
   }
 
   printRecipe() {
-    this.recipeService.print(this.recipe, 'default');
+    let printRecipeModal = this.modalCtrl.create('PrintRecipeModalPage', { recipe: this.recipe });
+    printRecipeModal.present();
   }
 
   shareRecipe() {

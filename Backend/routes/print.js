@@ -19,6 +19,9 @@ router.get('/',
   MiddlewareService.validateUser,
   function (req, res, next) {
 
+  var modifiers = [];
+  if (req.query.modifiers) modifiers = req.query.modifiers.split(',');
+
   var templates = ['default', 'halfsheet'];
   if (templates.indexOf(req.query.template) === -1) {
     res.render('error', {
@@ -68,7 +71,11 @@ router.get('/',
           recipe.instructions = recipe.instructions.split(/\r?\n/);
           recipe.ingredients = recipe.ingredients.split(/\r?\n/);
 
-          res.render('recipe-' + req.query.template, { recipe: recipe, date: (new Date).toDateString() });
+          if (modifiers.indexOf('noimage') > -1) {
+            delete recipe.image;
+          }
+
+          res.render('recipe-' + req.query.template, { recipe: recipe, date: (new Date).toDateString(), modifiers: modifiers });
         }
       });
     }
