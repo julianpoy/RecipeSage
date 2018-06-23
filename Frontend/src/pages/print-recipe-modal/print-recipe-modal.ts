@@ -19,22 +19,26 @@ export class PrintRecipeModalPage {
   templates: any = [{
     name: 'default',
     modifiers: '',
-    description: 'Standard'
-  },
-  {
-    name: 'default',
-    modifiers: 'noimage',
-    description: 'Standard No Image'
+    description: 'Standard',
+    orientation: 'portrait'
   },
   {
     name: 'halfsheet',
     modifiers: '',
-    description: 'Half Sheet'
+    description: 'Half Sheet',
+    orientation: 'landscape'
+  },
+  {
+    name: 'default',
+    modifiers: 'noimage',
+    description: 'Standard No Image',
+    orientation: 'portrait'
   },
   {
     name: 'halfsheet',
     modifiers: 'noimage',
-    description: 'Half Sheet No Image'
+    description: 'Half Sheet No Image',
+    orientation: 'landscape'
   }];
 
   base: any;

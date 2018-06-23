@@ -12,6 +12,17 @@ page-print-recipe-modal {
     .template {
       width: $width * $scale;
       height: ($height * $scale) + $descriptionHeight;
+
+      &.landscape {
+        width: $height * $scale;
+        height: ($width * $scale) + $descriptionHeight;
+
+        iframe {
+          width: $height;
+          height: $width;
+        }
+      }
+
       overflow: hidden;
       margin-right: 10px;
       margin-left: 10px;
