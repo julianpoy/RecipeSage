@@ -22,22 +22,22 @@
       </ion-thumbnail>
       <h2 text-wrap>{{ recipe.title }}</h2>
 
-      <ion-grid class="meta" showWhen="core">
+      <ion-grid class="meta" showWhen="core" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield">
         <ion-row>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.source" col-auto>
             <p text-wrap>
               <b>Source:</b>
               <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
               <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
             </p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.activeTime" col-auto>
             <p text-wrap><b>Active Time: </b>{{ recipe.activeTime }}</p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.totalTime" col-auto>
             <p text-wrap><b>Total Time: </b>{{ recipe.totalTime }}</p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.yield" col-auto>
             <p text-wrap><b>Yield: </b>{{ recipe.yield }}</p>
           </ion-col>
         </ion-row>
@@ -45,25 +45,25 @@
       <p text-wrap>{{ recipe.description }}</p>
     </ion-item>
 
-    <div showWhen="mobile" padding-left padding-right>
+    <div showWhen="mobile" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield" padding-left padding-right>
       <ion-grid class="meta">
         <ion-row>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.source" col-auto>
             <p>
               <b>Source:</b>
               <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
               <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
             </p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.activeTime" col-auto>
             <p>
               <b>Active Time: </b>{{ recipe.activeTime }}</p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.totalTime" col-auto>
             <p>
               <b>Total Time: </b>{{ recipe.totalTime }}</p>
           </ion-col>
-          <ion-col col-auto>
+          <ion-col *ngIf="recipe.yield" col-auto>
             <p>
               <b>Yield: </b>{{ recipe.yield }}</p>
           </ion-col>
