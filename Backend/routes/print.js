@@ -19,7 +19,7 @@ router.get('/',
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-  var templates = ['default'];
+  var templates = ['default', 'halfsheet'];
   if (templates.indexOf(req.query.template) === -1) {
     res.render('error', {
       message: '404',
