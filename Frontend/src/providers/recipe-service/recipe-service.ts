@@ -198,7 +198,7 @@ export class RecipeServiceProvider {
   }
 
   print(recipe, template) {
-    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe._id + '&template=' + template);
+    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe._id + '&template=' + template + '&print=true');
   }
 
   scrapePepperplate(data) {

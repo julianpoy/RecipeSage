@@ -125,5 +125,7 @@ html
       i= date
 
   script(type='text/javascript').
-    window.print();
-    window.onafterprint = window.close;
+    if (window.location.href.indexOf('print=true') > -1) {
+      window.print();
+      window.onafterprint = window.close;
+    }
