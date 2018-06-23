@@ -11,12 +11,12 @@
   <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icon/favicon-16x16.png">
-  
+
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon/apple-touch-icon.png">
   <link rel="mask-icon" href="assets/icon/safari-pinned-tab.svg" color="#353b48">
   <link rel="shortcut icon" href="assets/icon/favicon.ico">
   <meta name="msapplication-TileColor" content="#353b48">
-  
+
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#353b48">
 
@@ -60,39 +60,39 @@
       });
     }
   </script>
-  
+
   <script>
     if (!HTMLCanvasElement.prototype.toBlob) {
       Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
         value: function (callback, type, quality) {
           var canvas = this;
           setTimeout(function() {
-    
+
             var binStr = atob( canvas.toDataURL(type, quality).split(',')[1] ),
                 len = binStr.length,
                 arr = new Uint8Array(len);
-    
+
             for (var i = 0; i < len; i++ ) {
               arr[i] = binStr.charCodeAt(i);
             }
-    
+
             callback( new Blob( [arr], {type: type || 'image/png'} ) );
-    
+
           });
         }
       });
     }
   </script>
-  
+
   <script>
-    window.version = '1.1.3';
+    window.version = '1.2.0';
   </script>
 
   <link href="build/main.css" rel="stylesheet" async>
 
 </head>
 <body>
-  
+
   <noscript>
     <h1>You don't have javascript enabled.</h1>
     <p>This application requires javascript.</p>
@@ -109,7 +109,7 @@
   <!-- The vendor js is generated during the build process
        It contains all of the dependencies in node_modules -->
   <script src="build/vendor.js"></script>
-  
+
   <!--LinkifyJS-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify.min.js" integrity="sha256-b8aRDYEOoOLGpyaXMI3N2nWUbjSeQ2QxzKjmPnCa4yA=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js" integrity="sha256-FyCQ9XVSgI4tV3R0ldp8nZkLYPYBwRznvSeFME7tXJ8=" crossorigin="anonymous"></script>
