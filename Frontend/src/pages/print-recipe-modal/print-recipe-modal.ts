@@ -73,4 +73,8 @@ export class PrintRecipeModalPage {
       this.viewCtrl.dismiss();
     } catch(e) {}
   }
+
+  cancel() {
+    this.viewCtrl.dismiss();
+  }
 }
