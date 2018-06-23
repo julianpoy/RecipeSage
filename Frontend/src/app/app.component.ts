@@ -13,14 +13,14 @@ import { MessagingServiceProvider } from '../providers/messaging-service/messagi
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  
-  rootPage: string = 'WelcomePage';
-  // rootPageParams: any = { folder: 'main' };
+
+  rootPage: string = localStorage.getItem('token') ? 'HomePage' : 'WelcomePage';
+  rootPageParams: any = { folder: 'main' };
 
   pages: Array<{title: string, component: any}>;
-  
+
   inboxCount: number;
-  
+
   version: number = (<any>window).version;
 
   constructor(
@@ -30,7 +30,7 @@ export class MyApp {
     public recipeService: RecipeServiceProvider,
     public messagingService: MessagingServiceProvider,
     public userService: UserServiceProvider) {
-    
+
     this.initializeApp();
 
     this.loadInboxCount();
@@ -43,7 +43,7 @@ export class MyApp {
       this.messagingService.requestNotifications();
     }
   }
-  
+
   initUpdateListeners() {
     var me = this;
 
@@ -63,28 +63,28 @@ export class MyApp {
 		  }
   	};
   }
-  
+
   initEventListeners() {
     var me = this;
 
     this.events.subscribe('recipe:created', () => {
       this.loadInboxCount();
     });
-    
+
     this.events.subscribe('recipe:updated', () => {
       this.loadInboxCount();
     });
-    
+
     this.events.subscribe('recipe:deleted', () => {
       this.loadInboxCount();
     });
-    
+
     this.events.subscribe('messages:new', (message) => {
       if (me.nav.getActive().instance instanceof MessageThreadPage || me.nav.getActive().instance instanceof MessagesPage) return;
       var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
-      
+
       var myMessage = message;
-      
+
       let toast = me.toastCtrl.create({
         message: notification,
         duration: 7000,
@@ -92,18 +92,18 @@ export class MyApp {
         closeButtonText: 'View'
       });
       toast.present();
-      
-      toast.onDidDismiss((data, role) => {    
+
+      toast.onDidDismiss((data, role) => {
         console.log('Dismissed toast');
         if (role == "close") {
           me.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser._id });
         }
       });
     });
-    
+
     this.events.subscribe('import:pepperplate:complete', (message) => {
       var notification = 'Your recipes have been imported from Pepperplate.';
-      
+
       let toast = me.toastCtrl.create({
         message: notification,
         duration: 10000,
@@ -112,7 +112,7 @@ export class MyApp {
       });
       toast.present();
     });
-    
+
     this.events.subscribe('import:pepperplate:failed', (reason) => {
       var notification = '';
       if (reason === 'timeout') {
@@ -124,7 +124,7 @@ export class MyApp {
       } else {
         return;
       }
-      
+
       let toast = me.toastCtrl.create({
         message: notification,
         duration: 15000,
@@ -133,10 +133,10 @@ export class MyApp {
       });
       toast.present();
     });
-    
+
     this.events.subscribe('import:pepperplate:working', (message) => {
       var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
-      
+
       let toast = me.toastCtrl.create({
         message: notification,
         duration: 7000,
@@ -146,12 +146,12 @@ export class MyApp {
       toast.present();
     });
   }
-  
+
   initEventDispatchers() {
     var me = this;
 
-    var hidden, visibilityChange; 
-    if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+    var hidden, visibilityChange;
+    if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
       hidden = "hidden";
       visibilityChange = "visibilitychange";
     } else if (typeof (<any>document).msHidden !== "undefined") {
@@ -161,11 +161,11 @@ export class MyApp {
       hidden = "webkitHidden";
       visibilityChange = "webkitvisibilitychange";
     }
-    
+
     (<any>window).isHidden = function() {
       return document[hidden];
     }
-    
+
     document.addEventListener(visibilityChange, function() {
       if (document[hidden]) {
         me.events.publish('application:multitasking:paused');
@@ -174,7 +174,7 @@ export class MyApp {
       }
     }, false);
   }
-  
+
   initDevBase() {
     if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
       localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
@@ -186,10 +186,10 @@ export class MyApp {
       localStorage.setItem('base', window.location.protocol + '//' + window.location.hostname + ':3000/');
     }
   }
-  
+
   navList() {
     var pages = [];
-    
+
     var loggedOutPages = [
       { title: 'Welcome', component: 'WelcomePage' },
       { title: 'Log In', component: 'LoginPage' },
@@ -206,7 +206,7 @@ export class MyApp {
       { title: 'Settings', component: 'SettingsPage' },
       { title: 'About & Support', component: 'AboutPage' }
     ];
-    
+
     if (this.isLoggedIn()) {
       pages = pages.concat(loggedInPages);
     } else {
@@ -219,7 +219,7 @@ export class MyApp {
   isLoggedIn() {
     return localStorage.getItem('token') ? true : false;
   }
-  
+
   loadInboxCount() {
     var me = this;
 
@@ -227,7 +227,7 @@ export class MyApp {
 
     this.recipeService.fetch({ folder: 'inbox' }).subscribe(function(response) {
       me.inboxCount = response.length;
-      
+
       me.events.publish('recipe:inbox:count', me.inboxCount);
     }, function() {});
   }
@@ -238,12 +238,12 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       // this.statusBar.styleDefault();
-      
+
       // if(localStorage.getItem('token')) {
       //   this.nav.setRoot('HomePage', { folder: 'main' });
       // }else{
       //   this.nav.setRoot('LoginPage');
-      // } 
+      // }
     });
   }
 
@@ -254,15 +254,15 @@ export class MyApp {
   }
 
   _logout() {
-    
+
     localStorage.removeItem('token');
-    
+
     this.openPage({
       component: 'WelcomePage',
       navData: {}
     });
   }
-  
+
   logout() {
     this.messagingService.disableNotifications();
 
