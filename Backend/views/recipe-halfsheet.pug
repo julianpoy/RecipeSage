@@ -27,10 +27,18 @@ html
         margin-left: 40px;
       }
 
+      .ingredients ul {
+        margin: 0;
+        padding: 0;
+      }
+
       .ingredient {
         font-weight: bold;
+        padding: 0;
+        margin: 0;
         margin-top: 0px;
         margin-bottom: 10px;
+        list-style-type: none;
       }
 
       .instruction {
@@ -71,6 +79,14 @@ html
         width: 200px;
         padding-right: 20px;
       }
+    if modifiers.indexOf('columns') !== -1
+      style(type='text/css').
+        .ingredients {
+          margin-left: 0;
+        }
+        .ingredients ul {
+          columns: 2;
+        }
   body
     table(class='table1')
       tbody
@@ -110,8 +126,9 @@ html
 
     if recipe.ingredients
       div(class='ingredients sans')
-        each ingredient in recipe.ingredients
-          p(class='ingredient')= ingredient
+        ul
+          each ingredient in recipe.ingredients
+            li(class='ingredient')= ingredient
     if recipe.instructions
       div
         -var instructionIdx = 0
