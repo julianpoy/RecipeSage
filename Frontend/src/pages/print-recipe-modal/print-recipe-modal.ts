@@ -39,6 +39,18 @@ export class PrintRecipeModalPage {
     modifiers: 'noimage',
     description: 'Half Sheet No Image',
     orientation: 'landscape'
+  },
+  {
+    name: 'halfsheet',
+    modifiers: 'columns',
+    description: 'Half Sheet, Columns',
+    orientation: 'landscape'
+  },
+  {
+    name: 'halfsheet',
+    modifiers: 'noimage,columns',
+    description: 'Half Sheet, No Image, Columns',
+    orientation: 'landscape'
   }];
 
   base: any;
