@@ -22,7 +22,7 @@ router.get('/',
   var modifiers = [];
   if (req.query.modifiers) modifiers = req.query.modifiers.split(',');
 
-  var templates = ['default', 'halfsheet'];
+  var templates = ['default', 'halfsheet', 'compact'];
   if (templates.indexOf(req.query.template) === -1) {
     res.render('error', {
       message: '404',
