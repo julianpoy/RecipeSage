@@ -6,6 +6,11 @@ html
       body {
         margin: 0.635cm;
         font-family: 'Lora', serif;
+        font-size: 12px;
+      }
+
+      .header {
+        font-size: 20px;
       }
 
       .sans {
@@ -50,6 +55,11 @@ html
 
       table {
         width: 100%;
+        font-size: 12px;
+      }
+
+      .prewrap {
+        white-space: pre-wrap;
       }
 
       .leftCol {
@@ -64,7 +74,7 @@ html
             td(class='leftCol')
               img(class='image', src= recipe.image.location)
           td
-            h1(class='sans')= recipe.title
+            h1(class='sans header')= recipe.title
             if recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield
               div(class='meta')
                 if recipe.source
@@ -111,7 +121,7 @@ html
 
     if recipe.notes
       b(class='sans') Notes:
-      p= recipe.notes
+      p(class='prewrap')= recipe.notes
       br
 
 
