@@ -7,6 +7,11 @@ html
         margin: 0.635cm;
         margin-right: calc(50% + 0.635cm);
         font-family: 'Lora', serif;
+        font-size: 12px;
+      }
+
+      .header {
+        font-size: 20px;
       }
 
       .sans {
@@ -30,7 +35,7 @@ html
 
       .instruction {
         margin-top: 0;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
       }
 
       .meta {
@@ -55,6 +60,11 @@ html
 
       table {
         width: 100%;
+        font-size: 12px;
+      }
+
+      .prewrap {
+        white-space: pre-wrap;
       }
 
       .leftCol {
@@ -68,8 +78,10 @@ html
           if recipe.image && recipe.image.location
             td(class='leftCol')
               img(class='image', src= recipe.image.location)
+              br
+              br
           td
-            h1(class='sans')= recipe.title
+            h1(class='sans header')= recipe.title
             if recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield
               div(class='meta')
                 if recipe.source
@@ -95,7 +107,6 @@ html
                 i= label.title
                 if ++labelIdx < recipe.labels.length
                   i ,&nbsp;
-    br
 
     if recipe.ingredients
       div(class='ingredients sans')
@@ -112,7 +123,7 @@ html
 
     if recipe.notes
       b(class='sans') Notes:
-      p= recipe.notes
+      p(class='prewrap')= recipe.notes
 
     if recipe.url
       b(class='sans') Source URL:&nbsp;
