@@ -87,7 +87,11 @@ export class PrintRecipeModalPage {
 
   print() {
     var template = document.getElementById('selectedTemplateFrame');
-    (<any>template).contentWindow.postMessage('Hello World!', this.base);
+    try {
+      (<any>template).contentWindow.print();
+    } catch(e) {
+      (<any>template).contentWindow.postMessage('print', this.base);
+    }
     this.viewCtrl.dismiss();
   }
 
