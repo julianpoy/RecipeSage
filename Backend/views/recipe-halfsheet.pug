@@ -155,3 +155,7 @@ html
       window.print();
       window.onafterprint = window.close;
     }
+
+    window.addEventListener('message', function(e) {
+      window.print();
+    });

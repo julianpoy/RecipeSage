@@ -86,10 +86,9 @@ export class PrintRecipeModalPage {
   }
 
   print() {
-    this.recipeService.print(this.recipe, this.templates[this.selectedTemplate]);
-    try {
-      this.viewCtrl.dismiss();
-    } catch(e) {}
+    var template = document.getElementById('selectedTemplateFrame');
+    (<any>template).contentWindow.postMessage('Hello World!', this.base);
+    this.viewCtrl.dismiss();
   }
 
   cancel() {
