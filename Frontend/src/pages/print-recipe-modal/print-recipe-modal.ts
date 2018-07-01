@@ -22,40 +22,40 @@ export class PrintRecipeModalPage {
     description: 'Standard',
     orientation: 'portrait'
   },
-  {
-    name: 'halfsheet',
-    modifiers: '',
-    description: 'Half Sheet',
-    orientation: 'landscape'
-  },
+  // {
+  //   name: 'halfsheet',
+  //   modifiers: '',
+  //   description: 'Half Sheet',
+  //   orientation: 'landscape'
+  // },
   {
     name: 'default',
     modifiers: 'noimage',
     description: 'Standard No Image',
     orientation: 'portrait'
   },
-  {
-    name: 'halfsheet',
-    modifiers: 'noimage',
-    description: 'Half Sheet No Image',
-    orientation: 'landscape'
-  },
-  {
-    name: 'halfsheet',
-    modifiers: 'columns',
-    description: 'Half Sheet, Columns',
-    orientation: 'landscape'
-  },
+  // {
+  //   name: 'halfsheet',
+  //   modifiers: 'noimage',
+  //   description: 'Half Sheet',
+  //   orientation: 'landscape'
+  // },
+  // {
+  //   name: 'halfsheet',
+  //   modifiers: 'columns',
+  //   description: 'Half Sheet, Columns',
+  //   orientation: 'landscape'
+  // },
   {
     name: 'halfsheet',
     modifiers: 'noimage,columns',
-    description: 'Half Sheet, No Image, Columns',
+    description: 'Half Sheet',
     orientation: 'landscape'
   },
   {
     name: 'compact',
     modifiers: '',
-    description: 'Half Sheet, Extra Compact',
+    description: 'Half Sheet, Compact, No Columns',
     orientation: 'landscape'
   }];
 
