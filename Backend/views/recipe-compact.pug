@@ -5,7 +5,7 @@ html
     style(type='text/css').
       body {
         margin: 0.635cm;
-        margin-right: calc(50% + 0.635cm);
+        margin-right: 50%;
         font-family: 'Noto+Serif', serif;
         font-size: 12px;
       }
@@ -21,8 +21,8 @@ html
       }
 
       @media print {
-        body {margin: 0.635cm; margin-right: calc(50% + 0.635cm)}
-        @page {margin: 0; size: landscape;}
+        body {margin: 0; margin-right: 50%}
+        @page {size: landscape;}
       }
 
       .ingredients {
