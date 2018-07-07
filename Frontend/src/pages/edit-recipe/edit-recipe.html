@@ -53,17 +53,17 @@
 
   <ion-item>
     <ion-label floating>Ingredients</ion-label>
-    <ion-textarea rows="10" [(ngModel)]="recipe.ingredients" type="text" value=""></ion-textarea>
+    <ion-textarea [(ngModel)]="recipe.ingredients" (ionChange)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label floating>Instructions</ion-label>
-    <ion-textarea rows="10" [(ngModel)]="recipe.instructions" type="text" value=""></ion-textarea>
+    <ion-textarea [(ngModel)]="recipe.instructions" (ionChange)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label floating>Notes</ion-label>
-    <ion-textarea rows="4" [(ngModel)]="recipe.notes" type="text" value=""></ion-textarea>
+    <ion-textarea [(ngModel)]="recipe.notes" (ionChange)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
   </ion-item>
 
   <br />

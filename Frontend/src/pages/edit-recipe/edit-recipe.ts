@@ -15,9 +15,9 @@ import loadImage from 'blueimp-load-image';
   providers: [ RecipeServiceProvider ]
 })
 export class EditRecipePage {
-  
+
   recipe: Recipe;
-  
+
   rawImageFile: any;
 
   constructor(
@@ -33,15 +33,27 @@ export class EditRecipePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditRecipePage');
   }
-  
+
+  ionViewWillEnter() {
+    var textAreas = document.getElementsByTagName('textarea');
+    for (var i = 0; i < textAreas.length; i++) {
+      textAreas[i].style.height = textAreas[i].scrollHeight + 'px';
+    }
+  }
+
+  updateTextAreaSize(event) {
+    var el = event._elementRef.nativeElement.children[0];
+    el.style.height = el.scrollHeight + 'px';
+  }
+
   setFile(event) {
     let files = event.srcElement.files
     if (!files) {
       return
     }
-    
+
     this.recipe.imageFile = files[0];
-    
+
     var me = this;
     var loadingImage = loadImage(
         files[0],
@@ -49,7 +61,7 @@ export class EditRecipePage {
           renderedCanvas.toBlob(function(myBlob) {
             myBlob.name = me.recipe.imageFile.name;
             me.recipe.imageFile = myBlob;
-            
+
             console.log('Local conversion complete');
           }, 'image/jpeg', 1);
         },
@@ -64,7 +76,7 @@ export class EditRecipePage {
       console.log('Local conversion failed', err)
     };
   }
-  
+
   save() {
     if (!this.recipe.title || this.recipe.title.length === 0) {
       this.toastCtrl.create({
@@ -73,9 +85,9 @@ export class EditRecipePage {
       }).present();
       return;
     }
-    
+
     var me = this;
-  
+
     var loading = this.loadingService.start();
 
     if (this.recipe._id) {
@@ -113,7 +125,7 @@ export class EditRecipePage {
     } else {
       this.recipeService.create(this.recipe).subscribe(function(response) {
         loading.dismiss();
-        
+
         me.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
         me.navCtrl.push('RecipePage', {
           recipe: response,
@@ -150,11 +162,11 @@ export class EditRecipePage {
       });
     }
   }
-  
+
   filePicker() {
     document.getElementById('filePicker').click();
   }
-  
+
   filePickerText() {
     if (this.recipe.imageFile) {
       return this.recipe.imageFile.name + ' Selected';
