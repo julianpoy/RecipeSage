@@ -1,12 +1,12 @@
 html
   head
     title= recipe.title
-    link(href="https://fonts.googleapis.com/css?family=Lora|Lato", rel="stylesheet")
+    link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
     style(type='text/css').
       body {
         margin: 0.635cm;
         margin-right: calc(50% + 0.635cm);
-        font-family: 'Lora', serif;
+        font-family: 'Noto+Serif', serif;
         font-size: 12px;
       }
 
@@ -17,7 +17,7 @@ html
       }
 
       .sans {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Noto+Sans', sans-serif;
       }
 
       @media print {
@@ -26,6 +26,7 @@ html
       }
 
       .ingredients {
+        margin-top: 7px;
         margin-left: 40px;
         margin-bottom: 7px;
       }
@@ -39,7 +40,16 @@ html
 
       .instruction {
         margin-top: 0;
-        margin-bottom: 2px;
+        vertical-align: top;
+      }
+
+      .instruction .count {
+        font-weight: bold;
+        width: 10px;
+      }
+
+      .instruction .text {
+        padding-bottom: 2px;
       }
 
       .meta {
@@ -108,22 +118,24 @@ html
         each ingredient in recipe.ingredients
           p(class='ingredient')= ingredient
     if recipe.instructions
-      div
-        -var instructionIdx = 0
-        each instruction in recipe.instructions
-          p(class='instruction')
-            b(class='sans')= ++instructionIdx
-            span &nbsp;&nbsp;&nbsp;
-            span= instruction
+      table
+        tbody
+          -var instructionIdx = 0
+          each instruction in recipe.instructions
+            tr(class='instruction')
+              td(class='count')
+                span(class='')= ++instructionIdx
+              td(class='text')
+                span= instruction
 
     if recipe.notes
-      br
-      b(class='sans') Notes:
+      p(class='sans')
+        b Notes:
       p(class='prewrap')= recipe.notes
 
     if recipe.url
-      b(class='sans') Source URL:&nbsp;
-      span= recipe.url
+      b(class='sans') Source URL:
+      span= ' ' + recipe.url
 
     p
       i Printed on&nbsp;

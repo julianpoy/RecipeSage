@@ -49,7 +49,7 @@ export class PrintRecipeModalPage {
   {
     name: 'halfsheet',
     modifiers: 'noimage,columns',
-    description: 'Half Sheet',
+    description: 'Half Sheet, Columns',
     orientation: 'landscape'
   },
   {

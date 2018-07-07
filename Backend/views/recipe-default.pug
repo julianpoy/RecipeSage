@@ -1,11 +1,11 @@
 html
   head
     title= recipe.title
-    link(href="https://fonts.googleapis.com/css?family=Lora|Lato", rel="stylesheet")
+    link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
     style(type='text/css').
       body {
         margin: 0.635cm;
-        font-family: 'Lora', serif;
+        font-family: 'Noto+Serif', serif;
         font-size: 12px;
       }
 
@@ -14,7 +14,7 @@ html
       }
 
       .sans {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Noto+Sans', sans-serif;
       }
 
       @media print {
@@ -30,7 +30,16 @@ html
 
       .instruction {
         margin-top: 0;
-        margin-bottom: 20px;
+        vertical-align: top;
+      }
+
+      .instruction .count {
+        font-weight: bold;
+        width: 15px;
+      }
+
+      .instruction .text {
+        padding-bottom: 10px;
       }
 
       .meta {
@@ -110,25 +119,25 @@ html
                 p(class='ingredient')= ingredient
           if recipe.instructions
             td(valign='top')
-              -var instructionIdx = 0
-              each instruction in recipe.instructions
-                p(class='instruction')
-                  b(class='sans')= ++instructionIdx
-                  span &nbsp;&nbsp;&nbsp;
-                  span= instruction
-    br
-    br
+              table(class='instructions')
+                tbody
+                  -var instructionIdx = 0
+                  each instruction in recipe.instructions
+                    tr(class='instruction')
+                      td(class='count')
+                        span(class='')= ++instructionIdx
+                      td(class='text')
+                        p= instruction
 
     if recipe.notes
-      b(class='sans') Notes:
+      p(class='sans')
+        b Notes:
       p(class='prewrap')= recipe.notes
-      br
 
 
     if recipe.url
-      b(class='sans') Source URL:&nbsp;
-      p= recipe.url
-      br
+      b(class='sans') Source URL:
+      span= ' ' + recipe.url
 
     p
       i Printed on&nbsp;
