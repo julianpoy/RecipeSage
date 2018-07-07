@@ -19,35 +19,35 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
   providers: [ LazyLoadImageDirective ]
 })
 export class HomePage {
-  
+
   recipes: Recipe[];
   initialLoadComplete: boolean = false;
 
   showSearch: boolean;
   searchText: string;
-  
+
   imageLoadOffset: number = 20;
-  
+
   viewType: string = localStorage.getItem('viewType') || 'list';
-  
+
   viewTypes: string[] = ['list', 'cards'];
-  
+
   folder: string;
   folderTitle: string;
-  
+
   viewOptions: any = {};
   filterOptions: any = {};
-  
+
   searchWorker: any;
-  
+
   searchResultContainer: any;
   searchResultsAfterFilterLen: number = -1;
-  
+
   //Lazy load reqs
   @ViewChild('container') container: any;
   updateSearchResult$: any;
   scrollAndSearch$: any;
-  
+
   constructor(
     private cdRef:ChangeDetectorRef,
     public navCtrl: NavController,
@@ -61,7 +61,7 @@ export class HomePage {
     public userService: UserServiceProvider,
     public messagingService: MessagingServiceProvider) {
     var me = this;
-      
+
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
       case 'inbox':
@@ -72,7 +72,7 @@ export class HomePage {
         break;
     }
 
-    
+
     this.loadViewOptions();
     this.filterOptions.viewOptions = this.viewOptions;
     // Refresh search results whenever filters change
@@ -87,22 +87,22 @@ export class HomePage {
         this.loadRecipes();
       }
     });
-    
+
     events.subscribe('import:pepperplate:complete', () => {
       this.loadRecipes();
     });
-    
+
     this.searchText = '';
     this.showSearch = false;
   }
-  
+
   ionViewDidLoad() {
     this.searchResultContainer = document.getElementById('recipeListContainer');
   }
-  
+
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    
+
     var me = this;
     this.loadRecipes().then(function() {
       me.initialLoadComplete = true;
@@ -111,7 +111,7 @@ export class HomePage {
       loading.dismiss();
     });
   }
-  
+
   ngAfterViewInit() {
     this.updateSearchResult$ = new Subject();
     this.scrollAndSearch$ = Observable.merge(
@@ -119,7 +119,7 @@ export class HomePage {
       this.updateSearchResult$
     );
   }
-  
+
   ngAfterViewChecked() {
     if (this.searchResultContainer) {
       var len = this.searchResultContainer.children.length;
@@ -131,7 +131,7 @@ export class HomePage {
       this.searchResultsAfterFilterLen = -1;
     }
   }
-  
+
   refresh(refresher) {
     this.loadRecipes().then(function() {
       refresher.complete();
@@ -139,7 +139,7 @@ export class HomePage {
       refresher.complete();
     });
   }
-  
+
   loadViewOptions() {
     var defaults = {
       showLabels: true,
@@ -154,7 +154,7 @@ export class HomePage {
     this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
     this.viewOptions.sortBy = localStorage.getItem('sortBy');
     this.viewOptions.selectedLabels = [];
-    
+
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
@@ -166,23 +166,22 @@ export class HomePage {
 
   loadRecipes() {
     var me = this;
-    
+
     return new Promise(function(resolve, reject) {
       me.recipeService.fetch({
         folder: me.folder,
         sortBy: me.viewOptions.sortBy,
         // labels: me.viewOptions.selectedLabels
       }).subscribe(function(response) {
-        me.recipes = response;
-        
+
         if (me.searchWorker) me.searchWorker.terminate();
         me.searchWorker = new Worker('assets/src/search-worker.js');
-        
+
         me.searchWorker.postMessage(JSON.stringify({
           op: 'init',
-          data: me.recipes
+          data: response
         }));
-        
+
         me.searchWorker.onmessage = function(e) {
           var message = JSON.parse(e.data);
           if (message.op === 'results') {
@@ -193,15 +192,17 @@ export class HomePage {
             me.updateSearchResult$.next();
           });
         }
-        
+
         if (me.searchText) {
           me.search(me.searchText);
+        } else {
+          me.recipes = response;
         }
-        
+
         resolve();
       }, function(err) {
         reject();
-        
+
         switch(err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
@@ -224,7 +225,7 @@ export class HomePage {
       });
     });
   }
-  
+
   openRecipe(recipe) {
     // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
@@ -232,23 +233,23 @@ export class HomePage {
       recipeId: recipe._id
     });
   }
-  
+
   editRecipe(recipe) {
     this.navCtrl.push('EditRecipePage', {
       recipe: recipe
     });
   }
-  
+
   moveRecipe(recipe, folderName) {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     recipe.folder = folderName;
-    
+
     this.recipeService.update(recipe).subscribe(function(response) {
       loading.dismiss();
-      
+
       me.loadRecipes().then(function() {}, function() {});
     }, function(err) {
       loading.dismiss();
@@ -274,7 +275,7 @@ export class HomePage {
       }
     });
   }
-  
+
   deleteRecipe(recipe) {
     let alert = this.alertCtrl.create({
       title: 'Confirm Delete',
@@ -296,15 +297,15 @@ export class HomePage {
     });
     alert.present();
   }
-  
+
   private _deleteRecipe(recipe) {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.recipeService.remove(recipe).subscribe(function(response) {
       loading.dismiss();
-      
+
       me.loadRecipes();
     }, function(err) {
       loading.dismiss();
@@ -336,7 +337,7 @@ export class HomePage {
       }
     });
   }
-  
+
   presentPopover(event) {
     let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
 
@@ -344,15 +345,15 @@ export class HomePage {
       ev: event
     });
   }
-  
+
   newRecipe() {
     this.navCtrl.push('EditRecipePage');
   }
-  
+
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }
-  
+
   search(text) {
     if (!text) text = '';
     this.searchText = text;
@@ -361,20 +362,20 @@ export class HomePage {
       data: text
     }));
   }
-  
+
   trackByFn(index, item) {
     return item._id;
   }
-  
+
   nextViewType() {
     var viewTypeIdx = this.viewTypes.indexOf(this.viewType);
-    
+
     viewTypeIdx++;
 
     if (viewTypeIdx === this.viewTypes.length) viewTypeIdx = 0;
-    
+
     this.viewType = this.viewTypes[viewTypeIdx];
-    
+
     localStorage.setItem('viewType', this.viewType);
   }
 }
