@@ -35,15 +35,19 @@ export class EditRecipePage {
   }
 
   ionViewWillEnter() {
-    var textAreas = document.getElementsByTagName('textarea');
-    for (var i = 0; i < textAreas.length; i++) {
-      textAreas[i].style.height = textAreas[i].scrollHeight + 'px';
-    }
+    this.resizeAllTextAreas();
   }
 
   updateTextAreaSize(event) {
     var el = event._elementRef.nativeElement.children[0];
     el.style.height = el.scrollHeight + 'px';
+  }
+
+  resizeAllTextAreas() {
+    var textAreas = document.getElementsByTagName('textarea');
+    for (var i = 0; i < textAreas.length; i++) {
+      textAreas[i].style.height = textAreas[i].scrollHeight + 'px';
+    }
   }
 
   setFile(event) {
@@ -89,9 +93,11 @@ export class EditRecipePage {
     this.recipeService.vision(image).subscribe(function(response) {
       loading.dismiss();
 
-      console.log(response);
-
       me.recipe[fieldName] = response.text;
+
+      setTimeout(function() {
+        me.resizeAllTextAreas();
+      });
     }, function() {
       loading.dismiss();
       me.toastCtrl.create({
