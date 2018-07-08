@@ -77,6 +77,34 @@ export class EditRecipePage {
     };
   }
 
+  setOCR(event, fieldName) {
+    let files = event.srcElement.files;
+    if (!files) return;
+
+    let image = files[0];
+
+    var loading = this.loadingService.start();
+
+    var me = this;
+    this.recipeService.vision(image).subscribe(function(response) {
+      loading.dismiss();
+
+      console.log(response);
+
+      me.recipe[fieldName] = response.text;
+    }, function() {
+      loading.dismiss();
+      me.toastCtrl.create({
+        message: 'There was an error while fetching text for your image, we\'re sorry!',
+        duration: 4000
+      }).present();
+    });
+  }
+
+  ocrPicker(fieldName) {
+    document.getElementById('ocr-' + fieldName).click();
+  }
+
   save() {
     if (!this.recipe.title || this.recipe.title.length === 0) {
       this.toastCtrl.create({

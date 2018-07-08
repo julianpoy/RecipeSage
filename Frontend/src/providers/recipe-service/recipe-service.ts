@@ -220,6 +220,26 @@ export class RecipeServiceProvider {
     );
   }
 
+  vision(imageFile) {
+    let formData: FormData = new FormData();
+    formData.append('image', imageFile, 'convert');
+
+    const httpOptions = {};
+
+    var me = this;
+    return {
+      subscribe: function (resolve, reject) {
+        me.http
+          .post(me.base + 'vision/' + me.getTokenQuery(), formData, httpOptions)
+          .pipe(
+            catchError(me.handleError)
+          ).subscribe(function (response) {
+            resolve(response);
+          }, reject);
+      }
+    }
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

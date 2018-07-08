@@ -48,7 +48,7 @@ function cleanupVisionStorage(filepath) {
   });
 }
 
-router.post('/vision', visionStorage.single('image'), function(req, res, next) {
+router.post('/vision', cors(), visionStorage.single('image'), function(req, res, next) {
   // Grabs text from within image
   client
     .documentTextDetection(req.file.path)
