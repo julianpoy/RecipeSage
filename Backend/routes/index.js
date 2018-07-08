@@ -5,6 +5,10 @@ var cors = require('cors');
 var aws = require('aws-sdk');
 var semver = require('semver');
 var Raven = require('raven');
+var multer = require('multer');
+var vision = require('@google-cloud/vision');
+var visionStorage = multer({ dest: 'tmp/' });
+var fs = require('fs');
 
 // DB
 var mongoose = require('mongoose');
@@ -16,18 +20,53 @@ var UtilService = require('../services/util');
 
 var CURRENT_CLIENT_VERSION = '1.1.1';
 
-/* GET home page. */
+// ---- GENERAL ----
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 router.get('/info', cors(), function(req, res, next) {
   var updateAvailable = semver.compare(CURRENT_CLIENT_VERSION, req.query.version) > 0;
-  
+
   res.status(200).json({
     updateAvailable: updateAvailable
   });
 });
+
+// ---- GOOGLE CLOUD ----
+
+// Creates a vision client
+var client = new vision.ImageAnnotatorClient({
+  projectId: 'chef-book',
+  keyFilename: './config/googlecloud-credentials.json',
+});
+
+function cleanupVisionStorage(filepath) {
+  fs.unlink(filepath, function(err) {
+    if(err) Raven.captureException(err);
+  });
+}
+
+router.post('/vision', visionStorage.single('image'), function(req, res, next) {
+  // Grabs text from within image
+  client
+    .documentTextDetection(req.file.path)
+    .then(results => {
+      console.log(results[0])
+      res.status(200).json({
+        text: results[0].fullTextAnnotation.text
+      });
+      cleanupVisionStorage(req.file.path);
+    })
+    .catch(err => {
+      Raven.captureException(err);
+      res.status(500).send('Failed to convert text');
+      cleanupVisionStorage(req.file.path);
+    });
+});
+
+// ---- SCRAPERS ----
 
 router.get(
   '/scrape/pepperplate',
@@ -42,14 +81,14 @@ router.get(
 
   var username = req.query.username;
   var password = req.query.password;
-  
+
   var loginLink = 'https://www.pepperplate.com/login.aspx';
 
   var nightmare = Nightmare({
     show: true,
     executionTimeout: 300000
   });
-  
+
   var WORKER_TIMEOUT_INTERVAL = 60 * 1000; // 60 Seconds
   function setWorkerTimeout() {
     return setTimeout(function() {
@@ -59,12 +98,12 @@ router.get(
   }
   var workerTimeout = setWorkerTimeout();
   // UtilService.dispatchImportNotification(res.locals.user, 2);
-  
+
   function saveRecipes(accountId, recipes) {
     var savePromises = [];
     for (var i = 0; i < recipes.length; i++) {
       let recipe = recipes[i];
-      
+
       savePromises.push(new Promise(function(resolve, reject) {
         function saveRecipe(image, success, fail) {
           new Recipe({
@@ -86,16 +125,16 @@ router.get(
               fail();
             } else {
               var labelPromises = [];
-              
+
               for (var i = 0; i < recipe.rawCategories.length; i++) {
                 labelPromises.push(new Promise(function(resolveLabel, rejectLabel) {
                   let rawCategory = recipe.rawCategories[i].trim();
-                  
+
                   if (rawCategory.length === 0) {
                     resolveLabel();
                     return;
                   };
-      
+
                   Label.findOneAndUpdate({
                     accountId: accountId,
                     title: rawCategory
@@ -118,7 +157,7 @@ router.get(
                   });
                 }));
               }
-              
+
               // After all labels have been saved, sucess or fail the recipe save callback
               Promise.all(labelPromises).then(function() {
                 success();
@@ -128,7 +167,7 @@ router.get(
             }
           });
         }
-    
+
         if (recipe.imageURL) {
           UtilService.sendURLToS3(recipes[i].imageURL, function(err, image) {
             if (err) {
@@ -153,7 +192,7 @@ router.get(
         }
       }));
     }
-    
+
     Promise.all(savePromises).then(function() {
       UtilService.dispatchImportNotification(res.locals.user, 0);
       Raven.captureMessage('Import job completed succesfully', {
@@ -164,10 +203,10 @@ router.get(
       Raven.captureException('Import job failed');
     });
   };
-  
+
   function loadNext(nightmare, recipes, urls, idx) {
     // Raven.captureMessage('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
-    
+
     nightmare
       .goto(urls[idx])
       .wait('#cphMiddle_cphMain_lblTitle')
@@ -186,12 +225,12 @@ router.get(
           imageURL: (document.getElementById('cphMiddle_cphMain_imgRecipeThumb') || { src: '' }).src,
           rawCategories: (document.querySelector('#cphMiddle_cphMain_pnlTags span') || { innerText: '' }).innerText.split(',').map(function(el) { return el.trim() })
         }
-        
+
         return els;
       })
       .then(function (result) {
         recipes.push(result);
-        
+
         if (idx+1 < urls.length) {
           // Reset worker timeout
           clearTimeout(workerTimeout);
@@ -204,7 +243,7 @@ router.get(
         } else {
           // Finally, clear the worker timeout completely
           clearTimeout(workerTimeout);
-          
+
           saveRecipes(res.locals.session.accountId, recipes);
         }
       })
@@ -214,7 +253,7 @@ router.get(
         Raven.captureException(error);
       });
   }
-  
+
   nightmare
     .goto(loginLink)
     .type('#cphMain_loginForm_tbEmail', username)
@@ -244,7 +283,7 @@ router.get(
 
       // Dispatch a progress notification
       UtilService.dispatchImportNotification(res.locals.user, 2);
-      
+
       // Load the next page of recipes
       loadNext(nightmare, [], results, 0);
     })
