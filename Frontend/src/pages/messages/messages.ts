@@ -13,8 +13,9 @@ import { MessagingServiceProvider } from '../../providers/messaging-service/mess
 export class MessagesPage {
 
   threads: any = [];
-  
+
   isNotificationsEnabled: any;
+  isNotificationsSupported: any = 'Notification' in window;
 
   constructor(
     public navCtrl: NavController,
@@ -23,7 +24,7 @@ export class MessagesPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public messagingService: MessagingServiceProvider) {
-      
+
     this.isNotificationsEnabled = this.messagingService.isNotificationsEnabled;
 
     this.messagingService.requestNotifications();
@@ -36,11 +37,11 @@ export class MessagesPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MessagesPage');
   }
-  
+
   ionViewWillEnter() {
     this.loadThreads().then(function() {}, function() {});
   }
-  
+
   refresh(refresher) {
     this.loadThreads().then(function() {
       refresher.complete();
@@ -51,7 +52,7 @@ export class MessagesPage {
 
   loadThreads() {
     var me = this;
-    
+
     return new Promise(function(resolve, reject) {
       me.messagingService.threads({
         includeMessages: true,
@@ -62,7 +63,7 @@ export class MessagesPage {
         resolve();
       }, function(err) {
         reject();
-        
+
         switch(err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
@@ -85,14 +86,14 @@ export class MessagesPage {
       });
     });
   }
-  
+
   openThread(thread) {
     this.navCtrl.push('MessageThreadPage', {
       thread: thread,
       otherUserId: thread.otherUser._id
     });
   }
-  
+
   newThread() {
     var me = this;
     let modal = this.modalCtrl.create('NewMessageModalPage');

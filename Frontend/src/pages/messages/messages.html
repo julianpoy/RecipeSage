@@ -14,7 +14,7 @@
   </ion-refresher>
   <ion-list>
     <ion-item class="thread" *ngFor="let thread of threads" (click)="openThread(thread)">
-      <ion-icon name="text" item-start></ion-icon> 
+      <ion-icon name="text" item-start></ion-icon>
       <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
       <p><b>{{ thread.messages[0].from._id === thread.otherUser._id ? thread.messages[0].from.name || thread.messages[0].from.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
     </ion-item>
@@ -25,12 +25,12 @@
       </p>
     </ion-item>
   </ion-list>
-  
+
   <ion-fab right bottom>
     <button (click)="newThread()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
-  
-  <ion-footer *ngIf="!isNotificationsEnabled()" padding text-center>
+
+  <ion-footer *ngIf="isNotificationsSupported && !isNotificationsEnabled()" padding text-center>
     <b class="notificationWarning">Warning:</b>
     Notifications must be enabled for messaging to work properly.<br />
     <a href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1" target="_blank">See how to re-enable notifications here</a>

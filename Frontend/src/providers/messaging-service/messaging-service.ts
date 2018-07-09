@@ -152,7 +152,7 @@ export class MessagingServiceProvider {
 
   requestNotifications() {
     if (!('Notification' in window)) return;
-    if (!this.messaging || !((<any>Notification).permission === 'denied')) return;
+    if (!this.messaging || (<any>Notification).permission === 'denied') return;
 
     // Skip the prompt if permissions are already granted
     if ((<any>Notification).permission === 'granted') {
