@@ -20,7 +20,7 @@ export class LoginPage {
   confirmPassword: string = '';
 
   showLogin: boolean = true;
-  
+
   errorMessage: string = '';
 
   constructor(
@@ -41,7 +41,7 @@ export class LoginPage {
 
   toggleLogin() {
     this.showLogin = !this.showLogin;
-    
+
     this.errorMessage = '';
   }
 
@@ -50,7 +50,7 @@ export class LoginPage {
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     this.password = (document.getElementById('password') as HTMLInputElement).value;
     if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
-    
+
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
       this.errorMessage = 'Please enter a valid email address.';
@@ -58,7 +58,7 @@ export class LoginPage {
     } else if (!this.showLogin && this.name.length < 1) {
       this.errorMessage = 'Please enter a name (you can enter a nickname!)';
       return;
-    } else if (this.password.length === 0) { 
+    } else if (this.password.length === 0) {
       this.errorMessage = 'Please enter a password.';
       return;
     } else if (!this.showLogin && this.password.length < 6) {
@@ -68,25 +68,25 @@ export class LoginPage {
       this.errorMessage = 'Please enter your email address.';
       return;
     }
-    
+
     var me = this;
     this.errorMessage = '';
-    
+
     var loading = this.loadingService.start();
-    
+
     if (this.showLogin) {
       this.userService.login({
         email: this.email,
         password: this.password
       }).subscribe(function(response) {
         loading.dismiss();
-        
+
         localStorage.setItem('token', response.token);
 
-        if ((<any>Notification).permission === 'granted') {
+        if ('Notification' in window && (<any>Notification).permission === 'granted') {
           me.messagingService.requestNotifications();
         }
-        
+
         me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
       }, function(err) {
         loading.dismiss();
@@ -113,13 +113,13 @@ export class LoginPage {
           password: this.password
         }).subscribe(function(response) {
           loading.dismiss();
-          
+
           localStorage.setItem('token', response.token);
 
-          if ((<any>Notification).permission === 'granted') {
+          if ('Notification' in window && (<any>Notification).permission === 'granted') {
             me.messagingService.requestNotifications();
           }
-          
+
           me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
         }, function(err) {
           loading.dismiss();

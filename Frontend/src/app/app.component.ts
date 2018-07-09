@@ -39,7 +39,7 @@ export class MyApp {
     this.initEventDispatchers();
     this.initDevBase();
 
-    if ((<any>Notification).permission === 'granted' && this.isLoggedIn()) {
+    if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
       this.messagingService.requestNotifications();
     }
   }

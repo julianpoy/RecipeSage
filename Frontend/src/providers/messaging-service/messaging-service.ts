@@ -25,9 +25,9 @@ export class MessagingServiceProvider {
   private messaging: firebase.messaging.Messaging;
   private unsubscribeOnTokenRefresh = () => {};
   private fcmToken: any;
-  
+
   base: any;
-  
+
   constructor(
   public http: HttpClient,
   public events: Events,
@@ -35,9 +35,9 @@ export class MessagingServiceProvider {
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
     console.log('Hello MessagingServiceProvider Provider');
-    
+
     this.base = localStorage.getItem('base') || '/api/';
-    
+
     var me = this;
     var onSWRegsitration = function() {
       console.log("Has service worker registration. Beginning setup.")
@@ -45,13 +45,13 @@ export class MessagingServiceProvider {
         messagingSenderId: "1064631313987"
       };
       firebase.initializeApp(config);
-  
+
       me.messaging = firebase.messaging();
       me.messaging.useServiceWorker((<any>window).swRegistration);
-      
+
       me.messaging.onMessage(function(message: any) {
         console.log("received foreground FCM: ", message)
-        
+
         switch(message.data.type) {
           case 'messages:new':
             var message = JSON.parse(message.data.message);
@@ -69,25 +69,25 @@ export class MessagingServiceProvider {
     if ((<any>window).swRegistration) onSWRegsitration.call(null);
     else (<any>window).onSWRegistration = onSWRegsitration;
   }
-  
+
   isNotificationsEnabled() {
     return ('Notification' in window) && ((<any>Notification).permission === 'granted');
   }
-  
+
   getTokenQuery() {
     return '?token=' + localStorage.getItem('token');
   }
-  
+
   fetch(from?) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    
+
     var url = this.base + 'messages/' + this.getTokenQuery();
     if (from) url += '&user=' + from;
-    
+
     return this.http
     .get<Message[]>(url, httpOptions)
     .pipe(
@@ -95,7 +95,7 @@ export class MessagingServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   threads(options?) {
     options = options || {};
 
@@ -104,11 +104,11 @@ export class MessagingServiceProvider {
         'Content-Type':  'application/json'
       })
     };
-    
+
     var url = this.base + 'messages/threads/' + this.getTokenQuery();
     if (!options.includeMessages) url += '&light=true';
     if (options.messageLimit) url += '&limit=' + options.messageLimit;
-    
+
     return this.http
     .get<Message[]>(url, httpOptions)
     .pipe(
@@ -116,7 +116,7 @@ export class MessagingServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   create(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -131,17 +131,17 @@ export class MessagingServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   markAsRead(from?) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    
+
     var url = this.base + 'messages/read/' + this.getTokenQuery();
     if (from) url += '&from=' + from;
-    
+
     return this.http
     .get<Message[]>(url, httpOptions)
     .pipe(
@@ -151,9 +151,8 @@ export class MessagingServiceProvider {
   }
 
   requestNotifications() {
-    const notificationsSupported = 'Notification' in window;
-    const notificationsDenied = (<any>Notification).permission === 'denied';
-    if (!this.messaging || !notificationsSupported || notificationsDenied) return;
+    if (!('Notification' in window)) return;
+    if (!this.messaging || !((<any>Notification).permission === 'denied')) return;
 
     // Skip the prompt if permissions are already granted
     if ((<any>Notification).permission === 'granted') {
@@ -185,7 +184,7 @@ export class MessagingServiceProvider {
       this.enableNotifications();
     }
   }
-  
+
   // Grab token and setup FCM
   private enableNotifications() {
     if (!this.messaging) return;
@@ -245,7 +244,7 @@ export class MessagingServiceProvider {
       });;
     });
   }
-  
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
