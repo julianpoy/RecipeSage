@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, ModalController } from 'ionic-angular';
 
-import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
-import { LabelServiceProvider } from '../../providers/label-service/label-service';
-import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { LabelServiceProvider } from '../../../providers/label-service/label-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 import fractionjs from 'fraction.js';
 

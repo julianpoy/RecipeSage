@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
-import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
-import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 import loadImage from 'blueimp-load-image';
 

@@ -1,7 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
-import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
+import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 
 @IonicPage({
   segment: 'messages/:otherUserId',
@@ -16,12 +16,12 @@ export class MessageThreadPage {
   @ViewChild('content') content: any;
 
   messages: any = [];
-  
+
   otherUserId: string = '';
   pendingMessage: string = '';
   messagePlaceholder: string = 'Message...';
   reloading: boolean = false;
-  
+
   isViewLoaded: boolean = true;
 
   constructor(
@@ -32,7 +32,7 @@ export class MessageThreadPage {
     public toastCtrl: ToastController,
     public messagingService: MessagingServiceProvider) {
     this.otherUserId = this.navParams.get('otherUserId');
-    
+
     var me = this;
     events.subscribe('messages:new', (message) => {
       if (!me.isViewLoaded || message.otherUser._id !== me.otherUserId) return;
@@ -52,7 +52,7 @@ export class MessageThreadPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MessageThreadPage');
   }
-  
+
   ionViewWillEnter() {
     this.isViewLoaded = true;
     this.otherUserId = this.navParams.get('otherUserId');
@@ -67,11 +67,11 @@ export class MessageThreadPage {
       }, function() {});
     }
   }
-  
+
   ionViewWillLeave() {
     this.isViewLoaded = false;
   }
-  
+
   reload() {
     this.reloading = true;
 
@@ -82,7 +82,7 @@ export class MessageThreadPage {
       me.reloading = false;
     });
   }
-  
+
   refresh(refresher) {
     this.loadMessages.call(this).then(function() {
       refresher.complete();
@@ -90,7 +90,7 @@ export class MessageThreadPage {
       refresher.complete();
     });
   }
-  
+
   scrollToBottom(animate?, delay?, callback?) {
     var animationDuration = animate ? 300 : 0;
     var me = this;
@@ -105,7 +105,7 @@ export class MessageThreadPage {
       this.content.scrollToBottom(animationDuration);
     }
   }
-  
+
   keyboardOpened() {
     var me = this;
     window.onresize = function() {
@@ -113,24 +113,24 @@ export class MessageThreadPage {
       window.onresize = null;
     }
   }
-  
+
   trackByFn(index, item) {
     return item._id;
   }
-  
+
   loadMessages(isInitialLoad?) {
     var me = this;
-    
+
     return new Promise(function(resolve, reject) {
       me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
         me.messages = response;
-        
+
         me.scrollToBottom.call(me, !isInitialLoad, true, function() {
           resolve();
         });
       }, function(err) {
         reject();
-        
+
         if (!me.isViewLoaded) return;
         switch(err.status) {
           default:
@@ -140,15 +140,15 @@ export class MessageThreadPage {
       });
     });
   }
-  
+
   sendMessage() {
     var me = this;
     if (!this.pendingMessage) return;
-    
+
     var myMessage = this.pendingMessage;
     this.pendingMessage = '';
     this.messagePlaceholder = 'Sending...';
-    
+
     this.messagingService.create({
       to: this.otherUserId,
       body: myMessage
@@ -179,30 +179,30 @@ export class MessageThreadPage {
       }
     });
   }
-  
+
   openRecipe(recipe) {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe._id
     });
   }
-  
+
   onMessageKeyUp(event) {
     if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
       this.sendMessage();
     }
   }
-  
+
   parseMessage(message) {
     var updated = message;
-    
+
     updated = (<any>window).linkifyStr(updated, {
       target: {
         url: '_blank'
       },
       className: 'linkified'
     });
-    
+
     return updated;
   }
 }

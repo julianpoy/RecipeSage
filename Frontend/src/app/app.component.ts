@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events, ToastController } from 'ionic-angular';
 
-import { MessagesPage } from '../pages/messages/messages';
-import { MessageThreadPage } from '../pages/message-thread/message-thread';
+import { MessagesPage } from '../pages/messaging-components/messages/messages';
+import { MessageThreadPage } from '../pages/messaging-components/message-thread/message-thread';
 
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
@@ -203,6 +203,7 @@ export class MyApp {
       { title: 'Messages', component: 'MessagesPage' },
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Create Recipe', component: 'EditRecipePage' },
+      { title: 'Shopping Lists', component: 'ShoppingListsPage' },
       { title: 'Settings', component: 'SettingsPage' },
       { title: 'About & Support', component: 'AboutPage' }
     ];

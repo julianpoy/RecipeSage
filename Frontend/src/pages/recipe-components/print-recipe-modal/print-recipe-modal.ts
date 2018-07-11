@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
-import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage({

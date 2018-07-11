@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
-import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
-import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -13,10 +13,10 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
   providers: [ RecipeServiceProvider ]
 })
 export class ImportPage {
-  
+
   username: string = '';
   password: string = '';
-  
+
   errorMessage: string = '';
 
   constructor(
@@ -30,33 +30,33 @@ export class ImportPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ImportPage');
   }
-  
+
   scrapePepperplate() {
     if (this.username.trim().length === 0) {
       this.errorMessage = 'Please enter your pepperplate email/username.';
       return;
     }
-    
+
     if (this.password.trim().length === 0) {
       this.errorMessage = 'Please enter your pepperplate password.';
       return;
     }
-    
+
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.recipeService.scrapePepperplate({
       username: this.username,
       password: this.password
     }).subscribe(function(response) {
       loading.dismiss();
-      
+
       me.toastCtrl.create({
         message: 'We\'ll start importing your recipes shortly! We\'ll alert you when the process begins.',
         duration: 6000
       }).present();
-      
+
       me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();

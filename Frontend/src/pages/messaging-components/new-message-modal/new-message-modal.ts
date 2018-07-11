@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ViewController, NavParams, ToastController } from 'ionic-angular';
 
-import { UserServiceProvider } from '../../providers/user-service/user-service';
-import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
+import { UserServiceProvider } from '../../../providers/user-service/user-service';
+import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 
 @IonicPage({
   priority: 'low'
@@ -15,11 +15,11 @@ export class NewMessageModalPage {
 
   searching: boolean = false;
   autofillTimeout: any;
-  
+
   recipientEmail: string = '';
   recipientName: string = '';
   recipientId: string = '';
-  
+
   message: string = '';
 
   constructor(
@@ -34,12 +34,12 @@ export class NewMessageModalPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad NewMessageModalPage');
   }
-  
+
   autofillUserName() {
     this.searching = true;
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
-    
+
     var me = this;
     this.autofillTimeout = setTimeout(function() {
       me.userService.getUserByEmail(me.recipientEmail.trim()).subscribe(function(response) {
@@ -64,11 +64,11 @@ export class NewMessageModalPage {
       });
     }, 500);
   }
-  
+
   send() {
     var me = this;
     this.message = this.message || 'Hello! I\'d like to chat on RecipeSage';
-    
+
     this.messagingService.create({
       to: this.recipientId,
       body: this.message

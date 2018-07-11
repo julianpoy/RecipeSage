@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController, Events } from 'ionic-angular';
 
-import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
+import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 
 @IonicPage({
   priority: 'low'
