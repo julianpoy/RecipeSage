@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>Shopping Lists</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item class="shoppingList" *ngFor="let shoppingList of shoppingLists" (click)="openThread(thread)">
+      <ion-icon name="text" item-start></ion-icon>
+      <h2>{{ shoppingList.title }}</h2>
+      <p>
+        In collaboration with: <span *ngFor="user in shoppingList.otherUsers">{{ user.name || user.email }}</span>
+      </p>
+    </ion-item>
+    <ion-item *ngIf="shoppingLists.length === 0" text-wrap text-center>
+      <p>
+        You have no shopping lists.
+        <br /> To create a shopping list, press the plus button.
+      </p>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button (click)="newShoppingList()" ion-fab color="primary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>
