@@ -39,6 +39,7 @@ var recipes = require('./routes/recipes');
 var labels = require('./routes/labels');
 var messages = require('./routes/messages');
 var print = require('./routes/print');
+var grip = require('./routes/grip');
 
 var app = express();
 app.use(Raven.requestHandler());
@@ -68,6 +69,7 @@ app.use('/recipes', recipes);
 app.use('/labels', labels);
 app.use('/messages', messages);
 app.use('/print', print);
+app.use('/grip', grip);
 
 app.use(Raven.errorHandler());
 
