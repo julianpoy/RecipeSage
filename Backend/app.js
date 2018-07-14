@@ -31,6 +31,7 @@ var sessionSchema = require('./models/session');
 var recipeSchema = require('./models/recipe');
 var labelSchema = require('./models/label');
 var messageSchema = require('./models/message');
+var shoppingListSchema = require('./models/shoppingList');
 
 // Routes
 var index = require('./routes/index');
@@ -38,6 +39,7 @@ var users = require('./routes/users');
 var recipes = require('./routes/recipes');
 var labels = require('./routes/labels');
 var messages = require('./routes/messages');
+var shoppingLists = require('./routes/shoppingLists');
 var print = require('./routes/print');
 var grip = require('./routes/grip');
 
@@ -68,6 +70,7 @@ app.use('/users', users);
 app.use('/recipes', recipes);
 app.use('/labels', labels);
 app.use('/messages', messages);
+app.use('/shoppingLists', shoppingLists);
 app.use('/print', print);
 app.use('/grip', grip);
 

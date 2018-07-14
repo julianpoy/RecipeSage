@@ -5,9 +5,6 @@ var Raven = require('raven');
 
 // DB
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var Recipe = mongoose.model('Recipe');
-var Label = mongoose.model('Label');
 var ShoppingList = mongoose.model('ShoppingList');
 
 // Service
@@ -289,7 +286,6 @@ router.put(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  upload.single('image'),
   function(req, res) {
 
   ShoppingList.findOne({

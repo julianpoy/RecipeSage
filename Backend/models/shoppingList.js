@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Recipe = new Schema({
+var ShoppingList = new Schema({
   accountId: {
     type: String,
     ref: 'User'
@@ -44,4 +44,4 @@ var Recipe = new Schema({
   }
 });
 
-mongoose.model('Recipe', Recipe);
+mongoose.model('ShoppingList', ShoppingList);
