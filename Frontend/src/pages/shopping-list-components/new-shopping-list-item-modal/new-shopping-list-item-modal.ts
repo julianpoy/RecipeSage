@@ -1,12 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the NewShoppingListItemModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -15,11 +8,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class NewShoppingListItemModalPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  // LABELS REFERENCED HERE ARE ACTUALLY COLLABORATORS ON SHOPPING LIST ITEM
+  labelObjectsByTitle: any = {};
+  existingLabels: any = [];
+  selectedLabels: any = [];
+  pendingLabel: string = '';
+  showAutocomplete: boolean = false;
+  autocompleteSelectionIdx: number = -1;
+
+  constructor(
+    public navCtrl: NavController,
+    public viewCtrl: ViewController,
+    public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NewShoppingListItemModalPage');
   }
 
+  cancel() {
+    this.viewCtrl.dismiss({
+      destination: false
+    });
+  }
 }

@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-@IonicPage()
+@IonicPage({
+  segment: 'shopping-lists/:shoppingListId',
+  priority: 'low'
+})
 @Component({
   selector: 'page-shopping-list',
   templateUrl: 'shopping-list.html',

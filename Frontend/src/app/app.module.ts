@@ -15,6 +15,7 @@ import { MessagingServiceProvider } from '../providers/messaging-service/messagi
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingServiceProvider } from '../providers/loading-service/loading-service';
+import { ShoppingListServiceProvider } from '../providers/shopping-list-service/shopping-list-service';
 
 var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Force windows phone to use Material Design
 
@@ -45,7 +46,8 @@ var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Fo
     LabelServiceProvider,
     RecipeServiceProvider,
     MessagingServiceProvider,
-    LoadingServiceProvider
+    LoadingServiceProvider,
+    ShoppingListServiceProvider
   ]
 })
 export class AppModule {}

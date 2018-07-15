@@ -1,18 +1,46 @@
-<!--
-  Generated template for the NewShoppingListItemModalPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
     <ion-title>newShoppingListItemModal</ion-title>
+
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <div id='labelSelectParent' *ngIf="recipe.folder !== 'inbox'">
 
+    <div class="labels">
+      <span class="label" *ngFor="let label of selectedLabels">
+        <ion-icon class="delete-label" (click)="deleteLabel(labelObjectsByTitle[label])" name="trash" item-start></ion-icon>
+        {{ label }}
+      </span>
+    </div>
+
+    <input [(ngModel)]='pendingLabel' (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)' (blur)='toggleAutocomplete(false, $event)'
+      (keyup)="labelFieldKeyUp($event)" (keyup.enter)="addLabel($event.target.value); $event.target.value = ''" placeholder="Create or select label"
+      #labelInputField id="labelInputField" />
+    <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
+      <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1"
+        (click)="addLabel(pendingLabel)">{{ pendingLabel }}
+        <span class="hint">Click to create</span>
+      </button>
+      <button class="suggestion" *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+        {{ pendingLabel }}
+        <span class="hint">Already added</span>
+      </button>
+      <button class="suggestion" *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
+        (click)="addLabel(label)">
+        {{ label }}
+        <span class="hint">Click to add</span>
+      </button>
+    </div>
+  </div>
 </ion-content>

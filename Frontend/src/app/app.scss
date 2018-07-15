@@ -26,7 +26,7 @@ ion-thumbnail img {
 .platform-core ion-thumbnail {
   width: 200px;
   height: 200px;
-  
+
   img {
     width: 200px;
     height: 200px;
@@ -43,4 +43,62 @@ ion-thumbnail img {
 
 .alert-message {
   overflow: auto;
+}
+
+#labelSelectParent {
+  padding-left: 16px;
+  padding-right: 16px;
+
+  .labels {
+    margin-bottom: 5px;
+
+    .label {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      border-radius: 2px;
+      margin-right: 7px;
+      padding: 8px;
+      line-height: 37px;
+
+      ion-icon {
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  input {
+    border: none;
+    border-bottom: 1px solid lightgrey;
+    padding: 7px;
+
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .autocomplete {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    max-width: 600px;
+    max-height: 100px;
+    overflow-y: auto;
+
+    button.suggestion {
+      display: block;
+      padding: 8px;
+      background-color: white;
+      width: 100%;
+      text-align: left;
+
+      &:hover {
+        background-color: #00a8ff;
+      }
+
+      &:focus {
+        background-color: #00a8ff;
+      }
+
+      .hint {
+        float: right;
+      }
+    }
+  }
 }
