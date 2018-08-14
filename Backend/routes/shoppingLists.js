@@ -165,15 +165,16 @@ router.delete(
     ShoppingList.findOne(query)
       .exec(function (err, shoppingList) {
         if (err) {
-          res.status(500).send("Couldn't search the database for recipe!");
+          res.status(500).send("Couldn't search the database for shopping list!");
+          Raven.captureException(err);
         } else if (!shoppingList) {
-          res.status(404).send("Recipe with that ID not found!");
+          res.status(404).send("Shopping list not found or not visible to you!");
         } else {
           if (shoppingList.accountId === res.locals.accountId) {
-            recipe.remove(function (err) {
+            shoppingList.remove(function (err) {
               if (err) {
                 var payload = {
-                  msg: "Couldn't delete recipe from database"
+                  msg: "Couldn't delete shopping list from database"
                 };
                 res.status(500).json(payload);
                 payload.err = err;
