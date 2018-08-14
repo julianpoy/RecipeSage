@@ -51,7 +51,7 @@ export class MessagingServiceProvider {
 
       me.messaging.onMessage(function(message: any) {
         console.log("received foreground FCM: ", message)
-
+        // TODO: REPLACE WITH GRIP (WS)
         switch(message.data.type) {
           case 'messages:new':
             var message = JSON.parse(message.data.message);
