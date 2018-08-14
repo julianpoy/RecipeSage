@@ -4,10 +4,48 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>Shopping List</ion-title>
+    <ion-title>{{ list.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-list-header *ngIf="list.items.length > 0">
+      Items
+    </ion-list-header>
+    <ion-item *ngFor="let item of list.items; let i = index;">
+      <ion-label>{{ item.title }}</ion-label>
+      <p *ngIf="list.collaborators.length > 0 && item.createdBy">
+        Added by:
+        <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+      </p>
+      <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
+    </ion-item>
+    <ion-item *ngIf="list.items.length === 0" text-wrap text-center>
+      <p>
+        There are no items in this shopping list.
+        <br /> To add a new item, press the plus button.
+      </p>
+    </ion-item>
+  </ion-list>
 
+  <br />
+
+  <ion-list *ngIf="recipeIds.length > 0">
+    <ion-list-header>
+      Recipes in this list
+    </ion-list-header>
+    <ion-item *ngFor="let recipeId of recipeIds">
+      {{ itemsByRecipeId[recipeId][0].recipe.title }}
+    </ion-item>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button (click)="newShoppingListItem()" ion-fab color="primary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
