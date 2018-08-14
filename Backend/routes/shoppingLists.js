@@ -127,15 +127,18 @@ router.post(
       } else if (!shoppingList) {
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
+        var broadcastPayload = {
+          shoppingList: shoppingList._id,
+          updatedBy: {
+            _id: res.locals.user._id,
+            name: res.locals.user.name,
+            email: res.locals.user.email
+          }
+        };
+
+        GripService.broadcast(shoppingList.accountId, 'shoppingList:itemsUpdated', broadcastPayload);
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
-          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', {
-            shoppingList: shoppingList._id,
-            updatedBy: {
-              _id: res.locals.user._id,
-              name: res.locals.user.name,
-              email: res.locals.user.email
-            }
-          });
+          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', broadcastPayload);
         }
 
         res.status(200).json(shoppingList);
@@ -246,15 +249,18 @@ router.delete(
       } else if (!shoppingList) {
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
+        var deletedItemBroadcast = {
+          shoppingList: shoppingList._id,
+          updatedBy: {
+            _id: res.locals.user._id,
+            name: res.locals.user.name,
+            email: res.locals.user.email
+          }
+        };
+
+        GripService.broadcast(shoppingList.accountId, 'shoppingList:itemsUpdated', deletedItemBroadcast);
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
-          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', {
-            shoppingList: shoppingList._id,
-            updatedBy: {
-              _id: res.locals.user._id,
-              name: res.locals.user.name,
-              email: res.locals.user.email
-            }
-          });
+          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', deletedItemBroadcast);
         }
 
         res.status(200).json(shoppingList);
