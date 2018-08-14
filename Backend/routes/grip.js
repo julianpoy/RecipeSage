@@ -27,7 +27,6 @@ router.all(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
-    console.log("user is connecting")
     // Reject non-WebSocket requests
     if (!GripService.expressGrip.verifyIsWebSocket(res, next)) {
       return;
@@ -37,7 +36,6 @@ router.all(
 
     // If this is a new connection, accept it and subscribe it to a channel
     if (ws.isOpening()) {
-      console.log(ws, req, req.query);
       ws.accept();
       ws.subscribe('all');
       ws.subscribe(res.locals.accountId);
