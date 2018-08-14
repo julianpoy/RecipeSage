@@ -15,9 +15,6 @@ export class NewShoppingListModalPage {
 
   listTitle: string = '';
 
-  // threads: any = [];
-
-  // LABELS REFERENCED HERE ARE ACTUALLY COLLABORATORS ON SHOPPING LIST ITEM
   threadsByUserId: any = {};
   existingThreads: any = [];
   selectedThreads: any = [];
