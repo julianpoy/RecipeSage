@@ -39,11 +39,11 @@ export class WebsocketServiceProvider {
   }
 
   // Listeners
-  register(eventName, fn, ctx) {
+  register(eventName, cb, ctx) {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
 
     this.listeners[eventName].push({
-      cb: fn,
+      cb: cb,
       ctx: ctx
     });
   }
@@ -64,12 +64,12 @@ export class WebsocketServiceProvider {
     this.connection.onopen = function() {
       me.handleMessage({
         type: 'connected',
-        message: null
+        data: null
       });
     };
 
     this.connection.onmessage = function(payload) {
-      me.handleMessage(payload.data);
+      me.handleMessage(JSON.parse(payload.data));
     };
 
     this.connection.onerror = function() {
@@ -92,7 +92,7 @@ export class WebsocketServiceProvider {
   }
 
   private handleMessage(payload) {
-    this.broadcast('test', null);
+    this.broadcast(payload.type, payload.data);
   }
 
   private broadcast(eventName, msg) {
@@ -101,7 +101,7 @@ export class WebsocketServiceProvider {
     if (!queue) return;
 
     for (var i = 0; i < queue.length; i++) {
-      queue[i].fn.call(queue[i].ctx, msg);
+      queue[i].cb.call(queue[i].ctx, msg);
     }
   }
 }
