@@ -73,6 +73,27 @@ export class ShoppingListServiceProvider {
     }
   }
 
+  addItems(data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    var me = this;
+    return {
+      subscribe: function (resolve, reject) {
+        me.http
+          .post(me.base + 'shoppingLists/' + data._id + me.getTokenQuery(), data, httpOptions)
+          .pipe(
+            catchError(me.handleError)
+          ).subscribe(function (response) {
+            resolve(response);
+          }, reject);
+      }
+    }
+  }
+
   update(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -95,11 +116,13 @@ export class ShoppingListServiceProvider {
       })
     };
 
+    var recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
+
     var me = this;
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'shoppingLists/' + data._id + me.getTokenQuery(), httpOptions)
+          .delete(me.base + 'shoppingLists/' + data._id + me.getTokenQuery() + '&items=' + data.items.join(',') + recipeQuery, httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)
