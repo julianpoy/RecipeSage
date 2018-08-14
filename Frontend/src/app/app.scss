@@ -45,6 +45,10 @@ ion-thumbnail img {
   overflow: auto;
 }
 
+.modal-wrapper .scroll-content {
+  overflow-y: auto;
+}
+
 #labelSelectParent {
   padding-left: 16px;
   padding-right: 16px;
