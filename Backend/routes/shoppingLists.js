@@ -103,7 +103,7 @@ router.post(
     for (var i = 0; i < req.body.items.length; i++) {
       var item = {
         title: req.body.items[i].title,
-        recipe: req.body.items[i].recipe,
+        recipe: req.body.items[i].recipe || null,
         created: Date.now(),
         createdBy: res.locals.accountId,
         completed: false
@@ -113,13 +113,17 @@ router.post(
     }
 
     var update = {
-      $pushAll: { items: addItems },
+      $push: { items: { $each: addItems } },
       updated: Date.now()
     };
 
-    ShoppingList.findOneAndUpdate(find, update, { new: true }, function (err, shoppingList) {
+    ShoppingList.findOneAndUpdate(find, update, { new: true })
+    .populate('collaborators', 'name email')
+    .populate('items.recipe', 'title')
+    .exec(function (err, shoppingList) {
       if (err) {
-        res.status(500).send("Couldn't search the database for shopping list!");
+        res.status(500).send("Couldn't update the database with shopping list!");
+        Raven.captureException(err);
       } else if (!shoppingList) {
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
@@ -219,17 +223,25 @@ router.delete(
 
     if (req.body.recipeId) {
       update = {
-        $pull: { items: { recipeId: req.body.recipeId } }
+        $pull: { items: { recipeId: req.query.recipeId } }
       };
     } else {
+      var items = req.query.items.split(',').map(function (el) {
+        return mongoose.Types.ObjectId(el);
+      });
+
       update = {
-        $pullAll: { items: { _id: req.body.items } }
+        $pull: { items: { _id: { $in: items } } }
       };
     }
     update.updated = Date.now();
 
-    ShoppingList.findOneAndUpdate(find, update, { new: true }, function(err, shoppingList) {
+    ShoppingList.findOneAndUpdate(find, update, { new: true })
+    .populate('collaborators', 'name email')
+    .populate('items.recipe', 'title')
+    .exec(function(err, shoppingList) {
       if (err) {
+        console.log(err)
         res.status(500).send("Couldn't search the database for shopping list!");
       } else if (!shoppingList) {
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
@@ -268,6 +280,7 @@ router.get(
 
     ShoppingList.findOne(query)
     .populate('collaborators', 'name email')
+    .populate('items.recipe', 'title')
     .lean()
     .exec(function(err, shoppingList) {
       if (err) {
