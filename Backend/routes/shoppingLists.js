@@ -138,7 +138,7 @@ router.post(
 
         GripService.broadcast(shoppingList.accountId, 'shoppingList:itemsUpdated', broadcastPayload);
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
-          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', broadcastPayload);
+          GripService.broadcast(shoppingList.collaborators[i]._id, 'shoppingList:itemsUpdated', broadcastPayload);
         }
 
         res.status(200).json(shoppingList);
@@ -261,7 +261,7 @@ router.delete(
 
         GripService.broadcast(shoppingList.accountId, 'shoppingList:itemsUpdated', deletedItemBroadcast);
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
-          GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:itemsUpdated', deletedItemBroadcast);
+          GripService.broadcast(shoppingList.collaborators[i]._id, 'shoppingList:itemsUpdated', deletedItemBroadcast);
         }
 
         res.status(200).json(shoppingList);
