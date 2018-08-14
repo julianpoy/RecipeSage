@@ -21,5 +21,5 @@ exports.broadcast = function(channel, type, data) {
     data: data || {}
   };
 
-  expressGrip.publish(channel, new grip.WebSocketMessageFormat(body));
+  expressGrip.publish(channel, new grip.WebSocketMessageFormat(JSON.stringify(body)));
 }
