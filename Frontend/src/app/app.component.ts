@@ -7,6 +7,7 @@ import { MessageThreadPage } from '../pages/messaging-components/message-thread/
 import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
+import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -29,6 +30,7 @@ export class MyApp {
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
     public messagingService: MessagingServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public userService: UserServiceProvider) {
 
     this.initializeApp();
