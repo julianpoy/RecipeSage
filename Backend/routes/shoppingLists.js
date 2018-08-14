@@ -180,6 +180,17 @@ router.delete(
                 payload.err = err;
                 Raven.captureException(payload);
               } else {
+                for (var i = 0; i < (shoppingList.collaborators || []).length; i++) {
+                  GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:removed', {
+                    shoppingList: shoppingList._id,
+                    updatedBy: {
+                      _id: res.locals.user._id,
+                      name: res.locals.user.name,
+                      email: res.locals.user.email
+                    }
+                  });
+                }
+
                 res.status(200).send('deleted');
               }
             });
