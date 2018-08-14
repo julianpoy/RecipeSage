@@ -33,14 +33,14 @@
       </span>
     </div>
 
-    <p *ngIf="selectedThreads.length === 0;">
-      No collaborators added
-    </p>
-
     <input [(ngModel)]='pendingThread' (ngModelChange)='autofillUserName()' (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)' (blur)='toggleAutocomplete(false, $event)'
       (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);" placeholder="Add collaborators"
       #labelInputField id="labelInputField" />
     <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
+      <button class="suggestion" *ngIf="pendingThread.length === 0">
+        Type an email address to search, or select a person below
+        <!-- <span class="hint"></span> -->
+      </button>
       <button class="suggestion" *ngIf="pendingThread && pendingThread.length > 0 && selectedThreads.indexOf(pendingCollaboratorId) > -1">
         {{ pendingThread }}
         <span class="hint">Already added</span>
