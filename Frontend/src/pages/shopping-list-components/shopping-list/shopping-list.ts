@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
+import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 
 @IonicPage({
   segment: 'shopping-lists/:shoppingListId',
@@ -25,11 +26,18 @@ export class ShoppingListPage {
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public shoppingListService: ShoppingListServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public navParams: NavParams) {
 
     this.shoppingListId = navParams.get('shoppingListId');
+
+    this.websocketService.register('shoppingList:itemsUpdated', function(payload) {
+      if (payload.shoppingListId === this.shoppingListId) {
+        this.loadList();
+      }
+    }, this);
   }
 
   ionViewDidLoad() {
