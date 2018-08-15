@@ -17,7 +17,11 @@
       <ion-icon name="list" item-start></ion-icon>
       <h2>{{ shoppingList.title }}</h2>
       <p *ngIf="shoppingList.collaborators.length > 0">
-        In collaboration with: <span *ngFor="let user of shoppingList.collaborators">{{ user.name || user.email }}</span>
+        In collaboration with:
+        <span *ngFor="let user of shoppingList.collaborators">
+          <span *ngIf="shoppingList.myUserId !== user._id">{{ user.name || user.email }}</span>
+        </span>
+        <span *ngIf="shoppingList.myUserId !== shoppingList.accountId._id">{{ shoppingList.accountId.name || shoppingList.accountId.email }}</span>
       </p>
     </ion-item>
     <ion-item *ngIf="shoppingLists.length === 0" text-wrap text-center>
