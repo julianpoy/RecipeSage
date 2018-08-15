@@ -1,0 +1,31 @@
+<ion-list no-border>
+  <ion-list-header>
+    Options
+  </ion-list-header>
+
+  <ion-item>
+    <ion-icon name='list' item-start></ion-icon>
+    <ion-label>Sort by</ion-label>
+    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
+      <ion-option value="-title">Title</ion-option>
+      <ion-option value="-created">Created (newest first)</ion-option>
+      <ion-option value="created">Created (oldest first)</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-toggle (click)="removeAllItems()"></ion-toggle>
+    <ion-label>
+      Remove all items
+    </ion-label>
+    <ion-icon name='remove-circle' item-start></ion-icon>
+  </ion-item>
+
+  <ion-item>
+    <ion-toggle (click)="deleteList()"></ion-toggle>
+    <ion-label>
+      Delete list
+    </ion-label>
+    <ion-icon name='trash' item-start></ion-icon>
+  </ion-item>
+</ion-list>

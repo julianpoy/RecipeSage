@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, PopoverController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
@@ -22,6 +22,8 @@ export class ShoppingListPage {
 
   lastItemRemoved: any;
 
+  viewOptions: any = {};
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
@@ -29,6 +31,7 @@ export class ShoppingListPage {
     public websocketService: WebsocketServiceProvider,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public navParams: NavParams) {
 
     this.shoppingListId = navParams.get('shoppingListId');
@@ -38,6 +41,8 @@ export class ShoppingListPage {
         this.loadList();
       }
     }, this);
+
+    this.loadViewOptions();
   }
 
   ionViewDidLoad() {
@@ -81,6 +86,8 @@ export class ShoppingListPage {
       if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
       me.itemsByRecipeId[recipeId].push(items[i]);
     }
+
+    this.applySort();
   }
 
   loadList() {
@@ -235,6 +242,54 @@ export class ShoppingListPage {
       } else {
         me.navCtrl.push(data.destination, data.routingData);
       }
+    });
+  }
+
+  loadViewOptions() {
+    var defaults = {
+      sortBy: '-created'
+    }
+
+    this.viewOptions.sortBy = localStorage.getItem('shoppingLists.sortBy');
+
+    for (var key in this.viewOptions) {
+      if (this.viewOptions.hasOwnProperty(key)) {
+        if (this.viewOptions[key] == null) {
+          this.viewOptions[key] = defaults[key];
+        }
+      }
+    }
+  }
+
+  applySort() {
+    var me = this;
+    this.list.items = this.list.items.sort(function(a, b) {
+      if (me.viewOptions.sortBy === 'created') {
+        return new Date(a.created) > new Date(b.created);
+      }
+      if (me.viewOptions.sortBy === '-created') {
+        return new Date(a.created) < new Date(b.created);
+      }
+      if (me.viewOptions.sortBy === '-title') {
+        return a.title.localeCompare(b.title);
+      }
+    });
+  }
+
+  presentPopover(event) {
+    let popover = this.popoverCtrl.create('ShoppingListPopoverPage', {
+      shoppingListId: this.shoppingListId,
+      shoppingList: this.list,
+      viewOptions: this.viewOptions
+    });
+
+    popover.present({
+      ev: event
+    });
+
+    var me = this;
+    popover.onDidDismiss(() => {
+      me.applySort();
     });
   }
 }
