@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
+import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 
 @IonicPage({
   segment: 'shopping-lists',
@@ -19,7 +20,16 @@ export class ShoppingListsPage {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public shoppingListService: ShoppingListServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public navParams: NavParams) {
+
+    this.websocketService.register('shoppingList:received', function() {
+      this.loadLists();
+    }, this);
+
+    this.websocketService.register('shoppingList:removed', function () {
+      this.loadLists();
+    }, this);
   }
 
   ionViewDidLoad() {
