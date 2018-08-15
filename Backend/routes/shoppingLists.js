@@ -34,7 +34,7 @@ router.post(
     } else {
       for (var i = 0; i < (req.body.collaborators || []).length; i++) {
         GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
-          shoppingList: shoppingList._id,
+          shoppingListId: shoppingList._id,
           from: {
             _id: res.locals.user._id,
             name: res.locals.user.name,
@@ -128,7 +128,7 @@ router.post(
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
         var broadcastPayload = {
-          shoppingList: shoppingList._id,
+          shoppingListId: shoppingList._id,
           updatedBy: {
             _id: res.locals.user._id,
             name: res.locals.user.name,
@@ -182,7 +182,7 @@ router.delete(
               } else {
                 for (var i = 0; i < (shoppingList.collaborators || []).length; i++) {
                   GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:removed', {
-                    shoppingList: shoppingList._id,
+                    shoppingListId: shoppingList._id,
                     updatedBy: {
                       _id: res.locals.user._id,
                       name: res.locals.user.name,
@@ -262,7 +262,7 @@ router.delete(
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
         var deletedItemBroadcast = {
-          shoppingList: shoppingList._id,
+          shoppingListId: shoppingList._id,
           updatedBy: {
             _id: res.locals.user._id,
             name: res.locals.user.name,
