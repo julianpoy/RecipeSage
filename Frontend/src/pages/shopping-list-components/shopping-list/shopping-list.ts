@@ -117,6 +117,8 @@ export class ShoppingListPage {
               dismissOnPageChange: true
             });
             errorToast.present();
+
+            me.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
             errorToast = me.toastCtrl.create({
