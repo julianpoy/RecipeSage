@@ -23,7 +23,7 @@
       Items
     </ion-list-header>
     <ion-item *ngFor="let item of list.items; let i = index;">
-      <ion-label>
+      <ion-label text-wrap>
         {{ item.title }}
         <p *ngIf="viewOptions.showAddedOn">
           Added
