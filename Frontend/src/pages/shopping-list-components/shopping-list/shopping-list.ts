@@ -112,7 +112,7 @@ export class ShoppingListPage {
             break;
           case 404:
             let errorToast = me.toastCtrl.create({
-              message: 'Recipe not found. Does this recipe URL exist?',
+              message: 'Shopping list not found. Does this shopping list URL exist?',
               duration: 30000,
               dismissOnPageChange: true
             });

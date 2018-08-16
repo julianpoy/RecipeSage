@@ -196,7 +196,7 @@ router.delete(
                   });
                 }
 
-                res.status(200).send('deleted');
+                res.status(200).send(shoppingList);
               }
             });
           } else {
@@ -215,7 +215,7 @@ router.delete(
               } else if (!shoppingList) {
                 res.status(404).send("Shopping list with that ID not found or you do not have access!");
               } else {
-                res.status(200).send('deleted');
+                res.status(200).send(shoppingList);
               }
             });
           }

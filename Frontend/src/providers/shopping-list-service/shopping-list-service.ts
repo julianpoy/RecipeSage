@@ -133,6 +133,28 @@ export class ShoppingListServiceProvider {
     }
   }
 
+  unlink(data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    var me = this;
+    return {
+      subscribe: function (resolve, reject) {
+        me.http
+          .delete(me.base + 'shoppingLists/' + data._id + '/unlink/' + me.getTokenQuery(), httpOptions)
+          .pipe(
+            retry(1),
+            catchError(me.handleError)
+          ).subscribe(function (response) {
+            resolve(response);
+          }, reject);
+      }
+    }
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

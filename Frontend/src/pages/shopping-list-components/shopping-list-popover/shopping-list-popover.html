@@ -14,18 +14,12 @@
   </ion-item>
 
   <ion-item>
-    <ion-toggle (click)="removeAllItems()"></ion-toggle>
-    <ion-label>
-      Remove all items
-    </ion-label>
     <ion-icon name='remove-circle' item-start></ion-icon>
+    <button (click)="removeAllItems()" ion-button full>Remove all items</button>
   </ion-item>
 
   <ion-item>
-    <ion-toggle (click)="deleteList()"></ion-toggle>
-    <ion-label>
-      Delete list
-    </ion-label>
     <ion-icon name='trash' item-start></ion-icon>
+    <button (click)="deleteList()" ion-button full>Delete list</button>
   </ion-item>
 </ion-list>
