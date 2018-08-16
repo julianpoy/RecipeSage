@@ -36,6 +36,10 @@ export class ShoppingListPopoverPage {
 
   saveViewOptions() {
     localStorage.setItem('shoppingLists.sortBy', this.viewOptions.sortBy);
+    localStorage.setItem('shoppingLists.showAddedBy', this.viewOptions.showAddedBy);
+    localStorage.setItem('shoppingLists.showAddedOn', this.viewOptions.showAddedOn);
+
+    this.viewCtrl.dismiss();
   }
 
   removeAllItems() {

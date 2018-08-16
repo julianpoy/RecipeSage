@@ -14,6 +14,22 @@
   </ion-item>
 
   <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showAddedBy" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Added By
+    </ion-label>
+    <ion-icon name='contact' item-start></ion-icon>
+  </ion-item>
+
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showAddedOn" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Added On
+    </ion-label>
+    <ion-icon name='calendar' item-start></ion-icon>
+  </ion-item>
+
+  <ion-item>
     <ion-icon name='remove-circle' item-start></ion-icon>
     <button (click)="removeAllItems()" ion-button full>Remove all items</button>
   </ion-item>

@@ -23,11 +23,17 @@
       Items
     </ion-list-header>
     <ion-item *ngFor="let item of list.items; let i = index;">
-      <ion-label>{{ item.title }}</ion-label>
-      <p *ngIf="list.collaborators.length > 0 && item.createdBy">
-        Added by:
-        <span>{{ item.createdBy.name || item.createdBy.email }}</span>
-      </p>
+      <ion-label>
+        {{ item.title }}
+        <p *ngIf="viewOptions.showAddedOn">
+          Added
+          <span>{{ formatItemCreationDate(item.created) }}</span>
+        </p>
+        <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
+          <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+          <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+        </p>
+      </ion-label>
       <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
     </ion-item>
     <ion-item *ngIf="list.items.length === 0" text-wrap text-center>
