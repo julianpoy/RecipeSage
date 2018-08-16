@@ -285,7 +285,6 @@ export class ShoppingListPage {
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingLists.showAddedOn'));
 
     for (var key in this.viewOptions) {
-      console.log(key, this.viewOptions[key])
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
           this.viewOptions[key] = defaults[key];

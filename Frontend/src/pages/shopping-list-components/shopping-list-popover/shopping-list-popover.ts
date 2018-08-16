@@ -26,8 +26,6 @@ export class ShoppingListPopoverPage {
     this.viewOptions = navParams.get('viewOptions');
     this.shoppingListId = navParams.get('shoppingListId');
     this.shoppingList = navParams.get('shoppingList');
-
-    console.log(this.viewOptions)
   }
 
   ionViewDidLoad() {
