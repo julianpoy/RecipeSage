@@ -125,6 +125,7 @@ router.post(
 
     ShoppingList.findOneAndUpdate(find, update, { new: true })
     .populate('collaborators', 'name email')
+    .populate('items.createdBy', 'name email')
     .populate('items.recipe', 'title')
     .exec(function (err, shoppingList) {
       if (err) {
@@ -304,6 +305,7 @@ router.get(
 
     ShoppingList.findOne(query)
     .populate('collaborators', 'name email')
+    .populate('items.createdBy', 'name email')
     .populate('items.recipe', 'title')
     .lean()
     .exec(function(err, shoppingList) {
