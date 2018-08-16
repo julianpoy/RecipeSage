@@ -277,12 +277,14 @@ export class ShoppingListPage {
     var defaults = {
       sortBy: '-created',
       showAddedBy: false,
-      showAddedOn: false
+      showAddedOn: false,
+      showRecipeTitle: true
     }
 
     this.viewOptions.sortBy = localStorage.getItem('shoppingLists.sortBy');
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingLists.showAddedBy'));
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingLists.showAddedOn'));
+    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingLists.showRecipeTitle'));
 
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {

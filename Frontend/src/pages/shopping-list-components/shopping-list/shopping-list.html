@@ -25,6 +25,10 @@
     <ion-item *ngFor="let item of list.items; let i = index;">
       <ion-label text-wrap>
         {{ item.title }}
+        <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+          For recipe:
+          <span>{{ item.recipe.title }}</span>
+        </p>
         <p *ngIf="viewOptions.showAddedOn">
           Added
           <span>{{ formatItemCreationDate(item.created) }}</span>
