@@ -11,6 +11,7 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 export class AddRecipeToShoppingListModalPage {
 
   recipe: any;
+  recipeScale: any;
   ingredients: any = [];
 
   shoppingLists: any = [];
@@ -28,13 +29,15 @@ export class AddRecipeToShoppingListModalPage {
     public modalCtrl: ModalController
   ) {
     this.recipe = navParams.get('recipe');
+    this.recipeScale = navParams.get('recipeScale');
 
     this.ingredientBinders = {};
 
-    if (this.recipe.ingredients) {
-      this.ingredients = this.recipe.ingredients.match(/[^\r\n]+/g);
-
-      for (var i = 0; i < this.ingredients.length; i++) {
+    this.ingredients = [];
+    var htmlIngredients = navParams.get('ingredients');
+    if (htmlIngredients) {
+      for (var i = 0; i < htmlIngredients.length; i++) {
+        this.ingredients.push(htmlIngredients[i].replace('<b>', '').replace('</b>', ''));
         this.ingredientBinders[i] = true;
       }
     }
@@ -137,10 +140,6 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   createShoppingList() {
-    // this.viewCtrl.dismiss();
-
-    // this.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
-
     var me = this;
     let modal = this.modalCtrl.create('NewShoppingListModalPage');
     modal.present();
@@ -161,5 +160,9 @@ export class AddRecipeToShoppingListModalPage {
       // Check for new lists
       me.loadLists();
     });
+  }
+
+  cancel() {
+    this.viewCtrl.dismiss();
   }
 }
