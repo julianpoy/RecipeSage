@@ -12,7 +12,7 @@
   <ion-refresher (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list>
+  <ion-list no-lines>
     <ion-item class="shoppingList" *ngFor="let shoppingList of shoppingLists" (click)="openShoppingList(shoppingList._id)">
       <ion-icon name="list" item-start></ion-icon>
       <h2>{{ shoppingList.title }}</h2>
@@ -23,6 +23,7 @@
         </span>
         <span *ngIf="shoppingList.myUserId !== shoppingList.accountId._id">{{ shoppingList.accountId.name || shoppingList.accountId.email }}</span>
       </p>
+      <ion-badge item-end>{{ shoppingList.itemCount }}</ion-badge>
     </ion-item>
     <ion-item *ngIf="shoppingLists.length === 0" text-wrap text-center>
       <p>

@@ -66,7 +66,6 @@ router.get(
       .sort({ updated: -1 })
       .populate('collaborators', 'name email')
       .populate('accountId', 'name email')
-      .select('-items')
       .lean()
       .exec(function (err, shoppingLists) {
         if (err) {
@@ -79,6 +78,8 @@ router.get(
         } else {
           for (var i = 0; i < shoppingLists.length; i++) {
             shoppingLists[i].myUserId = res.locals.accountId;
+            shoppingLists[i].itemCount = (shoppingLists[i].items || []).length;
+            delete shoppingLists[i].items;
           }
 
           res.status(200).json(shoppingLists);
