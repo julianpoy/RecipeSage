@@ -13,7 +13,7 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
+  <ion-item *ngIf="shoppingList.collaborators.length > 0">
     <ion-toggle [(ngModel)]="viewOptions.showAddedBy" (ngModelChange)="saveViewOptions()"></ion-toggle>
     <ion-label>
       Show Added By

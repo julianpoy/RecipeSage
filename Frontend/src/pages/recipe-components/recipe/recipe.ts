@@ -315,6 +315,11 @@ export class RecipePage {
     });
   }
 
+  addRecipeToShoppingList() {
+    let addRecipeToShoppingListModal = this.modalCtrl.create('AddRecipeToShoppingListModalPage', { recipe: this.recipe });
+    addRecipeToShoppingListModal.present();
+  }
+
   printRecipe() {
     let printRecipeModal = this.modalCtrl.create('PrintRecipeModalPage', { recipe: this.recipe });
     printRecipeModal.present();

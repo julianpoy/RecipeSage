@@ -135,9 +135,10 @@ export class ShoppingListPopoverPage {
     }).subscribe(function () {
       loading.dismiss();
 
-      me.viewCtrl.dismiss();
-
-      me.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
+      me.viewCtrl.dismiss({
+        setRoot: true,
+        destination: 'ShoppingListsPage'
+      });
     }, function (err) {
       loading.dismiss();
       switch (err.status) {

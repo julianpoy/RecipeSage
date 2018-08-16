@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Recipe To Shopping List</ion-title>
+
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-item *ngIf="shoppingLists.length > 0">
+    <ion-label>Select Shopping List</ion-label>
+    <ion-select [(ngModel)]="destinationShoppingList">
+      <ion-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <div *ngIf="shoppingLists.length === 0" (click)="createShoppingList()">
+    You have no shopping lists.<br /><br />
+    Click here to create one via the shopping lists section.
+  </div>
+
+  <div *ngIf="ingredients && ingredients.length > 0">
+    <p>
+      <b>Ingredients for "{{ recipe.title }}":</b>
+    </p>
+
+    <ion-item *ngFor="let ingredient of ingredients; let i = index;">
+      <ion-label>{{ ingredient }}</ion-label>
+      <ion-checkbox [(ngModel)]="ingredientBinders[i]" checked="true"></ion-checkbox>
+    </ion-item>
+  </div>
+  <div *ngIf="!ingredients || ingredients.length === 0">
+    <p>
+      <b>The selected recipe has no ingredients.</b>
+    </p>
+  </div>
+
+</ion-content>
+
+<ion-footer padding>
+  <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
+    <ion-icon name="list"></ion-icon>
+    Add to List
+  </button>
+</ion-footer>

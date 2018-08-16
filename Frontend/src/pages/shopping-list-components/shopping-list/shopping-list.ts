@@ -320,8 +320,19 @@ export class ShoppingListPage {
     });
 
     var me = this;
-    popover.onDidDismiss(() => {
-      me.applySort();
+    popover.onDidDismiss(data => {
+      data = data || {};
+
+      if (!data.destination) {
+        me.applySort();
+        return;
+      }
+
+      if (data.setRoot) {
+        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+      } else {
+        me.navCtrl.push(data.destination, data.routingData);
+      }
     });
   }
 }
