@@ -16,6 +16,7 @@ export class ShoppingListPage {
 
   shoppingListId: string;
   list: any = { items: [], collaborators: [] };
+  groups: any = [];
 
   itemsByRecipeId: any = {};
   recipeIds: any = [];
@@ -76,7 +77,27 @@ export class ShoppingListPage {
 
     me.recipeIds = [];
     me.itemsByRecipeId = {};
+    me.groups = [];
+
+    var ingredientGrouper = {};
     for (var i = 0; i < items.length; i++) {
+      // Ingredient grouping
+      var foundIngredientGroup = this.shoppingListService.ingredientsList.some(ingredient => {
+        if (items[i].title.toLowerCase().indexOf(ingredient.toLowerCase()) > -1) {
+          ingredientGrouper[ingredient] = ingredientGrouper[ingredient] || [];
+          ingredientGrouper[ingredient].push(items[i]);
+          return true;
+        }
+
+        return false;
+      });
+
+      if (!foundIngredientGroup) {
+        ingredientGrouper['Unsorted'] = ingredientGrouper['Unsorted'] || [];
+        ingredientGrouper['Unsorted'].push(items[i]);
+      }
+
+      // Recipe grouping
       if (!items[i].recipe) continue;
 
       var recipeId = items[i].recipe.id;
@@ -85,6 +106,18 @@ export class ShoppingListPage {
 
       if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
       me.itemsByRecipeId[recipeId].push(items[i]);
+    }
+
+    console.log(ingredientGrouper)
+
+    for (var key in ingredientGrouper) {
+      if (ingredientGrouper.hasOwnProperty(key)) {
+        this.groups.push({
+          title: key,
+          items: ingredientGrouper[key],
+          completed: false
+        });
+      }
     }
 
     this.applySort();

@@ -22,24 +22,49 @@
     <ion-list-header *ngIf="list.items.length > 0">
       Items
     </ion-list-header>
-    <ion-item *ngFor="let item of list.items; let i = index;">
-      <ion-label text-wrap>
-        {{ item.title }}
-        <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
-          For recipe:
-          <span>{{ item.recipe.title }}</span>
-        </p>
-        <p *ngIf="viewOptions.showAddedOn">
-          Added
-          <span>{{ formatItemCreationDate(item.created) }}</span>
-        </p>
-        <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
-          <span *ngIf="!viewOptions.showAddedOn">Added </span>by
-          <span>{{ item.createdBy.name || item.createdBy.email }}</span>
-        </p>
-      </ion-label>
-      <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
-    </ion-item>
+    <div *ngIf="!viewOptions.groupSimilar">
+      <ion-item *ngFor="let group of groups; let i = index;">
+        <ion-label text-wrap>
+          <b class="groupTitle">{{ group.title }}:</b>
+          <div *ngFor="let item of group.items">
+            {{ item.title }}
+            <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+              For recipe:
+              <span>{{ item.recipe.title }}</span>
+            </p>
+            <p *ngIf="viewOptions.showAddedOn">
+              Added
+              <span>{{ formatItemCreationDate(item.created) }}</span>
+            </p>
+            <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
+              <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+              <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+            </p>
+          </div>
+        </ion-label>
+        <ion-checkbox [(ngModel)]="group.completed" (ngModelChange)="removeGroup(group)"></ion-checkbox>
+      </ion-item>
+    </div>
+    <div *ngIf="viewOptions.groupSimilar">
+      <ion-item *ngFor="let item of list.items; let i = index;">
+        <ion-label text-wrap>
+          {{ item.title }}
+          <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+            For recipe:
+            <span>{{ item.recipe.title }}</span>
+          </p>
+          <p *ngIf="viewOptions.showAddedOn">
+            Added
+            <span>{{ formatItemCreationDate(item.created) }}</span>
+          </p>
+          <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
+            <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+            <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+          </p>
+        </ion-label>
+        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
+      </ion-item>
+    </div>
     <ion-item *ngIf="list.items.length === 0" text-wrap text-center>
       <p>
         There are no items in this shopping list.
