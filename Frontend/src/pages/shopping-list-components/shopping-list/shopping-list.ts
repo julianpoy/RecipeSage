@@ -313,13 +313,15 @@ export class ShoppingListPage {
       sortBy: '-created',
       showAddedBy: false,
       showAddedOn: false,
-      showRecipeTitle: true
+      showRecipeTitle: true,
+      groupSimilar: true
     }
 
-    this.viewOptions.sortBy = localStorage.getItem('shoppingLists.sortBy');
-    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingLists.showAddedBy'));
-    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingLists.showAddedOn'));
-    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingLists.showRecipeTitle'));
+    this.viewOptions.sortBy = localStorage.getItem('shoppingList.sortBy');
+    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingList.showAddedBy'));
+    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingList.showAddedOn'));
+    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingList.showRecipeTitle'));
+    this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('shoppingList.groupSimilar'));
 
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {

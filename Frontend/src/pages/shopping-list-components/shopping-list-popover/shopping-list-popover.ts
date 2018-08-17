@@ -33,9 +33,11 @@ export class ShoppingListPopoverPage {
   }
 
   saveViewOptions() {
-    localStorage.setItem('shoppingLists.sortBy', this.viewOptions.sortBy);
-    localStorage.setItem('shoppingLists.showAddedBy', this.viewOptions.showAddedBy);
-    localStorage.setItem('shoppingLists.showAddedOn', this.viewOptions.showAddedOn);
+    localStorage.setItem('shoppingList.sortBy', this.viewOptions.sortBy);
+    localStorage.setItem('shoppingList.showAddedBy', this.viewOptions.showAddedBy);
+    localStorage.setItem('shoppingList.showAddedOn', this.viewOptions.showAddedOn);
+    localStorage.setItem('shoppingList.showRecipeTitle', this.viewOptions.showRecipeTitle);
+    localStorage.setItem('shoppingList.groupSimilar', this.viewOptions.groupSimilar);
 
     this.viewCtrl.dismiss();
   }
