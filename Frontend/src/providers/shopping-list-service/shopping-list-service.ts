@@ -5,21 +5,15 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
-import * as ingredientsList from '../../ingredients.json';
-
 @Injectable()
 export class ShoppingListServiceProvider {
 
   base: any;
 
-  ingredientsList: any;
-
   constructor(public http: HttpClient, public events: Events) {
     console.log('Hello ShoppingListServiceProvider Provider');
 
     this.base = localStorage.getItem('base') || '/api/';
-
-    this.ingredientsList = ingredientsList;
   }
 
   getTokenQuery() {

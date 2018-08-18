@@ -30,7 +30,7 @@ function sendURLToS3(url, callback) {
       return callback(err, res);
 
     var key = new Date().getTime().toString();
-    
+
     var contentType = res.headers['content-type'];
     var contentLength = res.headers['content-length'];
 
@@ -58,7 +58,7 @@ function sendURLToS3(url, callback) {
           etag: response.ETag
         }
       }
-      
+
       callback(err, img)
     });
   });
@@ -79,7 +79,7 @@ exports.upload = multer({
       width: 200,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
       // height: 200,
       options: '',
-      format: 'jpg',                      // Default: jpg - Unused by our processor 
+      format: 'jpg',                      // Default: jpg - Unused by our processor
       process: function(gm, options, inputStream, outputStream) {
         var gmObj = gm(inputStream);
         gmObj.size({ bufferStream: true }, (err, size) => {
@@ -121,7 +121,7 @@ exports.dispatchShareNotification = function(user, recipe) {
       type: "recipe:inbox:new",
       recipe: JSON.stringify(recipe)
     }
-    
+
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
       FirebaseService.sendMessage(token, message, function() {}, function() {
@@ -167,24 +167,24 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
       from: fullMessage.from,
       to: fullMessage.to
     };
-    
+
     if (fullMessage.recipe) {
       message.recipe = {
         _id: fullMessage.recipe._id,
         title: fullMessage.recipe.title,
         image: {}
       };
-      
+
       if (fullMessage.recipe.image) {
         message.recipe.image.location = fullMessage.recipe.image.location;
       }
     }
-    
+
     var notification = {
       type: "messages:new",
       message: JSON.stringify(message)
     };
-    
+
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
       FirebaseService.sendMessage(token, notification, function() {}, function() {
@@ -248,7 +248,7 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject)
           resolve(null);
         }
       });
-      
+
       uploadByURLPromise.then(function(img) {
         findTitle(recipientId, null, recipe.title, 1, function(adjustedTitle) {
           new Recipe({

@@ -16,7 +16,6 @@ export class ShoppingListPage {
 
   shoppingListId: string;
   list: any = { items: [], collaborators: [] };
-  groups: any = [];
 
   itemsByRecipeId: any = {};
   recipeIds: any = [];
@@ -72,31 +71,14 @@ export class ShoppingListPage {
     var me = this;
 
     me.list = list;
+    this.applySort();
 
     var items = (me.list.items || []);
 
     me.recipeIds = [];
     me.itemsByRecipeId = {};
-    me.groups = [];
 
-    var ingredientGrouper = {};
     for (var i = 0; i < items.length; i++) {
-      // Ingredient grouping
-      var foundIngredientGroup = this.shoppingListService.ingredientsList.some(ingredient => {
-        if (items[i].title.toLowerCase().indexOf(ingredient.toLowerCase()) > -1) {
-          ingredientGrouper[ingredient] = ingredientGrouper[ingredient] || [];
-          ingredientGrouper[ingredient].push(items[i]);
-          return true;
-        }
-
-        return false;
-      });
-
-      if (!foundIngredientGroup) {
-        ingredientGrouper['Unsorted'] = ingredientGrouper['Unsorted'] || [];
-        ingredientGrouper['Unsorted'].push(items[i]);
-      }
-
       // Recipe grouping
       if (!items[i].recipe) continue;
 
@@ -107,20 +89,6 @@ export class ShoppingListPage {
       if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
       me.itemsByRecipeId[recipeId].push(items[i]);
     }
-
-    console.log(ingredientGrouper)
-
-    for (var key in ingredientGrouper) {
-      if (ingredientGrouper.hasOwnProperty(key)) {
-        this.groups.push({
-          title: key,
-          items: ingredientGrouper[key],
-          completed: false
-        });
-      }
-    }
-
-    this.applySort();
   }
 
   loadList() {
@@ -332,19 +300,48 @@ export class ShoppingListPage {
     }
   }
 
-  applySort() {
-    var me = this;
-    this.list.items = this.list.items.sort(function(a, b) {
-      if (me.viewOptions.sortBy === 'created') {
-        return new Date(a.created) > new Date(b.created);
-      }
-      if (me.viewOptions.sortBy === '-created') {
-        return new Date(a.created) < new Date(b.created);
-      }
-      if (me.viewOptions.sortBy === '-title') {
+  ingredientSorter(a, b) {
+    if (this.viewOptions.sortBy === 'created') {
+      var comp = new Date(a.created) - new Date(b.created);
+      if (comp === 0) {
         return a.title.localeCompare(b.title);
       }
+      return comp;
+    }
+    if (this.viewOptions.sortBy === '-created') {
+      var comp = new Date(b.created) - new Date(a.created);
+      if (comp === 0) {
+        return a.title.localeCompare(b.title);
+      }
+      return comp;
+    }
+    if (this.viewOptions.sortBy === '-title') {
+      var comp = a.title.localeCompare(b.title);
+      if (comp === 0) {
+        return new Date(a.created) - new Date(b.created);
+      }
+      return comp;
+    }
+  }
+
+  applySort() {
+    var me = this;
+    // Sort individual items
+    this.list.items = this.list.items.sort(function (a, b) {
+      return me.ingredientSorter.call(me, a, b);
     });
+
+    // Sort groups by title (always)
+    this.list.itemsByGroup = this.list.itemsByGroup.sort(function (a, b) {
+      return a.title.localeCompare(b.title);
+    });
+
+    // Sort items within each group
+    for (var i = 0; i < this.list.itemsByGroup.length; i++) {
+      this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort(function(a, b) {
+        return me.ingredientSorter.call(me, a, b);
+      });
+    }
   }
 
   presentPopover(event) {

@@ -12,6 +12,9 @@ var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var GripService = require('../services/grip');
 
+// Data
+var ingredientsList = require('../constants/ingredients.json');
+
 router.post(
   '/',
   cors(),
@@ -47,6 +50,41 @@ router.post(
     }
   });
 });
+
+function groupShoppingListItems(items) {
+  // Ingredient grouping into map by ingredientName
+  var itemGrouper = {};
+  for (var i = 0; i < items.length; i++) {
+    var foundIngredientGroup = ingredientsList.some(ingredient => {
+      if (items[i].title.toLowerCase().indexOf(ingredient.toLowerCase()) > -1) {
+        itemGrouper[ingredient] = itemGrouper[ingredient] || [];
+        itemGrouper[ingredient].push(items[i]);
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!foundIngredientGroup) {
+      itemGrouper.unsorted = itemGrouper.unsorted || [];
+      itemGrouper.unsorted.push(items[i]);
+    }
+  }
+
+  // Load map of groups by ingredientName into array of objects
+  var result = [];
+  for (var key in itemGrouper) {
+    if (itemGrouper.hasOwnProperty(key)) {
+      result.push({
+        title: key,
+        items: itemGrouper[key],
+        completed: false
+      });
+    }
+  }
+
+  return result;
+}
 
 router.get(
   '/',
@@ -127,6 +165,7 @@ router.post(
     .populate('collaborators', 'name email')
     .populate('items.createdBy', 'name email')
     .populate('items.recipe', 'title')
+    .lean()
     .exec(function (err, shoppingList) {
       if (err) {
         res.status(500).send("Couldn't update the database with shopping list!");
@@ -147,6 +186,8 @@ router.post(
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
           GripService.broadcast(shoppingList.collaborators[i]._id, 'shoppingList:itemsUpdated', broadcastPayload);
         }
+
+        shoppingList.itemsByGroup = groupShoppingListItems(shoppingList.items);
 
         res.status(200).json(shoppingList);
       }
@@ -260,7 +301,9 @@ router.delete(
 
     ShoppingList.findOneAndUpdate(find, update, { new: true })
     .populate('collaborators', 'name email')
+    .populate('items.createdBy', 'name email')
     .populate('items.recipe', 'title')
+    .lean()
     .exec(function(err, shoppingList) {
       if (err) {
         console.log(err)
@@ -281,6 +324,8 @@ router.delete(
         for (var i = 0; i < shoppingList.collaborators.length; i++) {
           GripService.broadcast(shoppingList.collaborators[i]._id, 'shoppingList:itemsUpdated', deletedItemBroadcast);
         }
+
+        shoppingList.itemsByGroup = groupShoppingListItems(shoppingList.items);
 
         res.status(200).json(shoppingList);
       }
@@ -314,6 +359,8 @@ router.get(
       } else if (!shoppingList) {
         res.status(404).send("Recipe with that ID not found!");
       } else {
+        shoppingList.itemsByGroup = groupShoppingListItems(shoppingList.items);
+
         res.status(200).json(shoppingList);
       }
     });

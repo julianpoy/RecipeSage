@@ -19,11 +19,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list no-lines>
-    <ion-list-header *ngIf="list.items.length > 0">
+    <ion-list-header *ngIf="list.items.length > 0" no-margin>
       Items
     </ion-list-header>
     <div *ngIf="viewOptions.groupSimilar">
-      <div *ngFor="let group of groups; let i = index;">
+      <div *ngFor="let group of list.itemsByGroup; let i = index;">
         <ion-item>
           <ion-label no-margin text-wrap>
             <b class="groupTitle">{{ group.title }}:</b>
