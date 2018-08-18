@@ -302,25 +302,25 @@ export class ShoppingListPage {
 
   ingredientSorter(a, b) {
     if (this.viewOptions.sortBy === 'created') {
-      var comp = new Date(a.created) - new Date(b.created);
-      if (comp === 0) {
+      var dateComp = (<any>new Date(a.created)) - (<any>new Date(b.created));
+      if (dateComp === 0) {
         return a.title.localeCompare(b.title);
       }
-      return comp;
+      return dateComp;
     }
     if (this.viewOptions.sortBy === '-created') {
-      var comp = new Date(b.created) - new Date(a.created);
-      if (comp === 0) {
+      var reverseDateComp = (<any>new Date(b.created)) - (<any>new Date(a.created));
+      if (reverseDateComp === 0) {
         return a.title.localeCompare(b.title);
       }
-      return comp;
+      return reverseDateComp;
     }
     if (this.viewOptions.sortBy === '-title') {
-      var comp = a.title.localeCompare(b.title);
-      if (comp === 0) {
-        return new Date(a.created) - new Date(b.created);
+      var localeComp = a.title.localeCompare(b.title);
+      if (localeComp === 0) {
+        return (<any>new Date(a.created)) - (<any>new Date(b.created));
       }
-      return comp;
+      return localeComp;
     }
   }
 
