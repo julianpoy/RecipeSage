@@ -46,7 +46,7 @@
               <span>{{ item.createdBy.name || item.createdBy.email }}</span>
             </p>
           </ion-label>
-          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
+          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
         </ion-item>
       </div>
     </div>
@@ -67,7 +67,7 @@
             <span>{{ item.createdBy.name || item.createdBy.email }}</span>
           </p>
         </ion-label>
-        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
+        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
       </ion-item>
     </div>
     <ion-item *ngIf="list.items.length === 0 && initialLoadComplete" text-wrap text-center>
@@ -91,10 +91,14 @@
     <ion-list-header>
       Recipes in this list
     </ion-list-header>
-    <ion-item *ngFor="let recipeId of recipeIds">
+    <ion-item *ngFor="let recipeId of recipeIds" (click)="removeRecipe(recipeId)">
+      <ion-icon name="trash"></ion-icon>
+       &nbsp;&nbsp;
       {{ itemsByRecipeId[recipeId][0].recipe.title }}
     </ion-item>
   </ion-list>
+
+  <br />
 
   <ion-fab right bottom>
     <button (click)="newShoppingListItem()" ion-fab color="primary">

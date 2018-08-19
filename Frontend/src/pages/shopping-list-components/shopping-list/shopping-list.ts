@@ -20,8 +20,6 @@ export class ShoppingListPage {
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
-  lastItemRemoved: any;
-
   viewOptions: any = {};
 
   initialLoadComplete: boolean = false;
@@ -141,30 +139,35 @@ export class ShoppingListPage {
     });
   }
 
-  removeItem(item) {
+  removeRecipe(recipeId) {
+    this.removeItems(this.itemsByRecipeId[recipeId]);
+  }
+
+  removeItems(items) {
     var me = this;
     var loading = this.loadingService.start();
 
-    this.lastItemRemoved = item;
+    var itemIds = items.map(function (el) {
+      return el._id;
+    });
 
     this.shoppingListService.remove({
       _id: this.list._id,
-      items: [ item._id ]
+      items: itemIds
     }).subscribe(function (response) {
       loading.dismiss();
 
       me.processIncomingList(response);
 
       var toast = me.toastCtrl.create({
-        message: 'Removed: ' + item.title,
+        message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
         duration: 5000,
         showCloseButton: true,
         closeButtonText: 'Undo',
       });
       toast.onDidDismiss((data, role) => {
         if (role == "close") {
-          // me.undoRemove();
-          me._addItems([ item ]);
+          me._addItems(items);
         }
       });
       toast.present();
@@ -191,12 +194,6 @@ export class ShoppingListPage {
           break;
       }
     });
-  }
-
-  undoRemove() {
-    if (!this.lastItemRemoved) return;
-
-    this._addItems([this.lastItemRemoved]);
   }
 
   _addItems(items) {
