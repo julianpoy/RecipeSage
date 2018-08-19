@@ -24,7 +24,7 @@
         <span *ngIf="shoppingList.myUserId !== shoppingList.accountId._id">{{ shoppingList.accountId.name || shoppingList.accountId.email }}</span>
       </p>
       <p>
-        <span *ngIf="shoppingList.myUserId !== shoppingList.accountId._id">Owned by: {{ shoppingList.accountId.name || shoppingList.accountId.email }}</span>
+        <span *ngIf="shoppingList.myUserId !== shoppingList.accountId._id">Created by {{ shoppingList.accountId.name || shoppingList.accountId.email }}</span>
         <span *ngIf="shoppingList.myUserId === shoppingList.accountId._id">You own this list</span>
       </p>
       <ion-badge item-end>{{ shoppingList.itemCount }}</ion-badge>
