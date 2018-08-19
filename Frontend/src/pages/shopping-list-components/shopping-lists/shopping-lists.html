@@ -16,6 +16,9 @@
     <ion-item class="shoppingList" *ngFor="let shoppingList of shoppingLists" (click)="openShoppingList(shoppingList._id)" text-wrap>
       <ion-icon name="list" item-start></ion-icon>
       <h2>{{ shoppingList.title }}</h2>
+      <p>
+        Created {{ formatItemCreationDate(shoppingList.created) }}
+      </p>
       <p *ngIf="shoppingList.collaborators.length > 0">
         In collaboration with:
         <span *ngFor="let user of shoppingList.collaborators">
