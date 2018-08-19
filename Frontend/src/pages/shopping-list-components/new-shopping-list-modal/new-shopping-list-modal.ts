@@ -6,7 +6,9 @@ import { ShoppingListServiceProvider } from '../../../providers/shopping-list-se
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-new-shopping-list-modal',
   templateUrl: 'new-shopping-list-modal.html',

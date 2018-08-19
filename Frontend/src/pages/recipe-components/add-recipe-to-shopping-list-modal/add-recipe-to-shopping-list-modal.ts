@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, ToastController, ViewController, M
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-add-recipe-to-shopping-list-modal',
   templateUrl: 'add-recipe-to-shopping-list-modal.html',

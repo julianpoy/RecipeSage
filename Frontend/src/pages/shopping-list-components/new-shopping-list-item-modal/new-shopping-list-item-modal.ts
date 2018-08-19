@@ -3,7 +3,9 @@ import { IonicPage, NavController, NavParams, ViewController, ToastController } 
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
-@IonicPage()
+@IonicPage({
+  priority: 'low'
+})
 @Component({
   selector: 'page-new-shopping-list-item-modal',
   templateUrl: 'new-shopping-list-item-modal.html',
