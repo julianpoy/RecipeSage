@@ -39,6 +39,10 @@
       <div id='labelSelectParent'>
         <br />
 
+        <p *ngIf="!selectedRecipe">
+          <b>No recipe selected</b>
+        </p>
+
         <input [(ngModel)]='searchText' (ngModelChange)="onSearchInputChange()" (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)'
           (blur)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);"
           placeholder="Select {{ selectedRecipe ? 'a different ' : '' }}recipe" #labelInputField id="labelInputField" />
@@ -64,10 +68,6 @@
             <span class="hint"></span>
           </button>
         </div>
-
-        <p *ngIf="!selectedRecipe">
-          <b>No recipe selected</b>
-        </p>
 
         <div *ngIf="selectedRecipe && selectedRecipe.ingredients && selectedRecipe.ingredients.length > 0">
           <p>

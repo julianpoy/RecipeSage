@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>{{ list.title }}</ion-title>
+    <ion-title>Shopping List - {{ list.title }}</ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
@@ -71,9 +71,16 @@
       </ion-item>
     </div>
     <ion-item *ngIf="list.items.length === 0" text-wrap text-center>
+      <br />
+      <br />
+      <br />
       <p>
         There are no items in this shopping list.
-        <br /> To add a new item, press the plus button.
+        <br />
+        <button ion-button icon-left (click)="newShoppingListItem()">
+          <ion-icon name="add"></ion-icon>
+          Add the first item
+        </button>
       </p>
     </ion-item>
   </ion-list>

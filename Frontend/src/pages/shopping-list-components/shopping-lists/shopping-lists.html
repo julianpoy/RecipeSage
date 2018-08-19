@@ -30,9 +30,16 @@
       <ion-badge item-end>{{ shoppingList.itemCount }}</ion-badge>
     </ion-item>
     <ion-item *ngIf="shoppingLists.length === 0" text-wrap text-center>
+      <br />
+      <br />
+      <br />
       <p>
         You have no shopping lists.
-        <br /> To create a shopping list, press the plus button.
+        <br />
+        <button ion-button icon-left (click)="newShoppingList()">
+          <ion-icon name="add"></ion-icon>
+          Create your first list
+        </button>
       </p>
     </ion-item>
   </ion-list>
