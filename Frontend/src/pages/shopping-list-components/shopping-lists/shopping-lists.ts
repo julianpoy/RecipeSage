@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 @IonicPage({
   segment: 'shopping-lists',
@@ -15,12 +16,15 @@ export class ShoppingListsPage {
 
   shoppingLists: any = [];
 
+  initialLoadComplete: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public shoppingListService: ShoppingListServiceProvider,
     public websocketService: WebsocketServiceProvider,
+    public loadingService: LoadingServiceProvider,
     public navParams: NavParams) {
 
     this.websocketService.register('shoppingList:received', function() {
@@ -37,7 +41,18 @@ export class ShoppingListsPage {
   }
 
   ionViewWillEnter() {
-    this.loadLists().then(function () { }, function () { });
+    var loading = this.loadingService.start();
+
+    var me = this;
+    me.initialLoadComplete = false;
+
+    this.loadLists().then(function () {
+      loading.dismiss();
+      me.initialLoadComplete = true;
+    }, function () {
+      loading.dismiss();
+      me.initialLoadComplete = true;
+    });
   }
 
   refresh(refresher) {

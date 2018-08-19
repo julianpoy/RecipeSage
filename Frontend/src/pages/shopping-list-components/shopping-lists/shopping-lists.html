@@ -29,7 +29,7 @@
       </p>
       <ion-badge item-end>{{ shoppingList.itemCount }}</ion-badge>
     </ion-item>
-    <ion-item *ngIf="shoppingLists.length === 0" text-wrap text-center>
+    <ion-item *ngIf="shoppingLists.length === 0 && initialLoadComplete" text-wrap text-center>
       <br />
       <br />
       <br />

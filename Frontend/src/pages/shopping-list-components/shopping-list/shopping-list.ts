@@ -24,6 +24,8 @@ export class ShoppingListPage {
 
   viewOptions: any = {};
 
+  initialLoadComplete: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
@@ -51,11 +53,15 @@ export class ShoppingListPage {
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
+    var me = this;
 
+    me.initialLoadComplete = false;
     this.loadList().then(function () {
       loading.dismiss();
+      me.initialLoadComplete = true;
     }, function () {
       loading.dismiss();
+      me.initialLoadComplete = true;
     });
   }
 

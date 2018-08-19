@@ -70,7 +70,7 @@
         <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
       </ion-item>
     </div>
-    <ion-item *ngIf="list.items.length === 0" text-wrap text-center>
+    <ion-item *ngIf="list.items.length === 0 && initialLoadComplete" text-wrap text-center>
       <br />
       <br />
       <br />
