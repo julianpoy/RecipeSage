@@ -46,7 +46,7 @@
               <span>{{ item.createdBy.name || item.createdBy.email }}</span>
             </p>
           </ion-label>
-          <ion-checkbox [(ngModel)]="group.completed" (ngModelChange)="removeGroup(group)"></ion-checkbox>
+          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItem(item)"></ion-checkbox>
         </ion-item>
       </div>
     </div>
