@@ -11,6 +11,7 @@ import { Injectable } from '@angular/core';
 export class WebsocketServiceProvider {
 
   connection: any;
+  reconnectTimeout: any;
 
   listeners: any = {};
 
@@ -83,12 +84,15 @@ export class WebsocketServiceProvider {
   }
 
   public queueReconnect() {
-    var RECONNECT_TIMEOUT = 3000; // Time to wait before attempting reconnect in MS
+    var RECONNECT_TIMEOUT_WAIT = 3000; // Time to wait before attempting reconnect in MS
+
+    if (this.reconnectTimeout) return;
 
     var me = this;
-    setTimeout(function() {
-      me.connect();
-    }, RECONNECT_TIMEOUT);
+    this.reconnectTimeout = setTimeout(function() {
+      me.connect.call(me);
+      me.reconnectTimeout = null;
+    }, RECONNECT_TIMEOUT_WAIT);
   }
 
   private handleMessage(payload) {
