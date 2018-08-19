@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController, Events } from 'ionic-angular';
 
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 @IonicPage({
   priority: 'low'
@@ -23,6 +24,7 @@ export class MessagesPage {
     public events: Events,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public loadingService: LoadingServiceProvider,
     public messagingService: MessagingServiceProvider) {
 
     this.isNotificationsEnabled = this.messagingService.isNotificationsEnabled;
@@ -39,7 +41,12 @@ export class MessagesPage {
   }
 
   ionViewWillEnter() {
-    this.loadThreads().then(function() {}, function() {});
+    var loading = this.loadingService.start();
+    this.loadThreads().then(function() {
+      loading.dismiss();
+    }, function() {
+      loading.dismiss();
+    });
   }
 
   refresh(refresher) {

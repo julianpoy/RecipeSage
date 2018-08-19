@@ -2,6 +2,7 @@ import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
+import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 
 @IonicPage({
   segment: 'messages/:otherUserId',
@@ -30,6 +31,7 @@ export class MessageThreadPage {
     public navParams: NavParams,
     public events: Events,
     public toastCtrl: ToastController,
+    public loadingService: LoadingServiceProvider,
     public messagingService: MessagingServiceProvider) {
     this.otherUserId = this.navParams.get('otherUserId');
 
@@ -60,11 +62,15 @@ export class MessageThreadPage {
     if (!this.otherUserId) {
       this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
     } else {
+      var loading = this.loadingService.start();
       var me = this;
       this.content.getNativeElement().style.opacity = 0;
       this.loadMessages.call(this, true).then(function() {
+        loading.dismiss();
         me.content.getNativeElement().style.opacity = 1;
-      }, function() {});
+      }, function() {
+        loading.dismiss();
+      });
     }
   }
 

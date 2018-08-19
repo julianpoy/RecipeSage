@@ -50,7 +50,12 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   ionViewWillEnter() {
-    this.loadLists();
+    var loading = this.loadingService.start();
+    this.loadLists().then(function () {
+      loading.dismiss();
+    }, function () {
+      loading.dismiss();
+    });
   }
 
   loadLists() {
