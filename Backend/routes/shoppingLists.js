@@ -66,8 +66,8 @@ function groupShoppingListItems(items) {
     });
 
     if (!foundIngredientGroup) {
-      itemGrouper.unsorted = itemGrouper.unsorted || [];
-      itemGrouper.unsorted.push(items[i]);
+      itemGrouper.ungrouped = itemGrouper.ungrouped || [];
+      itemGrouper.ungrouped.push(items[i]);
     }
   }
 
