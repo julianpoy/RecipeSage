@@ -86,7 +86,7 @@ export class ShoppingListPage {
       // Recipe grouping
       if (!items[i].recipe) continue;
 
-      var recipeId = items[i].recipe.id;
+      var recipeId = items[i].recipe.id + items[i].created;
 
       if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
 
