@@ -101,6 +101,20 @@
     <p>This application requires javascript.</p>
   </noscript>
 
+  <script>
+    var queryString = window.location.href.split('?')[1];
+    if (queryString) {
+      var queryParams = queryString.split("&");
+      for (var i = 0; i < queryParams.length; i++) {
+        if (queryParams[i].indexOf('token') > -1) {
+          var token = queryParams[i].split('=')[1];
+          localStorage.setItem('token', token);
+          break;
+        }
+      }
+    }
+  </script>
+
   <!-- Ionic's root component and where the app will load -->
   <main>
     <ion-app></ion-app>

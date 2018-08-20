@@ -6,19 +6,19 @@ import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class UserServiceProvider {
-  
+
   base: String;
 
   constructor(public http: HttpClient) {
     console.log('Hello UserServiceProvider Provider');
-    
+
     this.base = localStorage.getItem('base') || '/api/';
   }
-  
+
   getTokenQuery() {
     return '?token=' + localStorage.getItem('token');
   }
-  
+
   register(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -32,7 +32,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   login(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -47,7 +47,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   logout() {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -59,6 +59,21 @@ export class UserServiceProvider {
       .post(this.base + 'users/logout' + this.getTokenQuery(), {}, httpOptions)
       .pipe(
         retry(3),
+        catchError(this.handleError)
+      );
+  }
+
+  forgot(data) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http
+      .post(this.base + 'users/forgot', data, httpOptions)
+      .pipe(
+        retry(1),
         catchError(this.handleError)
       );
   }
@@ -77,9 +92,9 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   saveFCMToken(key) {
-    
+
     console.log("attempting save")
     var data = {
       fcmToken: key
@@ -97,7 +112,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   removeFCMToken(key) {
     console.log("attempting delete")
 
@@ -113,7 +128,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   getUserByEmail(email) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -127,7 +142,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   me() {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -141,7 +156,7 @@ export class UserServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   checkForUpdate(params) {
     const httpOptions = {
       headers: new HttpHeaders({

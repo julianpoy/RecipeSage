@@ -19,7 +19,53 @@ aws.config.update({
   accessKeyId: config.aws.accessKeyId,
   secretAccessKey: config.aws.secretAccessKey,
   subregion: config.aws.region,
+  region: config.aws.region,
 });
+
+exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, resolve, reject) {
+  ccAddresses = ccAddresses || [];
+
+  // Create sendEmail params
+  var params = {
+    Destination: { /* required */
+      CcAddresses: ccAddresses,
+      ToAddresses: toAddresses
+    },
+    Message: { /* required */
+      Body: { /* required */
+        Html: {
+          Charset: "UTF-8",
+          Data: html
+        },
+        Text: {
+          Charset: "UTF-8",
+          Data: plain
+        }
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: subject
+      }
+    },
+    Source: 'noreply@recipesage.com', /* required */
+    ReplyToAddresses: [
+      'noreply@recipesage.com',
+      /* more items */
+    ],
+  };
+
+  // Create the promise and SES service object
+  var sendPromise = new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+
+  // Handle promise's fulfilled/rejected states
+  sendPromise.then(function(data) {
+    console.log(data.MessageId);
+    resolve(data.messageId);
+  }).catch(function(err) {
+    console.error(err, err.stack);
+    reject(err, err.stack);
+  });
+}
 
 function sendURLToS3(url, callback) {
   request({
