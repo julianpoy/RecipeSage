@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
@@ -27,6 +27,7 @@ export class LoginPage {
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public messagingService: MessagingServiceProvider,
+    public toastCtrl: ToastController,
     public navParams: NavParams,
     public userService: UserServiceProvider) {
 
@@ -145,4 +146,38 @@ export class LoginPage {
     }
   }
 
+  forgotPassword() {
+    this.email = (document.getElementById('email') as HTMLInputElement).value;
+    if (!this.email) {
+      this.errorMessage = 'Please enter your account email and try again';
+      return;
+    }
+
+    var loading = this.loadingService.start();
+    var me = this;
+
+    console.log("calling!")
+
+    this.userService.forgot({
+      email: this.email
+    }).subscribe(function (response) {
+      loading.dismiss();
+
+      let successToast = me.toastCtrl.create({
+        message: 'If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.',
+        duration: 7000
+      });
+      successToast.present();
+    }, function (err) {
+      loading.dismiss();
+      switch (err.status) {
+        case 0:
+          me.errorMessage = 'It looks like you\'re offline right now.';
+          break;
+        default:
+          me.errorMessage = 'An unexpected error occured. Please try again.';
+          break;
+      }
+    });
+  }
 }

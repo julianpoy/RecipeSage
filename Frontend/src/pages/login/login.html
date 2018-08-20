@@ -20,19 +20,19 @@
           </label>
           <br /><br />
         </div>
-  
+
         <label>
           Email<br />
           <input id="email" type="email" />
         </label>
         <br /><br />
-  
+
         <label>
           Password<br />
           <input id="password" (keyup.enter)="showLogin && auth()" type="password" />
         </label>
         <br /><br />
-  
+
         <div *ngIf="!showLogin">
           <label>
             Confirm Password<br />
@@ -41,17 +41,21 @@
           <br /><br />
         </div>
       </div>
-  
+
       <div padding>
       	<button ion-button block (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</button>
   		</div>
-  
-  		<div>
-      	<button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</button>
-  		</div>
-  		
+
+      <div>
+        <button ion-button clear block *ngIf="showLogin" (click)="forgotPassword()">Forgot password</button>
+      </div>
+
+      <div>
+        <button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</button>
+      </div>
+
   		{{ errorMessage }}
-  
+
     </ion-list>
   </div>
 </ion-content>

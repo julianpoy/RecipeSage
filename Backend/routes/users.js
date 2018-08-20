@@ -6,8 +6,10 @@ var User = mongoose.model('User');
 var nodemailer = require('nodemailer');
 var Raven = require('raven');
 
+// Service
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
+var UtilService = require('../services/util');
 
 router.get(
   '/',
@@ -15,7 +17,7 @@ router.get(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-  
+
   // Manually construct fields to avoid sending sensitive info
   var user = {
     _id: res.locals.user._id,
@@ -24,7 +26,7 @@ router.get(
     created: res.locals.user.created,
     updated: res.locals.user.updated
   };
-  
+
   res.status(200).json(user);
 
 });
@@ -99,10 +101,10 @@ router.post(
           }, function(err) {
             res.status(err.status).json(err);
           });
-          
+
           // Update lastLogin
           user.lastLogin = Date.now();
-  
+
           user.save(function(err) {
             if (err) {
               Raven.captureException("Could not update user after login");
@@ -180,6 +182,75 @@ router.post(
   }
 });
 
+/* Forgot password */
+router.post(
+  '/forgot',
+  cors(),
+  function(req, res, next) {
+
+    var origin = req.get('origin');
+console.log(origin)
+
+  User.findOne({
+    email: req.body.email.toLowerCase()
+  }).exec(function(err, user) {
+    if (err) {
+      var payload = {
+        msg: "Couldn't search the database for user!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
+    } else if (!user) {
+      res.status(200).json({
+        msg: ""
+      });
+    } else {
+      SessionService.generateSession(user._id, 'user', function (token, session) {
+        var link = origin + '/#/account?token=' + token;
+        var html = `Hello,
+
+        <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
+        <br /><br />If you did not request a password reset, please disregard this email.
+
+        <br /><br /><a href="` + link + `">Click here to reset your password</a>
+        <br />or paste this url into your browser: ` + link + `
+
+        <br /><br />Thank you,
+        <br />Julian P.
+        <br />RecipeSage`;
+
+        var plain = `Hello,
+
+        \n\nSomeone recently requested a password reset link for the RecipeSage account associated with this email address.
+        \n\nIf you did not request a password reset, please disregard this email.
+
+        \n\nTo reset your password, paste this url into your browser: ` + link + `
+
+        \n\nThank you,
+        \nJulian P.
+        \nRecipeSage`;
+
+        UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain, function() {
+          res.status(200).json({
+            msg: ""
+          });
+        }, function(err) {
+          res.status(500).json({
+            msg: "An error occured."
+          });
+          Raven.captureException(err);
+        });
+      }, function (err) {
+        res.status(500).json({
+          msg: "An error occured."
+        });
+        Raven.captureException(err);
+      });
+    }
+  });
+});
+
 /* Update user */
 router.put(
   '/',
@@ -187,7 +258,7 @@ router.put(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-  
+
   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
   if (req.body.email && (!emailRegex.test(req.body.email) || req.body.email.length < 1)) {
     res.status(412).json({
@@ -211,14 +282,14 @@ router.put(
     } else {
       save();
     }
-    
+
     updatedUser.updated = Date.now();
-    
+
     function save() {
       var setUser = {
         $set: updatedUser
       }
-  
+
       User.update({
         _id: accountId
       }, setUser, {
@@ -236,10 +307,10 @@ router.put(
         } else {
           delete user.password;
           delete user.salt;
-          
+
           res.status(200).json(user);
         }
-      }); 
+      });
     }
   }
 });
@@ -345,7 +416,7 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-    
+
     if (!req.body.fcmToken) {
       res.status(412).send('fcmToken required');
       return;
@@ -367,10 +438,10 @@ router.post(
           resolveRevokeToken();
         } else {
           var userPromises = [];
-          
+
           for (var i = 0; i < users.length; i++) {
             let user = users[i];
-            
+
             userPromises.push(new Promise(function(resolve, reject) {
               User.findByIdAndUpdate(
                 user._id, {
@@ -389,7 +460,7 @@ router.post(
               });
             }));
           }
-          
+
           Promise.all(userPromises).then(function() {
             resolveRevokeToken();
           }, function() {
@@ -398,11 +469,11 @@ router.post(
         }
       });
     });
-    
+
     revokeTokenPromise.then(function() {
       if (res.locals.user.fcmTokens && res.locals.user.fcmTokens.indexOf(req.body.fcmToken) > -1) {
         var user = res.locals.user.toObject();
-        
+
         delete user.password;
         delete user.salt;
 
@@ -428,7 +499,7 @@ router.post(
           Raven.captureException(err);
         } else {
           user = user.toObject();
-        
+
           delete user.password;
           delete user.salt;
 
@@ -444,7 +515,7 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-    
+
     if (!req.query.fcmToken) {
       res.status(412).send('fcmToken required');
       return;
@@ -452,7 +523,7 @@ router.delete(
       res.status(404).send('fcmToken not found');
       return;
     }
-    
+
     User.findOneAndUpdate({
       _id: res.locals.session.accountId
     }, {
@@ -471,7 +542,7 @@ router.delete(
         Raven.captureException(err);
       } else {
         user = user.toObject();
-        
+
         delete user.password;
         delete user.salt;
 
