@@ -43,9 +43,7 @@ export class NewShoppingListModalPage {
     this.loadThreads().then(function () { }, function () { });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewShoppingListModalPage');
-  }
+  ionViewDidLoad() {}
 
   loadThreads() {
     var me = this;

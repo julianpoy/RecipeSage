@@ -17,10 +17,8 @@ export class SettingsPage {
     public alertCtrl: AlertController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
-  }
-  
+  ionViewDidLoad() {}
+
   goTo(state) {
     this.navCtrl.push(state);
   }
@@ -51,7 +49,7 @@ export class SettingsPage {
         message: 'We were unable to check for an update at this time.',
         duration: 4000
       });
-      
+
       toast.present();
     });
   }

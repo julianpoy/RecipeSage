@@ -27,9 +27,7 @@ export class ImportPage {
     public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ImportPage');
-  }
+  ionViewDidLoad() {}
 
   scrapePepperplate() {
     if (this.username.trim().length === 0) {

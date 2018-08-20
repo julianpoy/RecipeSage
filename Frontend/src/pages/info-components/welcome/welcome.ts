@@ -17,10 +17,8 @@ export class WelcomePage {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad WelcomePage');
-  }
-  
+  ionViewDidLoad() {}
+
   goToAuth(type) {
     let register = type === 'register';
 

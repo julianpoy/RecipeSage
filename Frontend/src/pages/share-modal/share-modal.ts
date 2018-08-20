@@ -14,17 +14,17 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
   templateUrl: 'share-modal.html',
 })
 export class ShareModalPage {
-  
+
   recipe: Recipe;
-  
+
   selectedThread: any;
   recipientEmail: string = '';
   recipientName: string = '';
   recipientId: string = '';
   searchingForRecipient: boolean = false;
-  
+
   threads: any = [];
-  
+
   autofillTimeout: any;
 
   constructor(
@@ -37,23 +37,21 @@ export class ShareModalPage {
   public userService: UserServiceProvider,
   public viewCtrl: ViewController) {
     this.recipe = navParams.get('recipe');
-    
+
     this.loadThreads().then(function() {}, function() {});
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShareModalPage');
-  }
-  
+  ionViewDidLoad() {}
+
   cancel() {
     this.viewCtrl.dismiss({
       destination: false
     });
   }
-  
+
   loadThreads() {
     var me = this;
-    
+
     return new Promise(function(resolve, reject) {
       me.messagingService.threads().subscribe(function(response) {
         me.threads = response;
@@ -61,7 +59,7 @@ export class ShareModalPage {
         resolve();
       }, function(err) {
         reject();
-        
+
         switch(err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
@@ -87,19 +85,19 @@ export class ShareModalPage {
       });
     });
   }
-  
+
   selectRecipient(thread) {
     this.recipientId = thread.otherUser._id;
     console.log(this.recipientId)
     this.recipientName = '';
     this.recipientEmail = '';
   }
-  
+
   autofillUserName() {
     this.searchingForRecipient = true;
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
-    
+
     var me = this;
     this.autofillTimeout = setTimeout(function() {
       me.userService.getUserByEmail(me.recipientEmail.trim()).subscribe(function(response) {
@@ -115,12 +113,12 @@ export class ShareModalPage {
       });
     }, 500);
   }
-  
+
   send() {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.messagingService.create({
       to: this.recipientId,
       body: '',

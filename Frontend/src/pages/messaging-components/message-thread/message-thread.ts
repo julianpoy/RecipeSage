@@ -51,9 +51,7 @@ export class MessageThreadPage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MessageThreadPage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     this.isViewLoaded = true;

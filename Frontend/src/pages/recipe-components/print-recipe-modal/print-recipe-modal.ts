@@ -81,9 +81,7 @@ export class PrintRecipeModalPage {
     return '?token=' + localStorage.getItem('token');
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PrintRecipeModalPage');
-  }
+  ionViewDidLoad() {}
 
   print() {
     var template = document.getElementById('selectedTemplateFrame');

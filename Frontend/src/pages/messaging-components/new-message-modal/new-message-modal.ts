@@ -31,9 +31,7 @@ export class NewMessageModalPage {
     public messagingService: MessagingServiceProvider) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewMessageModalPage');
-  }
+  ionViewDidLoad() {}
 
   autofillUserName() {
     this.searching = true;

@@ -159,9 +159,7 @@ export class RecipePage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RecipePage');
-  }
+  ionViewDidLoad() {}
 
   changeScale() {
     var me = this;

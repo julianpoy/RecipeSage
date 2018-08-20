@@ -45,9 +45,7 @@ export class ShoppingListPage {
     this.loadViewOptions();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShoppingListPage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();

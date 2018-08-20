@@ -47,9 +47,7 @@ export class NewShoppingListItemModalPage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewShoppingListItemModalPage');
-  }
+  ionViewDidLoad() {}
 
   loadRecipes() {
     var me = this;

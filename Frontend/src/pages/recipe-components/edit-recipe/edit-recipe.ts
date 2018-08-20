@@ -30,9 +30,7 @@ export class EditRecipePage {
     this.recipe = navParams.get('recipe') || <Recipe>{};
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EditRecipePage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     var textAreas = document.getElementsByTagName('textarea');

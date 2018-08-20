@@ -13,7 +13,7 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
 export class HomePopoverPage {
 
   viewOptions: any;
-  
+
   labels: any;
 
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public navParams: NavParams, public labelService: LabelServiceProvider) {
@@ -21,8 +21,6 @@ export class HomePopoverPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePopoverPage');
-    
     var me = this;
     this.labelService.fetch().subscribe(function(response) {
       me.labels = response;
@@ -48,7 +46,7 @@ export class HomePopoverPage {
       }
     });
   }
-  
+
   saveViewOptions() {
     localStorage.setItem('showLabels', this.viewOptions.showLabels);
     localStorage.setItem('showImages', this.viewOptions.showImages);

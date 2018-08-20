@@ -16,12 +16,12 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
   providers: [ LazyLoadImageDirective, RecipeServiceProvider, LabelServiceProvider ]
 })
 export class RecipesByLabelPage {
-  
+
   labels: Label[];
 
   showSearch: boolean;
   searchText: string;
-  
+
   imageLoadOffset: number = 20;
 
   constructor(public navCtrl: NavController,
@@ -30,24 +30,22 @@ export class RecipesByLabelPage {
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
     this.loadRecipes();
-    
+
     this.searchText = '';
     this.showSearch = false;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RecipesByLabelPage');
-  }
-  
+  ionViewDidLoad() {}
+
   loadRecipes() {
     var me = this;
-    
+
     var loading = this.loadingService.start();
-    
+
     this.labelService.fetch(true).subscribe(function(response) {
       loading.dismiss();
 
-      me.labels = response;      
+      me.labels = response;
     }, function(err) {
       loading.dismiss();
 
@@ -72,7 +70,7 @@ export class RecipesByLabelPage {
       }
     });
   }
-  
+
   openRecipe(recipe) {
     // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
@@ -80,15 +78,15 @@ export class RecipesByLabelPage {
       recipeId: recipe._id
     });
   }
-  
+
   newRecipe() {
     this.navCtrl.push('EditRecipePage');
   }
-  
+
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }
-  
+
   toggleLabel(label) {
     if (!label.expand) label.expand = true;
     else label.expand = false;

@@ -36,9 +36,7 @@ export class MessagesPage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MessagesPage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();

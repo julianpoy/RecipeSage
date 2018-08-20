@@ -59,9 +59,7 @@ export class AccountPage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AccountPage');
-  }
+  ionViewDidLoad() {}
 
   saveName() {
     var loading = this.loadingService.start();

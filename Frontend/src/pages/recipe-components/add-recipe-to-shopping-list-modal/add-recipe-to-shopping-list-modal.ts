@@ -45,9 +45,7 @@ export class AddRecipeToShoppingListModalPage {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddRecipeToShoppingListModalPage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();

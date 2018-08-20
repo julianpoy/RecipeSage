@@ -30,9 +30,7 @@ export class ShoppingListPopoverPage {
     this.shoppingList = navParams.get('shoppingList');
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShoppingListPopoverPage');
-  }
+  ionViewDidLoad() {}
 
   saveViewOptions() {
     localStorage.setItem('shoppingList.sortBy', this.viewOptions.sortBy);

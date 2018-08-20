@@ -36,9 +36,7 @@ export class ShoppingListsPage {
     }, this);
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShoppingListsPage');
-  }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();

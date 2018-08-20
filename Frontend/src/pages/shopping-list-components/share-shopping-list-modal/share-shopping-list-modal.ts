@@ -13,8 +13,6 @@ export class ShareShoppingListModalPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShareShoppingListModalPage');
-  }
+  ionViewDidLoad() {}
 
 }

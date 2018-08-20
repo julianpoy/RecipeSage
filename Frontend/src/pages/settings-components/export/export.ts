@@ -18,8 +18,6 @@ export class ExportPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ExportPage');
-
     for (var key in this.exportLinks) {
       if (this.exportLinks.hasOwnProperty(key)) {
         this.exportLinks[key] = this.getExportURL(key);
