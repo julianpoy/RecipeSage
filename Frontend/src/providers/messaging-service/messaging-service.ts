@@ -36,8 +36,6 @@ export class MessagingServiceProvider {
   public userService: UserServiceProvider,
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
-    console.log('Hello MessagingServiceProvider Provider');
-
     this.base = localStorage.getItem('base') || '/api/';
 
     var me = this;

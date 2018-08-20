@@ -10,19 +10,17 @@ export interface Label {
 
 @Injectable()
 export class LabelServiceProvider {
-  
+
   base: any;
 
   constructor(public http: HttpClient) {
-    console.log('Hello LabelServiceProvider Provider');
-    
     this.base = localStorage.getItem('base') || '/api/';
   }
-  
+
   getTokenQuery() {
     return '?token=' + localStorage.getItem('token');
   }
-  
+
   fetch(populate?: boolean) {
     var populateQuery = populate ? '&populate=true' : '';
 
@@ -31,7 +29,7 @@ export class LabelServiceProvider {
         'Content-Type':  'application/json'
       })
     };
-    
+
     return this.http
     .get(this.base + 'labels/' + this.getTokenQuery() + populateQuery, httpOptions)
     .pipe(
@@ -53,7 +51,7 @@ export class LabelServiceProvider {
       catchError(this.handleError)
     );
   }
-  
+
   remove(data) {
     const httpOptions = {
       headers: new HttpHeaders({

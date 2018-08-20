@@ -11,8 +11,6 @@ export class ShoppingListServiceProvider {
   base: any;
 
   constructor(public http: HttpClient, public events: Events) {
-    console.log('Hello ShoppingListServiceProvider Provider');
-
     this.base = localStorage.getItem('base') || '/api/';
   }
 

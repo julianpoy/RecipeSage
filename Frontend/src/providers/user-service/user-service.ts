@@ -10,8 +10,6 @@ export class UserServiceProvider {
   base: String;
 
   constructor(public http: HttpClient) {
-    console.log('Hello UserServiceProvider Provider');
-
     this.base = localStorage.getItem('base') || '/api/';
   }
 

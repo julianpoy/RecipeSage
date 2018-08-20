@@ -36,8 +36,6 @@ export class RecipeServiceProvider {
   base: any;
 
   constructor(public http: HttpClient, public events: Events) {
-    console.log('Hello RecipeServiceProvider Provider');
-
     this.base = localStorage.getItem('base') || '/api/';
   }
 

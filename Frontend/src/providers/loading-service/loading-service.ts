@@ -7,10 +7,8 @@ export class LoadingServiceProvider {
 
   REQUEST_COMPLETE_DELAY: number = 150;
 
-  constructor(private loadingBar: LoadingBarService) {
-    console.log('Hello LoadingServiceProvider Provider');
-  }
-  
+  constructor(private loadingBar: LoadingBarService) {}
+
   start() {
     this.loadingBar.start();
 

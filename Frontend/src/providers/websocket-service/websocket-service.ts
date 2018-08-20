@@ -16,8 +16,6 @@ export class WebsocketServiceProvider {
   listeners: any = {};
 
   constructor(public http: HttpClient) {
-    console.log('Hello WebsocketServiceProvider Provider');
-
     this.connect();
 
     var me = this;
