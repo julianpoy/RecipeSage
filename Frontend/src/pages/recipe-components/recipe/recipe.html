@@ -20,7 +20,7 @@
       <ion-thumbnail *ngIf="recipe.image" item-start>
         <img src="{{ recipe.image.location }}">
       </ion-thumbnail>
-      <h2 text-wrap>{{ recipe.title }}</h2>
+      <h2 class="recipeTitle" text-wrap>{{ recipe.title }}</h2>
 
       <ion-grid class="meta" showWhen="core" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield">
         <ion-row>

@@ -3,6 +3,10 @@ page-recipe {
     white-space: pre-wrap;
   }
 
+  h2.recipeTitle {
+    margin-top: 0 !important;
+  }
+
   .ingredientsInstructionsGrid {
     padding-left: 0;
 
