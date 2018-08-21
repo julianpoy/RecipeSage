@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { URLSearchParams } from "@angular/http";
 import { IonicPage, ToastController, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
