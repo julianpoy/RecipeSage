@@ -47,7 +47,7 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, reso
         Data: subject
       }
     },
-    Source: 'noreply@recipesage.com', /* required */
+    Source: '"RecipeSage" <noreply@recipesage.com>', /* required */
     ReplyToAddresses: [
       'noreply@recipesage.com',
       /* more items */
