@@ -57,7 +57,7 @@
     "purify-css": "^1.2.5",
     "rev-hash": "^2.0.0",
     "shx": "^0.3.2",
-    "typescript": "3.0.1",
+    "typescript": "~2.4.2",
     "webpack-manifest-plugin": "^2.0.3",
     "workbox-cli": "^3.2.0"
   },
