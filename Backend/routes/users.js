@@ -218,7 +218,9 @@ console.log(origin)
 
         <br /><br />Thank you,
         <br />Julian P.
-        <br />RecipeSage`;
+        <br />RecipeSage
+        <br /><br />
+        Please do not reply to this email.`;
 
         var plain = `Hello,
 
@@ -229,7 +231,9 @@ console.log(origin)
 
         \n\nThank you,
         \nJulian P.
-        \nRecipeSage`;
+        \nRecipeSage
+        \n\n
+        Please do not reply to this email.`;
 
         UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain, function() {
           res.status(200).json({
