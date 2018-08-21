@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, ToastController, AlertController, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
@@ -24,6 +24,7 @@ export class AccountPage {
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public navParams: NavParams,
     public loadingService: LoadingServiceProvider,
     public userService: UserServiceProvider) {
@@ -150,6 +151,26 @@ export class AccountPage {
     });
   }
 
+  _logout() {
+    localStorage.removeItem('token');
+
+    var me = this;
+
+    let alert = me.alertCtrl.create({
+      title: 'Password Updated',
+      message: 'Your password has been updated. You will need to log back in on any devices that use this account.',
+      buttons: [
+        {
+          text: 'Okay',
+          handler: () => {
+            me.navCtrl.setRoot('LoginPage', {});
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   savePassword() {
     if (this.account.password !== this.account.confirmPassword) {
       let tst = this.toastCtrl.create({
@@ -173,16 +194,30 @@ export class AccountPage {
     this.userService.update({
       password: this.account.password
     }).subscribe(function(response) {
-      loading.dismiss();
 
       me.account.password = '*'.repeat(me.account.password.length);
       me.passwordChanged = false;
 
-      let tst = me.toastCtrl.create({
-        message: 'Password was updated.',
-        duration: 5000
+      me.userService.logout().subscribe(function (response) {
+        loading.dismiss();
+
+        me._logout.call(me);
+      }, function (err) {
+        loading.dismiss();
+        switch (err.status) {
+          case 0:
+          case 401:
+          case 404:
+            me._logout.call(me);
+            break;
+          default:
+            me.toastCtrl.create({
+              message: 'An unexpected error occured. Please try again.',
+              duration: 6000
+            }).present();
+            break;
+        }
       });
-      tst.present();
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
