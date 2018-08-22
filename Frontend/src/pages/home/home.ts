@@ -8,6 +8,7 @@ import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/re
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -59,6 +60,7 @@ export class HomePage {
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
     public userService: UserServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
     var me = this;
 
@@ -82,11 +84,11 @@ export class HomePage {
       } catch(e){}
     }
 
-    events.subscribe('messages:new', (message) => {
-      if (message.recipe && this.folder === 'inbox') {
+    this.websocketService.register('messages:new', function (payload) {
+      if (payload.recipe && this.folder === 'inbox') {
         this.loadRecipes();
       }
-    });
+    }, this);
 
     events.subscribe('import:pepperplate:complete', () => {
       this.loadRecipes();

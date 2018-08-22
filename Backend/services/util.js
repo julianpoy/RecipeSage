@@ -11,7 +11,8 @@ var User = mongoose.model('User');
 var Recipe = mongoose.model('Recipe');
 
 // Service
-var FirebaseService = require('../services/firebase');
+var FirebaseService = require('./firebase');
+var GripService = require('./grip');
 var config = require('../config/config.json');
 
 var s3 = new aws.S3();
@@ -205,27 +206,27 @@ exports.dispatchImportNotification = function(user, status, reason) {
 }
 
 exports.dispatchMessageNotification = function(user, fullMessage) {
-  if (user.fcmTokens) {
-    var message = {
-      _id: fullMessage._id,
-      body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
-      otherUser: fullMessage.otherUser,
-      from: fullMessage.from,
-      to: fullMessage.to
+  var message = {
+    _id: fullMessage._id,
+    body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
+    otherUser: fullMessage.otherUser,
+    from: fullMessage.from,
+    to: fullMessage.to
+  };
+
+  if (fullMessage.recipe) {
+    message.recipe = {
+      _id: fullMessage.recipe._id,
+      title: fullMessage.recipe.title,
+      image: {}
     };
 
-    if (fullMessage.recipe) {
-      message.recipe = {
-        _id: fullMessage.recipe._id,
-        title: fullMessage.recipe.title,
-        image: {}
-      };
-
-      if (fullMessage.recipe.image) {
-        message.recipe.image.location = fullMessage.recipe.image.location;
-      }
+    if (fullMessage.recipe.image) {
+      message.recipe.image.location = fullMessage.recipe.image.location;
     }
+  }
 
+  if (user.fcmTokens) {
     var notification = {
       type: "messages:new",
       message: JSON.stringify(message)
@@ -238,6 +239,10 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
       });
     }
   }
+
+  console.log("about to broadcast")
+
+  GripService.broadcast(user._id, 'messages:new', message);
 }
 
 function findTitle(userId, recipeId, basename, ctr, success, fail) {

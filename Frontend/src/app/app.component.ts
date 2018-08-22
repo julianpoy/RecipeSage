@@ -81,13 +81,13 @@ export class MyApp {
       this.loadInboxCount();
     });
 
-    this.events.subscribe('messages:new', (message) => {
-      if (me.nav.getActive().instance instanceof MessageThreadPage || me.nav.getActive().instance instanceof MessagesPage) return;
-      var notification = 'New message from ' + (message.otherUser.name || message.otherUser.email);
+    this.websocketService.register('messages:new', function (payload) {
+      if (this.nav.getActive().instance instanceof MessageThreadPage || this.nav.getActive().instance instanceof MessagesPage) return;
+      var notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
 
-      var myMessage = message;
+      var myMessage = payload;
 
-      let toast = me.toastCtrl.create({
+      let toast = this.toastCtrl.create({
         message: notification,
         duration: 7000,
         showCloseButton: true,
@@ -98,10 +98,10 @@ export class MyApp {
       toast.onDidDismiss((data, role) => {
         console.log('Dismissed toast');
         if (role == "close") {
-          me.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser._id });
+          this.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser._id });
         }
       });
-    });
+    }, this);
 
     this.events.subscribe('import:pepperplate:complete', (message) => {
       var notification = 'Your recipes have been imported from Pepperplate.';

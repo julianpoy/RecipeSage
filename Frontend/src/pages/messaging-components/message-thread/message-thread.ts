@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController, Events } from 'io
 
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 
 @IonicPage({
   segment: 'messages/:otherUserId',
@@ -32,16 +33,17 @@ export class MessageThreadPage {
     public events: Events,
     public toastCtrl: ToastController,
     public loadingService: LoadingServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
     this.otherUserId = this.navParams.get('otherUserId');
 
+    this.websocketService.register('messages:new', function (payload) {
+      if (!this.isViewLoaded || payload.otherUser._id !== this.otherUserId) return;
+
+      this.loadMessages().then(function () { }, function () { });
+    }, this);
+
     var me = this;
-    events.subscribe('messages:new', (message) => {
-      if (!me.isViewLoaded || message.otherUser._id !== me.otherUserId) return;
-
-      me.loadMessages.call(me).then(function() {}, function() {});
-    });
-
     events.subscribe('application:multitasking:resumed', () => {
       if (!me.isViewLoaded) return;
 

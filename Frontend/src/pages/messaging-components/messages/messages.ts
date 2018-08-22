@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController, ModalController, 
 
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 
 @IonicPage({
   priority: 'low'
@@ -25,15 +26,16 @@ export class MessagesPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public loadingService: LoadingServiceProvider,
+    public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
 
     this.isNotificationsEnabled = this.messagingService.isNotificationsEnabled;
 
     this.messagingService.requestNotifications();
 
-    events.subscribe('messages:new', (message) => {
-      this.loadThreads().then(function() {}, function() {});
-    });
+    this.websocketService.register('messages:new', function (payload) {
+      this.loadThreads();
+    }, this);
   }
 
   ionViewDidLoad() {}

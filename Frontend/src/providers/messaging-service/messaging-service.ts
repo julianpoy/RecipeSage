@@ -53,10 +53,6 @@ export class MessagingServiceProvider {
         console.log("received foreground FCM: ", message)
         // TODO: REPLACE WITH GRIP (WS)
         switch(message.data.type) {
-          case 'messages:new':
-            var message = JSON.parse(message.data.message);
-
-            return me.events.publish('messages:new', message);
           case 'import:pepperplate:complete':
             return me.events.publish('import:pepperplate:complete');
           case 'import:pepperplate:failed':
