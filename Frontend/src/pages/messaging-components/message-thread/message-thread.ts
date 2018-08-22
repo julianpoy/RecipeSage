@@ -26,6 +26,8 @@ export class MessageThreadPage {
 
   isViewLoaded: boolean = true;
 
+  selectedChatIdx: number = -1;
+
   constructor(
     private changeDetector: ChangeDetectorRef,
     public navCtrl: NavController,
@@ -234,6 +236,57 @@ export class MessageThreadPage {
       day: 'numeric',
       year: 'numeric'
     });
+  }
+
+  formatMessageDate(plainTextDate) {
+    var aFewMomentsAgoAfter = new Date();
+    aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 5);
+
+    var todayAfter = new Date();
+    todayAfter.setHours(0);
+    todayAfter.setMinutes(0);
+    todayAfter.setSeconds(0);
+    todayAfter.setMilliseconds(0);
+
+    var thisWeekAfter = new Date();
+    thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
+
+    var toFormat = new Date(plainTextDate);
+
+    if (aFewMomentsAgoAfter < toFormat) {
+      return 'just now'
+    }
+
+    var format;
+
+    if (todayAfter < toFormat) {
+      format = {
+        hour: 'numeric',
+        minute: 'numeric'
+      };
+    } else if (thisWeekAfter < toFormat) {
+      format = {
+        weekday: 'long',
+        hour: 'numeric',
+        minute: 'numeric'
+      };
+    } else {
+      format = {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric'
+      };
+    }
+
+    return toFormat.toLocaleString((<any>window.navigator).userLanguage || window.navigator.language, format);
+  }
+
+  setSelectedChat(idx) {
+    if (idx === this.selectedChatIdx) {
+      this.selectedChatIdx = -1;
+    } else {
+      this.selectedChatIdx = idx;
+    }
   }
 
   parseMessage(message) {

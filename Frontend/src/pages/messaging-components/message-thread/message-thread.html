@@ -24,7 +24,7 @@
       <div class="time-divider" *ngIf="deservesDateDiff(messages[i-1], messages[i])">
         {{ formatMessageDividerDate(message.created) }}
       </div>
-      <div class="chat" *ngIf="!message.recipe && message.recipe !== null">
+      <div class="chat" *ngIf="!message.recipe && message.recipe !== null" (click)="setSelectedChat(i)">
         <span [innerHTML]="parseMessage(message.body)"></span>
       </div>
       <div class="recipe" *ngIf="(message.recipe || message.recipe === null) && message.from._id === message.otherUser._id">
@@ -57,6 +57,10 @@
           <h2 text-wrap>Recipe deleted</h2>
           <p class="description">Your copy of this recipe no longer exists</p>
         </ion-item>
+      </div>
+
+      <div class="chatDetails" *ngIf="selectedChatIdx === i">
+        {{ formatMessageDate(message.created) }}
       </div>
     </div>
   </div>
