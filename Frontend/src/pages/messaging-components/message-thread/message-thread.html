@@ -3,9 +3,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    
+
     <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
-    
+
     <ion-buttons end>
       <button class="reload" [ngClass]="{ reloading: reloading }" ion-button icon-only (click)="reload()">
         <ion-icon name="refresh"></ion-icon>
@@ -20,7 +20,10 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div>
-    <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages; trackBy: trackByFn">
+    <div class="message" [ngClass]="{'me': message.to._id === message.otherUser._id }" *ngFor="let message of messages; let i = index; trackBy: trackByFn">
+      <div class="time-divider" *ngIf="deservesDateDiff(messages[i-1], messages[i])">
+        {{ formatMessageDividerDate(message.created) }}
+      </div>
       <div class="chat" *ngIf="!message.recipe && message.recipe !== null">
         <span [innerHTML]="parseMessage(message.body)"></span>
       </div>

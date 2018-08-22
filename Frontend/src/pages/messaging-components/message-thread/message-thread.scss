@@ -2,7 +2,12 @@ page-message-thread {
   .message {
     margin-top: 2px;
     margin-bottom: 2px;
-    
+
+    .time-divider {
+      text-transform: capitalize;
+      text-align: center;
+    }
+
     .chat {
       display: inline-block;
       background: whitesmoke;
@@ -11,49 +16,49 @@ page-message-thread {
       border-radius: 6px;
       text-align: left;
       max-width: 60%;
-      
+
       span {
         color: black;
         white-space: pre-wrap;
       }
     }
-    
+
     .recipe {
       width: 60%;
       // border-radius: 20px;
       border-radius: 6px;
       background: whitesmoke;
-      
+
       ion-item {
         background: transparent;
       }
     }
-    
+
     &.me {
       text-align: right;
-      
+
       .chat {
         background: #00a8ff;
-        
+
         span {
           color: white;
-          
+
           a {
             color: white;
             opacity: 1;
           }
         }
       }
-      
+
       .recipe {
         margin-left: 40%;
         background: #00a8ff;
-        
+
         ion-item {
           h2 {
             color: white;
           }
-          
+
           .description {
             color: white;
           }
@@ -61,11 +66,11 @@ page-message-thread {
       }
     }
   }
-  
+
   .reload.reloading {
     animation: spin 1s linear infinite normal none;
   }
-  
+
 }
 
 @-webkit-keyframes spin {

@@ -199,6 +199,43 @@ export class MessageThreadPage {
     }
   }
 
+  deservesDateDiff(previous, next) {
+    if (!previous || !next) return;
+
+    var p = new Date(previous.created);
+    var n = new Date(next.created);
+
+    return p.getDay() !== n.getDay();
+  }
+
+  formatMessageDividerDate(plainTextDate) {
+    var todayAfter = new Date();
+    todayAfter.setHours(0);
+    todayAfter.setMinutes(0);
+    todayAfter.setSeconds(0);
+    todayAfter.setMilliseconds(0);
+
+    var plainTextAfter = new Date();
+    plainTextAfter.setDate(plainTextAfter.getDate() - 7);
+
+    var toFormat = new Date(plainTextDate);
+
+    if (todayAfter < toFormat) {
+      return 'today';
+    }
+
+    if (plainTextAfter < toFormat) {
+      var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return dayNames[toFormat.getDay()];
+    }
+
+    return toFormat.toLocaleString((<any>window.navigator).userLanguage || window.navigator.language, {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
   parseMessage(message) {
     var updated = message;
 
