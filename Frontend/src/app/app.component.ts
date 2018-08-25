@@ -206,6 +206,7 @@ export class MyApp {
       { title: 'Recipe Inbox', component: 'HomePage', navData: { folder: 'inbox' } },
       { title: 'Create Recipe', component: 'EditRecipePage' },
       { title: 'Shopping Lists', component: 'ShoppingListsPage' },
+      { title: 'Meal Plans', component: 'MealPlansPage' },
       { title: 'Settings', component: 'SettingsPage' },
       { title: 'About & Support', component: 'AboutPage' }
     ];
