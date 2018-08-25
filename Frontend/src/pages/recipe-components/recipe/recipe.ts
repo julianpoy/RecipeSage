@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams, AlertController, ToastController, 
 import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../../providers/label-service/label-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 import fractionjs from 'fraction.js';
 
@@ -39,6 +40,7 @@ export class RecipePage {
     public modalCtrl: ModalController,
     public loadingService: LoadingServiceProvider,
     public navParams: NavParams,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
 
@@ -550,6 +552,6 @@ export class RecipePage {
 
   prettyDateTime(datetime) {
     if (!datetime) return '';
-    return (new Date(datetime)).toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' });
+    return this.utilService.formatDate(datetime, { times: true });
   }
 }

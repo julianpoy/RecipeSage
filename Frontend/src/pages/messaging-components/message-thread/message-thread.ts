@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams, ToastController, Events } from 'io
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   segment: 'messages/:otherUserId',
@@ -36,6 +37,7 @@ export class MessageThreadPage {
     public toastCtrl: ToastController,
     public loadingService: LoadingServiceProvider,
     public websocketService: WebsocketServiceProvider,
+    public utilService: UtilServiceProvider,
     public messagingService: MessagingServiceProvider) {
     this.otherUserId = this.navParams.get('otherUserId');
 
@@ -211,74 +213,11 @@ export class MessageThreadPage {
   }
 
   formatMessageDividerDate(plainTextDate) {
-    var todayAfter = new Date();
-    todayAfter.setHours(0);
-    todayAfter.setMinutes(0);
-    todayAfter.setSeconds(0);
-    todayAfter.setMilliseconds(0);
-
-    var plainTextAfter = new Date();
-    plainTextAfter.setDate(plainTextAfter.getDate() - 7);
-
-    var toFormat = new Date(plainTextDate);
-
-    if (todayAfter < toFormat) {
-      return 'today';
-    }
-
-    if (plainTextAfter < toFormat) {
-      var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      return dayNames[toFormat.getDay()];
-    }
-
-    return toFormat.toLocaleString((<any>window.navigator).userLanguage || window.navigator.language, {
-      month: 'numeric',
-      day: 'numeric',
-      year: 'numeric'
-    });
+    return this.utilService.formatDate(plainTextDate);
   }
 
   formatMessageDate(plainTextDate) {
-    var aFewMomentsAgoAfter = new Date();
-    aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 5);
-
-    var todayAfter = new Date();
-    todayAfter.setHours(0);
-    todayAfter.setMinutes(0);
-    todayAfter.setSeconds(0);
-    todayAfter.setMilliseconds(0);
-
-    var thisWeekAfter = new Date();
-    thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
-
-    var toFormat = new Date(plainTextDate);
-
-    if (aFewMomentsAgoAfter < toFormat) {
-      return 'just now'
-    }
-
-    var format;
-
-    if (todayAfter < toFormat) {
-      format = {
-        hour: 'numeric',
-        minute: 'numeric'
-      };
-    } else if (thisWeekAfter < toFormat) {
-      format = {
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
-      };
-    } else {
-      format = {
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric'
-      };
-    }
-
-    return toFormat.toLocaleString((<any>window.navigator).userLanguage || window.navigator.language, format);
+    return this.utilService.formatDate(plainTextDate, { now: true, times: true });
   }
 
   setSelectedChat(idx) {

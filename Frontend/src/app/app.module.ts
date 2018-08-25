@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoadingServiceProvider } from '../providers/loading-service/loading-service';
 import { ShoppingListServiceProvider } from '../providers/shopping-list-service/shopping-list-service';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+import { UtilServiceProvider } from '../providers/util-service/util-service';
 
 var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Force windows phone to use Material Design
 
@@ -49,7 +50,8 @@ var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Fo
     MessagingServiceProvider,
     LoadingServiceProvider,
     ShoppingListServiceProvider,
-    WebsocketServiceProvider
+    WebsocketServiceProvider,
+    UtilServiceProvider
   ]
 })
 export class AppModule {}
