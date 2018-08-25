@@ -1,12 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { Events } from 'ionic-angular';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+// import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class MealPlanServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient, public events: Events) {
+  constructor(public http: HttpClient) {
     this.base = localStorage.getItem('base') || '/api/';
   }
 

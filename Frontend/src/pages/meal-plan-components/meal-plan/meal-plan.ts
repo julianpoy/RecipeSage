@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController, PopoverController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
-import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
+import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
@@ -16,7 +16,7 @@ import { UtilServiceProvider } from '../../../providers/util-service/util-servic
 export class MealPlanPage {
 
   mealPlanId: string;
-  list: any = { items: [], collaborators: [] };
+  mealPlan: any = { items: [], collaborators: [] };
 
   itemsByRecipeId: any = {};
   recipeIds: any = [];
@@ -28,7 +28,7 @@ export class MealPlanPage {
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
-    public shoppingListService: ShoppingListServiceProvider,
+    public mealPlanService: MealPlanServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public utilService: UtilServiceProvider,
     public toastCtrl: ToastController,
@@ -36,10 +36,10 @@ export class MealPlanPage {
     public popoverCtrl: PopoverController,
     public navParams: NavParams) {
 
-    this.shoppingListId = navParams.get('shoppingListId');
+    this.mealPlanId = navParams.get('mealPlanId');
 
-    this.websocketService.register('shoppingList:itemsUpdated', function (payload) {
-      if (payload.shoppingListId === this.shoppingListId) {
+    this.websocketService.register('mealPlan:itemsUpdated', function (payload) {
+      if (payload.mealPlanId === this.mealPlanId) {
         this.loadList();
       }
     }, this);
@@ -71,36 +71,36 @@ export class MealPlanPage {
     });
   }
 
-  processIncomingList(list) {
-    var me = this;
+  // processIncomingList(list) {
+  //   var me = this;
 
-    me.list = list;
-    this.applySort();
+  //   me.list = list;
+  //   this.applySort();
 
-    var items = (me.list.items || []);
+  //   var items = (me.list.items || []);
 
-    me.recipeIds = [];
-    me.itemsByRecipeId = {};
+  //   me.recipeIds = [];
+  //   me.itemsByRecipeId = {};
 
-    for (var i = 0; i < items.length; i++) {
-      // Recipe grouping
-      if (!items[i].recipe) continue;
+  //   for (var i = 0; i < items.length; i++) {
+  //     // Recipe grouping
+  //     if (!items[i].recipe) continue;
 
-      var recipeId = items[i].recipe.id + items[i].created;
+  //     var recipeId = items[i].recipe.id + items[i].created;
 
-      if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
+  //     if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
 
-      if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
-      me.itemsByRecipeId[recipeId].push(items[i]);
-    }
-  }
+  //     if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
+  //     me.itemsByRecipeId[recipeId].push(items[i]);
+  //   }
+  // }
 
   loadList() {
     var me = this;
 
     return new Promise(function (resolve, reject) {
-      me.shoppingListService.fetchById(me.shoppingListId).subscribe(function (response) {
-        me.processIncomingList(response);
+      me.mealPlanService.fetchById(me.mealPlanId).subscribe(function (response) {
+        // me.processIncomingList(response);
 
         resolve();
       }, function (err) {
@@ -140,116 +140,116 @@ export class MealPlanPage {
   }
 
   removeRecipe(recipeId) {
-    this.removeItems(this.itemsByRecipeId[recipeId]);
+    // this.removeItems(this.itemsByRecipeId[recipeId]);
   }
 
-  removeItems(items) {
-    var me = this;
-    var loading = this.loadingService.start();
+  // removeItems(items) {
+  //   var me = this;
+  //   var loading = this.loadingService.start();
 
-    var itemIds = items.map(function (el) {
-      return el._id;
-    });
+  //   var itemIds = items.map(function (el) {
+  //     return el._id;
+  //   });
 
-    this.shoppingListService.remove({
-      _id: this.list._id,
-      items: itemIds
-    }).subscribe(function (response) {
-      loading.dismiss();
+  //   this.mealPlanService.remove({
+  //     _id: this.list._id,
+  //     items: itemIds
+  //   }).subscribe(function (response) {
+  //     loading.dismiss();
 
-      me.processIncomingList(response);
+  //     me.processIncomingList(response);
 
-      var toast = me.toastCtrl.create({
-        message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
-        duration: 5000,
-        showCloseButton: true,
-        closeButtonText: 'Undo',
-      });
-      toast.onDidDismiss((data, role) => {
-        if (role == "close") {
-          me._addItems(items);
-        }
-      });
-      toast.present();
-    }, function (err) {
-      loading.dismiss();
-      switch (err.status) {
-        case 0:
-          me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-            duration: 5000
-          }).present();
-          break;
-        case 401:
-          me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
-            duration: 6000
-          }).present();
-          break;
-        default:
-          me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
-            duration: 6000
-          }).present();
-          break;
-      }
-    });
-  }
+  //     var toast = me.toastCtrl.create({
+  //       message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
+  //       duration: 5000,
+  //       showCloseButton: true,
+  //       closeButtonText: 'Undo',
+  //     });
+  //     toast.onDidDismiss((data, role) => {
+  //       if (role == "close") {
+  //         me._addItems(items);
+  //       }
+  //     });
+  //     toast.present();
+  //   }, function (err) {
+  //     loading.dismiss();
+  //     switch (err.status) {
+  //       case 0:
+  //         me.toastCtrl.create({
+  //           message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+  //           duration: 5000
+  //         }).present();
+  //         break;
+  //       case 401:
+  //         me.toastCtrl.create({
+  //           message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+  //           duration: 6000
+  //         }).present();
+  //         break;
+  //       default:
+  //         me.toastCtrl.create({
+  //           message: 'An unexpected error occured. Please try again.',
+  //           duration: 6000
+  //         }).present();
+  //         break;
+  //     }
+  //   });
+  // }
 
-  _addItems(items) {
-    var me = this;
-    var loading = this.loadingService.start();
+  // _addItems(items) {
+  //   var me = this;
+  //   var loading = this.loadingService.start();
 
-    this.shoppingListService.addItems({
-      _id: this.list._id,
-      items: items
-    }).subscribe(function (response) {
-      loading.dismiss();
+  //   this.mealPlanService.addItems({
+  //     _id: this.list._id,
+  //     items: items
+  //   }).subscribe(function (response) {
+  //     loading.dismiss();
 
-      me.processIncomingList(response);
-    }, function (err) {
-      loading.dismiss();
-      switch (err.status) {
-        case 0:
-          me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-            duration: 5000
-          }).present();
-          break;
-        case 401:
-          me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
-            duration: 6000
-          }).present();
-          break;
-        default:
-          me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
-            duration: 6000
-          }).present();
-          break;
-      }
-    });
-  }
+  //     me.processIncomingList(response);
+  //   }, function (err) {
+  //     loading.dismiss();
+  //     switch (err.status) {
+  //       case 0:
+  //         me.toastCtrl.create({
+  //           message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+  //           duration: 5000
+  //         }).present();
+  //         break;
+  //       case 401:
+  //         me.toastCtrl.create({
+  //           message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+  //           duration: 6000
+  //         }).present();
+  //         break;
+  //       default:
+  //         me.toastCtrl.create({
+  //           message: 'An unexpected error occured. Please try again.',
+  //           duration: 6000
+  //         }).present();
+  //         break;
+  //     }
+  //   });
+  // }
 
-  newShoppingListItem() {
-    var me = this;
-    let modal = this.modalCtrl.create('NewShoppingListItemModalPage');
-    modal.present();
-    modal.onDidDismiss(data => {
-      if (data.items) {
-        this._addItems(data.items);
-      }
+  // newShoppingListItem() {
+  //   var me = this;
+  //   let modal = this.modalCtrl.create('NewShoppingListItemModalPage');
+  //   modal.present();
+  //   modal.onDidDismiss(data => {
+  //     if (data.items) {
+  //       this._addItems(data.items);
+  //     }
 
-      if (!data.destination) return;
+  //     if (!data.destination) return;
 
-      if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        me.navCtrl.push(data.destination, data.routingData);
-      }
-    });
-  }
+  //     if (data.setRoot) {
+  //       me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+  //     } else {
+  //       me.navCtrl.push(data.destination, data.routingData);
+  //     }
+  //   });
+  // }
 
   formatItemCreationDate(plainTextDate) {
     return this.utilService.formatDate(plainTextDate, { now: true });
@@ -264,11 +264,11 @@ export class MealPlanPage {
       groupSimilar: true
     }
 
-    this.viewOptions.sortBy = localStorage.getItem('shoppingList.sortBy');
-    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingList.showAddedBy'));
-    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingList.showAddedOn'));
-    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingList.showRecipeTitle'));
-    this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('shoppingList.groupSimilar'));
+    this.viewOptions.sortBy = localStorage.getItem('mealPlan.sortBy');
+    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
+    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
+    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('mealPlan.showRecipeTitle'));
+    this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('mealPlan.groupSimilar'));
 
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
@@ -279,75 +279,75 @@ export class MealPlanPage {
     }
   }
 
-  ingredientSorter(a, b) {
-    if (this.viewOptions.sortBy === 'created') {
-      var dateComp = (<any>new Date(a.created)) - (<any>new Date(b.created));
-      if (dateComp === 0) {
-        return a.title.localeCompare(b.title);
-      }
-      return dateComp;
-    }
-    if (this.viewOptions.sortBy === '-created') {
-      var reverseDateComp = (<any>new Date(b.created)) - (<any>new Date(a.created));
-      if (reverseDateComp === 0) {
-        return a.title.localeCompare(b.title);
-      }
-      return reverseDateComp;
-    }
-    if (this.viewOptions.sortBy === '-title') {
-      var localeComp = a.title.localeCompare(b.title);
-      if (localeComp === 0) {
-        return (<any>new Date(a.created)) - (<any>new Date(b.created));
-      }
-      return localeComp;
-    }
-  }
+  // ingredientSorter(a, b) {
+  //   if (this.viewOptions.sortBy === 'created') {
+  //     var dateComp = (<any>new Date(a.created)) - (<any>new Date(b.created));
+  //     if (dateComp === 0) {
+  //       return a.title.localeCompare(b.title);
+  //     }
+  //     return dateComp;
+  //   }
+  //   if (this.viewOptions.sortBy === '-created') {
+  //     var reverseDateComp = (<any>new Date(b.created)) - (<any>new Date(a.created));
+  //     if (reverseDateComp === 0) {
+  //       return a.title.localeCompare(b.title);
+  //     }
+  //     return reverseDateComp;
+  //   }
+  //   if (this.viewOptions.sortBy === '-title') {
+  //     var localeComp = a.title.localeCompare(b.title);
+  //     if (localeComp === 0) {
+  //       return (<any>new Date(a.created)) - (<any>new Date(b.created));
+  //     }
+  //     return localeComp;
+  //   }
+  // }
 
-  applySort() {
-    var me = this;
-    // Sort individual items
-    this.list.items = this.list.items.sort(function (a, b) {
-      return me.ingredientSorter.call(me, a, b);
-    });
+  // applySort() {
+  //   var me = this;
+  //   // Sort individual items
+  //   this.list.items = this.list.items.sort(function (a, b) {
+  //     return me.ingredientSorter.call(me, a, b);
+  //   });
 
-    // Sort groups by title (always)
-    this.list.itemsByGroup = this.list.itemsByGroup.sort(function (a, b) {
-      return a.title.localeCompare(b.title);
-    });
+  //   // Sort groups by title (always)
+  //   this.list.itemsByGroup = this.list.itemsByGroup.sort(function (a, b) {
+  //     return a.title.localeCompare(b.title);
+  //   });
 
-    // Sort items within each group
-    for (var i = 0; i < this.list.itemsByGroup.length; i++) {
-      this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort(function (a, b) {
-        return me.ingredientSorter.call(me, a, b);
-      });
-    }
-  }
+  //   // Sort items within each group
+  //   for (var i = 0; i < this.list.itemsByGroup.length; i++) {
+  //     this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort(function (a, b) {
+  //       return me.ingredientSorter.call(me, a, b);
+  //     });
+  //   }
+  // }
 
-  presentPopover(event) {
-    let popover = this.popoverCtrl.create('ShoppingListPopoverPage', {
-      shoppingListId: this.shoppingListId,
-      shoppingList: this.list,
-      viewOptions: this.viewOptions
-    });
+  // presentPopover(event) {
+  //   let popover = this.popoverCtrl.create('ShoppingListPopoverPage', {
+  //     mealPlanId: this.mealPlanId,
+  //     mealPlan: this.list,
+  //     viewOptions: this.viewOptions
+  //   });
 
-    popover.present({
-      ev: event
-    });
+  //   popover.present({
+  //     ev: event
+  //   });
 
-    var me = this;
-    popover.onDidDismiss(data => {
-      data = data || {};
+  //   var me = this;
+  //   popover.onDidDismiss(data => {
+  //     data = data || {};
 
-      if (!data.destination) {
-        me.applySort();
-        return;
-      }
+  //     if (!data.destination) {
+  //       me.applySort();
+  //       return;
+  //     }
 
-      if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        me.navCtrl.push(data.destination, data.routingData);
-      }
-    });
-  }
+  //     if (data.setRoot) {
+  //       me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+  //     } else {
+  //       me.navCtrl.push(data.destination, data.routingData);
+  //     }
+  //   });
+  // }
 }
