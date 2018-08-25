@@ -18,6 +18,7 @@ import { LoadingServiceProvider } from '../providers/loading-service/loading-ser
 import { ShoppingListServiceProvider } from '../providers/shopping-list-service/shopping-list-service';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../providers/util-service/util-service';
+import { MealPlanServiceProvider } from '../providers/meal-plan-service/meal-plan-service';
 
 var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Force windows phone to use Material Design
 
@@ -51,7 +52,8 @@ var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Fo
     LoadingServiceProvider,
     ShoppingListServiceProvider,
     WebsocketServiceProvider,
-    UtilServiceProvider
+    UtilServiceProvider,
+    MealPlanServiceProvider
   ]
 })
 export class AppModule {}
