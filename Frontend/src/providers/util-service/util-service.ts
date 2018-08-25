@@ -10,7 +10,7 @@ export class UtilServiceProvider {
   formatDate(date, options?) {
     options = options || {};
     var aFewMomentsAgoAfter = new Date();
-    aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 5);
+    aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
 
     var todayAfter = new Date();
     todayAfter.setHours(0);
@@ -27,11 +27,11 @@ export class UtilServiceProvider {
       return 'just now'
     }
 
-    if (!options.times && options.todayAfter < toFormat) {
+    if (!options.times && todayAfter < toFormat) {
       return 'today';
     }
 
-    if (options.times && options.todayAfter < toFormat) {
+    if (options.times && todayAfter < toFormat) {
       return toFormat.toLocaleString(this.lang, {
         hour: 'numeric',
         minute: 'numeric'
