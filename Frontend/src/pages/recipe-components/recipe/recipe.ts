@@ -71,6 +71,8 @@ export class RecipePage {
     }, function() {
       loader.complete();
     });
+
+    this.loadLabels();
   }
 
   loadRecipe() {
