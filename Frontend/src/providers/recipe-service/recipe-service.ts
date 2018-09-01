@@ -1,4 +1,4 @@
-import { Events } from 'ionic-angular';
+import { Events, AlertController } from 'ionic-angular';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 // import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -6,6 +6,8 @@ import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
 import { Label } from '../label-service/label-service';
+
+import fractionjs from 'fraction.js';
 
 export interface Recipe {
   _id: string;
@@ -35,7 +37,10 @@ export class RecipeServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient, public events: Events) {
+  constructor(
+    public http: HttpClient,
+    public alertCtrl: AlertController,
+    public events: Events) {
     this.base = localStorage.getItem('base') || '/api/';
   }
 
@@ -216,6 +221,81 @@ export class RecipeServiceProvider {
     .pipe(
       catchError(this.handleError)
     );
+  }
+
+  scaleIngredients(ingredients, scale, boldify?) {
+    if (!ingredients) return [];
+
+    var lines = ingredients.match(/[^\r\n]+/g);
+
+    // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
+    var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+
+    for (var i = 0; i < lines.length; i++) {
+      var matches = lines[i].match(measurementRegexp);
+      if (!matches || matches.length === 0) continue;
+
+      var measurement = matches[0];
+
+      try {
+        var measurementParts = measurement.split(/-|to/);
+
+        for (var j = 0; j < measurementParts.length; j++) {
+          // console.log(measurementParts[j].trim())
+          var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
+
+          // Preserve original fraction format if entered
+          if (measurementParts[j].indexOf('/') > -1) {
+            scaledMeasurement = scaledMeasurement.toFraction(true);
+          }
+
+          if (boldify) measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
+          else measurementParts[j] = scaledMeasurement;
+        }
+
+        lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
+      } catch (e) {
+        console.log("failed to parse", e)
+      }
+    }
+
+    return lines;
+  }
+
+  scaleIngredientsPrompt(currentScale, cb) {
+    let alert = this.alertCtrl.create({
+      title: 'Recipe Scale',
+      message: 'Enter a number or fraction to scale the recipe',
+      inputs: [
+        {
+          name: 'scale',
+          value: currentScale.toString(),
+          placeholder: 'Scale'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => { }
+        },
+        {
+          text: 'Apply',
+          handler: (data) => {
+            // Support fractions
+            let parsed = fractionjs(data.scale).valueOf();
+            // Trim long/repeating decimals
+            let rounded = Number(parsed.toFixed(3));
+            // Check for falsy values
+            if (!rounded || rounded <= 0) rounded = 1;
+            // Check for invalid values
+            rounded = parseFloat(rounded) || 1;
+            cb(rounded);
+          }
+        }
+      ]
+    });
+
+    alert.present();
   }
 
   private handleError(error: HttpErrorResponse) {

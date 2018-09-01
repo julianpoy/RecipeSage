@@ -6,8 +6,6 @@ import { LabelServiceProvider } from '../../../providers/label-service/label-ser
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
-import fractionjs from 'fraction.js';
-
 @IonicPage({
   segment: 'recipe/:recipeId',
   priority: 'high'
@@ -164,87 +162,14 @@ export class RecipePage {
   ionViewDidLoad() {}
 
   changeScale() {
-    var me = this;
-
-    let alert = this.alertCtrl.create({
-      title: 'Recipe Scale',
-      message: 'Enter a number or fraction to scale the recipe',
-      inputs: [
-        {
-          name: 'scale',
-          value: me.scale.toString(),
-          placeholder: 'Scale'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Apply',
-          handler: (data) => {
-            let parsed = fractionjs(data.scale).valueOf();
-            let rounded = Number(parsed.toFixed(3));
-            me.setScale(rounded);
-          }
-        }
-      ]
+    this.recipeService.scaleIngredientsPrompt(this.scale, (scale) => {
+      this.scale = scale;
+      this.applyScale();
     });
-
-    alert.present();
-  }
-
-  setScale(scale) {
-    if (!scale || scale <= 0) scale = 1;
-
-    scale = parseFloat(scale) || 1;
-
-    this.scale = scale;
-
-    var me = this;
-    setTimeout(function() {
-      me.applyScale();
-    }, 0);
   }
 
   applyScale() {
-
-    if (!this.recipe.ingredients) return;
-
-    var lines = this.recipe.ingredients.match(/[^\r\n]+/g);
-
-    // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
-    var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
-
-    for (var i = 0; i < lines.length; i++) {
-      var matches = lines[i].match(measurementRegexp);
-      if (!matches || matches.length === 0) continue;
-
-      var measurement = matches[0];
-
-      try {
-        var measurementParts = measurement.split(/-|to/);
-
-        for (var j = 0; j < measurementParts.length; j++) {
-          // console.log(measurementParts[j].trim())
-          var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(this.scale);
-
-          // Preserve original fraction format if entered
-          if (measurementParts[j].indexOf('/') > -1) {
-            scaledMeasurement = scaledMeasurement.toFraction(true);
-          }
-
-          measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
-        }
-
-        lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
-      } catch(e) {
-        console.log("failed to parse", e)
-      }
-    }
-
-    this.ingredients = lines;
+    this.ingredients = this.recipeService.scaleIngredients(this.recipe.ingredients, this.scale, true);
   }
 
   editRecipe() {
@@ -318,8 +243,7 @@ export class RecipePage {
   addRecipeToShoppingList() {
     let addRecipeToShoppingListModal = this.modalCtrl.create('AddRecipeToShoppingListModalPage', {
       recipe: this.recipe,
-      recipeScale: this.scale,
-      ingredients: this.ingredients
+      recipeScale: this.scale
     });
     addRecipeToShoppingListModal.present();
   }

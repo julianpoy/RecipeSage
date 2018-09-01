@@ -50,9 +50,9 @@
     </p>
   </div>
 
-  <div *ngIf="ingredients && ingredients.length > 0 && recipeScale !== 1">
+  <div *ngIf="ingredients && ingredients.length > 0">
     <br /><br />
-    <b>Note:</b> You've scaled this recipe to {{ recipeScale }}x
+    <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
   </div>
 
 </ion-content>

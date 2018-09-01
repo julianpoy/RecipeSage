@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ViewController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ViewController, ModalController, AlertController } from 'ionic-angular';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 
 @IonicPage({
   priority: 'low'
@@ -13,7 +14,7 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 export class AddRecipeToShoppingListModalPage {
 
   recipe: any;
-  recipeScale: any;
+  scale: any = 1;
   ingredients: any = [];
 
   shoppingLists: any = [];
@@ -25,23 +26,21 @@ export class AddRecipeToShoppingListModalPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public shoppingListService: ShoppingListServiceProvider,
+    public recipeService: RecipeServiceProvider,
     public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public viewCtrl: ViewController,
     public modalCtrl: ModalController
   ) {
     this.recipe = navParams.get('recipe');
-    this.recipeScale = navParams.get('recipeScale');
+    this.scale = navParams.get('recipeScale') || 1;
+
+    this.applyScale();
 
     this.ingredientBinders = {};
-
-    this.ingredients = [];
-    var htmlIngredients = navParams.get('ingredients');
-    if (htmlIngredients) {
-      for (var i = 0; i < htmlIngredients.length; i++) {
-        this.ingredients.push(htmlIngredients[i].replace('<b>', '').replace('</b>', ''));
-        this.ingredientBinders[i] = true;
-      }
+    for (var i = 0; i < this.ingredients.length; i++) {
+      this.ingredientBinders[i] = true;
     }
   }
 
@@ -54,6 +53,17 @@ export class AddRecipeToShoppingListModalPage {
     }, function () {
       loading.dismiss();
     });
+  }
+
+  changeScale() {
+    this.recipeService.scaleIngredientsPrompt(this.scale, (scale) => {
+      this.scale = scale;
+      this.applyScale();
+    });
+  }
+
+  applyScale() {
+    this.ingredients = this.recipeService.scaleIngredients(this.recipe.ingredients, this.scale);
   }
 
   loadLists() {
