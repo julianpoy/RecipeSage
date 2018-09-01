@@ -21,9 +21,12 @@ var MealPlan = new Schema({
       type: String,
       ref: 'Recipe'
     },
-    date: {
+    scheduledDate: {
       type: Date,
       default: Date.now
+    },
+    meal: {
+      type: String
     },
     created: {
       type: Date,

@@ -1,6 +1,4 @@
-import { Events } from 'ionic-angular';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-// import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
@@ -71,7 +69,7 @@ export class MealPlanServiceProvider {
     }
   }
 
-  addItems(data) {
+  addItem(data) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -114,13 +112,11 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
-
     var me = this;
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'mealPlans/' + data._id + me.getTokenQuery() + '&items=' + data.items.join(',') + recipeQuery, httpOptions)
+          .delete(me.base + 'mealPlans/' + data._id + me.getTokenQuery() + '&itemId=' + data.itemId, httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)

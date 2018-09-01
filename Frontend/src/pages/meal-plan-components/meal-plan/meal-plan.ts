@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, PopoverController, AlertController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
@@ -17,6 +17,7 @@ export class MealPlanPage {
 
   mealPlanId: string;
   mealPlan: any = { items: [], collaborators: [] };
+  mealsByDate: any = {};
 
   itemsByRecipeId: any = {};
   recipeIds: any = [];
@@ -24,6 +25,11 @@ export class MealPlanPage {
   viewOptions: any = {};
 
   initialLoadComplete: boolean = false;
+
+  weeksOfMonth: any = [];
+  today: any = new Date();
+  center: any = new Date(this.today);
+  selectedDay: any = this.today.getDate();
 
   constructor(
     public navCtrl: NavController,
@@ -34,6 +40,7 @@ export class MealPlanPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
+    public alertCtrl: AlertController,
     public navParams: NavParams) {
 
     this.mealPlanId = navParams.get('mealPlanId');
@@ -45,6 +52,8 @@ export class MealPlanPage {
     }, this);
 
     this.loadViewOptions();
+
+    this.generateCalendar();
   }
 
   ionViewDidLoad() { }
@@ -71,36 +80,134 @@ export class MealPlanPage {
     });
   }
 
-  // processIncomingList(list) {
-  //   var me = this;
+  selectDay(day) {
+    if (day === 0) {
+      this.moveCalendar(-1);
+    } else if (day === 32) {
+      this.moveCalendar(1);
+    }
 
-  //   me.list = list;
-  //   this.applySort();
+    this.selectedDay = day;
+  }
 
-  //   var items = (me.list.items || []);
+  getFirstDayOfMonth(center) {
+    return (new Date(center.getFullYear(), center.getMonth(), 1));
+  }
 
-  //   me.recipeIds = [];
-  //   me.itemsByRecipeId = {};
+  getLastDayOfMonth(center) {
+    return (new Date(center.getFullYear(), center.getMonth() + 1, 0));
+  }
 
-  //   for (var i = 0; i < items.length; i++) {
-  //     // Recipe grouping
-  //     if (!items[i].recipe) continue;
+  // Generates calendar array centered around specified day (today).
+  generateCalendar(today?) {
+    this.weeksOfMonth = [];
 
-  //     var recipeId = items[i].recipe.id + items[i].created;
+    var baseDate = today ? new Date(today) : new Date();
+    var startOfMonth = this.getFirstDayOfMonth(baseDate);
+    var endOfMonth = this.getLastDayOfMonth(baseDate);
 
-  //     if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
+    for (var dayOfMonth = 0; dayOfMonth < endOfMonth.getDate();) {
+      var week = [];
 
-  //     if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
-  //     me.itemsByRecipeId[recipeId].push(items[i]);
+      if (dayOfMonth === 0) {
+        var startDay = startOfMonth.getDay();
+        for (let i = 0; i < startDay; i++) week.push(0);
+      }
+
+      while (week.length < 7 && dayOfMonth < endOfMonth.getDate()) {
+        week.push(dayOfMonth + 1);
+
+        dayOfMonth++;
+      }
+
+      for (let i = week.length; i < 7; i++) week.push(32);
+
+      this.weeksOfMonth.push(week);
+    }
+
+    this.selectDay(this.center.getDate());
+  }
+
+  // Gets new calendar center date. Positive = next month, negative = last month
+  getNewCenter(direction) {
+    var currentMonth = this.center.getMonth();
+    var newMonth = direction > 0 ? currentMonth + 1 : currentMonth - 1;
+
+    return new Date(this.center.getFullYear(), newMonth, 1);
+  }
+
+  // Checks if calendar can move in specified direction. Positive = next month, negative = last month
+  canMoveCalendar(direction) {
+    var newCenter = this.getNewCenter(direction);
+    if (direction > 0) {
+      let maximum = new Date(this.today.getFullYear() + 1, this.today.getMonth(), 0); // Can't see last month next year
+      return newCenter < maximum;
+    } else {
+      var minimum = new Date(this.today.getFullYear(), this.today.getMonth(), 1); // Can't be less than the first day of this month
+      return newCenter >= minimum;
+    }
+  }
+
+  // Moves the calendar. Positive = next month, negative = last month
+  moveCalendar(direction) {
+    if (this.canMoveCalendar(direction)) {
+      this.center = this.getNewCenter(direction);
+      this.generateCalendar(this.center);
+    }
+  }
+
+  // getDefaultMealObj() {
+  //   return {
+  //     items: [],
+  //     meals: {
+  //       'breakfast': [],
+  //       'lunch': [],
+  //       'dinner': [],
+  //       'snacks': [],
+  //       'other': []
+  //     }
   //   }
   // }
+
+  processIncomingMealPlan(mealPlan) {
+    this.mealPlan = mealPlan;
+    this.mealsByDate = {};
+
+    var mealSortOrder = {
+      'breakfast': 1,
+      'lunch'    : 2,
+      'dinner'   : 3,
+      'snacks'   : 4,
+      'other'    : 5
+    };
+    mealPlan.items.sort((a, b) => {
+      let comp = (mealSortOrder[a.meal] || 6) - (mealSortOrder[b.meal] || 6);
+      if (comp === 0) return a.title.localeCompare(b.title);
+      return comp;
+    }).forEach((item) => {
+      item.scheduledDateObj = new Date(item.scheduledDate);
+      var month = item.scheduledDateObj.getMonth();
+      var day = item.scheduledDateObj.getDate();
+      this.mealsByDate[month] = this.mealsByDate[month] || {};
+      this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
+      this.mealsByDate[month][day].push(item);
+      // this.mealsByDate[month][day].meals[item.meal].push(item);
+    });
+
+    this.selectDay(this.selectedDay);
+  }
+
+  mealItemsByDay(day) {
+    return (this.mealsByDate[this.center.getMonth()] || {})[day] || [];
+  }
 
   loadList() {
     var me = this;
 
     return new Promise(function (resolve, reject) {
       me.mealPlanService.fetchById(me.mealPlanId).subscribe(function (response) {
-        // me.processIncomingList(response);
+        console.log(response);
+        me.processIncomingMealPlan(response);
 
         resolve();
       }, function (err) {
@@ -139,117 +246,122 @@ export class MealPlanPage {
     });
   }
 
-  removeRecipe(recipeId) {
-    // this.removeItems(this.itemsByRecipeId[recipeId]);
+  removeItem(item) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Label Removal',
+      message: 'This will remove "' + (item.recipe || item).title + '" from this recipe.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Remove',
+          handler: () => {
+            this._removeItem(item);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
-  // removeItems(items) {
-  //   var me = this;
-  //   var loading = this.loadingService.start();
+  _removeItem(item) {
+    var me = this;
+    var loading = this.loadingService.start();
 
-  //   var itemIds = items.map(function (el) {
-  //     return el._id;
-  //   });
+    this.mealPlanService.remove({
+      _id: this.mealPlanId,
+      itemId: item._id
+    }).subscribe(function (response) {
+      loading.dismiss();
 
-  //   this.mealPlanService.remove({
-  //     _id: this.list._id,
-  //     items: itemIds
-  //   }).subscribe(function (response) {
-  //     loading.dismiss();
+      me.processIncomingMealPlan(response);
+    }, function (err) {
+      loading.dismiss();
+      switch (err.status) {
+        case 0:
+          me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          }).present();
+          break;
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
 
-  //     me.processIncomingList(response);
+  _addItem(item) {
+    var me = this;
+    var loading = this.loadingService.start();
 
-  //     var toast = me.toastCtrl.create({
-  //       message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
-  //       duration: 5000,
-  //       showCloseButton: true,
-  //       closeButtonText: 'Undo',
-  //     });
-  //     toast.onDidDismiss((data, role) => {
-  //       if (role == "close") {
-  //         me._addItems(items);
-  //       }
-  //     });
-  //     toast.present();
-  //   }, function (err) {
-  //     loading.dismiss();
-  //     switch (err.status) {
-  //       case 0:
-  //         me.toastCtrl.create({
-  //           message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-  //           duration: 5000
-  //         }).present();
-  //         break;
-  //       case 401:
-  //         me.toastCtrl.create({
-  //           message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
-  //           duration: 6000
-  //         }).present();
-  //         break;
-  //       default:
-  //         me.toastCtrl.create({
-  //           message: 'An unexpected error occured. Please try again.',
-  //           duration: 6000
-  //         }).present();
-  //         break;
-  //     }
-  //   });
-  // }
+    var date = new Date(this.center);
+    date.setDate(this.selectedDay);
 
-  // _addItems(items) {
-  //   var me = this;
-  //   var loading = this.loadingService.start();
+    this.mealPlanService.addItem({
+      _id: this.mealPlanId,
+      title: item.title,
+      recipe: item.recipe || null,
+      meal: item.meal,
+      scheduledDate: date
+    }).subscribe(function (response) {
+      loading.dismiss();
 
-  //   this.mealPlanService.addItems({
-  //     _id: this.list._id,
-  //     items: items
-  //   }).subscribe(function (response) {
-  //     loading.dismiss();
+      me.processIncomingMealPlan(response);
+    }, function (err) {
+      loading.dismiss();
+      switch (err.status) {
+        case 0:
+          me.toastCtrl.create({
+            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            duration: 5000
+          }).present();
+          break;
+        case 401:
+          me.toastCtrl.create({
+            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: 'An unexpected error occured. Please try again.',
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
 
-  //     me.processIncomingList(response);
-  //   }, function (err) {
-  //     loading.dismiss();
-  //     switch (err.status) {
-  //       case 0:
-  //         me.toastCtrl.create({
-  //           message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-  //           duration: 5000
-  //         }).present();
-  //         break;
-  //       case 401:
-  //         me.toastCtrl.create({
-  //           message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
-  //           duration: 6000
-  //         }).present();
-  //         break;
-  //       default:
-  //         me.toastCtrl.create({
-  //           message: 'An unexpected error occured. Please try again.',
-  //           duration: 6000
-  //         }).present();
-  //         break;
-  //     }
-  //   });
-  // }
+  newMealPlanItem() {
+    var me = this;
+    let modal = this.modalCtrl.create('NewMealPlanItemModalPage');
+    modal.present();
+    modal.onDidDismiss(data => {
+      if (data.item) {
+        this._addItem(data.item);
+      }
 
-  // newShoppingListItem() {
-  //   var me = this;
-  //   let modal = this.modalCtrl.create('NewShoppingListItemModalPage');
-  //   modal.present();
-  //   modal.onDidDismiss(data => {
-  //     if (data.items) {
-  //       this._addItems(data.items);
-  //     }
+      if (!data.destination) return;
 
-  //     if (!data.destination) return;
-
-  //     if (data.setRoot) {
-  //       me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-  //     } else {
-  //       me.navCtrl.push(data.destination, data.routingData);
-  //     }
-  //   });
-  // }
+      if (data.setRoot) {
+        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+      } else {
+        me.navCtrl.push(data.destination, data.routingData);
+      }
+    });
+  }
 
   formatItemCreationDate(plainTextDate) {
     return this.utilService.formatDate(plainTextDate, { now: true });
@@ -277,6 +389,13 @@ export class MealPlanPage {
         }
       }
     }
+  }
+
+  openRecipe(recipe) {
+    this.navCtrl.push('RecipePage', {
+      recipe: recipe,
+      recipeId: recipe._id
+    });
   }
 
   // ingredientSorter(a, b) {
@@ -350,4 +469,8 @@ export class MealPlanPage {
   //     }
   //   });
   // }
+
+  prettyMonthName(date) {
+    return date.toLocaleString(this.utilService.lang, { month: 'long' });
+  }
 }

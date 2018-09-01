@@ -106,7 +106,8 @@ router.post(
     var item = {
       title: req.body.title,
       recipe: req.body.recipe || null,
-      date: new Date(req.body.date),
+      scheduledDate: (new Date(req.body.scheduledDate)).getTime(),
+      meal: req.body.meal,
       created: Date.now(),
       createdBy: res.locals.accountId
     }
@@ -124,6 +125,7 @@ router.post(
     .exec(function (err, mealPlan) {
       if (err) {
         res.status(500).send("Couldn't update the database with meal plan!");
+        console.log("errr", err)
         Raven.captureException(err);
       } else if (!mealPlan) {
         res.status(404).send("Meal plan with that ID not found or you do not have access!");

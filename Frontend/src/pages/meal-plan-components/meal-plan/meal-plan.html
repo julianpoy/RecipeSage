@@ -1,18 +1,98 @@
-<!--
-  Generated template for the MealPlanPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
+  <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
 
-  <ion-navbar>
-    <ion-title>mealPlan</ion-title>
+    <ion-title>Meal Plan - {{ mealPlan.title }}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="options"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button class="previous" ion-button block icon-left [disabled]="!canMoveCalendar(-1)" (click)="moveCalendar(-1)" col-12 col-sm-7 col-lg-4>
+          <ion-icon name="arrow-dropleft"></ion-icon>
+          Previous
+        </button>
+      </ion-col>
+      <ion-col class="calendar-monthname">
+        {{ prettyMonthName(center) }}
+      </ion-col>
+      <ion-col>
+        <button class="next" ion-button block icon-right [disabled]="!canMoveCalendar(1)" (click)="moveCalendar(1)" col-12 col-sm-7 col-lg-4>
+          Next
+          <ion-icon name="arrow-dropright"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
+  <ion-grid class="calendar">
+    <ion-row class="week-title">
+      <ion-col class="day-title" *ngFor="let day of ['S', 'M', 'T', 'W', 'T', 'F', 'S']">
+        {{day}}
+      </ion-col>
+    </ion-row>
+    <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
+      <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectDay(day)">
+        <div class="date" *ngIf="day !== 0 && day !== 32" [ngClass]="{ 'selected': selectedDay === day }">
+          {{day}}
+        </div>
+        <div class="recipe-dot" *ngFor="let mealItem of mealItemsByDay(day)"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list no-lines>
+
+    <ion-item *ngIf="mealItemsByDay(selectedDay).length === 0 && initialLoadComplete" text-wrap text-center>
+      <br />
+      <br />
+      <br />
+      <p>
+        There are no recipes scheduled for this day.
+        <br />
+        <button ion-button icon-left (click)="newMealPlanItem()">
+          <ion-icon name="add"></ion-icon>
+          Add the first recipe
+        </button>
+      </p>
+    </ion-item>
+
+    <ion-list-header *ngIf="mealItemsByDay(selectedDay).length > 0">
+      Meals & Items
+    </ion-list-header>
+
+    <div *ngFor="let mealItem of mealItemsByDay(selectedDay); let idx = index;">
+      <ion-item-divider class="mealTitle" *ngIf="idx === 0 || mealItemsByDay(selectedDay)[idx - 1].meal !== mealItem.meal">
+        {{mealItem.meal}}
+      </ion-item-divider>
+      <ion-item>
+        <ion-icon name="text" item-start></ion-icon>
+        {{mealItem.title}}
+        <button ion-button outline item-end *ngIf="mealItem.recipe" (click)="openRecipe(mealItem.recipe)">View</button>
+        <button ion-button outline item-end (click)="removeItem(mealItem)">Remove</button>
+      </ion-item>
+    </div>
+  </ion-list>
+
+  <br />
+
+  <ion-fab right bottom>
+    <button (click)="newMealPlanItem()" ion-fab color="primary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

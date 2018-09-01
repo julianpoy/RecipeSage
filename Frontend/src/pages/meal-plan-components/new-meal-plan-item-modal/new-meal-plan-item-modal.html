@@ -1,18 +1,91 @@
-<!--
-  Generated template for the NewMealPlanItemModalPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>newMealPlanItemModal</ion-title>
+    <ion-title>Add item(s)</ion-title>
+
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <div>
+    <ion-segment [(ngModel)]="inputType">
+      <ion-segment-button value="manualEntry">
+        Manual Entry
+      </ion-segment-button>
+      <ion-segment-button value="recipe">
+        Choose Recipe
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 
+  <div [ngSwitch]="inputType">
+
+    <div *ngSwitchCase="'manualEntry'">
+      <ion-item>
+        <ion-label floating>Item title</ion-label>
+        <ion-input [(ngModel)]="itemTitle" type="text"></ion-input>
+      </ion-item>
+    </div>
+
+    <div *ngSwitchCase="'recipe'">
+      <div id='labelSelectParent'>
+        <br />
+
+        <p *ngIf="!selectedRecipe">
+          <b>No recipe selected</b>
+        </p>
+
+        <input [(ngModel)]='searchText' (ngModelChange)="onSearchInputChange()" (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)'
+          (blur)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);"
+          placeholder="Select {{ selectedRecipe ? 'a different ' : '' }}recipe" #labelInputField id="labelInputField" />
+        <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
+          <button class="suggestion" *ngFor="let recipe of recipes"
+            (click)="selectRecipe(recipe)">
+            {{ recipe.title }}
+            <span class="hint">Click to select</span>
+          </button>
+          <!-- Searching for user for which a thread does not exist -->
+          <button class="suggestion" *ngIf="searching">
+            {{ searchText }}
+            <span class="hint">Searching...</span>
+          </button>
+          <!-- Searching for user for which a thread does not exist -->
+          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length > 0">
+            {{ searchText }}
+            <span class="hint">No recipes found</span>
+          </button>
+
+          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length === 0">
+            You have no recipes
+            <span class="hint"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
+
+<ion-footer padding>
+  <ion-item>
+    <ion-label>Sort/Meal</ion-label>
+    <ion-select [(ngModel)]="meal">
+      <ion-option value="breakfast">Breakfast</ion-option>
+      <ion-option value="lunch">Lunch</ion-option>
+      <ion-option value="dinner">Dinner</ion-option>
+      <ion-option value="snacks">Snack</ion-option>
+      <ion-option value="other">Other</ion-option>
+    </ion-select>
+  </ion-item>
+  <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
+    <ion-icon name="list"></ion-icon>
+    Add to Meal Plan
+  </button>
+</ion-footer>
