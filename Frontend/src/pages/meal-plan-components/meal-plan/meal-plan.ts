@@ -4,6 +4,7 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
+import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 
 @IonicPage({
   segment: 'meal-planners/:mealPlanId',
@@ -35,6 +36,7 @@ export class MealPlanPage {
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public mealPlanService: MealPlanServiceProvider,
+    public recipeService: RecipeServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public utilService: UtilServiceProvider,
     public toastCtrl: ToastController,
@@ -156,19 +158,6 @@ export class MealPlanPage {
     }
   }
 
-  // getDefaultMealObj() {
-  //   return {
-  //     items: [],
-  //     meals: {
-  //       'breakfast': [],
-  //       'lunch': [],
-  //       'dinner': [],
-  //       'snacks': [],
-  //       'other': []
-  //     }
-  //   }
-  // }
-
   processIncomingMealPlan(mealPlan) {
     this.mealPlan = mealPlan;
     this.mealsByDate = {};
@@ -191,7 +180,6 @@ export class MealPlanPage {
       this.mealsByDate[month] = this.mealsByDate[month] || {};
       this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
       this.mealsByDate[month][day].push(item);
-      // this.mealsByDate[month][day].meals[item.meal].push(item);
     });
 
     this.selectDay(this.selectedDay);
@@ -214,7 +202,7 @@ export class MealPlanPage {
         switch (err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              message: me.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
@@ -282,19 +270,19 @@ export class MealPlanPage {
       switch (err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -324,19 +312,19 @@ export class MealPlanPage {
       switch (err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -395,6 +383,45 @@ export class MealPlanPage {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe._id
+    });
+  }
+
+  addRecipeToShoppingList(recipe) {
+    var me = this;
+    // Fetch complete recipe (this page is provided with only topical recipe details)
+    this.recipeService.fetchById(recipe._id).subscribe(function (response) {
+      let addRecipeToShoppingListModal = me.modalCtrl.create('AddRecipeToShoppingListModalPage', {
+        recipe: response
+      });
+      addRecipeToShoppingListModal.present();
+    }, function (err) {
+      switch (err.status) {
+        case 0:
+          let offlineToast = me.toastCtrl.create({
+            message: me.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          break;
+        case 404:
+          let errorToast = me.toastCtrl.create({
+            message: 'Recipe not found. Does this recipe URL exist?',
+            duration: 30000,
+            dismissOnPageChange: true
+          });
+          errorToast.present();
+          break;
+        default:
+          errorToast = me.toastCtrl.create({
+            message: 'An unexpected error occured. Please restart application.',
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 

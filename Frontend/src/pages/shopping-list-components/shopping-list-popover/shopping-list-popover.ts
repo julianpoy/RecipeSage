@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ViewController, AlertController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -19,6 +20,7 @@ export class ShoppingListPopoverPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
     public shoppingListService: ShoppingListServiceProvider,
     public toastCtrl: ToastController,
@@ -86,19 +88,19 @@ export class ShoppingListPopoverPage {
       switch (err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -146,19 +148,19 @@ export class ShoppingListPopoverPage {
       switch (err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

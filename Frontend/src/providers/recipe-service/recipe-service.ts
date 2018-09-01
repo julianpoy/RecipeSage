@@ -288,7 +288,7 @@ export class RecipeServiceProvider {
             // Check for falsy values
             if (!rounded || rounded <= 0) rounded = 1;
             // Check for invalid values
-            rounded = parseFloat(rounded) || 1;
+            // rounded = parseFloat(rounded) || 1;
             cb(rounded);
           }
         }

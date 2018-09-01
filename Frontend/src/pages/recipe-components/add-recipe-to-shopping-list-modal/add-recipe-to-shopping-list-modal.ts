@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController, ViewController, M
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -28,6 +29,7 @@ export class AddRecipeToShoppingListModalPage {
     public shoppingListService: ShoppingListServiceProvider,
     public recipeService: RecipeServiceProvider,
     public loadingService: LoadingServiceProvider,
+    public utilService: UtilServiceProvider,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public viewCtrl: ViewController,
@@ -80,7 +82,7 @@ export class AddRecipeToShoppingListModalPage {
         switch (err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              message: me.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
@@ -134,19 +136,19 @@ export class AddRecipeToShoppingListModalPage {
       switch (err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

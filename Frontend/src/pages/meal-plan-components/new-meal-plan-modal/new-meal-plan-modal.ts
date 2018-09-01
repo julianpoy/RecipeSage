@@ -5,6 +5,7 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -36,6 +37,7 @@ export class NewMealPlanModalPage {
     public loadingService: LoadingServiceProvider,
     public mealPlanService: MealPlanServiceProvider,
     public messagingService: MessagingServiceProvider,
+    public utilService: UtilServiceProvider,
     public userService: UserServiceProvider,
     public toastCtrl: ToastController,
     public navParams: NavParams) {
@@ -64,7 +66,7 @@ export class NewMealPlanModalPage {
         switch (err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+              message: me.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
             offlineToast.present();
@@ -209,7 +211,7 @@ export class NewMealPlanModalPage {
       switch (err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();

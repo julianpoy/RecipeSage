@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -30,6 +31,7 @@ export class NewShoppingListItemModalPage {
   constructor(
     public navCtrl: NavController,
     public viewCtrl: ViewController,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
@@ -83,7 +85,7 @@ export class NewShoppingListItemModalPage {
         switch (err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              message: me.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
@@ -178,7 +180,7 @@ export class NewShoppingListItemModalPage {
       switch (err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+            message: me.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();

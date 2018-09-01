@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
+import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'high'
@@ -16,7 +17,12 @@ export class HomePopoverPage {
 
   labels: any;
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public navParams: NavParams, public labelService: LabelServiceProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public toastCtrl: ToastController,
+    public navParams: NavParams,
+    public utilService: UtilServiceProvider,
+    public labelService: LabelServiceProvider) {
     this.viewOptions = navParams.get('viewOptions');
   }
 
@@ -28,7 +34,7 @@ export class HomePopoverPage {
       switch(err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+            message: me.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();

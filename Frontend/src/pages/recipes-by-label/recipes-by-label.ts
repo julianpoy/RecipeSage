@@ -6,6 +6,7 @@ import { LazyLoadImageDirective } from 'ng-lazyload-image';
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
+import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -27,6 +28,7 @@ export class RecipesByLabelPage {
   constructor(public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public labelService: LabelServiceProvider) {
     this.loadRecipes();
@@ -52,7 +54,7 @@ export class RecipesByLabelPage {
       switch(err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+            message: me.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();

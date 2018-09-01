@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -23,6 +24,7 @@ export class ImportPage {
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public toastCtrl: ToastController,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public navParams: NavParams) {
   }
@@ -61,19 +63,19 @@ export class ImportPage {
       switch(err.status) {
         case 0:
           me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
           me.toastCtrl.create({
-            message: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.',
+            message: me.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

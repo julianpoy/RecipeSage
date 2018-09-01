@@ -174,7 +174,7 @@ export class MessageThreadPage {
       switch(err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();

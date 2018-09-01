@@ -5,6 +5,13 @@ export class UtilServiceProvider {
 
   lang: any = ((<any>window.navigator).userLanguage || window.navigator.language);
 
+  standardMessages: any = {
+    offlineFetchMessage: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+    offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+    unexpectedError: 'An unexpected error occured. Please try again.',
+    unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
+  };
+
   constructor() {}
 
   formatDate(date, options?) {
@@ -68,5 +75,4 @@ export class UtilServiceProvider {
       });
     }
   }
-
 }

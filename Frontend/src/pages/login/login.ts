@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
+import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'high'
@@ -25,6 +26,7 @@ export class LoginPage {
 
   constructor(
     public navCtrl: NavController,
+    public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
     public messagingService: MessagingServiceProvider,
     public toastCtrl: ToastController,
@@ -100,7 +102,7 @@ export class LoginPage {
             me.errorMessage = 'That password doesn\'t match the email address you entered.';
             break;
           default:
-            me.errorMessage = 'An unexpected error occured. Please try again.';
+            me.errorMessage = me.utilService.standardMessages.unexpectedError;
             break;
         }
       });
@@ -133,7 +135,7 @@ export class LoginPage {
               me.errorMessage = 'An account with that email address already exists.';
               break;
             default:
-              me.errorMessage = 'An unexpected error occured. Please try again.';
+              me.errorMessage = me.utilService.standardMessages.unexpectedError;
               break;
           }
         });
@@ -173,7 +175,7 @@ export class LoginPage {
           me.errorMessage = 'It looks like you\'re offline right now.';
           break;
         default:
-          me.errorMessage = 'An unexpected error occured. Please try again.';
+          me.errorMessage = me.utilService.standardMessages.unexpectedError;
           break;
       }
     });

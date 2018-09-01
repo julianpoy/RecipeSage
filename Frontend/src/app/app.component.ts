@@ -8,6 +8,7 @@ import { RecipeServiceProvider } from '../providers/recipe-service/recipe-servic
 import { UserServiceProvider } from '../providers/user-service/user-service';
 import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
+import { UtilServiceProvider } from '../providers/util-service/util-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -28,6 +29,7 @@ export class MyApp {
     public platform: Platform,
     public events: Events,
     public toastCtrl: ToastController,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public messagingService: MessagingServiceProvider,
     public websocketService: WebsocketServiceProvider,
@@ -282,7 +284,7 @@ export class MyApp {
           break;
         default:
           me.toastCtrl.create({
-            message: 'An unexpected error occured. Please try again.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

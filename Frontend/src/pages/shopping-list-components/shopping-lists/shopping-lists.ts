@@ -77,7 +77,7 @@ export class ShoppingListsPage {
         switch (err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              message: me.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();

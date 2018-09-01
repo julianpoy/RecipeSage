@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams, ToastController, ModalController, 
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -25,6 +26,7 @@ export class MessagesPage {
     public events: Events,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
@@ -74,7 +76,7 @@ export class MessagesPage {
         switch(err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
+              message: me.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();

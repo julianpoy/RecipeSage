@@ -3,6 +3,7 @@ import { IonicPage, NavController, ViewController, NavParams, ToastController } 
 
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -28,6 +29,7 @@ export class NewMessageModalPage {
     public navParams: NavParams,
     public toastCtrl: ToastController,
     public userService: UserServiceProvider,
+    public utilService: UtilServiceProvider,
     public messagingService: MessagingServiceProvider) {
   }
 
@@ -48,7 +50,7 @@ export class NewMessageModalPage {
         switch(err.status) {
           case 0:
             let offlineToast = me.toastCtrl.create({
-              message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+              message: me.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
             offlineToast.present();
@@ -82,7 +84,7 @@ export class NewMessageModalPage {
       switch(err.status) {
         case 0:
           let offlineToast = me.toastCtrl.create({
-            message: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
+            message: me.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();

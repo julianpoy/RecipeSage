@@ -79,13 +79,22 @@
       <ion-item-divider class="mealTitle" *ngIf="idx === 0 || mealItemsByDay(selectedDay)[idx - 1].meal !== mealItem.meal">
         {{mealItem.meal}}
       </ion-item-divider>
-      <ion-item>
-        <ion-icon name="text" item-start></ion-icon>
+      <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" text-wrap>
+        <!-- <ion-icon name="leaf" item-start></ion-icon> -->
         {{mealItem.title}}
-        <button ion-button outline item-end *ngIf="mealItem.recipe" (click)="openRecipe(mealItem.recipe)">View</button>
-        <button ion-button outline item-end (click)="removeItem(mealItem)">Remove</button>
+
+        <button ion-button outline item-end *ngIf="mealItem.recipe" (click)="$event.stopPropagation(); addRecipeToShoppingList(mealItem.recipe)">
+          <ion-icon name="cart"></ion-icon>
+        </button>
+        <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
       </ion-item>
     </div>
+
+    <br />
+    <br />
+    <br />
   </ion-list>
 
   <br />
