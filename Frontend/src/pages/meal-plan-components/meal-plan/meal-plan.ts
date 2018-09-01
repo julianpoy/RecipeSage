@@ -236,8 +236,8 @@ export class MealPlanPage {
 
   removeItem(item) {
     let alert = this.alertCtrl.create({
-      title: 'Confirm Label Removal',
-      message: 'This will remove "' + (item.recipe || item).title + '" from this recipe.',
+      title: 'Confirm Removal',
+      message: 'This will remove "' + (item.recipe || item).title + '" from this meal plan.',
       buttons: [
         {
           text: 'Cancel',
