@@ -78,7 +78,7 @@ export class ShareModalPage {
             break;
           default:
             let errorToast = me.toastCtrl.create({
-              message: 'An unexpected error occured. Please restart application.',
+              message: me.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -152,7 +152,7 @@ export class ShareModalPage {
           break;
         default:
           let errorToast = me.toastCtrl.create({
-            message: 'An unexpected error occured. Please restart application.',
+            message: me.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
