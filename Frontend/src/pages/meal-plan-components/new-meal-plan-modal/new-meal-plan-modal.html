@@ -21,47 +21,7 @@
 
   <br /><br />
 
-  <div id='labelSelectParent'>
-    <h6>
-      Collaborators
-    </h6>
-
-    <div class="labels">
-      <span class="label" *ngFor="let userId of selectedThreads">
-        <ion-icon class="delete-label" (click)="removeCollaborator(userId)" name="trash" item-start></ion-icon>
-        {{ threadsByUserId[userId].name || threadsByUserId[userId].email }}
-      </span>
-    </div>
-
-    <input [(ngModel)]='pendingThread' (ngModelChange)='autofillUserName()' (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)'
-      (blur)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);"
-      placeholder="Add collaborators" #labelInputField id="labelInputField" />
-    <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
-      <button class="suggestion" *ngIf="pendingThread.length === 0">
-        Type an email address to search, or select a person below
-        <!-- <span class="hint"></span> -->
-      </button>
-      <button class="suggestion" *ngIf="pendingThread && pendingThread.length > 0 && selectedThreads.indexOf(pendingCollaboratorId) > -1">
-        {{ pendingThread }}
-        <span class="hint">Already added</span>
-      </button>
-      <button class="suggestion" *ngFor="let thread of existingThreads | shoppingListCollaboratorFilter:pendingThread+selectedThreads.join()+pendingCollaboratorId:pendingThread:selectedThreads"
-        (click)="addCollaborator(thread._id)">
-        {{ threadsByUserId[thread._id].name || threadsByUserId[thread._id].email }}
-        <span class="hint">Click to add</span>
-      </button>
-      <!-- Searching for user for which a thread does not exist -->
-      <button class="suggestion" *ngIf="searchingForRecipient">
-        {{ pendingThread }}
-        <span class="hint">Searching...</span>
-      </button>
-      <!-- Searching for user for which a thread does not exist -->
-      <button class="suggestion" *ngIf="pendingThread && !searchingForRecipient && !pendingCollaboratorId">
-        {{ pendingThread }}
-        <span class="hint">Not found</span>
-      </button>
-    </div>
-  </div>
+  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
 </ion-content>
 
 <ion-footer padding>

@@ -3,18 +3,23 @@ import { SelectIngredientsComponent } from './select-ingredients/select-ingredie
 import { SelectRecipeComponent } from './select-recipe/select-recipe';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from 'ionic-angular';
+import { SelectCollaboratorsComponent } from './select-collaborators/select-collaborators';
+import { PipesModule } from '../pipes/pipes.module';
 @NgModule({
 	declarations: [
     SelectRecipeComponent,
-    SelectIngredientsComponent
+    SelectIngredientsComponent,
+    SelectCollaboratorsComponent
   ],
 	imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    PipesModule
   ],
 	exports: [
     SelectRecipeComponent,
-    SelectIngredientsComponent
+    SelectIngredientsComponent,
+    SelectCollaboratorsComponent
   ]
 })
 export class ComponentsModule {}
