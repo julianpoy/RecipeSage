@@ -102,7 +102,7 @@ export class MealPlansPage {
     let modal = this.modalCtrl.create('NewMealPlanModalPage');
     modal.present();
     modal.onDidDismiss(data => {
-      if (!data.destination) return;
+      if (!data || !data.destination) return;
 
       if (data.setRoot) {
         me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });

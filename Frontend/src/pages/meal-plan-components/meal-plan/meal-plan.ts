@@ -337,6 +337,7 @@ export class MealPlanPage {
     let modal = this.modalCtrl.create('NewMealPlanItemModalPage');
     modal.present();
     modal.onDidDismiss(data => {
+      if (!data) return;
       if (data.item) {
         this._addItem(data.item);
       }
@@ -424,78 +425,6 @@ export class MealPlanPage {
       }
     });
   }
-
-  // ingredientSorter(a, b) {
-  //   if (this.viewOptions.sortBy === 'created') {
-  //     var dateComp = (<any>new Date(a.created)) - (<any>new Date(b.created));
-  //     if (dateComp === 0) {
-  //       return a.title.localeCompare(b.title);
-  //     }
-  //     return dateComp;
-  //   }
-  //   if (this.viewOptions.sortBy === '-created') {
-  //     var reverseDateComp = (<any>new Date(b.created)) - (<any>new Date(a.created));
-  //     if (reverseDateComp === 0) {
-  //       return a.title.localeCompare(b.title);
-  //     }
-  //     return reverseDateComp;
-  //   }
-  //   if (this.viewOptions.sortBy === '-title') {
-  //     var localeComp = a.title.localeCompare(b.title);
-  //     if (localeComp === 0) {
-  //       return (<any>new Date(a.created)) - (<any>new Date(b.created));
-  //     }
-  //     return localeComp;
-  //   }
-  // }
-
-  // applySort() {
-  //   var me = this;
-  //   // Sort individual items
-  //   this.list.items = this.list.items.sort(function (a, b) {
-  //     return me.ingredientSorter.call(me, a, b);
-  //   });
-
-  //   // Sort groups by title (always)
-  //   this.list.itemsByGroup = this.list.itemsByGroup.sort(function (a, b) {
-  //     return a.title.localeCompare(b.title);
-  //   });
-
-  //   // Sort items within each group
-  //   for (var i = 0; i < this.list.itemsByGroup.length; i++) {
-  //     this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort(function (a, b) {
-  //       return me.ingredientSorter.call(me, a, b);
-  //     });
-  //   }
-  // }
-
-  // presentPopover(event) {
-  //   let popover = this.popoverCtrl.create('ShoppingListPopoverPage', {
-  //     mealPlanId: this.mealPlanId,
-  //     mealPlan: this.list,
-  //     viewOptions: this.viewOptions
-  //   });
-
-  //   popover.present({
-  //     ev: event
-  //   });
-
-  //   var me = this;
-  //   popover.onDidDismiss(data => {
-  //     data = data || {};
-
-  //     if (!data.destination) {
-  //       me.applySort();
-  //       return;
-  //     }
-
-  //     if (data.setRoot) {
-  //       me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-  //     } else {
-  //       me.navCtrl.push(data.destination, data.routingData);
-  //     }
-  //   });
-  // }
 
   prettyMonthName(date) {
     return date.toLocaleString(this.utilService.lang, { month: 'long' });

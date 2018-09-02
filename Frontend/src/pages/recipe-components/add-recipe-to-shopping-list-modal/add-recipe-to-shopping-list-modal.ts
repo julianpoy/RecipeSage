@@ -161,7 +161,7 @@ export class AddRecipeToShoppingListModalPage {
     let modal = this.modalCtrl.create('NewShoppingListModalPage');
     modal.present();
     modal.onDidDismiss(data => {
-      if (!data.destination) return;
+      if (!data || !data.destination) return;
 
       if (data.setRoot) {
         // Ignore

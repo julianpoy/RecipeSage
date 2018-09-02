@@ -259,7 +259,7 @@ export class RecipePage {
     let shareModal = this.modalCtrl.create('ShareModalPage', { recipe: this.recipe });
     shareModal.present();
     shareModal.onDidDismiss(data => {
-      if (!data.destination) return;
+      if (!data || !data.destination) return;
 
       if (data.setRoot) {
         me.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});

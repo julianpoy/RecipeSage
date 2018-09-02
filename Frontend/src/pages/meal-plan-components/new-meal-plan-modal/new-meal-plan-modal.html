@@ -16,7 +16,7 @@
 <ion-content padding>
   <ion-item>
     <ion-label floating>Title</ion-label>
-    <ion-input [(ngModel)]="listTitle" type="text" value=""></ion-input>
+    <ion-input [(ngModel)]="mealPlanTitle" type="text" value=""></ion-input>
   </ion-item>
 
   <br /><br />
@@ -25,7 +25,7 @@
 </ion-content>
 
 <ion-footer padding>
-  <button ion-button icon-left block (click)="save()" [disabled]="!listTitle">
+  <button ion-button icon-left block (click)="save()" [disabled]="!mealPlanTitle">
     <ion-icon name="list"></ion-icon>
     Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
   </button>

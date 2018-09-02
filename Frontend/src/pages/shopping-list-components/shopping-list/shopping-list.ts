@@ -237,6 +237,7 @@ export class ShoppingListPage {
     let modal = this.modalCtrl.create('NewShoppingListItemModalPage');
     modal.present();
     modal.onDidDismiss(data => {
+      if (!data) return;
       if (data.items) {
         this._addItems(data.items);
       }
