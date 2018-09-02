@@ -36,39 +36,9 @@
     </div>
 
     <div *ngSwitchCase="'recipe'">
-      <div id='labelSelectParent'>
-        <br />
-
-        <p *ngIf="!selectedRecipe">
-          <b>No recipe selected</b>
-        </p>
-
-        <input [(ngModel)]='searchText' (ngModelChange)="onSearchInputChange()" (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)'
-          (blur)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);"
-          placeholder="Select {{ selectedRecipe ? 'a different ' : '' }}recipe" #labelInputField id="labelInputField" />
-        <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
-          <button class="suggestion" *ngFor="let recipe of recipes"
-            (click)="selectRecipe(recipe)">
-            {{ recipe.title }}
-            <span class="hint">Click to select</span>
-          </button>
-          <!-- Searching for user for which a thread does not exist -->
-          <button class="suggestion" *ngIf="searching">
-            {{ searchText }}
-            <span class="hint">Searching...</span>
-          </button>
-          <!-- Searching for user for which a thread does not exist -->
-          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length > 0">
-            {{ searchText }}
-            <span class="hint">No recipes found</span>
-          </button>
-
-          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length === 0">
-            You have no recipes
-            <span class="hint"></span>
-          </button>
-        </div>
-      </div>
+      <select-recipe
+      [(selectedRecipe)]="selectedRecipe"
+      ></select-recipe>
     </div>
   </div>
 </ion-content>

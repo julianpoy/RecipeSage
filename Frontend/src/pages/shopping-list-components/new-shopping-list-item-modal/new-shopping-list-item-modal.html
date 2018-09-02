@@ -36,54 +36,13 @@
     </div>
 
     <div *ngSwitchCase="'recipe'">
-      <div id='labelSelectParent'>
-        <br />
+      <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
 
-        <p *ngIf="!selectedRecipe">
-          <b>No recipe selected</b>
+      <div *ngIf="selectedRecipe">
+        <p>
+          <b>Ingredients for "{{ selectedRecipe.title }}":</b>
         </p>
-
-        <input [(ngModel)]='searchText' (ngModelChange)="onSearchInputChange()" (focus)='toggleAutocomplete(true)' (focusout)='toggleAutocomplete(false, $event)'
-          (blur)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" (keyup.enter)="onAddCollaboratorEnter($event);"
-          placeholder="Select {{ selectedRecipe ? 'a different ' : '' }}recipe" #labelInputField id="labelInputField" />
-        <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' (keyup)="labelFieldKeyUp($event)" *ngIf="showAutocomplete">
-          <button class="suggestion" *ngFor="let recipe of recipes"
-            (click)="selectRecipe(recipe)">
-            {{ recipe.title }}
-            <span class="hint">Click to select</span>
-          </button>
-          <!-- Searching for user for which a thread does not exist -->
-          <button class="suggestion" *ngIf="searching">
-            {{ searchText }}
-            <span class="hint">Searching...</span>
-          </button>
-          <!-- Searching for user for which a thread does not exist -->
-          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length > 0">
-            {{ searchText }}
-            <span class="hint">No recipes found</span>
-          </button>
-
-          <button class="suggestion" *ngIf="recipes.length === 0 && searchText.length === 0">
-            You have no recipes
-            <span class="hint"></span>
-          </button>
-        </div>
-
-        <div *ngIf="selectedRecipe && selectedRecipe.ingredients && selectedRecipe.ingredients.length > 0">
-          <p>
-            <b>Ingredients for "{{ selectedRecipe.title }}":</b>
-          </p>
-
-          <ion-item *ngFor="let ingredient of selectedRecipe.ingredients; let i = index;">
-            <ion-label>{{ ingredient }}</ion-label>
-            <ion-checkbox [(ngModel)]="ingredientBinders[i]" checked="true"></ion-checkbox>
-          </ion-item>
-        </div>
-        <div *ngIf="selectedRecipe && (!selectedRecipe.ingredients || selectedRecipe.ingredients.length === 0)">
-          <p>
-            <b>The selected recipe has no ingredients.</b>
-          </p>
-        </div>
+        <select-ingredients [ingredients]="selectedRecipe.ingredients" (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
       </div>
     </div>
   </div>
