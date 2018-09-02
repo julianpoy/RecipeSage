@@ -6,6 +6,7 @@ var Raven = require('raven');
 // DB
 var mongoose = require('mongoose');
 var MealPlan = mongoose.model('MealPlan');
+var ShoppingList = mongoose.model('ShoppingList');
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -308,7 +309,36 @@ router.get(
       } else if (!mealPlan) {
         res.status(404).send("Recipe with that ID not found!");
       } else {
-        res.status(200).json(mealPlan);
+        var itemsBySubDocId = {};
+        for (var i = 0; i < mealPlan.items.length; i++) {
+          itemsBySubDocId[mealPlan.items[i]._id] = mealPlan.items[i];
+        }
+
+        ShoppingList.find(
+          { 'items.reference': { $in: Object.keys(itemsBySubDocId) } }
+        )
+        .lean()
+        .exec(function(err, shoppingLists) {
+          if (err) {
+            res.status(500).send("Couldn't search the database for recipe!");
+            Raven.captureException(err);
+          } else {
+            for (var i = 0; i < shoppingLists.length; i++) {
+              for (var j = 0; j < shoppingLists[i].items.length; j++) {
+                var item = shoppingLists[i].items[j];
+                if (!item.reference) continue;
+
+                itemsBySubDocId[item.reference].shoppingListItems = itemsBySubDocId[item.reference].shoppingListItems || [];
+
+                itemsBySubDocId[item.reference].shoppingListItems.push(item);
+
+                itemsBySubDocId[item.reference].shoppingListId = shoppingLists[i]._id;
+              }
+            }
+
+            res.status(200).json(mealPlan);
+          }
+        });
       }
     });
 });

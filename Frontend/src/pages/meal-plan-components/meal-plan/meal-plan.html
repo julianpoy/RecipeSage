@@ -83,9 +83,24 @@
         <!-- <ion-icon name="leaf" item-start></ion-icon> -->
         {{mealItem.title}}
 
-        <button ion-button outline item-end *ngIf="mealItem.recipe" (click)="$event.stopPropagation(); addRecipeToShoppingList(mealItem.recipe)">
+        <!-- Remove from cart button: -->
+        <button
+          ion-button
+          item-end
+          *ngIf="mealItem.recipe && (mealItem.shoppingListItems || []).length > 0"
+          (click)="$event.stopPropagation(); removeMealPlanItemFromShoppingList(mealItem)">
           <ion-icon name="cart"></ion-icon>
         </button>
+        <!-- Add to cart button: -->
+        <button
+          ion-button
+          item-end
+          outline
+          *ngIf="mealItem.recipe && (mealItem.shoppingListItems || []).length === 0"
+          (click)="$event.stopPropagation(); addMealPlanItemToShoppingList(mealItem)">
+          <ion-icon name="cart"></ion-icon>
+        </button>
+        <!-- Remove from meal plan button: -->
         <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
           <ion-icon name="trash"></ion-icon>
         </button>

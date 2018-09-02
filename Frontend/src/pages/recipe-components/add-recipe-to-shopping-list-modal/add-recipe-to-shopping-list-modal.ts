@@ -23,6 +23,8 @@ export class AddRecipeToShoppingListModalPage {
 
   destinationShoppingList: any;
 
+  reference: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -37,6 +39,7 @@ export class AddRecipeToShoppingListModalPage {
   ) {
     this.recipe = navParams.get('recipe');
     this.scale = navParams.get('recipeScale') || 1;
+    this.reference = navParams.get('reference');
 
     this.applyScale();
 
@@ -114,9 +117,11 @@ export class AddRecipeToShoppingListModalPage {
     var items = [];
     for (var i = 0; i < this.ingredients.length; i++) {
       if (this.ingredientBinders[i]) {
+        console.log(this.reference)
         items.push({
           title: this.ingredients[i],
-          recipe: this.recipe._id
+          recipe: this.recipe._id,
+          reference: this.reference
         });
       }
     }

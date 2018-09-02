@@ -21,6 +21,9 @@ var ShoppingList = new Schema({
       type: String,
       ref: 'Recipe'
     },
+    reference: {
+      type: String
+    },
     created: {
       type: Date,
       default: Date.now

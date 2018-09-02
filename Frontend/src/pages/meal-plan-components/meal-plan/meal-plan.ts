@@ -5,6 +5,7 @@ import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/me
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
+import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 
 @IonicPage({
   segment: 'meal-planners/:mealPlanId',
@@ -36,6 +37,7 @@ export class MealPlanPage {
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
     public mealPlanService: MealPlanServiceProvider,
+    public shoppingListService: ShoppingListServiceProvider,
     public recipeService: RecipeServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public utilService: UtilServiceProvider,
@@ -387,12 +389,13 @@ export class MealPlanPage {
     });
   }
 
-  addRecipeToShoppingList(recipe) {
+  addMealPlanItemToShoppingList(mealPlanItem) {
     var me = this;
     // Fetch complete recipe (this page is provided with only topical recipe details)
-    this.recipeService.fetchById(recipe._id).subscribe(function (response) {
+    this.recipeService.fetchById(mealPlanItem.recipe._id).subscribe(function (response) {
       let addRecipeToShoppingListModal = me.modalCtrl.create('AddRecipeToShoppingListModalPage', {
-        recipe: response
+        recipe: response,
+        reference: mealPlanItem._id
       });
       addRecipeToShoppingListModal.present();
     }, function (err) {
@@ -421,6 +424,69 @@ export class MealPlanPage {
             duration: 30000
           });
           errorToast.present();
+          break;
+      }
+    });
+  }
+
+  removeMealPlanItemFromShoppingList(mealPlanItem) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Removal',
+      message: 'This will remove the linked copy of "' + (mealPlanItem.recipe || mealPlanItem).title + '" from your shopping list.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Remove',
+          handler: () => {
+            this._removeMealPlanItemFromShoppingList(mealPlanItem);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  _removeMealPlanItemFromShoppingList(mealPlanItem) {
+    var elIds = mealPlanItem.shoppingListItems.map(function(el) {
+      return el._id;
+    });
+
+    console.log(elIds);
+
+    var me = this;
+    var loading = this.loadingService.start();
+
+    this.shoppingListService.remove({
+      _id: mealPlanItem.shoppingListId,
+      items: elIds
+    }).subscribe(function (response) {
+      loading.dismiss();
+
+      delete mealPlanItem.shoppingListItems;
+      delete mealPlanItem.shoppingListId;
+    }, function (err) {
+      loading.dismiss();
+      switch (err.status) {
+        case 0:
+          me.toastCtrl.create({
+            message: me.utilService.standardMessages.offlinePushMessage,
+            duration: 5000
+          }).present();
+          break;
+        case 401:
+          me.toastCtrl.create({
+            message: me.utilService.standardMessages.unauthorized,
+            duration: 6000
+          }).present();
+          break;
+        default:
+          me.toastCtrl.create({
+            message: me.utilService.standardMessages.unexpectedError,
+            duration: 6000
+          }).present();
           break;
       }
     });

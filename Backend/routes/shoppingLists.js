@@ -148,6 +148,7 @@ router.post(
       var item = {
         title: req.body.items[i].title,
         recipe: req.body.items[i].recipe || null,
+        reference: req.body.items[i].reference,
         created: Date.now(),
         createdBy: res.locals.accountId,
         completed: false
