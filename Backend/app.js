@@ -23,16 +23,18 @@ Raven.config(appConfig.sentry.dsn, {
   release: '1.1.1'
 }).install();
 
-// Database and schemas
+// OLD Database and schemas (mongo)
 var mongo = require('mongodb');
-var db = require('./models/db');
-var userSchema = require('./models/user');
-var sessionSchema = require('./models/session');
-var recipeSchema = require('./models/recipe');
-var labelSchema = require('./models/label');
-var messageSchema = require('./models/message');
-var shoppingListSchema = require('./models/shoppingList');
-var mealPlanSchema = require('./models/mealPlan');
+var db = require('./mongoose-models/db');
+var userSchema = require('./mongoose-models/user');
+var sessionSchema = require('./mongoose-models/session');
+var recipeSchema = require('./mongoose-models/recipe');
+var labelSchema = require('./mongoose-models/label');
+var messageSchema = require('./mongoose-models/message');
+var shoppingListSchema = require('./mongoose-models/shoppingList');
+var mealPlanSchema = require('./mongoose-models/mealPlan');
+
+
 
 // Routes
 var index = require('./routes/index');

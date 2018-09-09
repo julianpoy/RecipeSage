@@ -25,10 +25,13 @@
     "multer-s3": "^2.7.0",
     "nightmare": "^2.10.0",
     "nodemailer": "^4.4.2",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
     "pug": "^2.0.3",
     "raven": "^2.6.2",
     "request": "^2.83.0",
     "semver": "^5.5.0",
+    "sequelize": "^4.38.0",
     "serve-favicon": "~2.4.5",
     "xml-js": "^1.6.4"
   }

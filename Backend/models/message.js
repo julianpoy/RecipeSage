@@ -1,34 +1,28 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Message = sequelize.define('Message', {
+    body: DataTypes.STRING
+  }, {});
+  Message.associate = function(models) {
+    Message.belongsTo(models.User, {
+      foreignKey: 'fromUserId',
+      onDelete: 'CASCADE',
+    });
 
-var Message = new Schema({
-  from: {
-    type: String,
-    ref: 'User'
-  },
-  to: {
-    type: String,
-    ref: 'User'
-  },
-  body: {
-    type: String
-  },
-  recipe: {
-    type: String,
-    ref: 'Recipe'
-  },
-  originalRecipe: {
-    type: String,
-    ref: 'Recipe'
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  }
-});
+    Message.belongsTo(models.User, {
+      foreignKey: 'toUserId',
+      onDelete: 'CASCADE',
+    });
 
-mongoose.model('Message', Message);
+    Message.belongsTo(models.Recipe, {
+      foreignKey: 'recipeId',
+      onDelete: 'SET NULL',
+    });
+
+    Message.belongsTo(models.Recipe, {
+      foreignKey: 'originalRecipeId',
+      onDelete: 'SET NULL',
+    });
+  };
+  return Message;
+};

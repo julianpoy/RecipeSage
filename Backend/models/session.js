@@ -1,26 +1,15 @@
-var mongoose = require('mongoose');
-var Session = new mongoose.Schema({
-  accountId: {
-    type: String
-  },
-  type: {
-    type: String
-  },
-  token: {
-    type: String
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  },
-  expires: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-mongoose.model('Session', Session);
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Session = sequelize.define('Session', {
+    type: DataTypes.STRING,
+    token: DataTypes.STRING,
+    expires: DataTypes.DATE
+  }, {});
+  Session.associate = function(models) {
+    Session.belongsTo(models.User, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    });
+  };
+  return Session;
+};

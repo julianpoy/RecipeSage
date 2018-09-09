@@ -1,26 +1,19 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Label = sequelize.define('Label', {
+    title: DataTypes.STRING
+  }, {});
+  Label.associate = function(models) {
+    Label.belongsTo(models.User, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    });
 
-var Label = new Schema({
-  accountId: {
-    type: String,
-    ref: 'User'
-  },
-  title: {
-    type: String
-  },
-  recipes: [{
-    type: String,
-    ref: 'Recipe'
-  }],
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-mongoose.model('Label', Label);
+    Label.belongsToMany(models.Label, {
+      foreignKey: 'labelId',
+      as: 'recipes',
+      through: 'Recipe_Labels'
+    });
+  };
+  return Label;
+};

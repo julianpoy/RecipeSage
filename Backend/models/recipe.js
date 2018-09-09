@@ -1,59 +1,46 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Recipe = sequelize.define('Recipe', {
+    title: DataTypes.STRING,
+    description: DataTypes.STRING,
+    yield: DataTypes.STRING,
+    activeTime: DataTypes.STRING,
+    totalTime: DataTypes.STRING,
+    source: DataTypes.STRING,
+    url: DataTypes.STRING,
+    notes: DataTypes.STRING,
+    ingredients: DataTypes.STRING,
+    instructions: DataTypes.STRING,
+    image: DataTypes.JSONB,
+    folder: DataTypes.STRING
+  }, {});
+  Recipe.associate = function(models) {
+    Recipe.belongsTo(models.User, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    });
 
-var Recipe = new Schema({
-  accountId: {
-    type: String
-  },
-	title: {
-    type: String
-  },
-  description: {
-    type: String
-  },
-  yield: {
-    type: String
-  },
-  activeTime: {
-    type: String
-  },
-  totalTime: {
-    type: String
-  },
-  source: {
-    type: String
-  },
-  url: {
-    type: String
-  },
-  notes: {
-    type: String
-  },
-  ingredients: {
-    type: String
-  },
-  instructions: {
-    type: String
-  },
-  image: {
-    // Multer-S3 Object    
-  },
-  folder: {
-    type: String,
-    default: 'main'
-  },
-  fromUser: {
-    type: String,
-    ref: 'User'
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  }
-});
+    Recipe.belongsToMany(models.Label, {
+      foreignKey: 'recipeId',
+      as: 'labels',
+      through: 'Recipe_Labels'
+    });
 
-mongoose.model('Recipe', Recipe);
+    Recipe.hasMany(models.Message, {
+      foreignKey: 'recipeId',
+    });
+
+    Recipe.hasMany(models.Message, {
+      foreignKey: 'originalRecipeId',
+    });
+
+    Recipe.hasMany(models.ShoppingListItem, {
+      foreignKey: 'recipeId',
+    });
+
+    Recipe.hasMany(models.MealPlanItem, {
+      foreignKey: 'recipeId',
+    });
+  };
+  return Recipe;
+};

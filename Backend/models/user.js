@@ -1,115 +1,61 @@
-var mongoose = require('mongoose');
-var crypto = require('crypto');
-var Schema = mongoose.Schema;
-
-var currentPasswordVersion = 2;
-
-var User = new Schema({
-  name: {
-    type: String
-  },
-  email: {
-    type: String
-  },
-  password: {
-    type: String
-  },
-  salt: {
-    type: String
-  },
-  passwordVersion: {
-    type: String,
-    default: currentPasswordVersion
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  updated: {
-    type: Date,
-    default: Date.now
-  },
-  lastLogin: {
-    type: Date,
-    default: Date.now
-  },
-  fcmTokens: [{
-    type: String
-  }]
-});
-
-User.statics.generateHashedPassword = function(password, cb) {
-  var salt = crypto.randomBytes(128).toString('base64');
-  var hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
-
-  cb({
-    hash: hash,
-    salt: salt,
-    version: currentPasswordVersion
-  });
-};
-
-User.statics.validateHashedPassword = function(password, hash, salt, version, cb) {
-  switch(version) {
-    case "1":
-      var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
-      cb(comp == hash);
-      break;
-    case "2":
-      var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
-      cb(comp == hash);
-      break;
-  }
-};
-
-User.statics.login = function(email, password, cb) {
-  this.model('User').findOne({
-    email: email.toLowerCase()
-  }).exec(function(err, user) {
-    if (err) {
-      cb(err);
-    } else if (!user) {
-      cb();
-    } else {
-      user.validatePassword(password, function(err, valid) {
-        if (err) {
-          cb(err);
-        } else if (!valid) {
-          cb();
-        } else {
-          
-        }
-      });
-    }
-  });
-}
-
-User.methods.updatePassword = function(password, cb) {
-  var me = this;
-  this.model('User').generateHashedPassword(password, function(data) {
-    me.password = data.hash;
-    me.salt = data.salt;
-    me.passwordVersion = data.version;
-    me.updated = Date.now();
-    
-    me.save(cb);
-  });
-}
-
-User.methods.validatePassword = function(password, cb) {
-  var me = this;
-  this.model('User').validateHashedPassword(password, this.password, this.salt, this.passwordVersion, function(passwordIsValid) {
-    // Don't update if password isn't valid, or password is of current version
-    if (!passwordIsValid || me.passwordVersion == currentPasswordVersion) {
-      cb(null, passwordIsValid);
-      return;
-    }
-
-    User.methods.updatePassword.call(me, password, function(err, user) {
-      cb(err, passwordIsValid);
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    name: DataTypes.STRING,
+    email: DataTypes.STRING,
+    passwordHash: DataTypes.STRING,
+    passwordSalt: DataTypes.STRING,
+    lastLogin: DataTypes.DATE
+  }, {});
+  User.associate = function(models) {
+    User.hasMany(models.Session, {
+      foreignKey: 'userId'
     });
-  });
+
+    User.hasMany(models.Recipe, {
+      foreignKey: 'userId'
+    });
+
+    User.hasMany(models.Label, {
+      foreignKey: 'userId'
+    });
+
+    User.hasMany(models.Message, {
+      foreignKey: 'toUserId',
+      as: 'receivedMessages'
+    });
+
+    User.hasMany(models.Message, {
+      foreignKey: 'fromUserId',
+      as: 'sentMessages'
+    });
+
+    User.hasMany(models.ShoppingList, {
+      foreignKey: 'userId',
+      as: 'ownedShoppingLists'
+    });
+
+    User.belongsToMany(models.ShoppingList, {
+      foreignKey: 'userId',
+      as: 'collaboratingShoppingLists',
+      through: 'ShoppingList_Collaborators'
+    });
+
+    User.hasMany(models.ShoppingListItem, {
+      foreignKey: 'userId',
+      as: 'shoppingListItems'
+    });
+
+    User.hasMany(models.MealPlan, {
+      foreignKey: 'userId',
+      as: 'mealPlans'
+    });
+
+    User.belongsToMany(models.MealPlan, {
+      foreignKey: 'userId',
+      as: 'collaboratingMealPlans',
+      through: 'MealPlan_Collaborators'
+    });
+  };
+  return User;
 };
-
-
-mongoose.model('User', User);
