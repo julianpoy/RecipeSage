@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ShoppingList = sequelize.define('ShoppingList', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     title: DataTypes.STRING
   }, {});
   ShoppingList.associate = function(models) {
@@ -11,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
 
     ShoppingList.belongsToMany(models.User, {
       foreignKey: 'shoppingListId',
+      otherKey: 'userId',
       as: 'collaborators',
-      through: 'ShoppingList_Collaborators'
+      through: 'ShoppingList_Collaborator'
     });
 
     ShoppingList.hasMany(models.ShoppingListItem, {

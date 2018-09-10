@@ -1,15 +1,12 @@
-const uuid = require('uuid/v4');
-
 'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('MealPlans', {
+    return queryInterface.createTable('FCMTokens', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: uuid()
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
         allowNull: false,
@@ -21,8 +18,8 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      title: {
-        type: Sequelize.STRING
+      token: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +32,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('MealPlans');
+    return queryInterface.dropTable('FCMTokens');
   }
 };

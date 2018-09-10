@@ -4,7 +4,7 @@ const uuid = require('uuid/v4');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Recipes', {
+    return queryInterface.createTable('MealPlans', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -24,39 +24,6 @@ module.exports = {
       title: {
         type: Sequelize.TEXT
       },
-      description: {
-        type: Sequelize.TEXT
-      },
-      yield: {
-        type: Sequelize.TEXT
-      },
-      activeTime: {
-        type: Sequelize.TEXT
-      },
-      totalTime: {
-        type: Sequelize.TEXT
-      },
-      source: {
-        type: Sequelize.TEXT
-      },
-      url: {
-        type: Sequelize.TEXT
-      },
-      notes: {
-        type: Sequelize.TEXT
-      },
-      ingredients: {
-        type: Sequelize.TEXT
-      },
-      instructions: {
-        type: Sequelize.TEXT
-      },
-      image: {
-        type: Sequelize.JSONB
-      },
-      folder: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -68,6 +35,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Recipes');
+    return queryInterface.dropTable('MealPlans');
   }
 };

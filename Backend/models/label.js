@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Label = sequelize.define('Label', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     title: DataTypes.STRING
   }, {});
   Label.associate = function(models) {
@@ -11,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Label.belongsToMany(models.Label, {
       foreignKey: 'labelId',
+      otherKey: 'recipeId',
       as: 'recipes',
-      through: 'Recipe_Labels'
+      through: 'Recipe_Label'
     });
   };
   return Label;

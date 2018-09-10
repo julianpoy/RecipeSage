@@ -1,21 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Session = sequelize.define('Session', {
+  const FCMToken = sequelize.define('FCMToken', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false
     },
-    type: DataTypes.STRING,
-    token: DataTypes.STRING,
-    expires: DataTypes.DATE
+    token: DataTypes.STRING
   }, {});
-  Session.associate = function(models) {
-    Session.belongsTo(models.User, {
+  FCMToken.associate = function(models) {
+    FCMToken.belongsTo(models.User, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
     });
   };
-  return Session;
+  return FCMToken;
 };

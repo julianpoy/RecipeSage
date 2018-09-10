@@ -9,7 +9,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: uuid()
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
         allowNull: false,
@@ -42,7 +42,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       scheduled: {
         type: Sequelize.DATE

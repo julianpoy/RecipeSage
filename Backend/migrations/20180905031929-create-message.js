@@ -9,7 +9,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: uuid()
+        defaultValue: Sequelize.UUIDV4
       },
       fromUserId: {
         allowNull: false,
@@ -52,7 +52,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       body: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       type: {
         type: Sequelize.STRING

@@ -9,19 +9,22 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: uuid()
+        defaultValue: Sequelize.UUIDV4
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       passwordHash: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       passwordSalt: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
+      },
+      passwordVersion: {
+        type: Sequelize.INTEGER
       },
       lastLogin: {
         type: Sequelize.DATE

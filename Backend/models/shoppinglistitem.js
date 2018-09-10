@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ShoppingListItem = sequelize.define('ShoppingListItem', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     title: DataTypes.STRING,
     completed: DataTypes.BOOLEAN
   }, {});

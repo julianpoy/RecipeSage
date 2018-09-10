@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     yield: DataTypes.STRING,
@@ -22,8 +28,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Recipe.belongsToMany(models.Label, {
       foreignKey: 'recipeId',
+      otherKey: 'labelId',
       as: 'labels',
-      through: 'Recipe_Labels'
+      through: 'Recipe_Label'
     });
 
     Recipe.hasMany(models.Message, {

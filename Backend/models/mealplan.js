@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const MealPlan = sequelize.define('MealPlan', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     title: DataTypes.STRING
   }, {});
   MealPlan.associate = function(models) {
@@ -11,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
 
     MealPlan.belongsToMany(models.User, {
       foreignKey: 'mealPlanId',
+      otherKey: 'userId',
       as: 'collaborators',
-      through: 'MealPlan_Collaborators',
+      through: 'MealPlan_Collaborator',
     });
 
     MealPlan.hasMany(models.MealPlanItem, {

@@ -1,14 +1,30 @@
+var crypto = require('crypto');
+
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
+  let currentPasswordVersion = 2;
+
   const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false
+    },
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     passwordHash: DataTypes.STRING,
     passwordSalt: DataTypes.STRING,
+    passwordVersion: DataTypes.INTEGER,
     lastLogin: DataTypes.DATE
   }, {});
   User.associate = function(models) {
     User.hasMany(models.Session, {
+      foreignKey: 'userId'
+    });
+
+    User.hasMany(models.FCMToken, {
       foreignKey: 'userId'
     });
 
@@ -37,8 +53,9 @@ module.exports = (sequelize, DataTypes) => {
 
     User.belongsToMany(models.ShoppingList, {
       foreignKey: 'userId',
+      otherKey: 'shoppingListId',
       as: 'collaboratingShoppingLists',
-      through: 'ShoppingList_Collaborators'
+      through: 'ShoppingList_Collaborator'
     });
 
     User.hasMany(models.ShoppingListItem, {
@@ -53,9 +70,83 @@ module.exports = (sequelize, DataTypes) => {
 
     User.belongsToMany(models.MealPlan, {
       foreignKey: 'userId',
+      otherKey: 'mealPlanId',
       as: 'collaboratingMealPlans',
-      through: 'MealPlan_Collaborators'
+      through: 'MealPlan_Collaborator'
     });
   };
+
+  User.generateHashedPassword = function (password, cb) {
+    var salt = crypto.randomBytes(128).toString('base64');
+    var hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
+
+    cb({
+      hash: hash,
+      salt: salt,
+      version: currentPasswordVersion
+    });
+  };
+
+  User.validateHashedPassword = function (password, hash, salt, version, cb) {
+    switch (version) {
+      case "1":
+        var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
+        cb(comp == hash);
+        break;
+      case "2":
+        var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
+        cb(comp == hash);
+        break;
+    }
+  };
+
+  User.login = function (email, password, cb) {
+    User.find({
+      where: {
+        email: email.toLowerCase()
+      }
+    }).exec(function (err, user) {
+      if (!user) {
+        cb();
+      } else {
+        user.validatePassword(password, function (err, valid) {
+          if (err) {
+            cb(err);
+          } else if (!valid) {
+            cb();
+          } else {
+
+          }
+        });
+      }
+    }).catch(cb);
+  }
+
+  User.prototype.updatePassword = function (password, cb) {
+    var me = this;
+    User.generateHashedPassword(password, function (data) {
+      me.passwordHash = data.hash;
+      me.passwordSalt = data.salt;
+      me.passwordVersion = data.version;
+
+      me.save(cb);
+    });
+  }
+
+  User.prototype.validatePassword = function (password, cb) {
+    var me = this;
+    User.validateHashedPassword(password, this.passwordHash, this.passwordSalt, this.passwordVersion, function (passwordIsValid) {
+      // Don't update if password isn't valid, or password is of current version
+      if (!passwordIsValid || me.passwordVersion == currentPasswordVersion) {
+        cb(null, passwordIsValid);
+        return;
+      }
+
+      User.methods.updatePassword.call(me, password, function (err, user) {
+        cb(err, passwordIsValid);
+      });
+    });
+  };
+
   return User;
 };
