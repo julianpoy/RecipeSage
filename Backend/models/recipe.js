@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
+    Recipe.belongsTo(models.User, {
+      foreignKey: 'fromUserId',
+      as: 'fromUser',
+      onDelete: 'SET NULL',
+    });
+
     Recipe.belongsToMany(models.Label, {
       foreignKey: 'recipeId',
       otherKey: 'labelId',

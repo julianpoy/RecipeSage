@@ -89,14 +89,18 @@ module.exports = (sequelize, DataTypes) => {
 
   User.validateHashedPassword = function (password, hash, salt, version, cb) {
     switch (version) {
-      case "1":
+      case 1:
+      case '1':
         var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
         cb(comp == hash);
         break;
-      case "2":
+      case 2:
+      case '2':
         var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
         cb(comp == hash);
         break;
+      default:
+        cb(false);
     }
   };
 
@@ -129,7 +133,11 @@ module.exports = (sequelize, DataTypes) => {
       me.passwordSalt = data.salt;
       me.passwordVersion = data.version;
 
-      me.save(cb);
+      me.save().then(function() {
+        cb();
+      }).catch(function(err) {
+        cb(err);
+      });
     });
   }
 
@@ -142,8 +150,8 @@ module.exports = (sequelize, DataTypes) => {
         return;
       }
 
-      User.methods.updatePassword.call(me, password, function (err, user) {
-        cb(err, passwordIsValid);
+      User.prototype.updatePassword.call(me, password, function() {
+        cb(passwordIsValid);
       });
     });
   };
