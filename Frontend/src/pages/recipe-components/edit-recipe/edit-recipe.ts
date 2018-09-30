@@ -90,14 +90,14 @@ export class EditRecipePage {
 
     var loading = this.loadingService.start();
 
-    if (this.recipe._id) {
+    if (this.recipe.id) {
       this.recipeService.update(this.recipe).subscribe(function(response) {
         loading.dismiss();
 
         me.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
         me.navCtrl.push('RecipePage', {
           recipe: response,
-          recipeId: response._id
+          recipeId: response.id
         });
       }, function(err) {
         loading.dismiss();
@@ -129,7 +129,7 @@ export class EditRecipePage {
         me.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
         me.navCtrl.push('RecipePage', {
           recipe: response,
-          recipeId: response._id
+          recipeId: response.id
         });
       }, function(err) {
         loading.dismiss();

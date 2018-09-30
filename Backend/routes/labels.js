@@ -4,9 +4,11 @@ var cors = require('cors');
 var Raven = require('raven');
 
 // DB
-var mongoose = require('mongoose');
-var Recipe = mongoose.model('Recipe');
-var Label = mongoose.model('Label');
+var SQ = require('../models').sequelize;
+var User = require('../models').User;
+var Recipe = require('../models').Recipe;
+var Label = require('../models').Label;
+var Recipe_Label = require('../models').Recipe_Label;
 
 // Services
 var MiddlewareService = require('../services/middleware');
@@ -18,62 +20,26 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-    
+
   if (!req.body.title || req.body.title.length === 0) {
-    res.status(412).json({
-      msg: "Label title must be provided."
-    });
-    return;
+    var e = new Error("Label title must be provided.");
+    e.status = 412;
+    return next(e);
   }
-  
-  Recipe.findOneAndUpdate({
-    accountId: res.locals.session.accountId,
-    _id: req.body.recipeId
-  }, {
-    $setOnInsert: {
-      updated: Date.now()
-    }
-  }, {
-    new: true, // Triggers mongoose to return updated item
-    upsert: false // Do not create a new recipe if not exists
-  }, function(err, recipe) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't search/update recipe!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else if (!recipe) {
-      res.status(404).json({
-        msg: "Recipe with specified ID does not exist!"
-      });
-    } else {
-      Label.findOneAndUpdate({
-        accountId: res.locals.session.accountId,
+
+  SQ.transaction(function (t) {
+    return Label.findOrCreate({
+      where: {
+        userId: res.locals.session.userId,
         title: req.body.title.toLowerCase()
-      }, {
-        $addToSet: {
-          "recipes": recipe._id
-        }
-      }, {
-        safe: true,
-        upsert: true, // Create if not exists
-        new: true // Return updated, not original
-      }, function(err, label) {
-        if (err) {
-          var payload = {
-            msg: "Couldn't add label to recipe!"
-          };
-          res.status(500).json(payload);
-          payload.err = err;
-          Raven.captureException(payload);
-        } else {
-          res.status(201).json(label);
-        }
+      },
+      transaction: t
+    }).then(function(labels) {
+      return labels[0].addRecipe(req.body.recipeId, {transaction: t}).then(function() {
+        res.status(201).send(labels[0]);
       });
-    }
-  });
+    });
+  }).catch(next);
 });
 
 //Get all of a user's labels
@@ -84,24 +50,23 @@ router.get(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-  var query = Label.find({
-    accountId: res.locals.session.accountId
-  }).sort('title');
-  
-  if (req.query.populate) query.populate('recipes');
-
-  query.exec(function(err, labels) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't query database for labels."
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else {
-      res.status(200).json(labels);
-    }
-  });
+  Label.findAll({
+    where: {
+      userId: res.locals.session.userId
+    },
+    include: [{
+      model: Recipe,
+      as: 'recipes',
+      attributes: ['id', 'title']
+    }],
+    order: [
+      ['title', 'ASC']
+    ]
+  })
+  .then(function(labels) {
+    res.status(200).json(labels);
+  })
+  .catch(next);
 });
 
 //Delete a label from a recipe
@@ -110,46 +75,40 @@ router.delete(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  function(req, res) {
+  function(req, res, next) {
 
-  Label.findOneAndUpdate({
-    _id: req.query.labelId,
-    accountId: res.locals.session.accountId
-  }, {
-    $pull: { 'recipes': req.query.recipeId } // Pull the dump out of the array
-  }, {
-    new: true // Grab the updated document, not the original
-  }, function(err, label) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't search the database for label!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else if (!label) {
-      res.status(404).json({
-        msg: "Label does not exist!"
-      });
-    } else {
-      if(label.recipes.length == 0){
-        label.remove(function(err, data){
-          if (err) {
-            var payload = {
-              msg: "Couldn't remove empty label."
-            };
-            res.status(500).json(payload);
-            payload.err = err;
-            Raven.captureException(payload);
-          } else {
-            res.status(200).json(data);
-          }
+  SQ.transaction(function(t) {
+    return Label.findOne({
+      where: {
+        id: req.query.labelId,
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe,
+        as: 'recipes',
+        attributes: ['id']
+      }],
+      transaction: t
+    })
+    .then(function(label) {
+      if (!label) {
+        res.status(404).json({
+          msg: "Label does not exist!"
         });
       } else {
-        res.status(200).json(label);
+        return label.removeRecipe(req.query.recipeId, {transaction: t}).then(function() {
+          if (label.recipes.length === 1) {
+            return label.destroy({transaction: t}).then(function (data) {
+              res.status(200).json({});
+            });
+          } else {
+            res.status(200).json(label);
+          }
+        });
       }
-    }
-  });
+    });
+  })
+  .catch(next);
 });
 
 module.exports = router;

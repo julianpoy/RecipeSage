@@ -231,10 +231,11 @@ export class HomePage {
   }
 
   openRecipe(recipe) {
+    console.log(recipe)
     // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
-      recipeId: recipe._id
+      recipeId: recipe.id
     });
   }
 
@@ -368,7 +369,7 @@ export class HomePage {
   }
 
   trackByFn(index, item) {
-    return item._id;
+    return item.id;
   }
 
   nextViewType() {

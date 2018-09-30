@@ -68,10 +68,10 @@
 
   <br />
 
-  <ion-item *ngIf="!recipe._id" text-wrap>
+  <ion-item *ngIf="!recipe.id" text-wrap>
     <p>You'll be able to add categories/labels after the recipe is created.</p>
   </ion-item>
   <div padding>
-  	<button ion-button block (click)="save()">{{ recipe._id ? "Save" : "Create" }}</button>
+  	<button ion-button block (click)="save()">{{ recipe.id ? "Save" : "Create" }}</button>
 	</div>
 </ion-content>

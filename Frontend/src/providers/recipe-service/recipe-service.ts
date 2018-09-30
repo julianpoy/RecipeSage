@@ -10,7 +10,7 @@ import { Label } from '../label-service/label-service';
 import fractionjs from 'fraction.js';
 
 export interface Recipe {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   yield: string;
@@ -163,7 +163,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: function(resolve, reject) {
         me.http
-        .put(me.base + 'recipes/' + data._id + me.getTokenQuery(), formData, httpOptions)
+        .put(me.base + 'recipes/' + data.id + me.getTokenQuery(), formData, httpOptions)
         .pipe(
           retry(1),
           catchError(me.handleError)
@@ -187,7 +187,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: function(resolve, reject) {
         me.http
-        .delete(me.base + 'recipes/' + data._id + me.getTokenQuery(), httpOptions)
+        .delete(me.base + 'recipes/' + data.id + me.getTokenQuery(), httpOptions)
         .pipe(
           retry(1),
           catchError(me.handleError)
@@ -201,7 +201,7 @@ export class RecipeServiceProvider {
   }
 
   print(recipe, template) {
-    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe._id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
+    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
   scrapePepperplate(data) {

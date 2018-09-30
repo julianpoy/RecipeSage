@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var nodemailer = require('nodemailer');
+var Sequelize = require('sequelize');
+var User = require('../models').User;
+var FCMToken = require('../models').FCMToken;
 var Raven = require('raven');
 
 // Service
@@ -66,17 +66,11 @@ router.post(
   function(req, res, next) {
 
   User.findOne({
-    email: req.body.email.toLowerCase()
-  })
-  .exec(function(err, user) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't search the database for user!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else if (!user) {
+    where: {
+      email: req.body.email.toLowerCase()
+    }
+  }).then(function(user) {
+    if (!user) {
       res.status(404).json({
         msg: "Wrong email!"
       });
@@ -94,7 +88,7 @@ router.post(
             msg: "Password is incorrect!"
           });
         } else {
-          SessionService.generateSession(user._id, 'user', function(token, session) {
+          SessionService.generateSession(user.id, 'user', function(token, session) {
             res.status(200).json({
               token: token
             });
@@ -105,7 +99,7 @@ router.post(
           // Update lastLogin
           user.lastLogin = Date.now();
 
-          user.save(function(err) {
+          user.save().catch(function(err) {
             if (err) {
               Raven.captureException("Could not update user after login");
             }
@@ -113,6 +107,14 @@ router.post(
         }
       });
     }
+  }).catch(function(err) {
+    console.log("got here", err)
+    var payload = {
+      msg: "Couldn't search the database for user!"
+    };
+    res.status(500).json(payload);
+    payload.err = err;
+    Raven.captureException(payload);
   });
 });
 
@@ -421,96 +423,47 @@ router.post(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-    if (!req.body.fcmToken) {
-      res.status(412).send('fcmToken required');
-      return;
+  if (!req.body.fcmToken) {
+    res.status(412).send('fcmToken required');
+    return;
+  }
+
+  FCMToken.destroy({
+    where: {
+      token: req.body.fcmToken,
+      userId: { [Sequelize.Op.ne]: res.locals.session.userId }
     }
-
-    var revokeTokenPromise = new Promise(function(resolveRevokeToken, rejectRevokeToken) {
-      User.find({
-        fcmTokens: req.body.fcmToken,
-        _id: { $ne: res.locals.session.accountId }
-      }).exec(function(err, users) {
-        if (err) {
-          var payload = {
-            msg: "Couldn't search the database for users!"
-          };
-          res.status(500).json(payload);
-          payload.err = err;
-          Raven.captureException(payload);
-        } else if (!users) {
-          resolveRevokeToken();
-        } else {
-          var userPromises = [];
-
-          for (var i = 0; i < users.length; i++) {
-            let user = users[i];
-
-            userPromises.push(new Promise(function(resolve, reject) {
-              User.findByIdAndUpdate(
-                user._id, {
-                  $pull: {
-                    fcmTokens: req.body.fcmToken
-                  }
-                }, {
-                new: true
-              }).exec(function(err, updatedUser) {
-                if (err) {
-                  reject(500, "Couldn't search the database for users during fcm revoke!");
-                  Raven.captureException(err);
-                } else {
-                  resolve();
-                }
-              });
-            }));
-          }
-
-          Promise.all(userPromises).then(function() {
-            resolveRevokeToken();
-          }, function() {
-            rejectRevokeToken();
-          });
-        }
-      });
-    });
-
-    revokeTokenPromise.then(function() {
-      if (res.locals.user.fcmTokens && res.locals.user.fcmTokens.indexOf(req.body.fcmToken) > -1) {
-        var user = res.locals.user.toObject();
-
-        delete user.password;
-        delete user.salt;
-
-        res.status(200).json(user);
-        return;
+  })
+  .then(function() {
+    FCMToken.findOrCreate({
+      where: {
+        token: req.body.fcmToken
+      },
+      defaults: {
+        userId: res.locals.session.userId,
+        token: req.body.fcmToken
       }
-
-      User.findOneAndUpdate({
-        _id: res.locals.session.accountId
-      }, {
-        $addToSet: {
-          "fcmTokens": req.body.fcmToken
-        }
-      }, {
-        safe: true,
-        upsert: false, // Create if not exists
-        new: true // Return updated, not original
-      }, function(err, user) {
-        if (err) {
-          res.status(500).json({
-            msg: "Couldn't add to the database!"
-          });
-          Raven.captureException(err);
-        } else {
-          user = user.toObject();
-
-          delete user.password;
-          delete user.salt;
-
-          res.status(201).json(user);
-        }
-      });
+    })
+    .then(function(token) {
+      res.status(200).send(token);
+    })
+    .catch(function(err) {
+      var payload = {
+        msg: "Couldn't upsert FCM token!"
+      };
+      res.status(500).json(payload);
+      payload.err = err;
+      Raven.captureException(payload);
     });
+  })
+  .catch(function(err) {
+    var payload = {
+      msg: "Couldn't remove FCM tokens!"
+    };
+    res.status(500).json(payload);
+    payload.err = err;
+    Raven.captureException(payload);
+  });
 });
 
 router.delete(

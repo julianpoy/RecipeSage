@@ -6,9 +6,9 @@ var request = require('request');
 var Raven = require('raven');
 
 // DB
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var Recipe = mongoose.model('Recipe');
+var Op = require("sequelize").Op;
+var User = require('../models').User;
+var Recipe = require('../models').Recipe;
 
 // Service
 var FirebaseService = require('./firebase');
@@ -152,12 +152,14 @@ exports.upload = multer({
 });
 
 exports.deleteS3Object = function(key, success, fail){
-  s3.deleteObject({
-    Bucket: config.aws.bucket,
-    Key: key
-  }, function(err, data) {
-    if (err) fail(err);
-    else success(data);
+  return new Promise(function(resolve, reject) {
+    s3.deleteObject({
+      Bucket: config.aws.bucket,
+      Key: key
+    }, function(err, data) {
+      if (err) reject(err);
+      else resolve(data);
+    });
   });
 }
 
@@ -245,7 +247,7 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
   GripService.broadcast(user._id, 'messages:new', message);
 }
 
-function findTitle(userId, recipeId, basename, ctr, success, fail) {
+function _findTitle(userId, recipeId, basename, ctr, success, fail) {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
@@ -253,17 +255,27 @@ function findTitle(userId, recipeId, basename, ctr, success, fail) {
     adjustedTitle = basename + ' (' + ctr + ')';
   }
   Recipe.findOne({
-    _id: { $ne: recipeId },
-    accountId: userId,
-    title: adjustedTitle
-  }).exec(function(err, dupe) {
-    if (err) {
-      fail(err);
-    } else if (dupe) {
+    where: {
+      id: { [Op.ne]: recipeId },
+      userId: userId,
+      title: adjustedTitle
+    }
+  })
+  .then(function (dupe) {
+    if (dupe) {
       findTitle(userId, recipeId, basename, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
     }
+  })
+  .catch(function (err) {
+    fail(err);
+  });
+}
+
+function findTitle(userId, recipeId, basename, ctr) {
+  return new Promise(function(resolve, reject) {
+    _findTitle(userId, recipeId, basename, ctr, resolve, reject);
   });
 }
 exports.findTitle = findTitle;

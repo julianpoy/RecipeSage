@@ -12,7 +12,7 @@ import { Events, ToastController, AlertController } from 'ionic-angular';
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 
 export interface Message {
-  _id: string;
+  id: string;
   from: any;
   to: any;
   body: string;

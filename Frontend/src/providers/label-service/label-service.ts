@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 
 export interface Label {
-  _id: string;
+  id: string;
 }
 
 @Injectable()
@@ -60,7 +60,7 @@ export class LabelServiceProvider {
     };
 
     return this.http
-    .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data._id + '&recipeId=' + data.recipeId, httpOptions)
+    .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)

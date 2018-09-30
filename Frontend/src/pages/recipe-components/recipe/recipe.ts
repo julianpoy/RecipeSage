@@ -52,21 +52,20 @@ export class RecipePage {
     var loading = this.loadingService.start();
 
     this.recipe = <Recipe>{};
-    // if (!this.recipe._id) {
-    this.loadRecipe().then(function() {
+
+    Promise.all([this.loadRecipe(), this.loadLabels()])
+    .then(function () {
       loading.dismiss();
-    }, function() {
+    }, function () {
       loading.dismiss();
     });
-    // }
-
-    this.loadLabels();
   }
 
   refresh(loader) {
-    this.loadRecipe().then(function() {
+    Promise.all([this.loadRecipe(), this.loadLabels()])
+    .then(function () {
       loader.complete();
-    }, function() {
+    }, function () {
       loader.complete();
     });
   }
@@ -121,41 +120,42 @@ export class RecipePage {
 
   loadLabels() {
     var me = this;
-    this.labelService.fetch().subscribe(function(response) {
-      for (var i = 0; i < response.length; i++) {
-        var label = response[i];
-        me.existingLabels.push(label.title);
-        me.labelObjectsByTitle[label.title] = label;
 
-        if (label.recipes.indexOf(me.recipeId) > -1) {
-          me.selectedLabels.push(label.title);
+    return new Promise(function(resolve, reject) {
+      me.labelService.fetch().subscribe(function(response) {
+        for (var i = 0; i < response.length; i++) {
+          var label = response[i];
+          me.existingLabels.push(label.title);
+          me.labelObjectsByTitle[label.title] = label;
+
+          if (label.recipes.findIndex(function(el) { return el.id === me.recipeId }) > -1) {
+            me.selectedLabels.push(label.title);
+          }
         }
-      }
 
-      me.existingLabels.sort(function(a, b) {
-        if (me.labelObjectsByTitle[a].recipes.length === me.labelObjectsByTitle[b].recipes.length) return 0;
-        return me.labelObjectsByTitle[a].recipes.length > me.labelObjectsByTitle[b].recipes.length ? -1 : 1;
+        me.existingLabels.sort(function(a, b) {
+          if (me.labelObjectsByTitle[a].recipes.length === me.labelObjectsByTitle[b].recipes.length) return 0;
+          return me.labelObjectsByTitle[a].recipes.length > me.labelObjectsByTitle[b].recipes.length ? -1 : 1;
+        });
+
+        resolve();
+      }, function(err) {
+        reject();
+
+        switch(err.status) {
+          case 0:
+          case 401:
+            // Ignore, handled by main loader
+            break;
+          default:
+            let errorToast = me.toastCtrl.create({
+              message: me.utilService.standardMessages.unexpectedError,
+              duration: 30000
+            });
+            errorToast.present();
+            break;
+        }
       });
-    }, function(err) {
-      switch(err.status) {
-        case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          // Ignore, handled by main loader
-          break;
-        default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
     });
   }
 
@@ -283,7 +283,7 @@ export class RecipePage {
 
       me.navCtrl.setRoot('RecipePage', {
         recipe: response,
-        recipeId: response._id
+        recipeId: response.id
       }, {animate: true, direction: 'forward'});
     }, function(err) {
       loading.dismiss();
@@ -359,19 +359,21 @@ export class RecipePage {
     var loading = this.loadingService.start();
 
     this.labelService.create({
-      recipeId: this.recipe._id,
+      recipeId: this.recipe.id,
       title: title.toLowerCase()
     }).subscribe(function(response) {
       loading.dismiss();
 
-      if (!me.recipe.labels) me.recipe.labels = [];
-      if (me.recipe.labels.indexOf(response) === -1) me.recipe.labels.push(response);
-      if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
+      // if (!me.recipe.labels) me.recipe.labels = [];
+      // if (me.recipe.labels.findIndex(function(el) { return el.id === response.id }) === -1) me.recipe.labels.push(response);
+      // if (me.selectedLabels.indexOf(response.title) === -1) me.selectedLabels.push(response.title);
 
-      me.labelObjectsByTitle[response.title] = response;
+      // me.labelObjectsByTitle[response.title] = response;
 
-      me.toggleAutocomplete(false);
-      me.pendingLabel = '';
+      me.loadLabels().then(function() {
+        me.toggleAutocomplete(false);
+        me.pendingLabel = '';
+      });
     }, function(err) {
       loading.dismiss();
       switch(err.status) {
@@ -431,23 +433,28 @@ export class RecipePage {
 
     var loading = this.loadingService.start();
 
-    label.recipeId = this.recipe._id;
+    label.recipeId = this.recipe.id;
 
-    this.labelService.remove(label).subscribe(function(response) {
+    this.labelService.remove(label).subscribe(function() {
       loading.dismiss();
 
-      if(label.recipes.length === 1 && label.recipes[0] === me.recipeId) {
+      if(label.recipes.length === 1) {
         var i = me.existingLabels.indexOf(label.title);
         me.existingLabels.splice(i, 1);
         delete me.labelObjectsByTitle[label.title];
       } else {
-        label.recipes = response.recipes;
+        var recipeIdx = label.recipes.findIndex(function(el) {
+          return el.id === me.recipe.id;
+        });
+        label.recipes.splice(recipeIdx, 1);
       }
 
-      var rIdx = me.recipe.labels.indexOf(response);
-      me.recipe.labels.splice(rIdx, 1);
+      var lblIdx = me.recipe.labels.findIndex(function(el) {
+        return el.id === label.id;
+      });
+      me.recipe.labels.splice(lblIdx, 1);
 
-      var idx = me.selectedLabels.indexOf(response.title);
+      var idx = me.selectedLabels.indexOf(label.title);
       me.selectedLabels.splice(idx, 1);
     }, function(err) {
       loading.dismiss();

@@ -65,6 +65,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json({limit: '4MB'}));
 app.use(bodyParser.urlencoded({ limit: '4MB', extended: false }));
 app.use(cookieParser());
+app.disable('x-powered-by');
 
 var frontendDir = appConfig.frontendDir || '../Frontend/www';
 app.use(express.static(path.join(__dirname, frontendDir)));
@@ -92,7 +93,14 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  if (!err.status) err.status = 500;
+
+  var devMode = appConfig.environment === 'dev';
+
+  res.locals.error = devMode ? err : {};
+  if (devMode) console.error(err);
+  else Raven.captureException(err);
 
   // render the error page
   res.status(err.status || 500);

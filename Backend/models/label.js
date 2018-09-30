@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    Label.belongsToMany(models.Label, {
+    Label.belongsToMany(models.Recipe, {
       foreignKey: 'labelId',
       otherKey: 'recipeId',
       as: 'recipes',
-      through: 'Recipe_Label'
+      through: models.Recipe_Label
     });
   };
   return Label;
