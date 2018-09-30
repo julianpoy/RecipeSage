@@ -45,7 +45,7 @@
     "fraction.js": "^4.0.9",
     "ionic-angular": "3.9.2",
     "ionicons": "4.3.0",
-    "ng-lazyload-image": "^4.0.0",
+    "ng-lazyload-image": "^3.4.2",
     "rxjs": "^5.5.11",
     "workbox-sw": "^3.4.1",
     "zone.js": "0.8.26"
