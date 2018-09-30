@@ -68,6 +68,8 @@ export class RecipePage {
     }, function () {
       loader.complete();
     });
+
+    this.loadLabels();
   }
 
   loadRecipe() {
@@ -123,6 +125,10 @@ export class RecipePage {
 
     return new Promise(function(resolve, reject) {
       me.labelService.fetch().subscribe(function(response) {
+        me.labelObjectsByTitle = {};
+        me.existingLabels = [];
+        me.selectedLabels = [];
+
         for (var i = 0; i < response.length; i++) {
           var label = response[i];
           me.existingLabels.push(label.title);
