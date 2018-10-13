@@ -16,7 +16,7 @@
     <ion-item class="thread" *ngFor="let thread of threads" (click)="openThread(thread)">
       <ion-icon name="chatboxes" item-start></ion-icon>
       <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
-      <p><b>{{ thread.messages[0].from._id === thread.otherUser._id ? thread.messages[0].from.name || thread.messages[0].from.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
+      <p><b>{{ thread.messages[0].fromUser.id === thread.otherUser.id ? thread.messages[0].fromUser.name || thread.messages[0].fromUser.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
     </ion-item>
     <ion-item *ngIf="threads.length === 0" text-wrap text-center>
       <p>

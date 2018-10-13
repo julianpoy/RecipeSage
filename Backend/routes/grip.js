@@ -25,7 +25,6 @@ router.use(GripService.expressGrip.preHandlerGripMiddleware);
 router.all(
   '/ws',
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function (req, res, next) {
     // Reject non-WebSocket requests
     if (!GripService.expressGrip.verifyIsWebSocket(res, next)) {
@@ -38,7 +37,7 @@ router.all(
     if (ws.isOpening()) {
       ws.accept();
       ws.subscribe('all');
-      ws.subscribe(res.locals.accountId);
+      ws.subscribe(res.locals.userId);
     }
 
     while (ws.canRecv()) {

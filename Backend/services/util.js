@@ -208,17 +208,18 @@ exports.dispatchImportNotification = function(user, status, reason) {
 }
 
 exports.dispatchMessageNotification = function(user, fullMessage) {
+  console.log("DISPATCHING --------------------")
   var message = {
-    _id: fullMessage._id,
+    id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
     otherUser: fullMessage.otherUser,
-    from: fullMessage.from,
-    to: fullMessage.to
+    fromUser: fullMessage.fromUser,
+    toUser: fullMessage.toUser
   };
 
   if (fullMessage.recipe) {
     message.recipe = {
-      _id: fullMessage.recipe._id,
+      id: fullMessage.recipe.id,
       title: fullMessage.recipe.title,
       image: {}
     };
@@ -242,12 +243,12 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
     }
   }
 
-  console.log("about to broadcast")
+  console.log("about to broadcast", user.id)
 
-  GripService.broadcast(user._id, 'messages:new', message);
+  GripService.broadcast(user.id, 'messages:new', message);
 }
 
-function _findTitle(userId, recipeId, basename, ctr, success, fail) {
+function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail) {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
@@ -259,11 +260,12 @@ function _findTitle(userId, recipeId, basename, ctr, success, fail) {
       id: { [Op.ne]: recipeId },
       userId: userId,
       title: adjustedTitle
-    }
+    },
+    transaction: transaction
   })
   .then(function (dupe) {
     if (dupe) {
-      findTitle(userId, recipeId, basename, ctr + 1, success, fail);
+      _findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
     }
@@ -273,36 +275,25 @@ function _findTitle(userId, recipeId, basename, ctr, success, fail) {
   });
 }
 
-function findTitle(userId, recipeId, basename, ctr) {
+function findTitle(userId, recipeId, basename, transaction) {
   return new Promise(function(resolve, reject) {
-    _findTitle(userId, recipeId, basename, ctr, resolve, reject);
+    _findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
   });
 }
 exports.findTitle = findTitle;
 
-exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject) {
-  Recipe.findById(recipeId).lean().exec(function(err, recipe) {
-    if (err) {
-      var payload = {
-        msg: 'Could not search DB for recipe.',
-        err: err
-      };
-      reject(500, payload);
-      Raven.captureException(payload);
-    } else if (!recipe) {
-      reject(404, 'Could not find recipe under that ID.');
+exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
+  return Recipe.findById(recipeId, { transaction: transaction }).then(function(recipe) {
+    if (!recipe) {
+      var e = new Error("Could not find recipe to share");
+      e.status = 404;
+      throw e;
     } else {
-      var uploadByURLPromise = new Promise(function(resolve, reject) {
+      return new Promise(function(resolve, reject) {
         if (recipe.image && recipe.image.location) {
           sendURLToS3(recipe.image.location, function(err, img) {
             if (err) {
-              var payload = {
-                msg: 'Could not send URL to s3.',
-                err: err,
-                img: img
-              };
               reject(err);
-              Raven.captureException(payload);
             } else {
               resolve(img);
             }
@@ -310,12 +301,10 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject)
         } else {
           resolve(null);
         }
-      });
-
-      uploadByURLPromise.then(function(img) {
-        findTitle(recipientId, null, recipe.title, 1, function(adjustedTitle) {
-          new Recipe({
-            accountId: recipientId,
+      }).then(function(img) {
+        return findTitle(recipientId, null, recipe.title, transaction).then(function(adjustedTitle) {
+          return Recipe.create({
+            userId: recipientId,
         		title: adjustedTitle,
             description: recipe.description,
             yield: recipe.yield,
@@ -328,34 +317,9 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, resolve, reject)
             instructions: recipe.instructions,
             image: img,
             folder: 'inbox',
-            fromUser: senderId
-          }).save(function(err, sharedRecipe) {
-            if (err) {
-              var payload = {
-                msg: "Error saving the recipe!",
-                err: err
-              }
-              reject(500, payload.msg);
-              Raven.captureException(payload);
-            } else {
-              resolve(sharedRecipe);
-            }
+            fromUserId: senderId
           });
-        }, function(err) {
-          var payload = {
-            msg: "Could not avoid duplicate title!",
-            err: err
-          };
-          reject(500, payload.msg);
-          Raven.captureException(payload);
         });
-      }, function(err) {
-        var payload = {
-          msg: "Error uploading image via URL!",
-          err: err
-        }
-        reject(500, payload);
-        Raven.captureException(payload);
       });
     }
   });

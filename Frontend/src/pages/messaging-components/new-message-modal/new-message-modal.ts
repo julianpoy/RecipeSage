@@ -45,7 +45,7 @@ export class NewMessageModalPage {
       me.userService.getUserByEmail(me.recipientEmail.trim()).subscribe(function(response) {
         me.recipientName = response.name || response.email;
         me.searching = false;
-        me.recipientId = response._id;
+        me.recipientId = response.id;
       }, function(err) {
         switch(err.status) {
           case 0:

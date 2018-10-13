@@ -99,7 +99,7 @@ export class MessagesPage {
   openThread(thread) {
     this.navCtrl.push('MessageThreadPage', {
       thread: thread,
-      otherUserId: thread.otherUser._id
+      otherUserId: thread.otherUser.id
     });
   }
 

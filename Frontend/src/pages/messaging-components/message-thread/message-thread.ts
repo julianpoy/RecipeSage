@@ -19,6 +19,7 @@ export class MessageThreadPage {
   @ViewChild('content') content: any;
 
   messages: any = [];
+  messagesById: any = {};
 
   otherUserId: string = '';
   pendingMessage: string = '';
@@ -42,7 +43,9 @@ export class MessageThreadPage {
     this.otherUserId = this.navParams.get('otherUserId');
 
     this.websocketService.register('messages:new', function (payload) {
-      if (!this.isViewLoaded || payload.otherUser._id !== this.otherUserId) return;
+      console.log("here", this.isViewLoaded, payload.otherUser.id)
+      if (!this.isViewLoaded || payload.otherUser.id !== this.otherUserId) return;
+      console.log("and continued")
 
       this.loadMessages().then(function () { }, function () { });
     }, this);
@@ -125,7 +128,7 @@ export class MessageThreadPage {
   }
 
   trackByFn(index, item) {
-    return item._id;
+    return item.id;
   }
 
   loadMessages(isInitialLoad?) {
@@ -133,7 +136,17 @@ export class MessageThreadPage {
 
     return new Promise(function(resolve, reject) {
       me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
-        me.messages = response;
+        me.messages = response.map(function(message) {
+          if (me.messagesById[message.id]) {
+            message.body = me.messagesById[message.id].body;
+          } else {
+            message.body = me.parseMessage(message.body);
+          }
+
+          me.messagesById[message.id] = message;
+
+          return message;
+        });
 
         me.scrollToBottom.call(me, !isInitialLoad, true, function() {
           resolve();
@@ -163,11 +176,15 @@ export class MessageThreadPage {
       to: this.otherUserId,
       body: myMessage
     }).subscribe(function(response) {
-      me.messagePlaceholder = 'Message...';
+      me.messagePlaceholder = 'Sent!';
 
-      me.messages.push(response);
+      setTimeout(function() {
+        me.messagePlaceholder = 'Message...';
+      }, 1000);
 
-      me.scrollToBottom.call(me, true, true);
+      // me.messages.push(response);
+
+      // me.scrollToBottom.call(me, true, true);
     }, function(err) {
       me.messagePlaceholder = 'Message...';
       me.pendingMessage = myMessage;
@@ -193,7 +210,7 @@ export class MessageThreadPage {
   openRecipe(recipe) {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
-      recipeId: recipe._id
+      recipeId: recipe.id
     });
   }
 
@@ -206,8 +223,8 @@ export class MessageThreadPage {
   deservesDateDiff(previous, next) {
     if (!previous || !next) return;
 
-    var p = new Date(previous.created);
-    var n = new Date(next.created);
+    var p = new Date(previous.createdAt);
+    var n = new Date(next.createdAt);
 
     return p.getDay() !== n.getDay();
   }
@@ -229,6 +246,7 @@ export class MessageThreadPage {
   }
 
   parseMessage(message) {
+    console.log("parsing...")
     var updated = message;
 
     updated = (<any>window).linkifyStr(updated, {

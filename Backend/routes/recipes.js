@@ -5,6 +5,7 @@ var xmljs = require("xml-js");
 var Raven = require('raven');
 
 // DB
+var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
@@ -19,7 +20,6 @@ router.post(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   UtilService.upload.single('image'),
   function(req, res, next) {
 
@@ -57,7 +57,7 @@ router.post(
     uploadByURLPromise.then(function(img) {
       var uploadedFile = img || req.file;
 
-      UtilService.findTitle(res.locals.session.userId, null, req.body.title, 1, function(adjustedTitle) {
+      UtilService.findTitle(res.locals.session.userId, null, req.body.title, null, function(adjustedTitle) {
         Recipe.create({
           userId: res.locals.session.userId,
       		title: adjustedTitle,
@@ -89,7 +89,6 @@ router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   Recipe.findAll({
@@ -122,7 +121,6 @@ router.get(
   '/export',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res) {
 
   Recipe.findAll({
@@ -202,7 +200,6 @@ router.get(
   '/:recipeId',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   Recipe.findOne({
@@ -239,7 +236,6 @@ router.put(
   '/:id',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   UtilService.upload.single('image'),
   function(req, res) {
 
@@ -273,7 +269,7 @@ router.put(
           recipe.image = req.file;
         }
 
-        return UtilService.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, 1).then(function(adjustedTitle) {
+        return UtilService.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, t).then(function(adjustedTitle) {
           recipe.title = adjustedTitle;
 
           return recipe.save({transaction: t}).then(function (recipe) {
@@ -307,14 +303,24 @@ router.delete(
   '/:id',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
-  function(req, res) {
+  function(req, res, next) {
 
   Recipe.findOne({
     where: {
       id: req.params.id,
       userId: res.locals.session.userId
-    }
+    },
+    attributes: ['id'],
+    include: [{
+      model: Label,
+      as: "labels",
+      attributes: ['id'],
+      include: [{
+        model: Recipe,
+        as: "recipes",
+        attributes: ['id']
+      }]
+    }]
   })
   .then(function(recipe) {
     if (!recipe) {
@@ -324,14 +330,29 @@ router.delete(
     } else {
       return SQ.transaction(function(t) {
         return recipe.destroy({transaction: t}).then(function() {
-          // Remove image from our S3 bucket
-          if (recipe.image && recipe.image.key) {
-            return UtilService.deleteS3Object(recipe.image.key).then(function() {
+          // Get an array of labelIds which have only this recipe associated
+          labelIds = recipe.labels.reduce(function(acc, label) {
+            if (label.recipes.length <= 1) {
+              acc.push(label.id);
+            }
+            return acc;
+          }, []);
+
+          return Label.destroy({
+            where: {
+              id: { [Op.in]: labelIds }
+            },
+            transaction: t
+          }).then(function() {
+            // Remove image from our S3 bucket
+            if (recipe.image && recipe.image.key) {
+              return UtilService.deleteS3Object(recipe.image.key).then(function() {
+                res.status(200).json(recipe);
+              });
+            } else {
               res.status(200).json(recipe);
-            });
-          } else {
-            res.status(200).json(recipe);
-          }
+            }
+          });
         });
       });
     }

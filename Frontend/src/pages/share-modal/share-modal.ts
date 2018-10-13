@@ -89,7 +89,7 @@ export class ShareModalPage {
   }
 
   selectRecipient(thread) {
-    this.recipientId = thread.otherUser._id;
+    this.recipientId = thread.otherUser.id;
     console.log(this.recipientId)
     this.recipientName = '';
     this.recipientEmail = '';
@@ -104,7 +104,7 @@ export class ShareModalPage {
     this.autofillTimeout = setTimeout(function() {
       me.userService.getUserByEmail(me.recipientEmail.trim()).subscribe(function(response) {
         me.recipientName = response.name || response.email;
-        me.recipientId = response._id;
+        me.recipientId = response.id;
         me.selectedThread = null;
         me.searchingForRecipient = false;
       }, function(err) {
@@ -124,7 +124,7 @@ export class ShareModalPage {
     this.messagingService.create({
       to: this.recipientId,
       body: '',
-      recipeId: this.recipe._id
+      recipeId: this.recipe.id
     }).subscribe(function(response) {
       loading.dismiss();
       me.viewCtrl.dismiss({

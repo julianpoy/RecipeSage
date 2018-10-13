@@ -18,7 +18,6 @@ router.post(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   if (!req.body.title || req.body.title.length === 0) {
@@ -47,7 +46,6 @@ router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   Label.findAll({
@@ -74,28 +72,26 @@ router.delete(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
-  SQ.transaction(function(t) {
-    return Label.findOne({
-      where: {
-        id: req.query.labelId,
-        userId: res.locals.session.userId
-      },
-      include: [{
-        model: Recipe,
-        as: 'recipes',
-        attributes: ['id']
-      }],
-      transaction: t
-    })
-    .then(function(label) {
-      if (!label) {
-        res.status(404).json({
-          msg: "Label does not exist!"
-        });
-      } else {
+  Label.findOne({
+    where: {
+      id: req.query.labelId,
+      userId: res.locals.session.userId
+    },
+    include: [{
+      model: Recipe,
+      as: 'recipes',
+      attributes: ['id']
+    }]
+  })
+  .then(function(label) {
+    if (!label) {
+      res.status(404).json({
+        msg: "Label does not exist!"
+      });
+    } else {
+      return SQ.transaction(function (t) {
         return label.removeRecipe(req.query.recipeId, {transaction: t}).then(function() {
           if (label.recipes.length === 1) {
             return label.destroy({transaction: t}).then(function (data) {
@@ -105,8 +101,8 @@ router.delete(
             res.status(200).json(label);
           }
         });
-      }
-    });
+      });
+    }
   })
   .catch(next);
 });

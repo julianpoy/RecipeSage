@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
+var Raven = require('raven');
+
+// DB
 var Sequelize = require('sequelize');
 var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
-var Raven = require('raven');
 
 // Service
 var SessionService = require('../services/sessions');
@@ -20,7 +22,7 @@ router.get(
 
   // Manually construct fields to avoid sending sensitive info
   var user = {
-    _id: res.locals.user._id,
+    id: res.locals.user.id,
     name: res.locals.user.name,
     email: res.locals.user.email,
     created: res.locals.user.created,
@@ -37,26 +39,22 @@ router.get(
   cors(),
   function(req, res, next) {
 
-  User.findOne({
-    email: req.query.email.trim().toLowerCase()
+  User.find({
+    where: {
+      email: req.query.email.trim().toLowerCase()
+    },
+    attributes: ['id', 'name', 'email']
   })
-  .select('_id name email')
-  .exec(function(err, user) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't search the database for user!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else if (!user) {
+  .then(function(user) {
+    if (!user) {
       res.status(404).json({
         msg: "No user with that email!"
       });
     } else {
       res.status(200).json(user);
     }
-  });
+  })
+  .catch(next);
 });
 
 /* Log in user */
@@ -135,52 +133,37 @@ router.post(
     });
   } else {
     //Check if a user with that email already exists
-    User.findOne({
-      email: req.body.email.toLowerCase()
-    })
-    .select('_id')
-    .exec(function(err, user) {
-      if (err) {
-        var payload = {
-          msg: 'Could not query database for preexisting user'
-        };
-        res.status(500).json(payload);
-        payload.err = err;
-        Raven.captureException(payload);
-      } else if (user) {
+    User.find({
+      where: {
+        email: req.body.email.toLowerCase()
+      },
+      attributes: ['id']
+    }).then(function(user) {
+      if (user) {
         res.status(406).json({
           msg: "Account with that email address already exists!"
         });
       } else {
         User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-          var newUser = new User({
+          User.create({
             name: req.body.name,
             email: req.body.email.toLowerCase(),
-            password: hashedPasswordData.hash,
-            salt: hashedPasswordData.salt,
+            passwordHash: hashedPasswordData.hash,
+            passwordSalt: hashedPasswordData.salt,
             passwordVersion: hashedPasswordData.version
-          }).save(function(err, newUser) {
-            if (err) {
-              var payload = {
-                msg: "Error saving user to DB!"
-              };
-              res.status(500).json(payload);
-              payload.err = err;
-              Raven.captureException(payload);
-            } else {
-              SessionService.generateSession(newUser._id, 'user', function(token, session) {
-                res.status(200).json({
-                  token: token
-                });
-              }, function(err) {
-                res.status(err.status).json(err);
-                Raven.captureException(err);
+          }).then(function(newUser) {
+            SessionService.generateSession(newUser.id, 'user', function(token, session) {
+              res.status(200).json({
+                token: token
               });
-            }
-          });
+            }, function(err) {
+              res.status(err.status).json(err);
+              Raven.captureException(err);
+            });
+          }).catch(next);
         });
       }
-    });
+    }).catch(next);
   }
 });
 
@@ -193,22 +176,17 @@ router.post(
     var origin = req.get('origin');
 console.log(origin)
 
-  User.findOne({
-    email: req.body.email.toLowerCase()
-  }).exec(function(err, user) {
-    if (err) {
-      var payload = {
-        msg: "Couldn't search the database for user!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
-    } else if (!user) {
+  User.find({
+    where: {
+      email: req.body.email.toLowerCase()
+    }
+  }).then(function(user) {
+    if (!user) {
       res.status(200).json({
         msg: ""
       });
     } else {
-      SessionService.generateSession(user._id, 'user', function (token, session) {
+      SessionService.generateSession(user.id, 'user', function (token, session) {
         var link = origin + '/#/account?token=' + token;
         var html = `Hello,
 
@@ -241,18 +219,8 @@ console.log(origin)
           res.status(200).json({
             msg: ""
           });
-        }, function(err) {
-          res.status(500).json({
-            msg: "An error occured."
-          });
-          Raven.captureException(err);
-        });
-      }, function (err) {
-        res.status(500).json({
-          msg: "An error occured."
-        });
-        Raven.captureException(err);
-      });
+        }, next);
+      }, next);
     }
   });
 });
@@ -262,7 +230,6 @@ router.put(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
@@ -271,53 +238,40 @@ router.put(
       msg: "Email is not valid!"
     });
   } else {
-    var session = res.locals.session;
-    var accountId = session.accountId;
+    var updates = {};
 
-    var updatedUser = {};
+    if (req.body.name && typeof req.body.name === 'string') updates.name = req.body.name;
+    if (req.body.email && typeof req.body.email === 'string') updates.email = req.body.email;
 
-    if (req.body.name && typeof req.body.name === 'string') updatedUser.name = req.body.name;
-    if (req.body.email && typeof req.body.email === 'string') updatedUser.email = req.body.email;
-    if (req.body.password && typeof req.body.password === 'string') {
-      User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-        updatedUser.password = hashedPasswordData.hash;
-        updatedUser.salt = hashedPasswordData.salt;
-        updatedUser.passwordVersion = hashedPasswordData.version;
-        save();
-      });
-    } else {
-      save();
-    }
-
-    updatedUser.updated = Date.now();
-
-    function save() {
-      var setUser = {
-        $set: updatedUser
+    new Promise(function(resolve, reject) {
+      if (req.body.password && typeof req.body.password === 'string') {
+        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
+          updates.passwordHash = hashedPasswordData.hash;
+          updates.passwordSalt = hashedPasswordData.salt;
+          updates.passwordVersion = hashedPasswordData.version;
+          resolve();
+        });
+      } else {
+        resolve();
       }
-
-      User.update({
-        _id: accountId
-      }, setUser, {
-        new: true
+    }).then(function() {
+      return User.update(updates, {
+        where: {
+          id: res.locals.userId
+        },
+        returning: true
       })
-      .lean()
-      .exec(function(err, user) {
-        if (err) {
-          var payload = {
-            msg: "Could not update user"
-          };
-          res.status(500).json(payload);
-          payload.err = err;
-          Raven.captureException(payload);
-        } else {
-          delete user.password;
-          delete user.salt;
-
-          res.status(200).json(user);
-        }
+      .then(function() {
+        return User.find({
+          where: {
+            id: res.locals.userId
+          },
+          attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt']
+        }).then(function(updatedUser) {
+          res.status(200).json(updatedUser);
+        });
       });
-    }
+    }).catch(next);
   }
 });
 
@@ -325,7 +279,6 @@ router.post(
   '/logout',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function (req, res) {
     SessionService.deleteSession(res.locals.session.token, function() {
       res.status(200).json({
@@ -336,76 +289,6 @@ router.post(
       Raven.captureException(err);
     });
   });
-
-/* User forgot password */
-// router.post('/forgot', function(req, res, next) {
-//   //Find a user with the email requested. Select salt and password
-//   var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-//   if (!emailRegex.test(req.body.email)) {
-//     res.status(412).json({
-//       msg: "Email is not valid!"
-//     });
-//   } else {
-//     //Check if a user with that email already exists
-//     User.findOne({
-//       email: req.body.email.toLowerCase()
-//     })
-//     .select('_id')
-//     .exec(function(err, user) {
-//       if (err) {
-//         res.status(500).send('Could not query database for user with that email');
-//       } else if (user) {
-//         //Create a random token
-//         var token = crypto.randomBytes(48).toString('hex');
-//         //New session!
-//         new Session({
-//           user_id: user._id,
-//           token: token
-//         }).save(function(err) {
-//           if (err) {
-//             res.status(500).json({
-//               msg: "Error saving token to DB!"
-//             });
-//           } else {
-//             var messagePlain = 'Hello ' + req.body.email.toLowerCase() + ', You recently requested a password reset for your LinkJay account. If you didn\'t, please ignore this email. Here is your reset link: https://LinkJay.com/#/forgot/' + token;
-//             var messageHTML = 'Hello LinkJay User!<br><br> You recently requested a password reset for your LinkJay account. If you didn\'t, please ignore this email. <br><br>Here is your reset link: <br>https://LinkJay.com/#/forgot/' + token;
-
-//             var transporter = nodemailer.createTransport({
-//               service: 'Gmail',
-//               auth: {
-//                 user: config.gmail.username,
-//                 pass: config.gmail.password
-//               }
-//             });
-//             var mailOptions = {
-//               from: config.gmail.alias,
-//               to: req.body.email.toLowerCase(),
-//               subject: 'LinkJay Password Reset Link',
-//               text: messagePlain,
-//               html: messageHTML
-//             }
-//             console.log(mailOptions);
-//             transporter.sendMail(mailOptions, function(error, response) {
-//               if (error) {
-//                 console.log(error);
-//               } else {
-//                 console.log("Message sent: " + response.message);
-//               }
-//             });
-
-//             res.status(200).json({
-//               msg: "Password reset email was sent!"
-//             });
-//           }
-//         });
-//       } else {
-//         res.status(404).json({
-//           msg: "Email does not exist!"
-//         });
-//       }
-//     });
-//   }
-// });
 
 /* Check if a session token is valid */
 router.get(
@@ -420,7 +303,6 @@ router.post(
   '/fcm/token',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
   if (!req.body.fcmToken) {
@@ -431,79 +313,41 @@ router.post(
   FCMToken.destroy({
     where: {
       token: req.body.fcmToken,
-      userId: { [Sequelize.Op.ne]: res.locals.session.userId }
+      userId: { [Sequelize.Op.ne]: res.locals.userId }
     }
   })
   .then(function() {
-    FCMToken.findOrCreate({
+    return FCMToken.findOrCreate({
       where: {
         token: req.body.fcmToken
       },
       defaults: {
-        userId: res.locals.session.userId,
+        userId: res.locals.userId,
         token: req.body.fcmToken
       }
     })
     .then(function(token) {
       res.status(200).send(token);
-    })
-    .catch(function(err) {
-      var payload = {
-        msg: "Couldn't upsert FCM token!"
-      };
-      res.status(500).json(payload);
-      payload.err = err;
-      Raven.captureException(payload);
     });
   })
-  .catch(function(err) {
-    var payload = {
-      msg: "Couldn't remove FCM tokens!"
-    };
-    res.status(500).json(payload);
-    payload.err = err;
-    Raven.captureException(payload);
-  });
+  .catch(next);
 });
 
 router.delete(
   '/fcm/token',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function(req, res, next) {
 
     if (!req.query.fcmToken) {
       res.status(412).send('fcmToken required');
       return;
-    } else if (!res.locals.user.fcmTokens || res.locals.user.fcmTokens.indexOf(req.query.fcmToken) === -1) {
-      res.status(404).send('fcmToken not found');
-      return;
     }
 
-    User.findOneAndUpdate({
-      _id: res.locals.session.accountId
-    }, {
-      $pull: {
-        'fcmTokens': req.query.fcmToken
-      }
-    }, {
-      safe: true,
-      upsert: false, // Create if not exists
-      new: true // Return updated, not original
-    }, function(err, user) {
-      if (err) {
-        res.status(500).json({
-          msg: "Couldn't query the database!"
-        });
-        Raven.captureException(err);
-      } else {
-        user = user.toObject();
-
-        delete user.password;
-        delete user.salt;
-
-        res.status(200).json(user);
+    FCMToken.destroy({
+      where: {
+        token: req.query.fcmToken,
+        userId: res.locals.userId
       }
     });
 });

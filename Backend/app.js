@@ -17,6 +17,7 @@ if (fs.existsSync("./config/config.json")) {
   console.log("config.json initialized");
 }
 var appConfig = require('./config/config.json');
+var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
@@ -34,8 +35,6 @@ var messageSchema = require('./mongoose-models/message');
 var shoppingListSchema = require('./mongoose-models/shoppingList');
 var mealPlanSchema = require('./mongoose-models/mealPlan');
 
-
-
 // Routes
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -48,7 +47,7 @@ var print = require('./routes/print');
 var grip = require('./routes/grip');
 
 var app = express();
-app.use(Raven.requestHandler());
+if (!devMode) app.use(Raven.requestHandler());
 
 app.use(compression());
 
@@ -80,7 +79,7 @@ app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/grip', grip);
 
-app.use(Raven.errorHandler());
+if (!devMode) app.use(Raven.errorHandler());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -95,8 +94,6 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
 
   if (!err.status) err.status = 500;
-
-  var devMode = appConfig.environment === 'dev';
 
   res.locals.error = devMode ? err : {};
   if (devMode) console.error(err);
