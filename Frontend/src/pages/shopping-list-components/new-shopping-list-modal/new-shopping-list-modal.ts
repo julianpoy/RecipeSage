@@ -53,10 +53,9 @@ export class NewShoppingListModalPage {
     return new Promise(function (resolve, reject) {
       me.messagingService.threads().subscribe(function (response) {
         me.existingThreads = response.map(function(el){
-          me.threadsByUserId[el.otherUser._id] = el.otherUser;
+          me.threadsByUserId[el.otherUser.id] = el.otherUser;
           console.log(el.otherUser)
           return el.otherUser;
-          // return el.otherUser._id;
         });
 
         resolve();
@@ -97,13 +96,13 @@ export class NewShoppingListModalPage {
     var me = this;
     this.autofillTimeout = setTimeout(function () {
       me.userService.getUserByEmail(me.pendingThread.trim()).subscribe(function (response) {
-        if (!me.threadsByUserId[response._id]) {
+        if (!me.threadsByUserId[response.id]) {
           me.existingThreads.push(response);
-          me.threadsByUserId[response._id] = response;
+          me.threadsByUserId[response.id] = response;
         }
 
         me.pendingCollaboratorName = response.name || response.email;
-        me.pendingCollaboratorId = response._id;
+        me.pendingCollaboratorId = response.id;
         me.searchingForRecipient = false;
 
         if (callback) callback.call(null);
@@ -202,7 +201,7 @@ export class NewShoppingListModalPage {
       me.viewCtrl.dismiss({
         destination: 'ShoppingListPage',
         routingData: {
-          shoppingListId: response._id
+          shoppingListId: response.id
         },
         setRoot: false
       });

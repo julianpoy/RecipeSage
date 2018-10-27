@@ -72,7 +72,7 @@ export class PrintRecipeModalPage {
     this.base = localStorage.getItem('base') || '/api/';
 
     for (var i = 0; i < this.templates.length; i++) {
-      var url = this.base + 'print' + this.getTokenQuery() + '&recipeId=' + this.recipe._id + '&template=' + this.templates[i].name + '&modifiers=' + this.templates[i].modifiers;
+      var url = this.base + 'print' + this.getTokenQuery() + '&recipeId=' + this.recipe.id + '&template=' + this.templates[i].name + '&modifiers=' + this.templates[i].modifiers;
       this.templates[i].url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
   }

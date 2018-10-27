@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   MealPlan.associate = function(models) {
     MealPlan.belongsTo(models.User, {
       foreignKey: 'userId',
+      as: 'owner',
       onDelete: 'CASCADE',
     });
 

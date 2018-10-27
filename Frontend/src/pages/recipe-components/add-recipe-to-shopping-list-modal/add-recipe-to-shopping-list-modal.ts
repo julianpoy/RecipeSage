@@ -120,7 +120,7 @@ export class AddRecipeToShoppingListModalPage {
         console.log(this.reference)
         items.push({
           title: this.ingredients[i],
-          recipe: this.recipe._id,
+          recipe: this.recipe.id,
           reference: this.reference
         });
       }
@@ -130,7 +130,7 @@ export class AddRecipeToShoppingListModalPage {
     var loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
-      _id: this.destinationShoppingList._id,
+      id: this.destinationShoppingList.id,
       items: items
     }).subscribe(function (response) {
       loading.dismiss();

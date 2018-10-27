@@ -82,7 +82,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .post(me.base + 'shoppingLists/' + data._id + me.getTokenQuery(), data, httpOptions)
+          .post(me.base + 'shoppingLists/' + data.id + me.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(me.handleError)
           ).subscribe(function (response) {
@@ -100,7 +100,7 @@ export class ShoppingListServiceProvider {
     };
 
     return this.http
-      .put(this.base + 'shoppingLists/' + data._id + this.getTokenQuery(), data, httpOptions)
+      .put(this.base + 'shoppingLists/' + data.id + this.getTokenQuery(), data, httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -120,7 +120,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'shoppingLists/' + data._id + me.getTokenQuery() + '&items=' + data.items.join(',') + recipeQuery, httpOptions)
+          .delete(me.base + `shoppingLists/${data.id}/items${me.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`, httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)
@@ -142,7 +142,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'shoppingLists/' + data._id + '/unlink/' + me.getTokenQuery(), httpOptions)
+          .delete(me.base + 'shoppingLists/' + data.id + me.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)

@@ -5,10 +5,10 @@ var xmljs = require("xml-js");
 var Raven = require('raven');
 
 // DB
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var Recipe = mongoose.model('Recipe');
-var Label = mongoose.model('Label');
+var Op = require("sequelize").Op;
+var SQ = require('../models').sequelize;
+var Recipe = require('../models').Recipe;
+var Label = require('../models').Label;
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -16,7 +16,6 @@ var UtilService = require('../services/util');
 
 router.get('/',
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
   function (req, res, next) {
 
   var modifiers = [];
@@ -34,18 +33,18 @@ router.get('/',
     return;
   }
 
-  Recipe.findOne({
-    _id: req.query.recipeId
-  }).lean().exec(function(err, recipe) {
-    if (err) {
-      res.render('error', {
-        message: '500',
-        error: {
-          status: 'Error while loading recipe',
-          stack: ''
-        }
-      });
-    } else if (!recipe) {
+  Recipe.find({
+    where: {
+      id: req.query.recipeId
+    },
+    include: [
+      {
+        model: Label,
+        as: 'labels'
+      }
+    ]
+  }).then(function(recipe) {
+    if (!recipe) {
       res.render('error', {
         message: '404',
         error: {
@@ -54,31 +53,27 @@ router.get('/',
         }
       });
     } else {
-      Label.find({
-        recipes: recipe._id
-      }).lean().exec(function (err, labels) {
-        if (err) {
-          res.render('error', {
-            message: '500',
-            error: {
-              status: 'Error while loading recipe',
-              stack: ''
-            }
-          });
-        } else {
-          if (labels) recipe.labels = labels;
-          else recipe.labels = [];
-          recipe.instructions = recipe.instructions.split(/\r?\n/);
-          recipe.ingredients = recipe.ingredients.split(/\r?\n/);
+      let r = recipe.toJSON();
 
-          if (modifiers.indexOf('noimage') > -1) {
-            delete recipe.image;
-          }
+      r.instructions = r.instructions.split(/\r?\n/);
+      r.ingredients = r.ingredients.split(/\r?\n/);
 
-          res.render('recipe-' + req.query.template, { recipe: recipe, date: (new Date).toDateString(), modifiers: modifiers });
-        }
-      });
+      if (modifiers.indexOf('noimage') > -1) {
+        delete r.image;
+      }
+
+      res.render('recipe-' + req.query.template, { recipe: r, date: (new Date).toDateString(), modifiers: modifiers });
     }
+  }).catch(function(err) {
+    res.render('error', {
+      message: '500',
+      error: {
+        status: 'Error while loading recipe',
+        stack: ''
+      }
+    });
+
+    next(err);
   });
 });
 

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   ShoppingList.associate = function(models) {
     ShoppingList.belongsTo(models.User, {
       foreignKey: 'userId',
+      as: 'owner',
       onDelete: 'CASCADE',
     });
 

@@ -8,8 +8,8 @@
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
       <ion-option value="-title">Title</ion-option>
-      <ion-option value="-created">Created (newest first)</ion-option>
-      <ion-option value="created">Created (oldest first)</ion-option>
+      <ion-option value="-createdAt">Created (newest first)</ion-option>
+      <ion-option value="createdAt">Created (oldest first)</ion-option>
     </ion-select>
   </ion-item>
 

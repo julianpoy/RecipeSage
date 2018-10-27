@@ -25,8 +25,8 @@ router.get(
     id: res.locals.user.id,
     name: res.locals.user.name,
     email: res.locals.user.email,
-    created: res.locals.user.created,
-    updated: res.locals.user.updated
+    createdAt: res.locals.user.createdAt,
+    updatedAt: res.locals.user.updatedAt
   };
 
   res.status(200).json(user);

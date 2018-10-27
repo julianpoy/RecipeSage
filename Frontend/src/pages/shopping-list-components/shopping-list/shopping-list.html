@@ -39,11 +39,11 @@
             </p>
             <p *ngIf="viewOptions.showAddedOn">
               Added
-              <span>{{ formatItemCreationDate(item.created) }}</span>
+              <span>{{ formatItemCreationDate(item.createdAt) }}</span>
             </p>
-            <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
+            <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
               <span *ngIf="!viewOptions.showAddedOn">Added </span>by
-              <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+              <span>{{ item.owner.name || item.owner.email }}</span>
             </p>
           </ion-label>
           <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
@@ -60,11 +60,11 @@
           </p>
           <p *ngIf="viewOptions.showAddedOn">
             Added
-            <span>{{ formatItemCreationDate(item.created) }}</span>
+            <span>{{ formatItemCreationDate(item.createdAt) }}</span>
           </p>
-          <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.createdBy">
+          <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
             <span *ngIf="!viewOptions.showAddedOn">Added </span>by
-            <span>{{ item.createdBy.name || item.createdBy.email }}</span>
+            <span>{{ item.owner.name || item.owner.email }}</span>
           </p>
         </ion-label>
         <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>

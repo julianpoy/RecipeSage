@@ -38,7 +38,7 @@ export class NewShoppingListItemModalPage {
   }
 
   isFormValid() {
-    if (this.inputType === 'recipe' && this.selectedRecipe && this.selectedRecipe._id) {
+    if (this.inputType === 'recipe' && this.selectedRecipe && this.selectedRecipe.id) {
       return (this.selectedIngredients || []).length > 0;
     }
     if (this.inputType === 'items') {
@@ -56,7 +56,7 @@ export class NewShoppingListItemModalPage {
       for (var i = 0; i < this.selectedIngredients.length; i++) {
         items.push({
           title: this.selectedIngredients[i],
-          recipe: this.selectedRecipe._id
+          recipeId: this.selectedRecipe.id
         });
       }
     } else {

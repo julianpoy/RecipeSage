@@ -73,11 +73,11 @@ export class ShoppingListPopoverPage {
     var loading = this.loadingService.start();
 
     var itemIds = this.shoppingList.items.map(function(el) {
-      return el._id;
+      return el.id;
     });
 
     this.shoppingListService.remove({
-      _id: this.shoppingListId,
+      id: this.shoppingListId,
       items: itemIds
     }).subscribe(function () {
       loading.dismiss();
@@ -135,7 +135,7 @@ export class ShoppingListPopoverPage {
     var loading = this.loadingService.start();
 
     this.shoppingListService.unlink({
-      _id: this.shoppingListId
+      id: this.shoppingListId
     }).subscribe(function () {
       loading.dismiss();
 

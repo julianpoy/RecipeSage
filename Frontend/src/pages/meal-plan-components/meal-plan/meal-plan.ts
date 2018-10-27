@@ -33,6 +33,8 @@ export class MealPlanPage {
   center: any = new Date(this.today);
   selectedDay: any = this.today.getDate();
 
+  reference: number = 0;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
@@ -50,7 +52,7 @@ export class MealPlanPage {
     this.mealPlanId = navParams.get('mealPlanId');
 
     this.websocketService.register('mealPlan:itemsUpdated', function (payload) {
-      if (payload.mealPlanId === this.mealPlanId) {
+      if (payload.mealPlanId === this.mealPlanId && payload.reference !== this.reference) {
         this.loadList();
       }
     }, this);
@@ -176,7 +178,7 @@ export class MealPlanPage {
       if (comp === 0) return a.title.localeCompare(b.title);
       return comp;
     }).forEach((item) => {
-      item.scheduledDateObj = new Date(item.scheduledDate);
+      item.scheduledDateObj = new Date(item.scheduled);
       var month = item.scheduledDateObj.getMonth();
       var day = item.scheduledDateObj.getDate();
       this.mealsByDate[month] = this.mealsByDate[month] || {};
@@ -261,12 +263,12 @@ export class MealPlanPage {
     var loading = this.loadingService.start();
 
     this.mealPlanService.remove({
-      _id: this.mealPlanId,
-      itemId: item._id
+      id: this.mealPlanId,
+      itemId: item.id
     }).subscribe(function (response) {
-      loading.dismiss();
+      me.reference = response.reference || 0;
 
-      me.processIncomingMealPlan(response);
+      me.loadList().then(loading.dismiss);
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
@@ -300,15 +302,15 @@ export class MealPlanPage {
     date.setDate(this.selectedDay);
 
     this.mealPlanService.addItem({
-      _id: this.mealPlanId,
+      id: this.mealPlanId,
       title: item.title,
       recipe: item.recipe || null,
       meal: item.meal,
-      scheduledDate: date
+      scheduled: date
     }).subscribe(function (response) {
-      loading.dismiss();
+      me.reference = response.reference;
 
-      me.processIncomingMealPlan(response);
+      me.loadList().then(loading.dismiss);
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
@@ -360,7 +362,7 @@ export class MealPlanPage {
 
   loadViewOptions() {
     var defaults = {
-      sortBy: '-created',
+      sortBy: '-createdAt',
       showAddedBy: false,
       showAddedOn: false,
       showRecipeTitle: true,
@@ -385,17 +387,17 @@ export class MealPlanPage {
   openRecipe(recipe) {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
-      recipeId: recipe._id
+      recipeId: recipe.id
     });
   }
 
   addMealPlanItemToShoppingList(mealPlanItem) {
     var me = this;
     // Fetch complete recipe (this page is provided with only topical recipe details)
-    this.recipeService.fetchById(mealPlanItem.recipe._id).subscribe(function (response) {
+    this.recipeService.fetchById(mealPlanItem.recipe.id).subscribe(function (response) {
       let addRecipeToShoppingListModal = me.modalCtrl.create('AddRecipeToShoppingListModalPage', {
         recipe: response,
-        reference: mealPlanItem._id
+        reference: mealPlanItem.id
       });
       addRecipeToShoppingListModal.present();
     }, function (err) {
@@ -451,7 +453,7 @@ export class MealPlanPage {
 
   _removeMealPlanItemFromShoppingList(mealPlanItem) {
     var elIds = mealPlanItem.shoppingListItems.map(function(el) {
-      return el._id;
+      return el.id;
     });
 
     console.log(elIds);
@@ -460,7 +462,7 @@ export class MealPlanPage {
     var loading = this.loadingService.start();
 
     this.shoppingListService.remove({
-      _id: mealPlanItem.shoppingListId,
+      id: mealPlanItem.shoppingListId,
       items: elIds
     }).subscribe(function (response) {
       loading.dismiss();

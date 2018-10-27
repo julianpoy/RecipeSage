@@ -9,6 +9,7 @@ var Raven = require('raven');
 var Op = require("sequelize").Op;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
+var FCMToken = require('../models').FCMToken;
 
 // Service
 var FirebaseService = require('./firebase');
@@ -163,23 +164,6 @@ exports.deleteS3Object = function(key, success, fail){
   });
 }
 
-// Deprecated
-exports.dispatchShareNotification = function(user, recipe) {
-  if (user.fcmTokens) {
-    var message = {
-      type: "recipe:inbox:new",
-      recipe: JSON.stringify(recipe)
-    }
-
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, function() {}, function() {
-        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
-      });
-    }
-  }
-}
-
 exports.dispatchImportNotification = function(user, status, reason) {
   var type;
   if (status === 0) {
@@ -201,7 +185,12 @@ exports.dispatchImportNotification = function(user, status, reason) {
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
       FirebaseService.sendMessage(token, message, function() {}, function() {
-        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
+        FCMToken.destroy({
+          where: {
+            userId: user.id,
+            token: token
+          }
+        })
       });
     }
   }
@@ -238,7 +227,12 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
       FirebaseService.sendMessage(token, notification, function() {}, function() {
-        User.update({ _id: user._id }, { $pull: { fcmTokens: token } }).exec(function() {});
+        FCMToken.destroy({
+          where: {
+            userId: user.id,
+            token: token
+          }
+        });
       });
     }
   }

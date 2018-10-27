@@ -14,20 +14,25 @@ module.exports = (sequelize, DataTypes) => {
   MealPlanItem.associate = function(models) {
     MealPlanItem.belongsTo(models.User, {
       foreignKey: 'userId',
+      as: 'owner',
       onDelete: 'CASCADE',
     });
 
-    MealPlanItem.hasOne(models.ShoppingListItem, {
-      foreignKey: 'mealPlanItemId'
+    MealPlanItem.hasMany(models.ShoppingListItem, {
+      foreignKey: 'mealPlanItemId',
+      as: 'shoppingListItems',
+      onDelete: 'SET NULL'
     });
 
     MealPlanItem.belongsTo(models.MealPlan, {
       foreignKey: 'mealPlanId',
+      as: 'mealPlan',
       onDelete: 'CASCADE',
     });
 
     MealPlanItem.belongsTo(models.Recipe, {
       foreignKey: 'recipeId',
+      as: 'recipe',
       onDelete: 'CASCADE',
     });
   };

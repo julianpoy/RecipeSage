@@ -51,7 +51,7 @@ export class NewMealPlanItemModalPage {
     if (this.inputType === 'recipe') {
       item = {
         title: this.selectedRecipe.title,
-        recipe: this.selectedRecipe._id
+        recipe: this.selectedRecipe.id
       };
     } else {
       item = {

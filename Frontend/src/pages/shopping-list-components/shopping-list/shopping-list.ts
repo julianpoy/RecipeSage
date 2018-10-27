@@ -25,6 +25,8 @@ export class ShoppingListPage {
 
   initialLoadComplete: boolean = false;
 
+  reference: number = 0;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
@@ -39,7 +41,7 @@ export class ShoppingListPage {
     this.shoppingListId = navParams.get('shoppingListId');
 
     this.websocketService.register('shoppingList:itemsUpdated', function(payload) {
-      if (payload.shoppingListId === this.shoppingListId) {
+      if (payload.shoppingListId === this.shoppingListId && payload.reference !== this.reference) {
         this.loadList();
       }
     }, this);
@@ -86,7 +88,7 @@ export class ShoppingListPage {
       // Recipe grouping
       if (!items[i].recipe) continue;
 
-      var recipeId = items[i].recipe.id + items[i].created;
+      var recipeId = items[i].recipe.id + items[i].createdAt;
 
       if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
 
@@ -148,29 +150,37 @@ export class ShoppingListPage {
     var loading = this.loadingService.start();
 
     var itemIds = items.map(function (el) {
-      return el._id;
+      return el.id;
     });
 
     this.shoppingListService.remove({
-      _id: this.list._id,
+      id: this.list.id,
       items: itemIds
     }).subscribe(function (response) {
-      loading.dismiss();
+      me.reference = response.reference || 0;
 
-      me.processIncomingList(response);
-
-      var toast = me.toastCtrl.create({
-        message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
-        duration: 5000,
-        showCloseButton: true,
-        closeButtonText: 'Undo',
+      me.loadList().then(function() {
+        loading.dismiss();
+        var toast = me.toastCtrl.create({
+          message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
+          duration: 5000,
+          showCloseButton: true,
+          closeButtonText: 'Undo',
+        });
+        toast.onDidDismiss((data, role) => {
+          if (role == "close") {
+            me._addItems(items.map(function(el) {
+              return {
+                title: el.title,
+                id: el.shoppingListId,
+                mealPlanItemId: (el.mealPlanItem || {}).id || null,
+                recipeId: (el.recipe || {}).id || null
+              }
+            }));
+          }
+        });
+        toast.present();
       });
-      toast.onDidDismiss((data, role) => {
-        if (role == "close") {
-          me._addItems(items);
-        }
-      });
-      toast.present();
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
@@ -201,12 +211,12 @@ export class ShoppingListPage {
     var loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
-      _id: this.list._id,
+      id: this.list.id,
       items: items
     }).subscribe(function (response) {
-      loading.dismiss();
+      me.reference = response.reference || 0;
 
-      me.processIncomingList(response);
+      me.loadList().then(loading.dismiss);
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
@@ -282,14 +292,14 @@ export class ShoppingListPage {
 
   ingredientSorter(a, b) {
     if (this.viewOptions.sortBy === 'created') {
-      var dateComp = (<any>new Date(a.created)) - (<any>new Date(b.created));
+      var dateComp = (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
       if (dateComp === 0) {
         return a.title.localeCompare(b.title);
       }
       return dateComp;
     }
     if (this.viewOptions.sortBy === '-created') {
-      var reverseDateComp = (<any>new Date(b.created)) - (<any>new Date(a.created));
+      var reverseDateComp = (<any>new Date(b.createdAt)) - (<any>new Date(a.createdAt));
       if (reverseDateComp === 0) {
         return a.title.localeCompare(b.title);
       }
@@ -298,7 +308,7 @@ export class ShoppingListPage {
     if (this.viewOptions.sortBy === '-title') {
       var localeComp = a.title.localeCompare(b.title);
       if (localeComp === 0) {
-        return (<any>new Date(a.created)) - (<any>new Date(b.created));
+        return (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
       }
       return localeComp;
     }

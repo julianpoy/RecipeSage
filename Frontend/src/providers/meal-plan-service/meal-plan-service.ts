@@ -80,7 +80,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .post(me.base + 'mealPlans/' + data._id + me.getTokenQuery(), data, httpOptions)
+          .post(me.base + 'mealPlans/' + data.id + me.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(me.handleError)
           ).subscribe(function (response) {
@@ -98,7 +98,7 @@ export class MealPlanServiceProvider {
     };
 
     return this.http
-      .put(this.base + 'shoppingLists/' + data._id + this.getTokenQuery(), data, httpOptions)
+      .put(this.base + 'shoppingLists/' + data.id + this.getTokenQuery(), data, httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -116,7 +116,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'mealPlans/' + data._id + me.getTokenQuery() + '&itemId=' + data.itemId, httpOptions)
+          .delete(me.base + `mealPlans/${data.id}/items${me.getTokenQuery()}&itemId=${data.itemId}`, httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)
@@ -138,7 +138,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: function (resolve, reject) {
         me.http
-          .delete(me.base + 'mealPlans/' + data._id + '/unlink/' + me.getTokenQuery(), httpOptions)
+          .delete(me.base + 'mealPlans/' + data.id + me.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
             catchError(me.handleError)

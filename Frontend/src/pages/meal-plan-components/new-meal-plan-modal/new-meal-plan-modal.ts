@@ -46,7 +46,7 @@ export class NewMealPlanModalPage {
       me.viewCtrl.dismiss({
         destination: 'MealPlanPage',
         routingData: {
-          mealPlanId: response._id
+          mealPlanId: response.id
         },
         setRoot: false
       });

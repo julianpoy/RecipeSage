@@ -100,7 +100,7 @@ export class MyApp {
       toast.onDidDismiss((data, role) => {
         console.log('Dismissed toast');
         if (role == "close") {
-          this.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser._id });
+          this.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser.id });
         }
       });
     }, this);

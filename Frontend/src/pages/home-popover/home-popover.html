@@ -10,7 +10,7 @@
     </ion-label>
     <ion-icon name='pricetag' item-start></ion-icon>
   </ion-item>
-  
+
   <ion-item>
     <ion-toggle [(ngModel)]="viewOptions.showImages" (ngModelChange)="saveViewOptions()"></ion-toggle>
     <ion-label>
@@ -26,20 +26,20 @@
     </ion-label>
     <ion-icon name='link' item-start></ion-icon>
   </ion-item>
-  
+
   <ion-item>
     <ion-icon name='list' item-start></ion-icon>
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
       <ion-option value="-title">Title</ion-option>
       <!--<ion-option value="label">Label</ion-option>-->
-      <ion-option value="-created">Created (newest first)</ion-option>
-      <ion-option value="created">Created (oldest first)</ion-option>
-      <ion-option value="-updated">Updated (newest first)</ion-option>
-      <ion-option value="updated">Updated (oldest first)</ion-option>
+      <ion-option value="-createdAt">Created (newest first)</ion-option>
+      <ion-option value="createdAt">Created (oldest first)</ion-option>
+      <ion-option value="-updatedAt">Updated (newest first)</ion-option>
+      <ion-option value="updatedAt">Updated (oldest first)</ion-option>
     </ion-select>
   </ion-item>
-  
+
   <ion-item>
     <ion-icon name='funnel' item-start></ion-icon>
     <ion-label>Filter by label</ion-label>

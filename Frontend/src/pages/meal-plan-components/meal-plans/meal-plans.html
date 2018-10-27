@@ -13,24 +13,24 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list no-lines>
-    <ion-item class="mealPlan" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan._id)" text-wrap>
+    <ion-item class="mealPlan" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan.id)" text-wrap>
       <ion-icon name="list" item-start></ion-icon>
       <h2>{{ mealPlan.title }}</h2>
       <p>
-        Created {{ formatItemCreationDate(mealPlan.created) }}
+        Created {{ formatItemCreationDate(mealPlan.createdAt) }}
       </p>
       <p *ngIf="mealPlan.collaborators.length > 0">
         In collaboration with:
         <span *ngFor="let user of mealPlan.collaborators">
-          <span *ngIf="mealPlan.myUserId !== user._id">{{ user.name || user.email }}</span>
+          <span *ngIf="mealPlan.myUserId !== user.id">{{ user.name || user.email }}</span>
         </span>
-        <span *ngIf="mealPlan.myUserId !== mealPlan.accountId._id">{{ mealPlan.accountId.name || mealPlan.accountId.email
+        <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">{{ mealPlan.owner.name || mealPlan.owner.email
           }}</span>
       </p>
       <p>
-        <span *ngIf="mealPlan.myUserId !== mealPlan.accountId._id">Created by {{ mealPlan.accountId.name || mealPlan.accountId.email
+        <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">Created by {{ mealPlan.owner.name || mealPlan.owner.email
           }}</span>
-        <span *ngIf="mealPlan.myUserId === mealPlan.accountId._id">You own this list</span>
+        <span *ngIf="mealPlan.myUserId === mealPlan.owner.id">You own this list</span>
       </p>
       <ion-badge item-end>{{ mealPlan.itemCount }}</ion-badge>
     </ion-item>

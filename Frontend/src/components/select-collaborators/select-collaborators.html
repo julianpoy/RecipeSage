@@ -24,8 +24,8 @@
         <span class="hint">Already added</span>
       </button>
       <button class="suggestion" *ngFor="let thread of existingThreads | shoppingListCollaboratorFilter:pendingThread+selectedThreads.join()+pendingCollaboratorId:pendingThread:selectedThreads"
-        (click)="addCollaborator(thread._id)">
-        {{ threadsByUserId[thread._id].name || threadsByUserId[thread._id].email }}
+        (click)="addCollaborator(thread.id)">
+        {{ threadsByUserId[thread.id].name || threadsByUserId[thread.id].email }}
         <span class="hint">Click to add</span>
       </button>
       <!-- Searching for user for which a thread does not exist -->

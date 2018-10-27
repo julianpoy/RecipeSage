@@ -10,7 +10,7 @@ var SESSION_VALIDITY_LENGTH = 7; // Initial session validity time
 var SET_GRACE_WHEN = 5; // Set token expiry equal to grace period if session will expire in X days
 var SESSION_GRACE_PERIOD = 7; // Should always be more than SET_GRACE_WHEN
 
-//Checks if a token exists, and returns the corrosponding accountId
+//Checks if a token exists, and returns the corrosponding userId
 exports.validateSession = function(token, type, success, fail) {
   var query;
   if(typeof type == "string"){
@@ -83,16 +83,14 @@ exports.validateSession = function(token, type, success, fail) {
 };
 
 //Creates a token and returns the token if successful
-exports.generateSession = function(accountId, type, success, fail) {
+exports.generateSession = function(userId, type, success, fail) {
   //Create a random token
   var token = crypto.randomBytes(48).toString('hex');
   //New session!
   Session.create({
-    userId: accountId,
-    type: type,
-    token: token,
-    // createdAt: Date.now(),
-    // updated: Date.now(),
+    userId,
+    type,
+    token,
     expires: moment().add(SESSION_VALIDITY_LENGTH, "days")
   }).then(function(session) {
     success(token, session);

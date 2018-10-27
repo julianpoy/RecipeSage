@@ -155,7 +155,7 @@ export class SelectRecipeComponent {
     this.toggleAutocomplete(false);
 
     var me = this;
-    this.recipeService.fetchById(recipe._id).subscribe(function (response) {
+    this.recipeService.fetchById(recipe.id).subscribe(function (response) {
       me.selectedRecipe = response;
     }, function (err) {
       switch (err.status) {

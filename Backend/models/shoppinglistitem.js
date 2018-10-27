@@ -13,21 +13,25 @@ module.exports = (sequelize, DataTypes) => {
   ShoppingListItem.associate = function(models) {
     ShoppingListItem.belongsTo(models.User, {
       foreignKey: 'userId',
+      as: 'owner',
       onDelete: 'CASCADE',
     });
 
     ShoppingListItem.belongsTo(models.ShoppingList, {
       foreignKey: 'shoppingListId',
+      as: 'shoppingList',
       onDelete: 'CASCADE',
     });
 
     ShoppingListItem.belongsTo(models.MealPlanItem, {
       foreignKey: 'mealPlanItemId',
+      as: 'mealPlanItem',
       onDelete: 'CASCADE',
     });
 
     ShoppingListItem.belongsTo(models.Recipe, {
       foreignKey: 'recipeId',
+      as: 'recipe',
       onDelete: 'CASCADE',
     });
   };
