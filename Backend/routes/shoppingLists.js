@@ -161,26 +161,16 @@ router.post(
         res.status(404).send("Shopping list with that ID not found or you do not have access!");
       } else {
         return SQ.transaction(function(t) {
-
-          var itemCreationP = [];
-          var items = [];
-
-          for (var i = 0; i < req.body.items.length; i++) {
-            itemCreationP.push(
-              ShoppingListItem.create({
-                title: req.body.items[i].title,
-                completed: false,
-                userId: res.locals.userId,
-                shoppingListId: shoppingList.id,
-                recipeId: req.body.items[i].recipeId || null,
-                mealPlanItemId: req.body.items[i].mealPlanItemId
-              }, { transaction: t }).then(function(item) {
-                items.push(item);
-              })
-            );
-          }
-
-          return Promise.all(itemCreationP).then(function() {
+          return ShoppingListItem.bulkCreate(req.body.items.map((item) => {
+            return {
+              title: item.title,
+              completed: false,
+              userId: res.locals.userId,
+              shoppingListId: shoppingList.id,
+              recipeId: item.recipeId || null,
+              mealPlanItemId: item.mealPlanItemId
+            }
+          }), { transaction: t }).then(function() {
             let reference = Date.now();
 
             var broadcastPayload = {
