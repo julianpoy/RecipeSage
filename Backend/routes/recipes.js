@@ -23,10 +23,8 @@ router.post(
   UtilService.upload.single('image'),
   function(req, res, next) {
 
-  var folder = 'main'; // Default folder
-  if (req.body.destinationUserEmail) { //We're sending the recipe to someone else
-    folder = 'inbox';
-  }
+  // If sending to another user, folder should be inbox. Otherwise, main.
+  let folder = req.body.destinationUserEmail ? 'inbox' : 'main';
 
   // Check for title
   if (!req.body.title || req.body.title.length === 0) {
@@ -40,7 +38,7 @@ router.post(
     }
   } else {
     // Support for imageURLs instead of image files
-    var uploadByURLPromise = new Promise(function(resolve, reject) {
+    new Promise(function(resolve, reject) {
       if (req.body.imageURL) {
         UtilService.sendURLToS3(req.body.imageURL, function(err, img) {
           if (err) {
@@ -52,13 +50,11 @@ router.post(
       } else {
         resolve(null);
       }
-    });
-
-    uploadByURLPromise.then(function(img) {
+    }).then(function(img) {
       var uploadedFile = img || req.file;
 
-      UtilService.findTitle(res.locals.session.userId, null, req.body.title, null, function(adjustedTitle) {
-        Recipe.create({
+      return UtilService.findTitle(res.locals.session.userId, null, req.body.title, null).then(function(adjustedTitle) {
+        return Recipe.create({
           userId: res.locals.session.userId,
       		title: adjustedTitle,
           description: req.body.description,
@@ -72,15 +68,23 @@ router.post(
           instructions: req.body.instructions,
           image: uploadedFile,
           folder: folder
-        })
-        .then(function(recipe) {
-          var serializedRecipe = recipe.toObject();
+        }).then(function(recipe) {
+          var serializedRecipe = recipe.toJSON();
           serializedRecipe.labels = [];
           res.status(201).json(serializedRecipe);
-        })
-        .catch(next);
-      }, next);
-    }, next);
+        });
+      });
+    }).catch(function (err) {
+      if (req.file) {
+        return UtilService.deleteS3Object(req.file.key).then(function () {
+          next(err);
+        }).catch(function () {
+          next(err);
+        });
+      }
+
+      next(err);
+    });
   }
 });
 
@@ -110,11 +114,9 @@ router.get(
     order: [
       ['title', 'ASC']
     ],
-  })
-  .then(function(recipes) {
+  }).then(function(recipes) {
     res.status(200).json(recipes);
-  })
-  .catch(next);
+  }).catch(next);
 });
 
 router.get(
@@ -140,8 +142,7 @@ router.get(
     order: [
       ['title', 'ASC']
     ],
-  })
-  .then(function(recipes) {
+  }).then(function(recipes) {
     var data;
     var mimetype;
 
@@ -191,8 +192,7 @@ router.get(
 
       res.end();
     });
-  })
-  .catch(next);
+  }).catch(next);
 });
 
 //Get a single recipe
@@ -220,15 +220,13 @@ router.get(
     order: [
       ['title', 'ASC']
     ],
-  })
-  .then(function(recipe) {
+  }).then(function(recipe) {
     if (!recipe) {
       res.status(404).send("Recipe with that ID not found!");
     } else {
       res.status(200).json(recipe);
     }
-  })
-  .catch(next);
+  }).catch(next);
 });
 
 //Update a recipe
@@ -244,8 +242,7 @@ router.put(
       id: req.params.id,
       userId: res.locals.session.userId
     }
-  })
-  .then(function(recipe) {
+  }).then(function(recipe) {
     if (!recipe) {
       res.status(404).json({
         msg: "Recipe with that ID does not exist!"
@@ -285,10 +282,9 @@ router.put(
         });
       });
     }
-  })
-  .catch(function(err) {
+  }).catch(function(err) {
     if (req.file) {
-      return UtilService.deleteS3Object(recipe.image.key).then(function() {
+      return UtilService.deleteS3Object(req.file.key).then(function() {
         next(err);
       }).catch(function() {
         next(err);
