@@ -34,7 +34,12 @@ router.post(
     collaborators: req.body.collaborators || [],
     userId: res.locals.userId
   }, {
-    include: [User]
+    include: [
+      {
+        model: User,
+        as: 'collaborators'
+      }
+    ]
   }).then(function(shoppingList) {
     for (var i = 0; i < (req.body.collaborators || []).length; i++) {
       GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
