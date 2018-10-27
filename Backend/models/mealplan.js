@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {});
   MealPlan.associate = function(models) {
     MealPlan.belongsTo(models.User, {

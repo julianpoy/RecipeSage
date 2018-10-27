@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {});
   ShoppingList.associate = function(models) {
     ShoppingList.belongsTo(models.User, {

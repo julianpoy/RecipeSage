@@ -7,9 +7,18 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    type: DataTypes.STRING,
-    token: DataTypes.STRING,
-    expires: DataTypes.DATE
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    expires: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
   }, {});
   Session.associate = function(models) {
     Session.belongsTo(models.User, {

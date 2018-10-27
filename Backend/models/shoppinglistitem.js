@@ -7,8 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING,
-    completed: DataTypes.BOOLEAN
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    completed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    }
   }, {});
   ShoppingListItem.associate = function(models) {
     ShoppingListItem.belongsTo(models.User, {

@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    body: DataTypes.STRING
+    body: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    }
   }, {});
   Message.associate = function(models) {
     Message.belongsTo(models.User, {

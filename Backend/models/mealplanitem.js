@@ -7,9 +7,19 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING,
-    scheduled: DataTypes.DATE,
-    meal: DataTypes.STRING
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    scheduled: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    meal: {
+      type: DataTypes.STRING,
+      defaultValue: 'other',
+      allowNull: false
+    }
   }, {});
   MealPlanItem.associate = function(models) {
     MealPlanItem.belongsTo(models.User, {

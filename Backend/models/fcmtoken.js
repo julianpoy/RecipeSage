@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    token: DataTypes.STRING
+    token: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {});
   FCMToken.associate = function(models) {
     FCMToken.belongsTo(models.User, {

@@ -13,10 +13,23 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    passwordHash: DataTypes.STRING,
-    passwordSalt: DataTypes.STRING,
-    passwordVersion: DataTypes.INTEGER,
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    passwordHash: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    passwordSalt: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    passwordVersion: {
+      type: DataTypes.INTEGER,
+      defaultValue: currentPasswordVersion,
+      allowNull: false
+    },
     lastLogin: DataTypes.DATE
   }, {});
   User.associate = function(models) {

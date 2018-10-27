@@ -7,18 +7,62 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    yield: DataTypes.STRING,
-    activeTime: DataTypes.STRING,
-    totalTime: DataTypes.STRING,
-    source: DataTypes.STRING,
-    url: DataTypes.STRING,
-    notes: DataTypes.STRING,
-    ingredients: DataTypes.STRING,
-    instructions: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    yield: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    activeTime: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    totalTime: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    source: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    url: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    notes: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    ingredients: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
+    instructions: {
+      type: DataTypes.STRING,
+      defaultValue: '',
+      allowNull: false
+    },
     image: DataTypes.JSONB,
-    folder: DataTypes.STRING
+    folder: {
+      type: DataTypes.STRING,
+      defaultValue: 'main',
+      allowNull: false
+    }
   }, {});
   Recipe.associate = function(models) {
     Recipe.belongsTo(models.User, {
