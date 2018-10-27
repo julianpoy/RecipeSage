@@ -249,16 +249,16 @@ router.put(
       });
     } else {
       return SQ.transaction(function(t) {
-        if (typeof req.body.description === 'string') recipe.description = req.body.description;
-        if (typeof req.body.yield === 'string') recipe.yield = req.body.yield;
-        if (typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
-        if (typeof req.body.totalTime === 'string') recipe.totalTime = req.body.totalTime;
-        if (typeof req.body.source === 'string') recipe.source = req.body.source;
-        if (typeof req.body.url === 'string') recipe.url = req.body.url;
-        if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
-        if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
-        if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
-        if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
+        if (req.body.description && typeof req.body.description === 'string') recipe.description = req.body.description;
+        if (req.body.yield && typeof req.body.yield === 'string') recipe.yield = req.body.yield;
+        if (req.body.activeTime && typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
+        if (req.body.totalTime && typeof req.body.totalTime === 'string') recipe.totalTime = req.body.totalTime;
+        if (req.body.source && typeof req.body.source === 'string') recipe.source = req.body.source;
+        if (req.body.url && typeof req.body.url === 'string') recipe.url = req.body.url;
+        if (req.body.notes && typeof req.body.notes === 'string') recipe.notes = req.body.notes;
+        if (req.body.ingredients && typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
+        if (req.body.instructions && typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+        if (req.body.folder && typeof req.body.folder === 'string') recipe.folder = req.body.folder;
 
         // Check if user uploaded a new image. If so, delete the old image to save space and $$
         var oldImage = recipe.image;
