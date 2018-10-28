@@ -27,29 +27,33 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-  MealPlan.create({
-    title: req.body.title,
-    collaborators: req.body.collaborators || [],
-    userId: res.locals.userId
-  }, {
-    include: [
-      {
-        model: User,
-        as: 'collaborators'
-      }]
-  }).then(function(mealPlan) {
-    for (var i = 0; i < (req.body.collaborators || []).length; i++) {
-      GripService.broadcast(req.body.collaborators[i], 'mealPlan:received', {
-        mealPlanId: mealPlan.id,
-        from: {
-          id: res.locals.user.id,
-          name: res.locals.user.name,
-          email: res.locals.user.email
+  SQ.transaction((t) => {
+    return MealPlan.create({
+      title: req.body.title,
+      userId: res.locals.userId
+    }, {
+      transaction: t
+    }).then(function(mealPlan) {
+      return mealPlan.addCollaborators(
+        req.body.collaborators || [],
+        {
+          transaction: t
         }
-      });
-    }
+      ).then(() => {
+        for (var i = 0; i < (req.body.collaborators || []).length; i++) {
+          GripService.broadcast(req.body.collaborators[i], 'mealPlan:received', {
+            mealPlanId: mealPlan.id,
+            from: {
+              id: res.locals.user.id,
+              name: res.locals.user.name,
+              email: res.locals.user.email
+            }
+          });
+        }
 
-    res.status(200).json(mealPlan);
+        res.status(200).json(mealPlan);
+      })
+    });
   }).catch(next);
 });
 
