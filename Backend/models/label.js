@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Label.associate = function(models) {
     Label.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: {
+        name: 'userId',
+        allowNull: false
+      },
       onDelete: 'CASCADE',
     });
 

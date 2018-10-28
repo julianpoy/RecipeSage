@@ -15,13 +15,19 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Message.associate = function(models) {
     Message.belongsTo(models.User, {
-      foreignKey: 'fromUserId',
+      foreignKey: {
+        name: 'fromUserId',
+        allowNull: false
+      },
       as: 'fromUser',
       onDelete: 'CASCADE',
     });
 
     Message.belongsTo(models.User, {
-      foreignKey: 'toUserId',
+      foreignKey: {
+        name: 'toUserId',
+        allowNull: false
+      },
       as: 'toUser',
       onDelete: 'CASCADE',
     });

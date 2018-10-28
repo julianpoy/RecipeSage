@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   FCMToken.associate = function(models) {
     FCMToken.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: {
+        name: 'userId',
+        allowNull: false
+      },
       onDelete: 'CASCADE',
     });
   };

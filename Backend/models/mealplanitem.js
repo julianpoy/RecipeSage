@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   MealPlanItem.associate = function(models) {
     MealPlanItem.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: {
+        name: 'userId',
+        allowNull: false
+      },
       as: 'owner',
       onDelete: 'CASCADE',
     });
@@ -35,7 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     MealPlanItem.belongsTo(models.MealPlan, {
-      foreignKey: 'mealPlanId',
+      foreignKey: {
+        name: 'mealPlanId',
+        allowNull: false
+      },
       as: 'mealPlan',
       onDelete: 'CASCADE',
     });

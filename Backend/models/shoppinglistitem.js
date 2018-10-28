@@ -19,13 +19,19 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ShoppingListItem.associate = function(models) {
     ShoppingListItem.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: {
+        name: 'userId',
+        allowNull: false
+      },
       as: 'owner',
       onDelete: 'CASCADE',
     });
 
     ShoppingListItem.belongsTo(models.ShoppingList, {
-      foreignKey: 'shoppingListId',
+      foreignKey: {
+        name: 'shoppingListId',
+        allowNull: false
+      },
       as: 'shoppingList',
       onDelete: 'CASCADE',
     });
