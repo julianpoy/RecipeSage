@@ -87,7 +87,7 @@ router.get(
           attributes: []
         }
       ],
-      attributes: ['id', 'createdAt', 'updatedAt', [SQ.fn('COUNT', 'items.id'), 'itemCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', 'items.id'), 'itemCount']],
       group: ['MealPlan.id', 'collaborators.id', 'collaborators->MealPlan_Collaborator.id', 'owner.id'],
       order: [
         ['updatedAt', 'DESC']

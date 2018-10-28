@@ -87,7 +87,7 @@
         <button
           ion-button
           item-end
-          *ngIf="mealItem.recipe && (mealItem.shoppingListItems || []).length > 0"
+          *ngIf="mealItem.recipe && mealItem.shoppingListItems.length > 0"
           (click)="$event.stopPropagation(); removeMealPlanItemFromShoppingList(mealItem)">
           <ion-icon name="cart"></ion-icon>
         </button>
@@ -96,7 +96,7 @@
           ion-button
           item-end
           outline
-          *ngIf="mealItem.recipe && (mealItem.shoppingListItems || []).length === 0"
+          *ngIf="mealItem.recipe && mealItem.shoppingListItems.length === 0"
           (click)="$event.stopPropagation(); addMealPlanItemToShoppingList(mealItem)">
           <ion-icon name="cart"></ion-icon>
         </button>

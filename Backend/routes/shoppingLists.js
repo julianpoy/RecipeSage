@@ -173,7 +173,7 @@ router.post(
               userId: res.locals.userId,
               shoppingListId: shoppingList.id,
               recipeId: item.recipeId || null,
-              mealPlanItemId: item.mealPlanItemId
+              mealPlanItemId: item.mealPlanItemId || null
             }
           }), { transaction: t }).then(function() {
             let reference = Date.now();

@@ -304,7 +304,7 @@ export class MealPlanPage {
     this.mealPlanService.addItem({
       id: this.mealPlanId,
       title: item.title,
-      recipe: item.recipe || null,
+      recipeId: item.recipeId || null,
       meal: item.meal,
       scheduled: date
     }).subscribe(function (response) {
