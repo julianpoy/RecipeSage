@@ -46,8 +46,21 @@
       </ion-col>
     </ion-row>
     <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
-      <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectedDay = day">
-        <div class="date" [ngClass]="{ 'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date() }">
+      <ion-col
+        class="day"
+        *ngFor="let day of weekOfMonth"
+        (click)="selectedDay = day"
+        [ngClass]="{
+          'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+          'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+        }">
+        <div
+          class="date"
+          [ngClass]="{
+            'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+            'inactive': center.getMonth() !== day.month(),
+            'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+          }">
           {{day.date()}}
         </div>
         <div class="recipe-dot" *ngFor="let mealItem of mealItemsByDay(day)"></div>
