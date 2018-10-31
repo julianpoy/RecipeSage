@@ -41,6 +41,7 @@
     "cordova-plugin-ionic-webview": "^2.0.3",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-whitelist": "^1.3.3",
+    "dayjs": "^1.7.7",
     "firebase": "^5.4.0",
     "fraction.js": "^4.0.9",
     "ionic-angular": "3.9.2",
