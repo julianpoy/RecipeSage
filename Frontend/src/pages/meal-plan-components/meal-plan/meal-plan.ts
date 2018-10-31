@@ -7,6 +7,8 @@ import { UtilServiceProvider } from '../../../providers/util-service/util-servic
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 
+import dayjs, { Dayjs } from 'dayjs'
+
 @IonicPage({
   segment: 'meal-planners/:mealPlanId',
   priority: 'low'
@@ -29,9 +31,10 @@ export class MealPlanPage {
   initialLoadComplete: boolean = false;
 
   weeksOfMonth: any = [];
-  today: any = new Date();
-  center: any = new Date(this.today);
-  selectedDay: any = this.today.getDate();
+  today: Date = new Date();
+  center: Date = new Date(this.today);
+  selectedDay: Dayjs = dayjs(this.today);
+  dayTitles: string[];
 
   reference: number = 0;
 
@@ -86,52 +89,42 @@ export class MealPlanPage {
     });
   }
 
-  selectDay(day) {
-    if (day === 0) {
-      this.moveCalendar(-1);
-    } else if (day === 32) {
-      this.moveCalendar(1);
-    }
-
-    this.selectedDay = day;
-  }
-
-  getFirstDayOfMonth(center) {
-    return (new Date(center.getFullYear(), center.getMonth(), 1));
-  }
-
-  getLastDayOfMonth(center) {
-    return (new Date(center.getFullYear(), center.getMonth() + 1, 0));
-  }
-
   // Generates calendar array centered around specified day (today).
-  generateCalendar(today?) {
+  generateCalendar() {
+    const { viewOptions, center } = this;
+
     this.weeksOfMonth = [];
 
-    var baseDate = today ? new Date(today) : new Date();
-    var startOfMonth = this.getFirstDayOfMonth(baseDate);
-    var endOfMonth = this.getLastDayOfMonth(baseDate);
+    const base = dayjs(center);
+    var startOfMonth = base.startOf('month');
+    var startOfCalendar = startOfMonth.startOf('week');
+    var endOfMonth = base.endOf('month');
+    var endOfCalendar = endOfMonth.endOf('week');
 
-    for (var dayOfMonth = 0; dayOfMonth < endOfMonth.getDate();) {
-      var week = [];
+    if (viewOptions.startOfWeek === 'monday') {
+      this.dayTitles = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      startOfCalendar = startOfCalendar.add(1, 'day');
 
-      if (dayOfMonth === 0) {
-        var startDay = startOfMonth.getDay();
-        for (let i = 0; i < startDay; i++) week.push(0);
+      // Special case for months starting on sunday: Add an additional week before
+      if (startOfMonth.day() === 0) {
+        startOfCalendar = startOfMonth.subtract(1, 'week').add(1, 'day');
       }
+    } else {
+      this.dayTitles = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    }
 
-      while (week.length < 7 && dayOfMonth < endOfMonth.getDate()) {
-        week.push(dayOfMonth + 1);
+    var iteratorDate = dayjs(startOfCalendar);
 
-        dayOfMonth++;
+    while (iteratorDate.isBefore(endOfCalendar)) {
+      let week = [];
+
+      while (week.length < 7) {
+        week.push(iteratorDate);
+        iteratorDate = iteratorDate.add(1, 'day');
       }
-
-      for (let i = week.length; i < 7; i++) week.push(32);
 
       this.weeksOfMonth.push(week);
     }
-
-    this.selectDay(this.center.getDate());
   }
 
   // Gets new calendar center date. Positive = next month, negative = last month
@@ -158,7 +151,9 @@ export class MealPlanPage {
   moveCalendar(direction) {
     if (this.canMoveCalendar(direction)) {
       this.center = this.getNewCenter(direction);
-      this.generateCalendar(this.center);
+      this.generateCalendar();
+
+      this.selectedDay = dayjs(this.center);
     }
   }
 
@@ -185,12 +180,10 @@ export class MealPlanPage {
       this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
       this.mealsByDate[month][day].push(item);
     });
-
-    this.selectDay(this.selectedDay);
   }
 
   mealItemsByDay(day) {
-    return (this.mealsByDate[this.center.getMonth()] || {})[day] || [];
+    return (this.mealsByDate[day.month()] || {})[day.date()] || [];
   }
 
   loadList() {
@@ -198,7 +191,6 @@ export class MealPlanPage {
 
     return new Promise(function (resolve, reject) {
       me.mealPlanService.fetchById(me.mealPlanId).subscribe(function (response) {
-        console.log(response);
         me.processIncomingMealPlan(response);
 
         resolve();
@@ -298,15 +290,12 @@ export class MealPlanPage {
     var me = this;
     var loading = this.loadingService.start();
 
-    var date = new Date(this.center);
-    date.setDate(this.selectedDay);
-
     this.mealPlanService.addItem({
       id: this.mealPlanId,
       title: item.title,
       recipeId: item.recipeId || null,
       meal: item.meal,
-      scheduled: date
+      scheduled: this.selectedDay.toDate()
     }).subscribe(function (response) {
       me.reference = response.reference;
 
@@ -362,18 +351,14 @@ export class MealPlanPage {
 
   loadViewOptions() {
     var defaults = {
-      sortBy: '-createdAt',
       showAddedBy: false,
       showAddedOn: false,
-      showRecipeTitle: true,
-      groupSimilar: true
+      startOfWeek: 'monday'
     }
 
-    this.viewOptions.sortBy = localStorage.getItem('mealPlan.sortBy');
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
-    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('mealPlan.showRecipeTitle'));
-    this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('mealPlan.groupSimilar'));
+    this.viewOptions.startOfWeek = JSON.parse(localStorage.getItem('mealPlan.startOfWeek'));
 
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
@@ -455,8 +440,6 @@ export class MealPlanPage {
     var elIds = mealPlanItem.shoppingListItems.map(function(el) {
       return el.id;
     });
-
-    console.log(elIds);
 
     var me = this;
     var loading = this.loadingService.start();

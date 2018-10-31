@@ -41,14 +41,14 @@
 
   <ion-grid class="calendar">
     <ion-row class="week-title">
-      <ion-col class="day-title" *ngFor="let day of ['S', 'M', 'T', 'W', 'T', 'F', 'S']">
+      <ion-col class="day-title" *ngFor="let day of dayTitles">
         {{day}}
       </ion-col>
     </ion-row>
     <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
-      <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectDay(day)">
-        <div class="date" *ngIf="day !== 0 && day !== 32" [ngClass]="{ 'selected': selectedDay === day }">
-          {{day}}
+      <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectedDay = day">
+        <div class="date" [ngClass]="{ 'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date() }">
+          {{day.date()}}
         </div>
         <div class="recipe-dot" *ngFor="let mealItem of mealItemsByDay(day)"></div>
       </ion-col>
