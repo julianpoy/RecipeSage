@@ -125,6 +125,8 @@ export class MealPlanPage {
 
       this.weeksOfMonth.push(week);
     }
+
+    return [startOfCalendar, endOfCalendar];
   }
 
   // Gets new calendar center date. Positive = next month, negative = last month
@@ -151,9 +153,11 @@ export class MealPlanPage {
   moveCalendar(direction) {
     if (this.canMoveCalendar(direction)) {
       this.center = this.getNewCenter(direction);
-      this.generateCalendar();
+      let bounds = this.generateCalendar();
 
-      this.selectedDay = dayjs(this.center);
+      if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
+        this.selectedDay = dayjs(this.center);
+      }
     }
   }
 
