@@ -117,6 +117,15 @@
         <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
           <ion-icon name="trash"></ion-icon>
         </button>
+
+        <p *ngIf="viewOptions.showAddedOn">
+          Added
+          <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
+        </p>
+        <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
+          <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+          <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
+        </p>
       </ion-item>
     </div>
 

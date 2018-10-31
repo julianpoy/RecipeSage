@@ -362,7 +362,7 @@ export class MealPlanPage {
 
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
-    this.viewOptions.startOfWeek = JSON.parse(localStorage.getItem('mealPlan.startOfWeek'));
+    this.viewOptions.startOfWeek = localStorage.getItem('mealPlan.startOfWeek') || null;
 
     for (var key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
@@ -477,6 +477,34 @@ export class MealPlanPage {
             duration: 6000
           }).present();
           break;
+      }
+    });
+  }
+
+  presentPopover(event) {
+    let popover = this.popoverCtrl.create('MealPlanPopoverPage', {
+      mealPlanId: this.mealPlanId,
+      mealPlan: this.mealPlan,
+      viewOptions: this.viewOptions
+    });
+
+    popover.present({
+      ev: event
+    });
+
+    var me = this;
+    popover.onDidDismiss(data => {
+      data = data || {};
+
+      if (!data.destination) {
+        me.generateCalendar();
+        return;
+      }
+
+      if (data.setRoot) {
+        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+      } else {
+        me.navCtrl.push(data.destination, data.routingData);
       }
     });
   }
