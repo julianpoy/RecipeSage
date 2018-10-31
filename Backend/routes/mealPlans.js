@@ -302,7 +302,7 @@ router.get(
       {
         model: MealPlanItem,
         as: 'items',
-        attributes: ['id', 'title', 'scheduled', 'createdAt', 'updatedAt'],
+        attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
         include: [
           {
             model: User,
