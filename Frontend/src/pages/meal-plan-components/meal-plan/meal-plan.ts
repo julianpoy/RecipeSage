@@ -212,13 +212,13 @@ export class MealPlanPage {
             break;
           case 404:
             let errorToast = me.toastCtrl.create({
-              message: 'Shopping list not found. Does this shopping list URL exist?',
+              message: 'Meal plan not found. Does this meal plan URL exist?',
               duration: 30000,
               dismissOnPageChange: true
             });
             errorToast.present();
 
-            me.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
+            me.navCtrl.setRoot('MealPlansPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
             errorToast = me.toastCtrl.create({
