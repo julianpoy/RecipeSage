@@ -54,7 +54,7 @@ export class MealPlanPage {
 
     this.mealPlanId = navParams.get('mealPlanId');
 
-    this.websocketService.register('mealPlan:itemsUpdated', function (payload) {
+    this.websocketService.register('mealPlan:itemsUpdated', payload => {
       if (payload.mealPlanId === this.mealPlanId && payload.reference !== this.reference) {
         this.loadMealPlan();
       }
@@ -69,22 +69,21 @@ export class MealPlanPage {
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    var me = this;
 
-    me.initialLoadComplete = false;
-    this.loadMealPlan().then(function () {
+    this.initialLoadComplete = false;
+    this.loadMealPlan().then(() => {
       loading.dismiss();
-      me.initialLoadComplete = true;
-    }, function () {
+      this.initialLoadComplete = true;
+    }, () => {
       loading.dismiss();
-      me.initialLoadComplete = true;
+      this.initialLoadComplete = true;
     });
   }
 
   refresh(loader) {
-    this.loadMealPlan().then(function () {
+    this.loadMealPlan().then(() => {
       loader.complete();
-    }, function () {
+    }, () => {
       loader.complete();
     });
   }
@@ -191,38 +190,36 @@ export class MealPlanPage {
   }
 
   loadMealPlan() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.mealPlanService.fetchById(me.mealPlanId).subscribe(function (response) {
-        me.processIncomingMealPlan(response);
+    return new Promise((resolve, reject) => {
+      this.mealPlanService.fetchById(this.mealPlanId).subscribe((response) => {
+        this.processIncomingMealPlan(response);
 
         resolve();
-      }, function (err) {
+      }, err => {
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
             break;
           case 404:
-            let errorToast = me.toastCtrl.create({
+            let errorToast = this.toastCtrl.create({
               message: 'Meal plan not found. Does this meal plan URL exist?',
               duration: 30000,
               dismissOnPageChange: true
             });
             errorToast.present();
 
-            me.navCtrl.setRoot('MealPlansPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('MealPlansPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
-            errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -255,34 +252,33 @@ export class MealPlanPage {
   }
 
   _removeItem(item) {
-    var me = this;
     var loading = this.loadingService.start();
 
     this.mealPlanService.remove({
       id: this.mealPlanId,
       itemId: item.id
-    }).subscribe(function (response) {
-      me.reference = response.reference || 0;
+    }).subscribe(response => {
+      this.reference = response.reference || 0;
 
-      me.loadMealPlan().then(loading.dismiss);
-    }, function (err) {
+      this.loadMealPlan().then(loading.dismiss);
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -291,7 +287,6 @@ export class MealPlanPage {
   }
 
   _addItem(item) {
-    var me = this;
     var loading = this.loadingService.start();
 
     this.mealPlanService.addItem({
@@ -300,28 +295,28 @@ export class MealPlanPage {
       recipeId: item.recipeId || null,
       meal: item.meal,
       scheduled: this.selectedDay.toDate()
-    }).subscribe(function (response) {
-      me.reference = response.reference;
+    }).subscribe(response => {
+      this.reference = response.reference;
 
-      me.loadMealPlan().then(loading.dismiss);
-    }, function (err) {
+      this.loadMealPlan().then(loading.dismiss);
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -330,7 +325,6 @@ export class MealPlanPage {
   }
 
   newMealPlanItem() {
-    var me = this;
     let modal = this.modalCtrl.create('NewMealPlanItemModalPage');
     modal.present();
     modal.onDidDismiss(data => {
@@ -342,9 +336,9 @@ export class MealPlanPage {
       if (!data.destination) return;
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }
@@ -381,28 +375,27 @@ export class MealPlanPage {
   }
 
   addMealPlanItemToShoppingList(mealPlanItem) {
-    var me = this;
     // Fetch complete recipe (this page is provided with only topical recipe details)
-    this.recipeService.fetchById(mealPlanItem.recipe.id).subscribe(function (response) {
-      let addRecipeToShoppingListModal = me.modalCtrl.create('AddRecipeToShoppingListModalPage', {
+    this.recipeService.fetchById(mealPlanItem.recipe.id).subscribe(response => {
+      let addRecipeToShoppingListModal = this.modalCtrl.create('AddRecipeToShoppingListModalPage', {
         recipe: response,
         reference: mealPlanItem.id
       });
       addRecipeToShoppingListModal.present();
-    }, function (err) {
+    }, err => {
       switch (err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlineFetchMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
           break;
         case 404:
-          let errorToast = me.toastCtrl.create({
+          let errorToast = this.toastCtrl.create({
             message: 'Recipe not found. Does this recipe URL exist?',
             duration: 30000,
             dismissOnPageChange: true
@@ -410,8 +403,8 @@ export class MealPlanPage {
           errorToast.present();
           break;
         default:
-          errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
@@ -441,39 +434,38 @@ export class MealPlanPage {
   }
 
   _removeMealPlanItemFromShoppingList(mealPlanItem) {
-    var elIds = mealPlanItem.shoppingListItems.map(function(el) {
+    var elIds = mealPlanItem.shoppingListItems.map(el => {
       return el.id;
     });
 
-    var me = this;
     var loading = this.loadingService.start();
 
     this.shoppingListService.remove({
       id: mealPlanItem.shoppingListId,
       items: elIds
-    }).subscribe(function (response) {
+    }).subscribe(response => {
       loading.dismiss();
 
       delete mealPlanItem.shoppingListItems;
       delete mealPlanItem.shoppingListId;
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -492,19 +484,18 @@ export class MealPlanPage {
       ev: event
     });
 
-    var me = this;
     popover.onDidDismiss(data => {
       data = data || {};
 
       if (!data.destination) {
-        me.generateCalendar();
+        this.generateCalendar();
         return;
       }
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }
