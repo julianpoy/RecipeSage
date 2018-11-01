@@ -56,7 +56,7 @@ export class MealPlanPage {
 
     this.websocketService.register('mealPlan:itemsUpdated', function (payload) {
       if (payload.mealPlanId === this.mealPlanId && payload.reference !== this.reference) {
-        this.loadList();
+        this.loadMealPlan();
       }
     }, this);
 
@@ -72,7 +72,7 @@ export class MealPlanPage {
     var me = this;
 
     me.initialLoadComplete = false;
-    this.loadList().then(function () {
+    this.loadMealPlan().then(function () {
       loading.dismiss();
       me.initialLoadComplete = true;
     }, function () {
@@ -82,7 +82,7 @@ export class MealPlanPage {
   }
 
   refresh(loader) {
-    this.loadList().then(function () {
+    this.loadMealPlan().then(function () {
       loader.complete();
     }, function () {
       loader.complete();
@@ -190,7 +190,7 @@ export class MealPlanPage {
     return (this.mealsByDate[day.month()] || {})[day.date()] || [];
   }
 
-  loadList() {
+  loadMealPlan() {
     var me = this;
 
     return new Promise(function (resolve, reject) {
@@ -264,7 +264,7 @@ export class MealPlanPage {
     }).subscribe(function (response) {
       me.reference = response.reference || 0;
 
-      me.loadList().then(loading.dismiss);
+      me.loadMealPlan().then(loading.dismiss);
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
@@ -303,7 +303,7 @@ export class MealPlanPage {
     }).subscribe(function (response) {
       me.reference = response.reference;
 
-      me.loadList().then(loading.dismiss);
+      me.loadMealPlan().then(loading.dismiss);
     }, function (err) {
       loading.dismiss();
       switch (err.status) {
