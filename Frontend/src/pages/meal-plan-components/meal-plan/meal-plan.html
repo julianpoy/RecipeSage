@@ -50,10 +50,12 @@
         class="day"
         *ngFor="let day of weekOfMonth"
         (click)="selectedDay = day"
+        (keyup.enter)="selectedDay = day"
         [ngClass]="{
           'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
           'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
-        }">
+        }"
+        tabindex="0">
         <div
           class="date"
           [ngClass]="{
@@ -75,17 +77,17 @@
       <br />
       <br />
       <p>
-        There are no recipes scheduled for this day.
+        There are no meals scheduled for this day.
         <br />
         <button ion-button icon-left (click)="newMealPlanItem()">
           <ion-icon name="add"></ion-icon>
-          Add the first recipe
+          Add a meal
         </button>
       </p>
     </ion-item>
 
-    <ion-list-header *ngIf="mealItemsByDay(selectedDay).length > 0">
-      Meals & Items
+    <ion-list-header *ngIf="mealItemsByDay(selectedDay).length > 0" no-lines>
+      <b>Meals & Items:</b>
     </ion-list-header>
 
     <div *ngFor="let mealItem of mealItemsByDay(selectedDay); let idx = index;">
