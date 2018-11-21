@@ -29,11 +29,11 @@ export class MealPlansPage {
     public utilService: UtilServiceProvider,
     public navParams: NavParams) {
 
-    this.websocketService.register('mealPlan:received', function () {
+    this.websocketService.register('mealPlan:received', () => {
       this.loadPlans();
     }, this);
 
-    this.websocketService.register('mealPlan:removed', function () {
+    this.websocketService.register('mealPlan:removed', () => {
       this.loadPlans();
     }, this);
   }
@@ -43,51 +43,48 @@ export class MealPlansPage {
   ionViewWillEnter() {
     var loading = this.loadingService.start();
 
-    var me = this;
-    me.initialLoadComplete = false;
+    this.initialLoadComplete = false;
 
-    this.loadPlans().then(function () {
+    this.loadPlans().then(() => {
       loading.dismiss();
-      me.initialLoadComplete = true;
-    }, function () {
+      this.initialLoadComplete = true;
+    }, () => {
       loading.dismiss();
-      me.initialLoadComplete = true;
+      this.initialLoadComplete = true;
     });
   }
 
   refresh(refresher) {
-    this.loadPlans().then(function () {
+    this.loadPlans().then(() => {
       refresher.complete();
-    }, function () {
+    }, () => {
       refresher.complete();
     });
   }
 
   loadPlans() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.mealPlanService.fetch().subscribe(function (response) {
-        me.mealPlans = response;
+    return new Promise((resolve, reject) => {
+      this.mealPlanService.fetch().subscribe(response => {
+        this.mealPlans = response;
 
         resolve();
-      }, function (err) {
+      }, err => {
         reject();
 
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -98,21 +95,20 @@ export class MealPlansPage {
   }
 
   newMealPlan() {
-    var me = this;
     let modal = this.modalCtrl.create('NewMealPlanModalPage');
     modal.present();
     modal.onDidDismiss(data => {
       if (!data || !data.destination) return;
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }
   openMealPlan(mealPlanId) {
-    // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
+    // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('MealPlanPage', {
       mealPlanId: mealPlanId
     });

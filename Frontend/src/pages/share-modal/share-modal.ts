@@ -40,7 +40,7 @@ export class ShareModalPage {
   public viewCtrl: ViewController) {
     this.recipe = navParams.get('recipe');
 
-    this.loadThreads().then(function() {}, function() {});
+    this.loadThreads().then(() => {}, () => {});
   }
 
   ionViewDidLoad() {}
@@ -52,33 +52,31 @@ export class ShareModalPage {
   }
 
   loadThreads() {
-    var me = this;
-
-    return new Promise(function(resolve, reject) {
-      me.messagingService.threads().subscribe(function(response) {
-        me.threads = response;
+    return new Promise((resolve, reject) => {
+      this.messagingService.threads().subscribe(response => {
+        this.threads = response;
 
         resolve();
-      }, function(err) {
+      }, err => {
         reject();
 
         switch(err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlinePushMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.viewCtrl.dismiss({
+            this.viewCtrl.dismiss({
               destination: 'LoginPage',
               setRoot: true
             });
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -100,59 +98,56 @@ export class ShareModalPage {
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
-    var me = this;
-    this.autofillTimeout = setTimeout(function() {
-      me.userService.getUserByEmail(me.recipientEmail.trim()).subscribe(function(response) {
-        me.recipientName = response.name || response.email;
-        me.recipientId = response.id;
-        me.selectedThread = null;
-        me.searchingForRecipient = false;
-      }, function(err) {
-        me.recipientName = '';
-        me.recipientId = '';
-        me.selectedThread = null;
-        me.searchingForRecipient = false;
+    this.autofillTimeout = setTimeout(() => {
+      this.userService.getUserByEmail(this.recipientEmail.trim()).subscribe(response => {
+        this.recipientName = response.name || response.email;
+        this.recipientId = response.id;
+        this.selectedThread = null;
+        this.searchingForRecipient = false;
+      }, err => {
+        this.recipientName = '';
+        this.recipientId = '';
+        this.selectedThread = null;
+        this.searchingForRecipient = false;
       });
     }, 500);
   }
 
   send() {
-    var me = this;
-
     var loading = this.loadingService.start();
 
     this.messagingService.create({
       to: this.recipientId,
       body: '',
       recipeId: this.recipe.id
-    }).subscribe(function(response) {
+    }).subscribe(response => {
       loading.dismiss();
-      me.viewCtrl.dismiss({
+      this.viewCtrl.dismiss({
         destination: 'MessageThreadPage',
         routingData: {
-          otherUserId: me.recipientId
+          otherUserId: this.recipientId
         },
         setRoot: false
       });
-    }, function(err) {
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.viewCtrl.dismiss({
+          this.viewCtrl.dismiss({
             destination: 'LoginPage',
             setRoot: true
           });
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();

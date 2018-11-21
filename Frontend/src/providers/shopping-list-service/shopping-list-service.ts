@@ -57,14 +57,13 @@ export class ShoppingListServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .post(me.base + 'shoppingLists/' + me.getTokenQuery(), data, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .post(this.base + 'shoppingLists/' + this.getTokenQuery(), data, httpOptions)
           .pipe(
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -78,14 +77,13 @@ export class ShoppingListServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .post(me.base + 'shoppingLists/' + data.id + me.getTokenQuery(), data, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .post(this.base + 'shoppingLists/' + data.id + this.getTokenQuery(), data, httpOptions)
           .pipe(
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -116,15 +114,14 @@ export class ShoppingListServiceProvider {
 
     var recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .delete(me.base + `shoppingLists/${data.id}/items${me.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .delete(this.base + `shoppingLists/${data.id}/items${this.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`, httpOptions)
           .pipe(
             retry(1),
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -138,15 +135,14 @@ export class ShoppingListServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .delete(me.base + 'shoppingLists/' + data.id + me.getTokenQuery(), httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .delete(this.base + 'shoppingLists/' + data.id + this.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }

@@ -33,26 +33,25 @@ export class AccountPage {
 
     var loading = this.loadingService.start();
 
-    var me = this;
-    this.userService.me().subscribe(function(response) {
+    this.userService.me().subscribe(response => {
       loading.dismiss();
 
-      me.account = response;
-    }, function(err) {
+      this.account = response;
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
@@ -66,35 +65,34 @@ export class AccountPage {
   saveName() {
     var loading = this.loadingService.start();
 
-    var me = this;
     this.userService.update({
       name: this.account.name
-    }).subscribe(function(response) {
+    }).subscribe(response => {
       loading.dismiss();
 
-      me.account.name = response.name;
-      me.nameChanged = false;
+      this.account.name = response.name;
+      this.nameChanged = false;
 
-      let tst = me.toastCtrl.create({
+      let tst = this.toastCtrl.create({
         message: 'Profile name was updated.',
         duration: 5000
       });
       tst.present();
-    }, function(err) {
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
@@ -116,35 +114,34 @@ export class AccountPage {
 
     var loading = this.loadingService.start();
 
-    var me = this;
     this.userService.update({
       email: this.account.email
-    }).subscribe(function(response) {
+    }).subscribe(response => {
       loading.dismiss();
 
-      me.account.email = response.email;
-      me.emailChanged = false;
+      this.account.email = response.email;
+      this.emailChanged = false;
 
-      let tst = me.toastCtrl.create({
+      let tst = this.toastCtrl.create({
         message: 'Email address was updated.',
         duration: 5000
       });
       tst.present();
-    }, function(err) {
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
@@ -156,16 +153,14 @@ export class AccountPage {
   _logout() {
     localStorage.removeItem('token');
 
-    var me = this;
-
-    let alert = me.alertCtrl.create({
+    let alert = this.alertCtrl.create({
       title: 'Password Updated',
       message: 'Your password has been updated. You will need to log back in on any devices that use this account.',
       buttons: [
         {
           text: 'Okay',
           handler: () => {
-            me.navCtrl.setRoot('LoginPage', {});
+            this.navCtrl.setRoot('LoginPage', {});
           }
         }
       ]
@@ -192,49 +187,48 @@ export class AccountPage {
 
     var loading = this.loadingService.start();
 
-    var me = this;
     this.userService.update({
       password: this.account.password
-    }).subscribe(function(response) {
+    }).subscribe(response => {
 
-      me.account.password = '*'.repeat(me.account.password.length);
-      me.passwordChanged = false;
+      this.account.password = '*'.repeat(this.account.password.length);
+      this.passwordChanged = false;
 
-      me.userService.logout().subscribe(function (response) {
+      this.userService.logout().subscribe(response => {
         loading.dismiss();
 
-        me._logout.call(me);
-      }, function (err) {
+        this._logout();
+      }, err => {
         loading.dismiss();
         switch (err.status) {
           case 0:
           case 401:
           case 404:
-            me._logout.call(me);
+            this._logout();
             break;
           default:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 6000
             }).present();
             break;
         }
       });
-    }, function(err) {
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();

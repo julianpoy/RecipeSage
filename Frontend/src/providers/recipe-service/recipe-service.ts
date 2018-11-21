@@ -102,16 +102,15 @@ export class RecipeServiceProvider {
 
     const httpOptions = {};
 
-    var me = this;
     return {
-      subscribe: function(resolve, reject) {
-        me.http
-        .post(me.base + 'recipes/' + me.getTokenQuery(), formData, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(this.base + 'recipes/' + this.getTokenQuery(), formData, httpOptions)
         .pipe(
-          catchError(me.handleError)
-        ).subscribe(function(response) {
-          me.events.publish('recipe:created');
-          me.events.publish('recipe:generalUpdate');
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:created');
+          this.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
       }
@@ -129,15 +128,14 @@ export class RecipeServiceProvider {
 
     if (data.image) data.imageURL = data.image.location;
 
-    var me = this;
     return {
-      subscribe: function(resolve, reject) {
-        me.http
-        .post(me.base + 'recipes/' + me.getTokenQuery(), data, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
         .pipe(
-          catchError(me.handleError)
-        ).subscribe(function(response) {
-          me.events.publish('recipe:generalUpdate');
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
       }
@@ -159,17 +157,16 @@ export class RecipeServiceProvider {
 
     const httpOptions = {};
 
-    var me = this;
     return {
-      subscribe: function(resolve, reject) {
-        me.http
-        .put(me.base + 'recipes/' + data.id + me.getTokenQuery(), formData, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+        .put(this.base + 'recipes/' + data.id + this.getTokenQuery(), formData, httpOptions)
         .pipe(
           retry(1),
-          catchError(me.handleError)
-        ).subscribe(function(response) {
-          me.events.publish('recipe:updated');
-          me.events.publish('recipe:generalUpdate');
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:updated');
+          this.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
       }
@@ -183,17 +180,16 @@ export class RecipeServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function(resolve, reject) {
-        me.http
-        .delete(me.base + 'recipes/' + data.id + me.getTokenQuery(), httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+        .delete(this.base + 'recipes/' + data.id + this.getTokenQuery(), httpOptions)
         .pipe(
           retry(1),
-          catchError(me.handleError)
-        ).subscribe(function(response) {
-          me.events.publish('recipe:deleted');
-          me.events.publish('recipe:generalUpdate');
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:deleted');
+          this.events.publish('recipe:generalUpdate');
           resolve(response);
         }, reject);
       }
@@ -280,7 +276,7 @@ export class RecipeServiceProvider {
         },
         {
           text: 'Apply',
-          handler: (data) => {
+          handler: data => {
             // Support fractions
             let parsed = fractionjs(data.scale).valueOf();
             // Trim long/repeating decimals

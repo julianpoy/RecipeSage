@@ -55,14 +55,13 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .post(me.base + 'mealPlans/' + me.getTokenQuery(), data, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .post(this.base + 'mealPlans/' + this.getTokenQuery(), data, httpOptions)
           .pipe(
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -76,14 +75,13 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .post(me.base + 'mealPlans/' + data.id + me.getTokenQuery(), data, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .post(this.base + 'mealPlans/' + data.id + this.getTokenQuery(), data, httpOptions)
           .pipe(
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -112,15 +110,14 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .delete(me.base + `mealPlans/${data.id}/items${me.getTokenQuery()}&itemId=${data.itemId}`, httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .delete(this.base + `mealPlans/${data.id}/items${this.getTokenQuery()}&itemId=${data.itemId}`, httpOptions)
           .pipe(
             retry(1),
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }
@@ -134,15 +131,14 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var me = this;
     return {
-      subscribe: function (resolve, reject) {
-        me.http
-          .delete(me.base + 'mealPlans/' + data.id + me.getTokenQuery(), httpOptions)
+      subscribe: (resolve, reject) => {
+        this.http
+          .delete(this.base + 'mealPlans/' + data.id + this.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
-            catchError(me.handleError)
-          ).subscribe(function (response) {
+            catchError(this.handleError)
+          ).subscribe(response => {
             resolve(response);
           }, reject);
       }

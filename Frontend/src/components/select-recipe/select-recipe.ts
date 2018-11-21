@@ -40,58 +40,56 @@ export class SelectRecipeComponent {
   ) {
     var loading = this.loadingService.start();
 
-    this.loadRecipes().then(function () {
+    this.loadRecipes().then(() => {
       loading.dismiss();
-    }, function () {
+    }, () => {
       loading.dismiss();
     });
   }
 
   loadRecipes() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.recipeService.fetch({
+    return new Promise((resolve, reject) => {
+      this.recipeService.fetch({
         folder: 'main',
         sortBy: 'title',
-      }).subscribe(function (response) {
+      }).subscribe(response => {
 
-        if (me.searchWorker) me.searchWorker.terminate();
-        me.searchWorker = new Worker('assets/src/search-worker.js');
+        if (this.searchWorker) this.searchWorker.terminate();
+        this.searchWorker = new Worker('assets/src/search-worker.js');
 
-        me.searchWorker.postMessage(JSON.stringify({
+        this.searchWorker.postMessage(JSON.stringify({
           op: 'init',
           data: response
         }));
 
-        me.searchWorker.onmessage = function (e) {
-          me.searching = false;
+        this.searchWorker.onmessage = e => {
+          this.searching = false;
           var message = JSON.parse(e.data);
           if (message.op === 'results') {
-            me.recipes = message.data;
+            this.recipes = message.data;
           }
         }
 
-        me.recipes = response;
+        this.recipes = response;
 
         resolve();
-      }, function (err) {
+      }, err => {
         reject();
 
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -154,24 +152,23 @@ export class SelectRecipeComponent {
     this.searchText = '';
     this.toggleAutocomplete(false);
 
-    var me = this;
-    this.recipeService.fetchById(recipe.id).subscribe(function (response) {
-      me.selectedRecipe = response;
-    }, function (err) {
+    this.recipeService.fetchById(recipe.id).subscribe(response => {
+      this.selectedRecipe = response;
+    }, err => {
       switch (err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlineFetchMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();

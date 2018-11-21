@@ -12,12 +12,11 @@ export class LoadingServiceProvider {
   start() {
     this.loadingBar.start();
 
-    var me = this;
     return {
-      dismiss: function() {
-        setTimeout(function() {
-          me.loadingBar.complete();
-        }, me.REQUEST_COMPLETE_DELAY);
+      dismiss: () => {
+        setTimeout(() => {
+          this.loadingBar.complete();
+        }, this.REQUEST_COMPLETE_DELAY);
       }
     }
   }

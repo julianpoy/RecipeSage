@@ -40,7 +40,7 @@ export class ShoppingListPage {
 
     this.shoppingListId = navParams.get('shoppingListId');
 
-    this.websocketService.register('shoppingList:itemsUpdated', function(payload) {
+    this.websocketService.register('shoppingList:itemsUpdated', payload => {
       if (payload.shoppingListId === this.shoppingListId && payload.reference !== this.reference) {
         this.loadList();
       }
@@ -53,36 +53,33 @@ export class ShoppingListPage {
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    var me = this;
 
-    me.initialLoadComplete = false;
-    this.loadList().then(function () {
+    this.initialLoadComplete = false;
+    this.loadList().then(() => {
       loading.dismiss();
-      me.initialLoadComplete = true;
-    }, function () {
+      this.initialLoadComplete = true;
+    }, () => {
       loading.dismiss();
-      me.initialLoadComplete = true;
+      this.initialLoadComplete = true;
     });
   }
 
   refresh(loader) {
-    this.loadList().then(function () {
+    this.loadList().then(() => {
       loader.complete();
-    }, function () {
+    }, () => {
       loader.complete();
     });
   }
 
   processIncomingList(list) {
-    var me = this;
-
-    me.list = list;
+    this.list = list;
     this.applySort();
 
-    var items = (me.list.items || []);
+    var items = (this.list.items || []);
 
-    me.recipeIds = [];
-    me.itemsByRecipeId = {};
+    this.recipeIds = [];
+    this.itemsByRecipeId = {};
 
     for (var i = 0; i < items.length; i++) {
       // Recipe grouping
@@ -90,46 +87,44 @@ export class ShoppingListPage {
 
       var recipeId = items[i].recipe.id + items[i].createdAt;
 
-      if (me.recipeIds.indexOf(recipeId) === -1) me.recipeIds.push(recipeId);
+      if (this.recipeIds.indexOf(recipeId) === -1) this.recipeIds.push(recipeId);
 
-      if (!me.itemsByRecipeId[recipeId]) me.itemsByRecipeId[recipeId] = [];
-      me.itemsByRecipeId[recipeId].push(items[i]);
+      if (!this.itemsByRecipeId[recipeId]) this.itemsByRecipeId[recipeId] = [];
+      this.itemsByRecipeId[recipeId].push(items[i]);
     }
   }
 
   loadList() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.shoppingListService.fetchById(me.shoppingListId).subscribe(function (response) {
-        me.processIncomingList(response);
+    return new Promise((resolve, reject) => {
+      this.shoppingListService.fetchById(this.shoppingListId).subscribe(response => {
+        this.processIncomingList(response);
 
         resolve();
-      }, function (err) {
+      }, err => {
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
             break;
           case 404:
-            let errorToast = me.toastCtrl.create({
+            let errorToast = this.toastCtrl.create({
               message: 'Shopping list not found. Does this shopping list URL exist?',
               duration: 30000,
               dismissOnPageChange: true
             });
             errorToast.present();
 
-            me.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
-            errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -146,22 +141,21 @@ export class ShoppingListPage {
   }
 
   removeItems(items) {
-    var me = this;
     var loading = this.loadingService.start();
 
-    var itemIds = items.map(function (el) {
+    var itemIds = items.map(el => {
       return el.id;
     });
 
     this.shoppingListService.remove({
       id: this.list.id,
       items: itemIds
-    }).subscribe(function (response) {
-      me.reference = response.reference || 0;
+    }).subscribe(response => {
+      this.reference = response.reference || 0;
 
-      me.loadList().then(function() {
+      this.loadList().then(() => {
         loading.dismiss();
-        var toast = me.toastCtrl.create({
+        var toast = this.toastCtrl.create({
           message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
           duration: 5000,
           showCloseButton: true,
@@ -169,7 +163,7 @@ export class ShoppingListPage {
         });
         toast.onDidDismiss((data, role) => {
           if (role == "close") {
-            me._addItems(items.map(function(el) {
+            this._addItems(items.map(el => {
               return {
                 title: el.title,
                 id: el.shoppingListId,
@@ -181,24 +175,24 @@ export class ShoppingListPage {
         });
         toast.present();
       });
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -207,34 +201,33 @@ export class ShoppingListPage {
   }
 
   _addItems(items) {
-    var me = this;
     var loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
       id: this.list.id,
       items: items
-    }).subscribe(function (response) {
-      me.reference = response.reference || 0;
+    }).subscribe(response => {
+      this.reference = response.reference || 0;
 
-      me.loadList().then(loading.dismiss);
-    }, function (err) {
+      this.loadList().then(loading.dismiss);
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -243,7 +236,6 @@ export class ShoppingListPage {
   }
 
   newShoppingListItem() {
-    var me = this;
     let modal = this.modalCtrl.create('NewShoppingListItemModalPage');
     modal.present();
     modal.onDidDismiss(data => {
@@ -255,9 +247,9 @@ export class ShoppingListPage {
       if (!data.destination) return;
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }
@@ -315,21 +307,20 @@ export class ShoppingListPage {
   }
 
   applySort() {
-    var me = this;
     // Sort individual items
-    this.list.items = this.list.items.sort(function (a, b) {
-      return me.ingredientSorter.call(me, a, b);
+    this.list.items = this.list.items.sort((a, b) => {
+      return this.ingredientSorter(a, b);
     });
 
     // Sort groups by title (always)
-    this.list.itemsByGroup = this.list.itemsByGroup.sort(function (a, b) {
+    this.list.itemsByGroup = this.list.itemsByGroup.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
 
     // Sort items within each group
     for (var i = 0; i < this.list.itemsByGroup.length; i++) {
-      this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort(function(a, b) {
-        return me.ingredientSorter.call(me, a, b);
+      this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort((a, b) => {
+        return this.ingredientSorter(a, b);
       });
     }
   }
@@ -345,19 +336,18 @@ export class ShoppingListPage {
       ev: event
     });
 
-    var me = this;
     popover.onDidDismiss(data => {
       data = data || {};
 
       if (!data.destination) {
-        me.applySort();
+        this.applySort();
         return;
       }
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }

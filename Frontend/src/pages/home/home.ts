@@ -64,7 +64,6 @@ export class HomePage {
     public utilService: UtilServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
-    var me = this;
 
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
@@ -80,13 +79,13 @@ export class HomePage {
     this.loadViewOptions();
     this.filterOptions.viewOptions = this.viewOptions;
     // Refresh search results whenever filters change
-    this.filterOptions.onchange = function() {
+    this.filterOptions.onchange = () => {
       try {
-        me.updateSearchResult$.next();
+        this.updateSearchResult$.next();
       } catch(e){}
     }
 
-    this.websocketService.register('messages:new', function (payload) {
+    this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
         this.loadRecipes();
       }
@@ -107,11 +106,10 @@ export class HomePage {
   ionViewWillEnter() {
     var loading = this.loadingService.start();
 
-    var me = this;
-    this.loadRecipes().then(function() {
-      me.initialLoadComplete = true;
+    this.loadRecipes().then(() => {
+      this.initialLoadComplete = true;
       loading.dismiss();
-    }, function() {
+    }, () => {
       loading.dismiss();
     });
   }
@@ -137,9 +135,9 @@ export class HomePage {
   }
 
   refresh(refresher) {
-    this.loadRecipes().then(function() {
+    this.loadRecipes().then(() => {
       refresher.complete();
-    }, function() {
+    }, () => {
       refresher.complete();
     });
   }
@@ -169,58 +167,56 @@ export class HomePage {
   }
 
   loadRecipes() {
-    var me = this;
+    return new Promise((resolve, reject) => {
+      this.recipeService.fetch({
+        folder: this.folder,
+        sortBy: this.viewOptions.sortBy,
+        // labels: this.viewOptions.selectedLabels
+      }).subscribe(response => {
 
-    return new Promise(function(resolve, reject) {
-      me.recipeService.fetch({
-        folder: me.folder,
-        sortBy: me.viewOptions.sortBy,
-        // labels: me.viewOptions.selectedLabels
-      }).subscribe(function(response) {
+        if (this.searchWorker) this.searchWorker.terminate();
+        this.searchWorker = new Worker('assets/src/search-worker.js');
 
-        if (me.searchWorker) me.searchWorker.terminate();
-        me.searchWorker = new Worker('assets/src/search-worker.js');
-
-        me.searchWorker.postMessage(JSON.stringify({
+        this.searchWorker.postMessage(JSON.stringify({
           op: 'init',
           data: response
         }));
 
-        me.searchWorker.onmessage = function(e) {
+        this.searchWorker.onmessage = e => {
           var message = JSON.parse(e.data);
           if (message.op === 'results') {
-            me.recipes = message.data;
+            this.recipes = message.data;
           }
           // After render loop
-          setTimeout(function() {
-            me.updateSearchResult$.next();
+          setTimeout(() => {
+            this.updateSearchResult$.next();
           });
         }
 
-        if (me.searchText) {
-          me.search(me.searchText);
+        if (this.searchText) {
+          this.search(this.searchText);
         } else {
-          me.recipes = response;
+          this.recipes = response;
         }
 
         resolve();
-      }, function(err) {
+      }, err => {
         reject();
 
         switch(err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -232,7 +228,7 @@ export class HomePage {
 
   openRecipe(recipe) {
     console.log(recipe)
-    // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
+    // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe.id
@@ -246,34 +242,32 @@ export class HomePage {
   }
 
   moveRecipe(recipe, folderName) {
-    var me = this;
-
     var loading = this.loadingService.start();
 
     recipe.folder = folderName;
 
-    this.recipeService.update(recipe).subscribe(function(response) {
+    this.recipeService.update(recipe).subscribe(response => {
       loading.dismiss();
 
-      me.loadRecipes().then(function() {}, function() {});
-    }, function(err) {
+      this.loadRecipes().then(() => {}, () => {});
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -304,38 +298,36 @@ export class HomePage {
   }
 
   private _deleteRecipe(recipe) {
-    var me = this;
-
     var loading = this.loadingService.start();
 
-    this.recipeService.remove(recipe).subscribe(function(response) {
+    this.recipeService.remove(recipe).subscribe(response => {
       loading.dismiss();
 
-      me.loadRecipes();
-    }, function(err) {
+      this.loadRecipes();
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         case 404:
-          me.toastCtrl.create({
+          this.toastCtrl.create({
             message: 'Can\'t find the recipe you\'re trying to delete.',
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

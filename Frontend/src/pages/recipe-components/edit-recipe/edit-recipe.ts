@@ -54,13 +54,12 @@ export class EditRecipePage {
 
     this.recipe.imageFile = files[0];
 
-    var me = this;
     var loadingImage = loadImage(
         files[0],
-        function (renderedCanvas, exif) {
-          renderedCanvas.toBlob(function(myBlob) {
-            myBlob.name = me.recipe.imageFile.name;
-            me.recipe.imageFile = myBlob;
+        (renderedCanvas, exif) => {
+          renderedCanvas.toBlob(myBlob => {
+            myBlob.name = this.recipe.imageFile.name;
+            this.recipe.imageFile = myBlob;
 
             console.log('Local conversion complete');
           }, 'image/jpeg', 1);
@@ -72,7 +71,7 @@ export class EditRecipePage {
         }
     );
 
-    loadingImage.onerror = function(err) {
+    loadingImage.onerror = err => {
       console.log('Local conversion failed', err)
     };
   }
@@ -86,75 +85,73 @@ export class EditRecipePage {
       return;
     }
 
-    var me = this;
-
     var loading = this.loadingService.start();
 
     if (this.recipe.id) {
-      this.recipeService.update(this.recipe).subscribe(function(response) {
+      this.recipeService.update(this.recipe).subscribe(response => {
         loading.dismiss();
 
-        me.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
-        me.navCtrl.push('RecipePage', {
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
-      }, function(err) {
+      }, err => {
         loading.dismiss();
         switch(err.status) {
           case 0:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlinePushMessage,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             }).present();
             break;
           case 401:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.unauthorized,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unauthorized,
               duration: 6000
             }).present();
             break;
           default:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 6000
             }).present();
             break;
         }
       });
     } else {
-      this.recipeService.create(this.recipe).subscribe(function(response) {
+      this.recipeService.create(this.recipe).subscribe(response => {
         loading.dismiss();
 
-        me.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
-        me.navCtrl.push('RecipePage', {
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
-      }, function(err) {
+      }, err => {
         loading.dismiss();
         switch(err.status) {
           case 0:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlinePushMessage,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             }).present();
             break;
           case 401:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.unauthorized,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unauthorized,
               duration: 6000
             }).present();
             break;
           case 412:
-            me.toastCtrl.create({
+            this.toastCtrl.create({
               message: 'Please provide a recipe title (the only required field).',
               duration: 6000
             }).present();
             break;
           default:
-            me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 6000
             }).present();
             break;

@@ -40,31 +40,29 @@ export class RecipesByLabelPage {
   ionViewDidLoad() {}
 
   loadRecipes() {
-    var me = this;
-
     var loading = this.loadingService.start();
 
-    this.labelService.fetch(true).subscribe(function(response) {
+    this.labelService.fetch(true).subscribe(response => {
       loading.dismiss();
 
-      me.labels = response;
-    }, function(err) {
+      this.labels = response;
+    }, err => {
       loading.dismiss();
 
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlineFetchMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
@@ -74,7 +72,7 @@ export class RecipesByLabelPage {
   }
 
   openRecipe(recipe) {
-    // me.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
+    // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe.id

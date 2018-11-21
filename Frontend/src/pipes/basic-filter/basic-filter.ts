@@ -10,33 +10,33 @@ export class BasicFilterPipe implements PipeTransform {
     }
 
     setTimeout(options.onchange, 0);
-    
+
     var filteredRecipes = recipes;
-    
+
     if (options.viewOptions.selectedLabels && options.viewOptions.selectedLabels.length > 0) {
-      filteredRecipes = recipes.filter(function(el) {
-        return el.labels.some(function(label) {
+      filteredRecipes = recipes.filter(el => {
+        return el.labels.some(label => {
           return options.viewOptions.selectedLabels.indexOf(label.title) > -1;
         });
       });
     }
-    
+
     if (filteredRecipes.length === 0) return filteredRecipes;
 
     if (filteredRecipes[0].score) {
-      return filteredRecipes.sort(function(a: any, b: any) {
+      return filteredRecipes.sort((a: any, b: any) => {
         if (a.score = b.score) return 0;
         return a.score < b.score ? 1 : -1;
       });
     }
-    
-    return filteredRecipes.sort(function(a: any, b: any) {
+
+    return filteredRecipes.sort((a: any, b: any) => {
       var desc = options.viewOptions.sortBy.indexOf('-') == 0;
       var sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
-      
+
       var aV = a[sortField];
       var bV = b[sortField];
-      
+
       switch(sortField) {
         case "title":
           if (desc) {

@@ -49,19 +49,17 @@ export class MyApp {
   }
 
   initUpdateListeners() {
-    var me = this;
-
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
       (<any>window).updateSW();
     });
 
-    window['onSWUpdate'] = function() {
+    window['onSWUpdate'] = () => {
 		  console.log("Update is waiting for pause...")
 		  if ((<any>window).isHidden()) {
   	    (<any>window).location.reload(true);
 		  } else {
-  		  me.events.subscribe('application:multitasking:paused', () => {
+  		  this.events.subscribe('application:multitasking:paused', () => {
     	    (<any>window).location.reload(true);
         });
 		  }
@@ -69,8 +67,6 @@ export class MyApp {
   }
 
   initEventListeners() {
-    var me = this;
-
     this.events.subscribe('recipe:created', () => {
       this.loadInboxCount();
     });
@@ -83,7 +79,7 @@ export class MyApp {
       this.loadInboxCount();
     });
 
-    this.websocketService.register('messages:new', function (payload) {
+    this.websocketService.register('messages:new', payload => {
       if (this.nav.getActive().instance instanceof MessageThreadPage || this.nav.getActive().instance instanceof MessagesPage) return;
       var notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
 
@@ -105,10 +101,10 @@ export class MyApp {
       });
     }, this);
 
-    this.events.subscribe('import:pepperplate:complete', (message) => {
+    this.events.subscribe('import:pepperplate:complete', message => {
       var notification = 'Your recipes have been imported from Pepperplate.';
 
-      let toast = me.toastCtrl.create({
+      let toast = this.toastCtrl.create({
         message: notification,
         duration: 10000,
         showCloseButton: true,
@@ -117,7 +113,7 @@ export class MyApp {
       toast.present();
     });
 
-    this.events.subscribe('import:pepperplate:failed', (reason) => {
+    this.events.subscribe('import:pepperplate:failed', reason => {
       var notification = '';
       if (reason === 'timeout') {
         notification += 'Import failed: Pepperplate service is unavailable right now.';
@@ -129,7 +125,7 @@ export class MyApp {
         return;
       }
 
-      let toast = me.toastCtrl.create({
+      let toast = this.toastCtrl.create({
         message: notification,
         duration: 15000,
         showCloseButton: true,
@@ -138,10 +134,10 @@ export class MyApp {
       toast.present();
     });
 
-    this.events.subscribe('import:pepperplate:working', (message) => {
+    this.events.subscribe('import:pepperplate:working', message => {
       var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
 
-      let toast = me.toastCtrl.create({
+      let toast = this.toastCtrl.create({
         message: notification,
         duration: 7000,
         showCloseButton: true,
@@ -152,8 +148,6 @@ export class MyApp {
   }
 
   initEventDispatchers() {
-    var me = this;
-
     var hidden, visibilityChange;
     if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
       hidden = "hidden";
@@ -166,15 +160,15 @@ export class MyApp {
       visibilityChange = "webkitvisibilitychange";
     }
 
-    (<any>window).isHidden = function() {
+    (<any>window).isHidden = () => {
       return document[hidden];
     }
 
-    document.addEventListener(visibilityChange, function() {
+    document.addEventListener(visibilityChange, () => {
       if (document[hidden]) {
-        me.events.publish('application:multitasking:paused');
+        this.events.publish('application:multitasking:paused');
       } else {
-        me.events.publish('application:multitasking:resumed');
+        this.events.publish('application:multitasking:resumed');
       }
     }, false);
   }
@@ -227,15 +221,13 @@ export class MyApp {
   }
 
   loadInboxCount() {
-    var me = this;
-
     if (!localStorage.getItem('token')) return;
 
-    this.recipeService.fetch({ folder: 'inbox' }).subscribe(function(response) {
-      me.inboxCount = response.length;
+    this.recipeService.fetch({ folder: 'inbox' }).subscribe(response => {
+      this.inboxCount = response.length;
 
-      me.events.publish('recipe:inbox:count', me.inboxCount);
-    }, function() {});
+      this.events.publish('recipe:inbox:count', this.inboxCount);
+    }, () => {});
   }
 
   initializeApp() {
@@ -272,19 +264,18 @@ export class MyApp {
   logout() {
     this.messagingService.disableNotifications();
 
-    var me = this;
-    this.userService.logout().subscribe(function() {
-      me._logout.call(me);
-    }, function(err) {
+    this.userService.logout().subscribe(() => {
+      this._logout();
+    }, err => {
       switch (err.status) {
         case 0:
         case 401:
         case 404:
-          me._logout.call(me);
+          this._logout();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

@@ -38,27 +38,26 @@ export class MessagingServiceProvider {
   public toastCtrl: ToastController) {
     this.base = localStorage.getItem('base') || '/api/';
 
-    var me = this;
-    var onSWRegsitration = function() {
+    var onSWRegsitration = () => {
       console.log("Has service worker registration. Beginning setup.")
       var config = {
         messagingSenderId: "1064631313987"
       };
       firebase.initializeApp(config);
 
-      me.messaging = firebase.messaging();
-      me.messaging.useServiceWorker((<any>window).swRegistration);
+      this.messaging = firebase.messaging();
+      this.messaging.useServiceWorker((<any>window).swRegistration);
 
-      me.messaging.onMessage(function(message: any) {
+      this.messaging.onMessage((message: any) => {
         console.log("received foreground FCM: ", message)
         // TODO: REPLACE WITH GRIP (WS)
         switch(message.data.type) {
           case 'import:pepperplate:complete':
-            return me.events.publish('import:pepperplate:complete');
+            return this.events.publish('import:pepperplate:complete');
           case 'import:pepperplate:failed':
-            return me.events.publish('import:pepperplate:failed', message.data.reason);
+            return this.events.publish('import:pepperplate:failed', message.data.reason);
           case 'import:pepperplate:working':
-            return me.events.publish('import:pepperplate:working');
+            return this.events.publish('import:pepperplate:working');
         }
       });
     }
@@ -158,7 +157,6 @@ export class MessagingServiceProvider {
 
     if (!localStorage.getItem('notificationExplainationShown')) {
       localStorage.setItem('notificationExplainationShown', 'true');
-      var me = this;
 
       let alert = this.alertCtrl.create({
         title: 'Requires Notification Permissions',
@@ -170,7 +168,7 @@ export class MessagingServiceProvider {
           {
             text: 'Continue',
             handler: () => {
-              me.enableNotifications();
+              this.enableNotifications();
             }
           }
         ]
@@ -191,7 +189,7 @@ export class MessagingServiceProvider {
       // token might change - we need to listen for changes to it and update it
       this.setupOnTokenRefresh();
       return this.updateToken();
-    }).catch(function(err) {
+    }).catch(err => {
       console.log('Unable to get permission to notify. ', err);
     });
   }
@@ -203,29 +201,29 @@ export class MessagingServiceProvider {
 
     this.unsubscribeOnTokenRefresh();
     this.unsubscribeOnTokenRefresh = () => {};
-    return this.userService.removeFCMToken(token).subscribe(function(response) {
+    return this.userService.removeFCMToken(token).subscribe(response => {
       console.log("deleted FCM token", response);
-    }, function(err) {
+    }, err => {
       console.log("failed to delete FCM token", err);
     });
   }
 
   private updateToken() {
-    return this.messaging.getToken().then((currentToken) => {
+    return this.messaging.getToken().then(currentToken => {
       console.log("current token", currentToken)
       if (currentToken) {
         this.fcmToken = currentToken;
         console.log("saving FCM token", currentToken)
         // we've got the token from Firebase, now let's store it in the database
-        return this.userService.saveFCMToken(currentToken).subscribe(function(response) {
+        return this.userService.saveFCMToken(currentToken).subscribe(response => {
           console.log("saved FCM token", response);
-        }, function(err) {
+        }, err => {
           console.log("failed to save FCM token", err);
         });
       } else {
         console.log('No Instance ID token available. Request permission to generate one.');
       }
-    }).catch(function(err) {
+    }).catch(err => {
       console.log('Unable to get notification token. ', err);
     });
   }
@@ -233,9 +231,9 @@ export class MessagingServiceProvider {
   private setupOnTokenRefresh() {
     this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(() => {
       console.log("Token refreshed");
-      this.userService.removeFCMToken(this.fcmToken).subscribe(function(response) {
+      this.userService.removeFCMToken(this.fcmToken).subscribe(response => {
         this.updateToken();
-      }, function(err) {
+      }, err => {
         this.updateToken();
       });;
     });

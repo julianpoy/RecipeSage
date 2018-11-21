@@ -35,7 +35,7 @@ export class MessagesPage {
 
     this.messagingService.requestNotifications();
 
-    this.websocketService.register('messages:new', function (payload) {
+    this.websocketService.register('messages:new', payload => {
       this.loadThreads();
     }, this);
   }
@@ -44,49 +44,47 @@ export class MessagesPage {
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    this.loadThreads().then(function() {
+    this.loadThreads().then(() => {
       loading.dismiss();
-    }, function() {
+    }, () => {
       loading.dismiss();
     });
   }
 
   refresh(refresher) {
-    this.loadThreads().then(function() {
+    this.loadThreads().then(() => {
       refresher.complete();
-    }, function() {
+    }, () => {
       refresher.complete();
     });
   }
 
   loadThreads() {
-    var me = this;
-
-    return new Promise(function(resolve, reject) {
-      me.messagingService.threads({
+    return new Promise((resolve, reject) => {
+      this.messagingService.threads({
         includeMessages: true,
         messageLimit: 1
-      }).subscribe(function(response) {
-        me.threads = response;
+      }).subscribe(response => {
+        this.threads = response;
 
         resolve();
-      }, function(err) {
+      }, err => {
         reject();
 
         switch(err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -104,16 +102,15 @@ export class MessagesPage {
   }
 
   newThread() {
-    var me = this;
     let modal = this.modalCtrl.create('NewMessageModalPage');
     modal.present();
     modal.onDidDismiss(data => {
       if (!data || !data.destination) return;
 
       if (data.setRoot) {
-        me.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
+        this.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
       } else {
-        me.navCtrl.push(data.destination, data.routingData);
+        this.navCtrl.push(data.destination, data.routingData);
       }
     });
   }

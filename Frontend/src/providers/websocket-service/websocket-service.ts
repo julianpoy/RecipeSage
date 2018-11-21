@@ -18,12 +18,11 @@ export class WebsocketServiceProvider {
   constructor(public http: HttpClient) {
     this.connect();
 
-    var me = this;
     // Before tab close, cleanup WS handler and connection
-    window.onbeforeunload = function() {
+    window.onbeforeunload = () => {
       try {
-        me.connection.onclose = function() {};
-        me.connection.close();
+        this.connection.onclose = () => {};
+        this.connection.close();
       } catch(e) {}
     };
   }
@@ -59,25 +58,24 @@ export class WebsocketServiceProvider {
 
     this.connection = new WebSocket(prot + "://" + window.location.hostname + ":7999/grip/ws" + this.getTokenQuery());
 
-    var me = this;
-    this.connection.onopen = function() {
-      me.handleMessage({
+    this.connection.onopen = () => {
+      this.handleMessage({
         type: 'connected',
         data: null
       });
     };
 
-    this.connection.onmessage = function(payload) {
-      me.handleMessage(JSON.parse(payload.data));
+    this.connection.onmessage = payload => {
+      this.handleMessage(JSON.parse(payload.data));
     };
 
-    this.connection.onerror = function() {
-      if (me.connection.readyState === WebSocket.OPEN) me.connection.close();
-      me.queueReconnect();
+    this.connection.onerror = () => {
+      if (this.connection.readyState === WebSocket.OPEN) this.connection.close();
+      this.queueReconnect();
     };
 
-    this.connection.onclose = function () {
-      me.queueReconnect();
+    this.connection.onclose = () => {
+      this.queueReconnect();
     };
   }
 
@@ -86,10 +84,9 @@ export class WebsocketServiceProvider {
 
     if (this.reconnectTimeout) return;
 
-    var me = this;
-    this.reconnectTimeout = setTimeout(function() {
-      me.connect.call(me);
-      me.reconnectTimeout = null;
+    this.reconnectTimeout = setTimeout(() => {
+      this.connect();
+      this.reconnectTimeout = null;
     }, RECONNECT_TIMEOUT_WAIT);
   }
 

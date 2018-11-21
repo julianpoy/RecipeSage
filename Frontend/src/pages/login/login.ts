@@ -70,7 +70,6 @@ export class LoginPage {
       return;
     }
 
-    var me = this;
     this.errorMessage = '';
 
     var loading = this.loadingService.start();
@@ -79,30 +78,30 @@ export class LoginPage {
       this.userService.login({
         email: this.email,
         password: this.password
-      }).subscribe(function(response) {
+      }).subscribe(response => {
         loading.dismiss();
 
         localStorage.setItem('token', response.token);
 
         if ('Notification' in window && (<any>Notification).permission === 'granted') {
-          me.messagingService.requestNotifications();
+          this.messagingService.requestNotifications();
         }
 
-        me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
-      }, function(err) {
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+      }, err => {
         loading.dismiss();
         switch(err.status) {
           case 0:
-            me.errorMessage = 'It looks like you\'re offline right now.';
+            this.errorMessage = 'It looks like you\'re offline right now.';
             break;
           case 404:
-            me.errorMessage = 'I can\'t find an account with that email address.';
+            this.errorMessage = 'I can\'t find an account with that email address.';
             break;
           case 401:
-            me.errorMessage = 'That password doesn\'t match the email address you entered.';
+            this.errorMessage = 'That password doesn\'t match the email address you entered.';
             break;
           default:
-            me.errorMessage = me.utilService.standardMessages.unexpectedError;
+            this.errorMessage = this.utilService.standardMessages.unexpectedError;
             break;
         }
       });
@@ -112,36 +111,36 @@ export class LoginPage {
           name: this.name,
           email: this.email,
           password: this.password
-        }).subscribe(function(response) {
+        }).subscribe(response => {
           loading.dismiss();
 
           localStorage.setItem('token', response.token);
 
           if ('Notification' in window && (<any>Notification).permission === 'granted') {
-            me.messagingService.requestNotifications();
+            this.messagingService.requestNotifications();
           }
 
-          me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
-        }, function(err) {
+          this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+        }, err => {
           loading.dismiss();
           switch(err.status) {
             case 0:
-              me.errorMessage = 'It looks like you\'re offline right now.';
+              this.errorMessage = 'It looks like you\'re offline right now.';
               break;
             case 412:
-              me.errorMessage = 'Please enter an email address.';
+              this.errorMessage = 'Please enter an email address.';
               break;
             case 406:
-              me.errorMessage = 'An account with that email address already exists.';
+              this.errorMessage = 'An account with that email address already exists.';
               break;
             default:
-              me.errorMessage = me.utilService.standardMessages.unexpectedError;
+              this.errorMessage = this.utilService.standardMessages.unexpectedError;
               break;
           }
         });
       } else {
         loading.dismiss();
-        me.errorMessage = 'The password and confirmation you entered do not match.';
+        this.errorMessage = 'The password and confirmation you entered do not match.';
       }
     }
   }
@@ -154,28 +153,27 @@ export class LoginPage {
     }
 
     var loading = this.loadingService.start();
-    var me = this;
 
     console.log("calling!")
 
     this.userService.forgot({
       email: this.email
-    }).subscribe(function (response) {
+    }).subscribe(response => {
       loading.dismiss();
 
-      let successToast = me.toastCtrl.create({
+      let successToast = this.toastCtrl.create({
         message: 'If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.',
         duration: 7000
       });
       successToast.present();
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.errorMessage = 'It looks like you\'re offline right now.';
+          this.errorMessage = 'It looks like you\'re offline right now.';
           break;
         default:
-          me.errorMessage = me.utilService.standardMessages.unexpectedError;
+          this.errorMessage = this.utilService.standardMessages.unexpectedError;
           break;
       }
     });

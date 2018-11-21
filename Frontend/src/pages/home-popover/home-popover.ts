@@ -27,24 +27,23 @@ export class HomePopoverPage {
   }
 
   ionViewDidLoad() {
-    var me = this;
-    this.labelService.fetch().subscribe(function(response) {
-      me.labels = response;
-    }, function(err) {
+    this.labelService.fetch().subscribe(response => {
+      this.labels = response;
+    }, err => {
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlineFetchMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();

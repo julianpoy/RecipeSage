@@ -42,40 +42,38 @@ export class ImportPage {
       return;
     }
 
-    var me = this;
-
     var loading = this.loadingService.start();
 
     this.recipeService.scrapePepperplate({
       username: this.username,
       password: this.password
-    }).subscribe(function(response) {
+    }).subscribe(response => {
       loading.dismiss();
 
-      me.toastCtrl.create({
+      this.toastCtrl.create({
         message: 'We\'ll start importing your recipes shortly! We\'ll alert you when the process begins.',
         duration: 6000
       }).present();
 
-      me.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
-    }, function(err) {
+      this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+    }, err => {
       loading.dismiss();
       switch(err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

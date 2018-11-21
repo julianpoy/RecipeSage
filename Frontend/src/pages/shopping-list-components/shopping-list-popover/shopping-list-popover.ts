@@ -69,38 +69,37 @@ export class ShoppingListPopoverPage {
   _removeAllItems() {
     if (this.shoppingList.items.length === 0) return;
 
-    var me = this;
     var loading = this.loadingService.start();
 
-    var itemIds = this.shoppingList.items.map(function(el) {
+    var itemIds = this.shoppingList.items.map(el => {
       return el.id;
     });
 
     this.shoppingListService.remove({
       id: this.shoppingListId,
       items: itemIds
-    }).subscribe(function () {
+    }).subscribe(() => {
       loading.dismiss();
 
-      me.viewCtrl.dismiss();
-    }, function (err) {
+      this.viewCtrl.dismiss();
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -131,36 +130,35 @@ export class ShoppingListPopoverPage {
   }
 
   _deleteList() {
-    var me = this;
     var loading = this.loadingService.start();
 
     this.shoppingListService.unlink({
       id: this.shoppingListId
-    }).subscribe(function () {
+    }).subscribe(() => {
       loading.dismiss();
 
-      me.viewCtrl.dismiss({
+      this.viewCtrl.dismiss({
         setRoot: true,
         destination: 'ShoppingListsPage'
       });
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;

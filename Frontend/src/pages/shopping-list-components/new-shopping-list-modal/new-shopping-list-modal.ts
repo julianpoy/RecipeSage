@@ -42,43 +42,41 @@ export class NewShoppingListModalPage {
     public toastCtrl: ToastController,
     public navParams: NavParams) {
 
-    this.loadThreads().then(function () { }, function () { });
+    this.loadThreads().then(() => { }, () => { });
   }
 
   ionViewDidLoad() {}
 
   loadThreads() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.messagingService.threads().subscribe(function (response) {
-        me.existingThreads = response.map(function(el){
-          me.threadsByUserId[el.otherUser.id] = el.otherUser;
+    return new Promise((resolve, reject) => {
+      this.messagingService.threads().subscribe(response => {
+        this.existingThreads = response.map(el => {
+          this.threadsByUserId[el.otherUser.id] = el.otherUser;
           console.log(el.otherUser)
           return el.otherUser;
         });
 
         resolve();
-      }, function (err) {
+      }, err => {
         reject();
 
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlinePushMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.viewCtrl.dismiss({
+            this.viewCtrl.dismiss({
               destination: 'LoginPage',
               setRoot: true
             });
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -93,23 +91,22 @@ export class NewShoppingListModalPage {
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
-    var me = this;
-    this.autofillTimeout = setTimeout(function () {
-      me.userService.getUserByEmail(me.pendingThread.trim()).subscribe(function (response) {
-        if (!me.threadsByUserId[response.id]) {
-          me.existingThreads.push(response);
-          me.threadsByUserId[response.id] = response;
+    this.autofillTimeout = setTimeout(() => {
+      this.userService.getUserByEmail(this.pendingThread.trim()).subscribe(response => {
+        if (!this.threadsByUserId[response.id]) {
+          this.existingThreads.push(response);
+          this.threadsByUserId[response.id] = response;
         }
 
-        me.pendingCollaboratorName = response.name || response.email;
-        me.pendingCollaboratorId = response.id;
-        me.searchingForRecipient = false;
+        this.pendingCollaboratorName = response.name || response.email;
+        this.pendingCollaboratorId = response.id;
+        this.searchingForRecipient = false;
 
         if (callback) callback.call(null);
-      }, function (err) {
-        me.pendingCollaboratorName = '';
-        me.pendingCollaboratorId = '';
-        me.searchingForRecipient = false;
+      }, err => {
+        this.pendingCollaboratorName = '';
+        this.pendingCollaboratorId = '';
+        this.searchingForRecipient = false;
 
         if (callback) callback.call(null);
       });
@@ -152,15 +149,13 @@ export class NewShoppingListModalPage {
   }
 
   onAddCollaboratorEnter($event) {
-    var me = this;
-
-    this.autofillUserName(function() {
-      if (me.pendingCollaboratorId) {
+    this.autofillUserName(() => {
+      if (this.pendingCollaboratorId) {
         $event.target.value = '';
 
-        me.addCollaborator(me.pendingCollaboratorId);
+        this.addCollaborator(this.pendingCollaboratorId);
       } else {
-        me.toastCtrl.create({
+        this.toastCtrl.create({
           message: 'Could not find user with that email address.',
           duration: 6000
         }).present();
@@ -189,41 +184,39 @@ export class NewShoppingListModalPage {
   }
 
   save() {
-    var me = this;
-
     var loading = this.loadingService.start();
 
     this.shoppingListService.create({
       title: this.listTitle,
       collaborators: this.selectedThreads
-    }).subscribe(function (response) {
+    }).subscribe(response => {
       loading.dismiss();
-      me.viewCtrl.dismiss({
+      this.viewCtrl.dismiss({
         destination: 'ShoppingListPage',
         routingData: {
           shoppingListId: response.id
         },
         setRoot: false
       });
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.viewCtrl.dismiss({
+          this.viewCtrl.dismiss({
             destination: 'LoginPage',
             setRoot: true
           });
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();

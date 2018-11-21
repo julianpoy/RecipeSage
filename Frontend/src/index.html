@@ -47,7 +47,7 @@
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
-        .then((registration) => {
+        .then(registration => {
           window.swRegistration = registration;
           if (window.onSWRegistration) window.onSWRegistration.call(null);
 

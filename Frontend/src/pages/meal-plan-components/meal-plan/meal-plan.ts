@@ -175,7 +175,7 @@ export class MealPlanPage {
       let comp = (mealSortOrder[a.meal] || 6) - (mealSortOrder[b.meal] || 6);
       if (comp === 0) return a.title.localeCompare(b.title);
       return comp;
-    }).forEach((item) => {
+    }).forEach(item => {
       item.scheduledDateObj = new Date(item.scheduled);
       var month = item.scheduledDateObj.getMonth();
       var day = item.scheduledDateObj.getDate();
@@ -191,7 +191,7 @@ export class MealPlanPage {
 
   loadMealPlan() {
     return new Promise((resolve, reject) => {
-      this.mealPlanService.fetchById(this.mealPlanId).subscribe((response) => {
+      this.mealPlanService.fetchById(this.mealPlanId).subscribe(response => {
         this.processIncomingMealPlan(response);
 
         resolve();

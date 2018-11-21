@@ -61,9 +61,9 @@ export class NewShoppingListItemModalPage {
       }
     } else {
       // Redundant for now. Kept for sterilization
-      items = this.itemFields.filter(function(e){
+      items = this.itemFields.filter(e => {
         return (e.title || '').length > 0;
-      }).map(function(e) {
+      }).map(e => {
         return {
           title: e.title
         };

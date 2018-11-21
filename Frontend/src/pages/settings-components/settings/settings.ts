@@ -24,10 +24,8 @@ export class SettingsPage {
   }
 
   checkForUpdate() {
-    var me = this;
-
-    (<any>window).updateSW(function() {
-      let alert = me.alertCtrl.create({
+    (<any>window).updateSW(() => {
+      let alert = this.alertCtrl.create({
         title: 'App will reload',
         subTitle: 'The app will reload to check for an update.',
         buttons: [
@@ -44,8 +42,8 @@ export class SettingsPage {
           }]
       });
       alert.present();
-    }, function() {
-      let toast = me.toastCtrl.create({
+    }, () => {
+      let toast = this.toastCtrl.create({
         message: 'We were unable to check for an update at this time.',
         duration: 4000
       });

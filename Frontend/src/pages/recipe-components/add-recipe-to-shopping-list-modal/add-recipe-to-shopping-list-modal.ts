@@ -53,15 +53,15 @@ export class AddRecipeToShoppingListModalPage {
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
-    this.loadLists().then(function () {
+    this.loadLists().then(() => {
       loading.dismiss();
-    }, function () {
+    }, () => {
       loading.dismiss();
     });
   }
 
   changeScale() {
-    this.recipeService.scaleIngredientsPrompt(this.scale, (scale) => {
+    this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
       this.scale = scale;
       this.applyScale();
     });
@@ -72,30 +72,28 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   loadLists() {
-    var me = this;
-
-    return new Promise(function (resolve, reject) {
-      me.shoppingListService.fetch().subscribe(function (response) {
-        me.shoppingLists = response;
+    return new Promise((resolve, reject) => {
+      this.shoppingListService.fetch().subscribe(response => {
+        this.shoppingLists = response;
 
         resolve();
-      }, function (err) {
+      }, err => {
         reject();
 
         switch (err.status) {
           case 0:
-            let offlineToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.offlineFetchMessage,
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
             offlineToast.present();
             break;
           case 401:
-            me.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
             break;
           default:
-            let errorToast = me.toastCtrl.create({
-              message: me.utilService.standardMessages.unexpectedError,
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
             errorToast.present();
@@ -126,34 +124,33 @@ export class AddRecipeToShoppingListModalPage {
       }
     }
 
-    var me = this;
     var loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
       items: items
-    }).subscribe(function (response) {
+    }).subscribe(response => {
       loading.dismiss();
 
-      me.viewCtrl.dismiss();
-    }, function (err) {
+      this.viewCtrl.dismiss();
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           }).present();
           break;
         case 401:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unauthorized,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
             duration: 6000
           }).present();
           break;
         default:
-          me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
           }).present();
           break;
@@ -162,7 +159,6 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   createShoppingList() {
-    var me = this;
     let modal = this.modalCtrl.create('NewShoppingListModalPage');
     modal.present();
     modal.onDidDismiss(data => {
@@ -174,13 +170,13 @@ export class AddRecipeToShoppingListModalPage {
         // Ignore
       }
 
-      me.toastCtrl.create({
+      this.toastCtrl.create({
         message: 'Excellent! Now select the list you just created.',
         duration: 6000
       }).present();
 
       // Check for new lists
-      me.loadLists();
+      this.loadLists();
     });
   }
 

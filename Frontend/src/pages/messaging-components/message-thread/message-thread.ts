@@ -42,21 +42,20 @@ export class MessageThreadPage {
     public messagingService: MessagingServiceProvider) {
     this.otherUserId = this.navParams.get('otherUserId');
 
-    this.websocketService.register('messages:new', function (payload) {
+    this.websocketService.register('messages:new', payload => {
       console.log("here", this.isViewLoaded, payload.otherUser.id)
       if (!this.isViewLoaded || payload.otherUser.id !== this.otherUserId) return;
       console.log("and continued")
 
-      this.loadMessages().then(function () { }, function () { });
+      this.loadMessages().then(() => { }, () => { });
     }, this);
 
-    var me = this;
     events.subscribe('application:multitasking:resumed', () => {
-      if (!me.isViewLoaded) return;
+      if (!this.isViewLoaded) return;
 
-      me.loadMessages.call(me).then(function() {
-        me.changeDetector.detectChanges();
-      }, function() {});
+      this.loadMessages().then(() => {
+        this.changeDetector.detectChanges();
+      }, () => {});
     });
   }
 
@@ -70,12 +69,12 @@ export class MessageThreadPage {
       this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
     } else {
       var loading = this.loadingService.start();
-      var me = this;
+
       this.content.getNativeElement().style.opacity = 0;
-      this.loadMessages.call(this, true).then(function() {
+      this.loadMessages(true).then(() => {
         loading.dismiss();
-        me.content.getNativeElement().style.opacity = 1;
-      }, function() {
+        this.content.getNativeElement().style.opacity = 1;
+      }, () => {
         loading.dismiss();
       });
     }
@@ -88,30 +87,29 @@ export class MessageThreadPage {
   reload() {
     this.reloading = true;
 
-    var me = this;
-    this.loadMessages.call(this).then(function() {
-      me.reloading = false;
-    }, function() {
-      me.reloading = false;
+    this.loadMessages().then(() => {
+      this.reloading = false;
+    }, () => {
+      this.reloading = false;
     });
   }
 
   refresh(refresher) {
-    this.loadMessages.call(this).then(function() {
+    this.loadMessages().then(() => {
       refresher.complete();
-    }, function() {
+    }, () => {
       refresher.complete();
     });
   }
 
   scrollToBottom(animate?, delay?, callback?) {
     var animationDuration = animate ? 300 : 0;
-    var me = this;
+
     if (delay) {
-      setTimeout(function() {
-        me.content.scrollToBottom(animationDuration);
+      setTimeout(() => {
+        this.content.scrollToBottom(animationDuration);
         if (callback) {
-          callback.call(me);
+          callback.call(this);
         }
       });
     } else {
@@ -120,9 +118,8 @@ export class MessageThreadPage {
   }
 
   keyboardOpened() {
-    var me = this;
-    window.onresize = function() {
-      me.scrollToBottom.call(me, false, true);
+    window.onresize = () => {
+      this.scrollToBottom.call(this, false, true);
       window.onresize = null;
     }
   }
@@ -132,32 +129,30 @@ export class MessageThreadPage {
   }
 
   loadMessages(isInitialLoad?) {
-    var me = this;
-
-    return new Promise(function(resolve, reject) {
-      me.messagingService.fetch(me.otherUserId).subscribe(function(response) {
-        me.messages = response.map(function(message) {
-          if (me.messagesById[message.id]) {
-            message.body = me.messagesById[message.id].body;
+    return new Promise((resolve, reject) => {
+      this.messagingService.fetch(this.otherUserId).subscribe(response => {
+        this.messages = response.map(message => {
+          if (this.messagesById[message.id]) {
+            message.body = this.messagesById[message.id].body;
           } else {
-            message.body = me.parseMessage(message.body);
+            message.body = this.parseMessage(message.body);
           }
 
-          me.messagesById[message.id] = message;
+          this.messagesById[message.id] = message;
 
           return message;
         });
 
-        me.scrollToBottom.call(me, !isInitialLoad, true, function() {
+        this.scrollToBottom.call(this, !isInitialLoad, true, () => {
           resolve();
         });
-      }, function(err) {
+      }, err => {
         reject();
 
-        if (!me.isViewLoaded) return;
+        if (!this.isViewLoaded) return;
         switch(err.status) {
           default:
-            me.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
+            this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
             break;
         }
       });
@@ -165,7 +160,6 @@ export class MessageThreadPage {
   }
 
   sendMessage() {
-    var me = this;
     if (!this.pendingMessage) return;
 
     var myMessage = this.pendingMessage;
@@ -175,29 +169,29 @@ export class MessageThreadPage {
     this.messagingService.create({
       to: this.otherUserId,
       body: myMessage
-    }).subscribe(function(response) {
-      me.messagePlaceholder = 'Sent!';
+    }).subscribe(response => {
+      this.messagePlaceholder = 'Sent!';
 
-      setTimeout(function() {
-        me.messagePlaceholder = 'Message...';
+      setTimeout(() => {
+        this.messagePlaceholder = 'Message...';
       }, 1000);
 
-      // me.messages.push(response);
+      // this.messages.push(response);
 
-      // me.scrollToBottom.call(me, true, true);
-    }, function(err) {
-      me.messagePlaceholder = 'Message...';
-      me.pendingMessage = myMessage;
+      // this.scrollToBottom.call(me, true, true);
+    }, err => {
+      this.messagePlaceholder = 'Message...';
+      this.pendingMessage = myMessage;
       switch(err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         default:
-          let errorToast = me.toastCtrl.create({
+          let errorToast = this.toastCtrl.create({
             message: 'Failed to send message.',
             duration: 5000
           });

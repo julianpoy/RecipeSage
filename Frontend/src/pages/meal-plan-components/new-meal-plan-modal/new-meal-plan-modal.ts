@@ -34,41 +34,39 @@ export class NewMealPlanModalPage {
   ionViewDidLoad() {}
 
   save() {
-    var me = this;
-
     var loading = this.loadingService.start();
 
     this.mealPlanService.create({
       title: this.mealPlanTitle,
       collaborators: this.selectedThreads
-    }).subscribe(function (response) {
+    }).subscribe(response => {
       loading.dismiss();
-      me.viewCtrl.dismiss({
+      this.viewCtrl.dismiss({
         destination: 'MealPlanPage',
         routingData: {
           mealPlanId: response.id
         },
         setRoot: false
       });
-    }, function (err) {
+    }, err => {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          let offlineToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.offlinePushMessage,
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         case 401:
-          me.viewCtrl.dismiss({
+          this.viewCtrl.dismiss({
             destination: 'LoginPage',
             setRoot: true
           });
           break;
         default:
-          let errorToast = me.toastCtrl.create({
-            message: me.utilService.standardMessages.unexpectedError,
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
