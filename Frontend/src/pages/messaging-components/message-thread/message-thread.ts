@@ -176,9 +176,9 @@ export class MessageThreadPage {
         this.messagePlaceholder = 'Message...';
       }, 1000);
 
-      // this.messages.push(response);
+      this.messages.push(response);
 
-      // this.scrollToBottom.call(me, true, true);
+      this.scrollToBottom(true, true);
     }, err => {
       this.messagePlaceholder = 'Message...';
       this.pendingMessage = myMessage;
