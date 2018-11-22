@@ -43,9 +43,7 @@ export class MessageThreadPage {
     this.otherUserId = this.navParams.get('otherUserId');
 
     this.websocketService.register('messages:new', payload => {
-      console.log("here", this.isViewLoaded, payload.otherUser.id)
       if (!this.isViewLoaded || payload.otherUser.id !== this.otherUserId) return;
-      console.log("and continued")
 
       this.loadMessages().then(() => { }, () => { });
     }, this);
