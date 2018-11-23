@@ -207,7 +207,11 @@ export class MessageThreadPage {
   }
 
   onMessageKeyUp(event) {
-    if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+    if (!(event.keyCode == 10 || event.keyCode == 13)) return;
+
+    if (event.ctrlKey || event.shiftKey || event.altKey) {
+      this.pendingMessage += "\n";
+    } else {
       this.sendMessage();
     }
   }
