@@ -124,7 +124,7 @@ router.get(
           attributes: []
         }
       ],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', 'items.id'), 'itemCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
       group: ['ShoppingList.id', 'collaborators.id', 'collaborators->ShoppingList_Collaborator.id', 'owner.id'],
       order: [
         ['updatedAt', 'DESC']
