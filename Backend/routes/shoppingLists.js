@@ -29,30 +29,33 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-  ShoppingList.create({
-    title: req.body.title,
-    collaborators: req.body.collaborators || [],
-    userId: res.locals.userId
-  }, {
-    include: [
-      {
-        model: User,
-        as: 'collaborators'
-      }
-    ]
-  }).then(function(shoppingList) {
-    for (var i = 0; i < (req.body.collaborators || []).length; i++) {
-      GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
-        shoppingListId: shoppingList.id,
-        from: {
-          id: res.locals.user.id,
-          name: res.locals.user.name,
-          email: res.locals.user.email
+  SQ.transaction(function (t) {
+    return ShoppingList.create({
+      title: req.body.title,
+      userId: res.locals.userId
+    }, {
+      transaction: t
+    }).then(function(shoppingList) {
+      return shoppingList.addCollaborators(
+        req.body.collaborators || [],
+        {
+          transaction: t
         }
-      });
-    }
+      ).then(() => {
+        for (var i = 0; i < (req.body.collaborators || []).length; i++) {
+          GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
+            shoppingListId: shoppingList.id,
+            from: {
+              id: res.locals.user.id,
+              name: res.locals.user.name,
+              email: res.locals.user.email
+            }
+          });
+        }
 
-    res.status(200).json(shoppingList);
+        res.status(200).json(shoppingList);
+      });
+    });
   }).catch(next);
 });
 
