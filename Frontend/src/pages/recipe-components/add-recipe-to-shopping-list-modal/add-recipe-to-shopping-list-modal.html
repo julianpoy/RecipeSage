@@ -14,17 +14,21 @@
 <ion-content padding>
 
   <p>
-    <b>Select a destination shopping list:</b>
+    Select the destination shopping list:
   </p>
 
-  <ion-item *ngIf="shoppingLists.length > 0">
+  <p *ngIf="!shoppingLists">
+    Loading shopping lists...
+  </p>
+
+  <ion-item *ngIf="shoppingLists && shoppingLists.length > 0">
     <ion-label>Destination Shopping List</ion-label>
     <ion-select [(ngModel)]="destinationShoppingList">
       <ion-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-option>
     </ion-select>
   </ion-item>
 
-  <div *ngIf="shoppingLists.length === 0" (click)="createShoppingList()">
+  <div *ngIf="shoppingLists && shoppingLists.length === 0" (click)="createShoppingList()">
     <p>
       You have no shopping lists.<br /><br />
       <button ion-button icon-left>
@@ -34,27 +38,10 @@
     </p>
   </div>
 
-  <div *ngIf="ingredients && ingredients.length > 0">
-    <p>
-      <b>Ingredients for "{{ recipe.title }}":</b>
-    </p>
-
-    <ion-item *ngFor="let ingredient of ingredients; let i = index;">
-      <ion-label>{{ ingredient }}</ion-label>
-      <ion-checkbox [(ngModel)]="ingredientBinders[i]" checked="true"></ion-checkbox>
-    </ion-item>
-  </div>
-  <div *ngIf="!ingredients || ingredients.length === 0">
-    <p>
-      <b>The selected recipe has no ingredients.</b>
-    </p>
-  </div>
-
-  <div *ngIf="ingredients && ingredients.length > 0">
-    <br /><br />
-    <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
-  </div>
-
+  <select-ingredients
+    [ingredients]="recipe.ingredients"
+    [initialScale]="scale"
+    (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
 </ion-content>
 
 <ion-footer padding>

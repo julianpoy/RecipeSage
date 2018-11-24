@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 
 @Component({
   selector: 'select-ingredients',
@@ -7,6 +8,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class SelectIngredientsComponent {
 
   ingredientBinders: any = {};
+  scaledIngredients: any = [];
+  scale: any = 1;
 
   _ingredients: any;
   @Input()
@@ -15,30 +18,50 @@ export class SelectIngredientsComponent {
   }
 
   set ingredients(val) {
-    this._ingredients = (val || '').match(/[^\r\n]+/g) || [];
+    this._ingredients = val;
 
     this.selectedIngredients = [];
     this.ingredientBinders = {};
 
-    for (var i = 0; i < (this.ingredients || []).length; i++) {
-      this.ingredientBinders[i] = true;
-      this.selectedIngredients.push(this.ingredients[i]);
-    }
-
-    this.selectedIngredientsChange.emit(this.selectedIngredients);
+    this.applyScale(true);
   }
 
   selectedIngredients: any;
 
   @Output() selectedIngredientsChange = new EventEmitter();
 
-  constructor() {}
+  @Input()
+  set initialScale(val) {
+    this.scale = val;
+    this.applyScale();
+  }
+
+  constructor(public recipeService: RecipeServiceProvider) {}
+
+  changeScale() {
+    this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
+      this.scale = scale;
+      this.applyScale();
+    });
+  }
+
+  applyScale(init?) {
+    this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale);
+
+    this.selectedIngredients = [];
+    for (var i = 0; i < (this.scaledIngredients || []).length; i++) {
+      if (init) this.ingredientBinders[i] = true;
+      if (this.ingredientBinders[i]) this.selectedIngredients.push(this.scaledIngredients[i]);
+    }
+
+    this.selectedIngredientsChange.emit(this.selectedIngredients);
+  }
 
   toggleIngredient(i) {
     if (this.ingredientBinders[i]) {
-      this.selectedIngredients.push(this.ingredients[i]);
+      this.selectedIngredients.push(this.scaledIngredients[i]);
     } else {
-      this.selectedIngredients.splice(this.selectedIngredients.indexOf(this.ingredients[i]), 1);
+      this.selectedIngredients.splice(this.selectedIngredients.indexOf(this.scaledIngredients[i]), 1);
     }
   }
 }

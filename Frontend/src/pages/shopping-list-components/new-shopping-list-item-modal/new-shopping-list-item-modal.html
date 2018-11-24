@@ -39,12 +39,10 @@
       <br *ngIf="!selectedRecipe" />
       <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
 
-      <div *ngIf="selectedRecipe">
-        <p>
-          <b>Ingredients for "{{ selectedRecipe.title }}":</b>
-        </p>
-        <select-ingredients [ingredients]="selectedRecipe.ingredients" (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
-      </div>
+      <select-ingredients
+        *ngIf="selectedRecipe"
+        [ingredients]="selectedRecipe.ingredients"
+        (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
     </div>
   </div>
 

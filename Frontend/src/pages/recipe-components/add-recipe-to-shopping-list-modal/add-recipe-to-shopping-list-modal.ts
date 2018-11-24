@@ -16,10 +16,9 @@ export class AddRecipeToShoppingListModalPage {
 
   recipe: any;
   scale: any = 1;
-  ingredients: any = [];
+  selectedIngredients: any = [];
 
-  shoppingLists: any = [];
-  ingredientBinders: any = {};
+  shoppingLists: any;
 
   destinationShoppingList: any;
 
@@ -40,13 +39,6 @@ export class AddRecipeToShoppingListModalPage {
     this.recipe = navParams.get('recipe');
     this.scale = navParams.get('recipeScale') || 1;
     this.reference = navParams.get('reference');
-
-    this.applyScale();
-
-    this.ingredientBinders = {};
-    for (var i = 0; i < this.ingredients.length; i++) {
-      this.ingredientBinders[i] = true;
-    }
   }
 
   ionViewDidLoad() {}
@@ -58,17 +50,6 @@ export class AddRecipeToShoppingListModalPage {
     }, () => {
       loading.dismiss();
     });
-  }
-
-  changeScale() {
-    this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
-      this.scale = scale;
-      this.applyScale();
-    });
-  }
-
-  applyScale() {
-    this.ingredients = this.recipeService.scaleIngredients(this.recipe.ingredients, this.scale);
   }
 
   loadLists() {
@@ -106,22 +87,17 @@ export class AddRecipeToShoppingListModalPage {
   isFormValid() {
     if (!this.destinationShoppingList) return false;
 
-    for (var key in this.ingredientBinders) {
-      if (this.ingredientBinders.hasOwnProperty(key) && this.ingredientBinders[key]) return true;
-    }
+    return this.selectedIngredients && this.selectedIngredients.length > 0;
   }
 
   save() {
     var items = [];
-    for (var i = 0; i < this.ingredients.length; i++) {
-      if (this.ingredientBinders[i]) {
-        console.log(this.reference)
-        items.push({
-          title: this.ingredients[i],
-          recipe: this.recipe.id,
-          reference: this.reference
-        });
-      }
+    for (var i = 0; i < this.selectedIngredients.length; i++) {
+      items.push({
+        title: this.selectedIngredients[i],
+        recipeId: this.recipe.id,
+        reference: this.reference
+      });
     }
 
     var loading = this.loadingService.start();

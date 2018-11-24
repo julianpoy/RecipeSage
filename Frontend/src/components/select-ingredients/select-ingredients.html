@@ -1,13 +1,19 @@
 <div>
-  <div *ngIf="ingredients && ingredients.length > 0">
-    <ion-item *ngFor="let ingredient of ingredients; let i = index;">
+  <div *ngIf="scaledIngredients && scaledIngredients.length > 0">
+    <p>
+      Select the ingredients you'd like to add:
+    </p>
+
+    <ion-item *ngFor="let ingredient of scaledIngredients; let i = index;">
       <ion-label>{{ ingredient }}</ion-label>
       <ion-checkbox [(ngModel)]="ingredientBinders[i]" (ngModelChange)="toggleIngredient(i)" checked="true"></ion-checkbox>
     </ion-item>
+    <br /><br />
+    <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
   </div>
-  <div *ngIf="!ingredients || ingredients.length === 0">
+  <div *ngIf="!scaledIngredients || scaledIngredients.length === 0">
     <p>
-      <b>The selected recipe has no ingredients.</b>
+      <b>This recipe has no ingredients.</b>
     </p>
   </div>
 </div>
