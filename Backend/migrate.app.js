@@ -207,13 +207,22 @@ function migrateShoppingLists(cb) {
   });
 }
 
+function printLogs() {
+  console.log("==================");
+  console.log(usersByMongoId);
+  console.log("==================");
+  console.log(recipesByMongoId);
+  console.log("==================");
+}
+
 var t = 0;
-var a = 500;
+var a = 2000;
 setTimeout(migrateUsers, t += a);
 setTimeout(migrateRecipes, t += a);
 setTimeout(migrateLabels, t += a);
 setTimeout(migrateMessages, t += a);
 setTimeout(migrateShoppingLists, t += a);
+setTimeout(printLogs, t += a);
 
 // error handler
 app.use(function(err, req, res, next) {
