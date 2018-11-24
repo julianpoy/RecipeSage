@@ -36,6 +36,7 @@
     </div>
 
     <div *ngSwitchCase="'recipe'">
+      <br *ngIf="!selectedRecipe" />
       <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
 
       <div *ngIf="selectedRecipe">

@@ -49,7 +49,7 @@ ion-thumbnail img {
   overflow-y: auto;
 }
 
-#labelSelectParent {
+.dropdownSelect {
   padding-left: 16px;
   padding-right: 16px;
 
@@ -87,21 +87,29 @@ ion-thumbnail img {
 
     button.suggestion {
       display: block;
-      padding: 8px;
+      padding: 0;
       background-color: white;
       width: 100%;
       text-align: left;
 
-      &:hover {
-        background-color: #00a8ff;
-      }
+      ion-item {
+        cursor: pointer;
 
-      &:focus {
-        background-color: #00a8ff;
-      }
+        &:hover {
+          background-color: #00a8ff;
+        }
 
-      .hint {
-        float: right;
+        &:focus {
+          background-color: #00a8ff;
+        }
+
+        h2 {
+          margin-top: 0;
+        }
+
+        .hint {
+          float: right;
+        }
       }
     }
   }

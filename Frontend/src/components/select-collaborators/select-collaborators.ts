@@ -26,7 +26,6 @@ export class SelectCollaboratorsComponent {
   existingThreads: any = [];
   pendingThread: string = '';
   showAutocomplete: boolean = false;
-  autocompleteSelectionIdx: number = -1;
 
   // Holds user autocomplete variables
   pendingCollaboratorName: any = '';
@@ -118,32 +117,6 @@ export class SelectCollaboratorsComponent {
       }
     }
     this.showAutocomplete = show;
-    this.autocompleteSelectionIdx = -1;
-  }
-
-  labelFieldKeyUp(event) {
-    // Only listen for up or down arrow
-    if (event.keyCode !== 38 && event.keyCode !== 40) return;
-
-    // Get all suggestions (including click to create)
-    var suggestions = document.getElementsByClassName('autocomplete')[0].children;
-
-    // If result list size was reduced, do not overflow
-    if (this.autocompleteSelectionIdx > suggestions.length - 1) this.autocompleteSelectionIdx = suggestions.length - 1;
-
-    if (event.keyCode === 40 && this.autocompleteSelectionIdx < suggestions.length - 1) {
-      // Arrow Down
-      this.autocompleteSelectionIdx++;
-    } else if (event.keyCode === 38 && this.autocompleteSelectionIdx >= 0) {
-      // Arrow Up
-      this.autocompleteSelectionIdx--;
-    }
-
-    if (this.autocompleteSelectionIdx === -1) {
-      (document.getElementById('labelInputField') as HTMLElement).focus();
-    } else {
-      (suggestions[this.autocompleteSelectionIdx] as HTMLElement).focus();
-    }
   }
 
   onAddCollaboratorEnter($event) {

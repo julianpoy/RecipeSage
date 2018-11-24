@@ -36,16 +36,17 @@
     </div>
 
     <div *ngSwitchCase="'recipe'">
+      <br /><br />
       <select-recipe
       [(selectedRecipe)]="selectedRecipe"
       ></select-recipe>
     </div>
   </div>
-</ion-content>
 
-<ion-footer padding>
+  <br /><br />
+
   <ion-item>
-    <ion-label>Sort/Meal</ion-label>
+    <ion-label>Meal</ion-label>
     <ion-select [(ngModel)]="meal">
       <ion-option value="breakfast">Breakfast</ion-option>
       <ion-option value="lunch">Lunch</ion-option>
@@ -54,6 +55,9 @@
       <ion-option value="other">Other</ion-option>
     </ion-select>
   </ion-item>
+</ion-content>
+
+<ion-footer padding>
   <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="list"></ion-icon>
     Add to Meal Plan
