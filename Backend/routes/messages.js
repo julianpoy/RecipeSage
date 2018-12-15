@@ -189,9 +189,11 @@ router.get(
   Message.findAll({
     where: {
       [Op.or]: [{
+        fromUserId: req.query.user,
         toUserId: res.locals.userId
       }, {
-        fromUserId: res.locals.userId
+        fromUserId: res.locals.userId,
+        toUserId: req.query.user
       }]
     },
     include: [
