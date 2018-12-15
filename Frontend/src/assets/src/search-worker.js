@@ -1,4 +1,4 @@
-self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.6/lunr.min.js');
+self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.5/lunr.min.js');
 
 var l;
 var recipes;
