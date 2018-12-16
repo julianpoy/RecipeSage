@@ -26,8 +26,6 @@ export class HomePage {
 
   searchText: string;
 
-  imageLoadOffset: number = 20;
-
   folder: string;
   folderTitle: string;
 
@@ -59,7 +57,6 @@ export class HomePage {
         this.folderTitle = 'My Recipes';
         break;
     }
-
 
     this.loadViewOptions();
     this.filterOptions.viewOptions = this.viewOptions;
@@ -182,106 +179,6 @@ export class HomePage {
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
       recipeId: recipe.id
-    });
-  }
-
-  editRecipe(recipe) {
-    this.navCtrl.push('EditRecipePage', {
-      recipe: recipe
-    });
-  }
-
-  moveRecipe(recipe, folderName) {
-    var loading = this.loadingService.start();
-
-    recipe.folder = folderName;
-
-    this.recipeService.update(recipe).subscribe(response => {
-      loading.dismiss();
-
-      this.loadRecipes().then(() => {}, () => {});
-    }, err => {
-      loading.dismiss();
-      switch(err.status) {
-        case 0:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          }).present();
-          break;
-        case 401:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          }).present();
-          break;
-        default:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          }).present();
-          break;
-      }
-    });
-  }
-
-  deleteRecipe(recipe) {
-    let alert = this.alertCtrl.create({
-      title: 'Confirm Delete',
-      message: 'This will permanently delete the recipe from your account. This action is irreversible.',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {}
-        },
-        {
-          text: 'Delete',
-          cssClass: 'alertDanger',
-          handler: () => {
-            this._deleteRecipe(recipe);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  private _deleteRecipe(recipe) {
-    var loading = this.loadingService.start();
-
-    this.recipeService.remove(recipe).subscribe(response => {
-      loading.dismiss();
-
-      this.loadRecipes();
-    }, err => {
-      loading.dismiss();
-      switch(err.status) {
-        case 0:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          }).present();
-          break;
-        case 401:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          }).present();
-          break;
-        case 404:
-          this.toastCtrl.create({
-            message: 'Can\'t find the recipe you\'re trying to delete.',
-            duration: 6000
-          }).present();
-          break;
-        default:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          }).present();
-          break;
-      }
     });
   }
 
