@@ -8,6 +8,8 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
+import SearchWorker from 'worker-loader!../../assets/src/recipe-search.worker';
+
 @IonicPage({
   segment: 'list/:folder',
   priority: 'high',
@@ -123,7 +125,7 @@ export class HomePage {
       }).subscribe(response => {
 
         if (this.searchWorker) this.searchWorker.terminate();
-        this.searchWorker = new Worker('assets/src/search-worker.js');
+        this.searchWorker = new SearchWorker();
 
         this.searchWorker.postMessage(JSON.stringify({
           op: 'init',

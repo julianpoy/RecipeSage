@@ -4,6 +4,8 @@ import { UtilServiceProvider } from '../../providers/util-service/util-service';
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { ToastController, NavController } from 'ionic-angular';
 
+import SearchWorker from 'worker-loader!../../assets/src/recipe-search.worker';
+
 @Component({
   selector: 'select-recipe',
   templateUrl: 'select-recipe.html'
@@ -53,7 +55,7 @@ export class SelectRecipeComponent {
       }).subscribe(response => {
 
         if (this.searchWorker) this.searchWorker.terminate();
-        this.searchWorker = new Worker('assets/src/search-worker.js');
+        this.searchWorker = new SearchWorker();
 
         this.searchWorker.postMessage(JSON.stringify({
           op: 'init',

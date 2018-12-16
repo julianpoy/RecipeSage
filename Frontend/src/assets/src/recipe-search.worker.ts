@@ -1,10 +1,12 @@
-self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.5/lunr.min.js');
+const ctx: Worker = self as any;
+
+ctx.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.5/lunr.min.js');
 
 var l;
 var recipes;
 var recipesById;
 
-self.addEventListener("message", function(e) {
+ctx.addEventListener("message", function(e) {
   var message = JSON.parse(e.data);
   if (message.op === 'init') {
     recipes = message.data;
@@ -43,7 +45,7 @@ self.addEventListener("message", function(e) {
     if (message.data.trim().length > 0) {
       var txt = message.data.trim();
 
-      var results = l.search(txt);
+      let results = l.search(txt);
 
       // Expand the search to autocomplete
       if (results.length === 0) {
@@ -66,7 +68,7 @@ self.addEventListener("message", function(e) {
         data: results
       }));
     } else {
-      var results = recipes.map(function(el) {
+      let results = recipes.map(function(el) {
         delete el.score;
         return el;
       });

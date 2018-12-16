@@ -60,7 +60,8 @@
     "shx": "^0.3.2",
     "typescript": "~2.4.2",
     "webpack-manifest-plugin": "^2.0.3",
-    "workbox-cli": "^3.4.1"
+    "workbox-cli": "^3.4.1",
+    "worker-loader": "^2.0.0"
   },
   "description": "An Ionic project",
   "cordova": {
