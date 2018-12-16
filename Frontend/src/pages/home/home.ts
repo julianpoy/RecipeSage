@@ -1,5 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef  } from '@angular/core';
-import { Observable, Subject } from 'rxjs'
+import { Component } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
 import { LazyLoadImageDirective } from 'ng-lazyload-image';
@@ -38,7 +37,6 @@ export class HomePage {
   searchWorker: any;
 
   constructor(
-    private cdRef:ChangeDetectorRef,
     public navCtrl: NavController,
     public navParams: NavParams,
     public events: Events,
