@@ -19,9 +19,6 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js"
-  },
-  {
-    "url": "https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.5/lunr.min.js"
   }
 ]);
 
