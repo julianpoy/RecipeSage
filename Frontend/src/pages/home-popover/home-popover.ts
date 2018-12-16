@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, Select } from '@angular/core';
 import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
@@ -12,6 +12,8 @@ import { UtilServiceProvider } from '../../providers/util-service/util-service';
   templateUrl: 'home-popover.html',
 })
 export class HomePopoverPage {
+
+  @ViewChild('filterByLabelSelect') filterByLabelSelect: Select;
 
   viewOptions: any;
 
@@ -57,5 +59,10 @@ export class HomePopoverPage {
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
     localStorage.setItem('sortBy', this.viewOptions.sortBy);
+  }
+
+  resetFilterByLabel() {
+    this.filterByLabelSelect.close()
+    this.viewOptions.selectedLabels.splice(0, this.viewOptions.selectedLabels.length)
   }
 }
