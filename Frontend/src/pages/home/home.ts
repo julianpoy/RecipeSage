@@ -25,14 +25,9 @@ export class HomePage {
   recipes: Recipe[];
   initialLoadComplete: boolean = false;
 
-  showSearch: boolean;
   searchText: string;
 
   imageLoadOffset: number = 20;
-
-  viewType: string = localStorage.getItem('viewType') || 'list';
-
-  viewTypes: string[] = ['list', 'cards'];
 
   folder: string;
   folderTitle: string;
@@ -41,14 +36,6 @@ export class HomePage {
   filterOptions: any = {};
 
   searchWorker: any;
-
-  searchResultContainer: any;
-  searchResultsAfterFilterLen: number = -1;
-
-  //Lazy load reqs
-  @ViewChild('container') container: any;
-  updateSearchResult$: any;
-  scrollAndSearch$: any;
 
   constructor(
     private cdRef:ChangeDetectorRef,
@@ -78,12 +65,6 @@ export class HomePage {
 
     this.loadViewOptions();
     this.filterOptions.viewOptions = this.viewOptions;
-    // Refresh search results whenever filters change
-    this.filterOptions.onchange = () => {
-      try {
-        this.updateSearchResult$.next();
-      } catch(e){}
-    }
 
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
@@ -96,11 +77,6 @@ export class HomePage {
     });
 
     this.searchText = '';
-    this.showSearch = false;
-  }
-
-  ionViewDidLoad() {
-    this.searchResultContainer = document.getElementById('recipeListContainer');
   }
 
   ionViewWillEnter() {
@@ -112,26 +88,6 @@ export class HomePage {
     }, () => {
       loading.dismiss();
     });
-  }
-
-  ngAfterViewInit() {
-    this.updateSearchResult$ = new Subject();
-    this.scrollAndSearch$ = Observable.merge(
-      this.container.ionScroll,
-      this.updateSearchResult$
-    );
-  }
-
-  ngAfterViewChecked() {
-    if (this.searchResultContainer) {
-      var len = this.searchResultContainer.children.length;
-      if (len !== this.searchResultsAfterFilterLen) {
-        this.searchResultsAfterFilterLen = len;
-        this.cdRef.detectChanges();
-      }
-    } else {
-      this.searchResultsAfterFilterLen = -1;
-    }
   }
 
   refresh(refresher) {
@@ -187,10 +143,6 @@ export class HomePage {
           if (message.op === 'results') {
             this.recipes = message.data;
           }
-          // After render loop
-          setTimeout(() => {
-            this.updateSearchResult$.next();
-          });
         }
 
         if (this.searchText) {
@@ -347,10 +299,6 @@ export class HomePage {
     this.navCtrl.push('EditRecipePage');
   }
 
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
-  }
-
   search(text) {
     if (!text) text = '';
     this.searchText = text;
@@ -362,17 +310,5 @@ export class HomePage {
 
   trackByFn(index, item) {
     return item.id;
-  }
-
-  nextViewType() {
-    var viewTypeIdx = this.viewTypes.indexOf(this.viewType);
-
-    viewTypeIdx++;
-
-    if (viewTypeIdx === this.viewTypes.length) viewTypeIdx = 0;
-
-    this.viewType = this.viewTypes[viewTypeIdx];
-
-    localStorage.setItem('viewType', this.viewType);
   }
 }

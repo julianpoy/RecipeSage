@@ -5,6 +5,8 @@ import { PipesModule } from './../../pipes/pipes.module';
 
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+
 @NgModule({
   declarations: [
     HomePage,
@@ -12,7 +14,8 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
   imports: [
     IonicPageModule.forChild(HomePage),
     PipesModule,
-    LazyLoadImageModule
+    LazyLoadImageModule,
+    VirtualScrollerModule
   ],
 })
 export class HomePageModule {}
