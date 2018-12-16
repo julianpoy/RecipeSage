@@ -1,5 +1,5 @@
-import { Component, ViewChild, Select } from '@angular/core';
-import { IonicPage, NavController, ToastController, NavParams, ViewController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, ToastController, NavParams, ViewController, Select } from 'ionic-angular';
 
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
