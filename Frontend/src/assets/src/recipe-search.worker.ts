@@ -1,6 +1,6 @@
 const ctx: Worker = self as any;
 
-ctx.importScripts('https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.5/lunr.min.js');
+import * as lunr from 'lunr';
 
 var l;
 var recipes;
@@ -66,7 +66,7 @@ ctx.addEventListener("message", function(e) {
       postMessage(JSON.stringify({
         op: 'results',
         data: results
-      }));
+      }), null);
     } else {
       let results = recipes.map(function(el) {
         delete el.score;
@@ -76,7 +76,7 @@ ctx.addEventListener("message", function(e) {
       postMessage(JSON.stringify({
         op: 'results',
         data: results
-      }));
+      }), null);
     }
   }
 }, false);
