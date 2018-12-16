@@ -11,7 +11,8 @@ export class BasicFilterPipe implements PipeTransform {
 
     setTimeout(options.onchange, 0);
 
-    var filteredRecipes = recipes;
+    // Mutate array for VirtualScroll
+    var filteredRecipes = recipes.slice();
 
     if (options.viewOptions.selectedLabels && options.viewOptions.selectedLabels.length > 0) {
       filteredRecipes = recipes.filter(el => {
