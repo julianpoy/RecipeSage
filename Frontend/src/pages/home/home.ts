@@ -14,8 +14,7 @@ import { UtilServiceProvider } from '../../providers/util-service/util-service';
 })
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html',
-  providers: [ LazyLoadImageDirective ]
+  templateUrl: 'home.html'
 })
 export class HomePage {
 

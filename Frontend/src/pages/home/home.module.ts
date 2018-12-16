@@ -12,7 +12,6 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
   imports: [
     IonicPageModule.forChild(HomePage),
     PipesModule,
-    LazyLoadImageModule,
     VirtualScrollerModule
   ],
 })
