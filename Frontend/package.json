@@ -1,8 +1,8 @@
 {
   "name": "RecipeSage",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "version": "0.0.0",
+  "author": "Julian Poyourow",
+  "homepage": "https://recipesage.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
