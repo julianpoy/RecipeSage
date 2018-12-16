@@ -63,20 +63,20 @@ ctx.addEventListener("message", function(e) {
         return recipe;
       });
 
-      postMessage(JSON.stringify({
+      ctx.postMessage(JSON.stringify({
         op: 'results',
         data: results
-      }), null);
+      }));
     } else {
       let results = recipes.map(function(el) {
         delete el.score;
         return el;
       });
 
-      postMessage(JSON.stringify({
+      ctx.postMessage(JSON.stringify({
         op: 'results',
         data: results
-      }), null);
+      }));
     }
   }
 }, false);
