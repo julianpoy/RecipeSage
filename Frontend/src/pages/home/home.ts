@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, AlertController, ToastController, PopoverController } from 'ionic-angular';
 
-import { LazyLoadImageDirective } from 'ng-lazyload-image';
-
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { MessagingServiceProvider } from '../../providers/messaging-service/messaging-service';
 import { UserServiceProvider } from '../../providers/user-service/user-service';

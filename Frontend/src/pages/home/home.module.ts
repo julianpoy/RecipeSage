@@ -3,8 +3,6 @@ import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 import { PipesModule } from './../../pipes/pipes.module';
 
-import { LazyLoadImageModule } from 'ng-lazyload-image';
-
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
