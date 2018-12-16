@@ -150,5 +150,5 @@ html
     }
 
     window.addEventListener('message', function(e) {
-      window.print();
+      if (e.data == 'print') window.print();
     });
