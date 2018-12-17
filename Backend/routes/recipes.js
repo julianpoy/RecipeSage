@@ -143,23 +143,25 @@ router.get(
       ['title', 'ASC']
     ],
   }).then(function(recipes) {
+    let recipes_j = recipes.map(e => e.toJSON());
+
     var data;
     var mimetype;
 
     switch (req.query.format) {
       case 'json':
-        data = JSON.stringify(recipes);
+        data = JSON.stringify(recipes_j);
         mimetype = 'application/json';
         break;
       case 'xml':
-        data = xmljs.json2xml(recipes, { compact: true, ignoreComment: true, spaces: 4 });
+        data = xmljs.json2xml(recipes_j, { compact: true, ignoreComment: true, spaces: 4 });
         mimetype = 'text/xml';
         break;
       case 'txt':
         data = '';
 
-        for (var i = 0; i < recipes.length; i++) {
-          let recipe = recipes[i];
+        for (var i = 0; i < recipes_j.length; i++) {
+          let recipe = recipes_j[i];
 
           recipe.labels = recipe.labels.map(function (el) {
             return el.title;
@@ -185,13 +187,8 @@ router.get(
 
     res.setHeader('Content-disposition', 'attachment; filename=recipes-' + Date.now() + '.' + req.query.format);
     res.setHeader('Content-type', mimetype);
-    res.write(data, function (err) {
-      if (err) {
-        Raven.captureException("Could not write data response for export task.");
-      }
-
-      res.end();
-    });
+    res.write(data);
+    res.end();
   }).catch(next);
 });
 
