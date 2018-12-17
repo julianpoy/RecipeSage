@@ -123,7 +123,7 @@ router.get(
   '/export',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res) {
+  function(req, res, next) {
 
   Recipe.findAll({
     where: {
@@ -235,7 +235,7 @@ router.put(
   cors(),
   MiddlewareService.validateSession(['user']),
   UtilService.upload.single('image'),
-  function(req, res) {
+  function(req, res, next) {
 
   Recipe.findOne({
     where: {
