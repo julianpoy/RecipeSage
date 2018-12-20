@@ -242,6 +242,37 @@ export class MyApp {
       // }else{
       //   this.nav.setRoot('LoginPage');
       // }
+
+      // Listen for page change events
+      let currentUrl;
+      this.nav.viewDidEnter.subscribe((view) => {
+        // Wait for nav change to happen
+        setTimeout(() => {
+          try {
+            let viewName = view.instance.constructor.name;
+
+            let _paq = (<any>window)._paq;
+
+            if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
+            currentUrl = '' + window.location.hash.substr(1);
+            _paq.push(['setCustomUrl', currentUrl]);
+            _paq.push(['setDocumentTitle', viewName]);
+
+            // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+            _paq.push(['deleteCustomVariables', 'page']);
+            _paq.push(['setGenerationTimeMs', 0]);
+            _paq.push(['trackPageView']);
+
+            // make Matomo aware of newly added content
+            _paq.push(['MediaAnalytics::scanForMedia']);
+            _paq.push(['FormAnalytics::scanForForms']);
+            _paq.push(['trackContentImpressionsWithinNode']);
+            _paq.push(['enableLinkTracking']);
+          } catch(e) {
+            console.warn(e);
+          }
+        }, 0);
+      });
     });
   }
 
