@@ -13,45 +13,60 @@
 
 
 <ion-content>
-  <div class="photoHolder">
-    <picture>
-      <source media="(min-width: 1921px)" srcset="assets/stockphotos/chicken-salad-original.jpg">
-      <source media="(min-width: 1281px)" srcset="assets/stockphotos/chicken-salad-1920.jpg">
-      <source media="(min-width: 641px)" srcset="assets/stockphotos/chicken-salad-1280.jpg">
-      <img src="assets/stockphotos/chicken-salad-640.jpg" alt="Chicken Salad">
-    </picture>
+  <div class="intro-container">
+    <div class="intro-fold"></div>
+
+    <div class="intro-fold-dimmer"></div>
+
+    <div class="title">
+      <h1>
+        All of your recipes in one place
+      </h1>
+
+      <br />
+
+      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf"></ion-icon>
+        Create an account
+      </button>
+    </div>
+
+    <div class="screen">
+      <picture>
+        <img src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+      </picture>
+    </div>
+
+    <div class="welcomeContent" padding>
+      <h2>Welcome to Recipe Sage!</h2>
+
+      <br /><br />
+
+      Create, store, share and browse your recipes online.
+
+      <br /><br />
+
+      Why Recipe Sage?<br />
+      - Free<br />
+      - Easy to use<br />
+      - Open Source<br />
+      - Mobile compatible<br />
+      - Import recipes from Pepperplate<br />
+      - Share and interact with other users<br />
+
+      <br /><br /><br />
+
+      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf"></ion-icon>
+        Create an account
+      </button>
+
+      <br /><br />
+
+      <button ion-button icon-start (click)="goToAuth('login')" style="margin: 0;">
+        <ion-icon name="ios-nutrition"></ion-icon>
+        Log In
+      </button>
+    </div>
   </div>
-  <div class="welcomeContent" padding>
-    <h2>Welcome to Recipe Sage!</h2>
-    
-    <br /><br />
-    
-    Create, store, share and browse your recipes online.
-    
-    <br /><br />
-    
-    Why Recipe Sage?<br />
-    - Free<br />
-    - Easy to use<br />
-    - Open Source<br />
-    - Mobile compatible<br />
-    - Import recipes from Pepperplate<br />
-    - Share and interact with other users<br />
-    
-    <br /><br /><br />
-    
-    <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
-      <ion-icon name="ios-leaf"></ion-icon>
-      Create an account
-    </button>
-    
-    <br /><br />
-    
-    <button ion-button icon-start (click)="goToAuth('login')" style="margin: 0;">
-      <ion-icon name="ios-nutrition"></ion-icon>
-      Log In
-    </button>
-  </div>
-  
-  
 </ion-content>
