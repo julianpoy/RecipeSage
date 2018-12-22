@@ -22,8 +22,6 @@ export class LoginPage {
 
   showLogin: boolean = true;
 
-  errorMessage: string = '';
-
   constructor(
     public navCtrl: NavController,
     public utilService: UtilServiceProvider,
@@ -42,8 +40,13 @@ export class LoginPage {
 
   toggleLogin() {
     this.showLogin = !this.showLogin;
+  }
 
-    this.errorMessage = '';
+  presentToast(msg) {
+    this.toastCtrl.create({
+      message: msg,
+      duration: 6000
+    }).present();
   }
 
   auth() {
@@ -54,23 +57,25 @@ export class LoginPage {
 
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
-      this.errorMessage = 'Please enter a valid email address.';
-      return;
-    } else if (!this.showLogin && this.name.length < 1) {
-      this.errorMessage = 'Please enter a name (you can enter a nickname!)';
-      return;
-    } else if (this.password.length === 0) {
-      this.errorMessage = 'Please enter a password.';
-      return;
-    } else if (!this.showLogin && this.password.length < 6) {
-      this.errorMessage = 'Please enter a password at least 6 characters long.';
-      return;
-    } else if (this.email.length === 0) {
-      this.errorMessage = 'Please enter your email address.';
+      this.presentToast('Please enter a valid email address.')
       return;
     }
-
-    this.errorMessage = '';
+    if (!this.showLogin && this.name.length < 1) {
+      this.presentToast('Please enter a name (you can enter a nickname!)')
+      return;
+    }
+    if (this.password.length === 0) {
+      this.presentToast('Please enter a password.')
+      return;
+    }
+    if (!this.showLogin && this.password.length < 6) {
+      this.presentToast('Please enter a password at least 6 characters long.')
+      return;
+    }
+    if (this.email.length === 0) {
+      this.presentToast('Please enter your email address.')
+      return;
+    }
 
     var loading = this.loadingService.start();
 
@@ -92,16 +97,16 @@ export class LoginPage {
         loading.dismiss();
         switch(err.status) {
           case 0:
-            this.errorMessage = 'It looks like you\'re offline right now.';
+            this.presentToast('It looks like you\'re offline right now.')
             break;
           case 404:
-            this.errorMessage = 'I can\'t find an account with that email address.';
+            this.presentToast('I can\'t find an account with that email address.')
             break;
           case 401:
-            this.errorMessage = 'That password doesn\'t match the email address you entered.';
+            this.presentToast('That password doesn\'t match the email address you entered.')
             break;
           default:
-            this.errorMessage = this.utilService.standardMessages.unexpectedError;
+            this.presentToast(this.utilService.standardMessages.unexpectedError)
             break;
         }
       });
@@ -125,22 +130,22 @@ export class LoginPage {
           loading.dismiss();
           switch(err.status) {
             case 0:
-              this.errorMessage = 'It looks like you\'re offline right now.';
+              this.presentToast('It looks like you\'re offline right now.')
               break;
             case 412:
-              this.errorMessage = 'Please enter an email address.';
+              this.presentToast('Please enter an email address.')
               break;
             case 406:
-              this.errorMessage = 'An account with that email address already exists.';
+              this.presentToast('An account with that email address already exists.')
               break;
             default:
-              this.errorMessage = this.utilService.standardMessages.unexpectedError;
+              this.presentToast(this.utilService.standardMessages.unexpectedError)
               break;
           }
         });
       } else {
         loading.dismiss();
-        this.errorMessage = 'The password and confirmation you entered do not match.';
+        this.presentToast('The password and confirmation you entered do not match.')
       }
     }
   }
@@ -148,13 +153,11 @@ export class LoginPage {
   forgotPassword() {
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
-      this.errorMessage = 'Please enter your account email and try again';
+      this.presentToast('Please enter your account email and try again')
       return;
     }
 
     var loading = this.loadingService.start();
-
-    console.log("calling!")
 
     this.userService.forgot({
       email: this.email
@@ -170,10 +173,10 @@ export class LoginPage {
       loading.dismiss();
       switch (err.status) {
         case 0:
-          this.errorMessage = 'It looks like you\'re offline right now.';
+          this.presentToast('It looks like you\'re offline right now.')
           break;
         default:
-          this.errorMessage = this.utilService.standardMessages.unexpectedError;
+          this.presentToast(this.utilService.standardMessages.unexpectedError)
           break;
       }
     });
