@@ -74,6 +74,11 @@ page-welcome {
       max-width: $content-max-width;
       margin-left: auto;
       margin-right: auto;
+
+      .sectionHeader {
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
     }
   }
 }
