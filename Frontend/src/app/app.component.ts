@@ -55,7 +55,20 @@ export class MyApp {
     });
 
     window['onSWUpdate'] = () => {
-		  console.log("Update is waiting for pause...")
+      console.log("Update is waiting for pause...")
+      let toast = this.toastCtrl.create({
+        message: "RecipeSage needs to update",
+        duration: 7000,
+        showCloseButton: true,
+        closeButtonText: 'Reload'
+      });
+      toast.present();
+
+      toast.onDidDismiss((data, role) => {
+        if (role == "close") {
+          (<any>window).location.reload(true);
+        }
+      });
 		  if ((<any>window).isHidden()) {
   	    (<any>window).location.reload(true);
 		  } else {
