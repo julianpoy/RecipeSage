@@ -13,6 +13,22 @@
   <div class="auth-container">
     <ion-list>
       <div class="auth-entry">
+
+        <br /><br /><br /><br />
+
+        <div class="welcome" *ngIf="showLogin">
+          <h2>Welcome back!</h2>
+          <span>Please login with your account details below.</span>
+        </div>
+
+        <div class="welcome" *ngIf="!showLogin">
+          <h2>Welcome!</h2>
+          <span>We need a few details to create your account.</span><br />
+          <span>After this, you'll be set up and ready to go.</span>
+        </div>
+
+        <br /><br /><br /><br />
+
         <div *ngIf="!showLogin">
           <label>
             Full Name or Nickname<br />

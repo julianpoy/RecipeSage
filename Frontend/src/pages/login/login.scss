@@ -4,8 +4,13 @@ page-login {
     margin-right: auto;
     max-width: $content-max-width;
 
+    .welcome {
+      color: rgba(0,0,0,0.8);
+      text-align: center;
+    }
+
     label {
-      color: #999;
+      color: rgba(0,0,0,0.7);
       font-size: 12px;
       margin: 5px;
     }
@@ -14,12 +19,12 @@ page-login {
       width: 100%;
       background: none;
       border: none;
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
       padding: 10px;
       transition: 0.3s;
       background: transparent;
       color: initial;
-      
+
       &:focus {
         border-bottom: 1px solid #00a8ff;
       }
