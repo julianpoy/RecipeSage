@@ -17,9 +17,6 @@ export class MessagesPage {
 
   threads: any = [];
 
-  isNotificationsEnabled: any;
-  isNotificationsSupported: any = 'Notification' in window;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -30,8 +27,6 @@ export class MessagesPage {
     public loadingService: LoadingServiceProvider,
     public websocketService: WebsocketServiceProvider,
     public messagingService: MessagingServiceProvider) {
-
-    this.isNotificationsEnabled = this.messagingService.isNotificationsEnabled;
 
     this.messagingService.requestNotifications();
 
@@ -113,5 +108,13 @@ export class MessagesPage {
         this.navCtrl.push(data.destination, data.routingData);
       }
     });
+  }
+
+  isNotificationsCapable() {
+    return this.messagingService.isNotificationsCapable();
+  }
+
+  isNotificationsEnabled() {
+    return this.messagingService.isNotificationsEnabled();
   }
 }

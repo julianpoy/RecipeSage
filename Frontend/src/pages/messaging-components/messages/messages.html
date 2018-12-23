@@ -30,7 +30,7 @@
     <button (click)="newThread()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
-  <ion-footer *ngIf="isNotificationsSupported && !isNotificationsEnabled()" padding text-center>
+  <ion-footer *ngIf="isNotificationsCapable() && !isNotificationsEnabled()" padding text-center>
     <b class="notificationWarning">Warning:</b>
     Notifications must be enabled for messaging to work properly.<br />
     <a href="https://support.google.com/chrome/answer/114662?visit_id=1-636632909352922358-846594632&rd=1" target="_blank">See how to re-enable notifications here</a>
