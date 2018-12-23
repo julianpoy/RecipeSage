@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events, ToastController } from 'ionic-angular';
 
-import * as inobounce from 'inobounce';
+import * as bodyScrollLock from 'body-scroll-lock';
 
 import { MessagesPage } from '../pages/messaging-components/messages/messages';
 import { MessageThreadPage } from '../pages/messaging-components/message-thread/message-thread';
@@ -44,8 +44,6 @@ export class MyApp {
     this.initEventListeners();
     this.initEventDispatchers();
     this.initDevBase();
-
-    inobounce.isEnabled(); // call to init inobounce
 
     if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
       this.messagingService.requestNotifications();
@@ -262,7 +260,15 @@ export class MyApp {
 
       // Listen for page change events
       let currentUrl;
-      this.nav.viewDidEnter.subscribe((view) => {
+      this.nav.viewDidEnter.subscribe(view => {
+        try {
+          let scrollContent = view._ionCntRef.nativeElement.children[1]
+
+          bodyScrollLock.disableBodyScroll(scrollContent);
+        } catch(e) {
+          console.error("Error fetching view for body-scroll-lock (IOS)", e);
+        }
+
         // Wait for nav change to happen
         setTimeout(() => {
           try {
