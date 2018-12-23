@@ -1,6 +1,8 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Events } from 'ionic-angular';
 
+import * as linkifyStr from 'linkifyjs/string';
+
 import { MessagingServiceProvider } from '../../../providers/messaging-service/messaging-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { WebsocketServiceProvider } from '../../../providers/websocket-service/websocket-service';
@@ -242,10 +244,9 @@ export class MessageThreadPage {
   }
 
   parseMessage(message) {
-    console.log("parsing...")
-    var updated = message;
+    let updated = message;
 
-    updated = (<any>window).linkifyStr(updated, {
+    updated = linkifyStr(updated, {
       target: {
         url: '_blank'
       },
