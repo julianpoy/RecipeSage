@@ -39,6 +39,8 @@ export class MessagingServiceProvider {
     this.base = localStorage.getItem('base') || '/api/';
 
     var onSWRegsitration = () => {
+      if (!this.isNotificationsCapable()) return;
+
       console.log("Has service worker registration. Beginning setup.")
       var config = {
         messagingSenderId: "1064631313987"
@@ -65,8 +67,12 @@ export class MessagingServiceProvider {
     else (<any>window).onSWRegistration = onSWRegsitration;
   }
 
+  isNotificationsCapable() {
+    return firebase.messaging.isSupported()
+  }
+
   isNotificationsEnabled() {
-    return ('Notification' in window) && ((<any>Notification).permission === 'granted');
+    return this.isNotificationsCapable() && ('Notification' in window) && ((<any>Notification).permission === 'granted');
   }
 
   getTokenQuery() {
@@ -146,6 +152,7 @@ export class MessagingServiceProvider {
   }
 
   requestNotifications() {
+    if (!this.isNotificationsCapable()) return;
     if (!('Notification' in window)) return;
     if (!this.messaging || (<any>Notification).permission === 'denied') return;
 
@@ -181,7 +188,7 @@ export class MessagingServiceProvider {
 
   // Grab token and setup FCM
   private enableNotifications() {
-    if (!this.messaging) return;
+    if (!this.messaging || !this.isNotificationsCapable()) return;
 
     console.log('Requesting permission...');
     return this.messaging.requestPermission().then(() => {
@@ -195,7 +202,7 @@ export class MessagingServiceProvider {
   }
 
   public disableNotifications() {
-    if (!this.messaging) return;
+    if (!this.messaging || !this.isNotificationsCapable()) return;
 
     var token = this.fcmToken;
 
@@ -209,6 +216,8 @@ export class MessagingServiceProvider {
   }
 
   private updateToken() {
+    if (!this.messaging || !this.isNotificationsCapable()) return;
+
     return this.messaging.getToken().then(currentToken => {
       console.log("current token", currentToken)
       if (currentToken) {
@@ -229,6 +238,8 @@ export class MessagingServiceProvider {
   }
 
   private setupOnTokenRefresh() {
+    if (!this.messaging || !this.isNotificationsCapable()) return;
+
     this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(() => {
       console.log("Token refreshed");
       this.userService.removeFCMToken(this.fcmToken).subscribe(response => {
