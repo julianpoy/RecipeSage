@@ -13,12 +13,6 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "assets/fonts/ionicons.woff2?v=4.1.1",
     "revision": '383676'
-  },
-  {
-    "url": "https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify.min.js"
-  },
-  {
-    "url": "https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.6/linkify-string.min.js"
   }
 ]);
 
