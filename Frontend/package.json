@@ -44,7 +44,6 @@
     "dayjs": "^1.7.8",
     "firebase": "^5.7.1",
     "fraction.js": "^4.0.11",
-    "inobounce": "git+git@github.com:julianpoy/iNoBounce.git",
     "ionic-angular": "3.9.2",
     "ionicons": "4.5.1",
     "linkifyjs": "^2.1.7",

@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events, ToastController } from 'ionic-angular';
 
-import * as inobounce from 'inobounce';
-
 import { MessagesPage } from '../pages/messaging-components/messages/messages';
 import { MessageThreadPage } from '../pages/messaging-components/message-thread/message-thread';
 
@@ -44,8 +42,6 @@ export class MyApp {
     this.initEventListeners();
     this.initEventDispatchers();
     this.initDevBase();
-
-    inobounce.isEnabled();
 
     if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
       this.messagingService.requestNotifications();
