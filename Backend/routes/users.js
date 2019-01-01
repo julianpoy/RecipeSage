@@ -4,7 +4,8 @@ var cors = require('cors');
 var Raven = require('raven');
 
 // DB
-var Sequelize = require('sequelize');
+var Op = require("sequelize").Op;
+var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 
@@ -313,7 +314,7 @@ router.post(
   FCMToken.destroy({
     where: {
       token: req.body.fcmToken,
-      userId: { [Sequelize.Op.ne]: res.locals.userId }
+      userId: { [Op.ne]: res.locals.userId }
     }
   })
   .then(function() {
