@@ -63,6 +63,14 @@ export class AccountPage {
   ionViewDidLoad() {}
 
   saveName() {
+    if (!this.account.name || this.account.name.length === 0) {
+      this.toastCtrl.create({
+        message: "Name/nickname must not be blank.",
+        duration: 5000
+      }).present();
+      return;
+    }
+
     var loading = this.loadingService.start();
 
     this.userService.update({
@@ -102,13 +110,11 @@ export class AccountPage {
   }
 
   saveEmail() {
-    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-    if (this.account.email.length === 0 || !emailRegex.test(this.account.email)) {
-      let tst = this.toastCtrl.create({
-        message: 'Please enter a valid email address.',
+    if (!this.account.email || this.account.email.length === 0) {
+      this.toastCtrl.create({
+        message: "Email must not be blank.",
         duration: 5000
-      });
-      tst.present();
+      }).present();
       return;
     }
 
@@ -138,6 +144,18 @@ export class AccountPage {
           break;
         case 401:
           this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          break;
+        case 406:
+          this.toastCtrl.create({
+            message: 'Sorry, an account with that email address already exists.',
+            duration: 5000
+          }).present();
+          break;
+        case 412:
+          this.toastCtrl.create({
+            message: 'Please enter a valid email address.',
+            duration: 5000
+          }).present();
           break;
         default:
           let errorToast = this.toastCtrl.create({
@@ -172,13 +190,6 @@ export class AccountPage {
     if (this.account.password !== this.account.confirmPassword) {
       let tst = this.toastCtrl.create({
         message: 'Passwords do not match.',
-        duration: 5000
-      });
-      tst.present();
-      return;
-    } else if (this.account.password.length < 6) {
-      let tst = this.toastCtrl.create({
-        message: 'Password must be 6 characters or longer.',
         duration: 5000
       });
       tst.present();
@@ -225,6 +236,12 @@ export class AccountPage {
           break;
         case 401:
           this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          break;
+        case 412:
+          this.toastCtrl.create({
+            message: 'Invalid password - Passwords must be 6 characters or longer.',
+            duration: 5000
+          }).present();
           break;
         default:
           let errorToast = this.toastCtrl.create({

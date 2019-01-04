@@ -42,7 +42,7 @@ router.get(
 
   User.find({
     where: {
-      email: req.query.email.trim().toLowerCase()
+      email: UtilService.sanitizeEmail(req.query.email)
     },
     attributes: ['id', 'name', 'email']
   })
@@ -66,7 +66,7 @@ router.post(
 
   User.findOne({
     where: {
-      email: req.body.email.toLowerCase()
+      email: UtilService.sanitizeEmail(req.body.email)
     }
   }).then(function(user) {
     if (!user) {
@@ -123,20 +123,21 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-  if (!emailRegex.test(req.body.email) || req.body.email.length === 0) {
+  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+
+  if (!UtilService.validateEmail(sanitizedEmail)) {
     res.status(412).json({
       msg: "Email is not valid!"
     });
-  } else if (req.body.password.length < 6) {
+  } else if (!UtilService.validatePassword(req.body.password)) {
     res.status(411).json({
-      msg: "Password is too short!"
+      msg: "Password is not valid!"
     });
   } else {
     //Check if a user with that email already exists
     User.find({
       where: {
-        email: req.body.email.toLowerCase()
+        email: sanitizedEmail
       },
       attributes: ['id']
     }).then(function(user) {
@@ -147,8 +148,8 @@ router.post(
       } else {
         User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
           User.create({
-            name: req.body.name,
-            email: req.body.email.toLowerCase(),
+            name: (req.body.name || sanitizedEmail).trim(),
+            email: sanitizedEmail,
             passwordHash: hashedPasswordData.hash,
             passwordSalt: hashedPasswordData.salt,
             passwordVersion: hashedPasswordData.version
@@ -174,12 +175,11 @@ router.post(
   cors(),
   function(req, res, next) {
 
-    var origin = req.get('origin');
-console.log(origin)
+  var origin = req.get('origin');
 
   User.find({
     where: {
-      email: req.body.email.toLowerCase()
+      email: UtilService.sanitizeEmail(req.body.email)
     }
   }).then(function(user) {
     if (!user) {
@@ -233,47 +233,77 @@ router.put(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-  if (req.body.email && (!emailRegex.test(req.body.email) || req.body.email.length < 1)) {
-    res.status(412).json({
-      msg: "Email is not valid!"
-    });
-  } else {
-    var updates = {};
+  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
-    if (req.body.name && typeof req.body.name === 'string') updates.name = req.body.name;
-    if (req.body.email && typeof req.body.email === 'string') updates.email = req.body.email;
+  return SQ.transaction(t => {
+    if (sanitizedEmail && !UtilService.validateEmail(sanitizedEmail)) {
+      var e = new Error("Email is not valid!");
+      e.status = 412;
+      throw e;
+    } else if (req.body.password && !UtilService.validatePassword(req.body.password || '')) {
+      var e = new Error("Password is not valid!");
+      e.status = 412;
+      throw e;
+    } else {
+      var updates = {};
 
-    new Promise(function(resolve, reject) {
-      if (req.body.password && typeof req.body.password === 'string') {
-        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-          updates.passwordHash = hashedPasswordData.hash;
-          updates.passwordSalt = hashedPasswordData.salt;
-          updates.passwordVersion = hashedPasswordData.version;
+      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
+      if (req.body.email && typeof req.body.email === 'string') updates.email = sanitizedEmail;
+
+      return new Promise(function(resolve, reject) {
+        if (req.body.password && typeof req.body.password === 'string') {
+          User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
+            updates.passwordHash = hashedPasswordData.hash;
+            updates.passwordSalt = hashedPasswordData.salt;
+            updates.passwordVersion = hashedPasswordData.version;
+            resolve();
+          });
+        } else {
           resolve();
-        });
-      } else {
-        resolve();
-      }
-    }).then(function() {
-      return User.update(updates, {
-        where: {
-          id: res.locals.userId
-        },
-        returning: true
-      })
-      .then(function() {
-        return User.find({
+        }
+      }).then(() => {
+        if (!req.body.email) {
+          return Promise.resolve();
+        } else {
+          return User.findOne({
+            where: {
+              id: { [Op.ne]: res.locals.userId },
+              email: sanitizedEmail
+            },
+            attributes: ['id'],
+            transaction: t
+          }).then(user => {
+            if (user) {
+              var e = new Error("Account with that email address already exists!");
+              e.status = 406;
+              throw e;
+            }
+
+            // Allow stack to fall through
+          });
+        }
+      }).then(() => {
+        return User.update(updates, {
           where: {
             id: res.locals.userId
           },
-          attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt']
-        }).then(function(updatedUser) {
-          res.status(200).json(updatedUser);
+          returning: true,
+          transaction: t
+        })
+        .then(([numUpdated, [updatedUser]]) => {
+          const { id, name, email, createdAt, updatedAt } = updatedUser;
+
+          res.status(200).json({
+            id,
+            name,
+            email,
+            createdAt,
+            updatedAt
+          });
         });
       });
-    }).catch(next);
-  }
+    }
+  }).catch(next);
 });
 
 router.post(
