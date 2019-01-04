@@ -236,73 +236,79 @@ router.put(
   let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
   return SQ.transaction(t => {
-    if (sanitizedEmail && !UtilService.validateEmail(sanitizedEmail)) {
-      var e = new Error("Email is not valid!");
-      e.status = 412;
-      throw e;
-    } else if (req.body.password && !UtilService.validatePassword(req.body.password || '')) {
-      var e = new Error("Password is not valid!");
-      e.status = 412;
-      throw e;
-    } else {
-      var updates = {};
+    var updates = {};
 
-      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
-      if (req.body.email && typeof req.body.email === 'string') updates.email = sanitizedEmail;
+    return new Promise(function(resolve, reject) {
+      if (!req.body.password) {
+        // Skip if not updating password
+        resolve();
+      } else {
+        if (!UtilService.validatePassword(req.body.password)) {
+          var e = new Error("Password is not valid!");
+          e.status = 412;
+          throw e;
+        }
 
-      return new Promise(function(resolve, reject) {
-        if (req.body.password && typeof req.body.password === 'string') {
-          User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-            updates.passwordHash = hashedPasswordData.hash;
-            updates.passwordSalt = hashedPasswordData.salt;
-            updates.passwordVersion = hashedPasswordData.version;
-            resolve();
-          });
-        } else {
+        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
+          updates.passwordHash = hashedPasswordData.hash;
+          updates.passwordSalt = hashedPasswordData.salt;
+          updates.passwordVersion = hashedPasswordData.version;
           resolve();
+        });
+      }
+    }).then(() => {
+      if (!req.body.email) {
+        // Skip if not updating email
+        return Promise.resolve();
+      } else {
+        if (!UtilService.validateEmail(sanitizedEmail)) {
+          var e = new Error("Email is not valid!");
+          e.status = 412;
+          throw e;
         }
-      }).then(() => {
-        if (!req.body.email) {
-          return Promise.resolve();
-        } else {
-          return User.findOne({
-            where: {
-              id: { [Op.ne]: res.locals.userId },
-              email: sanitizedEmail
-            },
-            attributes: ['id'],
-            transaction: t
-          }).then(user => {
-            if (user) {
-              var e = new Error("Account with that email address already exists!");
-              e.status = 406;
-              throw e;
-            }
 
-            // Allow stack to fall through
-          });
-        }
-      }).then(() => {
-        return User.update(updates, {
+        updates.email = sanitizedEmail;
+
+        return User.findOne({
           where: {
-            id: res.locals.userId
+            id: { [Op.ne]: res.locals.userId },
+            email: sanitizedEmail
           },
-          returning: true,
+          attributes: ['id'],
           transaction: t
-        })
-        .then(([numUpdated, [updatedUser]]) => {
-          const { id, name, email, createdAt, updatedAt } = updatedUser;
+        }).then(user => {
+          if (user) {
+            var e = new Error("Account with that email address already exists!");
+            e.status = 406;
+            throw e;
+          }
 
-          res.status(200).json({
-            id,
-            name,
-            email,
-            createdAt,
-            updatedAt
-          });
+          // Allow stack to fall through
+        });
+      }
+    }).then(() => {
+      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
+      return Promise.resolve();
+    }).then(() => {
+      return User.update(updates, {
+        where: {
+          id: res.locals.userId
+        },
+        returning: true,
+        transaction: t
+      })
+      .then(([numUpdated, [updatedUser]]) => {
+        const { id, name, email, createdAt, updatedAt } = updatedUser;
+
+        res.status(200).json({
+          id,
+          name,
+          email,
+          createdAt,
+          updatedAt
         });
       });
-    }
+    });
   }).catch(next);
 });
 
