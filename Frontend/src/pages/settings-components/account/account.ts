@@ -205,26 +205,7 @@ export class AccountPage {
       this.account.password = '*'.repeat(this.account.password.length);
       this.passwordChanged = false;
 
-      this.userService.logout().subscribe(response => {
-        loading.dismiss();
-
-        this._logout();
-      }, err => {
-        loading.dismiss();
-        switch (err.status) {
-          case 0:
-          case 401:
-          case 404:
-            this._logout();
-            break;
-          default:
-            this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
-            }).present();
-            break;
-        }
-      });
+      this._logout();
     }, err => {
       loading.dismiss();
       switch(err.status) {

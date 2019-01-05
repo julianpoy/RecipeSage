@@ -8,6 +8,7 @@ var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
+var Session = require('../models').Session;
 
 // Service
 var SessionService = require('../services/sessions');
@@ -218,6 +219,21 @@ router.put(
         updates.passwordHash = hashedPasswordData.hash;
         updates.passwordSalt = hashedPasswordData.salt;
         updates.passwordVersion = hashedPasswordData.version;
+
+        return Promise.all([
+          FCMToken.destroy({
+            where: {
+              userId: res.locals.session.userId
+            },
+            transaction: t
+          }),
+          Session.destroy({
+            where: {
+              userId: res.locals.session.userId
+            },
+            transaction: t
+          })
+        ])
       }),
       // Email update stage
       Promise.resolve().then(() => {
