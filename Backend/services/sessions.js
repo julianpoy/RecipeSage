@@ -11,7 +11,7 @@ var SET_GRACE_WHEN = 5; // Set token expiry equal to grace period if session wil
 var SESSION_GRACE_PERIOD = 7; // Should always be more than SET_GRACE_WHEN
 
 //Checks if a token exists, and returns the corrosponding userId
-exports.validateSession = function(token, type, success, fail) {
+exports.validateSession = function(token, type) {
   var query;
   if(typeof type == "string"){
     query = {
@@ -25,53 +25,51 @@ exports.validateSession = function(token, type, success, fail) {
   query.token = token;
   query.expires = {[Op.gte]: Date.now() };
 
-  Session.findOne({
+  return Session.findOne({
     where: query,
     attributes: ['id', 'userId', 'token', 'type', 'expires']
   })
   .then(function(session) {
     if (!session) {
-      fail({
-        msg: "Session is not valid!",
-        status: 401
-      });
-    } else {
-      success(session.userId, session);
-
-      // Extend the session expiry if necessary
-      if (moment(session.expires).subtract(SET_GRACE_WHEN, "days").isBefore(moment())) {
-        var updateCmd = {
-          // updatedAt: Date.now(),
-          expires: moment().add(SESSION_GRACE_PERIOD, "days")
-        }
-
-        session.update(updateCmd).catch(function(err){
-          var payload = {
-            msg: "Error reading database when extending user token!",
-            err: err
-          }
-          Raven.captureException(payload);
-        });
-      }
+      let e = new Error('Session is not valid!');
+      e.status = 401;
+      throw e;
     }
-  })
-  .catch(function(err) {
-    var payload = {
-      msg: "Could not search database for session!",
-      status: 500
-    };
-    fail(payload);
-    payload.err = err;
-    Raven.captureException(payload);
-  });
 
+    extendSession(session);
+    removeOldSessions();
+
+    return Promise.resolve(session);
+  });
+};
+
+function extendSession(session) {
+  // Extend the session expiry if necessary
+  if (moment(session.expires).subtract(SET_GRACE_WHEN, "days").isBefore(moment())) {
+    var updateCmd = {
+      // updatedAt: Date.now(),
+      expires: moment().add(SESSION_GRACE_PERIOD, "days")
+    }
+
+    session.update(updateCmd).catch(function (err) {
+      var payload = {
+        msg: "Error reading database when extending user token!",
+        err: err
+      }
+      Raven.captureException(payload);
+    });
+  }
+}
+
+function removeOldSessions() {
   //Clean out all old items
   var removeOld = {
-    expires: {[Op.lt]: Date.now()}
+    expires: { [Op.lt]: Date.now() }
   }
-  Session.destroy({
+
+  return Session.destroy({
     where: removeOld
-  }).catch(function(err) {
+  }).catch(function (err) {
     if (err) {
       var payload = {
         msg: "Error removing old sessions!",
@@ -80,46 +78,27 @@ exports.validateSession = function(token, type, success, fail) {
       Raven.captureException(payload);
     }
   });
-};
+}
 
 //Creates a token and returns the token if successful
-exports.generateSession = function(userId, type, success, fail) {
+exports.generateSession = function(userId, type, transaction) {
   //Create a random token
   var token = crypto.randomBytes(48).toString('hex');
   //New session!
-  Session.create({
+  return Session.create({
     userId,
     type,
     token,
     expires: moment().add(SESSION_VALIDITY_LENGTH, "days")
-  }).then(function(session) {
-    success(token, session);
-  }).catch(function(err) {
-    var payload = {
-      msg: "Could not add session to DB!",
-      status: 500
-    }
-    fail(payload);
-    payload.err = err;
-    Raven.captureException(payload);
+  }, { transaction }).then(session => {
+    return Promise.resolve(session);
   });
 };
 
-//Creates a token and returns the token if successful
-exports.deleteSession = function(token, success, fail) {
-  Session.destroy({
+exports.deleteSession = function(token) {
+  return Session.destroy({
     where: {
       token: token
     }
-  }).then(function(){
-    success();
-  }).catch(function(err) {
-    var payload = {
-      msg: "Could not delete session!",
-      status: 500
-    }
-    fail(payload);
-    payload.err = err;
-    Raven.captureException(payload);
   });
 };

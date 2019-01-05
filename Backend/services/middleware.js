@@ -3,24 +3,21 @@ var User = require('../models').User;
 
 exports.validateSession = function(types) {
   return function(req, res, next) {
-    SessionService.validateSession(req.query.token, types, function(userId, session) {
-      res.locals.userId = userId;
+    SessionService.validateSession(req.query.token, types).then(session => {
       res.locals.session = session;
       next();
-    }, function(err){
-      res.status(err.status).json(err);
-    });
+    }).catch(next);
   }
-}
+};
 
 // Requires validateSession
 exports.validateUser = function(req, res, next) {
   User.find({
     where: {
-      id: res.locals.userId
+      id: res.locals.session.userId
     },
     attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt']
-  }).then(function(user){
+  }).then(user => {
     if (!user) {
       res.status(404).send("Your user was not found");
     } else {
@@ -30,4 +27,4 @@ exports.validateUser = function(req, res, next) {
   }).catch(function(err) {
     res.status(500).json(err);
   });
-}
+};

@@ -64,57 +64,21 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  User.findOne({
-    where: {
-      email: UtilService.sanitizeEmail(req.body.email)
-    }
-  }).then(function(user) {
-    if (!user) {
-      res.status(404).json({
-        msg: "Wrong email!"
-      });
-    } else {
-      user.validatePassword(req.body.password, function(err, isValid) {
-        if (err) {
-          var payload = {
-            msg: "Couldn't validate the database user password!"
-          };
-          res.status(500).json(payload);
-          payload.err = err;
-          Raven.captureException(payload);
-        } else if (!isValid) {
-          res.status(401).json({
-            msg: "Password is incorrect!"
-          });
-        } else {
-          SessionService.generateSession(user.id, 'user', function(token, session) {
-            res.status(200).json({
-              token: token
-            });
-          }, function(err) {
-            res.status(err.status).json(err);
-          });
+  SQ.transaction(transaction => {
+    return User.login(req.body.email, req.body.password, transaction).then(user => {
+      // Update lastLogin
+      user.lastLogin = Date.now();
 
-          // Update lastLogin
-          user.lastLogin = Date.now();
-
-          user.save().catch(function(err) {
-            if (err) {
-              Raven.captureException("Could not update user after login");
-            }
-          });
-        }
+      return Promise.all([
+        user.save(),
+        SessionService.generateSession(user.id, 'user', transaction)
+      ]).then(([user, { token }]) => {
+        res.status(200).json({
+          token: token
+        });
       });
-    }
-  }).catch(function(err) {
-    console.log("got here", err)
-    var payload = {
-      msg: "Couldn't search the database for user!"
-    };
-    res.status(500).json(payload);
-    payload.err = err;
-    Raven.captureException(payload);
-  });
+    });
+  }).catch(next);
 });
 
 /* Register as a user */
@@ -123,50 +87,50 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+  SQ.transaction(transaction => {
+    let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
-  if (!UtilService.validateEmail(sanitizedEmail)) {
-    res.status(412).json({
-      msg: "Email is not valid!"
-    });
-  } else if (!UtilService.validatePassword(req.body.password)) {
-    res.status(411).json({
-      msg: "Password is not valid!"
-    });
-  } else {
-    //Check if a user with that email already exists
-    User.find({
-      where: {
-        email: sanitizedEmail
-      },
-      attributes: ['id']
-    }).then(function(user) {
-      if (user) {
-        res.status(406).json({
-          msg: "Account with that email address already exists!"
-        });
-      } else {
-        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-          User.create({
-            name: (req.body.name || sanitizedEmail).trim(),
-            email: sanitizedEmail,
-            passwordHash: hashedPasswordData.hash,
-            passwordSalt: hashedPasswordData.salt,
-            passwordVersion: hashedPasswordData.version
-          }).then(function(newUser) {
-            SessionService.generateSession(newUser.id, 'user', function(token, session) {
-              res.status(200).json({
-                token: token
-              });
-            }, function(err) {
-              res.status(err.status).json(err);
-              Raven.captureException(err);
+    if (!UtilService.validateEmail(sanitizedEmail)) {
+      let e = new Error('Email is not valid!');
+      e.status = 412;
+      throw e;
+    } else if (!UtilService.validatePassword(req.body.password)) {
+      let e = new Error('Password is not valid!');
+      e.status = 411;
+      throw e;
+    } else {
+      //Check if a user with that email already exists
+      return User.find({
+        where: {
+          email: sanitizedEmail
+        },
+        attributes: ['id'],
+        transaction
+      }).then(user => {
+        if (user) {
+          let e = new Error("Account with that email address already exists!");
+          e.status = 406;
+          throw e;
+        }
+
+        let hashedPasswordData = User.generateHashedPassword(req.body.password);
+
+        return User.create({
+          name: (req.body.name || sanitizedEmail).trim(),
+          email: sanitizedEmail,
+          passwordHash: hashedPasswordData.hash,
+          passwordSalt: hashedPasswordData.salt,
+          passwordVersion: hashedPasswordData.version
+        }, { transaction }).then(newUser => {
+          return SessionService.generateSession(newUser.id, 'user', transaction).then(({ token }) => {
+            res.status(200).json({
+              token: token
             });
-          }).catch(next);
+          });
         });
-      }
-    }).catch(next);
-  }
+      });
+    }
+  }).catch(next);
 });
 
 /* Forgot password */
@@ -174,6 +138,11 @@ router.post(
   '/forgot',
   cors(),
   function(req, res, next) {
+
+  let standardStatus = 200;
+  let standardResponse = {
+    msg: ""
+  }
 
   var origin = req.get('origin');
 
@@ -183,11 +152,9 @@ router.post(
     }
   }).then(function(user) {
     if (!user) {
-      res.status(200).json({
-        msg: ""
-      });
+      res.status(standardStatus).json(standardResponse);
     } else {
-      SessionService.generateSession(user.id, 'user', function (token, session) {
+      return SessionService.generateSession(user.id, 'user').then(({ token }) => {
         var link = origin + '/#/account?token=' + token;
         var html = `Hello,
 
@@ -217,13 +184,11 @@ router.post(
         Please do not reply to this email.`;
 
         UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain, function() {
-          res.status(200).json({
-            msg: ""
-          });
+          res.status(standardStatus).json(standardResponse);
         }, next);
-      }, next);
+      });
     }
-  });
+  }).catch(next);
 });
 
 /* Update user */
@@ -249,12 +214,11 @@ router.put(
           throw e;
         }
 
-        User.generateHashedPassword(req.body.password, function(hashedPasswordData) {
-          updates.passwordHash = hashedPasswordData.hash;
-          updates.passwordSalt = hashedPasswordData.salt;
-          updates.passwordVersion = hashedPasswordData.version;
-          resolve();
-        });
+        let hashedPasswordData = User.generateHashedPassword(req.body.password);
+
+        updates.passwordHash = hashedPasswordData.hash;
+        updates.passwordSalt = hashedPasswordData.salt;
+        updates.passwordVersion = hashedPasswordData.version;
       }
     }).then(() => {
       if (!req.body.email) {
@@ -271,7 +235,7 @@ router.put(
 
         return User.findOne({
           where: {
-            id: { [Op.ne]: res.locals.userId },
+            id: { [Op.ne]: res.locals.session.userId },
             email: sanitizedEmail
           },
           attributes: ['id'],
@@ -283,7 +247,7 @@ router.put(
             throw e;
           }
 
-          // Allow stack to fall through
+          return Promise.resolve();
         });
       }
     }).then(() => {
@@ -292,7 +256,7 @@ router.put(
     }).then(() => {
       return User.update(updates, {
         where: {
-          id: res.locals.userId
+          id: res.locals.session.userId
         },
         returning: true,
         transaction: t
@@ -316,15 +280,12 @@ router.post(
   '/logout',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function (req, res) {
-    SessionService.deleteSession(res.locals.session.token, function() {
+  function (req, res, next) {
+    SessionService.deleteSession(res.locals.session.token).then(() => {
       res.status(200).json({
         msg: 'Session invalidated. User is now logged out.'
       });
-    }, function(err) {
-      res.status(err.status).send(err);
-      Raven.captureException(err);
-    });
+    }).catch(next);
   });
 
 /* Check if a session token is valid */
@@ -350,7 +311,7 @@ router.post(
   FCMToken.destroy({
     where: {
       token: req.body.fcmToken,
-      userId: { [Op.ne]: res.locals.userId }
+      userId: { [Op.ne]: res.locals.session.userId }
     }
   })
   .then(function() {
@@ -359,7 +320,7 @@ router.post(
         token: req.body.fcmToken
       },
       defaults: {
-        userId: res.locals.userId,
+        userId: res.locals.session.userId,
         token: req.body.fcmToken
       }
     })
@@ -384,7 +345,7 @@ router.delete(
     FCMToken.destroy({
       where: {
         token: req.query.fcmToken,
-        userId: res.locals.userId
+        userId: res.locals.session.userId
       }
     });
 });

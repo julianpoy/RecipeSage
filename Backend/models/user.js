@@ -89,82 +89,77 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  User.generateHashedPassword = function (password, cb) {
+  User.generateHashedPassword = function (password) {
     var salt = crypto.randomBytes(128).toString('base64');
     var hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
 
-    cb({
+    return {
       hash: hash,
       salt: salt,
       version: currentPasswordVersion
-    });
+    };
   };
 
-  User.validateHashedPassword = function (password, hash, salt, version, cb) {
+  User.validateHashedPassword = function (password, hash, salt, version) {
     switch (version) {
       case 1:
       case '1':
-        var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
-        cb(comp == hash);
-        break;
+        return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
       case 2:
       case '2':
-        var comp = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
-        cb(comp == hash);
-        break;
-      default:
-        cb(false);
+        return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
     }
+
+    return false;
   };
 
-  User.login = function (email, password, cb) {
-    User.find({
+  User.login = function (email, password, transaction) {
+    // Setup error
+    var e = new Error("Credentials are not valid!");
+    e.status = 412;
+
+    return User.find({
       where: {
         email: email.toLowerCase()
-      }
-    }).exec(function (err, user) {
+      },
+      transaction
+    }).then(user => {
       if (!user) {
-        cb();
+        throw e;
       } else {
-        user.validatePassword(password, function (err, valid) {
-          if (err) {
-            cb(err);
-          } else if (!valid) {
-            cb();
-          } else {
-
+        return user.validatePassword(password, transaction).then(isValid => {
+          if (!isValid) {
+            throw e;
           }
+
+          return Promise.resolve(user);
         });
       }
-    }).catch(cb);
-  }
-
-  User.prototype.updatePassword = function (password, cb) {
-    var me = this;
-    User.generateHashedPassword(password, function (data) {
-      me.passwordHash = data.hash;
-      me.passwordSalt = data.salt;
-      me.passwordVersion = data.version;
-
-      me.save().then(function() {
-        cb();
-      }).catch(function(err) {
-        cb(err);
-      });
     });
   }
 
-  User.prototype.validatePassword = function (password, cb) {
-    var me = this;
-    User.validateHashedPassword(password, this.passwordHash, this.passwordSalt, this.passwordVersion, function (passwordIsValid) {
+  User.prototype.updatePassword = function (password, transaction) {
+    let data = User.generateHashedPassword(password);
+
+    this.passwordHash = data.hash;
+    this.passwordSalt = data.salt;
+    this.passwordVersion = data.version;
+
+    return this.save({ transaction });
+  }
+
+  User.prototype.validatePassword = function (password, transaction) {
+    return new Promise(resolve => {
+      let isValid = User.validateHashedPassword(password, this.passwordHash, this.passwordSalt, this.passwordVersion);
+
       // Don't update if password isn't valid, or password is of current version
-      if (!passwordIsValid || me.passwordVersion == currentPasswordVersion) {
-        cb(null, passwordIsValid);
+      if (!isValid || this.passwordVersion == currentPasswordVersion) {
+        resolve(isValid);
         return;
       }
 
-      User.prototype.updatePassword.call(me, password, function() {
-        cb(passwordIsValid);
+      return this.updatePassword(password, transaction).then(() => {
+        resolve(isValid);
       });
     });
   };

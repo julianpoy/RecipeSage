@@ -37,7 +37,7 @@ router.all(
     if (ws.isOpening()) {
       ws.accept();
       ws.subscribe('all');
-      ws.subscribe(res.locals.userId);
+      ws.subscribe(res.locals.session.userId);
     }
 
     while (ws.canRecv()) {

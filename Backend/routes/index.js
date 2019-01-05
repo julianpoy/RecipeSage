@@ -40,7 +40,7 @@ router.get(
 
   User.find({
     where: {
-      id: res.locals.userId
+      id: res.locals.session.userId
     },
     include: [
       {
@@ -94,7 +94,7 @@ router.get(
             }
           }).then(function(image) {
             return Recipe.create({
-              userId: res.locals.userId,
+              userId: res.locals.session.userId,
               title: recipe.title,
               description: recipe.description,
               yield: recipe.yield,
@@ -110,7 +110,7 @@ router.get(
               Promise.all(recipe.rawCategories.map(function(rawCategory) {
                 return Label.findOrCreate({
                   where: {
-                    userId: res.locals.userId,
+                    userId: res.locals.session.userId,
                     title: rawCategory.trim().toLowerCase()
                   },
                   transaction: t

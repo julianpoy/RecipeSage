@@ -30,7 +30,7 @@ router.post(
   SQ.transaction((t) => {
     return MealPlan.create({
       title: req.body.title,
-      userId: res.locals.userId
+      userId: res.locals.session.userId
     }, {
       transaction: t
     }).then(function(mealPlan) {
@@ -66,8 +66,8 @@ router.get(
     MealPlan.findAll({
       where: {
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -95,7 +95,7 @@ router.get(
     }).then(function(mealPlans) {
       let mp = mealPlans.map(function (plan) {
         let p = plan.dataValues;
-        p.myUserId = res.locals.userId;
+        p.myUserId = res.locals.session.userId;
 
         return p;
       });
@@ -116,8 +116,8 @@ router.post(
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -136,7 +136,7 @@ router.post(
           scheduled: new Date(req.body.scheduled),
           meal: req.body.meal,
           recipeId: req.body.recipeId || null,
-          userId: res.locals.userId,
+          userId: res.locals.session.userId,
           mealPlanId: mealPlan.id
         }).then(function() {
           let reference = Date.now();
@@ -176,8 +176,8 @@ router.delete(
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -191,7 +191,7 @@ router.delete(
       if (!mealPlan) {
         res.status(404).send("Meal plan not found or not visible to you!");
       } else {
-        if (mealPlan.userId === res.locals.userId) {
+        if (mealPlan.userId === res.locals.session.userId) {
           return mealPlan.destroy(function () {
             for (var i = 0; i < (mealPlan.collaborators || []).length; i++) {
               GripService.broadcast(mealPlan.collaborators[i], 'mealPlan:removed', {
@@ -207,7 +207,7 @@ router.delete(
             res.status(200).json({});
           });
         } else {
-          return MealPlan.removeCollaborator(res.locals.userId).then(function () {
+          return MealPlan.removeCollaborator(res.locals.session.userId).then(function () {
             res.status(200).json({});
           });
         }
@@ -227,8 +227,8 @@ router.delete(
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -284,8 +284,8 @@ router.get(
     where: {
       id: req.params.mealPlanId,
       [Op.or]: [
-        { userId: res.locals.userId },
-        { '$collaborators.id$': res.locals.userId }
+        { userId: res.locals.session.userId },
+        { '$collaborators.id$': res.locals.session.userId }
       ]
     },
     include: [

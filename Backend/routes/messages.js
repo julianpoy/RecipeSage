@@ -27,14 +27,14 @@ router.post(
         res.status(404).send('Could not find user under that ID.');
       } else {
         function shareRecipeStep() {
-          return UtilService.shareRecipe(req.body.recipeId, res.locals.userId, req.body.to, t).then(function(sharedRecipe) {
+          return UtilService.shareRecipe(req.body.recipeId, res.locals.session.userId, req.body.to, t).then(function(sharedRecipe) {
             return createMessageStep(sharedRecipe.id);
           });
         }
 
         function createMessageStep(sharedRecipeId) {
           return Message.create({
-            fromUserId: res.locals.userId,
+            fromUserId: res.locals.session.userId,
             toUserId: req.body.to,
             body: req.body.body,
             recipeId: sharedRecipeId,
@@ -103,9 +103,9 @@ router.get(
   Message.findAll({
     where: {
       [Op.or]: [{
-        toUserId: res.locals.userId
+        toUserId: res.locals.session.userId
       }, {
-        fromUserId: res.locals.userId
+        fromUserId: res.locals.session.userId
       }]
     },
     include: [
@@ -137,7 +137,7 @@ router.get(
   .then(function(messages) {
     var conversationsByUser = messages.reduce(function(acc, el, i) {
       var otherUser;
-      if (el.toUser.id === res.locals.userId) {
+      if (el.toUser.id === res.locals.session.userId) {
         otherUser = el.fromUser;
       } else {
         otherUser = el.toUser;
@@ -190,9 +190,9 @@ router.get(
     where: {
       [Op.or]: [{
         fromUserId: req.query.user,
-        toUserId: res.locals.userId
+        toUserId: res.locals.session.userId
       }, {
-        fromUserId: res.locals.userId,
+        fromUserId: res.locals.session.userId,
         toUserId: req.query.user
       }]
     },
@@ -227,7 +227,7 @@ router.get(
     res.status(200).json(messages.map(function(message) {
       let m = message.toJSON();
 
-      if (m.toUser.id === res.locals.userId) {
+      if (m.toUser.id === res.locals.session.userId) {
         m.otherUser = m.fromUser;
       } else {
         m.otherUser = m.toUser;

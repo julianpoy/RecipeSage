@@ -32,7 +32,7 @@ router.post(
   SQ.transaction(function (t) {
     return ShoppingList.create({
       title: req.body.title,
-      userId: res.locals.userId
+      userId: res.locals.session.userId
     }, {
       transaction: t
     }).then(function(shoppingList) {
@@ -103,8 +103,8 @@ router.get(
     ShoppingList.findAll({
       where: {
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -132,7 +132,7 @@ router.get(
     }).then(function(shoppingLists) {
       let s = shoppingLists.map(function(list) {
         let l = list.dataValues;
-        l.myUserId = res.locals.userId;
+        l.myUserId = res.locals.session.userId;
 
         return l;
       });
@@ -153,8 +153,8 @@ router.post(
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -173,7 +173,7 @@ router.post(
             return {
               title: item.title,
               completed: false,
-              userId: res.locals.userId,
+              userId: res.locals.session.userId,
               shoppingListId: shoppingList.id,
               recipeId: item.recipeId || null,
               mealPlanItemId: item.mealPlanItemId || null
@@ -217,8 +217,8 @@ router.delete(
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -232,7 +232,7 @@ router.delete(
       if (!shoppingList) {
         res.status(404).send("Shopping list not found or not visible to you!");
       } else {
-        if (shoppingList.userId === res.locals.userId) {
+        if (shoppingList.userId === res.locals.session.userId) {
           return shoppingList.destroy().then(function () {
             for (var i = 0; i < (shoppingList.collaborators || []).length; i++) {
               GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:removed', {
@@ -248,7 +248,7 @@ router.delete(
             res.status(200).json({});
           });
         } else {
-          return shoppingList.removeCollaborator(res.locals.userId).then(function() {
+          return shoppingList.removeCollaborator(res.locals.session.userId).then(function() {
             res.status(200).json({});
           });
         }
@@ -268,8 +268,8 @@ router.delete(
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -326,8 +326,8 @@ router.get(
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
-          { userId: res.locals.userId },
-          { '$collaborators.id$': res.locals.userId }
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
         ]
       },
       include: [
@@ -390,7 +390,7 @@ router.get(
 
 //   ShoppingList.update(updates, {
 //     id: req.params.shoppingListId,
-//     userId: res.locals.userId
+//     userId: res.locals.session.userId
 //   }, function(shoppingList) {
 //     if (!shoppingList) {
 //       res.status(404).json({
