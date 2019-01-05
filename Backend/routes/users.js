@@ -196,18 +196,17 @@ router.put(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
   function(req, res, next) {
 
-  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
-
   return SQ.transaction(t => {
-    var updates = {};
+    let updates = {};
 
-    return new Promise(function(resolve, reject) {
-      if (!req.body.password) {
-        // Skip if not updating password
-        resolve();
-      } else {
+    return Promise.all([
+      // Password update stage
+      Promise.resolve().then(() => {
+        if (!req.body.password) return;
+
         if (!UtilService.validatePassword(req.body.password)) {
           var e = new Error("Password is not valid!");
           e.status = 412;
@@ -219,19 +218,18 @@ router.put(
         updates.passwordHash = hashedPasswordData.hash;
         updates.passwordSalt = hashedPasswordData.salt;
         updates.passwordVersion = hashedPasswordData.version;
-      }
-    }).then(() => {
-      if (!req.body.email) {
-        // Skip if not updating email
-        return Promise.resolve();
-      } else {
+      }),
+      // Email update stage
+      Promise.resolve().then(() => {
+        if (!req.body.email) return;
+
+        let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+
         if (!UtilService.validateEmail(sanitizedEmail)) {
           var e = new Error("Email is not valid!");
           e.status = 412;
           throw e;
         }
-
-        updates.email = sanitizedEmail;
 
         return User.findOne({
           where: {
@@ -247,13 +245,14 @@ router.put(
             throw e;
           }
 
-          return Promise.resolve();
+          updates.email = sanitizedEmail;
         });
-      }
-    }).then(() => {
-      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
-      return Promise.resolve();
-    }).then(() => {
+      }),
+      // Other info update stage
+      Promise.resolve().then(() => {
+        if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
+      })
+    ]).then(() => {
       return User.update(updates, {
         where: {
           id: res.locals.session.userId
@@ -337,17 +336,18 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-    if (!req.query.fcmToken) {
-      res.status(412).send('fcmToken required');
-      return;
-    }
+  if (!req.query.fcmToken) {
+    res.status(412).send('fcmToken required');
+    return;
+  }
 
-    FCMToken.destroy({
-      where: {
-        token: req.query.fcmToken,
-        userId: res.locals.session.userId
-      }
-    });
+  FCMToken.destroy({
+    where: {
+      token: req.query.fcmToken,
+      userId: res.locals.session.userId
+    }
+  })
+  .catch(next);
 });
 
 module.exports = router;
