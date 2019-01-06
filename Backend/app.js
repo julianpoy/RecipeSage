@@ -9,12 +9,14 @@ var fs = require('fs');
 var Raven = require('raven');
 var compression = require('compression');
 
+var testMode = process.env.NODE_ENV === 'test';
+
 if (fs.existsSync("./config/config.json")) {
-  console.log("config.json found");
+  if (!testMode) console.log("config.json found");
 } else {
   var content = fs.readFileSync('./config/config-template.json');
   fs.writeFileSync('./config/config.json', content);
-  console.log("config.json initialized");
+  if (!testMode) console.log("config.json initialized");
 }
 var appConfig = require('./config/config.json');
 var devMode = appConfig.environment === 'dev';
@@ -60,7 +62,7 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+if (!testMode) app.use(logger('dev'));
 app.use(bodyParser.json({limit: '4MB'}));
 app.use(bodyParser.urlencoded({ limit: '4MB', extended: false }));
 app.use(cookieParser());
@@ -79,7 +81,7 @@ app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/grip', grip);
 
-if (!devMode) app.use(Raven.errorHandler());
+if (!devMode && !testMode) app.use(Raven.errorHandler());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -96,8 +98,10 @@ app.use(function(err, req, res, next) {
   if (!err.status) err.status = 500;
 
   res.locals.error = devMode ? err : {};
-  if (devMode) console.error(err);
-  else Raven.captureException(err);
+  if (!testMode) {
+    if (devMode) console.error(err);
+    else Raven.captureException(err);
+  }
 
   // render the error page
   res.status(err.status || 500);
