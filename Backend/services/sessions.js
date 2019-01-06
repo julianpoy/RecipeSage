@@ -90,8 +90,8 @@ exports.generateSession = function(userId, type, transaction) {
     type,
     token,
     expires: moment().add(SESSION_VALIDITY_LENGTH, "days")
-  }, { transaction }).then(session => {
-    return Promise.resolve(session);
+  }, {
+    transaction: transaction
   });
 };
 
