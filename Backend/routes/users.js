@@ -71,7 +71,7 @@ router.post(
       user.lastLogin = Date.now();
 
       return Promise.all([
-        user.save(),
+        user.save({ transaction }),
         SessionService.generateSession(user.id, 'user', transaction)
       ]).then(([user, { token }]) => {
         res.status(200).json({
