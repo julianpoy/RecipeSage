@@ -74,10 +74,12 @@ router.post(
         user.save({ transaction }),
         SessionService.generateSession(user.id, 'user', transaction)
       ]).then(([user, { token }]) => {
-        res.status(200).json({
-          token: token
-        });
+        return token;
       });
+    });
+  }).then(token => {
+    res.status(200).json({
+      token
     });
   }).catch(next);
 });
@@ -124,14 +126,18 @@ router.post(
           passwordVersion: hashedPasswordData.version
         }, { transaction }).then(newUser => {
           return SessionService.generateSession(newUser.id, 'user', transaction).then(({ token }) => {
-            res.status(200).json({
-              token: token
-            });
+            return token
           });
         });
       });
     }
-  }).catch(next);
+  })
+  .then(token => {
+    res.status(200).json({
+      token
+    });
+  })
+  .catch(next);
 });
 
 /* Forgot password */
