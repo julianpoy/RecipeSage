@@ -8,52 +8,52 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     yield: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     activeTime: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     totalTime: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     source: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     url: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     notes: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     ingredients: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
     instructions: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
