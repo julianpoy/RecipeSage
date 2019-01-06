@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "PORT=2999 NODE_ENV=test mocha \"./routes/**/*.spec.js\" --timeout 10000 --watch"
   },
   "dependencies": {
     "aws-sdk": "^2.200.0",
@@ -34,5 +35,11 @@
     "sequelize": "^4.39.0",
     "serve-favicon": "~2.4.5",
     "xml-js": "^1.6.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "sqlite3": "^4.0.4",
+    "supertest": "^3.3.0"
   }
 }
