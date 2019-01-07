@@ -9,19 +9,22 @@ jobs: # a collection of steps
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
+      - run:
+          name: install-deps
+          command: 'sudo npm install -g sequelize'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
       - run:
           name: install-npm-backend
           command: 'cd Backend && npm install'
       - save_cache: # special step to save the dependency cache
-          key: backend-dependency-cache-{{ checksum "package.json" }}
+          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
           paths:
             - ./Backend/node_modules
       - run: # run tests
           name: test
-          command: cd Backend && npm test
+          command: cd Backend && npm run test:ci
       # - run: # run coverage report
       #     name: code-coverage
       #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
