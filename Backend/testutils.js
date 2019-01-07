@@ -8,8 +8,8 @@ const { exec } = require('child_process');
 
 module.exports.migrate = async (down) => {
   await new Promise((resolve, reject) => {
-    let command = 'sequelize db:migrate';
-    if (down) command = 'sequelize db:migrate:undo:all';
+    let command = './node_modules/.bin/sequelize db:migrate';
+    if (down) command = './node_modules/.bin/sequelize db:migrate:undo:all';
 
     const migrate = exec(
       command,
