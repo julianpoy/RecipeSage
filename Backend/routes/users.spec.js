@@ -30,8 +30,8 @@ describe('user', () => {
     server = require('../bin/www');
   });
 
-  afterEach(async () => {
-    server.close();
+  afterEach(done => {
+    server.close(done);
   });
 
   after(async () => {
