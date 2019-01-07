@@ -23,16 +23,16 @@ describe('user', () => {
   var server;
   before(async () => {
     await migrate();
+    server = require('../bin/www');
   })
 
   beforeEach(async () => {
     await SQ.sync({ force: true });
-    server = require('../bin/www');
   });
 
-  afterEach(done => {
-    server.close(done);
-  });
+  // afterEach(done => {
+  //   server.close(done);
+  // });
 
   after(async () => {
     await migrate(true);
