@@ -1,24 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Nightmare = require('nightmare');
-var cors = require('cors');
-var aws = require('aws-sdk');
-var semver = require('semver');
-var Raven = require('raven');
-var config = require('../config/config.json');
-var bodyParser = require('body-parser');
-
-// DB
-var mongoose = require('mongoose');
-var Recipe = mongoose.model('Recipe');
-var Label = mongoose.model('Label');
 
 var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
 var GripService = require('../services/grip');
-
-// GRIP && PUSHPIN
-var grip = require('grip');
 
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 
