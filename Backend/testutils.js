@@ -6,7 +6,7 @@ var Session = require('./models').Session;
 
 const { exec } = require('child_process');
 
-module.exports.migrate = async (down) => {
+let migrate = async (down) => {
   await new Promise((resolve, reject) => {
     let command = './node_modules/.bin/sequelize db:migrate';
     if (down) command = './node_modules/.bin/sequelize db:migrate:undo:all';
@@ -29,8 +29,20 @@ module.exports.migrate = async (down) => {
   })
 }
 
-module.exports.sync = () => {
-  SQ.sync({ force: true });
+module.exports.setup = async () => {
+  await migrate();
+  server = require('./bin/www');
+
+  beforeEach(async () => {
+    await SQ.sync({ force: true });
+  });
+
+  after(async () => {
+    await migrate(true);
+    await new Promise(r => server.close(() => { r() }));
+  })
+
+  return server;
 }
 
 function randomString(len) {

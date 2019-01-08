@@ -4,8 +4,7 @@ let {
 } = require('chai');
 
 let {
-  migrate,
-  sync,
+  setup,
   randomString,
   randomEmail,
   createUser,
@@ -19,24 +18,11 @@ var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 
-describe('user', () => {
+describe('users', () => {
   var server;
   before(async () => {
-    await migrate();
-    server = require('../bin/www');
-  })
-
-  beforeEach(async () => {
-    await SQ.sync({ force: true });
+    server = await setup();
   });
-
-  // afterEach(done => {
-  //   server.close(done);
-  // });
-
-  after(async () => {
-    await migrate(true);
-  })
 
   describe('register', () => {
     it('success', async () => {
