@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
-var compression = require('compression');
 
 var testMode = process.env.NODE_ENV === 'test';
 
@@ -39,8 +38,6 @@ var grip = require('./routes/grip');
 
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
-
-app.use(compression());
 
 app.options('*', cors());
 app.use(cookieParser());
