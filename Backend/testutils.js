@@ -3,10 +3,12 @@ var SQ = require('./models').sequelize;
 var User = require('./models').User;
 var FCMToken = require('./models').FCMToken;
 var Session = require('./models').Session;
+var Recipe = require('./models').Recipe;
+var Label = require('./models').Label;
 
 const { exec } = require('child_process');
 
-module.exports.migrate = async (down) => {
+let migrate = async (down) => {
   await new Promise((resolve, reject) => {
     let command = './node_modules/.bin/sequelize db:migrate';
     if (down) command = './node_modules/.bin/sequelize db:migrate:undo:all';
@@ -29,8 +31,20 @@ module.exports.migrate = async (down) => {
   })
 }
 
-module.exports.sync = () => {
-  SQ.sync({ force: true });
+module.exports.setup = async () => {
+  await migrate();
+  server = require('./bin/www');
+
+  beforeEach(async () => {
+    await SQ.sync({ force: true });
+  });
+
+  after(async () => {
+    await migrate(true);
+    await new Promise(r => server.close(() => { r() }));
+  })
+
+  return server;
 }
 
 function randomString(len) {
@@ -49,16 +63,12 @@ function randomEmail() {
 module.exports.randomEmail = randomEmail;
 
 module.exports.createUser = () => {
-  return SQ.transaction(t => {
-    return User.create({
-      name: `${randomString(10)} ${randomString(10)}`,
-      email: randomEmail(),
-      passwordHash: 'SaVNC9ubXV8BHykB2wAD0mhxPwh/W7O7Rz+qRy/PeV+GeeakLzkv2TSghPQvLTe07b7TqxdsRUt39lC3RaaWmhORkVS9UbtEIh9dzvcbj9VzHA0ex0k97nv0lE56Jh6D6M5Laxe2BrkpiUibP3yCDCk75vCHtLGTZVjqtabTGheIs/QwiD72C7H+bK4QSL2RYSOEbB0wysNAC5nF8r1m36FB/DS5wEixOWiQH470H1s9yHODAALNag9Lom+It4P3cMSSa83mxPNvFOniEpuDDcI5W/Oxef/XiA3EhMLL8n4+CSV1Z891g65U7j7RIKSCjK1LbCvQ5JuS/jZCErNBW9472TXdGKGeYY6RTDgSBzqISyxlMCSRBsNjToWHJyPEyEbt0BTSjTkliB+0wSQpdzUiDDiJNrLVimAriH/AcU/eFvpU5YyyY1coY8Kc80LxKxP/p881Q0DABCmaRcDH+/1iEz3SoWNvSsw/Xq8u9LcgKCjccDoD8tKBDkMijS7TBPu9zJd2nUqblPO+KTGz7hVqh/u0VQ+xEdvRQuKSc+4OnUtQRVCAFQGB99hfXfQvffeGosNy3BABEuZkobaUgs8m8RTaRFGqy8qk6BYw1bk5I5KjjmA8GNOtNHlKQ+1EZO83pIKbG61Jfm93FJ6CsWji9fXsxaBsv+JNBhRgmUw=',
-      passwordSalt: 'dM4YXu5N5XY4c0LXnf30vtshh7dgsBYZ/5pZockgcJofPkWhMOplVAoWKhyqODZhO3mSUBqMqo3kXC2+7fOMt1NFB0Q1iRcJ4zaqAqdTenyjXu7rJ8WpgR1qnTcnpP8g/frQ+sk8Kcv49OC84R3v+FD8RrGm0rz8dDt7m7c/+Rw=',
-      passwordVersion: 2
-    }, {
-      transaction: t
-    });
+  return User.create({
+    name: `${randomString(10)} ${randomString(10)}`,
+    email: randomEmail(),
+    passwordHash: 'SaVNC9ubXV8BHykB2wAD0mhxPwh/W7O7Rz+qRy/PeV+GeeakLzkv2TSghPQvLTe07b7TqxdsRUt39lC3RaaWmhORkVS9UbtEIh9dzvcbj9VzHA0ex0k97nv0lE56Jh6D6M5Laxe2BrkpiUibP3yCDCk75vCHtLGTZVjqtabTGheIs/QwiD72C7H+bK4QSL2RYSOEbB0wysNAC5nF8r1m36FB/DS5wEixOWiQH470H1s9yHODAALNag9Lom+It4P3cMSSa83mxPNvFOniEpuDDcI5W/Oxef/XiA3EhMLL8n4+CSV1Z891g65U7j7RIKSCjK1LbCvQ5JuS/jZCErNBW9472TXdGKGeYY6RTDgSBzqISyxlMCSRBsNjToWHJyPEyEbt0BTSjTkliB+0wSQpdzUiDDiJNrLVimAriH/AcU/eFvpU5YyyY1coY8Kc80LxKxP/p881Q0DABCmaRcDH+/1iEz3SoWNvSsw/Xq8u9LcgKCjccDoD8tKBDkMijS7TBPu9zJd2nUqblPO+KTGz7hVqh/u0VQ+xEdvRQuKSc+4OnUtQRVCAFQGB99hfXfQvffeGosNy3BABEuZkobaUgs8m8RTaRFGqy8qk6BYw1bk5I5KjjmA8GNOtNHlKQ+1EZO83pIKbG61Jfm93FJ6CsWji9fXsxaBsv+JNBhRgmUw=',
+    passwordSalt: 'dM4YXu5N5XY4c0LXnf30vtshh7dgsBYZ/5pZockgcJofPkWhMOplVAoWKhyqODZhO3mSUBqMqo3kXC2+7fOMt1NFB0Q1iRcJ4zaqAqdTenyjXu7rJ8WpgR1qnTcnpP8g/frQ+sk8Kcv49OC84R3v+FD8RrGm0rz8dDt7m7c/+Rw=',
+    passwordVersion: 2
   });
 }
 
@@ -67,14 +77,45 @@ module.exports.createSession = userId => {
   var tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
 
-  return SQ.transaction(t => {
-    return Session.create({
-      userId,
-      token: randomString(40),
-      type: 'user',
-      expires: tomorrow
-    }, {
-      transaction: t
-    });
+  return Session.create({
+    userId,
+    token: randomString(40),
+    type: 'user',
+    expires: tomorrow
   });
+}
+
+module.exports.createRecipe = (userId, folder, fromUserId) => {
+  return Recipe.create({
+    userId,
+    fromUserId: fromUserId,
+    title: randomString(20),
+    description: randomString(20),
+    yield: randomString(20),
+    activeTime: randomString(20),
+    totalTime: randomString(20),
+    source: randomString(20),
+    url: randomString(20),
+    notes: randomString(20),
+    ingredients: randomString(20),
+    instructions: randomString(20),
+    folder: folder || 'main'
+  })
+}
+
+module.exports.createLabel = userId => {
+  return Label.findOrCreate({
+    where: {
+      userId: userId,
+      title: randomString(20)
+    }
+  }).then(function (labels) {
+    return labels[0];
+  });
+}
+
+module.exports.associateLabel = (labelId, recipeId) => {
+  return Label.findById(labelId).then(label => {
+    return label.addRecipe(recipeId);
+  })
 }

@@ -4,18 +4,21 @@
     "password": "admin",
     "database": "chefbook",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "operatorsAliases": false
   },
   "test": {
     "dialect": "sqlite",
     "storage": "test.sqlite3",
-    "logging": false
+    "logging": false,
+    "operatorsAliases": false
   },
   "production": {
     "username": "chefbook",
     "password": null,
     "database": "chefbook",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "operatorsAliases": false
   }
 }
