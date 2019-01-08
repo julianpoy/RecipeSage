@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var Nightmare = require('nightmare');
 var cors = require('cors');
-var aws = require('aws-sdk');
-var semver = require('semver');
 var Raven = require('raven');
 
 // DB
@@ -17,19 +15,9 @@ var Label = require('../models').Label;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 
-var CURRENT_CLIENT_VERSION = '1.1.1';
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'RS API' });
-});
-
-router.get('/info', cors(), function(req, res, next) {
-  var updateAvailable = semver.compare(CURRENT_CLIENT_VERSION, req.query.version) > 0;
-
-  res.status(200).json({
-    updateAvailable: updateAvailable
-  });
 });
 
 router.get(
