@@ -1,13 +1,11 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
-var compression = require('compression');
 
 var testMode = process.env.NODE_ENV === 'test';
 
@@ -40,8 +38,6 @@ var grip = require('./routes/grip');
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
 
-app.use(compression());
-
 app.options('*', cors());
 app.use(cookieParser());
 
@@ -49,8 +45,6 @@ app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 if (!testMode) app.use(logger('dev'));
 app.use(bodyParser.json({limit: '4MB'}));
 app.use(bodyParser.urlencoded({ limit: '4MB', extended: false }));
