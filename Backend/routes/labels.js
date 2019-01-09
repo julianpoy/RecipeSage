@@ -26,6 +26,12 @@ router.post(
     return next(e);
   }
 
+  if (!req.body.recipeId || req.body.recipeId.length === 0) {
+    var e = new Error("RecipeId must be provided.");
+    e.status = 412;
+    return next(e);
+  }
+
   SQ.transaction(function (t) {
     return Label.findOrCreate({
       where: {
