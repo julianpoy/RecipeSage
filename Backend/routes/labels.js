@@ -80,6 +80,12 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  if (!req.query.recipeId || !req.query.labelId) {
+    return res.status(412).json({
+      msg: "RecipeId and LabelId are required!"
+    });
+  }
+
   Label.findOne({
     where: {
       id: req.query.labelId,
@@ -92,7 +98,7 @@ router.delete(
     }]
   })
   .then(function(label) {
-    if (!label) {
+    if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
       res.status(404).json({
         msg: "Label does not exist!"
       });
