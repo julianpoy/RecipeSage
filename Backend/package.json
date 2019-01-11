@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "PORT=2999 NODE_ENV=test mocha \"./routes/**/*.spec.js\" --timeout 10000 --watch",
-    "test:ci": "PORT=2999 NODE_ENV=test mocha \"./routes/**/*.spec.js\" --timeout 10000 --exit"
+    "test": "npm run test:clean && PORT=2999 NODE_ENV=test mocha \"./routes/**/*.spec.js\" --timeout 10000 --watch",
+    "test:ci": "PORT=2999 NODE_ENV=test mocha \"./routes/**/*.spec.js\" --timeout 10000 --exit",
+    "test:clean": "rm test.sqlite3"
   },
   "dependencies": {
     "aws-sdk": "^2.200.0",

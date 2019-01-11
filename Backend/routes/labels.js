@@ -26,6 +26,12 @@ router.post(
     return next(e);
   }
 
+  if (!req.body.recipeId || req.body.recipeId.length === 0) {
+    var e = new Error("RecipeId must be provided.");
+    e.status = 412;
+    return next(e);
+  }
+
   SQ.transaction(function (t) {
     return Label.findOrCreate({
       where: {
@@ -74,6 +80,12 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  if (!req.query.recipeId || !req.query.labelId) {
+    return res.status(412).json({
+      msg: "RecipeId and LabelId are required!"
+    });
+  }
+
   Label.findOne({
     where: {
       id: req.query.labelId,
@@ -86,7 +98,7 @@ router.delete(
     }]
   })
   .then(function(label) {
-    if (!label) {
+    if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
       res.status(404).json({
         msg: "Label does not exist!"
       });
