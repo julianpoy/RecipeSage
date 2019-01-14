@@ -39,6 +39,8 @@ router.post(
             body: req.body.body,
             recipeId: sharedRecipeId,
             originalRecipeId: req.body.recipeId
+          }, {
+            transaction: t
           }).then(function(newMessage) {
             return Message.find({
               where: {
