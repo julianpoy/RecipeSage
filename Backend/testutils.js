@@ -1,3 +1,7 @@
+let {
+  expect
+} = require('chai');
+
 var Op = require("sequelize").Op;
 var SQ = require('./models').sequelize;
 var User = require('./models').User;
@@ -5,6 +9,7 @@ var FCMToken = require('./models').FCMToken;
 var Session = require('./models').Session;
 var Recipe = require('./models').Recipe;
 var Label = require('./models').Label;
+var Message = require('./models').Message;
 
 const { exec } = require('child_process');
 
@@ -118,4 +123,32 @@ module.exports.associateLabel = (labelId, recipeId) => {
   return Label.findById(labelId).then(label => {
     return label.addRecipe(recipeId);
   })
+}
+
+module.exports.createMessage = (fromUserId, toUserId, recipeId, originalRecipeId) => {
+  return Message.create({
+    fromUserId,
+    toUserId,
+    recipeId,
+    originalRecipeId,
+    body: recipeId ? '' : randomString(40)
+  })
+}
+
+// Validates that fields match but we are not sending any additional private data
+module.exports.secureUserMatch = (userHash, user) => {
+  expect(userHash.id).to.equal(user.id)
+  expect(userHash.name).to.equal(user.name)
+  expect(userHash.email).to.equal(user.email)
+
+  expect(Object.keys(userHash).length).to.equal(3)
+}
+
+// Validates that fields match but we are not sending any additional private data
+module.exports.secureRecipeMatch = (recipeHash, recipe) => {
+  expect(recipeHash.id).to.equal(recipe.id)
+  expect(recipeHash.title).to.equal(recipe.title)
+  expect(recipeHash.image).not.to.be.undefined
+
+  expect(Object.keys(recipeHash).length).to.equal(3)
 }
