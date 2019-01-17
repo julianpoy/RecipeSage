@@ -38,8 +38,17 @@ describe('messages', () => {
   });
 
   describe('create', () => {
+    let dispatchStub
     before(() => {
-      sinon.stub(UtilService, 'dispatchMessageNotification');
+      dispatchStub = sinon.stub(UtilService, 'dispatchMessageNotification');
+    })
+
+    afterEach(() => {
+      dispatchStub.reset()
+    })
+
+    after(() => {
+      dispatchStub.restore()
     })
 
     it('succeeds with standard text message', async () => {
@@ -82,6 +91,8 @@ describe('messages', () => {
             expect(message.toUser.id).to.equal(user2.id)
             expect(message.toUser.name).to.equal(user2.name)
             expect(message.toUser.email).to.equal(user2.email)
+            // Should have dispatched notification to recipient
+            sinon.assert.calledOnce(dispatchStub);
           })
         );
     });
@@ -144,6 +155,9 @@ describe('messages', () => {
             // Recipe
             expect(message.recipe.id).not.to.equal(recipe.id)
             expect(message.recipe.title).to.equal(recipe.title)
+
+            // Should have dispatched notification to recipient
+            sinon.assert.calledOnce(dispatchStub);
           })
         );
     });
