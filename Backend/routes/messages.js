@@ -21,6 +21,12 @@ router.post(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  if (!req.body.recipeId && !req.body.body) {
+    let e = new Error("recipeId or body is required");
+    e.status = 412;
+    throw e;
+  }
+
   SQ.transaction(function(t) {
     return User.findById(req.body.to, {transaction: t}).then(function(recipient) {
       if (!recipient) {
@@ -39,6 +45,8 @@ router.post(
             body: req.body.body,
             recipeId: sharedRecipeId,
             originalRecipeId: req.body.recipeId
+          }, {
+            transaction: t
           }).then(function(newMessage) {
             return Message.find({
               where: {

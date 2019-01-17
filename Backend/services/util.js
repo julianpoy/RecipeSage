@@ -255,7 +255,7 @@ function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail)
       userId: userId,
       title: adjustedTitle
     },
-    transaction: transaction
+    transaction
   })
   .then(function (dupe) {
     if (dupe) {
@@ -277,7 +277,7 @@ function findTitle(userId, recipeId, basename, transaction) {
 exports.findTitle = findTitle;
 
 exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
-  return Recipe.findById(recipeId, { transaction: transaction }).then(function(recipe) {
+  return Recipe.findById(recipeId, { transaction }).then(function(recipe) {
     if (!recipe) {
       var e = new Error("Could not find recipe to share");
       e.status = 404;
@@ -312,6 +312,8 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
             image: img,
             folder: 'inbox',
             fromUserId: senderId
+          }, {
+            transaction
           });
         });
       });

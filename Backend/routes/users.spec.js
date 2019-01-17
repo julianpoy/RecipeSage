@@ -8,7 +8,8 @@ let {
   randomString,
   randomEmail,
   createUser,
-  createSession
+  createSession,
+  secureUserMatch
 } = require('../testutils');
 
 // DB
@@ -44,7 +45,7 @@ describe('users', () => {
           }).then(session => {
             expect(session).not.to.be.null
 
-            User.findOne({
+            return User.findOne({
               where: {
                 id: session.userId,
                 email: payload.email,
@@ -215,11 +216,9 @@ describe('users', () => {
         .get('/users/by-email')
         .query({ email: user.email })
         .expect(200)
-        .then(({ body }) => {
-          expect(body.id).to.equal(user.id);
-          expect(body.name).to.equal(user.name);
-          expect(body.email).to.equal(user.email);
-        });
+        .then(({ body }) =>
+          secureUserMatch(body, user)
+        );
     });
 
     it('rejects non-existent email', async () => {
