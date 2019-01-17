@@ -36,6 +36,7 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "sequelize-cli": "^5.4.0",
+    "sinon": "^7.2.2",
     "sqlite3": "^4.0.4",
     "supertest": "^3.3.0"
   }
