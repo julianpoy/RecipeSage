@@ -24,7 +24,7 @@ aws.config.update({
   region: config.aws.region,
 });
 
-exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, resolve, reject) {
+exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain) {
   ccAddresses = ccAddresses || [];
 
   // Create sendEmail params
@@ -57,16 +57,7 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, reso
   };
 
   // Create the promise and SES service object
-  var sendPromise = new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
-
-  // Handle promise's fulfilled/rejected states
-  sendPromise.then(function(data) {
-    console.log(data.MessageId);
-    resolve(data.messageId);
-  }).catch(function(err) {
-    console.error(err, err.stack);
-    reject(err, err.stack);
-  });
+  return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 }
 
 function sendURLToS3(url, callback) {

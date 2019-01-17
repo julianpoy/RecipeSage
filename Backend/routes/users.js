@@ -190,9 +190,9 @@ router.post(
         \n\n
         Please do not reply to this email.`;
 
-        UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain, function() {
+        return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
           res.status(standardStatus).json(standardResponse);
-        }, next);
+        });
       });
     }
   }).catch(next);
