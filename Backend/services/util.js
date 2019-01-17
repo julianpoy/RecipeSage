@@ -60,47 +60,44 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain) {
   return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 }
 
-function sendURLToS3(url, callback) {
-  request({
-    url: url,
-    encoding: null
-  }, function(err, res, body) {
-    if (err)
-      return callback(err, res);
+function sendURLToS3(url) {
+  return new Promise(resolve => {
+    request({
+      url: url,
+      encoding: null
+    }, function(err, res, body) {
+      if (err) throw err;
 
+      resolve({ res, body })
+    });
+  }).then(({ res, body }) => {
     var key = new Date().getTime().toString();
 
     var contentType = res.headers['content-type'];
     var contentLength = res.headers['content-length'];
 
-    s3.putObject({
+    return s3.putObject({
       Bucket: config.aws.bucket,
       Key: key,
       ACL: 'public-read',
       Body: body // buffer
-    }, function(err, response) {
-      var img;
-
-      if (!err) {
-        img = {
-          fieldname: "image",
-          originalname: 'recipe-sage-img.jpg',
-          mimetype: contentType,
-          size: contentLength,
-          bucket: config.aws.bucket,
-          key: key,
-          acl: "public-read",
-          metadata: {
-            fieldName: "image"
-          },
-          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-          etag: response.ETag
-        }
+    }).promise().then(response => {
+      return {
+        fieldname: "image",
+        originalname: 'recipe-sage-img.jpg',
+        mimetype: contentType,
+        size: contentLength,
+        bucket: config.aws.bucket,
+        key: key,
+        acl: "public-read",
+        metadata: {
+          fieldName: "image"
+        },
+        location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+        etag: response.ETag
       }
-
-      callback(err, img)
     });
-  });
+  })
 }
 exports.sendURLToS3 = sendURLToS3;
 
@@ -276,13 +273,7 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
     } else {
       return new Promise(function(resolve, reject) {
         if (recipe.image && recipe.image.location) {
-          sendURLToS3(recipe.image.location, function(err, img) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(img);
-            }
-          });
+          sendURLToS3(recipe.image.location).then(resolve).catch(reject)
         } else {
           resolve(null);
         }

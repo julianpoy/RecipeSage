@@ -69,17 +69,8 @@ router.get(
         return Promise.all(recipes.map(function(recipe) {
           return new Promise(function(resolve, reject) {
             if (recipe.imageURL) {
-              UtilService.sendURLToS3(recipe.imageURL, function (err, image) {
-                if (err) {
-                  Raven.captureException(err);
-                  reject();
-                } else {
-                  resolve(image);
-                }
-              });
-            } else {
-              resolve(null);
-            }
+              UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(reject)
+            } else resolve(null);
           }).then(function(image) {
             return Recipe.create({
               userId: res.locals.session.userId,
