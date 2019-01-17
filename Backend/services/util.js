@@ -323,7 +323,8 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
 
 exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
 
-var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+// Very liberal email regex. Don't want to reject valid user emails.
+let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 exports.validateEmail = email => emailRegex.test(email);
 
 exports.validatePassword = password => typeof password === 'string' && password.length >= 6;

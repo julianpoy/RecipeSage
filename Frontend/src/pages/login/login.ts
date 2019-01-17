@@ -55,7 +55,7 @@ export class LoginPage {
     this.password = (document.getElementById('password') as HTMLInputElement).value;
     if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
 
-    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
       this.presentToast('Please enter a valid email address.')
       return;
