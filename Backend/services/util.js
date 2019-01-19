@@ -60,17 +60,21 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain) {
   return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 }
 
-function sendURLToS3(url) {
+exports.fetchImage = url => {
   return new Promise(resolve => {
     request({
       url: url,
       encoding: null
-    }, function(err, res, body) {
+    }, function (err, res, body) {
       if (err) throw err;
 
       resolve({ res, body })
     });
-  }).then(({ res, body }) => {
+  })
+}
+
+function sendURLToS3(url) {
+  return exports.fetchImage(url).then(({ res, body }) => {
     var key = new Date().getTime().toString();
 
     var contentType = res.headers['content-type'];
