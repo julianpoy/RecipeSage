@@ -250,7 +250,7 @@ exports._findTitle = (userId, recipeId, basename, transaction, ctr, success, fai
   })
   .then(dupe => {
     if (dupe) {
-      _findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
+      exports._findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
     }
