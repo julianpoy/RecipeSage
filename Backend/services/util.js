@@ -233,14 +233,14 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   GripService.broadcast(user.id, 'messages:new', message);
 }
 
-exports._findTitle = (userId, recipeId, basename, transaction, ctr, success, fail) => {
+exports._findTitle = (userId, recipeId, basename, transaction, ctr) => {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
   } else {
     adjustedTitle = basename + ' (' + ctr + ')';
   }
-  Recipe.findOne({
+  return Recipe.findOne({
     where: {
       id: { [Op.ne]: recipeId },
       userId: userId,
@@ -250,20 +250,15 @@ exports._findTitle = (userId, recipeId, basename, transaction, ctr, success, fai
   })
   .then(dupe => {
     if (dupe) {
-      exports._findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
-    } else {
-      success(adjustedTitle);
+      return exports._findTitle(userId, recipeId, basename, transaction, ctr + 1);
     }
-  })
-  .catch(err => {
-    fail(err);
+
+    return adjustedTitle
   });
 }
 
 exports.findTitle = (userId, recipeId, basename, transaction) => {
-  return new Promise((resolve, reject) => {
-    exports._findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
-  });
+  return exports._findTitle(userId, recipeId, basename, transaction, 1);
 }
 
 exports.shareRecipe = (recipeId, senderId, recipientId, transaction) => {
