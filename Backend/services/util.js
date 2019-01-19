@@ -62,7 +62,7 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain) {
 
 exports.fetchImage = url => {
   return new Promise(resolve => {
-    request({
+    request.get({
       url: url,
       encoding: null
     }, function (err, res, body) {
