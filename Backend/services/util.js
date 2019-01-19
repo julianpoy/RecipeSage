@@ -24,7 +24,7 @@ aws.config.update({
   region: config.aws.region,
 });
 
-exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain) {
+exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
 
   // Create sendEmail params
@@ -65,7 +65,7 @@ exports.fetchImage = url => {
     request.get({
       url: url,
       encoding: null
-    }, function (err, res, body) {
+    }, (err, res, body) => {
       if (err) throw err;
 
       resolve({ res, body })
@@ -111,7 +111,7 @@ exports.upload = multer({
     accessKeyId: config.aws.accessKeyId,
     secretAccessKey: config.aws.secretAccessKey,
     region: config.aws.region,
-    filename: function (req, file, cb) {  // [Optional]: define filename (default: random)
+    filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
       cb(null, Date.now())                // i.e. with a timestamp
     },                                    //
     gm: {                                 // [Optional]: define graphicsmagick options
@@ -119,7 +119,7 @@ exports.upload = multer({
       // height: 200,
       options: '',
       format: 'jpg',                      // Default: jpg - Unused by our processor
-      process: function(gm, options, inputStream, outputStream) {
+      process: (gm, options, inputStream, outputStream) => {
         var gmObj = gm(inputStream);
         gmObj.size({ bufferStream: true }, (err, size) => {
           if (err || size.width > 400) {
@@ -143,19 +143,19 @@ exports.upload = multer({
   })
 });
 
-exports.deleteS3Object = function(key, success, fail){
-  return new Promise(function(resolve, reject) {
+exports.deleteS3Object = (key, success, fail) => {
+  return new Promise((resolve, reject) => {
     s3.deleteObject({
       Bucket: config.aws.bucket,
       Key: key
-    }, function(err, data) {
+    }, (err, data) => {
       if (err) reject(err);
       else resolve(data);
     });
   });
 }
 
-exports.dispatchImportNotification = function(user, status, reason) {
+exports.dispatchImportNotification = (user, status, reason) => {
   var type;
   if (status === 0) {
     type = 'complete';
@@ -175,7 +175,7 @@ exports.dispatchImportNotification = function(user, status, reason) {
 
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, function() {}, function() {
+      FirebaseService.sendMessage(token, message, () => {}, () => {
         FCMToken.destroy({
           where: {
             userId: user.id,
@@ -187,7 +187,7 @@ exports.dispatchImportNotification = function(user, status, reason) {
   }
 }
 
-exports.dispatchMessageNotification = function(user, fullMessage) {
+exports.dispatchMessageNotification = (user, fullMessage) => {
   console.log("DISPATCHING --------------------")
   var message = {
     id: fullMessage.id,
@@ -217,7 +217,7 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
 
     for (var i = 0; i < user.fcmTokens.length; i++) {
       let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, notification, function() {}, function() {
+      FirebaseService.sendMessage(token, notification, () => {}, () => {
         FCMToken.destroy({
           where: {
             userId: user.id,
@@ -248,39 +248,39 @@ exports._findTitle = (userId, recipeId, basename, transaction, ctr, success, fai
     },
     transaction
   })
-  .then(function (dupe) {
+  .then(dupe => {
     if (dupe) {
       _findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
     } else {
       success(adjustedTitle);
     }
   })
-  .catch(function (err) {
+  .catch(err => {
     fail(err);
   });
 }
 
 exports.findTitle = (userId, recipeId, basename, transaction) => {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     exports._findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
   });
 }
 
-exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
-  return Recipe.findById(recipeId, { transaction }).then(function(recipe) {
+exports.shareRecipe = (recipeId, senderId, recipientId, transaction) => {
+  return Recipe.findById(recipeId, { transaction }).then(recipe => {
     if (!recipe) {
       var e = new Error("Could not find recipe to share");
       e.status = 404;
       throw e;
     } else {
-      return new Promise(function(resolve, reject) {
+      return new Promise((resolve, reject) => {
         if (recipe.image && recipe.image.location) {
           exports.sendURLToS3(recipe.image.location).then(resolve).catch(reject)
         } else {
           resolve(null);
         }
-      }).then(function(img) {
-        return exports.findTitle(recipientId, null, recipe.title, transaction).then(function(adjustedTitle) {
+      }).then(img => {
+        return exports.findTitle(recipientId, null, recipe.title, transaction).then(adjustedTitle => {
           return Recipe.create({
             userId: recipientId,
         		title: adjustedTitle,
