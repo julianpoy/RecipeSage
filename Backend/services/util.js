@@ -73,7 +73,7 @@ exports.fetchImage = url => {
   })
 }
 
-function sendURLToS3(url) {
+exports.sendURLToS3 = url => {
   return exports.fetchImage(url).then(({ res, body }) => {
     var key = new Date().getTime().toString();
 
@@ -103,7 +103,6 @@ function sendURLToS3(url) {
     });
   })
 }
-exports.sendURLToS3 = sendURLToS3;
 
 exports.upload = multer({
   storage: multerImager({
@@ -234,7 +233,7 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
   GripService.broadcast(user.id, 'messages:new', message);
 }
 
-function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail) {
+exports._findTitle = (userId, recipeId, basename, transaction, ctr, success, fail) => {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
@@ -261,12 +260,11 @@ function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail)
   });
 }
 
-function findTitle(userId, recipeId, basename, transaction) {
+exports.findTitle = (userId, recipeId, basename, transaction) => {
   return new Promise(function(resolve, reject) {
-    _findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
+    exports._findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
   });
 }
-exports.findTitle = findTitle;
 
 exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
   return Recipe.findById(recipeId, { transaction }).then(function(recipe) {
@@ -277,12 +275,12 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
     } else {
       return new Promise(function(resolve, reject) {
         if (recipe.image && recipe.image.location) {
-          sendURLToS3(recipe.image.location).then(resolve).catch(reject)
+          exports.sendURLToS3(recipe.image.location).then(resolve).catch(reject)
         } else {
           resolve(null);
         }
       }).then(function(img) {
-        return findTitle(recipientId, null, recipe.title, transaction).then(function(adjustedTitle) {
+        return exports.findTitle(recipientId, null, recipe.title, transaction).then(function(adjustedTitle) {
           return Recipe.create({
             userId: recipientId,
         		title: adjustedTitle,
