@@ -27,7 +27,8 @@ let {
   fetchImage,
   sendURLToS3,
   _findTitle,
-  findTitle
+  findTitle,
+  shareRecipe
 } = require('../services/util');
 
 let UtilService = require('../services/util')
@@ -355,6 +356,71 @@ describe('utils', () => {
         return findTitle(user.id, null, recipe1.title, t).then(adjustedTitle => {
           expect(adjustedTitle).to.equal(recipe1.title + " (2)")
         })
+      })
+    })
+  })
+
+  describe('shareRecipe', () => {
+    var server;
+    let findTitleStub
+    before(async () => {
+      server = await setup();
+      findTitleStub = sinon.stub(UtilService, 'findTitle').callsFake((a, b, title) => Promise.resolve(title))
+    });
+
+    after(() => {
+      findTitleStub.restore();
+    })
+
+    describe('shares recipe to recipient', () => {
+      let user1, user2, recipe, sharedRecipe
+      before(async () => {
+        user1 = await createUser()
+        user2 = await createUser()
+
+        recipe = await createRecipe(user1.id)
+
+        await SQ.transaction(async t => {
+          sharedRecipe = await shareRecipe(recipe.id, user1.id, user2.id, t)
+        })
+      })
+
+      // it('creates a new recipe', async () => {
+      //   expect(recipe.id).not.to.equal(sharedRecipe.id)
+      //   console.log(recipe.id, sharedRecipe.id)
+
+      //   return Promise.all([
+      //     Recipe.count().then(count => expect(count).to.equal(2)),
+      //     Recipe.findById(recipe.id).then(r => expect(r).to.not.be.null),
+      //     Recipe.findById(sharedRecipe.id).then(r => expect(r).to.not.be.null)
+      //   ])
+      // })
+
+      it('creates the recipes under the proper owners', () => {
+        expect(recipe.userId).to.equal(user1.id)
+        expect(sharedRecipe.userId).to.equal(user2.id)
+      })
+
+      it('includes the same data as original recipe', () => {
+        expect(recipe.title).to.equal(sharedRecipe.title)
+        expect(recipe.description).to.equal(sharedRecipe.description)
+        expect(recipe.yield).to.equal(sharedRecipe.yield)
+        expect(recipe.activeTime).to.equal(sharedRecipe.activeTime)
+        expect(recipe.totalTime).to.equal(sharedRecipe.totalTime)
+        expect(recipe.source).to.equal(sharedRecipe.source)
+        expect(recipe.url).to.equal(sharedRecipe.url)
+        expect(recipe.notes).to.equal(sharedRecipe.notes)
+        expect(recipe.ingredients).to.equal(sharedRecipe.ingredients)
+        expect(recipe.instructions).to.equal(sharedRecipe.instructions)
+        // expect(recipe.image).to.equal(sharedRecipe.image)
+      })
+
+      it('sets the fromUserId to the sending user', () => {
+        expect(sharedRecipe.fromUserId).to.equal(user1.id)
+      })
+
+      it('sets the folder to inbox on new recipe', () => {
+        expect(sharedRecipe.folder).to.equal('inbox')
       })
     })
   })
