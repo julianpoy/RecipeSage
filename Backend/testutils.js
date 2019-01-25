@@ -36,20 +36,18 @@ let migrate = async (down) => {
   })
 }
 
+module.exports.syncDB = async () => {
+  await SQ.sync({ force: true });
+}
+
 module.exports.setup = async () => {
   await migrate();
-  server = require('./bin/www');
+  return require('./bin/www');
+}
 
-  beforeEach(async () => {
-    await SQ.sync({ force: true });
-  });
-
-  after(async () => {
-    await migrate(true);
-    await new Promise(r => server.close(() => { r() }));
-  })
-
-  return server;
+module.exports.cleanup = async (server) => {
+  await migrate(true);
+  await new Promise(r => server.close(() => { r() }));
 }
 
 function randomString(len) {

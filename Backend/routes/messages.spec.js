@@ -7,6 +7,8 @@ let sinon = require('sinon');
 
 let {
   setup,
+  cleanup,
+  syncDB,
   randomString,
   randomEmail,
   createUser,
@@ -35,6 +37,14 @@ describe('messages', () => {
   var server;
   before(async () => {
     server = await setup();
+  });
+
+  beforeEach(async () => {
+    await syncDB();
+  });
+
+  after(async () => {
+    await cleanup(server);
   });
 
   describe('create', () => {

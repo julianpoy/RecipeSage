@@ -7,6 +7,8 @@ var request = require('request');
 
 let {
   setup,
+  cleanup,
+  syncDB,
   randomString,
   randomEmail,
   createUser,
@@ -46,6 +48,15 @@ var Message = require('../models').Message;
 var aws = require('aws-sdk');
 
 describe('utils', () => {
+  let server
+  before(async () => {
+    server = await setup();
+  })
+
+  after(async () => {
+    await cleanup(server);
+  })
+
   describe('validatePassword', () => {
     it('returns true for valid password', () => {
       expect(validatePassword('123456')).to.be.true
@@ -306,9 +317,8 @@ describe('utils', () => {
   })
 
   describe('_findTitle', () => {
-    var server;
-    before(async () => {
-      server = await setup();
+    beforeEach(async () => {
+      await syncDB();
     });
 
     it('returns initial name when no conflicts arise', async () => {
@@ -361,10 +371,9 @@ describe('utils', () => {
   })
 
   describe('shareRecipe', () => {
-    var server;
     let findTitleStub
     before(async () => {
-      server = await setup();
+      await syncDB();
       findTitleStub = sinon.stub(UtilService, 'findTitle').callsFake((a, b, title) => Promise.resolve(title))
     });
 
