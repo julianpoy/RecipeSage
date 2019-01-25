@@ -394,16 +394,15 @@ describe('utils', () => {
         })
       })
 
-      // it('creates a new recipe', async () => {
-      //   expect(recipe.id).not.to.equal(sharedRecipe.id)
-      //   console.log(recipe.id, sharedRecipe.id)
+      it('creates a new recipe', async () => {
+        expect(recipe.id).not.to.equal(sharedRecipe.id)
 
-      //   return Promise.all([
-      //     Recipe.count().then(count => expect(count).to.equal(2)),
-      //     Recipe.findById(recipe.id).then(r => expect(r).to.not.be.null),
-      //     Recipe.findById(sharedRecipe.id).then(r => expect(r).to.not.be.null)
-      //   ])
-      // })
+        return Promise.all([
+          Recipe.count().then(count => expect(count).to.equal(2)),
+          Recipe.findById(recipe.id).then(r => expect(r).to.not.be.null),
+          Recipe.findById(sharedRecipe.id).then(r => expect(r).to.not.be.null)
+        ])
+      })
 
       it('creates the recipes under the proper owners', () => {
         expect(recipe.userId).to.equal(user1.id)
