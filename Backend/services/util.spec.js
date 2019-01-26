@@ -30,10 +30,12 @@ let {
   sendURLToS3,
   _findTitle,
   findTitle,
-  shareRecipe
+  shareRecipe,
+  dispatchImportNotification
 } = require('../services/util');
 
 let UtilService = require('../services/util')
+let FirebaseService = require('../services/firebase');
 
 // DB
 var Op = require("sequelize").Op;
@@ -430,6 +432,64 @@ describe('utils', () => {
       it('sets the folder to inbox on new recipe', () => {
         expect(sharedRecipe.folder).to.equal('inbox')
       })
+    })
+  })
+
+  describe('dispatchImportNotification', () => {
+    let fcmTokens, fcmSendMessagesStub
+
+    beforeEach(() => {
+      fcmTokens = [{
+        id: 'a',
+        token: 'token1'
+      }, {
+        id: 'b',
+        token: 'token2'
+      }]
+
+      fcmSendMessagesStub = sinon.stub(FirebaseService, 'sendMessages').returns(Promise.resolve())
+    })
+
+    afterEach(() => {
+      fcmSendMessagesStub.restore()
+    })
+
+    it('accepts status 0 (complete)', () => {
+      dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
+
+      expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:complete")
+    })
+
+    it('accepts status 1 (failed)', () => {
+      dispatchImportNotification({ fcmTokens }, 1, 'anyreason')
+
+      expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:failed")
+    })
+
+    it('accepts status 2 (working, progress)', () => {
+      dispatchImportNotification({ fcmTokens }, 2, 'anyreason')
+
+      expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:working")
+    })
+
+    it('rejects status higher than 2', () => {
+      dispatchImportNotification({ fcmTokens }, 3, 'anyreason')
+
+      expect(fcmSendMessagesStub.getCalls()).to.have.length(0)
+    })
+
+    it('passes reason in message', () => {
+      let reason = 'myreasonhere'
+      dispatchImportNotification({ fcmTokens }, 0, reason)
+
+      expect(fcmSendMessagesStub.getCalls()[0].args[1].reason).to.equal(reason)
+    })
+
+    it('calls with an array of fcmTokens', () => {
+      dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
+
+      expect(fcmSendMessagesStub.getCalls()[0].args[0][0]).to.equal(fcmTokens[0].token)
+      expect(fcmSendMessagesStub.getCalls()[0].args[0][1]).to.equal(fcmTokens[1].token)
     })
   })
 });
