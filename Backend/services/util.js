@@ -24,7 +24,7 @@ aws.config.update({
   region: config.aws.region,
 });
 
-exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, resolve, reject) {
+exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
 
   // Create sendEmail params
@@ -57,61 +57,52 @@ exports.sendmail = function(toAddresses, ccAddresses, subject, html, plain, reso
   };
 
   // Create the promise and SES service object
-  var sendPromise = new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
-
-  // Handle promise's fulfilled/rejected states
-  sendPromise.then(function(data) {
-    console.log(data.MessageId);
-    resolve(data.messageId);
-  }).catch(function(err) {
-    console.error(err, err.stack);
-    reject(err, err.stack);
-  });
+  return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 }
 
-function sendURLToS3(url, callback) {
-  request({
-    url: url,
-    encoding: null
-  }, function(err, res, body) {
-    if (err)
-      return callback(err, res);
+exports.fetchImage = url => {
+  return new Promise(resolve => {
+    request.get({
+      url: url,
+      encoding: null
+    }, (err, res, body) => {
+      if (err) throw err;
 
+      resolve({ res, body })
+    });
+  })
+}
+
+exports.sendURLToS3 = url => {
+  return exports.fetchImage(url).then(({ res, body }) => {
     var key = new Date().getTime().toString();
 
     var contentType = res.headers['content-type'];
     var contentLength = res.headers['content-length'];
 
-    s3.putObject({
+    return s3.putObject({
       Bucket: config.aws.bucket,
       Key: key,
       ACL: 'public-read',
       Body: body // buffer
-    }, function(err, response) {
-      var img;
-
-      if (!err) {
-        img = {
-          fieldname: "image",
-          originalname: 'recipe-sage-img.jpg',
-          mimetype: contentType,
-          size: contentLength,
-          bucket: config.aws.bucket,
-          key: key,
-          acl: "public-read",
-          metadata: {
-            fieldName: "image"
-          },
-          location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-          etag: response.ETag
-        }
+    }).promise().then(response => {
+      return {
+        fieldname: "image",
+        originalname: 'recipe-sage-img.jpg',
+        mimetype: contentType,
+        size: contentLength,
+        bucket: config.aws.bucket,
+        key: key,
+        acl: "public-read",
+        metadata: {
+          fieldName: "image"
+        },
+        location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+        etag: response.ETag
       }
-
-      callback(err, img)
     });
-  });
+  })
 }
-exports.sendURLToS3 = sendURLToS3;
 
 exports.upload = multer({
   storage: multerImager({
@@ -120,7 +111,7 @@ exports.upload = multer({
     accessKeyId: config.aws.accessKeyId,
     secretAccessKey: config.aws.secretAccessKey,
     region: config.aws.region,
-    filename: function (req, file, cb) {  // [Optional]: define filename (default: random)
+    filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
       cb(null, Date.now())                // i.e. with a timestamp
     },                                    //
     gm: {                                 // [Optional]: define graphicsmagick options
@@ -128,7 +119,7 @@ exports.upload = multer({
       // height: 200,
       options: '',
       format: 'jpg',                      // Default: jpg - Unused by our processor
-      process: function(gm, options, inputStream, outputStream) {
+      process: (gm, options, inputStream, outputStream) => {
         var gmObj = gm(inputStream);
         gmObj.size({ bufferStream: true }, (err, size) => {
           if (err || size.width > 400) {
@@ -152,19 +143,19 @@ exports.upload = multer({
   })
 });
 
-exports.deleteS3Object = function(key, success, fail){
-  return new Promise(function(resolve, reject) {
+exports.deleteS3Object = (key, success, fail) => {
+  return new Promise((resolve, reject) => {
     s3.deleteObject({
       Bucket: config.aws.bucket,
       Key: key
-    }, function(err, data) {
+    }, (err, data) => {
       if (err) reject(err);
       else resolve(data);
     });
   });
 }
 
-exports.dispatchImportNotification = function(user, status, reason) {
+exports.dispatchImportNotification = (user, status, reason) => {
   var type;
   if (status === 0) {
     type = 'complete';
@@ -182,22 +173,13 @@ exports.dispatchImportNotification = function(user, status, reason) {
       reason: reason || 'status'
     }
 
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, function() {}, function() {
-        FCMToken.destroy({
-          where: {
-            userId: user.id,
-            token: token
-          }
-        })
-      });
-    }
+    return FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message);
   }
+
+  return Promise.resolve();
 }
 
-exports.dispatchMessageNotification = function(user, fullMessage) {
-  console.log("DISPATCHING --------------------")
+exports.dispatchMessageNotification = (user, fullMessage) => {
   var message = {
     id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
@@ -218,38 +200,29 @@ exports.dispatchMessageNotification = function(user, fullMessage) {
     }
   }
 
+  let sendQueues = [];
   if (user.fcmTokens) {
     var notification = {
       type: "messages:new",
       message: JSON.stringify(message)
     };
 
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, notification, function() {}, function() {
-        FCMToken.destroy({
-          where: {
-            userId: user.id,
-            token: token
-          }
-        });
-      });
-    }
+    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), notification));
   }
 
-  console.log("about to broadcast", user.id)
+  sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
 
-  GripService.broadcast(user.id, 'messages:new', message);
+  return Promise.all(sendQueues);
 }
 
-function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail) {
+exports._findTitle = (userId, recipeId, basename, transaction, ctr) => {
   var adjustedTitle;
   if (ctr == 1) {
     adjustedTitle = basename;
   } else {
     adjustedTitle = basename + ' (' + ctr + ')';
   }
-  Recipe.findOne({
+  return Recipe.findOne({
     where: {
       id: { [Op.ne]: recipeId },
       userId: userId,
@@ -257,46 +230,34 @@ function _findTitle(userId, recipeId, basename, transaction, ctr, success, fail)
     },
     transaction
   })
-  .then(function (dupe) {
+  .then(dupe => {
     if (dupe) {
-      _findTitle(userId, recipeId, basename, transaction, ctr + 1, success, fail);
-    } else {
-      success(adjustedTitle);
+      return exports._findTitle(userId, recipeId, basename, transaction, ctr + 1);
     }
-  })
-  .catch(function (err) {
-    fail(err);
+
+    return adjustedTitle
   });
 }
 
-function findTitle(userId, recipeId, basename, transaction) {
-  return new Promise(function(resolve, reject) {
-    _findTitle(userId, recipeId, basename, transaction, 1, resolve, reject);
-  });
+exports.findTitle = (userId, recipeId, basename, transaction) => {
+  return exports._findTitle(userId, recipeId, basename, transaction, 1);
 }
-exports.findTitle = findTitle;
 
-exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
-  return Recipe.findById(recipeId, { transaction }).then(function(recipe) {
+exports.shareRecipe = (recipeId, senderId, recipientId, transaction) => {
+  return Recipe.findById(recipeId, { transaction }).then(recipe => {
     if (!recipe) {
       var e = new Error("Could not find recipe to share");
       e.status = 404;
       throw e;
     } else {
-      return new Promise(function(resolve, reject) {
+      return new Promise((resolve, reject) => {
         if (recipe.image && recipe.image.location) {
-          sendURLToS3(recipe.image.location, function(err, img) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(img);
-            }
-          });
+          exports.sendURLToS3(recipe.image.location).then(resolve).catch(reject)
         } else {
           resolve(null);
         }
-      }).then(function(img) {
-        return findTitle(recipientId, null, recipe.title, transaction).then(function(adjustedTitle) {
+      }).then(img => {
+        return exports.findTitle(recipientId, null, recipe.title, transaction).then(adjustedTitle => {
           return Recipe.create({
             userId: recipientId,
         		title: adjustedTitle,
@@ -323,7 +284,8 @@ exports.shareRecipe = function(recipeId, senderId, recipientId, transaction) {
 
 exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
 
-var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+// Very liberal email regex. Don't want to reject valid user emails.
+let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 exports.validateEmail = email => emailRegex.test(email);
 
 exports.validatePassword = password => typeof password === 'string' && password.length >= 6;
