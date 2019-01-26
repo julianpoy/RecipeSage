@@ -1,5 +1,8 @@
 var admin = require("firebase-admin");
 
+// DB
+var FCMToken = require('../models').FCMToken;
+
 var serviceAccount = require("../config/firebase-credentials.json");
 
 admin.initializeApp({
@@ -7,17 +10,31 @@ admin.initializeApp({
   databaseURL: "https://chef-book.firebaseio.com"
 });
 
-exports.sendMessage = function(fcmToken, payload, success, fail) {
+let invalidFcmTokenErrors = [
+  'messaging/registration-token-not-registered'
+]
+
+exports.sendMessages = (tokens, payload) => {
+  return Promise.all(tokens.map(token =>
+    exports.sendMessage(token, payload)
+  ))
+}
+
+exports.sendMessage = (token, payload) => {
   var message = {
     data: payload,
-    token: fcmToken
+    token
   };
-  
-  admin.messaging().send(message)
-  .then((response) => {
-    success(response);
-  })
-  .catch((error) => {
-    fail(error);
+
+  return admin.messaging().send(message).catch(err => {
+    if (invalidFcmTokenErrors.indexOf(err.errorInfo.code) > -1) {
+      return FCMToken.destroy({
+        where: {
+          token
+        }
+      });
+    }
+
+    return Promise.resolve();
   });
 }

@@ -173,22 +173,13 @@ exports.dispatchImportNotification = (user, status, reason) => {
       reason: reason || 'status'
     }
 
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, message, () => {}, () => {
-        FCMToken.destroy({
-          where: {
-            userId: user.id,
-            token: token
-          }
-        })
-      });
-    }
+    return FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message);
   }
+
+  return Promise.resolve();
 }
 
 exports.dispatchMessageNotification = (user, fullMessage) => {
-  console.log("DISPATCHING --------------------")
   var message = {
     id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
@@ -209,28 +200,19 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
     }
   }
 
+  let sendQueues = [];
   if (user.fcmTokens) {
     var notification = {
       type: "messages:new",
       message: JSON.stringify(message)
     };
 
-    for (var i = 0; i < user.fcmTokens.length; i++) {
-      let token = user.fcmTokens[i];
-      FirebaseService.sendMessage(token, notification, () => {}, () => {
-        FCMToken.destroy({
-          where: {
-            userId: user.id,
-            token: token
-          }
-        });
-      });
-    }
+    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), notification));
   }
 
-  console.log("about to broadcast", user.id)
+  sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
 
-  GripService.broadcast(user.id, 'messages:new', message);
+  return Promise.all(sendQueues);
 }
 
 exports._findTitle = (userId, recipeId, basename, transaction, ctr) => {
