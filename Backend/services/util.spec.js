@@ -31,11 +31,13 @@ let {
   _findTitle,
   findTitle,
   shareRecipe,
-  dispatchImportNotification
+  dispatchImportNotification,
+  dispatchMessageNotification
 } = require('../services/util');
 
 let UtilService = require('../services/util')
 let FirebaseService = require('../services/firebase');
+let GripService = require('../services/grip');
 
 // DB
 var Op = require("sequelize").Op;
@@ -454,42 +456,172 @@ describe('utils', () => {
       fcmSendMessagesStub.restore()
     })
 
-    it('accepts status 0 (complete)', () => {
-      dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
+    it('accepts status 0 (complete)', async () => {
+      await dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:complete")
     })
 
-    it('accepts status 1 (failed)', () => {
-      dispatchImportNotification({ fcmTokens }, 1, 'anyreason')
+    it('accepts status 1 (failed)', async () => {
+      await dispatchImportNotification({ fcmTokens }, 1, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:failed")
     })
 
-    it('accepts status 2 (working, progress)', () => {
-      dispatchImportNotification({ fcmTokens }, 2, 'anyreason')
+    it('accepts status 2 (working, progress)', async () => {
+      await dispatchImportNotification({ fcmTokens }, 2, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:working")
     })
 
-    it('rejects status higher than 2', () => {
-      dispatchImportNotification({ fcmTokens }, 3, 'anyreason')
+    it('rejects status higher than 2', async () => {
+      await dispatchImportNotification({ fcmTokens }, 3, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()).to.have.length(0)
     })
 
-    it('passes reason in message', () => {
+    it('passes reason in message', async () => {
       let reason = 'myreasonhere'
-      dispatchImportNotification({ fcmTokens }, 0, reason)
+      await dispatchImportNotification({ fcmTokens }, 0, reason)
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].reason).to.equal(reason)
     })
 
-    it('calls with an array of fcmTokens', () => {
-      dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
+    it('calls with an array of fcmTokens', async () => {
+      await dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[0][0]).to.equal(fcmTokens[0].token)
       expect(fcmSendMessagesStub.getCalls()[0].args[0][1]).to.equal(fcmTokens[1].token)
+    })
+  })
+
+  describe('dispatchMessageNotification', () => {
+    let userId, fcmTokens, message, fcmSendMessagesStub, gripBroadcastStub
+
+    before(async () => {
+      userId = "15"
+      fcmTokens = [{
+        id: 'a',
+        token: 'token1'
+      }, {
+        id: 'b',
+        token: 'token2'
+      }]
+      message = {
+        id: "22",
+        body: randomString(2000),
+        otherUser: {
+          name: "test1"
+        },
+        fromUser: {
+          name: "test1"
+        },
+        toUser: {
+          name: "test2"
+        },
+        recipe: {
+          id: "44",
+          title: "recipeTitle",
+          image: {
+            location: "location"
+          }
+        }
+      }
+
+      fcmSendMessagesStub = sinon.stub(FirebaseService, 'sendMessages').returns(Promise.resolve())
+      gripBroadcastStub = sinon.stub(GripService, 'broadcast').returns(Promise.resolve())
+
+      await dispatchMessageNotification({ id: userId, fcmTokens }, message)
+    })
+
+    after(() => {
+      fcmSendMessagesStub.restore()
+      gripBroadcastStub.restore()
+    })
+
+    describe('fcm', () => {
+      it('calls fcm sendMessages', () => {
+        sinon.assert.calledOnce(fcmSendMessagesStub)
+      })
+
+      it('sends to all passed tokens', () => {
+        expect(fcmSendMessagesStub.getCalls()[0].args[0][0]).to.equal(fcmTokens[0].token)
+        expect(fcmSendMessagesStub.getCalls()[0].args[0][1]).to.equal(fcmTokens[1].token)
+      })
+
+      it('sends with correct type', () => {
+        expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("messages:new")
+      })
+
+      it('sends with correct message', () => {
+        let stubMessageCall = fcmSendMessagesStub.getCalls()[0].args[1].message
+        expect(typeof stubMessageCall).to.equal("string")
+
+        let parsedMessage = JSON.parse(stubMessageCall)
+
+        expect(parsedMessage.id).to.equal("22")
+        expect(parsedMessage.body).to.equal(message.body.substring(0, 1000))
+        expect(parsedMessage.otherUser.name).to.equal("test1")
+        expect(parsedMessage.fromUser.name).to.equal("test1")
+        expect(parsedMessage.toUser.name).to.equal("test2")
+        expect(parsedMessage.recipe.id).to.equal("44")
+        expect(parsedMessage.recipe.title).to.equal("recipeTitle")
+        expect(parsedMessage.recipe.image.location).to.equal("location")
+      })
+
+      it('sends no additional fields', () => {
+        let stubMessageCall = fcmSendMessagesStub.getCalls()[0].args[1]
+        expect(Object.keys(stubMessageCall)).to.have.length(2)
+
+        let parsedMessage = JSON.parse(stubMessageCall.message)
+        expect(Object.keys(parsedMessage)).to.have.length(6)
+        expect(Object.keys(parsedMessage.recipe)).to.have.length(3)
+        expect(Object.keys(parsedMessage.recipe.image)).to.have.length(1)
+      })
+    })
+
+    describe('grip', () => {
+      it('calls grip broadcast', () => {
+        sinon.assert.calledOnce(gripBroadcastStub)
+      })
+
+      it('sends to user channel', () => {
+        expect(gripBroadcastStub.getCalls()[0].args[0]).to.equal(userId)
+      })
+
+      it('sends with correct type', () => {
+        expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal("messages:new")
+      })
+
+      it('sends with correct message', () => {
+        let stubMessageCall = gripBroadcastStub.getCalls()[0].args[2]
+
+        // Message should be immutable
+        expect(stubMessageCall).to.not.equal(message)
+        expect(stubMessageCall.id).to.equal(message.id)
+        expect(stubMessageCall.body).to.equal(message.body.substring(0, 1000))
+
+        // Users should be mutable
+        expect(stubMessageCall.otherUser).to.equal(message.otherUser)
+        expect(stubMessageCall.fromUser).to.equal(message.fromUser)
+        expect(stubMessageCall.toUser).to.equal(message.toUser)
+
+        // Recipe should be immutable
+        expect(stubMessageCall.recipe).to.not.equal(message.recipe)
+        expect(stubMessageCall.recipe.id).to.equal(message.recipe.id)
+        expect(stubMessageCall.recipe.title).to.equal(message.recipe.title)
+
+        // Recipe image should be immutable
+        expect(stubMessageCall.recipe.image).to.not.equal(message.recipe.image)
+        expect(stubMessageCall.recipe.image.location).to.equal(message.recipe.image.location)
+      })
+
+      it('sends no additional fields', () => {
+        let stubMessageCall = gripBroadcastStub.getCalls()[0].args[2]
+        expect(Object.keys(stubMessageCall)).to.have.length(6)
+        expect(Object.keys(stubMessageCall.recipe)).to.have.length(3)
+        expect(Object.keys(stubMessageCall.recipe.image)).to.have.length(1)
+      })
     })
   })
 });
