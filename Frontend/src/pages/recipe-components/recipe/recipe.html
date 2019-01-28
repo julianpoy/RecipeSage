@@ -140,6 +140,7 @@
         (blur)='toggleAutocomplete(false, $event)'
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
+        autocomplete="off"
         #labelInputField
         id="labelInputField" />
       <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">

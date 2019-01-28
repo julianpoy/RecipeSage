@@ -11,13 +11,6 @@
 <ion-content>
   <br />
 
-  <ion-item style="position: absolute; width: 0px; height: 0px;">
-      <label for="fakeEmail">Email</label>
-      <input id="fakeEmail" style="border: none; height: 1px; width: 0;" name="email" />
-      <label for="fakePassword">Password</label>
-      <input id="fakePassword" style="border: none; height: 0; width: 0;" name="password" type="password" />
-    </ion-item>
-
   <ion-item>
     <ion-label stacked>Name/Nickname</ion-label>
     <ion-input
@@ -49,7 +42,7 @@
   <ion-item>
     <ion-label stacked>Password</ion-label>
     <ion-input
-      autocomplete="off"
+      autocomplete="new-password"
       autofill="off"
       type="password"
       [(ngModel)]="account.password"
@@ -59,7 +52,11 @@
 
   <ion-item *ngIf="passwordChanged">
     <ion-label stacked>Confirm Password</ion-label>
-    <ion-input autocomplete="off" autofill="off" type="password" [(ngModel)]="account.confirmPassword"></ion-input>
+    <ion-input
+      autocomplete="new-password"
+      autofill="off"
+      type="password"
+      [(ngModel)]="account.confirmPassword"></ion-input>
     <button ion-button (click)="savePassword()" item-right>
       Save Password
     </button>
