@@ -19,6 +19,7 @@
       (blur)='toggleAutocomplete(false, $event)'
       (keyup.enter)="onAddCollaboratorEnter($event);"
       placeholder="Add collaborators by email address"
+      autocomplete="off"
       #labelInputField
       id="labelInputField" />
     <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
