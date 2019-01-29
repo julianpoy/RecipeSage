@@ -20,6 +20,7 @@ module.exports = {
       instances : "2",
       instance_var: "INSTANCE_ID",
       env: {
+        NODE_ENV: 'staging',
         PORT: '3040'
       }
     }
