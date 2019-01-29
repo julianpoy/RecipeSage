@@ -99,11 +99,8 @@ export class LoginPage {
           case 0:
             this.presentToast('It looks like you\'re offline right now.')
             break;
-          case 404:
-            this.presentToast('I can\'t find an account with that email address.')
-            break;
-          case 401:
-            this.presentToast('That password doesn\'t match the email address you entered.')
+          case 412:
+            this.presentToast('It looks like that email or password isn\'t correct.')
             break;
           default:
             this.presentToast(this.utilService.standardMessages.unexpectedError)
