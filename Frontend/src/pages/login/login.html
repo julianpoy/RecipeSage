@@ -58,6 +58,10 @@
         </div>
       </div>
 
+      <div>
+        <p *ngIf="!showLogin">By clicking Create Account, you agree to our <a href="" (click)="showLegal($event)">Terms</a></p>
+      </div>
+
       <div padding>
       	<button ion-button block (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</button>
   		</div>

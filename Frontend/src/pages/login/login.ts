@@ -178,4 +178,9 @@ export class LoginPage {
       }
     });
   }
+
+  showLegal(e) {
+    e.preventDefault();
+    this.navCtrl.push('LegalPage');
+  }
 }
