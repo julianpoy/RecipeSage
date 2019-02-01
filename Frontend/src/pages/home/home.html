@@ -25,7 +25,7 @@
     [parentScroll]="contentContainer.getScrollElement()"
     [enableUnequalChildrenSizes]="true">
 
-    <ion-searchbar (ionInput)="search($event.target.value)"></ion-searchbar>
+    <ion-searchbar (ionInput)="search($event.target.value)" (keyup.enter)="$event.target.blur()"></ion-searchbar>
 
     <div #container>
       <ion-item *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn" class="recipeItem" (click)="openRecipe(recipe)">
