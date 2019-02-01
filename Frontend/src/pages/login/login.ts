@@ -92,6 +92,13 @@ export class LoginPage {
           this.messagingService.requestNotifications();
         }
 
+        let redirect = localStorage.getItem('redirect')
+        if (redirect) {
+          localStorage.removeItem('redirect')
+
+          return window.location.assign(redirect)
+        }
+
         this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
       }, err => {
         loading.dismiss();

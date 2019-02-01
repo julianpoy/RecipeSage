@@ -126,7 +126,12 @@
         if (queryParams[i].indexOf('token') > -1) {
           var token = queryParams[i].split('=')[1];
           localStorage.setItem('token', token);
-          break;
+          continue;
+        }
+        if (queryParams[i].indexOf('redirect') > -1) {
+          var url = queryParams[i].split('=')[1];
+          localStorage.setItem('redirect', url);
+          continue;
         }
       }
     }

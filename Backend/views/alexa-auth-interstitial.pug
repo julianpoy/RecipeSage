@@ -1,0 +1,24 @@
+html
+  head
+    title RecipeSage Authentication
+    link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
+  body
+    span Please wait...
+
+  script(type='text/javascript').
+    fetch(`/alexa/authHandler${location.search}&token=${localStorage.getItem('token')}`)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(myJson) {
+      console.log(JSON.stringify(myJson));
+      const params = new URLSearchParams(window.location.search)
+
+      let redirectURL = `${decodeURIComponent(params.get('redirect_uri'))}#state=${params.get('state')}&access_token=${myJson.token}`
+      window.location.assign(redirectURL)
+    })
+    .catch(err => {
+      let loginURL = `/#/login?redirect=${encodeURIComponent(window.location.href)}`
+
+      window.location.assign(loginURL)
+    });
