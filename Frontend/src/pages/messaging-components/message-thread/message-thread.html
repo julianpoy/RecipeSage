@@ -22,7 +22,7 @@
   <div>
     <div
       class="message"
-      [ngClass]="{'me': message.toUser.id === message.otherUser.id }"
+      [ngClass]="{'me': message.toUser.id === message.otherUser.id, 'blue': message.fromUser.id === message.otherUser.id }"
       *ngFor="let message of messages; let i = index; trackBy: trackByFn">
       <div class="time-divider" *ngIf="deservesDateDiff(messages[i-1], messages[i])">
         {{ formatMessageDividerDate(message.createdAt) }}
