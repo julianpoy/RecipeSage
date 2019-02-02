@@ -233,7 +233,7 @@ router.get(
       }
     ],
     order: [
-      ['updatedAt', 'DESC']
+      ['createdAt', 'DESC']
     ],
     limit: messageLimit
   })
