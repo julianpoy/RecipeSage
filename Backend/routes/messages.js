@@ -164,7 +164,7 @@ router.get(
       }
 
       // Do not fill messages for light requests
-      if (!req.query.light && !(req.query.limit && acc[otherUser.id].messageCount >= req.query.limit)) acc[otherUser.id].messages.push(el);
+      if (!req.query.light) acc[otherUser.id].messages.push(el);
       acc[otherUser.id].messageCount += 1;
 
       return acc;
@@ -173,7 +173,13 @@ router.get(
     var conversations = [];
     for (var userId in conversationsByUser) {
       if (conversationsByUser.hasOwnProperty(userId)) {
-        conversations.push(conversationsByUser[userId]);
+        let conversation = conversationsByUser[userId];
+
+        if (req.query.limit && conversation.messageCount > req.query.limit) {
+          conversation.messages.splice(0, conversation.messages.length - req.query.limit)
+        }
+
+        conversations.push(conversation);
       }
     }
 
@@ -227,7 +233,7 @@ router.get(
       }
     ],
     order: [
-      ['updatedAt', 'DESC']
+      ['createdAt', 'DESC']
     ],
     limit: messageLimit
   })
