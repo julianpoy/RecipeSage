@@ -264,7 +264,7 @@ export class ShoppingListPage {
       showAddedBy: false,
       showAddedOn: false,
       showRecipeTitle: true,
-      groupSimilar: true
+      groupSimilar: false
     }
 
     this.viewOptions.sortBy = localStorage.getItem('shoppingList.sortBy');
