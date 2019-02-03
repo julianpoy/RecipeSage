@@ -7,6 +7,7 @@ import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-ser
 })
 export class SelectIngredientsComponent {
 
+  allSelected: boolean = true;
   ingredientBinders: any = {};
   scaledIngredients: any = [];
   scale: any = 1;
@@ -62,6 +63,15 @@ export class SelectIngredientsComponent {
       this.selectedIngredients.push(this.scaledIngredients[i]);
     } else {
       this.selectedIngredients.splice(this.selectedIngredients.indexOf(this.scaledIngredients[i]), 1);
+    }
+  }
+
+  resetAll() {
+    for (let idx in Object.keys(this.ingredientBinders)) {
+      if (this.ingredientBinders.hasOwnProperty(idx)) {
+        this.ingredientBinders[idx] = this.allSelected
+        this.toggleIngredient(idx)
+      }
     }
   }
 }

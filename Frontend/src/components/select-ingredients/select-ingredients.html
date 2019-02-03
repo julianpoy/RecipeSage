@@ -4,6 +4,10 @@
       Select the ingredients you'd like to add:
     </p>
 
+    <ion-item>
+      <ion-label>Select/Deselect All</ion-label>
+      <ion-checkbox [(ngModel)]="allSelected" (ngModelChange)="resetAll()" checked="true"></ion-checkbox>
+    </ion-item>
     <ion-item *ngFor="let ingredient of scaledIngredients; let i = index;">
       <ion-label>{{ ingredient }}</ion-label>
       <ion-checkbox [(ngModel)]="ingredientBinders[i]" (ngModelChange)="toggleIngredient(i)" checked="true"></ion-checkbox>
