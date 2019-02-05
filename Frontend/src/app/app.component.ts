@@ -101,7 +101,19 @@ export class MyApp {
       });
     }, this);
 
-    this.events.subscribe('import:pepperplate:complete', message => {
+    this.websocketService.register('import:pepperplate:complete', payload => {
+      this.events.publish('import:pepperplate:complete');
+    }, this);
+
+    this.websocketService.register('import:pepperplate:failed', payload => {
+      this.events.publish('import:pepperplate:failed', payload.reason);
+    }, this);
+
+    this.websocketService.register('import:pepperplate:working', payload => {
+      this.events.publish('import:pepperplate:working');
+    }, this);
+
+    this.events.subscribe('import:pepperplate:complete', () => {
       var notification = 'Your recipes have been imported from Pepperplate.';
 
       let toast = this.toastCtrl.create({
@@ -116,7 +128,7 @@ export class MyApp {
     this.events.subscribe('import:pepperplate:failed', reason => {
       var notification = '';
       if (reason === 'timeout') {
-        notification += 'Import failed: Pepperplate service is unavailable right now.';
+        notification += 'Import failed: The Pepperplate API is unavailable right now.';
       } else if (reason === 'invalidCredentials') {
         notification += 'Import failed: Incorrect Pepperplate username or password.';
       } else if (reason === 'saving') {
@@ -134,7 +146,7 @@ export class MyApp {
       toast.present();
     });
 
-    this.events.subscribe('import:pepperplate:working', message => {
+    this.events.subscribe('import:pepperplate:working', () => {
       var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
 
       let toast = this.toastCtrl.create({

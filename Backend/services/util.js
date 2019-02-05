@@ -156,27 +156,32 @@ exports.deleteS3Object = (key, success, fail) => {
 }
 
 exports.dispatchImportNotification = (user, status, reason) => {
-  var type;
+  var event;
   if (status === 0) {
-    type = 'complete';
+    event = 'complete';
   } else if (status === 1) {
-    type = 'failed';
+    event = 'failed';
   } else if (status === 2) {
-    type = 'working';
+    event = 'working';
   } else {
     return;
   }
 
-  if (user.fcmTokens) {
-    var message = {
-      type: "import:pepperplate:" + type,
-      reason: reason || 'status'
-    }
+  let type = "import:pepperplate:" + event
 
-    return FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message);
+  var message = {
+    type,
+    reason: reason || 'status'
   }
 
-  return Promise.resolve();
+  let sendQueues = []
+  if (user.fcmTokens) {
+    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message));
+  }
+
+  sendQueues.push(GripService.broadcast(user.id, type, message));
+
+  return Promise.all(sendQueues);
 }
 
 exports.dispatchMessageNotification = (user, fullMessage) => {
