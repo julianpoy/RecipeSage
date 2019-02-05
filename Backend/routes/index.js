@@ -80,7 +80,9 @@ router.get(
       }
     ]
   }).then(async (user) => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({
+      headless: (process.env.NODE_ENV || 'dev') !== 'dev'
+    });
 
     Raven.captureMessage('Starting import job', {
       level: 'info'
