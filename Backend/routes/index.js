@@ -33,7 +33,6 @@ router.get(
     include: [
       {
         model: FCMToken,
-        as: 'fcmTokens',
         attributes: ['id', 'token']
       }
     ]
@@ -86,7 +85,7 @@ router.get(
               instructions: recipe.instructions,
               image: image
             }, { transaction: t }).then(function(newRecipe) {
-              Promise.all(recipe.rawCategories.map(function(rawCategory) {
+              return Promise.all(recipe.rawCategories.map(function(rawCategory) {
                 return Label.findOrCreate({
                   where: {
                     userId: res.locals.session.userId,
@@ -100,14 +99,19 @@ router.get(
             });
           })
         }));
+      }).catch(err => {
+        console.log(err)
+        next(err)
       });
     };
 
     function loadNext(nightmare, recipes, urls, idx) {
       // Raven.captureMessage('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
+      // console.log('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length)
 
       nightmare
         .goto(urls[idx])
+        .wait(1)
         .wait('#cphMiddle_cphMain_lblTitle')
         .evaluate(function () {
           var els = {
@@ -148,9 +152,10 @@ router.get(
               Raven.captureMessage('Import job completed succesfully', {
                 level: 'info'
               });
-            }).catch(function() {
+            }).catch(function(err) {
               UtilService.dispatchImportNotification(user, 1, 'saving');
               Raven.captureException('Import job failed');
+              next(err)
             });
           }
         })
@@ -166,7 +171,8 @@ router.get(
       .type('#cphMain_loginForm_tbEmail', username)
       .type('#cphMain_loginForm_tbPassword', password)
       .click('#cphMain_loginForm_ibSubmit')
-      .wait('.reclistnav')
+      .wait(6000)
+      .wait('#reclist')
       .evaluate(function () {
         return new Promise(function(resolve, reject) {
           var interval = setInterval(function() {
