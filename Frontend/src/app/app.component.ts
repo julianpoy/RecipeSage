@@ -101,6 +101,18 @@ export class MyApp {
       });
     }, this);
 
+    this.websocketService.register('import:pepperplate:complete', payload => {
+      this.events.publish('import:pepperplate:complete');
+    }, this);
+
+    this.websocketService.register('import:pepperplate:failed', payload => {
+      this.events.publish('import:pepperplate:failed');
+    }, this);
+
+    this.websocketService.register('import:pepperplate:working', payload => {
+      this.events.publish('import:pepperplate:working');
+    }, this);
+
     this.events.subscribe('import:pepperplate:complete', message => {
       var notification = 'Your recipes have been imported from Pepperplate.';
 
