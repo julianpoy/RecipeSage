@@ -80,6 +80,10 @@ router.get(
       }
     ]
   }).then(async (user) => {
+    const browser = await puppeteer.launch({
+      headless: (process.env.NODE_ENV || 'dev') !== 'dev'
+    });
+
     Raven.captureMessage('Starting import job', {
       level: 'info'
     });
@@ -87,8 +91,6 @@ router.get(
     res.status(200).json({
       msg: "Starting scrape..."
     });
-
-    const browser = await puppeteer.launch({ headless: false });
 
     try {
       var username = req.query.username;
