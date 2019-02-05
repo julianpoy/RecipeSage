@@ -450,34 +450,40 @@ describe('utils', () => {
       }]
 
       fcmSendMessagesStub = sinon.stub(FirebaseService, 'sendMessages').returns(Promise.resolve())
+      gripBroadcastStub = sinon.stub(GripService, 'broadcast').returns(Promise.resolve())
     })
 
     afterEach(() => {
       fcmSendMessagesStub.restore()
+      gripBroadcastStub.restore()
     })
 
     it('accepts status 0 (complete)', async () => {
       await dispatchImportNotification({ fcmTokens }, 0, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:complete")
+      expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal("import:pepperplate:complete")
     })
 
     it('accepts status 1 (failed)', async () => {
       await dispatchImportNotification({ fcmTokens }, 1, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:failed")
+      expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal("import:pepperplate:failed")
     })
 
     it('accepts status 2 (working, progress)', async () => {
       await dispatchImportNotification({ fcmTokens }, 2, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal("import:pepperplate:working")
+      expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal("import:pepperplate:working")
     })
 
     it('rejects status higher than 2', async () => {
       await dispatchImportNotification({ fcmTokens }, 3, 'anyreason')
 
       expect(fcmSendMessagesStub.getCalls()).to.have.length(0)
+      expect(gripBroadcastStub.getCalls()).to.have.length(0)
     })
 
     it('passes reason in message', async () => {
@@ -485,6 +491,7 @@ describe('utils', () => {
       await dispatchImportNotification({ fcmTokens }, 0, reason)
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].reason).to.equal(reason)
+      expect(gripBroadcastStub.getCalls()[0].args[2].reason).to.equal(reason)
     })
 
     it('calls with an array of fcmTokens', async () => {
