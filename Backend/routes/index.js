@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Nightmare = require('nightmare');
+let puppeteer = require('puppeteer');
 var cors = require('cors');
 var Raven = require('raven');
 
@@ -20,11 +20,54 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'RS API' });
 });
 
+function saveRecipes(userId, recipes) {
+  return SQ.transaction(function (t) {
+
+    return Promise.all(recipes.map(function (recipe) {
+      return new Promise(function (resolve, reject) {
+        if (recipe.imageURL) {
+          UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(reject)
+        } else resolve(null);
+      }).then(function (image) {
+        return Recipe.create({
+          userId: userId,
+          title: recipe.title,
+          description: recipe.description,
+          yield: recipe.yield,
+          activeTime: recipe.activeTime,
+          totalTime: recipe.totalTime,
+          source: recipe.source,
+          url: recipe.url,
+          notes: recipe.notes,
+          ingredients: recipe.ingredients,
+          instructions: recipe.instructions,
+          image: image
+        }, { transaction: t }).then(function (newRecipe) {
+          return Promise.all(recipe.rawCategories.map(function (rawCategory) {
+            return Label.findOrCreate({
+              where: {
+                userId: userId,
+                title: rawCategory.trim().toLowerCase()
+              },
+              transaction: t
+            }).then(function (labels) {
+              return labels[0].addRecipe(newRecipe.id, { transaction: t });
+            });
+          }));
+        });
+      })
+    }));
+  }).catch(err => {
+    console.log(err)
+    Raven.captureException(err);
+  });
+};
+
 router.get(
   '/scrape/pepperplate',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  async (req, res, next) => {
 
   User.find({
     where: {
@@ -36,84 +79,93 @@ router.get(
         attributes: ['id', 'token']
       }
     ]
-  }).then(function(user) {
-
+  }).then(async (user) => {
     Raven.captureMessage('Starting import job', {
       level: 'info'
     });
 
-    var username = req.query.username;
-    var password = req.query.password;
-
-    var loginLink = 'https://www.pepperplate.com/login.aspx';
-
-    var nightmare = Nightmare({
-      show: true,
-      executionTimeout: 300000
+    res.status(200).json({
+      msg: "Starting scrape..."
     });
 
-    var WORKER_TIMEOUT_INTERVAL = 60 * 1000; // 60 Seconds
-    function setWorkerTimeout() {
-      return setTimeout(function() {
-        UtilService.dispatchImportNotification(user, 1, 'timeout');
-        Raven.captureException('Import job failed');
-      }, WORKER_TIMEOUT_INTERVAL);
-    }
-    var workerTimeout = setWorkerTimeout();
-    // UtilService.dispatchImportNotification(res.locals.user, 2);
+    const browser = await puppeteer.launch({ headless: false });
 
-    function saveRecipes(recipes) {
-      return SQ.transaction(function(t) {
+    try {
+      var username = req.query.username;
+      var password = req.query.password;
 
-        return Promise.all(recipes.map(function(recipe) {
-          return new Promise(function(resolve, reject) {
-            if (recipe.imageURL) {
-              UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(reject)
-            } else resolve(null);
-          }).then(function(image) {
-            return Recipe.create({
-              userId: res.locals.session.userId,
-              title: recipe.title,
-              description: recipe.description,
-              yield: recipe.yield,
-              activeTime: recipe.activeTime,
-              totalTime: recipe.totalTime,
-              source: recipe.source,
-              url: recipe.url,
-              notes: recipe.notes,
-              ingredients: recipe.ingredients,
-              instructions: recipe.instructions,
-              image: image
-            }, { transaction: t }).then(function(newRecipe) {
-              return Promise.all(recipe.rawCategories.map(function(rawCategory) {
-                return Label.findOrCreate({
-                  where: {
-                    userId: res.locals.session.userId,
-                    title: rawCategory.trim().toLowerCase()
-                  },
-                  transaction: t
-                }).then(function (labels) {
-                  return labels[0].addRecipe(newRecipe.id, { transaction: t });
-                });
-              }));
-            });
-          })
-        }));
-      }).catch(err => {
-        console.log(err)
-        next(err)
-      });
-    };
+      const page = await browser.newPage();
 
-    function loadNext(nightmare, recipes, urls, idx) {
-      // Raven.captureMessage('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length);
-      // console.log('Loading next... ', urls[idx], ' currently fetching ', idx, ' of ', urls.length)
+      await page.goto('https://www.pepperplate.com/login.aspx', {
+        waitUntil: "networkidle2",
+        timeout: 120000
+      })
 
-      nightmare
-        .goto(urls[idx])
-        .wait(1)
-        .wait('#cphMiddle_cphMain_lblTitle')
-        .evaluate(function () {
+      await page.waitForSelector('#cphMain_loginForm_tbEmail')
+      await page.waitForSelector('#cphMain_loginForm_tbPassword')
+      await page.waitForSelector('#cphMain_loginForm_ibSubmit')
+
+      await page.type('#cphMain_loginForm_tbEmail', username, { delay: 10 });
+
+      await page.type('#cphMain_loginForm_tbPassword', password, { delay: 10 });
+
+      const [response] = await Promise.all([
+        page.waitForNavigation({
+          waitUntil: "networkidle2",
+          timeout: 120000
+        }),
+        page.click('#cphMain_loginForm_ibSubmit'),
+      ]);
+
+      await Promise.race([
+        page.waitForSelector('.errors li'),
+        page.waitForSelector('#reclist')
+      ])
+
+      if (await page.$('.errors li')) {
+        UtilService.dispatchImportNotification(user, 1, 'invalidCredentials');
+
+        console.log("invalid credentials")
+        await browser.close();
+        return
+      }
+
+      let recipeURLResults = await page.evaluate(() => {
+        return new Promise((resolve, reject) => {
+          var interval = setInterval(() => {
+            var loadMore = document.getElementById('loadmorelink');
+            if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display !== 'block') {
+              clearInterval(interval);
+
+              let recipeURLs = [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(el => el.href)
+
+              resolve(recipeURLs)
+              // return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
+            } else {
+              loadMore.click();
+            }
+          }, 700);
+        });
+      })
+
+      console.log(recipeURLResults)
+
+      // Dispatch a progress notification
+      UtilService.dispatchImportNotification(user, 2);
+
+      let recipeResults = []
+      for (var i = 0; i < recipeURLResults.length; i++) {
+        await page.goto(recipeURLResults[i], {
+          waitUntil: "networkidle2",
+          timeout: 120000
+        })
+
+        // await page.waitFor(100) // Give pepperplate some rest time
+        // await page.waitForSelector('#cphMiddle_cphMain_lblTitle', {
+        //   visible: true
+        // })
+
+        let recipeResult = await page.evaluate(() => {
           var els = {
             title: (document.getElementById('cphMiddle_cphMain_lblTitle') || {}).innerText,
             // description: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerText,
@@ -123,92 +175,38 @@ router.get(
             source: (document.getElementById('cphMiddle_cphMain_hlSource') || {}).innerText,
             url: (document.getElementById('cphMiddle_cphSidebar_hlOriginalRecipe') || {}).href,
             notes: (document.getElementById('cphMiddle_cphMain_lblNotes') || {}).innerText,
-            ingredients: [].slice.call(document.querySelectorAll('.inggroups li ul li span.content')).map(function(el) { return el.innerText }).join("\r\n"),
-            instructions: [].slice.call(document.querySelectorAll('.dirgroups li ol li span')).map(function(el) { return el.innerText }).join("\r\n"),
+            ingredients: [].slice.call(document.querySelectorAll('.inggroups li ul li span.content')).map(function (el) { return el.innerText }).join("\r\n"),
+            instructions: [].slice.call(document.querySelectorAll('.dirgroups li ol li span')).map(function (el) { return el.innerText }).join("\r\n"),
             imageURL: (document.getElementById('cphMiddle_cphMain_imgRecipeThumb') || { src: '' }).src,
-            rawCategories: (document.querySelector('#cphMiddle_cphMain_pnlTags span') || { innerText: '' }).innerText.split(',').map(function(el) { return el.trim() })
+            rawCategories: (document.querySelector('#cphMiddle_cphMain_pnlTags span') || { innerText: '' }).innerText.split(',').map(function (el) { return el.trim() })
           }
 
-          return els;
+          return Promise.resolve(els)
         })
-        .then(function (result) {
-          recipes.push(result);
 
-          if (idx+1 < urls.length) {
-            // Reset worker timeout
-            clearTimeout(workerTimeout);
-            workerTimeout = setWorkerTimeout();
+        recipeResults.push(recipeResult);
+      }
 
-            // Give pepperplate some resting time
-            setTimeout(function() {
-              loadNext(nightmare, recipes, urls, idx+1);
-            }, 100); // MUST BE SIGNIFICANTLY LESS THAN WORKER TIMEOUT
-          } else {
-            // Finally, clear the worker timeout completely
-            clearTimeout(workerTimeout);
+      await browser.close();
 
-            saveRecipes(recipes).then(function() {
-              UtilService.dispatchImportNotification(user, 0);
-              Raven.captureMessage('Import job completed succesfully', {
-                level: 'info'
-              });
-            }).catch(function(err) {
-              UtilService.dispatchImportNotification(user, 1, 'saving');
-              Raven.captureException('Import job failed');
-              next(err)
-            });
-          }
-        })
-        .catch(function (error) {
-          clearTimeout(workerTimeout);
-          UtilService.dispatchImportNotification(user, 1, 'timeout');
-          Raven.captureException(error);
+      saveRecipes(res.locals.session.userId, recipeResults).then(function () {
+        UtilService.dispatchImportNotification(user, 0);
+        Raven.captureMessage('Import job completed succesfully', {
+          level: 'info'
         });
-    }
-
-    nightmare
-      .goto(loginLink)
-      .type('#cphMain_loginForm_tbEmail', username)
-      .type('#cphMain_loginForm_tbPassword', password)
-      .click('#cphMain_loginForm_ibSubmit')
-      .wait(6000)
-      .wait('#reclist')
-      .evaluate(function () {
-        return new Promise(function(resolve, reject) {
-          var interval = setInterval(function() {
-            var loadMore = document.getElementById('loadmorelink');
-            if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display !== 'block') {
-              clearInterval(interval);
-              resolve([].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href }))
-              // return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
-            } else {
-              loadMore.click();
-            }
-          }, 700);
-        });
-      })
-      .then(function(results){
-        // Raven.captureMessage("got to loadnext ", results, results.length);
-
-        // Reset worker timeout
-        clearTimeout(workerTimeout);
-        workerTimeout = setWorkerTimeout();
-
-        // Dispatch a progress notification
-        UtilService.dispatchImportNotification(user, 2);
-
-        // Load the next page of recipes
-        loadNext(nightmare, [], results, 0);
-      })
-      .catch(function (error) {
-        clearTimeout(workerTimeout);
-        UtilService.dispatchImportNotification(user, 1, 'invalidCredentials');
-        Raven.captureException(error);
+      }).catch(function (err) {
+        UtilService.dispatchImportNotification(user, 1, 'saving');
+        Raven.captureException('Import job failed');
+        next(err)
       });
+    } catch(e) {
+      console.log(e)
+      Raven.captureException(e);
 
-    res.status(200).json({
-      msg: "Starting scrape..."
-    });
+      UtilService.dispatchImportNotification(user, 1, 'timeout');
+
+      await browser.close();
+    }
   }).catch(next);
 });
 
