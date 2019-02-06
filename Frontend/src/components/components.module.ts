@@ -4,12 +4,14 @@ import { SelectRecipeComponent } from './select-recipe/select-recipe';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from 'ionic-angular';
 import { SelectCollaboratorsComponent } from './select-collaborators/select-collaborators';
+import { LogoIconComponent } from './logo-icon/logo-icon';
 import { PipesModule } from '../pipes/pipes.module';
 @NgModule({
 	declarations: [
     SelectRecipeComponent,
     SelectIngredientsComponent,
-    SelectCollaboratorsComponent
+    SelectCollaboratorsComponent,
+    LogoIconComponent
   ],
 	imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { PipesModule } from '../pipes/pipes.module';
 	exports: [
     SelectRecipeComponent,
     SelectIngredientsComponent,
-    SelectCollaboratorsComponent
+    SelectCollaboratorsComponent,
+    LogoIconComponent
   ]
 })
 export class ComponentsModule {}

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { HomePage } from './home';
 import { PipesModule } from './../../pipes/pipes.module';
+import { ComponentsModule } from '../../components/components.module';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
@@ -12,7 +13,8 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
   imports: [
     IonicPageModule.forChild(HomePage),
     PipesModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    ComponentsModule
   ],
 })
 export class HomePageModule {}

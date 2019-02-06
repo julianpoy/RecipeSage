@@ -50,11 +50,20 @@
 
   <ion-list *ngIf="initialLoadComplete">
     <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
+      <br /><br />
+      <logo-icon href="/#/about"></logo-icon>
+      <br /><br />
+      <h2>Welcome to Recipe Sage!</h2>
+      <br /><br />
       <p>
-        Welcome to Recipe Sage!<br /><br />
-        This is your recipe list.<br />
+        This is where your recipes will appear.<br />
         It looks like you don't have any recipes yet.<br />
-        Click the button in the bottom right corner to add one!
+        <b>Click the + button in the bottom right corner to add one!</b><br />
+
+        <br /><br />
+
+        You can also import recipes!<br />
+        Use the side menu to go to settings -> import
       </p>
     </ion-item>
 
