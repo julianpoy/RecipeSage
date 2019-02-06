@@ -6,14 +6,15 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
+  segment: 'import/pepperplate',
   priority: 'low'
 })
 @Component({
-  selector: 'page-import',
-  templateUrl: 'import.html',
+  selector: 'page-import-pepperplate',
+  templateUrl: 'import-pepperplate.html',
   providers: [ RecipeServiceProvider ]
 })
-export class ImportPage {
+export class ImportPepperplatePage {
 
   username: string = '';
   password: string = '';
