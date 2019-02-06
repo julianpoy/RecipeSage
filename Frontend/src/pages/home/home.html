@@ -48,7 +48,7 @@
     </div>
   </virtual-scroller>
 
-  <ion-list *ngIf="!initialLoadComplete">
+  <ion-list *ngIf="initialLoadComplete">
     <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
       <p>
         Welcome to Recipe Sage!<br /><br />
