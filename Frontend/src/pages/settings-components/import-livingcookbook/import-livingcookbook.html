@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>Import Recipes from Living Cookbook</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+
+    <ion-item text-wrap no-lines>
+      <br /><br />
+      <p>
+        This will import your Living Cookbook database into Recipe Sage.<br />
+        All files must be in .lcb format. Other formats will not work.
+      </p>
+      <br />
+      <p>
+        The import task can take several minutes and depends on the format of your database file<br />
+        If you're having trouble with the import, send me an email with the database file and I can import it manually.
+      </p>
+    </ion-item>
+
+    <br /><br />
+
+    <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
+    <div padding>
+      <button ion-button block (click)="filePicker()">{{ filePickerText() }}</button>
+    </div>
+
+    <br /><br />
+
+    <div padding>
+    	<button ion-button block (click)="submit()">Upload and Import</button>
+		</div>
+  </ion-list>
+</ion-content>
