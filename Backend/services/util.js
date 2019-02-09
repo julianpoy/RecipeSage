@@ -4,6 +4,9 @@ var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
 var request = require('request');
 var Raven = require('raven');
+let fs = require('fs-extra');
+let gm = require('gm');
+let path = require('path');
 
 // DB
 var Op = require("sequelize").Op;
@@ -73,34 +76,84 @@ exports.fetchImage = url => {
   })
 }
 
+exports.sendBufferToS3 = buffer => {
+  let key = new Date().getTime().toString();
+  let bucket = config.aws.bucket
+  let acl = 'public-read'
+
+  return s3.putObject({
+    Bucket: bucket,
+    Key: key,
+    ACL: acl,
+    Body: buffer // buffer
+  }).promise().then(s3Response => {
+    return {
+      s3Response,
+      key,
+      acl,
+      bucket
+    }
+  })
+}
+
+exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
+  return {
+    fieldname: "image",
+    originalname: 'recipe-sage-img.jpg',
+    mimetype,
+    size,
+    bucket: config.aws.bucket,
+    key,
+    acl: "public-read",
+    metadata: {
+      fieldName: "image"
+    },
+    location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+    etag
+  }
+}
+
 exports.sendURLToS3 = url => {
   return exports.fetchImage(url).then(({ res, body }) => {
-    var key = new Date().getTime().toString();
 
     var contentType = res.headers['content-type'];
     var contentLength = res.headers['content-length'];
 
-    return s3.putObject({
-      Bucket: config.aws.bucket,
-      Key: key,
-      ACL: 'public-read',
-      Body: body // buffer
-    }).promise().then(response => {
-      return {
-        fieldname: "image",
-        originalname: 'recipe-sage-img.jpg',
-        mimetype: contentType,
-        size: contentLength,
-        bucket: config.aws.bucket,
-        key: key,
-        acl: "public-read",
-        metadata: {
-          fieldName: "image"
-        },
-        location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
-        etag: response.ETag
-      }
+    return exports.sendBufferToS3(body).then(result => {
+      return exports.formatS3ImageResponse(result.key, contentType, contentLength, result.s3Response.ETag)
     });
+  })
+}
+
+exports.sendFileToS3 = path => {
+  return fs.readFile(path).then(buf => {
+    return new Promise(resolve => {
+      var gmObj = gm(buf, 'image.jpg');
+      gmObj.size((err, size) => {
+        if (err) throw err;
+
+        if (size.width > 400) {
+          let width = 200
+          let height
+          gmObj.resize(width, height, '')
+            .autoOrient()
+            .toBuffer('PNG', (err, buffer) => {
+              if (err) throw err;
+              resolve(buffer);
+            });
+        } else {
+          gmObj.toBuffer('PNG', (err, buffer) => {
+            if (err) throw err;
+            resolve(buffer);
+          });
+        }
+      });
+    })
+  }).then(stream => {
+    return exports.sendBufferToS3(stream)
+  }).then(result => {
+    var stats = fs.statSync(path);
+    return exports.formatS3ImageResponse(result.key, 'image/png', stats["size"], result.s3Response.ETag)
   })
 }
 
@@ -140,7 +193,10 @@ exports.upload = multer({
         'acl': 'public-read'
       }
     }
-  })
+  }),
+  limits: {
+    fileSize: 4 * 1024 * 1024 // 4MB
+  }
 });
 
 exports.deleteS3Object = (key, success, fail) => {
@@ -286,6 +342,24 @@ exports.shareRecipe = (recipeId, senderId, recipientId, transaction) => {
     }
   });
 }
+
+exports.findFilesByRegex = (searchPath, regex) => {
+  if (!fs.existsSync(searchPath)) {
+    return [];
+  }
+
+  return fs.readdirSync(searchPath).reduce((acc, subPath) => {
+    let newPath = path.join(searchPath, subPath);
+
+    if (newPath.match(regex)) {
+      return [newPath, ...acc]
+    }
+
+    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...exports.findFilesByRegex(newPath, regex)]
+
+    return acc
+  }, [])
+};
 
 exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
 
