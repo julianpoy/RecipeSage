@@ -127,27 +127,30 @@ exports.sendURLToS3 = url => {
 
 exports.sendFileToS3 = path => {
   return fs.readFile(path).then(buf => {
-    return new Promise(resolve => {
-      var gmObj = gm(buf, 'image.jpg');
-      gmObj.size((err, size) => {
-        if (err) throw err;
+    return new Promise((resolve, reject) => {
+      try {
+        var gmObj = gm(buf, 'image.jpg');
+        gmObj.size((err, size) => {
+          if (err) {
+            return reject(err)
+          };
 
-        if (size.width > 400) {
-          let width = 200
-          let height
-          gmObj.resize(width, height, '')
-            .autoOrient()
-            .toBuffer('PNG', (err, buffer) => {
-              if (err) throw err;
-              resolve(buffer);
-            });
-        } else {
-          gmObj.toBuffer('PNG', (err, buffer) => {
-            if (err) throw err;
-            resolve(buffer);
-          });
-        }
-      });
+          if (size.width > 400) {
+            let width = 200;
+            let height;
+            gmObj.resize(width, height, '')
+              .autoOrient()
+              .toBuffer('PNG', (err, buffer) => {
+                if (err) throw err;
+                resolve(buffer);
+              });
+          } else {
+            resolve(buf);
+          }
+        });
+      } catch(e) {
+        reject()
+      }
     })
   }).then(stream => {
     return exports.sendBufferToS3(stream)
