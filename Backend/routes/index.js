@@ -3,6 +3,11 @@ var router = express.Router();
 let puppeteer = require('puppeteer');
 var cors = require('cors');
 var Raven = require('raven');
+let multer = require('multer');
+let fs = require('fs-extra');
+let mdb = require('mdb');
+let extract = require('extract-zip');
+let sqlite3 = require('sqlite3');
 
 // DB
 var Op = require("sequelize").Op;
@@ -211,5 +216,308 @@ router.get(
     }
   }).catch(next);
 });
+
+let tablesNeeded = [
+  // "t_attachment", //2x unused
+  "t_authornote", // seems to be a cross between description (short) and notes (long) - sometimes very long (multiple entries per recipe, divided paragraph)
+  // "t_cookbook_x", // unused from this db afaik
+  // "t_favorite_x", //2x unused
+  // "t_favoritefolder", //2x unused
+  // "t_glossaryitem",
+  // "t_groceryaisle",
+  // "t_grocerylistitemrecipe",
+  "t_image", // Holds filenames for all images
+  // "t_ingredient",
+  // "t_ingredientattachment",
+  // "t_ingredientautocomplete",
+  // "t_ingredientfolder",
+  // "t_ingredientfolder_x",
+  // "t_ingredientimage",
+  // "t_meal", // Holds meal names with an abbreviation. No reference to any other table
+  // "t_measure",
+  // "t_measure_x",
+  // "t_menu", // Holds menu info - has some "types" info that might be useful for labelling
+  // "t_menu_x", // unused
+  // "t_menuimage",
+  "t_recipe",
+  // "t_recipe_x", //2x unused
+  // "t_recipeattachment", // 2x unused
+  "t_recipeimage", // bidirectional relation table between recipe and image
+  "t_recipeingredient",
+  // "t_recipemeasure",
+  "t_recipeprocedure",
+  // "t_recipereview",
+  // "t_technique",
+  // "t_recipetechnique",
+  "t_recipetip",
+  // "t_recipetype", // seems to store category names, but no discernable relationship to recipe table - better to use recipetypes field in recipe itself (comma separated)
+  // "t_recipetype_x", //2x unused
+  // "t_grocerylistitem",
+  // "t_ingredient_x", //2x unused
+  // "t_ingredientmeasure", //not entirely clear - looks like a relationship table between ingredients and measurements
+  // "t_recipemedia" //2x unused (or barely used)
+]
+
+router.post(
+  '/import/livingcookbook',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  multer({
+    dest: '/tmp/chefbook-lcb-import/',
+  }).single('lcbdb'),
+  async (req, res, next) => {
+    if (!req.file) {
+      res.status(400).send("Must include a file with the key lcbdb")
+    } else {
+      console.log(req.file.path)
+    }
+
+    let sqliteDB;
+    let lcbDB;
+    let zipPath = req.file.path;
+    let extractPath = zipPath + '-extract';
+    let dbPath;
+    let lcbTables;
+    let schemaInitSQL;
+    let tableInitSQL = {};
+    let tableMap = {};
+
+    try {
+      await new Promise((resolve, reject) => {
+        sqliteDB = new sqlite3.Database(':memory:', (err) => {
+          if (err) reject(err)
+          else resolve()
+        })
+      });
+
+      return new Promise((resolve, reject) => {
+        extract(zipPath, { dir: extractPath }, function (err) {
+          if (err) reject(err);
+          else resolve();
+        })
+      })
+      .then(() => {
+        fs.unlinkSync(zipPath)
+        return UtilService.findFilesByRegex(extractPath, /\.mdb/i)
+      })
+      .then(potentialDbPaths => {
+        if (potentialDbPaths.length == 0) return Promise.reject()
+
+        dbPath = potentialDbPaths[0];
+
+        if (potentialDbPaths.length > 1) {
+          console.log("More than one lcbdb path - ", potentialDbPaths)
+          Raven.captureMessage("More than one lcbdb path - ", potentialDbPaths);
+        } else {
+          Raven.captureMessage("LCB DB Path - ", dbPath)
+        }
+
+        return dbPath
+      }).then(dbPath => {
+        // Load mdb
+        lcbDB = mdb(dbPath);
+      }).then(() => {
+        // Load lcb schema
+        return new Promise((resolve, reject) => {
+          lcbDB.schema((mdbSchemaErr, result) => {
+            if (mdbSchemaErr) reject(mdbSchemaErr);
+            schemaInitSQL = result
+            resolve()
+          })
+        })
+      }).then(() => {
+        // Load table insert statements
+        return new Promise((resolve, reject) => {
+          lcbDB.tables((err, tables) => {
+            if (err) {
+              throw err
+            }
+            lcbTables = tables
+
+            resolve()
+          })
+        }).then(() => Promise.all(
+          lcbTables
+            .filter(table => tablesNeeded.indexOf(table) !== -1)
+            .map(table => new Promise((resolve, reject) =>
+              lcbDB.toSQL(table, function (err, sql) {
+                if (err && err !== "no output") return reject(err)
+                if (!sql) return resolve()
+
+                // tableInitSQL[table] = sql.match(/[^\r\n]+/g);
+                tableInitSQL[table] = sql.split(';\n'); // could be error prone
+
+                resolve()
+              })
+            ))
+          )
+        )
+      }).then(() => {
+        // Send queries to database
+        return new Promise((sqDbInitResolve, sqDbInitReject) => {
+          sqliteDB.serialize(() => {
+            let initStmts = schemaInitSQL.split(";");
+            for (let i = 0; i < initStmts.length; i++) {
+              let stmt = initStmts[i]
+
+              sqliteDB.run(stmt, (sqliteErr) => {
+                if (sqliteErr && sqliteErr.code !== "SQLITE_MISUSE") throw sqliteErr
+              })
+            }
+
+            let tables = Object.keys(tableInitSQL)
+            tables.forEach((tableName, idx) => {
+              for (let i = 0; i < tableInitSQL[tableName].length; i++) {
+                sqliteDB.run(tableInitSQL[tableName][i], (sqliteErr) => {
+                  if (sqliteErr && sqliteErr.code !== "SQLITE_MISUSE") {
+                    console.log("here", tableName, tableInitSQL[tableName][i])
+                    throw sqliteErr
+                  }
+
+                  if (idx == tables.length - 1 && i == tableInitSQL[tableName].length - 1) {
+                    sqDbInitResolve()
+                  }
+                })
+              }
+            })
+          })
+        })
+      }).then(() => {
+        return Promise.all(lcbTables.map(tableName => {
+          return new Promise(resolve => {
+            sqliteDB.all("SELECT * FROM " + tableName, [], (err, results) => {
+              if (err) throw err;
+
+              tableMap[tableName] = results;
+
+              resolve();
+            })
+          })
+        }))
+      }).then(async () => {
+        // return await fs.writeFile('output', JSON.stringify(tableMap))
+        console.log(tableMap)
+        return SQ.transaction(t => {
+          return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
+            return new Promise(resolve => {
+              let lcbImages = (tableMap.t_recipeimage || [])
+                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .sort((a, b) => a.imageindex.localeCompare(b.imageindex))
+
+              if (lcbImages.length == 0) return resolve()
+
+              let possibleFileNameRegex = [
+                `recipe${lcbRecipe.recipeid}\.gif`,
+                `recipe${lcbRecipe.recipeid}\.jpg`,
+                `recipe${lcbRecipe.recipeid}\.jpeg`,
+                `recipeimage${lcbRecipe.recipeid}\.gif`,
+                `recipeimage${lcbRecipe.recipeid}\.jpg`,
+                `recipeimage${lcbRecipe.recipeid}\.jpeg`
+              ].join('|')
+
+              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
+
+              if (possibleImageFiles.length == 0) return resolve()
+
+              resolve(UtilService.sendFileToS3(possibleImageFiles[0]))
+            }).then(image => {
+              let ingredients = (tableMap.t_recipeingredient || [])
+                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .sort((a, b) => a.ingredientindex > b.ingredientindex)
+                .map(lcbIngredient => `${lcbIngredient.quantitytext} ${lcbIngredient.unittext} ${lcbIngredient.ingredienttext}`)
+                .join("\r\n")
+
+              let instructions = (tableMap.t_recipeprocedure || [])
+                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .sort((a, b) => a.procedureindex > b.procedureindex)
+                .map(lcbProcedure => lcbProcedure.proceduretext)
+                .join("\r\n")
+
+              let recipeTips = (tableMap.t_recipetip || [])
+                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .sort((a, b) => a.tipindex > b.tipindex)
+                .map(lcbTip => lcbTip.tiptext)
+
+              let authorNotes = (tableMap.t_authornote || [])
+                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .sort((a, b) => a.authornoteindex > b.authornoteindex)
+                .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
+
+              let description = ''
+
+              let notes = []
+
+              // Add comments to notes
+              if (lcbRecipe.comments) notes.push(lcbRecipe.comments)
+
+              // Add "author notes" to description or notes depending on length
+              if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0]
+              else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
+
+              // Add recipeTips and join with double return
+              notes = [...notes, ...recipeTips].join('\r\n\r\n')
+
+              let createdAt = new Date(lcbRecipe.createdate || Date.now())
+              let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
+
+              return Recipe.create({
+                userId: res.locals.session.userId,
+                title: lcbRecipe.recipename || '',
+                description,
+                yield: lcbRecipe.yield || '',
+                activeTime: lcbRecipe.preparationtime || '',
+                totalTime: lcbRecipe.readyintime || '',
+                source: lcbRecipe.source || '',
+                url: lcbRecipe.webpage || '',
+                notes,
+                ingredients,
+                instructions,
+                image: image,
+                folder: 'main',
+                fromUserId: null,
+                createdAt,
+                updatedAt
+              }, { transaction: t }).then(recipe => {
+                // Split, trim, tolowercase, filter nulls, then transform to set (remove dupes) and back to array
+                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()).filter(el => el.length > 0))]
+
+                return Promise.all(lcbRecipeLabels.map(lcbLabelName => {
+                  return Label.findOrCreate({
+                    where: {
+                      userId: res.locals.session.userId,
+                      title: lcbLabelName
+                    },
+                    transaction: t
+                  }).then(function (labels) {
+                    return labels[0].addRecipe(recipe.id, { transaction: t });
+                  });
+                }))
+              })
+            })
+          })).then(() => {
+            sqliteDB.close()
+            fs.removeSync(zipPath)
+            fs.removeSync(extractPath)
+
+            res.status(200).json({
+              msg: "Success!"
+            });
+          })
+        })
+      }).catch(e => {
+        fs.removeSync(zipPath)
+        fs.removeSync(extractPath)
+        console.log("Couldn't handle lcb upload 1", e)
+        next(e);
+      })
+    } catch(e) {
+      fs.removeSync(zipPath)
+      fs.removeSync(extractPath)
+      console.log("Couldn't handle lcb upload 2", e)
+      next(e);
+    }
+  }
+)
 
 module.exports = router;
