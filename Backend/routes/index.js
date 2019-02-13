@@ -371,7 +371,6 @@ router.post(
               for (let i = 0; i < tableInitSQL[tableName].length; i++) {
                 sqliteDB.run(tableInitSQL[tableName][i], (sqliteErr) => {
                   if (sqliteErr && sqliteErr.code !== "SQLITE_MISUSE") {
-                    console.log("here", tableName, tableInitSQL[tableName][i])
                     throw sqliteErr
                   }
 
@@ -397,7 +396,7 @@ router.post(
         }))
       }).then(async () => {
         // return await fs.writeFile('output', JSON.stringify(tableMap))
-        console.log(tableMap)
+
         return SQ.transaction(t => {
           return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
             return new Promise(resolve => {
@@ -420,7 +419,9 @@ router.post(
 
               if (possibleImageFiles.length == 0) return resolve()
 
-              resolve(UtilService.sendFileToS3(possibleImageFiles[0]))
+              UtilService.sendFileToS3(possibleImageFiles[0]).then(resolve).catch(() => {
+                resolve(null)
+              })
             }).then(image => {
               let ingredients = (tableMap.t_recipeingredient || [])
                 .filter(el => el.recipeid == lcbRecipe.recipeid)
