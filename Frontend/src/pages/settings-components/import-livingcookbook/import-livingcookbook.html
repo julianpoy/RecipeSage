@@ -12,32 +12,41 @@
 
 
 <ion-content>
-  <ion-list>
-
-    <ion-item text-wrap no-lines>
-      <br /><br />
-      <p>
-        This will import your Living Cookbook database into Recipe Sage.<br />
-        All files must be in .lcb format. Other formats will not work.
-      </p>
-      <br />
-      <p>
-        The import task can take several minutes and depends on the format of your database file<br />
-        If you're having trouble with the import, send me an email with the database file and I can import it manually.
-      </p>
-    </ion-item>
-
+  <ion-item text-wrap no-lines class="description">
     <br /><br />
+    <p>
+      This will import your Living Cookbook database into Recipe Sage.<br />
+      All files must be in .lcb format. Other formats will not work.
+    </p>
+    <br />
+    <p>
+      <b>The import task can take several minutes</b><br />
+      It depends on the format and size of your database file<br />
+    </p>
+    <br />
+    <p>
+      If you're having trouble with the import, send me an email with the database file and I can import it manually.<br />
+      If your database file is very large, you may have trouble importing it via this interface due to browser limitations.
+    </p>
+  </ion-item>
 
+  <br /><br />
+
+  <div padding class="actions">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
-    <div padding>
-      <button ion-button block (click)="filePicker()">{{ filePickerText() }}</button>
+    <button ion-button outline (click)="filePicker()">{{ filePickerText() }}</button>
+
+    <div padding *ngIf="showFileTypeWarning()">
+      <p>
+        Warning! This filetype does not end in .lcb<br />
+        It may not work.
+      </p>
     </div>
 
-    <br /><br />
-
-    <div padding>
-    	<button ion-button block (click)="submit()">Upload and Import</button>
-		</div>
-  </ion-list>
+    <div padding *ngIf="imageFile">
+      <button *ngIf="!loading && !showFileTypeWarning()" ion-button (click)="submit()">Upload and Import</button>
+      <button *ngIf="!loading && showFileTypeWarning()" ion-button (click)="submit()">Upload and Import Anyway</button>
+      <button *ngIf="loading" ion-button>Importing, please wait...</button>
+    </div>
+  </div>
 </ion-content>

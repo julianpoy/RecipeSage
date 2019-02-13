@@ -16,7 +16,8 @@ import { UtilServiceProvider } from '../../../providers/util-service/util-servic
 })
 export class ImportLivingcookbookPage {
 
-  imageFile = null
+  loading = null;
+  imageFile = null;
 
   constructor(
     public navCtrl: NavController,
@@ -48,6 +49,11 @@ export class ImportLivingcookbookPage {
     }
   }
 
+  showFileTypeWarning() {
+    if (!this.imageFile || !this.imageFile.name) return false
+    return !this.imageFile.name.toLowerCase().endsWith('.lcb')
+  }
+
   presentToast(msg) {
     this.toastCtrl.create({
       message: msg,
@@ -56,16 +62,18 @@ export class ImportLivingcookbookPage {
   }
 
   submit() {
-    var loading = this.loadingService.start();
+    this.loading = this.loadingService.start();
 
     this.recipeService.importLCB(this.imageFile).subscribe(response => {
-      loading.dismiss();
+      this.loading.dismiss();
+      this.loading = null;
 
       this.presentToast('Import was successful!')
 
       this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
     }, err => {
-      loading.dismiss();
+      this.loading.dismiss();
+      this.loading = null;
       switch (err.status) {
         case 0:
           this.presentToast(this.utilService.standardMessages.offlinePushMessage)
