@@ -497,7 +497,9 @@ router.post(
               })
             })
           })).then(() => {
-            sqliteDB.close()
+            try {
+              sqliteDB.close()
+            } catch(e){}
             fs.removeSync(zipPath)
             fs.removeSync(extractPath)
 
@@ -507,12 +509,18 @@ router.post(
           })
         })
       }).catch(e => {
+        try {
+          sqliteDB.close()
+        } catch (e) {}
         fs.removeSync(zipPath)
         fs.removeSync(extractPath)
         console.log("Couldn't handle lcb upload 1", e)
         next(e);
       })
     } catch(e) {
+      try {
+        sqliteDB.close()
+      } catch (e) {}
       fs.removeSync(zipPath)
       fs.removeSync(extractPath)
       console.log("Couldn't handle lcb upload 2", e)
