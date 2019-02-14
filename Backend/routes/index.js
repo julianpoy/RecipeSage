@@ -402,7 +402,7 @@ router.post(
             return new Promise(resolve => {
               let lcbImages = (tableMap.t_recipeimage || [])
                 .filter(el => el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.imageindex.localeCompare(b.imageindex))
+                .sort((a, b) => a.imageindex > b.imageindex)
 
               if (lcbImages.length == 0) return resolve()
 
