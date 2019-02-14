@@ -4,27 +4,47 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-  
-    <ion-title>Contribute!</ion-title>
+
+    <!-- <ion-title>Contribute!</ion-title> -->
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <p>Recipe Sage is freeware, but it costs money to run servers.</p>
-  
-  <p>I do my best to keep costs low, but I still have to pay some bills to host recipes and images.</p>
-  
-  <p>I truly appreciate any financial support you are willing to give. Please donate by clicking below:</p>
-  
-  <br /><br />
-  
-  <form ngNoForm class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-  </form>
+  <p class="headline">Contribute to RecipeSage</p>
+
+  <div class="card">
+    <logo-icon href="/#/about"></logo-icon>
+
+    <a
+      class="donate monthly-paypal"
+      href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GUFFC8V9ESPJQ&source=url">
+      Monthly
+    </a>
+
+    <!-- <br /> -->
+
+    <a
+      class="donate one-time-paypal"
+      href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Y6WCWPZLJQWYY&source=url">
+      One-time
+    </a>
+
+    <p>I truly appreciate any financial support you're able to give.</p>
+
+    <p>
+      I want to keep Recipe Sage free and without ads, but hosting costs for recipes and images add up.
+    </p>
+
+    <p>Monthly donations of a small amount are the most helpful!</p>
+
+    <a href="/#/about-details">A little about me</a>
+
+    <br />
+  </div>
+
+
+
 
 </ion-content>
