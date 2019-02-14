@@ -3,7 +3,9 @@ let {
 } = require('chai');
 
 let sinon = require('sinon');
-var request = require('request');
+let aws = require('aws-sdk');
+let request = require('request');
+let path = require('path');
 
 let {
   setup,
@@ -27,12 +29,16 @@ let {
   sanitizeEmail,
   sendmail,
   fetchImage,
+  sendBufferToS3,
+  formatS3ImageResponse,
   sendURLToS3,
+  sendFileToS3,
   _findTitle,
   findTitle,
   shareRecipe,
   dispatchImportNotification,
-  dispatchMessageNotification
+  dispatchMessageNotification,
+  findFilesByRegex
 } = require('../services/util');
 
 let UtilService = require('../services/util')
@@ -48,8 +54,6 @@ var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
 var Message = require('../models').Message;
-
-var aws = require('aws-sdk');
 
 describe('utils', () => {
   let server
@@ -191,12 +195,76 @@ describe('utils', () => {
     })
   })
 
+  describe('sendBufferToS3', () => {
+    // let s3PutObjectStub, s3PutObjectPromiseStub, fakeBody, result, etag
+
+    // before(async () => {
+    //   etag = randomString(20)
+
+    //   s3PutObjectPromiseStub = sinon.stub().returns(Promise.resolve({
+    //     ETag: etag
+    //   }));
+
+    //   s3PutObjectStub = sinon.stub(aws.S3.prototype, 'putObject').returns({
+    //     promise: s3PutObjectStub
+    //   });
+
+    //   fakeBody = randomString(20)
+
+    //   result = await sendBufferToS3(fakeBody)
+    // })
+
+    // after(() => {
+    //   s3PutObjectStub.restore()
+    // })
+
+    // it('calls s3 putobject', () => {
+    //   sinon.assert.calledOnce(s3PutObjectStub)
+    //   sinon.assert.calledOnce(s3PutObjectPromiseStub)
+    // })
+
+    // it('returns required fields', () => {
+    //   expect(result.key).to.be.a('string')
+    //   expect(result.bucket).to.be.a('string')
+    //   expect(result.acl).to.equal('public-read')
+    //   expect(result.s3Response).to.be.an('object')
+    //   expect(result.s3Response.ETag).to.equal(etag)
+    // })
+  })
+
+  describe('formatS3ImageResponse', () => {
+    it('returns formatted image object', () => {
+      let key = "s3key"
+      let mimetype = "mimetype/mimetype"
+      let size = 200000
+      let etag = randomString(20)
+      let img = formatS3ImageResponse(key, mimetype, size, etag)
+
+      expect(img.fieldname).to.equal("image")
+      expect(img.originalname).to.equal("recipe-sage-img.jpg")
+      expect(img.mimetype).to.equal(mimetype)
+      expect(img.size).to.equal(size)
+      expect(img.bucket).to.be.an.string
+      expect(img.key).to.equal(key)
+      expect(img.acl).to.equal("public-read")
+      expect(img.metadata.fieldName).to.equal("image")
+
+      expect(img.location).to.be.an.string
+      expect(img.location).to.contain("https://")
+      expect(img.location).to.contain(".s3.")
+      expect(img.location).to.contain(".amazonaws.com/" + key)
+
+      expect(img.etag).to.equal(etag)
+    })
+  })
+
   describe('sendURLToS3', () => {
-    let fetchImageStub, s3Stub, s3PutObjectStub, etag, contentType, contentLength
+    let fetchImageStub, sendBufferToS3Stub, formatS3ImageResponseStub, etag, key, contentType, contentLength, contentBody, formattedS3Response
 
     before(() => {
       contentType = randomString(20)
       contentLength = randomString(20)
+      contentBody = randomString(20)
 
       fetchImageStub = sinon.stub(UtilService, 'fetchImage').returns(Promise.resolve({
         res: {
@@ -205,60 +273,140 @@ describe('utils', () => {
             'content-length': contentLength
           }
         },
-        body: randomString(20)
+        body: contentBody
       }))
 
       etag = randomString(20)
-      s3PutObjectStub = sinon.stub().returns({
-        promise: () => Promise.resolve({
-          ETag: etag
-        })
-      })
+      key = randomString(20)
 
-      s3Stub = sinon.stub(aws, 'S3').returns({
-        putObject: s3PutObjectStub
-      })
+      sendBufferToS3Stub = sinon.stub(UtilService, 'sendBufferToS3').returns(Promise.resolve({
+        s3Response: {
+          ETag: etag
+        },
+        key
+      }))
+
+      formattedS3Response = {
+        fieldname: "image",
+        originalname: 'recipe-sage-img.jpg',
+        mimetype: contentType,
+        size: contentLength,
+        bucket: 'BUCKET',
+        key: "key here",
+        acl: "public-read",
+        metadata: {
+          fieldName: "image"
+        },
+        location: 'https://BUCKET.s3.REGION.amazonaws.com/KEY',
+        etag
+      }
+
+      formatS3ImageResponseStub = sinon.stub(UtilService, 'formatS3ImageResponse').returns(Promise.resolve(formattedS3Response))
     })
 
     after(() => {
       fetchImageStub.restore();
-      s3Stub.restore();
+      sendBufferToS3Stub.restore();
+      formatS3ImageResponseStub.restore();
     })
 
     it('copies url to s3 bucket', () => {
-      return sendURLToS3(randomString(20)).then(img => {
+      let fakeURL = randomString(20)
+      return sendURLToS3(fakeURL).then(result => {
+        sinon.assert.calledOnce(fetchImageStub)
+        sinon.assert.calledWith(fetchImageStub, fakeURL)
 
-        let {
-          fieldname,
-          originalname,
-          mimetype,
-          size,
-          bucket,
-          key,
-          acl,
-          metadata: {
-            fieldName
-          },
-          location,
-          etag
-        } = img
+        sinon.assert.calledOnce(sendBufferToS3Stub)
+        sinon.assert.calledWith(sendBufferToS3Stub, contentBody)
 
-        expect(fieldname).to.equal("image")
-        expect(originalname).to.equal("recipe-sage-img.jpg")
-        expect(mimetype).to.equal(contentType)
-        expect(size).to.equal(contentLength)
-        expect(bucket).to.be.an.string
-        expect(key).to.be.an.string
-        expect(acl).to.equal("public-read")
-        expect(fieldName).to.equal("image")
+        sinon.assert.calledOnce(formatS3ImageResponseStub)
+        sinon.assert.calledWith(formatS3ImageResponseStub, key, contentType, contentLength, etag)
 
-        expect(location).to.be.an.string
-        expect(location).to.contain("https://")
-        expect(location).to.contain(".s3.")
-        expect(location).to.contain(".amazonaws.com/" + key)
-
-        expect(img.etag).to.equal(etag)
+        expect(result).to.equal(formattedS3Response)
       })
+    })
+  })
+
+  describe('sendFileToS3', () => {
+    let fsReadFileStub, fetchImageStub, sendBufferToS3Stub, formatS3ImageResponseStub, etag, key, contentLength, contentBody, formattedS3Response, result
+
+    before(async () => {
+      contentLength = randomString(20)
+      // contentBody = randomString(20)
+
+      // fsReadFileStub = sinon.stub(fs, 'readFile').returns(Promise.resolve(null))
+      // fsStatStub = sinon.stub(fs, 'stat').returns(Promise.resolve({ size: contentLength }))
+
+      etag = randomString(20)
+      key = randomString(20)
+
+      sendBufferToS3Stub = sinon.stub(UtilService, 'sendBufferToS3').returns(Promise.resolve({
+        s3Response: {
+          ETag: etag
+        },
+        key
+      }))
+
+      formattedS3Response = {
+        fieldname: "image",
+        originalname: 'recipe-sage-img.jpg',
+        mimetype: 'image/png',
+        size: contentLength,
+        bucket: 'BUCKET',
+        key: "key here",
+        acl: "public-read",
+        metadata: {
+          fieldName: "image"
+        },
+        location: 'https://BUCKET.s3.REGION.amazonaws.com/KEY',
+        etag
+      }
+
+      formatS3ImageResponseStub = sinon.stub(UtilService, 'formatS3ImageResponse').returns(Promise.resolve(formattedS3Response))
+
+      let exampleFilePath = './test/exampleFiles/img1.png'
+      result = await sendFileToS3(exampleFilePath)
+    })
+
+    after(() => {
+      // fsReadFileStub.restore();
+      // fsStatStub.restore();
+      sendBufferToS3Stub.restore();
+      formatS3ImageResponseStub.restore();
+    })
+
+    it('copies url to s3 bucket', () => {
+      // sinon.assert.calledOnce(fsReadFileStub)
+      // sinon.assert.calledWith(fsReadFileStub, fakePath)
+
+      sinon.assert.calledOnce(sendBufferToS3Stub)
+      // sinon.assert.calledWith(sendBufferToS3Stub, contentBody)
+
+      sinon.assert.calledOnce(formatS3ImageResponseStub)
+      sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/png', 4324, etag)
+
+      expect(result).to.equal(formattedS3Response)
+    })
+  })
+
+  describe('findFilesByRegex', () => {
+    it('returns an array of file paths for test image img1.png', () => {
+      let files = findFilesByRegex(path.join(__dirname, "../test/exampleFiles"), new RegExp("img1\.png", 'i'))
+
+      expect(files[0].endsWith("test/exampleFiles/img1.png")).to.be.true
+    })
+
+    it('returns an array of file paths for test image img1.png recursive', () => {
+      let files = findFilesByRegex(path.join(__dirname, "../test"), new RegExp("img1\.png", 'i'))
+
+      expect(files[0].endsWith("/test/exampleFiles/img1.png")).to.be.true
+    })
+
+    it('returns empty array when it finds no files', () => {
+      let files = findFilesByRegex("../test/exampleFiles", new RegExp("doesnotexist"))
+
+      expect(files).to.be.an("array")
+      expect(files).to.have.length(0)
     })
   })
 

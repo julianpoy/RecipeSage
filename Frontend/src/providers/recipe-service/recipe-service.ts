@@ -219,6 +219,26 @@ export class RecipeServiceProvider {
     );
   }
 
+  importLCB(lcbFile) {
+    let formData: FormData = new FormData();
+    formData.append('lcbdb', lcbFile, lcbFile.name)
+
+    const httpOptions = {};
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(this.base + 'import/livingcookbook' + this.getTokenQuery(), formData, httpOptions)
+        .pipe(
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
   scaleIngredients(ingredients, scale, boldify?) {
     if (!ingredients) return [];
 

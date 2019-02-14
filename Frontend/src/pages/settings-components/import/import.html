@@ -5,46 +5,34 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>Import Your Recipes</ion-title>
+    <ion-title>Import</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <ion-list>
-    <ion-item no-lines>
-      <p text-wrap>Currently, we support importing from Pepperplate. Soon we'll more have export/import capabilities.</p>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Pepperplate Email/Username</ion-label>
-      <ion-input autocomplete="off" autofill="off" [(ngModel)]="username" type="text"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Pepperplate Password</ion-label>
-      <ion-input autocomplete="new-password" autofill="off" [(ngModel)]="password" type="password"></ion-input>
-    </ion-item>
-
+  <ion-item text-wrap no-lines class="description">
     <br /><br />
+    <p>
+      RecipeSage supports importing from Pepperplate and Living Cookbook.
+    </p>
+    <br />
+    <p>
+      Importing recipes will add all recipes from the file/account you've selected to your RecipeSage account.<br />
+      If you're having trouble with the import, please send me an email.
+    </p>
+  </ion-item>
+  <br />
 
-    <ion-item text-wrap no-lines>
-      <p>
-        The import task can take several minutes and depends on the availability of Pepperplate servers.<br />
-        You will only see the imported recipes in your library once the full import task is complete.<br />
-        It takes time for us to fetch information from the Pepperplate servers. If your username/password is incorrect, you'll receive a notification shortly.<br />
-        We'll alert you when the process is complete.
-      </p>
-    </ion-item>
-
-    <div padding>
-    	<button ion-button block (click)="scrapePepperplate()">Start Import</button>
-		</div>
-
-	  <div padding>
-		  {{ errorMessage }}
-		</div>
-
+  <ion-list>
+    <button ion-item (click)="goTo('ImportPepperplatePage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import from Pepperplate
+    </button>
+    <button ion-item (click)="goTo('ImportLivingcookbookPage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import Living Cookbook File
+    </button>
   </ion-list>
 </ion-content>

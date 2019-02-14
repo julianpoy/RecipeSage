@@ -1,0 +1,56 @@
+<ion-header>
+
+  <ion-navbar color="navBar">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>Import Recipes from Pepperplate</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="slimPage">
+    <ion-item text-wrap no-lines class="description">
+      <br /><br />
+      <p>
+        <b>The import task can take several minutes</b> and depends on the availability of Pepperplate servers.<br />
+        You will only see the imported recipes in your library once the full import task is complete.<br />
+      </p>
+      <br />
+      <p>
+        If your username/password is incorrect, you'll receive a notification shortly.<br />
+        When the process is complete, you'll receive an alert and your recipe list will be updated.
+      </p>
+      <br />
+      <p>
+        Please enter the credentials associated with your Pepperplate account:
+      </p>
+    </ion-item>
+
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Pepperplate Email/Username</ion-label>
+        <ion-input autocomplete="off" autofill="off" [(ngModel)]="username" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Pepperplate Password</ion-label>
+        <ion-input autocomplete="new-password" autofill="off" [(ngModel)]="password" type="password"></ion-input>
+      </ion-item>
+
+      <br /><br />
+
+      <div padding>
+        <button ion-button block (click)="scrapePepperplate()">Start Import</button>
+      </div>
+
+      <div padding>
+        {{ errorMessage }}
+      </div>
+
+    </ion-list>
+  </div>
+</ion-content>
