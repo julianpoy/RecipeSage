@@ -35,7 +35,7 @@
 
         <h2 text-wrap>{{ recipe.title }}</h2>
         <p text-wrap>{{ recipe.description }}</p>
-        <p *ngIf="recipe.source && viewOptions.showSource" text-wrap>Source: {{ recipe.source }}</p>
+        <p *ngIf="(recipe.source || recipe.url) && viewOptions.showSource" text-wrap>Source: {{ recipe.source || recipe.url }}</p>
 
         <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
           <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>

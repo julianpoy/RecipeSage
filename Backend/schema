@@ -1,0 +1,2233 @@
+-- ----------------------------------------------------------
+-- MDB Tools - A library for reading MS Access database files
+-- Copyright (C) 2000-2011 Brian Bruns and others.
+-- Files in libmdb are licensed under LGPL and the utilities under
+-- the GPL, see COPYING.LIB and COPYING files respectively.
+-- Check out http://mdbtools.sourceforge.net
+-- ----------------------------------------------------------
+
+-- That file uses encoding UTF-8
+
+CREATE TABLE `t_accountentityknowledge`
+ (
+	`entity`			varchar, 
+	`maxtick`			INTEGER, 
+	`replicaid`			INTEGER
+);
+
+CREATE TABLE `t_accountknowledge`
+ (
+	`maxtick`			INTEGER, 
+	`replicaid`			INTEGER
+);
+
+CREATE TABLE `t_applicationregistry`
+ (
+	`keygroup`			varchar, 
+	`keyname`			varchar, 
+	`keyvalue`			varchar
+);
+
+CREATE TABLE `t_attachment`
+ (
+	`attachmentid`			INTEGER, 
+	`externalfilepath`			TEXT, 
+	`filename`			varchar, 
+	`localfileflag`			varchar, 
+	`md5hash`			varchar, 
+	`originalfilename`			varchar
+);
+
+CREATE TABLE `t_authornote`
+ (
+	`authornoteid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`authornotetext`			TEXT, 
+	`authornoteindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_calendarday`
+ (
+	`calendardate`			DateTime, 
+	`headingtext`			varchar, 
+	`totaldaycost`			REAL, 
+	`averagemealcost`			REAL, 
+	`averageservingcost`			REAL, 
+	`wwfiber`			REAL, 
+	`mealdataflag`			varchar, 
+	`comments`			varchar, 
+	`alanine`			REAL, 
+	`alcohol`			REAL, 
+	`alcoholfactor`			REAL, 
+	`alphacarotene`			REAL, 
+	`alphalinolenicacid`			REAL, 
+	`arachidonicacid`			REAL, 
+	`arginine`			REAL, 
+	`ash`			REAL, 
+	`asparticacid`			REAL, 
+	`betacarotene`			REAL, 
+	`betacryptoxanthin`			REAL, 
+	`betasitosterol`			REAL, 
+	`betatocopherol`			REAL, 
+	`biotin`			REAL, 
+	`caffeine`			REAL, 
+	`calcium`			REAL, 
+	`calories`			REAL, 
+	`caloriesfromalcohol`			REAL, 
+	`caloriesfromcarbs`			REAL, 
+	`caloriesfromfat`			REAL, 
+	`caloriesfromprotein`			REAL, 
+	`campesterol`			REAL, 
+	`chloride`			REAL, 
+	`cholesterol`			REAL, 
+	`choline`			REAL, 
+	`chromium`			REAL, 
+	`copper`			REAL, 
+	`cystine`			REAL, 
+	`deltatocopherol`			REAL, 
+	`dihomogammalinolenicacid`			REAL, 
+	`docosahexaenoicacid`			REAL, 
+	`docosapentaenoicacid`			REAL, 
+	`eicosadienoicacid`			REAL, 
+	`eicosapentaenoicacid`			REAL, 
+	`energy`			REAL, 
+	`energyfromalcohol`			REAL, 
+	`energyfromcarbs`			REAL, 
+	`energyfromfat`			REAL, 
+	`energyfromprotein`			REAL, 
+	`fiber`			REAL, 
+	`fluoride`			REAL, 
+	`folate`			REAL, 
+	`fructose`			REAL, 
+	`galactose`			REAL, 
+	`gammalinolenicacid`			REAL, 
+	`gammatocopherol`			REAL, 
+	`glucose`			REAL, 
+	`glutamicacid`			REAL, 
+	`glycine`			REAL, 
+	`histidine`			REAL, 
+	`hydroxyproline`			REAL, 
+	`iodine`			REAL, 
+	`iron`			REAL, 
+	`isoleucine`			REAL, 
+	`lactose`			REAL, 
+	`leucine`			REAL, 
+	`linoleicacid`			REAL, 
+	`lycopene`			REAL, 
+	`lysine`			REAL, 
+	`magnesium`			REAL, 
+	`maltose`			REAL, 
+	`manganese`			REAL, 
+	`mass`			REAL, 
+	`methionine`			REAL, 
+	`molybdenum`			REAL, 
+	`monounsaturatedfat`			REAL, 
+	`monounsaturatedfattyacid_14_1`			REAL, 
+	`monounsaturatedfattyacid_15_1`			REAL, 
+	`monounsaturatedfattyacid_16_1`			REAL, 
+	`monounsaturatedfattyacid_17_1`			REAL, 
+	`monounsaturatedfattyacid_18_1`			REAL, 
+	`monounsaturatedfattyacid_20_1`			REAL, 
+	`monounsaturatedfattyacid_22_1`			REAL, 
+	`monounsaturatedfattyacid_24_1`			REAL, 
+	`mypoints`			REAL, 
+	`netcarbohydrates`			REAL, 
+	`niacin`			REAL, 
+	`omega3fattyacids`			REAL, 
+	`omega6fattyacids`			REAL, 
+	`pantothenicacid`			REAL, 
+	`percentcaloriesfromalcohol`			REAL, 
+	`percentcaloriesfromcarbs`			REAL, 
+	`percentcaloriesfromfat`			REAL, 
+	`percentcaloriesfromprotein`			REAL, 
+	`phenylalanine`			REAL, 
+	`phosphorus`			REAL, 
+	`phytosterols`			REAL, 
+	`polyunsaturatedfat`			REAL, 
+	`polyunsaturatedfattyacid_18_2`			REAL, 
+	`polyunsaturatedfattyacid_18_3`			REAL, 
+	`polyunsaturatedfattyacid_18_4`			REAL, 
+	`polyunsaturatedfattyacid_20_3`			REAL, 
+	`polyunsaturatedfattyacid_20_4`			REAL, 
+	`polyunsaturatedfattyacid_21_5`			REAL, 
+	`polyunsaturatedfattyacid_22_4`			REAL, 
+	`potassium`			REAL, 
+	`proline`			REAL, 
+	`protein`			REAL, 
+	`refuse`			REAL, 
+	`retinol`			REAL, 
+	`riboflavin`			REAL, 
+	`saturatedfat`			REAL, 
+	`saturatedfattyacid_10_0`			REAL, 
+	`saturatedfattyacid_12_0`			REAL, 
+	`saturatedfattyacid_13_0`			REAL, 
+	`saturatedfattyacid_14_0`			REAL, 
+	`saturatedfattyacid_15_0`			REAL, 
+	`saturatedfattyacid_16_0`			REAL, 
+	`saturatedfattyacid_17_0`			REAL, 
+	`saturatedfattyacid_18_0`			REAL, 
+	`saturatedfattyacid_20_0`			REAL, 
+	`saturatedfattyacid_22_0`			REAL, 
+	`saturatedfattyacid_24_0`			REAL, 
+	`saturatedfattyacid_4_0`			REAL, 
+	`saturatedfattyacid_6_0`			REAL, 
+	`saturatedfattyacid_8_0`			REAL, 
+	`selenium`			REAL, 
+	`serine`			REAL, 
+	`sodium`			REAL, 
+	`starch`			REAL, 
+	`stigmasterol`			REAL, 
+	`sucrose`			REAL, 
+	`sugar`			REAL, 
+	`sugaralcohols`			REAL, 
+	`theobromine`			REAL, 
+	`thiamin`			REAL, 
+	`threonine`			REAL, 
+	`totalcarbohydrate`			REAL, 
+	`totalfat`			REAL, 
+	`transfattyacids`			REAL, 
+	`transmonoenoicfattyacids`			REAL, 
+	`transpolyenoicfattyacids`			REAL, 
+	`tryptophan`			REAL, 
+	`tyrosine`			REAL, 
+	`valine`			REAL, 
+	`vitamina`			REAL, 
+	`vitaminb12`			REAL, 
+	`vitaminb6`			REAL, 
+	`vitaminc`			REAL, 
+	`vitamind`			REAL, 
+	`vitamine`			REAL, 
+	`vitamink`			REAL, 
+	`volume`			REAL, 
+	`water`			REAL, 
+	`zinc`			REAL, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_calendarday_x`
+ (
+	`calendardate`			DateTime, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_calendarentry`
+ (
+	`calendarentryid`			INTEGER, 
+	`calendarentrydate`			DateTime, 
+	`mealid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`entrytype`			varchar, 
+	`entrytext`			varchar, 
+	`entryindex`			INTEGER, 
+	`entrycost`			REAL, 
+	`calendarentrymeasureid`			INTEGER, 
+	`calendarentrymeasurequantity`			REAL, 
+	`calendarentryquantity`			varchar, 
+	`calendarentryunit`			varchar, 
+	`servings`			REAL, 
+	`ingredientmeasureid`			INTEGER, 
+	`ingredientmeasurequantity`			REAL, 
+	`ingredientquantity`			varchar, 
+	`ingredientunit`			varchar, 
+	`menuid`			INTEGER
+);
+
+CREATE TABLE `t_calendarmeal`
+ (
+	`mealdate`			DateTime, 
+	`mealid`			INTEGER, 
+	`headingtext`			varchar, 
+	`comments`			varchar, 
+	`mealcost`			REAL, 
+	`averageservingcost`			REAL, 
+	`wwfiber`			REAL, 
+	`servings`			REAL, 
+	`alanine`			REAL, 
+	`alcohol`			REAL, 
+	`alcoholfactor`			REAL, 
+	`alphacarotene`			REAL, 
+	`alphalinolenicacid`			REAL, 
+	`arachidonicacid`			REAL, 
+	`arginine`			REAL, 
+	`ash`			REAL, 
+	`asparticacid`			REAL, 
+	`betacarotene`			REAL, 
+	`betacryptoxanthin`			REAL, 
+	`betasitosterol`			REAL, 
+	`betatocopherol`			REAL, 
+	`biotin`			REAL, 
+	`caffeine`			REAL, 
+	`calcium`			REAL, 
+	`calories`			REAL, 
+	`caloriesfromalcohol`			REAL, 
+	`caloriesfromcarbs`			REAL, 
+	`caloriesfromfat`			REAL, 
+	`caloriesfromprotein`			REAL, 
+	`campesterol`			REAL, 
+	`chloride`			REAL, 
+	`cholesterol`			REAL, 
+	`choline`			REAL, 
+	`chromium`			REAL, 
+	`copper`			REAL, 
+	`cystine`			REAL, 
+	`deltatocopherol`			REAL, 
+	`dihomogammalinolenicacid`			REAL, 
+	`docosahexaenoicacid`			REAL, 
+	`docosapentaenoicacid`			REAL, 
+	`eicosadienoicacid`			REAL, 
+	`eicosapentaenoicacid`			REAL, 
+	`energy`			REAL, 
+	`energyfromalcohol`			REAL, 
+	`energyfromcarbs`			REAL, 
+	`energyfromfat`			REAL, 
+	`energyfromprotein`			REAL, 
+	`fiber`			REAL, 
+	`fluoride`			REAL, 
+	`folate`			REAL, 
+	`fructose`			REAL, 
+	`galactose`			REAL, 
+	`gammalinolenicacid`			REAL, 
+	`gammatocopherol`			REAL, 
+	`glucose`			REAL, 
+	`glutamicacid`			REAL, 
+	`glycine`			REAL, 
+	`histidine`			REAL, 
+	`hydroxyproline`			REAL, 
+	`iodine`			REAL, 
+	`iron`			REAL, 
+	`isoleucine`			REAL, 
+	`lactose`			REAL, 
+	`leucine`			REAL, 
+	`linoleicacid`			REAL, 
+	`lycopene`			REAL, 
+	`lysine`			REAL, 
+	`magnesium`			REAL, 
+	`maltose`			REAL, 
+	`manganese`			REAL, 
+	`mass`			REAL, 
+	`methionine`			REAL, 
+	`molybdenum`			REAL, 
+	`monounsaturatedfat`			REAL, 
+	`monounsaturatedfattyacid_14_1`			REAL, 
+	`monounsaturatedfattyacid_15_1`			REAL, 
+	`monounsaturatedfattyacid_16_1`			REAL, 
+	`monounsaturatedfattyacid_17_1`			REAL, 
+	`monounsaturatedfattyacid_18_1`			REAL, 
+	`monounsaturatedfattyacid_20_1`			REAL, 
+	`monounsaturatedfattyacid_22_1`			REAL, 
+	`monounsaturatedfattyacid_24_1`			REAL, 
+	`mypoints`			REAL, 
+	`netcarbohydrates`			REAL, 
+	`niacin`			REAL, 
+	`omega3fattyacids`			REAL, 
+	`omega6fattyacids`			REAL, 
+	`pantothenicacid`			REAL, 
+	`percentcaloriesfromalcohol`			REAL, 
+	`percentcaloriesfromcarbs`			REAL, 
+	`percentcaloriesfromfat`			REAL, 
+	`percentcaloriesfromprotein`			REAL, 
+	`phenylalanine`			REAL, 
+	`phosphorus`			REAL, 
+	`phytosterols`			REAL, 
+	`polyunsaturatedfat`			REAL, 
+	`polyunsaturatedfattyacid_18_2`			REAL, 
+	`polyunsaturatedfattyacid_18_3`			REAL, 
+	`polyunsaturatedfattyacid_18_4`			REAL, 
+	`polyunsaturatedfattyacid_20_3`			REAL, 
+	`polyunsaturatedfattyacid_20_4`			REAL, 
+	`polyunsaturatedfattyacid_21_5`			REAL, 
+	`polyunsaturatedfattyacid_22_4`			REAL, 
+	`potassium`			REAL, 
+	`proline`			REAL, 
+	`protein`			REAL, 
+	`refuse`			REAL, 
+	`retinol`			REAL, 
+	`riboflavin`			REAL, 
+	`saturatedfat`			REAL, 
+	`saturatedfattyacid_10_0`			REAL, 
+	`saturatedfattyacid_12_0`			REAL, 
+	`saturatedfattyacid_13_0`			REAL, 
+	`saturatedfattyacid_14_0`			REAL, 
+	`saturatedfattyacid_15_0`			REAL, 
+	`saturatedfattyacid_16_0`			REAL, 
+	`saturatedfattyacid_17_0`			REAL, 
+	`saturatedfattyacid_18_0`			REAL, 
+	`saturatedfattyacid_20_0`			REAL, 
+	`saturatedfattyacid_22_0`			REAL, 
+	`saturatedfattyacid_24_0`			REAL, 
+	`saturatedfattyacid_4_0`			REAL, 
+	`saturatedfattyacid_6_0`			REAL, 
+	`saturatedfattyacid_8_0`			REAL, 
+	`selenium`			REAL, 
+	`serine`			REAL, 
+	`sodium`			REAL, 
+	`starch`			REAL, 
+	`stigmasterol`			REAL, 
+	`sucrose`			REAL, 
+	`sugar`			REAL, 
+	`sugaralcohols`			REAL, 
+	`theobromine`			REAL, 
+	`thiamin`			REAL, 
+	`threonine`			REAL, 
+	`totalcarbohydrate`			REAL, 
+	`totalfat`			REAL, 
+	`transfattyacids`			REAL, 
+	`transmonoenoicfattyacids`			REAL, 
+	`transpolyenoicfattyacids`			REAL, 
+	`tryptophan`			REAL, 
+	`tyrosine`			REAL, 
+	`valine`			REAL, 
+	`vitamina`			REAL, 
+	`vitaminb12`			REAL, 
+	`vitaminb6`			REAL, 
+	`vitaminc`			REAL, 
+	`vitamind`			REAL, 
+	`vitamine`			REAL, 
+	`vitamink`			REAL, 
+	`volume`			REAL, 
+	`water`			REAL, 
+	`zinc`			REAL
+);
+
+CREATE TABLE `t_cookbook_x`
+ (
+	`cookbookid`			INTEGER, 
+	`servercookbookid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_cookbookautoarchiverule`
+ (
+	`attribute`			varchar, 
+	`cookbookautoarchiveruleid`			INTEGER, 
+	`cookbookid`			INTEGER, 
+	`expression`			TEXT, 
+	`expressiontype`			varchar, 
+	`priority`			INTEGER
+);
+
+CREATE TABLE `t_cookbookchapter`
+ (
+	`cookbookchapterid`			INTEGER, 
+	`parentchapterid`			INTEGER, 
+	`cookbookid`			INTEGER, 
+	`autoarchivepriority`			INTEGER, 
+	`comments`			TEXT, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`servercookbookchapterid`			INTEGER, 
+	`serverparentchapterid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_cookbookchapter_x`
+ (
+	`cookbookchapterid`			INTEGER, 
+	`servercookbookchapterid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_cookbookchapterassociation`
+ (
+	`cookbookchapterid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_cookbookchapterautoarchiverule`
+ (
+	`attribute`			varchar, 
+	`cookbookchapterautoarchiveruleid`			INTEGER, 
+	`cookbookchapterid`			INTEGER, 
+	`expression`			TEXT, 
+	`expressiontype`			varchar, 
+	`priority`			INTEGER
+);
+
+CREATE TABLE `t_favorite_x`
+ (
+	`favoriteid`			INTEGER, 
+	`serverfavoriteid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_favoritefolder`
+ (
+	`favoritefolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`navigator`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverfavoritefolderid`			INTEGER, 
+	`serverparentfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_favoritefolderassociation`
+ (
+	`favoritefolderid`			INTEGER, 
+	`favoriteid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_glossaryitem`
+ (
+	`glossaryitemid`			INTEGER, 
+	`name`			varchar, 
+	`source`			varchar, 
+	`webpage`			varchar, 
+	`colorflag`			varchar, 
+	`copyright`			varchar, 
+	`createdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`photographflag`			varchar, 
+	`sourceimageid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`glossaryitemassetid`			INTEGER, 
+	`md5hash`			varchar, 
+	`serverglossaryitemid`			INTEGER, 
+	`sourceimagemd5hash`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_glossaryitem_x`
+ (
+	`glossaryitemid`			INTEGER, 
+	`serverglossaryitemid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_glossaryitemattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`glossaryitemattachmentid`			INTEGER, 
+	`glossaryitemid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_glossaryitemimage`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`glossaryitemid`			INTEGER, 
+	`glossaryitemimageid`			INTEGER, 
+	`imageid`			INTEGER, 
+	`imageindex`			INTEGER, 
+	`imagepath`			varchar, 
+	`imagetype`			varchar, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_glossaryitemtext`
+ (
+	`glossaryitemtextid`			INTEGER, 
+	`glossaryitemid`			INTEGER, 
+	`itemtext`			TEXT, 
+	`textindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_groceryaisle`
+ (
+	`groceryaisleid`			INTEGER, 
+	`name`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`servergroceryaisleid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylist`
+ (
+	`grocerylistid`			INTEGER, 
+	`name`			varchar, 
+	`grocerylistfolderid`			INTEGER, 
+	`comments`			TEXT, 
+	`createdate`			DateTime, 
+	`defaultstoreid`			INTEGER, 
+	`grocerylistdate`			DateTime, 
+	`receiptprocessed`			varchar, 
+	`colorflag`			varchar, 
+	`modifieddate`			DateTime, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`servergrocerylistid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylist_x`
+ (
+	`grocerylistid`			INTEGER, 
+	`servergrocerylistid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`grocerylistattachmentid`			INTEGER, 
+	`grocerylistid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_grocerylistfolder`
+ (
+	`grocerylistfolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`servergrocerylistfolderid`			INTEGER, 
+	`serverparentfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistfolder_x`
+ (
+	`grocerylistfolderid`			varchar, 
+	`servergrocerylistfolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistfolderassociation`
+ (
+	`grocerylistfolderid`			INTEGER, 
+	`grocerylistid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistitemrecipe`
+ (
+	`grocerylistid`			INTEGER, 
+	`grocerylistitemid`			INTEGER, 
+	`recipeid`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistnote`
+ (
+	`grocerylistnoteid`			INTEGER, 
+	`grocerylistid`			INTEGER, 
+	`notetext`			TEXT, 
+	`noteindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_grocerylistrecipe`
+ (
+	`grocerylistid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`recipeservings`			REAL
+);
+
+CREATE TABLE `t_groceryliststore`
+ (
+	`grocerylistid`			INTEGER, 
+	`storeid`			INTEGER
+);
+
+CREATE TABLE `t_image`
+ (
+	`filename`			varchar, 
+	`filesize`			INTEGER, 
+	`filetype`			varchar, 
+	`height`			INTEGER, 
+	`imageid`			INTEGER, 
+	`width`			INTEGER, 
+	`originalfilename`			varchar, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_ingredient`
+ (
+	`ingredientid`			INTEGER, 
+	`name`			varchar, 
+	`source`			varchar, 
+	`webpage`			varchar, 
+	`ingredientfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`water`			REAL, 
+	`calories`			REAL, 
+	`caloriesfromfat`			REAL, 
+	`percentcaloriesfromfat`			REAL, 
+	`energy`			REAL, 
+	`protein`			REAL, 
+	`totalfat`			REAL, 
+	`sugar`			REAL, 
+	`totalcarbohydrate`			REAL, 
+	`fiber`			REAL, 
+	`calcium`			REAL, 
+	`phosphorus`			REAL, 
+	`iron`			REAL, 
+	`sodium`			REAL, 
+	`potassium`			REAL, 
+	`magnesium`			REAL, 
+	`zinc`			REAL, 
+	`copper`			REAL, 
+	`manganese`			REAL, 
+	`selenium`			REAL, 
+	`vitamina`			REAL, 
+	`vitamine`			REAL, 
+	`thiamin`			REAL, 
+	`riboflavin`			REAL, 
+	`niacin`			REAL, 
+	`pantothenicacid`			REAL, 
+	`vitaminb6`			REAL, 
+	`folate`			REAL, 
+	`vitaminb12`			REAL, 
+	`vitaminc`			REAL, 
+	`saturatedfat`			REAL, 
+	`monounsaturatedfat`			REAL, 
+	`polyunsaturatedfat`			REAL, 
+	`cholesterol`			REAL, 
+	`alcohol`			REAL, 
+	`caffeine`			REAL, 
+	`selectedweight`			INTEGER, 
+	`usdaingredient`			varchar, 
+	`useringredient`			varchar, 
+	`selectedmeasureid`			INTEGER, 
+	`cost`			REAL, 
+	`onhandmeasurequantity`			REAL, 
+	`onhandmeasureid`			INTEGER, 
+	`onhandflag`			varchar, 
+	`groceryaisleid`			INTEGER, 
+	`biotin`			REAL, 
+	`commonname`			varchar, 
+	`energyfromfat`			REAL, 
+	`nutritionsource`			varchar, 
+	`photographflag`			varchar, 
+	`servingsize`			REAL, 
+	`servingsizemeasureid`			INTEGER, 
+	`sugaralcohols`			REAL, 
+	`transfattyacids`			REAL, 
+	`vitamind`			REAL, 
+	`caloriesfromalcohol`			REAL, 
+	`caloriesfromcarbs`			REAL, 
+	`caloriesfromprotein`			REAL, 
+	`energyfromalcohol`			REAL, 
+	`energyfromcarbs`			REAL, 
+	`energyfromprotein`			REAL, 
+	`percentcaloriesfromalcohol`			REAL, 
+	`percentcaloriesfromcarbs`			REAL, 
+	`percentcaloriesfromprotein`			REAL, 
+	`preferredstoreid`			INTEGER, 
+	`alanine`			REAL, 
+	`alcoholfactor`			REAL, 
+	`alphacarotene`			REAL, 
+	`alphalinolenicacid`			REAL, 
+	`arachidonicacid`			REAL, 
+	`arginine`			REAL, 
+	`ash`			REAL, 
+	`asparticacid`			REAL, 
+	`betacarotene`			REAL, 
+	`betacryptoxanthin`			REAL, 
+	`betasitosterol`			REAL, 
+	`betatocopherol`			REAL, 
+	`campesterol`			REAL, 
+	`carbohydratefactor`			REAL, 
+	`chloride`			REAL, 
+	`choline`			REAL, 
+	`chromium`			REAL, 
+	`colorflag`			varchar, 
+	`copyright`			varchar, 
+	`createdate`			DateTime, 
+	`cystine`			REAL, 
+	`deltatocopherol`			REAL, 
+	`dihomogammalinolenicacid`			REAL, 
+	`docosahexaenoicacid`			REAL, 
+	`docosapentaenoicacid`			REAL, 
+	`eicosadienoicacid`			REAL, 
+	`eicosapentaenoicacid`			REAL, 
+	`fatfactor`			REAL, 
+	`fluoride`			REAL, 
+	`fructose`			REAL, 
+	`galactose`			REAL, 
+	`gammalinolenicacid`			REAL, 
+	`gammatocopherol`			REAL, 
+	`glucose`			REAL, 
+	`glutamicacid`			REAL, 
+	`glycine`			REAL, 
+	`histidine`			REAL, 
+	`hydroxyproline`			REAL, 
+	`inventoryitemid`			INTEGER, 
+	`iodine`			REAL, 
+	`isoleucine`			REAL, 
+	`lactose`			REAL, 
+	`leucine`			REAL, 
+	`linoleicacid`			REAL, 
+	`lycopene`			REAL, 
+	`lysine`			REAL, 
+	`maltose`			REAL, 
+	`methionine`			REAL, 
+	`modifieddate`			DateTime, 
+	`molybdenum`			REAL, 
+	`monounsaturatedfattyacid_14_1`			REAL, 
+	`monounsaturatedfattyacid_15_1`			REAL, 
+	`monounsaturatedfattyacid_16_1`			REAL, 
+	`monounsaturatedfattyacid_17_1`			REAL, 
+	`monounsaturatedfattyacid_18_1`			REAL, 
+	`monounsaturatedfattyacid_20_1`			REAL, 
+	`monounsaturatedfattyacid_22_1`			REAL, 
+	`monounsaturatedfattyacid_24_1`			REAL, 
+	`mypoints`			REAL, 
+	`netcarbohydrates`			REAL, 
+	`nutritioncalculationmode`			varchar, 
+	`omega3fattyacids`			REAL, 
+	`omega6fattyacids`			REAL, 
+	`phenylalanine`			REAL, 
+	`phytosterols`			REAL, 
+	`polyunsaturatedfattyacid_18_2`			REAL, 
+	`polyunsaturatedfattyacid_18_3`			REAL, 
+	`polyunsaturatedfattyacid_18_4`			REAL, 
+	`polyunsaturatedfattyacid_20_3`			REAL, 
+	`polyunsaturatedfattyacid_20_4`			REAL, 
+	`polyunsaturatedfattyacid_21_5`			REAL, 
+	`polyunsaturatedfattyacid_22_4`			REAL, 
+	`proline`			REAL, 
+	`proteinfactor`			REAL, 
+	`refuse`			REAL, 
+	`retinol`			REAL, 
+	`saturatedfattyacid_10_0`			REAL, 
+	`saturatedfattyacid_12_0`			REAL, 
+	`saturatedfattyacid_13_0`			REAL, 
+	`saturatedfattyacid_14_0`			REAL, 
+	`saturatedfattyacid_15_0`			REAL, 
+	`saturatedfattyacid_16_0`			REAL, 
+	`saturatedfattyacid_17_0`			REAL, 
+	`saturatedfattyacid_18_0`			REAL, 
+	`saturatedfattyacid_20_0`			REAL, 
+	`saturatedfattyacid_22_0`			REAL, 
+	`saturatedfattyacid_24_0`			REAL, 
+	`saturatedfattyacid_4_0`			REAL, 
+	`saturatedfattyacid_6_0`			REAL, 
+	`saturatedfattyacid_8_0`			REAL, 
+	`serine`			REAL, 
+	`sourceimageid`			INTEGER, 
+	`starch`			REAL, 
+	`stigmasterol`			REAL, 
+	`sucrose`			REAL, 
+	`theobromine`			REAL, 
+	`threonine`			REAL, 
+	`transmonoenoicfattyacids`			REAL, 
+	`transpolyenoicfattyacids`			REAL, 
+	`tryptophan`			REAL, 
+	`tyrosine`			REAL, 
+	`valine`			REAL, 
+	`vitamink`			REAL, 
+	`volume`			REAL, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`ingredientassetid`			INTEGER, 
+	`md5hash`			varchar, 
+	`serveringredientid`			INTEGER, 
+	`sourceimagemd5hash`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER, 
+	`userdata1`			varchar, 
+	`userdata10`			INTEGER, 
+	`userdata11`			varchar, 
+	`userdata12`			varchar, 
+	`userdata13`			varchar, 
+	`userdata14`			varchar, 
+	`userdata15`			varchar, 
+	`userdata2`			varchar, 
+	`userdata3`			varchar, 
+	`userdata4`			varchar, 
+	`userdata5`			varchar, 
+	`userdata6`			INTEGER, 
+	`userdata7`			INTEGER, 
+	`userdata8`			INTEGER, 
+	`userdata9`			INTEGER
+);
+
+CREATE TABLE `t_ingredientattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`ingredientattachmentid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_ingredientautocomplete`
+ (
+	`ingredient`			varchar
+);
+
+CREATE TABLE `t_ingredientfolder`
+ (
+	`ingredientfolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`autoarchivepriority`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serveringredientfolderid`			INTEGER, 
+	`serverparentfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_ingredientfolder_x`
+ (
+	`ingredientfolderid`			varchar, 
+	`serveringredientfolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_ingredientfolderassociation`
+ (
+	`ingredientfolderid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_ingredientfolderautoarchiverule`
+ (
+	`attribute`			varchar, 
+	`expression`			TEXT, 
+	`expressiontype`			varchar, 
+	`ingredientfolderautoarchiveruleid`			INTEGER, 
+	`ingredientfolderid`			INTEGER, 
+	`priority`			INTEGER
+);
+
+CREATE TABLE `t_ingredientimage`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`imageid`			INTEGER, 
+	`imageindex`			INTEGER, 
+	`imagepath`			varchar, 
+	`imagetype`			varchar, 
+	`ingredientid`			INTEGER, 
+	`ingredientimageid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_ingredientmeasurebarcode`
+ (
+	`barcode`			varchar, 
+	`ingredientbarcodeid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`measureid`			INTEGER
+);
+
+CREATE TABLE `t_ingredientnote`
+ (
+	`ingredientnoteid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`notetext`			TEXT, 
+	`ingredientnoteindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_ingredientskipsearchword`
+ (
+	`wordid`			INTEGER, 
+	`word`			varchar
+);
+
+CREATE TABLE `t_ingredientsynonym`
+ (
+	`ingredientsynonymid`			INTEGER, 
+	`ingredientname`			varchar, 
+	`synonym`			varchar
+);
+
+CREATE TABLE `t_inventoryitem`
+ (
+	`comments`			varchar, 
+	`defaultingredientid`			INTEGER, 
+	`itemname`			varchar, 
+	`minimumordermeasuredescription`			varchar, 
+	`minimumordermeasureid`			INTEGER, 
+	`minimumorderquantity`			REAL, 
+	`onhandflag`			varchar, 
+	`onhandmeasuredescription`			varchar, 
+	`onhandmeasureid`			INTEGER, 
+	`onhandquantity`			REAL, 
+	`orderatmeasuredescription`			varchar, 
+	`orderatmeasureid`			INTEGER, 
+	`orderatquantity`			REAL, 
+	`ordermultiple`			INTEGER, 
+	`ordermultipleflag`			varchar, 
+	`orderquantitymode`			varchar, 
+	`orderunitmeasuredescription`			varchar, 
+	`orderunitmeasureid`			INTEGER, 
+	`orderunitplural`			varchar, 
+	`orderunitsingular`			varchar, 
+	`orderuptomeasuredescription`			varchar, 
+	`orderuptomeasureid`			INTEGER, 
+	`orderuptoquantity`			REAL, 
+	`inventoryitemfolderid`			INTEGER, 
+	`inventoryitemid`			INTEGER, 
+	`colorflag`			varchar, 
+	`createdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverdefaultingredientid`			INTEGER, 
+	`serverinventoryitemid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_inventoryitem_x`
+ (
+	`inventoryitemid`			INTEGER, 
+	`serverinventoryitemid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_inventoryitemfolder_x`
+ (
+	`inventoryitemfolderid`			varchar, 
+	`serverinventoryitemfolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_meal`
+ (
+	`mealid`			INTEGER, 
+	`mealname`			varchar, 
+	`abbreviation`			varchar
+);
+
+CREATE TABLE `t_measure`
+ (
+	`measureid`			INTEGER, 
+	`description`			varchar, 
+	`type`			varchar, 
+	`orderquantitymode`			varchar, 
+	`orderunitplural`			varchar, 
+	`orderunitsingular`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`md5hash`			varchar, 
+	`measureassetid`			INTEGER, 
+	`servermeasureid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_measure_x`
+ (
+	`measureid`			INTEGER, 
+	`servermeasureid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_media`
+ (
+	`description`			varchar, 
+	`filename`			varchar, 
+	`filetype`			varchar, 
+	`mediaid`			INTEGER, 
+	`md5hash`			varchar, 
+	`originalfilename`			varchar, 
+	`thumbnailfilename`			varchar
+);
+
+CREATE TABLE `t_menu`
+ (
+	`menuid`			INTEGER, 
+	`menuname`			varchar, 
+	`comments`			TEXT, 
+	`menufolderid`			INTEGER, 
+	`menuphotographflag`			varchar, 
+	`author`			varchar, 
+	`source`			varchar, 
+	`webpage`			varchar, 
+	`menutypes`			varchar, 
+	`servingcost`			REAL, 
+	`servings`			INTEGER, 
+	`alanine`			REAL, 
+	`alcohol`			REAL, 
+	`alcoholfactor`			REAL, 
+	`alphacarotene`			REAL, 
+	`alphalinolenicacid`			REAL, 
+	`arachidonicacid`			REAL, 
+	`arginine`			REAL, 
+	`ash`			REAL, 
+	`asparticacid`			REAL, 
+	`betacarotene`			REAL, 
+	`betacryptoxanthin`			REAL, 
+	`betasitosterol`			REAL, 
+	`betatocopherol`			REAL, 
+	`biotin`			REAL, 
+	`caffeine`			REAL, 
+	`calcium`			REAL, 
+	`calories`			REAL, 
+	`caloriesfromalcohol`			REAL, 
+	`caloriesfromcarbs`			REAL, 
+	`caloriesfromfat`			REAL, 
+	`caloriesfromprotein`			REAL, 
+	`campesterol`			REAL, 
+	`carbohydratefactor`			REAL, 
+	`cholesterol`			REAL, 
+	`colorflag`			varchar, 
+	`copper`			REAL, 
+	`copyright`			varchar, 
+	`createdate`			DateTime, 
+	`cystine`			REAL, 
+	`deltatocopherol`			REAL, 
+	`dihomogammalinolenicacid`			REAL, 
+	`docosahexaenoicacid`			REAL, 
+	`docosapentaenoicacid`			REAL, 
+	`eicosadienoicacid`			REAL, 
+	`eicosapentaenoicacid`			REAL, 
+	`energy`			REAL, 
+	`energyfromalcohol`			REAL, 
+	`energyfromcarbs`			REAL, 
+	`energyfromfat`			REAL, 
+	`energyfromprotein`			REAL, 
+	`fatfactor`			REAL, 
+	`fiber`			REAL, 
+	`folate`			REAL, 
+	`fructose`			REAL, 
+	`galactose`			REAL, 
+	`gammalinolenicacid`			REAL, 
+	`gammatocopherol`			REAL, 
+	`glucose`			REAL, 
+	`glutamicacid`			REAL, 
+	`glycine`			REAL, 
+	`histidine`			REAL, 
+	`hydroxyproline`			REAL, 
+	`iron`			REAL, 
+	`isoleucine`			REAL, 
+	`lactose`			REAL, 
+	`leucine`			REAL, 
+	`linoleicacid`			REAL, 
+	`lycopene`			REAL, 
+	`lysine`			REAL, 
+	`magnesium`			REAL, 
+	`maltose`			REAL, 
+	`manganese`			REAL, 
+	`mass`			REAL, 
+	`menugroupid`			INTEGER, 
+	`methionine`			REAL, 
+	`modifieddate`			DateTime, 
+	`monounsaturatedfat`			REAL, 
+	`monounsaturatedfattyacid_14_1`			REAL, 
+	`monounsaturatedfattyacid_15_1`			REAL, 
+	`monounsaturatedfattyacid_16_1`			REAL, 
+	`monounsaturatedfattyacid_17_1`			REAL, 
+	`monounsaturatedfattyacid_18_1`			REAL, 
+	`monounsaturatedfattyacid_20_1`			REAL, 
+	`monounsaturatedfattyacid_22_1`			REAL, 
+	`monounsaturatedfattyacid_24_1`			REAL, 
+	`mypoints`			REAL, 
+	`netcarbohydrates`			REAL, 
+	`niacin`			REAL, 
+	`nutritioncalculationmode`			varchar, 
+	`omega3fattyacids`			REAL, 
+	`omega6fattyacids`			REAL, 
+	`pantothenicacid`			REAL, 
+	`percentcaloriesfromalcohol`			REAL, 
+	`percentcaloriesfromcarbs`			REAL, 
+	`percentcaloriesfromfat`			REAL, 
+	`percentcaloriesfromprotein`			REAL, 
+	`phenylalanine`			REAL, 
+	`phosphorus`			REAL, 
+	`phytosterols`			REAL, 
+	`polyunsaturatedfat`			REAL, 
+	`polyunsaturatedfattyacid_18_2`			REAL, 
+	`polyunsaturatedfattyacid_18_3`			REAL, 
+	`polyunsaturatedfattyacid_18_4`			REAL, 
+	`polyunsaturatedfattyacid_20_3`			REAL, 
+	`polyunsaturatedfattyacid_20_4`			REAL, 
+	`polyunsaturatedfattyacid_21_5`			REAL, 
+	`polyunsaturatedfattyacid_22_4`			REAL, 
+	`potassium`			REAL, 
+	`proline`			REAL, 
+	`protein`			REAL, 
+	`proteinfactor`			REAL, 
+	`recipegroupid`			INTEGER, 
+	`refuse`			REAL, 
+	`retinol`			REAL, 
+	`riboflavin`			REAL, 
+	`saturatedfat`			REAL, 
+	`saturatedfattyacid_10_0`			REAL, 
+	`saturatedfattyacid_12_0`			REAL, 
+	`saturatedfattyacid_13_0`			REAL, 
+	`saturatedfattyacid_14_0`			REAL, 
+	`saturatedfattyacid_15_0`			REAL, 
+	`saturatedfattyacid_16_0`			REAL, 
+	`saturatedfattyacid_17_0`			REAL, 
+	`saturatedfattyacid_18_0`			REAL, 
+	`saturatedfattyacid_20_0`			REAL, 
+	`saturatedfattyacid_22_0`			REAL, 
+	`saturatedfattyacid_24_0`			REAL, 
+	`saturatedfattyacid_4_0`			REAL, 
+	`saturatedfattyacid_6_0`			REAL, 
+	`saturatedfattyacid_8_0`			REAL, 
+	`selenium`			REAL, 
+	`serine`			REAL, 
+	`sodium`			REAL, 
+	`sourceimageid`			INTEGER, 
+	`starch`			REAL, 
+	`stigmasterol`			REAL, 
+	`sucrose`			REAL, 
+	`sugar`			REAL, 
+	`sugaralcohols`			REAL, 
+	`theobromine`			REAL, 
+	`thiamin`			REAL, 
+	`threonine`			REAL, 
+	`totalcarbohydrate`			REAL, 
+	`totalfat`			REAL, 
+	`transfattyacids`			REAL, 
+	`transmonoenoicfattyacids`			REAL, 
+	`transpolyenoicfattyacids`			REAL, 
+	`tryptophan`			REAL, 
+	`tyrosine`			REAL, 
+	`valine`			REAL, 
+	`vitamina`			REAL, 
+	`vitaminb12`			REAL, 
+	`vitaminb6`			REAL, 
+	`vitaminc`			REAL, 
+	`vitamind`			REAL, 
+	`vitamine`			REAL, 
+	`vitamink`			REAL, 
+	`volume`			REAL, 
+	`water`			REAL, 
+	`zinc`			REAL, 
+	`chloride`			REAL, 
+	`choline`			REAL, 
+	`chromium`			REAL, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`fluoride`			REAL, 
+	`iodine`			REAL, 
+	`md5hash`			varchar, 
+	`menuassetid`			INTEGER, 
+	`molybdenum`			REAL, 
+	`servermenuid`			INTEGER, 
+	`sourceimagemd5hash`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER, 
+	`userdata1`			varchar, 
+	`userdata10`			INTEGER, 
+	`userdata11`			varchar, 
+	`userdata12`			varchar, 
+	`userdata13`			varchar, 
+	`userdata14`			varchar, 
+	`userdata15`			varchar, 
+	`userdata2`			varchar, 
+	`userdata3`			varchar, 
+	`userdata4`			varchar, 
+	`userdata5`			varchar, 
+	`userdata6`			INTEGER, 
+	`userdata7`			INTEGER, 
+	`userdata8`			INTEGER, 
+	`userdata9`			INTEGER
+);
+
+CREATE TABLE `t_menu_x`
+ (
+	`menuid`			INTEGER, 
+	`servermenuid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_menuattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`md5hash`			varchar, 
+	`menuattachmentid`			INTEGER, 
+	`menuid`			INTEGER
+);
+
+CREATE TABLE `t_menuauthornote`
+ (
+	`authornoteid`			INTEGER, 
+	`menuid`			INTEGER, 
+	`authornotetext`			TEXT, 
+	`authornoteindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_menufolder`
+ (
+	`comments`			varchar, 
+	`menufolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`servermenufolderid`			INTEGER, 
+	`serverparentfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_menufolderassociation`
+ (
+	`menufolderid`			INTEGER, 
+	`menuid`			INTEGER, 
+	`distance`			INTEGER, 
+	`recipegroupid`			INTEGER
+);
+
+CREATE TABLE `t_menuimage`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`imageid`			INTEGER, 
+	`imageindex`			INTEGER, 
+	`imagepath`			varchar, 
+	`imagetype`			varchar, 
+	`md5hash`			varchar, 
+	`menuid`			INTEGER, 
+	`menuimageid`			INTEGER
+);
+
+CREATE TABLE `t_menuitem`
+ (
+	`menuitemid`			INTEGER, 
+	`menuid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`itemindex`			INTEGER, 
+	`itemname`			varchar, 
+	`itemtype`			varchar, 
+	`menuitemcost`			REAL, 
+	`servings`			REAL, 
+	`menuitemmeasureid`			INTEGER, 
+	`menuitemmeasurequantity`			REAL, 
+	`menuitemquantity`			varchar, 
+	`menuitemunit`			varchar, 
+	`ingredientmeasureid`			INTEGER, 
+	`ingredientmeasurequantity`			REAL, 
+	`ingredientquantity`			varchar, 
+	`ingredientunit`			varchar
+);
+
+CREATE TABLE `t_menumedia`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`mediaid`			INTEGER, 
+	`mediaindex`			INTEGER, 
+	`mediapath`			varchar, 
+	`mediatype`			varchar, 
+	`menuid`			INTEGER, 
+	`menumediaid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_menutip`
+ (
+	`menutipid`			INTEGER, 
+	`menuid`			INTEGER, 
+	`tiptext`			TEXT, 
+	`tipindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_menutype`
+ (
+	`menutypeid`			INTEGER, 
+	`description`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`servermenutypeid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_recipe`
+ (
+	`recipeid`			INTEGER, 
+	`recipename`			varchar, 
+	`comments`			TEXT, 
+	`preparationtime`			INTEGER, 
+	`cookingtime`			INTEGER, 
+	`readyintime`			INTEGER, 
+	`cookbookchapterid`			INTEGER, 
+	`recipephotographflag`			varchar, 
+	`author`			varchar, 
+	`source`			varchar, 
+	`webpage`			varchar, 
+	`createdate`			DateTime, 
+	`averagerating`			REAL, 
+	`servingcost`			REAL, 
+	`servingprice`			REAL, 
+	`servingprofit`			REAL, 
+	`onhandflag`			varchar, 
+	`alanine`			REAL, 
+	`alcohol`			REAL, 
+	`alcoholfactor`			REAL, 
+	`alphacarotene`			REAL, 
+	`alphalinolenicacid`			REAL, 
+	`arachidonicacid`			REAL, 
+	`arginine`			REAL, 
+	`ash`			REAL, 
+	`asparticacid`			REAL, 
+	`betacarotene`			REAL, 
+	`betacryptoxanthin`			REAL, 
+	`betasitosterol`			REAL, 
+	`betatocopherol`			REAL, 
+	`biotin`			REAL, 
+	`caffeine`			REAL, 
+	`calcium`			REAL, 
+	`calories`			REAL, 
+	`caloriesfromalcohol`			REAL, 
+	`caloriesfromcarbs`			REAL, 
+	`caloriesfromfat`			REAL, 
+	`caloriesfromprotein`			REAL, 
+	`campesterol`			REAL, 
+	`carbohydratefactor`			REAL, 
+	`chloride`			REAL, 
+	`cholesterol`			REAL, 
+	`choline`			REAL, 
+	`chromium`			REAL, 
+	`colorflag`			varchar, 
+	`cookbookid`			INTEGER, 
+	`copper`			REAL, 
+	`copyright`			varchar, 
+	`cystine`			REAL, 
+	`degreeofdifficulty`			INTEGER, 
+	`deltatocopherol`			REAL, 
+	`dihomogammalinolenicacid`			REAL, 
+	`docosahexaenoicacid`			REAL, 
+	`docosapentaenoicacid`			REAL, 
+	`eicosadienoicacid`			REAL, 
+	`eicosapentaenoicacid`			REAL, 
+	`energy`			REAL, 
+	`energyfromalcohol`			REAL, 
+	`energyfromcarbs`			REAL, 
+	`energyfromfat`			REAL, 
+	`energyfromprotein`			REAL, 
+	`fatfactor`			REAL, 
+	`fiber`			REAL, 
+	`fluoride`			REAL, 
+	`folate`			REAL, 
+	`fructose`			REAL, 
+	`galactose`			REAL, 
+	`gammalinolenicacid`			REAL, 
+	`gammatocopherol`			REAL, 
+	`glucose`			REAL, 
+	`glutamicacid`			REAL, 
+	`glycine`			REAL, 
+	`histidine`			REAL, 
+	`hydroxyproline`			REAL, 
+	`inactivetime`			INTEGER, 
+	`ingredientlinkpercent`			INTEGER, 
+	`ingredients`			TEXT, 
+	`ingredientsearchstring`			TEXT, 
+	`iodine`			REAL, 
+	`iron`			REAL, 
+	`isoleucine`			REAL, 
+	`lactose`			REAL, 
+	`leucine`			REAL, 
+	`linoleicacid`			REAL, 
+	`lycopene`			REAL, 
+	`lysine`			REAL, 
+	`magnesium`			REAL, 
+	`maltose`			REAL, 
+	`manganese`			REAL, 
+	`mass`			REAL, 
+	`methionine`			REAL, 
+	`modifieddate`			DateTime, 
+	`molybdenum`			REAL, 
+	`monounsaturatedfat`			REAL, 
+	`monounsaturatedfattyacid_14_1`			REAL, 
+	`monounsaturatedfattyacid_15_1`			REAL, 
+	`monounsaturatedfattyacid_16_1`			REAL, 
+	`monounsaturatedfattyacid_17_1`			REAL, 
+	`monounsaturatedfattyacid_18_1`			REAL, 
+	`monounsaturatedfattyacid_20_1`			REAL, 
+	`monounsaturatedfattyacid_22_1`			REAL, 
+	`monounsaturatedfattyacid_24_1`			REAL, 
+	`mypoints`			REAL, 
+	`netcarbohydrates`			REAL, 
+	`niacin`			REAL, 
+	`nutritioncalculationmode`			varchar, 
+	`omega3fattyacids`			REAL, 
+	`omega6fattyacids`			REAL, 
+	`oventemperaturec`			INTEGER, 
+	`oventemperaturef`			INTEGER, 
+	`pantothenicacid`			REAL, 
+	`percentcaloriesfromalcohol`			REAL, 
+	`percentcaloriesfromcarbs`			REAL, 
+	`percentcaloriesfromfat`			REAL, 
+	`percentcaloriesfromprotein`			REAL, 
+	`phenylalanine`			REAL, 
+	`phosphorus`			REAL, 
+	`phytosterols`			REAL, 
+	`polyunsaturatedfat`			REAL, 
+	`polyunsaturatedfattyacid_18_2`			REAL, 
+	`polyunsaturatedfattyacid_18_3`			REAL, 
+	`polyunsaturatedfattyacid_18_4`			REAL, 
+	`polyunsaturatedfattyacid_20_3`			REAL, 
+	`polyunsaturatedfattyacid_20_4`			REAL, 
+	`polyunsaturatedfattyacid_21_5`			REAL, 
+	`polyunsaturatedfattyacid_22_4`			REAL, 
+	`potassium`			REAL, 
+	`proline`			REAL, 
+	`protein`			REAL, 
+	`proteinfactor`			REAL, 
+	`refuse`			REAL, 
+	`retinol`			REAL, 
+	`riboflavin`			REAL, 
+	`saturatedfat`			REAL, 
+	`saturatedfattyacid_10_0`			REAL, 
+	`saturatedfattyacid_12_0`			REAL, 
+	`saturatedfattyacid_13_0`			REAL, 
+	`saturatedfattyacid_14_0`			REAL, 
+	`saturatedfattyacid_15_0`			REAL, 
+	`saturatedfattyacid_16_0`			REAL, 
+	`saturatedfattyacid_17_0`			REAL, 
+	`saturatedfattyacid_18_0`			REAL, 
+	`saturatedfattyacid_20_0`			REAL, 
+	`saturatedfattyacid_22_0`			REAL, 
+	`saturatedfattyacid_24_0`			REAL, 
+	`saturatedfattyacid_4_0`			REAL, 
+	`saturatedfattyacid_6_0`			REAL, 
+	`saturatedfattyacid_8_0`			REAL, 
+	`selenium`			REAL, 
+	`serine`			REAL, 
+	`servings`			REAL, 
+	`sodium`			REAL, 
+	`sourceimageid`			INTEGER, 
+	`starch`			REAL, 
+	`stigmasterol`			REAL, 
+	`sucrose`			REAL, 
+	`sugar`			REAL, 
+	`sugaralcohols`			REAL, 
+	`theobromine`			REAL, 
+	`thiamin`			REAL, 
+	`threonine`			REAL, 
+	`totalcarbohydrate`			REAL, 
+	`totalfat`			REAL, 
+	`transfattyacids`			REAL, 
+	`transmonoenoicfattyacids`			REAL, 
+	`transpolyenoicfattyacids`			REAL, 
+	`tryptophan`			REAL, 
+	`tyrosine`			REAL, 
+	`valine`			REAL, 
+	`vitamina`			REAL, 
+	`vitaminb12`			REAL, 
+	`vitaminb6`			REAL, 
+	`vitaminc`			REAL, 
+	`vitamind`			REAL, 
+	`vitamine`			REAL, 
+	`vitamink`			REAL, 
+	`volume`			REAL, 
+	`water`			REAL, 
+	`zinc`			REAL, 
+	`nutritionservinglabel`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`md5hash`			varchar, 
+	`recipeassetid`			INTEGER, 
+	`recipetypes`			TEXT, 
+	`serverrecipeid`			INTEGER, 
+	`sourceimagemd5hash`			varchar, 
+	`sourcepagenumber`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER, 
+	`userdata1`			varchar, 
+	`userdata10`			INTEGER, 
+	`userdata11`			varchar, 
+	`userdata12`			varchar, 
+	`userdata13`			varchar, 
+	`userdata14`			varchar, 
+	`userdata15`			varchar, 
+	`userdata2`			varchar, 
+	`userdata3`			varchar, 
+	`userdata4`			varchar, 
+	`userdata5`			varchar, 
+	`userdata6`			INTEGER, 
+	`userdata7`			INTEGER, 
+	`userdata8`			INTEGER, 
+	`userdata9`			INTEGER, 
+	`yield`			varchar
+);
+
+CREATE TABLE `t_recipe_x`
+ (
+	`recipeid`			INTEGER, 
+	`serverrecipeid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_recipeattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`md5hash`			varchar, 
+	`recipeattachmentid`			INTEGER, 
+	`recipeid`			INTEGER
+);
+
+CREATE TABLE `t_recipeimage`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`imageid`			INTEGER, 
+	`imageindex`			INTEGER, 
+	`imagepath`			varchar, 
+	`imagetype`			varchar, 
+	`md5hash`			varchar, 
+	`recipeid`			INTEGER, 
+	`recipeimageid`			INTEGER
+);
+
+CREATE TABLE `t_recipeingredient`
+ (
+	`recipeingredientid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`quantitytext`			varchar, 
+	`unittext`			varchar, 
+	`ingredienttext`			varchar, 
+	`ingredientindex`			INTEGER, 
+	`heading`			varchar, 
+	`measureid`			INTEGER, 
+	`measurequantity`			REAL, 
+	`linkedrecipeid`			INTEGER, 
+	`linktype`			varchar, 
+	`unresolvedlinkrecipename`			varchar, 
+	`unresolvedrecipelink`			INTEGER, 
+	`linkedrecipeservings`			REAL, 
+	`linkquality`			INTEGER, 
+	`serverlinkedrecipeid`			INTEGER
+);
+
+CREATE TABLE `t_recipemeasure`
+ (
+	`gramweight`			REAL, 
+	`measureid`			INTEGER, 
+	`recipeid`			INTEGER
+);
+
+CREATE TABLE `t_recipeprocedure`
+ (
+	`recipeprocedureid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`proceduretext`			TEXT, 
+	`procedureindex`			INTEGER, 
+	`heading`			varchar, 
+	`imageindex`			INTEGER, 
+	`photographpath`			varchar, 
+	`imageid`			INTEGER, 
+	`imagemd5hash`			varchar
+);
+
+CREATE TABLE `t_recipereview`
+ (
+	`recipereviewid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`reviewtext`			TEXT, 
+	`reviewindex`			INTEGER, 
+	`reviewdate`			DateTime, 
+	`rating`			INTEGER, 
+	`reviewer`			varchar
+);
+
+CREATE TABLE `t_recipetechnique`
+ (
+	`recipeid`			INTEGER, 
+	`techniqueid`			INTEGER, 
+	`techniqueindex`			INTEGER
+);
+
+CREATE TABLE `t_recipetip`
+ (
+	`recipetipid`			INTEGER, 
+	`recipeid`			INTEGER, 
+	`tiptext`			TEXT, 
+	`tipindex`			INTEGER, 
+	`heading`			varchar
+);
+
+CREATE TABLE `t_recipetype`
+ (
+	`recipetypeid`			INTEGER, 
+	`description`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverrecipetypeid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_recipetype_x`
+ (
+	`recipetypeid`			INTEGER, 
+	`serverrecipetypeid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_rssfeed_x`
+ (
+	`rssfeedid`			INTEGER, 
+	`serverrssfeedid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_rssfeedfolder`
+ (
+	`comments`			varchar, 
+	`parentfolderid`			INTEGER, 
+	`rssfeedfolderid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverparentfolderid`			INTEGER, 
+	`serverrssfeedfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_rssfeedfolder_x`
+ (
+	`rssfeedfolderid`			varchar, 
+	`serverrssfeedfolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_rssfeedfolderassociation`
+ (
+	`distance`			INTEGER, 
+	`rssfeedfolderid`			INTEGER, 
+	`rssfeedid`			INTEGER
+);
+
+CREATE TABLE `t_search`
+ (
+	`searchid`			INTEGER, 
+	`navigator`			varchar, 
+	`task`			varchar, 
+	`name`			varchar, 
+	`constraintstring`			TEXT, 
+	`searchfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`mode`			varchar, 
+	`searchgroupid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serversearchid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_searchfolder`
+ (
+	`searchfolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`navigator`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverparentfolderid`			INTEGER, 
+	`serversearchfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_searchfolder_x`
+ (
+	`searchfolderid`			varchar, 
+	`serversearchfolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_searchfolderassociation`
+ (
+	`searchfolderid`			INTEGER, 
+	`searchid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_store`
+ (
+	`address1`			varchar, 
+	`address2`			varchar, 
+	`city`			varchar, 
+	`comments`			TEXT, 
+	`country`			varchar, 
+	`email1`			varchar, 
+	`email2`			varchar, 
+	`fulladdress`			varchar, 
+	`name`			varchar, 
+	`orderurl`			varchar, 
+	`state`			varchar, 
+	`storeid`			INTEGER, 
+	`telephone1`			varchar, 
+	`telephone2`			varchar, 
+	`website`			varchar, 
+	`zip`			varchar, 
+	`colorflag`			varchar, 
+	`createdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverstoreid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_store_x`
+ (
+	`serverstoreid`			INTEGER, 
+	`storeid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_storeingredient`
+ (
+	`cost`			REAL, 
+	`groceryaisle`			varchar, 
+	`ingredientid`			INTEGER, 
+	`measureid`			INTEGER, 
+	`storeid`			INTEGER, 
+	`upc`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverstoreingredientid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_storeingredient_x`
+ (
+	`ingredientid`			INTEGER, 
+	`measureid`			INTEGER, 
+	`serverstoreingredientid`			INTEGER, 
+	`storeid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_technique`
+ (
+	`techniqueid`			INTEGER, 
+	`name`			varchar, 
+	`source`			varchar, 
+	`webpage`			varchar, 
+	`techniquefolderid`			INTEGER, 
+	`comments`			TEXT, 
+	`photographflag`			varchar, 
+	`colorflag`			varchar, 
+	`copyright`			varchar, 
+	`createdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`sourceimageid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`md5hash`			varchar, 
+	`servertechniqueid`			INTEGER, 
+	`sourceimagemd5hash`			varchar, 
+	`techniqueassetid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_technique_x`
+ (
+	`servertechniqueid`			INTEGER, 
+	`techniqueid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_techniqueattachment`
+ (
+	`attachmentid`			INTEGER, 
+	`attachmentindex`			INTEGER, 
+	`description`			varchar, 
+	`md5hash`			varchar, 
+	`techniqueattachmentid`			INTEGER, 
+	`techniqueid`			INTEGER
+);
+
+CREATE TABLE `t_techniquefolder`
+ (
+	`techniquefolderid`			INTEGER, 
+	`comments`			varchar, 
+	`parentfolderid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverparentfolderid`			INTEGER, 
+	`servertechniquefolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_techniquefolderassociation`
+ (
+	`techniquefolderid`			INTEGER, 
+	`techniqueid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_techniquemedia`
+ (
+	`techniqueid`			INTEGER, 
+	`techniquemediaid`			INTEGER, 
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`mediaindex`			INTEGER, 
+	`mediapath`			varchar, 
+	`mediatype`			varchar, 
+	`mediaid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_techniquetext`
+ (
+	`techniquetextid`			INTEGER, 
+	`techniqueid`			INTEGER, 
+	`techniquetext`			TEXT, 
+	`textindex`			INTEGER, 
+	`numberflag`			varchar, 
+	`bulletflag`			varchar, 
+	`imageid`			INTEGER, 
+	`heading`			varchar, 
+	`imagemd5hash`			varchar
+);
+
+CREATE TABLE `t_unit`
+ (
+	`casesensitive`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`preferredname`			varchar, 
+	`serverunitid`			INTEGER, 
+	`unitid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_unit_x`
+ (
+	`serverunitid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`unitid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_unitautocomplete`
+ (
+	`unit`			varchar
+);
+
+CREATE TABLE `t_webpage`
+ (
+	`webpageid`			INTEGER, 
+	`title`			varchar, 
+	`comments`			TEXT, 
+	`url`			varchar, 
+	`webpagefolderid`			INTEGER, 
+	`colorflag`			varchar, 
+	`createdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`webpagegroupid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverwebpageid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_webpagefolder`
+ (
+	`webpagefolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`comments`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverparentfolderid`			INTEGER, 
+	`serverwebpagefolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_webpagefolder_x`
+ (
+	`serverwebpagefolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER, 
+	`webpagefolderid`			varchar
+);
+
+CREATE TABLE `t_webpagefolderassociation`
+ (
+	`webpagefolderid`			INTEGER, 
+	`webpageid`			INTEGER, 
+	`distance`			INTEGER
+);
+
+CREATE TABLE `t_cookbook`
+ (
+	`cookbookid`			INTEGER, 
+	`cookbookimageid`			INTEGER, 
+	`author`			varchar, 
+	`copyright`			varchar, 
+	`autoarchivepriority`			INTEGER, 
+	`comments`			TEXT, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`imagemd5hash`			varchar, 
+	`name`			varchar, 
+	`servercookbookid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_favorite`
+ (
+	`favoriteid`			INTEGER, 
+	`navigator`			varchar, 
+	`name`			varchar, 
+	`itemtype`			varchar, 
+	`itemid1`			INTEGER, 
+	`itemid2`			INTEGER, 
+	`itemid3`			INTEGER, 
+	`favoritefolderid`			INTEGER, 
+	`comments`			varchar, 
+	`favoritegroupid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverfavoriteid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_favoritefolder_x`
+ (
+	`favoritefolderid`			varchar, 
+	`serverfavoritefolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_groceryaisle_x`
+ (
+	`groceryaisleid`			INTEGER, 
+	`servergroceryaisleid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_grocerylistitem`
+ (
+	`grocerylistitemid`			INTEGER, 
+	`grocerylistid`			INTEGER, 
+	`quantity`			varchar, 
+	`unit`			varchar, 
+	`ingredient`			varchar, 
+	`itemtype`			varchar, 
+	`recipeid`			INTEGER, 
+	`ingredientid`			INTEGER, 
+	`unitcost`			REAL, 
+	`extendedcost`			REAL, 
+	`groceryaisleid`			INTEGER, 
+	`groceryaisle`			varchar, 
+	`measureid`			INTEGER, 
+	`rawmass`			REAL, 
+	`reservemass`			REAL, 
+	`store`			varchar, 
+	`storeid`			INTEGER, 
+	`checkedflag`			varchar, 
+	`linkquality`			INTEGER
+);
+
+CREATE TABLE `t_ingredient_x`
+ (
+	`ingredientid`			INTEGER, 
+	`serveringredientid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_ingredientmeasure`
+ (
+	`ingredientid`			INTEGER, 
+	`measureid`			INTEGER, 
+	`gramweight`			REAL, 
+	`measurecost`			REAL
+);
+
+CREATE TABLE `t_inventoryitemfolder`
+ (
+	`comments`			varchar, 
+	`inventoryitemfolderid`			INTEGER, 
+	`parentfolderid`			INTEGER, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`name`			varchar, 
+	`serverinventoryitemfolderid`			INTEGER, 
+	`serverparentfolderid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_inventoryitemfolderassociation`
+ (
+	`distance`			INTEGER, 
+	`inventoryitemfolderid`			INTEGER, 
+	`inventoryitemid`			INTEGER
+);
+
+CREATE TABLE `t_menufolder_x`
+ (
+	`menufolderid`			varchar, 
+	`servermenufolderid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_menutype_x`
+ (
+	`menutypeid`			INTEGER, 
+	`servermenutypeid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_recipemedia`
+ (
+	`description`			varchar, 
+	`fileindex`			INTEGER, 
+	`mediaindex`			INTEGER, 
+	`mediapath`			varchar, 
+	`mediatype`			varchar, 
+	`recipeid`			INTEGER, 
+	`recipemediaid`			INTEGER, 
+	`mediaid`			INTEGER, 
+	`md5hash`			varchar
+);
+
+CREATE TABLE `t_rssfeed`
+ (
+	`colorflag`			varchar, 
+	`comments`			TEXT, 
+	`createdate`			DateTime, 
+	`feedxml`			TEXT, 
+	`lastrefreshdate`			DateTime, 
+	`modifieddate`			DateTime, 
+	`name`			varchar, 
+	`rssfeedfolderid`			INTEGER, 
+	`rssfeedid`			INTEGER, 
+	`url`			varchar, 
+	`createreplicaid`			INTEGER, 
+	`deleteflag`			varchar, 
+	`serverrssfeedid`			INTEGER, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_search_x`
+ (
+	`searchid`			INTEGER, 
+	`serversearchid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_storegroceryaisle`
+ (
+	`aisleindex`			INTEGER, 
+	`groceryaisle`			varchar, 
+	`storegroceryaisleid`			INTEGER, 
+	`storeid`			INTEGER
+);
+
+CREATE TABLE `t_techniquefolder_x`
+ (
+	`servertechniquefolderid`			INTEGER, 
+	`techniquefolderid`			varchar, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER
+);
+
+CREATE TABLE `t_webpage_x`
+ (
+	`serverwebpageid`			INTEGER, 
+	`undeleteflag`			varchar, 
+	`updatereplicaid`			INTEGER, 
+	`updatetick`			INTEGER, 
+	`webpageid`			INTEGER
+);
+
+
+-- CREATE Relationships ...

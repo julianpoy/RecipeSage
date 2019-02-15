@@ -22,13 +22,13 @@
       </ion-thumbnail>
       <h2 class="recipeTitle" text-wrap>{{ recipe.title }}</h2>
 
-      <ion-grid class="meta" showWhen="core" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield">
+      <ion-grid class="meta" showWhen="core" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
         <ion-row>
-          <ion-col *ngIf="recipe.source" col-auto>
+          <ion-col *ngIf="recipe.source || recipe.url" col-auto>
             <p text-wrap>
               <b>Source:</b>
-              <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
-              <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
+              <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+              <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.activeTime" col-auto>
@@ -45,14 +45,14 @@
       <p text-wrap>{{ recipe.description }}</p>
     </ion-item>
 
-    <div showWhen="mobile" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield" padding-left padding-right>
+    <div showWhen="mobile" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield" padding-left padding-right>
       <ion-grid class="meta">
         <ion-row>
-          <ion-col *ngIf="recipe.source" col-auto>
+          <ion-col *ngIf="recipe.source || recipe.url" col-auto>
             <p>
               <b>Source:</b>
-              <a *ngIf='recipe.url' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source }}</a>
-              <span *ngIf='!recipe.url'>{{ recipe.source }}</span>
+              <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+              <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.activeTime" col-auto>
