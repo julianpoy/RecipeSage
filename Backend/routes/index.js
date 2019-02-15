@@ -472,7 +472,7 @@ router.post(
                 userId: res.locals.session.userId,
                 title: lcbRecipe.recipename || '',
                 description,
-                yield: lcbRecipe.yield || '',
+                yield: (lcbRecipe.yield || '').toString(),
                 activeTime: (lcbRecipe.preparationtime || '').toString(),
                 totalTime,
                 source: lcbRecipe.source || '',
