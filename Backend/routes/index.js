@@ -462,13 +462,19 @@ router.post(
               let createdAt = new Date(lcbRecipe.createdate || Date.now())
               let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
 
+              let totalTime = (lcbRecipe.readyintime || '').toString().trim()
+              if (lcbRecipe.cookingtime) {
+                totalTime += ` (${lcbRecipe.cookingtime.toString().trim()} cooking time)`;
+              }
+              totalTime = totalTime.trim();
+
               return Recipe.create({
                 userId: res.locals.session.userId,
                 title: lcbRecipe.recipename || '',
                 description,
                 yield: lcbRecipe.yield || '',
-                activeTime: lcbRecipe.preparationtime || '',
-                totalTime: lcbRecipe.readyintime || '',
+                activeTime: (lcbRecipe.preparationtime || '').toString(),
+                totalTime,
                 source: lcbRecipe.source || '',
                 url: lcbRecipe.webpage || '',
                 notes,
