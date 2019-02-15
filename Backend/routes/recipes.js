@@ -94,7 +94,7 @@ router.get(
       userId: res.locals.session.userId,
       folder: req.query.folder
     },
-    attributes: ['id', 'title', 'description', 'source', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
     include: [{
       model: User,
       as: 'fromUser',
