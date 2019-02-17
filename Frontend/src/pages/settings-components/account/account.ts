@@ -201,6 +201,7 @@ export class AccountPage {
     this.userService.update({
       password: this.account.password
     }).subscribe(response => {
+      loading.dismiss();
 
       this.account.password = '*'.repeat(this.account.password.length);
       this.passwordChanged = false;
