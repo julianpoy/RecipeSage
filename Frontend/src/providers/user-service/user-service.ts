@@ -91,6 +91,20 @@ export class UserServiceProvider {
     );
   }
 
+  delete() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http
+    .delete(this.base + 'users/' + this.getTokenQuery(), httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
   saveFCMToken(key) {
 
     console.log("attempting save")

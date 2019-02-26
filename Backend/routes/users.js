@@ -297,6 +297,26 @@ router.put(
   }).catch(next);
 });
 
+/* Delete user */
+router.delete(
+  '/',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function (req, res, next) {
+
+  return SQ.transaction(t => {
+    User.destroy({
+      where: {
+        id: res.locals.session.userId
+      },
+      transaction: t
+    }).then(() => {
+      res.status(200).send("Ok");
+    })
+  })
+})
+
 router.post(
   '/logout',
   cors(),

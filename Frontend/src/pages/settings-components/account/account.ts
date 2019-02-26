@@ -238,6 +238,62 @@ export class AccountPage {
     });
   }
 
+  deleteAccount() {
+    let alert = this.alertCtrl.create({
+      title: 'Warning - You\'re about to delete your account!',
+      message: `This action is PERMANENT.<br /><br />All of your recipes, messages, etc. will be removed from the Recipe Sage system.<br />This is a FULL wipe of your data.<br /><br />Note: This may also affect anyone you share a shopping list with (that you own).`,
+      buttons: [
+        {
+          text: 'Yes, continue',
+          handler: () => {
+            let loading = this.loadingService.start();
+
+            this.userService.delete().subscribe(response => {
+              loading.dismiss();
+
+              this.toastCtrl.create({
+                message: 'Your account has been deleted.',
+                duration: 5000
+              }).present();
+
+              this.navCtrl.setRoot('WelcomePage', {}, { animate: true, direction: 'forward' });
+            }, err => {
+              loading.dismiss();
+
+              switch(err.status) {
+                case 0:
+                  this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  }).present();
+                  break;
+                case 401:
+                  this.toastCtrl.create({
+                    message: 'It looks like your session has expired. Please login and try again.',
+                    duration: 5000
+                  }).present();
+                  this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
+            })
+          }
+        },
+        {
+          text: 'Cancel',
+          handler: () => {}
+        }
+      ]
+    });
+    alert.present();
+  }
+
   deleteAllRecipes() {
     let alert = this.alertCtrl.create({
       title: 'Warning - You\'re about to delete all of your recipes!',
