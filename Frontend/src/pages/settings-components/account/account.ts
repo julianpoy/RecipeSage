@@ -4,6 +4,7 @@ import { IonicPage, ToastController, AlertController, NavController, NavParams }
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
+import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
 
 @IonicPage({
   priority: 'low'
@@ -29,6 +30,7 @@ export class AccountPage {
     public navParams: NavParams,
     public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
+    public recipeService: RecipeServiceProvider,
     public userService: UserServiceProvider) {
 
     var loading = this.loadingService.start();
@@ -201,6 +203,7 @@ export class AccountPage {
     this.userService.update({
       password: this.account.password
     }).subscribe(response => {
+      loading.dismiss();
 
       this.account.password = '*'.repeat(this.account.password.length);
       this.passwordChanged = false;
@@ -233,5 +236,99 @@ export class AccountPage {
           break;
       }
     });
+  }
+
+  deleteAllRecipes() {
+    let alert = this.alertCtrl.create({
+      title: 'Warning - You\'re about to delete all of your recipes!',
+      message: `This action is PERMANENT.<br /><br />All of your recipes and associated labels will be removed from the Recipe Sage system.`,
+      buttons: [
+        {
+          text: 'Yes, continue',
+          handler: () => {
+            let loading = this.loadingService.start();
+
+            Promise.all([
+              new Promise((resolve, reject) => this.recipeService.fetch({ folder: 'main' }).subscribe(response => resolve(response), err => reject(err))),
+              new Promise((resolve, reject) => this.recipeService.fetch({ folder: 'inbox' }).subscribe(response => resolve(response), err => reject(err))),
+            ]).then(([main, inbox]: [[Recipe], [Recipe]]) => {
+              let allRecipes = [...main, ...inbox]
+
+              Promise.all(allRecipes.map(recipe => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    this.recipeService.remove({
+                      id: recipe.id
+                    }).subscribe(response => resolve(response), err => reject(err))
+                  }, Math.floor(Math.random() * 1000)) // Avoid server ddos
+                })
+              })).then(() => {
+                loading.dismiss();
+
+                this.toastCtrl.create({
+                  message: 'Your recipe data has been deleted.',
+                  duration: 5000
+                }).present();
+              }).catch(err => {
+                loading.dismiss();
+
+                switch (err.status) {
+                  case 0:
+                    this.toastCtrl.create({
+                      message: this.utilService.standardMessages.offlinePushMessage,
+                      duration: 5000
+                    }).present();
+                    break;
+                  case 401:
+                    this.toastCtrl.create({
+                      message: 'It looks like your session has expired. Please login and try again.',
+                      duration: 5000
+                    }).present();
+                    this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+                    break;
+                  default:
+                    let errorToast = this.toastCtrl.create({
+                      message: this.utilService.standardMessages.unexpectedError,
+                      duration: 30000
+                    });
+                    errorToast.present();
+                    break;
+                }
+              })
+            }).catch(err => {
+              loading.dismiss();
+
+              switch (err.status) {
+                case 0:
+                  this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  }).present();
+                  break;
+                case 401:
+                  this.toastCtrl.create({
+                    message: 'It looks like your session has expired. Please login and try again.',
+                    duration: 5000
+                  }).present();
+                  this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
+            })
+          }
+        },
+        {
+          text: 'Cancel',
+          handler: () => {}
+        }
+      ]
+    });
+    alert.present();
   }
 }

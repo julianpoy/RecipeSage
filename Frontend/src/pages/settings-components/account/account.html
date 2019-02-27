@@ -11,6 +11,19 @@
 <ion-content>
   <br />
 
+  <ion-item no-lines text-wrap>
+    <p>
+      Here you can update and change aspects about your account
+    </p>
+  </ion-item>
+
+  <br />
+
+  <ion-item no-lines>
+    <ion-icon name="key" item-start></ion-icon>
+    Credentials and Details
+  </ion-item>
+
   <ion-item>
     <ion-label stacked>Name/Nickname</ion-label>
     <ion-input
@@ -66,7 +79,25 @@
 
   <ion-item no-lines text-wrap>
     <p>
-      To change something here, tap the field, edit it, and press the save button that appears.
+      To change a field above, tap the field, edit it, and press the save button that appears.
     </p>
   </ion-item>
+
+  <br /><br /><br /><br />
+
+  <ion-item no-lines>
+    <ion-icon name="warning" color="danger" item-start></ion-icon>
+    Danger Zone!
+  </ion-item>
+
+  <ion-item no-lines text-wrap>
+    <p>
+      Be careful with these actions - they are permenant.<br />
+      You will be asked a to confirm any action you take here.
+    </p>
+  </ion-item>
+
+  <button margin ion-button color="danger" (click)="deleteAllRecipes()" item-right>
+    Delete All Recipes
+  </button>
 </ion-content>
