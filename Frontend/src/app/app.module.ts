@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import * as Sentry from '@sentry/browser';
 
 import { MyApp } from './app.component';
 import { PipesModule } from '../pipes/pipes.module';
@@ -19,6 +20,22 @@ import { ShoppingListServiceProvider } from '../providers/shopping-list-service/
 import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../providers/util-service/util-service';
 import { MealPlanServiceProvider } from '../providers/meal-plan-service/meal-plan-service';
+
+Sentry.init({
+  release: (<any>window).version,
+  dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200'
+});
+
+class SentryIonicErrorHandler extends IonicErrorHandler {
+  handleError(error) {
+    super.handleError(error);
+    try {
+      Sentry.captureException(error.originalError || error);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
 
 var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Force windows phone to use Material Design
 
@@ -44,7 +61,7 @@ var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Fo
     MyApp
   ],
   providers: [
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: ErrorHandler, useClass: SentryIonicErrorHandler},
     UserServiceProvider,
     LabelServiceProvider,
     RecipeServiceProvider,

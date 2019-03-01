@@ -33,6 +33,7 @@
     "@ionic/pro": "2.0.4",
     "@ionic/storage": "2.2.0",
     "@ngx-loading-bar/core": "^2.1.2",
+    "@sentry/browser": "^4.6.4",
     "@types/firebase": "^3.2.1",
     "blueimp-load-image": "^2.20.1",
     "cordova-browser": "5.0.4",
