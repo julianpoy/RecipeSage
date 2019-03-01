@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, AlertController, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, ToastController, AlertController, NavController, NavParams } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
@@ -29,7 +29,6 @@ export class AccountPage {
     public alertCtrl: AlertController,
     public navParams: NavParams,
     public utilService: UtilServiceProvider,
-    public loadingCtrl: LoadingController,
     public loadingService: LoadingServiceProvider,
     public recipeService: RecipeServiceProvider,
     public userService: UserServiceProvider) {
@@ -247,11 +246,7 @@ export class AccountPage {
         {
           text: 'Yes, continue',
           handler: () => {
-            let loading = this.loadingCtrl.create({
-              content: 'Deleting Recipes, Please Wait...'
-            });
-
-            loading.present();
+            let loading = this.loadingService.start();
 
             Promise.all([
               new Promise((resolve, reject) => this.recipeService.fetch({ folder: 'main' }).subscribe(response => resolve(response), err => reject(err))),
