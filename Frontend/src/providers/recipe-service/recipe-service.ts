@@ -185,7 +185,30 @@ export class RecipeServiceProvider {
         this.http
         .delete(this.base + 'recipes/' + data.id + this.getTokenQuery(), httpOptions)
         .pipe(
-          retry(1),
+          retry(2),
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:deleted');
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
+  removeAll() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .delete(this.base + 'recipes/all' + this.getTokenQuery(), httpOptions)
+        .pipe(
+          retry(2),
           catchError(this.handleError)
         ).subscribe(response => {
           this.events.publish('recipe:deleted');

@@ -21,7 +21,7 @@ var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '1.5.2'
+  release: '1.5.3'
 }).install();
 
 // Routes

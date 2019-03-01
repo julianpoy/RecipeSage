@@ -469,6 +469,92 @@ describe('recipes', () => {
     })
   })
 
+  describe('delete all', () => {
+    it('deletes all recipes and labels', async () => {
+      let user = await createUser();
+
+      let session = await createSession(user.id);
+
+      let recipe1 = await createRecipe(user.id);
+      let recipe2 = await createRecipe(user.id);
+
+      let label1 = await createLabel(user.id);
+      let label2 = await createLabel(user.id);
+
+      await associateLabel(label1.id, recipe1.id);
+      await associateLabel(label2.id, recipe2.id);
+
+      await request(server)
+        .delete(`/recipes/all`)
+        .query({ token: session.token })
+        .expect(200)
+        .then(async () => {
+          await Recipe.findAll({
+            where: {
+              userId: user.id
+            }
+          }).then(async recipes => {
+            expect(recipes).to.have.lengthOf(0)
+
+            await Label.findAll({
+              where: {
+                userId: user.id
+              }
+            }).then(labels => {
+              expect(labels).to.have.lengthOf(0)
+            })
+          })
+        });
+    })
+
+    it('does not remove recipes or labels belonging to another user', async () => {
+      let user1 = await createUser();
+      let user2 = await createUser();
+
+      let session = await createSession(user1.id);
+
+      let recipe = await createRecipe(user2.id);
+
+      let label = await createLabel(user2.id);
+
+      await associateLabel(label.id, recipe.id);
+
+      await request(server)
+        .delete(`/recipes/all`)
+        .query({ token: session.token })
+        .then(async () => {
+          await Recipe.findAll({
+            where: {
+              userId: user2.id
+            }
+          }).then(async recipes => {
+            expect(recipes).to.have.lengthOf(1)
+
+            await Label.findAll({
+              where: {
+                userId: user2.id
+              }
+            }).then(labels => {
+              expect(labels).to.have.lengthOf(1)
+            })
+          })
+        });
+    });
+
+    it('requires valid session', async () => {
+      let user = await createUser();
+
+      let session = await createSession(user.id);
+
+      let recipe = await createRecipe(user.id);
+
+      return request(server)
+        .delete(`/recipes/all`)
+        .query({ token: 'invalid' })
+        .expect(401);
+    });
+  })
+
   describe('delete', () => {
     it('deletes recipe', async () => {
       let user = await createUser();

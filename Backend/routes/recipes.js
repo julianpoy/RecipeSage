@@ -287,6 +287,31 @@ router.put(
 });
 
 router.delete(
+  '/all',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  SQ.transaction(t => {
+    return Recipe.destroy({
+      where: {
+        userId: res.locals.session.userId
+      },
+      transaction: t
+    }).then(() => {
+      return Label.destroy({
+        where: {
+          userId: res.locals.session.userId
+        },
+        transaction: t
+      }).then(() => {
+        res.status(200).send({})
+      })
+    })
+  }).catch(next);
+})
+
+router.delete(
   '/:id',
   cors(),
   MiddlewareService.validateSession(['user']),
