@@ -4,7 +4,7 @@ import { IonicPage, ToastController, AlertController, NavController, NavParams }
 import { UserServiceProvider } from '../../../providers/user-service/user-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
-import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 
 @IonicPage({
   priority: 'low'
@@ -248,54 +248,14 @@ export class AccountPage {
           handler: () => {
             let loading = this.loadingService.start();
 
-            Promise.all([
-              new Promise((resolve, reject) => this.recipeService.fetch({ folder: 'main' }).subscribe(response => resolve(response), err => reject(err))),
-              new Promise((resolve, reject) => this.recipeService.fetch({ folder: 'inbox' }).subscribe(response => resolve(response), err => reject(err))),
-            ]).then(([main, inbox]: [[Recipe], [Recipe]]) => {
-              let allRecipes = [...main, ...inbox]
+            this.recipeService.removeAll().subscribe(() => {
+              loading.dismiss();
 
-              Promise.all(allRecipes.map(recipe => {
-                return new Promise((resolve, reject) => {
-                  setTimeout(() => {
-                    this.recipeService.remove({
-                      id: recipe.id
-                    }).subscribe(response => resolve(response), err => reject(err))
-                  }, Math.floor(Math.random() * 1000)) // Avoid server ddos
-                })
-              })).then(() => {
-                loading.dismiss();
-
-                this.toastCtrl.create({
-                  message: 'Your recipe data has been deleted.',
-                  duration: 5000
-                }).present();
-              }).catch(err => {
-                loading.dismiss();
-
-                switch (err.status) {
-                  case 0:
-                    this.toastCtrl.create({
-                      message: this.utilService.standardMessages.offlinePushMessage,
-                      duration: 5000
-                    }).present();
-                    break;
-                  case 401:
-                    this.toastCtrl.create({
-                      message: 'It looks like your session has expired. Please login and try again.',
-                      duration: 5000
-                    }).present();
-                    this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
-                    break;
-                  default:
-                    let errorToast = this.toastCtrl.create({
-                      message: this.utilService.standardMessages.unexpectedError,
-                      duration: 30000
-                    });
-                    errorToast.present();
-                    break;
-                }
-              })
-            }).catch(err => {
+              this.toastCtrl.create({
+                message: 'Your recipe data has been deleted.',
+                duration: 5000
+              }).present();
+            }, err => {
               loading.dismiss();
 
               switch (err.status) {
