@@ -306,13 +306,13 @@ router.delete(
   function (req, res, next) {
 
   return SQ.transaction(t => {
-    User.destroy({
+    return User.destroy({
       where: {
         id: res.locals.session.userId
       },
       transaction: t
     }).then(() => {
-      res.status(200).send("Ok");
+      res.status(200).send({});
     })
   })
 })
