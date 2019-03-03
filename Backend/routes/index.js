@@ -25,6 +25,70 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'RS API' });
 });
 
+router.get('/deduperecipelabels', function(req, res, next) {
+  SQ.transaction(t => {
+    return User.findAll({
+      attributes: ['id'],
+      transaction: t
+    }).then(users => {
+      return Promise.all(users.map(user => {
+        let recipeIdsByLabelTitle = {};
+        let labelIdsByLabelTitle = {};
+
+        return Label.findAll({
+          where: {
+            userId: user.id
+          },
+          attributes: ['id', 'title'],
+          include: [{
+            model: Recipe,
+            as: 'recipes',
+            attributes: ['id']
+          }],
+          transaction: t
+        }).then(labels => {
+          return Promise.all(labels.map(label => {
+            recipeIdsByLabelTitle[label.title] = recipeIdsByLabelTitle[label.title] || [];
+            label.recipes.map(recipe => {
+              recipeIdsByLabelTitle[label.title].push(recipe.id);
+            })
+
+            labelIdsByLabelTitle[label.title] = labelIdsByLabelTitle[label.title] || [];
+            if (labelIdsByLabelTitle[label.title].indexOf(label.id) == -1) labelIdsByLabelTitle[label.title].push(label.id);
+          }))
+        }).then(() => {
+          return Object.entries(labelIdsByLabelTitle).filter(([labelTitle, labelIds]) => labelIds.length > 1).length
+        }).then(dupeCount => {
+          if (dupeCount > 0) {
+            return Label.destroy({
+              where: {
+                userId: user.id
+              },
+              transaction: t
+            }).then(() => {
+              return Promise.all(Object.entries(recipeIdsByLabelTitle).map(([labelTitle, recipeIds]) => {
+                if (labelTitle.trim().length == 0 || recipeIds.length == 0) return;
+
+                return Label.findOrCreate({
+                  where: {
+                    userId: user.id,
+                    title: labelTitle
+                  },
+                  transaction: t
+                }).then(function (labels) {
+                  return Promise.all(recipeIds.map(recipeId => {
+                    return labels[0].addRecipe(recipeId, { transaction: t })
+                  }))
+                })
+              }))
+            })
+          }
+        })
+      }))
+    })
+  }).catch(next);
+})
+
 function saveRecipes(userId, recipes) {
   return SQ.transaction(function (t) {
 
@@ -397,6 +461,8 @@ router.post(
       }).then(async () => {
         // return await fs.writeFile('output', JSON.stringify(tableMap))
 
+        let labelMap = {};
+
         return SQ.transaction(t => {
           return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
             return new Promise(resolve => {
@@ -487,18 +553,28 @@ router.post(
                 updatedAt
               }, { transaction: t }).then(recipe => {
                 // Split, trim, tolowercase, filter nulls, then transform to set (remove dupes) and back to array
-                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()).filter(el => el.length > 0))]
+                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
 
                 return Promise.all(lcbRecipeLabels.map(lcbLabelName => {
-                  return Label.findOrCreate({
+                  if (labelMap[lcbLabelName]) { // If pending label found in map
+                    return labelMap[lcbLabelName].then(label => { // Wait for it to be resolved by another worker
+                      return label.addRecipe(recipe.id, { transaction: t });
+                    })
+                  }
+
+                  labelMap[lcbLabelName] = Label.findOrCreate({
                     where: {
                       userId: res.locals.session.userId,
                       title: lcbLabelName
                     },
                     transaction: t
                   }).then(function (labels) {
-                    return labels[0].addRecipe(recipe.id, { transaction: t });
+                    return labels[0].addRecipe(recipe.id, { transaction: t }).then(() => {
+                      return labels[0]; // Fill in the labelmap for others
+                    });
                   });
+
+                  return labelMap[lcbLabelName] // Continue promise chain
                 }))
               })
             })
@@ -508,11 +584,11 @@ router.post(
             } catch(e){}
             fs.removeSync(zipPath)
             fs.removeSync(extractPath)
-
-            res.status(200).json({
-              msg: "Success!"
-            });
           })
+        }).then(() => {
+          res.status(200).json({
+            msg: "Success!"
+          });
         })
       }).catch(e => {
         try {

@@ -72,17 +72,29 @@ export class ImportLivingcookbookPage {
 
       this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
     }, err => {
-      this.loading.dismiss();
-      this.loading = null;
       switch (err.status) {
         case 0:
+          this.loading.dismiss();
+          this.loading = null;
           this.presentToast(this.utilService.standardMessages.offlinePushMessage)
           break;
         case 401:
+          this.loading.dismiss();
+          this.loading = null;
           this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
           break;
+        case 504:
+          setTimeout(() => {
+            this.loading.dismiss();
+            this.loading = null;
+            this.presentToast("The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.");
+            this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
+          }, 20000);
+          break;
         default:
-          this.presentToast(this.utilService.standardMessages.unexpectedError)
+          this.loading.dismiss();
+          this.loading = null;
+          this.presentToast(this.utilService.standardMessages.unexpectedError);
           break;
       }
     });
