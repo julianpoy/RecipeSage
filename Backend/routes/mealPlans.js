@@ -192,7 +192,7 @@ router.delete(
         res.status(404).send("Meal plan not found or not visible to you!");
       } else {
         if (mealPlan.userId === res.locals.session.userId) {
-          return mealPlan.destroy(function () {
+          return mealPlan.destroy().then(() => {
             for (var i = 0; i < (mealPlan.collaborators || []).length; i++) {
               GripService.broadcast(mealPlan.collaborators[i], 'mealPlan:removed', {
                 mealPlanId: mealPlan.id,
