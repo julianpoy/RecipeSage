@@ -81,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       beforeBulkDestroy: (where, options) => {
         return Recipe.findAll({
           where,
+          attributes: ['image'],
           transaction: options.transaction
         }).then(recipes => {
           return Promise.all(recipes.map(recipe => {
