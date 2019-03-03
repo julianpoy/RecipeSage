@@ -202,7 +202,7 @@ exports.upload = multer({
   }
 });
 
-exports.deleteS3Object = (key, success, fail) => {
+exports.deleteS3Object = key => {
   return new Promise((resolve, reject) => {
     s3.deleteObject({
       Bucket: config.aws.bucket,
