@@ -5,9 +5,24 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>{{ folderTitle }}</ion-title>
+    <ion-title *ngIf="selectedRecipeIds.length == 0">{{ folderTitle }}</ion-title>
 
     <ion-buttons end>
+      <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="addLabelToSelectedRecipes()">
+        <ion-icon name="pricetag"></ion-icon>
+        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="deleteSelectedRecipes()">
+        <ion-icon name="trash"></ion-icon>
+        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="clearSelectedRecipes()">
+        <ion-icon name="close"></ion-icon>
+        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="options"></ion-icon>
       </button>
@@ -28,7 +43,12 @@
     <ion-searchbar (ionInput)="search($event.target.value)" (keyup.enter)="$event.target.blur()"></ion-searchbar>
 
     <div #container>
-      <ion-item *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn" class="recipeItem" (click)="openRecipe(recipe)">
+      <ion-item
+        *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn"
+        class="recipeItem"
+        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+        (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe)"
+        (press)="selectRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
           <img [src]="recipe.image.location" />
         </ion-thumbnail>
