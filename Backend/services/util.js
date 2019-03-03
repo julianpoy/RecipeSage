@@ -8,12 +8,6 @@ let fs = require('fs-extra');
 let gm = require('gm');
 let path = require('path');
 
-// DB
-var Op = require("sequelize").Op;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var FCMToken = require('../models').FCMToken;
-
 // Service
 var FirebaseService = require('./firebase');
 var GripService = require('./grip');
@@ -202,7 +196,7 @@ exports.upload = multer({
   }
 });
 
-exports.deleteS3Object = (key, success, fail) => {
+exports.deleteS3Object = key => {
   return new Promise((resolve, reject) => {
     s3.deleteObject({
       Bucket: config.aws.bucket,
@@ -277,73 +271,6 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
 
   return Promise.all(sendQueues);
-}
-
-exports._findTitle = (userId, recipeId, basename, transaction, ctr) => {
-  var adjustedTitle;
-  if (ctr == 1) {
-    adjustedTitle = basename;
-  } else {
-    adjustedTitle = basename + ' (' + ctr + ')';
-  }
-  return Recipe.findOne({
-    where: {
-      id: { [Op.ne]: recipeId },
-      userId: userId,
-      title: adjustedTitle
-    },
-    transaction
-  })
-  .then(dupe => {
-    if (dupe) {
-      return exports._findTitle(userId, recipeId, basename, transaction, ctr + 1);
-    }
-
-    return adjustedTitle
-  });
-}
-
-exports.findTitle = (userId, recipeId, basename, transaction) => {
-  return exports._findTitle(userId, recipeId, basename, transaction, 1);
-}
-
-exports.shareRecipe = (recipeId, senderId, recipientId, transaction) => {
-  return Recipe.findById(recipeId, { transaction }).then(recipe => {
-    if (!recipe) {
-      var e = new Error("Could not find recipe to share");
-      e.status = 404;
-      throw e;
-    } else {
-      return new Promise((resolve, reject) => {
-        if (recipe.image && recipe.image.location) {
-          exports.sendURLToS3(recipe.image.location).then(resolve).catch(reject)
-        } else {
-          resolve(null);
-        }
-      }).then(img => {
-        return exports.findTitle(recipientId, null, recipe.title, transaction).then(adjustedTitle => {
-          return Recipe.create({
-            userId: recipientId,
-        		title: adjustedTitle,
-            description: recipe.description,
-            yield: recipe.yield,
-            activeTime: recipe.activeTime,
-            totalTime: recipe.totalTime,
-            source: recipe.source,
-            url: recipe.url,
-            notes: recipe.notes,
-            ingredients: recipe.ingredients,
-            instructions: recipe.instructions,
-            image: img,
-            folder: 'inbox',
-            fromUserId: senderId
-          }, {
-            transaction
-          });
-        });
-      });
-    }
-  });
 }
 
 exports.findFilesByRegex = (searchPath, regex) => {

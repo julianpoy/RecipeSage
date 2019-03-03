@@ -47,7 +47,7 @@ router.post(
     }).then(function(img) {
       var uploadedFile = img || req.file;
 
-      return UtilService.findTitle(res.locals.session.userId, null, req.body.title, null).then(function(adjustedTitle) {
+      return Recipe.findTitle(res.locals.session.userId, null, req.body.title, null).then(function(adjustedTitle) {
         return Recipe.create({
           userId: res.locals.session.userId,
       		title: adjustedTitle,
@@ -257,7 +257,7 @@ router.put(
           recipe.image = req.file;
         }
 
-        return UtilService.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, t).then(function(adjustedTitle) {
+        return Recipe.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, t).then(function(adjustedTitle) {
           recipe.title = adjustedTitle;
 
           return recipe.save({transaction: t}).then(function (recipe) {
@@ -356,14 +356,7 @@ router.delete(
             },
             transaction: t
           }).then(function() {
-            // Remove image from our S3 bucket
-            if (recipe.image && recipe.image.key) {
-              return UtilService.deleteS3Object(recipe.image.key).then(function() {
-                res.status(200).json(recipe);
-              });
-            } else {
-              res.status(200).json(recipe);
-            }
+            res.status(200).json(recipe);
           });
         });
       });

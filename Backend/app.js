@@ -8,6 +8,7 @@ var fs = require('fs');
 var Raven = require('raven');
 
 var testMode = process.env.NODE_ENV === 'test';
+var verboseMode = process.env.VERBOSE === 'true';
 
 if (fs.existsSync("./config/config.json")) {
   if (!testMode) console.log("config.json found");
@@ -81,7 +82,7 @@ app.use(function(err, req, res, next) {
   if (!err.status) err.status = 500;
 
   res.locals.error = devMode ? err : {};
-  if (!testMode) {
+  if (!testMode || verboseMode) {
     if (devMode) console.error(err);
     else Raven.captureException(err);
   }

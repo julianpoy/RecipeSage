@@ -1,4 +1,8 @@
+let UtilService = require('../services/util');
+let Op = require("sequelize").Op;
+
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
     id: {
@@ -63,7 +67,33 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'main',
       allowNull: false
     }
-  }, {});
+  }, {
+    hooks: {
+      beforeDestroy: (recipe, options) => {
+        return Recipe.findById(recipe.id, {
+          attributes: ['image'],
+          transaction: options.transaction
+        }).then(recipe => {
+          if (recipe.image && recipe.image.key) {
+            return UtilService.deleteS3Object(recipe.image.key);
+          }
+        })
+      },
+      beforeBulkDestroy: (options) => {
+        return Recipe.findAll({
+          where: options.where,
+          attributes: ['image'],
+          transaction: options.transaction
+        }).then(recipes => {
+          return Promise.all(recipes.map(recipe => {
+            if (recipe.image && recipe.image.key) {
+              return UtilService.deleteS3Object(recipe.image.key);
+            }
+          }))
+        })
+      }
+    }
+  });
   Recipe.associate = function(models) {
     Recipe.belongsTo(models.User, {
       foreignKey: {
@@ -102,5 +132,76 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'recipeId',
     });
   };
+
+  Recipe._findTitle = function(userId, recipeId, basename, transaction, ctr) {
+    var adjustedTitle;
+    if (ctr == 1) {
+      adjustedTitle = basename;
+    } else {
+      adjustedTitle = basename + ' (' + ctr + ')';
+    }
+    return Recipe.findOne({
+      where: {
+        id: { [Op.ne]: recipeId },
+        userId: userId,
+        title: adjustedTitle
+      },
+      transaction
+    }).then(dupe => {
+      if (dupe) {
+        return Recipe._findTitle(userId, recipeId, basename, transaction, ctr + 1);
+      }
+
+      return adjustedTitle
+    });
+  }
+
+  Recipe.findTitle = function(userId, recipeId, basename, transaction) {
+    return Recipe._findTitle(userId, recipeId, basename, transaction, 1);
+  }
+
+  Recipe.share = function(recipeId, recipientId, transaction) {
+    return Recipe.findById(recipeId, { transaction }).then(recipe => {
+      if (!recipe) {
+        var e = new Error("Could not find recipe to share");
+        e.status = 404;
+        throw e;
+      } else {
+        return recipe.share(recipientId, transaction);
+      }
+    });
+  }
+
+  Recipe.prototype.share = function(recipientId, transaction) {
+    return new Promise((resolve, reject) => {
+      if (this.image && this.image.location) {
+        UtilService.sendURLToS3(this.image.location).then(resolve).catch(reject)
+      } else {
+        resolve(null);
+      }
+    }).then(img => {
+      return Recipe.findTitle(recipientId, null, this.title, transaction).then(adjustedTitle => {
+        return Recipe.create({
+          userId: recipientId,
+          title: adjustedTitle,
+          description: this.description,
+          yield: this.yield,
+          activeTime: this.activeTime,
+          totalTime: this.totalTime,
+          source: this.source,
+          url: this.url,
+          notes: this.notes,
+          ingredients: this.ingredients,
+          instructions: this.instructions,
+          image: img,
+          folder: 'inbox',
+          fromUserId: this.userId
+        }, {
+          transaction
+        });
+      });
+    });
+  }
+
   return Recipe;
 };

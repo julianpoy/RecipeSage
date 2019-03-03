@@ -33,7 +33,7 @@ router.post(
         res.status(404).send('Could not find user under that ID.');
       } else {
         function shareRecipeStep() {
-          return UtilService.shareRecipe(req.body.recipeId, res.locals.session.userId, req.body.to, t).then(function(sharedRecipe) {
+          return Recipe.share(req.body.recipeId, req.body.to, t).then(function(sharedRecipe) {
             return createMessageStep(sharedRecipe.id);
           });
         }
