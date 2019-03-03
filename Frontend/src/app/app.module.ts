@@ -26,7 +26,7 @@ Sentry.init({
   dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200'
 });
 
-class SentryIonicErrorHandler extends IonicErrorHandler {
+export class SentryIonicErrorHandler extends IonicErrorHandler {
   handleError(error) {
     super.handleError(error);
     try {
