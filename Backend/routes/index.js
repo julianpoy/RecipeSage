@@ -67,7 +67,7 @@ router.get('/deduperecipelabels', function(req, res, next) {
               transaction: t
             }).then(() => {
               return Promise.all(Object.entries(recipeIdsByLabelTitle).map(([labelTitle, recipeIds]) => {
-                if (recipeIds.length == 0) return;
+                if (labelTitle.trim().length == 0 || recipeIds.length == 0) return;
 
                 return Label.findOrCreate({
                   where: {
@@ -553,7 +553,7 @@ router.post(
                 updatedAt
               }, { transaction: t }).then(recipe => {
                 // Split, trim, tolowercase, filter nulls, then transform to set (remove dupes) and back to array
-                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()).filter(el => el.length > 0))]
+                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
 
                 return Promise.all(lcbRecipeLabels.map(lcbLabelName => {
                   if (labelMap[lcbLabelName]) { // If pending label found in map
