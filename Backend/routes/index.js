@@ -25,6 +25,70 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'RS API' });
 });
 
+router.get('/deduperecipelabels', function(req, res, next) {
+  SQ.transaction(t => {
+    return User.findAll({
+      attributes: ['id'],
+      transaction: t
+    }).then(users => {
+      return Promise.all(users.map(user => {
+        let recipeIdsByLabelTitle = {};
+        let labelIdsByLabelTitle = {};
+
+        return Label.findAll({
+          where: {
+            userId: user.id
+          },
+          attributes: ['id', 'title'],
+          include: [{
+            model: Recipe,
+            as: 'recipes',
+            attributes: ['id']
+          }],
+          transaction: t
+        }).then(labels => {
+          return Promise.all(labels.map(label => {
+            recipeIdsByLabelTitle[label.title] = recipeIdsByLabelTitle[label.title] || [];
+            label.recipes.map(recipe => {
+              recipeIdsByLabelTitle[label.title].push(recipe.id);
+            })
+
+            labelIdsByLabelTitle[label.title] = labelIdsByLabelTitle[label.title] || [];
+            if (labelIdsByLabelTitle[label.title].indexOf(label.id) == -1) labelIdsByLabelTitle[label.title].push(label.id);
+          }))
+        }).then(() => {
+          return Object.entries(labelIdsByLabelTitle).filter(([labelTitle, labelIds]) => labelIds.length > 1).length
+        }).then(dupeCount => {
+          if (dupeCount > 0) {
+            return Label.destroy({
+              where: {
+                userId: user.id
+              },
+              transaction: t
+            }).then(() => {
+              return Promise.all(Object.entries(recipeIdsByLabelTitle).map(([labelTitle, recipeIds]) => {
+                if (recipeIds.length == 0) return;
+
+                return Label.findOrCreate({
+                  where: {
+                    userId: user.id,
+                    title: labelTitle
+                  },
+                  transaction: t
+                }).then(function (labels) {
+                  return Promise.all(recipeIds.map(recipeId => {
+                    return labels[0].addRecipe(recipeId, { transaction: t })
+                  }))
+                })
+              }))
+            })
+          }
+        })
+      }))
+    })
+  }).catch(next);
+})
+
 function saveRecipes(userId, recipes) {
   return SQ.transaction(function (t) {
 
