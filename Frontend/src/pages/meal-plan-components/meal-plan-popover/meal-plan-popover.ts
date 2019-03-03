@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ViewController, AlertController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
-import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
+import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
@@ -22,7 +22,7 @@ export class MealPlanPopoverPage {
     public navParams: NavParams,
     public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
-    public shoppingListService: ShoppingListServiceProvider,
+    public mealPlanService: MealPlanServiceProvider,
     public toastCtrl: ToastController,
     public viewCtrl: ViewController,
     public alertCtrl: AlertController
@@ -67,7 +67,7 @@ export class MealPlanPopoverPage {
   _deleteMealPlan() {
     var loading = this.loadingService.start();
 
-    this.shoppingListService.unlink({
+    this.mealPlanService.unlink({
       id: this.mealPlanId
     }).subscribe(() => {
       loading.dismiss();
