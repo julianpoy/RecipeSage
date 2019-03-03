@@ -6,6 +6,7 @@ import { catchError, retry } from 'rxjs/operators';
 
 export interface Label {
   id: string;
+  title: string;
 }
 
 @Injectable()
