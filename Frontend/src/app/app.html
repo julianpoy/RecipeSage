@@ -9,12 +9,14 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of navList()" (click)="openPage(p)">
-        {{p.title}}
+      <button menuClose ion-item icon-left *ngFor="let p of navList()" (click)="openPage(p)">
+        <ion-icon class="sidemenu-icon" name="{{p.icon}}" padding-right></ion-icon>
+        <span class="sidemenu-item-text">{{p.title}}</span>
         <ion-badge *ngIf="p.title === 'Recipe Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
       </button>
-      <button menuClose ion-item *ngIf="isLoggedIn()" (click)="logout()">
-        Log Out
+      <button menuClose ion-item icon-left *ngIf="isLoggedIn()" (click)="logout()">
+        <ion-icon class="sidemenu-icon" name="log-out" padding-right></ion-icon>
+        <span class="sidemenu-item-text">Log Out</span>
       </button>
     </ion-list>
   </ion-content>
