@@ -59,10 +59,12 @@ router.get(
       userId: res.locals.session.userId
     },
     include: [{
-      model: Recipe,
-      as: 'recipes',
-      attributes: ['id', 'title']
+      model: Recipe_Label,
+      as: 'recipe_labels',
+      attributes: [],
     }],
+    attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
+    group: ['Label.id'],
     order: [
       ['title', 'ASC']
     ]
