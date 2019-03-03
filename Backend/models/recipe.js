@@ -1,4 +1,7 @@
+let UtilService = require('../services/util')
+
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
     id: {
@@ -63,7 +66,32 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'main',
       allowNull: false
     }
-  }, {});
+  }, {
+    hooks: {
+      beforeDestroy: (recipe, options) => {
+        return Recipe.findById(recipe.id, {
+          attributes: ['image'],
+          transaction: options.transaction
+        }).then(recipe => {
+          if (recipe.image && recipe.image.key) {
+            return UtilService.deleteS3Object(recipe.image.key);
+          }
+        })
+      },
+      beforeBulkDestroy: (where, options) => {
+        return Recipe.findAll({
+          where,
+          transaction: options.transaction
+        }).then(recipes => {
+          return Promise.all(recipes.map(recipe => {
+            if (recipe.image && recipe.image.key) {
+              return UtilService.deleteS3Object(recipe.image.key);
+            }
+          }))
+        })
+      }
+    }
+  });
   Recipe.associate = function(models) {
     Recipe.belongsTo(models.User, {
       foreignKey: {
