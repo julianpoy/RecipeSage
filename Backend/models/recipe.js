@@ -1,4 +1,5 @@
-var Op = require("sequelize").Op;
+let UtilService = require('../services/util');
+let Op = require("sequelize").Op;
 
 'use strict';
 
@@ -174,7 +175,7 @@ module.exports = (sequelize, DataTypes) => {
   Recipe.prototype.share = function(recipientId, transaction) {
     return new Promise((resolve, reject) => {
       if (this.image && this.image.location) {
-        exports.sendURLToS3(this.image.location).then(resolve).catch(reject)
+        UtilService.sendURLToS3(this.image.location).then(resolve).catch(reject)
       } else {
         resolve(null);
       }
