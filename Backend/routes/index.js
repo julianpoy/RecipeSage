@@ -584,11 +584,11 @@ router.post(
             } catch(e){}
             fs.removeSync(zipPath)
             fs.removeSync(extractPath)
-
-            res.status(200).json({
-              msg: "Success!"
-            });
           })
+        }).then(() => {
+          res.status(200).json({
+            msg: "Success!"
+          });
         })
       }).catch(e => {
         try {
