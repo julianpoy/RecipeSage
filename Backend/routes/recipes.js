@@ -356,14 +356,7 @@ router.delete(
             },
             transaction: t
           }).then(function() {
-            // Remove image from our S3 bucket
-            if (recipe.image && recipe.image.key) {
-              return UtilService.deleteS3Object(recipe.image.key).then(function() {
-                res.status(200).json(recipe);
-              });
-            } else {
-              res.status(200).json(recipe);
-            }
+            res.status(200).json(recipe);
           });
         });
       });
