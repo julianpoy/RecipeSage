@@ -9,6 +9,7 @@ import { WebsocketServiceProvider } from '../../providers/websocket-service/webs
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
 import SearchWorker from 'worker-loader!../../assets/src/recipe-search.worker';
+import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -22,6 +23,7 @@ export class HomePage {
 
   recipes: Recipe[];
   initialLoadComplete: boolean = false;
+  selectedRecipeIds: string[] = [];
 
   searchText: string;
 
@@ -42,6 +44,7 @@ export class HomePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public recipeService: RecipeServiceProvider,
+    public labelService: LabelServiceProvider,
     public userService: UserServiceProvider,
     public utilService: UtilServiceProvider,
     public websocketService: WebsocketServiceProvider,
@@ -117,6 +120,8 @@ export class HomePage {
   }
 
   loadRecipes() {
+    this.clearSelectedRecipes();
+
     return new Promise((resolve, reject) => {
       this.recipeService.fetch({
         folder: this.folder,
@@ -204,5 +209,86 @@ export class HomePage {
 
   trackByFn(index, item) {
     return item.id;
+  }
+
+  selectRecipe(recipe) {
+    let index = this.selectedRecipeIds.indexOf(recipe.id);
+    if (index > -1) {
+      this.selectedRecipeIds.splice(index, 1);
+    } else {
+      this.selectedRecipeIds.push(recipe.id);
+    }
+  }
+
+  clearSelectedRecipes() {
+    this.selectedRecipeIds = [];
+  }
+
+  addLabelToSelectedRecipes() {
+    const prompt = this.alertCtrl.create({
+      title: 'Add Label to Selected Recipes',
+      message: "Enter the name for the label",
+      inputs: [
+        {
+          name: 'labelName',
+          placeholder: 'Label Name'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Save',
+          handler: ({labelName}) => {
+            let loading = this.loadingService.start();
+            Promise.all(this.selectedRecipeIds.map(recipeId => {
+              return new Promise(resolve => {
+                this.labelService.create({
+                  recipeId: recipeId,
+                  title: labelName.toLowerCase()
+                }).subscribe(() => resolve(), () => resolve())
+              })
+            })).then(() => {
+              loading.dismiss();
+              this.loadRecipes();
+            })
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  deleteSelectedRecipes() {
+    let recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id == recipeId)[0].title).join("<br />");
+
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />The following recipes will be deleted:<br />' + recipeNames,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => { }
+        },
+        {
+          text: 'Delete',
+          cssClass: 'alertDanger',
+          handler: () => {
+            let loading = this.loadingService.start();
+            Promise.all(this.selectedRecipeIds.map(recipeId => {
+              return new Promise(resolve => {
+                this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
+              })
+            })).then(() => {
+              loading.dismiss();
+              this.loadRecipes();
+            })
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }
