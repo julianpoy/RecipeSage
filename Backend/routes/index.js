@@ -397,6 +397,8 @@ router.post(
       }).then(async () => {
         // return await fs.writeFile('output', JSON.stringify(tableMap))
 
+        let labelMap = {};
+
         return SQ.transaction(t => {
           return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
             return new Promise(resolve => {
@@ -490,15 +492,25 @@ router.post(
                 let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()).filter(el => el.length > 0))]
 
                 return Promise.all(lcbRecipeLabels.map(lcbLabelName => {
-                  return Label.findOrCreate({
+                  if (labelMap[lcbLabelName]) { // If pending label found in map
+                    return labelMap[lcbLabelName].then(label => { // Wait for it to be resolved by another worker
+                      return label.addRecipe(recipe.id, { transaction: t });
+                    })
+                  }
+
+                  labelMap[lcbLabelName] = Label.findOrCreate({
                     where: {
                       userId: res.locals.session.userId,
                       title: lcbLabelName
                     },
                     transaction: t
                   }).then(function (labels) {
-                    return labels[0].addRecipe(recipe.id, { transaction: t });
+                    return labels[0].addRecipe(recipe.id, { transaction: t }).then(() => {
+                      return labels[0]; // Fill in the labelmap for others
+                    });
                   });
+
+                  return labelMap[lcbLabelName] // Continue promise chain
                 }))
               })
             })
