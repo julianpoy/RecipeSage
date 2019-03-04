@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       as: 'recipes',
       through: models.Recipe_Label
     });
+
+    Label.hasMany(models.Recipe_Label, {
+      foreignKey: 'labelId',
+      as: 'recipe_labels'
+    })
   };
   return Label;
 };

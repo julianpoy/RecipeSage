@@ -52,7 +52,7 @@ export class RecipePage {
 
     this.recipe = <Recipe>{};
 
-    Promise.all([this.loadRecipe(), this.loadLabels()])
+    this.loadAll()
     .then(() => {
       loading.dismiss();
     }, () => {
@@ -61,7 +61,7 @@ export class RecipePage {
   }
 
   refresh(loader) {
-    Promise.all([this.loadRecipe(), this.loadLabels()])
+    this.loadAll()
     .then(() => {
       loader.complete();
     }, () => {
@@ -69,6 +69,10 @@ export class RecipePage {
     });
 
     this.loadLabels();
+  }
+
+  loadAll() {
+    return Promise.all([this.loadRecipe(), this.loadLabels()])
   }
 
   loadRecipe() {
@@ -81,6 +85,8 @@ export class RecipePage {
         }
 
         this.applyScale();
+
+        this.selectedLabels = this.recipe.labels.map(label => label.title)
 
         resolve();
       }, err => {
@@ -122,21 +128,16 @@ export class RecipePage {
       this.labelService.fetch().subscribe(response => {
         this.labelObjectsByTitle = {};
         this.existingLabels = [];
-        this.selectedLabels = [];
 
         for (var i = 0; i < response.length; i++) {
           var label = response[i];
           this.existingLabels.push(label.title);
           this.labelObjectsByTitle[label.title] = label;
-
-          if (label.recipes.findIndex(el => { return el.id === this.recipeId }) > -1) {
-            this.selectedLabels.push(label.title);
-          }
         }
 
         this.existingLabels.sort((a, b) => {
-          if (this.labelObjectsByTitle[a].recipes.length === this.labelObjectsByTitle[b].recipes.length) return 0;
-          return this.labelObjectsByTitle[a].recipes.length > this.labelObjectsByTitle[b].recipes.length ? -1 : 1;
+          if (this.labelObjectsByTitle[a].recipeCount === this.labelObjectsByTitle[b].recipeCount) return 0;
+          return this.labelObjectsByTitle[a].recipeCount > this.labelObjectsByTitle[b].recipeCount ? -1 : 1;
         });
 
         resolve();
@@ -331,13 +332,7 @@ export class RecipePage {
     }).subscribe(response => {
       loading.dismiss();
 
-      // if (!this.recipe.labels) this.recipe.labels = [];
-      // if (this.recipe.labels.findIndex(el => { return el.id === response.id }) === -1) this.recipe.labels.push(response);
-      // if (this.selectedLabels.indexOf(response.title) === -1) this.selectedLabels.push(response.title);
-
-      // this.labelObjectsByTitle[response.title] = response;
-
-      this.loadLabels().then(() => {
+      this.loadAll().then(() => {
         this.toggleAutocomplete(false);
         this.pendingLabel = '';
       });
@@ -403,15 +398,12 @@ export class RecipePage {
     this.labelService.remove(label).subscribe(() => {
       loading.dismiss();
 
-      if(label.recipes.length === 1) {
+      if (label.recipeCount === 1) {
         var i = this.existingLabels.indexOf(label.title);
         this.existingLabels.splice(i, 1);
         delete this.labelObjectsByTitle[label.title];
       } else {
-        var recipeIdx = label.recipes.findIndex(el => {
-          return el.id === this.recipe.id;
-        });
-        label.recipes.splice(recipeIdx, 1);
+        label.recipeCount -= 1;
       }
 
       var lblIdx = this.recipe.labels.findIndex(el => {

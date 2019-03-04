@@ -492,7 +492,7 @@ router.post(
               let ingredients = (tableMap.t_recipeingredient || [])
                 .filter(el => el.recipeid == lcbRecipe.recipeid)
                 .sort((a, b) => a.ingredientindex > b.ingredientindex)
-                .map(lcbIngredient => `${lcbIngredient.quantitytext} ${lcbIngredient.unittext} ${lcbIngredient.ingredienttext}`)
+                .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
                 .join("\r\n")
 
               let instructions = (tableMap.t_recipeprocedure || [])

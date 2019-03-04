@@ -221,9 +221,7 @@ describe('labels', () => {
       })
 
       it('responds with associated recipes', () => {
-        expect(responseBody[0].recipes.length).to.equal(1)
-        expect(responseBody[0].recipes[0].id).to.equal(recipe1.id)
-        expect(responseBody[0].recipes[0].id).to.equal(recipe1.id)
+        expect(responseBody[0].recipeCount).to.equal(1)
       })
     })
 

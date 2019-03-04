@@ -3,6 +3,7 @@ module.exports = {
     "username": process.env.RS_DEV_DB_USERNAME || "chefbook",
     "password": process.env.RS_DEV_DB_PASSWORD || "admin",
     "database": process.env.RS_DEV_DB_DATABASE || "chefbook",
+    "port"    : process.env.RS_DEV_DB_PORT     || "5432",
     "host"    : process.env.RS_DEV_DB_HOST     || "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -17,6 +18,7 @@ module.exports = {
     "username": process.env.RS_STG_DB_USERNAME || "chefbook",
     "password": process.env.RS_STG_DB_PASSWORD || null,
     "database": process.env.RS_STG_DB_DATABASE || "chefbook",
+    "port"    : process.env.RS_STG_DB_PORT     || "5432",
     "host"    : process.env.RS_STG_DB_HOST     || "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -25,6 +27,7 @@ module.exports = {
     "username": process.env.RS_PROD_DB_USERNAME || "chefbook",
     "password": process.env.RS_PROD_DB_PASSWORD || null,
     "database": process.env.RS_PROD_DB_DATABASE || "chefbook",
+    "port"    : process.env.RS_PROD_DB_PORT     || "5432",
     "host"    : process.env.RS_PROD_DB_HOST     || "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
