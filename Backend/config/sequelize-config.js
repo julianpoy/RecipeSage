@@ -4,7 +4,11 @@ module.exports = {
     "password": process.env.RS_DEV_DB_PASSWORD || "admin",
     "database": process.env.RS_DEV_DB_DATABASE || "chefbook",
     "host"    : process.env.RS_DEV_DB_HOST     || "127.0.0.1",
+    "ssl"     : process.env.RS_DEV_DB_SSL == "true",
     "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": process.env.RS_DEV_DB_SSL == "true"
+    },
     "operatorsAliases": false
   },
   "test": {
@@ -18,7 +22,11 @@ module.exports = {
     "password": process.env.RS_STG_DB_PASSWORD || null,
     "database": process.env.RS_STG_DB_DATABASE || "chefbook",
     "host"    : process.env.RS_STG_DB_HOST     || "127.0.0.1",
+    "ssl": process.env.RS_STG_DB_SSL == "true",
     "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": process.env.RS_STG_DB_SSL == "true"
+    },
     "operatorsAliases": false
   },
   "production": {
@@ -26,7 +34,11 @@ module.exports = {
     "password": process.env.RS_PROD_DB_PASSWORD || null,
     "database": process.env.RS_PROD_DB_DATABASE || "chefbook",
     "host"    : process.env.RS_PROD_DB_HOST     || "127.0.0.1",
+    "ssl": process.env.RS_PROD_DB_SSL == "true",
     "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": process.env.RS_PROD_DB_SSL == "true"
+    },
     "operatorsAliases": false
   }
 }
