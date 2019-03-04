@@ -70,6 +70,7 @@ router.get(
     ]
   })
   .then(function(labels) {
+    labels = labels.map(label => { label = label.toJSON(); label.recipes = []; return label; })
     res.status(200).json(labels);
   })
   .catch(next);
