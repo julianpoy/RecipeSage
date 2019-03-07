@@ -49,6 +49,14 @@ export class ImportLivingcookbookPage {
     }
   }
 
+  isFileTooLarge() {
+    if (this.imageFile && this.imageFile.size / 1024 / 1024 > 350) {
+      // File is larger than 350MB
+      return true;
+    }
+    return false;
+  }
+
   showFileTypeWarning() {
     if (!this.imageFile || !this.imageFile.name) return false
     return !this.imageFile.name.toLowerCase().endsWith('.lcb')
