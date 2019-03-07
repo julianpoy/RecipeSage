@@ -43,7 +43,16 @@
       </p>
     </div>
 
-    <div padding *ngIf="imageFile">
+    <div padding *ngIf="isFileTooLarge()">
+      <p>
+        <b>This file is too large to upload directly.</b><br />
+        <a href="mailto:julianpoyit@gmail.com?subject=RecipeSage Support">
+          Please contact me to have your database imported manually.
+        </a>
+      </p>
+    </div>
+
+    <div padding *ngIf="imageFile && !isFileTooLarge()">
       <button *ngIf="!loading && !showFileTypeWarning()" ion-button (click)="submit()">Upload and Import</button>
       <button *ngIf="!loading && showFileTypeWarning()" ion-button (click)="submit()">Upload and Import Anyway</button>
       <button *ngIf="loading" ion-button>Importing, please wait...</button>

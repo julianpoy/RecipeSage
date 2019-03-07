@@ -16,6 +16,7 @@ var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var FCMToken = require('../models').FCMToken;
 var Label = require('../models').Label;
+var Recipe_Label = require('../models').Recipe_Label;
 
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
@@ -463,6 +464,8 @@ router.post(
 
         let labelMap = {};
 
+        let pendingRecipes = [];
+
         return SQ.transaction(t => {
           return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
             return new Promise(resolve => {
@@ -534,51 +537,62 @@ router.post(
               }
               totalTime = totalTime.trim();
 
-              return Recipe.create({
-                userId: res.locals.session.userId,
-                title: lcbRecipe.recipename || '',
-                description,
-                yield: (lcbRecipe.yield || '').toString(),
-                activeTime: (lcbRecipe.preparationtime || '').toString(),
-                totalTime,
-                source: lcbRecipe.source || '',
-                url: lcbRecipe.webpage || '',
-                notes,
-                ingredients,
-                instructions,
-                image: image,
-                folder: 'main',
-                fromUserId: null,
-                createdAt,
-                updatedAt
-              }, { transaction: t }).then(recipe => {
-                // Split, trim, tolowercase, filter nulls, then transform to set (remove dupes) and back to array
-                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
+              let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
 
-                return Promise.all(lcbRecipeLabels.map(lcbLabelName => {
-                  if (labelMap[lcbLabelName]) { // If pending label found in map
-                    return labelMap[lcbLabelName].then(label => { // Wait for it to be resolved by another worker
-                      return label.addRecipe(recipe.id, { transaction: t });
-                    })
-                  }
-
-                  labelMap[lcbLabelName] = Label.findOrCreate({
-                    where: {
-                      userId: res.locals.session.userId,
-                      title: lcbLabelName
-                    },
-                    transaction: t
-                  }).then(function (labels) {
-                    return labels[0].addRecipe(recipe.id, { transaction: t }).then(() => {
-                      return labels[0]; // Fill in the labelmap for others
-                    });
-                  });
-
-                  return labelMap[lcbLabelName] // Continue promise chain
-                }))
+              return pendingRecipes.push({
+                model: {
+                  userId: res.locals.session.userId,
+                  title: lcbRecipe.recipename || '',
+                  description,
+                  yield: (lcbRecipe.yield || '').toString(),
+                  activeTime: (lcbRecipe.preparationtime || '').toString(),
+                  totalTime,
+                  source: lcbRecipe.source || '',
+                  url: lcbRecipe.webpage || '',
+                  notes,
+                  ingredients,
+                  instructions,
+                  image: image,
+                  folder: 'main',
+                  fromUserId: null,
+                  createdAt,
+                  updatedAt
+                },
+                lcbRecipeLabels
               })
             })
           })).then(() => {
+            return Recipe.bulkCreate(pendingRecipes.map(el => el.model), {
+              returning: true,
+              transaction: t
+            }).then(recipes => {
+              recipes.map((recipe, idx) => {
+                pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
+                  labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
+                  labelMap[lcbLabelName].push(recipe.id);
+                })
+              })
+            })
+          }).then(() => {
+            return Promise.all(Object.keys(labelMap).map(lcbLabelName => {
+              return Label.findOrCreate({
+                where: {
+                  userId: res.locals.session.userId,
+                  title: lcbLabelName
+                },
+                transaction: t
+              }).then(labels => {
+                return Recipe_Label.bulkCreate(labelMap[lcbLabelName].map(recipeId => {
+                  return {
+                    labelId: labels[0].id,
+                    recipeId
+                  }
+                }), {
+                  transaction: t
+                })
+              });
+            }))
+          }).then(() => {
             try {
               sqliteDB.close()
             } catch(e){}

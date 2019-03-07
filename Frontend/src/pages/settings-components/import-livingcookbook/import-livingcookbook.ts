@@ -19,6 +19,8 @@ export class ImportLivingcookbookPage {
   loading = null;
   imageFile = null;
 
+  ignoreLargeFiles: boolean;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingServiceProvider,
@@ -26,6 +28,8 @@ export class ImportLivingcookbookPage {
     public recipeService: RecipeServiceProvider,
     public utilService: UtilServiceProvider,
     public navParams: NavParams) {
+
+    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
 
   setFile(event) {
@@ -47,6 +51,14 @@ export class ImportLivingcookbookPage {
     } else {
       return 'Choose .lcb file';
     }
+  }
+
+  isFileTooLarge() {
+    if (!this.ignoreLargeFiles && this.imageFile && this.imageFile.size / 1024 / 1024 > 350) {
+      // File is larger than 350MB
+      return true;
+    }
+    return false;
   }
 
   showFileTypeWarning() {
