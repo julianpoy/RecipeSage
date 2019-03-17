@@ -55,17 +55,19 @@ export class HomePopoverPage {
     });
   }
 
-  saveViewOptions() {
+  saveViewOptions(refreshSearch?: boolean) {
     localStorage.setItem('showLabels', this.viewOptions.showLabels);
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
     localStorage.setItem('sortBy', this.viewOptions.sortBy);
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss({
+      refreshSearch
+    });
   }
 
   resetFilterByLabel() {
     this.filterByLabelSelect.close()
     this.viewOptions.selectedLabels.splice(0, this.viewOptions.selectedLabels.length)
-    this.saveViewOptions()
+    this.saveViewOptions(true)
   }
 }

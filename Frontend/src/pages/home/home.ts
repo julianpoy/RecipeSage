@@ -211,6 +211,10 @@ export class HomePage {
   presentPopover(event) {
     let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
 
+    popover.onDidDismiss(data => {
+      if (data && data.refreshSearch) this.resetAndLoadRecipes();
+    });
+
     popover.present({
       ev: event
     });
