@@ -75,7 +75,7 @@
   </virtual-scroller>
 
   <ion-list *ngIf="initialLoadComplete">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
       <br /><br />
       <logo-icon href="/#/about"></logo-icon>
       <br /><br />
@@ -93,7 +93,7 @@
       </p>
     </ion-item>
 
-    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
       <p>
         Your inbox is empty.<br />
         When someone sends you a recipe, it will show up here!
