@@ -1,4 +1,7 @@
 let UtilService = require('../services/util');
+let ElasticService = require('../services/elastic');
+let cron = require('node-cron');
+let Raven = require('raven');
 let Op = require("sequelize").Op;
 
 'use strict';
@@ -77,20 +80,36 @@ module.exports = (sequelize, DataTypes) => {
           if (recipe.image && recipe.image.key) {
             return UtilService.deleteS3Object(recipe.image.key);
           }
-        })
+        }).then(() => {
+          return ElasticService.remove('recipes', recipe.id).catch(e => {
+            if (e.status != 404) {
+              e = new Error(e);
+              e.status = 500;
+              throw e;
+            }
+          });
+        });
       },
       beforeBulkDestroy: (options) => {
         return Recipe.findAll({
           where: options.where,
-          attributes: ['image'],
+          attributes: ['id', 'image'],
           transaction: options.transaction
         }).then(recipes => {
           return Promise.all(recipes.map(recipe => {
             if (recipe.image && recipe.image.key) {
               return UtilService.deleteS3Object(recipe.image.key);
             }
-          }))
-        })
+          })).then(() => {
+            return ElasticService.bulk('delete', 'recipes', recipes);
+          });
+        });
+      },
+      afterCreate: (recipe, options) => {
+        return ElasticService.index('recipes', recipe);
+      },
+      afterBulkCreate: (recipes, options) => {
+        return ElasticService.bulk('index', 'recipes', recipes);
       }
     }
   });
@@ -202,6 +221,19 @@ module.exports = (sequelize, DataTypes) => {
       });
     });
   }
+
+  cron.schedule('*/2 * * * *', () => {
+    Recipe.count().then(count => {
+      return Recipe.findAll({
+        offset: Math.floor(Math.random() * count),
+        limit: 200
+      }).then(recipes => {
+        return ElasticService.bulk('index', 'recipes', recipes);
+      });
+    }).catch(e => {
+      Raven.captureException(e);
+    });
+  });
 
   return Recipe;
 };

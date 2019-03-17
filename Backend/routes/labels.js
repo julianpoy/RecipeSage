@@ -36,7 +36,7 @@ router.post(
     return Label.findOrCreate({
       where: {
         userId: res.locals.session.userId,
-        title: req.body.title.toLowerCase()
+        title: req.body.title.toLowerCase().replace(',', '')
       },
       transaction: t
     }).then(function(labels) {

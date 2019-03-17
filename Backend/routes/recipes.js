@@ -14,6 +14,7 @@ var Label = require('../models').Label;
 // Service
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+let ElasticService = require('../services/elastic');
 
 //Create a new recipe
 router.post(
@@ -112,6 +113,115 @@ router.get(
     res.status(200).json(recipes);
   }).catch(next);
 });
+
+//Get all of a user's recipes (paginated)
+router.get(
+  '/by-page',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  let sort = ['title', 'ASC'];
+  if (req.query.sort) {
+    switch(req.query.sort){
+      case "-title":
+        sort = ['title', 'ASC'];
+        break;
+      case "createdAt":
+        sort = ['createdAt', 'ASC'];
+        break;
+      case "-createdAt":
+        sort = ['createdAt', 'DESC'];
+        break;
+      case "updatedAt":
+        sort = ['updatedAt', 'ASC'];
+        break;
+      case "-updatedAt":
+        sort = ['updatedAt', 'DESC'];
+        break;
+    }
+  }
+
+  let labelFilter = {}
+  if (req.query.labels) {
+    labelFilter.where = {
+      title: req.query.labels.split(',')
+    }
+  }
+
+  Recipe.findAndCountAll({
+    where: {
+      userId: res.locals.session.userId,
+      folder: req.query.folder
+    },
+    attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
+    include: [{
+      model: User,
+      as: 'fromUser',
+      attributes: ['name', 'email']
+    },
+    {
+      model: Label,
+      as: 'labels',
+      attributes: ['id', 'title'],
+      ...labelFilter
+    }],
+    order: [
+      sort
+    ],
+    limit: Math.min(parseInt(req.query.count) || 100, 500),
+    offset: req.query.offset || 0
+  }).then(({ count, rows }) => {
+    res.status(200).json({
+      data: rows,
+      totalCount: count
+    });
+  }).catch(next);
+});
+
+router.get(
+  '/search',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+    ElasticService.search('recipes', res.locals.session.userId, req.query.query).then(results => {
+      let searchHits = results.hits.hits;
+
+      let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
+        acc[hit._id] = hit;
+        return acc;
+      }, {});
+
+      let labelFilter = {}
+      if (req.query.labels) {
+        labelFilter.where = {
+          title: req.query.labels.split(',')
+        }
+      }
+
+      return Recipe.findAll({
+        where: {
+          id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
+          userId: res.locals.session.userId,
+          folder: 'main'
+        },
+        include: [{
+          model: Label,
+          as: 'labels',
+          attributes: ['id', 'title'],
+          ...labelFilter
+        }],
+        limit: 200
+      }).then(recipes => {
+        res.status(200).send({
+          data: recipes.sort((a, b) => {
+            return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
+          })
+        });
+      })
+    }).catch(next);
+  }
+)
 
 router.get(
   '/export',
