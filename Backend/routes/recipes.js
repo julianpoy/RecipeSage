@@ -114,6 +114,25 @@ router.get(
   }).catch(next);
 });
 
+// Count a user's recipes
+router.get(
+  '/count',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  Recipe.count({
+    where: {
+      userId: res.locals.session.userId,
+      folder: req.query.folder || 'main'
+    }
+  }).then(count => {
+    res.status(200).json({
+      count
+    });
+  }).catch(next);
+});
+
 //Get all of a user's recipes (paginated)
 router.get(
   '/by-page',
@@ -152,7 +171,7 @@ router.get(
   Recipe.findAndCountAll({
     where: {
       userId: res.locals.session.userId,
-      folder: req.query.folder
+      folder: req.query.folder || 'main'
     },
     attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
     include: [{

@@ -235,8 +235,8 @@ export class MyApp {
   loadInboxCount() {
     if (!localStorage.getItem('token')) return;
 
-    this.recipeService.fetch({ folder: 'inbox' }).subscribe(response => {
-      this.inboxCount = response.totalCount;
+    this.recipeService.count({ folder: 'inbox' }).subscribe(response => {
+      this.inboxCount = response.count;
 
       this.events.publish('recipe:inbox:count', this.inboxCount);
     }, () => {});

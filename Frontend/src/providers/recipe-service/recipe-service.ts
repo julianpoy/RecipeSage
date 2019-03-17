@@ -52,6 +52,24 @@ export class RecipeServiceProvider {
     return this.base + 'recipes/export' + this.getTokenQuery() + '&format=' + format;
   }
 
+  count(options) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    var url = this.base + 'recipes/count' + this.getTokenQuery();
+    if (options.folder) url += '&folder=' + options.folder;
+
+    return this.http
+    .get(url, httpOptions)
+    .pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
   fetch(options) {
     const httpOptions = {
       headers: new HttpHeaders({
