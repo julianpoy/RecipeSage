@@ -26,7 +26,7 @@ export class HomePage {
   lastRecipeCount: number;
   totalRecipeCount: number;
 
-  initialLoadComplete: boolean = false;
+  loading: boolean = true;
   selectedRecipeIds: string[] = [];
 
   searchText: string;
@@ -84,7 +84,6 @@ export class HomePage {
     this.clearSelectedRecipes();
 
     this.resetAndLoadRecipes().then(() => {
-      this.initialLoadComplete = true;
       loading.dismiss();
     }, () => {
       loading.dismiss();
@@ -135,13 +134,13 @@ export class HomePage {
   }
 
   resetAndLoadRecipes() {
-    this.initialLoadComplete = false;
+    this.loading = true;
     this.resetRecipes();
 
     return this._resetAndLoadRecipes().then(() => {
-      this.initialLoadComplete = true;
+      this.loading = false;
     }, () => {
-      this.initialLoadComplete = true;
+      this.loading = false;
     })
   }
 
