@@ -13,13 +13,13 @@
   </button>
 
   <div class="dropdownSelect" *ngIf="!selectedRecipe">
-    <input
+    <ion-searchbar
       [(ngModel)]='searchText'
       (ngModelChange)="onSearchInputChange()"
       placeholder="Type to search for recipe..."
       autocomplete="off"
       #labelInputField
-      id="labelInputField" />
+      id="labelInputField"></ion-searchbar>
     <div
       class="autocomplete">
       <button
@@ -39,8 +39,8 @@
         class="suggestion"
         *ngIf="searching">
         <ion-item no-lines>
-          {{ searchText }}
-          <span class="hint">Searching...</span>
+          Searching for "{{ searchText }}"...
+          <!-- <span class="hint"></span> -->
         </ion-item>
       </button>
       <!-- Searching for user for which a thread does not exist -->
@@ -48,16 +48,8 @@
         class="suggestion"
         *ngIf="recipes.length === 0 && searchText.length > 0 && !searching">
         <ion-item no-lines>
-          {{ searchText }}
-          <span class="hint">No recipes found</span>
+          No results for "{{ searchText }}"
         </ion-item>
-      </button>
-
-      <button
-        class="suggestion"
-        *ngIf="recipes.length === 0 && searchText.length === 0">
-        You have no recipes
-        <span class="hint"></span>
       </button>
     </div>
   </div>

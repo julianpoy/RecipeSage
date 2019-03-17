@@ -59,10 +59,31 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/' + this.getTokenQuery();
+    var url = this.base + 'recipes/by-page' + this.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
     if (options.sortBy) url += '&sort=' + options.sortBy;
+    if (options.offset) url += '&offset=' + options.offset;
+    if (options.count)  url += '&count=' + options.count;
     if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+
+    return this.http
+    .get<Recipe[]>(url, httpOptions)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  search(query, options) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    var url = this.base + 'recipes/search' + this.getTokenQuery();
+    if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    url += '&query=' + query;
 
     return this.http
     .get<Recipe[]>(url, httpOptions)
