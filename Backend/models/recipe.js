@@ -189,6 +189,13 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Recipe_Label
     });
 
+    Recipe.belongsToMany(models.Label, {
+      foreignKey: 'recipeId',
+      otherKey: 'labelId',
+      as: 'label_filter',
+      through: models.Recipe_Label
+    });
+
     Recipe.hasMany(models.Message, {
       foreignKey: 'recipeId',
     });

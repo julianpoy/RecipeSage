@@ -187,7 +187,12 @@ router.get(
     {
       model: Label,
       as: 'labels',
-      attributes: ['id', 'title'],
+      attributes: ['id', 'title']
+    },
+    {
+      model: Label,
+      as: 'label_filter',
+      attributes: [],
       ...labelFilter
     }],
     order: [
@@ -232,7 +237,11 @@ router.get(
         include: [{
           model: Label,
           as: 'labels',
-          attributes: ['id', 'title'],
+          attributes: ['id', 'title']
+        }, {
+          model: Label,
+          as: 'label_filter',
+          attributes: [],
           ...labelFilter
         }],
         limit: 200
