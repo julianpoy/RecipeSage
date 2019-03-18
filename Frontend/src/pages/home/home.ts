@@ -337,16 +337,16 @@ export class HomePage {
           text: 'Save',
           handler: ({labelName}) => {
             let loading = this.loadingService.start();
-            Promise.all(this.selectedRecipeIds.map(recipeId => {
-              return new Promise(resolve => {
-                setTimeout(() => {
+            this.selectedRecipeIds.reduce((acc, recipeId) => {
+              return acc.then(() => {
+                return new Promise(resolve => {
                   this.labelService.create({
                     recipeId: recipeId,
                     title: labelName.toLowerCase()
                   }).subscribe(() => resolve(), () => resolve())
-                }, Math.floor(Math.random() * 1000)) // Avoid overloading server
-              })
-            })).then(() => {
+                })
+              });
+            }, Promise.resolve()).then(() => {
               loading.dismiss();
               this.resetAndLoadAll();
             })
@@ -374,13 +374,13 @@ export class HomePage {
           cssClass: 'alertDanger',
           handler: () => {
             let loading = this.loadingService.start();
-            Promise.all(this.selectedRecipeIds.map(recipeId => {
-              return new Promise(resolve => {
-                setTimeout(() => {
+            this.selectedRecipeIds.reduce((acc, recipeId) => {
+              return acc.then(() => {
+                return new Promise(resolve => {
                   this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
-                }, Math.floor(Math.random() * 1000)) // Avoid overloading server
+                })
               })
-            })).then(() => {
+            }, Promise.resolve()).then(() => {
               loading.dismiss();
               this.resetAndLoadAll();
             })
