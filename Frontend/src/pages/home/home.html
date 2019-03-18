@@ -1,26 +1,26 @@
 <ion-header>
   <ion-navbar color="navBar">
 
-    <button ion-button menuToggle>
+    <button *ngIf="selectedRecipeIds.length == 0" ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
 
+    <ion-buttons *ngIf="selectedRecipeIds.length > 0" left>
+      <button ion-button icon-only (click)="clearSelectedRecipes()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title *ngIf="selectedRecipeIds.length == 0">{{ folderTitle }}</ion-title>
+    <ion-title *ngIf="selectedRecipeIds.length > 0">{{ selectedRecipeIds.length }} Selected</ion-title>
 
     <ion-buttons end>
       <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="addLabelToSelectedRecipes()">
         <ion-icon name="pricetag"></ion-icon>
-        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
       </button>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="deleteSelectedRecipes()">
         <ion-icon name="trash"></ion-icon>
-        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
-      </button>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="clearSelectedRecipes()">
-        <ion-icon name="close"></ion-icon>
-        <ion-badge color="primary">{{ selectedRecipeIds.length }}</ion-badge>
       </button>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <button ion-button icon-only (click)="presentPopover($event)">
