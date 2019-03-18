@@ -8,9 +8,10 @@
     "test": "npm run test:clean && npm run test:all",
     "test:ci": "npm run test:all",
     "test:clean": "rm test.sqlite3 || true",
-    "test:all": "npm run test:routes && npm run test:services",
+    "test:all": "npm run test:routes && npm run test:services && npm run test:models",
     "test:routes": "npm run mocha \"./routes/**/*.spec.js\"",
-    "test:services": "npm run mocha \"./services/**/*.spec.js\""
+    "test:services": "npm run mocha \"./services/**/*.spec.js\"",
+    "test:models": "npm run mocha \"./models/**/*.spec.js\""
   },
   "dependencies": {
     "aws-sdk": "^2.200.0",
