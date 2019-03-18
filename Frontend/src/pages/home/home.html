@@ -41,6 +41,15 @@
     (keyup.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
 
+  <div class="labelChips">
+    <span
+      *ngFor="let label of labels"
+      [ngClass]="{ selected: viewOptions.selectedLabels.indexOf(label.title) > -1 }"
+      (click)="toggleLabel(label.title)">
+      {{ label.title }} ({{ label.recipeCount }})
+    </span>
+  </div>
+
   <virtual-scroller
   #scroll
   (vsEnd)="fetchMoreRecipes($event)"

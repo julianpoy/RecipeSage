@@ -8,7 +8,7 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
-import { LabelServiceProvider } from '../../providers/label-service/label-service';
+import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -19,6 +19,8 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+  labels: Label[] = [];
 
   recipes: Recipe[] = [];
   recipeFetchBuffer: number = 15;
@@ -35,7 +37,6 @@ export class HomePage {
   folderTitle: string;
 
   viewOptions: any = {};
-  filterOptions: any = {};
 
   constructor(
     public navCtrl: NavController,
@@ -63,7 +64,6 @@ export class HomePage {
     }
 
     this.loadViewOptions();
-    this.filterOptions.viewOptions = this.viewOptions;
 
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
@@ -83,7 +83,7 @@ export class HomePage {
 
     this.clearSelectedRecipes();
 
-    this.resetAndLoadRecipes().then(() => {
+    this.resetAndLoadAll().then(() => {
       loading.dismiss();
     }, () => {
       loading.dismiss();
@@ -91,7 +91,7 @@ export class HomePage {
   }
 
   refresh(refresher) {
-    this.resetAndLoadRecipes().then(() => {
+    this.resetAndLoadAll().then(() => {
       refresher.complete();
     }, () => {
       refresher.complete();
@@ -131,6 +131,18 @@ export class HomePage {
     if (shouldFetchMore && moreToScroll) {
       this.loadRecipes(this.lastRecipeCount, this.fetchPerPage)
     }
+  }
+
+  resetAndLoadAll() {
+    return Promise.all([
+      this.resetAndLoadRecipes(),
+      this.resetAndLoadLabels()
+    ])
+  }
+
+  resetAndLoadLabels() {
+    this.labels = [];
+    return this.loadLabels();
   }
 
   resetAndLoadRecipes() {
@@ -197,6 +209,25 @@ export class HomePage {
         }
       });
     });
+  }
+
+  loadLabels() {
+    return new Promise((resolve, reject) => {
+      this.labelService.fetch().subscribe(response => {
+        this.labels = response;
+
+        resolve();
+      }, err => {
+        reject(err);
+      });
+    });
+  }
+
+  toggleLabel(labelTitle) {
+    let labelIdx = this.viewOptions.selectedLabels.indexOf(labelTitle);
+    labelIdx > -1 ?
+      this.viewOptions.selectedLabels.splice(labelIdx, 1) : this.viewOptions.selectedLabels.push(labelTitle);
+    this.resetAndLoadRecipes();
   }
 
   openRecipe(recipe) {
@@ -317,7 +348,7 @@ export class HomePage {
               })
             })).then(() => {
               loading.dismiss();
-              this.resetAndLoadRecipes();
+              this.resetAndLoadAll();
             })
           }
         }
@@ -351,7 +382,7 @@ export class HomePage {
               })
             })).then(() => {
               loading.dismiss();
-              this.resetAndLoadRecipes();
+              this.resetAndLoadAll();
             })
           }
         }
