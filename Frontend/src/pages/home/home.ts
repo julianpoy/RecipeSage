@@ -308,10 +308,12 @@ export class HomePage {
             let loading = this.loadingService.start();
             Promise.all(this.selectedRecipeIds.map(recipeId => {
               return new Promise(resolve => {
-                this.labelService.create({
-                  recipeId: recipeId,
-                  title: labelName.toLowerCase()
-                }).subscribe(() => resolve(), () => resolve())
+                setTimeout(() => {
+                  this.labelService.create({
+                    recipeId: recipeId,
+                    title: labelName.toLowerCase()
+                  }).subscribe(() => resolve(), () => resolve())
+                }, Math.floor(Math.random() * 1000)) // Avoid overloading server
               })
             })).then(() => {
               loading.dismiss();
@@ -343,7 +345,9 @@ export class HomePage {
             let loading = this.loadingService.start();
             Promise.all(this.selectedRecipeIds.map(recipeId => {
               return new Promise(resolve => {
-                this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
+                setTimeout(() => {
+                  this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
+                }, Math.floor(Math.random() * 1000)) // Avoid overloading server
               })
             })).then(() => {
               loading.dismiss();
