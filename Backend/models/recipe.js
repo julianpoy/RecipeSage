@@ -105,6 +105,17 @@ module.exports = (sequelize, DataTypes) => {
           });
         });
       },
+      afterUpdate: (recipe, options) => {
+        return ElasticService.index('recipes', recipe);
+      },
+      afterBulkUpdate: options => {
+        return Recipe.findAll({
+          where: options.where,
+          transaction: options.transaction
+        }).then(recipes => {
+          return ElasticService.bulk('index', 'recipes', recipes);
+        });
+      },
       afterCreate: (recipe, options) => {
         return ElasticService.index('recipes', recipe);
       },
