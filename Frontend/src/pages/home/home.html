@@ -34,13 +34,19 @@
   <ion-refresher (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <virtual-scroller
-    #scroll
-    [items]="recipes | basicFilter:viewOptions.selectedLabels.join() + viewOptions.sortBy + searchText:filterOptions"
-    [parentScroll]="contentContainer.getScrollElement()"
-    [enableUnequalChildrenSizes]="true">
 
-    <ion-searchbar (ionInput)="search($event.target.value)" (keyup.enter)="$event.target.blur()"></ion-searchbar>
+  <ion-searchbar
+    *ngIf="folder === 'main'"
+    (ionClear)="search('')"
+    (keyup.enter)="search($event.target.value); $event.target.blur()"
+  ></ion-searchbar>
+
+  <virtual-scroller
+  #scroll
+  (vsEnd)="fetchMoreRecipes($event)"
+  [items]="recipes"
+  [parentScroll]="contentContainer.getScrollElement()"
+  [enableUnequalChildrenSizes]="true">
 
     <div #container>
       <ion-item
@@ -68,8 +74,8 @@
     </div>
   </virtual-scroller>
 
-  <ion-list *ngIf="initialLoadComplete">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
+  <ion-list *ngIf="!loading">
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
       <br /><br />
       <logo-icon href="/#/about"></logo-icon>
       <br /><br />
@@ -87,14 +93,14 @@
       </p>
     </ion-item>
 
-    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
       <p>
         Your inbox is empty.<br />
         When someone sends you a recipe, it will show up here!
       </p>
     </ion-item>
 
-    <ion-item *ngIf="searchResultsAfterFilterLen === 0 && searchText.length > 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="recipes && recipes.length === 0 && searchText.length > 0" no-lines text-wrap text-center>
       <p>
         No search results.<br /><br />
         Search includes:<br />

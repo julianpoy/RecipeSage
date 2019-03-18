@@ -139,7 +139,7 @@ router.get(
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
-  User.find({
+  User.findOne({
     where: {
       id: res.locals.session.userId
     },
@@ -499,18 +499,18 @@ router.post(
                 .join("\r\n")
 
               let instructions = (tableMap.t_recipeprocedure || [])
-                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .filter(el => el.proceduretext && el.recipeid == lcbRecipe.recipeid)
                 .sort((a, b) => a.procedureindex > b.procedureindex)
                 .map(lcbProcedure => lcbProcedure.proceduretext)
                 .join("\r\n")
 
               let recipeTips = (tableMap.t_recipetip || [])
-                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .filter(el => el.tiptext && el.recipeid == lcbRecipe.recipeid)
                 .sort((a, b) => a.tipindex > b.tipindex)
                 .map(lcbTip => lcbTip.tiptext)
 
               let authorNotes = (tableMap.t_authornote || [])
-                .filter(el => el.recipeid == lcbRecipe.recipeid)
+                .filter(el => el.authornotetext && el.recipeid == lcbRecipe.recipeid)
                 .sort((a, b) => a.authornoteindex > b.authornoteindex)
                 .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
 

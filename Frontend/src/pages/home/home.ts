@@ -8,7 +8,6 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
-import SearchWorker from 'worker-loader!../../assets/src/recipe-search.worker';
 import { LabelServiceProvider } from '../../providers/label-service/label-service';
 
 @IonicPage({
@@ -21,8 +20,13 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
 })
 export class HomePage {
 
-  recipes: Recipe[];
-  initialLoadComplete: boolean = false;
+  recipes: Recipe[] = [];
+  recipeFetchBuffer: number = 15;
+  fetchPerPage: number = 50;
+  lastRecipeCount: number;
+  totalRecipeCount: number;
+
+  loading: boolean = true;
   selectedRecipeIds: string[] = [];
 
   searchText: string;
@@ -32,8 +36,6 @@ export class HomePage {
 
   viewOptions: any = {};
   filterOptions: any = {};
-
-  searchWorker: any;
 
   constructor(
     public navCtrl: NavController,
@@ -65,12 +67,12 @@ export class HomePage {
 
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
-        this.loadRecipes();
+        this.resetAndLoadRecipes();
       }
     }, this);
 
     events.subscribe('import:pepperplate:complete', () => {
-      this.loadRecipes();
+      this.resetAndLoadRecipes();
     });
 
     this.searchText = '';
@@ -79,8 +81,9 @@ export class HomePage {
   ionViewWillEnter() {
     var loading = this.loadingService.start();
 
-    this.loadRecipes().then(() => {
-      this.initialLoadComplete = true;
+    this.clearSelectedRecipes();
+
+    this.resetAndLoadRecipes().then(() => {
       loading.dismiss();
     }, () => {
       loading.dismiss();
@@ -88,7 +91,7 @@ export class HomePage {
   }
 
   refresh(refresher) {
-    this.loadRecipes().then(() => {
+    this.resetAndLoadRecipes().then(() => {
       refresher.complete();
     }, () => {
       refresher.complete();
@@ -119,36 +122,55 @@ export class HomePage {
     }
   }
 
-  loadRecipes() {
-    this.clearSelectedRecipes();
+  fetchMoreRecipes(event) {
+    if (this.searchText) return;
+
+    let shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
+
+    let moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
+    if (shouldFetchMore && moreToScroll) {
+      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage)
+    }
+  }
+
+  resetAndLoadRecipes() {
+    this.loading = true;
+    this.resetRecipes();
+
+    return this._resetAndLoadRecipes().then(() => {
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    })
+  }
+
+  _resetAndLoadRecipes() {
+    if (this.searchText) {
+      return this.search(this.searchText);
+    }
+    return this.loadRecipes(0, this.fetchPerPage);
+  }
+
+  resetRecipes() {
+    this.recipes = [];
+    this.lastRecipeCount = 0;
+  }
+
+  loadRecipes(offset, numToFetch) {
+    this.lastRecipeCount += numToFetch;
 
     return new Promise((resolve, reject) => {
       this.recipeService.fetch({
         folder: this.folder,
         sortBy: this.viewOptions.sortBy,
-        // labels: this.viewOptions.selectedLabels
+        offset,
+        count: numToFetch,
+        ...(this.viewOptions.selectedLabels.length > 0 ? { labels: this.viewOptions.selectedLabels } : {})
       }).subscribe(response => {
 
-        if (this.searchWorker) this.searchWorker.terminate();
-        this.searchWorker = new SearchWorker();
+        this.totalRecipeCount = response.totalCount;
 
-        this.searchWorker.postMessage(JSON.stringify({
-          op: 'init',
-          data: response
-        }));
-
-        this.searchWorker.onmessage = e => {
-          var message = JSON.parse(e.data);
-          if (message.op === 'results') {
-            this.recipes = message.data;
-          }
-        }
-
-        if (this.searchText) {
-          this.search(this.searchText);
-        } else {
-          this.recipes = response;
-        }
+        this.recipes = this.recipes.concat(response.data);
 
         resolve();
       }, err => {
@@ -189,6 +211,10 @@ export class HomePage {
   presentPopover(event) {
     let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
 
+    popover.onDidDismiss(data => {
+      if (data && data.refreshSearch) this.resetAndLoadRecipes();
+    });
+
     popover.present({
       ev: event
     });
@@ -199,12 +225,50 @@ export class HomePage {
   }
 
   search(text) {
-    if (!text) text = '';
+    if (text.length == 0) {
+      this.searchText = '';
+      this.resetAndLoadRecipes();
+    }
+
+    let loading = this.loadingService.start();
+
     this.searchText = text;
-    this.searchWorker.postMessage(JSON.stringify({
-      op: 'search',
-      data: text
-    }));
+
+    return new Promise((resolve, reject) => {
+      this.recipeService.search(text, {
+        ...(this.viewOptions.selectedLabels.length > 0 ? { labels: this.viewOptions.selectedLabels } : {})
+      }).subscribe(response => {
+        loading.dismiss();
+
+        this.resetRecipes();
+        this.recipes = response.data;
+
+        resolve();
+      }, err => {
+        loading.dismiss();
+
+        reject();
+        switch (err.status) {
+          case 0:
+            let offlineToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlineFetchMessage,
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
+          case 401:
+            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            break;
+          default:
+            let errorToast = this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
+              duration: 30000
+            });
+            errorToast.present();
+            break;
+        }
+      });
+    });
   }
 
   trackByFn(index, item) {
@@ -251,7 +315,7 @@ export class HomePage {
               })
             })).then(() => {
               loading.dismiss();
-              this.loadRecipes();
+              this.resetAndLoadRecipes();
             })
           }
         }
@@ -283,7 +347,7 @@ export class HomePage {
               })
             })).then(() => {
               loading.dismiss();
-              this.loadRecipes();
+              this.resetAndLoadRecipes();
             })
           }
         }

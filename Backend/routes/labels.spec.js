@@ -58,7 +58,7 @@ describe('labels', () => {
         .send(payload)
         .expect(201)
         .then(({ body }) =>
-          Label.findById(body.id, {
+          Label.findByPk(body.id, {
             include: [{
               model: Recipe,
               as: 'recipes',
@@ -258,7 +258,7 @@ describe('labels', () => {
         .query(payload)
         .expect(200)
         .then(({ body }) => {
-          Label.findById(label.id, {
+          Label.findByPk(label.id, {
             include: [{
               model: Recipe,
               as: 'recipes',
@@ -295,7 +295,7 @@ describe('labels', () => {
         .expect(200)
         .then(({ body }) => {
           // Removes the label as well
-          Label.findById(label.id).then(label =>
+          Label.findByPk(label.id).then(label =>
             expect(label).to.be.null
           )
         });

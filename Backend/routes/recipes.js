@@ -14,6 +14,7 @@ var Label = require('../models').Label;
 // Service
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+let ElasticService = require('../services/elastic');
 
 //Create a new recipe
 router.post(
@@ -37,37 +38,42 @@ router.post(
       res.status(412).send("Recipe title must be provided.");
     }
   } else {
-    // Support for imageURLs instead of image files
-    new Promise(function(resolve, reject) {
-      if (req.body.imageURL) {
-        UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(reject);
-      } else {
-        resolve(null);
-      }
-    }).then(function(img) {
-      var uploadedFile = img || req.file;
+    SQ.transaction(t => {
 
-      return Recipe.findTitle(res.locals.session.userId, null, req.body.title, null).then(function(adjustedTitle) {
-        return Recipe.create({
-          userId: res.locals.session.userId,
-      		title: adjustedTitle,
-          description: req.body.description || '',
-          yield: req.body.yield || '',
-          activeTime: req.body.activeTime || '',
-          totalTime: req.body.totalTime || '',
-          source: req.body.source || '',
-          url: req.body.url || '',
-          notes: req.body.notes || '',
-          ingredients: req.body.ingredients || '',
-          instructions: req.body.instructions || '',
-          image: uploadedFile,
-          folder: folder
-        }).then(function(recipe) {
-          var serializedRecipe = recipe.toJSON();
-          serializedRecipe.labels = [];
-          res.status(201).json(serializedRecipe);
+      // Support for imageURLs instead of image files
+      return new Promise(function(resolve, reject) {
+        if (req.body.imageURL) {
+          UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(reject);
+        } else {
+          resolve(null);
+        }
+      }).then(function(img) {
+        var uploadedFile = img || req.file;
+
+        return Recipe.findTitle(res.locals.session.userId, null, req.body.title, t).then(function(adjustedTitle) {
+          return Recipe.create({
+            userId: res.locals.session.userId,
+            title: adjustedTitle,
+            description: req.body.description || '',
+            yield: req.body.yield || '',
+            activeTime: req.body.activeTime || '',
+            totalTime: req.body.totalTime || '',
+            source: req.body.source || '',
+            url: req.body.url || '',
+            notes: req.body.notes || '',
+            ingredients: req.body.ingredients || '',
+            instructions: req.body.instructions || '',
+            image: uploadedFile,
+            folder: folder
+          }, {
+            transaction: t
+          });
         });
-      });
+      })
+    }).then(recipe => {
+      var serializedRecipe = recipe.toJSON();
+      serializedRecipe.labels = [];
+      res.status(201).json(serializedRecipe);
     }).catch(function (err) {
       if (req.file) {
         return UtilService.deleteS3Object(req.file.key).then(function () {
@@ -112,6 +118,134 @@ router.get(
     res.status(200).json(recipes);
   }).catch(next);
 });
+
+// Count a user's recipes
+router.get(
+  '/count',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  Recipe.count({
+    where: {
+      userId: res.locals.session.userId,
+      folder: req.query.folder || 'main'
+    }
+  }).then(count => {
+    res.status(200).json({
+      count
+    });
+  }).catch(next);
+});
+
+//Get all of a user's recipes (paginated)
+router.get(
+  '/by-page',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  let sort = ['title', 'ASC'];
+  if (req.query.sort) {
+    switch(req.query.sort){
+      case "-title":
+        sort = ['title', 'ASC'];
+        break;
+      case "createdAt":
+        sort = ['createdAt', 'ASC'];
+        break;
+      case "-createdAt":
+        sort = ['createdAt', 'DESC'];
+        break;
+      case "updatedAt":
+        sort = ['updatedAt', 'ASC'];
+        break;
+      case "-updatedAt":
+        sort = ['updatedAt', 'DESC'];
+        break;
+    }
+  }
+
+  let labelFilter = {}
+  if (req.query.labels) {
+    labelFilter.where = {
+      title: req.query.labels.split(',')
+    }
+  }
+
+  Recipe.findAndCountAll({
+    where: {
+      userId: res.locals.session.userId,
+      folder: req.query.folder || 'main'
+    },
+    attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
+    include: [{
+      model: User,
+      as: 'fromUser',
+      attributes: ['name', 'email']
+    },
+    {
+      model: Label,
+      as: 'labels',
+      attributes: ['id', 'title'],
+      ...labelFilter
+    }],
+    order: [
+      sort
+    ],
+    limit: Math.min(parseInt(req.query.count) || 100, 500),
+    offset: req.query.offset || 0
+  }).then(({ count, rows }) => {
+    res.status(200).json({
+      data: rows,
+      totalCount: count
+    });
+  }).catch(next);
+});
+
+router.get(
+  '/search',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+    ElasticService.search('recipes', res.locals.session.userId, req.query.query).then(results => {
+      let searchHits = results.hits.hits;
+
+      let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
+        acc[hit._id] = hit;
+        return acc;
+      }, {});
+
+      let labelFilter = {}
+      if (req.query.labels) {
+        labelFilter.where = {
+          title: req.query.labels.split(',')
+        }
+      }
+
+      return Recipe.findAll({
+        where: {
+          id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
+          userId: res.locals.session.userId,
+          folder: 'main'
+        },
+        include: [{
+          model: Label,
+          as: 'labels',
+          attributes: ['id', 'title'],
+          ...labelFilter
+        }],
+        limit: 200
+      }).then(recipes => {
+        res.status(200).send({
+          data: recipes.sort((a, b) => {
+            return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
+          })
+        });
+      })
+    }).catch(next);
+  }
+)
 
 router.get(
   '/export',

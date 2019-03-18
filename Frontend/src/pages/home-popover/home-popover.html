@@ -30,7 +30,7 @@
   <ion-item>
     <ion-icon name='list' item-start></ion-icon>
     <ion-label>Sort by</ion-label>
-    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
+    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions(true);">
       <ion-option value="-title">Title</ion-option>
       <!--<ion-option value="label">Label</ion-option>-->
       <ion-option value="-createdAt">Created (newest first)</ion-option>
@@ -45,7 +45,7 @@
     <ion-label>Filter by label</ion-label>
     <ion-select
       [(ngModel)]="viewOptions.selectedLabels"
-      (ngModelChange)="saveViewOptions();"
+      (ngModelChange)="saveViewOptions(true);"
       multiple="true"
       #filterByLabelSelect>
       <ion-option

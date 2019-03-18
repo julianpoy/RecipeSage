@@ -175,8 +175,8 @@ describe('recipe', () => {
 
         return Promise.all([
           Recipe.count().then(count => expect(count).to.equal(2)),
-          Recipe.findById(recipe.id).then(r => expect(r).to.not.be.null),
-          Recipe.findById(sharedRecipe.id).then(r => expect(r).to.not.be.null)
+          Recipe.findByPk(recipe.id).then(r => expect(r).to.not.be.null),
+          Recipe.findByPk(sharedRecipe.id).then(r => expect(r).to.not.be.null)
         ])
       })
 

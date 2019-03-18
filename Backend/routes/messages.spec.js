@@ -78,7 +78,7 @@ describe('messages', () => {
         .send(payload)
         .expect(201)
         .then(({ body }) =>
-          Message.findById(body.id, {
+          Message.findByPk(body.id, {
             include: [{
               model: User,
               as: 'toUser',
@@ -126,7 +126,7 @@ describe('messages', () => {
         .send(payload)
         .expect(201)
         .then(({ body }) =>
-          Message.findById(body.id, {
+          Message.findByPk(body.id, {
             include: [{
               model: User,
               as: 'toUser',

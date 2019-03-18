@@ -41,7 +41,7 @@ router.get(
   cors(),
   function(req, res, next) {
 
-  User.find({
+  User.findOne({
     where: {
       email: UtilService.sanitizeEmail(req.query.email)
     },
@@ -103,7 +103,7 @@ router.post(
       throw e;
     } else {
       //Check if a user with that email already exists
-      return User.find({
+      return User.findOne({
         where: {
           email: sanitizedEmail
         },
@@ -153,7 +153,7 @@ router.post(
 
   var origin = req.get('origin');
 
-  User.find({
+  User.findOne({
     where: {
       email: UtilService.sanitizeEmail(req.body.email)
     }

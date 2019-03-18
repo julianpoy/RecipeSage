@@ -64,7 +64,7 @@ describe('recipes', () => {
         .send(payload)
         .expect(201)
         .then(({ body }) =>
-          Recipe.find({
+          Recipe.findOne({
             where: {
               [Op.and]: [payload, { id: body.id, userId: user.id }]
             }
@@ -93,7 +93,7 @@ describe('recipes', () => {
         .send(payload)
         .expect(201)
         .then(({ body }) =>
-          Recipe.find({
+          Recipe.findOne({
             where: {
               [Op.and]: [payload, { id: body.id, userId: user.id }]
             }
@@ -409,7 +409,7 @@ describe('recipes', () => {
         .query({ token: session.token })
         .expect(200)
         .then(({ body }) =>
-          Recipe.findById(recipe.id).then(updatedRecipe => {
+          Recipe.findByPk(recipe.id).then(updatedRecipe => {
             expect(updatedRecipe.title).to.equal(payload.title);
             expect(updatedRecipe.description).to.equal(payload.description);
             expect(updatedRecipe.yield).to.equal(payload.yield);
@@ -568,7 +568,7 @@ describe('recipes', () => {
         .query({ token: session.token })
         .expect(200)
         .then(({ body }) => {
-          Recipe.findById(recipe.id).then(recipe => {
+          Recipe.findByPk(recipe.id).then(recipe => {
             expect(recipe).to.be.null
           })
         });
@@ -593,13 +593,13 @@ describe('recipes', () => {
         .expect(200)
         .then(({ body }) =>
           Promise.all([
-            Recipe.findById(recipe.id).then(deletedRecipe =>
+            Recipe.findByPk(recipe.id).then(deletedRecipe =>
               expect(deletedRecipe).to.be.null
             ),
-            Label.findById(label1.id).then(deletedLabel1 =>
+            Label.findByPk(label1.id).then(deletedLabel1 =>
               expect(deletedLabel1).to.be.null
             ),
-            Label.findById(label2.id).then(deletedLabel2 =>
+            Label.findByPk(label2.id).then(deletedLabel2 =>
               expect(deletedLabel2).to.be.null
             )
           ])
@@ -625,13 +625,13 @@ describe('recipes', () => {
         .expect(200)
         .then(({ body }) =>
           Promise.all([
-            Recipe.findById(recipe1.id).then(deletedRecipe1 =>
+            Recipe.findByPk(recipe1.id).then(deletedRecipe1 =>
               expect(deletedRecipe1).to.be.null
             ),
-            Recipe.findById(recipe2.id).then(notDeletedRecipe2 =>
+            Recipe.findByPk(recipe2.id).then(notDeletedRecipe2 =>
               expect(notDeletedRecipe2).not.to.be.null
             ),
-            Label.findById(label.id).then(deletedLabel =>
+            Label.findByPk(label.id).then(deletedLabel =>
               expect(deletedLabel).not.to.be.null
             )
           ])

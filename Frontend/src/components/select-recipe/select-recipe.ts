@@ -4,17 +4,16 @@ import { UtilServiceProvider } from '../../providers/util-service/util-service';
 import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
 import { ToastController, NavController } from 'ionic-angular';
 
-import SearchWorker from 'worker-loader!../../assets/src/recipe-search.worker';
-
 @Component({
   selector: 'select-recipe',
   templateUrl: 'select-recipe.html'
 })
 export class SelectRecipeComponent {
 
-  searchWorker: any;
+  searchTimeout;
   searchText: string = '';
   searching: boolean = false;
+  PAUSE_BEFORE_SEARCH: number = 500;
 
   _selectedRecipe: any;
   @Input()
@@ -37,80 +36,54 @@ export class SelectRecipeComponent {
     public recipeService: RecipeServiceProvider,
     public toastCtrl: ToastController,
     public navCtrl: NavController
-  ) {
-    var loading = this.loadingService.start();
+  ) {}
 
-    this.loadRecipes().then(() => {
+  search(text) {
+    let loading = this.loadingService.start();
+
+    this.recipeService.search(text, {}).subscribe(response => {
+      this.recipes = response.data;
+
       loading.dismiss();
-    }, () => {
+      this.searching = false;
+    }, err => {
       loading.dismiss();
-    });
-  }
+      this.searching = false;
 
-  loadRecipes() {
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetch({
-        folder: 'main',
-        sortBy: 'title',
-      }).subscribe(response => {
-
-        if (this.searchWorker) this.searchWorker.terminate();
-        this.searchWorker = new SearchWorker();
-
-        this.searchWorker.postMessage(JSON.stringify({
-          op: 'init',
-          data: response
-        }));
-
-        this.searchWorker.onmessage = e => {
-          this.searching = false;
-          var message = JSON.parse(e.data);
-          if (message.op === 'results') {
-            this.recipes = message.data;
-          }
-        }
-
-        this.recipes = response;
-
-        resolve();
-      }, err => {
-        reject();
-
-        switch (err.status) {
-          case 0:
-            let offlineToast = this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
-            break;
-          default:
-            let errorToast = this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+      switch (err.status) {
+        case 0:
+          let offlineToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          break;
+        default:
+          let errorToast = this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 
   onSearchInputChange() {
-    this.search(this.searchText);
-  }
+    this.recipes = [];
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    if (!this.searchText) return;
 
-  search(text) {
-    if (!text) text = '';
-    this.searchText = text;
-    this.searchWorker.postMessage(JSON.stringify({
-      op: 'search',
-      data: text
-    }));
     this.searching = true;
+
+    this.searchTimeout = setTimeout(() => {
+      this.search(this.searchText);
+    }, this.PAUSE_BEFORE_SEARCH);
   }
 
   selectRecipe(recipe) {

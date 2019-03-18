@@ -149,7 +149,7 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    ShoppingList.find({
+    ShoppingList.findOne({
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
@@ -213,7 +213,7 @@ router.delete(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    ShoppingList.find({
+    ShoppingList.findOne({
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
@@ -264,7 +264,7 @@ router.delete(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    ShoppingList.find({
+    ShoppingList.findOne({
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [
@@ -322,7 +322,7 @@ router.get(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-    ShoppingList.find({
+    ShoppingList.findOne({
       where: {
         id: req.params.shoppingListId,
         [Op.or]: [

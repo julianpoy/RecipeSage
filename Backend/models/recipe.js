@@ -1,7 +1,18 @@
 let UtilService = require('../services/util');
+let ElasticService = require('../services/elastic');
+let cron = require('node-cron');
+let Raven = require('raven');
 let Op = require("sequelize").Op;
 
 'use strict';
+
+function afterCommitIfTransaction(options, cb) {
+  if (options && options.transaction && options.transaction.afterCommit) {
+    options.transaction.afterCommit(cb);
+  } else {
+    cb();
+  }
+}
 
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
@@ -70,27 +81,87 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeDestroy: (recipe, options) => {
-        return Recipe.findById(recipe.id, {
+        return Recipe.findByPk(recipe.id, {
           attributes: ['image'],
           transaction: options.transaction
         }).then(recipe => {
           if (recipe.image && recipe.image.key) {
             return UtilService.deleteS3Object(recipe.image.key);
           }
-        })
+        }).then(() => {
+          afterCommitIfTransaction(options, () => {
+            ElasticService.remove('recipes', recipe.id).catch(e => {
+              if (e.status != 404) {
+                e = new Error(e);
+                e.status = 500;
+                throw e;
+              }
+            }).catch(e => {
+              Raven.captureException(e);
+            });
+          })
+        });
       },
       beforeBulkDestroy: (options) => {
         return Recipe.findAll({
           where: options.where,
-          attributes: ['image'],
+          attributes: ['id', 'image'],
           transaction: options.transaction
         }).then(recipes => {
           return Promise.all(recipes.map(recipe => {
             if (recipe.image && recipe.image.key) {
               return UtilService.deleteS3Object(recipe.image.key);
             }
-          }))
+          })).then(() => {
+            afterCommitIfTransaction(options, () => {
+              ElasticService.bulk('delete', 'recipes', recipes).then(() => {
+
+                console.log("done");
+              }).catch(e => {
+                if (e.status != 404) {
+                  e = new Error(e);
+                  e.status = 500;
+                  throw e;
+                }
+              }).catch(e => {
+                Raven.captureException(e);
+              });
+            })
+          });
+        });
+      },
+      afterUpdate: (recipe, options) => {
+        afterCommitIfTransaction(options, () => {
+          ElasticService.index('recipes', recipe).catch(e => {
+            Raven.captureException(e);
+          });
+        });
+      },
+      afterBulkUpdate: options => {
+        return Recipe.findAll({
+          where: options.where,
+          transaction: options.transaction
+        }).then(recipes => {
+          afterCommitIfTransaction(options, () => {
+            ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+              Raven.captureException(e);
+            });
+          });
+        });
+      },
+      afterCreate: (recipe, options) => {
+        afterCommitIfTransaction(options, () => {
+          ElasticService.index('recipes', recipe).catch(e => {
+            Raven.captureException(e);
+          });
         })
+      },
+      afterBulkCreate: (recipes, options) => {
+        afterCommitIfTransaction(options, () => {
+          ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+            Raven.captureException(e);
+          });
+        });
       }
     }
   });
@@ -161,7 +232,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Recipe.share = function(recipeId, recipientId, transaction) {
-    return Recipe.findById(recipeId, { transaction }).then(recipe => {
+    return Recipe.findByPk(recipeId, { transaction }).then(recipe => {
       if (!recipe) {
         var e = new Error("Could not find recipe to share");
         e.status = 404;
@@ -202,6 +273,19 @@ module.exports = (sequelize, DataTypes) => {
       });
     });
   }
+
+  cron.schedule('*/2 * * * *', () => {
+    Recipe.count().then(count => {
+      return Recipe.findAll({
+        offset: Math.floor(Math.random() * count),
+        limit: 200
+      }).then(recipes => {
+        return ElasticService.bulk('index', 'recipes', recipes);
+      });
+    }).catch(e => {
+      Raven.captureException(e);
+    });
+  });
 
   return Recipe;
 };
