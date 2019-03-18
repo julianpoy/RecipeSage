@@ -118,7 +118,7 @@ module.exports.createLabel = userId => {
 }
 
 module.exports.associateLabel = (labelId, recipeId) => {
-  return Label.findById(labelId).then(label => {
+  return Label.findByPk(labelId).then(label => {
     return label.addRecipe(recipeId);
   })
 }

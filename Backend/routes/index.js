@@ -139,7 +139,7 @@ router.get(
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
-  User.find({
+  User.findOne({
     where: {
       id: res.locals.session.userId
     },

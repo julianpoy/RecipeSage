@@ -32,7 +32,7 @@ router.get('/',
     return;
   }
 
-  Recipe.find({
+  Recipe.findOne({
     where: {
       id: req.query.recipeId
     },

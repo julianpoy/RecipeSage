@@ -112,7 +112,7 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    MealPlan.find({
+    MealPlan.findOne({
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
@@ -172,7 +172,7 @@ router.delete(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    MealPlan.find({
+    MealPlan.findOne({
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
@@ -223,7 +223,7 @@ router.delete(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-    MealPlan.find({
+    MealPlan.findOne({
       where: {
         id: req.params.mealPlanId,
         [Op.or]: [
@@ -280,7 +280,7 @@ router.get(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-  MealPlan.find({
+  MealPlan.findOne({
     where: {
       id: req.params.mealPlanId,
       [Op.or]: [

@@ -28,7 +28,7 @@ router.post(
   }
 
   SQ.transaction(function(t) {
-    return User.findById(req.body.to, {transaction: t}).then(function(recipient) {
+    return User.findByPk(req.body.to, {transaction: t}).then(function(recipient) {
       if (!recipient) {
         res.status(404).send('Could not find user under that ID.');
       } else {
@@ -48,7 +48,7 @@ router.post(
           }, {
             transaction: t
           }).then(function(newMessage) {
-            return Message.find({
+            return Message.findOne({
               where: {
                 id: newMessage.id
               },

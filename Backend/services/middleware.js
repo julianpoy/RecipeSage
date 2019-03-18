@@ -12,7 +12,7 @@ exports.validateSession = function(types) {
 
 // Requires validateSession
 exports.validateUser = function(req, res, next) {
-  User.find({
+  User.findOne({
     where: {
       id: res.locals.session.userId
     },

@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeDestroy: (recipe, options) => {
-        return Recipe.findById(recipe.id, {
+        return Recipe.findByPk(recipe.id, {
           attributes: ['image'],
           transaction: options.transaction
         }).then(recipe => {
@@ -232,7 +232,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Recipe.share = function(recipeId, recipientId, transaction) {
-    return Recipe.findById(recipeId, { transaction }).then(recipe => {
+    return Recipe.findByPk(recipeId, { transaction }).then(recipe => {
       if (!recipe) {
         var e = new Error("Could not find recipe to share");
         e.status = 404;

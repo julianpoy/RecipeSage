@@ -118,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
     var e = new Error("Credentials are not valid!");
     e.status = 412;
 
-    return User.find({
+    return User.findOne({
       where: {
         email: email.toLowerCase()
       },
