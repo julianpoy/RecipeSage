@@ -438,10 +438,10 @@ router.delete(
           userId: res.locals.session.userId
         },
         transaction: t
-      }).then(() => {
-        res.status(200).send({})
       })
     })
+  }).then(() => {
+    res.status(200).send({})
   }).catch(next);
 })
 
@@ -489,10 +489,10 @@ router.delete(
               id: { [Op.in]: labelIds }
             },
             transaction: t
-          }).then(function() {
-            res.status(200).json(recipe);
           });
         });
+      }).then(() => {
+        res.status(200).json(recipe);
       });
     }
   })
