@@ -2,7 +2,8 @@ let UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
 let cron = require('node-cron');
 let Raven = require('raven');
-let Op = require("sequelize").Op;
+let SQ = require("sequelize");
+let Op = SQ.Op;
 
 'use strict';
 
@@ -77,6 +78,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'main',
       allowNull: false
+    },
+    indexedAt: {
+      type: DataTypes.DATE,
+      defaultValue: SQ.NOW
     }
   }, {
     hooks: {
@@ -114,10 +119,7 @@ module.exports = (sequelize, DataTypes) => {
             }
           })).then(() => {
             afterCommitIfTransaction(options, () => {
-              ElasticService.bulk('delete', 'recipes', recipes).then(() => {
-
-                console.log("done");
-              }).catch(e => {
+              ElasticService.bulk('delete', 'recipes', recipes).catch(e => {
                 if (e.status != 404) {
                   e = new Error(e);
                   e.status = 500;
@@ -274,13 +276,36 @@ module.exports = (sequelize, DataTypes) => {
     });
   }
 
-  cron.schedule('*/2 * * * *', () => {
-    Recipe.count().then(count => {
-      return Recipe.findAll({
-        offset: Math.floor(Math.random() * count),
-        limit: 200
-      }).then(recipes => {
-        return ElasticService.bulk('index', 'recipes', recipes);
+  cron.schedule('*/1 * * * *', () => {
+    let lt = new Date();
+    lt.setDate(lt.getDate() - 7);
+
+    Recipe.findAll({
+      where: {
+        [Op.or]: [
+          { indexedAt: null },
+          { indexedAt: { [Op.lt]: lt } }
+        ]
+      },
+      limit: 200,
+      order: [
+        ['indexedAt', 'ASC']
+      ]
+    }).then(recipes => {
+      if (!recipes || recipes.length === 0) return;
+
+      return ElasticService.bulk('index', 'recipes', recipes).then(() => {
+        let ids = recipes.map(r => r.id);
+        return Recipe.update(
+          { indexedAt: new Date() },
+          {
+            where: {
+              id: { [Op.in]: ids }
+            },
+            silent: true,
+            hooks: false
+          }
+        );
       });
     }).catch(e => {
       Raven.captureException(e);
