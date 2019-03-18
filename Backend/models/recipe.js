@@ -6,6 +6,14 @@ let Op = require("sequelize").Op;
 
 'use strict';
 
+function afterCommitIfTransaction(options, cb) {
+  if (options && options.transaction && options.transaction.afterCommit) {
+    options.transaction.afterCommit(cb);
+  } else {
+    cb();
+  }
+}
+
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
     id: {
@@ -81,13 +89,17 @@ module.exports = (sequelize, DataTypes) => {
             return UtilService.deleteS3Object(recipe.image.key);
           }
         }).then(() => {
-          return ElasticService.remove('recipes', recipe.id).catch(e => {
-            if (e.status != 404) {
-              e = new Error(e);
-              e.status = 500;
-              throw e;
-            }
-          });
+          afterCommitIfTransaction(options, () => {
+            ElasticService.remove('recipes', recipe.id).catch(e => {
+              if (e.status != 404) {
+                e = new Error(e);
+                e.status = 500;
+                throw e;
+              }
+            }).catch(e => {
+              Raven.captureException(e);
+            });
+          })
         });
       },
       beforeBulkDestroy: (options) => {
@@ -101,26 +113,55 @@ module.exports = (sequelize, DataTypes) => {
               return UtilService.deleteS3Object(recipe.image.key);
             }
           })).then(() => {
-            return ElasticService.bulk('delete', 'recipes', recipes);
+            afterCommitIfTransaction(options, () => {
+              ElasticService.bulk('delete', 'recipes', recipes).then(() => {
+
+                console.log("done");
+              }).catch(e => {
+                if (e.status != 404) {
+                  e = new Error(e);
+                  e.status = 500;
+                  throw e;
+                }
+              }).catch(e => {
+                Raven.captureException(e);
+              });
+            })
           });
         });
       },
       afterUpdate: (recipe, options) => {
-        return ElasticService.index('recipes', recipe);
+        afterCommitIfTransaction(options, () => {
+          ElasticService.index('recipes', recipe).catch(e => {
+            Raven.captureException(e);
+          });
+        });
       },
       afterBulkUpdate: options => {
         return Recipe.findAll({
           where: options.where,
           transaction: options.transaction
         }).then(recipes => {
-          return ElasticService.bulk('index', 'recipes', recipes);
+          afterCommitIfTransaction(options, () => {
+            ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+              Raven.captureException(e);
+            });
+          });
         });
       },
       afterCreate: (recipe, options) => {
-        return ElasticService.index('recipes', recipe);
+        afterCommitIfTransaction(options, () => {
+          ElasticService.index('recipes', recipe).catch(e => {
+            Raven.captureException(e);
+          });
+        })
       },
       afterBulkCreate: (recipes, options) => {
-        return ElasticService.bulk('index', 'recipes', recipes);
+        afterCommitIfTransaction(options, () => {
+          ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+            Raven.captureException(e);
+          });
+        });
       }
     }
   });
