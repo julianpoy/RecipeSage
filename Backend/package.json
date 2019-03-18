@@ -19,7 +19,7 @@
     "express": "~4.16.4",
     "express-grip": "^1.1.0",
     "extract-zip": "^1.6.7",
-    "firebase-admin": "^5.9.1",
+    "firebase-admin": "^7.1.0",
     "fs-extra": "^7.0.1",
     "gm": "^1.23.1",
     "grip": "^1.2.8",
