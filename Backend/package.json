@@ -16,7 +16,7 @@
     "cors": "^2.8.4",
     "debug": "~2.6.9",
     "elasticsearch": "^15.4.1",
-    "express": "~4.15.5",
+    "express": "~4.16.4",
     "express-grip": "^1.1.0",
     "extract-zip": "^1.6.7",
     "firebase-admin": "^5.9.1",
