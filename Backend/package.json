@@ -29,7 +29,6 @@
     "multer": "^1.3.0",
     "multer-imager": "git+https://git@github.com/julianpoy/multer-imager.git",
     "multer-s3": "^2.7.0",
-    "nightmare": "^2.10.0",
     "node-cron": "^2.0.3",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
