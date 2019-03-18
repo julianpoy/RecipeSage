@@ -41,9 +41,11 @@ router.post(
       transaction: t
     }).then(function(labels) {
       return labels[0].addRecipe(req.body.recipeId, {transaction: t}).then(function() {
-        res.status(201).send(labels[0]);
+        return labels[0];
       });
     });
+  }).then(label => {
+    res.status(201).send(label);
   }).catch(next);
 });
 
