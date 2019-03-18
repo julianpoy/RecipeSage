@@ -38,37 +38,42 @@ router.post(
       res.status(412).send("Recipe title must be provided.");
     }
   } else {
-    // Support for imageURLs instead of image files
-    new Promise(function(resolve, reject) {
-      if (req.body.imageURL) {
-        UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(reject);
-      } else {
-        resolve(null);
-      }
-    }).then(function(img) {
-      var uploadedFile = img || req.file;
+    SQ.transaction(t => {
 
-      return Recipe.findTitle(res.locals.session.userId, null, req.body.title, null).then(function(adjustedTitle) {
-        return Recipe.create({
-          userId: res.locals.session.userId,
-      		title: adjustedTitle,
-          description: req.body.description || '',
-          yield: req.body.yield || '',
-          activeTime: req.body.activeTime || '',
-          totalTime: req.body.totalTime || '',
-          source: req.body.source || '',
-          url: req.body.url || '',
-          notes: req.body.notes || '',
-          ingredients: req.body.ingredients || '',
-          instructions: req.body.instructions || '',
-          image: uploadedFile,
-          folder: folder
-        }).then(function(recipe) {
-          var serializedRecipe = recipe.toJSON();
-          serializedRecipe.labels = [];
-          res.status(201).json(serializedRecipe);
+      // Support for imageURLs instead of image files
+      return new Promise(function(resolve, reject) {
+        if (req.body.imageURL) {
+          UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(reject);
+        } else {
+          resolve(null);
+        }
+      }).then(function(img) {
+        var uploadedFile = img || req.file;
+
+        return Recipe.findTitle(res.locals.session.userId, null, req.body.title, t).then(function(adjustedTitle) {
+          return Recipe.create({
+            userId: res.locals.session.userId,
+            title: adjustedTitle,
+            description: req.body.description || '',
+            yield: req.body.yield || '',
+            activeTime: req.body.activeTime || '',
+            totalTime: req.body.totalTime || '',
+            source: req.body.source || '',
+            url: req.body.url || '',
+            notes: req.body.notes || '',
+            ingredients: req.body.ingredients || '',
+            instructions: req.body.instructions || '',
+            image: uploadedFile,
+            folder: folder
+          }, {
+            transaction: t
+          });
         });
-      });
+      })
+    }).then(recipe => {
+      var serializedRecipe = recipe.toJSON();
+      serializedRecipe.labels = [];
+      res.status(201).json(serializedRecipe);
     }).catch(function (err) {
       if (req.file) {
         return UtilService.deleteS3Object(req.file.key).then(function () {
