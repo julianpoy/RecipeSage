@@ -200,7 +200,8 @@ router.get(
     ],
     limit: Math.min(parseInt(req.query.count) || 100, 500),
     offset: req.query.offset || 0,
-    distinct: true
+    distinct: true,
+    subQuery: false
   }).then(({ count, rows }) => {
     res.status(200).json({
       data: rows,
