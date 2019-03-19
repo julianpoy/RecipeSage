@@ -15,7 +15,7 @@
     <ion-title *ngIf="selectedRecipeIds.length > 0">{{ selectedRecipeIds.length }} Selected</ion-title>
 
     <ion-buttons end>
-      <button *ngIf="selectedRecipeIds.length > 0" ion-button icon-only (click)="addLabelToSelectedRecipes()">
+      <button *ngIf="selectedRecipeIds.length > 0 && folder === 'main'" ion-button icon-only (click)="addLabelToSelectedRecipes()">
         <ion-icon name="pricetag"></ion-icon>
       </button>
       &nbsp;&nbsp;&nbsp;&nbsp;
@@ -103,8 +103,11 @@
     </ion-item>
 
     <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
+      <br /><br />
+      <ion-icon name="mail-open" class="big-icon"></ion-icon>
+      <br /><br />
       <p>
-        Your inbox is empty.<br />
+        Your recipe inbox is empty.<br />
         When someone sends you a recipe, it will show up here!
       </p>
     </ion-item>

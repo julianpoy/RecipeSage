@@ -35,16 +35,12 @@
       <ion-badge item-end>{{ mealPlan.itemCount }}</ion-badge>
     </ion-item>
     <ion-item *ngIf="mealPlans.length === 0 && initialLoadComplete" text-wrap text-center>
-      <br />
-      <br />
-      <br />
+      <br /><br />
+      <ion-icon name="calendar" class="big-icon"></ion-icon>
+      <br /><br />
       <p>
         You have no meal plans.
-        <br />
-        <button ion-button icon-left (click)="newMealPlan()">
-          <ion-icon name="add"></ion-icon>
-          Create your first meal plan
-        </button>
+        <br /> To create a meal plan, press the plus button in the bottom corner.
       </p>
     </ion-item>
   </ion-list>

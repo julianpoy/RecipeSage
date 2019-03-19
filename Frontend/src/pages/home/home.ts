@@ -56,7 +56,7 @@ export class HomePage {
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
       case 'inbox':
-        this.folderTitle = 'Inbox';
+        this.folderTitle = 'Recipe Inbox';
         break;
       default:
         this.folderTitle = 'My Recipes';
