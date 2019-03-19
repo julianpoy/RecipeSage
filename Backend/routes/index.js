@@ -67,26 +67,34 @@ router.get('/deduperecipelabels', function(req, res, next) {
               },
               transaction: t
             }).then(() => {
-              return Promise.all(Object.entries(recipeIdsByLabelTitle).map(([labelTitle, recipeIds]) => {
-                if (labelTitle.trim().length == 0 || recipeIds.length == 0) return;
+              return Label.bulkCreate(
+                Object.entries(recipeIdsByLabelTitle)
+                .filter(([labelTitle, recipeIds]) => labelTitle.trim().length > 0 && recipeIds.length > 0)
+                .map(([labelTitle, recipeIds]) => {
 
-                return Label.findOrCreate({
-                  where: {
-                    userId: user.id,
-                    title: labelTitle
-                  },
-                  transaction: t
-                }).then(function (labels) {
-                  return Recipe_Label.bulkCreate(recipeIds.map(recipeId => {
-                    return {
-                      labelId: labels[0].id,
-                      recipeId
-                    }
-                  }), {
+                return {
+                  userId: user.id,
+                  title: labelTitle
+                };
+              }), {
+                transaction: t
+              }).then(labels => {
+                return Recipe_Label.bulkCreate(
+                  labels.reduce((acc, label) => {
+                    let subQueries = recipeIdsByLabelTitle[label.title].map(recipeId => {
+                      return {
+                        labelId: label.id,
+                        recipeId
+                      }
+                    });
+
+                    acc.concat(subQueries);
+                    return acc;
+                  }, []), {
                     transaction: t
-                  });
-                })
-              }))
+                  }
+                )
+              });
             })
           }
         })
