@@ -27,32 +27,7 @@ export class HomePopoverPage {
     public utilService: UtilServiceProvider,
     public labelService: LabelServiceProvider) {
     this.viewOptions = navParams.get('viewOptions');
-  }
-
-  ionViewDidLoad() {
-    this.labelService.fetch().subscribe(response => {
-      this.labels = response;
-    }, err => {
-      switch(err.status) {
-        case 0:
-          let offlineToast = this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
-          break;
-        default:
-          let errorToast = this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
+    this.labels = navParams.get('labels');
   }
 
   saveViewOptions(refreshSearch?: boolean) {
