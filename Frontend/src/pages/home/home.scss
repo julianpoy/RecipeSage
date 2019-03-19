@@ -1,12 +1,41 @@
 page-home {
-  .recipeItem {
-    cursor: pointer;
+  .labelChips {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2px 4px 8px;
+
+    a {
+      color: black;
+      padding: 6px 12px;
+      border: 1px solid rgba(0,0,0,0.4);
+      border-radius: 20px;
+      margin: 2px 4px;
+      cursor: pointer;
+      transition: box-shadow 0.1s ease-in-out;
+
+      &.selected {
+        border-color: #00a8ff;
+        background: #00a8ff;
+        color: white;
+        box-shadow: 1px 1px 7px rgb(210,210,210);
+      }
+
+      &:hover {
+        opacity: initial;
+        box-shadow: 1px 1px 7px rgb(220,220,220);
+      }
+    }
   }
 
-  // ion-content.content {
-  //   background-color: rgb(220, 220, 220);
-  // }
-  .selected {
-    background-color: rgb(220,220,220);
+  .recipeItem {
+    cursor: pointer;
+
+    &.selected {
+      background-color: rgb(220,220,220);
+    }
+  }
+
+  .big-icon {
+    color: rgb(50,50,50);
   }
 }

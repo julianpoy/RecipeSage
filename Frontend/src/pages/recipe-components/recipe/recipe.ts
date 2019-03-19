@@ -80,6 +80,10 @@ export class RecipePage {
       this.recipeService.fetchById(this.recipeId).subscribe(response => {
         this.recipe = response;
 
+        if (this.recipe.url && !this.recipe.url.trim().startsWith('http')) {
+          this.recipe.url = 'http://' + this.recipe.url.trim();
+        }
+
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
           this.instructions = this.recipe.instructions.split(/\r?\n/);
         }

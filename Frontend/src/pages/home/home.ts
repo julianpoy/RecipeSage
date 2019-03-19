@@ -8,7 +8,7 @@ import { LoadingServiceProvider } from '../../providers/loading-service/loading-
 import { WebsocketServiceProvider } from '../../providers/websocket-service/websocket-service';
 import { UtilServiceProvider } from '../../providers/util-service/util-service';
 
-import { LabelServiceProvider } from '../../providers/label-service/label-service';
+import { LabelServiceProvider, Label } from '../../providers/label-service/label-service';
 
 @IonicPage({
   segment: 'list/:folder',
@@ -19,6 +19,8 @@ import { LabelServiceProvider } from '../../providers/label-service/label-servic
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+  labels: Label[] = [];
 
   recipes: Recipe[] = [];
   recipeFetchBuffer: number = 15;
@@ -35,7 +37,6 @@ export class HomePage {
   folderTitle: string;
 
   viewOptions: any = {};
-  filterOptions: any = {};
 
   constructor(
     public navCtrl: NavController,
@@ -55,7 +56,7 @@ export class HomePage {
     this.folder = navParams.get('folder') || 'main';
     switch(this.folder) {
       case 'inbox':
-        this.folderTitle = 'Inbox';
+        this.folderTitle = 'Recipe Inbox';
         break;
       default:
         this.folderTitle = 'My Recipes';
@@ -63,7 +64,6 @@ export class HomePage {
     }
 
     this.loadViewOptions();
-    this.filterOptions.viewOptions = this.viewOptions;
 
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
@@ -83,7 +83,7 @@ export class HomePage {
 
     this.clearSelectedRecipes();
 
-    this.resetAndLoadRecipes().then(() => {
+    this.resetAndLoadAll().then(() => {
       loading.dismiss();
     }, () => {
       loading.dismiss();
@@ -91,7 +91,7 @@ export class HomePage {
   }
 
   refresh(refresher) {
-    this.resetAndLoadRecipes().then(() => {
+    this.resetAndLoadAll().then(() => {
       refresher.complete();
     }, () => {
       refresher.complete();
@@ -101,6 +101,7 @@ export class HomePage {
   loadViewOptions() {
     var defaults = {
       showLabels: true,
+      showLabelChips: false,
       showImages: true,
       showSource: false,
       sortBy: '-title',
@@ -108,6 +109,7 @@ export class HomePage {
     }
 
     this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
+    this.viewOptions.showLabelChips = JSON.parse(localStorage.getItem('showLabelChips'));
     this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
     this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
     this.viewOptions.sortBy = localStorage.getItem('sortBy');
@@ -131,6 +133,18 @@ export class HomePage {
     if (shouldFetchMore && moreToScroll) {
       this.loadRecipes(this.lastRecipeCount, this.fetchPerPage)
     }
+  }
+
+  resetAndLoadAll() {
+    return Promise.all([
+      this.resetAndLoadRecipes(),
+      this.resetAndLoadLabels()
+    ])
+  }
+
+  resetAndLoadLabels() {
+    this.labels = [];
+    return this.loadLabels();
   }
 
   resetAndLoadRecipes() {
@@ -199,6 +213,25 @@ export class HomePage {
     });
   }
 
+  loadLabels() {
+    return new Promise((resolve, reject) => {
+      this.labelService.fetch().subscribe(response => {
+        this.labels = response;
+
+        resolve();
+      }, err => {
+        reject(err);
+      });
+    });
+  }
+
+  toggleLabel(labelTitle) {
+    let labelIdx = this.viewOptions.selectedLabels.indexOf(labelTitle);
+    labelIdx > -1 ?
+      this.viewOptions.selectedLabels.splice(labelIdx, 1) : this.viewOptions.selectedLabels.push(labelTitle);
+    this.resetAndLoadRecipes();
+  }
+
   openRecipe(recipe) {
     console.log(recipe)
     // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
@@ -209,7 +242,10 @@ export class HomePage {
   }
 
   presentPopover(event) {
-    let popover = this.popoverCtrl.create('HomePopoverPage', { viewOptions: this.viewOptions });
+    let popover = this.popoverCtrl.create('HomePopoverPage', {
+      viewOptions: this.viewOptions,
+      labels: this.labels
+    });
 
     popover.onDidDismiss(data => {
       if (data && data.refreshSearch) this.resetAndLoadRecipes();
@@ -306,16 +342,18 @@ export class HomePage {
           text: 'Save',
           handler: ({labelName}) => {
             let loading = this.loadingService.start();
-            Promise.all(this.selectedRecipeIds.map(recipeId => {
-              return new Promise(resolve => {
-                this.labelService.create({
-                  recipeId: recipeId,
-                  title: labelName.toLowerCase()
-                }).subscribe(() => resolve(), () => resolve())
-              })
-            })).then(() => {
+            this.selectedRecipeIds.reduce((acc, recipeId) => {
+              return acc.then(() => {
+                return new Promise(resolve => {
+                  this.labelService.create({
+                    recipeId: recipeId,
+                    title: labelName.toLowerCase()
+                  }).subscribe(() => resolve(), () => resolve())
+                })
+              });
+            }, Promise.resolve()).then(() => {
               loading.dismiss();
-              this.resetAndLoadRecipes();
+              this.resetAndLoadAll();
             })
           }
         }
@@ -341,13 +379,15 @@ export class HomePage {
           cssClass: 'alertDanger',
           handler: () => {
             let loading = this.loadingService.start();
-            Promise.all(this.selectedRecipeIds.map(recipeId => {
-              return new Promise(resolve => {
-                this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
+            this.selectedRecipeIds.reduce((acc, recipeId) => {
+              return acc.then(() => {
+                return new Promise(resolve => {
+                  this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
+                })
               })
-            })).then(() => {
+            }, Promise.resolve()).then(() => {
               loading.dismiss();
-              this.resetAndLoadRecipes();
+              this.resetAndLoadAll();
             })
           }
         }
