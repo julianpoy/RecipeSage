@@ -294,7 +294,7 @@ module.exports = (sequelize, DataTypes) => {
           { indexedAt: { [Op.lt]: lt } }
         ]
       },
-      limit: 200,
+      limit: 400,
       order: [
         ['indexedAt', 'ASC']
       ]
