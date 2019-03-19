@@ -351,7 +351,7 @@ export class HomePage {
                   }).subscribe(() => resolve(), () => resolve())
                 })
               });
-            }, Promise.resolve()).then(() => {
+            }, Promise.resolve({})).then(() => {
               loading.dismiss();
               this.resetAndLoadAll();
             })
@@ -385,7 +385,7 @@ export class HomePage {
                   this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
                 })
               })
-            }, Promise.resolve()).then(() => {
+            }, Promise.resolve({})).then(() => {
               loading.dismiss();
               this.resetAndLoadAll();
             })
