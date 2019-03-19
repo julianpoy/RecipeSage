@@ -41,7 +41,7 @@
     (keyup.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
 
-  <div class="labelChips" *ngIf="viewOptions.showLabelChips && folder === 'main'">
+  <div class="labelChips" *ngIf="viewOptions.showLabelChips && folder === 'main' && labels.length > 0">
     <a
       *ngFor="let label of labels"
       [ngClass]="{ selected: viewOptions.selectedLabels.indexOf(label.title) > -1 }"
