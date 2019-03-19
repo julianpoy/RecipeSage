@@ -41,13 +41,13 @@
     (keyup.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
 
-  <div class="labelChips">
-    <span
+  <div class="labelChips" *ngIf="viewOptions.showLabelChips && folder === 'main'">
+    <a
       *ngFor="let label of labels"
       [ngClass]="{ selected: viewOptions.selectedLabels.indexOf(label.title) > -1 }"
       (click)="toggleLabel(label.title)">
       {{ label.title }} ({{ label.recipeCount }})
-    </span>
+    </a>
   </div>
 
   <virtual-scroller

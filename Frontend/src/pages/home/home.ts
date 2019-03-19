@@ -101,6 +101,7 @@ export class HomePage {
   loadViewOptions() {
     var defaults = {
       showLabels: true,
+      showLabelChips: false,
       showImages: true,
       showSource: false,
       sortBy: '-title',
@@ -108,6 +109,7 @@ export class HomePage {
     }
 
     this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
+    this.viewOptions.showLabelChips = JSON.parse(localStorage.getItem('showLabelChips'));
     this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
     this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
     this.viewOptions.sortBy = localStorage.getItem('sortBy');

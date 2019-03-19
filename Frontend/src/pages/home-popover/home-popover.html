@@ -12,6 +12,14 @@
   </ion-item>
 
   <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showLabelChips" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label>
+      Show Label Toggles
+    </ion-label>
+    <ion-icon name='pricetag' item-start></ion-icon>
+  </ion-item>
+
+  <ion-item>
     <ion-toggle [(ngModel)]="viewOptions.showImages" (ngModelChange)="saveViewOptions()"></ion-toggle>
     <ion-label>
       Show Images

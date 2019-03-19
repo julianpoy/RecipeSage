@@ -57,6 +57,7 @@ export class HomePopoverPage {
 
   saveViewOptions(refreshSearch?: boolean) {
     localStorage.setItem('showLabels', this.viewOptions.showLabels);
+    localStorage.setItem('showLabelChips', this.viewOptions.showLabelChips);
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
     localStorage.setItem('sortBy', this.viewOptions.sortBy);
