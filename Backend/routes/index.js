@@ -77,9 +77,14 @@ router.get('/deduperecipelabels', function(req, res, next) {
                   },
                   transaction: t
                 }).then(function (labels) {
-                  return Promise.all(recipeIds.map(recipeId => {
-                    return labels[0].addRecipe(recipeId, { transaction: t })
-                  }))
+                  return Recipe_Label.bulkCreate(recipeIds.map(recipeId => {
+                    return {
+                      labelId: labels[0].id,
+                      recipeId
+                    }
+                  }), {
+                    transaction: t
+                  });
                 })
               }))
             })
