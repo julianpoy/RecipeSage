@@ -198,11 +198,14 @@ router.get(
     order: [
       sort
     ],
-    limit: Math.min(parseInt(req.query.count) || 100, 500),
-    offset: req.query.offset || 0,
-    distinct: true,
-    subQuery: false
+    limit: req.query.labels ? null : Math.min(parseInt(req.query.count) || 100, 500),
+    offset: req.query.labels ? null : req.query.offset || 0,
+    distinct: true
   }).then(({ count, rows }) => {
+    if (req.query.labels && count > 0) {
+      count = 1;
+    }
+
     res.status(200).json({
       data: rows,
       totalCount: count
