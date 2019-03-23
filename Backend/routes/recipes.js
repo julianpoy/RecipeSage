@@ -251,15 +251,16 @@ router.get(
 
   Recipe._validateIncludedElements(fetchQueryOptions);
 
-  SQ.query(countQuery, countQueryOptions).then(countResult => {
+  Promise.all([
+    SQ.query(countQuery, countQueryOptions),
+    SQ.query(fetchQuery, fetchQueryOptions)
+  ]).then(([countResult, recipes]) => {
     let totalCount = parseInt(countResult[0].count, 10);
 
-    return SQ.query(fetchQuery, fetchQueryOptions).then(recipes => {
-      res.status(200).json({
-        data: recipes,
-        totalCount
-      });
-    })
+    res.status(200).json({
+      data: recipes,
+      totalCount
+    });
   }).catch(next);
 });
 
