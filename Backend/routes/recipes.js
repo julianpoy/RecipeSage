@@ -145,67 +145,121 @@ router.get(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  let sort = ['title', 'ASC'];
+  let sort = '"Recipe"."title" ASC';
   if (req.query.sort) {
     switch(req.query.sort){
       case "-title":
-        sort = ['title', 'ASC'];
+        sort = '"Recipe"."title" ASC';
         break;
       case "createdAt":
-        sort = ['createdAt', 'ASC'];
+        sort = '"Recipe"."createdAt" ASC';
         break;
       case "-createdAt":
-        sort = ['createdAt', 'DESC'];
+        sort = '"Recipe"."createdAt" DESC';
         break;
       case "updatedAt":
-        sort = ['updatedAt', 'ASC'];
+        sort = '"Recipe"."updatedAt" ASC';
         break;
       case "-updatedAt":
-        sort = ['updatedAt', 'DESC'];
+        sort = '"Recipe"."updatedAt" DESC';
         break;
     }
   }
 
-  let labelFilter = {}
-  if (req.query.labels) {
-    labelFilter.where = {
-      title: req.query.labels.split(',')
+  let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
+  let labelFilterMap = labelFilter.reduce((acc, e, idx) => {
+    acc[`labelFilter${idx}`] = e;
+    return acc;
+  }, {});
+
+  let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
+  let labelAttributes = ['id', 'title'];
+
+  let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
+  let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
+  let fields = `${recipeSelect}, ${labelSelect}`;
+
+  let countQuery = labelFilter.length > 0 ?
+    `SELECT count("Recipe".id)
+    FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
+    WHERE "Recipe_Label"."labelId" = "Label".id
+    AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+    AND "Recipe".id = "Recipe_Label"."recipeId"
+    AND "Recipe"."userId" = $userId
+    AND "Recipe"."folder" = $folder`
+    :
+    `SELECT count("Recipe".id)
+    FROM "Recipes" AS "Recipe"
+    WHERE "Recipe"."userId" = $userId
+    AND "Recipe"."folder" = $folder`;
+
+  let fetchQuery = labelFilter.length > 0 ?
+    `SELECT ${fields} from (SELECT "Recipe".id
+    FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
+    WHERE "Recipe_Label"."labelId" = "Label".id
+    AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+    AND "Recipe".id = "Recipe_Label"."recipeId"
+    AND "Recipe"."userId" = $userId
+    AND "Recipe"."folder" = $folder
+    GROUP BY "Recipe".id
+    ORDER BY ${sort}
+    LIMIT $limit
+    OFFSET $offset) AS pag
+    INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
+    INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
+    INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    ORDER BY ${sort}`
+    :
+    `SELECT ${fields} FROM (SELECT "Recipe".id
+    FROM "Recipes" AS "Recipe"
+    WHERE "Recipe"."userId" = $userId
+    AND "Recipe"."folder" = $folder
+    GROUP BY "Recipe".id
+    LIMIT $limit
+    OFFSET $offset) AS pag
+    INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
+    LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
+    LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    ORDER BY ${sort}`;
+
+  let countQueryOptions = {
+    type: SQ.QueryTypes.SELECT,
+    bind: {
+      userId: res.locals.session.userId,
+      folder: req.query.folder || 'main',
+      ...labelFilterMap
     }
   }
 
-  Recipe.findAndCountAll({
-    where: {
+  let fetchQueryOptions = {
+    type: SQ.QueryTypes.SELECT,
+    hasJoin: true,
+    bind: {
       userId: res.locals.session.userId,
-      folder: req.query.folder || 'main'
+      folder: req.query.folder || 'main',
+      limit: Math.min(parseInt(req.query.count) || 100, 500),
+      offset: req.query.offset || 0,
+      ...labelFilterMap
     },
-    attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
+    model: Recipe,
     include: [{
-      model: User,
-      as: 'fromUser',
-      attributes: ['name', 'email']
-    },
-    {
       model: Label,
       as: 'labels',
-      attributes: ['id', 'title']
-    },
-    {
-      model: Label,
-      as: 'label_filter',
-      attributes: [],
-      ...labelFilter
-    }],
-    order: [
-      sort
-    ],
-    limit: Math.min(parseInt(req.query.count) || 100, 500),
-    offset: req.query.offset || 0,
-    distinct: true,
-    subQuery: false
-  }).then(({ count, rows }) => {
+      attributes: labelAttributes
+    }]
+  }
+
+  Recipe._validateIncludedElements(fetchQueryOptions);
+
+  Promise.all([
+    SQ.query(countQuery, countQueryOptions),
+    SQ.query(fetchQuery, fetchQueryOptions)
+  ]).then(([countResult, recipes]) => {
+    let totalCount = parseInt(countResult[0].count, 10);
+
     res.status(200).json({
-      data: rows,
-      totalCount: count
+      data: recipes,
+      totalCount
     });
   }).catch(next);
 });
