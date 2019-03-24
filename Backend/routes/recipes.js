@@ -174,10 +174,13 @@ router.get(
 
   let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
   let labelAttributes = ['id', 'title'];
+  let fromUserAttributes = ['name', 'email'];
 
   let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
   let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
+  let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
   let fields = `${recipeSelect}, ${labelSelect}`;
+  if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
     `SELECT count("Recipe".id)
@@ -208,6 +211,7 @@ router.get(
     INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
     INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
     INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`
     :
     `SELECT ${fields} FROM (SELECT "Recipe".id
@@ -220,6 +224,7 @@ router.get(
     INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
     LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
     LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`;
 
   let countQueryOptions = {
@@ -248,6 +253,12 @@ router.get(
       attributes: labelAttributes
     }]
   }
+
+  if (req.query.folder === 'inbox') fetchQueryOptions.include.push({
+    model: User,
+    as: 'fromUser',
+    attributes: fromUserAttributes
+  })
 
   Recipe._validateIncludedElements(fetchQueryOptions);
 
