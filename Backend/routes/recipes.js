@@ -219,6 +219,7 @@ router.get(
     WHERE "Recipe"."userId" = $userId
     AND "Recipe"."folder" = $folder
     GROUP BY "Recipe".id
+    ORDER BY ${sort}
     LIMIT $limit
     OFFSET $offset) AS pag
     INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
