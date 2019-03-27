@@ -479,8 +479,11 @@ router.post(
 
         let pendingRecipes = [];
 
+        tableMap.t_recipe = (tableMap.t_recipe || [])
+          .filter(lcbRecipe => !!lcbRecipe.recipeid && !!lcbRecipe.modifieddate)
+
         return SQ.transaction(t => {
-          return Promise.all((tableMap.t_recipe || []).filter(lcbRecipe => !!lcbRecipe.recipeid).map(lcbRecipe => {
+          return Promise.all(tableMap.t_recipe.map(lcbRecipe => {
             return new Promise(resolve => {
               let lcbImages = (tableMap.t_recipeimage || [])
                 .filter(el => el.recipeid == lcbRecipe.recipeid)
