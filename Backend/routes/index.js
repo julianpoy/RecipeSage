@@ -447,8 +447,14 @@ router.post(
             let tables = Object.keys(tableInitSQL)
             tables.forEach((tableName, idx) => {
               for (let i = 0; i < tableInitSQL[tableName].length; i++) {
-                sqliteDB.run(`INSERT INTO ${tableInitSQL[tableName][i]}`, (sqliteErr) => {
+                let sql = tableInitSQL[tableName][i].trim();
+                if (sql.length == 0) continue;
+
+                sql = sql.startsWith('INSERT INTO') ? sql : `INSERT INTO ${sql}`;
+
+                sqliteDB.run(sql, (sqliteErr) => {
                   if (sqliteErr && sqliteErr.code !== "SQLITE_MISUSE") {
+                    sqliteErr.query = sql;
                     throw sqliteErr
                   }
 
