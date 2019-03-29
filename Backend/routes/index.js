@@ -424,7 +424,7 @@ router.post(
                 if (!sql) return resolve()
 
                 // tableInitSQL[table] = sql.match(/[^\r\n]+/g);
-                tableInitSQL[table] = sql.split(';\n'); // could be error prone
+                tableInitSQL[table] = sql.split(';\nINSERT INTO '); // could be error prone
 
                 resolve()
               })
@@ -447,7 +447,7 @@ router.post(
             let tables = Object.keys(tableInitSQL)
             tables.forEach((tableName, idx) => {
               for (let i = 0; i < tableInitSQL[tableName].length; i++) {
-                sqliteDB.run(tableInitSQL[tableName][i], (sqliteErr) => {
+                sqliteDB.run(`INSERT INTO ${tableInitSQL[tableName][i]}`, (sqliteErr) => {
                   if (sqliteErr && sqliteErr.code !== "SQLITE_MISUSE") {
                     throw sqliteErr
                   }
