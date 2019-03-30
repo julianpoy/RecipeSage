@@ -89,13 +89,13 @@ export class EditRecipePage {
 
     if (this.recipe.id) {
       this.recipeService.update(this.recipe).subscribe(response => {
-        loading.dismiss();
-
-        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
         this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
+
+        loading.dismiss();
       }, err => {
         loading.dismiss();
         switch(err.status) {
@@ -121,13 +121,13 @@ export class EditRecipePage {
       });
     } else {
       this.recipeService.create(this.recipe).subscribe(response => {
-        loading.dismiss();
-
-        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
         this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
+
+        loading.dismiss();
       }, err => {
         loading.dismiss();
         switch(err.status) {
