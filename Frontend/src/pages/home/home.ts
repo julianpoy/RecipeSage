@@ -342,18 +342,28 @@ export class HomePage {
           text: 'Save',
           handler: ({labelName}) => {
             let loading = this.loadingService.start();
-            this.selectedRecipeIds.reduce((acc, recipeId) => {
-              return acc.then(() => {
-                return new Promise(resolve => {
-                  this.labelService.create({
-                    recipeId: recipeId,
-                    title: labelName.toLowerCase()
-                  }).subscribe(() => resolve(), () => resolve())
-                })
-              });
-            }, Promise.resolve({})).then(() => {
+            this.labelService.createBulk({
+              recipeIds: this.selectedRecipeIds,
+              title: labelName.toLowerCase()
+            }).subscribe(() => {
               loading.dismiss();
-              this.resetAndLoadAll();
+            }, err => {
+              switch (err.status) {
+                case 0:
+                  let offlineToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  });
+                  offlineToast.present();
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
             })
           }
         }
@@ -379,15 +389,25 @@ export class HomePage {
           cssClass: 'alertDanger',
           handler: () => {
             let loading = this.loadingService.start();
-            this.selectedRecipeIds.reduce((acc, recipeId) => {
-              return acc.then(() => {
-                return new Promise(resolve => {
-                  this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
-                })
-              })
-            }, Promise.resolve({})).then(() => {
+            this.recipeService.removeBulk(this.selectedRecipeIds).subscribe(() => {
               loading.dismiss();
-              this.resetAndLoadAll();
+            }, err => {
+              switch (err.status) {
+                case 0:
+                  let offlineToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  });
+                  offlineToast.present();
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
             })
           }
         }

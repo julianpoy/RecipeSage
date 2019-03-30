@@ -13,7 +13,7 @@ var Recipe_Label = require('../models').Recipe_Label;
 // Services
 var MiddlewareService = require('../services/middleware');
 
-//Add a label to a recipe
+//Add a label to a recipeId or recipeIds
 router.post(
   '/',
   cors(),
@@ -26,22 +26,29 @@ router.post(
     return next(e);
   }
 
-  if (!req.body.recipeId || req.body.recipeId.length === 0) {
-    var e = new Error("RecipeId must be provided.");
+  if ((!req.body.recipeId || req.body.recipeId.length === 0) && (!req.body.recipeIds || req.body.recipeIds.length === 0)) {
+    var e = new Error("RecipeId or recipeIds must be provided.");
     e.status = 412;
     return next(e);
   }
 
-  SQ.transaction(function (t) {
+  let recipeIds = req.body.recipeId ? [req.body.recipeId] : req.body.recipeIds;
+
+  SQ.transaction(t => {
     return Label.findOrCreate({
       where: {
         userId: res.locals.session.userId,
         title: req.body.title.toLowerCase().replace(',', '')
       },
       transaction: t
-    }).then(function(labels) {
-      return labels[0].addRecipe(req.body.recipeId, {transaction: t}).then(function() {
-        return labels[0];
+    }).then(([label]) => {
+      return Recipe_Label.bulkCreate(recipeIds.map(recipeId => ({
+        recipeId,
+        labelId: label.id
+      })), {
+        transaction: t
+      }).then(() => {
+        return label
       });
     });
   }).then(label => {

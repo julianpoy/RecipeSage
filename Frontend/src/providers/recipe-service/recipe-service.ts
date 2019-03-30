@@ -212,6 +212,29 @@ export class RecipeServiceProvider {
     }
   }
 
+  removeBulk(recipes) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(this.base + 'recipes/delete-bulk' + this.getTokenQuery(), { recipeIds: recipes }, httpOptions)
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:deleted');
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
   remove(data) {
     const httpOptions = {
       headers: new HttpHeaders({
