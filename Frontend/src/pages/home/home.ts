@@ -31,12 +31,13 @@ export class HomePage {
   loading: boolean = true;
   selectedRecipeIds: string[] = [];
 
-  searchText: string;
+  searchText: string = '';
 
   folder: string;
   folderTitle: string;
 
   viewOptions: any = {};
+  reloadPending: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -65,29 +66,38 @@ export class HomePage {
 
     this.loadViewOptions();
 
+    events.subscribe('recipe:created', () => this.reloadPending = true);
+    events.subscribe('recipe:modified', () => this.reloadPending = true);
+    events.subscribe('recipe:deleted', () => this.reloadPending = true);
+    events.subscribe('label:created', () => this.reloadPending = true);
+    events.subscribe('label:deleted', () => this.reloadPending = true);
+    events.subscribe('import:pepperplate:complete', () => {
+      let loading = this.loadingService.start();
+      this.resetAndLoadAll().then(() => {
+        loading.dismiss();
+      }, () => {
+        loading.dismiss();
+      })
+    });
+
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
         this.resetAndLoadRecipes();
       }
     }, this);
-
-    events.subscribe('import:pepperplate:complete', () => {
-      this.resetAndLoadRecipes();
-    });
-
-    this.searchText = '';
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
-
     this.clearSelectedRecipes();
 
-    this.resetAndLoadAll().then(() => {
-      loading.dismiss();
-    }, () => {
-      loading.dismiss();
-    });
+    if (this.reloadPending) {
+      let loading = this.loadingService.start();
+      this.resetAndLoadAll().then(() => {
+        loading.dismiss();
+      }, () => {
+        loading.dismiss();
+      });
+    }
   }
 
   refresh(refresher) {
@@ -136,6 +146,7 @@ export class HomePage {
   }
 
   resetAndLoadAll() {
+    this.reloadPending = false;
     return Promise.all([
       this.resetAndLoadRecipes(),
       this.resetAndLoadLabels()
@@ -346,7 +357,11 @@ export class HomePage {
               recipeIds: this.selectedRecipeIds,
               title: labelName.toLowerCase()
             }).subscribe(() => {
-              loading.dismiss();
+              this.resetAndLoadAll().then(() => {
+                loading.dismiss();
+              }, () => {
+                loading.dismiss();
+              });
             }, err => {
               switch (err.status) {
                 case 0:
@@ -390,7 +405,13 @@ export class HomePage {
           handler: () => {
             let loading = this.loadingService.start();
             this.recipeService.removeBulk(this.selectedRecipeIds).subscribe(() => {
-              loading.dismiss();
+              this.clearSelectedRecipes();
+
+              this.resetAndLoadAll().then(() => {
+                loading.dismiss();
+              }, () => {
+                loading.dismiss();
+              });
             }, err => {
               switch (err.status) {
                 case 0:
