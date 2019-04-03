@@ -371,7 +371,10 @@ router.post(
 
       return new Promise((resolve, reject) => {
         extract(zipPath, { dir: extractPath }, function (err) {
-          if (err) reject(err);
+          if (err) {
+            if (err.message === 'end of central directory record signature not found') err.status = 406;
+            reject(err)
+          }
           else resolve();
         })
       })
