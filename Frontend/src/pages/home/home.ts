@@ -145,7 +145,7 @@ export class HomePage {
     }
   }
 
-  resetAndLoadAll() {
+  resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
     if (this.viewOptions.selectedLabels.length === 0) {
