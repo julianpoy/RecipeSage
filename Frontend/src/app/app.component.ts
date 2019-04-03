@@ -227,6 +227,7 @@ export class MyApp {
       { title: 'Welcome', icon: 'sunny', component: 'WelcomePage' },
       { title: 'Log In', icon: 'ios-nutrition', component: 'LoginPage' },
       { title: 'Create an Account', icon: 'ios-leaf', component: 'LoginPage', navData: { register: true } },
+      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
       { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
     ];
 
@@ -238,6 +239,7 @@ export class MyApp {
       { title: 'Create Recipe', icon: 'md-add', component: 'EditRecipePage' },
       { title: 'Shopping Lists', icon: 'cart', component: 'ShoppingListsPage' },
       { title: 'Meal Plans', icon: 'calendar', component: 'MealPlansPage' },
+      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
       { title: 'Settings', icon: 'settings', component: 'SettingsPage' },
       { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
     ];
