@@ -486,7 +486,7 @@ router.post(
         let pendingRecipes = [];
 
         tableMap.t_recipe = (tableMap.t_recipe || [])
-          .filter(lcbRecipe => !!lcbRecipe.recipeid && !!lcbRecipe.modifieddate)
+          .filter(lcbRecipe => !!lcbRecipe.recipeid && (req.query.includeStockRecipes || !!lcbRecipe.modifieddate))
 
         return SQ.transaction(t => {
           return Promise.all(tableMap.t_recipe.map(lcbRecipe => {

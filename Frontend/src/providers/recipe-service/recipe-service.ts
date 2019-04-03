@@ -304,7 +304,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile) {
+  importLCB(lcbFile, includeStockRecipes?) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -313,7 +313,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'import/livingcookbook' + this.getTokenQuery(), formData, httpOptions)
+        .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {

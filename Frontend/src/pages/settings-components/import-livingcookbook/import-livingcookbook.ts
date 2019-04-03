@@ -76,7 +76,7 @@ export class ImportLivingcookbookPage {
   submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importLCB(this.imageFile).subscribe(response => {
+    this.recipeService.importLCB(this.imageFile, !!localStorage.getItem('includeStockRecipes')).subscribe(response => {
       this.loading.dismiss();
       this.loading = null;
 
