@@ -147,10 +147,22 @@ export class HomePage {
 
   resetAndLoadAll() {
     this.reloadPending = false;
-    return Promise.all([
-      this.resetAndLoadRecipes(),
-      this.resetAndLoadLabels()
-    ])
+
+    if (this.viewOptions.selectedLabels.length === 0) {
+      return Promise.all([
+        this.resetAndLoadLabels(),
+        this.resetAndLoadRecipes()
+      ])
+    }
+
+    return this.resetAndLoadLabels().then(() => {
+      var labelNames = this.labels.map(e => e.title);
+
+      let selectedLabels = this.viewOptions.selectedLabels;
+      selectedLabels.splice(0, selectedLabels.length, ...selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+
+      return this.resetAndLoadRecipes();
+    })
   }
 
   resetAndLoadLabels() {
