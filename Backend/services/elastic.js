@@ -76,7 +76,14 @@ let search = (index, userId, queryString) => {
             multi_match: {
               query: queryString,
               fuzziness: "AUTO",
-              fields: ["title"]
+              fields: [
+                "title^1.5",
+                "source^1.2",
+                "description^1.2",
+                "ingredients",
+                "instructions",
+                "notes"
+              ]
             }
           }
         }
