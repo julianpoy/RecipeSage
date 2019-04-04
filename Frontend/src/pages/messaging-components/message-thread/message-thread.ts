@@ -70,10 +70,15 @@ export class MessageThreadPage {
     } else {
       var loading = this.loadingService.start();
 
-      this.content.getNativeElement().style.opacity = 0;
+      let messageArea;
+      try {
+        this.content.getNativeElement().children[1].children[0];
+      } catch(e){};
+
+      if (messageArea) messageArea.style.opacity = 0;
       this.loadMessages(true).then(() => {
         loading.dismiss();
-        this.content.getNativeElement().style.opacity = 1;
+        if (messageArea) messageArea.style.opacity = 1;
       }, () => {
         loading.dismiss();
       });
