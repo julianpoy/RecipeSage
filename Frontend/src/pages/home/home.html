@@ -62,7 +62,7 @@
         *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn"
         class="recipeItem"
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
-        (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe)"
+        (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe, $event)"
         (press)="selectRecipe(recipe)">
         <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" item-start>
           <img [src]="recipe.image.location" />
