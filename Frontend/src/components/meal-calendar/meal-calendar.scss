@@ -1,13 +1,16 @@
 meal-calendar {
-  .next {
-    float: right;
-  }
-
-  .calendar-monthname {
+  .calendar-nav {
     text-align: center;
     line-height: 44px;
     font-weight: bold;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // ion-icon {
+    //   color: black;
+    // }
   }
 
   .calendar {

@@ -1,25 +1,21 @@
 <div>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <button class="previous" ion-button block icon-left [disabled]="!canMoveCalendar(-1)" (click)="moveCalendar(-1)"
-          col-12 col-sm-7 col-lg-4>
-          <ion-icon name="arrow-dropleft"></ion-icon>
-          Previous
-        </button>
-      </ion-col>
-      <ion-col class="calendar-monthname">
-        {{ prettyMonthName(center) }}
-      </ion-col>
-      <ion-col>
-        <button class="next" ion-button block icon-right [disabled]="!canMoveCalendar(1)" (click)="moveCalendar(1)" col-12
-          col-sm-7 col-lg-4>
-          Next
-          <ion-icon name="arrow-dropright"></ion-icon>
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="calendar-nav">
+    <button
+      class="previous"
+      ion-button icon-only clear
+      [disabled]="!canMoveCalendar(-1)"
+      (click)="moveCalendar(-1)">
+      <ion-icon name="arrow-dropleft"></ion-icon>
+    </button>
+    <span>{{ prettyMonthName(center) }}</span>
+    <button
+      class="next"
+      ion-button icon-only clear
+      [disabled]="!canMoveCalendar(1)"
+      (click)="moveCalendar(1)">
+      <ion-icon name="arrow-dropright"></ion-icon>
+    </button>
+  </div>
 
   <ion-grid class="calendar">
     <ion-row class="week-title">
