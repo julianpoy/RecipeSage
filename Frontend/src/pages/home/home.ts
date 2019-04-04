@@ -255,8 +255,11 @@ export class HomePage {
     this.resetAndLoadRecipes();
   }
 
-  openRecipe(recipe) {
-    console.log(recipe)
+  openRecipe(recipe, event?) {
+    if (event && event.srcEvent && (event.srcEvent.metaKey || event.srcEvent.ctrlKey)) {
+      window.open(`#/recipe/${recipe.id}`);
+      return;
+    }
     // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
     this.navCtrl.push('RecipePage', {
       recipe: recipe,
