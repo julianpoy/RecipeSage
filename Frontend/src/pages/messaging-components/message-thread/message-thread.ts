@@ -70,10 +70,15 @@ export class MessageThreadPage {
     } else {
       var loading = this.loadingService.start();
 
-      this.content.getNativeElement().style.opacity = 0;
+      let messageArea;
+      try {
+        this.content.getNativeElement().children[1].children[0];
+      } catch(e){};
+
+      if (messageArea) messageArea.style.opacity = 0;
       this.loadMessages(true).then(() => {
         loading.dismiss();
-        this.content.getNativeElement().style.opacity = 1;
+        if (messageArea) messageArea.style.opacity = 1;
       }, () => {
         loading.dismiss();
       });
@@ -132,6 +137,7 @@ export class MessageThreadPage {
     return new Promise((resolve, reject) => {
       this.messagingService.fetch(this.otherUserId).subscribe(response => {
         this.messages = response.map(message => {
+          // Reuse messages that have already been parsed for performance. Otherwise, send it through linkify
           if (this.messagesById[message.id]) {
             message.body = this.messagesById[message.id].body;
           } else {
@@ -142,6 +148,8 @@ export class MessageThreadPage {
 
           return message;
         });
+
+        this.processMessages();
 
         this.scrollToBottom.call(this, !isInitialLoad, true, () => {
           resolve();
@@ -157,6 +165,15 @@ export class MessageThreadPage {
         }
       });
     });
+  }
+
+  processMessages() {
+    for (var i = 0; i < this.messages.length; i++) {
+      let message = this.messages[i];
+      message.deservesDateDiff = !!this.deservesDateDiff(this.messages[i-1], message);
+      if (message.deservesDateDiff) message.dateDiff = this.formatMessageDividerDate(message.createdAt);
+      message.formattedDate = this.formatMessageDate(message.createdAt);
+    }
   }
 
   sendMessage() {
@@ -177,6 +194,8 @@ export class MessageThreadPage {
       }, 1000);
 
       this.messages.push(response);
+
+      this.processMessages();
 
       this.scrollToBottom(true, true);
     }, err => {

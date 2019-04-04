@@ -24,8 +24,8 @@
       class="message"
       [ngClass]="{'me': message.toUser.id === message.otherUser.id, 'blue': message.fromUser.id === message.otherUser.id }"
       *ngFor="let message of messages; let i = index; trackBy: trackByFn">
-      <div class="time-divider" *ngIf="deservesDateDiff(messages[i-1], messages[i])">
-        {{ formatMessageDividerDate(message.createdAt) }}
+      <div class="time-divider" *ngIf="message.deservesDateDiff">
+        {{ message.dateDiff }}
       </div>
       <div class="chat" *ngIf="!message.recipe" (press)="setSelectedChat(i)">
         <span [innerHTML]="message.body"></span>
@@ -63,7 +63,7 @@
       </div>
 
       <div class="chatDetails" *ngIf="selectedChatIdx === i">
-        {{ formatMessageDate(message.createdAt) }}
+        {{ message.formattedDate }}
       </div>
     </div>
   </div>
