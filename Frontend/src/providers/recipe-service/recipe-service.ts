@@ -212,6 +212,29 @@ export class RecipeServiceProvider {
     }
   }
 
+  removeBulk(recipes) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(this.base + 'recipes/delete-bulk' + this.getTokenQuery(), { recipeIds: recipes }, httpOptions)
+        .pipe(
+          retry(2),
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:deleted');
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
   remove(data) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -281,7 +304,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile) {
+  importLCB(lcbFile, includeStockRecipes?) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -290,7 +313,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'import/livingcookbook' + this.getTokenQuery(), formData, httpOptions)
+        .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {

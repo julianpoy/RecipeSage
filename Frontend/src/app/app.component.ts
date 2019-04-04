@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, ToastController } from 'ionic-angular';
+import { Nav, Platform, Events, ToastController, AlertController } from 'ionic-angular';
 
 import { MessagesPage } from '../pages/messaging-components/messages/messages';
 import { MessageThreadPage } from '../pages/messaging-components/message-thread/message-thread';
@@ -25,10 +25,14 @@ export class MyApp {
 
   version: number = (<any>window).version;
 
+  unsupportedBrowser: boolean = !!window.navigator.userAgent.match(/(MSIE|Trident)/);
+  seenOldBrowserWarning: boolean = !!localStorage.getItem('seenOldBrowserWarning');
+
   constructor(
     public platform: Platform,
     public events: Events,
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider,
     public messagingService: MessagingServiceProvider,
@@ -45,6 +49,25 @@ export class MyApp {
 
     if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
       this.messagingService.requestNotifications();
+    }
+  }
+
+  // Attached to pagechange so keep this light
+  checkBrowserCompatibility() {
+    if (this.unsupportedBrowser && this.seenOldBrowserWarning && this.isLoggedIn()) {
+      this.alertCtrl.create({
+        title: 'Unsupported Browser',
+        message: 'It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.<br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.',
+        buttons: [
+          {
+            text: 'Dismiss',
+            handler: () => {
+              this.seenOldBrowserWarning = true;
+              localStorage.setItem('seenOldBrowserWarning', "true");
+            }
+          }
+        ]
+      }).present();
     }
   }
 
@@ -204,6 +227,7 @@ export class MyApp {
       { title: 'Welcome', icon: 'sunny', component: 'WelcomePage' },
       { title: 'Log In', icon: 'ios-nutrition', component: 'LoginPage' },
       { title: 'Create an Account', icon: 'ios-leaf', component: 'LoginPage', navData: { register: true } },
+      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
       { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
     ];
 
@@ -215,6 +239,7 @@ export class MyApp {
       { title: 'Create Recipe', icon: 'md-add', component: 'EditRecipePage' },
       { title: 'Shopping Lists', icon: 'cart', component: 'ShoppingListsPage' },
       { title: 'Meal Plans', icon: 'calendar', component: 'MealPlansPage' },
+      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
       { title: 'Settings', icon: 'settings', component: 'SettingsPage' },
       { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
     ];
@@ -258,6 +283,7 @@ export class MyApp {
       // Listen for page change events
       let currentUrl;
       this.nav.viewDidEnter.subscribe(view => {
+        this.checkBrowserCompatibility();
 
         // Wait for nav change to happen
         setTimeout(() => {

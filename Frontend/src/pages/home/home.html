@@ -84,7 +84,7 @@
   </virtual-scroller>
 
   <ion-list *ngIf="!loading">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" no-lines text-wrap text-center>
       <br /><br />
       <logo-icon href="/#/about"></logo-icon>
       <br /><br />
@@ -116,7 +116,7 @@
       <p>
         No search results.<br /><br />
         Search includes:<br />
-        Title, description, source, ingredients, instructions, notes, and labels.
+        Title, description, source, ingredients, instructions, and notes.
       </p>
     </ion-item>
   </ion-list>

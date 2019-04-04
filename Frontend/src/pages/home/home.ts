@@ -31,12 +31,13 @@ export class HomePage {
   loading: boolean = true;
   selectedRecipeIds: string[] = [];
 
-  searchText: string;
+  searchText: string = '';
 
   folder: string;
   folderTitle: string;
 
   viewOptions: any = {};
+  reloadPending: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -65,29 +66,38 @@ export class HomePage {
 
     this.loadViewOptions();
 
+    events.subscribe('recipe:created', () => this.reloadPending = true);
+    events.subscribe('recipe:modified', () => this.reloadPending = true);
+    events.subscribe('recipe:deleted', () => this.reloadPending = true);
+    events.subscribe('label:created', () => this.reloadPending = true);
+    events.subscribe('label:deleted', () => this.reloadPending = true);
+    events.subscribe('import:pepperplate:complete', () => {
+      let loading = this.loadingService.start();
+      this.resetAndLoadAll().then(() => {
+        loading.dismiss();
+      }, () => {
+        loading.dismiss();
+      })
+    });
+
     this.websocketService.register('messages:new', payload => {
       if (payload.recipe && this.folder === 'inbox') {
         this.resetAndLoadRecipes();
       }
     }, this);
-
-    events.subscribe('import:pepperplate:complete', () => {
-      this.resetAndLoadRecipes();
-    });
-
-    this.searchText = '';
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
-
     this.clearSelectedRecipes();
 
-    this.resetAndLoadAll().then(() => {
-      loading.dismiss();
-    }, () => {
-      loading.dismiss();
-    });
+    if (this.reloadPending) {
+      let loading = this.loadingService.start();
+      this.resetAndLoadAll().then(() => {
+        loading.dismiss();
+      }, () => {
+        loading.dismiss();
+      });
+    }
   }
 
   refresh(refresher) {
@@ -135,11 +145,24 @@ export class HomePage {
     }
   }
 
-  resetAndLoadAll() {
-    return Promise.all([
-      this.resetAndLoadRecipes(),
-      this.resetAndLoadLabels()
-    ])
+  resetAndLoadAll(): Promise<any> {
+    this.reloadPending = false;
+
+    if (this.viewOptions.selectedLabels.length === 0) {
+      return Promise.all([
+        this.resetAndLoadLabels(),
+        this.resetAndLoadRecipes()
+      ])
+    }
+
+    return this.resetAndLoadLabels().then(() => {
+      var labelNames = this.labels.map(e => e.title);
+
+      let selectedLabels = this.viewOptions.selectedLabels;
+      selectedLabels.splice(0, selectedLabels.length, ...selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+
+      return this.resetAndLoadRecipes();
+    })
   }
 
   resetAndLoadLabels() {
@@ -342,18 +365,32 @@ export class HomePage {
           text: 'Save',
           handler: ({labelName}) => {
             let loading = this.loadingService.start();
-            this.selectedRecipeIds.reduce((acc, recipeId) => {
-              return acc.then(() => {
-                return new Promise(resolve => {
-                  this.labelService.create({
-                    recipeId: recipeId,
-                    title: labelName.toLowerCase()
-                  }).subscribe(() => resolve(), () => resolve())
-                })
+            this.labelService.createBulk({
+              recipeIds: this.selectedRecipeIds,
+              title: labelName.toLowerCase()
+            }).subscribe(() => {
+              this.resetAndLoadAll().then(() => {
+                loading.dismiss();
+              }, () => {
+                loading.dismiss();
               });
-            }, Promise.resolve({})).then(() => {
-              loading.dismiss();
-              this.resetAndLoadAll();
+            }, err => {
+              switch (err.status) {
+                case 0:
+                  let offlineToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  });
+                  offlineToast.present();
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
             })
           }
         }
@@ -379,15 +416,31 @@ export class HomePage {
           cssClass: 'alertDanger',
           handler: () => {
             let loading = this.loadingService.start();
-            this.selectedRecipeIds.reduce((acc, recipeId) => {
-              return acc.then(() => {
-                return new Promise(resolve => {
-                  this.recipeService.remove({ id: recipeId }).subscribe(() => resolve(), () => resolve())
-                })
-              })
-            }, Promise.resolve({})).then(() => {
-              loading.dismiss();
-              this.resetAndLoadAll();
+            this.recipeService.removeBulk(this.selectedRecipeIds).subscribe(() => {
+              this.clearSelectedRecipes();
+
+              this.resetAndLoadAll().then(() => {
+                loading.dismiss();
+              }, () => {
+                loading.dismiss();
+              });
+            }, err => {
+              switch (err.status) {
+                case 0:
+                  let offlineToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.offlinePushMessage,
+                    duration: 5000
+                  });
+                  offlineToast.present();
+                  break;
+                default:
+                  let errorToast = this.toastCtrl.create({
+                    message: this.utilService.standardMessages.unexpectedError,
+                    duration: 30000
+                  });
+                  errorToast.present();
+                  break;
+              }
             })
           }
         }

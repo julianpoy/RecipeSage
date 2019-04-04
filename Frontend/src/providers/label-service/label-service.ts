@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
+import { Events } from 'ionic-angular';
 
 export interface Label {
   id: string;
@@ -14,7 +15,7 @@ export class LabelServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public events: Events) {
     this.base = localStorage.getItem('base') || '/api/';
   }
 
@@ -40,17 +41,32 @@ export class LabelServiceProvider {
   }
 
   create(data) {
+    return this.createBulk({
+      title: data.title,
+      recipeIds: [data.recipeId]
+    })
+  }
+
+  createBulk(data) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
 
-    return this.http
-    .post(this.base + 'labels/' + this.getTokenQuery(), data, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    );
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+          .post(this.base + 'labels/' + this.getTokenQuery(), data, httpOptions)
+          .pipe(
+            catchError(this.handleError)
+          ).subscribe(response => {
+            this.events.publish('label:created');
+
+            resolve(response);
+          }, reject);
+      }
+    }
   }
 
   remove(data) {
@@ -60,12 +76,20 @@ export class LabelServiceProvider {
       })
     };
 
-    return this.http
-    .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    );
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+          .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
+          .pipe(
+            retry(1),
+            catchError(this.handleError)
+          ).subscribe(response => {
+            this.events.publish('label:deleted');
+
+            resolve(response);
+          }, reject);
+      }
+    }
   }
 
   private handleError(error: HttpErrorResponse) {

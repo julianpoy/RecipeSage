@@ -66,7 +66,7 @@ export class ImportLivingcookbookPage {
     return !this.imageFile.name.toLowerCase().endsWith('.lcb')
   }
 
-  presentToast(msg) {
+  presentToast(msg: string) {
     this.toastCtrl.create({
       message: msg,
       duration: 6000
@@ -76,7 +76,7 @@ export class ImportLivingcookbookPage {
   submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importLCB(this.imageFile).subscribe(response => {
+    this.recipeService.importLCB(this.imageFile, !!localStorage.getItem('includeStockRecipes')).subscribe(response => {
       this.loading.dismiss();
       this.loading = null;
 
@@ -95,11 +95,23 @@ export class ImportLivingcookbookPage {
           this.loading = null;
           this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
           break;
+        case 406:
+          this.loading.dismiss();
+          this.loading = null;
+          this.toastCtrl.create({
+            message: "Hmm, we had trouble extracting that file. Please make sure it is in .lcb format. If you're having trouble, please feel free to send me an email.",
+            showCloseButton: true,
+            dismissOnPageChange: true
+          }).present();
+          break;
         case 504:
           setTimeout(() => {
             this.loading.dismiss();
             this.loading = null;
-            this.presentToast("The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.");
+            this.toastCtrl.create({
+              message: "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
+              showCloseButton: true
+            }).present();
             this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
           }, 20000);
           break;

@@ -371,7 +371,10 @@ router.post(
 
       return new Promise((resolve, reject) => {
         extract(zipPath, { dir: extractPath }, function (err) {
-          if (err) reject(err);
+          if (err) {
+            if (err.message === 'end of central directory record signature not found') err.status = 406;
+            reject(err)
+          }
           else resolve();
         })
       })
@@ -486,7 +489,7 @@ router.post(
         let pendingRecipes = [];
 
         tableMap.t_recipe = (tableMap.t_recipe || [])
-          .filter(lcbRecipe => !!lcbRecipe.recipeid && !!lcbRecipe.modifieddate)
+          .filter(lcbRecipe => !!lcbRecipe.recipeid && (req.query.includeStockRecipes || !!lcbRecipe.modifieddate))
 
         return SQ.transaction(t => {
           return Promise.all(tableMap.t_recipe.map(lcbRecipe => {

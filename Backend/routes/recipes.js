@@ -522,6 +522,68 @@ router.delete(
   }).catch(next);
 })
 
+router.post(
+  '/delete-bulk',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+    SQ.transaction(t => {
+      return Recipe.findAll({
+        where: {
+          id: { [Op.in]: req.body.recipeIds },
+          userId: res.locals.session.userId
+        },
+        attributes: ['id'],
+        include: [{
+          model: Label,
+          as: "labels",
+          attributes: ['id'],
+          include: [{
+            model: Recipe,
+            as: "recipes",
+            attributes: ['id']
+          }]
+        }],
+        transaction: t
+      }).then(recipes => {
+        let nonDeletionRecipesByLabelId = {};
+        recipes.reduce((acc, recipe) => acc.concat(recipe.labels), [])
+          .map(label => {
+            label.recipes.map(labelRecipe => {
+              nonDeletionRecipesByLabelId[label.id] = nonDeletionRecipesByLabelId[label.id] || [];
+              if (req.body.recipeIds.indexOf(labelRecipe.id) === -1)
+                nonDeletionRecipesByLabelId[label.id].push(labelRecipe);
+            })
+          })
+
+        // Any recipe with zero existing recipes after deletion
+        let labelIdsToRemove = Object.entries(nonDeletionRecipesByLabelId)
+          .filter(([id, labelRecipes]) => labelRecipes.length === 0)
+          .map(([id, labelRecipes]) => id)
+
+        return Promise.all([
+          Recipe.destroy({
+            where: {
+              id: { [Op.in]: req.body.recipeIds },
+              userId: res.locals.session.userId
+            },
+            transaction: t
+          }),
+          Label.destroy({
+            where: {
+              id: { [Op.in]: labelIdsToRemove },
+              userId: res.locals.session.userId
+            },
+            transaction: t
+          })
+        ])
+      })
+    }).then(() => {
+      res.status(200).json({});
+    }).catch(next)
+  }
+)
+
 router.delete(
   '/:id',
   cors(),

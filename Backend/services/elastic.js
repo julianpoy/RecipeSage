@@ -75,7 +75,15 @@ let search = (index, userId, queryString) => {
           must: {
             multi_match: {
               query: queryString,
-              fields: ["title"]
+              fuzziness: "AUTO",
+              fields: [
+                "title^1.5",
+                "source^1.2",
+                "description^1.2",
+                "ingredients",
+                "instructions",
+                "notes"
+              ]
             }
           }
         }

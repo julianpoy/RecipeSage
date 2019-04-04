@@ -245,11 +245,16 @@ export class RecipePage {
   }
 
   addRecipeToShoppingList() {
-    let addRecipeToShoppingListModal = this.modalCtrl.create('AddRecipeToShoppingListModalPage', {
+    this.modalCtrl.create('AddRecipeToShoppingListModalPage', {
       recipe: this.recipe,
       recipeScale: this.scale
-    });
-    addRecipeToShoppingListModal.present();
+    }).present();
+  }
+
+  addRecipeToMealPlan() {
+    this.modalCtrl.create('AddRecipeToMealPlanModalPage', {
+      recipe: this.recipe
+    }).present();
   }
 
   printRecipe() {

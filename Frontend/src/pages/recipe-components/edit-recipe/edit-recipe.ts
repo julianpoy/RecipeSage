@@ -6,6 +6,7 @@ import { LoadingServiceProvider } from '../../../providers/loading-service/loadi
 
 import loadImage from 'blueimp-load-image';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage({
   priority: 'low'
@@ -19,7 +20,7 @@ export class EditRecipePage {
 
   recipe: Recipe;
 
-  rawImageFile: any;
+  imageBlobURL: any;
 
   constructor(
     public navCtrl: NavController,
@@ -27,7 +28,8 @@ export class EditRecipePage {
     public toastCtrl: ToastController,
     public utilService: UtilServiceProvider,
     public loadingService: LoadingServiceProvider,
-    public recipeService: RecipeServiceProvider) {
+    public recipeService: RecipeServiceProvider,
+    public domSanitizationService: DomSanitizer) {
     // this.recipe = <Recipe>{};
     this.recipe = navParams.get('recipe') || <Recipe>{};
   }
@@ -53,6 +55,9 @@ export class EditRecipePage {
     }
 
     this.recipe.imageFile = files[0];
+    this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
+      (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
+    );
 
     var loadingImage = loadImage(
         files[0],
@@ -60,6 +65,9 @@ export class EditRecipePage {
           renderedCanvas.toBlob(myBlob => {
             myBlob.name = this.recipe.imageFile.name;
             this.recipe.imageFile = myBlob;
+            this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
+              (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
+            );
 
             console.log('Local conversion complete');
           }, 'image/jpeg', 1);
@@ -89,13 +97,13 @@ export class EditRecipePage {
 
     if (this.recipe.id) {
       this.recipeService.update(this.recipe).subscribe(response => {
-        loading.dismiss();
-
-        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
         this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
+
+        loading.dismiss();
       }, err => {
         loading.dismiss();
         switch(err.status) {
@@ -121,13 +129,13 @@ export class EditRecipePage {
       });
     } else {
       this.recipeService.create(this.recipe).subscribe(response => {
-        loading.dismiss();
-
-        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {});
+        this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
         this.navCtrl.push('RecipePage', {
           recipe: response,
           recipeId: response.id
         });
+
+        loading.dismiss();
       }, err => {
         loading.dismiss();
         switch(err.status) {
