@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController, PopoverController, AlertController } from 'ionic-angular';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { MealPlanServiceProvider } from '../../../providers/meal-plan-service/meal-plan-service';
@@ -8,6 +8,7 @@ import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 
 import dayjs, { Dayjs } from 'dayjs'
+import { MealCalendarComponent } from '../../../components/meal-calendar/meal-calendar';
 
 @IonicPage({
   segment: 'meal-planners/:mealPlanId',
@@ -21,7 +22,7 @@ export class MealPlanPage {
 
   mealPlanId: string;
   mealPlan: any = { items: [], collaborators: [] };
-  mealsByDate: any = {};
+  selectedMealGroup: any = [];
 
   itemsByRecipeId: any = {};
   recipeIds: any = [];
@@ -30,13 +31,11 @@ export class MealPlanPage {
 
   initialLoadComplete: boolean = false;
 
-  weeksOfMonth: any = [];
-  today: Date = new Date();
-  center: Date = new Date(this.today);
-  selectedDay: Dayjs = dayjs(this.today);
-  dayTitles: string[];
+  selectedDay: Dayjs = dayjs(new Date());
 
   reference: number = 0;
+
+  @ViewChild(MealCalendarComponent) mealPlanCalendar: MealCalendarComponent;
 
   constructor(
     public navCtrl: NavController,
@@ -61,11 +60,7 @@ export class MealPlanPage {
     }, this);
 
     this.loadViewOptions();
-
-    this.generateCalendar();
   }
-
-  ionViewDidLoad() { }
 
   ionViewWillEnter() {
     var loading = this.loadingService.start();
@@ -88,111 +83,10 @@ export class MealPlanPage {
     });
   }
 
-  // Generates calendar array centered around specified day (today).
-  generateCalendar() {
-    const { viewOptions, center } = this;
-
-    this.weeksOfMonth = [];
-
-    const base = dayjs(center);
-    var startOfMonth = base.startOf('month');
-    var startOfCalendar = startOfMonth.startOf('week');
-    var endOfMonth = base.endOf('month');
-    var endOfCalendar = endOfMonth.endOf('week');
-
-    if (viewOptions.startOfWeek === 'monday') {
-      this.dayTitles = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-      startOfCalendar = startOfCalendar.add(1, 'day');
-
-      // Special case for months starting on sunday: Add an additional week before
-      if (startOfMonth.day() === 0) {
-        startOfCalendar = startOfMonth.subtract(1, 'week').add(1, 'day');
-      }
-    } else {
-      this.dayTitles = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    }
-
-    var iteratorDate = dayjs(startOfCalendar);
-
-    while (iteratorDate.isBefore(endOfCalendar)) {
-      let week = [];
-
-      while (week.length < 7) {
-        week.push(iteratorDate);
-        iteratorDate = iteratorDate.add(1, 'day');
-      }
-
-      this.weeksOfMonth.push(week);
-    }
-
-    return [startOfCalendar, endOfCalendar];
-  }
-
-  // Gets new calendar center date. Positive = next month, negative = last month
-  getNewCenter(direction) {
-    var currentMonth = this.center.getMonth();
-    var newMonth = direction > 0 ? currentMonth + 1 : currentMonth - 1;
-
-    return new Date(this.center.getFullYear(), newMonth, 1);
-  }
-
-  // Checks if calendar can move in specified direction. Positive = next month, negative = last month
-  canMoveCalendar(direction) {
-    var newCenter = this.getNewCenter(direction);
-    if (direction > 0) {
-      let maximum = new Date(this.today.getFullYear() + 1, this.today.getMonth(), 0); // Can't see last month next year
-      return newCenter < maximum;
-    } else {
-      var minimum = new Date(this.today.getFullYear(), this.today.getMonth(), 1); // Can't be less than the first day of this month
-      return newCenter >= minimum;
-    }
-  }
-
-  // Moves the calendar. Positive = next month, negative = last month
-  moveCalendar(direction) {
-    if (this.canMoveCalendar(direction)) {
-      this.center = this.getNewCenter(direction);
-      let bounds = this.generateCalendar();
-
-      if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
-        this.selectedDay = dayjs(this.center);
-      }
-    }
-  }
-
-  processIncomingMealPlan(mealPlan) {
-    this.mealPlan = mealPlan;
-    this.mealsByDate = {};
-
-    var mealSortOrder = {
-      'breakfast': 1,
-      'lunch'    : 2,
-      'dinner'   : 3,
-      'snacks'   : 4,
-      'other'    : 5
-    };
-    mealPlan.items.sort((a, b) => {
-      let comp = (mealSortOrder[a.meal] || 6) - (mealSortOrder[b.meal] || 6);
-      if (comp === 0) return a.title.localeCompare(b.title);
-      return comp;
-    }).forEach(item => {
-      item.scheduledDateObj = new Date(item.scheduled);
-      var month = item.scheduledDateObj.getMonth();
-      var day = item.scheduledDateObj.getDate();
-      this.mealsByDate[month] = this.mealsByDate[month] || {};
-      this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
-      this.mealsByDate[month][day].push(item);
-    });
-  }
-
-  mealItemsByDay(day) {
-    return (this.mealsByDate[day.month()] || {})[day.date()] || [];
-  }
-
   loadMealPlan() {
     return new Promise((resolve, reject) => {
       this.mealPlanService.fetchById(this.mealPlanId).subscribe(response => {
-        this.processIncomingMealPlan(response);
+        this.mealPlan = response;
 
         resolve();
       }, err => {
@@ -488,7 +382,7 @@ export class MealPlanPage {
       data = data || {};
 
       if (!data.destination) {
-        this.generateCalendar();
+        this.mealPlanCalendar.generateCalendar();
         return;
       }
 
@@ -498,9 +392,5 @@ export class MealPlanPage {
         this.navCtrl.push(data.destination, data.routingData);
       }
     });
-  }
-
-  prettyMonthName(date) {
-    return date.toLocaleString(this.utilService.lang, { month: 'long' });
   }
 }

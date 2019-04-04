@@ -1,0 +1,47 @@
+<div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button class="previous" ion-button block icon-left [disabled]="!canMoveCalendar(-1)" (click)="moveCalendar(-1)"
+          col-12 col-sm-7 col-lg-4>
+          <ion-icon name="arrow-dropleft"></ion-icon>
+          Previous
+        </button>
+      </ion-col>
+      <ion-col class="calendar-monthname">
+        {{ prettyMonthName(center) }}
+      </ion-col>
+      <ion-col>
+        <button class="next" ion-button block icon-right [disabled]="!canMoveCalendar(1)" (click)="moveCalendar(1)" col-12
+          col-sm-7 col-lg-4>
+          Next
+          <ion-icon name="arrow-dropright"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="calendar">
+    <ion-row class="week-title">
+      <ion-col class="day-title" *ngFor="let day of dayTitles">
+        {{day}}
+      </ion-col>
+    </ion-row>
+    <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
+      <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectedDay = day" (keyup.enter)="selectedDay = day"
+        [ngClass]="{
+            'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+            'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+          }" tabindex="0">
+        <div class="date" [ngClass]="{
+              'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+              'inactive': center.getMonth() !== day.month(),
+              'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+            }">
+          {{day.date()}}
+        </div>
+        <div class="recipe-dot" *ngFor="let mealItem of mealItemsByDay(day)"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
