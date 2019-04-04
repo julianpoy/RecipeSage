@@ -45,16 +45,7 @@
 
   <br /><br />
 
-  <ion-item>
-    <ion-label>Meal</ion-label>
-    <ion-select [(ngModel)]="meal">
-      <ion-option value="breakfast">Breakfast</ion-option>
-      <ion-option value="lunch">Lunch</ion-option>
-      <ion-option value="dinner">Dinner</ion-option>
-      <ion-option value="snacks">Snack</ion-option>
-      <ion-option value="other">Other</ion-option>
-    </ion-select>
-  </ion-item>
+  <select-meal (mealChange)="meal = $event"></select-meal>
 </ion-content>
 
 <ion-footer padding>
