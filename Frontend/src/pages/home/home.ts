@@ -23,7 +23,7 @@ export class HomePage {
   labels: Label[] = [];
 
   recipes: Recipe[] = [];
-  recipeFetchBuffer: number = 15;
+  recipeFetchBuffer: number = 25;
   fetchPerPage: number = 50;
   lastRecipeCount: number;
   totalRecipeCount: number;
