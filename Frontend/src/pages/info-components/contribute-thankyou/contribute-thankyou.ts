@@ -2,16 +2,15 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage({
-  segment: 'contribute',
+  segment: 'contribute/thankyou',
   priority: 'low'
 })
 @Component({
-  selector: 'page-contribute',
-  templateUrl: 'contribute.html',
+  selector: 'page-contribute-thankyou',
+  templateUrl: 'contribute-thankyou.html',
 })
-export class ContributePage {
+export class ContributeThankYouPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
-
 }
