@@ -1,4 +1,4 @@
-page-contribute {
+page-contribute-thankyou {
   text-align: center;
 
   .headline {
@@ -30,21 +30,6 @@ page-contribute {
         width: $iconSize;
         height: $iconSize;
       }
-    }
-
-    .donate {
-      width: 120px;
-      padding: 5px;
-      display: inline-block;
-      text-decoration: none;
-      background: map-get($colors, primary);
-      padding: 14px;
-      border-radius: 10px;
-      color: white;
-      margin: 5px 15px 15px 15px;
-      box-shadow: 1px 1px 7px rgba(0,0,0,0.3);
-      font-weight: 600;
-      font-size: 1.5rem;
     }
   }
 }
