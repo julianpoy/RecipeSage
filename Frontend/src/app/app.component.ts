@@ -74,7 +74,9 @@ export class MyApp {
   initUpdateListeners() {
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
-      (<any>window).updateSW();
+      setTimeout(() => {
+        (<any>window).updateSW();
+      })
     });
 
     window['onSWUpdate'] = () => {
