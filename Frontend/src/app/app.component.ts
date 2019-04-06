@@ -54,7 +54,7 @@ export class MyApp {
 
   // Attached to pagechange so keep this light
   checkBrowserCompatibility() {
-    if (this.unsupportedBrowser && this.seenOldBrowserWarning && this.isLoggedIn()) {
+    if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.isLoggedIn()) {
       this.alertCtrl.create({
         title: 'Unsupported Browser',
         message: 'It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.<br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.',
