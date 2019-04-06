@@ -361,6 +361,18 @@ router.post(
     let tableInitSQL = {};
     let tableMap = {};
 
+    let metrics = {
+      t0: performance.now(),
+      tExtracted: null,
+      tExported: null,
+      tSqliteStored: null,
+      tSqliteFetched: null,
+      tImagesUploaded: null,
+      tRecipesProcessed: null,
+      tRecipesSaved: null,
+      tLabelsSaved: null
+    }
+
     try {
       await new Promise((resolve, reject) => {
         sqliteDB = new sqlite3.Database(':memory:', (err) => {
@@ -396,6 +408,8 @@ router.post(
 
         return dbPath
       }).then(dbPath => {
+        metrics.tExtracted = performance.now();
+
         // Load mdb
         lcbDB = mdb(dbPath);
       }).then(() => {
@@ -435,6 +449,8 @@ router.post(
           )
         )
       }).then(() => {
+        metrics.tExported = performance.now();
+      }).then(() => {
         // Send queries to database
         return new Promise((sqDbInitResolve, sqDbInitReject) => {
           sqliteDB.serialize(() => {
@@ -470,6 +486,8 @@ router.post(
           })
         })
       }).then(() => {
+        metrics.tSqliteStored = performance.now();
+      }).then(() => {
         return Promise.all(lcbTables.map(tableName => {
           return new Promise(resolve => {
             sqliteDB.all("SELECT * FROM " + tableName, [], (err, results) => {
@@ -482,6 +500,7 @@ router.post(
           })
         }))
       }).then(async () => {
+        metrics.tSqliteFetched = performance.now();
         // return await fs.writeFile('output', JSON.stringify(tableMap))
 
         let labelMap = {};
@@ -491,102 +510,135 @@ router.post(
         tableMap.t_recipe = (tableMap.t_recipe || [])
           .filter(lcbRecipe => !!lcbRecipe.recipeid && (req.query.includeStockRecipes || !!lcbRecipe.modifieddate))
 
-        return SQ.transaction(t => {
-          return Promise.all(tableMap.t_recipe.map(lcbRecipe => {
-            return new Promise(resolve => {
-              let lcbImages = (tableMap.t_recipeimage || [])
-                .filter(el => el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.imageindex > b.imageindex)
+        let lcbImagesById = (tableMap.t_image || []).reduce((acc, image) => {
+          acc[image.imageid] = image;
+          return acc;
+        }, {});
 
-              if (lcbImages.length == 0) return resolve()
-
-              let possibleFileNameRegex = [
-                `recipe${lcbRecipe.recipeid}\.gif`,
-                `recipe${lcbRecipe.recipeid}\.jpg`,
-                `recipe${lcbRecipe.recipeid}\.jpeg`,
-                `recipeimage${lcbRecipe.recipeid}\.gif`,
-                `recipeimage${lcbRecipe.recipeid}\.jpg`,
-                `recipeimage${lcbRecipe.recipeid}\.jpeg`
-              ].join('|')
-
-              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
-
-              if (possibleImageFiles.length == 0) return resolve()
-
-              UtilService.sendFileToS3(possibleImageFiles[0]).then(resolve).catch(() => {
-                resolve(null)
-              })
-            }).then(image => {
-              let ingredients = (tableMap.t_recipeingredient || [])
-                .filter(el => el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.ingredientindex > b.ingredientindex)
-                .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
-                .join("\r\n")
-
-              let instructions = (tableMap.t_recipeprocedure || [])
-                .filter(el => el.proceduretext && el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.procedureindex > b.procedureindex)
-                .map(lcbProcedure => lcbProcedure.proceduretext)
-                .join("\r\n")
-
-              let recipeTips = (tableMap.t_recipetip || [])
-                .filter(el => el.tiptext && el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.tipindex > b.tipindex)
-                .map(lcbTip => lcbTip.tiptext)
-
-              let authorNotes = (tableMap.t_authornote || [])
-                .filter(el => el.authornotetext && el.recipeid == lcbRecipe.recipeid)
-                .sort((a, b) => a.authornoteindex > b.authornoteindex)
-                .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
-
-              let description = ''
-
-              let notes = []
-
-              // Add comments to notes
-              if (lcbRecipe.comments) notes.push(lcbRecipe.comments)
-
-              // Add "author notes" to description or notes depending on length
-              if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0]
-              else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
-
-              // Add recipeTips and join with double return
-              notes = [...notes, ...recipeTips].join('\r\n\r\n')
-
-              let createdAt = new Date(lcbRecipe.createdate || Date.now())
-              let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
-
-              let totalTime = (lcbRecipe.readyintime || '').toString().trim()
-              if (lcbRecipe.cookingtime) {
-                totalTime += ` (${lcbRecipe.cookingtime.toString().trim()} cooking time)`;
-              }
-              totalTime = totalTime.trim();
-
-              let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
-
-              return pendingRecipes.push({
-                model: {
-                  userId: res.locals.session.userId,
-                  title: lcbRecipe.recipename || '',
-                  description,
-                  yield: (lcbRecipe.yield || '').toString(),
-                  activeTime: (lcbRecipe.preparationtime || '').toString(),
-                  totalTime,
-                  source: lcbRecipe.source || '',
-                  url: lcbRecipe.webpage || '',
-                  notes,
-                  ingredients,
-                  instructions,
-                  image: image,
-                  folder: 'main',
-                  fromUserId: null,
-                  createdAt,
-                  updatedAt
-                },
-                lcbRecipeLabels
-              })
+        let lcbImagesByRecipeId = (tableMap.t_recipeimage || []).reduce((acc, recipeImage) => {
+          try {
+            acc[recipeImage.recipeid] = acc[recipeImage.recipeid] || [];
+            acc[recipeImage.recipeid].push({
+              filename: lcbImagesById[recipeImage.imageid].filename,
+              imageindex: parseInt(recipeImage.imageindex, 10)
             })
-          })).then(() => {
+          } catch(e){}
+          return acc;
+        }, {})
+
+        return SQ.transaction(t => {
+          let recipesWithImages = tableMap.t_recipe.map(lcbRecipe => {
+            lcbRecipe.imageFileNames = (lcbImagesByRecipeId[lcbRecipe.recipeid] || [])
+            .sort((a, b) => (a.imageindex || 0) - (b.imageindex || 0))
+            .filter(e => e.filename)
+            .map(e => e.filename);
+            return lcbRecipe;
+          }).filter(e => e.imageFileNames.length > 0);
+
+          var i, chunkedRecipesWithImages = [], chunk = 50;
+          for (i = 0; i < recipesWithImages.length; i += chunk) {
+            chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
+          }
+
+          return chunkedRecipesWithImages.reduce((acc, lcbRecipeChunk) => {
+            return acc.then(() => {
+              return Promise.all(lcbRecipeChunk.map(lcbRecipe => {
+                let imageFileNames = lcbRecipe.imageFileNames;
+
+                if (imageFileNames.length == 0) return;
+
+                // let possibleFileNameRegex = imageFileNames.join('|')
+                let possibleFileNameRegex = imageFileNames[0];
+
+                let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
+
+                if (possibleImageFiles.length == 0) return;
+
+                return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
+                  lcbRecipe.savedS3Image = image;
+                }).catch(() => {})
+              }))
+            })
+          }, Promise.resolve()).then(() => {
+            metrics.tImagesUploaded = performance.now();
+
+            return Promise.all(tableMap.t_recipe.map(lcbRecipe => {
+              return Promise.resolve().then(() => {
+                let image = lcbRecipe.savedS3Image || null;
+
+                let ingredients = (tableMap.t_recipeingredient || [])
+                  .filter(el => el.recipeid == lcbRecipe.recipeid)
+                  .sort((a, b) => a.ingredientindex > b.ingredientindex)
+                  .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
+                  .join("\r\n")
+
+                let instructions = (tableMap.t_recipeprocedure || [])
+                  .filter(el => el.proceduretext && el.recipeid == lcbRecipe.recipeid)
+                  .sort((a, b) => a.procedureindex > b.procedureindex)
+                  .map(lcbProcedure => lcbProcedure.proceduretext)
+                  .join("\r\n")
+
+                let recipeTips = (tableMap.t_recipetip || [])
+                  .filter(el => el.tiptext && el.recipeid == lcbRecipe.recipeid)
+                  .sort((a, b) => a.tipindex > b.tipindex)
+                  .map(lcbTip => lcbTip.tiptext)
+
+                let authorNotes = (tableMap.t_authornote || [])
+                  .filter(el => el.authornotetext && el.recipeid == lcbRecipe.recipeid)
+                  .sort((a, b) => a.authornoteindex > b.authornoteindex)
+                  .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
+
+                let description = ''
+
+                let notes = []
+
+                // Add comments to notes
+                if (lcbRecipe.comments) notes.push(lcbRecipe.comments)
+
+                // Add "author notes" to description or notes depending on length
+                if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0]
+                else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
+
+                // Add recipeTips and join with double return
+                notes = [...notes, ...recipeTips].join('\r\n\r\n')
+
+                let createdAt = new Date(lcbRecipe.createdate || Date.now())
+                let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
+
+                let totalTime = (lcbRecipe.readyintime || '').toString().trim()
+                if (lcbRecipe.cookingtime) {
+                  totalTime += ` (${lcbRecipe.cookingtime.toString().trim()} cooking time)`;
+                }
+                totalTime = totalTime.trim();
+
+                let lcbRecipeLabels = [...new Set((lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()))].filter(el => el && el.length > 0)
+
+                return pendingRecipes.push({
+                  model: {
+                    userId: res.locals.session.userId,
+                    title: lcbRecipe.recipename || '',
+                    description,
+                    yield: (lcbRecipe.yield || '').toString(),
+                    activeTime: (lcbRecipe.preparationtime || '').toString(),
+                    totalTime,
+                    source: lcbRecipe.source || '',
+                    url: lcbRecipe.webpage || '',
+                    notes,
+                    ingredients,
+                    instructions,
+                    image: image,
+                    folder: 'main',
+                    fromUserId: null,
+                    createdAt,
+                    updatedAt
+                  },
+                  lcbRecipeLabels
+                })
+              })
+            }))
+          }).then(() => {
+            metrics.tRecipesProcessed = performance.now();
+
             return Recipe.bulkCreate(pendingRecipes.map(el => el.model), {
               returning: true,
               transaction: t
@@ -599,6 +651,8 @@ router.post(
               })
             })
           }).then(() => {
+            metrics.tRecipesSaved = performance.now();
+
             return Promise.all(Object.keys(labelMap).map(lcbLabelName => {
               return Label.findOrCreate({
                 where: {
@@ -618,6 +672,25 @@ router.post(
               });
             }))
           }).then(() => {
+            metrics.tLabelsSaved = performance.now();
+
+            metrics.tExtract = metrics.tExtracted - t0,
+            metrics.tExport = metrics.tExported - metrics.tExtracted,
+            metrics.tSqliteStore = metrics.tSqliteStored - metrics.tExported,
+            metrics.tSqliteFetch = metrics.tSqliteFetched - metrics.tSqliteStored,
+            metrics.tImagesUpload = metrics.tImagesUploaded - metrics.tSqliteFetched,
+            metrics.tRecipesProcess = metrics.tRecipesProcessed - metrics.tImagesUploaded,
+            metrics.tRecipesSave = metrics.tRecipesSaved - metrics.tRecipesProcessed,
+            metrics.tLabelsSave = metrics.tLabelsSaved - metrics.tRecipesSaved
+
+            Raven.captureMessage('LCB Metrics', {
+              extra: {
+                metrics
+              },
+              user: res.locals.session,
+              level: 'info'
+            });
+
             try {
               sqliteDB.close()
             } catch(e){}
