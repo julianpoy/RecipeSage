@@ -529,22 +529,26 @@ router.post(
         }, {})
 
         let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce((acc, lcbIngredient) => {
-          acc[lcbIngredient.recipeid] = lcbIngredient;
+          acc[lcbIngredient.recipeid] = acc[lcbIngredient.recipeid] || []
+          acc[lcbIngredient.recipeid].push(lcbIngredient);
           return acc;
         }, {});
 
         let lcbInstructionsByRecipeId = (tableMap.t_recipeprocedure || []).reduce((acc, lcbInstruction) => {
-          acc[lcbInstruction.recipeid] = lcbInstruction;
+          acc[lcbInstruction.recipeid] = acc[lcbInstruction.recipeid] || [];
+          acc[lcbInstruction.recipeid].push(lcbInstruction);
           return acc;
         }, {});
 
         let lcbTipsByRecipeId = (tableMap.t_recipetip || []).reduce((acc, lcbTip) => {
-          acc[lcbTip.recipeid] = lcbTip;
+          acc[lcbTip.recipeid] = acc[lcbTip.recipeid] || [];
+          acc[lcbTip.recipeid].push(lcbTip);
           return acc;
         }, {});
 
         let lcbAuthorNotesById = (tableMap.t_authornote || []).reduce((acc, lcbAuthorNote) => {
-          acc[lcbAuthorNote.recipeid] = lcbAuthorNote;
+          acc[lcbAuthorNote.recipeid] = acc[lcbAuthorNote.recipeid] || [];
+          acc[lcbAuthorNote.recipeid].push(lcbAuthorNote);
           return acc;
         }, {});
 
