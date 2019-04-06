@@ -8,6 +8,7 @@ let fs = require('fs-extra');
 let mdb = require('mdb');
 let extract = require('extract-zip');
 let sqlite3 = require('sqlite3');
+const performance = require('perf_hooks').performance;
 
 // DB
 var Op = require("sequelize").Op;
@@ -674,20 +675,22 @@ router.post(
           }).then(() => {
             metrics.tLabelsSaved = performance.now();
 
-            metrics.tExtract = metrics.tExtracted - t0,
-            metrics.tExport = metrics.tExported - metrics.tExtracted,
-            metrics.tSqliteStore = metrics.tSqliteStored - metrics.tExported,
-            metrics.tSqliteFetch = metrics.tSqliteFetched - metrics.tSqliteStored,
-            metrics.tImagesUpload = metrics.tImagesUploaded - metrics.tSqliteFetched,
-            metrics.tRecipesProcess = metrics.tRecipesProcessed - metrics.tImagesUploaded,
-            metrics.tRecipesSave = metrics.tRecipesSaved - metrics.tRecipesProcessed,
-            metrics.tLabelsSave = metrics.tLabelsSaved - metrics.tRecipesSaved
+            metrics.performance = {
+              tExtract: Math.floor(metrics.tExtracted - metrics.t0),
+              tExport: Math.floor(metrics.tExported - metrics.tExtracted),
+              tSqliteStore: Math.floor(metrics.tSqliteStored - metrics.tExported),
+              tSqliteFetch: Math.floor(metrics.tSqliteFetched - metrics.tSqliteStored),
+              tImagesUpload: Math.floor(metrics.tImagesUploaded - metrics.tSqliteFetched),
+              tRecipesProcess: Math.floor(metrics.tRecipesProcessed - metrics.tImagesUploaded),
+              tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
+              tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
+            }
 
             Raven.captureMessage('LCB Metrics', {
               extra: {
                 metrics
               },
-              user: res.locals.session,
+              user: res.locals.session.toJSON(),
               level: 'info'
             });
 
