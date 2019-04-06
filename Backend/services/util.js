@@ -5,7 +5,7 @@ var multerS3 = require('multer-s3');
 var request = require('request');
 var Raven = require('raven');
 let fs = require('fs-extra');
-let gm = require('gm');
+let sharp = require('sharp');
 let path = require('path');
 
 // Service
@@ -123,25 +123,17 @@ exports.sendFileToS3 = path => {
   return fs.readFile(path).then(buf => {
     return new Promise((resolve, reject) => {
       try {
-        var gmObj = gm(buf, 'image.jpg');
-        gmObj.size((err, size) => {
-          if (err) {
-            return reject(err)
-          };
-
-          if (size.width > 400) {
-            let width = 200;
-            let height;
-            gmObj.resize(width, height, '')
-              .autoOrient()
-              .toBuffer('PNG', (err, buffer) => {
-                if (err) throw err;
-                resolve(buffer);
-              });
-          } else {
-            resolve(buf);
-          }
-        });
+        sharp(buf)
+          .rotate() // Rotates based on EXIF data
+          .resize(200, 200) // Uses object-fit: cover by default
+          .jpeg({
+            quality: 55,
+            // chromaSubsampling: '4:4:4'
+          })
+          .toBuffer((err, buffer, info) => {
+            if (err) reject(err);
+            resolve(buffer);
+          });
       } catch(e) {
         reject()
       }
@@ -170,18 +162,16 @@ exports.upload = multer({
       options: '',
       format: 'jpg',                      // Default: jpg - Unused by our processor
       process: (gm, options, inputStream, outputStream) => {
-        var gmObj = gm(inputStream);
-        gmObj.size({ bufferStream: true }, (err, size) => {
-          if (err || size.width > 400) {
-            gmObj.resize(options.gm.width , options.gm.height , options.gm.options)
-            .autoOrient()
-            .stream()
-            .pipe(outputStream);
-          } else {
-            gmObj.stream()
-            .pipe(outputStream);
-          }
-        });
+        let pipeline = sharp()
+        pipeline.rotate() // Rotates based on EXIF data
+          .resize(200, 200) // Uses object-fit: cover by default
+          .jpeg({
+            quality: 55,
+            // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
+          })
+          .pipe(outputStream);
+
+        inputStream.pipe(pipeline);
       }
     },
     s3 : {                                // [Optional]: define s3 options
