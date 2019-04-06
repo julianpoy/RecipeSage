@@ -19,77 +19,76 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <meal-calendar
-    [mealPlan]="mealPlan"
-    [viewOptions]="viewOptions"
-    (selectedDayChange)="selectedDay = $event"
-    (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
+  <br />
 
-  <ion-list no-lines>
+  <div class="mealplan-flex">
+    <meal-calendar
+      [mealPlan]="mealPlan"
+      [viewOptions]="viewOptions"
+      (selectedDayChange)="selectedDay = $event"
+      (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
 
-    <ion-item *ngIf="selectedMealGroup.length === 0 && initialLoadComplete" text-wrap text-center>
-      <br />
-      <br />
-      <br />
-      <p>
-        There are no meals scheduled for this day.
+    <ion-list class="meal-list" no-lines>
+      <ion-list-header no-lines text-center no-padding>
+        <h2>Meals & Items:</h2>
+      </ion-list-header>
+
+      <ion-item *ngIf="selectedMealGroup.length === 0 && initialLoadComplete" text-wrap text-center>
         <br />
-        <button ion-button icon-left (click)="newMealPlanItem()">
-          <ion-icon name="add"></ion-icon>
-          Add a meal
-        </button>
-      </p>
-    </ion-item>
-
-    <ion-list-header *ngIf="selectedMealGroup.length > 0" no-lines>
-      <b>Meals & Items:</b>
-    </ion-list-header>
-
-    <div *ngFor="let mealItem of selectedMealGroup; let idx = index;">
-      <ion-item-divider class="mealTitle" *ngIf="idx === 0 || selectedMealGroup[idx - 1].meal !== mealItem.meal">
-        {{mealItem.meal}}
-      </ion-item-divider>
-      <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" text-wrap>
-        <!-- <ion-icon name="leaf" item-start></ion-icon> -->
-        {{mealItem.title}}
-
-        <!-- Remove from cart button: -->
-        <button
-          ion-button
-          item-end
-          *ngIf="mealItem.recipe && mealItem.shoppingListItems.length > 0"
-          (click)="$event.stopPropagation(); removeMealPlanItemFromShoppingList(mealItem)">
-          <ion-icon name="cart"></ion-icon>
-        </button>
-        <!-- Add to cart button: -->
-        <button
-          ion-button
-          item-end
-          outline
-          *ngIf="mealItem.recipe && mealItem.shoppingListItems.length === 0"
-          (click)="$event.stopPropagation(); addMealPlanItemToShoppingList(mealItem)">
-          <ion-icon name="cart"></ion-icon>
-        </button>
-        <!-- Remove from meal plan button: -->
-        <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-
-        <p *ngIf="viewOptions.showAddedOn">
-          Added
-          <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
-        </p>
-        <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
-          <span *ngIf="!viewOptions.showAddedOn">Added </span>by
-          <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
+        <br />
+        <br />
+        <p>
+          There are no meals scheduled for this day.
+          <br />
+          <button ion-button icon-left (click)="newMealPlanItem()">
+            <ion-icon name="add"></ion-icon>
+            Add a meal
+          </button>
         </p>
       </ion-item>
-    </div>
 
-    <br />
-    <br />
-    <br />
-  </ion-list>
+      <div *ngFor="let mealItem of selectedMealGroup; let idx = index;">
+        <ion-item-divider class="mealTitle" *ngIf="idx === 0 || selectedMealGroup[idx - 1].meal !== mealItem.meal">
+          {{mealItem.meal}}
+        </ion-item-divider>
+        <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" text-wrap>
+          <!-- <ion-icon name="leaf" item-start></ion-icon> -->
+          {{mealItem.title}}
+
+          <!-- Remove from cart button: -->
+          <button
+            ion-button
+            item-end
+            *ngIf="mealItem.recipe && mealItem.shoppingListItems.length > 0"
+            (click)="$event.stopPropagation(); removeMealPlanItemFromShoppingList(mealItem)">
+            <ion-icon name="cart"></ion-icon>
+          </button>
+          <!-- Add to cart button: -->
+          <button
+            ion-button
+            item-end
+            outline
+            *ngIf="mealItem.recipe && mealItem.shoppingListItems.length === 0"
+            (click)="$event.stopPropagation(); addMealPlanItemToShoppingList(mealItem)">
+            <ion-icon name="cart"></ion-icon>
+          </button>
+          <!-- Remove from meal plan button: -->
+          <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
+            <ion-icon name="trash"></ion-icon>
+          </button>
+
+          <p *ngIf="viewOptions.showAddedOn">
+            Added
+            <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
+          </p>
+          <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
+            <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+            <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
+          </p>
+        </ion-item>
+      </div>
+    </ion-list>
+  </div>
 
   <br />
 
