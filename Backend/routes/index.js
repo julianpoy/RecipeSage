@@ -368,6 +368,7 @@ router.post(
       tExported: null,
       tSqliteStored: null,
       tSqliteFetched: null,
+      tRecipeDataAssembled: null,
       tImagesUploaded: null,
       tRecipesProcessed: null,
       tRecipesSaved: null,
@@ -527,6 +528,28 @@ router.post(
           return acc;
         }, {})
 
+        let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce((acc, lcbIngredient) => {
+          acc[lcbIngredient.recipeid] = lcbIngredient;
+          return acc;
+        }, {});
+
+        let lcbInstructionsByRecipeId = (tableMap.t_recipeprocedure || []).reduce((acc, lcbInstruction) => {
+          acc[lcbInstruction.recipeid] = lcbInstruction;
+          return acc;
+        }, {});
+
+        let lcbTipsByRecipeId = (tableMap.t_recipetip || []).reduce((acc, lcbTip) => {
+          acc[lcbTip.recipeid] = lcbTip;
+          return acc;
+        }, {});
+
+        let lcbAuthorNotesById = (tableMap.t_authornote || []).reduce((acc, lcbAuthorNote) => {
+          acc[lcbAuthorNote.recipeid] = lcbAuthorNote;
+          return acc;
+        }, {});
+
+        metrics.tRecipeDataAssembled = performance.now();
+
         return SQ.transaction(t => {
           let recipesWithImages = tableMap.t_recipe.map(lcbRecipe => {
             lcbRecipe.imageFileNames = (lcbImagesByRecipeId[lcbRecipe.recipeid] || [])
@@ -567,25 +590,21 @@ router.post(
               return Promise.resolve().then(() => {
                 let image = lcbRecipe.savedS3Image || null;
 
-                let ingredients = (tableMap.t_recipeingredient || [])
-                  .filter(el => el.recipeid == lcbRecipe.recipeid)
+                let ingredients = (lcbIngredientsByRecipeId[lcbRecipe.recipeid] || [])
                   .sort((a, b) => a.ingredientindex > b.ingredientindex)
                   .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
                   .join("\r\n")
 
-                let instructions = (tableMap.t_recipeprocedure || [])
-                  .filter(el => el.proceduretext && el.recipeid == lcbRecipe.recipeid)
+                let instructions = (lcbInstructionsByRecipeId[lcbRecipe.recipeid] || [])
                   .sort((a, b) => a.procedureindex > b.procedureindex)
                   .map(lcbProcedure => lcbProcedure.proceduretext)
                   .join("\r\n")
 
-                let recipeTips = (tableMap.t_recipetip || [])
-                  .filter(el => el.tiptext && el.recipeid == lcbRecipe.recipeid)
+                let recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
                   .sort((a, b) => a.tipindex > b.tipindex)
                   .map(lcbTip => lcbTip.tiptext)
 
-                let authorNotes = (tableMap.t_authornote || [])
-                  .filter(el => el.authornotetext && el.recipeid == lcbRecipe.recipeid)
+                let authorNotes = (lcbAuthorNotesById[lcbRecipe.recipeid] || [])
                   .sort((a, b) => a.authornoteindex > b.authornoteindex)
                   .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
 
@@ -680,7 +699,8 @@ router.post(
               tExport: Math.floor(metrics.tExported - metrics.tExtracted),
               tSqliteStore: Math.floor(metrics.tSqliteStored - metrics.tExported),
               tSqliteFetch: Math.floor(metrics.tSqliteFetched - metrics.tSqliteStored),
-              tImagesUpload: Math.floor(metrics.tImagesUploaded - metrics.tSqliteFetched),
+              tRecipeDataAssemble: Math.floor(metrics.tRecipeDataAssembled - metrics.tSqliteFetched),
+              tImagesUpload: Math.floor(metrics.tImagesUploaded - metrics.tRecipeDataAssembled),
               tRecipesProcess: Math.floor(metrics.tRecipesProcessed - metrics.tImagesUploaded),
               tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
               tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
