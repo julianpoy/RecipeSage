@@ -1,0 +1,57 @@
+{
+  "name": "RecipeSage",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "The RecipeSage browser extension",
+  "homepage_url": "https://recipesage.com",
+  "icons": {
+    "16": "icons/favicon-16x16.png",
+    "48": "icons/icon-48x48.png",
+    "128": "icons/icon-128x128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "src/bg/background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": "icons/android-chrome-512x512.png",
+    "default_title": "RecipeSage",
+    "default_popup": "src/browser_action/browser_action.html"
+  },
+  "permissions": [
+    "storage",
+    "clipboardRead",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "src/inject/inject.js"
+      ],
+      "css": [
+        "src/inject/inject.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "images/*.png",
+    "icons/ionic/ionicons.css",
+    "icons/ionic/*.svg",
+    "css/material-icons/*.css",
+    "css/material-icons/*.eot",
+    "css/material-icons/*.ijmap",
+    "css/material-icons/*.svg",
+    "css/material-icons/*.ttf",
+    "css/material-icons/*.woff",
+    "css/material-icons/*.woff2"
+  ],
+  "options_page": "src/settings/settings.html"
+}
