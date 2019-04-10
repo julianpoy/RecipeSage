@@ -1,4 +1,4 @@
-let pluginWidth = '275px';
+let pluginWidth = '300px';
 
 let styles = document.createElement('style');
 styles.innerHTML = `
@@ -133,12 +133,11 @@ let snip = (field) => {
 }
 
 let hide = () => {
-  currentSnip = {};
+  isDirty = false;
   if (container) container.style.display = 'none';
 };
 
 let show = () => {
-  currentSnip = {};
   if (!container) init();
   container.style.display = 'block';
 };
@@ -302,7 +301,8 @@ let initAlert = () => {
   let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
   document.body.appendChild(shadowRootContainer);
 
-  shadowRoot.appendChild(document.createElement(`<style>
+  let alertStyles = document.createElement('style');
+  alertStyles.innerHTML = `
     :host {
       all: initial !important;
       contain: content;
@@ -313,7 +313,7 @@ let initAlert = () => {
       bottom: 10px;
       right: 10px;
       width: ${pluginWidth};
-      padding: 10px;
+      padding: 20px;
 
       z-index: 99999999999999999999999999;
       background: white;
@@ -321,22 +321,53 @@ let initAlert = () => {
 
       user-select: none;
 
-      font-size: 14px;
+      font-size: 16px;
     }
-  </style>`));
+
+    .headline {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 20px;
+    }
+
+    h3 {
+      margin: 0 10px;
+      font-size: 18.5px;
+    }
+  </style>`;
+  shadowRoot.appendChild(alertStyles);
 
   alertContainer = document.createElement('div');
   alertContainer.className = 'alert'
   shadowRoot.appendChild(alertContainer);
 }
 
-let displayAlert = (innerHTML, timeout) => {
+let alertTimeout;
+let displayAlert = (innerHTML, hideAfter) => {
   if (!alertContainer) initAlert();
   alertContainer.innerHTML = innerHTML;
   alertContainer.style.display = 'block';
-  setTimeout(() => {
+
+  if (alertTimeout) clearTimeout(alertTimeout);
+  alertTimeout = setTimeout(() => {
     alertContainer.style.display = 'none';
-  }, 6000);
+  }, hideAfter || 6000);
+}
+
+let buildAlert = (header, body) => {
+  return `
+    <div class="headline">
+      <img src="${chrome.extension.getURL('./icons/android-chrome-512x512.png')}" />
+      <h3>${header}</h3>
+    </div>
+    <span>${body}</span>
+  `;
 }
 
 let submit = () => {
@@ -354,23 +385,40 @@ let submit = () => {
       if (response.ok) {
         response.json().then(data => {
           hide();
-          displayAlert(`<span>Clip Saved! <a href="https://recipesage.com/#/recipes/${response.id}" target="_blank">Click to open</a></span>`, 4000);
+          displayAlert(`<h3>Recipe Saved!</h3>
+          <span>
+            <a href="https://recipesage.com/#/recipes/${response.id}" target="_blank">Click to open</a>
+          </span>`, 4000);
         });
       } else {
         switch (response.status) {
-          case 412:
+          case 401:
             chrome.storage.local.set({ token: null }, () => {
-              displayAlert(`<span>It looks like you're logged out. Please click the RecipeSage icon to login again.</span>`, 4000);
-              hide();
+              displayAlert(
+                buildAlert('Please Login', `It looks like you're logged out. Please click the RecipeSage icon to login again.`),
+                4000
+              );
             });
             break;
+          case 412:
+            displayAlert(
+              buildAlert(`Could Not Save Recipe`, `A recipe title is required.`),
+              4000
+            );
+            break;
           default:
-            displayAlert(`<span>An error occurred while saving the recipe. Please try again.</span>`, 4000);
+            displayAlert(
+              buildAlert('Could Not Save Recipe', 'An error occurred while saving the recipe. Please try again.'),
+              4000
+            );
             break;
         }
       }
     }).catch(e => {
-      displayAlert(`<span>An error occurred while saving the recipe. Please try again.</span>`, 4000);
+      displayAlert(
+        buildAlert('Could Not Save Recipe', 'An error occurred while saving the recipe. Please try again.'),
+        4000
+      );
     });
   });
 }
