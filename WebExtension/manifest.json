@@ -9,7 +9,6 @@
     "48": "icons/icon-48x48.png",
     "128": "icons/icon-128x128.png"
   },
-  "default_locale": "en",
   "background": {
     "scripts": [
       "src/bg/background.js"
@@ -43,15 +42,7 @@
   ],
   "web_accessible_resources": [
     "images/*.png",
-    "icons/ionic/ionicons.css",
-    "icons/ionic/*.svg",
-    "css/material-icons/*.css",
-    "css/material-icons/*.eot",
-    "css/material-icons/*.ijmap",
-    "css/material-icons/*.svg",
-    "css/material-icons/*.ttf",
-    "css/material-icons/*.woff",
-    "css/material-icons/*.woff2"
+    "icons/*.png"
   ],
   "options_page": "src/settings/settings.html"
 }
