@@ -20,10 +20,16 @@ let login = () => {
         chrome.storage.local.set({ token: data.token }, () => {
           token = data.token;
 
-          document.getElementById('message').innerText = 'You are now logged in. Launching the snip tool...';
-          setTimeout(() => {
-            launch();
-          }, 2000);
+          chrome.storage.local.get(['seenTutorial'], result => {
+            if (result.seenTutorial) {
+              document.getElementById('message').innerText = 'You are now logged in. Launching the snip tool...';
+              setTimeout(() => {
+                launch();
+              }, 2000);
+            } else {
+              tutorial();
+            }
+          });
         });
       });
     } else {
@@ -39,6 +45,12 @@ let login = () => {
   }).catch(e => {
     document.getElementById('message').innerText = 'Something went wrong. Please check your internet connection and try again.';
   });
+}
+
+let tutorial = () => {
+  newClip();
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('tutorial').style.display = 'block';
 }
 
 let launch = () => {
@@ -61,4 +73,5 @@ chrome.storage.local.get(['token'], result => {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-submit').onclick = login;
+  document.getElementById('tutorial-submit').onclick = () => window.close();
 });
