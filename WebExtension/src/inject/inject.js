@@ -53,11 +53,11 @@ button {
   font-size: 14px;
   font-weight: 500;
   text-transform: uppercase;
-  
+
   background: #00a8ff;
   color: white;
   cursor: pointer;
-  
+
   border: none;
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
@@ -139,7 +139,10 @@ let hide = () => {
 
 let show = () => {
   if (!container) init();
-  container.style.display = 'block';
+  // Wait for DOM paint
+  setTimeout(() => {
+    container.style.display = 'block';
+  });
 };
 
 let moveTo = (top, left) => {
@@ -190,7 +193,7 @@ let init = () => {
 
   shadowRoot.appendChild(styles);
 
-  
+
   let ionIcons = document.createElement('link');
   ionIcons.href = 'https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css';
   ionIcons.rel = 'stylesheet';
@@ -282,7 +285,7 @@ let createSnipper = (title, field, isTextArea, initialValue, disableSnip) => {
       input.value = snip(field);
     };
     label.appendChild(button);
-  
+
     let buttonIcon = document.createElement('i');
     buttonIcon.className = 'icon ion-md-cut';
     button.appendChild(buttonIcon);
@@ -352,12 +355,16 @@ let alertTimeout;
 let displayAlert = (innerHTML, hideAfter) => {
   if (!alertContainer) initAlert();
   alertContainer.innerHTML = innerHTML;
-  alertContainer.style.display = 'block';
 
-  if (alertTimeout) clearTimeout(alertTimeout);
-  alertTimeout = setTimeout(() => {
-    alertContainer.style.display = 'none';
-  }, hideAfter || 6000);
+  // Wait for DOM paint
+  setTimeout(() => {
+    alertContainer.style.display = 'block';
+
+    if (alertTimeout) clearTimeout(alertTimeout);
+    alertTimeout = setTimeout(() => {
+      alertContainer.style.display = 'none';
+    }, hideAfter || 6000);
+  });
 }
 
 let buildAlert = (header, body) => {
