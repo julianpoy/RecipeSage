@@ -19,7 +19,7 @@ let login = () => {
         // Save the token
         chrome.storage.local.set({ token: data.token }, () => {
           token = data.token;
-    
+
           document.getElementById('message').innerText = 'You are now logged in. Launching the snip tool...';
           setTimeout(() => {
             launch();
@@ -48,7 +48,7 @@ let launch = () => {
 
 let newClip = () => {
   chrome.tabs.executeScript({
-    code: 'hide();show();'
+    code: 'show();'
   });
 }
 
