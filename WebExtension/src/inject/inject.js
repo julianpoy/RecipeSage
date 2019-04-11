@@ -113,7 +113,7 @@ button i {
 
 console.log("Loading RecipeSage Browser Extension");
 
-let container, currentSnip = {}, isDirty = false;
+let container, currentSnip = {}, isDirty = false, imageURLInput;
 
 let fetchToken = (callback) => {
   chrome.storage.local.get(['token'], function (result) {
@@ -239,11 +239,18 @@ let init = () => {
   closeButton.className = 'close clear';
   headline.appendChild(closeButton);
 
-  let tipText = document.createElement('div');
-  tipText.innerText = "Select some text and press the scissors button next to the field you wish to fill.";
-  tipText.className = 'tip';
-  container.appendChild(tipText);
+  let tipContainer = document.createElement('div');
+  tipContainer.className = 'tip';
+  tipContainer.onmousedown = e => e.stopPropagation();
+  container.appendChild(tipContainer);
 
+  let tipText = document.createElement('a');
+  tipText.innerText = "Open Tutorial";
+  tipText.href = "https://recipesage.com/#/tips-tricks-tutorials";
+  tipText.target = "_blank";
+  tipContainer.appendChild(tipText);
+
+  imageURLInput = createSnipper('Image URL', 'imageURL', false, "", true).input;
   createSnipper('Title', 'title');
   createSnipper('Description', 'description');
   createSnipper('Yield', 'yield');
@@ -296,7 +303,21 @@ let createSnipper = (title, field, isTextArea, initialValue, disableSnip) => {
   if (initialValue) input.value = initialValue;
   input.onchange = () => { setField(field, input.value) };
   label.appendChild(input);
+
+  return { input: input, label: label };
 }
+
+chrome.runtime.onMessage.addListener(function(request, sender) {
+  if (request.action === "show") show();
+  if (request.action === "hide") hide();
+  if (request.action === "snipImage") {
+    show();
+    imageURLInput.value = request.event.srcUrl
+    setField('imageURL', request.event.srcUrl);
+  }
+});
+
+// =========== Alerts ============
 
 let alertContainer;
 let initAlert = () => {
