@@ -50,7 +50,17 @@ export class EditRecipePage {
 
   setFile(event) {
     let files = event.srcElement.files
-    if (!files) {
+    if (!files || !files[0]) {
+      return
+    }
+
+    let MAX_FILE_SIZE_MB = 4;
+    if (files[0].size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
+      // Image is larger than MAX_FILE_SIZE_MB
+      this.toastCtrl.create({
+        message: `The max image file size is ${MAX_FILE_SIZE_MB}MB. Please select a smaller image.`,
+        duration: 6000
+      }).present();
       return
     }
 
@@ -59,29 +69,32 @@ export class EditRecipePage {
       (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
     );
 
-    var loadingImage = loadImage(
-        files[0],
-        (renderedCanvas, exif) => {
-          renderedCanvas.toBlob(myBlob => {
-            myBlob.name = this.recipe.imageFile.name;
-            this.recipe.imageFile = myBlob;
-            this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
-              (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
-            );
+    let ENABLE_LOCAL_CONVERSIONS = false;
+    if (ENABLE_LOCAL_CONVERSIONS) {
+      var loadingImage = loadImage(
+          files[0],
+          (renderedCanvas, exif) => {
+            renderedCanvas.toBlob(myBlob => {
+              myBlob.name = this.recipe.imageFile.name;
+              this.recipe.imageFile = myBlob;
+              this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
+                (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
+              );
 
-            console.log('Local conversion complete');
-          }, 'image/jpeg', 1);
-        },
-        {
-          maxWidth: 200,
-          canvas: true,
-          orientation: true
-        }
-    );
+              console.log('Local conversion complete');
+            }, 'image/jpeg', 1);
+          },
+          {
+            maxWidth: 200,
+            canvas: true,
+            orientation: true
+          }
+      );
 
-    loadingImage.onerror = err => {
-      console.log('Local conversion failed', err)
-    };
+      loadingImage.onerror = err => {
+        console.log('Local conversion failed', err)
+      };
+    }
   }
 
   save() {
