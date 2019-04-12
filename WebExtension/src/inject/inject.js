@@ -1,119 +1,6 @@
 var extensionContainerId = "recipeSageBrowserExtensionRootContainer";
 if (!document.getElementById(extensionContainerId)) {
 
-  let pluginWidth = '300px';
-
-  let styles = document.createElement('style');
-  styles.innerHTML = `
-  :host {
-    all: initial !important;
-    contain: content;
-  }
-
-  .rs-chrome-container {
-    position: fixed;
-    right: 10px;
-    top: 20%;
-    width: ${pluginWidth};
-    padding: 10px;
-
-    z-index: 99999999999999999999999999;
-    background: white;
-    box-shadow: 1px 1px 12px #666666;
-
-    user-select: none;
-
-    font-size: 14px;
-  }
-
-  label {
-    display: flex;
-  }
-
-  input, textarea {
-    min-width: 0;
-    flex-grow: 1;
-    background: none;
-    border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding: 10px;
-    transition: 0.3s;
-    background: transparent;
-    color: initial;
-    font-family: unset;
-  }
-
-  input:focus, textarea:focus {
-    border-bottom: 1px solid #00a8ff;
-    outline: none;
-  }
-
-  button {
-    height: 32px;
-    padding: 0 11px;
-    margin: 4px;
-
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-
-    background: #00a8ff;
-    color: white;
-    cursor: pointer;
-
-    border: none;
-    border-radius: 2px;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-  }
-
-  button.icon-button {
-    padding: 0 8px;
-  }
-
-  button.clear {
-    background: none;
-    box-shadow: none;
-    color: #00a8ff;
-  }
-
-  button i {
-    font-size: 16px;
-    vertical-align: bottom;
-  }
-
-  .logo {
-    height: 35px;
-  }
-
-  .tip {
-    margin-top: 8px;
-    margin-bottom: 16px;
-    text-align: center;
-    font-size: 12px;
-  }
-
-  .headline {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .headline-left {
-    display: flex;
-    align-self: flex-start;
-  }
-
-  .headline-left > .ion-md-move {
-    margin-right: 5px;
-    cursor: grab;
-  }
-
-  .save {
-    width: 100%;
-    margin: 10px 0 0;
-  }
-  `;
-
   console.log("Loading RecipeSage Browser Extension");
 
   let container, currentSnip = {}, isDirty = false, imageURLInput;
@@ -195,6 +82,10 @@ if (!document.getElementById(extensionContainerId)) {
     let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
     document.body.appendChild(shadowRootContainer);
 
+    let styles = document.createElement('link');
+    styles.href = chrome.extension.getURL('./src/inject/clipTool.css');
+    styles.rel = 'stylesheet';
+    styles.type = 'text/css';
     shadowRoot.appendChild(styles);
 
 
@@ -330,45 +221,9 @@ if (!document.getElementById(extensionContainerId)) {
     document.body.appendChild(shadowRootContainer);
 
     let alertStyles = document.createElement('style');
-    alertStyles.innerHTML = `
-      :host {
-        all: initial !important;
-        contain: content;
-      }
-
-      .alert {
-        position: fixed;
-        bottom: 10px;
-        right: 10px;
-        width: ${pluginWidth};
-        padding: 20px;
-
-        z-index: 99999999999999999999999999;
-        background: white;
-        box-shadow: 1px 1px 12px #666666;
-
-        user-select: none;
-
-        font-size: 16px;
-      }
-
-      .headline {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-
-      img {
-        width: 30px;
-        height: 30px;
-        border-radius: 20px;
-      }
-
-      h3 {
-        margin: 0 10px;
-        font-size: 18.5px;
-      }
-    </style>`;
+    alertStyles.src = chrome.extension.getURL('./src/inject/alert.css');
+    alertStyles.rel = 'stylesheet';
+    alertStyles.type = 'text/css';
     shadowRoot.appendChild(alertStyles);
 
     alertContainer = document.createElement('div');

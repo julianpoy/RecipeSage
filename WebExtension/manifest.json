@@ -28,7 +28,8 @@
 
   "web_accessible_resources": [
     "images/*.png",
-    "icons/*.png"
+    "icons/*.png",
+    "src/inject/*.css"
   ],
   "options_page": "src/settings/settings.html"
 }
