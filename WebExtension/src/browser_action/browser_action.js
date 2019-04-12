@@ -1,3 +1,9 @@
+let messageActiveWindow = (payload, cb) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, payload, cb);
+  });
+}
+
 let token;
 
 let login = () => {
@@ -54,14 +60,18 @@ let tutorial = () => {
 }
 
 let launch = () => {
-  newClip();
-  window.close();
+  newClip(() => {
+    window.close();
+  });
 }
 
-let newClip = () => {
+let newClip = cb => {
   chrome.tabs.executeScript({
-    code: 'show();'
+    file: 'src/inject/inject.js'
   });
+  messageActiveWindow({
+    action: 'show'
+  }, cb);
 }
 
 chrome.storage.local.get(['token'], result => {

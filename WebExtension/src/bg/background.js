@@ -1,3 +1,9 @@
+let initClipTool = () => {
+  chrome.tabs.executeScript({
+    file: 'src/inject/inject.js'
+  });
+}
+
 let messageActiveWindow = payload => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, payload);
@@ -8,6 +14,7 @@ chrome.contextMenus.create({
   title: "Snip Image for RecipeSage Clip Tool",
   contexts: ['image'],
   onclick: e => {
+    initClipTool();
     messageActiveWindow({
       action: 'snipImage',
       event: e
@@ -19,6 +26,7 @@ chrome.contextMenus.create({
   title: "Open RecipeSage Clip Tool",
   contexts: ['page'],
   onclick: e => {
+    initClipTool();
     messageActiveWindow({
       action: 'show',
       event: e
