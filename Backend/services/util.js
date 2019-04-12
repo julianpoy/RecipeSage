@@ -107,42 +107,44 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
   }
 }
 
+exports.convertImage = imageBuf => {
+  return new Promise((resolve, reject) => {
+    try {
+      sharp(imageBuf)
+        .rotate() // Rotates based on EXIF data
+        .resize(200, 200) // Uses object-fit: cover by default
+        .jpeg({
+          quality: 55,
+          // chromaSubsampling: '4:4:4'
+        })
+        .toBuffer((err, buffer, info) => {
+          if (err) reject(err);
+          resolve(buffer);
+        });
+    } catch (e) {
+      reject();
+    }
+  })
+}
+
 exports.sendURLToS3 = url => {
   return exports.fetchImage(url).then(({ res, body }) => {
-
-    var contentType = res.headers['content-type'];
-    var contentLength = res.headers['content-length'];
-
-    return exports.sendBufferToS3(body).then(result => {
-      return exports.formatS3ImageResponse(result.key, contentType, contentLength, result.s3Response.ETag)
+    return exports.convertImage(body).then(convertedBuffer => {
+      return exports.sendBufferToS3(convertedBuffer).then(result => {
+        return exports.formatS3ImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.s3Response.ETag);
+      });
     });
   })
 }
 
 exports.sendFileToS3 = path => {
   return fs.readFile(path).then(buf => {
-    return new Promise((resolve, reject) => {
-      try {
-        sharp(buf)
-          .rotate() // Rotates based on EXIF data
-          .resize(200, 200) // Uses object-fit: cover by default
-          .jpeg({
-            quality: 55,
-            // chromaSubsampling: '4:4:4'
-          })
-          .toBuffer((err, buffer, info) => {
-            if (err) reject(err);
-            resolve(buffer);
-          });
-      } catch(e) {
-        reject()
-      }
-    })
+    return exports.convertImage(buf);
   }).then(stream => {
     return exports.sendBufferToS3(stream)
   }).then(result => {
     var stats = fs.statSync(path);
-    return exports.formatS3ImageResponse(result.key, 'image/png', stats["size"], result.s3Response.ETag)
+    return exports.formatS3ImageResponse(result.key, 'image/jpeg', stats["size"], result.s3Response.ETag)
   })
 }
 
