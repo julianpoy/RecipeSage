@@ -55,13 +55,28 @@
       #tutorial {
         display: none;
       }
+
+      .headline {
+        text-align: center;
+      }
+
+      .headline h2 {
+        text-align: left;
+      }
+
+      .headline img {
+        height: 45px;
+      }
 		</style>
 		<script type="text/javascript" src="browser_action.js"></script>
 	</head>
 	<body>
 		<div class="container">
       <div id="login">
-        <h2>RecipeSage Browser Extension Login</h2>
+        <div class="headline">
+          <img id="login-logo" /><br />
+          <h2>Login</h2>
+        </div>
 				<label>
 					Email<br />
 					<input id="email" type="email" />
@@ -77,8 +92,11 @@
 				<span id="message"></span>
       </div>
       <div id="tutorial">
-        <h2>RecipeSage Browser Extension Tutorial</h2>
-        To view a full version of this tutorial, <a href="https://recipesage.com/#/tips-tricks-tutorials">click here</a>
+        <div class="headline">
+          <img id="tutorial-logo" /><br />
+          <h2>Tutorial</h2>
+        </div>
+        To view a full version of this tutorial, <a href="https://recipesage.com/#/tips-tricks-tutorials" target="_blank">click here</a>
         <br />
         <br />
 

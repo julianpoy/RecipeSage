@@ -72,6 +72,8 @@ chrome.storage.local.get(['token'], result => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('login-logo').src = chrome.extension.getURL('./images/recipesage-black-trimmed.png');
+  document.getElementById('tutorial-logo').src = chrome.extension.getURL('./images/recipesage-black-trimmed.png');
   document.getElementById('login-submit').onclick = login;
   document.getElementById('tutorial-submit').onclick = () => window.close();
 });
