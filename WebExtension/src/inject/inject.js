@@ -413,10 +413,13 @@ let submit = () => {
       if (response.ok) {
         response.json().then(data => {
           hide();
-          displayAlert(`<h3>Recipe Saved!</h3>
-          <span>
-            <a href="https://recipesage.com/#/recipes/${response.id}" target="_blank">Click to open</a>
-          </span>`, 4000);
+          displayAlert(
+            buildAlert(
+              `Recipe Saved!`,
+              `<a href="https://recipesage.com/#/recipe/${data.id}" target="_blank">Click to open</a>`
+            ),
+            4000
+          );
         });
       } else {
         switch (response.status) {
