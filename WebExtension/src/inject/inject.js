@@ -127,7 +127,6 @@ if (!document.getElementById(extensionContainerId)) {
     logoLink.appendChild(logo);
 
     let closeButton = document.createElement('button');
-    // closeButton.innerHTML = "<i class='icon ion-md-close'></i>";
     closeButton.innerText = 'CLOSE';
     closeButton.onclick = hide;
     closeButton.onmousedown = e => e.stopPropagation();
@@ -220,8 +219,8 @@ if (!document.getElementById(extensionContainerId)) {
     let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
     document.body.appendChild(shadowRootContainer);
 
-    let alertStyles = document.createElement('style');
-    alertStyles.src = chrome.extension.getURL('./src/inject/alert.css');
+    let alertStyles = document.createElement('link');
+    alertStyles.href = chrome.extension.getURL('./src/inject/alert.css');
     alertStyles.rel = 'stylesheet';
     alertStyles.type = 'text/css';
     shadowRoot.appendChild(alertStyles);
@@ -232,9 +231,32 @@ if (!document.getElementById(extensionContainerId)) {
   }
 
   let alertTimeout;
-  let displayAlert = (innerHTML, hideAfter) => {
+  let displayAlert = (title, body, hideAfter, bodyLink) => {
     if (!alertContainer) initAlert();
-    alertContainer.innerHTML = innerHTML;
+
+    let headline = document.createElement('div');
+    headline.className = "headline";
+    alertContainer.appendChild(headline);
+
+    let alertImg = document.createElement('img');
+    alertImg.src = chrome.extension.getURL('./icons/android-chrome-512x512.png');
+    headline.appendChild(alertImg);
+
+    let alertTitle = document.createElement('h3');
+    alertTitle.innerText = title;
+    headline.appendChild(alertTitle);
+
+    let alertBody = document.createElement('span');
+    if (!bodyLink) {
+      alertBody.innerText = body;
+    } else {
+      let alertBodyLink = document.createElement('a');
+      alertBodyLink.target = "_blank";
+      alertBodyLink.href = bodyLink;
+      alertBodyLink.innerText = body;
+      alertBody.appendChild(alertBodyLink);
+    }
+    alertContainer.appendChild(alertBody);
 
     // Wait for DOM paint
     setTimeout(() => {
@@ -245,16 +267,6 @@ if (!document.getElementById(extensionContainerId)) {
         alertContainer.style.display = 'none';
       }, hideAfter || 6000);
     });
-  }
-
-  let buildAlert = (header, body) => {
-    return `
-      <div class="headline">
-        <img src="${chrome.extension.getURL('./icons/android-chrome-512x512.png')}" />
-        <h3>${header}</h3>
-      </div>
-      <span>${body}</span>
-    `;
   }
 
   let submit = () => {
@@ -273,11 +285,10 @@ if (!document.getElementById(extensionContainerId)) {
           response.json().then(data => {
             hide();
             displayAlert(
-              buildAlert(
-                `Recipe Saved!`,
-                `<a href="https://recipesage.com/#/recipe/${data.id}" target="_blank">Click to open</a>`
-              ),
-              4000
+              `Recipe Saved!`,
+              `Click to open`,
+              4000,
+              `https://recipesage.com/#/recipe/${data.id}`
             );
           });
         } else {
@@ -285,20 +296,23 @@ if (!document.getElementById(extensionContainerId)) {
             case 401:
               chrome.storage.local.set({ token: null }, () => {
                 displayAlert(
-                  buildAlert('Please Login', `It looks like you're logged out. Please click the RecipeSage icon to login again.`),
+                  'Please Login',
+                  `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
                   4000
                 );
               });
               break;
             case 412:
               displayAlert(
-                buildAlert(`Could Not Save Recipe`, `A recipe title is required.`),
+                `Could Not Save Recipe`,
+                `A recipe title is required.`,
                 4000
               );
               break;
             default:
               displayAlert(
-                buildAlert('Could Not Save Recipe', 'An error occurred while saving the recipe. Please try again.'),
+                'Could Not Save Recipe',
+                'An error occurred while saving the recipe. Please try again.',
                 4000
               );
               break;
@@ -306,7 +320,8 @@ if (!document.getElementById(extensionContainerId)) {
         }
       }).catch(e => {
         displayAlert(
-          buildAlert('Could Not Save Recipe', 'An error occurred while saving the recipe. Please try again.'),
+          'Could Not Save Recipe',
+          'An error occurred while saving the recipe. Please try again.',
           4000
         );
       });
