@@ -22,7 +22,6 @@
   },
   "permissions": [
     "storage",
-    "clipboardRead",
     "contextMenus",
     "http://*/*",
     "https://*/*"
