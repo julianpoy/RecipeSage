@@ -249,6 +249,63 @@
       </p>
     </div>
 
+    <div *ngIf="active == 'webExtension'" padding>
+      <br />
+      <h2>Clip Tool Browser Extension Installation</h2>
+      <div class="tutorial-image">
+        <img src="assets/tutorial/webextension-on-rs.png" />
+      </div>
+      <p>
+        Adding the RecipeSage browser extension allows you to quickly select text from a webpage and save recipes directly to your
+        account via the handy clip tool. You can trigger the clip tool on most websites to grab text and import recipes
+        into your collection.<br /><br />
+        To install the RecipeSage browser extension, you'll need to be using a browser that supports WebExtensions.<br />
+        At the time of writing, this includes Firefox and Google Chrome.<br /><br />
+        If you're using Google Chrome, <a href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo" target="_blank">click here</a><br />
+        If you're using Firefox, the extension will be available soon.
+        <!-- <a href="" target="_blank">click here</a><br /> -->
+      </p>
+
+      <br />
+      <h2>Signing In and Getting Started</h2>
+      <div class="tutorial-image">
+        <img src="assets/tutorial/webextension-login.png" />
+      </div>
+      <p>
+        After installing the extension, you'll notice a new icon next to your navbar as pictured above.
+        The first time you click that icon, you'll be prompted to sign in to your RecipeSage account with your RecipeSage credentials.<br />
+        You'll then be shown a short tutorial, and the clip tool will open on the current page.
+        After this, clicking the RecipeSage icon will launch the clip tool immediately.<br /><br />
+
+        Note: If you don't have a RecipeSage account, you'll need to create one (see "Register" in the sidebar).<br />
+        Note: The clip tool cannot be activated on certain websites, such as browser settings pages and websites with certain security policies.
+      </p>
+
+      <br />
+      <h2>Using the Clip Tool</h2>
+      <div class="tutorial-image">
+        <img src="assets/tutorial/webextension-body.png" />
+      </div>
+      <p>
+        This is the clip tool. It allows you to quickly select text from a webpage and save recipes directly to your account.<br /><br />
+        To use it, highlight some text on the page using your mouse cursor, then press the button next to the desired field.<br />
+        The text you've selected will be copied into that field, where you can edit or refine the text.<br /><br />
+
+        To snip an image from the page, the process is slightly different - right click an image on the page,
+        and select the "Snip Image" option. The image source URL will be copied to the image URL field.<br /><br />
+
+        After you're done filling in the desired fields, press the "Save" button.
+        A popup notification will let you know if the recipe saved successfully or not.
+        If the recipe saved successfully, you'll receive a popup with a link to open the recipe in the full view.<br /><br />
+
+        Note: Only the title field is required.<br />
+        Note: Not all images will be snippable. If you're having trouble with an image, try creating your recipe first, then
+        edit the recipe on RecipeSage.com and add the image afterwards.<br />
+        Note: The clip tool is draggable. Click and hold on the icon in the upper left corner to move it anywhere within
+        the page.
+      </p>
+    </div>
+
     <br /><br />
 
     <button float-left ion-button clear (click)="active = ''">

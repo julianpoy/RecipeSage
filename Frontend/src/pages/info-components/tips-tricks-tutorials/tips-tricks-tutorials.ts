@@ -31,6 +31,11 @@ export class TipsTricksTutorialsPage {
       description: 'Individual recipe view',
       icon: 'paper',
       tag: 'recipeDetails'
+    }, {
+      title: 'Clip Tool Browser Extension',
+      description: 'The RecipeSage browser plugin',
+      icon: 'cut',
+      tag: 'webExtension'
     }];
 
     this.tutorialsByTag = {};
