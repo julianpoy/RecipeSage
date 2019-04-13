@@ -327,4 +327,9 @@ if (!document.getElementById(extensionContainerId)) {
       });
     });
   }
+
+  window.show = show;
+  show();
+} else {
+  window.show();
 }

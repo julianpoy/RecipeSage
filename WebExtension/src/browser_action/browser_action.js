@@ -60,25 +60,28 @@ let tutorial = () => {
 }
 
 let launch = () => {
-  newClip(() => {
-    window.close();
-  });
+  newClip();
+  window.close();
 }
 
-let newClip = cb => {
+let newClip = () => {
   chrome.tabs.executeScript({
-    file: 'src/inject/inject.js'
+    file: '/src/inject/inject.js'
   });
-  messageActiveWindow({
-    action: 'show'
-  }, cb);
 }
 
-chrome.storage.local.get(['token'], result => {
-  token = result.token;
+let tokenFetchPromise = new Promise((resolve, reject) => {
+  chrome.storage.local.get(['token'], result => {
+    token = result.token;
 
-  // If user is logged in, launch the tool
-  if (token) launch();
+    // If user is logged in, launch the tool
+    if (token) {
+      launch();
+      reject();
+    } else {
+      resolve();
+    }
+  });
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -86,4 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('tutorial-logo').src = chrome.extension.getURL('./images/recipesage-black-trimmed.png');
   document.getElementById('login-submit').onclick = login;
   document.getElementById('tutorial-submit').onclick = () => window.close();
+
+  tokenFetchPromise.then(() => {
+    document.getElementsByTagName('html')[0].style.display = "initial";
+  }).catch(() => {})
 });
