@@ -306,6 +306,7 @@ describe('utils', () => {
 
     after(() => {
       fetchImageStub.restore();
+      convertImageStub.restore();
       sendBufferToS3Stub.restore();
       formatS3ImageResponseStub.restore();
     })
@@ -331,17 +332,25 @@ describe('utils', () => {
   })
 
   describe('sendFileToS3', () => {
-    let fsReadFileStub, fetchImageStub, sendBufferToS3Stub, formatS3ImageResponseStub, etag, key, contentLength, contentBody, formattedS3Response, result
+    let sendBufferToS3Stub,
+      formatS3ImageResponseStub,
+      convertImageStub,
+      etag,
+      key,
+      convertedBody,
+      formattedS3Response,
+      result
 
     before(async () => {
       contentLength = randomString(20)
-      // contentBody = randomString(20)
 
-      // fsReadFileStub = sinon.stub(fs, 'readFile').returns(Promise.resolve(null))
-      // fsStatStub = sinon.stub(fs, 'stat').returns(Promise.resolve({ size: contentLength }))
+      // We are not mocking fs calls here due to an issue with fs and sinon
 
       etag = randomString(20)
       key = randomString(20)
+      convertedBody = randomString(20)
+
+      convertImageStub = sinon.stub(UtilService, 'convertImage').returns(Promise.resolve(convertedBody))
 
       sendBufferToS3Stub = sinon.stub(UtilService, 'sendBufferToS3').returns(Promise.resolve({
         s3Response: {
@@ -372,21 +381,19 @@ describe('utils', () => {
     })
 
     after(() => {
-      // fsReadFileStub.restore();
-      // fsStatStub.restore();
+      convertImageStub.restore();
       sendBufferToS3Stub.restore();
       formatS3ImageResponseStub.restore();
     })
 
     it('copies url to s3 bucket', () => {
-      // sinon.assert.calledOnce(fsReadFileStub)
-      // sinon.assert.calledWith(fsReadFileStub, fakePath)
+      sinon.assert.calledOnce(convertImageStub)
 
       sinon.assert.calledOnce(sendBufferToS3Stub)
-      // sinon.assert.calledWith(sendBufferToS3Stub, contentBody)
 
       sinon.assert.calledOnce(formatS3ImageResponseStub)
-      sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/png', 4324, etag)
+      // 4324 is magic num of our test file size
+      sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/jpeg', 4324, etag)
 
       expect(result).to.equal(formattedS3Response)
     })
