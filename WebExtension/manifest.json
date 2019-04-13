@@ -31,5 +31,8 @@
     "icons/*.png",
     "src/inject/*.css"
   ],
-  "options_page": "src/settings/settings.html"
+  "options_ui": {
+    "page": "src/settings/settings.html",
+    "open_in_tab": false
+  }
 }
