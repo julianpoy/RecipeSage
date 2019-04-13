@@ -256,22 +256,25 @@ describe('utils', () => {
   })
 
   describe('sendURLToS3', () => {
-    let fetchImageStub, sendBufferToS3Stub, formatS3ImageResponseStub, etag, key, contentType, contentLength, contentBody, formattedS3Response
+    let fetchImageStub,
+      convertImageStub,
+      sendBufferToS3Stub,
+      formatS3ImageResponseStub,
+      etag,
+      key,
+      contentBody,
+      convertedBuffer,
+      formattedS3Response
 
     before(() => {
-      contentType = randomString(20)
-      contentLength = randomString(20)
       contentBody = randomString(20)
+      convertedBuffer = randomString(20)
 
       fetchImageStub = sinon.stub(UtilService, 'fetchImage').returns(Promise.resolve({
-        res: {
-          headers: {
-            'content-type': contentType,
-            'content-length': contentLength
-          }
-        },
         body: contentBody
       }))
+
+      convertImageStub = sinon.stub(UtilService, 'convertImage').returns(Promise.resolve(convertedBuffer))
 
       etag = randomString(20)
       key = randomString(20)
@@ -286,8 +289,8 @@ describe('utils', () => {
       formattedS3Response = {
         fieldname: "image",
         originalname: 'recipe-sage-img.jpg',
-        mimetype: contentType,
-        size: contentLength,
+        mimetype: 'image/jpeg',
+        size: 20,
         bucket: 'BUCKET',
         key: "key here",
         acl: "public-read",
@@ -313,11 +316,14 @@ describe('utils', () => {
         sinon.assert.calledOnce(fetchImageStub)
         sinon.assert.calledWith(fetchImageStub, fakeURL)
 
+        sinon.assert.calledOnce(convertImageStub)
+        sinon.assert.calledWith(convertImageStub, contentBody)
+
         sinon.assert.calledOnce(sendBufferToS3Stub)
-        sinon.assert.calledWith(sendBufferToS3Stub, contentBody)
+        sinon.assert.calledWith(sendBufferToS3Stub, convertedBuffer)
 
         sinon.assert.calledOnce(formatS3ImageResponseStub)
-        sinon.assert.calledWith(formatS3ImageResponseStub, key, contentType, contentLength, etag)
+        sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/jpeg', 20, etag)
 
         expect(result).to.equal(formattedS3Response)
       })
@@ -347,7 +353,7 @@ describe('utils', () => {
       formattedS3Response = {
         fieldname: "image",
         originalname: 'recipe-sage-img.jpg',
-        mimetype: 'image/png',
+        mimetype: 'image/jpeg',
         size: contentLength,
         bucket: 'BUCKET',
         key: "key here",
