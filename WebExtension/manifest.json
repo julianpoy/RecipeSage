@@ -21,11 +21,12 @@
     "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [
+    "https://recipesage.com/*",
     "storage",
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "webRequest"
   ],
-
   "web_accessible_resources": [
     "images/*.png",
     "icons/*.png",
