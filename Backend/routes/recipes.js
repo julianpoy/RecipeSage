@@ -43,7 +43,11 @@ router.post(
       // Support for imageURLs instead of image files
       return new Promise(function(resolve, reject) {
         if (req.body.imageURL) {
-          UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(reject);
+          UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(e => {
+            let error = new Error(e);
+            error.status = 415;
+            reject(error);
+          });
         } else {
           resolve(null);
         }

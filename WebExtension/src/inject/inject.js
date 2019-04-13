@@ -319,6 +319,13 @@ if (!document.getElementById(extensionContainerId)) {
                 4000
               );
               break;
+            case 415:
+              displayAlert(
+                `Could Not Save Recipe`,
+                `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
+                6000
+              );
+              break;
             default:
               displayAlert(
                 'Could Not Save Recipe',
