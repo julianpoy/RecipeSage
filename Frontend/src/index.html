@@ -31,6 +31,13 @@
   <!--<script src="cordova.js"></script>-->
 
   <script>
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      window.deferredInstallPrompt = e;
+    });
+
     window.updateSW = function(resolve, reject) {
       resolve = resolve || function() {};
       reject = reject || function() {};

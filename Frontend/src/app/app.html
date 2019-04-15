@@ -14,6 +14,10 @@
         <span class="sidemenu-item-text">{{p.title}}</span>
         <ion-badge *ngIf="p.title === 'Recipe Inbox' && inboxCount && inboxCount > 0" item-end>{{ inboxCount }}</ion-badge>
       </button>
+      <button menuClose ion-item icon-left *ngIf="isLoggedIn() && readyForPrompt()" (click)="showInstallPrompt()">
+        <ion-icon class="sidemenu-icon" name="cloud-download" padding-right></ion-icon>
+        <span class="sidemenu-item-text">Download & Install</span>
+      </button>
       <button menuClose ion-item icon-left *ngIf="isLoggedIn()" (click)="logout()">
         <ion-icon class="sidemenu-icon" name="log-out" padding-right></ion-icon>
         <span class="sidemenu-item-text">Log Out</span>
