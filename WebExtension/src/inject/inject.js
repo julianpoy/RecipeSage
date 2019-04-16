@@ -288,7 +288,6 @@ if (!document.getElementById(extensionContainerId)) {
         headers: {
           "Content-Type": "application/json",
         },
-        referrer: "no-referrer",
         body: JSON.stringify(currentSnip)
       }).then(response => {
         if (response.ok) {
@@ -341,6 +340,7 @@ if (!document.getElementById(extensionContainerId)) {
           'An error occurred while saving the recipe. Please try again.',
           4000
         );
+        console.error(e);
       });
     });
   }
