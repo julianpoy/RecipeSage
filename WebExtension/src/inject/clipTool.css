@@ -17,6 +17,10 @@
   user-select: none;
 
   font-size: 14px;
+
+  font-family: Arial,Helvetica,sans-serif;
+
+  color: black;
 }
 
 label {
@@ -32,8 +36,9 @@ input, textarea {
   padding: 10px;
   transition: 0.3s;
   background: transparent;
-  color: initial;
-  font-family: unset;
+  color: black;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 12px;
 }
 
 input:focus, textarea:focus {

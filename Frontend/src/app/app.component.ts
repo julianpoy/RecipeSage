@@ -257,6 +257,27 @@ export class MyApp {
     return localStorage.getItem('token') ? true : false;
   }
 
+  readyForPrompt() {
+    return !!(<any>window).deferredInstallPrompt;
+  }
+
+  showInstallPrompt() {
+    let installPrompt = (<any>window).deferredInstallPrompt;
+    if (installPrompt) {
+      installPrompt.prompt();
+
+      installPrompt.userChoice
+        .then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+            (<any>window).deferredInstallPrompt = null;
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+        });
+    }
+  }
+
   loadInboxCount() {
     if (!localStorage.getItem('token')) return;
 

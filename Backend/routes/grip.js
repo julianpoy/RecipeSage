@@ -25,7 +25,13 @@ router.all(
     }
 
     while (ws.canRecv()) {
-      var message = ws.recv();
+      var message;
+
+      try {
+        message = ws.recv();
+      } catch(e) {
+        if (e.message != 'Client disconnected unexpectedly.') throw e;
+      }
 
       console.log("got message", message)
 

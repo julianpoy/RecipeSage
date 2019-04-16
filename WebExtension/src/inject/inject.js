@@ -213,11 +213,11 @@ if (!document.getElementById(extensionContainerId)) {
 
   // =========== Alerts ============
 
-  let alertContainer;
+  let alertShadowRootContainer, alertContainer;
   let initAlert = () => {
-    let shadowRootContainer = document.createElement('div')
-    let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
-    document.body.appendChild(shadowRootContainer);
+    alertShadowRootContainer = document.createElement('div');
+    let shadowRoot = alertShadowRootContainer.attachShadow({ mode: 'closed' });
+    document.body.appendChild(alertShadowRootContainer);
 
     let alertStyles = document.createElement('link');
     alertStyles.href = chrome.extension.getURL('./src/inject/alert.css');
@@ -230,9 +230,19 @@ if (!document.getElementById(extensionContainerId)) {
     shadowRoot.appendChild(alertContainer);
   }
 
+  destroyAlert = () => {
+    if (alertShadowRootContainer) {
+      document.body.removeChild(alertShadowRootContainer);
+    }
+    alertShadowRootContainer = null;
+    alertContainer = null;
+  }
+
   let alertTimeout;
   let displayAlert = (title, body, hideAfter, bodyLink) => {
-    if (!alertContainer) initAlert();
+    if (alertShadowRootContainer || alertContainer) destroyAlert();
+
+    initAlert();
 
     let headline = document.createElement('div');
     headline.className = "headline";
@@ -264,7 +274,7 @@ if (!document.getElementById(extensionContainerId)) {
 
       if (alertTimeout) clearTimeout(alertTimeout);
       alertTimeout = setTimeout(() => {
-        alertContainer.style.display = 'none';
+        destroyAlert();
       }, hideAfter || 6000);
     });
   }
@@ -309,6 +319,13 @@ if (!document.getElementById(extensionContainerId)) {
                 4000
               );
               break;
+            case 415:
+              displayAlert(
+                `Could Not Save Recipe`,
+                `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
+                6000
+              );
+              break;
             default:
               displayAlert(
                 'Could Not Save Recipe',
@@ -327,4 +344,9 @@ if (!document.getElementById(extensionContainerId)) {
       });
     });
   }
+
+  window.show = show;
+  show();
+} else {
+  window.show();
 }

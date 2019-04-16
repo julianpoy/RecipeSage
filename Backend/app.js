@@ -74,6 +74,21 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+let logError = err => {
+  // Do not log expected RESTful errors
+  let isExpectedError = err.status < 500 || err > 599;
+  if (isExpectedError) return;
+
+  let enableErrorLogging = !testMode || verboseMode;
+  if (enableErrorLogging) {
+    if (devMode) {
+      console.error(err);
+    } else {
+      Raven.captureException(err);
+    }
+  }
+}
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -82,10 +97,8 @@ app.use(function(err, req, res, next) {
   if (!err.status) err.status = 500;
 
   res.locals.error = devMode ? err : {};
-  if (!testMode || verboseMode) {
-    if (devMode) console.error(err);
-    else Raven.captureException(err);
-  }
+
+  logError(err);
 
   // render the error page
   res.status(err.status || 500);

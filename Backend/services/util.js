@@ -141,7 +141,7 @@ exports.sendFileToS3 = path => {
   return fs.readFile(path).then(buf => {
     return exports.convertImage(buf);
   }).then(stream => {
-    return exports.sendBufferToS3(stream)
+    return exports.sendBufferToS3(stream);
   }).then(result => {
     var stats = fs.statSync(path);
     return exports.formatS3ImageResponse(result.key, 'image/jpeg', stats["size"], result.s3Response.ETag)
