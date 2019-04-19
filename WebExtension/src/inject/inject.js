@@ -200,7 +200,7 @@ if (!document.getElementById(extensionContainerId)) {
     let input = document.createElement(isTextArea ? 'textarea' : 'input');
     input.placeholder = title;
     if (initialValue) input.value = initialValue;
-    input.onchange = () => { setField(field, input.value) };
+    input.oninput = () => { setField(field, input.value) };
     label.appendChild(input);
 
     return { input: input, label: label };
