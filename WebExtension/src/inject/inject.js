@@ -3,7 +3,12 @@ if (!document.getElementById(extensionContainerId)) {
 
   console.log("Loading RecipeSage Browser Extension");
 
-  let container, currentSnip = {}, isDirty = false, imageURLInput;
+  let container;
+  let currentSnip = {
+    sourceURL: window.location.href
+  };
+  let isDirty = false;
+  let imageURLInput;
 
   let fetchToken = (callback) => {
     chrome.storage.local.get(['token'], function (result) {
