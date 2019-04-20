@@ -54,7 +54,7 @@ export class EditRecipePage {
       return
     }
 
-    let MAX_FILE_SIZE_MB = 4;
+    let MAX_FILE_SIZE_MB = 8;
     if (files[0].size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
       // Image is larger than MAX_FILE_SIZE_MB
       this.toastCtrl.create({

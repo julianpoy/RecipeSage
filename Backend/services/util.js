@@ -184,7 +184,7 @@ exports.upload = multer({
     }
   }),
   limits: {
-    fileSize: 4 * 1024 * 1024 // 4MB
+    fileSize: 8 * 1024 * 1024 // 8MB
   }
 });
 
