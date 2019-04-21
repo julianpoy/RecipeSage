@@ -331,32 +331,44 @@ export class RecipeServiceProvider {
 
     // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
     var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+    // Starts with [, anything inbetween, ends with ]
+    var headerRegexp = /^\[.*\]$/;
 
     for (var i = 0; i < lines.length; i++) {
-      var matches = lines[i].match(measurementRegexp);
-      if (!matches || matches.length === 0) continue;
+      var line = lines[i].trim(" "); // Trim only spaces (no newlines)
 
-      var measurement = matches[0];
+      var measurementMatches = line.match(measurementRegexp);
+      var headerMatches = line.match(headerRegexp);
 
-      try {
-        var measurementParts = measurement.split(/-|to/);
+      if (headerMatches && headerMatches.length > 0) {
+        var header = headerMatches[0];
+        var headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
-        for (var j = 0; j < measurementParts.length; j++) {
-          // console.log(measurementParts[j].trim())
-          var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
+        if (boldify) headerContent = `<b class="sectionHeader">${headerContent}</b>`;
+        lines[i] = headerContent;
+      } else if (measurementMatches && measurementMatches.length > 0) {
+        var measurement = measurementMatches[0];
 
-          // Preserve original fraction format if entered
-          if (measurementParts[j].indexOf('/') > -1) {
-            scaledMeasurement = scaledMeasurement.toFraction(true);
+        try {
+          var measurementParts = measurement.split(/-|to/);
+
+          for (var j = 0; j < measurementParts.length; j++) {
+            // console.log(measurementParts[j].trim())
+            var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
+
+            // Preserve original fraction format if entered
+            if (measurementParts[j].indexOf('/') > -1) {
+              scaledMeasurement = scaledMeasurement.toFraction(true);
+            }
+
+            if (boldify) measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
+            else measurementParts[j] = scaledMeasurement;
           }
 
-          if (boldify) measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
-          else measurementParts[j] = scaledMeasurement;
+          lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
+        } catch (e) {
+          console.log("failed to parse", e)
         }
-
-        lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
-      } catch (e) {
-        console.log("failed to parse", e)
       }
     }
 
