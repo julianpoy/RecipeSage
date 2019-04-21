@@ -85,7 +85,24 @@ export class RecipePage {
         }
 
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-          this.instructions = this.recipe.instructions.split(/\r?\n/);
+          // Starts with [, anything inbetween, ends with ]
+          var headerRegexp = /^\[.*\]$/;
+          let stepCount = 1;
+          this.instructions = this.recipe.instructions.split(/\r?\n/).map(instruction => {
+            let line = instruction.trim();
+            var headerMatches = line.match(headerRegexp);
+
+            if (headerMatches && headerMatches.length > 0) {
+              var header = headerMatches[0];
+              var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+
+              stepCount = 1;
+
+              return `<b class="sectionHeader">${headerContent}</b>`
+            } else {
+              return `<b>${ stepCount++ } &nbsp;</b> ${instruction}`
+            }
+          });
         }
 
         this.applyScale();

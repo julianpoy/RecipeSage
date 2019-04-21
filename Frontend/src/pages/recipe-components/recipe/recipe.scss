@@ -51,6 +51,17 @@ page-recipe {
 
     .ingredient {
       color: #3f3f3f;
+
+      .sectionHeader {
+        display: block;
+        margin: 4px 0;
+      }
+
+      &:first-child {
+        .sectionHeader {
+          margin-top: 0;
+        }
+      }
     }
   }
 

@@ -101,7 +101,7 @@
             <p>Instructions</p>
           </ion-item>
           <ion-item class="instructions" text-wrap>
-            <p *ngFor="let instruction of instructions; let idx = index" class="instruction" text-wrap><b>{{ idx+1 }} &nbsp;</b> {{ instruction }}</p>
+            <p *ngFor="let instruction of instructions" [innerHTML]="instruction" class="instruction" text-wrap></p>
             <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
           </ion-item>
         </ion-col>
