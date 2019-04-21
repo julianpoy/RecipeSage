@@ -335,7 +335,7 @@ export class RecipeServiceProvider {
     var headerRegexp = /^\[.*\]$/;
 
     for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim(" "); // Trim only spaces (no newlines)
+      var line = lines[i].trim(); // Trim only spaces (no newlines)
 
       var measurementMatches = line.match(measurementRegexp);
       var headerMatches = line.match(headerRegexp);
