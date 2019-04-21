@@ -23,7 +23,7 @@ exports.validateSession = function(token, type) {
     }
   }
   query.token = token;
-  query.expires = {[Op.gte]: Date.now() };
+  query.expires = { [Op.gte]: Date.now() };
 
   return Session.findOne({
     where: query,
@@ -37,7 +37,6 @@ exports.validateSession = function(token, type) {
     }
 
     extendSession(session);
-    removeOldSessions();
 
     return Promise.resolve(session);
   });
@@ -62,7 +61,7 @@ function extendSession(session) {
 }
 
 function removeOldSessions() {
-  //Clean out all old items
+  // Clean out all old sessions
   var removeOld = {
     expires: { [Op.lt]: Date.now() }
   }
@@ -79,12 +78,13 @@ function removeOldSessions() {
     }
   });
 }
+setInterval(removeOldSessions, 1 * 60 * 60 * 1000); // Every X hours
 
-//Creates a token and returns the token if successful
+// Creates a token and returns the token if successful
 exports.generateSession = function(userId, type, transaction) {
-  //Create a random token
+  // Create a random token
   var token = crypto.randomBytes(48).toString('hex');
-  //New session!
+  // New session!
   return Session.create({
     userId,
     type,
