@@ -45,6 +45,7 @@
     "dayjs": "^1.7.8",
     "firebase": "^5.7.1",
     "fraction.js": "^4.0.11",
+    "howler": "^2.1.2",
     "ionic-angular": "3.9.4",
     "ionicons": "4.5.5",
     "linkifyjs": "^2.1.7",
