@@ -21,7 +21,7 @@ export class RecipePage {
   recipe: Recipe;
   recipeId: string;
   ingredients: any;
-  instructions: { content: string, isHeader: boolean, count: number }[];
+  instructions: { content: string, isHeader: boolean, count: number, complete: boolean }[];
 
   scale: number = 1;
 
@@ -274,6 +274,7 @@ export class RecipePage {
       let tokens = event.target.innerText.split(" ");
       this.setTimer(parseInt(tokens[0]), tokens[1]);
     }
+    instruction.complete = !instruction.complete;
   }
 
   changeScale() {

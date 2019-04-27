@@ -103,8 +103,11 @@
           <ion-item class="instructions" text-wrap>
             <p *ngFor="let instruction of instructions" class="instruction" text-wrap>
               <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
-              <span *ngIf="!instruction.isHeader" (click)="instructionClicked($event)">
-                <b>{{instruction.count}} &nbsp;</b> <span [innerHTML]="instruction.content"></span>
+              <span
+                *ngIf="!instruction.isHeader"
+                (click)="instructionClicked($event, instruction)"
+                [ngClass]="{ complete: instruction.complete }">
+                <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
               </span>
             </p>
             <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>

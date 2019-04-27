@@ -78,6 +78,10 @@ page-recipe {
       margin-bottom: 15px;
       color: #3f3f3f;
 
+      span.complete .instructionContent {
+        text-decoration: line-through;
+      }
+
       .timer {
         font-weight: bold;
       }
