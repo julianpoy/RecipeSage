@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, ModalController } from 'ionic-angular';
-import { Howl, Howler } from 'howler';
 
 import { RecipeServiceProvider, Recipe, Instruction, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../../providers/label-service/label-service';
@@ -30,11 +29,6 @@ export class RecipePage {
   selectedLabels: any = [];
   pendingLabel: string = '';
   showAutocomplete: boolean = false;
-
-  timeRoller;
-  audioWakeLock: any;
-  timer: any;
-  timeRemaining: number;
 
   constructor(
     public navCtrl: NavController,
@@ -93,9 +87,6 @@ export class RecipePage {
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
           // Starts with [, anything inbetween, ends with ]
           var headerRegexp = /^\[.*\]$/;
-          // Contains timer identifier
-          //
-          var timerRegexp = /([0-9]+ *([0-9]*(\/|\.)[0-9]*)? ?(to|-)? ?)* *(seconds|minutes|hours|second|minute|hour)/g;
 
           let stepCount = 1;
           this.instructions = this.recipe.instructions.split(/\r?\n/).map(instruction => {
@@ -115,13 +106,6 @@ export class RecipePage {
                 complete: false
               }
             } else {
-              var timerMatches = line.match(timerRegexp);
-              if (timerMatches && timerMatches.length > 0) {
-                for (var i = 0; i < timerMatches.length; i++) {
-                  line = line.replace(timerMatches[i], `<span class="timer">${timerMatches[i]}</span>`);
-                }
-              }
-
               return {
                 content: line,
                 isHeader: false,
@@ -211,73 +195,12 @@ export class RecipePage {
 
   ionViewDidLoad() {}
 
-  setTimer(time, unit) {
-    let multiplier = 1;
-    switch(unit) {
-      case 'second':
-      case 'seconds':
-      multiplier = 1000;
-      break;
-      case 'minute':
-      case 'minutes':
-      multiplier = 1000 * 60;
-      break;
-      case 'hour':
-      case 'hours':
-      multiplier = 1000 * 60 * 60;
-      break;
-    }
-
-    this.audioWakeLock = new Howl({
-      src: ['assets/silence-5s.mp3'],
-      loop: true,
-      onplayerror: () => {
-        this.audioWakeLock.once('unlock', () => {
-          this.audioWakeLock.play();
-        });
-      }
-    });
-
-    this.audioWakeLock.play();
-
-    var start = Date.now();
-    this.timer = setInterval(() => {
-      let timeElapsed = Date.now() - start;
-      let hours = Math.floor(timeElapsed / 3600);
-      let minutes = Math.floor((timeElapsed - (hours * 3600)) / 60);
-      let seconds = timeElapsed - (hours * 3600) - (minutes * 60);
-
-      let hour = hours, minute = minutes, second = seconds;
-      if (hours < 10) hour = `0${hours}`;
-      if (minutes < 10) minute = `0${minutes}`;
-      if (seconds < 10) second = `0${seconds}`;
-      this.timeRoller = `${hour}:${minute}:${second}`;
-
-      if (timeElapsed > time * multiplier) {
-        clearInterval(this.timer);
-        this.timer = null;
-
-        this.audioWakeLock.stop();
-
-        let alertSound = new Howl({
-          src: ['assets/bell.mp3']
-        });
-
-        alertSound.play();
-      }
-    }, 1000);
-  }
-
-  instructionClicked(event, instruction) {
-    if (event.target.className.indexOf('timer') > -1) {
-      alert("timer set for " + event.target.innerText);
-      let tokens = event.target.innerText.split(" ");
-      this.setTimer(parseInt(tokens[0]), tokens[1]);
-    }
+  instructionClicked(event, instruction: Instruction) {
+    if (instruction.isHeader) return;
     instruction.complete = !instruction.complete;
   }
 
-  ingredientClicked(event, ingredient) {
+  ingredientClicked(event, ingredient: Instruction) {
     if (ingredient.isHeader) return;
     ingredient.complete = !ingredient.complete;
   }
