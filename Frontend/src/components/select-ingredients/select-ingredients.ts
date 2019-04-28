@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Ingredient } from '../../providers/recipe-service/recipe-service';
 
 @Component({
   selector: 'select-ingredients',
@@ -8,17 +8,17 @@ import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-ser
 export class SelectIngredientsComponent {
 
   allSelected: boolean = true;
-  ingredientBinders: any = {};
-  scaledIngredients: any = [];
-  scale: any = 1;
+  ingredientBinders: { [index: number]: boolean } = {};
+  scaledIngredients: Ingredient[] = [];
+  scale: number = 1;
 
-  _ingredients: any;
+  _ingredients: string;
   @Input()
   get ingredients() {
     return this._ingredients;
   }
 
-  set ingredients(val) {
+  set ingredients(val: string) {
     this._ingredients = val;
 
     this.selectedIngredients = [];
@@ -27,7 +27,7 @@ export class SelectIngredientsComponent {
     this.applyScale(true);
   }
 
-  selectedIngredients: any;
+  selectedIngredients: Ingredient[];
 
   @Output() selectedIngredientsChange = new EventEmitter();
 

@@ -88,7 +88,11 @@
             <p>Ingredients</p>
           </ion-item>
           <ion-item class="ingredients" text-wrap>
-            <p *ngFor="let ingredient of ingredients" [innerHTML]="ingredient" class="ingredient"></p>
+            <p *ngFor="let ingredient of ingredients"
+              [innerHTML]="ingredient.content"
+              class="ingredient"
+              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: ingredient.complete }"
+              (click)="ingredientClicked($event, ingredient)"></p>
             <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
             <p>
               <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>

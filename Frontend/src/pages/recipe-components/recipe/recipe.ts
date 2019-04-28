@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, ModalController } from 'ionic-angular';
 import { Howl, Howler } from 'howler';
 
-import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Recipe, Instruction, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../../providers/label-service/label-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
@@ -20,8 +20,8 @@ export class RecipePage {
 
   recipe: Recipe;
   recipeId: string;
-  ingredients: any;
-  instructions: { content: string, isHeader: boolean, count: number, complete: boolean }[];
+  ingredients: Ingredient[];
+  instructions: Instruction[];
 
   scale: number = 1;
 
@@ -112,7 +112,7 @@ export class RecipePage {
                 content: headerContent,
                 isHeader: true,
                 count: 0,
-                isDone: false
+                complete: false
               }
             } else {
               var timerMatches = line.match(timerRegexp);
@@ -126,7 +126,7 @@ export class RecipePage {
                 content: line,
                 isHeader: false,
                 count: stepCount++,
-                isDone: false
+                complete: false
               }
             }
           });
@@ -275,6 +275,11 @@ export class RecipePage {
       this.setTimer(parseInt(tokens[0]), tokens[1]);
     }
     instruction.complete = !instruction.complete;
+  }
+
+  ingredientClicked(event, ingredient) {
+    if (ingredient.isHeader) return;
+    ingredient.complete = !ingredient.complete;
   }
 
   changeScale() {
