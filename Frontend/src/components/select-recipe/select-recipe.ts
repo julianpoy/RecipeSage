@@ -38,7 +38,7 @@ export class SelectRecipeComponent {
     public navCtrl: NavController
   ) {}
 
-  search(text) {
+  search(text: string) {
     let loading = this.loadingService.start();
 
     this.recipeService.search(text, {}).subscribe(response => {

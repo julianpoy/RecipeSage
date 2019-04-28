@@ -105,7 +105,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  search(query, options) {
+  search(query: string, options: { labels: string[] }) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -124,7 +124,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  fetchById(recipeId) {
+  fetchById(recipeId: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -317,7 +317,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile, includeStockRecipes?) {
+  importLCB(lcbFile, includeStockRecipes?: boolean) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -394,7 +394,7 @@ export class RecipeServiceProvider {
     return lines;
   }
 
-  scaleIngredientsPrompt(currentScale, cb) {
+  scaleIngredientsPrompt(currentScale: number, cb) {
     let alert = this.alertCtrl.create({
       title: 'Recipe Scale',
       message: 'Enter a number or fraction to scale the recipe',

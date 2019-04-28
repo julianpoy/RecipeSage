@@ -32,7 +32,7 @@ export class SelectIngredientsComponent {
   @Output() selectedIngredientsChange = new EventEmitter();
 
   @Input()
-  set initialScale(val) {
+  set initialScale(val: number) {
     this.scale = val;
     this.applyScale();
   }
@@ -46,7 +46,7 @@ export class SelectIngredientsComponent {
     });
   }
 
-  applyScale(init?) {
+  applyScale(init?: boolean) {
     this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale).filter(e => !e.isHeader);
 
     this.selectedIngredients = [];
@@ -58,7 +58,7 @@ export class SelectIngredientsComponent {
     this.selectedIngredientsChange.emit(this.selectedIngredients);
   }
 
-  toggleIngredient(i) {
+  toggleIngredient(i: number) {
     if (this.ingredientBinders[i]) {
       this.selectedIngredients.push(this.scaledIngredients[i]);
     } else {
@@ -70,7 +70,7 @@ export class SelectIngredientsComponent {
     for (let idx in Object.keys(this.ingredientBinders)) {
       if (this.ingredientBinders.hasOwnProperty(idx)) {
         this.ingredientBinders[idx] = this.allSelected
-        this.toggleIngredient(idx)
+        this.toggleIngredient(parseInt(idx))
       }
     }
   }
