@@ -47,7 +47,7 @@ export class SelectIngredientsComponent {
   }
 
   applyScale(init?) {
-    this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale);
+    this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale).filter(e => !e.isHeader);
 
     this.selectedIngredients = [];
     for (var i = 0; i < (this.scaledIngredients || []).length; i++) {
