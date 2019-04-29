@@ -7,14 +7,12 @@ jobs: # a collection of steps
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
       - run:
-          name: install-graphicsmagick
-          command: 'sudo apt install graphicsmagick -y'
-      - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
       - run:
           name: install-deps
           command: 'sudo npm install -g sequelize'
+      # -------------- Setup Backend -----------------
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
@@ -31,9 +29,27 @@ jobs: # a collection of steps
       - run:
           name: extract-config
           command: cd Backend/config && unzip -j -P $credentialskey config.json.zip
-      - run: # run tests
-          name: test
+      # ------------- Setup Frontend ----------------
+      - restore_cache: # special step to restore the dependency cache
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+      - run:
+          name: install-npm-frontend
+          command: 'cd Frontend && npm install'
+      - save_cache: # special step to save the dependency cache
+          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          paths:
+            - ./Frontend/node_modules
+      # -------------- Tests -----------------
+      - run: # run backend tests
+          name: test-backend
           command: cd Backend && npm run test:ci
+      - run: # lint frontend
+          name: lint-frontend
+          command: cd Frontend && npm run lint
+      - run: # build frontend
+          name: build-frontend
+          command: cd Frontend && npm run build
       # - run: # run coverage report
       #     name: code-coverage
       #     command: './node_modules/.bin/nyc report --reporter=text-lcov'

@@ -1,13 +1,9 @@
 #!/bin/bash
 
-# NightmareJS Scraper Engine Reqs
+# Puppeteer Reqs
 sudo apt install libnss3 libasound2 libxss1 -y
 
-sudo npm install -g electron --unsafe-perm=true --allow-root
-
-# multer-imager reqs
-sudo apt install graphicsmagick -y
-
+# PushPin
 sudo apt-get install apt-transport-https \
 	  software-properties-common
 echo deb https://dl.bintray.com/fanout/debian fanout-$(lsb_release -csu 2> /dev/null || lsb_release -cs) main \

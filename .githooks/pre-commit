@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd Frontend;
+npm run lint;
+# npm run build;

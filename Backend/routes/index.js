@@ -9,6 +9,7 @@ let mdb = require('mdb');
 let extract = require('extract-zip');
 let sqlite3 = require('sqlite3');
 const performance = require('perf_hooks').performance;
+let path = require('path');
 
 // DB
 var Op = require("sequelize").Op;
@@ -747,6 +748,161 @@ router.post(
       console.log("Couldn't handle lcb upload 2", e)
       next(e);
     }
+  }
+)
+
+router.post(
+  '/import/paprika',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  multer({
+    dest: '/tmp/paprika-import/',
+  }).single('paprikadb'),
+  async (req, res, next) => {
+    if (!req.file) {
+      res.status(400).send("Must include a file with the key lcbdb")
+    } else {
+      console.log(req.file.path)
+    }
+
+    Raven.captureMessage("Starting Paprika Import");
+
+    let metrics = {
+      t0: performance.now(),
+      tExtracted: null,
+      tRecipesProcessed: null,
+      tRecipesSaved: null,
+      tLabelsSaved: null
+    }
+
+    let zipPath = req.file.path;
+    let extractPath = zipPath + '-extract';
+
+    new Promise((resolve, reject) => {
+      extract(zipPath, { dir: extractPath }, err => {
+        if (err) {
+          if (err.message === 'end of central directory record signature not found') err.status = 406;
+          reject(err)
+        }
+        else resolve(extractPath);
+      })
+    }).then(extractPath => {
+      metrics.tExtracted = performance.now();
+
+      let labelMap = {};
+      let pendingRecipes = [];
+      return SQ.transaction(t => {
+        return fs.readdir(extractPath).then(fileNames => {
+          return fileNames.reduce((acc, fileName) => {
+            return acc.then(() => {
+              let filePath = path.join(extractPath, fileName);
+
+              return fs.readFile(filePath).then(fileBuf => {
+                return UtilService.gunzip(fileBuf).then(data => {
+                  let recipeData = JSON.parse(data.toString());
+
+                  let imageP = recipeData.photo_data ?
+                    UtilService.sendFileToS3(new Buffer(recipeData.photo_data, "base64"), true) : Promise.resolve();
+
+                  return imageP.then(image => {
+                    let notes = [
+                      recipeData.notes,
+                      recipeData.nutritional_info ? `Nutritional Info: ${recipeData.difficulty}` : '',
+                      recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : '',
+                      recipeData.rating ? `Rating: ${recipeData.rating}` : ''
+                    ].filter(e => e && e.length > 0).join('\r\n');
+
+                    let totalTime = [
+                      recipeData.total_time,
+                      recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : ''
+                    ].filter(e => e).join(' ');
+
+                    pendingRecipes.push({
+                      model: {
+                        userId: res.locals.session.userId,
+                        title: recipeData.name,
+                        image,
+                        description: recipeData.description,
+                        ingredients: recipeData.ingredients,
+                        instructions: recipeData.directions,
+                        yield: recipeData.servings,
+                        totalTime,
+                        activeTime: recipeData.prep_time,
+                        notes,
+                        source: recipeData.source,
+                        folder: 'main',
+                        fromUserId: null,
+                        url: recipeData.source_url
+                      },
+                      labels: (recipeData.categories || []).map(e => e.trim().toLowerCase()).filter(e => e)
+                    });
+                  });
+                })
+              });
+            });
+          }, Promise.resolve()).then(() => {
+            metrics.tRecipesProcessed = performance.now();
+
+            return Recipe.bulkCreate(pendingRecipes.map(el => el.model), {
+              returning: true,
+              transaction: t
+            }).then(recipes => {
+              recipes.map((recipe, idx) => {
+                pendingRecipes[idx].labels.map(labelTitle => {
+                  labelMap[labelTitle] = labelMap[labelTitle] || [];
+                  labelMap[labelTitle].push(recipe.id);
+                })
+              })
+            })
+          }).then(() => {
+            metrics.tRecipesSaved = performance.now();
+
+            return Promise.all(Object.keys(labelMap).map(labelTitle => {
+              return Label.findOrCreate({
+                where: {
+                  userId: res.locals.session.userId,
+                  title: labelTitle
+                },
+                transaction: t
+              }).then(labels => {
+                return Recipe_Label.bulkCreate(labelMap[labelTitle].map(recipeId => {
+                  return {
+                    labelId: labels[0].id,
+                    recipeId
+                  }
+                }), {
+                  transaction: t
+                })
+              });
+            }))
+          });
+        });
+      });
+    }).then(() => {
+      metrics.tLabelsSaved = performance.now();
+
+      metrics.performance = {
+        tExtract: Math.floor(metrics.tExtracted - metrics.t0),
+        tRecipesProcess: Math.floor(metrics.tRecipesProcessed - metrics.tExtracted),
+        tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
+        tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
+      }
+
+      Raven.captureMessage('Paprika Metrics', {
+        extra: {
+          metrics
+        },
+        user: res.locals.session.toJSON(),
+        level: 'info'
+      });
+
+      res.status(201).json({});
+    }).catch(err => {
+      fs.removeSync(zipPath);
+      fs.removeSync(extractPath);
+      next(err);
+    });
   }
 )
 

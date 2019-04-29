@@ -62,6 +62,15 @@ page-recipe {
           margin-top: 0;
         }
       }
+
+      &.complete {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+
+      &.ingredientContent {
+        cursor: pointer;
+      }
     }
   }
 
@@ -77,6 +86,15 @@ page-recipe {
     .instruction {
       margin-bottom: 15px;
       color: #3f3f3f;
+
+      .instructionContent {
+        cursor: pointer;
+      }
+
+      span.complete .instructionContent {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
     }
   }
 

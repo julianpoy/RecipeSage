@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Ingredient } from '../../providers/recipe-service/recipe-service';
 
 @Component({
   selector: 'select-ingredients',
@@ -8,17 +8,17 @@ import { RecipeServiceProvider } from '../../providers/recipe-service/recipe-ser
 export class SelectIngredientsComponent {
 
   allSelected: boolean = true;
-  ingredientBinders: any = {};
-  scaledIngredients: any = [];
-  scale: any = 1;
+  ingredientBinders: { [index: number]: boolean } = {};
+  scaledIngredients: Ingredient[] = [];
+  scale: number = 1;
 
-  _ingredients: any;
+  _ingredients: string;
   @Input()
   get ingredients() {
     return this._ingredients;
   }
 
-  set ingredients(val) {
+  set ingredients(val: string) {
     this._ingredients = val;
 
     this.selectedIngredients = [];
@@ -27,12 +27,12 @@ export class SelectIngredientsComponent {
     this.applyScale(true);
   }
 
-  selectedIngredients: any;
+  selectedIngredients: Ingredient[];
 
   @Output() selectedIngredientsChange = new EventEmitter();
 
   @Input()
-  set initialScale(val) {
+  set initialScale(val: number) {
     this.scale = val;
     this.applyScale();
   }
@@ -46,8 +46,8 @@ export class SelectIngredientsComponent {
     });
   }
 
-  applyScale(init?) {
-    this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale);
+  applyScale(init?: boolean) {
+    this.scaledIngredients = this.recipeService.scaleIngredients(this._ingredients, this.scale).filter(e => !e.isHeader);
 
     this.selectedIngredients = [];
     for (var i = 0; i < (this.scaledIngredients || []).length; i++) {
@@ -58,7 +58,7 @@ export class SelectIngredientsComponent {
     this.selectedIngredientsChange.emit(this.selectedIngredients);
   }
 
-  toggleIngredient(i) {
+  toggleIngredient(i: number) {
     if (this.ingredientBinders[i]) {
       this.selectedIngredients.push(this.scaledIngredients[i]);
     } else {
@@ -70,7 +70,7 @@ export class SelectIngredientsComponent {
     for (let idx in Object.keys(this.ingredientBinders)) {
       if (this.ingredientBinders.hasOwnProperty(idx)) {
         this.ingredientBinders[idx] = this.allSelected
-        this.toggleIngredient(idx)
+        this.toggleIngredient(parseInt(idx))
       }
     }
   }

@@ -15,7 +15,7 @@
   <ion-item text-wrap no-lines class="description">
     <br /><br />
     <p>
-      RecipeSage supports importing from Pepperplate and Living Cookbook.
+      RecipeSage supports importing from Pepperplate, Living Cookbook, and Paprika.
     </p>
     <br />
     <p>
@@ -33,6 +33,10 @@
     <button ion-item (click)="goTo('ImportLivingcookbookPage')">
       <ion-icon name="cloud-upload" item-start></ion-icon>
       Import Living Cookbook File
+    </button>
+    <button ion-item (click)="goTo('ImportPaprikaPage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import Paprika Recipes File
     </button>
   </ion-list>
 </ion-content>
