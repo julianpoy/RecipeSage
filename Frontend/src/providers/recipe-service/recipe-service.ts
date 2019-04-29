@@ -105,7 +105,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  search(query: string, options: { labels: string[] }) {
+  search(query: string, options?: { labels?: string[] }) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -113,7 +113,7 @@ export class RecipeServiceProvider {
     };
 
     var url = this.base + 'recipes/search' + this.getTokenQuery();
-    if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
     return this.http
@@ -327,6 +327,26 @@ export class RecipeServiceProvider {
       subscribe: (resolve, reject) => {
         this.http
         .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}`, formData, httpOptions)
+        .pipe(
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
+  importPaprika(paprikaFile) {
+    let formData: FormData = new FormData();
+    formData.append('paprikadb', paprikaFile, paprikaFile.name)
+
+    const httpOptions = {};
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(`${this.base}import/paprika${this.getTokenQuery()}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
