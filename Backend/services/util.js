@@ -7,6 +7,7 @@ var Raven = require('raven');
 let fs = require('fs-extra');
 let sharp = require('sharp');
 let path = require('path');
+let zlib = require('zlib');
 
 // Service
 var FirebaseService = require('./firebase');
@@ -137,13 +138,15 @@ exports.sendURLToS3 = url => {
   })
 }
 
-exports.sendFileToS3 = path => {
-  return fs.readFile(path).then(buf => {
+exports.sendFileToS3 = (file, isBuffer) => {
+  let p = isBuffer ? Promise.resolve(file) : fs.readFile(file);
+
+  return p.then(buf => {
     return exports.convertImage(buf);
   }).then(stream => {
     return exports.sendBufferToS3(stream);
   }).then(result => {
-    var stats = fs.statSync(path);
+    var stats = isBuffer ? { size: file.length } : fs.statSync(file);
     return exports.formatS3ImageResponse(result.key, 'image/jpeg', stats["size"], result.s3Response.ETag)
   })
 }
@@ -290,3 +293,12 @@ let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 exports.validateEmail = email => emailRegex.test(email);
 
 exports.validatePassword = password => typeof password === 'string' && password.length >= 6;
+
+exports.gunzip = buf => {
+  return new Promise((resolve, reject) => {
+    zlib.gunzip(buf, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    })
+  })
+}

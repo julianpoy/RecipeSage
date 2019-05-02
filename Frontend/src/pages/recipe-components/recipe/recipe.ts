@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ToastController, ModalController } from 'ionic-angular';
 
-import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Recipe, Instruction, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { LabelServiceProvider } from '../../../providers/label-service/label-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
@@ -19,8 +19,8 @@ export class RecipePage {
 
   recipe: Recipe;
   recipeId: string;
-  ingredients: any;
-  instructions: string[];
+  ingredients: Ingredient[];
+  instructions: Instruction[];
 
   scale: number = 1;
 
@@ -87,6 +87,7 @@ export class RecipePage {
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
           // Starts with [, anything inbetween, ends with ]
           var headerRegexp = /^\[.*\]$/;
+
           let stepCount = 1;
           this.instructions = this.recipe.instructions.split(/\r?\n/).map(instruction => {
             let line = instruction.trim();
@@ -98,9 +99,19 @@ export class RecipePage {
 
               stepCount = 1;
 
-              return `<b class="sectionHeader">${headerContent}</b>`
+              return {
+                content: headerContent,
+                isHeader: true,
+                count: 0,
+                complete: false
+              }
             } else {
-              return `<b>${ stepCount++ } &nbsp;</b> ${instruction}`
+              return {
+                content: line,
+                isHeader: false,
+                count: stepCount++,
+                complete: false
+              }
             }
           });
         }
@@ -183,6 +194,16 @@ export class RecipePage {
   }
 
   ionViewDidLoad() {}
+
+  instructionClicked(event, instruction: Instruction) {
+    if (instruction.isHeader) return;
+    instruction.complete = !instruction.complete;
+  }
+
+  ingredientClicked(event, ingredient: Instruction) {
+    if (ingredient.isHeader) return;
+    ingredient.complete = !ingredient.complete;
+  }
 
   changeScale() {
     this.recipeService.scaleIngredientsPrompt(this.scale, scale => {

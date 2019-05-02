@@ -32,6 +32,19 @@ export interface Recipe {
   score: number;
 }
 
+export interface Ingredient {
+  content: string;
+  isHeader: boolean;
+  complete: boolean;
+}
+
+export interface Instruction {
+  content: string;
+  isHeader: boolean;
+  complete: boolean;
+  count: number;
+}
+
 @Injectable()
 export class RecipeServiceProvider {
 
@@ -92,7 +105,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  search(query, options) {
+  search(query: string, options?: { labels?: string[] }) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -100,7 +113,7 @@ export class RecipeServiceProvider {
     };
 
     var url = this.base + 'recipes/search' + this.getTokenQuery();
-    if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
     return this.http
@@ -111,7 +124,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  fetchById(recipeId) {
+  fetchById(recipeId: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -304,7 +317,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile, includeStockRecipes?) {
+  importLCB(lcbFile, includeStockRecipes?: boolean) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -324,10 +337,34 @@ export class RecipeServiceProvider {
     }
   }
 
-  scaleIngredients(ingredients, scale, boldify?) {
+  importPaprika(paprikaFile) {
+    let formData: FormData = new FormData();
+    formData.append('paprikadb', paprikaFile, paprikaFile.name)
+
+    const httpOptions = {};
+
+    return {
+      subscribe: (resolve, reject) => {
+        this.http
+        .post(`${this.base}import/paprika${this.getTokenQuery()}`, formData, httpOptions)
+        .pipe(
+          catchError(this.handleError)
+        ).subscribe(response => {
+          this.events.publish('recipe:generalUpdate');
+          resolve(response);
+        }, reject);
+      }
+    }
+  }
+
+  scaleIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {
     if (!ingredients) return [];
 
-    var lines = ingredients.match(/[^\r\n]+/g);
+    let lines: Ingredient[] = ingredients.match(/[^\r\n]+/g).map(match => ({
+      content: match,
+      complete: false,
+      isHeader: false
+    }));
 
     // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
     var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
@@ -335,7 +372,7 @@ export class RecipeServiceProvider {
     var headerRegexp = /^\[.*\]$/;
 
     for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim(); // Trim only spaces (no newlines)
+      var line = lines[i].content.trim(); // Trim only spaces (no newlines)
 
       var measurementMatches = line.match(measurementRegexp);
       var headerMatches = line.match(headerRegexp);
@@ -345,7 +382,8 @@ export class RecipeServiceProvider {
         var headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
         if (boldify) headerContent = `<b class="sectionHeader">${headerContent}</b>`;
-        lines[i] = headerContent;
+        lines[i].content = headerContent;
+        lines[i].isHeader = true;
       } else if (measurementMatches && measurementMatches.length > 0) {
         var measurement = measurementMatches[0];
 
@@ -361,11 +399,12 @@ export class RecipeServiceProvider {
               scaledMeasurement = scaledMeasurement.toFraction(true);
             }
 
-            if (boldify) measurementParts[j] = '<b>' + scaledMeasurement + '</b>';
+            if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
             else measurementParts[j] = scaledMeasurement;
           }
 
-          lines[i] = lines[i].replace(measurementRegexp, measurementParts.join(' to '));
+          lines[i].content = lines[i].content.replace(measurementRegexp, measurementParts.join(' to '));
+          lines[i].isHeader = false;
         } catch (e) {
           console.log("failed to parse", e)
         }
@@ -375,7 +414,7 @@ export class RecipeServiceProvider {
     return lines;
   }
 
-  scaleIngredientsPrompt(currentScale, cb) {
+  scaleIngredientsPrompt(currentScale: number, cb) {
     let alert = this.alertCtrl.create({
       title: 'Recipe Scale',
       message: 'Enter a number or fraction to scale the recipe',
