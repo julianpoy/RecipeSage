@@ -70,7 +70,14 @@ export class ShoppingListServiceProvider {
     }
   }
 
-  addItems(data) {
+  addItems(data: {
+    id: string,
+    items: {
+      title: string,
+      recipeId: string,
+      reference: string
+    }[]
+  }) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
