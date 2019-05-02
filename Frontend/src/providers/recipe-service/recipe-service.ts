@@ -34,6 +34,7 @@ export interface Recipe {
 
 export interface Ingredient {
   content: string;
+  originalContent: string;
   isHeader: boolean;
   complete: boolean;
 }
@@ -362,6 +363,7 @@ export class RecipeServiceProvider {
 
     let lines: Ingredient[] = ingredients.match(/[^\r\n]+/g).map(match => ({
       content: match,
+      originalContent: match,
       complete: false,
       isHeader: false
     }));
