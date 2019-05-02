@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ViewController, ModalController, AlertController } from 'ionic-angular';
 import { ShoppingListServiceProvider } from '../../../providers/shopping-list-service/shopping-list-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
-import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
@@ -16,7 +16,7 @@ export class AddRecipeToShoppingListModalPage {
 
   recipe: any;
   scale: any = 1;
-  selectedIngredients: any = [];
+  selectedIngredients: Ingredient[] = [];
 
   shoppingLists: any;
 
@@ -91,20 +91,15 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   save() {
-    var items = [];
-    for (var i = 0; i < this.selectedIngredients.length; i++) {
-      items.push({
-        title: this.selectedIngredients[i],
-        recipeId: this.recipe.id,
-        reference: this.reference
-      });
-    }
-
     var loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
-      items: items
+      items: this.selectedIngredients.map(ingredient => ({
+        title: ingredient.originalContent,
+        recipeId: this.recipe.id,
+        reference: this.reference
+      }))
     }).subscribe(response => {
       loading.dismiss();
 
