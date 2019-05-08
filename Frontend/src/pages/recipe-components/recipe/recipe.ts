@@ -30,6 +30,8 @@ export class RecipePage {
   pendingLabel: string = '';
   showAutocomplete: boolean = false;
 
+  isLoggedIn: boolean = !!localStorage.getItem('token');
+
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -483,6 +485,49 @@ export class RecipePage {
           break;
       }
     });
+  }
+
+  cloneRecipe() {
+    var loading = this.loadingService.start();
+
+    if (this.recipe.image && this.recipe.image.location) {
+      this.recipe.imageURL = this.recipe.image.location;
+    }
+
+    this.recipeService.create(this.recipe).subscribe(response => {
+      this.navCtrl.push('RecipePage', {
+        recipe: response,
+        recipeId: response.id
+      });
+
+      loading.dismiss();
+    }, err => {
+      loading.dismiss();
+      switch (err.status) {
+        case 0:
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
+            duration: 5000
+          }).present();
+          break;
+        case 401:
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unauthorized,
+            duration: 6000
+          }).present();
+          break;
+        default:
+          this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 6000
+          }).present();
+          break;
+      }
+    });
+  }
+
+  goTo(page: string) {
+    this.navCtrl.push(page);
   }
 
   prettyDateTime(datetime) {
