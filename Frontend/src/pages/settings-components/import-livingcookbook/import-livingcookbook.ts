@@ -54,11 +54,21 @@ export class ImportLivingcookbookPage {
     }
   }
 
-  isFileTooLarge() {
-    if (!this.ignoreLargeFiles && this.imageFile && this.imageFile.size / 1024 / 1024 > 350) {
+  isFileLargerThanMB(size: number) {
+    if (this.imageFile && this.imageFile.size / 1024 / 1024 > size) {
       // File is larger than 350MB
       return true;
     }
+    return false;
+  }
+
+  isFileLarge() {
+    if (!this.ignoreLargeFiles) return this.isFileLargerThanMB(350);
+    return false;
+  }
+
+  isFileTooLarge() {
+    if (!this.ignoreLargeFiles) return this.isFileLargerThanMB(650);
     return false;
   }
 

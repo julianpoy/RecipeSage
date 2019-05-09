@@ -55,6 +55,16 @@
       </p>
     </div>
 
+    <div padding *ngIf="!isFileTooLarge() && isFileLarge()">
+      <p>
+        <b>This database is very large.</b><br />
+        It may take a very long time to upload depending on your internet connection.<br />
+        <a href="mailto:julianpoyit@gmail.com?subject=RecipeSage Support">
+          If you're having trouble, please contact me to have your database imported manually.
+        </a>
+      </p>
+    </div>
+
     <div padding *ngIf="isFileTooLarge()">
       <p>
         <b>This file is too large to upload directly.</b><br />
