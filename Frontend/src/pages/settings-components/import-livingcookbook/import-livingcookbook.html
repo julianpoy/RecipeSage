@@ -37,6 +37,13 @@
 
   <br />
 
+  <ion-item no-lines class="includeTechniques">
+    <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
+  </ion-item>
+
+  <br />
+
   <div padding class="actions">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
     <button ion-button outline (click)="filePicker()">{{ filePickerText() }}</button>
@@ -45,6 +52,16 @@
       <p>
         Warning! This filetype does not end in .lcb<br />
         It may not work.
+      </p>
+    </div>
+
+    <div padding *ngIf="!isFileTooLarge() && isFileLarge()">
+      <p>
+        <b>This database is very large.</b><br />
+        It may take a very long time to upload depending on your internet connection.<br />
+        <a href="mailto:julianpoyit@gmail.com?subject=RecipeSage Support">
+          If you're having trouble, please contact me to have your database imported manually.
+        </a>
       </p>
     </div>
 
