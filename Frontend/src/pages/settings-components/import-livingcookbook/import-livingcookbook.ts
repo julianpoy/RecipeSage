@@ -20,6 +20,7 @@ export class ImportLivingcookbookPage {
   imageFile = null;
 
   ignoreLargeFiles: boolean;
+  includeTechniques: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -76,7 +77,7 @@ export class ImportLivingcookbookPage {
   submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importLCB(this.imageFile, !!localStorage.getItem('includeStockRecipes')).subscribe(response => {
+    this.recipeService.importLCB(this.imageFile, !!localStorage.getItem('includeStockRecipes'), this.includeTechniques).subscribe(response => {
       this.loading.dismiss();
       this.loading = null;
 

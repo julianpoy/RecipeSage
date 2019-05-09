@@ -37,6 +37,13 @@
 
   <br />
 
+  <ion-item no-lines class="includeTechniques">
+    <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
+  </ion-item>
+
+  <br />
+
   <div padding class="actions">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
     <button ion-button outline (click)="filePicker()">{{ filePickerText() }}</button>
