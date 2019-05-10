@@ -609,25 +609,29 @@ router.post(
                 let image = lcbRecipe.savedS3Image || null;
 
                 let ingredients = (lcbIngredientsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbIngredient => lcbIngredient)
                   .sort((a, b) => a.ingredientindex > b.ingredientindex)
                   .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
                   .join("\r\n")
 
                 let instructions = (lcbInstructionsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbProcedure => lcbProcedure && lcbProcedure.proceduretext)
                   .sort((a, b) => a.procedureindex > b.procedureindex)
                   .map(lcbProcedure => lcbProcedure.proceduretext)
                   .join("\r\n")
 
                 let recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbTip => lcbTip && lcbTip.tiptext)
                   .sort((a, b) => a.tipindex > b.tipindex)
                   .map(lcbTip => lcbTip.tiptext)
 
                 let authorNotes = (lcbAuthorNotesById[lcbRecipe.recipeid] || [])
+                  .filter(lcbAuthorNote => lcbAuthorNote && lcbAuthorNote.authornotetext)
                   .sort((a, b) => a.authornoteindex > b.authornoteindex)
                   .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
 
                 let techniqueNotes = (lcbTechniquesByRecipeId[lcbRecipe.recipeid] || [])
-                  .filter(lcbTechnique => lcbTechnique.comments)
+                  .filter(lcbTechnique => lcbTechnique && lcbTechnique.comments)
                   .map(lcbTechnique => `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`)
 
                 if (!req.query.includeTechniques) techniqueNotes = [];
