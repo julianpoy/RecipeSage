@@ -1,0 +1,52 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.recipesage.app">
+
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
+
+    <meta-data
+      android:name="asset_statements"
+      android:resource="@string/asset_statements" />
+
+    <activity
+      android:name="android.support.customtabs.trusted.LauncherActivity">
+
+      <!-- Edit android:value to change the url opened by the TWA -->
+      <meta-data
+        android:name="android.support.customtabs.trusted.DEFAULT_URL"
+        android:value="https://recipesage.com" />
+
+      <meta-data
+        android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+        android:resource="@color/colorPrimary" />
+
+      <!-- This intent-filter adds the TWA to the Android Launcher -->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <!--
+        This intent-filter allows the TWA to handle Intents to open
+        recipesage.com.
+      -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <!-- Edit android:host to handle links to the target URL-->
+        <data
+          android:scheme="https"
+          android:host="recipesage.com"/>
+      </intent-filter>
+    </activity>
+
+
+  </application>
+</manifest>
