@@ -33,16 +33,26 @@
     <p>
       Please consider donating if your database contains a large number of recipes or images.
     </p>
+
+    <br /><br />
+    <b>1. Choose Import Options (if any):</b>
   </ion-item>
 
-  <br />
+  <ion-item no-lines class="option">
+    <ion-label>Include stock "filler" LCB recipes (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
+  </ion-item>
 
-  <ion-item no-lines class="includeTechniques">
+  <ion-item no-lines class="option">
     <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
     <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
   </ion-item>
 
   <br />
+
+  <ion-item text-wrap no-lines class="description">
+    <b>2. Select Your Living Cookbook Database:</b>
+  </ion-item>
 
   <div padding class="actions">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
@@ -75,9 +85,38 @@
     </div>
 
     <div padding *ngIf="imageFile && !isFileTooLarge()">
+      <ion-item text-wrap no-lines class="description">
+        <b>3. Upload!</b>
+      </ion-item>
+
       <button *ngIf="!loading && !showFileTypeWarning()" ion-button (click)="submit()">Upload and Import</button>
       <button *ngIf="!loading && showFileTypeWarning()" ion-button (click)="submit()">Upload and Import Anyway</button>
       <button *ngIf="loading" ion-button>Importing, please wait...</button>
     </div>
+
+    <br /><br /><br /><br />
+
+    <ion-item text-wrap no-lines class="description">
+      <a href="" (click)="troubleshoot = true; $event.preventDefault()">Click for Troubleshooting Help</a>
+      <br /><br />
+      <div *ngIf="troubleshoot">
+        <p>
+          If you find that the import isn't importing all of your recipes: <br />
+          Try selecting the option above for "Include stock "filler" LCB recipes" and try again.
+        </p>
+        <br />
+        <p>
+          If the import is taking a long time: <br />
+          Depending on your internet speed, database size, and image content, the import may take a long time.
+        </p>
+        <br />
+        <p>
+          If your database is too large: <br />
+          Upload your database to Firefox Send (<a href="https://send.firefox.com" target="_blank">https://send.firefox.com</a>)
+          and email me the link it gives you at the end.
+        </p>
+        <br />
+      </div>
+    </ion-item>
   </div>
 </ion-content>
