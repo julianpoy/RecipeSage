@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
-import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
+import { RecipeServiceProvider, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
 import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
@@ -18,7 +18,7 @@ export class NewShoppingListItemModalPage {
   itemFields: any = [{}];
 
   selectedRecipe: any;
-  selectedIngredients: any;
+  selectedIngredients: Ingredient[];
 
   constructor(
     public navCtrl: NavController,
@@ -52,13 +52,10 @@ export class NewShoppingListItemModalPage {
   save() {
     var items;
     if (this.inputType === 'recipe') {
-      items = [];
-      for (var i = 0; i < this.selectedIngredients.length; i++) {
-        items.push({
-          title: this.selectedIngredients[i],
-          recipeId: this.selectedRecipe.id
-        });
-      }
+      items = this.selectedIngredients.map(ingredient => ({
+        title: ingredient.originalContent,
+        recipeId: this.selectedRecipe.id
+      }));
     } else {
       // Redundant for now. Kept for sterilization
       items = this.itemFields.filter(e => {

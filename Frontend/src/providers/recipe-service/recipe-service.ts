@@ -34,6 +34,7 @@ export interface Recipe {
 
 export interface Ingredient {
   content: string;
+  originalContent: string;
   isHeader: boolean;
   complete: boolean;
 }
@@ -317,7 +318,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile, includeStockRecipes?: boolean) {
+  importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -326,7 +327,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}`, formData, httpOptions)
+          .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -362,6 +363,7 @@ export class RecipeServiceProvider {
 
     let lines: Ingredient[] = ingredients.match(/[^\r\n]+/g).map(match => ({
       content: match,
+      originalContent: match,
       complete: false,
       isHeader: false
     }));

@@ -327,8 +327,8 @@ let tablesNeeded = [
   // "t_recipemeasure",
   "t_recipeprocedure",
   // "t_recipereview",
-  // "t_technique",
-  // "t_recipetechnique",
+  "t_technique",
+  "t_recipetechnique",
   "t_recipetip",
   // "t_recipetype", // seems to store category names, but no discernable relationship to recipe table - better to use recipetypes field in recipe itself (comma separated)
   // "t_recipetype_x", //2x unused
@@ -529,6 +529,19 @@ router.post(
           return acc;
         }, {})
 
+        let lcbTechniquesById = (tableMap.t_technique || []).reduce((acc, technique) => {
+          acc[technique.techniqueid] = technique;
+          return acc;
+        }, {});
+
+        let lcbTechniquesByRecipeId = (tableMap.t_recipetechnique || []).reduce((acc, lcbRecipeTechnique) => {
+          try {
+            acc[lcbRecipeTechnique.recipeid] = acc[lcbRecipeTechnique.recipeid] || [];
+            acc[lcbRecipeTechnique.recipeid].push(lcbTechniquesById[lcbRecipeTechnique.techniqueid]);
+          } catch(e){}
+          return acc;
+        }, {});
+
         let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce((acc, lcbIngredient) => {
           acc[lcbIngredient.recipeid] = acc[lcbIngredient.recipeid] || []
           acc[lcbIngredient.recipeid].push(lcbIngredient);
@@ -596,22 +609,32 @@ router.post(
                 let image = lcbRecipe.savedS3Image || null;
 
                 let ingredients = (lcbIngredientsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbIngredient => lcbIngredient)
                   .sort((a, b) => a.ingredientindex > b.ingredientindex)
                   .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
                   .join("\r\n")
 
                 let instructions = (lcbInstructionsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbProcedure => lcbProcedure && lcbProcedure.proceduretext)
                   .sort((a, b) => a.procedureindex > b.procedureindex)
                   .map(lcbProcedure => lcbProcedure.proceduretext)
                   .join("\r\n")
 
                 let recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbTip => lcbTip && lcbTip.tiptext)
                   .sort((a, b) => a.tipindex > b.tipindex)
                   .map(lcbTip => lcbTip.tiptext)
 
                 let authorNotes = (lcbAuthorNotesById[lcbRecipe.recipeid] || [])
+                  .filter(lcbAuthorNote => lcbAuthorNote && lcbAuthorNote.authornotetext)
                   .sort((a, b) => a.authornoteindex > b.authornoteindex)
                   .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
+
+                let techniqueNotes = (lcbTechniquesByRecipeId[lcbRecipe.recipeid] || [])
+                  .filter(lcbTechnique => lcbTechnique && lcbTechnique.comments)
+                  .map(lcbTechnique => `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`)
+
+                if (!req.query.includeTechniques) techniqueNotes = [];
 
                 let description = ''
 
@@ -625,7 +648,7 @@ router.post(
                 else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
 
                 // Add recipeTips and join with double return
-                notes = [...notes, ...recipeTips].join('\r\n\r\n')
+                notes = [...notes, ...recipeTips, ...techniqueNotes].join('\r\n\r\n')
 
                 let createdAt = new Date(lcbRecipe.createdate || Date.now())
                 let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
