@@ -53,18 +53,15 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   selectLastUsedShoppingList() {
-    let lastUsedShoppingList = localStorage.getItem('lastUsedShoppingList');
-    let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingList);
-    if (matchingLists.length > 0) {
-      this.destinationShoppingList = this.shoppingLists[0];
-    } else if (this.shoppingLists.length === 1) {
-      // If there is only one shopping list, that shopping list should automatically be selected
+    let lastUsedShoppingListId = localStorage.getItem('lastUsedShoppingListId');
+    let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingListId);
+    if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
       this.destinationShoppingList = this.shoppingLists[0];
     }
   }
 
   saveLastUsedShoppingList() {
-    localStorage.setItem('lastUsedShoppingList', this.destinationShoppingList.id);
+    localStorage.setItem('lastUsedShoppingListId', this.destinationShoppingList.id);
   }
 
   loadLists() {
