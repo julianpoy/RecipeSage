@@ -52,10 +52,24 @@ export class AddRecipeToShoppingListModalPage {
     });
   }
 
+  selectLastUsedShoppingList() {
+    let lastUsedShoppingList = localStorage.getItem('lastUsedShoppingList');
+    let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingList);
+    if (matchingLists.length > 0) {
+      this.destinationShoppingList = this.shoppingLists[0];
+    }
+  }
+
+  saveLastUsedShoppingList() {
+    localStorage.setItem('lastUsedShoppingList', this.destinationShoppingList.id);
+  }
+
   loadLists() {
     return new Promise((resolve, reject) => {
       this.shoppingListService.fetch().subscribe(response => {
         this.shoppingLists = response;
+
+        this.selectLastUsedShoppingList();
 
         resolve();
       }, err => {
@@ -92,6 +106,8 @@ export class AddRecipeToShoppingListModalPage {
 
   save() {
     var loading = this.loadingService.start();
+
+    this.saveLastUsedShoppingList();
 
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
