@@ -57,6 +57,9 @@ export class AddRecipeToShoppingListModalPage {
     let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingList);
     if (matchingLists.length > 0) {
       this.destinationShoppingList = this.shoppingLists[0];
+    } else if (this.shoppingLists.length === 1) {
+      // If there is only one shopping list, that shopping list should automatically be selected
+      this.destinationShoppingList = this.shoppingLists[0];
     }
   }
 
