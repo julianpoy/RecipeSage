@@ -187,13 +187,15 @@ router.get(
   if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
-    `SELECT count("Recipe".id)
+    `SELECT "Recipe".id
     FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
     WHERE "Recipe_Label"."labelId" = "Label".id
     AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
     AND "Recipe".id = "Recipe_Label"."recipeId"
     AND "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder`
+    AND "Recipe"."folder" = $folder
+    GROUP BY "Recipe".id
+    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}`
     :
     `SELECT count("Recipe".id)
     FROM "Recipes" AS "Recipe"
@@ -209,6 +211,7 @@ router.get(
     AND "Recipe"."userId" = $userId
     AND "Recipe"."folder" = $folder
     GROUP BY "Recipe".id
+    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}
     ORDER BY ${sort}
     LIMIT $limit
     OFFSET $offset) AS pag
@@ -271,7 +274,7 @@ router.get(
     SQ.query(countQuery, countQueryOptions),
     SQ.query(fetchQuery, fetchQueryOptions)
   ]).then(([countResult, recipes]) => {
-    let totalCount = parseInt(countResult[0].count, 10);
+    let totalCount = countResult.length;
 
     res.status(200).json({
       data: recipes,
