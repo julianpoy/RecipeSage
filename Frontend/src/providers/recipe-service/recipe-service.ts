@@ -92,11 +92,12 @@ export class RecipeServiceProvider {
     };
 
     var url = this.base + 'recipes/by-page' + this.getTokenQuery();
-    if (options.folder) url += '&folder=' + options.folder;
-    if (options.sortBy) url += '&sort=' + options.sortBy;
-    if (options.offset) url += '&offset=' + options.offset;
-    if (options.count)  url += '&count=' + options.count;
+    if (options.folder)                              url += '&folder=' + options.folder;
+    if (options.sortBy)                              url += '&sort=' + options.sortBy;
+    if (options.offset)                              url += '&offset=' + options.offset;
+    if (options.count)                               url += '&count=' + options.count;
     if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options.labelIntersection)                   url += '&labelIntersection=true';
 
     return this.http
     .get<Recipe[]>(url, httpOptions)
