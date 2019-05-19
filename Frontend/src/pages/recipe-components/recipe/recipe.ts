@@ -494,40 +494,58 @@ export class RecipePage {
       this.recipe.imageURL = this.recipe.image.location;
     }
 
-    this.recipeService.create(this.recipe).subscribe(response => {
-      this.navCtrl.push('RecipePage', {
-        recipe: response,
-        recipeId: response.id
-      });
+    return new Promise((resolve, reject) => {
+      this.recipeService.create(this.recipe).subscribe(response => {
+        resolve();
+        this.navCtrl.push('RecipePage', {
+          recipe: response,
+          recipeId: response.id
+        });
 
-      loading.dismiss();
-    }, err => {
-      loading.dismiss();
-      switch (err.status) {
-        case 0:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          }).present();
-          break;
-        case 401:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          }).present();
-          break;
-        default:
-          this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          }).present();
-          break;
-      }
-    });
+        loading.dismiss();
+      }, err => {
+        reject();
+        loading.dismiss();
+        switch (err.status) {
+          case 0:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
+              duration: 5000
+            }).present();
+            break;
+          case 401:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unauthorized,
+              duration: 6000
+            }).present();
+            break;
+          default:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
+              duration: 6000
+            }).present();
+            break;
+        }
+      });
+    })
   }
 
-  goTo(page: string) {
-    this.navCtrl.push(page);
+  goToAuth() {
+    this.navCtrl.push('LoginPage', {
+      register: true,
+      afterAuth: () => {
+        this.navCtrl.setRoot('RecipePage', {
+          recipeId: this.recipeId
+        }, { animate: true, direction: 'forward' });
+
+        this.cloneRecipe().then(() => {
+          this.toastCtrl.create({
+            message: "The recipe has been saved to your account",
+            duration: 5000
+          }).present();
+        });
+      }
+    });
   }
 
   prettyDateTime(datetime) {
