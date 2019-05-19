@@ -157,13 +157,17 @@ export class AddRecipeToShoppingListModalPage {
         // Ignore
       }
 
-      this.toastCtrl.create({
-        message: 'Excellent! Now select the list you just created.',
-        duration: 6000
-      }).present();
-
       // Check for new lists
-      this.loadLists();
+      this.loadLists().then(() => {
+        if (this.shoppingLists.length == 1) {
+          this.destinationShoppingList = this.shoppingLists[0];
+        } else {
+          this.toastCtrl.create({
+            message: 'Excellent! Now select the list you just created.',
+            duration: 6000
+          }).present();
+        }
+      });
     });
   }
 
