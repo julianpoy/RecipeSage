@@ -20,6 +20,7 @@ export class AddRecipeToMealPlanModalPage {
 
   mealPlans: any;
 
+  selectedMealPlan: any;
   destinationMealPlan: any;
   meal: string;
 
@@ -201,13 +202,18 @@ export class AddRecipeToMealPlanModalPage {
         // Ignore
       }
 
-      this.toastCtrl.create({
-        message: 'Excellent! Now select the meal plan you just created.',
-        duration: 6000
-      }).present();
-
-      // Check for new lists
-      this.loadMealPlans();
+      // Check for new meal plans
+      this.loadMealPlans().then(() => {
+        if (this.mealPlans.length == 1) {
+          this.selectedMealPlan = this.mealPlans[0];
+          this.loadMealPlan(this.mealPlans[0].id);
+        } else {
+          this.toastCtrl.create({
+            message: 'Excellent! Now select the meal plan you just created.',
+            duration: 6000
+          }).present();
+        }
+      });
     });
   }
 
