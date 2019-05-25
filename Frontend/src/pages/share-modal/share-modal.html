@@ -55,21 +55,23 @@
         </div>
 
         <div *ngSwitchCase="'account'">
-          <ion-item>
-            <ion-label floating>Recipient's account email...</ion-label>
-            <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
-          </ion-item>
+          <div padding-right>
+            <ion-item>
+              <ion-label floating>Recipient's account email...</ion-label>
+              <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
+            </ion-item>
 
-          <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
-            <span *ngIf="recipientName">RecipeSage user found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
-            <span *ngIf="!recipientName">No RecipeSage user found with that email address.</span>
-          </p>
-          <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
-            Enter another user's email address to search <span *ngIf="threads.length > 0">or select a conversation below</span>
-          </p>
-          <p *ngIf="searchingForRecipient" padding-left padding-bottom>
-            Searcing for user...
-          </p>
+            <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
+              <span *ngIf="recipientName">RecipeSage user found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
+              <span *ngIf="!recipientName">No RecipeSage user found with that email address.</span>
+            </p>
+            <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
+              Enter another user's email address to search <span *ngIf="threads.length > 0">or select a conversation below</span>
+            </p>
+            <p *ngIf="searchingForRecipient" padding-left padding-bottom>
+              Searcing for user...
+            </p>
+          </div>
 
           <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
             <ion-list-header style="margin-bottom: 0;" no-lines>
