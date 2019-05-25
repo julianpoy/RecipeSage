@@ -164,7 +164,7 @@ export class ShareModalPage {
     if (this.hasWebShareAPI) {
       (navigator as any).share({
         title: this.recipe.title,
-        text: this.recipe.description || "",
+        text: `${this.recipe.title}:`,
         url: this.recipeURL,
       }).then(() => this.cancel());
     }
