@@ -1,3 +1,22 @@
 page-share-modal {
+  .linkShare {
+    display: flex;
+    align-items: center;
 
+    background: rgb(242, 242, 242);
+    color: black;
+
+    border-radius: 10px;
+    margin: 10px;
+    padding: 15px;
+
+    .link {
+      flex-grow: 1;
+      user-select: all;
+
+      &.webShareEnabled {
+        padding-right: 20px;
+      }
+    }
+  }
 }
