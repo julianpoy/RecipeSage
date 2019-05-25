@@ -275,6 +275,9 @@ router.get(
     SQ.query(fetchQuery, fetchQueryOptions)
   ]).then(([countResult, recipes]) => {
     let totalCount = countResult.length;
+    if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
+      totalCount = parseInt(countResult[0].count, 10);
+    }
 
     res.status(200).json({
       data: recipes,
