@@ -22,6 +22,7 @@ export class ImportLivingcookbookPage {
   ignoreLargeFiles: boolean;
   includeTechniques: boolean = false;
   includeStockRecipes: boolean = false;
+  excludeImages: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -88,7 +89,7 @@ export class ImportLivingcookbookPage {
   submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importLCB(this.imageFile, this.includeStockRecipes, this.includeTechniques).subscribe(response => {
+    this.recipeService.importLCB(this.imageFile, this.includeStockRecipes, this.includeTechniques, this.excludeImages).subscribe(response => {
       this.loading.dismiss();
       this.loading = null;
 
