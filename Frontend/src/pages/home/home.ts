@@ -110,6 +110,7 @@ export class HomePage {
 
   loadViewOptions() {
     var defaults = {
+      enableLabelIntersection: false,
       showLabels: true,
       showLabelChips: false,
       showImages: true,
@@ -118,6 +119,7 @@ export class HomePage {
       selectedLabels: [],
     }
 
+    this.viewOptions.enableLabelIntersection = JSON.parse(localStorage.getItem('enableLabelIntersection'));
     this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
     this.viewOptions.showLabelChips = JSON.parse(localStorage.getItem('showLabelChips'));
     this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
@@ -202,6 +204,7 @@ export class HomePage {
         sortBy: this.viewOptions.sortBy,
         offset,
         count: numToFetch,
+        labelIntersection: this.viewOptions.enableLabelIntersection,
         ...(this.viewOptions.selectedLabels.length > 0 ? { labels: this.viewOptions.selectedLabels } : {})
       }).subscribe(response => {
 

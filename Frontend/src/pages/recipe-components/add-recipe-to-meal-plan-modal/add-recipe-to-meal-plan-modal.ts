@@ -20,6 +20,7 @@ export class AddRecipeToMealPlanModalPage {
 
   mealPlans: any;
 
+  selectedMealPlan: any;
   destinationMealPlan: any;
   meal: string;
 
@@ -57,10 +58,25 @@ export class AddRecipeToMealPlanModalPage {
     });
   }
 
+  selectLastUsedMealPlan() {
+    let lastUsedMealPlanId = localStorage.getItem('lastUsedMealPlanId');
+    let matchingPlans = this.mealPlans.filter(mealPlan => mealPlan.id === lastUsedMealPlanId);
+    if (matchingPlans.length > 0 || this.mealPlans.length === 1) {
+      this.selectedMealPlan = this.mealPlans[0];
+      this.loadMealPlan(this.selectedMealPlan.id);
+    }
+  }
+
+  saveLastUsedMealPlan() {
+    localStorage.setItem('lastUsedMealPlanId', this.selectedMealPlan.id);
+  }
+
   loadMealPlans() {
     return new Promise((resolve, reject) => {
       this.mealPlanService.fetch().subscribe(response => {
         this.mealPlans = response;
+
+        this.selectLastUsedMealPlan();
 
         resolve();
       }, err => {
@@ -154,6 +170,8 @@ export class AddRecipeToMealPlanModalPage {
   save() {
     var loading = this.loadingService.start();
 
+    this.saveLastUsedMealPlan();
+
     this.mealPlanService.addItem({
       id: this.destinationMealPlan.id,
       title: this.recipe.title,
@@ -201,13 +219,18 @@ export class AddRecipeToMealPlanModalPage {
         // Ignore
       }
 
-      this.toastCtrl.create({
-        message: 'Excellent! Now select the meal plan you just created.',
-        duration: 6000
-      }).present();
-
-      // Check for new lists
-      this.loadMealPlans();
+      // Check for new meal plans
+      this.loadMealPlans().then(() => {
+        if (this.mealPlans.length == 1) {
+          this.selectedMealPlan = this.mealPlans[0];
+          this.loadMealPlan(this.mealPlans[0].id);
+        } else {
+          this.toastCtrl.create({
+            message: 'Excellent! Now select the meal plan you just created.',
+            duration: 6000
+          }).present();
+        }
+      });
     });
   }
 

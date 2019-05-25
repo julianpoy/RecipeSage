@@ -74,7 +74,9 @@ export class MyApp {
   initUpdateListeners() {
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
-      (<any>window).updateSW();
+      try {
+        (<any>window).updateSW();
+      } catch(e) {}
     });
 
     window['onSWUpdate'] = () => {
@@ -209,7 +211,9 @@ export class MyApp {
   }
 
   initDevBase() {
-    if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
+    if (window.location.href.toLowerCase().indexOf('ngrok.io') > -1) {
+      localStorage.setItem('base', window.location.protocol + '//' + window.location.hostname + '/');
+    } else if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
       localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
     } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
       localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');

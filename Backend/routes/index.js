@@ -569,13 +569,14 @@ router.post(
         metrics.tRecipeDataAssembled = performance.now();
 
         return SQ.transaction(t => {
-          let recipesWithImages = tableMap.t_recipe.map(lcbRecipe => {
-            lcbRecipe.imageFileNames = (lcbImagesByRecipeId[lcbRecipe.recipeid] || [])
-            .sort((a, b) => (a.imageindex || 0) - (b.imageindex || 0))
-            .filter(e => e.filename)
-            .map(e => e.filename);
-            return lcbRecipe;
-          }).filter(e => e.imageFileNames.length > 0);
+          let recipesWithImages = req.query.excludeImages ?
+            [] : tableMap.t_recipe.map(lcbRecipe => {
+              lcbRecipe.imageFileNames = (lcbImagesByRecipeId[lcbRecipe.recipeid] || [])
+              .sort((a, b) => (a.imageindex || 0) - (b.imageindex || 0))
+              .filter(e => e.filename)
+              .map(e => e.filename);
+              return lcbRecipe;
+            }).filter(e => e.imageFileNames.length > 0);
 
           var i, chunkedRecipesWithImages = [], chunk = 50;
           for (i = 0; i < recipesWithImages.length; i += chunk) {
