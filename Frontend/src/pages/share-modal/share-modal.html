@@ -48,8 +48,8 @@
             <div class="link" [ngClass]="{ webShareEnabled: hasWebShareAPI }">
               {{ recipeURL }}
             </div>
-            <button ion-button icon-only clear>
-              <ion-icon name="share" *ngIf="hasWebShareAPI" (click)="webShare()"></ion-icon>
+            <button ion-button icon-only clear *ngIf="hasWebShareAPI" (click)="webShare()">
+              <ion-icon name="share"></ion-icon>
             </button>
           </div>
         </div>
