@@ -31,6 +31,22 @@
   <!--<script src="cordova.js"></script>-->
 
   <script>
+    window.queryParams = {};
+    var queryString = window.location.href.split('?')[1];
+    if (queryString) {
+      var query = queryString.split("&").forEach(el => {
+        var tuple = el.split('=');
+
+        window.queryParams[tuple[0]] = tuple[1];
+      });
+    }
+
+    if (window.queryParams.token) {
+      localStorage.setItem('token', window.queryParams.token);
+    }
+  </script>
+
+  <script>
     window.addEventListener('beforeinstallprompt', (e) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
@@ -124,20 +140,6 @@
     <h1>You don't have javascript enabled.</h1>
     <p>This application requires javascript.</p>
   </noscript>
-
-  <script>
-    var queryString = window.location.href.split('?')[1];
-    if (queryString) {
-      var queryParams = queryString.split("&");
-      for (var i = 0; i < queryParams.length; i++) {
-        if (queryParams[i].indexOf('token') > -1) {
-          var token = queryParams[i].split('=')[1];
-          localStorage.setItem('token', token);
-          break;
-        }
-      }
-    }
-  </script>
 
   <!-- Ionic's root component and where the app will load -->
   <main>
