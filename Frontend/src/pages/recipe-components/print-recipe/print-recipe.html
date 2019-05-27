@@ -1,0 +1,76 @@
+<link href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans" rel="stylesheet" />
+
+<div [ngClass]="printConfig">
+  <ion-item no-lines>
+    <ion-thumbnail *ngIf="recipe.image && printConfig.titleImage" item-start>
+      <img src="{{ recipe.image.location }}">
+    </ion-thumbnail>
+
+    <h2 class="recipeTitle sans" text-wrap>{{ recipe.title }}</h2>
+
+    <ion-grid class="meta" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield">
+      <ion-row>
+        <ion-col *ngIf="recipe.source" col-auto>
+          <p text-wrap>
+            <b class="sans">Source:</b>
+            <span>{{ recipe.source }}</span>
+          </p>
+        </ion-col>
+        <ion-col *ngIf="recipe.activeTime" col-auto>
+          <p text-wrap><b class="sans">Active Time: </b>{{ recipe.activeTime }}</p>
+        </ion-col>
+        <ion-col *ngIf="recipe.totalTime" col-auto>
+          <p text-wrap><b class="sans">Total Time: </b>{{ recipe.totalTime }}</p>
+        </ion-col>
+        <ion-col *ngIf="recipe.yield" col-auto>
+          <p text-wrap><b class="sans">Yield: </b>{{ recipe.yield }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <p text-wrap>{{ recipe.description }}</p>
+    <p text-wrap><i>{{ selectedLabels.join(", ") }}</i></p>
+  </ion-item>
+
+  <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source)" />
+
+  <ion-grid class="ingredientsInstructionsGrid" no-padding>
+    <ion-row align-items-start>
+      <ion-col class="ingredientsCol sans" *ngIf="ingredients && ingredients.length > 0" col-12>
+        <ion-item class="ingredients" text-wrap no-lines>
+          <p *ngFor="let ingredient of ingredients"
+            [innerHTML]="ingredient.content"
+            class="ingredient"></p>
+        </ion-item>
+      </ion-col>
+      <ion-col class="instructionsCol" *ngIf="instructions && instructions.length > 0" col-12 col-sm-auto>
+        <ion-item class="instructions" text-wrap no-lines>
+          <p *ngFor="let instruction of instructions" class="instruction" text-wrap>
+            <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
+            <span *ngIf="!instruction.isHeader">
+              <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
+            </span>
+          </p>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="recipe.notes" padding-left>
+    <p class="sans">
+      <b>Notes:</b>
+    </p>
+    <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+  </div>
+
+  <div *ngIf="recipe.url" padding-left>
+    <p class="sans">
+      <b>Source URL:</b> <span class="pre">{{ recipe.url }}</span>
+    </p>
+  </div>
+
+  <div padding-left>
+    <p>
+      <i>Printed on {{ printedOn }}</i>
+    </p>
+  </div>
+</div>

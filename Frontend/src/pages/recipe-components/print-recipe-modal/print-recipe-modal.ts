@@ -18,8 +18,7 @@ export class PrintRecipeModalPage {
 
   selectedTemplate: any = -1;
   templates: any = [{
-    name: 'default',
-    modifiers: '',
+    modifiers: [['titleImage', true]],
     description: 'Standard',
     orientation: 'portrait'
   },
@@ -30,8 +29,7 @@ export class PrintRecipeModalPage {
   //   orientation: 'landscape'
   // },
   {
-    name: 'default',
-    modifiers: 'noimage',
+    modifiers: [],
     description: 'Standard No Image',
     orientation: 'portrait'
   },
@@ -49,13 +47,12 @@ export class PrintRecipeModalPage {
   // },
   {
     name: 'halfsheet',
-    modifiers: 'noimage,columns',
+    modifiers: [['halfsheet', true]],
     description: 'Half Sheet, Columns',
     orientation: 'landscape'
   },
   {
-    name: 'compact',
-    modifiers: '',
+    modifiers: [['halfsheet', true], ['verticalInstrIng', true]],
     description: 'Half Sheet, Compact, No Columns',
     orientation: 'landscape'
   }];
@@ -71,10 +68,11 @@ export class PrintRecipeModalPage {
     public recipeService: RecipeServiceProvider) {
     this.recipe = navParams.get('recipe');
 
-    this.base = localStorage.getItem('base') || '/api/';
+    this.base = window.location.origin;
 
     for (var i = 0; i < this.templates.length; i++) {
-      var url = this.base + 'print' + this.utilService.getTokenQuery() + '&recipeId=' + this.recipe.id + '&template=' + this.templates[i].name + '&modifiers=' + this.templates[i].modifiers;
+      let modifierQuery = this.templates[i].modifiers.map(e => e.join('=')).join('&');
+      var url = `${this.base}/#/recipe/${this.recipe.id}/print?${modifierQuery}`;
       this.templates[i].url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
   }
