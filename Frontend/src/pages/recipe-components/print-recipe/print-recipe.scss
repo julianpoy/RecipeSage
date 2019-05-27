@@ -1,6 +1,15 @@
 page-print-recipe {
   font-family: 'Noto+Serif', serif;
 
+  .halfsheet {
+    max-width: 50%;
+  }
+
+  * {
+    color: black !important;
+    font-size: 12px;
+  }
+
   .sans {
     font-family: 'Noto+Sans', sans-serif;
   }
@@ -10,23 +19,21 @@ page-print-recipe {
   }
 
   h2.recipeTitle {
+    font-size: 20px;
+    margin-bottom: 10px;
     margin-top: 0 !important;
+    font-weight: bold;
   }
 
   .ingredientsInstructionsGrid {
-    padding-left: 0;
+    .ingredientsCol {
+      max-width: 215px;
+    }
 
-    @media (min-width: 576px) {
-      .ingredientsCol {
-        max-width: 215px;
-      }
-
-      .instructionsCol[col-sm-auto] {
-        flex: 0 0;
-        flex-grow: 1;
-        max-width: 700px;
-        width: auto;
-      }
+    .instructionsCol[col-sm-auto] {
+      flex: 0 0;
+      flex-grow: 1;
+      width: auto;
     }
 
     ion-col {
@@ -34,13 +41,16 @@ page-print-recipe {
     }
   }
 
+  .verticalInstrIng .ingredientsInstructionsGrid {
+    .ingredientsCol {
+      max-width: initial;
+      margin-left: 40px;
+    }
+  }
+
   .ingredients {
     ion-label {
       margin: 0;
-    }
-
-    .scale {
-      cursor: pointer;
     }
 
     ion-label {
@@ -52,11 +62,9 @@ page-print-recipe {
     }
 
     .ingredient {
-      color: #3f3f3f;
-
       .sectionHeader {
         display: block;
-        margin: 4px 0;
+        margin: 5px 0;
       }
 
       &:first-child {
@@ -64,21 +72,13 @@ page-print-recipe {
           margin-top: 0;
         }
       }
-
-      &.complete {
-        text-decoration: line-through;
-        opacity: 0.7;
-      }
-
-      &.ingredientContent {
-        cursor: pointer;
-      }
     }
   }
 
   .instructions {
     ion-label {
       margin-top: 0;
+      margin-bottom: 0;
     }
 
     h2 {
@@ -86,24 +86,15 @@ page-print-recipe {
     }
 
     .instruction {
-      margin-bottom: 15px;
-      color: #3f3f3f;
-
-      .instructionContent {
-        cursor: pointer;
-      }
-
-      span.complete .instructionContent {
-        text-decoration: line-through;
-        opacity: 0.7;
-      }
+      margin-bottom: 8px;
     }
   }
 
   .meta {
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 0;
   }
 }
