@@ -3,13 +3,12 @@ var User = require('../models').User;
 
 exports.validateSession = function(types, optional) {
   return function(req, res, next) {
+    if (!req.query.token && optional) return next();
+
     SessionService.validateSession(req.query.token, types).then(session => {
       res.locals.session = session;
       next();
-    }).catch(e => {
-      if (optional) return next();
-      next(e);
-    });
+    }).catch(next);
   }
 };
 
