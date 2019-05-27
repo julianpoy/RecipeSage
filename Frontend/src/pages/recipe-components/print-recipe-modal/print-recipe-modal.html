@@ -16,11 +16,13 @@
 
 <ion-content padding>
   <div class="templates">
-    <div class="template" [ngClass]="{ selected: selectedTemplate === i, landscape: template.orientation === 'landscape' }" *ngFor="let template of templates; let i = index" (click)="selectedTemplate = i">
-      <iframe id="{{ selectedTemplate === i ? 'selectedTemplateFrame' : '' }}" scrolling="no" [src]="template.url"></iframe>
-      <div class="overlay"></div>
-      <div class="description">{{ template.description }}</div>
-    </div>
+    <recipe-preview
+      [selected]="selectedTemplate === i"
+      [landscape]="template.orientation === 'landscape'"
+      [url]="template.url"
+      [description]="template.description"
+      *ngFor="let template of templates; let i = index" (click)="selectedTemplate = i"
+      (click)="selectedTemplate = i"></recipe-preview>
   </div>
 </ion-content>
 
