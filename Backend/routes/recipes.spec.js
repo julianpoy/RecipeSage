@@ -372,7 +372,7 @@ describe('recipes', () => {
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id)
           expect(body.title).to.equal(recipe.title)
-          expect(body.labels).to.equal([])
+          expect(body.labels).to.be.an('array').that.is.empty
           expect(body.labels.length).to.equal(0)
           expect(body.isOwner).to.equal(false)
         });
@@ -396,10 +396,9 @@ describe('recipes', () => {
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id)
           expect(body.title).to.equal(recipe.title)
-          expect(body.labels).to.equal([])
+          expect(body.labels).to.be.an('array').that.is.empty
           expect(body.labels.length).to.equal(0)
           expect(body.isOwner).to.equal(false)
-          expect(body.labels).to.equal([])
         });
     });
 
