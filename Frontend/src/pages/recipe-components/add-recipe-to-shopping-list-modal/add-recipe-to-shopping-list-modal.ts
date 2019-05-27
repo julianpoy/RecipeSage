@@ -52,10 +52,24 @@ export class AddRecipeToShoppingListModalPage {
     });
   }
 
+  selectLastUsedShoppingList() {
+    let lastUsedShoppingListId = localStorage.getItem('lastUsedShoppingListId');
+    let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingListId);
+    if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
+      this.destinationShoppingList = this.shoppingLists[0];
+    }
+  }
+
+  saveLastUsedShoppingList() {
+    localStorage.setItem('lastUsedShoppingListId', this.destinationShoppingList.id);
+  }
+
   loadLists() {
     return new Promise((resolve, reject) => {
       this.shoppingListService.fetch().subscribe(response => {
         this.shoppingLists = response;
+
+        this.selectLastUsedShoppingList();
 
         resolve();
       }, err => {
@@ -92,6 +106,8 @@ export class AddRecipeToShoppingListModalPage {
 
   save() {
     var loading = this.loadingService.start();
+
+    this.saveLastUsedShoppingList();
 
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
@@ -141,13 +157,17 @@ export class AddRecipeToShoppingListModalPage {
         // Ignore
       }
 
-      this.toastCtrl.create({
-        message: 'Excellent! Now select the list you just created.',
-        duration: 6000
-      }).present();
-
       // Check for new lists
-      this.loadLists();
+      this.loadLists().then(() => {
+        if (this.shoppingLists.length == 1) {
+          this.destinationShoppingList = this.shoppingLists[0];
+        } else {
+          this.toastCtrl.create({
+            message: 'Excellent! Now select the list you just created.',
+            duration: 6000
+          }).present();
+        }
+      });
     });
   }
 

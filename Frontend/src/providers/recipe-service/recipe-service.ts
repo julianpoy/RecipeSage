@@ -92,11 +92,12 @@ export class RecipeServiceProvider {
     };
 
     var url = this.base + 'recipes/by-page' + this.getTokenQuery();
-    if (options.folder) url += '&folder=' + options.folder;
-    if (options.sortBy) url += '&sort=' + options.sortBy;
-    if (options.offset) url += '&offset=' + options.offset;
-    if (options.count)  url += '&count=' + options.count;
+    if (options.folder)                              url += '&folder=' + options.folder;
+    if (options.sortBy)                              url += '&sort=' + options.sortBy;
+    if (options.offset)                              url += '&offset=' + options.offset;
+    if (options.count)                               url += '&count=' + options.count;
     if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options.labelIntersection)                   url += '&labelIntersection=true';
 
     return this.http
     .get<Recipe[]>(url, httpOptions)
@@ -318,7 +319,7 @@ export class RecipeServiceProvider {
     );
   }
 
-  importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean) {
+  importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean, excludeImages?: boolean) {
     let formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name)
 
@@ -327,7 +328,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}`, formData, httpOptions)
+          .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {

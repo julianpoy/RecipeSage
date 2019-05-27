@@ -31,6 +31,7 @@ export class HomePopoverPage {
   }
 
   saveViewOptions(refreshSearch?: boolean) {
+    localStorage.setItem('enableLabelIntersection', this.viewOptions.enableLabelIntersection);
     localStorage.setItem('showLabels', this.viewOptions.showLabels);
     localStorage.setItem('showLabelChips', this.viewOptions.showLabelChips);
     localStorage.setItem('showImages', this.viewOptions.showImages);
