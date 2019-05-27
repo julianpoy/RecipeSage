@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 
 import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UtilServiceProvider } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   priority: 'low'
@@ -66,19 +67,16 @@ export class PrintRecipeModalPage {
     public navParams: NavParams,
     public viewCtrl: ViewController,
     public sanitizer: DomSanitizer,
+    public utilService: UtilServiceProvider,
     public recipeService: RecipeServiceProvider) {
     this.recipe = navParams.get('recipe');
 
     this.base = localStorage.getItem('base') || '/api/';
 
     for (var i = 0; i < this.templates.length; i++) {
-      var url = this.base + 'print' + this.getTokenQuery() + '&recipeId=' + this.recipe.id + '&template=' + this.templates[i].name + '&modifiers=' + this.templates[i].modifiers;
+      var url = this.base + 'print' + this.utilService.getTokenQuery() + '&recipeId=' + this.recipe.id + '&template=' + this.templates[i].name + '&modifiers=' + this.templates[i].modifiers;
       this.templates[i].url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
-  }
-
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
   }
 
   ionViewDidLoad() {}

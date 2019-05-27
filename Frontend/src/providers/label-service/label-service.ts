@@ -4,6 +4,7 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
 import { Events } from 'ionic-angular';
+import { UtilServiceProvider } from '../util-service/util-service';
 
 export interface Label {
   id: string;
@@ -15,12 +16,8 @@ export class LabelServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient, public events: Events) {
+  constructor(public http: HttpClient, public events: Events, public utilService: UtilServiceProvider) {
     this.base = localStorage.getItem('base') || '/api/';
-  }
-
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
   }
 
   fetch(populate?: boolean) {
@@ -33,7 +30,7 @@ export class LabelServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'labels/' + this.getTokenQuery() + populateQuery, httpOptions)
+    .get(this.base + 'labels/' + this.utilService.getTokenQuery() + populateQuery, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -57,7 +54,7 @@ export class LabelServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'labels/' + this.getTokenQuery(), data, httpOptions)
+          .post(this.base + 'labels/' + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -79,7 +76,7 @@ export class LabelServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + 'labels/' + this.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
+          .delete(this.base + 'labels/' + this.utilService.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)

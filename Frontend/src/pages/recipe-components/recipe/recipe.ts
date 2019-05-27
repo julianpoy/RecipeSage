@@ -133,7 +133,7 @@ export class RecipePage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            this.goToAuth();
             break;
           case 404:
             let errorToast = this.toastCtrl.create({
@@ -530,21 +530,27 @@ export class RecipePage {
     })
   }
 
-  goToAuth() {
+  goToAuth(cb?: Function) {
     this.navCtrl.push('LoginPage', {
-      register: true,
+      register: !this.isLoggedIn,
       afterAuth: () => {
         this.navCtrl.setRoot('RecipePage', {
           recipeId: this.recipeId
         }, { animate: true, direction: 'forward' });
 
-        this.cloneRecipe().then(() => {
-          this.toastCtrl.create({
-            message: "The recipe has been saved to your account",
-            duration: 5000
-          }).present();
-        });
+        if (cb) cb();
       }
+    });
+  }
+
+  authAndClone() {
+    this.goToAuth(() => {
+      this.cloneRecipe().then(() => {
+        this.toastCtrl.create({
+          message: "The recipe has been saved to your account",
+          duration: 5000
+        }).present();
+      });
     });
   }
 
