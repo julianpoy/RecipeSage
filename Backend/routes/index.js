@@ -11,6 +11,8 @@ let sqlite3 = require('sqlite3');
 const performance = require('perf_hooks').performance;
 let path = require('path');
 
+let appConfig = require('../config/config');
+
 // DB
 var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
@@ -929,5 +931,9 @@ router.post(
     });
   }
 )
+
+router.get('/embed/recipe/:recipeId', (req, res, next) => {
+  res.redirect(302, `${appConfig.frontendBaseURL}#/recipe/${req.params.recipeId}/print${req._parsedUrl.search}`);
+});
 
 module.exports = router;
