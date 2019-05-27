@@ -7,6 +7,7 @@ import { SelectCollaboratorsComponent } from './select-collaborators/select-coll
 import { SelectMealComponent } from './select-meal/select-meal';
 import { MealCalendarComponent } from './meal-calendar/meal-calendar';
 import { LogoIconComponent } from './logo-icon/logo-icon';
+import { RecipePreviewComponent } from './recipe-preview/recipe-preview';
 import { PipesModule } from '../pipes/pipes.module';
 @NgModule({
 	declarations: [
@@ -15,7 +16,8 @@ import { PipesModule } from '../pipes/pipes.module';
     SelectCollaboratorsComponent,
     SelectMealComponent,
     MealCalendarComponent,
-    LogoIconComponent
+    LogoIconComponent,
+    RecipePreviewComponent
   ],
 	imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { PipesModule } from '../pipes/pipes.module';
     SelectCollaboratorsComponent,
     SelectMealComponent,
     MealCalendarComponent,
-    LogoIconComponent
+    LogoIconComponent,
+    RecipePreviewComponent
   ]
 })
 export class ComponentsModule {}
