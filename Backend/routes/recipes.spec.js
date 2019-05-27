@@ -361,6 +361,10 @@ describe('recipes', () => {
 
       let recipe = await createRecipe(user2.id);
 
+      let label = await createLabel(user2.id);
+
+      await associateLabel(label.id, recipe.id);
+
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .query({ token: session.token })
@@ -368,9 +372,9 @@ describe('recipes', () => {
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id)
           expect(body.title).to.equal(recipe.title)
-          expect(body.labels.length).to.equal(1)
-          expect(body.isOwner).to.equal(false)
           expect(body.labels).to.equal([])
+          expect(body.labels.length).to.equal(0)
+          expect(body.isOwner).to.equal(false)
         });
     });
 
@@ -382,13 +386,18 @@ describe('recipes', () => {
 
       let recipe = await createRecipe(user2.id);
 
+      let label = await createLabel(user2.id);
+
+      await associateLabel(label.id, recipe.id);
+
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .expect(200)
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id)
           expect(body.title).to.equal(recipe.title)
-          expect(body.labels.length).to.equal(1)
+          expect(body.labels).to.equal([])
+          expect(body.labels.length).to.equal(0)
           expect(body.isOwner).to.equal(false)
           expect(body.labels).to.equal([])
         });
