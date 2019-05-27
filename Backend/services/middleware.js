@@ -3,7 +3,15 @@ var User = require('../models').User;
 
 exports.validateSession = function(types, optional) {
   return function(req, res, next) {
-    if (!req.query.token && optional) return next();
+    if (!req.query.token) {
+      // Permit no token if optional
+      if (optional) return next();
+
+      // Throw unauthorized without pinging DB
+      let e = new Error('Session is not valid!');
+      e.status = 401;
+      return next(e)
+    }
 
     SessionService.validateSession(req.query.token, types).then(session => {
       res.locals.session = session;
