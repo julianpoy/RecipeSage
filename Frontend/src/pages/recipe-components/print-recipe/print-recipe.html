@@ -35,15 +35,14 @@
 
   <ion-grid class="ingredientsInstructionsGrid" no-padding>
     <ion-row align-items-start>
-      <ion-col class="ingredientsCol sans" col-12>
+      <ion-col class="ingredientsCol sans" *ngIf="ingredients && ingredients.length > 0" col-12>
         <ion-item class="ingredients" text-wrap no-lines>
           <p *ngFor="let ingredient of ingredients"
             [innerHTML]="ingredient.content"
             class="ingredient"></p>
-          <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
         </ion-item>
       </ion-col>
-      <ion-col class="instructionsCol" col-12 col-sm-auto>
+      <ion-col class="instructionsCol" *ngIf="instructions && instructions.length > 0" col-12 col-sm-auto>
         <ion-item class="instructions" text-wrap no-lines>
           <p *ngFor="let instruction of instructions" class="instruction" text-wrap>
             <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
@@ -51,7 +50,6 @@
               <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
             </span>
           </p>
-          <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
         </ion-item>
       </ion-col>
     </ion-row>
