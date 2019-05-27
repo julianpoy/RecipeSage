@@ -187,13 +187,15 @@ router.get(
   if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
-    `SELECT count("Recipe".id)
+    `SELECT "Recipe".id
     FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
     WHERE "Recipe_Label"."labelId" = "Label".id
     AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
     AND "Recipe".id = "Recipe_Label"."recipeId"
     AND "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder`
+    AND "Recipe"."folder" = $folder
+    GROUP BY "Recipe".id
+    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}`
     :
     `SELECT count("Recipe".id)
     FROM "Recipes" AS "Recipe"
@@ -209,6 +211,7 @@ router.get(
     AND "Recipe"."userId" = $userId
     AND "Recipe"."folder" = $folder
     GROUP BY "Recipe".id
+    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}
     ORDER BY ${sort}
     LIMIT $limit
     OFFSET $offset) AS pag
@@ -271,7 +274,10 @@ router.get(
     SQ.query(countQuery, countQueryOptions),
     SQ.query(fetchQuery, fetchQueryOptions)
   ]).then(([countResult, recipes]) => {
-    let totalCount = parseInt(countResult[0].count, 10);
+    let totalCount = countResult.length;
+    if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
+      totalCount = parseInt(countResult[0].count, 10);
+    }
 
     res.status(200).json({
       data: recipes,
@@ -405,12 +411,11 @@ router.get(
 router.get(
   '/:recipeId',
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(['user'], true),
   function(req, res, next) {
 
   Recipe.findOne({
     where: {
-      userId: res.locals.session.userId,
       id: req.params.recipeId
     },
     include: [{
@@ -430,6 +435,15 @@ router.get(
     if (!recipe) {
       res.status(404).send("Recipe with that ID not found!");
     } else {
+      recipe = recipe.toJSON();
+
+      recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
+
+      // There should be no fromUser after recipes have been moved out of the inbox
+      if (recipe.folder !== 'inbox' || !recipe.isOwner) delete recipe.fromUser;
+
+      if (!recipe.isOwner) recipe.labels = [];
+
       res.status(200).json(recipe);
     }
   }).catch(next);

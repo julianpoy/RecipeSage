@@ -27,6 +27,10 @@ export class ShareModalPage {
   threads: any = [];
 
   autofillTimeout: any;
+  shareMethod: string = "account";
+
+  hasWebShareAPI: boolean = !!(navigator as any).share;
+  recipeURL: string = window.location.href;
 
   constructor(
   public navCtrl: NavController,
@@ -154,5 +158,15 @@ export class ShareModalPage {
           break;
       }
     });
+  }
+
+  webShare() {
+    if (this.hasWebShareAPI) {
+      (navigator as any).share({
+        title: this.recipe.title,
+        text: `${this.recipe.title}:`,
+        url: this.recipeURL,
+      }).then(() => this.cancel());
+    }
   }
 }

@@ -14,6 +14,12 @@ export class UtilServiceProvider {
 
   constructor() {}
 
+  getTokenQuery() {
+    let token = localStorage.getItem('token');
+    if (token) return `?token=${token}`;
+    return `?false=false`;
+  }
+
   formatDate(date, options?) {
     options = options || {};
     var aFewMomentsAgoAfter = new Date();

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UtilServiceProvider } from '../util-service/util-service';
 
 /*
   Generated class for the WebsocketServiceProvider provider.
@@ -15,7 +16,7 @@ export class WebsocketServiceProvider {
 
   listeners: any = {};
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public utilService: UtilServiceProvider) {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
@@ -25,10 +26,6 @@ export class WebsocketServiceProvider {
         this.connection.close();
       } catch(e) {}
     };
-  }
-
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
   }
 
   isConnected() {
@@ -56,7 +53,7 @@ export class WebsocketServiceProvider {
     var prot = "ws";
     if ((<any>window.location.href).indexOf('https') > -1) prot = "wss";
 
-    this.connection = new WebSocket(prot + "://" + window.location.hostname + ":7999/grip/ws" + this.getTokenQuery());
+    this.connection = new WebSocket(prot + "://" + window.location.hostname + ":7999/grip/ws" + this.utilService.getTokenQuery());
 
     this.connection.onopen = () => {
       this.handleMessage({
