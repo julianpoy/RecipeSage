@@ -353,7 +353,7 @@ describe('recipes', () => {
         .expect(404);
     });
 
-    it('does not return recipe belonging to another user', async () => {
+    it('returns recipes belonging to another user', async () => {
       let user1 = await createUser();
       let user2 = await createUser();
 
@@ -364,10 +364,37 @@ describe('recipes', () => {
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(404);
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.id).to.equal(recipe.id)
+          expect(body.title).to.equal(recipe.title)
+          expect(body.labels.length).to.equal(1)
+          expect(body.isOwner).to.equal(false)
+          expect(body.labels).to.equal([])
+        });
     });
 
-    it('requires valid session', async () => {
+    it('returns recipe with no token', async () => {
+      let user1 = await createUser();
+      let user2 = await createUser();
+
+      let session = await createSession(user1.id);
+
+      let recipe = await createRecipe(user2.id);
+
+      return request(server)
+        .get(`/recipes/${recipe.id}`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.id).to.equal(recipe.id)
+          expect(body.title).to.equal(recipe.title)
+          expect(body.labels.length).to.equal(1)
+          expect(body.isOwner).to.equal(false)
+          expect(body.labels).to.equal([])
+        });
+    });
+
+    it('denies invalid session', async () => {
       let user = await createUser();
 
       let session = await createSession(user.id);
