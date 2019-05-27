@@ -5,6 +5,10 @@ page-print-recipe {
     max-width: 50%;
   }
 
+  .loading {
+    visibility: hidden;
+  }
+
   * {
     color: black !important;
     font-size: 12px;

@@ -28,6 +28,7 @@ export class PrintRecipePage {
   printedOn: string = (new Date).toDateString();
 
   printConfig = {
+    loading: true,
     halfsheet: !!(window as any).queryParams['halfsheet'],
     verticalInstrIng: !!(window as any).queryParams['verticalInstrIng'],
     titleImage: !!(window as any).queryParams['titleImage']
@@ -47,19 +48,31 @@ export class PrintRecipePage {
     this.recipe = <Recipe>{};
 
     this.applyScale();
+
+    window.addEventListener('message', function (e) {
+      if (e.data == 'print') window.print();
+    });
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    this.printConfig.loading = true;
 
     this.recipe = <Recipe>{};
 
-    this.loadRecipe()
-    .then(() => {
-      loading.dismiss();
+    this.loadRecipe().then(() => {
+      this.afterLoad();
     }, () => {
-      loading.dismiss();
+      this.afterLoad();
     });
+  }
+
+  afterLoad() {
+    this.printConfig.loading = false;
+
+    if (!!(window as any).queryParams['print']) {
+      window.print();
+      window.onafterprint = window.close;
+    }
   }
 
   loadRecipe() {
