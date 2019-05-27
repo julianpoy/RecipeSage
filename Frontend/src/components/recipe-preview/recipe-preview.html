@@ -1,7 +1,7 @@
 <div class="template"
   [ngClass]="{ selected: selected, landscape: landscape }"
   (click)="onClick($event)">
-  <iframe id="{{ selected ? 'selectedTemplateFrame' : '' }}" scrolling="no" [src]="url"></iframe>
+  <iframe id="{{ selected ? 'selectedTemplateFrame' : '' }}" class="template-frame" scrolling="no" [src]="url"></iframe>
   <div class="overlay"></div>
   <div class="description">{{ description }}</div>
 </div>
