@@ -1,6 +1,7 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans" rel="stylesheet" />
 
 <div [ngClass]="printConfig">
+  <ion-icon class="print-button" name="print" *ngIf="printConfig.showPrintButton" (click)="print();"></ion-icon>
   <ion-item no-lines>
     <ion-thumbnail *ngIf="recipe.image && printConfig.titleImage" item-start>
       <img src="{{ recipe.image.location }}">
@@ -10,7 +11,7 @@
 
     <ion-grid class="meta" *ngIf="recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield">
       <ion-row>
-        <ion-col *ngIf="recipe.source" col-auto>
+        <ion-col *ngIf="recipe.source && !printConfig.hideSource" col-auto>
           <p text-wrap>
             <b class="sans">Source:</b>
             <span>{{ recipe.source }}</span>
@@ -55,20 +56,20 @@
     </ion-row>
   </ion-grid>
 
-  <div *ngIf="recipe.notes" padding-left>
+  <div *ngIf="recipe.notes && !printConfig.hideNotes" padding-left>
     <p class="sans">
       <b>Notes:</b>
     </p>
     <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
   </div>
 
-  <div *ngIf="recipe.url" padding-left>
+  <div *ngIf="recipe.url && !printConfig.hideSourceURL" padding-left>
     <p class="sans">
       <b>Source URL:</b> <span class="pre">{{ recipe.url }}</span>
     </p>
   </div>
 
-  <div padding-left>
+  <div *ngIf="printConfig.forPrinting" padding-left>
     <p>
       <i>Printed on {{ printedOn }}</i>
     </p>

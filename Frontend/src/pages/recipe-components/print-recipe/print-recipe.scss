@@ -1,6 +1,15 @@
 page-print-recipe {
   font-family: 'Noto+Serif', serif;
 
+  .print-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: black;
+    z-index: 1;
+    font-size: 20px;
+  }
+
   .halfsheet {
     max-width: 50%;
   }

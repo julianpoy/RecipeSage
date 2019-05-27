@@ -4,7 +4,12 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export interface RecipeTemplateModifiers {
   halfsheet?: boolean,
   verticalInstrIng?: boolean,
-  titleImage?: boolean
+  titleImage?: boolean,
+  hideNotes?: boolean,
+  hideSource?: boolean,
+  hideSourceURL?: boolean,
+  forPrinting?: boolean,
+  showPrintButton?: boolean
 }
 
 @Injectable()

@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, ToastController, 
 
 import { RecipeServiceProvider, Recipe, Instruction, Ingredient } from '../../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../../providers/loading-service/loading-service';
-import { UtilServiceProvider } from '../../../providers/util-service/util-service';
+import { UtilServiceProvider, RecipeTemplateModifiers } from '../../../providers/util-service/util-service';
 
 @IonicPage({
   segment: 'recipe/:recipeId/print',
@@ -27,11 +27,16 @@ export class PrintRecipePage {
 
   printedOn: string = (new Date).toDateString();
 
-  printConfig = {
+  printConfig: RecipeTemplateModifiers & { loading?: boolean } = {
     loading: true,
     halfsheet: !!(window as any).queryParams['halfsheet'],
     verticalInstrIng: !!(window as any).queryParams['verticalInstrIng'],
-    titleImage: !!(window as any).queryParams['titleImage']
+    titleImage: !!(window as any).queryParams['titleImage'],
+    hideNotes: !!(window as any).queryParams['hideNotes'],
+    hideSource: !!(window as any).queryParams['hideSource'],
+    hideSourceURL: !!(window as any).queryParams['hideSourceURL'],
+    forPrinting: !!(window as any).queryParams['forPrinting'],
+    showPrintButton: !!(window as any).queryParams['showPrintButton']
   };
 
   constructor(
@@ -50,7 +55,7 @@ export class PrintRecipePage {
     this.applyScale();
 
     window.addEventListener('message', function (e) {
-      if (e.data == 'print') window.print();
+      if (e.data == 'print') this.print();
     });
   }
 
@@ -70,9 +75,13 @@ export class PrintRecipePage {
     this.printConfig.loading = false;
 
     if (!!(window as any).queryParams['print']) {
-      window.print();
-      window.onafterprint = window.close;
+      this.print(true);
     }
+  }
+
+  print(closeAfterPrint?: boolean) {
+    window.print();
+    if (closeAfterPrint) window.onafterprint = window.close;
   }
 
   loadRecipe() {
