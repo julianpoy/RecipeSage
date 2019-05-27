@@ -11,9 +11,7 @@ export class ShoppingListServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient, public events: Events, public utilService: UtilServiceProvider) {
-    this.base = localStorage.getItem('base') || '/api/';
-  }
+  constructor(public http: HttpClient, public events: Events, public utilService: UtilServiceProvider) {}
 
   fetch() {
     const httpOptions = {
@@ -22,7 +20,7 @@ export class ShoppingListServiceProvider {
       })
     };
 
-    var url = this.base + 'shoppingLists/' + this.utilService.getTokenQuery();
+    var url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();
 
     return this.http
       .get<any[]>(url, httpOptions)
@@ -40,7 +38,7 @@ export class ShoppingListServiceProvider {
     };
 
     return this.http
-      .get<any>(this.base + 'shoppingLists/' + listId + this.utilService.getTokenQuery(), httpOptions)
+      .get<any>(this.utilService.getBase() + 'shoppingLists/' + listId + this.utilService.getTokenQuery(), httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -57,7 +55,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'shoppingLists/' + this.utilService.getTokenQuery(), data, httpOptions)
+          .post(this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -84,7 +82,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
+          .post(this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -102,7 +100,7 @@ export class ShoppingListServiceProvider {
     };
 
     return this.http
-      .put(this.base + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
+      .put(this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -121,7 +119,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + `shoppingLists/${data.id}/items${this.utilService.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`, httpOptions)
+          .delete(this.utilService.getBase() + `shoppingLists/${data.id}/items${this.utilService.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`, httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)
@@ -142,7 +140,7 @@ export class ShoppingListServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), httpOptions)
+          .delete(this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)

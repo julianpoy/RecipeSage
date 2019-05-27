@@ -10,9 +10,7 @@ export class UserServiceProvider {
 
   base: String;
 
-  constructor(public http: HttpClient, public utilService: UtilServiceProvider) {
-    this.base = localStorage.getItem('base') || '/api/';
-  }
+  constructor(public http: HttpClient, public utilService: UtilServiceProvider) {}
 
   register(data) {
     const httpOptions = {
@@ -22,7 +20,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .post(this.base + 'users/register', data, httpOptions)
+    .post(this.utilService.getBase() + 'users/register', data, httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -36,7 +34,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .post(this.base + 'users/login', data, httpOptions)
+    .post(this.utilService.getBase() + 'users/login', data, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -51,7 +49,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-      .post(this.base + 'users/logout' + this.utilService.getTokenQuery(), {}, httpOptions)
+      .post(this.utilService.getBase() + 'users/logout' + this.utilService.getTokenQuery(), {}, httpOptions)
       .pipe(
         retry(3),
         catchError(this.handleError)
@@ -66,7 +64,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-      .post(this.base + 'users/forgot', data, httpOptions)
+      .post(this.utilService.getBase() + 'users/forgot', data, httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -81,7 +79,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .put(this.base + 'users/' + this.utilService.getTokenQuery(), data, httpOptions)
+    .put(this.utilService.getBase() + 'users/' + this.utilService.getTokenQuery(), data, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -102,7 +100,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .post(this.base + 'users/fcm/token' + this.utilService.getTokenQuery(), data, httpOptions)
+    .post(this.utilService.getBase() + 'users/fcm/token' + this.utilService.getTokenQuery(), data, httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -118,7 +116,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .delete(this.base + 'users/fcm/token' + this.utilService.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key), httpOptions)
+    .delete(this.utilService.getBase() + 'users/fcm/token' + this.utilService.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key), httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -132,7 +130,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'users/by-email' + this.utilService.getTokenQuery() + '&email=' + encodeURIComponent(email), httpOptions)
+    .get(this.utilService.getBase() + 'users/by-email' + this.utilService.getTokenQuery() + '&email=' + encodeURIComponent(email), httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -146,7 +144,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'users/' + this.utilService.getTokenQuery(), httpOptions)
+    .get(this.utilService.getBase() + 'users/' + this.utilService.getTokenQuery(), httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -160,7 +158,7 @@ export class UserServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'info/' + this.utilService.getTokenQuery() + '&version=' + encodeURIComponent(params.version), httpOptions)
+    .get(this.utilService.getBase() + 'info/' + this.utilService.getTokenQuery() + '&version=' + encodeURIComponent(params.version), httpOptions)
     .pipe(
       catchError(this.handleError)
     );

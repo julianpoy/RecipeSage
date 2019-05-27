@@ -56,12 +56,10 @@ export class RecipeServiceProvider {
     public http: HttpClient,
     public alertCtrl: AlertController,
     public events: Events,
-    public utilService: UtilServiceProvider) {
-    this.base = localStorage.getItem('base') || '/api/';
-  }
+    public utilService: UtilServiceProvider) {}
 
   getExportURL(format) {
-    return this.base + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
+    return this.utilService.getBase() + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
   }
 
   count(options) {
@@ -71,7 +69,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/count' + this.utilService.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
 
     return this.http
@@ -89,7 +87,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/by-page' + this.utilService.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
     if (options.folder)                              url += '&folder=' + options.folder;
     if (options.sortBy)                              url += '&sort=' + options.sortBy;
     if (options.offset)                              url += '&offset=' + options.offset;
@@ -112,7 +110,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/search' + this.utilService.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
     if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
@@ -132,7 +130,7 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .get<Recipe>(this.base + 'recipes/' + recipeId + this.utilService.getTokenQuery(), httpOptions)
+    .get<Recipe>(this.utilService.getBase() + 'recipes/' + recipeId + this.utilService.getTokenQuery(), httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -157,7 +155,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/' + this.utilService.getTokenQuery(), formData, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery(), formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -183,7 +181,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/' + this.utilService.getTokenQuery(), data, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery(), data, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -212,7 +210,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .put(this.base + 'recipes/' + data.id + this.utilService.getTokenQuery(), formData, httpOptions)
+        .put(this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery(), formData, httpOptions)
         .pipe(
           retry(1),
           catchError(this.handleError)
@@ -235,7 +233,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/delete-bulk' + this.utilService.getTokenQuery(), { recipeIds: recipes }, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/delete-bulk' + this.utilService.getTokenQuery(), { recipeIds: recipes }, httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -258,7 +256,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .delete(this.base + 'recipes/' + data.id + this.utilService.getTokenQuery(), httpOptions)
+        .delete(this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery(), httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -281,7 +279,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .delete(this.base + 'recipes/all' + this.utilService.getTokenQuery(), httpOptions)
+        .delete(this.utilService.getBase() + 'recipes/all' + this.utilService.getTokenQuery(), httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -295,7 +293,7 @@ export class RecipeServiceProvider {
   }
 
   print(recipe, template) {
-    window.open(this.base + 'print/' + this.utilService.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
+    window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
   scrapePepperplate(data) {
@@ -306,7 +304,7 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .get(this.base
+    .get(this.utilService.getBase()
       + 'scrape/pepperplate'
       + this.utilService.getTokenQuery()
       + '&username=' + encodeURIComponent(data.username)
@@ -326,7 +324,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(`${this.base}import/livingcookbook${this.utilService.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`, formData, httpOptions)
+          .post(`${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -346,7 +344,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(`${this.base}import/paprika${this.utilService.getTokenQuery()}`, formData, httpOptions)
+        .post(`${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {

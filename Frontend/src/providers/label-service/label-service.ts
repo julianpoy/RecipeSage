@@ -17,7 +17,7 @@ export class LabelServiceProvider {
   base: any;
 
   constructor(public http: HttpClient, public events: Events, public utilService: UtilServiceProvider) {
-    this.base = localStorage.getItem('base') || '/api/';
+
   }
 
   fetch(populate?: boolean) {
@@ -30,7 +30,7 @@ export class LabelServiceProvider {
     };
 
     return this.http
-    .get(this.base + 'labels/' + this.utilService.getTokenQuery() + populateQuery, httpOptions)
+    .get(this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + populateQuery, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -54,7 +54,7 @@ export class LabelServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'labels/' + this.utilService.getTokenQuery(), data, httpOptions)
+          .post(this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -76,7 +76,7 @@ export class LabelServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + 'labels/' + this.utilService.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
+          .delete(this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId, httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)

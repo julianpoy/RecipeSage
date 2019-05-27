@@ -17,6 +17,8 @@ export class UtilServiceProvider {
 
   lang = ((<any>window.navigator).userLanguage || window.navigator.language);
 
+  devBase: string = localStorage.getItem('base');
+
   standardMessages = {
     offlineFetchMessage: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
     offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
@@ -25,6 +27,10 @@ export class UtilServiceProvider {
   };
 
   constructor(public sanitizer: DomSanitizer) {}
+
+  getBase(): string {
+    return this.devBase || '/api/';
+  }
 
   getTokenQuery(): string {
     let token = localStorage.getItem('token');
@@ -35,7 +41,7 @@ export class UtilServiceProvider {
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers, trust?: boolean): string|SafeResourceUrl {
     let modifierQuery = Object.keys(modifiers).map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`).join('&');
 
-    var url = `${window.location.origin}/#/recipe/${recipeId}/print?${modifierQuery}`;
+    var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
 
     if (trust) return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     return url;
