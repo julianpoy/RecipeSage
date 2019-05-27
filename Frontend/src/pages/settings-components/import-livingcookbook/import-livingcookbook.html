@@ -39,6 +39,11 @@
   </ion-item>
 
   <ion-item no-lines class="option">
+    <ion-label>Exclude recipe images (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="excludeImages"></ion-checkbox>
+  </ion-item>
+
+  <ion-item no-lines class="option">
     <ion-label>Include stock "filler" LCB recipes (optional, not recommended)</ion-label>
     <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
   </ion-item>

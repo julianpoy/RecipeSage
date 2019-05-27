@@ -68,4 +68,12 @@
       </ion-option>
     </ion-select>
   </ion-item>
+
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.enableLabelIntersection" (ngModelChange)="saveViewOptions(true);"></ion-toggle>
+    <ion-label>
+      Match All Labels
+    </ion-label>
+    <ion-icon name='funnel' item-start></ion-icon>
+  </ion-item>
 </ion-list>
