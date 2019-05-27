@@ -1,26 +1,42 @@
 import { Injectable } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+export interface RecipeTemplateModifiers {
+  halfsheet?: boolean,
+  verticalInstrIng?: boolean,
+  titleImage?: boolean
+}
 
 @Injectable()
 export class UtilServiceProvider {
 
-  lang: any = ((<any>window.navigator).userLanguage || window.navigator.language);
+  lang = ((<any>window.navigator).userLanguage || window.navigator.language);
 
-  standardMessages: any = {
+  standardMessages = {
     offlineFetchMessage: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
     offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
     unexpectedError: 'An unexpected error occured. Please try again.',
     unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
   };
 
-  constructor() {}
+  constructor(public sanitizer: DomSanitizer) {}
 
-  getTokenQuery() {
+  getTokenQuery(): string {
     let token = localStorage.getItem('token');
     if (token) return `?token=${token}`;
     return `?false=false`;
   }
 
-  formatDate(date, options?) {
+  generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers, trust?: boolean): string|SafeResourceUrl {
+    let modifierQuery = Object.keys(modifiers).map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`).join('&');
+
+    var url = `${window.location.origin}/#/recipe/${recipeId}/print?${modifierQuery}`;
+
+    if (trust) return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    return url;
+  }
+
+  formatDate(date, options?): string {
     options = options || {};
     var aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);

@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
-import { RecipeServiceProvider } from '../../../providers/recipe-service/recipe-service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { UtilServiceProvider } from '../../../providers/util-service/util-service';
+import { RecipeServiceProvider, Recipe } from '../../../providers/recipe-service/recipe-service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { UtilServiceProvider, RecipeTemplateModifiers } from '../../../providers/util-service/util-service';
+
+export interface PrintOption {
+  modifiers: RecipeTemplateModifiers,
+  description: string,
+  orientation: string,
+  url?: SafeResourceUrl
+}
 
 @IonicPage({
   priority: 'low'
@@ -14,11 +21,13 @@ import { UtilServiceProvider } from '../../../providers/util-service/util-servic
 })
 export class PrintRecipeModalPage {
 
-  recipe: any;
+  recipe: Recipe;
 
-  selectedTemplate: any = -1;
-  templates: any = [{
-    modifiers: [['titleImage', true]],
+  selectedTemplate: number = -1;
+  templates: PrintOption[] = [{
+    modifiers: {
+      titleImage: true
+    },
     description: 'Standard',
     orientation: 'portrait'
   },
@@ -29,7 +38,7 @@ export class PrintRecipeModalPage {
   //   orientation: 'landscape'
   // },
   {
-    modifiers: [],
+    modifiers: {},
     description: 'Standard No Image',
     orientation: 'portrait'
   },
@@ -46,18 +55,20 @@ export class PrintRecipeModalPage {
   //   orientation: 'landscape'
   // },
   {
-    name: 'halfsheet',
-    modifiers: [['halfsheet', true]],
+    modifiers: {
+      halfsheet: true
+    },
     description: 'Half Sheet, Columns',
     orientation: 'landscape'
   },
   {
-    modifiers: [['halfsheet', true], ['verticalInstrIng', true]],
+    modifiers: {
+      halfsheet: true,
+      verticalInstrIng: true
+    },
     description: 'Half Sheet, Compact, No Columns',
     orientation: 'landscape'
   }];
-
-  base: any;
 
   constructor(
     public navCtrl: NavController,
@@ -68,12 +79,8 @@ export class PrintRecipeModalPage {
     public recipeService: RecipeServiceProvider) {
     this.recipe = navParams.get('recipe');
 
-    this.base = window.location.origin;
-
     for (var i = 0; i < this.templates.length; i++) {
-      let modifierQuery = this.templates[i].modifiers.map(e => e.join('=')).join('&');
-      var url = `${this.base}/#/recipe/${this.recipe.id}/print?${modifierQuery}`;
-      this.templates[i].url = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.templates[i].url = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers, true);
     }
   }
 
@@ -84,7 +91,7 @@ export class PrintRecipeModalPage {
     try {
       (<any>template).contentWindow.print();
     } catch(e) {
-      (<any>template).contentWindow.postMessage('print', this.base);
+      (<any>template).contentWindow.postMessage('print', window.location.origin);
     }
     this.viewCtrl.dismiss();
   }
