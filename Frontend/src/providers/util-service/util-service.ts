@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export interface RecipeTemplateModifiers {
+  version?: string,
   halfsheet?: boolean,
   verticalInstrIng?: boolean,
   titleImage?: boolean,
@@ -39,6 +40,7 @@ export class UtilServiceProvider {
   }
 
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers, trust?: boolean): string|SafeResourceUrl {
+    modifiers = { version: (window as any).version, ...modifiers };
     let modifierQuery = Object.keys(modifiers).map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`).join('&');
 
     var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
