@@ -5,7 +5,8 @@ import { MessagingServiceProvider } from '../../providers/messaging-service/mess
 import { UserServiceProvider } from '../../providers/user-service/user-service';
 import { RecipeServiceProvider, Recipe } from '../../providers/recipe-service/recipe-service';
 import { LoadingServiceProvider } from '../../providers/loading-service/loading-service';
-import { UtilServiceProvider } from '../../providers/util-service/util-service';
+import { UtilServiceProvider, RecipeTemplateModifiers } from '../../providers/util-service/util-service';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @IonicPage({
   priority: 'low'
@@ -32,6 +33,17 @@ export class ShareModalPage {
   hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string = window.location.href;
 
+  embedConfig: RecipeTemplateModifiers = {
+    verticalInstrIng: false,
+    titleImage: true,
+    hideNotes: false,
+    hideSource: false,
+    hideSourceURL: false,
+    showPrintButton: true
+  };
+  recipePreviewURL: SafeResourceUrl;
+  recipeEmbedCode: string = "";
+
   constructor(
   public navCtrl: NavController,
   public navParams: NavParams,
@@ -45,6 +57,10 @@ export class ShareModalPage {
     this.recipe = navParams.get('recipe');
 
     this.loadThreads().then(() => {}, () => {});
+
+    this.recipePreviewURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig, true);
+
+    this.updateEmbed();
   }
 
   ionViewDidLoad() {}
@@ -53,6 +69,18 @@ export class ShareModalPage {
     this.viewCtrl.dismiss({
       destination: false
     });
+  }
+
+  updateEmbed() {
+    var template = document.getElementsByClassName('template-frame')[0];
+    if (!template) return;
+
+    (<any>template).contentWindow.postMessage({
+      action: 'updateConfig',
+      printConfig: this.embedConfig
+    }, window.location.origin);
+
+    this.recipeEmbedCode = `Test`;
   }
 
   loadThreads() {

@@ -96,7 +96,9 @@ export class PrintRecipeModalPage {
     try {
       (<any>template).contentWindow.print();
     } catch(e) {
-      (<any>template).contentWindow.postMessage('print', window.location.origin);
+      (<any>template).contentWindow.postMessage({
+        action: 'print'
+      }, window.location.origin);
     }
     this.viewCtrl.dismiss();
   }

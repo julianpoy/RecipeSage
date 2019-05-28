@@ -1,5 +1,5 @@
 page-share-modal {
-  .linkShare {
+  .codeBlock {
     display: flex;
     align-items: center;
 
@@ -10,7 +10,7 @@ page-share-modal {
     margin: 10px;
     padding: 15px;
 
-    .link {
+    .code {
       flex-grow: 1;
       user-select: all;
 

@@ -29,6 +29,7 @@ export class PrintRecipePage {
 
   printConfig: RecipeTemplateModifiers & { loading?: boolean } = {
     loading: true,
+    version: (window as any).queryParams['version'],
     halfsheet: !!(window as any).queryParams['halfsheet'],
     verticalInstrIng: !!(window as any).queryParams['verticalInstrIng'],
     titleImage: !!(window as any).queryParams['titleImage'],
@@ -54,8 +55,13 @@ export class PrintRecipePage {
 
     this.applyScale();
 
-    window.addEventListener('message', function (e) {
-      if (e.data == 'print') this.print();
+    window.addEventListener('message', e => {
+      if (!e.data || !e.data.action) return;
+      console.log(e)
+      if (e.data.action == 'print') this.print();
+      if (e.data.action == 'updateConfig') {
+        Object.assign(this.printConfig, e.data.printConfig || {});
+      };
     });
   }
 
