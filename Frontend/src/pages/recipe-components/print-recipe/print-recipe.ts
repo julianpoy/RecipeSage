@@ -56,8 +56,8 @@ export class PrintRecipePage {
     this.applyScale();
 
     window.addEventListener('message', e => {
-      if (!e.data || !e.data.action) return;
       console.log(e)
+      if (!e.data || !e.data.action) return;
       if (e.data.action == 'print') this.print();
       if (e.data.action == 'updateConfig') {
         Object.assign(this.printConfig, e.data.printConfig || {});

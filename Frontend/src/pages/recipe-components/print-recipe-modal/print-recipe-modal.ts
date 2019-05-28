@@ -85,7 +85,7 @@ export class PrintRecipeModalPage {
     this.recipe = navParams.get('recipe');
 
     for (var i = 0; i < this.templates.length; i++) {
-      this.templates[i].url = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers, true);
+      this.templates[i].url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers);
     }
   }
 

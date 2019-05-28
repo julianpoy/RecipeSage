@@ -39,13 +39,17 @@ export class UtilServiceProvider {
     return `?false=false`;
   }
 
-  generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers, trust?: boolean): string|SafeResourceUrl {
+  generateTrustedRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): SafeResourceUrl {
+    let url = this.generateRecipeTemplateURL(recipeId, modifiers);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
     modifiers = { version: (window as any).version, ...modifiers };
     let modifierQuery = Object.keys(modifiers).map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`).join('&');
 
     var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
 
-    if (trust) return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     return url;
   }
 

@@ -1,4 +1,19 @@
 page-share-modal {
+  .preview-settings-container {
+    display: grid;
+
+    recipe-preview {
+      grid-column-start: 1;
+      grid-column-end: 2;
+      grid-row-start: 1;
+      grid-row-end: 20;
+    }
+
+    ion-item {
+      grid-column-start: 2;
+    }
+  }
+
   .codeBlock {
     display: flex;
     align-items: center;
@@ -13,6 +28,8 @@ page-share-modal {
     .code {
       flex-grow: 1;
       user-select: all;
+      word-wrap: break-word;
+      max-width: 100%;
 
       &.webShareEnabled {
         padding-right: 20px;

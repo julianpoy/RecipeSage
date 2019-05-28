@@ -42,7 +42,8 @@ export class ShareModalPage {
     showPrintButton: true
   };
   recipePreviewURL: SafeResourceUrl;
-  recipeEmbedCode: string = "";
+  recipeEmbedURL: string;
+  recipeEmbedCode: string;
 
   constructor(
   public navCtrl: NavController,
@@ -58,7 +59,8 @@ export class ShareModalPage {
 
     this.loadThreads().then(() => {}, () => {});
 
-    this.recipePreviewURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig, true);
+    this.recipePreviewURL = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.embedConfig);
+    this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
 
     this.updateEmbed();
   }
@@ -73,14 +75,16 @@ export class ShareModalPage {
 
   updateEmbed() {
     var template = document.getElementsByClassName('template-frame')[0];
-    if (!template) return;
+    if (template) {
+      (<any>template).contentWindow.postMessage({
+        action: 'updateConfig',
+        printConfig: this.embedConfig
+      }, window.location.origin);
+    } else console.log("No template frame")
 
-    (<any>template).contentWindow.postMessage({
-      action: 'updateConfig',
-      printConfig: this.embedConfig
-    }, window.location.origin);
-
-    this.recipeEmbedCode = `Test`;
+    this.recipeEmbedCode = `
+      <iframe style="box-shadow: 1px 1px 7px rgb(25,25,25)" src="${this.recipeEmbedURL}" scrolling="no"></iframe>
+    `;
   }
 
   loadThreads() {

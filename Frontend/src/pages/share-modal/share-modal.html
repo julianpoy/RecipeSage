@@ -59,52 +59,55 @@
 
         <div *ngSwitchCase="'embed'">
           <br />
-          <recipe-preview [url]="recipePreviewURL" [description]="'Embed Preview'"></recipe-preview>
+          <div class="preview-settings-container">
 
-          <ion-item>
-            <ion-toggle [(ngModel)]="embedConfig.titleImage"
-              (ngModelChange)="updateEmbed();"></ion-toggle>
-            <ion-label>
-              Show Title Image
-            </ion-label>
-            <ion-icon name='image' item-start></ion-icon>
-          </ion-item>
+            <recipe-preview [url]="recipePreviewURL" [description]="'Embed Preview'"></recipe-preview>
 
-          <ion-item>
-            <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed();"></ion-toggle>
-            <ion-label>
-              Vertical Ingredients/Instructions
-            </ion-label>
-            <ion-icon name='funnel' item-start></ion-icon>
-          </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.titleImage"
+                (ngModelChange)="updateEmbed();"></ion-toggle>
+              <ion-label>
+                Show Title Image
+              </ion-label>
+              <ion-icon name='image' item-start></ion-icon>
+            </ion-item>
 
-          <ion-item>
-            <ion-toggle
-              [(ngModel)]="embedConfig.showPrintButton"
-              (ngModelChange)="updateEmbed();"></ion-toggle>
-            <ion-label>
-              Show Print Button
-            </ion-label>
-            <ion-icon name='print' item-start></ion-icon>
-          </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed();"></ion-toggle>
+              <ion-label>
+                Vertical Ingredients/Instructions
+              </ion-label>
+              <ion-icon name='swap' item-start></ion-icon>
+            </ion-item>
 
-          <ion-item>
-            <ion-toggle [(ngModel)]="embedConfig.hideSource"
-              (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed();"></ion-toggle>
-            <ion-label>
-              Hide Sources
-            </ion-label>
-            <ion-icon name='funnel' item-start></ion-icon>
-          </ion-item>
+            <ion-item>
+              <ion-toggle
+                [(ngModel)]="embedConfig.showPrintButton"
+                (ngModelChange)="updateEmbed();"></ion-toggle>
+              <ion-label>
+                Show Print Button
+              </ion-label>
+              <ion-icon name='print' item-start></ion-icon>
+            </ion-item>
 
-          <ion-item>
-            <ion-toggle [(ngModel)]="embedConfig.hideNotes"
-              (ngModelChange)="updateEmbed();"></ion-toggle>
-            <ion-label>
-              Hide Notes
-            </ion-label>
-            <ion-icon name='print' item-start></ion-icon>
-          </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.hideSource"
+                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed();"></ion-toggle>
+              <ion-label>
+                Hide Sources
+              </ion-label>
+              <ion-icon name='link' item-start></ion-icon>
+            </ion-item>
+
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.hideNotes"
+                (ngModelChange)="updateEmbed();"></ion-toggle>
+              <ion-label>
+                Hide Notes
+              </ion-label>
+              <ion-icon name='paper' item-start></ion-icon>
+            </ion-item>
+          </div>
 
           <ion-item no-lines>
             Copy the code below and paste it into your website HTML
@@ -156,7 +159,7 @@
     Send
   </button>
 
-  <button *ngIf="shareMethod === 'link'" ion-button icon-left block (click)="cancel()">
+  <button *ngIf="shareMethod === 'link' || shareMethod === 'embed'" ion-button icon-left block (click)="cancel()">
     <ion-icon name="close"></ion-icon>
     Close
   </button>
