@@ -100,35 +100,7 @@ export class PrintRecipePage {
         }
 
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-          // Starts with [, anything inbetween, ends with ]
-          var headerRegexp = /^\[.*\]$/;
-
-          let stepCount = 1;
-          this.instructions = this.recipe.instructions.split(/\r?\n/).map(instruction => {
-            let line = instruction.trim();
-            var headerMatches = line.match(headerRegexp);
-
-            if (headerMatches && headerMatches.length > 0) {
-              var header = headerMatches[0];
-              var headerContent = header.substring(1, header.length - 1); // Chop off brackets
-
-              stepCount = 1;
-
-              return {
-                content: headerContent,
-                isHeader: true,
-                count: 0,
-                complete: false
-              }
-            } else {
-              return {
-                content: line,
-                isHeader: false,
-                count: stepCount++,
-                complete: false
-              }
-            }
-          });
+          this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
         }
 
         this.applyScale();
@@ -171,7 +143,7 @@ export class PrintRecipePage {
   }
 
   applyScale() {
-    this.ingredients = this.recipeService.scaleIngredients(this.recipe.ingredients, this.scale, true);
+    this.ingredients = this.recipeService.parseIngredients(this.recipe.ingredients, this.scale, true);
   }
 
   prettyDateTime(datetime) {
