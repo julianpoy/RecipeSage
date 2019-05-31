@@ -24,6 +24,7 @@
     "express-grip": "^1.1.0",
     "extract-zip": "^1.6.7",
     "firebase-admin": "^5.9.1",
+    "fraction.js": "^4.0.12",
     "fs-extra": "^7.0.1",
     "grip": "^1.2.8",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",

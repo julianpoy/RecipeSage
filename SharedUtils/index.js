@@ -1,3 +1,5 @@
+let fractionjs = require('../Backend/node_modules/fraction.js');
+
 function parseIngredients(ingredients, scale, boldify) {
   if (!ingredients) return [];
 
@@ -88,7 +90,7 @@ function parseInstructions(instructions) {
   });
 }
 
-export default {
+module.exports = {
   parseIngredients,
   parseInstructions
 }
