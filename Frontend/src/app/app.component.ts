@@ -212,11 +212,11 @@ export class MyApp {
 
   initDevBase() {
     if (window.location.href.toLowerCase().indexOf('ngrok.io') > -1) {
-      localStorage.setItem('base', window.location.protocol + '//' + window.location.hostname + '/');
-    } else if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
-      localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
+      localStorage.setItem('base', '/');
     } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
       localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
+    } else if (window.location.href.toLowerCase().indexOf('rsdev.localhost') > -1) {
+      localStorage.setItem('base', '/api/');
     } else if (window.location.href.toLowerCase().indexOf('localhost') > -1) {
       localStorage.setItem('base', 'http://localhost:3000/');
     } else if (window.location.href.toLowerCase().indexOf(':8100') > -1) {
