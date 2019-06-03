@@ -9,37 +9,16 @@ html
         font-size: 12px;
       }
 
+      body.halfsheet {
+        max-width: 50%;
+      }
+
       .header {
         font-size: 20px;
       }
 
       .sans {
         font-family: 'Noto+Sans', sans-serif;
-      }
-
-      @media print {
-        body {margin: 0;}
-        @page {size: portrait;}
-      }
-
-      .ingredient {
-        font-weight: bold;
-        margin-top: 0px;
-        margin-bottom: 10px;
-      }
-
-      .instruction {
-        margin-top: 0;
-        vertical-align: top;
-      }
-
-      .instruction .count {
-        font-weight: bold;
-        width: 15px;
-      }
-
-      .instruction .text {
-        padding-bottom: 10px;
       }
 
       .meta {
@@ -75,8 +54,70 @@ html
         width: 200px;
         padding-right: 20px;
       }
-  body
-    table(class='table1')
+
+      .ingrInstrContainer {
+        display: flex;
+      }
+
+      .verticalInstrIng .ingrInstrContainer {
+        flex-wrap: wrap;
+      }
+
+      .ingredients {
+        min-width: 215px;
+      }
+
+      .verticalInstrIng .ingredients {
+        max-width: initial;
+        margin-left: 40px;
+        margin-bottom: 10px;
+      }
+
+      .twocolIngr .ingredients {
+        column-count: 2;
+      }
+
+      .ingredient {
+        margin-top: 0px;
+        margin-bottom: 8px;
+        padding-right: 20px;
+      }
+
+      .verticalInstrIng .ingredient {
+        margin-bottom: 2px;
+      }
+
+      .instruction {
+        display: grid;
+        grid-template-columns: min-content auto;
+
+        margin-top: 0;
+        vertical-align: top;
+        padding-bottom: 10px;
+      }
+
+      .verticalInstrIng .instruction {
+        padding-bottom: 8px;
+      }
+
+      .instruction .count {
+        font-weight: bold;
+        padding-right: 10px;
+      }
+
+    if modifiers.halfsheet
+      style(type='text/css').
+        @media print {
+          @page {size: landscape}
+        }
+    else
+      style(type='text/css').
+        @media print {
+          @page {size: portrait}
+        }
+
+  body(class=(modifiers.verticalInstrIng ? 'verticalInstrIng ' : '') + (modifiers.halfsheet ? 'halfsheet ' : '') + (modifiers.twocolIngr ? 'twocolIngr ' : ''))
+    table
       tbody
         tr
           if recipe.image && recipe.image.location
@@ -110,24 +151,18 @@ html
                 if ++labelIdx < recipe.labels.length
                   i ,&nbsp;
     br
-    table(class='table2')
-      tbody
-        tr
-          if recipe.ingredients
-            td(class='leftCol sans', valign='top')
-              each ingredient in recipe.ingredients
-                p(class='ingredient')= ingredient
-          if recipe.instructions
-            td(valign='top')
-              table(class='instructions')
-                tbody
-                  -var instructionIdx = 0
-                  each instruction in recipe.instructions
-                    tr(class='instruction')
-                      td(class='count')
-                        span(class='')= ++instructionIdx
-                      td(class='text')
-                        p= instruction
+    div(class='ingrInstrContainer')
+      div(class='ingredients')
+        each ingredient in recipe.ingredients
+          p(class='ingredient') !{ingredient.content}
+      div(class='instructions')
+        each instruction in recipe.instructions
+          div(class='instruction')
+            if instruction.isHeader
+              b= instruction.content
+            else
+              b(class='count')= instruction.count
+              span= instruction.content
 
     if recipe.notes
       p(class='sans')
