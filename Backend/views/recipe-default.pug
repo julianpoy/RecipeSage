@@ -1,9 +1,12 @@
 html
   head
     title= recipe.title
+    script(type="module" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.esm.js")
+    script(nomodule="" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.js")
     link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
     style(type='text/css').
       body {
+        position: relative;
         margin: 0.635cm;
         font-family: 'Noto+Serif', serif;
         font-size: 12px;
@@ -11,6 +14,26 @@ html
 
       body.halfsheet {
         max-width: 50%;
+      }
+
+      .print-icon {
+        font-size: 28px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: color 0.01s;
+      }
+
+      .print-icon:hover {
+        color: #00a8ff;
+      }
+
+      @media print {
+        .print-icon {
+          display: none;
+        }
       }
 
       .header {
@@ -88,6 +111,10 @@ html
         margin-bottom: 2px;
       }
 
+      .ingredient.ingredientHeader {
+        line-height: 170%;
+      }
+
       .instruction {
         display: grid;
         grid-template-columns: min-content auto;
@@ -118,6 +145,8 @@ html
         }
 
   body(class=(modifiers.verticalInstrIng ? 'verticalInstrIng ' : '') + (modifiers.halfsheet ? 'halfsheet ' : '') + (modifiers.twocolIngr ? 'twocolIngr ' : ''))
+    if modifiers.showPrintButton
+      ion-icon(name="print" class="print-icon" onclick="window.print()")
     table
       tbody
         tr
@@ -154,7 +183,7 @@ html
     div(class='ingrInstrContainer')
       div(class='ingredients')
         each ingredient in recipe.ingredients
-          p(class='ingredient') !{ingredient.content}
+          p(class=('ingredient ' + (ingredient.isHeader ? 'ingredientHeader' : ''))) !{ingredient.content}
       div(class='instructions')
         each instruction in recipe.instructions
           div(class='instruction')
@@ -164,19 +193,19 @@ html
               b(class='count')= instruction.count
               span= instruction.content
 
-    if recipe.notes
+    if recipe.notes && !modifiers.hideNotes
       p(class='sans')
         b Notes:
       p(class='prewrap')= recipe.notes
 
-
-    if recipe.url
+    if recipe.url && !modifiers.hideSourceURL
       b(class='sans') Source URL:
       span= ' ' + recipe.url
 
-    p
-      i Printed on&nbsp;
-      i= date
+    if modifiers.forPrinting
+      p
+        i Printed on&nbsp;
+        i= date
 
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {
