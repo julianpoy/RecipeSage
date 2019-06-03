@@ -48,7 +48,7 @@
             Copy the link below <span *ngIf="hasWebShareAPI">or press the share icon</span>
           </ion-item>
           <div class="codeBlock">
-            <div class="code" [ngClass]="{ webShareEnabled: hasWebShareAPI }">
+            <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
               {{ recipeURL }}
             </div>
             <button ion-button icon-only clear *ngIf="hasWebShareAPI" (click)="webShare()">
@@ -65,7 +65,7 @@
 
             <ion-item>
               <ion-toggle [(ngModel)]="embedConfig.titleImage"
-                (ngModelChange)="updateEmbed();"></ion-toggle>
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
               <ion-label>
                 Show Title Image
               </ion-label>
@@ -73,7 +73,7 @@
             </ion-item>
 
             <ion-item>
-              <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed();"></ion-toggle>
+              <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed(true);"></ion-toggle>
               <ion-label>
                 Vertical Ingredients/Instructions
               </ion-label>
@@ -83,7 +83,7 @@
             <ion-item>
               <ion-toggle
                 [(ngModel)]="embedConfig.showPrintButton"
-                (ngModelChange)="updateEmbed();"></ion-toggle>
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
               <ion-label>
                 Show Print Button
               </ion-label>
@@ -92,7 +92,7 @@
 
             <ion-item>
               <ion-toggle [(ngModel)]="embedConfig.hideSource"
-                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed();"></ion-toggle>
+                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"></ion-toggle>
               <ion-label>
                 Hide Sources
               </ion-label>
@@ -101,7 +101,7 @@
 
             <ion-item>
               <ion-toggle [(ngModel)]="embedConfig.hideNotes"
-                (ngModelChange)="updateEmbed();"></ion-toggle>
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
               <ion-label>
                 Hide Notes
               </ion-label>
@@ -109,14 +109,34 @@
             </ion-item>
           </div>
 
+          <ion-item>
+            <ion-input type="number" [(ngModel)]="embedHeight" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-label>
+              Height (not shown)
+            </ion-label>
+            <ion-icon name='resize' item-start></ion-icon>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="number" [(ngModel)]="embedWidth" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-label>
+              Width (not shown)
+            </ion-label>
+            <ion-icon name='resize' item-start></ion-icon>
+          </ion-item>
+
           <ion-item no-lines>
             Copy the code below and paste it into your website HTML
           </ion-item>
           <div class="codeBlock">
-            <div class="code">
+            <div class="code" [ngClass]="{ hasActionButton: hasCopyAPI }">
               {{ recipeEmbedCode }}
             </div>
+            <button ion-button icon-only clear *ngIf="hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="share"></ion-icon>
+            </button>
           </div>
+          <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeEmbedCode"></textarea>
         </div>
 
         <div *ngSwitchCase="'account'">

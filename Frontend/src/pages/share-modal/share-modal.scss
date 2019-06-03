@@ -31,9 +31,13 @@ page-share-modal {
       word-wrap: break-word;
       max-width: 100%;
 
-      &.webShareEnabled {
+      &.hasActionButton {
         padding-right: 20px;
       }
+    }
+
+    button {
+      flex-shrink: 0;
     }
   }
 }

@@ -30,9 +30,12 @@ export class ShareModalPage {
   autofillTimeout: any;
   shareMethod: string = "account";
 
+  hasCopyAPI: boolean = !!document.execCommand;
   hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string = window.location.href;
 
+  embedHeight: number = 800;
+  embedWidth: number = 600;
   embedConfig: RecipeTemplateModifiers = {
     verticalInstrIng: false,
     titleImage: true,
@@ -59,7 +62,7 @@ export class ShareModalPage {
 
     this.loadThreads().then(() => {}, () => {});
 
-    this.updateEmbed();
+    this.updateEmbed(true);
   }
 
   ionViewDidLoad() {}
@@ -70,13 +73,17 @@ export class ShareModalPage {
     });
   }
 
-  updateEmbed() {
-    this.recipePreviewURL = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.embedConfig);
-    this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
+  updateEmbed(updateURL?: boolean) {
+    if (updateURL) {
+      this.recipePreviewURL = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.embedConfig);
+      this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
+    }
 
-    this.recipeEmbedCode = `
-      <iframe style="box-shadow: 1px 1px 7px rgb(25,25,25)" src="${this.recipeEmbedURL}" scrolling="no"></iframe>
-    `;
+    this.recipeEmbedCode = `<iframe
+      style="box-shadow: 1px 1px 14px rgb(100,100,100); border: none; height: ${this.embedHeight}px; width: ${this.embedWidth}px;"
+      src="${this.recipeEmbedURL}"
+      scrolling="no"
+      frameborder="0"></iframe>`;
   }
 
   loadThreads() {
@@ -192,5 +199,13 @@ export class ShareModalPage {
         url: this.recipeURL,
       }).then(() => this.cancel());
     }
+  }
+
+  copyCodeToClipboard() {
+    var copyText = document.getElementById('codeBlockCopy') as any;
+
+    copyText.select();
+
+    document.execCommand("copy");
   }
 }
