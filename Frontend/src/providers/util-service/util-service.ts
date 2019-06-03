@@ -18,7 +18,7 @@ export class UtilServiceProvider {
 
   lang = ((<any>window.navigator).userLanguage || window.navigator.language);
 
-  devBase: string = localStorage.getItem('base');
+  devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
 
   standardMessages = {
     offlineFetchMessage: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
@@ -30,7 +30,7 @@ export class UtilServiceProvider {
   constructor(public sanitizer: DomSanitizer) {}
 
   getBase(): string {
-    return this.devBase || '/api/';
+    return this.devBase;
   }
 
   getTokenQuery(): string {
@@ -46,7 +46,10 @@ export class UtilServiceProvider {
 
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
     modifiers = { version: (window as any).version, ...modifiers };
-    let modifierQuery = Object.keys(modifiers).map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`).join('&');
+    let modifierQuery = Object.keys(modifiers)
+      .filter(modifierKey => modifiers[modifierKey])
+      .map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`)
+      .join('&');
 
     var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
 
