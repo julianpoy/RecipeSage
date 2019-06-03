@@ -933,7 +933,8 @@ router.post(
 )
 
 router.get('/embed/recipe/:recipeId', (req, res, next) => {
-  res.redirect(302, `${appConfig.frontendBaseURL}#/recipe/${req.params.recipeId}/print${req._parsedUrl.search}`);
+  let redirectBase = req.headers.proxypassbase || '/';
+  res.redirect(302, `${redirectBase}print/${req.params.recipeId}${req._parsedUrl.search}`);
 });
 
 module.exports = router;
