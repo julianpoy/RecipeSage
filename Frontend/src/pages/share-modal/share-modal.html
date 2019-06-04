@@ -133,7 +133,7 @@
               {{ recipeEmbedCode }}
             </div>
             <button ion-button icon-only clear *ngIf="hasCopyAPI" (click)="copyCodeToClipboard()">
-              <ion-icon name="share"></ion-icon>
+              <ion-icon name="copy"></ion-icon>
             </button>
           </div>
           <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeEmbedCode"></textarea>
