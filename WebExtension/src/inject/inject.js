@@ -5,7 +5,7 @@ if (!document.getElementById(extensionContainerId)) {
 
   let container;
   let currentSnip = {
-    sourceURL: window.location.href
+    url: window.location.href
   };
   let isDirty = false;
   let imageURLInput;
@@ -156,7 +156,7 @@ if (!document.getElementById(extensionContainerId)) {
     createSnipper('Active Time', 'activeTime');
     createSnipper('Total Time', 'totalTime');
     createSnipper('Source', 'source');
-    createSnipper('Source URL', 'sourceURL', false, window.location.href, true);
+    createSnipper('Source URL', 'url', false, window.location.href, true);
     createSnipper('Ingredients', 'ingredients', true);
     createSnipper('Instructions', 'instructions', true);
     createSnipper('Notes', 'notes', true);
