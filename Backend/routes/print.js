@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var cors = require('cors');
 var Raven = require('raven');
+var sanitizeHtml = require('sanitize-html');
 
 // DB
 var Op = require("sequelize").Op;
@@ -78,8 +79,8 @@ router.get('/:recipeId',
 
       if (!recipe.isOwner) recipe.labels = [];
 
-      recipe.instructions = SharedUtils.parseInstructions(recipe.instructions);
-      recipe.ingredients = SharedUtils.parseIngredients(recipe.ingredients, 1, true);
+      recipe.instructions = SharedUtils.parseInstructions(sanitizeHtml(recipe.instructions));
+      recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), 1, true);
 
       if (!modifiers.titleImage) {
         delete recipe.image;
