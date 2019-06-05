@@ -82,7 +82,7 @@ export class ShareModalPage {
     this.recipeEmbedCode = `<iframe
       style="box-shadow: 1px 1px 14px rgb(100,100,100); border: none; height: ${this.embedHeight}px; width: ${this.embedWidth}px;"
       src="${this.recipeEmbedURL}"
-      scrolling="no"
+      scrolling="auto"
       frameborder="0"></iframe>`;
   }
 
