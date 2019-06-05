@@ -54,7 +54,11 @@
             <button ion-button icon-only clear *ngIf="hasWebShareAPI" (click)="webShare()">
               <ion-icon name="share"></ion-icon>
             </button>
+            <button ion-button icon-only clear *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="copy"></ion-icon>
+            </button>
           </div>
+          <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeURL"></textarea>
         </div>
 
         <div *ngSwitchCase="'embed'">
