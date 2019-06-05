@@ -1,6 +1,16 @@
 page-share-modal {
   .preview-settings-container {
     display: grid;
+    grid-template-columns: min-content auto;
+
+    @media only screen and (max-width: 500px) {
+      display: initial;
+
+      recipe-preview {
+        display: flex;
+        justify-content: center;
+      }
+    }
 
     recipe-preview {
       grid-column-start: 1;
@@ -29,6 +39,7 @@ page-share-modal {
       flex-grow: 1;
       user-select: all;
       word-wrap: break-word;
+      min-width: 0;
       max-width: 100%;
 
       &.hasActionButton {
