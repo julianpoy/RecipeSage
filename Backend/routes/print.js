@@ -46,7 +46,7 @@ router.get('/:recipeId',
     hideNotes: !!req.query.hideNotes,
     hideSource: !!req.query.hideSource,
     hideSourceURL: !!req.query.hideSourceURL,
-    forPrinting: !!req.query.forPrinting,
+    printPreview: !!req.query.printPreview,
     showPrintButton: !!req.query.showPrintButton
   };
 
@@ -86,7 +86,12 @@ router.get('/:recipeId',
         delete recipe.image;
       }
 
-      res.render('recipe-default', { recipe: recipe, date: (new Date).toDateString(), modifiers: modifiers });
+      res.render('recipe-default', {
+        recipe: recipe,
+        recipeURL: `https://recipesage.com/#/recipe/${recipe.id}`,
+        date: (new Date).toDateString(),
+        modifiers: modifiers
+      });
     }
   }).catch(function(err) {
     res.render('error', {

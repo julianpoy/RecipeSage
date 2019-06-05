@@ -1,6 +1,18 @@
 html
   head
     title= recipe.title
+    script(type="text/javascript").
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//a.recipesage.com/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
     script(type="module" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.esm.js")
     script(nomodule="" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.js")
     link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
@@ -8,32 +20,17 @@ html
       body {
         position: relative;
         margin: 0.635cm;
+        font-family: 'Noto+Sans', sans-serif;
+        font-size: 14px;
+      }
+
+      body.printPreview {
         font-family: 'Noto+Serif', serif;
         font-size: 12px;
       }
 
       body.halfsheet {
         max-width: 50%;
-      }
-
-      .print-icon {
-        font-size: 28px;
-        position: absolute;
-        right: 0;
-        top: 0;
-        cursor: pointer;
-        border-radius: 20px;
-        transition: color 0.01s;
-      }
-
-      .print-icon:hover {
-        color: #00a8ff;
-      }
-
-      @media print {
-        .print-icon {
-          display: none;
-        }
       }
 
       .header {
@@ -66,7 +63,7 @@ html
 
       table {
         width: 100%;
-        font-size: 12px;
+        font-size: inherit;
       }
 
       .prewrap {
@@ -133,6 +130,94 @@ html
         padding-right: 10px;
       }
 
+      .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .printPreview .action-buttons {
+        display: none;
+      }
+
+      .logo-tagline {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-tagline .openInRS {
+        margin: 10px;
+        font-size: 14px;
+      }
+
+      .logo-tagline .logo-icon .bg {
+        box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+        display: inline-block;
+        border-radius: 100%;
+        background: #353b48;
+        padding: 6px;
+        bottom: middle;
+        width: 18px;
+        height: 18px;
+      }
+
+      .logo-tagline .logo-icon .bg img {
+        max-width: 100%;
+      }
+
+      .print-icon {
+        font-size: 28px;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: color 0.01s;
+      }
+
+      .print-icon:hover {
+        color: #00a8ff;
+      }
+
+      .printed-on {
+        display: none;
+      }
+
+      span.recipe-source-url {
+        display: none;
+      }
+
+      .printPreview span.recipe-source-url {
+        display: block;
+      }
+
+      .printPreview a.recipe-source-url {
+        display: none;
+      }
+
+      @media print {
+        a.recipe-source-url {
+          display: none;
+        }
+
+        span.recipe-source-url {
+          display: block;
+        }
+      }
+
+      @media print {
+        .action-buttons {
+          display: none;
+        }
+
+        .printed-on {
+          display: block;
+        }
+
+        body {
+          font-family: 'Noto+Serif', serif;
+          font-size: 12px;
+        }
+      }
+
     if modifiers.halfsheet
       style(type='text/css').
         @media print {
@@ -144,9 +229,16 @@ html
           @page {size: portrait}
         }
 
-  body(class=(modifiers.verticalInstrIng ? 'verticalInstrIng ' : '') + (modifiers.halfsheet ? 'halfsheet ' : '') + (modifiers.twocolIngr ? 'twocolIngr ' : ''))
-    if modifiers.showPrintButton
-      ion-icon(name="print" class="print-icon" onclick="window.print()")
+  body(class=(modifiers.verticalInstrIng ? 'verticalInstrIng ' : '') + (modifiers.halfsheet ? 'halfsheet ' : '') + (modifiers.twocolIngr ? 'twocolIngr ' : '') + (modifiers.printPreview ? 'printPreview ' : ''))
+    div(class="action-buttons")
+      div(class="logo-tagline")
+        div(class="logo-icon")
+          a(href=recipeURL target="_blank")
+            div(class="bg")
+              img(src="/assets/imgs/logo_green.png")
+        a(class="openInRS" href=recipeURL target="_blank") Click to Open in RecipeSage
+      if modifiers.showPrintButton
+        ion-icon(name="print" class="print-icon" onclick="window.print()")
     table
       tbody
         tr
@@ -199,13 +291,13 @@ html
       p(class='prewrap')= recipe.notes
 
     if recipe.url && !modifiers.hideSourceURL
-      b(class='sans') Source URL:
-      span= ' ' + recipe.url
+      b(class='sans') Source URL:&nbsp;
+      span(class="recipe-source-url")= recipe.url
+      a(class="recipe-source-url" href=recipe.url)= recipe.url
 
-    if modifiers.forPrinting
-      p
-        i Printed on&nbsp;
-        i= date
+    p(class="printed-on")
+      i Printed on&nbsp;
+      i= date
 
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {
