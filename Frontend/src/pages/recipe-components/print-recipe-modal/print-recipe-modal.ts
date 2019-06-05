@@ -27,7 +27,7 @@ export class PrintRecipeModalPage {
   templates: PrintOption[] = [{
     modifiers: {
       titleImage: true,
-      forPrinting: true
+      printPreview: true
     },
     description: 'Standard',
     orientation: 'portrait'
@@ -40,7 +40,7 @@ export class PrintRecipeModalPage {
   // },
   {
     modifiers: {
-      forPrinting: true
+      printPreview: true
     },
     description: 'Standard No Image',
     orientation: 'portrait'
@@ -60,7 +60,7 @@ export class PrintRecipeModalPage {
   {
     modifiers: {
       halfsheet: true,
-      forPrinting: true
+      printPreview: true
     },
     description: 'Half Sheet, Columns',
     orientation: 'landscape'
@@ -69,7 +69,7 @@ export class PrintRecipeModalPage {
     modifiers: {
       halfsheet: true,
       verticalInstrIng: true,
-      forPrinting: true
+      printPreview: true
     },
     description: 'Half Sheet, Compact, No Columns',
     orientation: 'landscape'

@@ -9,7 +9,7 @@ export interface RecipeTemplateModifiers {
   hideNotes?: boolean,
   hideSource?: boolean,
   hideSourceURL?: boolean,
-  forPrinting?: boolean,
+  printPreview?: boolean,
   showPrintButton?: boolean
 }
 
