@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
   let originalModifiers = req.query.modifiers ? req.query.modifiers.split(',') : [];
 
   let mappedModifiers = {
-    titleImage: originalModifiers.indexOf('noimage') !== -1 && req.query.template != 'compact',
+    titleImage: originalModifiers.indexOf('noimage') === -1 && req.query.template != 'compact',
     halfsheet: originalModifiers.indexOf('halfsheet') !== -1 || req.query.template == 'compact' || req.query.template == 'halfsheet',
   };
 
