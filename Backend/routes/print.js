@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var cors = require('cors');
 var Raven = require('raven');
+var sanitizeHtml = require('sanitize-html');
 
 // DB
 var Op = require("sequelize").Op;
@@ -13,28 +14,45 @@ var Label = require('../models').Label;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 
-router.get('/',
-  MiddlewareService.validateSession(['user']),
+// SharedUtils
+var SharedUtils = require('../../SharedUtils');
+
+router.get('/', (req, res, next) => {
+  let originalModifiers = req.query.modifiers ? req.query.modifiers.split(',') : [];
+
+  let mappedModifiers = {
+    titleImage: originalModifiers.indexOf('noimage') !== -1 && req.query.template != 'compact',
+    halfsheet: originalModifiers.indexOf('halfsheet') !== -1 || req.query.template == 'compact' || req.query.template == 'halfsheet',
+  };
+
+  let modifierQuery = Object.keys(mappedModifiers).filter(m => mappedModifiers[m]).map(modifier => `&${modifier}=true`).join('')
+
+  let redirectBase = req.headers.proxypassbase || '/';
+  res.redirect(302, `${redirectBase}print/${req.query.recipeId}?version=legacy${modifierQuery}`);
+})
+
+router.get('/:recipeId',
+  MiddlewareService.validateSession(['user'], true),
   function (req, res, next) {
 
-  var modifiers = [];
-  if (req.query.modifiers) modifiers = req.query.modifiers.split(',');
+  if (!req.query.version) return res.status(400).send("Missing parameter: version");
 
-  var templates = ['default', 'halfsheet', 'compact'];
-  if (templates.indexOf(req.query.template) === -1) {
-    res.render('error', {
-      message: '404',
-      error: {
-        status: 'Print template not found',
-        stack: ''
-      }
-    });
-    return;
-  }
+  var modifiers = {
+    version: req.query.version,
+    halfsheet: !!req.query.halfsheet,
+    twocolIngr: !!req.query.twocolIngr,
+    verticalInstrIng: !!req.query.verticalInstrIng,
+    titleImage: !!req.query.titleImage,
+    hideNotes: !!req.query.hideNotes,
+    hideSource: !!req.query.hideSource,
+    hideSourceURL: !!req.query.hideSourceURL,
+    printPreview: !!req.query.printPreview,
+    showPrintButton: !!req.query.showPrintButton
+  };
 
   Recipe.findOne({
     where: {
-      id: req.query.recipeId
+      id: req.params.recipeId
     },
     include: [
       {
@@ -42,8 +60,8 @@ router.get('/',
         as: 'labels'
       }
     ]
-  }).then(function(recipe) {
-    if (!recipe) {
+  }).then(function(rObj) {
+    if (!rObj) {
       res.render('error', {
         message: '404',
         error: {
@@ -52,16 +70,28 @@ router.get('/',
         }
       });
     } else {
-      let r = recipe.toJSON();
+      let recipe = rObj.toJSON();
 
-      r.instructions = r.instructions.split(/\r?\n/);
-      r.ingredients = r.ingredients.split(/\r?\n/);
+      recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
 
-      if (modifiers.indexOf('noimage') > -1) {
-        delete r.image;
+      // There should be no fromUser after recipes have been moved out of the inbox
+      if (recipe.folder !== 'inbox' || !recipe.isOwner) delete recipe.fromUser;
+
+      if (!recipe.isOwner) recipe.labels = [];
+
+      recipe.instructions = SharedUtils.parseInstructions(sanitizeHtml(recipe.instructions));
+      recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), 1, true);
+
+      if (!modifiers.titleImage) {
+        delete recipe.image;
       }
 
-      res.render('recipe-' + req.query.template, { recipe: r, date: (new Date).toDateString(), modifiers: modifiers });
+      res.render('recipe-default', {
+        recipe: recipe,
+        recipeURL: `https://recipesage.com/#/recipe/${recipe.id}`,
+        date: (new Date).toDateString(),
+        modifiers: modifiers
+      });
     }
   }).catch(function(err) {
     res.render('error', {

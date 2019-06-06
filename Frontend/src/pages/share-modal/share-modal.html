@@ -1,8 +1,8 @@
 <ion-header>
-  
+
   <ion-navbar>
     <ion-title>Share Recipe</ion-title>
-    
+
     <ion-buttons start>
       <button ion-button (click)="cancel()">
         <span ion-text color="primary" showWhen="ios">Cancel</span>
@@ -16,7 +16,7 @@
 
 <ion-content>
   <ion-list>
-      <ion-item>
+      <ion-item no-lines>
         <ion-avatar *ngIf="recipe.image" item-start>
           <img src="{{ recipe.image.location }}">
         </ion-avatar>
@@ -25,52 +25,166 @@
           When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.
         </p>
       </ion-item>
-      
-      <ion-item>
-        <ion-label floating>New recipient email...</ion-label>
-        <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
-      </ion-item>
-      
-      <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
-        <span *ngIf="recipientName">User found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
-        <span *ngIf="!recipientName">No user found with that email address.</span>
-      </p>
-      <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
-        Enter an email address to search for a user <span *ngIf="threads.length > 0">or select a conversation below</span>
-      </p>
-      <p *ngIf="searchingForRecipient" padding-left padding-bottom>
-        Searcing for user...
-      </p>
-      
-      <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
-        <ion-list-header style="margin-bottom: 0;" no-lines>
-          Existing Conversations
-        </ion-list-header>
-      
-        <ion-item *ngFor="let thread of threads">
-          <ion-label>{{ thread.otherUser.name || thread.otherUser.email }} <span *ngIf="thread.otherUser.name">({{ thread.otherUser.email }})</span></ion-label>
-          <ion-radio [value]="thread"></ion-radio>
-        </ion-item>
-      </ion-list>
-      
-      <!--<div *ngFor="let thread of threads">-->
-        
-      <!--</div>-->
 
-      <!--<ion-grid *ngIf="recents.length > 0">-->
-      <!--  <ion-row>-->
-      <!--    <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 *ngFor="let recipient of recents">-->
-      <!--      {{ -->
-      <!--    </ion-col>-->
-      <!--  </ion-row>-->
-      <!--</ion-grid>-->
-      
+      <div>
+        <ion-segment [(ngModel)]="shareMethod">
+          <ion-segment-button value="account">
+            RecipeSage
+          </ion-segment-button>
+          <ion-segment-button value="link">
+            Link
+          </ion-segment-button>
+          <ion-segment-button value="embed">
+            Embed
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div [ngSwitch]="shareMethod">
+
+        <div *ngSwitchCase="'link'">
+          <br />
+          <ion-item no-lines>
+            Copy the link below <span *ngIf="hasWebShareAPI">or press the share icon</span>
+          </ion-item>
+          <div class="codeBlock">
+            <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
+              {{ recipeURL }}
+            </div>
+            <button ion-button icon-only clear *ngIf="hasWebShareAPI" (click)="webShare()">
+              <ion-icon name="share"></ion-icon>
+            </button>
+            <button ion-button icon-only clear *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="copy"></ion-icon>
+            </button>
+          </div>
+          <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeURL"></textarea>
+        </div>
+
+        <div *ngSwitchCase="'embed'">
+          <br />
+          <div class="preview-settings-container">
+
+            <recipe-preview [url]="recipePreviewURL" [description]="'Embed Preview'"></recipe-preview>
+
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.titleImage"
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-label>
+                Show Title Image
+              </ion-label>
+              <ion-icon name='image' item-start></ion-icon>
+            </ion-item>
+
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-label>
+                Disable Columns
+              </ion-label>
+              <ion-icon name='swap' item-start></ion-icon>
+            </ion-item>
+
+            <ion-item>
+              <ion-toggle
+                [(ngModel)]="embedConfig.showPrintButton"
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-label>
+                Show Print Button
+              </ion-label>
+              <ion-icon name='print' item-start></ion-icon>
+            </ion-item>
+
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.hideSource"
+                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"></ion-toggle>
+              <ion-label>
+                Hide Sources
+              </ion-label>
+              <ion-icon name='link' item-start></ion-icon>
+            </ion-item>
+
+            <ion-item>
+              <ion-toggle [(ngModel)]="embedConfig.hideNotes"
+                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-label>
+                Hide Notes
+              </ion-label>
+              <ion-icon name='paper' item-start></ion-icon>
+            </ion-item>
+          </div>
+
+          <ion-item>
+            <ion-input type="number" [(ngModel)]="embedHeight" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-label>
+              Height (not shown)
+            </ion-label>
+            <ion-icon name='resize' item-start></ion-icon>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="number" [(ngModel)]="embedWidth" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-label>
+              Width (not shown)
+            </ion-label>
+            <ion-icon name='resize' item-start></ion-icon>
+          </ion-item>
+
+          <ion-item no-lines>
+            Copy the code below and paste it into your website HTML
+          </ion-item>
+          <div class="codeBlock">
+            <div class="code" [ngClass]="{ hasActionButton: hasCopyAPI }">
+              {{ recipeEmbedCode }}
+            </div>
+            <button ion-button icon-only clear *ngIf="hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="copy"></ion-icon>
+            </button>
+          </div>
+          <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeEmbedCode"></textarea>
+        </div>
+
+        <div *ngSwitchCase="'account'">
+          <div padding-right>
+            <ion-item>
+              <ion-label floating>Recipient's account email...</ion-label>
+              <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
+            </ion-item>
+
+            <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
+              <span *ngIf="recipientName">RecipeSage user found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
+              <span *ngIf="!recipientName">No RecipeSage user found with that email address.</span>
+            </p>
+            <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
+              Enter another user's email address to search <span *ngIf="threads.length > 0">or select a conversation below</span>
+            </p>
+            <p *ngIf="searchingForRecipient" padding-left padding-bottom>
+              Searcing for user...
+            </p>
+          </div>
+
+          <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
+            <ion-list-header style="margin-bottom: 0;" no-lines>
+              Existing Conversations
+            </ion-list-header>
+
+            <ion-item *ngFor="let thread of threads">
+              <ion-label>{{ thread.otherUser.name || thread.otherUser.email }} <span *ngIf="thread.otherUser.name">({{ thread.otherUser.email }})</span></ion-label>
+              <ion-radio [value]="thread"></ion-radio>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
   </ion-list>
 </ion-content>
 
 <ion-footer padding>
-  <button ion-button icon-left block (click)="send()" [disabled]="!recipientId">
+  <button *ngIf="shareMethod === 'account'" ion-button icon-left block (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send"></ion-icon>
     Send
+  </button>
+
+  <button *ngIf="shareMethod === 'link' || shareMethod === 'embed'" ion-button icon-left block (click)="cancel()">
+    <ion-icon name="close"></ion-icon>
+    Close
   </button>
 </ion-footer>

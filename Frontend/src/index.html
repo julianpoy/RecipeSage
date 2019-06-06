@@ -32,7 +32,7 @@
 
   <script>
     window.queryParams = {};
-    var queryString = window.location.href.split('?')[1];
+    var queryString = (window.location.search || window.location.href).split('?')[1];
     if (queryString) {
       var query = queryString.split("&").forEach(el => {
         var tuple = el.split('=');

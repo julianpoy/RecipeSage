@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title>Recipe Details - {{ recipe.title }}</ion-title>
+    <ion-title>Recipe Details: {{ recipe.title }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -136,7 +136,13 @@
       <p>Labels</p>
     </ion-item>
 
-    <div class='dropdownSelect' *ngIf="recipe.folder !== 'inbox'">
+    <ion-item *ngIf="recipe.id && !recipe.isOwner">
+      <p>
+        You can add labels once you save this recipe to your collection
+      </p>
+    </ion-item>
+
+    <div class='dropdownSelect' *ngIf="recipe.folder !== 'inbox' && recipe.isOwner">
 
       <div class="labels">
         <span class="label" *ngFor="let label of selectedLabels">
@@ -211,9 +217,33 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-  	</div>
+    </div>
 
-    <ion-row *ngIf="recipe.folder === 'main'">
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" padding>
+      <ion-item no-padding>
+        <p>
+          This recipe does not belong to you yet.
+        </p>
+      </ion-item>
+      <button ion-button icon-left block (click)="cloneRecipe()">
+        <ion-icon name="cloud-download"></ion-icon>
+        Save This Recipe to My Recipes
+      </button>
+    </div>
+
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" padding>
+      <ion-item no-padding>
+        <p>
+          Create an account or login to save this recipe to your collection.
+        </p>
+      </ion-item>
+      <button ion-button icon-left block (click)="authAndClone()">
+        <ion-icon name="cloud-download"></ion-icon>
+        Create an Account or Login To Save This Recipe
+      </button>
+    </div>
+
+    <ion-row *ngIf="recipe.folder === 'main' && recipe.isOwner">
       <ion-col center text-center>
         <button (click)="editRecipe()" ion-button icon-left clear small>
           <ion-icon name="create"></ion-icon>
@@ -248,6 +278,12 @@
         <button (click)="printRecipe()" ion-button icon-left clear small>
           <ion-icon name="print"></ion-icon>
           <div>Print</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="cloneRecipe()" ion-button icon-left clear small>
+          <ion-icon name="copy"></ion-icon>
+          <div>Make a Copy</div>
         </button>
       </ion-col>
     </ion-row>

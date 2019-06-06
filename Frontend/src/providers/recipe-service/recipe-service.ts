@@ -8,6 +8,9 @@ import { catchError, retry } from 'rxjs/operators';
 import { Label } from '../label-service/label-service';
 
 import fractionjs from 'fraction.js';
+import { UtilServiceProvider } from '../util-service/util-service';
+
+import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
 
 export interface Recipe {
   id: string;
@@ -54,16 +57,11 @@ export class RecipeServiceProvider {
   constructor(
     public http: HttpClient,
     public alertCtrl: AlertController,
-    public events: Events) {
-    this.base = localStorage.getItem('base') || '/api/';
-  }
-
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
-  }
+    public events: Events,
+    public utilService: UtilServiceProvider) {}
 
   getExportURL(format) {
-    return this.base + 'recipes/export' + this.getTokenQuery() + '&format=' + format;
+    return this.utilService.getBase() + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
   }
 
   count(options) {
@@ -73,7 +71,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/count' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
 
     return this.http
@@ -91,7 +89,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/by-page' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
     if (options.folder)                              url += '&folder=' + options.folder;
     if (options.sortBy)                              url += '&sort=' + options.sortBy;
     if (options.offset)                              url += '&offset=' + options.offset;
@@ -114,7 +112,7 @@ export class RecipeServiceProvider {
       })
     };
 
-    var url = this.base + 'recipes/search' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
     if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
@@ -134,7 +132,7 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .get<Recipe>(this.base + 'recipes/' + recipeId + this.getTokenQuery(), httpOptions)
+    .get<Recipe>(this.utilService.getBase() + 'recipes/' + recipeId + this.utilService.getTokenQuery(), httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -159,7 +157,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/' + this.getTokenQuery(), formData, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery(), formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -185,7 +183,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/' + this.getTokenQuery(), data, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery(), data, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -214,7 +212,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .put(this.base + 'recipes/' + data.id + this.getTokenQuery(), formData, httpOptions)
+        .put(this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery(), formData, httpOptions)
         .pipe(
           retry(1),
           catchError(this.handleError)
@@ -237,7 +235,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(this.base + 'recipes/delete-bulk' + this.getTokenQuery(), { recipeIds: recipes }, httpOptions)
+        .post(this.utilService.getBase() + 'recipes/delete-bulk' + this.utilService.getTokenQuery(), { recipeIds: recipes }, httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -260,7 +258,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .delete(this.base + 'recipes/' + data.id + this.getTokenQuery(), httpOptions)
+        .delete(this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery(), httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -283,7 +281,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .delete(this.base + 'recipes/all' + this.getTokenQuery(), httpOptions)
+        .delete(this.utilService.getBase() + 'recipes/all' + this.utilService.getTokenQuery(), httpOptions)
         .pipe(
           retry(2),
           catchError(this.handleError)
@@ -297,7 +295,7 @@ export class RecipeServiceProvider {
   }
 
   print(recipe, template) {
-    window.open(this.base + 'print/' + this.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
+    window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
   scrapePepperplate(data) {
@@ -308,9 +306,9 @@ export class RecipeServiceProvider {
     };
 
     return this.http
-    .get(this.base
+    .get(this.utilService.getBase()
       + 'scrape/pepperplate'
-      + this.getTokenQuery()
+      + this.utilService.getTokenQuery()
       + '&username=' + encodeURIComponent(data.username)
       + '&password=' + encodeURIComponent(data.password)
     , httpOptions)
@@ -328,7 +326,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(`${this.base}import/livingcookbook${this.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`, formData, httpOptions)
+          .post(`${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -348,7 +346,7 @@ export class RecipeServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-        .post(`${this.base}import/paprika${this.getTokenQuery()}`, formData, httpOptions)
+        .post(`${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`, formData, httpOptions)
         .pipe(
           catchError(this.handleError)
         ).subscribe(response => {
@@ -359,62 +357,12 @@ export class RecipeServiceProvider {
     }
   }
 
-  scaleIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {
-    if (!ingredients) return [];
+  parseIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {
+    return parseIngredients(ingredients, scale, boldify);
+  }
 
-    let lines: Ingredient[] = ingredients.match(/[^\r\n]+/g).map(match => ({
-      content: match,
-      originalContent: match,
-      complete: false,
-      isHeader: false
-    }));
-
-    // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
-    var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
-    // Starts with [, anything inbetween, ends with ]
-    var headerRegexp = /^\[.*\]$/;
-
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].content.trim(); // Trim only spaces (no newlines)
-
-      var measurementMatches = line.match(measurementRegexp);
-      var headerMatches = line.match(headerRegexp);
-
-      if (headerMatches && headerMatches.length > 0) {
-        var header = headerMatches[0];
-        var headerContent = header.substring(1, header.length - 1); // Chop off brackets
-
-        if (boldify) headerContent = `<b class="sectionHeader">${headerContent}</b>`;
-        lines[i].content = headerContent;
-        lines[i].isHeader = true;
-      } else if (measurementMatches && measurementMatches.length > 0) {
-        var measurement = measurementMatches[0];
-
-        try {
-          var measurementParts = measurement.split(/-|to/);
-
-          for (var j = 0; j < measurementParts.length; j++) {
-            // console.log(measurementParts[j].trim())
-            var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
-
-            // Preserve original fraction format if entered
-            if (measurementParts[j].indexOf('/') > -1) {
-              scaledMeasurement = scaledMeasurement.toFraction(true);
-            }
-
-            if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
-            else measurementParts[j] = scaledMeasurement;
-          }
-
-          lines[i].content = lines[i].content.replace(measurementRegexp, measurementParts.join(' to '));
-          lines[i].isHeader = false;
-        } catch (e) {
-          console.log("failed to parse", e)
-        }
-      }
-    }
-
-    return lines;
+  parseInstructions(instructions: string): Instruction[] {
+    return parseInstructions(instructions);
   }
 
   scaleIngredientsPrompt(currentScale: number, cb) {

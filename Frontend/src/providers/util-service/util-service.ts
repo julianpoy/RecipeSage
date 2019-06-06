@@ -1,20 +1,62 @@
 import { Injectable } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+export interface RecipeTemplateModifiers {
+  version?: string,
+  halfsheet?: boolean,
+  verticalInstrIng?: boolean,
+  titleImage?: boolean,
+  hideNotes?: boolean,
+  hideSource?: boolean,
+  hideSourceURL?: boolean,
+  printPreview?: boolean,
+  showPrintButton?: boolean
+}
 
 @Injectable()
 export class UtilServiceProvider {
 
-  lang: any = ((<any>window.navigator).userLanguage || window.navigator.language);
+  lang = ((<any>window.navigator).userLanguage || window.navigator.language);
 
-  standardMessages: any = {
+  devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
+
+  standardMessages = {
     offlineFetchMessage: 'It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.',
     offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
     unexpectedError: 'An unexpected error occured. Please try again.',
     unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
   };
 
-  constructor() {}
+  constructor(public sanitizer: DomSanitizer) {}
 
-  formatDate(date, options?) {
+  getBase(): string {
+    return this.devBase;
+  }
+
+  getTokenQuery(): string {
+    let token = localStorage.getItem('token');
+    if (token) return `?token=${token}`;
+    return `?false=false`;
+  }
+
+  generateTrustedRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): SafeResourceUrl {
+    let url = this.generateRecipeTemplateURL(recipeId, modifiers);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
+    modifiers = { version: (window as any).version, ...modifiers };
+    let modifierQuery = Object.keys(modifiers)
+      .filter(modifierKey => modifiers[modifierKey])
+      .map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`)
+      .join('&');
+
+    var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
+
+    return url;
+  }
+
+  formatDate(date, options?): string {
     options = options || {};
     var aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);

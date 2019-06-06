@@ -2,19 +2,14 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
+import { UtilServiceProvider } from '../util-service/util-service';
 
 @Injectable()
 export class MealPlanServiceProvider {
 
   base: any;
 
-  constructor(public http: HttpClient) {
-    this.base = localStorage.getItem('base') || '/api/';
-  }
-
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
-  }
+  constructor(public http: HttpClient, public utilService: UtilServiceProvider) {}
 
   fetch() {
     const httpOptions = {
@@ -23,7 +18,7 @@ export class MealPlanServiceProvider {
       })
     };
 
-    var url = this.base + 'mealPlans/' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery();
 
     return this.http
       .get<any[]>(url, httpOptions)
@@ -41,7 +36,7 @@ export class MealPlanServiceProvider {
     };
 
     return this.http
-      .get<any>(this.base + 'mealPlans/' + mealPlanId + this.getTokenQuery(), httpOptions)
+      .get<any>(this.utilService.getBase() + 'mealPlans/' + mealPlanId + this.utilService.getTokenQuery(), httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -58,7 +53,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'mealPlans/' + this.getTokenQuery(), data, httpOptions)
+          .post(this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -78,7 +73,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .post(this.base + 'mealPlans/' + data.id + this.getTokenQuery(), data, httpOptions)
+          .post(this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
           .pipe(
             catchError(this.handleError)
           ).subscribe(response => {
@@ -96,7 +91,7 @@ export class MealPlanServiceProvider {
     };
 
     return this.http
-      .put(this.base + 'shoppingLists/' + data.id + this.getTokenQuery(), data, httpOptions)
+      .put(this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery(), data, httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -113,7 +108,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + `mealPlans/${data.id}/items${this.getTokenQuery()}&itemId=${data.itemId}`, httpOptions)
+          .delete(this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`, httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)
@@ -134,7 +129,7 @@ export class MealPlanServiceProvider {
     return {
       subscribe: (resolve, reject) => {
         this.http
-          .delete(this.base + 'mealPlans/' + data.id + this.getTokenQuery(), httpOptions)
+          .delete(this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery(), httpOptions)
           .pipe(
             retry(1),
             catchError(this.handleError)

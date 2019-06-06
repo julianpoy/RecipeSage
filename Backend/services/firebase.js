@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+var Raven = require('raven');
 
 // DB
 var FCMToken = require('../models').FCMToken;
@@ -33,6 +34,8 @@ exports.sendMessage = (token, payload) => {
           token
         }
       });
+    } else {
+      Raven.captureException(err);
     }
 
     return Promise.resolve();

@@ -126,3 +126,12 @@ ion-thumbnail img {
     }
   }
 }
+
+.invisible {
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  background: transparent;
+  color: transparent;
+  border: none;
+}

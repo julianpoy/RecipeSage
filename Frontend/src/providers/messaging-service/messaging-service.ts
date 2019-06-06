@@ -10,6 +10,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { Events, ToastController, AlertController } from 'ionic-angular';
 
 import { UserServiceProvider } from '../../providers/user-service/user-service';
+import { UtilServiceProvider } from '../util-service/util-service';
 
 export interface Message {
   id: string;
@@ -33,11 +34,10 @@ export class MessagingServiceProvider {
   constructor(
   public http: HttpClient,
   public events: Events,
+  public utilService: UtilServiceProvider,
   public userService: UserServiceProvider,
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
-    this.base = localStorage.getItem('base') || '/api/';
-
     var onSWRegsitration = () => {
       if (!this.isNotificationsCapable()) return;
 
@@ -75,10 +75,6 @@ export class MessagingServiceProvider {
     return this.isNotificationsCapable() && ('Notification' in window) && ((<any>Notification).permission === 'granted');
   }
 
-  getTokenQuery() {
-    return '?token=' + localStorage.getItem('token');
-  }
-
   fetch(from?) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -86,7 +82,7 @@ export class MessagingServiceProvider {
       })
     };
 
-    var url = this.base + 'messages/' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
     if (from) url += '&user=' + from;
 
     return this.http
@@ -106,7 +102,7 @@ export class MessagingServiceProvider {
       })
     };
 
-    var url = this.base + 'messages/threads/' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'messages/threads/' + this.utilService.getTokenQuery();
     if (!options.includeMessages) url += '&light=true';
     if (options.messageLimit) url += '&limit=' + options.messageLimit;
 
@@ -126,7 +122,7 @@ export class MessagingServiceProvider {
     };
 
     return this.http
-    .post(this.base + 'messages/' + this.getTokenQuery(), data, httpOptions)
+    .post(this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery(), data, httpOptions)
     .pipe(
       retry(1),
       catchError(this.handleError)
@@ -140,7 +136,7 @@ export class MessagingServiceProvider {
       })
     };
 
-    var url = this.base + 'messages/read/' + this.getTokenQuery();
+    var url = this.utilService.getBase() + 'messages/read/' + this.utilService.getTokenQuery();
     if (from) url += '&from=' + from;
 
     return this.http

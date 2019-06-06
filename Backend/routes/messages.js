@@ -9,7 +9,7 @@ var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Message = require('../models').Message;
-var Label = require('../models').Label;
+var FCMToken = require('../models').FCMToken;
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -28,7 +28,16 @@ router.post(
   }
 
   SQ.transaction(function(t) {
-    return User.findByPk(req.body.to, {transaction: t}).then(function(recipient) {
+    return User.findByPk(req.body.to, {
+      include: [
+        {
+          model: FCMToken,
+          attributes: ['id', 'token'],
+          as: 'fcmTokens'
+        }
+      ],
+      transaction: t
+    }).then(function(recipient) {
       if (!recipient) {
         res.status(404).send('Could not find user under that ID.');
       } else {

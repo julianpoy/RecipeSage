@@ -30,6 +30,8 @@ export class RecipePage {
   pendingLabel: string = '';
   showAutocomplete: boolean = false;
 
+  isLoggedIn: boolean = !!localStorage.getItem('token');
+
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -85,35 +87,7 @@ export class RecipePage {
         }
 
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-          // Starts with [, anything inbetween, ends with ]
-          var headerRegexp = /^\[.*\]$/;
-
-          let stepCount = 1;
-          this.instructions = this.recipe.instructions.split(/\r?\n/).map(instruction => {
-            let line = instruction.trim();
-            var headerMatches = line.match(headerRegexp);
-
-            if (headerMatches && headerMatches.length > 0) {
-              var header = headerMatches[0];
-              var headerContent = header.substring(1, header.length - 1); // Chop off brackets
-
-              stepCount = 1;
-
-              return {
-                content: headerContent,
-                isHeader: true,
-                count: 0,
-                complete: false
-              }
-            } else {
-              return {
-                content: line,
-                isHeader: false,
-                count: stepCount++,
-                complete: false
-              }
-            }
-          });
+          this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
         }
 
         this.applyScale();
@@ -131,7 +105,7 @@ export class RecipePage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            this.goToAuth();
             break;
           case 404:
             let errorToast = this.toastCtrl.create({
@@ -213,7 +187,7 @@ export class RecipePage {
   }
 
   applyScale() {
-    this.ingredients = this.recipeService.scaleIngredients(this.recipe.ingredients, this.scale, true);
+    this.ingredients = this.recipeService.parseIngredients(this.recipe.ingredients, this.scale, true);
   }
 
   editRecipe() {
@@ -482,6 +456,73 @@ export class RecipePage {
           }).present();
           break;
       }
+    });
+  }
+
+  cloneRecipe() {
+    var loading = this.loadingService.start();
+
+    if (this.recipe.image && this.recipe.image.location) {
+      this.recipe.imageURL = this.recipe.image.location;
+    }
+
+    return new Promise((resolve, reject) => {
+      this.recipeService.create(this.recipe).subscribe(response => {
+        resolve();
+        this.navCtrl.push('RecipePage', {
+          recipe: response,
+          recipeId: response.id
+        });
+
+        loading.dismiss();
+      }, err => {
+        reject();
+        loading.dismiss();
+        switch (err.status) {
+          case 0:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
+              duration: 5000
+            }).present();
+            break;
+          case 401:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unauthorized,
+              duration: 6000
+            }).present();
+            break;
+          default:
+            this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
+              duration: 6000
+            }).present();
+            break;
+        }
+      });
+    })
+  }
+
+  goToAuth(cb?: Function) {
+    this.navCtrl.push('LoginPage', {
+      register: !this.isLoggedIn,
+      afterAuth: () => {
+        this.navCtrl.setRoot('RecipePage', {
+          recipeId: this.recipeId
+        }, { animate: true, direction: 'forward' });
+
+        if (cb) cb();
+      }
+    });
+  }
+
+  authAndClone() {
+    this.goToAuth(() => {
+      this.cloneRecipe().then(() => {
+        this.toastCtrl.create({
+          message: "The recipe has been saved to your account",
+          duration: 5000
+        }).present();
+      });
     });
   }
 

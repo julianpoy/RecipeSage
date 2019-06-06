@@ -45,7 +45,6 @@ export class MyApp {
     this.initUpdateListeners();
     this.initEventListeners();
     this.initEventDispatchers();
-    this.initDevBase();
 
     if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
       this.messagingService.requestNotifications();
@@ -208,20 +207,6 @@ export class MyApp {
         this.events.publish('application:multitasking:resumed');
       }
     }, false);
-  }
-
-  initDevBase() {
-    if (window.location.href.toLowerCase().indexOf('ngrok.io') > -1) {
-      localStorage.setItem('base', window.location.protocol + '//' + window.location.hostname + '/');
-    } else if (window.location.href.toLowerCase().indexOf('devbox.julianjp.com') > -1) {
-      localStorage.setItem('base', 'http://devbox.julianjp.com:3000/');
-    } else if (window.location.href.toLowerCase().indexOf('julianjp.com') > -1) {
-      localStorage.setItem('base', 'https://julianjp.com/chefbook-backend/');
-    } else if (window.location.href.toLowerCase().indexOf('localhost') > -1) {
-      localStorage.setItem('base', 'http://localhost:3000/');
-    } else if (window.location.href.toLowerCase().indexOf(':8100') > -1) {
-      localStorage.setItem('base', window.location.protocol + '//' + window.location.hostname + ':3000/');
-    }
   }
 
   navList() {

@@ -22,6 +22,9 @@ export class LoginPage {
 
   showLogin: boolean = true;
 
+  redirect: { page: string, params: any };
+  afterAuth: Function;
+
   constructor(
     public navCtrl: NavController,
     public utilService: UtilServiceProvider,
@@ -33,6 +36,14 @@ export class LoginPage {
 
     if (navParams.get('register')) {
       this.showLogin = false;
+    }
+
+    if (navParams.get('redirect')) {
+      this.redirect = navParams.get('redirect');
+    }
+
+    if (navParams.get('afterAuth')) {
+      this.afterAuth = navParams.get('afterAuth');
     }
   }
 
@@ -92,7 +103,7 @@ export class LoginPage {
           this.messagingService.requestNotifications();
         }
 
-        this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+        this.handleRedirect();
       }, err => {
         loading.dismiss();
         switch(err.status) {
@@ -122,7 +133,7 @@ export class LoginPage {
             this.messagingService.requestNotifications();
           }
 
-          this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+          this.handleRedirect();
         }, err => {
           loading.dismiss();
           switch(err.status) {
@@ -182,5 +193,15 @@ export class LoginPage {
   showLegal(e) {
     e.preventDefault();
     this.navCtrl.push('LegalPage');
+  }
+
+  handleRedirect() {
+    if (this.afterAuth) {
+      this.afterAuth();
+    } else {
+      let redirectPage = this.redirect ? this.redirect.page : 'HomePage';
+      let redirectParams = this.redirect ? this.redirect.params : { folder: 'main' };
+      this.navCtrl.setRoot(redirectPage, redirectParams, { animate: true, direction: 'forward' });
+    }
   }
 }

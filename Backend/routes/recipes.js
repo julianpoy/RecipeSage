@@ -411,12 +411,11 @@ router.get(
 router.get(
   '/:recipeId',
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(['user'], true),
   function(req, res, next) {
 
   Recipe.findOne({
     where: {
-      userId: res.locals.session.userId,
       id: req.params.recipeId
     },
     include: [{
@@ -436,6 +435,15 @@ router.get(
     if (!recipe) {
       res.status(404).send("Recipe with that ID not found!");
     } else {
+      recipe = recipe.toJSON();
+
+      recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
+
+      // There should be no fromUser after recipes have been moved out of the inbox
+      if (recipe.folder !== 'inbox' || !recipe.isOwner) delete recipe.fromUser;
+
+      if (!recipe.isOwner) recipe.labels = [];
+
       res.status(200).json(recipe);
     }
   }).catch(next);
