@@ -32,7 +32,7 @@ export class ShareModalPage {
 
   hasCopyAPI: boolean = !!document.execCommand;
   hasWebShareAPI: boolean = !!(navigator as any).share;
-  recipeURL: string = window.location.href;
+  recipeURL: string;
 
   embedHeight: number = 800;
   embedWidth: number = 600;
@@ -59,6 +59,8 @@ export class ShareModalPage {
   public userService: UserServiceProvider,
   public viewCtrl: ViewController) {
     this.recipe = navParams.get('recipe');
+
+    this.recipeURL = `${window.location.protocol}//${window.location.host}/#/recipe/${this.recipe.id}?usp=sharing&v=${(window as any).version}`;
 
     this.loadThreads().then(() => {}, () => {});
 
