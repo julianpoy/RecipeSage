@@ -38,7 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     User.hasMany(models.FCMToken, {
-      foreignKey: 'userId'
+      foreignKey: 'userId',
+      as: 'fcmTokens'
     });
 
     User.hasMany(models.Recipe, {
