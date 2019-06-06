@@ -60,7 +60,7 @@ export class ShareModalPage {
   public viewCtrl: ViewController) {
     this.recipe = navParams.get('recipe');
 
-    this.recipeURL = `${window.location.protocol}//${window.location.host}/#/recipe/${this.recipe.id}?usp=sharing&v=${(window as any).version}`;
+    this.recipeURL = `${window.location.protocol}//${window.location.host}/#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
 
     this.loadThreads().then(() => {}, () => {});
 
