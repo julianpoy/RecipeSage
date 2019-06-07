@@ -60,7 +60,12 @@ export class MessagesPage {
         includeMessages: true,
         messageLimit: 1
       }).subscribe(response => {
-        this.threads = response;
+        this.threads = response.sort((a, b) => {
+          let aCreatedAt = new Date((a.messages[0] || []).updatedAt);
+          let bCreatedAt = new Date((b.messages[0] || []).updatedAt);
+          // Ascending (newest first)
+          return bCreatedAt.valueOf() - aCreatedAt.valueOf();
+        });
 
         resolve();
       }, err => {
