@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button *ngIf="selectedRecipeIds.length == 0"></ion-menu-button>
+
+      <ion-button *ngIf="selectedRecipeIds.length > 0" (click)="clearSelectedRecipes()">
+        <ion-icon slot="icon-only" name="md-close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{ selectedRecipeIds.length > 0 ? selectedRecipeIds.length + ' Selected' : folderTitle }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button *ngIf="selectedRecipeIds.length > 0 && folder === 'main'" (click)="addLabelToSelectedRecipes()">
+        <ion-icon slot="icon-only" name="pricetag"></ion-icon>
+      </ion-button>
+
+      <ion-button *ngIf="selectedRecipeIds.length > 0" (click)="deleteSelectedRecipes()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #contentContainer>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-searchbar
+    *ngIf="folder === 'main'"
+    (ionClear)="search('')"
+    (keyup.enter)="search($event.target.value); $event.target.blur()"
+  ></ion-searchbar>
+
+  <div class="labelChips" *ngIf="viewOptions.showLabelChips && folder === 'main' && labels.length > 0">
+    <a
+      *ngFor="let label of labels"
+      [ngClass]="{ selected: viewOptions.selectedLabels.indexOf(label.title) > -1 }"
+      (click)="toggleLabel(label.title)">
+      {{ label.title }} ({{ label.recipeCount }})
+    </a>
+  </div>
+
+  <ion-virtual-scroll [items]="recipes">
+    <ion-item
+      *virtualItem="let recipe"
+      class="recipeItem"
+      [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+      (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+      (press)="selectRecipe(recipe)">
+      <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" slot="start" size="200px">
+        <ion-img [src]="recipe.image.location"></ion-img>
+      </ion-thumbnail>
+
+      <ion-label>
+        <h2 text-wrap>{{ recipe.title }}</h2>
+        <p text-wrap>{{ recipe.description }}</p>
+        <p *ngIf="(recipe.source || recipe.url) && viewOptions.showSource" text-wrap>Source: {{ recipe.source || recipe.url }}</p>
+
+        <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+          <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+        </p>
+
+        <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" text-wrap>
+          Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-virtual-scroll>
+
+  <ion-infinite-scroll threshold="400px" (ionInfinite)="fetchMoreRecipes($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-list *ngIf="!loading">
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" no-lines text-wrap text-center>
+      <br /><br />
+      <logo-icon href="/#/about"></logo-icon>
+      <br /><br />
+      <h2>Welcome to Recipe Sage!</h2>
+      <br /><br />
+      <p>
+        This is where your recipes will appear.<br />
+        It looks like you don't have any recipes yet.<br />
+        <b>Click the + button in the bottom right corner to add one!</b><br />
+
+        <br /><br />
+
+        You can also import recipes!<br />
+        Use the side menu to go to settings -> import
+      </p>
+    </ion-item>
+
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
+      <br /><br />
+      <ion-icon name="mail-open" class="big-icon"></ion-icon>
+      <br /><br />
+      <p>
+        Your recipe inbox is empty.<br />
+        When someone sends you a recipe, it will show up here!
+      </p>
+    </ion-item>
+
+    <ion-item *ngIf="recipes && recipes.length === 0 && searchText.length > 0" no-lines text-wrap text-center>
+      <p>
+        No search results.<br /><br />
+        Search includes:<br />
+        Title, description, source, ingredients, instructions, and notes.
+      </p>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab *ngIf="folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="newRecipe()" color="primary"><ion-icon name="add"></ion-icon></ion-fab-button>
+  </ion-fab>
+</ion-content>

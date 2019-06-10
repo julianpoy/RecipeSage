@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <button ion-item (click)="goTo('ImportPage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import Recipe Data
+    </button>
+    <button ion-item (click)="goTo('ExportPage')">
+      <ion-icon name="cloud-download" item-start></ion-icon>
+      Export Recipe Data
+    </button>
+    <button ion-item (click)="goTo('AccountPage')">
+      <ion-icon name="person" item-start></ion-icon>
+      Account & Credentials
+    </button>
+    <button ion-item (click)="checkForUpdate()">
+      <ion-icon name="sync" item-start></ion-icon>
+      Check for Update
+    </button>
+  </ion-list>
+</ion-content>

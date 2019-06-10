@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Account & Credentials</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br />
+
+  <ion-item no-lines text-wrap>
+    <p>
+      Here you can update and change aspects about your account
+    </p>
+  </ion-item>
+
+  <br />
+
+  <ion-item no-lines>
+    <ion-icon name="key" item-start></ion-icon>
+    Credentials and Details
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Name/Nickname</ion-label>
+    <ion-input
+      autocomplete="off"
+      autofill="off"
+      type="text"
+      [(ngModel)]="account.name"
+      (ionFocus)="nameChanged = true"
+      (ngModelChange)="nameChanged = true"></ion-input>
+    <button *ngIf="nameChanged" (click)="saveName()" ion-button item-right>
+      Save Name
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Email</ion-label>
+    <ion-input
+      autocomplete="off"
+      autofill="off"
+      type="text"
+      [(ngModel)]="account.email"
+      (ionFocus)="emailChanged = true"
+      (ngModelChange)="emailChanged = true"></ion-input>
+    <button *ngIf="emailChanged" (click)="saveEmail()" ion-button item-right>
+      Save Email
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Password</ion-label>
+    <ion-input
+      autocomplete="new-password"
+      autofill="off"
+      type="password"
+      [(ngModel)]="account.password"
+      (ionFocus)="account.password = ''; passwordChanged = true;"
+      (ngModelChange)="passwordChanged = true;"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="passwordChanged">
+    <ion-label stacked>Confirm Password</ion-label>
+    <ion-input
+      autocomplete="new-password"
+      autofill="off"
+      type="password"
+      [(ngModel)]="account.confirmPassword"></ion-input>
+    <button ion-button (click)="savePassword()" item-right>
+      Save Password
+    </button>
+  </ion-item>
+
+  <br />
+
+  <ion-item no-lines text-wrap>
+    <p>
+      To change a field above, tap the field, edit it, and press the save button that appears.
+    </p>
+  </ion-item>
+
+  <br /><br /><br /><br />
+
+  <ion-item no-lines>
+    <ion-icon name="warning" color="danger" item-start></ion-icon>
+    Danger Zone!
+  </ion-item>
+
+  <ion-item no-lines text-wrap>
+    <p>
+      Be careful with these actions - they are permenant.<br />
+      You will be asked a to confirm any action you take here.
+    </p>
+  </ion-item>
+
+  <button margin ion-button color="danger" (click)="deleteAllRecipes()" item-right>
+    Delete All Recipes
+  </button>
+</ion-content>

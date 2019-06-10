@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
+
+    <ion-buttons end>
+      <button class="reload" [ngClass]="{ reloading: reloading }" ion-button icon-only (click)="reload()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content #content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div>
+    <div
+      class="message"
+      [ngClass]="{'me': message.toUser.id === message.otherUser.id, 'blue': message.fromUser.id === message.otherUser.id }"
+      *ngFor="let message of messages; let i = index; trackBy: trackByFn">
+      <div class="time-divider" *ngIf="message.deservesDateDiff">
+        {{ message.dateDiff }}
+      </div>
+      <div class="chat" *ngIf="!message.recipe" (press)="setSelectedChat(i)">
+        <span [innerHTML]="message.body"></span>
+      </div>
+      <div class="recipe" *ngIf="message.recipe && message.fromUser.id === message.otherUser.id">
+        <!-- RECIPIENT -->
+        <ion-item *ngIf="message.recipe" (tap)="openRecipe(message.recipe)" (press)="setSelectedChat(i)" no-lines>
+          <ion-avatar *ngIf="message.recipe.image" item-start>
+            <img src="{{ message.recipe.image.location }}">
+          </ion-avatar>
+          <h2 text-wrap>{{ message.recipe.title }}</h2>
+          <p class="description">{{ message.recipe.description }}</p>
+          <p class="description">Click to open</p>
+        </ion-item>
+        <ion-item *ngIf="!message.recipe" (press)="setSelectedChat(i)" no-lines>
+          <h2 text-wrap>Recipe deleted</h2>
+          <p class="description">Your copy of this recipe no longer exists</p>
+        </ion-item>
+      </div>
+
+      <div class="recipe" *ngIf="message.originalRecipe && message.fromUser.id !== message.otherUser.id">
+        <!-- SENDER -->
+        <ion-item *ngIf="message.originalRecipe" (tap)="openRecipe(message.originalRecipe)" (press)="setSelectedChat(i)" no-lines>
+          <ion-avatar *ngIf="message.originalRecipe.image" item-start>
+            <img src="{{ message.originalRecipe.image.location }}">
+          </ion-avatar>
+          <h2 text-wrap>{{ message.originalRecipe.title }}</h2>
+          <p class="description">{{ message.originalRecipe.description }}</p>
+          <p class="description">A copy of this recipe was sent</p>
+        </ion-item>
+        <ion-item *ngIf="!message.originalRecipe" (press)="setSelectedChat(i)" no-lines>
+          <h2 text-wrap>Recipe deleted</h2>
+          <p class="description">Your copy of this recipe no longer exists</p>
+        </ion-item>
+      </div>
+
+      <div class="chatDetails" *ngIf="selectedChatIdx === i">
+        {{ message.formattedDate }}
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <form ng-submit="sendMessage()">
+    <ion-item>
+      <ion-textarea
+        autocomplete=“true”
+        spellcheck=“true”
+        autocorrect=“on”
+        name="body"
+        [(ngModel)]="pendingMessage"
+        (keyup)="onMessageKeyUp($event)"
+        type="text"
+        placeholder="{{ messagePlaceholder }}"
+        (ionFocus)="keyboardOpened()"></ion-textarea>
+      <button type="submit" (click)="sendMessage()" ion-button clear item-end>
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-item>
+  </form>
+</ion-footer>

@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Import</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-item text-wrap no-lines class="description">
+    <br /><br />
+    <p>
+      RecipeSage supports importing from Pepperplate, Living Cookbook, and Paprika.
+    </p>
+    <br />
+    <p>
+      Importing recipes will add all recipes from the file/account you've selected to your RecipeSage account.<br />
+      If you're having trouble with the import, please send me an email.
+    </p>
+  </ion-item>
+  <br />
+
+  <ion-list>
+    <button ion-item (click)="goTo('ImportPepperplatePage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import from Pepperplate
+    </button>
+    <button ion-item (click)="goTo('ImportLivingcookbookPage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import Living Cookbook File
+    </button>
+    <button ion-item (click)="goTo('ImportPaprikaPage')">
+      <ion-icon name="cloud-upload" item-start></ion-icon>
+      Import Paprika Recipes File
+    </button>
+  </ion-list>
+</ion-content>

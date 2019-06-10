@@ -1,0 +1,56 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Add item(s)</ion-title>
+
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div>
+    <ion-segment [(ngModel)]="inputType">
+      <ion-segment-button value="items">
+        Items
+      </ion-segment-button>
+      <ion-segment-button value="recipe">
+        Recipe
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="inputType">
+
+    <div *ngSwitchCase="'items'">
+      <ion-item *ngFor="let item of itemFields">
+        <ion-label floating>Item title</ion-label>
+        <ion-input [(ngModel)]="item.title" (ngModelChange)="addOrRemoveTextFields()" type="text" value=""></ion-input>
+      </ion-item>
+    </div>
+
+    <div *ngSwitchCase="'recipe'">
+      <br *ngIf="!selectedRecipe" />
+      <select-recipe [(selectedRecipe)]="selectedRecipe"></select-recipe>
+
+      <select-ingredients
+        *ngIf="selectedRecipe"
+        [ingredients]="selectedRecipe.ingredients"
+        (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer padding>
+  <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
+    <ion-icon name="list"></ion-icon>
+    Add to List
+  </button>
+</ion-footer>

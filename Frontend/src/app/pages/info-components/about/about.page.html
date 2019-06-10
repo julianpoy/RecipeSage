@@ -1,0 +1,41 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>About & Support</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <p>Hello! I'm Julian Poyourow. I made Recipe Sage as an alternative to many of the online recipe programs.</p>
+
+  <ion-list>
+    <button ion-item (click)="goTo('AboutDetailsPage')">
+      <ion-icon name="person" item-start></ion-icon>
+      More About Me & Recipe Sage
+    </button>
+    <button ion-item (click)="goTo('ContributePage')">
+      <ion-icon name="heart" item-start></ion-icon>
+      Contribute!
+    </button>
+    <button ion-item (click)="goTo('ReleaseNotesPage')">
+      <ion-icon name="archive" item-start></ion-icon>
+      Release Notes
+    </button>
+    <button ion-item (click)="goTo('TipsTricksTutorialsPage')">
+      <ion-icon name="help" item-start></ion-icon>
+      Tips, tricks and tutorials
+    </button>
+    <button ion-item (click)="goTo('LegalPage')">
+      <ion-icon name="list-box" item-start></ion-icon>
+      Legal, agreements and disclaimers
+    </button>
+  </ion-list>
+
+  <p>Feel free to email me at <a href="mailto:julianpoyit@gmail.com?subject=RecipeSage Support">julianpoyit@gmail.com</a>.</p>
+</ion-content>

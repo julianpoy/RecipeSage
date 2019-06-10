@@ -1,0 +1,292 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Recipe Details: {{ recipe.title }}</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card>
+    <ion-item>
+      <ion-thumbnail *ngIf="recipe.image" item-start>
+        <img src="{{ recipe.image.location }}">
+      </ion-thumbnail>
+      <h2 class="recipeTitle" text-wrap>{{ recipe.title }}</h2>
+
+      <ion-grid class="meta" showWhen="core" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
+        <ion-row>
+          <ion-col *ngIf="recipe.source || recipe.url" col-auto>
+            <p text-wrap>
+              <b>Source:</b>
+              <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+              <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
+            </p>
+          </ion-col>
+          <ion-col *ngIf="recipe.activeTime" col-auto>
+            <p text-wrap><b>Active Time: </b>{{ recipe.activeTime }}</p>
+          </ion-col>
+          <ion-col *ngIf="recipe.totalTime" col-auto>
+            <p text-wrap><b>Total Time: </b>{{ recipe.totalTime }}</p>
+          </ion-col>
+          <ion-col *ngIf="recipe.yield" col-auto>
+            <p text-wrap><b>Yield: </b>{{ recipe.yield }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <p text-wrap>{{ recipe.description }}</p>
+    </ion-item>
+
+    <div showWhen="mobile" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield" padding-left padding-right>
+      <ion-grid class="meta">
+        <ion-row>
+          <ion-col *ngIf="recipe.source || recipe.url" col-auto>
+            <p>
+              <b>Source:</b>
+              <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+              <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
+            </p>
+          </ion-col>
+          <ion-col *ngIf="recipe.activeTime" col-auto>
+            <p>
+              <b>Active Time: </b>{{ recipe.activeTime }}</p>
+          </ion-col>
+          <ion-col *ngIf="recipe.totalTime" col-auto>
+            <p>
+              <b>Total Time: </b>{{ recipe.totalTime }}</p>
+          </ion-col>
+          <ion-col *ngIf="recipe.yield" col-auto>
+            <p>
+              <b>Yield: </b>{{ recipe.yield }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+      <p text-wrap>
+        <b>This recipe was sent to you by {{ recipe.fromUser.name || recipe.fromUser.email }}</b><br />
+        Add this recipe to your recipes by clicking the button at the bottom of the page.<br /><br />
+      </p>
+    </ion-item>
+
+    <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
+
+    <ion-grid class="ingredientsInstructionsGrid">
+      <ion-row align-items-start>
+        <ion-col class="ingredientsCol" col-12>
+          <ion-item>
+            <ion-icon name="book" item-start large></ion-icon>
+            <p>Ingredients</p>
+          </ion-item>
+          <ion-item class="ingredients" text-wrap>
+            <p *ngFor="let ingredient of ingredients"
+              [innerHTML]="ingredient.content"
+              class="ingredient"
+              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: ingredient.complete }"
+              (click)="ingredientClicked($event, ingredient)"></p>
+            <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
+            <p>
+              <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
+            </p>
+          </ion-item>
+        </ion-col>
+        <ion-col class="instructionsCol" col-12 col-sm-auto>
+          <ion-item>
+            <ion-icon name="list" item-start large></ion-icon>
+            <p>Instructions</p>
+          </ion-item>
+          <ion-item class="instructions" text-wrap>
+            <p *ngFor="let instruction of instructions" class="instruction" text-wrap>
+              <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
+              <span
+                *ngIf="!instruction.isHeader"
+                (click)="instructionClicked($event, instruction)"
+                [ngClass]="{ complete: instruction.complete }">
+                <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
+              </span>
+            </p>
+            <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div *ngIf="recipe.notes">
+      <ion-item>
+        <ion-icon name="paper" item-start large></ion-icon>
+        <p>Notes</p>
+      </ion-item>
+      <ion-item text-wrap>
+        <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+      </ion-item>
+      <br />
+    </div>
+
+    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels" no-margin text-wrap>
+      <ion-icon name="pricetag" item-start large></ion-icon>
+      <p>Labels</p>
+    </ion-item>
+
+    <ion-item *ngIf="recipe.id && !recipe.isOwner">
+      <p>
+        You can add labels once you save this recipe to your collection
+      </p>
+    </ion-item>
+
+    <div class='dropdownSelect' *ngIf="recipe.folder !== 'inbox' && recipe.isOwner">
+
+      <div class="labels">
+        <span class="label" *ngFor="let label of selectedLabels">
+          <ion-icon class="delete-label" (click)="deleteLabel(labelObjectsByTitle[label])" name="trash" item-start></ion-icon>
+          {{ label }}
+        </span>
+      </div>
+
+      <input
+        [(ngModel)]='pendingLabel'
+        (focus)='toggleAutocomplete(true)'
+        (focusout)='toggleAutocomplete(false, $event)'
+        (blur)='toggleAutocomplete(false, $event)'
+        (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
+        placeholder="Create or select label"
+        autocomplete="off"
+        #labelInputField
+        id="labelInputField" />
+      <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
+        <button
+          class="suggestion"
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1"
+          (click)="addLabel(pendingLabel)">
+          <ion-item>
+            {{ pendingLabel }}
+            <span class="hint">Click to create</span>
+          </ion-item>
+        </button>
+        <button
+          class="suggestion"
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+          <ion-item>
+            {{ pendingLabel }}
+            <span class="hint">Already added</span>
+          </ion-item>
+        </button>
+        <button
+          class="suggestion"
+          *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
+          (click)="addLabel(label)">
+          <ion-item>
+            {{ label }}
+            <span class="hint">Click to add</span>
+          </ion-item>
+        </button>
+      </div>
+    </div>
+
+    <br />
+
+    <ion-item>
+      <p>
+        Created {{ prettyDateTime(recipe.createdAt) }}<br />
+        Last edited {{ prettyDateTime(recipe.updatedAt) }}
+      </p>
+    </ion-item>
+
+    <div *ngIf="recipe.folder === 'inbox'" padding>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
+          	<button ion-button icon-left block (click)="moveToFolder('main')">
+          	  <ion-icon name="cloud-download"></ion-icon>
+          	  Save This Recipe to My Recipes
+          	</button>
+          </ion-col>
+          <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
+          	<button color="danger" ion-button icon-left block (click)="deleteRecipe()">
+        	    <ion-icon name="trash"></ion-icon>
+          	  Delete
+        	  </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" padding>
+      <ion-item no-padding>
+        <p>
+          This recipe does not belong to you yet.
+        </p>
+      </ion-item>
+      <button ion-button icon-left block (click)="cloneRecipe()">
+        <ion-icon name="cloud-download"></ion-icon>
+        Save This Recipe to My Recipes
+      </button>
+    </div>
+
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" padding>
+      <ion-item no-padding>
+        <p>
+          Create an account or login to save this recipe to your collection.
+        </p>
+      </ion-item>
+      <button ion-button icon-left block (click)="authAndClone()">
+        <ion-icon name="cloud-download"></ion-icon>
+        Create an Account or Login To Save This Recipe
+      </button>
+    </div>
+
+    <ion-row *ngIf="recipe.folder === 'main' && recipe.isOwner">
+      <ion-col center text-center>
+        <button (click)="editRecipe()" ion-button icon-left clear small>
+          <ion-icon name="create"></ion-icon>
+          <div>Edit</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="deleteRecipe()" ion-button icon-left clear small>
+          <ion-icon name="trash"></ion-icon>
+          <div>Delete</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="addRecipeToShoppingList()" ion-button icon-left clear small>
+          <ion-icon name="list"></ion-icon>
+          <div>Add to Shopping List</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="addRecipeToMealPlan()" ion-button icon-left clear small>
+          <ion-icon name="calendar"></ion-icon>
+          <div>Add to Meal Plan</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="shareRecipe()" ion-button icon-left clear small>
+          <ion-icon name="share"></ion-icon>
+          <div>Share</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="printRecipe()" ion-button icon-left clear small>
+          <ion-icon name="print"></ion-icon>
+          <div>Print</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <button (click)="cloneRecipe()" ion-button icon-left clear small>
+          <ion-icon name="copy"></ion-icon>
+          <div>Make a Copy</div>
+        </button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+</ion-content>

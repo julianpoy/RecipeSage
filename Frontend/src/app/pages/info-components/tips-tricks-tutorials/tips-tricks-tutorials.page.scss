@@ -1,0 +1,30 @@
+page-tips-tricks-tutorials {
+  ion-content {
+    text-align: center;
+  }
+
+  ion-list ion-item {
+    cursor: pointer;
+  }
+
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--content-max-width);
+  }
+
+  .tutorial-image {
+    width: 30%;
+    max-width: 400px;
+    min-width: 200px;
+    margin: 2rem auto;
+
+    img {
+      box-shadow: 1px 1px 12px #555555;
+    }
+  }
+
+  p {
+    text-align: left;
+  }
+}

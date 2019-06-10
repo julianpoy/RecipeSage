@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <img src="assets/recipesage-white-trimmed.png" alt="Recipe Sage Logo" style="display:inline-block" height="40px" />
+      <!--Recipe Sage-->
+    </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="intro-container">
+    <div class="intro-fold"></div>
+
+    <div class="intro-fold-dimmer"></div>
+
+    <div class="title">
+      <h1>
+        All of your recipes in one place
+      </h1>
+
+      <br />
+
+      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf"></ion-icon>
+        Create an account
+      </button>
+    </div>
+
+    <div class="screen">
+      <picture>
+        <img src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+      </picture>
+    </div>
+
+    <div class="welcomeContent" padding>
+      <h2>Welcome to RecipeSage!</h2>
+
+      RecipeSage is a homegrown personal recipe keeper
+
+      <br /><br /><br />
+
+      <span class="sectionHeader">What can RecipeSage do?</span><br />
+
+      <ul>
+        <li>Store all of your recipes in one place</li>
+        <li>Assign labels to your recipes and filter by label</li>
+        <li>Powerful search within your recipe collection</li>
+        <li>Send recipes and notes to your friends and family</li>
+        <li>Create collaborative shopping lists and meal plans</li>
+        <li>Clip recipes directly from the web</li>
+        <li>Import from Pepperplate, Living Cookbook, and Paprika</li>
+        <li>Export your recipes in multiple formats for data portability</li>
+      </ul>
+
+      <span class="sectionHeader">Why RecipeSage?</span><br />
+
+      <ul>
+        <li>Free (donation based)</li>
+        <li>Easy to use</li>
+        <li>Mobile compatible</li>
+        <li>Chrome and Firefox extensions make it easy to clip recipes from the web</li>
+      </ul>
+
+      <br /><br />
+
+      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf"></ion-icon>
+        Create an account
+      </button>
+
+      <br /><br />
+
+      <button ion-button icon-start (click)="goToAuth('login')" style="margin: 0;">
+        <ion-icon name="ios-nutrition"></ion-icon>
+        Log In
+      </button>
+
+      <br /><br /><br /><br />
+    </div>
+  </div>
+</ion-content>

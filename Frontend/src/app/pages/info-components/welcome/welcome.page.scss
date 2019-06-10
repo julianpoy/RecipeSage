@@ -1,0 +1,88 @@
+page-welcome {
+  $container-layer: -2;
+  $bg-layer: -1;
+
+  .intro-container {
+    position: relative;
+    background-color: rgba(0,0,0,0.025);
+    z-index: $container-layer; // Move this below
+
+    .intro-fold, .intro-fold-dimmer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 50%;
+      z-index: $bg-layer; // Move this below all other layers
+    }
+
+    .intro-fold {
+      overflow: hidden;
+      box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+
+      background-image: url("/assets/stockphotos/chicken-salad-640.jpg");
+      background-position: top;
+      background-size: cover;
+
+      @media only screen and (min-width:641px) {
+        background-image: url('/assets/stockphotos/chicken-salad-1280.jpg');
+      }
+      @media only screen and (min-width:1281px) {
+        background-image: url('/assets/stockphotos/chicken-salad-1920.jpg');
+      }
+      @media only screen and (min-width:1921px) {
+        background-image: url('/assets/stockphotos/chicken-salad-original.jpg');
+      }
+    }
+
+    .intro-fold-dimmer {
+      background-color: rgba(0,0,0,0.3);
+    }
+
+    .title {
+      text-align: center;
+      color: white;
+      padding: 60px;
+      padding-top: 80px;
+
+      h1 {
+        font-size: 2.5rem;
+
+        @media only screen and (min-width:350px) {
+          font-size: 3.5rem;
+        }
+      }
+    }
+
+    .screen {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 200px;
+      box-shadow: 1px 1px 40px rgba(0, 0, 0, 0.35);
+
+      @media only screen and (min-width:350px) {
+        max-width: 300px;
+      }
+
+      @media only screen and (min-width:500px) {
+        max-width: 400px;
+      }
+    }
+
+    .welcomeContent {
+      margin-top: 50px;
+      max-width: var(--content-max-width);
+      margin-left: auto;
+      margin-right: auto;
+
+      .sectionHeader {
+        font-size: 1.5rem;
+        font-weight: 500;
+      }
+
+      li {
+        padding: 2px 0px;
+      }
+    }
+  }
+}
