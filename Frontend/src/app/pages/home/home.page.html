@@ -81,7 +81,7 @@
   </ion-infinite-scroll>
 
   <ion-list *ngIf="!loading">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" lines="none" text-wrap text-center>
       <br /><br />
       <logo-icon href="/#/about"></logo-icon>
       <br /><br />
@@ -99,7 +99,7 @@
       </p>
     </ion-item>
 
-    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" lines="none" class="ion-text-wrap ion-text-center">
       <br /><br />
       <ion-icon name="mail-open" class="big-icon"></ion-icon>
       <br /><br />
@@ -109,7 +109,7 @@
       </p>
     </ion-item>
 
-    <ion-item *ngIf="recipes && recipes.length === 0 && searchText.length > 0" no-lines text-wrap text-center>
+    <ion-item *ngIf="recipes && recipes.length === 0 && searchText.length > 0" lines="none" class="ion-text-wrap ion-text-center">
       <p>
         No search results.<br /><br />
         Search includes:<br />

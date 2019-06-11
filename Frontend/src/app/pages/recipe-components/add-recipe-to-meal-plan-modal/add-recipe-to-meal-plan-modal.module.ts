@@ -4,14 +4,12 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { AddRecipeToMealPlanModalPage } from './add-recipe-to-meal-plan-modal.page';
-// import { ComponentsModule } from '@/components/components.module';
 
 @NgModule({
   declarations: [
     AddRecipeToMealPlanModalPage,
   ],
   imports: [
-    ComponentsModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

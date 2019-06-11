@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ContributeThankYouPage } from './contribute-thankyou.page';
-// import { ComponentsModule } from '@/components/components.module';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { ContributeThankYouPage } from './contribute-thankyou.page';
         path: '',
         component: ContributeThankYouPage
       }
-    ]),
-    ComponentsModule
+    ])
   ],
 })
 export class ContributeThankYouPageModule {}

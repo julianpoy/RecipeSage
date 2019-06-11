@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { PrintRecipeModalPage } from './print-recipe-modal.page';
-// import { ComponentsModule } from '@/components/components.module';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { PrintRecipeModalPage } from './print-recipe-modal.page';
         path: '',
         component: PrintRecipeModalPage
       }
-    ]),
-    ComponentsModule
+    ])
   ],
 })
 export class PrintRecipeModalPageModule {}

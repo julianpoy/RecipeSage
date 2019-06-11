@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ShareModalPage } from './share-modal.page';
-// import { ComponentsModule } from '@/components/components.module';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { ShareModalPage } from './share-modal.page';
         path: '',
         component: ShareModalPage
       }
-    ]),
-    ComponentsModule
+    ])
   ],
 })
 export class ShareModalPageModule {}

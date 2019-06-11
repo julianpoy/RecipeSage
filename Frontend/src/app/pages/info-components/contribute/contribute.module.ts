@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ContributePage } from './contribute.page';
-// import { ComponentsModule } from '@/components/components.module';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { ContributePage } from './contribute.page';
         path: '',
         component: ContributePage
       }
-    ]),
-    ComponentsModule
+    ])
   ],
 })
 export class ContributePageModule {}

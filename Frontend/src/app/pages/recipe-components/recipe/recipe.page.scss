@@ -1,107 +1,131 @@
-page-recipe {
-  ion-thumbnail {
-    box-shadow: 1px 1px 8px #999999;
+@import 'src/theme/shared-variables.scss';
+
+@media only screen and (max-width: $desktop-breakpoint) {
+  .metacontainer-desktop {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $desktop-breakpoint) {
+  .metacontainer-mobile {
+    display: none;
+  }
+}
+
+ion-thumbnail {
+  box-shadow: 1px 1px 8px #999999;
+}
+
+.pre {
+  white-space: pre-wrap;
+}
+
+h2.recipeTitle {
+  margin-top: 0 !important;
+}
+
+.ingredientsInstructionsGrid {
+  padding-left: 0;
+
+  @media (min-width: 576px) {
+    .ingredientsCol {
+      max-width: 215px;
+    }
+
+    .instructionsCol[col-sm-auto] {
+      flex: 0 0;
+      flex-grow: 1;
+      max-width: 700px;
+      width: auto;
+    }
   }
 
-  .pre {
-    white-space: pre-wrap;
+  ion-col {
+    margin-bottom: 10px;
+  }
+}
+
+.ingredients {
+  ion-label {
+    margin: 0;
   }
 
-  h2.recipeTitle {
-    margin-top: 0 !important;
+  .scale {
+    cursor: pointer;
   }
 
-  .ingredientsInstructionsGrid {
-    padding-left: 0;
+  ion-label {
+    margin-top: 0;
+  }
 
-    @media (min-width: 576px) {
-      .ingredientsCol {
-        max-width: 215px;
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .ingredient {
+    color: #3f3f3f;
+
+    .sectionHeader {
+      display: block;
+      margin: 4px 0;
+    }
+
+    &:first-child {
+      .sectionHeader {
+        margin-top: 0;
       }
-
-      .instructionsCol[col-sm-auto] {
-        flex: 0 0;
-        flex-grow: 1;
-        max-width: 700px;
-        width: auto;
-      }
     }
 
-    ion-col {
-      margin-bottom: 10px;
+    &.complete {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    &.ingredientContent {
+      cursor: pointer;
     }
   }
+}
 
-  .ingredients {
-    ion-label {
-      margin: 0;
-    }
+.instructions {
+  ion-label {
+    margin-top: 0;
+  }
 
-    .scale {
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .instruction {
+    margin-bottom: 15px;
+    color: #3f3f3f;
+
+    .instructionContent {
       cursor: pointer;
     }
 
-    ion-label {
-      margin-top: 0;
-    }
-
-    h2 {
-      margin-bottom: 10px;
-    }
-
-    .ingredient {
-      color: #3f3f3f;
-
-      .sectionHeader {
-        display: block;
-        margin: 4px 0;
-      }
-
-      &:first-child {
-        .sectionHeader {
-          margin-top: 0;
-        }
-      }
-
-      &.complete {
-        text-decoration: line-through;
-        opacity: 0.7;
-      }
-
-      &.ingredientContent {
-        cursor: pointer;
-      }
+    span.complete .instructionContent {
+      text-decoration: line-through;
+      opacity: 0.7;
     }
   }
+}
 
-  .instructions {
-    ion-label {
-      margin-top: 0;
+.meta {
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  ion-col {
+    padding: 5px;
+
+    b {
+      color: var(--ion-color-dark-tint);
     }
 
-    h2 {
-      margin-bottom: 10px;
+    p {
+      margin-bottom: 0;
     }
-
-    .instruction {
-      margin-bottom: 15px;
-      color: #3f3f3f;
-
-      .instructionContent {
-        cursor: pointer;
-      }
-
-      span.complete .instructionContent {
-        text-decoration: line-through;
-        opacity: 0.7;
-      }
-    }
-  }
-
-  .meta {
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
-    margin-top: 15px;
-    margin-bottom: 15px;
   }
 }
