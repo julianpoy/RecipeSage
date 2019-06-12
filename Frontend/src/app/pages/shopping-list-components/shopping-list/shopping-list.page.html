@@ -18,20 +18,20 @@
   <ion-refresher (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list no-lines>
-    <ion-list-header *ngIf="list.items.length > 0" no-margin>
+  <ion-list lines="none">
+    <ion-list-header *ngIf="list.items.length > 0" class="ion-no-margin">
       Items
     </ion-list-header>
     <div *ngIf="viewOptions.groupSimilar">
       <div *ngFor="let group of list.itemsByGroup; let i = index;">
         <ion-item>
-          <ion-label no-margin text-wrap>
+          <ion-label class="ion-text-wrap ion-no-margin">
             <b class="groupTitle">{{ group.title }}:</b>
           </ion-label>
           <ion-checkbox style="visibility: hidden;"></ion-checkbox>
         </ion-item>
         <ion-item *ngFor="let item of group.items">
-          <ion-label no-margin text-wrap>
+          <ion-label class="ion-text-wrap ion-no-margin">
             {{ item.title }}
             <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
               For recipe:
@@ -52,7 +52,7 @@
     </div>
     <div *ngIf="!viewOptions.groupSimilar">
       <ion-item *ngFor="let item of list.items; let i = index;">
-        <ion-label text-wrap>
+        <ion-label class="ion-text-wrap">
           {{ item.title }}
           <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
             For recipe:
@@ -70,7 +70,7 @@
         <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
       </ion-item>
     </div>
-    <ion-item *ngIf="list.items.length === 0 && initialLoadComplete" text-wrap text-center>
+    <ion-item *ngIf="list.items.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
       <br />
       <br />
       <br />

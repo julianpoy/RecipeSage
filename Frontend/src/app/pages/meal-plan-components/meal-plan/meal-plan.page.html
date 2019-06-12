@@ -28,12 +28,12 @@
       (selectedDayChange)="selectedDay = $event"
       (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
 
-    <ion-list class="meal-list" no-lines>
-      <ion-list-header no-lines text-center no-padding>
+    <ion-list class="meal-list" lines="none">
+      <ion-list-header lines="none" class="ion-text-center ion-no-padding">
         <h2>Meals & Items:</h2>
       </ion-list-header>
 
-      <ion-item *ngIf="selectedMealGroup.length === 0 && initialLoadComplete" text-wrap text-center>
+      <ion-item *ngIf="selectedMealGroup.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
         <br />
         <br />
         <br />
@@ -51,7 +51,7 @@
         <ion-item-divider class="mealTitle" *ngIf="idx === 0 || selectedMealGroup[idx - 1].meal !== mealItem.meal">
           {{mealItem.meal}}
         </ion-item-divider>
-        <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" text-wrap>
+        <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" class="ion-text-wrap">
           <!-- <ion-icon name="leaf" item-start></ion-icon> -->
           {{mealItem.title}}
 

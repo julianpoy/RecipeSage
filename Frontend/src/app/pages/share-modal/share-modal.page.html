@@ -16,12 +16,12 @@
 
 <ion-content>
   <ion-list>
-      <ion-item no-lines>
+      <ion-item lines="none">
         <ion-avatar *ngIf="recipe.image" item-start>
           <img src="{{ recipe.image.location }}">
         </ion-avatar>
         <h2>{{ recipe.title }}</h2>
-        <p text-wrap>
+        <p class="ion-text-wrap">
           When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.
         </p>
       </ion-item>
@@ -44,7 +44,7 @@
 
         <div *ngSwitchCase="'link'">
           <br />
-          <ion-item no-lines>
+          <ion-item lines="none">
             Copy the link below <span *ngIf="hasWebShareAPI">or press the share icon</span>
           </ion-item>
           <div class="codeBlock">
@@ -129,7 +129,7 @@
             <ion-icon name='resize' item-start></ion-icon>
           </ion-item>
 
-          <ion-item no-lines>
+          <ion-item lines="none">
             Copy the code below and paste it into your website HTML
           </ion-item>
           <div class="codeBlock">
@@ -163,7 +163,7 @@
           </div>
 
           <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
-            <ion-list-header style="margin-bottom: 0;" no-lines>
+            <ion-list-header style="margin-bottom: 0;" lines="none">
               Existing Conversations
             </ion-list-header>
 

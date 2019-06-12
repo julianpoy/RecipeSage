@@ -8,7 +8,7 @@
     <ion-label>
       Show Labels
     </ion-label>
-    <ion-icon name='pricetag' item-start></ion-icon>
+    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
@@ -16,7 +16,7 @@
     <ion-label>
       Show Label Toggles
     </ion-label>
-    <ion-icon name='pricetag' item-start></ion-icon>
+    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
@@ -24,7 +24,7 @@
     <ion-label>
       Show Images
     </ion-label>
-    <ion-icon name='image' item-start></ion-icon>
+    <ion-icon name='image' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
@@ -32,11 +32,11 @@
     <ion-label>
       Show Source
     </ion-label>
-    <ion-icon name='link' item-start></ion-icon>
+    <ion-icon name='link' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
-    <ion-icon name='list' item-start></ion-icon>
+    <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions(true);">
       <ion-option value="-title">Title</ion-option>
@@ -49,7 +49,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-icon name='funnel' item-start></ion-icon>
+    <ion-icon name='funnel' slot="start"></ion-icon>
     <ion-label>Filter by label</ion-label>
     <ion-select
       [(ngModel)]="viewOptions.selectedLabels"
@@ -74,6 +74,6 @@
     <ion-label>
       Match All Labels
     </ion-label>
-    <ion-icon name='funnel' item-start></ion-icon>
+    <ion-icon name='funnel' slot="start"></ion-icon>
   </ion-item>
 </ion-list>

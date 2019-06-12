@@ -12,8 +12,8 @@
   <ion-refresher (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list no-lines>
-    <ion-item class="mealPlan" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan.id)" text-wrap>
+  <ion-list lines="none">
+    <ion-item class="mealPlan ion-text-wrap" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan.id)">
       <ion-icon name="list" item-start></ion-icon>
       <h2>{{ mealPlan.title }}</h2>
       <p>
@@ -34,7 +34,7 @@
       </p>
       <ion-badge item-end>{{ mealPlan.itemCount }}</ion-badge>
     </ion-item>
-    <ion-item *ngIf="mealPlans.length === 0 && initialLoadComplete" text-wrap text-center>
+    <ion-item *ngIf="mealPlans.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
       <br /><br />
       <ion-icon name="calendar" class="big-icon"></ion-icon>
       <br /><br />

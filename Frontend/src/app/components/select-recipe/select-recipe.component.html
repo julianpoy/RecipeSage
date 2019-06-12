@@ -26,7 +26,7 @@
         class="suggestion"
         *ngFor="let recipe of recipes"
         (click)="selectRecipe(recipe)">
-        <ion-item no-lines>
+        <ion-item lines="none">
           <ion-avatar *ngIf="recipe.image" slot="start">
             <img src="{{ recipe.image.location }}">
           </ion-avatar>
@@ -38,7 +38,7 @@
       <button
         class="suggestion"
         *ngIf="searching">
-        <ion-item no-lines>
+        <ion-item lines="none">
           Searching for "{{ searchText }}"...
           <!-- <span class="hint"></span> -->
         </ion-item>
@@ -47,7 +47,7 @@
       <button
         class="suggestion"
         *ngIf="recipes.length === 0 && searchText.length > 0 && !searching">
-        <ion-item no-lines>
+        <ion-item lines="none">
           No results for "{{ searchText }}"
         </ion-item>
       </button>

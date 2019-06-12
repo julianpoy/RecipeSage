@@ -12,7 +12,7 @@
 
 
 <ion-content>
-  <ion-item text-wrap no-lines class="description">
+  <ion-item lines="none" class="description ion-text-wrap">
     <br /><br />
     <p>
       This will import your Living Cookbook database into Recipe Sage. <b>Please note this feature is in beta.</b><br />
@@ -38,24 +38,24 @@
     <b>1. Choose Import Options (if any):</b>
   </ion-item>
 
-  <ion-item no-lines class="option">
+  <ion-item lines="none" class="option">
     <ion-label>Exclude recipe images (optional, not recommended)</ion-label>
     <ion-checkbox [(ngModel)]="excludeImages"></ion-checkbox>
   </ion-item>
 
-  <ion-item no-lines class="option">
+  <ion-item lines="none" class="option">
     <ion-label>Include stock "filler" LCB recipes (optional, not recommended)</ion-label>
     <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
   </ion-item>
 
-  <ion-item no-lines class="option">
+  <ion-item lines="none" class="option">
     <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
     <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
   </ion-item>
 
   <br />
 
-  <ion-item text-wrap no-lines class="description">
+  <ion-item lines="none" class="description ion-text-wrap">
     <b>2. Select Your Living Cookbook Database:</b>
   </ion-item>
 
@@ -90,7 +90,7 @@
     </div>
 
     <div padding *ngIf="imageFile && !isFileTooLarge()">
-      <ion-item text-wrap no-lines class="description">
+      <ion-item lines="none" class="description ion-text-wrap">
         <b>3. Upload!</b>
       </ion-item>
 
@@ -101,7 +101,7 @@
 
     <br /><br /><br /><br />
 
-    <ion-item text-wrap no-lines class="description">
+    <ion-item lines="none" class="description ion-text-wrap">
       <a href="" (click)="troubleshoot = true; $event.preventDefault()">Click for Troubleshooting Help</a>
       <br /><br />
       <div *ngIf="troubleshoot">

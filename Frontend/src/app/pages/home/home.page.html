@@ -60,15 +60,15 @@
       </ion-thumbnail>
 
       <ion-label>
-        <h2 text-wrap>{{ recipe.title }}</h2>
-        <p text-wrap>{{ recipe.description }}</p>
-        <p *ngIf="(recipe.source || recipe.url) && viewOptions.showSource" text-wrap>Source: {{ recipe.source || recipe.url }}</p>
+        <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+        <p class="ion-text-wrap">{{ recipe.description }}</p>
+        <p *ngIf="(recipe.source || recipe.url) && viewOptions.showSource" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
 
         <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
           <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
         </p>
 
-        <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" text-wrap>
+        <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" class="ion-text-wrap">
           Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
         </p>
       </ion-label>
@@ -81,7 +81,7 @@
   </ion-infinite-scroll>
 
   <ion-list *ngIf="!loading">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" lines="none" text-wrap text-center>
+    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" lines="none" class="ion-text-wrap ion-text-center">
       <br /><br />
       <logo-icon href="/#/about"></logo-icon>
       <br /><br />
