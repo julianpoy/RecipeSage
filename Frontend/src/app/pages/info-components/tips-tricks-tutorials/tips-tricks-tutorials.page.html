@@ -13,27 +13,31 @@
 
 <ion-content>
   <!-- Click a tutorial to get started!<br /> -->
-  <ion-list *ngIf="!active" inset>
+  <ion-list *ngIf="!active" inset="true">
     <ion-item *ngFor="let tutorial of tutorials" (click)="active = tutorial.tag">
-      <ion-icon name="{{tutorial.icon}}" item-start></ion-icon>
-      <h2>{{tutorial.title}}</h2>
-      <p>{{tutorial.description}}</p>
-      <button ion-button clear item-end>Open</button>
+      <ion-icon name="{{tutorial.icon}}" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{tutorial.title}}</h2>
+        <p>{{tutorial.description}}</p>
+      </ion-label>
+      <ion-button fill="clear" slot="end">Open</ion-button>
     </ion-item>
     <ion-item>
-      <ion-icon name="clock" item-start></ion-icon>
-      <h2>More Tutorials are Coming Soon</h2>
-      <p>Please feel free to email me if you need help</p>
+      <ion-icon name="clock" slot="start"></ion-icon>
+      <ion-label>
+        <h2>More Tutorials are Coming Soon</h2>
+        <p>Please feel free to email me if you need help</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 
   <div *ngIf="active" class="container">
     <br />
-    <button float-left ion-button clear (click)="active = ''">
+    <ion-button class="ion-float-left" fill="clear" (click)="active = ''">
       Close Tutorial
-    </button>
+    </ion-button>
 
-    <div *ngIf="active == 'home'" padding>
+    <div *ngIf="active == 'home'" class="ion-padding">
       <br />
       <h2>My Recipes Page</h2>
       <div class="tutorial-image">
@@ -90,7 +94,7 @@
       </p>
     </div>
 
-    <div *ngIf="active == 'editRecipe'" padding>
+    <div *ngIf="active == 'editRecipe'" class="ion-padding">
       <br />
       <h2>Recipe Create/Edit Page</h2>
       <div class="tutorial-image">
@@ -124,7 +128,7 @@
       </p>
     </div>
 
-    <div *ngIf="active == 'recipeDetails'" padding>
+    <div *ngIf="active == 'recipeDetails'" class="ion-padding">
       <br />
       <h2>Recipe Details Page</h2>
       <div class="tutorial-image">
@@ -326,7 +330,7 @@
       </p>
     </div>
 
-    <div *ngIf="active == 'webExtension'" padding>
+    <div *ngIf="active == 'webExtension'" class="ion-padding">
       <br />
       <h2>Clip Tool Browser Extension Installation</h2>
       <div class="tutorial-image">
@@ -384,13 +388,13 @@
 
     <br /><br />
 
-    <button float-left ion-button clear (click)="active = ''">
+    <ion-button class="ion-float-left" fill="clear" (click)="active = ''">
       Close Tutorial
-    </button>
+    </ion-button>
 
-    <button float-right ion-button clear (click)="next()" [disabled]="isLast()">
+    <ion-button class="ion-float-right" fill="clear" (click)="next()" [disabled]="isLast()">
       Next Tutorial
-    </button>
+    </ion-button>
 
     <br /><br /><br /><br />
   </div>
