@@ -101,9 +101,9 @@ export class HomePage {
 
   refresh(refresher) {
     this.resetAndLoadAll().then(() => {
-      refresher.complete();
+      refresher.target.complete();
     }, () => {
-      refresher.complete();
+      refresher.target.complete();
     });
   }
 

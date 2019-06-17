@@ -64,9 +64,9 @@ export class ShoppingListPage {
 
   refresh(loader) {
     this.loadList().then(() => {
-      loader.complete();
+      loader.target.complete();
     }, () => {
-      loader.complete();
+      loader.target.complete();
     });
   }
 

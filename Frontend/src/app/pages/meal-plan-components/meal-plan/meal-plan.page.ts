@@ -71,9 +71,9 @@ export class MealPlanPage {
 
   refresh(loader) {
     this.loadMealPlan().then(() => {
-      loader.complete();
+      loader.target.complete();
     }, () => {
-      loader.complete();
+      loader.target.complete();
     });
   }
 

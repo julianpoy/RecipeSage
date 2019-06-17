@@ -96,9 +96,9 @@ export class MessageThreadPage {
 
   refresh(refresher) {
     this.loadMessages().then(() => {
-      refresher.complete();
+      refresher.target.complete();
     }, () => {
-      refresher.complete();
+      refresher.target.complete();
     });
   }
 

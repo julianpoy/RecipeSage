@@ -52,9 +52,9 @@ export class MealPlansPage {
 
   refresh(refresher) {
     this.loadPlans().then(() => {
-      refresher.complete();
+      refresher.target.complete();
     }, () => {
-      refresher.complete();
+      refresher.target.complete();
     });
   }
 

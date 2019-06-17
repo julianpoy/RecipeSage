@@ -51,9 +51,9 @@ export class ShoppingListsPage {
 
   refresh(refresher) {
     this.loadLists().then(() => {
-      refresher.complete();
+      refresher.target.complete();
     }, () => {
-      refresher.complete();
+      refresher.target.complete();
     });
   }
 

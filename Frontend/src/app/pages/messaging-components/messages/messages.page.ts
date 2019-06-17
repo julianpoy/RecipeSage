@@ -43,9 +43,9 @@ export class MessagesPage {
 
   refresh(refresher) {
     this.loadThreads().then(() => {
-      refresher.complete();
+      refresher.target.complete();
     }, () => {
-      refresher.complete();
+      refresher.target.complete();
     });
   }
 

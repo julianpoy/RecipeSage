@@ -63,9 +63,9 @@ export class RecipePage {
   refresh(loader) {
     this.loadAll()
     .then(() => {
-      loader.complete();
+      loader.target.complete();
     }, () => {
-      loader.complete();
+      loader.target.complete();
     });
 
     this.loadLabels();
