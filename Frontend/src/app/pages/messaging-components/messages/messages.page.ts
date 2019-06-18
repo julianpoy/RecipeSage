@@ -90,10 +90,7 @@ export class MessagesPage {
   }
 
   openThread(thread) {
-    // this.navCtrl.push('MessageThreadPage', {
-    //   thread: thread,
-    //   otherUserId: thread.otherUser.id
-    // });
+    this.navCtrl.navigateForward(`/messages/${thread.otherUser.id}`);
   }
 
   async newThread() {
