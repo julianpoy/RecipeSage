@@ -31,8 +31,10 @@
     </ion-item>
   </ion-list>
 
-  <ion-fab right bottom>
-    <button (click)="newThread()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="newThread()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
 
   <ion-footer *ngIf="isNotificationsCapable() && !isNotificationsEnabled()" class="ion-text-center ion-padding">

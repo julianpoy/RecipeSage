@@ -119,6 +119,8 @@
   </ion-list>
 
   <ion-fab *ngIf="folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="newRecipe()" color="primary"><ion-icon name="add"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="newRecipe()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
 </ion-content>
