@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 
 import { NewShoppingListItemModalPage } from './new-shopping-list-item-modal.page';
 
@@ -12,12 +11,9 @@ import { NewShoppingListItemModalPage } from './new-shopping-list-item-modal.pag
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: NewShoppingListItemModalPage
-      }
-    ])
+  ],
+  entryComponents: [
+    NewShoppingListItemModalPage,
   ],
 })
 export class NewShoppingListItemModalPageModule {}

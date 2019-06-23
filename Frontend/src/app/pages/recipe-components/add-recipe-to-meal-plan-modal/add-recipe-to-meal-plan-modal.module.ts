@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 
 import { AddRecipeToMealPlanModalPage } from './add-recipe-to-meal-plan-modal.page';
 
@@ -12,12 +11,9 @@ import { AddRecipeToMealPlanModalPage } from './add-recipe-to-meal-plan-modal.pa
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: AddRecipeToMealPlanModalPage
-      }
-    ])
+  ],
+  entryComponents: [
+    AddRecipeToMealPlanModalPage,
   ],
 })
 export class AddRecipeToMealPlanModalPageModule {}

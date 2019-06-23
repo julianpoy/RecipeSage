@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NewMessageModalPage } from './new-message-modal.page';
 
@@ -12,12 +12,11 @@ import { NewMessageModalPage } from './new-message-modal.page';
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: NewMessageModalPage
-      }
-    ])
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  entryComponents: [
+    NewMessageModalPage,
   ],
 })
 export class NewMessageModalPageModule {}

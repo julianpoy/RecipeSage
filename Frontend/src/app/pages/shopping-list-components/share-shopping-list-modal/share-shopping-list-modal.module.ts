@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 
 import { ShareShoppingListModalPage } from './share-shopping-list-modal.page';
 
@@ -12,12 +11,9 @@ import { ShareShoppingListModalPage } from './share-shopping-list-modal.page';
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: ShareShoppingListModalPage
-      }
-    ])
+  ],
+  entryComponents: [
+    ShareShoppingListModalPage,
   ],
 })
 export class ShareShoppingListModalPageModule {}
