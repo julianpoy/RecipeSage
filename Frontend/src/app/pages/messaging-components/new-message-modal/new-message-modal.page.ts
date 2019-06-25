@@ -8,7 +8,7 @@ import { UtilService } from '@/services/util.service';
 @Component({
   selector: 'page-new-message-modal',
   templateUrl: 'new-message-modal.page.html',
-  styleUrls: ['new-message.page.scss']
+  styleUrls: ['new-message-modal.page.scss']
 })
 export class NewMessageModalPage {
 
