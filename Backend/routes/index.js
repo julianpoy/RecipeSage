@@ -163,6 +163,7 @@ router.get(
     include: [
       {
         model: FCMToken,
+        as: 'fcmTokens',
         attributes: ['id', 'token']
       }
     ]
