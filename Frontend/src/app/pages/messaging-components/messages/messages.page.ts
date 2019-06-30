@@ -5,6 +5,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService } from '@/services/util.service';
+import { NewMessageModalPage } from '../new-message-modal/new-message-modal.page';
 
 @Component({
   selector: 'page-messages',
@@ -95,7 +96,7 @@ export class MessagesPage {
 
   async newThread() {
     let modal = await this.modalCtrl.create({
-      component: 'NewMessageModalPage'
+      component: NewMessageModalPage
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {

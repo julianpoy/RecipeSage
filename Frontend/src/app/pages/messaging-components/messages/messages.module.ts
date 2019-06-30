@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { MessagesPage } from './messages.page';
+import { NewMessageModalPageModule } from '../new-message-modal/new-message-modal.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MessagesPage } from './messages.page';
         path: '',
         component: MessagesPage
       }
-    ])
-  ],
+    ]),
+    NewMessageModalPageModule
+  ]
 })
 export class MessagesPageModule {}
