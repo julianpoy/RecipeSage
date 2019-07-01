@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { MessagesPage } from './messages.page';
-import { NewMessageModalPageModule } from '../new-message-modal/new-message-modal.module';
+import { NewMessageModalPageModule } from '@/pages/messaging-components/new-message-modal/new-message-modal.module';
 
 @NgModule({
   declarations: [

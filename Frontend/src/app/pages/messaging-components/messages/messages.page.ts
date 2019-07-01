@@ -5,7 +5,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService } from '@/services/util.service';
-import { NewMessageModalPage } from '../new-message-modal/new-message-modal.page';
+import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 
 @Component({
   selector: 'page-messages',
