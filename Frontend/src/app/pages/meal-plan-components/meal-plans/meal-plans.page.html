@@ -34,15 +34,20 @@
       </p>
       <ion-badge item-end>{{ mealPlan.itemCount }}</ion-badge>
     </ion-item>
-    <ion-item *ngIf="mealPlans.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
+    <ion-grid *ngIf="mealPlans.length === 0 && initialLoadComplete">
       <br /><br />
-      <ion-icon name="calendar" class="big-icon"></ion-icon>
-      <br /><br />
-      <p>
-        You have no meal plans.
-        <br /> To create a meal plan, press the plus button in the bottom corner.
-      </p>
-    </ion-item>
+      <ion-row justify-content-center>
+        <ion-icon name="calendar" class="big-icon"></ion-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <p>
+            You have no meal plans.
+            <br /> To create a meal plan, press the plus button in the bottom corner.
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
