@@ -56,9 +56,6 @@ ion-thumbnail img {
 }
 
 .dropdownSelect {
-  padding-left: 16px;
-  padding-right: 16px;
-
   .labels {
     margin-bottom: 5px;
 
@@ -119,6 +116,14 @@ ion-thumbnail img {
       }
     }
   }
+}
+
+ion-label[position=floating] {
+  color: #999 !important;
+}
+
+.label-floating.sc-ion-label-md-h {
+  transform: translate3d(0,122%,0);
 }
 
 .invisible {
