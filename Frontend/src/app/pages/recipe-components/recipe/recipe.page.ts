@@ -188,9 +188,7 @@ export class RecipePage {
   }
 
   editRecipe() {
-    // this.navCtrl.push('EditRecipePage', {
-    //   recipe: this.recipe
-    // });
+    this.navCtrl.navigateForward(`/edit-recipe/${this.recipeId}`);
   }
 
   async deleteRecipe() {

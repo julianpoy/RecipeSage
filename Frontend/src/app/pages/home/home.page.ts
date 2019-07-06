@@ -302,7 +302,7 @@ export class HomePage {
   }
 
   newRecipe() {
-    // // this.navCtrl.push('EditRecipePage');
+    this.navCtrl.navigateForward('edit-recipe/new');
   }
 
   search(text) {

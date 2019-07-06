@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, ToastController } from '@ionic/angular';
 import loadImage from 'blueimp-load-image';
@@ -15,31 +16,80 @@ import { LoadingService } from '@/services/loading.service';
 })
 export class EditRecipePage {
 
-  @Input() recipe: Recipe;
+  recipeId: string;
+  recipe: Recipe = {} as Recipe;
 
   imageBlobURL: any;
 
   constructor(
+    public route: ActivatedRoute,
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
     public domSanitizationService: DomSanitizer) {
-    this.recipe = this.recipe || <Recipe>{};
+
+    const recipeId = this.route.snapshot.paramMap.get('recipeId');
+
+    if (recipeId !== 'new') {
+      this.recipeId = recipeId;
+
+      const loading = this.loadingService.start();
+      this.recipeService.fetchById(this.recipeId).then(recipe => {
+        this.recipe = recipe;
+        loading.dismiss();
+      }).catch(async err => {
+        loading.dismiss();
+        switch (err.status) {
+          case 0:
+            const offlineToast = await this.toastCtrl.create({
+              message: this.utilService.standardMessages.offlinePushMessage,
+              duration: 5000
+            });
+            offlineToast.present();
+            break;
+          case 401:
+            this.goToAuth();
+            break;
+          case 404:
+            const notFoundToast = await this.toastCtrl.create({
+              message: 'Recipe not found. Does this recipe URL exist?',
+              duration: 30000 // TODO: Should offer a dismiss button
+            });
+            notFoundToast.present();
+            break;
+          default:
+            const unexpectedErrorToast = await this.toastCtrl.create({
+              message: this.utilService.standardMessages.unexpectedError,
+              duration: 6000
+            });
+            unexpectedErrorToast.present();
+            break;
+        }
+      });
+    }
   }
 
+  getScrollHeight(el) {
+    return el.scrollHeight + 1;
+  }
 
   ionViewWillEnter() {
     var textAreas = document.getElementsByTagName('textarea');
     for (var i = 0; i < textAreas.length; i++) {
-      textAreas[i].style.height = textAreas[i].scrollHeight + 'px';
+      textAreas[i].style.height = `${this.getScrollHeight(textAreas[i])}px`;
     }
   }
 
   updateTextAreaSize(event) {
-    var el = event._elementRef.nativeElement.children[0];
-    el.style.height = el.scrollHeight + 'px';
+    var el = event.target.children[0];
+    el.style.height = 'auto';
+    el.style.height = `${this.getScrollHeight(el)}px`;
+  }
+
+  goToAuth(cb?: Function) {
+    // TODO: Needs functionality
   }
 
   async setFile(event) {
