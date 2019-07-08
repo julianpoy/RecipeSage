@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
+
+import { RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-about',
@@ -7,9 +10,25 @@ import { Component } from '@angular/core';
 })
 export class AboutPage {
 
-  constructor() {}
+  constructor(public navCtrl: NavController) {}
 
-  goTo(state) {
-    // this.navCtrl.push(state);
+  goToAboutDetails() {
+    this.navCtrl.navigateForward(RouteMap.AboutDetailsPage.getPath());
+  }
+
+  goToContribute() {
+    this.navCtrl.navigateForward(RouteMap.ContributePage.getPath());
+  }
+
+  goToReleaseNotes() {
+    this.navCtrl.navigateForward(RouteMap.ReleaseNotesPage.getPath());
+  }
+
+  goToTipsTricksTutorials() {
+    this.navCtrl.navigateForward(RouteMap.TipsTricksTutorialsPage.getPath());
+  }
+
+  goToLegal() {
+    this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }
 }
