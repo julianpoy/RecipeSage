@@ -243,7 +243,7 @@ export class HomePage {
             offlineToast.present();
             break;
           case 401:
-            // // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateForward(RouteMap.LoginPage.getPath()); // TODO: Remove back button on next view (navigateRoot?)
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -338,7 +338,7 @@ export class HomePage {
             offlineToast.present();
             break;
           case 401:
-            // // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateForward(RouteMap.LoginPage.getPath()); // TODO: Remove back button on next view (navigateRoot?)
             break;
           default:
             let errorToast = await this.toastCtrl.create({
