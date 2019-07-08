@@ -4,7 +4,7 @@ import { NavController, ToastController, ModalController, Events } from '@ionic/
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 
 @Component({
@@ -91,7 +91,7 @@ export class MessagesPage {
   }
 
   openThread(thread) {
-    this.navCtrl.navigateForward(`/messages/${thread.otherUser.id}`);
+    this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(thread.otherUser.id));
   }
 
   async newThread() {

@@ -7,7 +7,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
 
@@ -281,7 +281,7 @@ export class HomePage {
       window.open(`#/recipe/${recipe.id}`);
       return;
     }
-    this.navCtrl.navigateForward(`recipe/${recipe.id}`);
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
   async presentPopover(event) {
@@ -302,7 +302,7 @@ export class HomePage {
   }
 
   newRecipe() {
-    this.navCtrl.navigateForward('edit-recipe/new');
+    this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath('new'));
   }
 
   search(text) {

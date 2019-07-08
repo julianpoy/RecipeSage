@@ -5,7 +5,7 @@ import { NavController, AlertController, ToastController, ModalController } from
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-recipe',
@@ -188,7 +188,7 @@ export class RecipePage {
   }
 
   editRecipe() {
-    this.navCtrl.navigateForward(`/edit-recipe/${this.recipeId}`);
+    this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath(this.recipeId));
   }
 
   async deleteRecipe() {

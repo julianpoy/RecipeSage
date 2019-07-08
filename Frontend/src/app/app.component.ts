@@ -5,7 +5,7 @@ import { Platform, MenuController, ToastController, AlertController, NavControll
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
@@ -112,7 +112,7 @@ export class AppComponent {
     });
 
     this.websocketService.register('messages:new', async payload => {
-      if (this.route.snapshot.url.toString().indexOf('/messages')) return;
+      if (this.route.snapshot.url.toString().indexOf(RouteMap.MessagesPage.getPath())) return;
       var notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
 
       var myMessage = payload;
@@ -124,7 +124,7 @@ export class AppComponent {
           text: 'View',
           role: 'cancel',
           handler: () => {
-            this.navCtrl.navigateForward(`/messages/${myMessage.otherUser.id}`);
+            this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id));
           }
         }]
       });
@@ -322,7 +322,7 @@ export class AppComponent {
   _logout() {
     localStorage.removeItem('token');
 
-    this.navCtrl.navigateRoot('/welcome');
+    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
   }
 
   logout() {

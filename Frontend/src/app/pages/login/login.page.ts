@@ -5,7 +5,7 @@ import { NavController, ToastController } from '@ionic/angular';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-login',
@@ -188,6 +188,6 @@ export class LoginPage {
   }
 
   handleRedirect() {
-    this.navCtrl.navigateRoot(this.redirect || '/home');
+    this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
   }
 }

@@ -249,5 +249,4 @@ export class EditRecipePage {
       return 'Choose image';
     }
   }
-
 }
