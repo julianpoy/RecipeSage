@@ -15,6 +15,8 @@ import { UtilService, RouteMap } from '@/services/util.service';
 })
 export class RecipePage {
 
+  defaultBackHref: string = RouteMap.HomePage.getPath('main');
+
   recipe: Recipe;
   recipeId: string;
   ingredients: Ingredient[];
