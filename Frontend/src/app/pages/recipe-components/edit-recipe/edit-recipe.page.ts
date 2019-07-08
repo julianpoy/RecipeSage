@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, ToastController } from '@ionic/angular';
 import loadImage from 'blueimp-load-image';
 
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
 
@@ -15,6 +15,8 @@ import { LoadingService } from '@/services/loading.service';
   providers: [ RecipeService ]
 })
 export class EditRecipePage {
+
+  defaultBackHref: string;
 
   recipeId: string;
   recipe: Recipe = {} as Recipe;
@@ -69,6 +71,8 @@ export class EditRecipePage {
         }
       });
     }
+
+    this.defaultBackHref = this.recipeId ? RouteMap.RecipePage.getPath(this.recipeId) : RouteMap.HomePage.getPath('main');
   }
 
   getScrollHeight(el) {
