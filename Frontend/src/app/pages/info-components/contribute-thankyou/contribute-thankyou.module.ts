@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ContributeThankYouPage } from './contribute-thankyou.page';
+import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ContributeThankYouPage } from './contribute-thankyou.page';
         path: '',
         component: ContributeThankYouPage
       }
-    ])
+    ]),
+    LogoIconModule,
   ],
 })
 export class ContributeThankYouPageModule {}

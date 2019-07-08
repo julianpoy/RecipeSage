@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ContributeCancelPage } from './contribute-cancel.page';
+import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ContributeCancelPage } from './contribute-cancel.page';
         path: '',
         component: ContributeCancelPage
       }
-    ])
+    ]),
+    LogoIconModule,
   ],
 })
 export class ContributeCancelPageModule {}
