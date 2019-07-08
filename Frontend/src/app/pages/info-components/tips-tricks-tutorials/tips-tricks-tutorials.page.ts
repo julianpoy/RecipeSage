@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 
+import { RouteMap } from '@/services/util.service';
+
 @Component({
   selector: 'page-tips-tricks-tutorials',
   templateUrl: 'tips-tricks-tutorials.page.html',
   styleUrls: ['tips-tricks-tutorials.page.scss']
 })
 export class TipsTricksTutorialsPage {
+  defaultBackHref: string = RouteMap.AboutPage.getPath();
 
   active: string = '';
 
