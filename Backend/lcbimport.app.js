@@ -41,9 +41,13 @@ Raven.config(appConfig.sentry.dsn, {
   release: '1.8.3'
 }).install();
 
-let logError = err => {
+let logError = async err => {
   console.error(err);
-  if (!devMode) Raven.captureException(err);
+  if (!devMode) {
+    await new Promise(resolve => {
+      Raven.captureException(err, resolve);
+    });
+  }
 }
 
 let tablesNeeded = [
@@ -458,12 +462,14 @@ async function main() {
       tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
     }
 
-    Raven.captureMessage('LCB Metrics', {
-      extra: {
-        metrics
-      },
-      user: runConfig.userId,
-      level: 'info'
+    await new Promise(resolve => {
+      Raven.captureMessage('LCB Metrics', {
+        extra: {
+          metrics
+        },
+        user: runConfig.userId,
+        level: 'info'
+      }, resolve);
     });
 
     cleanup()
@@ -473,7 +479,7 @@ async function main() {
     cleanup();
 
     console.log("Couldn't handle lcb upload 2", e)
-    logError(e);
+    await logError(e);
 
     try {
       if (e && e.status) {
