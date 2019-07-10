@@ -45,7 +45,13 @@ let logError = async err => {
   console.error(err);
   if (!devMode) {
     await new Promise(resolve => {
-      Raven.captureException(err, resolve);
+      Raven.captureException(err, {
+        extra: {
+          runConfig,
+          user: runConfig.userId
+        },
+        user: runConfig.userId
+      }, resolve);
     });
   }
 }
@@ -465,7 +471,9 @@ async function main() {
     await new Promise(resolve => {
       Raven.captureMessage('LCB Metrics', {
         extra: {
-          metrics
+          runConfig,
+          metrics,
+          user: runConfig.userId
         },
         user: runConfig.userId,
         level: 'info'
