@@ -6,6 +6,10 @@ import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recip
 import { LabelService } from '@/services/label.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
+import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
+import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
+import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 
 @Component({
   selector: 'page-recipe',
@@ -255,7 +259,7 @@ export class RecipePage {
 
   async addRecipeToShoppingList() {
     const modal = await this.modalCtrl.create({
-      component: 'AddRecipeToShoppingListModalPage',
+      component: AddRecipeToShoppingListModalPage,
       componentProps: {
         recipe: this.recipe,
         recipeScale: this.scale
@@ -267,7 +271,7 @@ export class RecipePage {
 
   async addRecipeToMealPlan() {
     const modal = await this.modalCtrl.create({
-      component: 'AddRecipeToMealPlanModalPage',
+      component: AddRecipeToMealPlanModalPage,
       componentProps: {
         recipe: this.recipe
       }
@@ -278,7 +282,7 @@ export class RecipePage {
 
   async printRecipe() {
     const printRecipeModal = await this.modalCtrl.create({
-      component: 'PrintRecipeModalPage',
+      component: PrintRecipeModalPage,
       componentProps: {
         recipe: this.recipe
       }
@@ -289,7 +293,7 @@ export class RecipePage {
 
   async shareRecipe() {
     const shareModal = await this.modalCtrl.create({
-      component: 'ShareModalPage',
+      component: ShareModalPage,
       componentProps: {
         recipe: this.recipe
       }
@@ -304,6 +308,7 @@ export class RecipePage {
         // this.navCtrl.push(data.destination, data.routingData);
       }
     });
+    // TODO: Fix this
   }
 
   moveToFolder(folderName) {

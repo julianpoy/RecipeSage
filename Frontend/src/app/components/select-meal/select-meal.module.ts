@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SelectMealComponent } from './select-meal.component';
@@ -10,7 +11,9 @@ import { SelectMealComponent } from './select-meal.component';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     SelectMealComponent

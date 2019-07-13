@@ -24,7 +24,7 @@
   <ion-item *ngIf="shoppingLists && shoppingLists.length > 0">
     <ion-label>Destination Shopping List</ion-label>
     <ion-select [(ngModel)]="destinationShoppingList">
-      <ion-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-option>
+      <ion-select-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-select-option>
     </ion-select>
   </ion-item>
 

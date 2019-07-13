@@ -24,7 +24,7 @@
   <ion-item *ngIf="mealPlans && mealPlans.length > 0">
     <ion-label>Select Meal Plan</ion-label>
     <ion-select [(ngModel)]="selectedMealPlan" (ngModelChange)="loadMealPlan(selectedMealPlan.id)">
-      <ion-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan">{{ mealPlan.title }}</ion-option>
+      <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan">{{ mealPlan.title }}</ion-select-option>
     </ion-select>
   </ion-item>
 

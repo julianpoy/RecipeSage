@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AddRecipeToShoppingListModalPage } from './add-recipe-to-shopping-list-modal.page';
+import { SelectIngredientsModule } from '@/components/select-ingredients/select-ingredients.module';
 
 @NgModule({
   declarations: [
@@ -11,6 +13,9 @@ import { AddRecipeToShoppingListModalPage } from './add-recipe-to-shopping-list-
   imports: [
     CommonModule,
     IonicModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SelectIngredientsModule,
   ],
   entryComponents: [
     AddRecipeToShoppingListModalPage,

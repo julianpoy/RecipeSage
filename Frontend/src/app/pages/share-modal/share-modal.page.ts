@@ -204,4 +204,8 @@ export class ShareModalPage {
 
     document.execCommand("copy");
   }
+
+  shareMethodChanged(event) {
+    console.log(event); // TODO: Actually change the selected share method here
+  }
 }
