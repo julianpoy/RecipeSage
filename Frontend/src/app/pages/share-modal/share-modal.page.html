@@ -20,10 +20,12 @@
         <ion-avatar *ngIf="recipe.image" item-start>
           <img src="{{ recipe.image.location }}">
         </ion-avatar>
-        <h2>{{ recipe.title }}</h2>
-        <p class="ion-text-wrap">
-          When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.
-        </p>
+        <ion-label>
+          <h2>{{ recipe.title }}</h2>
+          <p class="ion-text-wrap">
+            When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.
+          </p>
+        </ion-label>
       </ion-item>
 
       <div>
@@ -144,9 +146,9 @@
         </div>
 
         <div *ngSwitchCase="'account'">
-          <div padding-right>
+          <div class="ion-padding">
             <ion-item>
-              <ion-label floating>Recipient's account email...</ion-label>
+              <ion-label position="floating">Recipient's account email...</ion-label>
               <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
             </ion-item>
 
