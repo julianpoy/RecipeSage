@@ -17,7 +17,7 @@
 <ion-content>
   <ion-list>
       <ion-item lines="none">
-        <ion-avatar *ngIf="recipe.image" item-start>
+        <ion-avatar *ngIf="recipe.image" slot="start">
           <img src="{{ recipe.image.location }}">
         </ion-avatar>
         <ion-label>
