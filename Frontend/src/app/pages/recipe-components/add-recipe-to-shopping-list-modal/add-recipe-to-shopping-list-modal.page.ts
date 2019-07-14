@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
+
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService, Ingredient } from '@/services/recipe.service';
 import { UtilService } from '@/services/util.service';
+import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
 
 @Component({
   selector: 'page-add-recipe-to-shopping-list-modal',
@@ -139,7 +141,7 @@ export class AddRecipeToShoppingListModalPage {
 
   async createShoppingList() {
     let modal = await this.modalCtrl.create({
-      component: 'NewShoppingListModalPage'
+      component: NewShoppingListModalPage
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {

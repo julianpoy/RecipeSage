@@ -1,14 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController, PopoverController, AlertController } from '@ionic/angular';
+
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 
 import dayjs, { Dayjs } from 'dayjs'
 import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
+import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
+import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 
 @Component({
   selector: 'page-meal-plan',
@@ -35,6 +39,7 @@ export class MealPlanPage {
   @ViewChild(MealCalendarComponent) mealPlanCalendar: MealCalendarComponent;
 
   constructor(
+    public route: ActivatedRoute,
     public navCtrl: NavController,
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
@@ -46,6 +51,7 @@ export class MealPlanPage {
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
     public alertCtrl: AlertController) {
+    this.mealPlanId = this.route.snapshot.paramMap.get('mealPlanId');
 
     this.websocketService.register('mealPlan:itemsUpdated', payload => {
       if (payload.mealPlanId === this.mealPlanId && payload.reference !== this.reference) {
@@ -214,7 +220,7 @@ export class MealPlanPage {
 
   async newMealPlanItem() {
     let modal = await this.modalCtrl.create({
-      component: 'NewMealPlanItemModalPage'
+      component: NewMealPlanItemModalPage
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
@@ -258,17 +264,14 @@ export class MealPlanPage {
   }
 
   openRecipe(recipe) {
-    // this.navCtrl.push('RecipePage', {
-    //   recipe: recipe,
-    //   recipeId: recipe.id
-    // });
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
   addMealPlanItemToShoppingList(mealPlanItem) {
     // Fetch complete recipe (this page is provided with only topical recipe details)
     this.recipeService.fetchById(mealPlanItem.recipe.id).then(async response => {
       let addRecipeToShoppingListModal = await this.modalCtrl.create({
-        component: 'AddRecipeToShoppingListModalPage',
+        component: AddRecipeToShoppingListModalPage,
         componentProps: {
           recipe: response,
           reference: mealPlanItem.id

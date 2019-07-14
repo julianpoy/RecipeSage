@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AddRecipeToShoppingListModalPage } from './add-recipe-to-shopping-list-modal.page';
 import { SelectIngredientsModule } from '@/components/select-ingredients/select-ingredients.module';
+import { NewShoppingListModalPageModule } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SelectIngredientsModule } from '@/components/select-ingredients/select-
     FormsModule,
     ReactiveFormsModule,
     SelectIngredientsModule,
+    NewShoppingListModalPageModule,
   ],
   entryComponents: [
     AddRecipeToShoppingListModalPage,
