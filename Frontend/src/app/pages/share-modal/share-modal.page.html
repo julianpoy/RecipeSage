@@ -70,7 +70,8 @@
 
             <ion-item>
               <ion-toggle [(ngModel)]="embedConfig.titleImage"
-                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+                (ngModelChange)="updateEmbed(true);"
+                slot="start"></ion-toggle>
               <ion-label>
                 Show Title Image
               </ion-label>
@@ -78,7 +79,10 @@
             </ion-item>
 
             <ion-item>
-              <ion-toggle [(ngModel)]="embedConfig.verticalInstrIng" (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-toggle
+                [(ngModel)]="embedConfig.verticalInstrIng"
+                (ngModelChange)="updateEmbed(true);"
+                slot="start"></ion-toggle>
               <ion-label>
                 Disable Columns
               </ion-label>
@@ -88,7 +92,8 @@
             <ion-item>
               <ion-toggle
                 [(ngModel)]="embedConfig.showPrintButton"
-                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+                (ngModelChange)="updateEmbed(true);"
+                slot="start"></ion-toggle>
               <ion-label>
                 Show Print Button
               </ion-label>
@@ -96,8 +101,10 @@
             </ion-item>
 
             <ion-item>
-              <ion-toggle [(ngModel)]="embedConfig.hideSource"
-                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"></ion-toggle>
+              <ion-toggle
+                [(ngModel)]="embedConfig.hideSource"
+                (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"
+                slot="start"></ion-toggle>
               <ion-label>
                 Hide Sources
               </ion-label>
@@ -105,8 +112,10 @@
             </ion-item>
 
             <ion-item>
-              <ion-toggle [(ngModel)]="embedConfig.hideNotes"
-                (ngModelChange)="updateEmbed(true);"></ion-toggle>
+              <ion-toggle
+                [(ngModel)]="embedConfig.hideNotes"
+                (ngModelChange)="updateEmbed(true);"
+                slot="start"></ion-toggle>
               <ion-label>
                 Hide Notes
               </ion-label>
@@ -115,7 +124,7 @@
           </div>
 
           <ion-item>
-            <ion-input type="number" [(ngModel)]="embedHeight" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-input type="number" [(ngModel)]="embedHeight" (ngModelChange)="updateEmbed();" slot="start"></ion-input>
             <ion-label>
               Height (not shown)
             </ion-label>
@@ -123,7 +132,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-input type="number" [(ngModel)]="embedWidth" (ngModelChange)="updateEmbed();"></ion-input>
+            <ion-input type="number" [(ngModel)]="embedWidth" (ngModelChange)="updateEmbed();" slot="start"></ion-input>
             <ion-label>
               Width (not shown)
             </ion-label>
