@@ -14,8 +14,7 @@
 
   <div class="dropdownSelect" *ngIf="!selectedRecipe">
     <ion-searchbar
-      [(ngModel)]='searchText'
-      (ngModelChange)="onSearchInputChange()"
+      (ionChange)='onSearchInputChange($event)'
       placeholder="Type to search for recipe..."
       autocomplete="off"
       #labelInputField

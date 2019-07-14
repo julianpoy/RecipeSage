@@ -73,7 +73,9 @@ export class SelectRecipeComponent {
     });
   }
 
-  onSearchInputChange() {
+  onSearchInputChange(event) {
+    this.searchText = event.detail.value;
+
     this.recipes = [];
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
