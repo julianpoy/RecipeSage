@@ -2,11 +2,10 @@
   <ion-toolbar>
     <ion-title>Add Recipe To Meal Plan</ion-title>
 
-    <ion-buttons start>
-      <button ion-button (click)="cancel()">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
-        <ion-icon name="md-close" showWhen="android, windows, core"></ion-icon>
-      </button>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
