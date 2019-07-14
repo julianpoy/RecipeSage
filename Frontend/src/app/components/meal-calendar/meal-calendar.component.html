@@ -1,20 +1,20 @@
 <div>
   <div class="calendar-nav">
-    <button
+    <ion-button
       class="previous"
-      ion-button icon-only clear
+      fill="clear"
       [disabled]="!canMoveCalendar(-1)"
       (click)="moveCalendar(-1)">
-      <ion-icon name="arrow-dropleft"></ion-icon>
-    </button>
+      <ion-icon name="arrow-dropleft" slot="icon-only"></ion-icon>
+    </ion-button>
     <span>{{ prettyMonthName(center) }}</span>
-    <button
+    <ion-button
       class="next"
-      ion-button icon-only clear
+      fill="clear"
       [disabled]="!canMoveCalendar(1)"
       (click)="moveCalendar(1)">
-      <ion-icon name="arrow-dropright"></ion-icon>
-    </button>
+      <ion-icon name="arrow-dropright" slot="icon-only"></ion-icon>
+    </ion-button>
   </div>
 
   <ion-grid class="calendar">
