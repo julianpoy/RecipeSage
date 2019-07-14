@@ -13,21 +13,29 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item (click)="goTo('ImportPage')">
-      <ion-icon name="cloud-upload" item-start></ion-icon>
-      Import Recipe Data
-    </button>
-    <button ion-item (click)="goTo('ExportPage')">
-      <ion-icon name="cloud-download" item-start></ion-icon>
-      Export Recipe Data
-    </button>
-    <button ion-item (click)="goTo('AccountPage')">
-      <ion-icon name="person" item-start></ion-icon>
-      Account & Credentials
-    </button>
-    <button ion-item (click)="checkForUpdate()">
-      <ion-icon name="sync" item-start></ion-icon>
-      Check for Update
-    </button>
+    <ion-item (click)="goToImport()">
+      <ion-icon name="cloud-upload" slot="start"></ion-icon>
+      <ion-label>
+        Import Recipe Data
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="goToExport()">
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      <ion-label>
+        Export Recipe Data
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="goToAccount()">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-label>
+        Account & Credentials
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="checkForUpdate()">
+      <ion-icon name="sync" slot="start"></ion-icon>
+      <ion-label>
+        Check for Update
+      </ion-label>
+    </ion-item>
   </ion-list>
 </ion-content>

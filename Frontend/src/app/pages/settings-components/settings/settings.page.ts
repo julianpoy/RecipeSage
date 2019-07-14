@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController } from '@ionic/angular';
 
+import { RouteMap } from '@/services/util.service';
+
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.page.html',
@@ -14,9 +16,16 @@ export class SettingsPage {
     public alertCtrl: AlertController) {
   }
 
+  goToImport() {
+    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath());
+  }
 
-  goTo(state) {
-    // this.navCtrl.push(state);
+  goToExport() {
+    this.navCtrl.navigateForward(RouteMap.ExportPage.getPath());
+  }
+
+  goToAccount() {
+    this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
   }
 
   checkForUpdate() {
