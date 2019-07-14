@@ -169,11 +169,7 @@ export class EditRecipePage {
 
     if (this.recipe.id) {
       this.recipeService.update(this.recipe).then(response => {
-        // this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
-        // this.navCtrl.push('RecipePage', {
-        //   recipe: response,
-        //   recipeId: response.id
-        // });
+        this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(this.recipe.id));
 
         loading.dismiss();
       }).catch(async err => {
@@ -201,11 +197,7 @@ export class EditRecipePage {
       });
     } else {
       this.recipeService.create(this.recipe).then(response => {
-        // this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: false });
-        // this.navCtrl.push('RecipePage', {
-        //   recipe: response,
-        //   recipeId: response.id
-        // });
+        this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
 
         loading.dismiss();
       }).catch(async err => {
