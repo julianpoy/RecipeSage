@@ -55,11 +55,13 @@ export class ShareModalPage {
   public recipeService: RecipeService,
   public userService: UserService,
   public modalCtrl: ModalController) {
-    this.recipeURL = `${window.location.protocol}//${window.location.host}/#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
+    setTimeout(() => {
+      this.recipeURL = `${window.location.protocol}//${window.location.host}/#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
 
-    this.loadThreads().then(() => {}, () => {});
+      this.loadThreads().then(() => {}, () => {});
 
-    this.updateEmbed(true);
+      this.updateEmbed(true);
+    });
   }
 
 
@@ -206,6 +208,6 @@ export class ShareModalPage {
   }
 
   shareMethodChanged(event) {
-    console.log(event); // TODO: Actually change the selected share method here
+    this.shareMethod = event.detail.value;
   }
 }
