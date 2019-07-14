@@ -4,7 +4,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 import { MealPlanService } from '@/services/meal-plan.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { NewMealPlanModalPage } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
 
 @Component({
@@ -107,11 +107,9 @@ export class MealPlansPage {
       }
     });
   }
+
   openMealPlan(mealPlanId) {
-    // // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
-    // this.navCtrl.push('MealPlanPage', {
-    //   mealPlanId: mealPlanId
-    // });
+    this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(mealPlanId));
   }
 
   formatItemCreationDate(plainTextDate) {
