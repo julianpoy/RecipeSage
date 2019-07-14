@@ -23,9 +23,11 @@
   <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
 </ion-content>
 
-<ion-footer padding>
-  <button ion-button icon-left block (click)="save()" [disabled]="!listTitle">
-    <ion-icon name="list"></ion-icon>
-    Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
-  </button>
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label>
+      Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
+    </ion-label>
+  </ion-button>
 </ion-footer>

@@ -63,15 +63,15 @@
       </div>
 
       <div padding>
-      	<button ion-button block (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</button>
+      	<ion-button expand="block" (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</ion-button>
   		</div>
 
       <div>
-        <button ion-button clear block *ngIf="showLogin" (click)="forgotPassword()">Forgot password</button>
+        <ion-button fill="clear" expand="block" *ngIf="showLogin" (click)="forgotPassword()">Forgot password</ion-button>
       </div>
 
       <div>
-        <button ion-button clear block (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</button>
+        <ion-button fill="clear" expand="block" (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</ion-button>
       </div>
     </ion-list>
   </div>

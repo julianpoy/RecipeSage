@@ -52,12 +52,12 @@
             <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
               {{ recipeURL }}
             </div>
-            <button ion-button icon-only clear *ngIf="hasWebShareAPI" (click)="webShare()">
-              <ion-icon name="share"></ion-icon>
-            </button>
-            <button ion-button icon-only clear *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
-              <ion-icon name="copy"></ion-icon>
-            </button>
+            <ion-button fill="clear" *ngIf="hasWebShareAPI" (click)="webShare()">
+              <ion-icon name="share" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="copy" slot="icon-only"></ion-icon>
+            </ion-button>
           </div>
           <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeURL"></textarea>
         </div>
@@ -146,9 +146,9 @@
             <div class="code" [ngClass]="{ hasActionButton: hasCopyAPI }">
               {{ recipeEmbedCode }}
             </div>
-            <button ion-button icon-only clear *ngIf="hasCopyAPI" (click)="copyCodeToClipboard()">
-              <ion-icon name="copy"></ion-icon>
-            </button>
+            <ion-button fill="clear" *ngIf="hasCopyAPI" (click)="copyCodeToClipboard()">
+              <ion-icon name="copy" slot="icon-only"></ion-icon>
+            </ion-button>
           </div>
           <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeEmbedCode"></textarea>
         </div>
@@ -188,13 +188,17 @@
 </ion-content>
 
 <ion-footer padding>
-  <button *ngIf="shareMethod === 'account'" ion-button icon-left block (click)="send()" [disabled]="!recipientId">
-    <ion-icon name="send"></ion-icon>
-    Send
-  </button>
+  <ion-button *ngIf="shareMethod === 'account'" expand="block" (click)="send()" [disabled]="!recipientId">
+    <ion-icon name="send" slot="start"></ion-icon>
+    <ion-label>
+      Send
+    </ion-label>
+  </ion-button>
 
-  <button *ngIf="shareMethod === 'link' || shareMethod === 'embed'" ion-button icon-left block (click)="cancel()">
-    <ion-icon name="close"></ion-icon>
-    Close
-  </button>
+  <ion-button *ngIf="shareMethod === 'link' || shareMethod === 'embed'" expand="block" (click)="cancel()">
+    <ion-icon name="close" slot="start"></ion-icon>
+    <ion-label>
+      Close
+    </ion-label>
+  </ion-button>
 </ion-footer>

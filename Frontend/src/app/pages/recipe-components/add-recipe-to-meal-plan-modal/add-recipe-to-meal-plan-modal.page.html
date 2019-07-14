@@ -30,10 +30,12 @@
   <div *ngIf="mealPlans && mealPlans.length === 0" (click)="createMealPlan()">
     <p>
       You have no meal plans.<br /><br />
-      <button ion-button icon-left>
-        <ion-icon name="calendar"></ion-icon>
-        Create a Meal Plan
-      </button>
+      <ion-button>
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>
+          Create a Meal Plan
+        </ion-label>
+      </ion-button>
     </p>
   </div>
 
@@ -57,13 +59,15 @@
 </ion-content>
 
 <ion-footer>
-  <div padding-bottom padding-horizontal>
+  <div class="ion-padding-bottom ion-padding-horizontal">
     <select-meal (mealChange)="meal = $event"></select-meal>
-    <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
-      <ion-icon name="calendar"></ion-icon>
-      <span *ngIf="isFormValid()">Add to Meal Plan</span>
-      <span *ngIf="!destinationMealPlan">Select a meal plan</span>
-      <span *ngIf="destinationMealPlan && !meal">Select a meal</span>
-    </button>
+    <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
+      <ion-icon name="calendar" slot="start"></ion-icon>
+      <ion-label>
+        <span *ngIf="isFormValid()">Add to Meal Plan</span>
+        <span *ngIf="!destinationMealPlan">Select a meal plan</span>
+        <span *ngIf="destinationMealPlan && !meal">Select a meal</span>
+      </ion-label>
+    </ion-button>
   </div>
 </ion-footer>

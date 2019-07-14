@@ -25,10 +25,12 @@
 
       <br />
 
-      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
-        <ion-icon name="ios-leaf"></ion-icon>
-        Create an account
-      </button>
+      <ion-button (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf" slot="start"></ion-icon>
+        <ion-label>
+          Create an account
+        </ion-label>
+      </ion-button>
     </div>
 
     <div class="screen">
@@ -68,17 +70,21 @@
 
       <br /><br />
 
-      <button ion-button icon-start (click)="goToAuth('register')" style="margin: 0;">
-        <ion-icon name="ios-leaf"></ion-icon>
-        Create an account
-      </button>
+      <ion-button (click)="goToAuth('register')" style="margin: 0;">
+        <ion-icon name="ios-leaf" slot="start"></ion-icon>
+        <ion-label>
+          Create an account
+        </ion-label>
+      </ion-button>
 
       <br /><br />
 
-      <button ion-button icon-start (click)="goToAuth('login')" style="margin: 0;">
-        <ion-icon name="ios-nutrition"></ion-icon>
-        Log In
-      </button>
+      <ion-button (click)="goToAuth('login')" style="margin: 0;">
+        <ion-icon name="ios-nutrition" slot="start"></ion-icon>
+        <ion-label>
+          Log In
+        </ion-label>
+      </ion-button>
 
       <br /><br /><br /><br />
     </div>

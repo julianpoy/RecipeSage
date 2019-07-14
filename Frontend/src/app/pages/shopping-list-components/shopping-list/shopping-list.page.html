@@ -6,10 +6,10 @@
 
     <ion-title>Shopping List - {{ list.title }}</ion-title>
 
-    <ion-buttons end>
-      <button ion-button icon-only (click)="presentPopover($event)">
-        <ion-icon name="options"></ion-icon>
-      </button>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -77,10 +77,12 @@
       <p>
         There are no items in this shopping list.
         <br />
-        <button ion-button icon-left (click)="newShoppingListItem()">
-          <ion-icon name="add"></ion-icon>
-          Add the first item
-        </button>
+        <ion-button (click)="newShoppingListItem()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          <ion-label>
+            Add the first item
+          </ion-label>
+        </ion-button>
       </p>
     </ion-item>
   </ion-list>

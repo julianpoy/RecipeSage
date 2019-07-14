@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
   <p>
     Select the destination shopping list:
@@ -30,10 +30,12 @@
   <div *ngIf="shoppingLists && shoppingLists.length === 0" (click)="createShoppingList()">
     <p>
       You have no shopping lists.<br /><br />
-      <button ion-button icon-left>
-        <ion-icon name="list"></ion-icon>
-        Create a Shopping List
-      </button>
+      <ion-button>
+        <ion-icon name="list" slot="start"></ion-icon>
+        <ion-label>
+          Create a Shopping List
+        </ion-label>
+      </ion-button>
     </p>
   </div>
 
@@ -45,9 +47,11 @@
   <br />
 </ion-content>
 
-<ion-footer padding>
-  <button ion-button icon-left block (click)="save()" [disabled]="!isFormValid()">
-    <ion-icon name="list"></ion-icon>
-    Add to List
-  </button>
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label>
+      Add to List
+    </ion-label>
+  </ion-button>
 </ion-footer>

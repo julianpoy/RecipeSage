@@ -61,7 +61,7 @@
 
   <div padding class="actions">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
-    <button ion-button outline (click)="filePicker()">{{ filePickerText() }}</button>
+    <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
 
     <div padding *ngIf="showFileTypeWarning()">
       <p>

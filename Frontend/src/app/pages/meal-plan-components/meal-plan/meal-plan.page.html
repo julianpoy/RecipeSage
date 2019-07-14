@@ -6,10 +6,10 @@
 
     <ion-title>Meal Plan - {{ mealPlan.title }}</ion-title>
 
-    <ion-buttons end>
-      <button ion-button icon-only (click)="presentPopover($event)">
-        <ion-icon name="options"></ion-icon>
-      </button>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -40,10 +40,12 @@
         <p>
           There are no meals scheduled for this day.
           <br />
-          <button ion-button icon-left (click)="newMealPlanItem()">
-            <ion-icon name="add"></ion-icon>
-            Add a meal
-          </button>
+          <ion-button (click)="newMealPlanItem()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            <ion-label>
+              Add a meal
+            </ion-label>
+          </ion-button>
         </p>
       </ion-item>
 
@@ -73,9 +75,9 @@
             <ion-icon name="cart"></ion-icon>
           </button>
           <!-- Remove from meal plan button: -->
-          <button ion-button outline item-end (click)="$event.stopPropagation(); removeItem(mealItem)">
-            <ion-icon name="trash"></ion-icon>
-          </button>
+          <ion-button fill="outline" (click)="$event.stopPropagation(); removeItem(mealItem)">
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
 
           <p *ngIf="viewOptions.showAddedOn">
             Added
