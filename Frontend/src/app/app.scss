@@ -19,6 +19,10 @@ ion-thumbnail img {
   object-fit: cover;
 }
 
+.popover-content, .alert-wrapper {
+  --width: 280px;
+}
+
 @media only screen and (min-width: $desktop-breakpoint) {
   ion-thumbnail {
     width: 200px;
@@ -28,6 +32,10 @@ ion-thumbnail img {
       width: 200px;
       height: 200px;
     }
+  }
+
+  .popover-content, .alert-wrapper {
+    --width: 350px;
   }
 }
 
