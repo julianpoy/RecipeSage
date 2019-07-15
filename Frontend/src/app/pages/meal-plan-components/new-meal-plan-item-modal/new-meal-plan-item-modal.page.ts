@@ -59,14 +59,11 @@ export class NewMealPlanItemModalPage {
     item.meal = this.meal;
 
     this.modalCtrl.dismiss({
-      destination: false,
-      item: item
+      item
     });
   }
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 }

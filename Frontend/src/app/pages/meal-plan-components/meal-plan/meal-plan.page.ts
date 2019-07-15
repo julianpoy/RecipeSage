@@ -225,18 +225,8 @@ export class MealPlanPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data) return;
-      if (data.item) {
-        this._addItem(data.item);
-      }
-
-      if (!data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
+      if (!data || !data.item) return;
+      this._addItem(data.item);
     });
   }
 
@@ -381,19 +371,8 @@ export class MealPlanPage {
       event
     });
 
-    popover.onDidDismiss().then(({ data }) => {
-      data = data || {};
-
-      if (!data.destination) { // TODO: Remove all of these destination and setroot popover/modal responses
-        this.mealPlanCalendar.generateCalendar();
-        return;
-      }
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
+    popover.onDidDismiss().then(() => {
+      this.mealPlanCalendar.generateCalendar();
     });
 
     popover.present();
