@@ -4,7 +4,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
 import { MealPlanService } from '@/services/meal-plan.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-meal-plan-modal',
@@ -36,13 +36,8 @@ export class NewMealPlanModalPage {
       collaborators: this.selectedThreads
     }).then(response => {
       loading.dismiss();
-      this.modalCtrl.dismiss({
-        destination: 'MealPlanPage',
-        routingData: {
-          mealPlanId: response.id
-        },
-        setRoot: false
-      });
+      this.modalCtrl.dismiss();
+      this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
       switch (err.status) {
@@ -54,10 +49,8 @@ export class NewMealPlanModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss({
-            destination: 'LoginPage',
-            setRoot: true
-          });
+          this.modalCtrl.dismiss();
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -71,8 +64,6 @@ export class NewMealPlanModalPage {
   }
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 }

@@ -97,14 +97,8 @@ export class MealPlansPage {
       component: NewMealPlanModalPage
     });
     modal.present();
-    modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
+    modal.onDidDismiss().then(() => {
+      this.loadPlans();
     });
   }
 
