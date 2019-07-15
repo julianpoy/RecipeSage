@@ -10,6 +10,7 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
+import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
 @Component({
   selector: 'page-home',
@@ -286,7 +287,7 @@ export class HomePage {
 
   async presentPopover(event) {
     let popover = await this.popoverCtrl.create({
-      component: 'home-popover-page',
+      component: HomePopoverPage,
       componentProps: {
         viewOptions: this.viewOptions,
         labels: this.labels

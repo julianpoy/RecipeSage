@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
+import { HomePopoverPageModule } from '@/pages/home-popover/home-popover.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
         component: HomePage
       }
     ]),
-    LogoIconModule
+    LogoIconModule,
+    HomePopoverPageModule,
   ],
   declarations: [HomePage]
 })

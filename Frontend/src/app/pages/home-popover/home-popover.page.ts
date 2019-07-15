@@ -1,8 +1,9 @@
 import { Component, ViewChild, Input } from '@angular/core';
-import { ToastController, ModalController, IonSelect } from '@ionic/angular';
+import { ToastController, ModalController, IonSelect, PopoverController } from '@ionic/angular';
 
 import { LabelService } from '@/services/label.service';
 import { UtilService } from '@/services/util.service';
+import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/resettable-select-popover.page';
 
 @Component({
   selector: 'page-home-popover',
@@ -18,7 +19,7 @@ export class HomePopoverPage {
   @Input() labels: any;
 
   constructor(
-    public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
     public labelService: LabelService) {
@@ -32,14 +33,27 @@ export class HomePopoverPage {
     localStorage.setItem('showImages', this.viewOptions.showImages);
     localStorage.setItem('showSource', this.viewOptions.showSource);
     localStorage.setItem('sortBy', this.viewOptions.sortBy);
-    this.modalCtrl.dismiss({
+    this.popoverCtrl.dismiss({
       refreshSearch
     });
   }
 
-  resetFilterByLabel() {
-    // this.filterByLabelSelect.dismiss();
-    this.viewOptions.selectedLabels.splice(0, this.viewOptions.selectedLabels.length)
-    this.saveViewOptions(true)
+  async openLabelFilter() {
+    const labelFilterPopover = await this.popoverCtrl.create({
+      component: ResettableSelectPopoverPage,
+      componentProps: {
+        options: this.labels.map(label => ({
+          title: `${label.title} (${label.recipeCount})`,
+          value: label.title,
+          selected: this.viewOptions.selectedLabels.indexOf(label.title) > -1
+        }))
+      }
+    });
+    labelFilterPopover.onDidDismiss().then(({ data }) => {
+      if (!data) return;
+      this.viewOptions.selectedLabels.splice(0, this.viewOptions.selectedLabels.length, ...data.selectedLabels);
+      this.saveViewOptions(true);
+    });
+    labelFilterPopover.present();
   }
 }

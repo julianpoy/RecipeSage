@@ -3,22 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { HomePopoverPage } from './home-popover.page';
-import { ResettableSelectPopoverPageModule } from '@/pages/resettable-select-popover/resettable-select-popover.module';
+import { ResettableSelectPopoverPage } from './resettable-select-popover.page';
 
 @NgModule({
   declarations: [
-    HomePopoverPage,
+    ResettableSelectPopoverPage,
   ],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule,
-    ResettableSelectPopoverPageModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
-    HomePopoverPage
+    ResettableSelectPopoverPage
   ]
 })
-export class HomePopoverPageModule {}
+export class ResettableSelectPopoverPageModule {}
