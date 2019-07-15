@@ -13,6 +13,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
 import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
+import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
 
 @Component({
   selector: 'page-meal-plan',
@@ -371,7 +372,7 @@ export class MealPlanPage {
 
   async presentPopover(event) {
     let popover = await this.popoverCtrl.create({
-      component: 'MealPlanPopoverPage',
+      component: MealPlanPopoverPage,
       componentProps: {
         mealPlanId: this.mealPlanId,
         mealPlan: this.mealPlan,
@@ -383,7 +384,7 @@ export class MealPlanPage {
     popover.onDidDismiss().then(({ data }) => {
       data = data || {};
 
-      if (!data.destination) {
+      if (!data.destination) { // TODO: Remove all of these destination and setroot popover/modal responses
         this.mealPlanCalendar.generateCalendar();
         return;
       }

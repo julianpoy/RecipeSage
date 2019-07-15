@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
+import { NavController, ToastController, ModalController, AlertController, PopoverController } from '@ionic/angular';
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-meal-plan-popover',
@@ -16,12 +16,12 @@ export class MealPlanPopoverPage {
   mealPlan: any; // From nav params
 
   constructor(
+    public popoverCtrl: PopoverController,
     public navCtrl: NavController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
     public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
     public alertCtrl: AlertController
   ) {}
 
@@ -32,7 +32,7 @@ export class MealPlanPopoverPage {
     localStorage.setItem('mealPlan.showAddedOn', this.viewOptions.showAddedOn);
     localStorage.setItem('mealPlan.startOfWeek', this.viewOptions.startOfWeek);
 
-    this.modalCtrl.dismiss();
+    this.popoverCtrl.dismiss();
   }
 
   async deleteMealPlan() {
@@ -65,10 +65,9 @@ export class MealPlanPopoverPage {
     }).then(() => {
       loading.dismiss();
 
-      this.modalCtrl.dismiss({
-        setRoot: true,
-        destination: 'MealPlansPage'
-      });
+      this.popoverCtrl.dismiss();
+
+      this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
     }).catch(async err => {
       loading.dismiss();
       switch (err.status) {

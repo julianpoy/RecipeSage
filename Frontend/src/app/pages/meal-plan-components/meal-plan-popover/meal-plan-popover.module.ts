@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
 
 import { MealPlanPopoverPage } from './meal-plan-popover.page';
 
@@ -12,12 +12,11 @@ import { MealPlanPopoverPage } from './meal-plan-popover.page';
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: MealPlanPopoverPage
-      }
-    ])
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  entryComponents: [
+    MealPlanPopoverPage
   ],
 })
 export class MealPlanPopoverPageModule {}
