@@ -4,7 +4,7 @@ import { NavController, ToastController, ModalController, AlertController } from
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService, Ingredient } from '@/services/recipe.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
 
 @Component({
@@ -78,7 +78,7 @@ export class AddRecipeToShoppingListModalPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -145,13 +145,7 @@ export class AddRecipeToShoppingListModalPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // Ignore
-      } else {
-        // Ignore
-      }
+      // TODO: This needs to receive a success status - data should return a success bool
 
       // Check for new lists
       this.loadLists().then(async () => {

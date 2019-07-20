@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LoadingService } from '../../services/loading.service';
-import { UtilService } from '../../services/util.service';
-import { RecipeService } from '../../services/recipe.service';
+import { LoadingService } from '@/services/loading.service';
+import { UtilService, RouteMap } from '@/services/util.service';
+import { RecipeService } from '@/services/recipe.service';
 import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
@@ -60,7 +60,7 @@ export class SelectRecipeComponent {
           offlineToast.present();
           break;
         case 401:
-          // // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -104,7 +104,7 @@ export class SelectRecipeComponent {
           offlineToast.present();
           break;
         case 401:
-          // // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({

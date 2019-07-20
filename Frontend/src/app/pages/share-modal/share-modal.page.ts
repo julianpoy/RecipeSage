@@ -5,7 +5,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService, RecipeTemplateModifiers } from '@/services/util.service';
+import { UtilService, RecipeTemplateModifiers, RouteMap } from '@/services/util.service';
 import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -66,9 +66,7 @@ export class ShareModalPage {
 
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 
   updateEmbed(updateURL?: boolean) {
@@ -102,10 +100,8 @@ export class ShareModalPage {
             offlineToast.present();
             break;
           case 401:
-            this.modalCtrl.dismiss({
-              destination: 'LoginPage',
-              setRoot: true
-            });
+            this.modalCtrl.dismiss();
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -155,13 +151,8 @@ export class ShareModalPage {
       recipeId: this.recipe.id
     }).then(response => {
       loading.dismiss();
-      this.modalCtrl.dismiss({
-        destination: 'MessageThreadPage',
-        routingData: {
-          otherUserId: this.recipientId
-        },
-        setRoot: false
-      });
+      this.modalCtrl.dismiss();
+      this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
     }).catch(async err => {
       loading.dismiss();
       switch(err.status) {
@@ -173,10 +164,8 @@ export class ShareModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss({
-            destination: 'LoginPage',
-            setRoot: true
-          });
+          this.modalCtrl.dismiss();
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({

@@ -7,7 +7,7 @@ import * as linkifyStr from 'linkifyjs/string';
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-message-thread',
@@ -61,7 +61,7 @@ export class MessageThreadPage {
     this.isViewLoaded = true;
 
     if (!this.otherUserId) {
-      // this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
+      this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
     } else {
       var loading = this.loadingService.start();
 
@@ -155,7 +155,7 @@ export class MessageThreadPage {
         if (!this.isViewLoaded) return;
         switch(err.status) {
           default:
-            // this.navCtrl.setRoot('MessagesPage', {}, {animate: true, direction: 'forward'});
+            this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
             break;
         }
       });

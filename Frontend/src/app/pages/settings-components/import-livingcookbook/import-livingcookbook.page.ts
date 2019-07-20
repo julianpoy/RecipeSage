@@ -3,7 +3,7 @@ import { NavController, ToastController } from '@ionic/angular';
 
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-import-livingcookbook',
@@ -90,7 +90,7 @@ export class ImportLivingcookbookPage {
 
       this.presentToast('Import was successful!')
 
-      // this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
+      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
       switch (err.status) {
         case 0:
@@ -101,7 +101,7 @@ export class ImportLivingcookbookPage {
         case 401:
           this.loading.dismiss();
           this.loading = null;
-          // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         case 406:
           this.loading.dismiss();
@@ -120,7 +120,7 @@ export class ImportLivingcookbookPage {
               message: "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
               showCloseButton: true
             })).present();
-            // this.navCtrl.setRoot('HomePage', { folder: 'main' }, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
           }, 20000);
           break;
         default:

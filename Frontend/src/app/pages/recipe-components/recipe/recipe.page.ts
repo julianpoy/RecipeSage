@@ -225,7 +225,7 @@ export class RecipePage {
     this.recipeService.remove(this.recipe).then(response => {
       loading.dismiss();
 
-      // this.navCtrl.setRoot('HomePage', { folder: this.recipe.folder }, {animate: true, direction: 'forward'});
+      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
     }).catch(async err => {
       loading.dismiss();
       switch(err.status) {
@@ -299,16 +299,6 @@ export class RecipePage {
       }
     });
     shareModal.present();
-    shareModal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
-    });
-    // TODO: Fix this
   }
 
   moveToFolder(folderName) {
@@ -321,10 +311,7 @@ export class RecipePage {
     this.recipeService.update(this.recipe).then(response => {
       loading.dismiss();
 
-      // this.navCtrl.setRoot('RecipePage', {
-      //   recipe: response,
-      //   recipeId: response.id
-      // }, {animate: true, direction: 'forward'});
+      this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
     }).catch(async err => {
       loading.dismiss();
       switch(err.status) {
@@ -536,6 +523,7 @@ export class RecipePage {
     //     if (cb) cb();
     //   }
     // });
+    // TODO: Fix reroute handling (perhaps login modal)
   }
 
   authAndClone() {

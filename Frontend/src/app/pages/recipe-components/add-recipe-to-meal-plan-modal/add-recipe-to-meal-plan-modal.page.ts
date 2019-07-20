@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 
 import dayjs, { Dayjs } from 'dayjs'
@@ -84,7 +84,7 @@ export class AddRecipeToMealPlanModalPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -116,7 +116,7 @@ export class AddRecipeToMealPlanModalPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -206,13 +206,7 @@ export class AddRecipeToMealPlanModalPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // Ignore
-      } else {
-        // Ignore
-      }
+      // TODO: This needs to know whether aforementioned operation was successful. Data should contain a success bool
 
       // Check for new meal plans
       this.loadMealPlans().then(async () => {

@@ -3,7 +3,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-shopping-lists',
@@ -75,7 +75,7 @@ export class ShoppingListsPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -93,22 +93,11 @@ export class ShoppingListsPage {
     let modal = await this.modalCtrl.create({
       component: 'NewShoppingListModalPage'
     });
-    modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
-    });
     modal.present();
   }
+
   openShoppingList(listId) {
-    // // this.navCtrl.setRoot(RecipePage, {}, {animate: true, direction: 'forward'});
-    // this.navCtrl.push('ShoppingListPage', {
-    //   shoppingListId: listId
-    // });
+    this.navCtrl.navigateForward(RouteMap.ShoppingListPage.getPath(listId));
   }
 
   formatItemCreationDate(plainTextDate) {

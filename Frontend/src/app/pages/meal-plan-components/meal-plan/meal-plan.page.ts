@@ -100,7 +100,7 @@ export class MealPlanPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           case 404:
             let errorToast = await this.toastCtrl.create({
@@ -110,7 +110,7 @@ export class MealPlanPage {
             });
             errorToast.present();
 
-            // this.navCtrl.setRoot('MealPlansPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.MealPlansPage.getPath());
             break;
           default:
             errorToast = await this.toastCtrl.create({
@@ -279,7 +279,7 @@ export class MealPlanPage {
           offlineToast.present();
           break;
         case 401:
-          // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         case 404:
           let errorToast = await this.toastCtrl.create({

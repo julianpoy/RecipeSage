@@ -76,7 +76,7 @@ export class MessagesPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -99,15 +99,6 @@ export class MessagesPage {
       component: NewMessageModalPage
     });
     modal.present();
-    modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, {animate: true, direction: 'forward'});
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
-    });
   }
 
   isNotificationsCapable() {

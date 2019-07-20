@@ -3,7 +3,7 @@ import { NavController, ToastController } from '@ionic/angular';
 
 import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-import-pepperplate',
@@ -51,7 +51,7 @@ export class ImportPepperplatePage {
         duration: 6000
       })).present();
 
-      // this.navCtrl.setRoot('HomePage', { folder: 'main' }, {animate: true, direction: 'forward'});
+      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
       loading.dismiss();
       switch(err.status) {

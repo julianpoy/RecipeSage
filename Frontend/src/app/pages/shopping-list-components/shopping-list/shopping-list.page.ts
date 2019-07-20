@@ -5,7 +5,7 @@ import { NavController, ToastController, ModalController, PopoverController } fr
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-shopping-list',
@@ -108,7 +108,7 @@ export class ShoppingListPage {
             offlineToast.present();
             break;
           case 401:
-            // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
             break;
           case 404:
             let errorToast = await this.toastCtrl.create({
@@ -118,7 +118,7 @@ export class ShoppingListPage {
             });
             errorToast.present();
 
-            // this.navCtrl.setRoot('ShoppingListsPage', {}, { animate: true, direction: 'forward' });
+            this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
             break;
           default:
             errorToast = await this.toastCtrl.create({
@@ -239,18 +239,8 @@ export class ShoppingListPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      if (!data) return;
-      if (data.items) {
-        this._addItems(data.items);
-      }
-
-      if (!data.destination) return;
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
+      if (!data || !data.items) return;
+      this._addItems(data.items);
     });
   }
 
@@ -336,19 +326,8 @@ export class ShoppingListPage {
       event
     });
 
-    popover.onDidDismiss().then(({ data }) => {
-      data = data || {};
-
-      if (!data.destination) {
-        this.applySort();
-        return;
-      }
-
-      if (data.setRoot) {
-        // this.navCtrl.setRoot(data.destination, data.routingData || {}, { animate: true, direction: 'forward' });
-      } else {
-        // this.navCtrl.push(data.destination, data.routingData);
-      }
+    popover.onDidDismiss().then(() => {
+      this.applySort();
     });
 
     popover.present();

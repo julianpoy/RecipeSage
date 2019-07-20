@@ -3,7 +3,7 @@ import { ToastController, AlertController, NavController } from '@ionic/angular'
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 
 @Component({
@@ -46,7 +46,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          // this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -95,7 +95,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          // this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -142,7 +142,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          // this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         case 406:
           (await this.toastCtrl.create({
@@ -177,7 +177,7 @@ export class AccountPage {
         {
           text: 'Okay',
           handler: () => {
-            // this.navCtrl.setRoot('LoginPage', {});
+            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           }
         }
       ]
@@ -216,7 +216,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          // this.navCtrl.setRoot('LoginPage', {}, {animate: true, direction: 'forward'});
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         case 412:
           (await this.toastCtrl.create({
@@ -267,7 +267,7 @@ export class AccountPage {
                     message: 'It looks like your session has expired. Please login and try again.',
                     duration: 5000
                   })).present();
-                  // this.navCtrl.setRoot('LoginPage', {}, { animate: true, direction: 'forward' });
+                  this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
                   break;
                 default:
                   let errorToast = await this.toastCtrl.create({

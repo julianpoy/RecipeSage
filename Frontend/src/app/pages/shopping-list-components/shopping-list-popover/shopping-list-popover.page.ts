@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { ToastController, ModalController, AlertController } from '@ionic/angular';
+import { ToastController, ModalController, AlertController, NavController } from '@ionic/angular';
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-shopping-list-popover',
@@ -16,6 +16,7 @@ export class ShoppingListPopoverPage {
   @Input() shoppingList: any;
 
   constructor(
+    public navCtrl: NavController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public shoppingListService: ShoppingListService,
@@ -128,10 +129,8 @@ export class ShoppingListPopoverPage {
     }).then(() => {
       loading.dismiss();
 
-      this.modalCtrl.dismiss({
-        setRoot: true,
-        destination: 'ShoppingListsPage'
-      });
+      this.modalCtrl.dismiss();
+      this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
     }).catch(async err => {
       loading.dismiss();
       switch (err.status) {

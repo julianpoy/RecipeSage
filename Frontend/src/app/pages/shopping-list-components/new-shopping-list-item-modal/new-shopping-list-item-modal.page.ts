@@ -64,14 +64,11 @@ export class NewShoppingListItemModalPage {
     }
 
     this.modalCtrl.dismiss({
-      destination: false,
-      items: items
+      items
     });
   }
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 }

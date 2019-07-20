@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController, NavController } from '@ionic/angular';
 
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-shopping-list-modal',
@@ -20,6 +20,7 @@ export class NewShoppingListModalPage {
 
   constructor(
     public modalCtrl: ModalController,
+    public navCtrl: NavController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public shoppingListService: ShoppingListService,
@@ -38,13 +39,8 @@ export class NewShoppingListModalPage {
       collaborators: this.selectedThreads
     }).then(response => {
       loading.dismiss();
-      this.modalCtrl.dismiss({
-        destination: 'ShoppingListPage',
-        routingData: {
-          shoppingListId: response.id
-        },
-        setRoot: false
-      });
+      this.modalCtrl.dismiss();
+      this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
       switch (err.status) {
@@ -56,10 +52,8 @@ export class NewShoppingListModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss({
-            destination: 'LoginPage',
-            setRoot: true
-          });
+          this.modalCtrl.dismiss();
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -73,8 +67,6 @@ export class NewShoppingListModalPage {
   }
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 }

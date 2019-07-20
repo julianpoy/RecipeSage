@@ -3,7 +3,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 
 import { UserService } from '@/services/user.service';
 import { MessagingService } from '@/services/messaging.service';
-import { UtilService } from '@/services/util.service';
+import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-message-modal',
@@ -67,13 +67,8 @@ export class NewMessageModalPage {
       to: this.recipientId,
       body: this.message
     }).then(response => {
-      this.modalCtrl.dismiss({
-        destination: 'MessageThreadPage',
-        routingData: {
-          otherUserId: this.recipientId
-        },
-        setRoot: false
-      });
+      this.modalCtrl.dismiss();
+      this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
     }).catch(async err => {
       switch(err.status) {
         case 0:
@@ -84,10 +79,8 @@ export class NewMessageModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss({
-            destination: 'LoginPage',
-            setRoot: true
-          });
+          this.modalCtrl.dismiss();
+          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -101,8 +94,6 @@ export class NewMessageModalPage {
   }
 
   cancel() {
-    this.modalCtrl.dismiss({
-      destination: false
-    });
+    this.modalCtrl.dismiss();
   }
 }
