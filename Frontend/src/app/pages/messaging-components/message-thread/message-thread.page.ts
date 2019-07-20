@@ -216,10 +216,7 @@ export class MessageThreadPage {
   }
 
   openRecipe(recipe) {
-    // this.navCtrl.push('RecipePage', {
-    //   recipe: recipe,
-    //   recipeId: recipe.id
-    // });
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
   onMessageKeyUp(event) {

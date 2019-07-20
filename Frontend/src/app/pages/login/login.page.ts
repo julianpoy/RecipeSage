@@ -184,7 +184,7 @@ export class LoginPage {
 
   showLegal(e) {
     e.preventDefault();
-    // this.navCtrl.push('LegalPage');
+    this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }
 
   handleRedirect() {
