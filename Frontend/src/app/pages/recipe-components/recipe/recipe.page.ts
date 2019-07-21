@@ -10,6 +10,7 @@ import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
+import { LoginModalPage } from '@/pages/login-modal/login-modal.page';
 
 @Component({
   selector: 'page-recipe',
@@ -34,7 +35,7 @@ export class RecipePage {
   pendingLabel: string = '';
   showAutocomplete: boolean = false;
 
-  isLoggedIn: boolean = !!localStorage.getItem('token');
+  isLoggedIn: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -46,6 +47,8 @@ export class RecipePage {
     public utilService: UtilService,
     public recipeService: RecipeService,
     public labelService: LabelService) {
+
+    this.updateIsLoggedIn();
 
     this.recipeId = this.route.snapshot.paramMap.get('recipeId');
     this.recipe = <Recipe>{};
@@ -75,6 +78,10 @@ export class RecipePage {
     });
 
     this.loadLabels();
+  }
+
+  updateIsLoggedIn() {
+    this.isLoggedIn = !!localStorage.getItem('token');
   }
 
   loadAll() {
@@ -479,10 +486,8 @@ export class RecipePage {
     return new Promise((resolve, reject) => {
       this.recipeService.create(this.recipe).then(response => {
         resolve();
-        // this.navCtrl.push('RecipePage', {
-        //   recipe: response,
-        //   recipeId: response.id
-        // });
+
+        this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
 
         loading.dismiss();
       }).catch(async err => {
@@ -512,18 +517,18 @@ export class RecipePage {
     })
   }
 
-  goToAuth(cb?: Function) {
-    // this.navCtrl.push('LoginPage', {
-    //   register: !this.isLoggedIn,
-    //   afterAuth: () => {
-    //     // this.navCtrl.setRoot('RecipePage', {
-    //       recipeId: this.recipeId
-    //     }, { animate: true, direction: 'forward' });
-
-    //     if (cb) cb();
-    //   }
-    // });
-    // TODO: Fix reroute handling (perhaps login modal)
+  async goToAuth(cb?: Function) {
+    const loginModal = await this.modalCtrl.create({
+      component: LoginModalPage,
+      componentProps: {
+        register: !this.isLoggedIn
+      }
+    });
+    loginModal.onDidDismiss().then(() => {
+      this.updateIsLoggedIn();
+      if (cb) cb();
+    });
+    loginModal.present();
   }
 
   authAndClone() {
