@@ -54,7 +54,7 @@ export class ImportPepperplatePage {
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

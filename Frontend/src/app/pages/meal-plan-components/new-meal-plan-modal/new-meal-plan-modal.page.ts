@@ -40,7 +40,7 @@ export class NewMealPlanModalPage {
       this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

@@ -70,7 +70,7 @@ export class MealPlanPopoverPage {
       this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

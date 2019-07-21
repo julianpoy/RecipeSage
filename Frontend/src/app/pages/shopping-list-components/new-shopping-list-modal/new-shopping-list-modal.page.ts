@@ -43,7 +43,7 @@ export class NewShoppingListModalPage {
       this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

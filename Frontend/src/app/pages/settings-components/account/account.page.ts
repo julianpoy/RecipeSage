@@ -38,7 +38,7 @@ export class AccountPage {
       this.account = response;
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -87,7 +87,7 @@ export class AccountPage {
       tst.present();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -134,7 +134,7 @@ export class AccountPage {
       tst.present();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -208,7 +208,7 @@ export class AccountPage {
       this._logout();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -255,7 +255,7 @@ export class AccountPage {
             }).catch(async err => {
               loading.dismiss();
 
-              switch (err.status) {
+              switch (err.response.status) {
                 case 0:
                   (await this.toastCtrl.create({
                     message: this.utilService.standardMessages.offlinePushMessage,

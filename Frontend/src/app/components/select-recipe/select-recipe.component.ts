@@ -51,7 +51,7 @@ export class SelectRecipeComponent {
       loading.dismiss();
       this.searching = false;
 
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlineFetchMessage,
@@ -95,7 +95,7 @@ export class SelectRecipeComponent {
     this.recipeService.fetchById(recipe.id).then(response => {
       this.selectedRecipe = response;
     }).catch(async err => {
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlineFetchMessage,

@@ -43,7 +43,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
@@ -174,7 +174,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
@@ -202,7 +202,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,

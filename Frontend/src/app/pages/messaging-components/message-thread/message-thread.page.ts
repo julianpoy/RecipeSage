@@ -153,7 +153,7 @@ export class MessageThreadPage {
         reject();
 
         if (!this.isViewLoaded) return;
-        switch(err.status) {
+        switch(err.response.status) {
           default:
             this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
             break;
@@ -196,7 +196,7 @@ export class MessageThreadPage {
     }).catch(async err => {
       this.messagePlaceholder = 'Message...';
       this.pendingMessage = myMessage;
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

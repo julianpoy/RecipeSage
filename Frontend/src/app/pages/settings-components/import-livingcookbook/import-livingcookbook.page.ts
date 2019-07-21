@@ -92,7 +92,7 @@ export class ImportLivingcookbookPage {
 
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           this.loading.dismiss();
           this.loading = null;

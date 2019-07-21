@@ -75,7 +75,7 @@ export class AddRecipeToMealPlanModalPage {
       }).catch(async err => {
         reject();
 
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
@@ -107,7 +107,7 @@ export class AddRecipeToMealPlanModalPage {
       }).catch(async err => {
         reject();
 
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
@@ -177,7 +177,7 @@ export class AddRecipeToMealPlanModalPage {
       this.modalCtrl.dismiss();
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

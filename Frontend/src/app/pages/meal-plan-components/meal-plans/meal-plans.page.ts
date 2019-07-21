@@ -69,7 +69,7 @@ export class MealPlansPage {
       }).catch(async err => {
         reject();
 
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,

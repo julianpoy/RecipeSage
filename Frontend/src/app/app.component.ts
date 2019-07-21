@@ -331,7 +331,7 @@ export class AppComponent {
     this.userService.logout().then(() => {
       this._logout();
     }, async err => {
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
         case 401:
         case 404:

@@ -99,7 +99,7 @@ export class ShoppingListPage {
 
         resolve();
       }).catch(async err => {
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
@@ -175,7 +175,7 @@ export class ShoppingListPage {
       });
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -210,7 +210,7 @@ export class ShoppingListPage {
       this.loadList().then(loading.dismiss);
     }).catch(async err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

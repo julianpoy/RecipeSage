@@ -100,7 +100,7 @@ export class RecipePage {
 
         resolve();
       }).catch(async err => {
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
@@ -154,7 +154,7 @@ export class RecipePage {
       }).catch(async err => {
         reject();
 
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
           case 401:
             // Ignore, handled by main loader
@@ -228,7 +228,7 @@ export class RecipePage {
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -314,7 +314,7 @@ export class RecipePage {
       this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -369,7 +369,7 @@ export class RecipePage {
       });
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -446,7 +446,7 @@ export class RecipePage {
       this.selectedLabels.splice(idx, 1);
     }).catch(async err => {
       loading.dismiss();
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -488,7 +488,7 @@ export class RecipePage {
       }).catch(async err => {
         reject();
         loading.dismiss();
-        switch (err.status) {
+        switch (err.response.status) {
           case 0:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,

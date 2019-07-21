@@ -98,7 +98,7 @@ export class LoginPage {
         this.handleRedirect();
       }).catch(err => {
         loading.dismiss();
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
             this.presentToast('It looks like you\'re offline right now.')
             break;
@@ -128,7 +128,7 @@ export class LoginPage {
           this.handleRedirect();
         }).catch(err => {
           loading.dismiss();
-          switch(err.status) {
+          switch(err.response.status) {
             case 0:
               this.presentToast('It looks like you\'re offline right now.')
               break;
@@ -171,7 +171,7 @@ export class LoginPage {
       successToast.present();
     }).catch(err => {
       loading.dismiss();
-      switch (err.status) {
+      switch (err.response.status) {
         case 0:
           this.presentToast('It looks like you\'re offline right now.')
           break;

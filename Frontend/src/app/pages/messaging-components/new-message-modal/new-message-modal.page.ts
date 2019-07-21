@@ -42,7 +42,7 @@ export class NewMessageModalPage {
         this.searching = false;
         this.recipientId = response.id;
       }).catch(async err => {
-        switch(err.status) {
+        switch(err.response.status) {
           case 0:
             let offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
@@ -70,7 +70,7 @@ export class NewMessageModalPage {
       this.modalCtrl.dismiss();
       this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
     }).catch(async err => {
-      switch(err.status) {
+      switch(err.response.status) {
         case 0:
           let offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
