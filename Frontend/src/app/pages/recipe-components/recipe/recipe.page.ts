@@ -116,7 +116,9 @@ export class RecipePage {
             offlineToast.present();
             break;
           case 401:
-            this.goToAuth();
+            this.goToAuth(() => {
+              this.loadAll();
+            });
             break;
           case 404:
             let errorToast = await this.toastCtrl.create({
