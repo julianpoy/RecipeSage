@@ -6,35 +6,113 @@ import { RouteMap } from './services/util.service';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: localStorage.getItem('token') ? 'list/main' : 'welcome',
+    redirectTo: localStorage.getItem('token') ? RouteMap.HomePage.getPath('main') : RouteMap.WelcomePage.getPath(),
     pathMatch: 'full'
   },
-  RouteMap.HomePage,
-  RouteMap.AboutPage,
-  RouteMap.AboutDetailsPage,
-  RouteMap.LegalPage,
-  RouteMap.ContributePage,
-  RouteMap.ContributeCancelPage,
-  RouteMap.ContributeThankYouPage,
-  RouteMap.ReleaseNotesPage,
-  RouteMap.TipsTricksTutorialsPage,
-  RouteMap.WelcomePage,
-  RouteMap.LoginPage,
-  RouteMap.MealPlansPage,
-  RouteMap.MealPlanPage,
-  RouteMap.MessagesPage,
-  RouteMap.MessageThreadPage,
-  RouteMap.EditRecipePage,
-  RouteMap.RecipePage,
-  RouteMap.SettingsPage,
-  RouteMap.AccountPage,
-  RouteMap.ExportPage,
-  RouteMap.ImportPage,
-  RouteMap.ImportLivingcookbookPage,
-  RouteMap.ImportPaprikaPage,
-  RouteMap.ImportPepperplatePage,
-  RouteMap.ShoppingListsPage,
-  RouteMap.ShoppingListPage,
+  {
+    path: RouteMap.HomePage.path,
+    loadChildren: '@/pages/home/home.module#HomePageModule'
+  },
+  {
+    path: RouteMap.AboutPage.path,
+    loadChildren: '@/pages/info-components/about/about.module#AboutPageModule'
+  },
+  {
+    path: RouteMap.AboutDetailsPage.path,
+    loadChildren: '@/pages/info-components/about-details/about-details.module#AboutDetailsPageModule'
+  },
+  {
+    path: RouteMap.LegalPage.path,
+    loadChildren: '@/pages/info-components/legal/legal.module#LegalPageModule'
+  },
+  {
+    path: RouteMap.ContributePage.path,
+    loadChildren: '@/pages/info-components/contribute/contribute.module#ContributePageModule'
+  },
+  {
+    path: RouteMap.ContributeCancelPage.path,
+    loadChildren: '@/pages/info-components/contribute-cancel/contribute-cancel.module#ContributeCancelPageModule'
+  },
+  {
+    path: RouteMap.ContributeThankYouPage.path,
+    loadChildren: '@/pages/info-components/contribute-thankyou/contribute-thankyou.module#ContributeThankYouPageModule'
+  },
+  {
+    path: RouteMap.ReleaseNotesPage.path,
+    loadChildren: '@/pages/info-components/release-notes/release-notes.module#ReleaseNotesPageModule'
+  },
+  {
+    path: RouteMap.TipsTricksTutorialsPage.path,
+    loadChildren: '@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module#TipsTricksTutorialsPageModule'
+  },
+  {
+    path: RouteMap.WelcomePage.path,
+    loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule'
+  },
+  {
+    path: RouteMap.LoginPage.path,
+    loadChildren: '@/pages/login/login.module#LoginPageModule'
+  },
+  {
+    path: RouteMap.MealPlansPage.path,
+    loadChildren: '@/pages/meal-plan-components/meal-plans/meal-plans.module#MealPlansPageModule'
+  },
+  {
+    path: RouteMap.MealPlanPage.path,
+    loadChildren: '@/pages/meal-plan-components/meal-plan/meal-plan.module#MealPlanPageModule'
+  },
+  {
+    path: RouteMap.MessagesPage.path,
+    loadChildren: '@/pages/messaging-components/messages/messages.module#MessagesPageModule'
+  },
+  {
+    path: RouteMap.MessageThreadPage.path,
+    loadChildren: '@/pages/messaging-components/message-thread/message-thread.module#MessageThreadPageModule'
+  },
+  {
+    path: RouteMap.EditRecipePage.path,
+    loadChildren: '@/pages/recipe-components/edit-recipe/edit-recipe.module#EditRecipePageModule'
+  },
+  {
+    path: RouteMap.RecipePage.path,
+    loadChildren: '@/pages/recipe-components/recipe/recipe.module#RecipePageModule'
+  },
+  {
+    path: RouteMap.SettingsPage.path,
+    loadChildren: '@/pages/settings-components/settings/settings.module#SettingsPageModule'
+  },
+  {
+    path: RouteMap.AccountPage.path,
+    loadChildren: '@/pages/settings-components/account/account.module#AccountPageModule'
+  },
+  {
+    path: RouteMap.ExportPage.path,
+    loadChildren: '@/pages/settings-components/export/export.module#ExportPageModule'
+  },
+  {
+    path: RouteMap.ImportPage.path,
+    loadChildren: '@/pages/settings-components/import/import.module#ImportPageModule'
+  },
+  {
+    path: RouteMap.ImportLivingcookbookPage.path,
+    loadChildren: '@/pages/settings-components/import-livingcookbook/import-livingcookbook.module#ImportLivingcookbookPageModule'
+  },
+  {
+    path: RouteMap.ImportPaprikaPage.path,
+    loadChildren: '@/pages/settings-components/import-paprika/import-paprika.module#ImportPaprikaPageModule'
+  },
+  {
+    path: RouteMap.ImportPepperplatePage.path,
+    loadChildren: '@/pages/settings-components/import-pepperplate/import-pepperplate.module#ImportPepperplatePageModule'
+  },
+  {
+    path: RouteMap.ShoppingListsPage.path,
+    loadChildren: '@/pages/shopping-list-components/shopping-lists/shopping-lists.module#ShoppingListsPageModule'
+  },
+  {
+    path: RouteMap.ShoppingListPage.path,
+    loadChildren: '@/pages/shopping-list-components/shopping-list/shopping-list.module#ShoppingListPageModule'
+  }
 ];
 
 @NgModule({
