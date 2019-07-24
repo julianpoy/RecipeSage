@@ -46,7 +46,7 @@ router.get('/shoppingList/:shoppingListId',
   ShoppingList.findOne({
     where: {
       id: req.params.shoppingListId,
-      // userId: res.locals.session.userId
+      userId: res.locals.session.userId
     },
     include: [{
       model: ShoppingListItem,
