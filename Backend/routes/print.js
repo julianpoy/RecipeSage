@@ -9,6 +9,8 @@ var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
+var ShoppingList = require('../models').ShoppingList;
+var ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -30,6 +32,57 @@ router.get('/', (req, res, next) => {
   let redirectBase = req.headers.proxypassbase || '/';
   res.redirect(302, `${redirectBase}print/${req.query.recipeId}?printPreview=true&version=legacy${modifierQuery}`);
 })
+
+router.get('/shoppingList/:shoppingListId',
+  MiddlewareService.validateSession(['user']),
+  function (req, res, next) {
+
+  if (!req.query.version) return res.status(400).send("Missing parameter: version");
+
+  var modifiers = {
+    version: req.query.version
+  };
+
+  ShoppingList.findOne({
+    where: {
+      id: req.params.shoppingListId,
+      // userId: res.locals.session.userId
+    },
+    include: [{
+      model: ShoppingListItem,
+      as: 'items',
+      attributes: ['title'],
+    }],
+  }).then(function(sObj) {
+    if (!sObj) {
+      res.render('error', {
+        message: '404',
+        error: {
+          status: 'Shopping list not found',
+          stack: ''
+        }
+      });
+    } else {
+      let shoppingList = sObj.toJSON();
+
+      res.render('shoppinglist-default', {
+        shoppingList,
+        date: (new Date).toDateString(),
+        modifiers: modifiers
+      });
+    }
+  }).catch(function(err) {
+    res.render('error', {
+      message: '500',
+      error: {
+        status: 'Error while loading shopping list',
+        stack: ''
+      }
+    });
+
+    next(err);
+  });
+});
 
 router.get('/:recipeId',
   MiddlewareService.validateSession(['user'], true),
