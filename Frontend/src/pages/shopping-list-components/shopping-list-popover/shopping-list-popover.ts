@@ -44,6 +44,10 @@ export class ShoppingListPopoverPage {
     this.viewCtrl.dismiss();
   }
 
+  print() {
+    window.open(this.utilService.generatePrintShoppingListURL(this.shoppingListId));
+  }
+
   removeAllItems() {
     let alert = this.alertCtrl.create({
       title: 'Confirm Removal',
