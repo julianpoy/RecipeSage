@@ -7,6 +7,7 @@ var sanitizeHtml = require('sanitize-html');
 // DB
 var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
+var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
 var ShoppingList = require('../models').ShoppingList;
@@ -46,13 +47,20 @@ router.get('/shoppingList/:shoppingListId',
   ShoppingList.findOne({
     where: {
       id: req.params.shoppingListId,
-      userId: res.locals.session.userId
+      [Op.or]: [
+        { userId: res.locals.session.userId },
+        { '$collaborators.id$': res.locals.session.userId }
+      ]
     },
     include: [{
       model: ShoppingListItem,
       as: 'items',
       attributes: ['title'],
-    }],
+    }, {
+      model: User,
+      as: 'collaborators',
+      attributes: ['id']
+    }]
   }).then(function(sObj) {
     if (!sObj) {
       res.render('error', {
