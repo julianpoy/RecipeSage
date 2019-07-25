@@ -391,7 +391,7 @@ async function main() {
         let lcbRecipeLabels = [
           ...new Set([
             ...(lcbRecipe.recipetypes || '').split(',').map(el => el.trim().toLowerCase()),
-            ...lcbCookbooksById[lcbRecipe.cookbookid].map(el => el.name.trim().toLowerCase())
+            ...(lcbCookbooksById[lcbRecipe.cookbookid] || []).map(el => el.name.trim().toLowerCase())
           ])
         ].filter(el => el && el.length > 0)
 
