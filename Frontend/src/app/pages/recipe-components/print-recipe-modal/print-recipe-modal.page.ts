@@ -79,9 +79,11 @@ export class PrintRecipeModalPage {
     public sanitizer: DomSanitizer,
     public utilService: UtilService,
     public recipeService: RecipeService) {
-    for (var i = 0; i < this.templates.length; i++) {
-      this.templates[i].url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers);
-    }
+    setTimeout(() => {
+      for (var i = 0; i < this.templates.length; i++) {
+        this.templates[i].url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers);
+      }
+    });
   }
 
 
