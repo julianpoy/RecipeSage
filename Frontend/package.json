@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
