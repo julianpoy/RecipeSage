@@ -1,5 +1,6 @@
-$container-layer: -2;
-$bg-layer: -1;
+$container-layer: 0;
+$bg-layer: 1;
+$content-layer: 2;
 
 .intro-container {
   position: relative;
@@ -36,6 +37,11 @@ $bg-layer: -1;
 
   .intro-fold-dimmer {
     background-color: rgba(0,0,0,0.3);
+  }
+
+  .title, .screen, .welcomeContent {
+    position: relative;
+    z-index: $content-layer;
   }
 
   .title {
