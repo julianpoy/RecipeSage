@@ -81,41 +81,59 @@
   </ion-infinite-scroll>
 
   <ion-list *ngIf="!loading">
-    <ion-item *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0" lines="none" class="ion-text-wrap ion-text-center">
+    <ion-grid *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && viewOptions.selectedLabels.length === 0">
       <br /><br />
-      <logo-icon href="/#/about"></logo-icon>
-      <br /><br />
-      <h2>Welcome to Recipe Sage!</h2>
-      <br /><br />
-      <p>
-        This is where your recipes will appear.<br />
-        It looks like you don't have any recipes yet.<br />
-        <b>Click the + button in the bottom right corner to add one!</b><br />
+      <ion-row justify-content-center>
+        <logo-icon href="/#/about"></logo-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <h2>Welcome to Recipe Sage!</h2>
+          <br /><br />
+          <p>
+            This is where your recipes will appear.<br />
+            It looks like you don't have any recipes yet.<br />
+            <b>Click the + button in the bottom right corner to add one!</b><br />
 
-        <br /><br />
+            <br /><br />
 
-        You can also import recipes!<br />
-        Use the side menu to go to settings -> import
-      </p>
-    </ion-item>
+            You can also import recipes!<br />
+            Use the side menu to go to settings -> import
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
 
-    <ion-item *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0" lines="none" class="ion-text-wrap ion-text-center">
+    <ion-grid *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0">
       <br /><br />
-      <ion-icon name="mail-open" class="big-icon"></ion-icon>
-      <br /><br />
-      <p>
-        Your recipe inbox is empty.<br />
-        When someone sends you a recipe, it will show up here!
-      </p>
-    </ion-item>
+      <ion-row justify-content-center>
+        <ion-icon name="mail-open" class="big-icon"></ion-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <p>
+            Your recipe inbox is empty.<br />
+            When someone sends you a recipe, it will show up here!
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
 
-    <ion-item *ngIf="recipes && recipes.length === 0 && searchText.length > 0" lines="none" class="ion-text-wrap ion-text-center">
-      <p>
-        No search results.<br /><br />
-        Search includes:<br />
-        Title, description, source, ingredients, instructions, and notes.
-      </p>
-    </ion-item>
+    <ion-grid *ngIf="recipes && recipes.length === 0 && searchText.length > 0">
+      <br /><br />
+      <ion-row justify-content-center>
+        <ion-icon name="search" class="big-icon"></ion-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <p>
+            No search results.<br /><br />
+            Search includes:<br />
+            Title, description, source, ingredients, instructions, and notes.
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
   </ion-list>
 
   <ion-fab *ngIf="folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
