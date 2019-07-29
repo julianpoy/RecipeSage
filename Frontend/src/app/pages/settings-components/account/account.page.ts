@@ -12,6 +12,7 @@ import { RecipeService } from '@/services/recipe.service';
   styleUrls: ['account.page.scss']
 })
 export class AccountPage {
+  defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
   account: any = {
     password: "123456"
