@@ -36,6 +36,7 @@ export class AccountPage {
       loading.dismiss();
 
       this.account = response;
+      this.account.password = '123456';
     }).catch(async err => {
       loading.dismiss();
       switch(err.response.status) {
