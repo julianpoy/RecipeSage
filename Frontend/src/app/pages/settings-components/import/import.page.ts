@@ -9,6 +9,7 @@ import { RouteMap } from '@/services/util.service';
   styleUrls: ['import.page.scss']
 })
 export class ImportPage {
+  defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
   constructor(
     public navCtrl: NavController) {
