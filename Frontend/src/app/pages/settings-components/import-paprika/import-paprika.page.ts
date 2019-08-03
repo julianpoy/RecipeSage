@@ -11,6 +11,7 @@ import { UtilService, RouteMap } from '@/services/util.service';
   styleUrls: ['import-paprika.page.scss']
 })
 export class ImportPaprikaPage {
+  defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   loading = null;
   imageFile = null;
