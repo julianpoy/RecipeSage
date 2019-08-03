@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { RecipeService } from '@/services/recipe.service';
+import { RouteMap } from '@/services/util.service';
 
 @Component({
   selector: 'page-export',
@@ -8,6 +9,8 @@ import { RecipeService } from '@/services/recipe.service';
   styleUrls: ['export.page.scss']
 })
 export class ExportPage {
+  defaultBackHref: string = RouteMap.SettingsPage.getPath();
+
   exportLinks: any;
 
   constructor(public recipeService: RecipeService) {
