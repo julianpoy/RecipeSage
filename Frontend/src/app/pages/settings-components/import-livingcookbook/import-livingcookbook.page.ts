@@ -11,6 +11,7 @@ import { UtilService, RouteMap } from '@/services/util.service';
   styleUrls: ['import-livingcookbook.page.scss']
 })
 export class ImportLivingcookbookPage {
+  defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   loading = null;
   imageFile = null;
