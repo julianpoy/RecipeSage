@@ -12,6 +12,7 @@ import { UtilService, RouteMap } from '@/services/util.service';
   providers: [ RecipeService ]
 })
 export class ImportPepperplatePage {
+  defaultBackHref: string = RouteMap.ImportPage.getPath();
 
   username: string = '';
   password: string = '';
