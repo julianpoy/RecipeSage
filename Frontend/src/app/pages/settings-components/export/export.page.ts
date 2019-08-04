@@ -11,21 +11,26 @@ import { RouteMap } from '@/services/util.service';
 export class ExportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
-  exportLinks: any;
-
-  constructor(public recipeService: RecipeService) {
-    this.exportLinks = {'json': '', 'xml': '', 'txt': '' };
-  }
-
-  ionViewDidLoad() {
-    for (var key in this.exportLinks) {
-      if (this.exportLinks.hasOwnProperty(key)) {
-        this.exportLinks[key] = this.getExportURL(key);
-      }
-    }
-  }
+  constructor(public recipeService: RecipeService) {}
 
   getExportURL(format) {
     return this.recipeService.getExportURL(format);
+  }
+
+  export(format) {
+    const exportUrl = this.getExportURL(format);
+    window.open(exportUrl);
+  }
+
+  exportAsJSON() {
+    this.export('json');
+  }
+
+  exportAsXML() {
+    this.export('xml');
+  }
+
+  exportAsTXT() {
+    this.export('txt');
   }
 }
