@@ -120,6 +120,14 @@ export const RouteMap = {
   }
 };
 
+// RouteMapAOT contains no functions for purposes of AOT - only route paths
+export const RouteMapAOT: any = Object.keys(RouteMap).reduce((acc, routeName) => {
+  acc[routeName] = {
+    path: RouteMap[routeName].path
+  };
+  return acc;
+}, {});
+
 @Injectable({
   providedIn: 'root'
 })

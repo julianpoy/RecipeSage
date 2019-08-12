@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { RouteMap } from './services/util.service';
+import { RouteMapAOT as RouteMap } from './services/util.service';
 
 const routes: Routes = [
   {
