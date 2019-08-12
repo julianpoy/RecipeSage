@@ -85,7 +85,7 @@ export class SelectCollaboratorsComponent {
     });
   }
 
-  autofillUserName(callback) {
+  autofillUserName(callback?) {
     this.searchingForRecipient = true;
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
