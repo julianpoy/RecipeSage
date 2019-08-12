@@ -15,118 +15,110 @@ export interface RecipeTemplateModifiers {
 
 export const RouteMap = {
   HomePage: {
-    getPath: (folder: string) => `list/${folder}`,
+    getPath(folder: string) { return `list/${folder}`; },
     path: 'list/:folder',
   },
   AboutPage: {
-    getPath: () => `about`,
+    getPath() { return `about`; },
     path: 'about',
   },
   AboutDetailsPage: {
-    getPath: () => `about/details`,
+    getPath() { return `about/details`; },
     path: 'about/details',
   },
   LegalPage: {
-    getPath: () => `legal`,
+    getPath() { return `legal`; },
     path: 'legal',
   },
   ContributePage: {
-    getPath: () => `contribute`,
+    getPath() { return `contribute`; },
     path: 'contribute',
   },
   ContributeCancelPage: {
-    getPath: () => `contribute/cancel`,
+    getPath() { return `contribute/cancel`; },
     path: 'contribute/cancel',
   },
   ContributeThankYouPage: {
-    getPath: () => `contribute/thankyou`,
+    getPath() { return `contribute/thankyou`; },
     path: 'contribute/thankyou',
   },
   ReleaseNotesPage: {
-    getPath: () => `release-notes`,
+    getPath() { return `release-notes`; },
     path: 'release-notes',
   },
   TipsTricksTutorialsPage: {
-    getPath: () => `tips-tricks-tutorials`,
+    getPath() { return `tips-tricks-tutorials`; },
     path: 'tips-tricks-tutorials',
   },
   WelcomePage: {
-    getPath: () => `welcome`,
+    getPath() { return `welcome`; },
     path: 'welcome',
   },
   LoginPage: {
-    getPath: () => `login`,
+    getPath() { return `login`; },
     path: 'login',
   },
   MealPlansPage: {
-    getPath: () => `meal-planners`,
+    getPath() { return `meal-planners`; },
     path: 'meal-planners',
   },
   MealPlanPage: {
-    getPath: (mealPlanId: string) => `meal-planners/${mealPlanId}`,
+    getPath(mealPlanId: string) { return `meal-planners/${mealPlanId}`; },
     path: 'meal-planners/:mealPlanId',
   },
   MessagesPage: {
-    getPath: () => `messages`,
+    getPath() { return `messages`; },
     path: 'messages',
   },
   MessageThreadPage: {
-    getPath: (otherUserId: string) => `messages/${otherUserId}`,
+    getPath(otherUserId: string) { return `messages/${otherUserId}`; },
     path: 'messages/:otherUserId',
   },
   EditRecipePage: {
-    getPath: (recipeId: string) => `edit-recipe/${recipeId}`,
+    getPath(recipeId: string) { return `edit-recipe/${recipeId}`; },
     path: 'edit-recipe/:recipeId',
   },
   RecipePage: {
-    getPath: (recipeId: string) => `recipe/${recipeId}`,
+    getPath(recipeId: string) { return `recipe/${recipeId}`; },
     path: 'recipe/:recipeId',
   },
   SettingsPage: {
-    getPath: () => `settings`,
+    getPath() { return `settings`; },
     path: 'settings',
   },
   AccountPage: {
-    getPath: () => `settings/account`,
+    getPath() { return `settings/account`; },
     path: 'settings/account',
   },
   ExportPage: {
-    getPath: () => `settings/export`,
+    getPath() { return `settings/export`; },
     path: 'settings/export',
   },
   ImportPage: {
-    getPath: () => `settings/import`,
+    getPath() { return `settings/import`; },
     path: 'settings/import',
   },
   ImportLivingcookbookPage: {
-    getPath: () => `settings/import/livingcookbook`,
+    getPath() { return `settings/import/livingcookbook`; },
     path: 'settings/import/livingcookbook',
   },
   ImportPaprikaPage: {
-    getPath: () => `settings/import/paprika`,
+    getPath() { return `settings/import/paprika`; },
     path: 'settings/import/paprika',
   },
   ImportPepperplatePage: {
-    getPath: () => `settings/import/pepperplate`,
+    getPath() { return `settings/import/pepperplate`; },
     path: 'settings/import/pepperplate',
   },
   ShoppingListsPage: {
-    getPath: () => `shopping-lists`,
+    getPath() { return `shopping-lists`; },
     path: 'shopping-lists',
   },
   ShoppingListPage: {
-    getPath: (shoppingListId: string) => `shopping-lists/${shoppingListId}`,
+    getPath(shoppingListId: string) { return `shopping-lists/${shoppingListId}`; },
     path: 'shopping-lists/:shoppingListId',
   }
 };
-
-// RouteMapAOT contains no functions for purposes of AOT - only route paths
-export const RouteMapAOT: any = Object.keys(RouteMap).reduce((acc, routeName) => {
-  acc[routeName] = {
-    path: RouteMap[routeName].path
-  };
-  return acc;
-}, {});
 
 @Injectable({
   providedIn: 'root'
