@@ -87,10 +87,10 @@ export class MessageThreadPage {
   reload() {
     this.reloading = true;
 
-    this.loadMessages().then(() => {
-      this.reloading = false;
-    }, () => {
-      this.reloading = false;
+    this.loadMessages().finally(() => {
+      setTimeout(() => {
+        this.reloading = false; // TODO: Replace with better delay for minimum animation time
+      }, 350);
     });
   }
 
