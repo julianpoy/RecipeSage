@@ -14,28 +14,30 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-label floating>Recipient email</ion-label>
+      <ion-label position="floating">Recipient email</ion-label>
       <ion-input type="text" value="" [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
     </ion-item>
 
-    <p *ngIf="recipientEmail.length > 0 && !searching" padding-left>
-      {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
-    </p>
-    <p *ngIf="recipientEmail.length == 0 && !searching" padding-left>
-      Enter an email address to search for a user
-    </p>
-    <p *ngIf="searching" padding-left>
-      Searcing for user...
-    </p>
+    <ion-item lines="none">
+      <ion-label>
+        <p *ngIf="recipientEmail.length > 0 && !searching">
+          {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
+        </p>
+        <p *ngIf="recipientEmail.length == 0 && !searching">
+          Enter an email address to search for a user
+        </p>
+        <p *ngIf="searching">
+          Searcing for user...
+        </p>
+      </ion-label>
+    </ion-item>
 
     <br /><br />
 
     <ion-item>
+      <ion-label position="floating">Compose a message</ion-label>
       <ion-textarea [(ngModel)]="message" placeholder="Hello! I'd like to chat on RecipeSage"></ion-textarea>
     </ion-item>
-    <p padding-left>
-      Compose a message
-    </p>
   </ion-list>
 </ion-content>
 
