@@ -1,90 +1,87 @@
-page-message-thread {
-  .message {
-    margin-top: 4px;
-    margin-bottom: 4px;
+.message {
+  margin-top: 4px;
+  margin-bottom: 4px;
 
-    .time-divider {
-      margin-top: 20px;
-      margin-bottom: 10px;
-      text-transform: capitalize;
-      text-align: center;
+  .time-divider {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  .chat {
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.2);
+    display: inline-block;
+    background: whitesmoke;
+    padding: 10px;
+    // border-radius: 20px;
+    border-radius: 6px;
+    text-align: left;
+    max-width: 60%;
+
+    span {
+      color: black;
+      white-space: pre-wrap;
     }
+  }
 
+  .recipe {
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.2);
+    width: 60%;
+    max-width: 400px;
+    // border-radius: 20px;
+    border-radius: 6px;
+    background: whitesmoke;
+
+    ion-item {
+      background: transparent;
+
+      h2 {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &.me {
+    text-align: right;
+
+    .recipe {
+      margin-left: auto;
+    }
+  }
+
+  &.blue {
     .chat {
-      box-shadow: 1px 1px 7px rgba(0,0,0,0.2);
-      display: inline-block;
-      background: whitesmoke;
-      padding: 10px;
-      // border-radius: 20px;
-      border-radius: 6px;
-      text-align: left;
-      max-width: 60%;
+      background: #00a8ff;
 
       span {
-        color: black;
-        white-space: pre-wrap;
+        color: white;
+
+        a {
+          color: white;
+          opacity: 1;
+        }
       }
     }
 
     .recipe {
-      box-shadow: 1px 1px 7px rgba(0,0,0,0.2);
-      width: 60%;
-      max-width: 400px;
-      // border-radius: 20px;
-      border-radius: 6px;
-      background: whitesmoke;
+      background: #00a8ff;
 
       ion-item {
-        background: transparent;
-
         h2 {
-          margin-top: 0;
-        }
-      }
-    }
-
-    &.me {
-      text-align: right;
-
-      .recipe {
-        margin-left: auto;
-      }
-    }
-
-    &.blue {
-      .chat {
-        background: #00a8ff;
-
-        span {
           color: white;
-
-          a {
-            color: white;
-            opacity: 1;
-          }
         }
-      }
 
-      .recipe {
-        background: #00a8ff;
-
-        ion-item {
-          h2 {
-            color: white;
-          }
-
-          .description {
-            color: white;
-          }
+        .description {
+          color: white;
         }
       }
     }
   }
+}
 
-  .reload.reloading {
-    animation: spin 1s linear infinite normal none;
-  }
-
+.reload.reloading {
+  animation: spin 1s linear infinite normal none;
 }
 
 @-webkit-keyframes spin {
