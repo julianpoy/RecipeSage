@@ -4,12 +4,12 @@
   </ion-list-header>
 
   <ion-item>
-    <ion-icon name='list' item-start></ion-icon>
+    <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
-      <ion-option value="-title">Title</ion-option>
-      <ion-option value="-createdAt">Created (newest first)</ion-option>
-      <ion-option value="createdAt">Created (oldest first)</ion-option>
+      <ion-select-option value="-title">Title</ion-select-option>
+      <ion-select-option value="-createdAt">Created (newest first)</ion-select-option>
+      <ion-select-option value="createdAt">Created (oldest first)</ion-select-option>
     </ion-select>
   </ion-item>
 
@@ -18,7 +18,7 @@
     <ion-label>
       Group Similar Items
     </ion-label>
-    <ion-icon name='attach' item-start></ion-icon>
+    <ion-icon name='attach' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
@@ -26,7 +26,7 @@
     <ion-label>
       Show Recipe Title
     </ion-label>
-    <ion-icon name='pricetag' item-start></ion-icon>
+    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item *ngIf="shoppingList.collaborators.length > 0">
@@ -34,7 +34,7 @@
     <ion-label>
       Show Added By
     </ion-label>
-    <ion-icon name='contact' item-start></ion-icon>
+    <ion-icon name='contact' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
@@ -42,16 +42,16 @@
     <ion-label>
       Show Added On
     </ion-label>
-    <ion-icon name='calendar' item-start></ion-icon>
+    <ion-icon name='calendar' slot="start"></ion-icon>
   </ion-item>
 
   <ion-item>
-    <ion-icon name='remove-circle' item-start></ion-icon>
-    <button (click)="removeAllItems()" ion-button full>Remove all items</button>
+    <ion-icon name='remove-circle' slot="start"></ion-icon>
+    <ion-button (click)="removeAllItems()" expand="full">Remove all items</ion-button>
   </ion-item>
 
   <ion-item>
-    <ion-icon name='trash' item-start></ion-icon>
-    <button (click)="deleteList()" ion-button full>Delete list</button>
+    <ion-icon name='trash' slot="start"></ion-icon>
+    <ion-button (click)="deleteList()" expand="full">Delete list</ion-button>
   </ion-item>
 </ion-list>
