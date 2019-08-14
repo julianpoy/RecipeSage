@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ShoppingListsPage } from './shopping-lists.page';
+import { NewShoppingListModalPageModule } from '../new-shopping-list-modal/new-shopping-list-modal.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ShoppingListsPage } from './shopping-lists.page';
         path: '',
         component: ShoppingListsPage
       }
-    ])
+    ]),
+    NewShoppingListModalPageModule
   ],
 })
 export class ShoppingListsPageModule {}
