@@ -15,8 +15,8 @@
 
 <ion-content padding>
   <div>
-    <ion-segment [(ngModel)]="inputType">
-      <ion-segment-button value="items">
+    <ion-segment (ionChange)="inputTypeChanged($event)">
+      <ion-segment-button value="items" checked>
         Items
       </ion-segment-button>
       <ion-segment-button value="recipe">
@@ -29,7 +29,7 @@
 
     <div *ngSwitchCase="'items'">
       <ion-item *ngFor="let item of itemFields">
-        <ion-label floating>Item title</ion-label>
+        <ion-label position="floating">Item title</ion-label>
         <ion-input [(ngModel)]="item.title" (ngModelChange)="addOrRemoveTextFields()" type="text" value=""></ion-input>
       </ion-item>
     </div>

@@ -27,6 +27,10 @@ export class NewShoppingListItemModalPage {
 
   }
 
+  inputTypeChanged(event) {
+    this.inputType = event.detail.value;
+  }
+
   addOrRemoveTextFields() {
     if ((this.itemFields[this.itemFields.length - 1].title || '').length > 0) {
       this.itemFields.push({});
