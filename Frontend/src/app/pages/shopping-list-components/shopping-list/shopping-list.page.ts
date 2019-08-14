@@ -8,6 +8,7 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';
+import { ShoppingListPopoverPage } from '../shopping-list-popover/shopping-list-popover.page';
 
 @Component({
   selector: 'page-shopping-list',
@@ -319,7 +320,7 @@ export class ShoppingListPage {
 
   async presentPopover(event) {
     const popover = await this.popoverCtrl.create({
-      component: 'ShoppingListPopoverPage',
+      component: ShoppingListPopoverPage,
       componentProps: {
         shoppingListId: this.shoppingListId,
         shoppingList: this.list,
