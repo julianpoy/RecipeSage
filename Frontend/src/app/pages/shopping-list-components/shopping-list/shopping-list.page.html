@@ -70,21 +70,26 @@
         <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
       </ion-item>
     </div>
-    <ion-item *ngIf="list.items.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
-      <br />
-      <br />
-      <br />
-      <p>
-        There are no items in this shopping list.
-        <br />
-        <ion-button (click)="newShoppingListItem()">
-          <ion-icon name="add" slot="start"></ion-icon>
-          <ion-label>
-            Add the first item
-          </ion-label>
-        </ion-button>
-      </p>
-    </ion-item>
+    <ion-grid *ngIf="list.items.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
+      <br /><br />
+      <ion-row justify-content-center>
+        <ion-icon name="cart" class="big-icon"></ion-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <p>
+            There are no items in this shopping list.
+            <br />
+            <ion-button (click)="newShoppingListItem()">
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>
+                Add the first item
+              </ion-label>
+            </ion-button>
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
   </ion-list>
 
   <br />
@@ -94,9 +99,10 @@
       Recipes in this list
     </ion-list-header>
     <ion-item *ngFor="let recipeId of recipeIds" (click)="removeRecipe(recipeId)">
-      <ion-icon name="trash"></ion-icon>
-       &nbsp;&nbsp;
-      {{ itemsByRecipeId[recipeId][0].recipe.title }}
+      <ion-icon name="trash" slot="start"></ion-icon>
+      <ion-label>
+        {{ itemsByRecipeId[recipeId][0].recipe.title }}
+      </ion-label>
     </ion-item>
   </ion-list>
 
