@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ToastController, ModalController, AlertController, NavController } from '@ionic/angular';
+import { ToastController, AlertController, NavController, PopoverController } from '@ionic/angular';
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -21,7 +21,7 @@ export class ShoppingListPopoverPage {
     public loadingService: LoadingService,
     public shoppingListService: ShoppingListService,
     public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public alertCtrl: AlertController
   ) {}
 
@@ -33,7 +33,7 @@ export class ShoppingListPopoverPage {
     localStorage.setItem('shoppingList.showRecipeTitle', this.viewOptions.showRecipeTitle);
     localStorage.setItem('shoppingList.groupSimilar', this.viewOptions.groupSimilar);
 
-    this.modalCtrl.dismiss();
+    this.popoverCtrl.dismiss();
   }
 
   async removeAllItems() {
@@ -73,7 +73,7 @@ export class ShoppingListPopoverPage {
     }).then(() => {
       loading.dismiss();
 
-      this.modalCtrl.dismiss();
+      this.popoverCtrl.dismiss();
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {
@@ -129,7 +129,7 @@ export class ShoppingListPopoverPage {
     }).then(() => {
       loading.dismiss();
 
-      this.modalCtrl.dismiss();
+      this.popoverCtrl.dismiss();
       this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
     }).catch(async err => {
       loading.dismiss();
