@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ShoppingListPage } from './shopping-list.page';
+import { NewShoppingListItemModalPageModule } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ShoppingListPage } from './shopping-list.page';
       }
     ]),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NewShoppingListItemModalPageModule
   ],
 })
 export class ShoppingListPageModule {}

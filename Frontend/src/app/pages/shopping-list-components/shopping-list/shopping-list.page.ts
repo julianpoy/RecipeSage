@@ -7,6 +7,8 @@ import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
+import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';
+
 @Component({
   selector: 'page-shopping-list',
   templateUrl: 'shopping-list.page.html',
@@ -235,7 +237,7 @@ export class ShoppingListPage {
 
   async newShoppingListItem() {
     let modal = await this.modalCtrl.create({
-      component: 'NewShoppingListItemModalPage'
+      component: NewShoppingListItemModalPage
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
