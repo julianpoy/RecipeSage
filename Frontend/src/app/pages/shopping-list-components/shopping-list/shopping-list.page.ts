@@ -253,12 +253,12 @@ export class ShoppingListPage {
 
   loadViewOptions() {
     var defaults = {
-      sortBy: '-created',
+      sortBy: '-createdAt',
       showAddedBy: false,
       showAddedOn: false,
       showRecipeTitle: true,
       groupSimilar: false
-    }
+    };
 
     this.viewOptions.sortBy = localStorage.getItem('shoppingList.sortBy');
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingList.showAddedBy'));
@@ -276,26 +276,26 @@ export class ShoppingListPage {
   }
 
   ingredientSorter(a, b) {
-    if (this.viewOptions.sortBy === 'created') {
-      var dateComp = (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
-      if (dateComp === 0) {
-        return a.title.localeCompare(b.title);
-      }
-      return dateComp;
-    }
-    if (this.viewOptions.sortBy === '-created') {
-      var reverseDateComp = (<any>new Date(b.createdAt)) - (<any>new Date(a.createdAt));
-      if (reverseDateComp === 0) {
-        return a.title.localeCompare(b.title);
-      }
-      return reverseDateComp;
-    }
-    if (this.viewOptions.sortBy === '-title') {
-      var localeComp = a.title.localeCompare(b.title);
-      if (localeComp === 0) {
-        return (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
-      }
-      return localeComp;
+    switch (this.viewOptions.sortBy) {
+      case 'createdAt':
+        var dateComp = (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
+        if (dateComp === 0) {
+          return a.title.localeCompare(b.title);
+        }
+        return dateComp;
+      case '-createdAt':
+        var reverseDateComp = (<any>new Date(b.createdAt)) - (<any>new Date(a.createdAt));
+        if (reverseDateComp === 0) {
+          return a.title.localeCompare(b.title);
+        }
+        return reverseDateComp;
+      case '-title':
+      default:
+        var localeComp = a.title.localeCompare(b.title);
+        if (localeComp === 0) {
+          return (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
+        }
+        return localeComp;
     }
   }
 
