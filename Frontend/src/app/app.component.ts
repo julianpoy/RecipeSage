@@ -16,6 +16,8 @@ import { UserService } from '@/services/user.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  isLoggedIn: boolean;
+
   navList: { title: string, icon: string, url: string }[];
 
   inboxCount: number;
@@ -50,16 +52,17 @@ export class AppComponent {
     this.initEventListeners();
     this.initEventDispatchers();
 
-    if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
+    if ('Notification' in window && (<any>Notification).permission === 'granted' && this.utilService.isLoggedIn()) {
       this.messagingService.requestNotifications();
     }
 
-    this.navList = this.generateNavList();
+    this.updateNavList();
+    this.updateIsLoggedIn();
   }
 
   // Attached to pagechange so keep this light
   async checkBrowserCompatibility() {
-    if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.isLoggedIn()) {
+    if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.utilService.isLoggedIn()) {
       const oldBrowserAlert = await this.alertCtrl.create({
         header: 'Unsupported Browser',
         message: 'It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.<br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.',
@@ -213,6 +216,14 @@ export class AppComponent {
     }, false);
   }
 
+  updateIsLoggedIn() {
+    this.isLoggedIn = this.utilService.isLoggedIn();
+  }
+
+  updateNavList() {
+    this.navList = this.generateNavList();
+  }
+
   generateNavList() {
     var pages = [];
 
@@ -236,17 +247,13 @@ export class AppComponent {
       { title: 'About & Support', icon: 'help-buoy', url: '/about' }
     ];
 
-    if (this.isLoggedIn()) {
+    if (this.utilService.isLoggedIn()) {
       pages = pages.concat(loggedInPages);
     } else {
       pages = pages.concat(loggedOutPages);
     }
 
     return pages;
-  }
-
-  isLoggedIn() {
-    return localStorage.getItem('token') ? true : false;
   }
 
   readyForPrompt() {
@@ -291,6 +298,9 @@ export class AppComponent {
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
+      this.updateNavList();
+      this.updateIsLoggedIn();
+
       this.checkBrowserCompatibility();
 
       try {
@@ -320,7 +330,7 @@ export class AppComponent {
   }
 
   _logout() {
-    localStorage.removeItem('token');
+    this.utilService.removeToken();
 
     this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
   }

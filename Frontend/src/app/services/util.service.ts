@@ -142,6 +142,10 @@ export class UtilService {
     return this.devBase;
   }
 
+  removeToken() {
+    localStorage.removeItem('token');
+  }
+
   setToken(token) {
     localStorage.setItem('token', token);
   }
