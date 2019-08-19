@@ -30,6 +30,9 @@ export interface Recipe {
   fromUser: any;
   folder: string;
   score: number;
+  isOwner: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface Ingredient {

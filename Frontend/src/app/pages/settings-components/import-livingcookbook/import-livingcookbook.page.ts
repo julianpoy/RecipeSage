@@ -21,6 +21,8 @@ export class ImportLivingcookbookPage {
   includeStockRecipes: boolean = false;
   excludeImages: boolean = false;
 
+  troubleshoot = false;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingService,
