@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check",
+    "dist": "ionic build --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
