@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { RouteMap } from './services/util.service';
+import { DefaultPageGuardService } from './services/default-page-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: localStorage.getItem('token') ? RouteMap.HomePage.getPath('main') : RouteMap.WelcomePage.getPath(),
-    pathMatch: 'full'
+    loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule',
+    pathMatch: 'full',
+    canActivate: [DefaultPageGuardService]
   },
   {
     path: RouteMap.HomePage.path,

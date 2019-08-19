@@ -142,9 +142,20 @@ export class UtilService {
     return this.devBase;
   }
 
+  setToken(token) {
+    localStorage.setItem('token', token);
+  }
+
+  getToken(): string {
+    return localStorage.getItem('token');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
   getTokenQuery(): string {
-    let token = localStorage.getItem('token');
-    if (token) return `?token=${token}`;
+    if (this.isLoggedIn()) return `?token=${this.getToken()}`;
     return `?false=false`;
   }
 
