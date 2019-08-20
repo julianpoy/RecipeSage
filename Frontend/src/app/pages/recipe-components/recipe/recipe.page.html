@@ -157,11 +157,11 @@
       </p>
     </ion-item>
 
-    <div class='dropdownSelect' *ngIf="recipe.folder !== 'inbox' && recipe.isOwner">
+    <div class="dropdownSelect ion-margin-start" *ngIf="recipe.folder !== 'inbox' && recipe.isOwner">
 
       <div class="labels">
         <span class="label" *ngFor="let label of selectedLabels">
-          <ion-icon class="delete-label" (click)="deleteLabel(labelObjectsByTitle[label])" name="trash" item-start></ion-icon>
+          <ion-icon class="delete-label" (click)="deleteLabel(labelObjectsByTitle[label])" name="trash" slot="start"></ion-icon>
           {{ label }}
         </span>
       </div>
