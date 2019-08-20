@@ -40,7 +40,7 @@ ion-thumbnail img {
 }
 
 .alertDanger {
-  // color: map-get($colors, danger) !important;
+  color: var(--ion-color-danger) !important;
 }
 
 #loading-bar-spinner {
