@@ -3,7 +3,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 
 import { UserService } from '@/services/user.service';
 import { MessagingService } from '@/services/messaging.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-message-modal',
@@ -80,7 +80,7 @@ export class NewMessageModalPage {
           break;
         case 401:
           this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({

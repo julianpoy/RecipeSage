@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { LoginPage } from './login.page';
+import { AuthPage } from './auth.page';
 
 @NgModule({
   declarations: [
-    LoginPage,
+    AuthPage,
   ],
   imports: [
     CommonModule,
@@ -15,9 +15,9 @@ import { LoginPage } from './login.page';
     RouterModule.forChild([
       {
         path: '',
-        component: LoginPage
+        component: AuthPage
       }
     ])
   ],
 })
-export class LoginPageModule {}
+export class AuthPageModule {}

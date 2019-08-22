@@ -5,7 +5,7 @@ import { NavController, ToastController, ModalController, PopoverController } fr
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';
 import { ShoppingListPopoverPage } from '../shopping-list-popover/shopping-list-popover.page';
@@ -111,7 +111,7 @@ export class ShoppingListPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           case 404:
             let errorToast = await this.toastCtrl.create({

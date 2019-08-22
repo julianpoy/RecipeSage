@@ -5,7 +5,7 @@ import { NavController, ToastController, ModalController, PopoverController, Ale
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 
@@ -100,7 +100,7 @@ export class MealPlanPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           case 404:
             let errorToast = await this.toastCtrl.create({
@@ -279,7 +279,7 @@ export class MealPlanPage {
           offlineToast.present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         case 404:
           let errorToast = await this.toastCtrl.create({

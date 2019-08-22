@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
-import { LoginModalPage } from './login-modal.page';
+import { AuthModalPage } from './auth-modal.page';
 
 @NgModule({
   declarations: [
-    LoginModalPage,
+    AuthModalPage,
   ],
   imports: [
     CommonModule,
     IonicModule,
   ],
   entryComponents: [
-    LoginModalPage
+    AuthModalPage
   ]
 })
-export class LoginModalPageModule {}
+export class AuthModalPageModule {}

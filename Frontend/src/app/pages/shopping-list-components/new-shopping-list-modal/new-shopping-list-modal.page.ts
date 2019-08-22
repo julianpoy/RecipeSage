@@ -5,7 +5,7 @@ import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-shopping-list-modal',
@@ -53,7 +53,7 @@ export class NewShoppingListModalPage {
           break;
         case 401:
           this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({

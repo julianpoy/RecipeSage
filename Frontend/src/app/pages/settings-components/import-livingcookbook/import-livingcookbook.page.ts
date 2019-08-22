@@ -3,7 +3,7 @@ import { NavController, ToastController } from '@ionic/angular';
 
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-import-livingcookbook',
@@ -104,7 +104,7 @@ export class ImportLivingcookbookPage {
         case 401:
           this.loading.dismiss();
           this.loading = null;
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         case 406:
           this.loading.dismiss();

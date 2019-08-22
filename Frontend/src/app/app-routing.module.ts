@@ -52,8 +52,8 @@ const routes: Routes = [
     loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule'
   },
   {
-    path: RouteMap.LoginPage.path,
-    loadChildren: '@/pages/login/login.module#LoginPageModule'
+    path: RouteMap.AuthPage.path,
+    loadChildren: '@/pages/auth/auth.module#AuthPageModule'
   },
   {
     path: RouteMap.MealPlansPage.path,

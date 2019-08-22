@@ -13,6 +13,12 @@ export interface RecipeTemplateModifiers {
   showPrintButton?: boolean
 }
 
+// TODO: Create more types for various page getPath methods
+export enum AuthType {
+  Login = 'login',
+  Register = 'register'
+}
+
 export const RouteMap = {
   HomePage: {
     getPath(folder: string) { return `list/${folder}`; },
@@ -54,9 +60,9 @@ export const RouteMap = {
     getPath() { return `welcome`; },
     path: 'welcome',
   },
-  LoginPage: {
-    getPath() { return `login`; },
-    path: 'login',
+  AuthPage: {
+    getPath(authType: AuthType) { return `auth/${authType}`; },
+    path: 'auth/:authType',
   },
   MealPlansPage: {
     getPath() { return `meal-planners`; },

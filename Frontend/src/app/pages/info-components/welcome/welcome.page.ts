@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { RouteMap } from '@/services/util.service';
+import { RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-welcome',
@@ -18,9 +18,11 @@ export class WelcomePage {
   goToAuth(type) {
     let register = type === 'register';
 
-    if (register) this.navCtrl.navigateForward(RouteMap.LoginPage.getPath());
-    else this.navCtrl.navigateForward(RouteMap.LoginPage.getPath());
-    // TODO: Route to correct pages
+    if (register) {
+      this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Register));
+    } else {
+      this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+    }
   }
 
 }

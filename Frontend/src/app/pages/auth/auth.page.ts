@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController, ModalController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -8,13 +8,12 @@ import { MessagingService } from '@/services/messaging.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
-  selector: 'page-login-modal',
-  templateUrl: 'login-modal.page.html',
-  styleUrls: ['login-modal.page.scss']
+  selector: 'page-auth',
+  templateUrl: 'auth.page.html',
+  styleUrls: ['auth.page.scss'],
+  providers: [ UserService ]
 })
-export class LoginModalPage {
-  @Input() register: boolean;
-
+export class AuthPage {
   name: string = '';
   email: string = '';
   password: string = '';
@@ -22,9 +21,10 @@ export class LoginModalPage {
 
   showLogin: boolean = true;
 
+  redirect: string;
+
   constructor(
     public navCtrl: NavController,
-    public modalCtrl: ModalController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
@@ -32,9 +32,13 @@ export class LoginModalPage {
     public route: ActivatedRoute,
     public userService: UserService) {
 
-    setTimeout(() => {
-      this.showLogin = !this.register;
-    });
+    if (this.route.snapshot.paramMap.get('register')) {
+      this.showLogin = false;
+    }
+
+    if (this.route.snapshot.paramMap.get('redirect')) {
+      this.redirect = this.route.snapshot.queryParamMap.get('redirect');
+    }
   }
 
   toggleLogin() {
@@ -91,7 +95,7 @@ export class LoginModalPage {
           this.messagingService.requestNotifications();
         }
 
-        this.dismiss();
+        this.handleRedirect();
       }).catch(err => {
         loading.dismiss();
         switch(err.response.status) {
@@ -121,7 +125,7 @@ export class LoginModalPage {
             this.messagingService.requestNotifications();
           }
 
-          this.dismiss();
+          this.handleRedirect();
         }).catch(err => {
           loading.dismiss();
           switch(err.response.status) {
@@ -183,7 +187,7 @@ export class LoginModalPage {
     this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }
 
-  dismiss() {
-    this.modalCtrl.dismiss();
+  handleRedirect() {
+    this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
   }
 }

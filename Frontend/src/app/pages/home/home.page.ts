@@ -7,7 +7,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
@@ -244,7 +244,7 @@ export class HomePage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateForward(RouteMap.LoginPage.getPath()); // TODO: Remove back button on next view (navigateRoot?)
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -339,7 +339,7 @@ export class HomePage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateForward(RouteMap.LoginPage.getPath()); // TODO: Remove back button on next view (navigateRoot?)
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({

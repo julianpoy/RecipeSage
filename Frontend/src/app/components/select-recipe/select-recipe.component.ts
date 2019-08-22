@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ToastController, NavController } from '@ionic/angular';
 
@@ -60,7 +60,7 @@ export class SelectRecipeComponent {
           offlineToast.present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -104,7 +104,7 @@ export class SelectRecipeComponent {
           offlineToast.present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({

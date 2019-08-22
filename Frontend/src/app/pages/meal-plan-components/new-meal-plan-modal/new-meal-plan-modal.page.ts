@@ -4,7 +4,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
 import { MealPlanService } from '@/services/meal-plan.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-new-meal-plan-modal',
@@ -50,7 +50,7 @@ export class NewMealPlanModalPage {
           break;
         case 401:
           this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({

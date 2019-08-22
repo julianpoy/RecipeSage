@@ -3,7 +3,7 @@ import { ToastController, AlertController, NavController } from '@ionic/angular'
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 
 @Component({
@@ -48,7 +48,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -97,7 +97,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({
@@ -144,7 +144,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         case 406:
           (await this.toastCtrl.create({
@@ -179,7 +179,7 @@ export class AccountPage {
         {
           text: 'Okay',
           handler: () => {
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           }
         }
       ]
@@ -218,7 +218,7 @@ export class AccountPage {
           })).present();
           break;
         case 401:
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         case 412:
           (await this.toastCtrl.create({
@@ -269,7 +269,7 @@ export class AccountPage {
                     message: 'It looks like your session has expired. Please login and try again.',
                     duration: 5000
                   })).present();
-                  this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+                  this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
                   break;
                 default:
                   let errorToast = await this.toastCtrl.create({

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, ModalController } from '@ionic/angular';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -8,12 +8,13 @@ import { MessagingService } from '@/services/messaging.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.page.html',
-  styleUrls: ['login.page.scss'],
-  providers: [ UserService ]
+  selector: 'page-auth-modal',
+  templateUrl: 'auth-modal.page.html',
+  styleUrls: ['auth-modal.page.scss']
 })
-export class LoginPage {
+export class AuthModalPage {
+  @Input() register: boolean;
+
   name: string = '';
   email: string = '';
   password: string = '';
@@ -21,10 +22,9 @@ export class LoginPage {
 
   showLogin: boolean = true;
 
-  redirect: string;
-
   constructor(
     public navCtrl: NavController,
+    public modalCtrl: ModalController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
@@ -32,13 +32,9 @@ export class LoginPage {
     public route: ActivatedRoute,
     public userService: UserService) {
 
-    if (this.route.snapshot.paramMap.get('register')) {
-      this.showLogin = false;
-    }
-
-    if (this.route.snapshot.paramMap.get('redirect')) {
-      this.redirect = this.route.snapshot.queryParamMap.get('redirect');
-    }
+    setTimeout(() => {
+      this.showLogin = !this.register;
+    });
   }
 
   toggleLogin() {
@@ -95,7 +91,7 @@ export class LoginPage {
           this.messagingService.requestNotifications();
         }
 
-        this.handleRedirect();
+        this.dismiss();
       }).catch(err => {
         loading.dismiss();
         switch(err.response.status) {
@@ -125,7 +121,7 @@ export class LoginPage {
             this.messagingService.requestNotifications();
           }
 
-          this.handleRedirect();
+          this.dismiss();
         }).catch(err => {
           loading.dismiss();
           switch(err.response.status) {
@@ -187,7 +183,7 @@ export class LoginPage {
     this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }
 
-  handleRedirect() {
-    this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
+  dismiss() {
+    this.modalCtrl.dismiss();
   }
 }

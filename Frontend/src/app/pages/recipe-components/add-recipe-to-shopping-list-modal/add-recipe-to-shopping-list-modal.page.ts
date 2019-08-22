@@ -4,7 +4,7 @@ import { NavController, ToastController, ModalController, AlertController } from
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService, Ingredient } from '@/services/recipe.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
 
 @Component({
@@ -78,7 +78,7 @@ export class AddRecipeToShoppingListModalPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({

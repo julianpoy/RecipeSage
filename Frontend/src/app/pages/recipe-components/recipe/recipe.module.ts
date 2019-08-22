@@ -11,7 +11,7 @@ import { AddRecipeToShoppingListModalPageModule } from '../add-recipe-to-shoppin
 import { AddRecipeToMealPlanModalPageModule } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.module';
 import { PrintRecipeModalPageModule } from '../print-recipe-modal/print-recipe-modal.module';
 import { ShareModalPageModule } from '@/pages/share-modal/share-modal.module';
-import { LoginModalPageModule } from '@/pages/login-modal/login-modal.module';
+import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { LoginModalPageModule } from '@/pages/login-modal/login-modal.module';
     AddRecipeToMealPlanModalPageModule,
     PrintRecipeModalPageModule,
     ShareModalPageModule,
-    LoginModalPageModule,
+    AuthModalPageModule,
   ],
 })
 export class RecipePageModule {}

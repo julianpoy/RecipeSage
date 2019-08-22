@@ -10,7 +10,7 @@ import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
-import { LoginModalPage } from '@/pages/login-modal/login-modal.page';
+import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 
 @Component({
   selector: 'page-recipe',
@@ -520,17 +520,17 @@ export class RecipePage {
   }
 
   async goToAuth(cb?: Function) {
-    const loginModal = await this.modalCtrl.create({
-      component: LoginModalPage,
+    const authModal = await this.modalCtrl.create({
+      component: AuthModalPage,
       componentProps: {
         register: !this.isLoggedIn
       }
     });
-    loginModal.onDidDismiss().then(() => {
+    authModal.onDidDismiss().then(() => {
       this.updateIsLoggedIn();
       if (cb) cb();
     });
-    loginModal.present();
+    authModal.present();
   }
 
   authAndClone() {

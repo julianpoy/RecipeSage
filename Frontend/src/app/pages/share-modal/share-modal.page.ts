@@ -5,7 +5,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService, RecipeTemplateModifiers, RouteMap } from '@/services/util.service';
+import { UtilService, RecipeTemplateModifiers, RouteMap, AuthType } from '@/services/util.service';
 import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -101,7 +101,7 @@ export class ShareModalPage {
             break;
           case 401:
             this.modalCtrl.dismiss();
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -165,7 +165,7 @@ export class ShareModalPage {
           break;
         case 401:
           this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
           let errorToast = await this.toastCtrl.create({

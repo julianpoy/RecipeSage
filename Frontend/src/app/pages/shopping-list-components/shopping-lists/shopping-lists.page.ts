@@ -3,7 +3,7 @@ import { NavController, ModalController, ToastController } from '@ionic/angular'
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { NewShoppingListModalPage } from '../new-shopping-list-modal/new-shopping-list-modal.page';
 
@@ -77,7 +77,7 @@ export class ShoppingListsPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({

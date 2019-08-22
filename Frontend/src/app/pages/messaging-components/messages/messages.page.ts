@@ -4,7 +4,7 @@ import { NavController, ToastController, ModalController, Events } from '@ionic/
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 
 @Component({
@@ -76,7 +76,7 @@ export class MessagesPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({

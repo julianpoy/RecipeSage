@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 
 import dayjs, { Dayjs } from 'dayjs'
@@ -84,7 +84,7 @@ export class AddRecipeToMealPlanModalPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({
@@ -116,7 +116,7 @@ export class AddRecipeToMealPlanModalPage {
             offlineToast.present();
             break;
           case 401:
-            this.navCtrl.navigateRoot(RouteMap.LoginPage.getPath());
+            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
             let errorToast = await this.toastCtrl.create({
