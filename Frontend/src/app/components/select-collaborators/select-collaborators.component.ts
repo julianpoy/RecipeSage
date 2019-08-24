@@ -67,11 +67,12 @@ export class SelectCollaboratorsComponent {
             offlineToast.present();
             break;
           case 401:
-            // this.modalCtrl.dismiss({
-            //   destination: 'LoginPage',
-            //   setRoot: true
-            // });
-            // TODO: Figure this mess out - this is not a modal!
+            // TODO: This may need to be improved. Previously, this tried to dismiss as a modal with return message
+            let unauthorizedToast = await this.toastCtrl.create({
+              message: this.utilService.standardMessages.unauthorized,
+              duration: 30000
+            });
+            unauthorizedToast.present();
             break;
           default:
             let errorToast = await this.toastCtrl.create({
