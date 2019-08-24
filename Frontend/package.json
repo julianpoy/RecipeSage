@@ -6,11 +6,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check",
-    "dist": "ionic build --prod",
+    "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest && npm run compress",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "compress": "bread-compressor -a gzip www"
   },
   "private": true,
   "dependencies": {
@@ -49,9 +50,9 @@
     "@angular/compiler-cli": "~7.2.2",
     "@angular/language-service": "~7.2.2",
     "@ionic/angular-toolkit": "~1.5.1",
-    "@types/node": "~12.0.12",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~12.0.12",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -61,9 +62,11 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "shx": "^0.3.2",
     "ts-node": "~8.3.0",
     "tslint": "~5.17.0",
-    "typescript": "~3.1.6"
+    "typescript": "~3.1.6",
+    "workbox-cli": "^4.3.1"
   },
   "description": "An Ionic project"
 }

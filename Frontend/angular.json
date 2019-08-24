@@ -20,6 +20,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
+              "src/manifest.json",
+              "src/service-worker.js",
               {
                 "glob": "**/*",
                 "input": "src/assets",
