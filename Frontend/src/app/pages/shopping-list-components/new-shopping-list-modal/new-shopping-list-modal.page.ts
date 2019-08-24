@@ -39,7 +39,9 @@ export class NewShoppingListModalPage {
       collaborators: this.selectedThreads
     }).then(response => {
       loading.dismiss();
-      this.modalCtrl.dismiss();
+      this.modalCtrl.dismiss({
+        success: true
+      });
       this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
@@ -52,7 +54,9 @@ export class NewShoppingListModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss();
+          this.modalCtrl.dismiss({
+            success: false
+          });
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
@@ -67,6 +71,8 @@ export class NewShoppingListModalPage {
   }
 
   cancel() {
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss({
+      success: false
+    });
   }
 }

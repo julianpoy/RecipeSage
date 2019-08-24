@@ -36,7 +36,9 @@ export class NewMealPlanModalPage {
       collaborators: this.selectedThreads
     }).then(response => {
       loading.dismiss();
-      this.modalCtrl.dismiss();
+      this.modalCtrl.dismiss({
+        success: true
+      });
       this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(response.id));
     }).catch(async err => {
       loading.dismiss();
@@ -49,7 +51,9 @@ export class NewMealPlanModalPage {
           offlineToast.present();
           break;
         case 401:
-          this.modalCtrl.dismiss();
+          this.modalCtrl.dismiss({
+            success: false
+          });
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
@@ -64,6 +68,8 @@ export class NewMealPlanModalPage {
   }
 
   cancel() {
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss({
+      success: false
+    });
   }
 }

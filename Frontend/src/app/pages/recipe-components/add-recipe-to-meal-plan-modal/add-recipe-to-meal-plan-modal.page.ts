@@ -1,11 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
+import dayjs, { Dayjs } from 'dayjs'
+
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 
-import dayjs, { Dayjs } from 'dayjs'
+import { NewMealPlanModalPage } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
 
 @Component({
   selector: 'page-add-recipe-to-meal-plan-modal',
@@ -202,11 +204,11 @@ export class AddRecipeToMealPlanModalPage {
 
   async createMealPlan() {
     let modal = await this.modalCtrl.create({
-      component: 'NewMealPlanModalPage'
+      component: NewMealPlanModalPage
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      // TODO: This needs to know whether aforementioned operation was successful. Data should contain a success bool
+      if (!data || !data.success) return;
 
       // Check for new meal plans
       this.loadMealPlans().then(async () => {

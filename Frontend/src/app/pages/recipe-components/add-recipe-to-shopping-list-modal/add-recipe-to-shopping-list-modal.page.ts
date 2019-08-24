@@ -145,7 +145,7 @@ export class AddRecipeToShoppingListModalPage {
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
-      // TODO: This needs to receive a success status - data should return a success bool
+      if (!data || !data.success) return;
 
       // Check for new lists
       this.loadLists().then(async () => {
