@@ -32,6 +32,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
   <script>
+    // Redirect old, legacy routing to new hashless routing
+    if (window.location.href.indexOf('/#/') > -1) {
+      window.location.replace(window.location.href.replace('/#/', '/'));
+    }
+  </script>
+
+  <script>
     window.queryParams = {};
     var queryString = (window.location.search || window.location.href).split('?')[1];
     if (queryString) {
