@@ -1,13 +1,13 @@
 'use strict';
 
-importScripts('workbox-3.2.0/workbox-sw.js');
+importScripts('workbox-src/workbox-sw.js');
 /* global workbox */
 workbox.setConfig({
   debug: false,
-  modulePathPrefix: 'workbox-3.2.0/'
+  modulePathPrefix: 'workbox-src/'
 });
-workbox.skipWaiting();
-workbox.clientsClaim();
+workbox.core.skipWaiting();
+workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
 workbox.precaching.precacheAndRoute([
   {
