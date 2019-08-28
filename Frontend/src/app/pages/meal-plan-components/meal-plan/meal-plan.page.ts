@@ -37,7 +37,7 @@ export class MealPlanPage {
 
   reference: number = 0;
 
-  @ViewChild(MealCalendarComponent) mealPlanCalendar: MealCalendarComponent;
+  @ViewChild(MealCalendarComponent, { static: true }) mealPlanCalendar: MealCalendarComponent;
 
   constructor(
     public route: ActivatedRoute,

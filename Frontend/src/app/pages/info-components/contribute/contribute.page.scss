@@ -15,7 +15,7 @@
 
   font-size: 14px;
 
-  /deep/ .logo-icon {
+  ::ng-deep .logo-icon {
     $iconSize: 50px;
     margin-top: - $padding - ($iconSize / 2);
     margin-bottom: $iconSize / 2;

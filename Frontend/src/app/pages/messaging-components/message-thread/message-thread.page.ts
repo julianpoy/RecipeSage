@@ -17,7 +17,7 @@ import { UtilService, RouteMap } from '@/services/util.service';
 export class MessageThreadPage {
   defaultBackHref: string = RouteMap.MessagesPage.getPath();
 
-  @ViewChild('content') content: any;
+  @ViewChild('content', { static: true }) content: any;
 
   messages: any = [];
   messagesById: any = {};

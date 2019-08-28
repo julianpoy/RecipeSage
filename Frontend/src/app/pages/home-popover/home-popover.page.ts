@@ -12,7 +12,7 @@ import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/r
 })
 export class HomePopoverPage {
 
-  @ViewChild('filterByLabelSelect') filterByLabelSelect: IonSelect;
+  @ViewChild('filterByLabelSelect', { static: true }) filterByLabelSelect: IonSelect;
 
   @Input() viewOptions: any;
 

@@ -36,8 +36,8 @@ export class HomePage {
   viewOptions: any = {};
   reloadPending: boolean = true;
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-  @ViewChild(IonVirtualScroll) virtualScroll: IonVirtualScroll;
+  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonVirtualScroll, { static: true }) virtualScroll: IonVirtualScroll;
 
   constructor(
     public navCtrl: NavController,
