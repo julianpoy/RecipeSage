@@ -34,7 +34,7 @@ ion-thumbnail {
   cursor: pointer;
 
   &.selected {
-    background-color: rgb(220,220,220);
+    --background: rgb(220,220,220);
   }
 }
 

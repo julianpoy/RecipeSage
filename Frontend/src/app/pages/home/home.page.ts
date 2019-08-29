@@ -39,6 +39,9 @@ export class HomePage {
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
   @ViewChild(IonVirtualScroll, { static: true }) virtualScroll: IonVirtualScroll;
 
+  itemMouseDetails;
+  itemMouseTimer;
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
@@ -472,4 +475,45 @@ export class HomePage {
     alert.present();
   }
 
+  // Below is for press-and-hold gestures until https://github.com/ionic-team/ionic/issues/19244 is resolved
+
+  getPositionalEvent(e) {
+    return e.changedTouches ? e.changedTouches[0] : e;
+  }
+
+  itemMouseDown(item, e) {
+    const positionalEvent = this.getPositionalEvent(e);
+    this.itemMouseDetails = {
+      y: positionalEvent.clientY,
+      isClick: true
+    };
+
+    clearTimeout(this.itemMouseTimer);
+    this.itemMouseTimer = setTimeout(() => {
+      this.itemPress(item);
+    }, 250);
+  }
+
+  itemMouseMove(item, e) {
+    const positionalEvent = this.getPositionalEvent(e);
+    if (this.itemMouseDetails && Math.abs(positionalEvent.clientY - this.itemMouseDetails.y) > 5) {
+      this.itemMouseDetails.isClick = false;
+      clearTimeout(this.itemMouseTimer);
+    }
+  }
+
+  itemMouseUp(item, e) {
+    if (this.itemMouseTimer) {
+      clearTimeout(this.itemMouseTimer);
+    }
+
+    if (this.itemMouseDetails.isClick) {
+      this.selectedRecipeIds.length > 0 ? this.selectRecipe(item) : this.openRecipe(item, e);
+    }
+  }
+
+  itemPress(item) {
+    this.itemMouseDetails.isClick = false;
+    this.selectRecipe(item);
+  }
 }

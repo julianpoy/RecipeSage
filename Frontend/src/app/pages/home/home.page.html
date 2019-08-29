@@ -53,8 +53,15 @@
       *virtualItem="let recipe"
       class="recipeItem"
       [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
-      (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe, $event)"
-      (press)="selectRecipe(recipe)">
+      (touchstart)="itemMouseDown(recipe, $event)"
+      (mousedown)="itemMouseDown(recipe, $event)"
+      (touchmove)="itemMouseMove(recipe, $event)"
+      (mousemove)="itemMouseMove(recipe, $event)"
+      (touchend)="itemMouseUp(recipe, $event)"
+      (mouseup)="itemMouseUp(recipe, $event)">
+      <!-- Following disabled due to https://github.com/ionic-team/ionic/issues/19244 -->
+      <!-- (tap)="selectedRecipeIds.length > 0 ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+      (press)="selectRecipe(recipe)"> -->
       <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" slot="start" size="200px">
         <ion-img [src]="recipe.image.location"></ion-img>
       </ion-thumbnail>
