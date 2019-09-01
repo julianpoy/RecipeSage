@@ -68,7 +68,13 @@
           [src]="recipe.image.location"
           (ionImgWillLoad)="recipe.imgLoading = true"
           (ionImgDidLoad)="recipe.imgLoading = false"
-          [ngClass]="{ invisible: recipe.imgLoading }"></ion-img>
+          [hidden]="recipe.imgLoading"></ion-img>
+
+        <div class="spinner" [hidden]="!recipe.imgLoading">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
       </ion-thumbnail>
 
       <ion-label>
