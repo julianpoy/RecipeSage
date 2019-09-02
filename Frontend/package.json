@@ -44,7 +44,7 @@
     "workbox-routing": "^4.3.1",
     "workbox-strategies": "^4.3.1",
     "workbox-sw": "^4.3.1",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.803.2",
