@@ -40,6 +40,7 @@ export class EditRecipePage {
       const loading = this.loadingService.start();
       this.recipeService.fetchById(this.recipeId).then(recipe => {
         this.recipe = recipe;
+        setTimeout(() => this.setInitialTextAreaSize());
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
@@ -79,11 +80,15 @@ export class EditRecipePage {
     return el.scrollHeight + 1;
   }
 
-  ionViewWillEnter() {
+  setInitialTextAreaSize() {
     var textAreas = document.getElementsByTagName('textarea');
     for (var i = 0; i < textAreas.length; i++) {
       textAreas[i].style.height = `${this.getScrollHeight(textAreas[i])}px`;
     }
+  }
+
+  ionViewWillEnter() {
+    this.setInitialTextAreaSize();
   }
 
   updateTextAreaSize(event) {
