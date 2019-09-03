@@ -179,7 +179,7 @@
       <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
         <ion-item
           class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1"
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
           (click)="addLabel(pendingLabel)"
           button>
           {{ pendingLabel }}
