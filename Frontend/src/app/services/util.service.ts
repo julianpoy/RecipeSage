@@ -169,6 +169,10 @@ export class UtilService {
     return `?false=false`;
   }
 
+  generatePrintShoppingListURL(shoppingListId) {
+    return `${this.getBase()}print/shoppingList/${shoppingListId}${this.getTokenQuery()}&version=${(<any>window).version}&print=true`;
+  }
+
   generateTrustedRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): SafeResourceUrl {
     let url = this.generateRecipeTemplateURL(recipeId, modifiers);
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);

@@ -36,6 +36,10 @@ export class ShoppingListPopoverPage {
     this.popoverCtrl.dismiss();
   }
 
+  print() {
+    window.open(this.utilService.generatePrintShoppingListURL(this.shoppingListId));
+  }
+
   async removeAllItems() {
     let alert = await this.alertCtrl.create({
       header: 'Confirm Removal',
