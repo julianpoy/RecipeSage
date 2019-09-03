@@ -177,32 +177,29 @@
         #labelInputField
         id="labelInputField" />
       <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
-        <button
+        <ion-item
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1"
-          (click)="addLabel(pendingLabel)">
-          <ion-item>
-            {{ pendingLabel }}
-            <span class="hint">Click to create</span>
-          </ion-item>
-        </button>
-        <button
+          (click)="addLabel(pendingLabel)"
+          button>
+          {{ pendingLabel }}
+          <span class="hint" slot="end">Click to create</span>
+        </ion-item>
+        <ion-item
           class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
-          <ion-item>
-            {{ pendingLabel }}
-            <span class="hint">Already added</span>
-          </ion-item>
-        </button>
-        <button
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1"
+          button>
+          {{ pendingLabel }}
+          <span class="hint" slot="end">Already added</span>
+        </ion-item>
+        <ion-item
           class="suggestion"
           *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
-          (click)="addLabel(label)">
-          <ion-item>
-            {{ label }}
-            <span class="hint">Click to add</span>
-          </ion-item>
-        </button>
+          (click)="addLabel(label)"
+          button>
+          {{ label }}
+          <span class="hint" slot="end">Click to add</span>
+        </ion-item>
       </div>
     </div>
 
