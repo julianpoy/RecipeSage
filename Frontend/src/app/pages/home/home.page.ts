@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Events, NavController, AlertController, ToastController, PopoverController, IonInfiniteScroll, IonVirtualScroll } from '@ionic/angular';
+import { Events, NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -17,12 +17,13 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
   labels: Label[] = [];
 
   recipes: Recipe[] = [];
+  recipeFetchBuffer: number = 25;
   fetchPerPage: number = 50;
-  lastRecipeCount: number;
+  lastRecipeCount: number = 0;
   totalRecipeCount: number;
 
   loading: boolean = true;
@@ -36,11 +37,8 @@ export class HomePage {
   viewOptions: any = {};
   reloadPending: boolean = true;
 
-  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
-  @ViewChild(IonVirtualScroll, { static: true }) virtualScroll: IonVirtualScroll;
-
-  itemMouseDetails;
-  itemMouseTimer;
+  @ViewChild('contentContainer', { static: true }) contentContainer;
+  scrollElement;
 
   constructor(
     public navCtrl: NavController,
@@ -88,6 +86,10 @@ export class HomePage {
         this.resetAndLoadRecipes();
       }
     }, this);
+  }
+
+  ngAfterViewInit() {
+    this.getScrollElement();
   }
 
   ionViewWillEnter() {
@@ -139,30 +141,14 @@ export class HomePage {
     }
   }
 
-  updateVirtualScroll(event) {
-    // App logic to determine if all data is loaded
-    // and disable the infinite scroll
-    if (!this.isMoreToScroll()) {
-      event.target.disabled = true;
-    }
-
-    // Dismiss loader
-    event.target.complete();
-  }
-
-  isMoreToScroll() {
-    return this.lastRecipeCount <= this.totalRecipeCount;
-  }
-
   fetchMoreRecipes(event) {
     if (this.searchText) return;
 
-    if (this.isMoreToScroll()) {
-      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage).finally(() => {
-        this.updateVirtualScroll(event);
-      });
-    } else {
-      this.updateVirtualScroll(event);
+    const shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
+
+    const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
+    if (shouldFetchMore && moreToScroll) {
+      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
     }
   }
 
@@ -229,10 +215,7 @@ export class HomePage {
 
         this.totalRecipeCount = response.totalCount;
 
-        this.recipes.push(...response.data);
-
-        // Rerender Virtual Scroll List After Adding New Data
-        this.virtualScroll.checkEnd();
+        this.recipes = this.recipes.concat(response.data);
 
         resolve();
       }).catch(async err => {
@@ -303,6 +286,10 @@ export class HomePage {
     });
 
     popover.present();
+  }
+
+  async getScrollElement() {
+    this.scrollElement = await this.contentContainer.getScrollElement();
   }
 
   newRecipe() {
@@ -473,47 +460,5 @@ export class HomePage {
       ]
     });
     alert.present();
-  }
-
-  // Below is for press-and-hold gestures until https://github.com/ionic-team/ionic/issues/19244 is resolved
-
-  getPositionalEvent(e) {
-    return e.changedTouches ? e.changedTouches[0] : e;
-  }
-
-  itemMouseDown(item, e) {
-    const positionalEvent = this.getPositionalEvent(e);
-    this.itemMouseDetails = {
-      y: positionalEvent.clientY,
-      isClick: true
-    };
-
-    clearTimeout(this.itemMouseTimer);
-    this.itemMouseTimer = setTimeout(() => {
-      this.itemPress(item);
-    }, 250);
-  }
-
-  itemMouseMove(item, e) {
-    const positionalEvent = this.getPositionalEvent(e);
-    if (this.itemMouseDetails && Math.abs(positionalEvent.clientY - this.itemMouseDetails.y) > 5) {
-      this.itemMouseDetails.isClick = false;
-      clearTimeout(this.itemMouseTimer);
-    }
-  }
-
-  itemMouseUp(item, e) {
-    if (this.itemMouseTimer) {
-      clearTimeout(this.itemMouseTimer);
-    }
-
-    if (this.itemMouseDetails.isClick) {
-      this.selectedRecipeIds.length > 0 ? this.selectRecipe(item) : this.openRecipe(item, e);
-    }
-  }
-
-  itemPress(item) {
-    this.itemMouseDetails.isClick = false;
-    this.selectRecipe(item);
   }
 }
