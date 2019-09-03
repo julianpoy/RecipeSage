@@ -58,13 +58,23 @@
           {{mealItem.meal}}
         </ion-item-divider>
         <ion-item (click)="mealItem.recipe && openRecipe(mealItem.recipe)" class="ion-text-wrap" [ngClass]="{ 'cursor-pointer': mealItem.recipe }">
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             {{mealItem.title}}
+
+            <p *ngIf="viewOptions.showAddedOn">
+              Added
+              <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
+            </p>
+            <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
+              <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+              <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
+            </p>
           </ion-label>
 
           <!-- Remove from cart button: -->
           <ion-button
             slot="end"
+            fill="none"
             class="ion-margin-start"
             *ngIf="mealItem.recipe && mealItem.shoppingListItems.length > 0"
             (click)="$event.stopPropagation(); removeMealPlanItemFromShoppingList(mealItem)">
@@ -73,7 +83,7 @@
           <!-- Add to cart button: -->
           <ion-button
             slot="end"
-            fill="outline"
+            fill="none"
             class="ion-margin-start"
             *ngIf="mealItem.recipe && mealItem.shoppingListItems.length === 0"
             (click)="$event.stopPropagation(); addMealPlanItemToShoppingList(mealItem)">
@@ -82,20 +92,11 @@
           <!-- Remove from meal plan button: -->
           <ion-button
             slot="end"
-            fill="outline"
+            fill="none"
             class="ion-margin-start"
             (click)="$event.stopPropagation(); removeItem(mealItem)">
             <ion-icon name="trash" slot="icon-only"></ion-icon>
           </ion-button>
-
-          <p *ngIf="viewOptions.showAddedOn">
-            Added
-            <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
-          </p>
-          <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
-            <span *ngIf="!viewOptions.showAddedOn">Added </span>by
-            <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
-          </p>
         </ion-item>
       </div>
     </ion-list>
