@@ -5,7 +5,7 @@ import { Platform, MenuController, ToastController, AlertController, NavControll
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
@@ -228,23 +228,23 @@ export class AppComponent {
     var pages = [];
 
     var loggedOutPages = [
-      { title: 'Welcome', icon: 'sunny', url: '/welcome' },
-      { title: 'Log In', icon: 'ios-nutrition', url: '/login' },
-      { title: 'Create an Account', icon: 'ios-leaf', url: '/register', navData: { register: true } },
-      { title: 'Contribute!', icon: 'heart', url: '/contribute' },
-      { title: 'About & Support', icon: 'help-buoy', url: '/about' }
+      { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
+      { title: 'Log In', icon: 'ios-nutrition', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { title: 'Create an Account', icon: 'ios-leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     var loggedInPages = [
-      { title: 'My Recipes', icon: 'book', url: '/list/main' },
-      { title: 'Messages', icon: 'chatboxes', url: '/messages' },
-      { title: 'Recipe Inbox', icon: 'mail', url: '/list/inbox' },
-      { title: 'Create Recipe', icon: 'md-add', url: '/edit-recipe/new' },
-      { title: 'Shopping Lists', icon: 'cart', url: '/shopping-lists' },
-      { title: 'Meal Plans', icon: 'calendar', url: '/meal-planners' },
-      { title: 'Contribute!', icon: 'heart', url: '/contribute' },
-      { title: 'Settings', icon: 'settings', url: '/settings' },
-      { title: 'About & Support', icon: 'help-buoy', url: '/about' }
+      { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
+      { title: 'Messages', icon: 'chatboxes', url: RouteMap.MessagesPage.getPath() },
+      { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
+      { title: 'Create Recipe', icon: 'md-add', url: RouteMap.EditRecipePage.getPath('new') },
+      { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
+      { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
+      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     if (this.utilService.isLoggedIn()) {
