@@ -39,7 +39,7 @@ export class ImportPepperplatePage {
       return;
     }
 
-    let loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.recipeService.scrapePepperplate({
       username: this.username,

@@ -32,11 +32,11 @@ export class BasicFilterPipe implements PipeTransform {
     }
 
     return filteredRecipes.sort((a: any, b: any) => {
-      let desc = options.viewOptions.sortBy.indexOf('-') == 0;
-      let sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
+      const desc = options.viewOptions.sortBy.indexOf('-') == 0;
+      const sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
 
-      let aV = a[sortField];
-      let bV = b[sortField];
+      const aV = a[sortField];
+      const bV = b[sortField];
 
       switch (sortField) {
         case 'title':

@@ -88,7 +88,7 @@ export class PrintRecipeModalPage {
 
 
   print() {
-    let template = document.getElementById('selectedTemplateFrame');
+    const template = document.getElementById('selectedTemplateFrame');
     try {
       (template as any).contentWindow.print();
     } catch (e) {
