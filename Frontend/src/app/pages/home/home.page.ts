@@ -297,7 +297,7 @@ export class HomePage implements AfterViewInit {
   }
 
   search(text) {
-    if (text.length == 0) {
+    if (text.length === 0) {
       this.searchText = '';
       this.resetAndLoadRecipes();
     }
@@ -413,11 +413,13 @@ export class HomePage implements AfterViewInit {
   }
 
   async deleteSelectedRecipes() {
-    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id == recipeId)[0].title).join('<br />');
+    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title)
+                                              .join('<br />');
 
     const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
-      message: 'This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />The following recipes will be deleted:<br />' + recipeNames,
+      message: `This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />
+                The following recipes will be deleted:<br />${recipeNames}`,
       buttons: [
         {
           text: 'Cancel',

@@ -82,16 +82,16 @@ export class ShoppingListPage {
     this.recipeIds = [];
     this.itemsByRecipeId = {};
 
-    for (let i = 0; i < items.length; i++) {
+    for (const item of items) {
       // Recipe grouping
-      if (!items[i].recipe) continue;
+      if (!item.recipe) continue;
 
-      const recipeId = items[i].recipe.id + items[i].createdAt;
+      const recipeId = item.recipe.id + item.createdAt;
 
       if (this.recipeIds.indexOf(recipeId) === -1) this.recipeIds.push(recipeId);
 
       if (!this.itemsByRecipeId[recipeId]) this.itemsByRecipeId[recipeId] = [];
-      this.itemsByRecipeId[recipeId].push(items[i]);
+      this.itemsByRecipeId[recipeId].push(item);
     }
   }
 
@@ -311,8 +311,8 @@ export class ShoppingListPage {
     });
 
     // Sort items within each group
-    for (let i = 0; i < this.list.itemsByGroup.length; i++) {
-      this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort((a, b) => {
+    for (const itemGroup of this.list.itemsByGroup) {
+      itemGroup.items = itemGroup.items.sort((a, b) => {
         return this.ingredientSorter(a, b);
       });
     }

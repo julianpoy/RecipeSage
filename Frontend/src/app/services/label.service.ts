@@ -60,7 +60,8 @@ export class LabelService {
   }
 
   remove(data) {
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + '&labelId=' + data.id + '&recipeId=' + data.recipeId;
+    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery()
+                + '&labelId=' + data.id + '&recipeId=' + data.recipeId;
 
     return this.axiosClient.request({
       method: 'delete',

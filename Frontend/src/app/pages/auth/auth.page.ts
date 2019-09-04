@@ -165,7 +165,8 @@ export class AuthPage {
       loading.dismiss();
 
       const successToast = await this.toastCtrl.create({
-        message: 'If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.',
+        message: `If there is a RecipeSage account associated with that email address,
+                  you should receive a password reset link within the next few minutes.`,
         duration: 7000
       });
       successToast.present();

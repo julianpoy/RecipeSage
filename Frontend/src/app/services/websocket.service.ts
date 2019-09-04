@@ -97,8 +97,8 @@ export class WebsocketService {
 
     if (!queue) return;
 
-    for (let i = 0; i < queue.length; i++) {
-      queue[i].cb.call(queue[i].ctx, msg);
+    for (const queueItem of queue) {
+      queueItem.cb.call(queueItem.ctx, msg);
     }
   }
 }

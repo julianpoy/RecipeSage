@@ -145,7 +145,7 @@ export class AddRecipeToMealPlanModalPage {
 
     for (const key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] == null) {
+        if (this.viewOptions[key] === null) {
           this.viewOptions[key] = defaults[key];
         }
       }
@@ -212,7 +212,7 @@ export class AddRecipeToMealPlanModalPage {
 
       // Check for new meal plans
       this.loadMealPlans().then(async () => {
-        if (this.mealPlans.length == 1) {
+        if (this.mealPlans.length === 1) {
           this.selectedMealPlan = this.mealPlans[0];
           this.loadMealPlan(this.mealPlans[0].id);
         } else {

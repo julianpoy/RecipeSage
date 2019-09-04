@@ -68,7 +68,7 @@ export class MessageThreadPage {
 
       let messageArea;
       try {
-        this.content.getNativeElement().children[1].children[0];
+        messageArea = this.content.getNativeElement().children[1].children[0];
       } catch (e) {}
 
       if (messageArea) messageArea.style.opacity = 0;
@@ -221,7 +221,7 @@ export class MessageThreadPage {
   }
 
   onMessageKeyUp(event) {
-    if (!(event.keyCode == 10 || event.keyCode == 13)) return;
+    if (!(event.keyCode === 10 || event.keyCode === 13)) return;
 
     if (event.ctrlKey || event.shiftKey || event.altKey) {
       this.pendingMessage += '\n';

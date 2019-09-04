@@ -106,7 +106,9 @@ export class ShoppingListPopoverPage {
   async deleteList() {
     const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
-      message: 'This will <b>permanently</b> remove this shopping list from your account.<br /><br /><b>Note</b>: If you\'re only a collaborator on this list, it\'ll only be removed from your account. If you own this list, it will be removed from all other collaborators accounts.',
+      message: `This will <b>permanently</b> remove this shopping list from your account.<br /><br />
+                <b>Note</b>: If you\'re only a collaborator on this list, it\'ll only be removed from your account.
+                If you own this list, it will be removed from all other collaborators accounts.`,
       buttons: [
         {
           text: 'Cancel',

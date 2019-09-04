@@ -126,11 +126,8 @@ export class RecipeService {
 
     delete data.imageFile;
 
-    for (let i = 0; i < Object.keys(data).length; i++) {
-      const key = Object.keys(data)[i];
-      const val = data[key];
-
-      formData.append(key, val);
+    for (const key of Object.keys(data)) {
+      formData.append(key, data[key]);
     }
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
@@ -173,11 +170,8 @@ export class RecipeService {
 
     delete data.imageFile;
 
-    for (let i = 0; i < Object.keys(data).length; i++) {
-      const key = Object.keys(data)[i];
-      const val = data[key];
-
-      formData.append(key, val);
+    for (const key of Object.keys(data)) {
+      formData.append(key, data[key]);
     }
 
     const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
@@ -244,7 +238,8 @@ export class RecipeService {
   }
 
   print(recipe, template) {
-    window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery() + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
+    window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery()
+                + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
   scrapePepperplate(data) {
@@ -264,7 +259,10 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name);
 
-    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`;
+    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}
+                 ${includeStockRecipes ? '&includeStockRecipes=true' : ''}
+                 ${includeTechniques ? '&includeTechniques=true' : ''}
+                 ${excludeImages ? '&excludeImages=true' : ''}`;
 
     return this.axiosClient.request({
       method: 'post',

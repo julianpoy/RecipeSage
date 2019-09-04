@@ -49,7 +49,7 @@ export class TipsTricksTutorialsPage {
   }
 
   isLast() {
-    return this.tutorials.indexOf(this.tutorialsByTag[this.active]) + 1 == this.tutorials.length;
+    return this.tutorials.indexOf(this.tutorialsByTag[this.active]) + 1 === this.tutorials.length;
   }
 
 }

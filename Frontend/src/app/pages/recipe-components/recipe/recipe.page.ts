@@ -148,8 +148,7 @@ export class RecipePage {
         this.labelObjectsByTitle = {};
         this.existingLabels = [];
 
-        for (let i = 0; i < response.length; i++) {
-          const label = response[i];
+        for (const label of response) {
           this.existingLabels.push(label.title);
           this.labelObjectsByTitle[label.title] = label;
         }
@@ -519,7 +518,7 @@ export class RecipePage {
     });
   }
 
-  async goToAuth(cb?: Function) {
+  async goToAuth(cb?: () => any) {
     const authModal = await this.modalCtrl.create({
       component: AuthModalPage,
       componentProps: {

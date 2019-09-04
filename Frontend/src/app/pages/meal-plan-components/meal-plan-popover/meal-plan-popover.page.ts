@@ -38,7 +38,9 @@ export class MealPlanPopoverPage {
   async deleteMealPlan() {
     const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
-      message: 'This will <b>permanently</b> remove this meal plan from your account.<br /><br /><b>Note</b>: If you\'re only a collaborator on this meal plan, it\'ll only be removed from your account. If you own this meal plan, it will be removed from all other collaborators accounts.',
+      message: `This will <b>permanently</b> remove this meal plan from your account.<br /><br />
+                <b>Note</b>: If you\'re only a collaborator on this meal plan, it\'ll only be removed from your account.
+                If you own this meal plan, it will be removed from all other collaborators accounts.`,
       buttons: [
         {
           text: 'Cancel',

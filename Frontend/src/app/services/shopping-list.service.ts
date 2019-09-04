@@ -80,7 +80,9 @@ export class ShoppingListService {
   remove(data) {
     const recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
 
-    const url = this.utilService.getBase() + `shoppingLists/${data.id}/items${this.utilService.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`;
+    const url = `${this.utilService.getBase()}shoppingLists/${data.id}/items
+                ${this.utilService.getTokenQuery()}
+                &items=${data.items.join(',')}${recipeQuery}`;
 
     return this.axiosClient.request({
       method: 'delete',

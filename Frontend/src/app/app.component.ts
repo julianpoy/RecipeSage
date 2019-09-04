@@ -65,7 +65,8 @@ export class AppComponent {
     if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.utilService.isLoggedIn()) {
       const oldBrowserAlert = await this.alertCtrl.create({
         header: 'Unsupported Browser',
-        message: 'It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.<br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.',
+        message: `It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.
+                  <br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.`,
         buttons: [
           {
             text: 'Dismiss',

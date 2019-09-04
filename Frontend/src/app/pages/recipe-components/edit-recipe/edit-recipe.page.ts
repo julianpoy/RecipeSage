@@ -81,9 +81,9 @@ export class EditRecipePage {
   }
 
   setInitialTextAreaSize() {
-    const textAreas = document.getElementsByTagName('textarea');
-    for (let i = 0; i < textAreas.length; i++) {
-      textAreas[i].style.height = `${this.getScrollHeight(textAreas[i])}px`;
+    const textAreas = Array.from(document.getElementsByTagName('textarea'));
+    for (const textArea of textAreas) {
+      textArea.style.height = `${this.getScrollHeight(textArea)}px`;
     }
   }
 
@@ -97,7 +97,7 @@ export class EditRecipePage {
     el.style.height = `${this.getScrollHeight(el)}px`;
   }
 
-  goToAuth(cb?: Function) {
+  goToAuth(cb?: () => any) {
     // TODO: Needs functionality
   }
 

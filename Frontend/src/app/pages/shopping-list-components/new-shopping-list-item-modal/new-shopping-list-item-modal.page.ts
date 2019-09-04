@@ -42,8 +42,8 @@ export class NewShoppingListItemModalPage {
       return (this.selectedIngredients || []).length > 0;
     }
     if (this.inputType === 'items') {
-      for (let i = 0; i < this.itemFields.length; i++) {
-        if (this.itemFields[i].title) return true;
+      for (const itemField of this.itemFields) {
+        if (itemField.title) return true;
       }
     }
     return false;

@@ -95,7 +95,8 @@ export class ImportPaprikaPage {
           this.loading.dismiss();
           this.loading = null;
           (await this.toastCtrl.create({
-            message: 'Hmm, we had trouble extracting that file. Please make sure it is in Paprika Recipe Format directly from the app. If you\'re having trouble, please feel free to send me an email.',
+            message: `Hmm, we had trouble extracting that file. Please make sure it is in Paprika Recipe Format directly from the app.
+                      If you\'re having trouble, please feel free to send me an email.`,
             showCloseButton: true,
             // dismissOnPageChange: true
           })).present();
@@ -105,7 +106,8 @@ export class ImportPaprikaPage {
             this.loading.dismiss();
             this.loading = null;
             (await this.toastCtrl.create({
-              message: 'The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.',
+              message: `The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes.
+                        If your recipes do not appear, please send me an email.`,
               showCloseButton: true
             })).present();
             this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));

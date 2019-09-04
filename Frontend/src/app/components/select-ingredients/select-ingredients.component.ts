@@ -71,7 +71,7 @@ export class SelectIngredientsComponent {
     for (const idx in Object.keys(this.ingredientBinders)) {
       if (this.ingredientBinders.hasOwnProperty(idx)) {
         this.ingredientBinders[idx] = this.allSelected;
-        this.toggleIngredient(parseInt(idx));
+        this.toggleIngredient(parseInt(idx, 10));
       }
     }
   }

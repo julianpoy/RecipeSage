@@ -24,13 +24,13 @@ export interface Message {
   providedIn: 'root'
 })
 export class MessagingService {
-  private messaging: firebase.messaging.Messaging;
-  private unsubscribeOnTokenRefresh = () => {};
-  private fcmToken: any;
-
   base: any;
 
   axiosClient: AxiosInstance;
+
+  private messaging: firebase.messaging.Messaging;
+  private fcmToken: any;
+  private unsubscribeOnTokenRefresh = () => { };
 
   constructor(
   public events: Events,
@@ -142,7 +142,8 @@ export class MessagingService {
 
       const alert = await this.alertCtrl.create({
         header: 'Requires Notification Permissions',
-        subHeader: 'To notify you when your contacts send you messages, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
+        subHeader: `To notify you when your contacts send you messages, we need notification access.<br /><br />
+                    <b>After dismissing this popup, you will be prompted to enable notification access.</b>`,
         buttons: [
           {
             text: 'Cancel'

@@ -6,9 +6,6 @@ import { UtilService } from './util.service';
   providedIn: 'root'
 })
 export class UserService {
-
-  base: String;
-
   axiosClient: AxiosInstance;
 
   constructor(public utilService: UtilService) {

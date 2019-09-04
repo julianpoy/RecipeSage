@@ -149,7 +149,7 @@ export class AddRecipeToShoppingListModalPage {
 
       // Check for new lists
       this.loadLists().then(async () => {
-        if (this.shoppingLists.length == 1) {
+        if (this.shoppingLists.length === 1) {
           this.destinationShoppingList = this.shoppingLists[0];
         } else {
           (await this.toastCtrl.create({
