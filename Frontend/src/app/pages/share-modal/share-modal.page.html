@@ -46,7 +46,7 @@
         <div *ngSwitchCase="'link'">
           <br />
           <ion-item lines="none">
-            Copy the link below <span *ngIf="hasWebShareAPI">or press the share icon</span>
+            Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
           </ion-item>
           <div class="codeBlock">
             <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
