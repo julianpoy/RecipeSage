@@ -53,7 +53,7 @@
         <ion-row class="ion-justify-content-start">
           <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
             <p>
-              <b>Source:</b>
+              <b>Source: </b>
               <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
               <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
             </p>
