@@ -1,4 +1,4 @@
-let fractionjs = require('../Backend/node_modules/fraction.js');
+let fractionjs = require('fraction.js');
 
 function parseIngredients(ingredients, scale, boldify) {
   if (!ingredients) return [];
