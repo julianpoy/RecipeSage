@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-button (click)="resetAll()" fill="clear">
+    <ion-label>
+      Reset All
+    </ion-label>
+  </ion-button>
+</ion-header>
+
+<ion-list>
+  <ion-item *ngFor="let option of options">
+    <ion-checkbox slot="start" [(ngModel)]="option.selected" (ngModelChange)="emitChange();"></ion-checkbox>
+    <ion-label class="ion-text-wrap">
+      {{option.title}}
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+<ion-footer>
+  <ion-button (click)="close()" fill="clear" class="ion-float-end">
+    <ion-label>
+      Done
+    </ion-label>
+  </ion-button>
+</ion-footer>

@@ -1,43 +1,49 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, ToastController, AlertController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
-import { MessagesPage } from '../pages/messaging-components/messages/messages';
-import { MessageThreadPage } from '../pages/messaging-components/message-thread/message-thread';
+import { Platform, MenuController, ToastController, AlertController, NavController, Events } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
-import { UserServiceProvider } from '../providers/user-service/user-service';
-import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
-import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
-import { UtilServiceProvider } from '../providers/util-service/util-service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { RecipeService } from '@/services/recipe.service';
+import { MessagingService } from '@/services/messaging.service';
+import { WebsocketService } from '@/services/websocket.service';
+import { UserService } from '@/services/user.service';
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
-export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+export class AppComponent {
+  isLoggedIn: boolean;
 
-  rootPage: string = localStorage.getItem('token') ? 'HomePage' : 'WelcomePage';
-  rootPageParams: any = { folder: 'main' };
-
-  pages: Array<{title: string, component: any}>;
+  navList: { title: string, icon: string, url: string }[];
 
   inboxCount: number;
 
-  version: number = (<any>window).version;
+  version: number = (window as any).version;
 
   unsupportedBrowser: boolean = !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem('seenOldBrowserWarning');
 
   constructor(
-    public platform: Platform,
-    public events: Events,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public utilService: UtilServiceProvider,
-    public recipeService: RecipeServiceProvider,
-    public messagingService: MessagingServiceProvider,
-    public websocketService: WebsocketServiceProvider,
-    public userService: UserServiceProvider) {
+    private navCtrl: NavController,
+    private route: ActivatedRoute,
+    private router: Router,
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private menuCtrl: MenuController,
+    private events: Events,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
+    private utilService: UtilService,
+    private recipeService: RecipeService,
+    private messagingService: MessagingService,
+    private websocketService: WebsocketService,
+    private userService: UserService
+  ) {
 
     this.initializeApp();
 
@@ -46,27 +52,33 @@ export class MyApp {
     this.initEventListeners();
     this.initEventDispatchers();
 
-    if ('Notification' in window && (<any>Notification).permission === 'granted' && this.isLoggedIn()) {
+    if ('Notification' in window && (Notification as any).permission === 'granted' && this.utilService.isLoggedIn()) {
       this.messagingService.requestNotifications();
     }
+
+    this.updateNavList();
+    this.updateIsLoggedIn();
   }
 
   // Attached to pagechange so keep this light
-  checkBrowserCompatibility() {
-    if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.isLoggedIn()) {
-      this.alertCtrl.create({
-        title: 'Unsupported Browser',
-        message: 'It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.<br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.',
+  async checkBrowserCompatibility() {
+    if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.utilService.isLoggedIn()) {
+      const oldBrowserAlert = await this.alertCtrl.create({
+        header: 'Unsupported Browser',
+        message: `It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.
+                  <br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.`,
         buttons: [
           {
             text: 'Dismiss',
             handler: () => {
               this.seenOldBrowserWarning = true;
-              localStorage.setItem('seenOldBrowserWarning', "true");
+              localStorage.setItem('seenOldBrowserWarning', 'true');
             }
           }
         ]
-      }).present();
+      });
+
+      oldBrowserAlert.present();
     }
   }
 
@@ -74,20 +86,20 @@ export class MyApp {
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
       try {
-        (<any>window).updateSW();
-      } catch(e) {}
+        (window as any).updateSW();
+      } catch (e) { }
     });
 
-    window['onSWUpdate'] = () => {
-		  console.log("Update is waiting for pause...")
-		  if ((<any>window).isHidden()) {
-  	    (<any>window).location.reload(true);
-		  } else {
-  		  this.events.subscribe('application:multitasking:paused', () => {
-    	    (<any>window).location.reload(true);
+    (window as any).onSWUpdate = () => {
+      console.log('Update is waiting for pause...');
+      if ((window as any).isHidden()) {
+        (window as any).location.reload(true);
+      } else {
+        this.events.subscribe('application:multitasking:paused', () => {
+          (window as any).location.reload(true);
         });
-		  }
-  	};
+      }
+    };
   }
 
   initEventListeners() {
@@ -103,26 +115,24 @@ export class MyApp {
       this.loadInboxCount();
     });
 
-    this.websocketService.register('messages:new', payload => {
-      if (this.nav.getActive().instance instanceof MessageThreadPage || this.nav.getActive().instance instanceof MessagesPage) return;
-      var notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
+    this.websocketService.register('messages:new', async payload => {
+      if (this.route.snapshot.url.toString().indexOf(RouteMap.MessagesPage.getPath())) return;
+      const notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
 
-      var myMessage = payload;
+      const myMessage = payload;
 
-      let toast = this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         duration: 7000,
-        showCloseButton: true,
-        closeButtonText: 'View'
+        buttons: [{
+          text: 'View',
+          role: 'cancel',
+          handler: () => {
+            this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id));
+          }
+        }]
       });
       toast.present();
-
-      toast.onDidDismiss((data, role) => {
-        console.log('Dismissed toast');
-        if (role == "close") {
-          this.nav.setRoot('MessageThreadPage', { otherUserId: myMessage.otherUser.id });
-        }
-      });
     }, this);
 
     this.websocketService.register('import:pepperplate:complete', payload => {
@@ -137,10 +147,10 @@ export class MyApp {
       this.events.publish('import:pepperplate:working');
     }, this);
 
-    this.events.subscribe('import:pepperplate:complete', () => {
-      var notification = 'Your recipes have been imported from Pepperplate.';
+    this.events.subscribe('import:pepperplate:complete', async () => {
+      const notification = 'Your recipes have been imported from Pepperplate.';
 
-      let toast = this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         duration: 10000,
         showCloseButton: true,
@@ -149,8 +159,8 @@ export class MyApp {
       toast.present();
     });
 
-    this.events.subscribe('import:pepperplate:failed', reason => {
-      var notification = '';
+    this.events.subscribe('import:pepperplate:failed', async reason => {
+      let notification = '';
       if (reason === 'timeout') {
         notification += 'Import failed: The Pepperplate API is unavailable right now.';
       } else if (reason === 'invalidCredentials') {
@@ -161,21 +171,19 @@ export class MyApp {
         return;
       }
 
-      let toast = this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
-        duration: 15000,
         showCloseButton: true,
         closeButtonText: 'Close'
       });
       toast.present();
     });
 
-    this.events.subscribe('import:pepperplate:working', () => {
-      var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
+    this.events.subscribe('import:pepperplate:working', async () => {
+      const notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
 
-      let toast = this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
-        duration: 7000,
         showCloseButton: true,
         closeButtonText: 'Close'
       });
@@ -184,21 +192,21 @@ export class MyApp {
   }
 
   initEventDispatchers() {
-    var hidden, visibilityChange;
-    if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
-      hidden = "hidden";
-      visibilityChange = "visibilitychange";
-    } else if (typeof (<any>document).msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof (<any>document).webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
+    let hidden, visibilityChange;
+    if (typeof (document as any).hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
+      hidden = 'hidden';
+      visibilityChange = 'visibilitychange';
+    } else if (typeof (document as any).msHidden !== 'undefined') {
+      hidden = 'msHidden';
+      visibilityChange = 'msvisibilitychange';
+    } else if (typeof (document as any).webkitHidden !== 'undefined') {
+      hidden = 'webkitHidden';
+      visibilityChange = 'webkitvisibilitychange';
     }
 
-    (<any>window).isHidden = () => {
+    (window as any).isHidden = () => {
       return document[hidden];
-    }
+    };
 
     document.addEventListener(visibilityChange, () => {
       if (document[hidden]) {
@@ -209,31 +217,38 @@ export class MyApp {
     }, false);
   }
 
-  navList() {
-    var pages = [];
+  updateIsLoggedIn() {
+    this.isLoggedIn = this.utilService.isLoggedIn();
+  }
 
-    var loggedOutPages = [
-      { title: 'Welcome', icon: 'sunny', component: 'WelcomePage' },
-      { title: 'Log In', icon: 'ios-nutrition', component: 'LoginPage' },
-      { title: 'Create an Account', icon: 'ios-leaf', component: 'LoginPage', navData: { register: true } },
-      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
-      { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
+  updateNavList() {
+    this.navList = this.generateNavList();
+  }
+
+  generateNavList() {
+    let pages = [];
+
+    const loggedOutPages = [
+      { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
+      { title: 'Log In', icon: 'ios-nutrition', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { title: 'Create an Account', icon: 'ios-leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
-    var loggedInPages = [
-      { title: 'My Recipes', icon: 'book', component: 'HomePage', navData: { folder: 'main' } },
-      // { title: 'My Labels', icon: 'none', component: 'RecipesByLabelPage' },
-      { title: 'Messages', icon: 'chatboxes', component: 'MessagesPage' },
-      { title: 'Recipe Inbox', icon: 'mail', component: 'HomePage', navData: { folder: 'inbox' } },
-      { title: 'Create Recipe', icon: 'md-add', component: 'EditRecipePage' },
-      { title: 'Shopping Lists', icon: 'cart', component: 'ShoppingListsPage' },
-      { title: 'Meal Plans', icon: 'calendar', component: 'MealPlansPage' },
-      { title: 'Contribute!', icon: 'heart', component: 'ContributePage' },
-      { title: 'Settings', icon: 'settings', component: 'SettingsPage' },
-      { title: 'About & Support', icon: 'help-buoy', component: 'AboutPage' }
+    const loggedInPages = [
+      { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
+      { title: 'Messages', icon: 'chatboxes', url: RouteMap.MessagesPage.getPath() },
+      { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
+      { title: 'Create Recipe', icon: 'md-add', url: RouteMap.EditRecipePage.getPath('new') },
+      { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
+      { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
+      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
-    if (this.isLoggedIn()) {
+    if (this.utilService.isLoggedIn()) {
       pages = pages.concat(loggedInPages);
     } else {
       pages = pages.concat(loggedOutPages);
@@ -242,16 +257,12 @@ export class MyApp {
     return pages;
   }
 
-  isLoggedIn() {
-    return localStorage.getItem('token') ? true : false;
-  }
-
   readyForPrompt() {
-    return !!(<any>window).deferredInstallPrompt;
+    return !!(window as any).deferredInstallPrompt;
   }
 
   showInstallPrompt() {
-    let installPrompt = (<any>window).deferredInstallPrompt;
+    const installPrompt = (window as any).deferredInstallPrompt;
     if (installPrompt) {
       installPrompt.prompt();
 
@@ -259,7 +270,7 @@ export class MyApp {
         .then(choiceResult => {
           if (choiceResult.outcome === 'accepted') {
             console.log('User accepted the A2HS prompt');
-            (<any>window).deferredInstallPrompt = null;
+            (window as any).deferredInstallPrompt = null;
           } else {
             console.log('User dismissed the A2HS prompt');
           }
@@ -270,94 +281,79 @@ export class MyApp {
   loadInboxCount() {
     if (!localStorage.getItem('token')) return;
 
-    this.recipeService.count({ folder: 'inbox' }).subscribe(response => {
+    this.recipeService.count({ folder: 'inbox' }).then(response => {
       this.inboxCount = response.count;
 
       this.events.publish('recipe:inbox:count', this.inboxCount);
-    }, () => {});
+    }, () => { });
   }
 
   initializeApp() {
-    // this.splashScreen.hide();
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      // this.statusBar.styleDefault();
-
-      // if(localStorage.getItem('token')) {
-      //   this.nav.setRoot('HomePage', { folder: 'main' });
-      // }else{
-      //   this.nav.setRoot('LoginPage');
-      // }
-
-      // Listen for page change events
-      let currentUrl;
-      this.nav.viewDidEnter.subscribe(view => {
-        this.checkBrowserCompatibility();
-
-        // Wait for nav change to happen
-        setTimeout(() => {
-          try {
-            let viewName = view.instance.constructor.name;
-
-            let _paq = (<any>window)._paq;
-
-            if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
-            currentUrl = '' + window.location.hash.substr(1);
-            _paq.push(['setCustomUrl', currentUrl]);
-            _paq.push(['setDocumentTitle', viewName]);
-
-            // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
-            _paq.push(['deleteCustomVariables', 'page']);
-            _paq.push(['setGenerationTimeMs', 0]);
-            _paq.push(['trackPageView']);
-
-            // make Matomo aware of newly added content
-            _paq.push(['MediaAnalytics::scanForMedia']);
-            _paq.push(['FormAnalytics::scanForForms']);
-            _paq.push(['trackContentImpressionsWithinNode']);
-            _paq.push(['enableLinkTracking']);
-          } catch(e) {
-            console.warn(e);
-          }
-        }, 0);
-      });
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+      this.menuCtrl.close();
     });
-  }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component, page.navData);
+    let currentUrl;
+    this.router.events.subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+
+      this.updateNavList();
+      this.updateIsLoggedIn();
+
+      this.checkBrowserCompatibility();
+
+      try {
+        const viewName = event.url;
+
+        const _paq = (window as any)._paq;
+
+        if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
+        currentUrl = '' + window.location.hash.substr(1);
+        _paq.push(['setCustomUrl', currentUrl]);
+        _paq.push(['setDocumentTitle', viewName]);
+
+        // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+        _paq.push(['deleteCustomVariables', 'page']);
+        _paq.push(['setGenerationTimeMs', 0]);
+        _paq.push(['trackPageView']);
+
+        // make Matomo aware of newly added content
+        _paq.push(['MediaAnalytics::scanForMedia']);
+        _paq.push(['FormAnalytics::scanForForms']);
+        _paq.push(['trackContentImpressionsWithinNode']);
+        _paq.push(['enableLinkTracking']);
+      } catch (e) {
+        console.warn(e);
+      }
+    });
   }
 
   _logout() {
+    this.utilService.removeToken();
 
-    localStorage.removeItem('token');
-
-    this.openPage({
-      component: 'WelcomePage',
-      navData: {}
-    });
+    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
   }
 
   logout() {
     this.messagingService.disableNotifications();
 
-    this.userService.logout().subscribe(() => {
+    this.userService.logout().then(() => {
       this._logout();
-    }, err => {
-      switch (err.status) {
+    }, async err => {
+      switch (err.response.status) {
         case 0:
         case 401:
         case 404:
           this._logout();
           break;
         default:
-          this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 6000
-          }).present();
+          });
+          errorToast.present();
           break;
       }
     });

@@ -1,0 +1,14 @@
+.logo-icon {
+  $iconSize: 50px;
+
+  .bg {
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    border-radius: 100%;
+    background: #353b48;
+    padding: 6px;
+    bottom: middle;
+    width: $iconSize;
+    height: $iconSize;
+  }
+}

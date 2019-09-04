@@ -1,0 +1,471 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Release Notes</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <p>
+    Here you'll find a summary of the changes made in each version.
+    <br />
+    To check for an update, please use the settings page
+  </p>
+
+  <br />
+
+  <b>v2.0.0.b7</b><br />
+  - Fix recipe ingredients/instructions column layout<br />
+
+  <br />
+
+  <b>v2.0.0.b6</b><br />
+  - Updated with all changes and functionality from v1.8.4<br />
+
+  <br />
+
+  <b>v2.0.0.b5</b><br />
+  - Fix image and resize issues in home page scrolling<br />
+  - Fix label creation/selection dropdown<br />
+  - Fix meal plan item styling<br />
+  - Fix sidebar options<br />
+  - Fix edit recipe page textarea sizing<br />
+
+  <br />
+
+  <b>v2.0.0.b4</b><br />
+  - Fix home page scrolling on touch devices<br />
+  - Switch back to hash-based routing<br />
+
+  <br />
+
+  <b>v2.0.0.b3</b><br />
+  - Re-enable offline mode and PWA support<br />
+  - Performance optimizations<br />
+
+  <br />
+
+  <b>v2.0.0.b2</b><br />
+  - Bug fixes and improvements<br />
+
+  <br />
+
+  <b>v2.0.0.b1</b><br />
+  - Initial v2 beta release<br />
+  - Upgrades internal application framework<br />
+
+  <br />
+
+  <b>v1.8.4</b><br />
+  - Feature - Add shopping list print functionality<br />
+  - Fix an issue where LCB import cookbook tagging can cause import to fail on older databases without cookbooks<br />
+
+  <br />
+
+  <b>v1.8.3</b><br />
+  - Improve LCB import speed<br />
+
+  <br />
+
+  <b>v1.8.2</b><br />
+  - Fixed an issue where pepperplate import would fail even with correct credentials<br />
+
+  <br />
+
+  <b>v1.8.1</b><br />
+  - Message threads now appear with newest on top<br />
+
+  <br />
+
+  <b>v1.8.0</b><br />
+  - Feature - remember/autoselect last used shopping list, or select the first by default if there is only 1<br />
+  - Feature - remember/autoselect last used meal plan, or select the first by default if there is only 1<br />
+  - Feature - added an option to filter by label intersection (selecting more labels = fewer results)<br />
+  - Feature - added an option to exclude LCB images while importing<br />
+  - Feature - external recipe sharing - share a link with anybody via any platform<br />
+  - Feature - embeddable recipes - share your recipes by embedding them in a webpage<br />
+  - Fix for a bug where messaging/sharing notifications would not be sent<br />
+
+  <br />
+
+  <b>v1.7.9</b><br />
+  - Added an option to include stock LCB recipes in import<br />
+  - Fix for LCB formats where some fields cause importer to break<br />
+  - Fix for service worker update when paused for multitasking<br />
+
+  <br />
+
+  <b>v1.7.8</b><br />
+  - Add support for importing LCB techniques<br />
+  - Increase support for larger LCB files<br />
+
+  <br />
+
+  <b>v1.7.7</b><br />
+  - Fixed a bug where adding recipe ingredients to shopping list was broken<br />
+
+  <br />
+
+  <b>v1.7.6</b><br />
+  - Add new Paprika importer (Settings -> Import -> Import from Paprika)<br />
+  - Add ability to temporarily check-off/mark ingredients or instructions<br />
+  - Updated welcome screen text<br />
+  - Fixed a bug where ingredient headers would appear in "add to shopping list"<br />
+
+  <br />
+
+  <b>v1.7.5</b><br />
+  - Add support for headers in ingredients and instructions<br />
+  - Add tutorial for adding headers<br />
+  - Increase image file size limit<br />
+  - Images over file size limit are now pre-resized in the browser<br />
+  - Image upload selector now only shows image files by default<br />
+  - Fixed an issue that prevented removing fields from recipe after creation<br />
+  - Browser Extension: Fixed the sourceURL field<br />
+  - Browser Extension: Add warning when user is about to lose unsaved changes<br />
+
+  <br />
+
+  <b>v1.7.4</b><br />
+  - Browser Extension: Added support for Firefox<br />
+  - Browser Extension: Better error messages for bad image URLs<br />
+  - Added a "Download & Install" option to the sidebar for browsers that support PWAs (includes some desktop browsers!)<br />
+
+  <br />
+
+  <b>v1.7.3</b><br />
+  - Added help page for new browser extension<br />
+  - Fixed an issue where image quality would be reduced in some browsers<br />
+  - Fixed an issue where selecting image for recipe would cause lag<br />
+  - Added a warning for images that are over the size limit<br />
+
+  <br />
+
+  <b>v1.7.2</b><br />
+  - Meal plan page now displays in side-by-side split view on wide screens<br />
+  - Fixed a bug where warning for old browsers (at or below IE11) would not trigger<br />
+
+  <br />
+
+  <b>v1.7.1</b><br />
+  - Added a thank-you message for contributors - thank you!<br />
+  - Fixed a bug where clicking the contribute button would not launch<br />
+  - Increased the recipe pagination buffer for the my recipes page to help with fast scrolling<br />
+  - Fixed a bug where LCB images would not be imported for some file formats<br />
+  - Vastly improved LCB import performance<br />
+
+  <br />
+
+  <b>v1.7.0</b><br />
+  - Improved recipe bulk actions, now is less network-heavy<br />
+  - Improved homepage navigation. Homepage only reloads recipes when needed - such as when a recipe or label is changed.<br />
+  - Fixed a bug where homepage would show no recipes if a label was selected, but then deleted via the recipe details page.<br />
+  - Added a better error message for when a user uploads an invalid file format for LCB import.<br />
+  - Improved search: Added fuzzy matching - mistyped words will now show results, but at a lower ranking in the results with exact matches<br />
+  - Improved search: Re-added support for searching in source, description, instructions, ingredients, and notes.<br />
+  - Improved search: A match in the title will be heavily boosted, and a match in the source or description will be slightly boosted<br />
+  - Added a warning for unsupported browsers<br />
+  - Added the contribute page to the sidemenu!<br />
+  - Added an action button to add recipe to meal plan from the recipe details page<br />
+  - Recipe authoring page (edit, create) now shows preview of recipe image<br />
+  - Added a tips, tricks and tutorials page to the about and support page<br />
+  - Open recipes in new tab from recipe list: control + click or command + click on a recipe<br />
+  - Fixed a bug where message thread text input would be slow on longer threads<br />
+
+  <br />
+
+  <b>v1.6.4</b><br />
+  - Fixed a bug where the Living Cookbook importer would break for specific versions/formats of LCB databases<br />
+
+  <br />
+
+  <b>v1.6.3</b><br />
+  - Added a filter to remove all default Living Cookbook recipes (recipes that shipped with Living Cookbook)<br />
+
+  <br />
+
+  <b>v1.6.2</b><br />
+  - Fixed a bug where recipes would not be properly sorted<br />
+
+  <br />
+
+  <b>v1.6.1</b><br />
+  - More large performance improvements for large and small recipe collections<br />
+
+  <br />
+
+  <b>v1.6.0</b><br />
+  - Large performance improvements for large recipe collections<br />
+  - Improved recipe search engine<br />
+  - Improved the welcome experience for app features<br />
+  - Added label toggles to recipe page as an option<br />
+  - Fixed a bug where lcb import would fail due to null fields in some lcb formats<br />
+  - Fixed a bug where duplicate labels could be created when using bulk actions<br />
+  - Fixed an issue where source URLs without a preceeding http:// or https:// would not open their respective website by click<br />
+
+  <br />
+
+  <b>v1.5.7</b><br />
+  - Large performance improvements for LCB import<br />
+  - LCB import page warns user when file is too large<br />
+
+  <br />
+
+  <b>v1.5.6</b><br />
+  - Performance improvements for label filter dialogue and for recipe details page<br />
+
+  <br />
+
+  <b>v1.5.5</b><br />
+  - Fixed a bug where importing from LCB would create duplicate labels<br />
+
+  <br />
+
+  <b>v1.5.4</b><br />
+  - Recipe bulk actions: press and hold a recipe for actions on multiple recipes at once<br />
+  - New iconography for menus<br />
+  - Better client-side error handling<br />
+  - Fixed a bug that caused the meal plan delete button to be broken<br />
+
+  <br />
+
+  <b>v1.5.3</b><br />
+  - Fixed a bug where "delete all recipes" would not work on extremely large recipe collections<br />
+
+  <br />
+
+  <b>v1.5.2</b><br />
+  - Added "delete all recipes" option in settings under "danger zone"<br />
+  - Fixed a bug where changing password would not dismiss loading bar<br />
+
+  <br />
+
+  <b>v1.5.1</b><br />
+  - Fixed a bug where Living Cookbook import would fail<br />
+  - Fixed a bug where recipe url would not show if no source was present<br />
+  - Fixed a bug where Living Cookbook import would not include the cooking time field<br />
+
+  <br />
+
+  <b>v1.5.0</b><br />
+  - Added LivingCookbook import option<br />
+
+  <br />
+
+  <b>v1.4.11</b><br />
+  - Updated "My Recipes" welcome screen<br />
+
+  <br />
+
+  <b>v1.4.10</b><br />
+  - Fixes a bug where Pepperplate import would fail due to updates to Pepperplate<br />
+  - Adds a select/deselect all option to select ingredients component<br />
+  - Disabled shopping list grouping by default<br />
+  - Improved messaging styling<br />
+  - Fixed a bug where messaging previews would be incorrect<br />
+  - Search submit now dismisses keyboard<br />
+  - Disabled autofill for form fields that have custom autofill<br />
+
+  <br />
+
+  <b>v1.4.9</b><br />
+  - Fixes a bug where new visitors would be prompted to update<br />
+  - Fixes a bug where account update would not verify email address<br />
+  - Updated security for password reset - now forces a login on all devices signed into the account<br />
+  - Improved API performance<br />
+
+  <br />
+
+  <b>v1.4.8</b><br />
+  - Performance improvements for slow network conditions<br />
+  - Fixed a bug on IOS where a white screen would be shown on launch<br />
+
+  <br />
+
+  <b>v1.4.7</b><br />
+  - New welcome page<br />
+  - More friendly login page<br />
+  - Login page messages now appear as toasts<br />
+  - Added a prompt for when updates are pending in background<br />
+  - Fixed a bug where recipe export would throw an error<br />
+
+  <br />
+
+  <b>v1.4.6</b><br />
+  - Fixed a bug where the print dialogue may freeze upon opening, or trigger the print dialogue directly<br />
+
+  <br />
+
+  <b>v1.4.5</b><br />
+  - Fixed a bug where search would not update immediately after selecting a new sort option<br />
+  - My Recipes popover now closes automatically after selection is made<br />
+
+  <br />
+
+  <b>v1.4.4</b><br />
+  - Fixed a bug where search would return only a single result<br />
+  - Search worker is now loaded from the main package enabling offline search<br />
+
+  <br />
+
+  <b>v1.4.3</b><br />
+  - Greatly improved performance on My Recipes page by switching to VirtualScroll<br />
+
+  <br />
+
+  <b>v1.4.2</b><br />
+  - Updated lunr (search) to 2.3.5<br />
+
+  <br />
+
+  <b>v1.4.1</b><br />
+  - Fixed a bug where message threads would not sort<br />
+
+  <br />
+
+  <b>v1.4.0</b><br />
+  - Added meal plan feature<br />
+  - Improved recipe selection modal for shopping lists<br />
+  - Improved item selection modal for shopping lists<br />
+  - Fixed message autocorrect<br />
+  - Message timestamps can now be accessed via press-and-hold<br />
+
+  <br />
+
+  <b>v1.3.1</b><br />
+  - Fixed label duplication issue when navigating between views<br />
+
+  <br />
+
+  <b>v1.3.0</b><br />
+  - Added shopping lists feature<br />
+  - Added password reset (forgot password) functionality<br />
+  - Added message timestamps<br />
+  - Instant messaging now works on IOS devices<br />
+
+  <br />
+
+  <b>v1.2.1</b><br />
+  - Fixed compatibility issues for devices without notification support<br />
+
+  <br />
+
+  <b>v1.2.0</b><br />
+  - Added recipe printing<br />
+  - Updated recipe details page layout. On large screens, ingredients and instructions now appear side-by-side.
+      Improved readability of recipe details<br />
+  - Fixed a bug where the welcome page would appear quickly during app launch if already logged in.
+      The app now routes straight to the 'my recipes' page<br />
+  - Fixed a bug where search results would flash quickly when returning to search results page<br />
+  - Improved text area sizing for recipe edit/create page. Fields now resize with text instead of displaying a scrollbar<br />
+
+  <br />
+
+  <b>v1.1.3</b><br />
+  - Log out now disables notifications and deletes session for security<br />
+  - Notification permission prompt has been moved to messaging page<br />
+  - Small performance improvements<br />
+  - Removed misleading scrollbar from modal messages<br />
+  - Recipe scale modal now accepts fraction input<br />
+  - About and Support page is now visible when logged out<br />
+  - Sessions are now valid for up to 7 days of inactivity instead of 3<br />
+
+  <br />
+
+  <b>v1.1.2</b><br />
+  - Further improved application performance<br />
+  - Recipes are cached for offline use, provided they have been opened before<br />
+  - Images are cached for offline use, provided they have been opened before<br />
+  - Better error handling for offline errors<br />
+  - Improved welcome screen buttons. Better terminology and separate buttons<br />
+  - Improved welcome screen image. Now loads image at size appropriate for device resolution<br />
+  - Added welcome tab to sidebar when logged out<br />
+  - Log Out now takes you to welcome screen<br />
+  - Added update button to settings, allowing the user to manually trigger app update<br />
+
+  <br />
+
+  <b>v1.1.1</b><br />
+  - Greatly improved application performance<br />
+  - Reduced network data usage<br />
+  - Asset/application caching<br />
+  - Better update management<br />
+
+  <br />
+
+  <b>v1.1.0</b><br />
+  - Messaging functionality<br />
+  - Removed Recipes by Label page. You can find parallel functionality by using the recipe filter on the My Recipes page<br />
+  - Added recipe count to label filter modal<br />
+  - Added Welcome, About, Contribute, Release Notes, and About Me pages (text-only)<br />
+  - Added Export page and export functionality<br />
+  - Added quick actions to recipe items (slide to left)<br />
+  - Delete confirmations now have red button to warn user<br />
+  - Duplicate recipe titles are now renamed slightly (#)<br />
+  - Clicking on recipe source URL now opens in new tab<br />
+  - Improved recipe scale input. Now uses a modal<br />
+  - Improved titles for sort options<br />
+  - Improved import process. Now notifies you during import task, and warns if the task has failed<br />
+  - Fixed a bug where label autocomplete would grow too large for screen when user had a large number of labels<br />
+  - Fixed a bug where labels would duplicate when trying to delete them<br />
+  - Label selection can now be done via the arrow keys and enter<br />
+  - Fixed a bug in update notification<br />
+  - Fixed a bug where users would receive multiple notifications<br />
+  - Fixed a bug where log in page would not autofill credentials in Chrome<br />
+  - Log in page email field now brings up email-type keyboard for mobile devices<br />
+  - Better loading bar. No longer disrupts user experience<br />
+  - Notes field now holds linebreaks<br />
+  - Fixed a bug where recipe inbox count does not show in sidemenu<br />
+  - Fixed a bug where recipe source would not be imported from pepperplate<br />
+  - Fixed a bug where imported recipes with special characters wouldn't render correctly<br />
+
+  <br />
+
+  <b>v1.0.7</b><br />
+  - Improved label selection<br />
+  - Application now notifies user when a new update is available<br />
+
+  <br />
+
+  <b>v1.0.6</b><br />
+  - Application preloading and speed improvements<br />
+
+  <br />
+
+  <b>v1.0.5</b><br />
+  - Improved label selection on recipe page<br />
+  - Improved recipe search<br />
+  - Bug fixes<br />
+
+  <br />
+
+  <b>v1.0.4</b><br />
+  - Fixed a navbar bug on the profile page<br />
+
+  <br />
+
+  <b>v1.0.3</b><br />
+  - Fixed some issues with edit page<br />
+  - Added profile page<br />
+
+  <br />
+
+  <b>v1.0.2</b><br />
+  - Networking improvements<br />
+
+  <br />
+
+  <b>v1.0.1</b><br />
+  - Added version number to sidemenu<br />
+
+  <br />
+
+  <b>v1.0.0</b><br />
+  - Initial release<br />
+</ion-content>

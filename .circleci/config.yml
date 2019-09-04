@@ -1,25 +1,34 @@
 version: 2 # use CircleCI 2.0
-jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
+jobs:
+  test_backend: # runs not using Workflows must have a `build` job as entry point
     working_directory: ~/recipesage # directory where steps will run
-    docker: # run the steps with Docker
-      - image: circleci/node:8.15.0 # ...with this image as the primary container; this is where all `steps` will run
-    steps: # a collection of executable commands
-      - checkout # special step to check out source code to working directory
+    docker:
+      - image: circleci/node:8.15.0
+    steps:
+      - checkout
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
       - run:
           name: install-deps
           command: 'sudo npm install -g sequelize'
+      # -------------- Setup SharedUtils -----------------
+      - restore_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+      - run:
+          name: install-npm-sharedutils
+          command: 'cd SharedUtils && npm install'
+      - save_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          paths:
+            - ./SharedUtils/node_modules
       # -------------- Setup Backend -----------------
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+      - restore_cache:
           key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
       - run:
           name: install-npm-backend
           command: 'cd Backend && npm install'
-      - save_cache: # special step to save the dependency cache
+      - save_cache:
           key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
           paths:
             - ./Backend/node_modules
@@ -29,37 +38,49 @@ jobs: # a collection of steps
       - run:
           name: extract-config
           command: cd Backend/config && unzip -j -P $credentialskey config.json.zip
-      # ------------- Setup Frontend ----------------
-      - restore_cache: # special step to restore the dependency cache
-          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
-      - run:
-          name: install-npm-frontend
-          command: 'cd Frontend && npm install'
-      - save_cache: # special step to save the dependency cache
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
-          paths:
-            - ./Frontend/node_modules
       # -------------- Tests -----------------
       - run: # run backend tests
           name: test-backend
           command: cd Backend && npm run test:ci
+  build_frontend:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      # -------------- Setup SharedUtils -----------------
+      - restore_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+      - run:
+          name: install-npm-sharedutils
+          command: 'cd SharedUtils && npm install'
+      - save_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          paths:
+            - ./SharedUtils/node_modules
+      # -------------- Setup Frontend -----------------
+      - restore_cache:
+          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+      - run:
+          name: install-npm-frontend
+          command: 'cd Frontend && npm install'
+      - save_cache:
+          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          paths:
+            - ./Frontend/node_modules
+      # -------------- Tests -----------------
       - run: # lint frontend
           name: lint-frontend
           command: cd Frontend && npm run lint
       - run: # build frontend
           name: build-frontend
           command: cd Frontend && npm run build
-      # - run: # run coverage report
-      #     name: code-coverage
-      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
-      # - store_artifacts: # special step to save test results as as artifact
-      #     # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: test-results.xml
-      #     prefix: tests
-      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: coverage
-      #     prefix: coverage
-      # - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-      #     path: test-results.xml
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test_backend
+      - build_frontend

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Meal Plans</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list lines="none">
+    <ion-item class="mealPlan ion-text-wrap" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan.id)">
+      <ion-icon name="calendar" slot="start"></ion-icon>
+      <ion-label>
+        <h2>{{ mealPlan.title }}</h2>
+        <p>
+          Created {{ formatItemCreationDate(mealPlan.createdAt) }}
+        </p>
+        <p *ngIf="mealPlan.collaborators.length > 0">
+          In collaboration with:
+          <span *ngFor="let user of mealPlan.collaborators">
+            <span *ngIf="mealPlan.myUserId !== user.id">{{ user.name || user.email }}</span>
+          </span>
+          <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">{{ mealPlan.owner.name || mealPlan.owner.email
+            }}</span>
+        </p>
+        <p>
+          <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">Created by {{ mealPlan.owner.name || mealPlan.owner.email
+            }}</span>
+          <span *ngIf="mealPlan.myUserId === mealPlan.owner.id">You own this meal plan</span>
+        </p>
+      </ion-label>
+      <ion-badge slot="end">{{ mealPlan.itemCount }}</ion-badge>
+    </ion-item>
+    <ion-grid *ngIf="mealPlans.length === 0 && initialLoadComplete">
+      <br /><br />
+      <ion-row justify-content-center>
+        <ion-icon name="calendar" class="big-icon"></ion-icon>
+      </ion-row>
+      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
+        <ion-label>
+          <p>
+            You have no meal plans.
+            <br /> To create a meal plan, press the plus button in the bottom corner.
+          </p>
+        </ion-label>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="newMealPlan()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
