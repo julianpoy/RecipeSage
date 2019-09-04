@@ -6,6 +6,10 @@
   "rules": {
     "array-type": false,
     "arrow-parens": false,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
     "deprecation": {
       "severity": "warn"
     },
