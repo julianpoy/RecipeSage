@@ -2,13 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
-import { BasicFilterPipe } from './basic-filter.pipe';
 import { LabelAutocompleteFilterPipe } from './label-autocomplete-filter.pipe';
 import { ShoppingListCollaboratorFilterPipe } from './shopping-list-collaborator-filter.pipe';
 
 @NgModule({
   declarations: [
-    BasicFilterPipe,
     LabelAutocompleteFilterPipe,
     ShoppingListCollaboratorFilterPipe
   ],
@@ -17,7 +15,6 @@ import { ShoppingListCollaboratorFilterPipe } from './shopping-list-collaborator
     IonicModule
   ],
   exports: [
-    BasicFilterPipe,
     LabelAutocompleteFilterPipe,
     ShoppingListCollaboratorFilterPipe
   ]
