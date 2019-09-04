@@ -16,7 +16,7 @@ export class ShoppingListsPage {
 
   shoppingLists: any = [];
 
-  initialLoadComplete: boolean = false;
+  initialLoadComplete = false;
 
   constructor(
     public navCtrl: NavController,
@@ -38,7 +38,7 @@ export class ShoppingListsPage {
 
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.initialLoadComplete = false;
 
@@ -70,7 +70,7 @@ export class ShoppingListsPage {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -80,7 +80,7 @@ export class ShoppingListsPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -92,7 +92,7 @@ export class ShoppingListsPage {
   }
 
   async newShoppingList() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewShoppingListModalPage
     });
     modal.present();

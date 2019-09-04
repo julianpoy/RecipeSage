@@ -8,10 +8,10 @@ import { RecipeService, Ingredient } from '../../services/recipe.service';
 })
 export class SelectIngredientsComponent {
 
-  allSelected: boolean = true;
+  allSelected = true;
   ingredientBinders: { [index: number]: boolean } = {};
   scaledIngredients: Ingredient[] = [];
-  scale: number = 1;
+  scale = 1;
 
   _ingredients: string;
   @Input()
@@ -51,7 +51,7 @@ export class SelectIngredientsComponent {
     this.scaledIngredients = this.recipeService.parseIngredients(this._ingredients, this.scale).filter(e => !e.isHeader);
 
     this.selectedIngredients = [];
-    for (var i = 0; i < (this.scaledIngredients || []).length; i++) {
+    for (let i = 0; i < (this.scaledIngredients || []).length; i++) {
       if (init) this.ingredientBinders[i] = true;
       if (this.ingredientBinders[i]) this.selectedIngredients.push(this.scaledIngredients[i]);
     }
@@ -68,10 +68,10 @@ export class SelectIngredientsComponent {
   }
 
   resetAll() {
-    for (let idx in Object.keys(this.ingredientBinders)) {
+    for (const idx in Object.keys(this.ingredientBinders)) {
       if (this.ingredientBinders.hasOwnProperty(idx)) {
-        this.ingredientBinders[idx] = this.allSelected
-        this.toggleIngredient(parseInt(idx))
+        this.ingredientBinders[idx] = this.allSelected;
+        this.toggleIngredient(parseInt(idx));
       }
     }
   }

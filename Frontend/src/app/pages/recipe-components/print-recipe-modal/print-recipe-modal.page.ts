@@ -6,10 +6,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UtilService, RecipeTemplateModifiers } from '@/services/util.service';
 
 export interface PrintOption {
-  modifiers: RecipeTemplateModifiers,
-  description: string,
-  orientation: string,
-  url?: SafeResourceUrl
+  modifiers: RecipeTemplateModifiers;
+  description: string;
+  orientation: string;
+  url?: SafeResourceUrl;
 }
 
 @Component({
@@ -21,7 +21,7 @@ export class PrintRecipeModalPage {
 
   @Input() recipe: Recipe;
 
-  selectedTemplate: number = -1;
+  selectedTemplate = -1;
   templates: PrintOption[] = [{
     modifiers: {
       titleImage: true,
@@ -80,7 +80,7 @@ export class PrintRecipeModalPage {
     public utilService: UtilService,
     public recipeService: RecipeService) {
     setTimeout(() => {
-      for (var i = 0; i < this.templates.length; i++) {
+      for (let i = 0; i < this.templates.length; i++) {
         this.templates[i].url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.templates[i].modifiers);
       }
     });
@@ -88,11 +88,11 @@ export class PrintRecipeModalPage {
 
 
   print() {
-    var template = document.getElementById('selectedTemplateFrame');
+    let template = document.getElementById('selectedTemplateFrame');
     try {
-      (<any>template).contentWindow.print();
-    } catch(e) {
-      (<any>template).contentWindow.postMessage({
+      (template as any).contentWindow.print();
+    } catch (e) {
+      (template as any).contentWindow.postMessage({
         action: 'print'
       }, window.location.origin);
     }

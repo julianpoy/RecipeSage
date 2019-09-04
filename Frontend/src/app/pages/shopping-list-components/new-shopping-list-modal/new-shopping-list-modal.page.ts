@@ -14,7 +14,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class NewShoppingListModalPage {
 
-  listTitle: string = '';
+  listTitle = '';
 
   selectedThreads: any = [];
 
@@ -32,7 +32,7 @@ export class NewShoppingListModalPage {
 
 
   save() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.shoppingListService.create({
       title: this.listTitle,
@@ -47,7 +47,7 @@ export class NewShoppingListModalPage {
       loading.dismiss();
       switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
@@ -60,7 +60,7 @@ export class NewShoppingListModalPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });

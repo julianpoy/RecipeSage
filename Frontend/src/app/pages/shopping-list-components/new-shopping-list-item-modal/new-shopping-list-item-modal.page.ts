@@ -11,7 +11,7 @@ import { UtilService } from '@/services/util.service';
 })
 export class NewShoppingListItemModalPage {
 
-  inputType: string = 'items';
+  inputType = 'items';
 
   itemFields: any = [{}];
 
@@ -42,7 +42,7 @@ export class NewShoppingListItemModalPage {
       return (this.selectedIngredients || []).length > 0;
     }
     if (this.inputType === 'items') {
-      for (var i = 0; i < this.itemFields.length; i++) {
+      for (let i = 0; i < this.itemFields.length; i++) {
         if (this.itemFields[i].title) return true;
       }
     }
@@ -50,7 +50,7 @@ export class NewShoppingListItemModalPage {
   }
 
   save() {
-    var items;
+    let items;
     if (this.inputType === 'recipe') {
       items = this.selectedIngredients.map(ingredient => ({
         title: ingredient.originalContent,

@@ -7,7 +7,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 })
 export class LoadingService {
 
-  REQUEST_COMPLETE_DELAY: number = 150;
+  REQUEST_COMPLETE_DELAY = 150;
 
   constructor(private loadingBar: LoadingBarService) {}
 
@@ -20,6 +20,6 @@ export class LoadingService {
           this.loadingBar.complete();
         }, this.REQUEST_COMPLETE_DELAY);
       }
-    }
+    };
   }
 }

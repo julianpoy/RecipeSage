@@ -18,22 +18,22 @@ export class ShareModalPage {
   @Input() recipe: Recipe;
 
   selectedThread: any;
-  recipientEmail: string = '';
-  recipientName: string = '';
-  recipientId: string = '';
-  searchingForRecipient: boolean = false;
+  recipientEmail = '';
+  recipientName = '';
+  recipientId = '';
+  searchingForRecipient = false;
 
   threads: any = [];
 
   autofillTimeout: any;
-  shareMethod: string = "account";
+  shareMethod = 'account';
 
   hasCopyAPI: boolean = !!document.execCommand;
   hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string;
 
-  embedHeight: number = 800;
-  embedWidth: number = 600;
+  embedHeight = 800;
+  embedWidth = 600;
   embedConfig: RecipeTemplateModifiers = {
     verticalInstrIng: false,
     titleImage: true,
@@ -91,9 +91,9 @@ export class ShareModalPage {
       }).catch(async err => {
         reject();
 
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
@@ -104,7 +104,7 @@ export class ShareModalPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -117,7 +117,7 @@ export class ShareModalPage {
 
   selectRecipient(thread) {
     this.recipientId = thread.otherUser.id;
-    console.log(this.recipientId)
+    console.log(this.recipientId);
     this.recipientName = '';
     this.recipientEmail = '';
   }
@@ -143,7 +143,7 @@ export class ShareModalPage {
   }
 
   send() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.messagingService.create({
       to: this.recipientId,
@@ -155,9 +155,9 @@ export class ShareModalPage {
       this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
@@ -168,7 +168,7 @@ export class ShareModalPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -189,11 +189,11 @@ export class ShareModalPage {
   }
 
   copyCodeToClipboard() {
-    var copyText = document.getElementById('codeBlockCopy') as any;
+    const copyText = document.getElementById('codeBlockCopy') as any;
 
     copyText.select();
 
-    document.execCommand("copy");
+    document.execCommand('copy');
   }
 
   shareMethodChanged(event) {

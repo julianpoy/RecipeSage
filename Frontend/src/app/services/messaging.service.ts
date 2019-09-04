@@ -46,22 +46,22 @@ export class MessagingService {
       }
     });
 
-    var onSWRegsitration = () => {
+    const onSWRegsitration = () => {
       if (!this.isNotificationsCapable()) return;
 
-      console.log("Has service worker registration. Beginning setup.")
-      var config = {
-        messagingSenderId: "1064631313987"
+      console.log('Has service worker registration. Beginning setup.');
+      const config = {
+        messagingSenderId: '1064631313987'
       };
       firebase.initializeApp(config);
 
       this.messaging = firebase.messaging();
-      this.messaging.useServiceWorker((<any>window).swRegistration);
+      this.messaging.useServiceWorker((window as any).swRegistration);
 
       this.messaging.onMessage((message: any) => {
-        console.log("received foreground FCM: ", message)
+        console.log('received foreground FCM: ', message);
         // TODO: REPLACE WITH GRIP (WS)
-        switch(message.data.type) {
+        switch (message.data.type) {
           case 'import:pepperplate:complete':
             return this.events.publish('import:pepperplate:complete');
           case 'import:pepperplate:failed':
@@ -70,21 +70,21 @@ export class MessagingService {
             return this.events.publish('import:pepperplate:working');
         }
       });
-    }
-    if ((<any>window).swRegistration) onSWRegsitration.call(null);
-    else (<any>window).onSWRegistration = onSWRegsitration;
+    };
+    if ((window as any).swRegistration) onSWRegsitration.call(null);
+    else (window as any).onSWRegistration = onSWRegsitration;
   }
 
   isNotificationsCapable() {
-    return firebase.messaging.isSupported()
+    return firebase.messaging.isSupported();
   }
 
   isNotificationsEnabled() {
-    return this.isNotificationsCapable() && ('Notification' in window) && ((<any>Notification).permission === 'granted');
+    return this.isNotificationsCapable() && ('Notification' in window) && ((Notification as any).permission === 'granted');
   }
 
   fetch(from?) {
-    var url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
     if (from) url += '&user=' + from;
 
     return this.axiosClient.request({
@@ -96,7 +96,7 @@ export class MessagingService {
   threads(options?) {
     options = options || {};
 
-    var url = this.utilService.getBase() + 'messages/threads/' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'messages/threads/' + this.utilService.getTokenQuery();
     if (!options.includeMessages) url += '&light=true';
     if (options.messageLimit) url += '&limit=' + options.messageLimit;
 
@@ -117,7 +117,7 @@ export class MessagingService {
   }
 
   markAsRead(from?) {
-    var url = this.utilService.getBase() + 'messages/read/' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'messages/read/' + this.utilService.getTokenQuery();
     if (from) url += '&from=' + from;
 
     return this.axiosClient.request({
@@ -129,10 +129,10 @@ export class MessagingService {
   async requestNotifications() {
     if (!this.isNotificationsCapable()) return;
     if (!('Notification' in window)) return;
-    if (!this.messaging || (<any>Notification).permission === 'denied') return;
+    if (!this.messaging || (Notification as any).permission === 'denied') return;
 
     // Skip the prompt if permissions are already granted
-    if ((<any>Notification).permission === 'granted') {
+    if ((Notification as any).permission === 'granted') {
       this.enableNotifications();
       return;
     }
@@ -140,7 +140,7 @@ export class MessagingService {
     if (!localStorage.getItem('notificationExplainationShown')) {
       localStorage.setItem('notificationExplainationShown', 'true');
 
-      let alert = await this.alertCtrl.create({
+      const alert = await this.alertCtrl.create({
         header: 'Requires Notification Permissions',
         subHeader: 'To notify you when your contacts send you messages, we need notification access.<br /><br /><b>After dismissing this popup, you will be prompted to enable notification access.</b>',
         buttons: [
@@ -179,14 +179,14 @@ export class MessagingService {
   public disableNotifications() {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
-    var token = this.fcmToken;
+    const token = this.fcmToken;
 
     this.unsubscribeOnTokenRefresh();
     this.unsubscribeOnTokenRefresh = () => {};
     return this.userService.removeFCMToken(token).then(response => {
-      console.log("deleted FCM token", response);
+      console.log('deleted FCM token', response);
     }).catch(err => {
-      console.log("failed to delete FCM token", err);
+      console.log('failed to delete FCM token', err);
     });
   }
 
@@ -194,15 +194,15 @@ export class MessagingService {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
     return this.messaging.getToken().then(currentToken => {
-      console.log("current token", currentToken)
+      console.log('current token', currentToken);
       if (currentToken) {
         this.fcmToken = currentToken;
-        console.log("saving FCM token", currentToken)
+        console.log('saving FCM token', currentToken);
         // we've got the token from Firebase, now let's store it in the database
         return this.userService.saveFCMToken(currentToken).then(response => {
-          console.log("saved FCM token", response);
+          console.log('saved FCM token', response);
         }).catch(err => {
-          console.log("failed to save FCM token", err);
+          console.log('failed to save FCM token', err);
         });
       } else {
         console.log('No Instance ID token available. Request permission to generate one.');
@@ -216,12 +216,12 @@ export class MessagingService {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
     this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(() => {
-      console.log("Token refreshed");
+      console.log('Token refreshed');
       this.userService.removeFCMToken(this.fcmToken).then(response => {
         this.updateToken();
       }).catch(err => {
         this.updateToken();
-      });;
+      });
     });
   }
 }

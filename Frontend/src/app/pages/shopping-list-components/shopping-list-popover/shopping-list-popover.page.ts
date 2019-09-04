@@ -41,7 +41,7 @@ export class ShoppingListPopoverPage {
   }
 
   async removeAllItems() {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Removal',
       message: 'This will permanently delete all shopping list items from this list.<br /><br />This action is irreversible.',
       buttons: [
@@ -65,9 +65,9 @@ export class ShoppingListPopoverPage {
   _removeAllItems() {
     if (this.shoppingList.items.length === 0) return;
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
-    var itemIds = this.shoppingList.items.map(el => {
+    const itemIds = this.shoppingList.items.map(el => {
       return el.id;
     });
 
@@ -104,7 +104,7 @@ export class ShoppingListPopoverPage {
   }
 
   async deleteList() {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
       message: 'This will <b>permanently</b> remove this shopping list from your account.<br /><br /><b>Note</b>: If you\'re only a collaborator on this list, it\'ll only be removed from your account. If you own this list, it will be removed from all other collaborators accounts.',
       buttons: [
@@ -126,7 +126,7 @@ export class ShoppingListPopoverPage {
   }
 
   _deleteList() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.shoppingListService.unlink({
       id: this.shoppingListId

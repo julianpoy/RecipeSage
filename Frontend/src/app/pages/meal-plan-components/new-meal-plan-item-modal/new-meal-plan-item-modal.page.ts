@@ -11,9 +11,9 @@ import { UtilService } from '@/services/util.service';
 })
 export class NewMealPlanItemModalPage {
 
-  inputType: string = 'manualEntry';
+  inputType = 'manualEntry';
 
-  itemTitle: any = "";
+  itemTitle: any = '';
 
   selectedRecipe: any;
 
@@ -44,7 +44,7 @@ export class NewMealPlanItemModalPage {
   }
 
   save() {
-    var item;
+    let item;
     if (this.inputType === 'recipe') {
       item = {
         title: this.selectedRecipe.title,
@@ -53,7 +53,7 @@ export class NewMealPlanItemModalPage {
     } else {
       item = {
         title: this.itemTitle
-      }
+      };
     }
 
     item.meal = this.meal;

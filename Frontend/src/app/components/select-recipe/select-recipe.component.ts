@@ -12,9 +12,9 @@ import { ToastController, NavController } from '@ionic/angular';
 export class SelectRecipeComponent {
 
   searchTimeout;
-  searchText: string = '';
-  searching: boolean = false;
-  PAUSE_BEFORE_SEARCH: number = 500;
+  searchText = '';
+  searching = false;
+  PAUSE_BEFORE_SEARCH = 500;
 
   _selectedRecipe: any;
   @Input()
@@ -40,7 +40,7 @@ export class SelectRecipeComponent {
   ) {}
 
   search(text: string) {
-    let loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.recipeService.search(text, {}).then(response => {
       this.recipes = response.data;
@@ -53,7 +53,7 @@ export class SelectRecipeComponent {
 
       switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
@@ -63,7 +63,7 @@ export class SelectRecipeComponent {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -97,7 +97,7 @@ export class SelectRecipeComponent {
     }).catch(async err => {
       switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
@@ -107,7 +107,7 @@ export class SelectRecipeComponent {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });

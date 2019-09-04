@@ -25,13 +25,13 @@ export class SelectCollaboratorsComponent {
 
   threadsByUserId: any = {};
   existingThreads: any = [];
-  pendingThread: string = '';
-  showAutocomplete: boolean = false;
+  pendingThread = '';
+  showAutocomplete = false;
 
   // Holds user autocomplete variables
   pendingCollaboratorName: any = '';
   pendingCollaboratorId: any = '';
-  searchingForRecipient: boolean = false;
+  searchingForRecipient = false;
   autofillTimeout: any;
 
   constructor(
@@ -50,7 +50,7 @@ export class SelectCollaboratorsComponent {
       this.messagingService.threads().then(response => {
         this.existingThreads = response.map(el => {
           this.threadsByUserId[el.otherUser.id] = el.otherUser;
-          console.log(el.otherUser)
+          console.log(el.otherUser);
           return el.otherUser;
         });
 
@@ -60,7 +60,7 @@ export class SelectCollaboratorsComponent {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
@@ -68,14 +68,14 @@ export class SelectCollaboratorsComponent {
             break;
           case 401:
             // TODO: This may need to be improved. Previously, this tried to dismiss as a modal with return message
-            let unauthorizedToast = await this.toastCtrl.create({
+            const unauthorizedToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unauthorized,
               duration: 30000
             });
             unauthorizedToast.present();
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });

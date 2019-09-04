@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class LogoIconComponent {
 
-  @Input('href') href
+  @Input('href') href;
 
   constructor() {}
 }

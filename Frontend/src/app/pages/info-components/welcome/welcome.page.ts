@@ -16,7 +16,7 @@ export class WelcomePage {
   }
 
   goToAuth(type) {
-    let register = type === 'register';
+    const register = type === 'register';
 
     if (register) {
       this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Register));

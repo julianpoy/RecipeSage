@@ -29,8 +29,8 @@ export class SettingsPage {
   }
 
   checkForUpdate() {
-    (<any>window).updateSW(async () => {
-      let alert = await this.alertCtrl.create({
+    (window as any).updateSW(async () => {
+      const alert = await this.alertCtrl.create({
         header: 'App will reload',
         subHeader: 'The app will reload to check for an update.',
         buttons: [
@@ -42,13 +42,13 @@ export class SettingsPage {
           {
             text: 'Continue',
             handler: () => {
-              (<any>window).location.reload(true);
+              (window as any).location.reload(true);
             }
           }]
       });
       alert.present();
     }, async () => {
-      let toast = await this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: 'We were unable to check for an update at this time.',
         duration: 4000
       });

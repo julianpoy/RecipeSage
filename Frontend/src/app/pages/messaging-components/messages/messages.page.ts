@@ -34,7 +34,7 @@ export class MessagesPage {
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
     this.loadThreads().then(() => {
       loading.dismiss();
     }, () => {
@@ -57,8 +57,8 @@ export class MessagesPage {
         messageLimit: 1
       }).then(response => {
         this.threads = response.sort((a, b) => {
-          let aCreatedAt = new Date((a.messages[0] || []).updatedAt);
-          let bCreatedAt = new Date((b.messages[0] || []).updatedAt);
+          const aCreatedAt = new Date((a.messages[0] || []).updatedAt);
+          const bCreatedAt = new Date((b.messages[0] || []).updatedAt);
           // Ascending (newest first)
           return bCreatedAt.valueOf() - aCreatedAt.valueOf();
         });
@@ -67,9 +67,9 @@ export class MessagesPage {
       }).catch(async err => {
         reject();
 
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -79,7 +79,7 @@ export class MessagesPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -95,7 +95,7 @@ export class MessagesPage {
   }
 
   async newThread() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewMessageModalPage
     });
     modal.present();

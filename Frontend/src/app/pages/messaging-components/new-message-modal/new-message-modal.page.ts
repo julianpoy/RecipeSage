@@ -12,14 +12,14 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class NewMessageModalPage {
 
-  searching: boolean = false;
+  searching = false;
   autofillTimeout: any;
 
-  recipientEmail: string = '';
-  recipientName: string = '';
-  recipientId: string = '';
+  recipientEmail = '';
+  recipientName = '';
+  recipientId = '';
 
-  message: string = '';
+  message = '';
 
   constructor(
     public navCtrl: NavController,
@@ -42,9 +42,9 @@ export class NewMessageModalPage {
         this.searching = false;
         this.recipientId = response.id;
       }).catch(async err => {
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
               duration: 5000
             });
@@ -70,9 +70,9 @@ export class NewMessageModalPage {
       this.modalCtrl.dismiss();
       this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
     }).catch(async err => {
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
@@ -83,14 +83,14 @@ export class NewMessageModalPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
           errorToast.present();
           break;
       }
-    })
+    });
   }
 
   cancel() {

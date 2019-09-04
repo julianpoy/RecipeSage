@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs';
 
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
@@ -45,7 +45,7 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
     this.loadMealPlans().then(() => {
       loading.dismiss();
     }, () => {
@@ -54,8 +54,8 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   selectLastUsedMealPlan() {
-    let lastUsedMealPlanId = localStorage.getItem('lastUsedMealPlanId');
-    let matchingPlans = this.mealPlans.filter(mealPlan => mealPlan.id === lastUsedMealPlanId);
+    const lastUsedMealPlanId = localStorage.getItem('lastUsedMealPlanId');
+    const matchingPlans = this.mealPlans.filter(mealPlan => mealPlan.id === lastUsedMealPlanId);
     if (matchingPlans.length > 0 || this.mealPlans.length === 1) {
       this.selectedMealPlan = this.mealPlans[0];
       this.loadMealPlan(this.selectedMealPlan.id);
@@ -79,7 +79,7 @@ export class AddRecipeToMealPlanModalPage {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -89,7 +89,7 @@ export class AddRecipeToMealPlanModalPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -111,7 +111,7 @@ export class AddRecipeToMealPlanModalPage {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -121,7 +121,7 @@ export class AddRecipeToMealPlanModalPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -133,17 +133,17 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   loadViewOptions() {
-    var defaults = {
+    const defaults = {
       showAddedBy: false,
       showAddedOn: false,
       startOfWeek: 'monday'
-    }
+    };
 
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
     this.viewOptions.startOfWeek = localStorage.getItem('mealPlan.startOfWeek') || null;
 
-    for (var key in this.viewOptions) {
+    for (const key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
           this.viewOptions[key] = defaults[key];
@@ -153,7 +153,7 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   currentScheduledMeals() {
-    return this.selectedMealGroup.map(e => e.title).join(', ')
+    return this.selectedMealGroup.map(e => e.title).join(', ');
   }
 
   isFormValid() {
@@ -163,7 +163,7 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   save() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
 
@@ -203,7 +203,7 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async createMealPlan() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewMealPlanModalPage
     });
     modal.present();

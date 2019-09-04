@@ -17,9 +17,9 @@ export class ImportLivingcookbookPage {
   imageFile = null;
 
   ignoreLargeFiles: boolean;
-  includeTechniques: boolean = false;
-  includeStockRecipes: boolean = false;
-  excludeImages: boolean = false;
+  includeTechniques = false;
+  includeStockRecipes = false;
+  excludeImages = false;
 
   troubleshoot = false;
 
@@ -30,13 +30,13 @@ export class ImportLivingcookbookPage {
     public recipeService: RecipeService,
     public utilService: UtilService) {
 
-    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
+    this.ignoreLargeFiles = !!localStorage.getItem('largeFileOverride');
   }
 
   setFile(event) {
-    let files = event.srcElement.files
+    const files = event.srcElement.files;
     if (!files) {
-      return
+      return;
     }
 
     this.imageFile = files[0];
@@ -73,8 +73,8 @@ export class ImportLivingcookbookPage {
   }
 
   showFileTypeWarning() {
-    if (!this.imageFile || !this.imageFile.name) return false
-    return !this.imageFile.name.toLowerCase().endsWith('.lcb')
+    if (!this.imageFile || !this.imageFile.name) return false;
+    return !this.imageFile.name.toLowerCase().endsWith('.lcb');
   }
 
   async presentToast(msg: string) {
@@ -91,7 +91,7 @@ export class ImportLivingcookbookPage {
       this.loading.dismiss();
       this.loading = null;
 
-      this.presentToast('Import was successful!')
+      this.presentToast('Import was successful!');
 
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
@@ -99,7 +99,7 @@ export class ImportLivingcookbookPage {
         case 0:
           this.loading.dismiss();
           this.loading = null;
-          this.presentToast(this.utilService.standardMessages.offlinePushMessage)
+          this.presentToast(this.utilService.standardMessages.offlinePushMessage);
           break;
         case 401:
           this.loading.dismiss();
@@ -110,7 +110,7 @@ export class ImportLivingcookbookPage {
           this.loading.dismiss();
           this.loading = null;
           (await this.toastCtrl.create({
-            message: "Hmm, we had trouble extracting that file. Please make sure it is in .lcb format. If you're having trouble, please feel free to send me an email.",
+            message: 'Hmm, we had trouble extracting that file. Please make sure it is in .lcb format. If you\'re having trouble, please feel free to send me an email.',
             showCloseButton: true,
             // dismissOnPageChange: true
           })).present();
@@ -120,7 +120,7 @@ export class ImportLivingcookbookPage {
             this.loading.dismiss();
             this.loading = null;
             (await this.toastCtrl.create({
-              message: "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
+              message: 'The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.',
               showCloseButton: true
             })).present();
             this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));

@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export interface RecipeTemplateModifiers {
-  version?: string,
-  halfsheet?: boolean,
-  verticalInstrIng?: boolean,
-  titleImage?: boolean,
-  hideNotes?: boolean,
-  hideSource?: boolean,
-  hideSourceURL?: boolean,
-  printPreview?: boolean,
-  showPrintButton?: boolean
+  version?: string;
+  halfsheet?: boolean;
+  verticalInstrIng?: boolean;
+  titleImage?: boolean;
+  hideNotes?: boolean;
+  hideSource?: boolean;
+  hideSourceURL?: boolean;
+  printPreview?: boolean;
+  showPrintButton?: boolean;
 }
 
 // TODO: Create more types for various page getPath methods
@@ -131,7 +131,7 @@ export const RouteMap = {
 })
 export class UtilService {
 
-  lang = ((<any>window.navigator).userLanguage || window.navigator.language);
+  lang = ((window.navigator as any).userLanguage || window.navigator.language);
 
   devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
 
@@ -170,44 +170,44 @@ export class UtilService {
   }
 
   generatePrintShoppingListURL(shoppingListId) {
-    return `${this.getBase()}print/shoppingList/${shoppingListId}${this.getTokenQuery()}&version=${(<any>window).version}&print=true`;
+    return `${this.getBase()}print/shoppingList/${shoppingListId}${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
   }
 
   generateTrustedRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): SafeResourceUrl {
-    let url = this.generateRecipeTemplateURL(recipeId, modifiers);
+    const url = this.generateRecipeTemplateURL(recipeId, modifiers);
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
     modifiers = { version: (window as any).version, ...modifiers };
-    let modifierQuery = Object.keys(modifiers)
+    const modifierQuery = Object.keys(modifiers)
       .filter(modifierKey => modifiers[modifierKey])
       .map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`)
       .join('&');
 
-    var url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
+    const url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
 
     return url;
   }
 
   formatDate(date, options?): string {
     options = options || {};
-    var aFewMomentsAgoAfter = new Date();
+    const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
 
-    var todayAfter = new Date();
+    const todayAfter = new Date();
     todayAfter.setHours(0);
     todayAfter.setMinutes(0);
     todayAfter.setSeconds(0);
     todayAfter.setMilliseconds(0);
 
-    var thisWeekAfter = new Date();
+    const thisWeekAfter = new Date();
     thisWeekAfter.setDate(thisWeekAfter.getDate() - 7);
 
-    var toFormat = new Date(date);
+    const toFormat = new Date(date);
 
     if (options.now && aFewMomentsAgoAfter < toFormat) {
-      return 'just now'
+      return 'just now';
     }
 
     if (!options.times && todayAfter < toFormat) {

@@ -23,7 +23,7 @@ export class ShoppingListService {
   }
 
   fetch() {
-    var url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();
 
     return this.axiosClient.request({
       method: 'get',
@@ -78,7 +78,7 @@ export class ShoppingListService {
   }
 
   remove(data) {
-    var recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
+    let recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
 
     const url = this.utilService.getBase() + `shoppingLists/${data.id}/items${this.utilService.getTokenQuery()}&items=${data.items.join(',')}${recipeQuery}`;
 

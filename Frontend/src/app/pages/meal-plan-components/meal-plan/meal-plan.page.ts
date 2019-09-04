@@ -9,7 +9,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs';
 import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
 import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
@@ -31,11 +31,11 @@ export class MealPlanPage {
 
   viewOptions: any = {};
 
-  initialLoadComplete: boolean = false;
+  initialLoadComplete = false;
 
   selectedDay: Dayjs = dayjs(new Date());
 
-  reference: number = 0;
+  reference = 0;
 
   @ViewChild(MealCalendarComponent, { static: true }) mealPlanCalendar: MealCalendarComponent;
 
@@ -64,7 +64,7 @@ export class MealPlanPage {
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.initialLoadComplete = false;
     this.loadMealPlan().then(() => {
@@ -93,7 +93,7 @@ export class MealPlanPage {
       }).catch(async err => {
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -127,7 +127,7 @@ export class MealPlanPage {
   }
 
   async removeItem(item) {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Removal',
       message: 'This will remove "' + (item.recipe || item).title + '" from this meal plan.',
       buttons: [
@@ -147,7 +147,7 @@ export class MealPlanPage {
   }
 
   _removeItem(item) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.mealPlanService.remove({
       id: this.mealPlanId,
@@ -182,7 +182,7 @@ export class MealPlanPage {
   }
 
   _addItem(item) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.mealPlanService.addItem({
       id: this.mealPlanId,
@@ -220,7 +220,7 @@ export class MealPlanPage {
   }
 
   async newMealPlanItem() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewMealPlanItemModalPage
     });
     modal.present();
@@ -235,17 +235,17 @@ export class MealPlanPage {
   }
 
   loadViewOptions() {
-    var defaults = {
+    const defaults = {
       showAddedBy: false,
       showAddedOn: false,
       startOfWeek: 'monday'
-    }
+    };
 
     this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
     this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
     this.viewOptions.startOfWeek = localStorage.getItem('mealPlan.startOfWeek') || null;
 
-    for (var key in this.viewOptions) {
+    for (const key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
           this.viewOptions[key] = defaults[key];
@@ -261,7 +261,7 @@ export class MealPlanPage {
   addMealPlanItemToShoppingList(mealPlanItem) {
     // Fetch complete recipe (this page is provided with only topical recipe details)
     this.recipeService.fetchById(mealPlanItem.recipe.id).then(async response => {
-      let addRecipeToShoppingListModal = await this.modalCtrl.create({
+      const addRecipeToShoppingListModal = await this.modalCtrl.create({
         component: AddRecipeToShoppingListModalPage,
         componentProps: {
           recipe: response,
@@ -272,7 +272,7 @@ export class MealPlanPage {
     }).catch(async err => {
       switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlineFetchMessage,
             duration: 5000
           });
@@ -301,7 +301,7 @@ export class MealPlanPage {
   }
 
   async removeMealPlanItemFromShoppingList(mealPlanItem) {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Removal',
       message: 'This will remove the linked copy of "' + (mealPlanItem.recipe || mealPlanItem).title + '" from your shopping list.',
       buttons: [
@@ -321,11 +321,11 @@ export class MealPlanPage {
   }
 
   _removeMealPlanItemFromShoppingList(mealPlanItem) {
-    var elIds = mealPlanItem.shoppingListItems.map(el => {
+    const elIds = mealPlanItem.shoppingListItems.map(el => {
       return el.id;
     });
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.shoppingListService.remove({
       id: mealPlanItem.shoppingListId,
@@ -361,7 +361,7 @@ export class MealPlanPage {
   }
 
   async presentPopover(event) {
-    let popover = await this.popoverCtrl.create({
+    const popover = await this.popoverCtrl.create({
       component: MealPlanPopoverPage,
       componentProps: {
         mealPlanId: this.mealPlanId,

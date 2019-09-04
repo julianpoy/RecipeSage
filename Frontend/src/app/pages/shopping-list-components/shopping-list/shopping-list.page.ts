@@ -25,9 +25,9 @@ export class ShoppingListPage {
 
   viewOptions: any = {};
 
-  initialLoadComplete: boolean = false;
+  initialLoadComplete = false;
 
-  reference: number = 0;
+  reference = 0;
 
   constructor(
     public navCtrl: NavController,
@@ -53,7 +53,7 @@ export class ShoppingListPage {
 
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.initialLoadComplete = false;
     this.loadList().then(() => {
@@ -77,16 +77,16 @@ export class ShoppingListPage {
     this.list = list;
     this.applySort();
 
-    var items = (this.list.items || []);
+    const items = (this.list.items || []);
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
 
-    for (var i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       // Recipe grouping
       if (!items[i].recipe) continue;
 
-      var recipeId = items[i].recipe.id + items[i].createdAt;
+      const recipeId = items[i].recipe.id + items[i].createdAt;
 
       if (this.recipeIds.indexOf(recipeId) === -1) this.recipeIds.push(recipeId);
 
@@ -104,7 +104,7 @@ export class ShoppingListPage {
       }).catch(async err => {
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -142,9 +142,9 @@ export class ShoppingListPage {
   }
 
   removeItems(items) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
-    var itemIds = items.map(el => {
+    const itemIds = items.map(el => {
       return el.id;
     });
 
@@ -156,7 +156,7 @@ export class ShoppingListPage {
 
       this.loadList().then(async () => {
         loading.dismiss();
-        var toast = await this.toastCtrl.create({
+        const toast = await this.toastCtrl.create({
           message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
           duration: 5000,
           buttons: [{
@@ -202,11 +202,11 @@ export class ShoppingListPage {
   }
 
   _addItems(items) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.shoppingListService.addItems({
       id: this.list.id,
-      items: items
+      items
     }).then(response => {
       this.reference = response.reference || 0;
 
@@ -237,7 +237,7 @@ export class ShoppingListPage {
   }
 
   async newShoppingListItem() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewShoppingListItemModalPage
     });
     modal.present();
@@ -252,7 +252,7 @@ export class ShoppingListPage {
   }
 
   loadViewOptions() {
-    var defaults = {
+    const defaults = {
       sortBy: '-createdAt',
       showAddedBy: false,
       showAddedOn: false,
@@ -266,7 +266,7 @@ export class ShoppingListPage {
     this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingList.showRecipeTitle'));
     this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('shoppingList.groupSimilar'));
 
-    for (var key in this.viewOptions) {
+    for (const key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
           this.viewOptions[key] = defaults[key];
@@ -278,22 +278,22 @@ export class ShoppingListPage {
   ingredientSorter(a, b) {
     switch (this.viewOptions.sortBy) {
       case 'createdAt':
-        var dateComp = (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
+        const dateComp = (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any);
         if (dateComp === 0) {
           return a.title.localeCompare(b.title);
         }
         return dateComp;
       case '-createdAt':
-        var reverseDateComp = (<any>new Date(b.createdAt)) - (<any>new Date(a.createdAt));
+        const reverseDateComp = (new Date(b.createdAt) as any) - (new Date(a.createdAt) as any);
         if (reverseDateComp === 0) {
           return a.title.localeCompare(b.title);
         }
         return reverseDateComp;
       case '-title':
       default:
-        var localeComp = a.title.localeCompare(b.title);
+        const localeComp = a.title.localeCompare(b.title);
         if (localeComp === 0) {
-          return (<any>new Date(a.createdAt)) - (<any>new Date(b.createdAt));
+          return (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any);
         }
         return localeComp;
     }
@@ -311,7 +311,7 @@ export class ShoppingListPage {
     });
 
     // Sort items within each group
-    for (var i = 0; i < this.list.itemsByGroup.length; i++) {
+    for (let i = 0; i < this.list.itemsByGroup.length; i++) {
       this.list.itemsByGroup[i].items = this.list.itemsByGroup[i].items.sort((a, b) => {
         return this.ingredientSorter(a, b);
       });

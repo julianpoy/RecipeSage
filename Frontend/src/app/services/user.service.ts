@@ -72,7 +72,7 @@ export class UserService {
   }
 
   saveFCMToken(key) {
-    console.log("attempting save")
+    console.log('attempting save');
     const data = {
       fcmToken: key
     };
@@ -87,7 +87,7 @@ export class UserService {
   }
 
   removeFCMToken(key) {
-    console.log("attempting delete")
+    console.log('attempting delete');
     const url = this.utilService.getBase() + 'users/fcm/token' + this.utilService.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key);
 
     return this.axiosClient.request({

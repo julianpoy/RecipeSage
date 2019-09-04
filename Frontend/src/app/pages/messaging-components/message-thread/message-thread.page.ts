@@ -22,14 +22,14 @@ export class MessageThreadPage {
   messages: any = [];
   messagesById: any = {};
 
-  otherUserId: string = '';
-  pendingMessage: string = '';
-  messagePlaceholder: string = 'Message...';
-  reloading: boolean = false;
+  otherUserId = '';
+  pendingMessage = '';
+  messagePlaceholder = 'Message...';
+  reloading = false;
 
-  isViewLoaded: boolean = true;
+  isViewLoaded = true;
 
-  selectedChatIdx: number = -1;
+  selectedChatIdx = -1;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -64,12 +64,12 @@ export class MessageThreadPage {
     if (!this.otherUserId) {
       this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
     } else {
-      var loading = this.loadingService.start();
+      const loading = this.loadingService.start();
 
       let messageArea;
       try {
         this.content.getNativeElement().children[1].children[0];
-      } catch(e){};
+      } catch (e) {}
 
       if (messageArea) messageArea.style.opacity = 0;
       this.loadMessages(true).then(() => {
@@ -104,7 +104,7 @@ export class MessageThreadPage {
   }
 
   scrollToBottom(animate?, delay?, callback?) {
-    var animationDuration = animate ? 300 : 0;
+    const animationDuration = animate ? 300 : 0;
 
     if (delay) {
       setTimeout(() => {
@@ -122,7 +122,7 @@ export class MessageThreadPage {
     window.onresize = () => {
       this.scrollToBottom.call(this, false, true);
       window.onresize = null;
-    }
+    };
   }
 
   trackByFn(index, item) {
@@ -154,7 +154,7 @@ export class MessageThreadPage {
         reject();
 
         if (!this.isViewLoaded) return;
-        switch(err.response.status) {
+        switch (err.response.status) {
           default:
             this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
             break;
@@ -164,9 +164,9 @@ export class MessageThreadPage {
   }
 
   processMessages() {
-    for (var i = 0; i < this.messages.length; i++) {
-      let message = this.messages[i];
-      message.deservesDateDiff = !!this.deservesDateDiff(this.messages[i-1], message);
+    for (let i = 0; i < this.messages.length; i++) {
+      const message = this.messages[i];
+      message.deservesDateDiff = !!this.deservesDateDiff(this.messages[i - 1], message);
       if (message.deservesDateDiff) message.dateDiff = this.formatMessageDividerDate(message.createdAt);
       message.formattedDate = this.formatMessageDate(message.createdAt);
     }
@@ -175,7 +175,7 @@ export class MessageThreadPage {
   sendMessage() {
     if (!this.pendingMessage) return;
 
-    var myMessage = this.pendingMessage;
+    const myMessage = this.pendingMessage;
     this.pendingMessage = '';
     this.messagePlaceholder = 'Sending...';
 
@@ -197,16 +197,16 @@ export class MessageThreadPage {
     }).catch(async err => {
       this.messagePlaceholder = 'Message...';
       this.pendingMessage = myMessage;
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
           offlineToast.present();
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: 'Failed to send message.',
             duration: 5000
           });
@@ -224,7 +224,7 @@ export class MessageThreadPage {
     if (!(event.keyCode == 10 || event.keyCode == 13)) return;
 
     if (event.ctrlKey || event.shiftKey || event.altKey) {
-      this.pendingMessage += "\n";
+      this.pendingMessage += '\n';
     } else {
       this.sendMessage();
     }
@@ -233,8 +233,8 @@ export class MessageThreadPage {
   deservesDateDiff(previous, next) {
     if (!previous || !next) return;
 
-    var p = new Date(previous.createdAt);
-    var n = new Date(next.createdAt);
+    const p = new Date(previous.createdAt);
+    const n = new Date(next.createdAt);
 
     return p.getDay() !== n.getDay();
   }

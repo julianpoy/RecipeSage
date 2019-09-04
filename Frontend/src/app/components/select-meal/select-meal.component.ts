@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./select-meal.component.scss']
 })
 export class SelectMealComponent {
-  @Input() meal: string = '';
+  @Input() meal = '';
   @Output() mealChange = new EventEmitter();
 
   constructor() { }

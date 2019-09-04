@@ -38,7 +38,7 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
     this.loadLists().then(() => {
       loading.dismiss();
     }, () => {
@@ -47,8 +47,8 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   selectLastUsedShoppingList() {
-    let lastUsedShoppingListId = localStorage.getItem('lastUsedShoppingListId');
-    let matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingListId);
+    const lastUsedShoppingListId = localStorage.getItem('lastUsedShoppingListId');
+    const matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingListId);
     if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
       this.destinationShoppingList = this.shoppingLists[0];
     }
@@ -71,7 +71,7 @@ export class AddRecipeToShoppingListModalPage {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -81,7 +81,7 @@ export class AddRecipeToShoppingListModalPage {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -99,7 +99,7 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   save() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.saveLastUsedShoppingList();
 
@@ -140,7 +140,7 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   async createShoppingList() {
-    let modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: NewShoppingListModalPage
     });
     modal.present();

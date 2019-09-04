@@ -14,10 +14,10 @@ import { UtilService, RouteMap } from '@/services/util.service';
 export class ImportPepperplatePage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  username: string = '';
-  password: string = '';
+  username = '';
+  password = '';
 
-  errorMessage: string = '';
+  errorMessage = '';
 
   constructor(
     public navCtrl: NavController,
@@ -39,7 +39,7 @@ export class ImportPepperplatePage {
       return;
     }
 
-    var loading = this.loadingService.start();
+    let loading = this.loadingService.start();
 
     this.recipeService.scrapePepperplate({
       username: this.username,
@@ -55,7 +55,7 @@ export class ImportPepperplatePage {
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,

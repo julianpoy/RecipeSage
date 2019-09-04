@@ -14,12 +14,12 @@ import { UtilService, RouteMap } from '@/services/util.service';
   providers: [ UserService ]
 })
 export class AuthPage {
-  name: string = '';
-  email: string = '';
-  password: string = '';
-  confirmPassword: string = '';
+  name = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
 
-  showLogin: boolean = true;
+  showLogin = true;
 
   redirect: string;
 
@@ -58,29 +58,29 @@ export class AuthPage {
     this.password = (document.getElementById('password') as HTMLInputElement).value;
     if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
 
-    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
-      this.presentToast('Please enter a valid email address.')
+      this.presentToast('Please enter a valid email address.');
       return;
     }
     if (!this.showLogin && this.name.length < 1) {
-      this.presentToast('Please enter a name (you can enter a nickname!)')
+      this.presentToast('Please enter a name (you can enter a nickname!)');
       return;
     }
     if (this.password.length === 0) {
-      this.presentToast('Please enter a password.')
+      this.presentToast('Please enter a password.');
       return;
     }
     if (!this.showLogin && this.password.length < 6) {
-      this.presentToast('Please enter a password at least 6 characters long.')
+      this.presentToast('Please enter a password at least 6 characters long.');
       return;
     }
     if (this.email.length === 0) {
-      this.presentToast('Please enter your email address.')
+      this.presentToast('Please enter your email address.');
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     if (this.showLogin) {
       this.userService.login({
@@ -91,22 +91,22 @@ export class AuthPage {
 
         localStorage.setItem('token', response.token);
 
-        if ('Notification' in window && (<any>Notification).permission === 'granted') {
+        if ('Notification' in window && (Notification as any).permission === 'granted') {
           this.messagingService.requestNotifications();
         }
 
         this.handleRedirect();
       }).catch(err => {
         loading.dismiss();
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
-            this.presentToast('It looks like you\'re offline right now.')
+            this.presentToast('It looks like you\'re offline right now.');
             break;
           case 412:
-            this.presentToast('It looks like that email or password isn\'t correct.')
+            this.presentToast('It looks like that email or password isn\'t correct.');
             break;
           default:
-            this.presentToast(this.utilService.standardMessages.unexpectedError)
+            this.presentToast(this.utilService.standardMessages.unexpectedError);
             break;
         }
       });
@@ -121,31 +121,31 @@ export class AuthPage {
 
           localStorage.setItem('token', response.token);
 
-          if ('Notification' in window && (<any>Notification).permission === 'granted') {
+          if ('Notification' in window && (Notification as any).permission === 'granted') {
             this.messagingService.requestNotifications();
           }
 
           this.handleRedirect();
         }).catch(err => {
           loading.dismiss();
-          switch(err.response.status) {
+          switch (err.response.status) {
             case 0:
-              this.presentToast('It looks like you\'re offline right now.')
+              this.presentToast('It looks like you\'re offline right now.');
               break;
             case 412:
-              this.presentToast('Please enter an email address.')
+              this.presentToast('Please enter an email address.');
               break;
             case 406:
-              this.presentToast('An account with that email address already exists.')
+              this.presentToast('An account with that email address already exists.');
               break;
             default:
-              this.presentToast(this.utilService.standardMessages.unexpectedError)
+              this.presentToast(this.utilService.standardMessages.unexpectedError);
               break;
           }
         });
       } else {
         loading.dismiss();
-        this.presentToast('The password and confirmation you entered do not match.')
+        this.presentToast('The password and confirmation you entered do not match.');
       }
     }
   }
@@ -153,18 +153,18 @@ export class AuthPage {
   forgotPassword() {
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
-      this.presentToast('Please enter your account email and try again')
+      this.presentToast('Please enter your account email and try again');
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.userService.forgot({
       email: this.email
     }).then(async response => {
       loading.dismiss();
 
-      let successToast = await this.toastCtrl.create({
+      const successToast = await this.toastCtrl.create({
         message: 'If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.',
         duration: 7000
       });
@@ -173,10 +173,10 @@ export class AuthPage {
       loading.dismiss();
       switch (err.response.status) {
         case 0:
-          this.presentToast('It looks like you\'re offline right now.')
+          this.presentToast('It looks like you\'re offline right now.');
           break;
         default:
-          this.presentToast(this.utilService.standardMessages.unexpectedError)
+          this.presentToast(this.utilService.standardMessages.unexpectedError);
           break;
       }
     });

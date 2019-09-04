@@ -81,8 +81,8 @@ export class EditRecipePage {
   }
 
   setInitialTextAreaSize() {
-    var textAreas = document.getElementsByTagName('textarea');
-    for (var i = 0; i < textAreas.length; i++) {
+    const textAreas = document.getElementsByTagName('textarea');
+    for (let i = 0; i < textAreas.length; i++) {
       textAreas[i].style.height = `${this.getScrollHeight(textAreas[i])}px`;
     }
   }
@@ -92,7 +92,7 @@ export class EditRecipePage {
   }
 
   updateTextAreaSize(event) {
-    var el = event.target.children[0];
+    const el = event.target.children[0];
     el.style.height = 'auto';
     el.style.height = `${this.getScrollHeight(el)}px`;
   }
@@ -102,33 +102,33 @@ export class EditRecipePage {
   }
 
   async setFile(event) {
-    let files = event.srcElement.files
+    const files = event.srcElement.files;
     if (!files || !files[0]) {
-      return
+      return;
     }
 
-    let MAX_FILE_SIZE_MB = 8;
-    let ENABLE_LOCAL_CONVERSIONS = true;
-    let isOverMaxSize = files[0].size / 1024 / 1024 > MAX_FILE_SIZE_MB; // Image is larger than MAX_FILE_SIZE_MB
+    const MAX_FILE_SIZE_MB = 8;
+    const ENABLE_LOCAL_CONVERSIONS = true;
+    const isOverMaxSize = files[0].size / 1024 / 1024 > MAX_FILE_SIZE_MB; // Image is larger than MAX_FILE_SIZE_MB
 
     if (!isOverMaxSize) {
       // Image size is OK, upload the image directly for high quality server conversion
       console.log(`Image is under ${MAX_FILE_SIZE_MB}MB`);
       this.recipe.imageFile = files[0];
       this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
-        (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
+        (window.URL || (window as any).webkitURL).createObjectURL(this.recipe.imageFile)
       );
     } else if (isOverMaxSize && ENABLE_LOCAL_CONVERSIONS) {
       // Image is too large, do some resizing before high quality server conversion
       console.log(`Image is over ${MAX_FILE_SIZE_MB}MB. Converting locally`);
-      var loadingImage = loadImage(
+      const loadingImage = loadImage(
         files[0],
         (renderedCanvas, exif) => {
           renderedCanvas.toBlob(myBlob => {
             myBlob.name = this.recipe.imageFile.name;
             this.recipe.imageFile = myBlob;
             this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
-              (window.URL || (<any>window).webkitURL).createObjectURL(this.recipe.imageFile)
+              (window.URL || (window as any).webkitURL).createObjectURL(this.recipe.imageFile)
             );
 
             console.log('Local conversion complete');
@@ -170,7 +170,7 @@ export class EditRecipePage {
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     if (this.recipe.id) {
       this.recipeService.update(this.recipe).then(response => {
@@ -179,7 +179,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,
@@ -207,7 +207,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlinePushMessage,

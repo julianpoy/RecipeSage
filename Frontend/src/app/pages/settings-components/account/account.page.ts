@@ -15,12 +15,12 @@ export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
   account: any = {
-    password: "123456"
+    password: '123456'
   };
 
-  nameChanged: boolean = false;
-  emailChanged: boolean = false;
-  passwordChanged: boolean = false;
+  nameChanged = false;
+  emailChanged = false;
+  passwordChanged = false;
 
   constructor(
     public navCtrl: NavController,
@@ -31,7 +31,7 @@ export class AccountPage {
     public recipeService: RecipeService,
     public userService: UserService) {
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.userService.me().then(response => {
       loading.dismiss();
@@ -40,7 +40,7 @@ export class AccountPage {
       this.account.password = '123456';
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -51,7 +51,7 @@ export class AccountPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -65,14 +65,14 @@ export class AccountPage {
   async saveName() {
     if (!this.account.name || this.account.name.length === 0) {
       const errorToast = await this.toastCtrl.create({
-        message: "Name/nickname must not be blank.",
+        message: 'Name/nickname must not be blank.',
         duration: 5000
       });
       errorToast.present();
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.userService.update({
       name: this.account.name
@@ -82,14 +82,14 @@ export class AccountPage {
       this.account.name = response.name;
       this.nameChanged = false;
 
-      let tst = await this.toastCtrl.create({
+      const tst = await this.toastCtrl.create({
         message: 'Profile name was updated.',
         duration: 5000
       });
       tst.present();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -100,7 +100,7 @@ export class AccountPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -113,13 +113,13 @@ export class AccountPage {
   async saveEmail() {
     if (!this.account.email || this.account.email.length === 0) {
       (await this.toastCtrl.create({
-        message: "Email must not be blank.",
+        message: 'Email must not be blank.',
         duration: 5000
       })).present();
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.userService.update({
       email: this.account.email
@@ -129,14 +129,14 @@ export class AccountPage {
       this.account.email = response.email;
       this.emailChanged = false;
 
-      let tst = await this.toastCtrl.create({
+      const tst = await this.toastCtrl.create({
         message: 'Email address was updated.',
         duration: 5000
       });
       tst.present();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -159,7 +159,7 @@ export class AccountPage {
           })).present();
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -172,7 +172,7 @@ export class AccountPage {
   async _logout() {
     localStorage.removeItem('token');
 
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Password Updated',
       message: 'Your password has been updated. You will need to log back in on any devices that use this account.',
       buttons: [
@@ -189,7 +189,7 @@ export class AccountPage {
 
   async savePassword() {
     if (this.account.password !== this.account.confirmPassword) {
-      let tst = await this.toastCtrl.create({
+      const tst = await this.toastCtrl.create({
         message: 'Passwords do not match.',
         duration: 5000
       });
@@ -197,7 +197,7 @@ export class AccountPage {
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.userService.update({
       password: this.account.password
@@ -210,7 +210,7 @@ export class AccountPage {
       this._logout();
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -227,7 +227,7 @@ export class AccountPage {
           })).present();
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });
@@ -238,14 +238,14 @@ export class AccountPage {
   }
 
   async deleteAllRecipes() {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Warning - You\'re about to delete all of your recipes!',
       message: `This action is PERMANENT.<br /><br />All of your recipes and associated labels will be removed from the Recipe Sage system.`,
       buttons: [
         {
           text: 'Yes, continue',
           handler: () => {
-            let loading = this.loadingService.start();
+            const loading = this.loadingService.start();
 
             this.recipeService.removeAll().then(async () => {
               loading.dismiss();
@@ -272,14 +272,14 @@ export class AccountPage {
                   this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
                   break;
                 default:
-                  let errorToast = await this.toastCtrl.create({
+                  const errorToast = await this.toastCtrl.create({
                     message: this.utilService.standardMessages.unexpectedError,
                     duration: 30000
                   });
                   errorToast.present();
                   break;
               }
-            })
+            });
           }
         },
         {

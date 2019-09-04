@@ -76,7 +76,7 @@ export class RecipeService {
   }
 
   count(options) {
-    var url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
 
     return this.axiosClient.request({
@@ -86,7 +86,7 @@ export class RecipeService {
   }
 
   fetch(options) {
-    var url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
     if (options.folder)                              url += '&folder=' + options.folder;
     if (options.sortBy)                              url += '&sort=' + options.sortBy;
     if (options.offset)                              url += '&offset=' + options.offset;
@@ -101,7 +101,7 @@ export class RecipeService {
   }
 
   search(query: string, options?: { labels?: string[] }) {
-    var url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
+    let url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
     if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
@@ -121,14 +121,14 @@ export class RecipeService {
   }
 
   create(data) {
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
 
     delete data.imageFile;
 
-    for (var i = 0; i < Object.keys(data).length; i++) {
-      var key = Object.keys(data)[i];
-      var val = data[key];
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      const key = Object.keys(data)[i];
+      const val = data[key];
 
       formData.append(key, val);
     }
@@ -151,7 +151,7 @@ export class RecipeService {
   }
 
   share(data) {
-    if (!data.destinationUserEmail) throw 'DestinationUserEmail required for share operation';
+    if (!data.destinationUserEmail) throw new Error('DestinationUserEmail required for share operation');
     if (data.image) data.imageURL = data.image.location;
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
@@ -168,14 +168,14 @@ export class RecipeService {
   }
 
   update(data) {
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
 
     delete data.imageFile;
 
-    for (var i = 0; i < Object.keys(data).length; i++) {
-      var key = Object.keys(data)[i];
-      var val = data[key];
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      const key = Object.keys(data)[i];
+      const val = data[key];
 
       formData.append(key, val);
     }
@@ -261,8 +261,8 @@ export class RecipeService {
   }
 
   importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean, excludeImages?: boolean) {
-    let formData: FormData = new FormData();
-    formData.append('lcbdb', lcbFile, lcbFile.name)
+    const formData: FormData = new FormData();
+    formData.append('lcbdb', lcbFile, lcbFile.name);
 
     const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}${includeStockRecipes ? '&includeStockRecipes=true' : ''}${includeTechniques ? '&includeTechniques=true' : ''}${excludeImages ? '&excludeImages=true' : ''}`;
 
@@ -281,8 +281,8 @@ export class RecipeService {
   }
 
   importPaprika(paprikaFile) {
-    let formData: FormData = new FormData();
-    formData.append('paprikadb', paprikaFile, paprikaFile.name)
+    const formData: FormData = new FormData();
+    formData.append('paprikadb', paprikaFile, paprikaFile.name);
 
     const url = `${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`;
 
@@ -309,7 +309,7 @@ export class RecipeService {
   }
 
   async scaleIngredientsPrompt(currentScale: number, cb) {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Recipe Scale',
       message: 'Enter a number or fraction to scale the recipe',
       inputs: [
@@ -328,7 +328,7 @@ export class RecipeService {
           text: 'Apply',
           handler: data => {
             // Support fractions
-            let parsed = fractionjs(data.scale).valueOf();
+            const parsed = fractionjs(data.scale).valueOf();
             // Trim long/repeating decimals
             let rounded = Number(parsed.toFixed(3));
             // Check for falsy values

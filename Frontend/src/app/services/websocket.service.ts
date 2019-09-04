@@ -25,7 +25,7 @@ export class WebsocketService {
       try {
         this.connection.onclose = () => {};
         this.connection.close();
-      } catch(e) {}
+      } catch (e) {}
     };
   }
 
@@ -39,8 +39,8 @@ export class WebsocketService {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
 
     this.listeners[eventName].push({
-      cb: cb,
-      ctx: ctx
+      cb,
+      ctx
     });
   }
 
@@ -51,10 +51,10 @@ export class WebsocketService {
 
   // Connection
   private connect() {
-    var prot = "ws";
-    if ((<any>window.location.href).indexOf('https') > -1) prot = "wss";
+    let prot = 'ws';
+    if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
 
-    this.connection = new WebSocket(prot + "://" + window.location.hostname + ":7999/grip/ws" + this.utilService.getTokenQuery());
+    this.connection = new WebSocket(prot + '://' + window.location.hostname + ':7999/grip/ws' + this.utilService.getTokenQuery());
 
     this.connection.onopen = () => {
       this.handleMessage({
@@ -78,7 +78,7 @@ export class WebsocketService {
   }
 
   public queueReconnect() {
-    var RECONNECT_TIMEOUT_WAIT = 3000; // Time to wait before attempting reconnect in MS
+    const RECONNECT_TIMEOUT_WAIT = 3000; // Time to wait before attempting reconnect in MS
 
     if (this.reconnectTimeout) return;
 
@@ -93,11 +93,11 @@ export class WebsocketService {
   }
 
   private broadcast(eventName, msg) {
-    var queue = this.listeners[eventName];
+    const queue = this.listeners[eventName];
 
     if (!queue) return;
 
-    for (var i = 0; i < queue.length; i++) {
+    for (let i = 0; i < queue.length; i++) {
       queue[i].cb.call(queue[i].ctx, msg);
     }
   }

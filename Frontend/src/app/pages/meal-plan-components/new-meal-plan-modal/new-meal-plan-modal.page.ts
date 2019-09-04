@@ -13,7 +13,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class NewMealPlanModalPage {
 
-  mealPlanTitle: string = '';
+  mealPlanTitle = '';
 
   selectedThreads: any = [];
 
@@ -29,7 +29,7 @@ export class NewMealPlanModalPage {
   }
 
   save() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.mealPlanService.create({
       title: this.mealPlanTitle,
@@ -44,7 +44,7 @@ export class NewMealPlanModalPage {
       loading.dismiss();
       switch (err.response.status) {
         case 0:
-          let offlineToast = await this.toastCtrl.create({
+          const offlineToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
             duration: 5000
           });
@@ -57,7 +57,7 @@ export class NewMealPlanModalPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         default:
-          let errorToast = await this.toastCtrl.create({
+          const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
             duration: 30000
           });

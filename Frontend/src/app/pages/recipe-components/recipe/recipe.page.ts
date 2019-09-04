@@ -27,13 +27,13 @@ export class RecipePage {
   ingredients: Ingredient[];
   instructions: Instruction[];
 
-  scale: number = 1;
+  scale = 1;
 
   labelObjectsByTitle: any = {};
   existingLabels: any = [];
   selectedLabels: any = [];
-  pendingLabel: string = '';
-  showAutocomplete: boolean = false;
+  pendingLabel = '';
+  showAutocomplete = false;
 
   isLoggedIn: boolean;
 
@@ -51,15 +51,15 @@ export class RecipePage {
     this.updateIsLoggedIn();
 
     this.recipeId = this.route.snapshot.paramMap.get('recipeId');
-    this.recipe = <Recipe>{};
+    this.recipe = {} as Recipe;
 
     this.applyScale();
   }
 
   ionViewWillEnter() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
-    this.recipe = <Recipe>{};
+    this.recipe = {} as Recipe;
 
     this.loadAll()
     .then(() => {
@@ -85,7 +85,7 @@ export class RecipePage {
   }
 
   loadAll() {
-    return Promise.all([this.loadRecipe(), this.loadLabels()])
+    return Promise.all([this.loadRecipe(), this.loadLabels()]);
   }
 
   loadRecipe() {
@@ -103,13 +103,13 @@ export class RecipePage {
 
         this.applyScale();
 
-        this.selectedLabels = this.recipe.labels.map(label => label.title)
+        this.selectedLabels = this.recipe.labels.map(label => label.title);
 
         resolve();
       }).catch(async err => {
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -148,8 +148,8 @@ export class RecipePage {
         this.labelObjectsByTitle = {};
         this.existingLabels = [];
 
-        for (var i = 0; i < response.length; i++) {
-          var label = response[i];
+        for (let i = 0; i < response.length; i++) {
+          const label = response[i];
           this.existingLabels.push(label.title);
           this.labelObjectsByTitle[label.title] = label;
         }
@@ -163,13 +163,13 @@ export class RecipePage {
       }).catch(async err => {
         reject();
 
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 0:
           case 401:
             // Ignore, handled by main loader
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -207,7 +207,7 @@ export class RecipePage {
   }
 
   async deleteRecipe() {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
       message: 'This will permanently delete the recipe from your account. This action is irreversible.',
       buttons: [
@@ -229,7 +229,7 @@ export class RecipePage {
   }
 
   private _deleteRecipe() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.recipeService.remove(this.recipe).then(response => {
       loading.dismiss();
@@ -237,7 +237,7 @@ export class RecipePage {
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -311,11 +311,11 @@ export class RecipePage {
   }
 
   moveToFolder(folderName) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;
 
-    console.log(this.recipe)
+    console.log(this.recipe);
 
     this.recipeService.update(this.recipe).then(response => {
       loading.dismiss();
@@ -323,7 +323,7 @@ export class RecipePage {
       this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -364,7 +364,7 @@ export class RecipePage {
       return;
     }
 
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.labelService.create({
       recipeId: this.recipe.id,
@@ -378,7 +378,7 @@ export class RecipePage {
       });
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -408,7 +408,7 @@ export class RecipePage {
   }
 
   async deleteLabel(label) {
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Label Removal',
       message: 'This will remove the label "' + label.title + '" from this recipe.',
       buttons: [
@@ -431,7 +431,7 @@ export class RecipePage {
   }
 
   private _deleteLabel(label) {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     label.recipeId = this.recipe.id;
 
@@ -439,23 +439,23 @@ export class RecipePage {
       loading.dismiss();
 
       if (label.recipeCount === 1) {
-        var i = this.existingLabels.indexOf(label.title);
+        const i = this.existingLabels.indexOf(label.title);
         this.existingLabels.splice(i, 1);
         delete this.labelObjectsByTitle[label.title];
       } else {
         label.recipeCount -= 1;
       }
 
-      var lblIdx = this.recipe.labels.findIndex(el => {
+      const lblIdx = this.recipe.labels.findIndex(el => {
         return el.id === label.id;
       });
       this.recipe.labels.splice(lblIdx, 1);
 
-      var idx = this.selectedLabels.indexOf(label.title);
+      const idx = this.selectedLabels.indexOf(label.title);
       this.selectedLabels.splice(idx, 1);
     }).catch(async err => {
       loading.dismiss();
-      switch(err.response.status) {
+      switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.offlinePushMessage,
@@ -479,7 +479,7 @@ export class RecipePage {
   }
 
   cloneRecipe() {
-    var loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     if (this.recipe.image && this.recipe.image.location) {
       this.recipe.imageURL = this.recipe.image.location;
@@ -516,7 +516,7 @@ export class RecipePage {
             break;
         }
       });
-    })
+    });
   }
 
   async goToAuth(cb?: Function) {
@@ -537,7 +537,7 @@ export class RecipePage {
     this.goToAuth(() => {
       this.cloneRecipe().then(async () => {
         (await this.toastCtrl.create({
-          message: "The recipe has been saved to your account",
+          message: 'The recipe has been saved to your account',
           duration: 5000
         })).present();
       });

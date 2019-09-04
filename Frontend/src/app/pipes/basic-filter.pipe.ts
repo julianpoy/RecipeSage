@@ -12,7 +12,7 @@ export class BasicFilterPipe implements PipeTransform {
     setTimeout(options.onchange, 0);
 
     // Mutate array for VirtualScroll
-    var filteredRecipes = recipes.slice();
+    let filteredRecipes = recipes.slice();
 
     if (options.viewOptions.selectedLabels && options.viewOptions.selectedLabels.length > 0) {
       filteredRecipes = recipes.filter(el => {
@@ -32,21 +32,21 @@ export class BasicFilterPipe implements PipeTransform {
     }
 
     return filteredRecipes.sort((a: any, b: any) => {
-      var desc = options.viewOptions.sortBy.indexOf('-') == 0;
-      var sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
+      let desc = options.viewOptions.sortBy.indexOf('-') == 0;
+      let sortField = desc ? options.viewOptions.sortBy.substr(1) : options.viewOptions.sortBy;
 
-      var aV = a[sortField];
-      var bV = b[sortField];
+      let aV = a[sortField];
+      let bV = b[sortField];
 
-      switch(sortField) {
-        case "title":
+      switch (sortField) {
+        case 'title':
           if (desc) {
             return aV.toLowerCase().localeCompare(bV.toLowerCase());
           } else {
             return bV.toLowerCase().localeCompare(aV.toLowerCase());
           }
-        case "created":
-        case "updated":
+        case 'created':
+        case 'updated':
           if (Date.parse(aV) === Date.parse(bV)) return 0;
           if (desc) {
             return Date.parse(aV) < Date.parse(bV) ? 1 : -1;

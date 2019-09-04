@@ -22,7 +22,7 @@ export class AppComponent {
 
   inboxCount: number;
 
-  version: number = (<any>window).version;
+  version: number = (window as any).version;
 
   unsupportedBrowser: boolean = !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem('seenOldBrowserWarning');
@@ -52,7 +52,7 @@ export class AppComponent {
     this.initEventListeners();
     this.initEventDispatchers();
 
-    if ('Notification' in window && (<any>Notification).permission === 'granted' && this.utilService.isLoggedIn()) {
+    if ('Notification' in window && (Notification as any).permission === 'granted' && this.utilService.isLoggedIn()) {
       this.messagingService.requestNotifications();
     }
 
@@ -71,7 +71,7 @@ export class AppComponent {
             text: 'Dismiss',
             handler: () => {
               this.seenOldBrowserWarning = true;
-              localStorage.setItem('seenOldBrowserWarning', "true");
+              localStorage.setItem('seenOldBrowserWarning', 'true');
             }
           }
         ]
@@ -85,17 +85,17 @@ export class AppComponent {
     // When user pauses app (device locks, switches tabs, etc) try to update SW
     this.events.subscribe('application:multitasking:paused', () => {
       try {
-        (<any>window).updateSW();
+        (window as any).updateSW();
       } catch (e) { }
     });
 
-    window['onSWUpdate'] = () => {
-      console.log("Update is waiting for pause...")
-      if ((<any>window).isHidden()) {
-        (<any>window).location.reload(true);
+    window.onSWUpdate = () => {
+      console.log('Update is waiting for pause...');
+      if ((window as any).isHidden()) {
+        (window as any).location.reload(true);
       } else {
         this.events.subscribe('application:multitasking:paused', () => {
-          (<any>window).location.reload(true);
+          (window as any).location.reload(true);
         });
       }
     };
@@ -116,11 +116,11 @@ export class AppComponent {
 
     this.websocketService.register('messages:new', async payload => {
       if (this.route.snapshot.url.toString().indexOf(RouteMap.MessagesPage.getPath())) return;
-      var notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
+      const notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
 
-      var myMessage = payload;
+      const myMessage = payload;
 
-      let toast = await this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         duration: 7000,
         buttons: [{
@@ -147,9 +147,9 @@ export class AppComponent {
     }, this);
 
     this.events.subscribe('import:pepperplate:complete', async () => {
-      var notification = 'Your recipes have been imported from Pepperplate.';
+      const notification = 'Your recipes have been imported from Pepperplate.';
 
-      let toast = await this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         duration: 10000,
         showCloseButton: true,
@@ -159,7 +159,7 @@ export class AppComponent {
     });
 
     this.events.subscribe('import:pepperplate:failed', async reason => {
-      var notification = '';
+      let notification = '';
       if (reason === 'timeout') {
         notification += 'Import failed: The Pepperplate API is unavailable right now.';
       } else if (reason === 'invalidCredentials') {
@@ -170,7 +170,7 @@ export class AppComponent {
         return;
       }
 
-      let toast = await this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         showCloseButton: true,
         closeButtonText: 'Close'
@@ -179,9 +179,9 @@ export class AppComponent {
     });
 
     this.events.subscribe('import:pepperplate:working', async () => {
-      var notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
+      const notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
 
-      let toast = await this.toastCtrl.create({
+      const toast = await this.toastCtrl.create({
         message: notification,
         showCloseButton: true,
         closeButtonText: 'Close'
@@ -191,21 +191,21 @@ export class AppComponent {
   }
 
   initEventDispatchers() {
-    var hidden, visibilityChange;
-    if (typeof (<any>document).hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
-      hidden = "hidden";
-      visibilityChange = "visibilitychange";
-    } else if (typeof (<any>document).msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-    } else if (typeof (<any>document).webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
+    let hidden, visibilityChange;
+    if (typeof (document as any).hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
+      hidden = 'hidden';
+      visibilityChange = 'visibilitychange';
+    } else if (typeof (document as any).msHidden !== 'undefined') {
+      hidden = 'msHidden';
+      visibilityChange = 'msvisibilitychange';
+    } else if (typeof (document as any).webkitHidden !== 'undefined') {
+      hidden = 'webkitHidden';
+      visibilityChange = 'webkitvisibilitychange';
     }
 
-    (<any>window).isHidden = () => {
+    (window as any).isHidden = () => {
       return document[hidden];
-    }
+    };
 
     document.addEventListener(visibilityChange, () => {
       if (document[hidden]) {
@@ -225,9 +225,9 @@ export class AppComponent {
   }
 
   generateNavList() {
-    var pages = [];
+    let pages = [];
 
-    var loggedOutPages = [
+    const loggedOutPages = [
       { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
       { title: 'Log In', icon: 'ios-nutrition', url: RouteMap.AuthPage.getPath(AuthType.Login) },
       { title: 'Create an Account', icon: 'ios-leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
@@ -235,7 +235,7 @@ export class AppComponent {
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
-    var loggedInPages = [
+    const loggedInPages = [
       { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
       { title: 'Messages', icon: 'chatboxes', url: RouteMap.MessagesPage.getPath() },
       { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
@@ -257,11 +257,11 @@ export class AppComponent {
   }
 
   readyForPrompt() {
-    return !!(<any>window).deferredInstallPrompt;
+    return !!(window as any).deferredInstallPrompt;
   }
 
   showInstallPrompt() {
-    let installPrompt = (<any>window).deferredInstallPrompt;
+    const installPrompt = (window as any).deferredInstallPrompt;
     if (installPrompt) {
       installPrompt.prompt();
 
@@ -269,7 +269,7 @@ export class AppComponent {
         .then(choiceResult => {
           if (choiceResult.outcome === 'accepted') {
             console.log('User accepted the A2HS prompt');
-            (<any>window).deferredInstallPrompt = null;
+            (window as any).deferredInstallPrompt = null;
           } else {
             console.log('User dismissed the A2HS prompt');
           }
@@ -304,9 +304,9 @@ export class AppComponent {
       this.checkBrowserCompatibility();
 
       try {
-        let viewName = event.url;
+        const viewName = event.url;
 
-        let _paq = (<any>window)._paq;
+        const _paq = (window as any)._paq;
 
         if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
         currentUrl = '' + window.location.hash.substr(1);

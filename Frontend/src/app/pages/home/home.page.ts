@@ -21,21 +21,21 @@ export class HomePage implements AfterViewInit {
   labels: Label[] = [];
 
   recipes: Recipe[] = [];
-  recipeFetchBuffer: number = 25;
-  fetchPerPage: number = 50;
-  lastRecipeCount: number = 0;
+  recipeFetchBuffer = 25;
+  fetchPerPage = 50;
+  lastRecipeCount = 0;
   totalRecipeCount: number;
 
-  loading: boolean = true;
+  loading = true;
   selectedRecipeIds: string[] = [];
 
-  searchText: string = '';
+  searchText = '';
 
   folder: string;
   folderTitle: string;
 
   viewOptions: any = {};
-  reloadPending: boolean = true;
+  reloadPending = true;
 
   @ViewChild('contentContainer', { static: true }) contentContainer;
   scrollElement;
@@ -73,12 +73,12 @@ export class HomePage implements AfterViewInit {
     events.subscribe('label:created', () => this.reloadPending = true);
     events.subscribe('label:deleted', () => this.reloadPending = true);
     events.subscribe('import:pepperplate:complete', () => {
-      let loading = this.loadingService.start();
+      const loading = this.loadingService.start();
       this.resetAndLoadAll().then(() => {
         loading.dismiss();
       }, () => {
         loading.dismiss();
-      })
+      });
     });
 
     this.websocketService.register('messages:new', payload => {
@@ -96,7 +96,7 @@ export class HomePage implements AfterViewInit {
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
-      let loading = this.loadingService.start();
+      const loading = this.loadingService.start();
       this.resetAndLoadAll().then(() => {
         loading.dismiss();
       }, () => {
@@ -114,7 +114,7 @@ export class HomePage implements AfterViewInit {
   }
 
   loadViewOptions() {
-    var defaults = {
+    const defaults = {
       enableLabelIntersection: false,
       showLabels: true,
       showLabelChips: false,
@@ -122,7 +122,7 @@ export class HomePage implements AfterViewInit {
       showSource: false,
       sortBy: '-title',
       selectedLabels: [],
-    }
+    };
 
     this.viewOptions.enableLabelIntersection = JSON.parse(localStorage.getItem('enableLabelIntersection'));
     this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
@@ -132,7 +132,7 @@ export class HomePage implements AfterViewInit {
     this.viewOptions.sortBy = localStorage.getItem('sortBy');
     this.viewOptions.selectedLabels = [];
 
-    for (var key in this.viewOptions) {
+    for (const key in this.viewOptions) {
       if (this.viewOptions.hasOwnProperty(key)) {
         if (this.viewOptions[key] == null) {
           this.viewOptions[key] = defaults[key];
@@ -159,17 +159,17 @@ export class HomePage implements AfterViewInit {
       return Promise.all([
         this.resetAndLoadLabels(),
         this.resetAndLoadRecipes()
-      ])
+      ]);
     }
 
     return this.resetAndLoadLabels().then(() => {
-      var labelNames = this.labels.map(e => e.title);
+      const labelNames = this.labels.map(e => e.title);
 
-      let selectedLabels = this.viewOptions.selectedLabels;
+      const selectedLabels = this.viewOptions.selectedLabels;
       selectedLabels.splice(0, selectedLabels.length, ...selectedLabels.filter(e => labelNames.indexOf(e) > -1));
 
       return this.resetAndLoadRecipes();
-    })
+    });
   }
 
   resetAndLoadLabels() {
@@ -185,7 +185,7 @@ export class HomePage implements AfterViewInit {
       this.loading = false;
     }, () => {
       this.loading = false;
-    })
+    });
   }
 
   _resetAndLoadRecipes() {
@@ -223,7 +223,7 @@ export class HomePage implements AfterViewInit {
 
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -233,7 +233,7 @@ export class HomePage implements AfterViewInit {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -257,7 +257,7 @@ export class HomePage implements AfterViewInit {
   }
 
   toggleLabel(labelTitle) {
-    let labelIdx = this.viewOptions.selectedLabels.indexOf(labelTitle);
+    const labelIdx = this.viewOptions.selectedLabels.indexOf(labelTitle);
     labelIdx > -1 ?
       this.viewOptions.selectedLabels.splice(labelIdx, 1) : this.viewOptions.selectedLabels.push(labelTitle);
     this.resetAndLoadRecipes();
@@ -272,7 +272,7 @@ export class HomePage implements AfterViewInit {
   }
 
   async presentPopover(event) {
-    let popover = await this.popoverCtrl.create({
+    const popover = await this.popoverCtrl.create({
       component: HomePopoverPage,
       componentProps: {
         viewOptions: this.viewOptions,
@@ -302,7 +302,7 @@ export class HomePage implements AfterViewInit {
       this.resetAndLoadRecipes();
     }
 
-    let loading = this.loadingService.start();
+    const loading = this.loadingService.start();
 
     this.searchText = text;
 
@@ -322,7 +322,7 @@ export class HomePage implements AfterViewInit {
         reject();
         switch (err.response.status) {
           case 0:
-            let offlineToast = await this.toastCtrl.create({
+            const offlineToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.offlineFetchMessage,
               duration: 5000
             });
@@ -332,7 +332,7 @@ export class HomePage implements AfterViewInit {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
             break;
           default:
-            let errorToast = await this.toastCtrl.create({
+            const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
               duration: 30000
             });
@@ -348,7 +348,7 @@ export class HomePage implements AfterViewInit {
   }
 
   selectRecipe(recipe) {
-    let index = this.selectedRecipeIds.indexOf(recipe.id);
+    const index = this.selectedRecipeIds.indexOf(recipe.id);
     if (index > -1) {
       this.selectedRecipeIds.splice(index, 1);
     } else {
@@ -377,7 +377,7 @@ export class HomePage implements AfterViewInit {
         {
           text: 'Save',
           handler: ({ labelName }) => {
-            let loading = this.loadingService.start();
+            const loading = this.loadingService.start();
             this.labelService.createBulk({
               recipeIds: this.selectedRecipeIds,
               title: labelName.toLowerCase()
@@ -390,21 +390,21 @@ export class HomePage implements AfterViewInit {
             }).catch(async err => {
               switch (err.response.status) {
                 case 0:
-                  let offlineToast = await this.toastCtrl.create({
+                  const offlineToast = await this.toastCtrl.create({
                     message: this.utilService.standardMessages.offlinePushMessage,
                     duration: 5000
                   });
                   offlineToast.present();
                   break;
                 default:
-                  let errorToast = await this.toastCtrl.create({
+                  const errorToast = await this.toastCtrl.create({
                     message: this.utilService.standardMessages.unexpectedError,
                     duration: 30000
                   });
                   errorToast.present();
                   break;
               }
-            })
+            });
           }
         }
       ]
@@ -413,9 +413,9 @@ export class HomePage implements AfterViewInit {
   }
 
   async deleteSelectedRecipes() {
-    let recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id == recipeId)[0].title).join("<br />");
+    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id == recipeId)[0].title).join('<br />');
 
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirm Delete',
       message: 'This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />The following recipes will be deleted:<br />' + recipeNames,
       buttons: [
@@ -428,7 +428,7 @@ export class HomePage implements AfterViewInit {
           text: 'Delete',
           cssClass: 'alertDanger',
           handler: () => {
-            let loading = this.loadingService.start();
+            const loading = this.loadingService.start();
             this.recipeService.removeBulk(this.selectedRecipeIds).then(() => {
               this.clearSelectedRecipes();
 
@@ -440,21 +440,21 @@ export class HomePage implements AfterViewInit {
             }).catch(async err => {
               switch (err.response.status) {
                 case 0:
-                  let offlineToast = await this.toastCtrl.create({
+                  const offlineToast = await this.toastCtrl.create({
                     message: this.utilService.standardMessages.offlinePushMessage,
                     duration: 5000
                   });
                   offlineToast.present();
                   break;
                 default:
-                  let errorToast = await this.toastCtrl.create({
+                  const errorToast = await this.toastCtrl.create({
                     message: this.utilService.standardMessages.unexpectedError,
                     duration: 30000
                   });
                   errorToast.present();
                   break;
               }
-            })
+            });
           }
         }
       ]

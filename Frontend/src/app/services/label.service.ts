@@ -28,7 +28,7 @@ export class LabelService {
   }
 
   fetch(populate?: boolean) {
-    var populateQuery = populate ? '&populate=true' : '';
+    const populateQuery = populate ? '&populate=true' : '';
 
     const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + populateQuery;
 

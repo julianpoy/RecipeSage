@@ -10,7 +10,7 @@ import { RouteMap } from '@/services/util.service';
 export class TipsTricksTutorialsPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
-  active: string = '';
+  active = '';
 
   tutorials;
   tutorialsByTag;
