@@ -90,7 +90,7 @@ export class AppComponent {
       } catch (e) { }
     });
 
-    window.onSWUpdate = () => {
+    (window as any).onSWUpdate = () => {
       console.log('Update is waiting for pause...');
       if ((window as any).isHidden()) {
         (window as any).location.reload(true);
