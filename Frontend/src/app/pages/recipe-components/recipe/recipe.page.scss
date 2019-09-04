@@ -25,23 +25,29 @@ h2.recipeTitle {
 }
 
 .ingredientsInstructionsGrid {
+  display: flex;
+  flex-wrap: wrap;
   padding-left: 0;
 
-  @media (min-width: 576px) {
-    .ingredientsCol {
-      max-width: 215px;
-    }
-
-    .instructionsCol[col-sm-auto] {
-      flex: 0 0;
-      flex-grow: 1;
-      max-width: 700px;
-      width: auto;
-    }
+  .ingredientsCol {
+    flex-shrink: 0;
   }
 
-  ion-col {
-    margin-bottom: 10px;
+  .instructionsCol {
+    min-width: 100%; // Force instructions column to wrap
+    max-width: 700px;
+  }
+
+  @media (min-width: 576px) {
+    flex-wrap: nowrap;
+
+    .instructionsCol {
+      min-width: auto; // Allow instructions column to wrap
+    }
+
+    .ingredientsCol {
+      width: 215px;
+    }
   }
 }
 
