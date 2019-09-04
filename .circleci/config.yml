@@ -12,7 +12,17 @@ jobs:
       - run:
           name: install-deps
           command: 'sudo npm install -g sequelize'
-      # -------------- Setup -----------------
+      # -------------- Setup SharedUtils -----------------
+      - restore_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+      - run:
+          name: install-npm-sharedutils
+          command: 'cd SharedUtils && npm install'
+      - save_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          paths:
+            - ./SharedUtils/node_modules
+      # -------------- Setup Backend -----------------
       - restore_cache:
           key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
       - run:
@@ -41,7 +51,17 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@latest'
-      # -------------- Setup -----------------
+      # -------------- Setup SharedUtils -----------------
+      - restore_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+      - run:
+          name: install-npm-sharedutils
+          command: 'cd SharedUtils && npm install'
+      - save_cache:
+          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          paths:
+            - ./SharedUtils/node_modules
+      # -------------- Setup Frontend -----------------
       - restore_cache:
           key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
       - run:
