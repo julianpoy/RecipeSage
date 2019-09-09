@@ -172,15 +172,17 @@
             </p>
           </div>
 
-          <ion-list *ngIf="threads.length > 0" radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
-            <ion-list-header style="margin-bottom: 0;" lines="none">
-              Existing Conversations
-            </ion-list-header>
+          <ion-list *ngIf="threads.length > 0">
+            <ion-radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
+              <ion-list-header style="margin-bottom: 0;" lines="none">
+                Existing Conversations
+              </ion-list-header>
 
-            <ion-item *ngFor="let thread of threads">
-              <ion-label>{{ thread.otherUser.name || thread.otherUser.email }} <span *ngIf="thread.otherUser.name">({{ thread.otherUser.email }})</span></ion-label>
-              <ion-radio [value]="thread"></ion-radio>
-            </ion-item>
+              <ion-item *ngFor="let thread of threads">
+                <ion-label>{{ thread.otherUser.name || thread.otherUser.email }} <span *ngIf="thread.otherUser.name">({{ thread.otherUser.email }})</span></ion-label>
+                <ion-radio [value]="thread"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
           </ion-list>
         </div>
       </div>
