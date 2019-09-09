@@ -39,6 +39,7 @@
     "puppeteer": "^1.16.0",
     "raven": "^2.6.4",
     "request": "^2.88.0",
+    "sanitize-html": "^1.20.1",
     "sequelize": "^5.8.6",
     "sharp": "^0.22.1",
     "xml-js": "^1.6.11"
