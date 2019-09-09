@@ -1,0 +1,52 @@
+.preview-settings-container {
+  display: grid;
+  grid-template-columns: min-content auto;
+
+  @media only screen and (max-width: 500px) {
+    display: initial;
+
+    recipe-preview {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  recipe-preview {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 7;
+  }
+
+  ion-item {
+    grid-column-start: 2;
+  }
+}
+
+.codeBlock {
+  display: flex;
+  align-items: center;
+
+  background: rgb(242, 242, 242);
+  color: black;
+
+  border-radius: 10px;
+  margin: 10px;
+  padding: 15px;
+
+  .code {
+    flex-grow: 1;
+    user-select: all;
+    word-wrap: break-word;
+    min-width: 0;
+    max-width: 100%;
+
+    &.hasActionButton {
+      padding-right: 20px;
+    }
+  }
+
+  button {
+    flex-shrink: 0;
+  }
+}

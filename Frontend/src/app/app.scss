@@ -1,19 +1,11 @@
-// http://ionicframework.com/docs/theming/
+@import 'src/theme/shared-variables.scss';
 
-
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+// App Styles
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply to the entire application. These
+// styles are for the entire app and not just one component. Additionally, this
+// file can hold Sass mixins, functions, and placeholder classes to be imported
+// and used throughout the application.
 
 .bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
@@ -27,18 +19,28 @@ ion-thumbnail img {
   object-fit: cover;
 }
 
-.platform-core ion-thumbnail {
-  width: 200px;
-  height: 200px;
+.popover-content, .alert-wrapper {
+  --width: 280px;
+}
 
-  img {
+@media only screen and (min-width: $desktop-breakpoint) {
+  ion-thumbnail {
     width: 200px;
     height: 200px;
+
+    ion-img {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+  .popover-content, .alert-wrapper {
+    --width: 350px;
   }
 }
 
 .alertDanger {
-  color: map-get($colors, danger) !important;
+  color: var(--ion-color-danger) !important;
 }
 
 #loading-bar-spinner {
@@ -62,9 +64,6 @@ ion-thumbnail img {
 }
 
 .dropdownSelect {
-  padding-left: 16px;
-  padding-right: 16px;
-
   .labels {
     margin-bottom: 5px;
 
@@ -125,4 +124,25 @@ ion-thumbnail img {
       }
     }
   }
+}
+
+ion-label[position=floating] {
+  color: #999 !important;
+}
+
+.label-floating.sc-ion-label-md-h {
+  transform: translate3d(0,122%,0);
+}
+
+.invisible {
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  background: transparent;
+  color: transparent;
+  border: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

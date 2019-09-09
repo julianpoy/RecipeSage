@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>New shopping list</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label position="floating">Title</ion-label>
+    <ion-input [(ngModel)]="listTitle" type="text" value=""></ion-input>
+  </ion-item>
+
+  <br /><br />
+
+  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label>
+      Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
+    </ion-label>
+  </ion-button>
+</ion-footer>

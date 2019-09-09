@@ -1,0 +1,35 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Select print layout</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div class="templates">
+    <recipe-preview
+      [selected]="selectedTemplate === i"
+      [landscape]="template.orientation === 'landscape'"
+      [url]="template.url"
+      [description]="template.description"
+      *ngFor="let template of templates; let i = index" (click)="selectedTemplate = i"
+      (click)="selectedTemplate = i"></recipe-preview>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="print()" [disabled]="selectedTemplate === -1">
+    <ion-icon name="print" slot="start"></ion-icon>
+    <ion-label>
+      Print
+    </ion-label>
+  </ion-button>
+</ion-footer>

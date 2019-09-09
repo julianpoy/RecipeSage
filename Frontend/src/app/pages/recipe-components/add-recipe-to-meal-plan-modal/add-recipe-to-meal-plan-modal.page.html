@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Recipe To Meal Plan</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <p *ngIf="!destinationMealPlan">
+    First, select the destination meal plan:
+  </p>
+
+  <p *ngIf="!mealPlans">
+    Loading meal plans...
+  </p>
+
+  <ion-item *ngIf="mealPlans && mealPlans.length > 0">
+    <ion-label>Select Meal Plan</ion-label>
+    <ion-select [(ngModel)]="selectedMealPlan" (ngModelChange)="loadMealPlan(selectedMealPlan.id)">
+      <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan">{{ mealPlan.title }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div *ngIf="mealPlans && mealPlans.length === 0" (click)="createMealPlan()">
+    <p>
+      You have no meal plans.<br /><br />
+      <ion-button>
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        <ion-label>
+          Create a Meal Plan
+        </ion-label>
+      </ion-button>
+    </p>
+  </div>
+
+  <div *ngIf="destinationMealPlan">
+    <meal-calendar
+      [mealPlan]="destinationMealPlan"
+      [viewOptions]="viewOptions"
+      (selectedDayChange)="selectedDay = $event"
+      (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
+
+    <p>
+      <span *ngIf="selectedMealGroup.length > 0">
+        <i>Recipes scheduled on this day:</i>&nbsp; {{ currentScheduledMeals() }}
+      </span>
+
+      <span *ngIf="selectedMealGroup.length === 0">
+        <i>No recipes are currently scheduled on this day.</i>
+      </span>
+    </p>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="ion-padding-bottom ion-padding-horizontal">
+    <select-meal (mealChange)="meal = $event"></select-meal>
+    <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
+      <ion-icon name="calendar" slot="start"></ion-icon>
+      <ion-label>
+        <span *ngIf="isFormValid()">Add to Meal Plan</span>
+        <span *ngIf="!destinationMealPlan">Select a meal plan</span>
+        <span *ngIf="destinationMealPlan && !meal">Select a meal</span>
+      </ion-label>
+    </ion-button>
+  </div>
+</ion-footer>

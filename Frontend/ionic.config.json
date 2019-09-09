@@ -1,7 +1,5 @@
 {
-  "name": "Recipe Sage",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
+  "name": "recipeSage",
+  "integrations": {},
+  "type": "angular"
 }

@@ -1,0 +1,32 @@
+.recipe-image {
+  cursor: pointer;
+  text-align: center;
+  width: 200px;
+  margin: 0 auto;
+  margin-bottom: 8px;
+
+  .image-frame {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    box-shadow: 1px 1px 7px #777777;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    span {
+      padding: 0 10px;
+    }
+  }
+
+  .image-subtext {
+    margin-top: 4px;
+  }
+}

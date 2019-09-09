@@ -1,0 +1,15 @@
+button.selectedRecipe {
+  width: 100%;
+  padding: 0;
+  background-color: white;
+
+  ion-item h2:first-child {
+    margin-top: 0;
+  }
+}
+
+.dropdownSelect {
+  .autocomplete {
+    max-height: 200px;
+  }
+}

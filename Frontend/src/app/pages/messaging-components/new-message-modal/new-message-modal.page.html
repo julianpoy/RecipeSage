@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Message Thread</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Recipient email</ion-label>
+      <ion-input type="text" value="" [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>
+        <p *ngIf="recipientEmail.length > 0 && !searching">
+          {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
+        </p>
+        <p *ngIf="recipientEmail.length == 0 && !searching">
+          Enter an email address to search for a user
+        </p>
+        <p *ngIf="searching">
+          Searcing for user...
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <br /><br />
+
+    <ion-item>
+      <ion-label position="floating">Compose a message</ion-label>
+      <ion-textarea [(ngModel)]="message" placeholder="Hello! I'd like to chat on RecipeSage"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
+    <ion-icon name="send" slot="start"></ion-icon>
+    <ion-label>
+      Send
+    </ion-label>
+  </ion-button>
+</ion-footer>
