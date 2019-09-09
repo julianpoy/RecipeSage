@@ -42,6 +42,7 @@
     "sanitize-html": "^1.20.1",
     "sequelize": "^5.18.4",
     "sharp": "^0.23.0",
+    "sqlite3": "^4.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
@@ -49,7 +50,6 @@
     "mocha": "^5.2.0",
     "sequelize-cli": "^5.5.1",
     "sinon": "^7.4.2",
-    "sqlite3": "^4.1.0",
     "supertest": "^4.0.2"
   }
 }
