@@ -27,12 +27,12 @@
       <div class="time-divider" *ngIf="message.deservesDateDiff">
         {{ message.dateDiff }}
       </div>
-      <div class="chat" *ngIf="!message.recipe" (press)="setSelectedChat(i)">
+      <div class="chat" *ngIf="!message.recipe" (click)="setSelectedChat(i)">
         <span [innerHTML]="message.body"></span>
       </div>
       <div class="recipe" *ngIf="message.recipe && message.fromUser.id === message.otherUser.id">
         <!-- RECIPIENT -->
-        <ion-item *ngIf="message.recipe" (tap)="openRecipe(message.recipe)" (press)="setSelectedChat(i)" lines="none">
+        <ion-item *ngIf="message.recipe" (click)="openRecipe(message.recipe)" lines="none">
           <ion-avatar *ngIf="message.recipe.image" slot="start">
             <img src="{{ message.recipe.image.location }}">
           </ion-avatar>
@@ -42,7 +42,7 @@
             <p class="description">Click to open</p>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="!message.recipe" (press)="setSelectedChat(i)" lines="none">
+        <ion-item *ngIf="!message.recipe" (click)="setSelectedChat(i)" lines="none">
           <ion-label>
             <h2 class="ion-text-wrap">Recipe deleted</h2>
             <p class="description">Your copy of this recipe no longer exists</p>
@@ -52,7 +52,7 @@
 
       <div class="recipe" *ngIf="message.originalRecipe && message.fromUser.id !== message.otherUser.id">
         <!-- SENDER -->
-        <ion-item *ngIf="message.originalRecipe" (tap)="openRecipe(message.originalRecipe)" (press)="setSelectedChat(i)" lines="none">
+        <ion-item *ngIf="message.originalRecipe" (click)="openRecipe(message.originalRecipe)" lines="none">
           <ion-avatar *ngIf="message.originalRecipe.image" slot="start">
             <img src="{{ message.originalRecipe.image.location }}">
           </ion-avatar>
@@ -62,7 +62,7 @@
             <p class="description">A copy of this recipe was sent</p>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="!message.originalRecipe" (press)="setSelectedChat(i)" lines="none">
+        <ion-item *ngIf="!message.originalRecipe" (click)="setSelectedChat(i)" lines="none">
           <ion-label>
             <h2 class="ion-text-wrap">Recipe deleted</h2>
             <p class="description">Your copy of this recipe no longer exists</p>
