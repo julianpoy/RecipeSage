@@ -12,6 +12,12 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LabelService, Label } from '@/services/label.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
+enum MouseAction {
+  Drag = 'drag',
+  LongPress = 'longPress',
+  Click = 'click'
+}
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
@@ -39,6 +45,12 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('contentContainer', { static: true }) contentContainer;
   scrollElement;
+
+  lastMouseDown: {
+    y: number,
+    actionType: MouseAction
+    longPressTimeout: number
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -462,5 +474,52 @@ export class HomePage implements AfterViewInit {
       ]
     });
     alert.present();
+  }
+
+  // Below is for press-and-hold gestures until https://github.com/ionic-team/ionic/issues/19244 is resolved
+
+  // Grabs first touchpoint on touch devices for positional context
+  getPositionalEvent(e) {
+    return e.changedTouches ? e.changedTouches[0] : e;
+  }
+
+  itemMouseDown(item, e) {
+    const positionalEvent = this.getPositionalEvent(e);
+
+    if (this.lastMouseDown) clearTimeout(this.lastMouseDown.longPressTimeout);
+
+    const longPressTimeout = window.setTimeout(() => {
+      this.itemPress(item);
+    }, 250);
+
+    this.lastMouseDown = {
+      y: positionalEvent.clientY,
+      actionType: null,
+      longPressTimeout
+    };
+  }
+
+  itemMouseMove(item, e) {
+    const positionalEvent = this.getPositionalEvent(e);
+
+    if (this.lastMouseDown && !this.lastMouseDown.actionType && Math.abs(positionalEvent.clientY - this.lastMouseDown.y) > 5) {
+      this.lastMouseDown.actionType = MouseAction.Drag;
+    }
+  }
+
+  itemMouseUp(item, e) {
+    e.preventDefault(); // Prevent touch events from generating click events
+
+    if (this.lastMouseDown && !this.lastMouseDown.actionType) {
+      this.lastMouseDown.actionType = MouseAction.Click;
+      this.selectedRecipeIds.length > 0 ? this.selectRecipe(item) : this.openRecipe(item, e);
+    }
+  }
+
+  itemPress(item) {
+    if (this.lastMouseDown && !this.lastMouseDown.actionType) {
+      this.lastMouseDown.actionType = MouseAction.LongPress;
+      this.selectRecipe(item);
+    }
   }
 }
