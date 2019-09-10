@@ -102,7 +102,7 @@ router.get(
   Recipe.findAll({
     where: {
       userId: res.locals.session.userId,
-      folder: req.query.folder
+      folder: req.query.folder || 'main'
     },
     attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
     include: [{
