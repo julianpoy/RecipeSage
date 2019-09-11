@@ -39,18 +39,18 @@
 
   <br />
 
-  <div padding class="ion-text-center">
+  <div class="ion-text-center ion-padding">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" accept=".paprikarecipes" />
     <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
 
-    <div padding *ngIf="showFileTypeWarning()">
+    <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>
         Warning! This filetype does not end in .paprikarecipes<br />
         It may not work.
       </p>
     </div>
 
-    <div padding *ngIf="isFileTooLarge()">
+    <div class="ion-padding" *ngIf="isFileTooLarge()">
       <p>
         <b>This file is too large to upload directly.</b><br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
@@ -59,7 +59,7 @@
       </p>
     </div>
 
-    <div padding *ngIf="imageFile && !isFileTooLarge()">
+    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
       <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">Upload and Import</ion-button>
       <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">Upload and Import Anyway</ion-button>
       <ion-button *ngIf="loading">Importing, please wait...</ion-button>

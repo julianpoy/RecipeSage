@@ -63,18 +63,18 @@
     </ion-label>
   </ion-item>
 
-  <div padding class="ion-text-center">
+  <div class="ion-text-center ion-padding">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
     <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
 
-    <div padding *ngIf="showFileTypeWarning()">
+    <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>
         Warning! This filetype does not end in .lcb<br />
         It may not work.
       </p>
     </div>
 
-    <div padding *ngIf="!isFileTooLarge() && isFileLarge()">
+    <div class="ion-padding" *ngIf="!isFileTooLarge() && isFileLarge()">
       <p>
         <b>This database is very large.</b><br />
         It may take a very long time to upload depending on your internet connection.<br />
@@ -84,7 +84,7 @@
       </p>
     </div>
 
-    <div padding *ngIf="isFileTooLarge()">
+    <div class="ion-padding" *ngIf="isFileTooLarge()">
       <p>
         <b>This file is too large to upload directly.</b><br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
@@ -93,7 +93,7 @@
       </p>
     </div>
 
-    <div padding *ngIf="imageFile && !isFileTooLarge()">
+    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
       <ion-item lines="none">
         <ion-label class="ion-text-center ion-text-wrap">
           <b>3. Upload!</b>

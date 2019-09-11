@@ -11,7 +11,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -22,29 +22,29 @@
       </ion-thumbnail>
 
       <ion-label>
-        <h2 class="recipeTitle" text-wrap>{{ recipe.title }}</h2>
+        <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
 
         <ion-grid class="meta metacontainer-desktop" showWhen="core" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
           <ion-row class="ion-justify-content-start">
             <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <b>Source: </b>
                 <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
                 <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
               </p>
             </ion-col>
             <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
-              <p text-wrap><b>Active Time: </b>{{ recipe.activeTime }}</p>
+              <p class="ion-text-wrap"><b>Active Time: </b>{{ recipe.activeTime }}</p>
             </ion-col>
             <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
-              <p text-wrap><b>Total Time: </b>{{ recipe.totalTime }}</p>
+              <p class="ion-text-wrap"><b>Total Time: </b>{{ recipe.totalTime }}</p>
             </ion-col>
             <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
-              <p text-wrap><b>Yield: </b>{{ recipe.yield }}</p>
+              <p class="ion-text-wrap"><b>Yield: </b>{{ recipe.yield }}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
-        <p text-wrap>{{ recipe.description }}</p>
+        <p class="ion-text-wrap">{{ recipe.description }}</p>
       </ion-label>
     </ion-item>
 
@@ -75,7 +75,7 @@
     </div>
 
     <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
-      <p text-wrap>
+      <p class="ion-text-wrap">
         <b>This recipe was sent to you by {{ recipe.fromUser.name || recipe.fromUser.email }}</b><br />
         Add this recipe to your recipes by clicking the button at the bottom of the page.<br /><br />
       </p>
@@ -136,7 +136,7 @@
           <p>Notes</p>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" text-wrap>
+      <ion-item lines="none" class="ion-text-wrap">
         <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
       </ion-item>
       <br />
@@ -212,7 +212,7 @@
       </ion-label>
     </ion-item>
 
-    <div *ngIf="recipe.folder === 'inbox'" padding>
+    <div *ngIf="recipe.folder === 'inbox'" class="ion-padding">
       <ion-grid>
         <ion-row>
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
@@ -231,7 +231,7 @@
       </ion-grid>
     </div>
 
-    <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" padding>
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p>
@@ -245,7 +245,7 @@
       </ion-button>
     </div>
 
-    <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" padding>
+    <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p>

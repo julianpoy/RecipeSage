@@ -160,14 +160,14 @@
               <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
             </ion-item>
 
-            <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" padding-left padding-bottom>
+            <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">
               <span *ngIf="recipientName">RecipeSage user found: <b>{{ recipientName }}</b>. Press send to share recipe.</span>
               <span *ngIf="!recipientName">No RecipeSage user found with that email address.</span>
             </p>
-            <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" padding-left padding-bottom>
+            <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">
               Enter another user's email address to search <span *ngIf="threads.length > 0">or select a conversation below</span>
             </p>
-            <p *ngIf="searchingForRecipient" padding-left padding-bottom>
+            <p *ngIf="searchingForRecipient" class="ion-padding-left ion-padding-bottom">
               Searcing for user...
             </p>
           </div>
@@ -189,7 +189,7 @@
   </ion-list>
 </ion-content>
 
-<ion-footer padding>
+<ion-footer class="ion-padding">
   <ion-button *ngIf="shareMethod === 'account'" expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
     <ion-label>
