@@ -1,30 +1,18 @@
-import axios, { AxiosInstance } from 'axios';
 import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MealPlanService {
 
-  base: any;
-
-  axiosClient: AxiosInstance;
-
-  constructor(public utilService: UtilService) {
-    this.axiosClient = axios.create({
-      timeout: 3000,
-      headers: {
-        'X-Initialized-At': Date.now().toString(),
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+  constructor(public utilService: UtilService, public httpService: HttpService) {}
 
   fetch() {
     const url = this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -33,7 +21,7 @@ export class MealPlanService {
   fetchById(mealPlanId) {
     const url = this.utilService.getBase() + 'mealPlans/' + mealPlanId + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -42,7 +30,7 @@ export class MealPlanService {
   create(data) {
     const url = this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -52,7 +40,7 @@ export class MealPlanService {
   addItem(data) {
     const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -62,7 +50,7 @@ export class MealPlanService {
   update(data) {
     const url = this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'put',
       url,
       data
@@ -72,7 +60,7 @@ export class MealPlanService {
   remove(data) {
     const url = this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'delete',
       url
     }).then(response => response.data);
@@ -81,7 +69,7 @@ export class MealPlanService {
   unlink(data) {
     const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'delete',
       url
     }).then(response => response.data);

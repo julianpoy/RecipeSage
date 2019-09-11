@@ -1,7 +1,7 @@
-import axios, { AxiosInstance } from 'axios';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { UtilService } from './util.service';
+import { HttpService } from './http.service';
 
 export interface Label {
   id: string;
@@ -13,26 +13,14 @@ export interface Label {
 })
 export class LabelService {
 
-  base: any;
-
-  axiosClient: AxiosInstance;
-
-  constructor(public events: Events, public utilService: UtilService) {
-    this.axiosClient = axios.create({
-      timeout: 3000,
-      headers: {
-        'X-Initialized-At': Date.now().toString(),
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+  constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
 
   fetch(populate?: boolean) {
     const populateQuery = populate ? '&populate=true' : '';
 
     const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + populateQuery;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -48,7 +36,7 @@ export class LabelService {
   createBulk(data) {
     const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -63,7 +51,7 @@ export class LabelService {
     const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery()
                 + '&labelId=' + data.id + '&recipeId=' + data.recipeId;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'delete',
       url
     }).then(response => {

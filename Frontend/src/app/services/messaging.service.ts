@@ -2,12 +2,12 @@ import firebase from 'firebase/app';
 import 'firebase/messaging';
 
 import { Injectable } from '@angular/core';
-import axios, { AxiosInstance } from 'axios';
 
 import { Events, ToastController, AlertController } from '@ionic/angular';
 
 import { UserService } from './user.service';
 import { UtilService } from './util.service';
+import { HttpService } from './http.service';
 
 export interface Message {
   id: string;
@@ -24,9 +24,6 @@ export interface Message {
   providedIn: 'root'
 })
 export class MessagingService {
-  base: any;
-
-  axiosClient: AxiosInstance;
 
   private messaging: firebase.messaging.Messaging;
   private fcmToken: any;
@@ -35,16 +32,10 @@ export class MessagingService {
   constructor(
   public events: Events,
   public utilService: UtilService,
+  public httpService: HttpService,
   public userService: UserService,
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
-    this.axiosClient = axios.create({
-      timeout: 3000,
-      headers: {
-        'X-Initialized-At': Date.now().toString(),
-        'Content-Type': 'application/json'
-      }
-    });
 
     const onSWRegsitration = () => {
       if (!this.isNotificationsCapable()) return;
@@ -87,7 +78,7 @@ export class MessagingService {
     let url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
     if (from) url += '&user=' + from;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -100,7 +91,7 @@ export class MessagingService {
     if (!options.includeMessages) url += '&light=true';
     if (options.messageLimit) url += '&limit=' + options.messageLimit;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -109,7 +100,7 @@ export class MessagingService {
   create(data) {
     const url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -120,7 +111,7 @@ export class MessagingService {
     let url = this.utilService.getBase() + 'messages/read/' + this.utilService.getTokenQuery();
     if (from) url += '&from=' + from;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
