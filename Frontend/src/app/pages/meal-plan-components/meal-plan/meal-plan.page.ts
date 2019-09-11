@@ -22,6 +22,8 @@ import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popo
 })
 export class MealPlanPage {
 
+  defaultBackHref: string = RouteMap.MealPlansPage.getPath();
+
   mealPlanId: string; // From nav params
   mealPlan: any = { items: [], collaborators: [] };
   selectedMealGroup: any = [];

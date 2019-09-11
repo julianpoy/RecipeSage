@@ -17,6 +17,8 @@ import { ShoppingListPopoverPage } from '../shopping-list-popover/shopping-list-
 })
 export class ShoppingListPage {
 
+  defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
+
   shoppingListId: string;
   list: any = { items: [], collaborators: [] };
 
