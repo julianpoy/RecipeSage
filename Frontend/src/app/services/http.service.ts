@@ -43,7 +43,7 @@ export class HttpService {
       };
     }).catch(err => {
       const response = {
-        status: err.status ? err.response.status : 0, // 0 For no network
+        status: err.response ? err.response.status : 0, // 0 For no network
         data: err.response ? err.response.data : null
       };
 
