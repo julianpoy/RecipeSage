@@ -20,20 +20,15 @@
         <p><b>{{ thread.messages[0].fromUser.id === thread.otherUser.id ? thread.messages[0].fromUser.name || thread.messages[0].fromUser.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
       </ion-label>
     </ion-item>
-    <ion-grid *ngIf="threads.length === 0">
-      <br /><br />
-      <ion-row justify-content-center>
-        <ion-icon name="chatboxes" class="big-icon"></ion-icon>
-      </ion-row>
-      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
-        <ion-label>
-          <p>
-            You have no message threads.
-            <br /> To start a conversation with someone, press the plus button in the bottom corner.
-          </p>
-        </ion-label>
-      </ion-row>
-    </ion-grid>
+    <null-state *ngIf="threads.length === 0">
+      <ion-icon name="chatboxes" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          You have no message threads.
+          <br /> To start a conversation with someone, press the plus button in the bottom corner.
+        </p>
+      </ion-label>
+    </null-state>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

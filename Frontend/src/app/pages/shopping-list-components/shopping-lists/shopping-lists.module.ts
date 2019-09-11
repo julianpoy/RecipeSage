@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { ShoppingListsPage } from './shopping-lists.page';
 import { NewShoppingListModalPageModule } from '../new-shopping-list-modal/new-shopping-list-modal.module';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NewShoppingListModalPageModule } from '../new-shopping-list-modal/new-s
         component: ShoppingListsPage
       }
     ]),
-    NewShoppingListModalPageModule
+    NewShoppingListModalPageModule,
+    NullStateModule
   ],
 })
 export class ShoppingListsPageModule {}
