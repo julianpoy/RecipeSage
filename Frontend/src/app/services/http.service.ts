@@ -16,6 +16,8 @@ export class HttpError extends Error {
   }
 }
 
+const REQUEST_TIMEOUT_FALLBACK = 10 * 60 * 1000; // 10 minutes
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +27,7 @@ export class HttpService {
 
   constructor() {
     this.axiosClient = axios.create({
-      timeout: 3000,
+      timeout: REQUEST_TIMEOUT_FALLBACK,
       headers: {
         'X-Initialized-At': Date.now().toString(),
         'Content-Type': 'application/json'
