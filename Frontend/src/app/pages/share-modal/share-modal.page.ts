@@ -56,8 +56,8 @@ export class ShareModalPage {
   public userService: UserService,
   public modalCtrl: ModalController) {
     setTimeout(() => {
-      this.recipeURL = `${window.location.protocol}//${window.location.host}
-                        /#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
+      this.recipeURL = `${window.location.protocol}//${window.location.host}`
+                     + `/#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
 
       this.loadThreads().then(() => {}, () => {});
 

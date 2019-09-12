@@ -248,10 +248,10 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name);
 
-    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}
-                 ${includeStockRecipes ? '&includeStockRecipes=true' : ''}
-                 ${includeTechniques ? '&includeTechniques=true' : ''}
-                 ${excludeImages ? '&excludeImages=true' : ''}`;
+    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}`
+              + `${includeStockRecipes ? '&includeStockRecipes=true' : ''}`
+              + `${includeTechniques ? '&includeTechniques=true' : ''}`
+              + `${excludeImages ? '&excludeImages=true' : ''}`;
 
     return this.httpService.request({
       method: 'post',
