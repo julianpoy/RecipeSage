@@ -6,6 +6,8 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
@@ -18,7 +20,8 @@ import { DefaultPageGuardService } from './services/default-page-guard.service';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    LoadingBarModule
   ],
   providers: [
     StatusBar,
