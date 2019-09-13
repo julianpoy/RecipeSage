@@ -27,6 +27,7 @@
     "@ionic-native/status-bar": "^5.13.0",
     "@ionic/angular": "^4.9.0",
     "@ngx-loading-bar/core": "^4.2.0",
+    "@sentry/browser": "^5.6.3",
     "@types/firebase": "^3.2.1",
     "axios": "^0.19.0",
     "blueimp-load-image": "^2.24.0",
