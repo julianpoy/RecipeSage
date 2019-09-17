@@ -1,23 +1,23 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-menu-button *ngIf="selectedRecipeIds.length == 0"></ion-menu-button>
+      <ion-menu-button *ngIf="!selectionMode"></ion-menu-button>
 
-      <ion-button *ngIf="selectedRecipeIds.length > 0" (click)="clearSelectedRecipes()">
+      <ion-button *ngIf="selectionMode" (click)="clearSelectedRecipes()">
         <ion-icon slot="icon-only" name="md-close"></ion-icon>
       </ion-button>
     </ion-buttons>
 
     <ion-title>
-      {{ selectedRecipeIds.length > 0 ? selectedRecipeIds.length + ' Selected' : folderTitle }}
+      {{ selectionMode ? selectedRecipeIds.length + ' Selected' : folderTitle }}
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button *ngIf="selectedRecipeIds.length > 0 && folder === 'main'" (click)="addLabelToSelectedRecipes()">
+      <ion-button *ngIf="selectionMode && selectedRecipeIds.length > 0 && folder === 'main'" (click)="addLabelToSelectedRecipes()">
         <ion-icon slot="icon-only" name="pricetag"></ion-icon>
       </ion-button>
 
-      <ion-button *ngIf="selectedRecipeIds.length > 0" (click)="deleteSelectedRecipes()">
+      <ion-button *ngIf="selectionMode && selectedRecipeIds.length > 0" (click)="deleteSelectedRecipes()">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>
 
@@ -59,12 +59,7 @@
     <div #container>
       <ion-item *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn" class="recipeItem"
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
-        (touchstart)="itemMouseDown(recipe, $event)"
-        (mousedown)="itemMouseDown(recipe, $event)"
-        (touchmove)="itemMouseMove(recipe, $event)"
-        (mousemove)="itemMouseMove(recipe, $event)"
-        (touchend)="itemMouseUp(recipe, $event)"
-        (mouseup)="itemMouseUp(recipe, $event)">
+        (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)">
         <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" slot="start" size="200px">
           <img [src]="recipe.image.location" />
         </ion-thumbnail>

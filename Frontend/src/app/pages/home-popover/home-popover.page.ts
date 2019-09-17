@@ -18,12 +18,20 @@ export class HomePopoverPage {
 
   @Input() labels: any;
 
+  @Input() selectionMode: boolean;
+
   constructor(
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
     public labelService: LabelService) {
 
+  }
+
+  toggleSelectionMode() {
+    this.popoverCtrl.dismiss({
+      selectionMode: !this.selectionMode
+    });
   }
 
   saveViewOptions(refreshSearch?: boolean) {

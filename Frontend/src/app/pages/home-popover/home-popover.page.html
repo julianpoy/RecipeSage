@@ -62,4 +62,14 @@
     </ion-label>
     <ion-icon name='funnel' slot="start"></ion-icon>
   </ion-item>
+
+  <ion-item *ngIf="!selectionMode">
+    <ion-icon name='checkmark' slot="start"></ion-icon>
+    <ion-button (click)="toggleSelectionMode()" expand="full">Select Multiple Recipes</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="selectionMode">
+    <ion-icon name='close' slot="start"></ion-icon>
+    <ion-button (click)="toggleSelectionMode()" expand="full">Unselect All Recipes</ion-button>
+  </ion-item>
 </ion-list>
