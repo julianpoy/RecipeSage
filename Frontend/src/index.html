@@ -141,6 +141,12 @@
   </noscript>
 
   <app-root></app-root>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.className += 'darkMode';
+    }
+  </script>
 </body>
 
 </html>
