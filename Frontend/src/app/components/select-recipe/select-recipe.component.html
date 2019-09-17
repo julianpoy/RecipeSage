@@ -7,8 +7,10 @@
       <ion-avatar *ngIf="selectedRecipe.image" slot="start">
         <img src="{{ selectedRecipe.image.location }}">
       </ion-avatar>
-      <h2>{{ selectedRecipe.title }}</h2>
-      <p>Click to change</p>
+      <ion-label>
+        <h2>{{ selectedRecipe.title }}</h2>
+        <p>Click to change</p>
+      </ion-label>
     </ion-item>
   </button>
 
@@ -25,29 +27,34 @@
         class="suggestion"
         *ngFor="let recipe of recipes"
         (click)="selectRecipe(recipe)">
-        <ion-item lines="none">
+        <ion-item class="suggestion-inner" button>
           <ion-avatar *ngIf="recipe.image" slot="start">
             <img src="{{ recipe.image.location }}">
           </ion-avatar>
-          <h2>{{ recipe.title }}</h2>
-          <p>Click to select</p>
+          <ion-label>
+            <h2>{{ recipe.title }}</h2>
+            <p>Click to select</p>
+          </ion-label>
         </ion-item>
       </button>
       <!-- Searching for user for which a thread does not exist -->
       <button
         class="suggestion"
         *ngIf="searching">
-        <ion-item lines="none">
-          Searching for "{{ searchText }}"...
-          <!-- <span class="hint"></span> -->
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>Searching for "{{ searchText }}"...</h2>
+          </ion-label>
         </ion-item>
       </button>
       <!-- Searching for user for which a thread does not exist -->
       <button
         class="suggestion"
         *ngIf="recipes.length === 0 && searchText.length > 0 && !searching">
-        <ion-item lines="none">
-          No results for "{{ searchText }}"
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>No results for "{{ searchText }}"</h2>
+          </ion-label>
         </ion-item>
       </button>
     </div>
