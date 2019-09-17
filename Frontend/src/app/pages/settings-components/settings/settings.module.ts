@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { SettingsPage } from './settings.page';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { SettingsPage } from './settings.page';
         path: '',
         component: SettingsPage
       }
-    ])
+    ]),
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class SettingsPageModule {}

@@ -3,17 +3,38 @@ import { NavController, ToastController, AlertController } from '@ionic/angular'
 
 import { RouteMap } from '@/services/util.service';
 
+const APP_THEME_LOCALSTORAGE_KEY = 'theme';
+
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss']
 })
 export class SettingsPage {
+  appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || 'default';
 
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController) {
+  }
+
+  appThemeChanged() {
+    // Change in localStorage
+    if (['dark', 'light'].indexOf(this.appTheme) > -1) {
+      localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
+    } else {
+      localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
+    }
+
+    // Change in current session
+    const bodyClasses = document.body.className.split(' ');
+    const darkThemeClassIdx = bodyClasses.indexOf('theme-dark');
+    if (darkThemeClassIdx > -1) {
+      bodyClasses.splice(darkThemeClassIdx, 1);
+    }
+    if (this.appTheme === 'dark') bodyClasses.push('theme-dark');
+    document.body.className = bodyClasses.join(' ');
   }
 
   goToImport() {
