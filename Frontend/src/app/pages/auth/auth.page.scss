@@ -25,7 +25,7 @@
     color: initial;
 
     &:focus {
-      border-bottom: 1px solid #00a8ff;
+      border-bottom: 1px solid var(--ion-color-primary);
     }
   }
 }

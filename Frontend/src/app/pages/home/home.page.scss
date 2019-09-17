@@ -13,8 +13,8 @@
     transition: box-shadow 0.1s ease-in-out;
 
     &.selected {
-      border-color: #00a8ff;
-      background: #00a8ff;
+      border-color: var(--ion-color-primary);
+      background: var(--ion-color-primary);
       color: white;
       box-shadow: 1px 1px 7px rgb(210,210,210);
     }

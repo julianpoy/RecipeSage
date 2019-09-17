@@ -44,7 +44,7 @@
         }
 
         &.today {
-          background: #00a8ff;
+          background: var(--ion-color-primary);
           color: white;
         }
       }
@@ -52,7 +52,7 @@
       .recipe-dot {
         width: 10px;
         height: 10px;
-        background: #00a8ff;
+        background: var(--ion-color-primary);
         border-radius: 45px;
 
         display: inline-block;

@@ -52,7 +52,7 @@
 
   &.blue {
     .chat {
-      background: #00a8ff;
+      background: var(--ion-color-primary);
 
       span {
         color: white;
@@ -65,7 +65,7 @@
     }
 
     .recipe {
-      background: #00a8ff;
+      background: var(--ion-color-primary);
 
       ion-item {
         h2 {
