@@ -12,8 +12,11 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list lines="none">
-    <ion-item class="mealPlan ion-text-wrap" *ngFor="let mealPlan of mealPlans" (click)="openMealPlan(mealPlan.id)">
+  <ion-list>
+    <ion-item button
+      class="ion-text-wrap"
+      *ngFor="let mealPlan of mealPlans"
+      (click)="openMealPlan(mealPlan.id)">
       <ion-icon name="calendar" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ mealPlan.title }}</h2>
