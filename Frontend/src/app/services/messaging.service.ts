@@ -133,7 +133,7 @@ export class MessagingService {
 
       const alert = await this.alertCtrl.create({
         header: 'Requires Notification Permissions',
-        subHeader: `To notify you when your contacts send you messages, we need notification access.<br /><br />
+        message: `To notify you when your contacts send you messages, we need notification access.<br /><br />
                     <b>After dismissing this popup, you will be prompted to enable notification access.</b>`,
         buttons: [
           {
