@@ -83,7 +83,8 @@ ion-thumbnail img {
 
   input {
     border: none;
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1px solid var(--ion-border-color);
+    background-color: transparent;
     padding: 7px;
 
     width: 100%;
