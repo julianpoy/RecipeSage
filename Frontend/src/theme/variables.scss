@@ -15,18 +15,46 @@
   --ion-color-step-250: #515151;
   --ion-color-step-300: #5d5d5d;
   --ion-color-step-350: #8b8b8b;
-  --ion-color-step-400: #747474;
-  --ion-color-step-450: #7f7f7f;
-  --ion-color-step-500: #8b8b8b;
-  --ion-color-step-550: #979797;
-  --ion-color-step-600: #a2a2a2;
-  --ion-color-step-650: #aeaeae;
-  --ion-color-step-700: #b9b9b9;
-  --ion-color-step-750: #c5c5c5;
-  --ion-color-step-800: #d1d1d1;
-  --ion-color-step-850: #dcdcdc;
-  --ion-color-step-900: #e8e8e8;
-  --ion-color-step-950: #f3f3f3;
+  --ion-color-step-400: #c2c2c2;
+  --ion-color-step-450: #c6c6c6;
+  --ion-color-step-500: #cacaca;
+  --ion-color-step-550: #cecece;
+  --ion-color-step-600: #d2d2d2;
+  --ion-color-step-650: #d6d6d6;
+  --ion-color-step-700: #dadada;
+  --ion-color-step-750: #dedede;
+  --ion-color-step-800: #e2e2e2;
+  --ion-color-step-850: #e6e6e6;
+  --ion-color-step-900: #eaeaea;
+  --ion-color-step-950: #f4f4f4;
+}
+
+@mixin lightModeVars() {
+  --ion-border-color: rgba(0,0,0,0.13);
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: rgb(255,255,255);
+  --ion-text-color: var(--ion-color-dark);
+  --ion-text-color-rgb: var(--ion-color-dark-rgb);
+
+  --ion-color-step-50: #1a1a1a;
+  --ion-color-step-100: #1e1e1e;
+  --ion-color-step-150: #222222;
+  --ion-color-step-200: #262626;
+  --ion-color-step-250: #2a2a2a;
+  --ion-color-step-300: #2e2e2e;
+  --ion-color-step-350: #323232;
+  --ion-color-step-400: #363636;
+  --ion-color-step-450: #3a3a3a;
+  --ion-color-step-500: #424242;
+  --ion-color-step-550: #464646;
+  --ion-color-step-600: #4a4a4a;
+  --ion-color-step-650: #4e4e4e;
+  --ion-color-step-700: #525252;
+  --ion-color-step-750: #565656;
+  --ion-color-step-800: #5a5a5a;
+  --ion-color-step-850: #5e5e5e;
+  --ion-color-step-900: #626262;
+  --ion-color-step-950: #666666;
 }
 
 /** Ionic CSS Variables **/
@@ -110,8 +138,6 @@
   --ion-color-nav-shade: #353b48;
   --ion-color-nav-tint: #353b48;
 
-  --ion-border-color: rgba(0,0,0,0.13);
-
   $colors: (
     // primary:    #488aff, // Original Ionic primary
     primary:    #00a8ff,
@@ -126,12 +152,24 @@
 
   --content-max-width: 700px;
 
+  // Default theme is light
+  .theme-default {
+    @include lightModeVars;
+  }
+
+  // Override default theme if system dark mode is enabled
+  @media (prefers-color-scheme: dark) {
+    .theme-default {
+      @include darkModeVars;
+    }
+  }
+
   .theme-dark {
     @include darkModeVars;
   }
 
-  @media (prefers-color-scheme: dark) {
-    @include darkModeVars;
+  .theme-light {
+    @include lightModeVars;
   }
 }
 
