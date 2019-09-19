@@ -5,6 +5,8 @@
   --ion-border-color: var(--ion-color-dark-shade);
   --ion-background-color: var(--ion-color-dark);
   --ion-background-color-rgb: var(--ion-color-dark-rgb);
+  --ion-background-shade-color: var(--ion-color-dark-shade);
+  --ion-background-tint-color: var(--ion-color-dark-tint);
   --ion-text-color: var(--ion-color-light);
   --ion-text-color-rgb: var(--ion-color-light-rgb);
 
@@ -33,6 +35,8 @@
   --ion-border-color: rgba(0,0,0,0.13);
   --ion-background-color: #ffffff;
   --ion-background-color-rgb: rgb(255,255,255);
+  --ion-background-shade-color: var(--ion-color-light-shade);
+  --ion-background-tint-color: var(--ion-color-light-tint);
   --ion-text-color: var(--ion-color-dark);
   --ion-text-color-rgb: var(--ion-color-dark-rgb);
 

@@ -27,8 +27,8 @@
   display: flex;
   align-items: center;
 
-  background: rgb(242, 242, 242);
-  color: black;
+  background-color: var(--ion-background-tint-color);
+  color: var(--ion-text-color);
 
   border-radius: 10px;
   margin: 10px;
