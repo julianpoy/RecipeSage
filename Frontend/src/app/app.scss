@@ -21,6 +21,7 @@ ion-thumbnail img {
 
 .popover-content, .alert-wrapper {
   --width: 280px;
+  --max-width: 280px;
 }
 
 @media only screen and (min-width: $desktop-breakpoint) {
@@ -36,6 +37,7 @@ ion-thumbnail img {
 
   .popover-content, .alert-wrapper {
     --width: 350px;
+    --max-width: 350px;
   }
 }
 
@@ -107,13 +109,17 @@ ion-thumbnail img {
   }
 }
 
+// For floating input placeholders
 ion-label[position=floating] {
   color: #999 !important;
 }
 
+// Fix floating label vertical position issue.
+// This prop is overriden when label is in the floating state
 .label-floating.sc-ion-label-md-h {
   transform: translate3d(0,122%,0);
 }
+
 
 .invisible {
   position: absolute;
