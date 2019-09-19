@@ -19,13 +19,40 @@ export class SettingsPage {
     public alertCtrl: AlertController) {
   }
 
-  appThemeChanged() {
+  private applyAppTheme() {
     // Change in localStorage
     localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
 
     // Change in current session
     const bodyClasses = document.body.className.replace(/theme-\S*/, '');
     document.body.className = `${bodyClasses} theme-${this.appTheme}`;
+  }
+
+  async appThemeChanged() {
+    if (this.appTheme === 'black') {
+      const alert = await this.alertCtrl.create({
+        header: 'Black (OLED) Warning',
+        message: `The black (OLED) theme may make it difficult to distinguish between elements and alerts.<br />
+                    Shadows and other visual animations will also not be displayed.`,
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: () => {
+              this.appTheme = 'default';
+            }
+          },
+          {
+            text: 'Okay',
+            handler: () => {
+              this.applyAppTheme();
+            }
+          }]
+      });
+
+      alert.present();
+    } else {
+      this.applyAppTheme();
+    }
   }
 
   goToImport() {
