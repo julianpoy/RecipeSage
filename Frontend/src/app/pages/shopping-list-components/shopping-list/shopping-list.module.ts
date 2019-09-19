@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingListPage } from './shopping-list.page';
 import { NewShoppingListItemModalPageModule } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.module';
 import { ShoppingListPopoverPageModule } from '../shopping-list-popover/shopping-list-popover.module';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ShoppingListPopoverPageModule } from '../shopping-list-popover/shopping
     FormsModule,
     ReactiveFormsModule,
     NewShoppingListItemModalPageModule,
-    ShoppingListPopoverPageModule
+    ShoppingListPopoverPageModule,
+    NullStateModule
   ],
 })
 export class ShoppingListPageModule {}

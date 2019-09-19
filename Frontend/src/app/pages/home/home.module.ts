@@ -8,6 +8,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { HomePage } from './home.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 import { HomePopoverPageModule } from '@/pages/home-popover/home-popover.module';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { HomePopoverPageModule } from '@/pages/home-popover/home-popover.module'
       }
     ]),
     LogoIconModule,
+    NullStateModule,
     HomePopoverPageModule,
     VirtualScrollerModule,
   ],

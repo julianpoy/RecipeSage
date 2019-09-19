@@ -141,6 +141,20 @@
   </noscript>
 
   <app-root></app-root>
+
+  <script>
+    const storedTheme = localStorage.getItem('theme');
+    switch(storedTheme) {
+      case 'black':
+      case 'dark':
+      case 'light':
+        document.body.className += 'theme-' + storedTheme;
+        break;
+      default:
+        document.body.className += 'theme-default';
+        break;
+    }
+  </script>
 </body>
 
 </html>

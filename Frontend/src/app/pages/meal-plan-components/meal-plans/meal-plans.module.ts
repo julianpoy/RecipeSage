@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { MealPlansPage } from './meal-plans.page';
 import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-mea
         component: MealPlansPage
       }
     ]),
-    NewMealPlanModalPageModule
+    NewMealPlanModalPageModule,
+    NullStateModule
   ],
 })
 export class MealPlansPageModule {}

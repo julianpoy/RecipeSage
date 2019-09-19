@@ -11,7 +11,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <div class="auth-container">
     <ion-list>
       <div class="auth-entry">
@@ -62,7 +62,7 @@
         <p *ngIf="!showLogin">By clicking Create Account, you agree to our <a href="" (click)="showLegal($event)">Terms</a></p>
       </div>
 
-      <div padding>
+      <div class="ion-padding">
       	<ion-button expand="block" (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</ion-button>
   		</div>
 

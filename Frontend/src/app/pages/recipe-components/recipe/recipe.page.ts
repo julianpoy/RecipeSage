@@ -363,17 +363,17 @@ export class RecipePage {
       return;
     }
 
+    this.toggleAutocomplete(false);
+    this.pendingLabel = '';
+
     const loading = this.loadingService.start();
 
     this.labelService.create({
       recipeId: this.recipe.id,
       title: title.toLowerCase()
     }).then(response => {
-      loading.dismiss();
-
       this.loadAll().then(() => {
-        this.toggleAutocomplete(false);
-        this.pendingLabel = '';
+        loading.dismiss();
       });
     }).catch(async err => {
       loading.dismiss();

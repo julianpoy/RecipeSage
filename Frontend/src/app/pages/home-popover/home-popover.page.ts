@@ -3,6 +3,7 @@ import { ToastController, ModalController, IonSelect, PopoverController } from '
 
 import { LabelService } from '@/services/label.service';
 import { UtilService } from '@/services/util.service';
+import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/resettable-select-popover.page';
 
 @Component({
@@ -18,12 +19,26 @@ export class HomePopoverPage {
 
   @Input() labels: any;
 
+  @Input() selectionMode: boolean;
+
   constructor(
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
+    public quickTutorialService: QuickTutorialService,
     public labelService: LabelService) {
 
+  }
+
+  toggleSelectionMode() {
+    const enteringSelectionMode = !this.selectionMode;
+    if (enteringSelectionMode) {
+      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.MultipleRecipeSelection);
+    }
+
+    this.popoverCtrl.dismiss({
+      selectionMode: enteringSelectionMode
+    });
   }
 
   saveViewOptions(refreshSearch?: boolean) {

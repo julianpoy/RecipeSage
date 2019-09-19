@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
     <ion-title>Shopping List - {{ list.title }}</ion-title>
@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher (ionRefresh)="refresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
@@ -28,7 +28,6 @@
           <ion-label class="ion-text-wrap ion-no-margin">
             <b class="groupTitle">{{ group.title }}:</b>
           </ion-label>
-          <ion-checkbox style="visibility: hidden;"></ion-checkbox>
         </ion-item>
         <ion-item *ngFor="let item of group.items">
           <ion-label class="ion-text-wrap ion-no-margin">
@@ -70,26 +69,21 @@
         <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
       </ion-item>
     </div>
-    <ion-grid *ngIf="list.items.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
-      <br /><br />
-      <ion-row justify-content-center>
-        <ion-icon name="cart" class="big-icon"></ion-icon>
-      </ion-row>
-      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
-        <ion-label>
-          <p>
-            There are no items in this shopping list.
-            <br />
-            <ion-button (click)="newShoppingListItem()">
-              <ion-icon name="add" slot="start"></ion-icon>
-              <ion-label>
-                Add the first item
-              </ion-label>
-            </ion-button>
-          </p>
-        </ion-label>
-      </ion-row>
-    </ion-grid>
+    <null-state *ngIf="list.items.length === 0 && initialLoadComplete">
+      <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          There are no items in this shopping list.
+          <br />
+          <ion-button (click)="newShoppingListItem()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            <ion-label>
+              Add the first item
+            </ion-label>
+          </ion-button>
+        </p>
+      </ion-label>
+    </null-state>
   </ion-list>
 
   <br />

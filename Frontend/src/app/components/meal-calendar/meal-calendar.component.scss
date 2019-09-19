@@ -6,27 +6,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  // ion-icon {
-  //   color: black;
-  // }
 }
 
 .calendar {
   .week {
-
-
     .day {
-      border: 1px solid #dbdbdb;
+      border: 1px solid;
+      border-color: var(--ion-border-color);
       min-height: 80px;
       cursor: pointer;
+      outline: none;
 
       &:hover {
-        background: #f0f0f0;
+        background: var(--ion-border-color);
       }
 
       &.selected {
-        background: #e2e2e2;
+        background: var(--ion-border-color);
       }
 
       .date {
@@ -40,19 +36,19 @@
         line-height: 18px;
 
         &.inactive {
-          color: #424242;
+          color: var(--ion-color-medium);
         }
 
         &.today {
-          background: #00a8ff;
-          color: white;
+          background: var(--ion-color-primary);
+          color: var(--ion-color-light);
         }
       }
 
       .recipe-dot {
         width: 10px;
         height: 10px;
-        background: #00a8ff;
+        background: var(--ion-color-primary);
         border-radius: 45px;
 
         display: inline-block;

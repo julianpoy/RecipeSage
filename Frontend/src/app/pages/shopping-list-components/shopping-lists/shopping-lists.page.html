@@ -9,11 +9,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher (ionRefresh)="refresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list lines="none">
-    <ion-item class="shoppingList ion-text-wrap cursor-pointer" *ngFor="let shoppingList of shoppingLists" (click)="openShoppingList(shoppingList.id)">
+  <ion-list>
+    <ion-item button
+      class="ion-text-wrap"
+      *ngFor="let shoppingList of shoppingLists"
+      (click)="openShoppingList(shoppingList.id)">
       <ion-icon name="list" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ shoppingList.title }}</h2>
@@ -34,20 +37,15 @@
       </ion-label>
       <ion-badge slot="end">{{ shoppingList.itemCount }}</ion-badge>
     </ion-item>
-    <ion-grid *ngIf="shoppingLists.length === 0 && initialLoadComplete" class="ion-text-wrap ion-text-center">
-      <br /><br />
-      <ion-row justify-content-center>
-        <ion-icon name="cart" class="big-icon"></ion-icon>
-      </ion-row>
-      <ion-row justify-content-around class="ion-text-center ion-text-wrap ion-margin-top">
-        <ion-label>
-          <p>
-            You have no shopping lists.
-            <br /> To create a shopping list, press the plus button in the bottom corner.
-          </p>
-        </ion-label>
-      </ion-row>
-    </ion-grid>
+    <null-state *ngIf="shoppingLists.length === 0 && initialLoadComplete">
+      <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          You have no shopping lists.
+          <br /> To create a shopping list, press the plus button in the bottom corner.
+        </p>
+      </ion-label>
+    </null-state>
   </ion-list>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

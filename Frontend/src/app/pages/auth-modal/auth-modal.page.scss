@@ -4,12 +4,12 @@
   max-width: var(--content-max-width);
 
   .welcome {
-    color: rgba(0,0,0,0.8);
+    color: var(--ion-text-color);
     text-align: center;
   }
 
   label {
-    color: rgba(0,0,0,0.7);
+    color: var(--ion-text-color);
     font-size: 12px;
     margin: 5px;
   }
@@ -18,14 +18,16 @@
     width: 100%;
     background: none;
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid;
+    border-color: var(--ion-border-color);
     padding: 10px;
     transition: 0.3s;
     background: transparent;
-    color: initial;
+    color: var(--ion-text-color);
+    outline: none;
 
     &:focus {
-      border-bottom: 1px solid #00a8ff;
+      border-color: var(--ion-color-primary);
     }
   }
 }

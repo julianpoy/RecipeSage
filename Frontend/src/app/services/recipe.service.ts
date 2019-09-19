@@ -1,10 +1,10 @@
 import { Events, AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import axios, { AxiosInstance } from 'axios';
 
 import { Label } from './label.service';
 
 import fractionjs from 'fraction.js';
+import { HttpService } from './http.service';
 import { UtilService } from './util.service';
 
 import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
@@ -54,22 +54,11 @@ export interface Instruction {
 })
 export class RecipeService {
 
-  base: any;
-
-  axiosClient: AxiosInstance;
-
   constructor(
   public alertCtrl: AlertController,
   public events: Events,
-  public utilService: UtilService) {
-    this.axiosClient = axios.create({
-      timeout: 3000,
-      headers: {
-        'X-Initialized-At': Date.now().toString(),
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+  public httpService: HttpService,
+  public utilService: UtilService) {}
 
   getExportURL(format) {
     return this.utilService.getBase() + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
@@ -79,7 +68,7 @@ export class RecipeService {
     let url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
     if (options.folder) url += '&folder=' + options.folder;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -91,10 +80,10 @@ export class RecipeService {
     if (options.sortBy)                              url += '&sort=' + options.sortBy;
     if (options.offset)                              url += '&offset=' + options.offset;
     if (options.count)                               url += '&count=' + options.count;
-    if (options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options.labels && options.labels.length > 0) url += '&labels=' + encodeURIComponent(options.labels.join(','));
     if (options.labelIntersection)                   url += '&labelIntersection=true';
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -105,7 +94,7 @@ export class RecipeService {
     if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
     url += '&query=' + query;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -114,7 +103,7 @@ export class RecipeService {
   fetchById(recipeId: string) {
     const url = this.utilService.getBase() + 'recipes/' + recipeId + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -132,7 +121,7 @@ export class RecipeService {
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       headers: {
@@ -153,7 +142,7 @@ export class RecipeService {
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -176,7 +165,7 @@ export class RecipeService {
 
     const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'put',
       url,
       headers: {
@@ -197,7 +186,7 @@ export class RecipeService {
       recipeIds: recipes
     };
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       data
@@ -212,7 +201,7 @@ export class RecipeService {
   remove(data) {
     const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'delete',
       url
     }).then(response => {
@@ -226,7 +215,7 @@ export class RecipeService {
   removeAll() {
     const url = this.utilService.getBase() + 'recipes/all' + this.utilService.getTokenQuery();
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'delete',
       url
     }).then(response => {
@@ -249,7 +238,7 @@ export class RecipeService {
       + '&username=' + encodeURIComponent(data.username)
       + '&password=' + encodeURIComponent(data.password);
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'get',
       url
     }).then(response => response.data);
@@ -259,12 +248,12 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name);
 
-    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}
-                 ${includeStockRecipes ? '&includeStockRecipes=true' : ''}
-                 ${includeTechniques ? '&includeTechniques=true' : ''}
-                 ${excludeImages ? '&excludeImages=true' : ''}`;
+    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}`
+              + `${includeStockRecipes ? '&includeStockRecipes=true' : ''}`
+              + `${includeTechniques ? '&includeTechniques=true' : ''}`
+              + `${excludeImages ? '&excludeImages=true' : ''}`;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       headers: {
@@ -284,7 +273,7 @@ export class RecipeService {
 
     const url = `${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`;
 
-    return this.axiosClient.request({
+    return this.httpService.request({
       method: 'post',
       url,
       headers: {

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { MessagesPage } from './messages.page';
 import { NewMessageModalPageModule } from '@/pages/messaging-components/new-message-modal/new-message-modal.module';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NewMessageModalPageModule } from '@/pages/messaging-components/new-mess
         component: MessagesPage
       }
     ]),
-    NewMessageModalPageModule
+    NewMessageModalPageModule,
+    NullStateModule
   ]
 })
 export class MessagesPageModule {}

@@ -4,6 +4,7 @@ $descriptionHeight: 20px;
 $height: 800px;
 
 .template {
+  background: white;
   width: $width * $scale;
   height: ($height * $scale) + $descriptionHeight;
 
