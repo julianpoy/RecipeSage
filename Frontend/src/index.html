@@ -143,8 +143,17 @@
   <app-root></app-root>
 
   <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.className += 'theme-dark';
+    const storedTheme = localStorage.getItem('theme');
+    switch(storedTheme) {
+      case 'dark':
+        document.body.className += 'theme-dark';
+        break;
+      case 'light':
+        document.body.className += 'theme-light';
+        break;
+      default:
+        document.body.className += 'theme-default';
+        break;
     }
   </script>
 </body>

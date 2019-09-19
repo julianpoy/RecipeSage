@@ -21,20 +21,11 @@ export class SettingsPage {
 
   appThemeChanged() {
     // Change in localStorage
-    if (['dark', 'light'].indexOf(this.appTheme) > -1) {
-      localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
-    } else {
-      localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
-    }
+    localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
 
     // Change in current session
-    const bodyClasses = document.body.className.split(' ');
-    const darkThemeClassIdx = bodyClasses.indexOf('theme-dark');
-    if (darkThemeClassIdx > -1) {
-      bodyClasses.splice(darkThemeClassIdx, 1);
-    }
-    if (this.appTheme === 'dark') bodyClasses.push('theme-dark');
-    document.body.className = bodyClasses.join(' ');
+    const bodyClasses = document.body.className.replace(/theme-\S*/, '');
+    document.body.className = `${bodyClasses} theme-${this.appTheme}`;
   }
 
   goToImport() {
