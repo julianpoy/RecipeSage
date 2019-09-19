@@ -31,12 +31,4 @@ ion-thumbnail {
 
 .recipeItem {
   cursor: pointer;
-
-  &.selected {
-    --background: rgb(220,220,220);
-  }
-}
-
-.big-icon {
-  color: rgb(50,50,50);
 }
