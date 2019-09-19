@@ -78,6 +78,8 @@
             Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,</span> </span>
           </p>
         </ion-label>
+
+        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">Selected</ion-badge>
       </ion-item>
     </div>
   </virtual-scroller>
