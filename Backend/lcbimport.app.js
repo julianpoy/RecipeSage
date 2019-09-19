@@ -38,7 +38,7 @@ var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '1.8.4'
+  release: '1.8.5'
 }).install();
 
 let logError = async err => {
