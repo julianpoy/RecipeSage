@@ -341,13 +341,13 @@ router.post(
 )
 
 router.post(
-  '/import/fdx',
+  '/import/fdxz',
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   multer({
-    dest: '/tmp/chefbook-fdx-import/',
-  }).single('fdxdb'),
+    dest: '/tmp/chefbook-fdxz-import/',
+  }).single('fdxzdb'),
   async (req, res, next) => {
     if (!req.file) {
       res.status(400).send("Must include a file with the key fdxdb")
