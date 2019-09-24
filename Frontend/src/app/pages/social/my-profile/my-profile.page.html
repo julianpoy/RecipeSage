@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Account & Credentials</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br />
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <p>
+        Here you can update and change aspects about your account
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br />
+
+  <ion-item lines="none">
+    <ion-icon name="key" slot="start"></ion-icon>
+    <ion-label>
+      Credentials and Details
+    </ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Name/Nickname</ion-label>
+    <ion-input
+      autocomplete="off"
+      autofill="off"
+      type="text"
+      [(ngModel)]="account.name"
+      (ionFocus)="nameChanged = true"
+      (ngModelChange)="nameChanged = true"></ion-input>
+    <ion-button *ngIf="nameChanged" (click)="saveName()" slot="end" class="ion-align-self-center">
+      Save Name
+    </ion-button>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input
+      autocomplete="off"
+      autofill="off"
+      type="text"
+      [(ngModel)]="account.email"
+      (ionFocus)="emailChanged = true"
+      (ngModelChange)="emailChanged = true"></ion-input>
+    <ion-button *ngIf="emailChanged" (click)="saveEmail()" slot="end" class="ion-align-self-center">
+      Save Email
+    </ion-button>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input
+      autocomplete="new-password"
+      autofill="off"
+      type="password"
+      [(ngModel)]="account.password"
+      (ionFocus)="account.password = ''; passwordChanged = true;"
+      (ngModelChange)="passwordChanged = true;"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="passwordChanged">
+    <ion-label position="stacked">Confirm Password</ion-label>
+    <ion-input
+      autocomplete="new-password"
+      autofill="off"
+      type="password"
+      [(ngModel)]="account.confirmPassword"></ion-input>
+    <ion-button (click)="savePassword()" slot="end" class="ion-align-self-center">
+      Save Password
+    </ion-button>
+  </ion-item>
+
+  <br />
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <p>
+        To change a field above, tap the field, edit it, and press the save button that appears.
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br /><br /><br />
+
+  <ion-item lines="none">
+    <ion-icon name="warning" color="danger" slot="start"></ion-icon>
+    <ion-label>
+      Danger Zone!
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <p>
+        Be careful with these actions - they are permenant.<br />
+        You will be asked a to confirm any action you take here.
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-button color="danger" (click)="deleteAllRecipes()" class="ion-margin">
+    Delete All Recipes
+  </ion-button>
+</ion-content>

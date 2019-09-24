@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: '@/pages/home/home.module#HomePageModule'
   },
   {
+    path: RouteMap.LabelsPage.path,
+    loadChildren: '@/pages/labels-pages/labels/labels.module#LabelsPageModule'
+  },
+  {
     path: RouteMap.AboutPage.path,
     loadChildren: '@/pages/info-components/about/about.module#AboutPageModule'
   },

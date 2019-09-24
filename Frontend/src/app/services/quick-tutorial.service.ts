@@ -10,7 +10,8 @@ interface QuickTutorialBlurb {
 // Mapped values of these enums are stored in client localStorage.
 // Changing mapped value names here will reset their viewed status
 export enum QuickTutorialOptions {
-  MultipleRecipeSelection = 'multipleRecipeSelection'
+  MultipleRecipeSelection = 'multipleRecipeSelection',
+  MultipleLabelSelection = 'multipleLabelSelection'
 }
 
 type QuickTutorialBlurbs = {
@@ -22,8 +23,15 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
     header: 'Multiple Recipe Selection',
     message: `You're now in multiple recipe selection mode.<br /><br />
               You can click as many recipes as you'd like to select,
-              then use the buttons in the header to take bulk actions such as labelling or deleting.<br /><br />
+              then use the buttons in that appear the header to take bulk actions such as labelling or deleting.<br /><br />
               You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.`
+  },
+  [QuickTutorialOptions.MultipleLabelSelection]: {
+    header: 'Multiple Label Selection',
+    message: `You're now in multiple label selection mode.<br /><br />
+              You can click as many labels as you'd like to select,
+              then use the buttons that appear in the header to take bulk actions.<br /><br />
+              You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.`
   }
 };
 

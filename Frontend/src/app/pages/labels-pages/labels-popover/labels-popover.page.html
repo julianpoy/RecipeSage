@@ -1,0 +1,23 @@
+<ion-list no-border>
+  <ion-list-header>
+    Options
+  </ion-list-header>
+
+  <ion-item>
+    <ion-toggle [(ngModel)]="viewOptions.showDates" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-label class="ion-text-wrap">
+      Show Created/Updated At
+    </ion-label>
+    <ion-icon name='calendar' slot="start"></ion-icon>
+  </ion-item>
+
+  <ion-item *ngIf="!selectionMode">
+    <ion-icon name='checkmark' slot="start"></ion-icon>
+    <ion-button (click)="toggleSelectionMode()" expand="full">Select Multiple Labels</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="selectionMode">
+    <ion-icon name='close' slot="start"></ion-icon>
+    <ion-button (click)="toggleSelectionMode()" expand="full">Unselect All Labels</ion-button>
+  </ion-item>
+</ion-list>
