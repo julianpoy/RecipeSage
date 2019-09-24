@@ -341,6 +341,47 @@ router.post(
 )
 
 router.post(
+  '/import/fdx',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  multer({
+    dest: '/tmp/chefbook-fdx-import/',
+  }).single('fdxdb'),
+  async (req, res, next) => {
+    if (!req.file) {
+      res.status(400).send("Must include a file with the key fdxdb")
+    } else {
+      console.log(req.file.path)
+    }
+
+    let optionalFlags = [];
+    if (req.query.excludeImages) optionalFlags.push('--excludeImages');
+
+    let lcbImportJob = spawn(`node`, [`./fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
+    lcbImportJob.on('close', (code) => {
+      switch (code) {
+        case 0:
+          res.status(200).json({
+            msg: "Ok"
+          });
+          break;
+        case 3:
+          let badFileErr = new Error("Bad file format (not in .FDX or .FDXZ format)");
+          badFileErr.status = 406;
+          next(badFileErr);
+          break;
+        default:
+          let unexpectedErr = new Error("Import failed");
+          unexpectedErr.status = 500;
+          next(unexpectedErr);
+          break;
+      }
+    });
+  }
+)
+
+router.post(
   '/import/paprika',
   cors(),
   MiddlewareService.validateSession(['user']),
