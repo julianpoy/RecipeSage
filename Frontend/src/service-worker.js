@@ -63,6 +63,8 @@ messaging.setBackgroundMessageHandler(function(message) {
   var notificationOptions = {};
 
   switch(message.data.type) {
+    case 'update:available':
+      return self.registration.update();
     case 'messages:new':
       var messageObj = JSON.parse(message.data.message);
 
