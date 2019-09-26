@@ -117,6 +117,7 @@ export class ShareModalPage {
   }
 
   selectRecipient(thread) {
+    if (!thread) return;
     this.recipientId = thread.otherUser.id;
     console.log(this.recipientId);
     this.recipientName = '';
