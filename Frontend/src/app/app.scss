@@ -133,3 +133,8 @@ ion-label[position=floating] {
 .cursor-pointer {
   cursor: pointer;
 }
+
+ion-toast {
+  --background: var(--ion-color-dark-tint);
+  --color: var(--ion-color-light);
+}
