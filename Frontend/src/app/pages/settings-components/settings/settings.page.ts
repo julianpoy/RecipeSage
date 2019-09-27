@@ -81,7 +81,13 @@ export class SettingsPage {
           {
             text: 'Continue',
             handler: () => {
-              (window as any).location.reload(true);
+              try {
+                (window as any).forceSWUpdate().then(() => {
+                  (window as any).location.reload(true);
+                });
+              } catch (e) {
+                (window as any).location.reload(true);
+              }
             }
           }]
       });

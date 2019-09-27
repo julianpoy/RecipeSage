@@ -85,6 +85,16 @@
         if (window.onSWUpdate) window.onSWUpdate.call(null);
         else window.location.reload(true);
       });
+
+      window.forceSWUpdate = function() {
+        return navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          Promise.all(registrations.map(function(registration) {
+            registration.unregister();
+          })).then(function() {
+            return navigator.serviceWorker.register('service-worker.js');
+          });
+        });
+      }
     }
   </script>
 
