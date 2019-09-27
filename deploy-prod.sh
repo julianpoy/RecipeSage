@@ -1,5 +1,15 @@
 #!/bin/bash
 
+echo "==== PROD DEPLOYMENT ===="
+read -p "Do you want to continue to deploy to prod? [yN] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Y]$  ]]
+then
+    echo "Continuing to deploy"
+else
+    exit 0
+fi
+
 cd Frontend
 
 npm run dist
