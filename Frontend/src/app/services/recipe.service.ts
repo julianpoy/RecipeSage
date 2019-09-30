@@ -244,6 +244,27 @@ export class RecipeService {
     }).then(response => response.data);
   }
 
+  importFDXZ(fdxzFile, excludeImages?: boolean) {
+    const formData: FormData = new FormData();
+    formData.append('fdxzdb', fdxzFile, fdxzFile.name);
+
+    const url = `${this.utilService.getBase()}import/fdxz${this.utilService.getTokenQuery()}`
+      + `${excludeImages ? '&excludeImages=true' : ''}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: formData
+    }).then(response => {
+      this.events.publish('recipe:generalUpdate');
+
+      return response.data;
+    });
+  }
+
   importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean, excludeImages?: boolean) {
     const formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name);
