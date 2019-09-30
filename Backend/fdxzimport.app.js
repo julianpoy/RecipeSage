@@ -152,11 +152,11 @@ async function main() {
           .map(lcbIngredient => `${lcbIngredient.Quantity || ''} ${lcbIngredient.Unit || ''} ${lcbIngredient.Ingredient || ''}`)
           .join("\r\n")
 
-      let instructions = fetchDeepProp(recipe, 'RecipeInstruction')
-        .map(lcbProcedure => lcbProcedure._attributes)
-        .filter(lcbProcedure => lcbProcedure && lcbProcedure.ProcedureText)
-        .map(lcbProcedure => lcbProcedure.ProcedureText._text)
+      let instructions = fetchDeepProp(recipe, 'RecipeProcedure')
+        .map(lcbInstruction => lcbInstruction.ProcedureText._text)
         .join("\r\n")
+
+      let yield = recipe._attributes.Servings && recipe._attributes.Servings.length > 0 ? `${recipe._attributes.Servings} servings` : null;
 
       let lcbRecipeLabels = [
         ...new Set([
@@ -170,7 +170,7 @@ async function main() {
           userId: runConfig.userId,
           title: recipe._attributes.Name,
           description,
-          yield: recipe._attributes.Servings,
+          yield,
           activeTime: recipe._attributes.PreparationTime,
           totalTime,
           source: recipe._attributes.Source,
