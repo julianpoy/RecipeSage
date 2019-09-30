@@ -368,8 +368,9 @@ router.delete(
       token: req.query.fcmToken,
       userId: res.locals.session.userId
     }
-  })
-  .catch(next);
+  }).then(() => {
+    res.status(200).send("ok");
+  }).catch(next);
 });
 
 module.exports = router;
