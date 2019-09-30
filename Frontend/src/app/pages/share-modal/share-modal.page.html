@@ -46,7 +46,11 @@
         <div *ngSwitchCase="'link'">
           <br />
           <ion-item lines="none">
-            Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
+            <ion-label class="ion-text-wrap">
+              <p>
+                Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
+              </p>
+            </ion-label>
           </ion-item>
           <div class="codeBlock">
             <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
@@ -173,7 +177,7 @@
           </div>
 
           <ion-list *ngIf="threads.length > 0">
-            <ion-radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
+            <ion-radio-group [(ngModel)]="selectedThread" (ionChange)="selectRecipient($event.detail.value)">
               <ion-list-header style="margin-bottom: 0;" lines="none">
                 Existing Conversations
               </ion-list-header>

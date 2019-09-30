@@ -5,7 +5,7 @@ import { NavController, ToastController } from '@ionic/angular';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 @Component({
   selector: 'page-auth',
@@ -32,7 +32,7 @@ export class AuthPage {
     public route: ActivatedRoute,
     public userService: UserService) {
 
-    if (this.route.snapshot.paramMap.get('register')) {
+    if (this.route.snapshot.paramMap.get('authType') === AuthType.Register) {
       this.showLogin = false;
     }
 
