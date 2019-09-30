@@ -351,7 +351,7 @@ router.post(
   }).single('fdxzdb'),
   async (req, res, next) => {
     if (!req.file) {
-      res.status(400).send("Must include a file with the key fdxdb")
+      res.status(400).send("Must include a file with the key fdxzdb")
     } else {
       console.log(req.file.path)
     }
