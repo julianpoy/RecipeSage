@@ -243,14 +243,15 @@ router.get(
       let recipeResults = []
       for (var i = 0; i < recipeURLResults.length; i++) {
         await page.goto(recipeURLResults[i], {
-          waitUntil: "networkidle2",
+          waitUntil: "domcontentloaded",
           timeout: 120000
-        })
+        });
 
-        // await page.waitFor(100) // Give pepperplate some rest time
-        // await page.waitForSelector('#cphMiddle_cphMain_lblTitle', {
-        //   visible: true
-        // })
+        await page.waitForSelector('.dircontainer', {
+          visible: true
+        });
+
+        await page.waitFor(200); // Give pepperplate some rest time
 
         let recipeResult = await page.evaluate(() => {
           var els = {

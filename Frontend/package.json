@@ -37,7 +37,6 @@
     "fraction.js": "^4.0.12",
     "linkifyjs": "^2.1.8",
     "ngx-virtual-scroller": "^3.0.2",
-    "rxjs": "^6.5.3",
     "tslib": "^1.9.0",
     "workbox-core": "^4.3.1",
     "workbox-expiration": "^4.3.1",
