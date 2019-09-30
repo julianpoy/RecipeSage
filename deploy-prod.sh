@@ -19,7 +19,7 @@ if [ $? -eq 0 ]; then
 
     tar -czf deploy-prod.tgz ./www/*
 
-    ssh julian@recipesage.com 'rm /tmp/deploy-prod.tgz; cd ~/Projects/chefbook; git checkout Backend/package-lock.json; git pull; cd Backend; npm install; pm2 reload RecipeSageAPI'
+    ssh julian@recipesage.com 'rm /tmp/deploy-prod.tgz; cd ~/Projects/chefbook; git checkout Backend/package-lock.json; git pull; cd Backend; npm install; cd ../SharedUtils; npm install; pm2 reload RecipeSageAPI'
 
     scp deploy-prod.tgz julian@recipesage.com:/tmp
 
