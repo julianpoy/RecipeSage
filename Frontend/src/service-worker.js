@@ -84,6 +84,7 @@ messaging.setBackgroundMessageHandler(function(message) {
         otherUserId: messageObj.otherUser.id
       };
       notificationOptions.tag = message.data.type + '-' + messageObj.otherUser.id;
+      break;
     case 'import:pepperplate:complete':
       notificationTitle = 'Import complete!';
 
@@ -95,6 +96,7 @@ messaging.setBackgroundMessageHandler(function(message) {
         type: message.data.type,
       };
       notificationOptions.tag = 'import:pepperplate';
+      break;
     case 'import:pepperplate:failed':
       var messageObj = JSON.parse(message.data.message);
 
@@ -119,6 +121,7 @@ messaging.setBackgroundMessageHandler(function(message) {
         type: message.data.type
       };
       notificationOptions.tag = 'import:pepperplate';
+      break;
     case 'import:pepperplate:working':
       notificationTitle = 'Import in progress';
 
@@ -130,6 +133,7 @@ messaging.setBackgroundMessageHandler(function(message) {
         type: message.data.type
       };
       notificationOptions.tag = 'import:pepperplate';
+      break;
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
