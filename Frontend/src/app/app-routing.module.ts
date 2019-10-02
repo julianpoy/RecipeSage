@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { RouteMap } from './services/util.service';
+import { RouteMap, AuthType } from './services/util.service';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
 import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
@@ -142,7 +142,10 @@ const routes: Routes = [
     path: RouteMap.ShoppingListPage.path,
     loadChildren: '@/pages/shopping-list-components/shopping-list/shopping-list.module#ShoppingListPageModule',
     canDeactivate: [UnsavedChangesGuardService]
-  }
+  },
+  // Legacy route redirects
+  { path: 'about-details', redirectTo: RouteMap.AboutDetailsPage.getPath(), pathMatch: 'full' },
+  { path: 'login', redirectTo: RouteMap.AuthPage.getPath(AuthType.Login), pathMatch: 'full' }
 ];
 
 @NgModule({
