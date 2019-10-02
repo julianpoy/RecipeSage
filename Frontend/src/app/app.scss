@@ -15,24 +15,24 @@
   font-size: 40px;
 }
 
-ion-thumbnail img {
-  object-fit: cover;
-}
-
 .popover-content, .alert-wrapper {
   --width: 280px;
   --max-width: 280px;
+}
+
+ion-thumbnail {
+  width: 80px;
+  height: 80px;
+
+  img {
+    object-fit: cover;
+  }
 }
 
 @media only screen and (min-width: $desktop-breakpoint) {
   ion-thumbnail {
     width: 200px;
     height: 200px;
-
-    ion-img {
-      width: 200px;
-      height: 200px;
-    }
   }
 
   .popover-content, .alert-wrapper {
