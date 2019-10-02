@@ -25,7 +25,6 @@ export class UnsavedChangesService {
 
     // Listen for leave events
     window.addEventListener('beforeunload', e => {
-      console.log('leaving!');
       if (!this.pendingChanges) return undefined;
 
       (e || window.event).returnValue = UNSAVED_CHANGES_MESSAGE; // Gecko + IE
