@@ -7,6 +7,7 @@ import loadImage from 'blueimp-load-image';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
+import { UnsavedChangesService } from '@/services/unsaved-changes.service';
 
 @Component({
   selector: 'page-edit-recipe',
@@ -28,6 +29,7 @@ export class EditRecipePage {
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
+    public unsavedChangesService: UnsavedChangesService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
     public domSanitizationService: DomSanitizer) {
@@ -249,5 +251,9 @@ export class EditRecipePage {
     } else {
       return 'Choose image';
     }
+  }
+
+  markAsDirty() {
+    this.unsavedChangesService.setPendingChanges();
   }
 }

@@ -12,6 +12,7 @@ import * as Sentry from '@sentry/browser';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
+import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
 Sentry.init({
   release: (window as any).version,
@@ -46,6 +47,7 @@ export class SentryErrorHandler extends ErrorHandler {
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DefaultPageGuardService,
+    UnsavedChangesGuardService,
   ],
   bootstrap: [AppComponent]
 })
