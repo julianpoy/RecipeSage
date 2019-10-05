@@ -18,7 +18,7 @@ if [ $? -eq 0 ]; then
 
     rm deploy-beta.tgz
 
-    ssh julian@beta.recipesage.com 'cd /var/www/beta.recipesage.com; rm -rf ./*; tar -zxvf /tmp/deploy-beta.tgz; mv www/* .'
+    ssh julian@beta.recipesage.com 'cd /var/www/beta.recipesage.com; tar -zxvf /tmp/deploy-beta.tgz; rsync -av www/* .; rm -rf www'
 else
     echo FAIL
 fi

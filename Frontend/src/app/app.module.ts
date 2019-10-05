@@ -22,7 +22,18 @@ Sentry.init({
 export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
     super.handleError(error);
+
+    let token = '';
     try {
+      token = localStorage.getItem('token');
+    } catch (e) {}
+
+    try {
+      Sentry.addBreadcrumb({
+        category: 'auth',
+        message: 'Session: ' + token,
+        level: Sentry.Severity.Info
+      });
       Sentry.captureException(error.originalError || error);
     } catch (e) {
       console.error(e);
