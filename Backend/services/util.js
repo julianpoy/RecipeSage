@@ -59,14 +59,16 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
 }
 
 exports.fetchImage = url => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     request.get({
       url: url,
       encoding: null
     }, (err, res, body) => {
-      if (err) throw err;
-
-      resolve({ res, body })
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ res, body });
+      }
     });
   })
 }
