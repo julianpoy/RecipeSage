@@ -19,7 +19,7 @@ export class UnsavedChangesService {
     // Reset pending changes after every navigation event
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.pendingChanges = false;
+        this.clearPendingChanges();
       }
     });
 
@@ -38,5 +38,9 @@ export class UnsavedChangesService {
 
   hasPendingChanges() {
     return this.pendingChanges;
+  }
+
+  clearPendingChanges() {
+    this.pendingChanges = false;
   }
 }

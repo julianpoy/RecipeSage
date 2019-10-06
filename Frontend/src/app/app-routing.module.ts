@@ -144,8 +144,9 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   // Legacy route redirects
-  { path: 'about-details', redirectTo: RouteMap.AboutDetailsPage.getPath(), pathMatch: 'full' },
-  { path: 'login', redirectTo: RouteMap.AuthPage.getPath(AuthType.Login), pathMatch: 'full' }
+  { path: 'about-details', redirectTo: '/about/details', pathMatch: 'full' },
+  { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
+  { path: 'edit-recipe', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({

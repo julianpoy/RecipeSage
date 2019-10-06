@@ -14,6 +14,8 @@ var Recipe_Label = require('./models').Recipe_Label;
 
 var UtilService = require('./services/util');
 
+var RS_VERSION = JSON.parse(fs.readFileSync('./package.json')).version;
+
 let runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
@@ -34,7 +36,7 @@ var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '2.0.0'
+  release: RS_VERSION
 }).install();
 
 let logError = async err => {

@@ -110,7 +110,9 @@ function saveRecipes(userId, recipes) {
     return Promise.all(recipes.map(function (recipe) {
       return new Promise(function (resolve, reject) {
         if (recipe.imageURL) {
-          UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(reject)
+          UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(() => {
+            resolve(null);
+          });
         } else resolve(null);
       }).then(function (image) {
         return Recipe.create({

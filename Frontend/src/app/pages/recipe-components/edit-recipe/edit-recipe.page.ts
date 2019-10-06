@@ -176,6 +176,8 @@ export class EditRecipePage {
 
     if (this.recipe.id) {
       this.recipeService.update(this.recipe).then(response => {
+        this.markAsClean();
+
         this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(this.recipe.id));
 
         loading.dismiss();
@@ -204,6 +206,8 @@ export class EditRecipePage {
       });
     } else {
       this.recipeService.create(this.recipe).then(response => {
+        this.markAsClean();
+
         this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
 
         loading.dismiss();
@@ -255,5 +259,9 @@ export class EditRecipePage {
 
   markAsDirty() {
     this.unsavedChangesService.setPendingChanges();
+  }
+
+  markAsClean() {
+    this.unsavedChangesService.clearPendingChanges();
   }
 }
