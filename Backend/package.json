@@ -14,12 +14,12 @@
     "test:models": "npm run mocha \"./models/**/*.spec.js\""
   },
   "dependencies": {
-    "aws-sdk": "^2.524.0",
+    "aws-sdk": "^2.543.0",
     "body-parser": "~1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "debug": "~4.1.1",
-    "elasticsearch": "^16.0.0",
+    "elasticsearch": "^16.4.0",
     "express": "~4.17.0",
     "express-grip": "^1.2.1",
     "extract-zip": "^1.6.7",
@@ -36,12 +36,12 @@
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "pug": "^2.0.4",
-    "puppeteer": "^1.19.0",
+    "puppeteer": "^1.20.0",
     "raven": "^2.6.4",
     "request": "^2.88.0",
     "sanitize-html": "^1.20.1",
-    "sequelize": "^5.18.4",
-    "sharp": "^0.23.0",
+    "sequelize": "^5.19.3",
+    "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",
     "xml-js": "^1.6.11"
   },
@@ -49,7 +49,7 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "sequelize-cli": "^5.5.1",
-    "sinon": "^7.4.2",
+    "sinon": "^7.5.0",
     "supertest": "^4.0.2"
   }
 }
