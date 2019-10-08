@@ -29,6 +29,11 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.ContactPage.path,
+    loadChildren: '@/pages/info-components/contact/contact.module#ContactPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
     path: RouteMap.LegalPage.path,
     loadChildren: '@/pages/info-components/legal/legal.module#LegalPageModule',
     canDeactivate: [UnsavedChangesGuardService]

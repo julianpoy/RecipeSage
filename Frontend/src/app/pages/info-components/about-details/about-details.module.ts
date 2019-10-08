@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { AboutDetailsPage } from './about-details.page';
+import { SocialLinksModule } from '@/components/social-links/social-links.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AboutDetailsPage } from './about-details.page';
         path: '',
         component: AboutDetailsPage
       }
-    ])
+    ]),
+    SocialLinksModule
   ],
 })
 export class AboutDetailsPageModule {}

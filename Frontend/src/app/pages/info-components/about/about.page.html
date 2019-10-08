@@ -15,27 +15,36 @@
   <p>Hello! I'm Julian Poyourow. I made Recipe Sage as an alternative to many of the online recipe programs.</p>
 
   <ion-list>
-    <ion-item (click)="goToAboutDetails()" class="cursor-pointer">
+    <ion-item button (click)="goToAboutDetails()">
       <ion-icon name="person" slot="start"></ion-icon>
       More About Me & Recipe Sage
     </ion-item>
-    <ion-item (click)="goToContribute()" class="cursor-pointer">
+    <ion-item button (click)="goToContact()">
+      <ion-icon name="send" slot="start"></ion-icon>
+      Contact
+    </ion-item>
+    <ion-item button (click)="goToContribute()">
       <ion-icon name="heart" slot="start"></ion-icon>
       Contribute!
     </ion-item>
-    <ion-item (click)="goToReleaseNotes()" class="cursor-pointer">
+    <ion-item button (click)="goToReleaseNotes()">
       <ion-icon name="archive" slot="start"></ion-icon>
       Release Notes
     </ion-item>
-    <ion-item (click)="goToTipsTricksTutorials()" class="cursor-pointer">
+    <ion-item button (click)="goToTipsTricksTutorials()">
       <ion-icon name="help" slot="start"></ion-icon>
       Tips, tricks and tutorials
     </ion-item>
-    <ion-item (click)="goToLegal()" class="cursor-pointer">
+    <ion-item button (click)="goToLegal()">
       <ion-icon name="list-box" slot="start"></ion-icon>
       Legal, agreements and disclaimers
     </ion-item>
   </ion-list>
 
   <p>Feel free to email me at <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a>.</p>
+
+
+  <br />
+  <p><b>Social Media</b></p>
+  <social-links></social-links>
 </ion-content>
