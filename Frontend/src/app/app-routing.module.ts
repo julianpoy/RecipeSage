@@ -151,7 +151,9 @@ const routes: Routes = [
   // Legacy route redirects
   { path: 'about-details', redirectTo: '/about/details', pathMatch: 'full' },
   { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
-  { path: 'edit-recipe', redirectTo: '/', pathMatch: 'full' }
+  { path: 'edit-recipe', redirectTo: '/', pathMatch: 'full' },
+  // Catchall
+  { path: '**', loadChildren: '@/pages/error-pages/not-found/not-found.module#NotFoundPageModule' }
 ];
 
 @NgModule({
