@@ -18,6 +18,7 @@
       <ion-label>
         <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
         <p><b>{{ thread.messages[0].fromUser.id === thread.otherUser.id ? thread.messages[0].fromUser.name || thread.messages[0].fromUser.email : 'You' }}</b>: {{ thread.messages[0].recipe ? 'Sent a recipe' : thread.messages[0].body }}</p>
+        <p>{{thread.messages[0]._updatedAt}}</p>
       </ion-label>
     </ion-item>
     <null-state *ngIf="threads.length === 0">
