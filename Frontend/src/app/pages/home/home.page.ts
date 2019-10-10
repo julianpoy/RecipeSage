@@ -12,12 +12,6 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LabelService, Label } from '@/services/label.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
-enum MouseAction {
-  Drag = 'drag',
-  LongPress = 'longPress',
-  Click = 'click'
-}
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
@@ -196,7 +190,7 @@ export class HomePage implements AfterViewInit {
   }
 
   _resetAndLoadRecipes() {
-    if (this.searchText) {
+    if (this.searchText && this.searchText.trim().length > 0) {
       return this.search(this.searchText);
     }
     return this.loadRecipes(0, this.fetchPerPage);
@@ -312,9 +306,10 @@ export class HomePage implements AfterViewInit {
   }
 
   search(text) {
-    if (text.length === 0) {
+    if (text.trim().length === 0) {
       this.searchText = '';
       this.resetAndLoadRecipes();
+      return;
     }
 
     const loading = this.loadingService.start();
