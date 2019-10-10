@@ -13,7 +13,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item class="thread" *ngFor="let thread of threads" (click)="openThread(thread)">
+    <ion-item class="thread" *ngFor="let thread of threads" (click)="openThread(thread)" button>
       <ion-icon name="chatboxes" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ thread.otherUser.name || thread.otherUser.email }}</h2>
