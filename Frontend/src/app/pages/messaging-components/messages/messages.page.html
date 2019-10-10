@@ -21,7 +21,7 @@
         <p>{{thread.messages[0]._updatedAt}}</p>
       </ion-label>
     </ion-item>
-    <null-state *ngIf="threads.length === 0">
+    <null-state *ngIf="threads.length === 0 && !loading">
       <ion-icon name="chatboxes" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>

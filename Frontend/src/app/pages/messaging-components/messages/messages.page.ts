@@ -14,6 +14,8 @@ import { NewMessageModalPage } from '@/pages/messaging-components/new-message-mo
 })
 export class MessagesPage {
 
+  loading = true;
+
   threads: any = [];
 
   constructor(
@@ -35,9 +37,8 @@ export class MessagesPage {
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
-    this.loadThreads().then(() => {
-      loading.dismiss();
-    }, () => {
+    this.loadThreads().finally(() => {
+      this.loading = false;
       loading.dismiss();
     });
   }
