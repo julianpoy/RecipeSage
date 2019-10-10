@@ -83,7 +83,7 @@ export class AddRecipeToShoppingListModalPage {
           default:
             const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;
@@ -132,7 +132,7 @@ export class AddRecipeToShoppingListModalPage {
         default:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
+            showCloseButton: true
           })).present();
           break;
       }

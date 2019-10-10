@@ -154,7 +154,6 @@ export class AppComponent {
 
       const toast = await this.toastCtrl.create({
         message: notification,
-        duration: 10000,
         showCloseButton: true,
         closeButtonText: 'Close'
       });
@@ -353,7 +352,7 @@ export class AppComponent {
         default:
           const errorToast = await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
+            showCloseButton: true
           });
           errorToast.present();
           break;

@@ -60,14 +60,14 @@ export class EditRecipePage {
           case 404:
             const notFoundToast = await this.toastCtrl.create({
               message: 'Recipe not found. Does this recipe URL exist?',
-              duration: 30000 // TODO: Should offer a dismiss button
+              showCloseButton: true
             });
             notFoundToast.present();
             break;
           default:
             const unexpectedErrorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
+              showCloseButton: true
             });
             unexpectedErrorToast.present();
             break;
@@ -199,7 +199,7 @@ export class EditRecipePage {
           default:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
+              showCloseButton: true
             })).present();
             break;
         }
@@ -235,7 +235,7 @@ export class EditRecipePage {
           default:
             (await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
+              showCloseButton: true
             })).present();
             break;
         }

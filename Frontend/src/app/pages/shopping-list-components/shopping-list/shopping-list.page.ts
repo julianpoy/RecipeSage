@@ -118,8 +118,7 @@ export class ShoppingListPage {
           case 404:
             let errorToast = await this.toastCtrl.create({
               message: 'Shopping list not found. Does this shopping list URL exist?',
-              duration: 30000,
-              // dismissOnPageChange: true
+              showCloseButton: true
             });
             errorToast.present();
 
@@ -128,7 +127,7 @@ export class ShoppingListPage {
           default:
             errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;

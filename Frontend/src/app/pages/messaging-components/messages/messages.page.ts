@@ -85,7 +85,7 @@ export class MessagesPage {
           default:
             const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;

@@ -70,14 +70,14 @@ export class SelectCollaboratorsComponent {
             // TODO: This may need to be improved. Previously, this tried to dismiss as a modal with return message
             const unauthorizedToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unauthorized,
-              duration: 30000
+              showCloseButton: true
             });
             unauthorizedToast.present();
             break;
           default:
             const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;

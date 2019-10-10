@@ -123,15 +123,14 @@ export class RecipePage {
           case 404:
             let errorToast = await this.toastCtrl.create({
               message: 'Recipe not found. Does this recipe URL exist?',
-              duration: 30000,
-              // dismissOnPageChange: true
+              showCloseButton: true
             });
             errorToast.present();
             break;
           default:
             errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;
@@ -170,7 +169,7 @@ export class RecipePage {
           default:
             const errorToast = await this.toastCtrl.create({
               message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
+              showCloseButton: true
             });
             errorToast.present();
             break;
