@@ -26,7 +26,7 @@ exports.validateUser = function(req, res, next) {
     where: {
       id: res.locals.session.userId
     },
-    attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt']
+    attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt', 'lastLogin']
   }).then(user => {
     if (!user) {
       res.status(404).send("Your user was not found");
