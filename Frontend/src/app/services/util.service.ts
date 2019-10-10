@@ -32,6 +32,10 @@ export const RouteMap = {
     getPath() { return `about/details`; },
     path: 'about/details',
   },
+  ContactPage: {
+    getPath() { return `about/contact`; },
+    path: 'about/contact',
+  },
   LegalPage: {
     getPath() { return `legal`; },
     path: 'legal',

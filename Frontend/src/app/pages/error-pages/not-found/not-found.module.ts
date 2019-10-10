@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { AboutPage } from './about.page';
-import { SocialLinksModule } from '@/components/social-links/social-links.module';
+import { NotFoundPage } from './not-found.page';
+import { NullStateModule } from '@/components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
-    AboutPage,
+    NotFoundPage,
   ],
   imports: [
     CommonModule,
@@ -16,10 +16,10 @@ import { SocialLinksModule } from '@/components/social-links/social-links.module
     RouterModule.forChild([
       {
         path: '',
-        component: AboutPage
+        component: NotFoundPage
       }
     ]),
-    SocialLinksModule
+    NullStateModule
   ],
 })
-export class AboutPageModule {}
+export class NotFoundPageModule {}

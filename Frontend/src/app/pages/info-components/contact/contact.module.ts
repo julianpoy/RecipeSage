@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { AboutPage } from './about.page';
+import { ContactPage } from './contact.page';
 import { SocialLinksModule } from '@/components/social-links/social-links.module';
 
 @NgModule({
   declarations: [
-    AboutPage,
+    ContactPage,
   ],
   imports: [
     CommonModule,
@@ -16,10 +16,10 @@ import { SocialLinksModule } from '@/components/social-links/social-links.module
     RouterModule.forChild([
       {
         path: '',
-        component: AboutPage
+        component: ContactPage
       }
     ]),
     SocialLinksModule
   ],
 })
-export class AboutPageModule {}
+export class ContactPageModule {}

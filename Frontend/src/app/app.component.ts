@@ -27,6 +27,8 @@ export class AppComponent {
   unsupportedBrowser: boolean = !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem('seenOldBrowserWarning');
 
+  aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
+
   constructor(
     private navCtrl: NavController,
     private route: ActivatedRoute,
