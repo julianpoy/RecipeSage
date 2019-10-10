@@ -18,6 +18,8 @@ export class AccountPage {
     password: '123456'
   };
 
+  stats: any = {};
+
   nameChanged = false;
   emailChanged = false;
   passwordChanged = false;
@@ -33,11 +35,18 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    this.userService.me().then(response => {
+    Promise.all([
+      this.userService.me(),
+      this.userService.myStats(),
+    ]).then(([account, stats]) => {
       loading.dismiss();
 
-      this.account = response;
+      this.account = account;
       this.account.password = '123456';
+
+      this.stats = stats;
+      this.stats.createdAt = this.utilService.formatDate(stats.createdAt, { now: true });
+      this.stats.lastLogin = stats.lastLogin ? this.utilService.formatDate(stats.lastLogin, { now: true }) : this.stats.createdAt;
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {

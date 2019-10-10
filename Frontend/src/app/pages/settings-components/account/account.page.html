@@ -89,7 +89,51 @@
     </ion-label>
   </ion-item>
 
-  <br /><br /><br /><br />
+  <br /><br />
+
+  <ion-item lines="none">
+    <ion-icon name="stats" slot="start"></ion-icon>
+    <ion-label>
+      Stats
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Recipe Count</h2>
+      <p>{{stats.recipeCount}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Recipe Image Count</h2>
+      <p>{{stats.recipeImageCount}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Total Message Count</h2>
+      <p>{{stats.messageCount}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Account Created</h2>
+      <p>{{stats.createdAt}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Last Login</h2>
+      <p>{{stats.lastLogin}}</p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br />
 
   <ion-item lines="none">
     <ion-icon name="warning" color="danger" slot="start"></ion-icon>
