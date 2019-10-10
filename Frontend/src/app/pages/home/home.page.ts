@@ -12,12 +12,6 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LabelService, Label } from '@/services/label.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
-enum MouseAction {
-  Drag = 'drag',
-  LongPress = 'longPress',
-  Click = 'click'
-}
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
