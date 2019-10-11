@@ -138,3 +138,17 @@ ion-toast {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
 }
+
+.social-footer {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  a {
+    color: black;
+  }
+}
