@@ -14,6 +14,8 @@ import { NewMessageModalPage } from '@/pages/messaging-components/new-message-mo
 })
 export class MessagesPage {
 
+  loading = true;
+
   threads: any = [];
 
   constructor(
@@ -35,9 +37,8 @@ export class MessagesPage {
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
-    this.loadThreads().then(() => {
-      loading.dismiss();
-    }, () => {
+    this.loadThreads().finally(() => {
+      this.loading = false;
       loading.dismiss();
     });
   }
@@ -57,10 +58,13 @@ export class MessagesPage {
         messageLimit: 1
       }).then(response => {
         this.threads = response.sort((a, b) => {
-          const aCreatedAt = new Date((a.messages[0] || []).updatedAt);
-          const bCreatedAt = new Date((b.messages[0] || []).updatedAt);
+          const aCreatedAt = new Date(a.messages[0].updatedAt);
+          const bCreatedAt = new Date(b.messages[0].updatedAt);
           // Ascending (newest first)
           return bCreatedAt.valueOf() - aCreatedAt.valueOf();
+        }).map(thread => {
+          thread.messages[0]._updatedAt = this.utilService.formatDate(thread.messages[0].updatedAt, { now: true });
+          return thread;
         });
 
         resolve();

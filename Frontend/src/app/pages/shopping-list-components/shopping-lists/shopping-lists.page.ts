@@ -62,7 +62,9 @@ export class ShoppingListsPage {
   loadLists() {
     return new Promise((resolve, reject) => {
       this.shoppingListService.fetch().then(response => {
-        this.shoppingLists = response;
+        this.shoppingLists = response.sort((a, b) => {
+          return a.title.localeCompare(b.title);
+        });
 
         resolve();
       }).catch(async err => {

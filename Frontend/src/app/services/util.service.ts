@@ -195,7 +195,7 @@ export class UtilService {
     return url;
   }
 
-  formatDate(date, options?): string {
+  formatDate(date, options?: { now?: boolean, times?: boolean }): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
