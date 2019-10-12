@@ -121,6 +121,7 @@ export class HomePage implements AfterViewInit {
       showLabelChips: false,
       showImages: true,
       showSource: false,
+      viewType: 'list',
       sortBy: '-title',
       selectedLabels: [],
     };
@@ -130,6 +131,7 @@ export class HomePage implements AfterViewInit {
     this.viewOptions.showLabelChips = JSON.parse(localStorage.getItem('showLabelChips'));
     this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
     this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
+    this.viewOptions.viewType = JSON.parse(localStorage.getItem('myRecipes.viewType'));
     this.viewOptions.sortBy = localStorage.getItem('sortBy');
     this.viewOptions.selectedLabels = [];
 

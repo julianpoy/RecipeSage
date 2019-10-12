@@ -49,6 +49,49 @@
   </div>
 
   <virtual-scroller
+    *ngIf="viewOptions.viewType === 'tiles'"
+    #scroll
+    bufferAmount="5"
+    (vsEnd)="fetchMoreRecipes($event)"
+    [items]="recipes"
+    [parentScroll]="scrollElement"
+    [enableUnequalChildrenSizes]="true">
+
+    <div #container class="card-container">
+      <ion-card *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn"
+        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+        (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+        button>
+        <ion-card-content>
+          <ion-thumbnail *ngIf="recipe.image && viewOptions.showImages" size="200px">
+            <img [src]="recipe.image.location" />
+          </ion-thumbnail>
+          <div *ngIf="!recipe.image && viewOptions.showImages" class="no-image">
+            <img src="/assets/imgs/logo_green.png" />
+          </div>
+          <ion-item lines="none">
+            <ion-label>
+              <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+              <p class="ion-text-wrap">{{ recipe.description }}</p>
+              <p *ngIf="(recipe.source || recipe.url) && viewOptions.showSource" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
+
+              <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+                <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+              </p>
+
+              <p *ngIf="recipe.labels && recipe.labels.length > 0 && viewOptions.showLabels" class="ion-text-wrap">
+                Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-card-content>
+        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">Selected</ion-badge>
+      </ion-card>
+    </div>
+  </virtual-scroller>
+
+  <virtual-scroller
+    *ngIf="viewOptions.viewType === 'list'"
     #scroll
     bufferAmount="5"
     (vsEnd)="fetchMoreRecipes($event)"
