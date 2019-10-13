@@ -73,21 +73,24 @@ exports.fetchImage = url => {
   })
 }
 
+const S3_DEFAULT_ACL = 'public-read';
+const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
+
 exports.sendBufferToS3 = buffer => {
   let key = new Date().getTime().toString();
-  let bucket = config.aws.bucket
-  let acl = 'public-read'
+  let bucket = config.aws.bucket;
 
   return s3.putObject({
     Bucket: bucket,
     Key: key,
-    ACL: acl,
+    ACL: S3_DEFAULT_ACL,
+    CacheControl: S3_DEFAULT_CACHECONTROL,
     Body: buffer // buffer
   }).promise().then(s3Response => {
     return {
       s3Response,
       key,
-      acl,
+      acl: S3_DEFAULT_ACL,
       bucket
     }
   })
@@ -101,7 +104,7 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
     size,
     bucket: config.aws.bucket,
     key,
-    acl: "public-read",
+    acl: S3_DEFAULT_ACL,
     metadata: {
       fieldName: "image"
     },
@@ -182,9 +185,11 @@ exports.upload = multer({
       }
     },
     s3 : {                                // [Optional]: define s3 options
-      ACL: 'public-read',
+      ACL: S3_DEFAULT_ACL,
+      CacheControl: S3_DEFAULT_CACHECONTROL,
       Metadata: {
-        'acl': 'public-read'
+        'acl': S3_DEFAULT_ACL,
+        'cache-control': S3_DEFAULT_CACHECONTROL
       }
     }
   }),
