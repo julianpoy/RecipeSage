@@ -9,12 +9,6 @@ workbox.setConfig({
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
-workbox.precaching.precacheAndRoute([
-  {
-    "url": "assets/fonts/ionicons.woff2?v=4.1.1",
-    "revision": '383676'
-  }
-]);
 
 self.addEventListener('install', evt => {
   caches.keys().then(function (names) {
