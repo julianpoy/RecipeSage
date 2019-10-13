@@ -44,9 +44,8 @@ router.post(
       return new Promise(function(resolve, reject) {
         if (req.body.imageURL) {
           UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(e => {
-            let error = new Error(e);
-            error.status = 415;
-            reject(error);
+            e.status = 415;
+            reject(e);
           });
         } else {
           resolve(null);
