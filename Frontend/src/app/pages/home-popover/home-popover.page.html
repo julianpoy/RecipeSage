@@ -4,6 +4,15 @@
   </ion-list-header>
 
   <ion-item>
+    <ion-icon name='grid' slot="start"></ion-icon>
+    <ion-label>Layout</ion-label>
+    <ion-select [(ngModel)]="preferences[preferenceKeys.ViewType]" (ngModelChange)="savePreferences();">
+      <ion-select-option value="tiles">Tiles</ion-select-option>
+      <ion-select-option value="list">List</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabels]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Labels
