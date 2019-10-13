@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 
 const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
+export enum GlobalPreferenceKey {
+  EnableSplitPane = 'global.enableSplitPane'
+}
+
 export enum MyRecipesPreferenceKey {
   EnableLabelIntersection = 'myRecipes.enableLabelIntersection',
   ShowLabels = 'myRecipes.showLabels',
@@ -27,6 +31,8 @@ export enum ShoppingListPreferenceKey {
 }
 
 export interface AppPreferenceTypes {
+  [GlobalPreferenceKey.EnableSplitPane]: boolean;
+
   [MyRecipesPreferenceKey.EnableLabelIntersection]: boolean;
   [MyRecipesPreferenceKey.ShowLabels]: boolean;
   [MyRecipesPreferenceKey.ShowLabelChips]: boolean;
@@ -51,6 +57,8 @@ export interface AppPreferenceTypes {
 })
 export class PreferencesService {
   preferences: AppPreferenceTypes = {
+    [GlobalPreferenceKey.EnableSplitPane]: false,
+
     [MyRecipesPreferenceKey.EnableLabelIntersection]: true,
     [MyRecipesPreferenceKey.ShowLabels]: true,
     [MyRecipesPreferenceKey.ShowLabelChips]: true,

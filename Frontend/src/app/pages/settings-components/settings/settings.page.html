@@ -38,6 +38,13 @@
       </ion-label>
     </ion-item>
     <ion-item>
+      <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]" (ngModelChange)="toggleSplitPane(); savePreferences()"></ion-toggle>
+      <ion-label class="ion-text-wrap">
+        Enable Split Pane View on Large Screens
+      </ion-label>
+      <ion-icon name='laptop' slot="start"></ion-icon>
+    </ion-item>
+    <ion-item>
       <ion-icon name='brush' slot="start"></ion-icon>
       <ion-label>Theme</ion-label>
       <ion-select [(ngModel)]="appTheme" (ngModelChange)="appThemeChanged();">

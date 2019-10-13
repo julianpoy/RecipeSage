@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController } from '@ionic/angular';
 
 import { RouteMap } from '@/services/util.service';
+import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 
@@ -13,10 +15,25 @@ const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 export class SettingsPage {
   appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || 'default';
 
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = GlobalPreferenceKey;
+
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public preferencesService: PreferencesService,
+    public quickTutorialService: QuickTutorialService) {
+  }
+
+  savePreferences() {
+    this.preferencesService.save();
+  }
+
+  toggleSplitPane() {
+    if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
+      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.SplitPaneView);
+    }
   }
 
   private applyAppTheme() {
