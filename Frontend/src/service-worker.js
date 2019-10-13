@@ -32,7 +32,7 @@ workbox.routing.registerRoute(
     cacheName: 'api-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days, equal to our session invalidation
+        maxAgeSeconds: 60 * 60 * 24 * 14, // 14 Days
       }),
     ]
   })
@@ -46,7 +46,8 @@ workbox.routing.registerRoute(
     cacheName: 's3-image-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxEntries: 40
+        maxEntries: 400,
+        purgeOnQuotaError: true // Clear the image cache if we exceed the browser cache limit
       }),
     ],
   })
