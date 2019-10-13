@@ -6,7 +6,7 @@
   <ion-item>
     <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Sort by</ion-label>
-    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions();">
+    <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences();">
       <ion-select-option value="-title">Title</ion-select-option>
       <ion-select-option value="-createdAt">Created (newest first)</ion-select-option>
       <ion-select-option value="createdAt">Created (oldest first)</ion-select-option>
@@ -14,7 +14,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.groupSimilar" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Group Similar Items
     </ion-label>
@@ -22,7 +22,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showRecipeTitle" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Recipe Title
     </ion-label>
@@ -30,7 +30,7 @@
   </ion-item>
 
   <ion-item *ngIf="shoppingList.collaborators.length > 0">
-    <ion-toggle [(ngModel)]="viewOptions.showAddedBy" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added By
     </ion-label>
@@ -38,7 +38,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showAddedOn" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added On
     </ion-label>

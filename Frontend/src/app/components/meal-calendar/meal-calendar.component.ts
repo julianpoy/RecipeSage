@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { UtilService } from '../../services/util.service';
-
-import dayjs, { Dayjs } from 'dayjs';
+import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'meal-calendar',
@@ -22,7 +22,8 @@ export class MealCalendarComponent {
 
   mealsByDate: any = {};
 
-  @Input() viewOptions: any = {};
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MealPlanPreferenceKey;
 
   weeksOfMonth: any = [];
   today: Date = new Date();
@@ -45,7 +46,8 @@ export class MealCalendarComponent {
   }
 
   constructor(
-    public utilService: UtilService
+    public utilService: UtilService,
+    public preferencesService: PreferencesService
   ) {
     this.selectedDayChange.emit(this.selectedDay);
     this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
@@ -54,7 +56,7 @@ export class MealCalendarComponent {
 
   // Generates calendar array centered around specified day (today).
   generateCalendar() {
-    const { viewOptions, center } = this;
+    const { preferences, center } = this;
 
     this.weeksOfMonth = [];
 
@@ -64,7 +66,7 @@ export class MealCalendarComponent {
     const endOfMonth = base.endOf('month');
     const endOfCalendar = endOfMonth.endOf('week');
 
-    if (viewOptions.startOfWeek === 'monday') {
+    if (preferences[MealPlanPreferenceKey.StartOfWeek] === 'monday') {
       this.dayTitles = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
       startOfCalendar = startOfCalendar.add(1, 'day');
 

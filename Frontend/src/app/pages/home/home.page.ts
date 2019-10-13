@@ -10,6 +10,7 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
+import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
 @Component({
@@ -19,6 +20,7 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 })
 export class HomePage implements AfterViewInit {
   labels: Label[] = [];
+  selectedLabels: string[] = [];
 
   recipes: Recipe[] = [];
   recipeFetchBuffer = 25;
@@ -35,7 +37,9 @@ export class HomePage implements AfterViewInit {
   folder: string;
   folderTitle: string;
 
-  viewOptions: any = {};
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MyRecipesPreferenceKey;
+
   reloadPending = true;
 
   @ViewChild('contentContainer', { static: true }) contentContainer;
@@ -53,6 +57,7 @@ export class HomePage implements AfterViewInit {
     public labelService: LabelService,
     public userService: UserService,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public websocketService: WebsocketService,
     public messagingService: MessagingService) {
 
@@ -65,8 +70,6 @@ export class HomePage implements AfterViewInit {
         this.folderTitle = 'My Recipes';
         break;
     }
-
-    this.loadViewOptions();
 
     events.subscribe('recipe:created', () => this.reloadPending = true);
     events.subscribe('recipe:modified', () => this.reloadPending = true);
@@ -114,36 +117,6 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  loadViewOptions() {
-    const defaults = {
-      enableLabelIntersection: false,
-      showLabels: true,
-      showLabelChips: false,
-      showImages: true,
-      showSource: false,
-      viewType: 'list',
-      sortBy: '-title',
-      selectedLabels: [],
-    };
-
-    this.viewOptions.enableLabelIntersection = JSON.parse(localStorage.getItem('enableLabelIntersection'));
-    this.viewOptions.showLabels = JSON.parse(localStorage.getItem('showLabels'));
-    this.viewOptions.showLabelChips = JSON.parse(localStorage.getItem('showLabelChips'));
-    this.viewOptions.showImages = JSON.parse(localStorage.getItem('showImages'));
-    this.viewOptions.showSource = JSON.parse(localStorage.getItem('showSource'));
-    this.viewOptions.viewType = JSON.parse(localStorage.getItem('myRecipes.viewType'));
-    this.viewOptions.sortBy = localStorage.getItem('sortBy');
-    this.viewOptions.selectedLabels = [];
-
-    for (const key in this.viewOptions) {
-      if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] == null) {
-          this.viewOptions[key] = defaults[key];
-        }
-      }
-    }
-  }
-
   fetchMoreRecipes(event) {
     if (this.searchText) return;
 
@@ -158,7 +131,7 @@ export class HomePage implements AfterViewInit {
   resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
-    if (this.viewOptions.selectedLabels.length === 0) {
+    if (this.selectedLabels.length === 0) {
       return Promise.all([
         this.resetAndLoadLabels(),
         this.resetAndLoadRecipes()
@@ -168,8 +141,7 @@ export class HomePage implements AfterViewInit {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = this.labels.map(e => e.title);
 
-      const selectedLabels = this.viewOptions.selectedLabels;
-      selectedLabels.splice(0, selectedLabels.length, ...selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+      this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
 
       return this.resetAndLoadRecipes();
     });
@@ -209,11 +181,11 @@ export class HomePage implements AfterViewInit {
     return new Promise((resolve, reject) => {
       this.recipeService.fetch({
         folder: this.folder,
-        sortBy: this.viewOptions.sortBy,
+        sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
         offset,
         count: numToFetch,
-        labelIntersection: this.viewOptions.enableLabelIntersection,
-        ...(this.viewOptions.selectedLabels.length > 0 ? { labels: this.viewOptions.selectedLabels } : {})
+        labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
       }).then(response => {
 
         this.totalRecipeCount = response.totalCount;
@@ -260,9 +232,9 @@ export class HomePage implements AfterViewInit {
   }
 
   toggleLabel(labelTitle) {
-    const labelIdx = this.viewOptions.selectedLabels.indexOf(labelTitle);
+    const labelIdx = this.selectedLabels.indexOf(labelTitle);
     labelIdx > -1 ?
-      this.viewOptions.selectedLabels.splice(labelIdx, 1) : this.viewOptions.selectedLabels.push(labelTitle);
+      this.selectedLabels.splice(labelIdx, 1) : this.selectedLabels.push(labelTitle);
     this.resetAndLoadRecipes();
   }
 
@@ -278,8 +250,8 @@ export class HomePage implements AfterViewInit {
     const popover = await this.popoverCtrl.create({
       component: HomePopoverPage,
       componentProps: {
-        viewOptions: this.viewOptions,
         labels: this.labels,
+        selectedLabels: this.selectedLabels,
         selectionMode: this.selectionMode
       },
       event
@@ -320,7 +292,7 @@ export class HomePage implements AfterViewInit {
 
     return new Promise((resolve, reject) => {
       this.recipeService.search(text, {
-        ...(this.viewOptions.selectedLabels.length > 0 ? { labels: this.viewOptions.selectedLabels } : {})
+        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
       }).then(response => {
         loading.dismiss();
 

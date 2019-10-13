@@ -4,7 +4,7 @@
   </ion-list-header>
 
   <ion-item *ngIf="mealPlan.collaborators.length > 0">
-    <ion-toggle [(ngModel)]="viewOptions.showAddedBy" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added By
     </ion-label>
@@ -12,7 +12,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showAddedOn" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added On
     </ion-label>
@@ -22,7 +22,7 @@
   <ion-item>
     <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Start week on</ion-label>
-    <ion-select [(ngModel)]="viewOptions.startOfWeek" (ngModelChange)="saveViewOptions();">
+    <ion-select [(ngModel)]="preferences[preferenceKeys.StartOfWeek]" (ngModelChange)="savePreferences();">
       <ion-select-option value="sunday">Sunday</ion-select-option>
       <ion-select-option value="monday">Monday</ion-select-option>
     </ion-select>
