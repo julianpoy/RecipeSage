@@ -3,7 +3,7 @@
     Options
   </ion-list-header>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='grid' slot="start"></ion-icon>
     <ion-label>Layout</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.ViewType]" (ngModelChange)="savePreferences();">
@@ -12,7 +12,7 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabels]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Labels
@@ -20,7 +20,7 @@
     <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Label Toggles
@@ -28,7 +28,7 @@
     <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowImages]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Images
@@ -36,7 +36,7 @@
     <ion-icon name='image' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowSource]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Source
@@ -44,7 +44,7 @@
     <ion-icon name='link' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences(true);">
@@ -57,14 +57,14 @@
     </ion-select>
   </ion-item>
 
-  <ion-item class="cursor-pointer" (click)="openLabelFilter()">
+  <ion-item lines="inset" class="cursor-pointer" (click)="openLabelFilter()">
     <ion-icon name='funnel' slot="start"></ion-icon>
     <ion-label>Filter by Label</ion-label>
     <ion-badge *ngIf="selectedLabels.length > 0" slot="end">{{selectedLabels.length}}</ion-badge>
     <ion-icon name="arrow-dropdown" slot="end"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]" (ngModelChange)="savePreferences(true);"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Match All Labels
@@ -72,12 +72,12 @@
     <ion-icon name='funnel' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item *ngIf="!selectionMode">
+  <ion-item lines="inset" *ngIf="!selectionMode">
     <ion-icon name='checkmark' slot="start"></ion-icon>
     <ion-button (click)="toggleSelectionMode()" expand="full">Select Multiple Recipes</ion-button>
   </ion-item>
 
-  <ion-item *ngIf="selectionMode">
+  <ion-item lines="inset" *ngIf="selectionMode">
     <ion-icon name='close' slot="start"></ion-icon>
     <ion-button (click)="toggleSelectionMode()" expand="full">Unselect All Recipes</ion-button>
   </ion-item>

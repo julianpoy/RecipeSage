@@ -3,7 +3,7 @@
     Options
   </ion-list-header>
 
-  <ion-item *ngIf="mealPlan.collaborators.length > 0">
+  <ion-item lines="inset" *ngIf="mealPlan.collaborators.length > 0">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added By
@@ -11,7 +11,7 @@
     <ion-icon name='contact' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added On
@@ -19,7 +19,7 @@
     <ion-icon name='calendar' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Start week on</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.StartOfWeek]" (ngModelChange)="savePreferences();">
@@ -28,7 +28,7 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='trash' slot="start"></ion-icon>
     <ion-button (click)="deleteMealPlan()" expand="full">Delete meal plan</ion-button>
   </ion-item>

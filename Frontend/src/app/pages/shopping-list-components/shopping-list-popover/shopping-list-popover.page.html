@@ -3,7 +3,7 @@
     Options
   </ion-list-header>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='list' slot="start"></ion-icon>
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences();">
@@ -13,7 +13,7 @@
     </ion-select>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Group Similar Items
@@ -21,7 +21,7 @@
     <ion-icon name='attach' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Recipe Title
@@ -29,7 +29,7 @@
     <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item *ngIf="shoppingList.collaborators.length > 0">
+  <ion-item lines="inset" *ngIf="shoppingList.collaborators.length > 0">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added By
@@ -37,7 +37,7 @@
     <ion-icon name='contact' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label>
       Show Added On
@@ -45,17 +45,17 @@
     <ion-icon name='calendar' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='print' slot="start"></ion-icon>
     <ion-button (click)="print()" expand="full">Print</ion-button>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='remove-circle' slot="start"></ion-icon>
     <ion-button (click)="removeAllItems()" expand="full">Remove all items</ion-button>
   </ion-item>
 
-  <ion-item>
+  <ion-item lines="inset">
     <ion-icon name='trash' slot="start"></ion-icon>
     <ion-button (click)="deleteList()" expand="full">Delete list</ion-button>
   </ion-item>
