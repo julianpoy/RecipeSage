@@ -309,3 +309,20 @@ exports.gunzip = buf => {
     })
   })
 }
+
+// CBs are an array of promises to be executed by chunkSize
+// Waits until previous is done before executing next chunk
+exports.executeInChunks = async (cbs, chunkSize) => {
+  if (chunkSize < 1) return Promise.resolve();
+
+  let chunks = [];
+  for (let i = 0; i < cbs.length; i += chunkSize) {
+    chunks.push(cbs.slice(i, i + chunkSize));
+  }
+
+  await chunks.reduce((acc, chunk) => {
+    return acc.then(() => {
+      return Promise.all(chunk.map(cb => cb()))
+    })
+  }, Promise.resolve())
+}

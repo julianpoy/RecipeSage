@@ -105,43 +105,62 @@ router.get('/deduperecipelabels', function(req, res, next) {
 })
 
 function saveRecipes(userId, recipes) {
-  return SQ.transaction(function (t) {
+  return SQ.transaction(async t => {
 
-    return Promise.all(recipes.map(function (recipe) {
-      return new Promise(function (resolve, reject) {
-        if (recipe.imageURL) {
-          UtilService.sendURLToS3(recipe.imageURL).then(resolve).catch(() => {
-            resolve(null);
-          });
-        } else resolve(null);
-      }).then(function (image) {
-        return Recipe.create({
+    const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
+
+    await UtilService.executeInChunks(recipes.map(recipe => () => {
+      if (recipe.imageURL) {
+        return UtilService.sendURLToS3(recipe.imageURL).then(image => {
+          recipe.image = image;
+        }).catch(() => {});
+      }
+    }), PEPPERPLATE_IMG_CHUNK_SIZE);
+
+    const serializedRecipes = recipes.map(recipe => ({
+      userId: userId,
+      title: recipe.title,
+      description: recipe.description,
+      yield: recipe.yield,
+      activeTime: recipe.activeTime,
+      totalTime: recipe.totalTime,
+      source: recipe.source,
+      url: recipe.url,
+      notes: recipe.notes,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+      image: recipe.image
+    }));
+
+    const savedRecipes = await Recipe.bulkCreate(serializedRecipes, {
+      returning: true,
+      transaction: t
+    });
+
+    const recipesByLabelTitle = {};
+    savedRecipes.map((savedRecipe, idx) => {
+      recipes[idx].rawCategories.map(rawCategory => {
+        const labelTitle = rawCategory.trim().toLowerCase();
+        recipesByLabelTitle[labelTitle] = recipesByLabelTitle[labelTitle] || [];
+        recipesByLabelTitle[labelTitle].push(savedRecipe.id);
+      });
+    });
+
+    await Promise.all(Object.keys(recipesByLabelTitle).map(async labelTitle => {
+      const matchingLabels = await Label.findOrCreate({
+        where: {
           userId: userId,
-          title: recipe.title,
-          description: recipe.description,
-          yield: recipe.yield,
-          activeTime: recipe.activeTime,
-          totalTime: recipe.totalTime,
-          source: recipe.source,
-          url: recipe.url,
-          notes: recipe.notes,
-          ingredients: recipe.ingredients,
-          instructions: recipe.instructions,
-          image: image
-        }, { transaction: t }).then(function (newRecipe) {
-          return Promise.all(recipe.rawCategories.map(function (rawCategory) {
-            return Label.findOrCreate({
-              where: {
-                userId: userId,
-                title: rawCategory.trim().toLowerCase()
-              },
-              transaction: t
-            }).then(function (labels) {
-              return labels[0].addRecipe(newRecipe.id, { transaction: t });
-            });
-          }));
-        });
-      })
+          title: labelTitle
+        },
+        transaction: t
+      });
+
+      await Recipe_Label.bulkCreate(recipesByLabelTitle[labelTitle].map(savedRecipeId => ({
+        labelId: matchingLabels[0].id,
+        recipeId: savedRecipeId
+      })), {
+        transaction: t
+      });
     }));
   }).catch(err => {
     console.log(err)
