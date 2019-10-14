@@ -29,6 +29,10 @@
   --ion-color-step-850: #e6e6e6;
   --ion-color-step-900: #eaeaea;
   --ion-color-step-950: #f4f4f4;
+
+  .alert-wrapper, ion-card {
+    border: 1px solid var(--ion-border-color);
+  }
 }
 
 @mixin darkModeVars() {
