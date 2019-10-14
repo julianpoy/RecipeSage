@@ -59,11 +59,11 @@ export class PreferencesService {
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
 
-    [MyRecipesPreferenceKey.EnableLabelIntersection]: true,
+    [MyRecipesPreferenceKey.EnableLabelIntersection]: false,
     [MyRecipesPreferenceKey.ShowLabels]: true,
-    [MyRecipesPreferenceKey.ShowLabelChips]: true,
+    [MyRecipesPreferenceKey.ShowLabelChips]: false,
     [MyRecipesPreferenceKey.ShowImages]: true,
-    [MyRecipesPreferenceKey.ShowSource]: true,
+    [MyRecipesPreferenceKey.ShowSource]: false,
     [MyRecipesPreferenceKey.ViewType]: 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
 
