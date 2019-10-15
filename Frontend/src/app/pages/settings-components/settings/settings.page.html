@@ -13,6 +13,9 @@
 
 <ion-content>
   <ion-list>
+    <ion-list-header>
+      Data & Account
+    </ion-list-header>
     <ion-item lines="inset" (click)="goToImport()" button>
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
@@ -37,6 +40,9 @@
         Check for Update
       </ion-label>
     </ion-item>
+    <ion-list-header>
+      General Settings
+    </ion-list-header>
     <ion-item lines="inset">
       <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]" (ngModelChange)="toggleSplitPane(); savePreferences()"></ion-toggle>
       <ion-label class="ion-text-wrap">
