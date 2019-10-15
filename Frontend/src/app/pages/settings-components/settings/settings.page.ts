@@ -18,12 +18,20 @@ export class SettingsPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
+  showSplitPaneOption = false;
+
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public preferencesService: PreferencesService,
     public quickTutorialService: QuickTutorialService) {
+
+    try {
+      this.showSplitPaneOption = screen.width >= 1200;
+    } catch (e) {
+      console.error('Could not get screen width', e);
+    }
   }
 
   savePreferences() {

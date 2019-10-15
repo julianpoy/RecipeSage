@@ -43,7 +43,7 @@
     <ion-list-header>
       General Settings
     </ion-list-header>
-    <ion-item lines="inset">
+    <ion-item lines="inset" *ngIf="showSplitPaneOption">
       <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]" (ngModelChange)="toggleSplitPane(); savePreferences()"></ion-toggle>
       <ion-label class="ion-text-wrap">
         Enable Split Pane View on Large Screens
