@@ -40,6 +40,7 @@ export class SettingsPage {
     const alert = await this.alertCtrl.create({
       header: 'Reset Preferences Warning',
       message: `Resetting your preferences will set all app preferences back to their default state.<br /><br />
+                This includes preferences set via menus on the home page, meal plans page, shopping list page, etc.<br /><br />
                 <b>Note:</b> This only affects this device.`,
       buttons: [
         {
