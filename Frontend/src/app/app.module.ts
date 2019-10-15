@@ -1,35 +1,39 @@
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import * as Sentry from '@sentry/browser';
 
-import { MyApp } from './app.component';
-import { PipesModule } from '../pipes/pipes.module';
-
-import { UserServiceProvider } from '../providers/user-service/user-service';
-import { LabelServiceProvider } from '../providers/label-service/label-service';
-import { RecipeServiceProvider } from '../providers/recipe-service/recipe-service';
-import { MessagingServiceProvider } from '../providers/messaging-service/messaging-service';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoadingServiceProvider } from '../providers/loading-service/loading-service';
-import { ShoppingListServiceProvider } from '../providers/shopping-list-service/shopping-list-service';
-import { WebsocketServiceProvider } from '../providers/websocket-service/websocket-service';
-import { UtilServiceProvider } from '../providers/util-service/util-service';
-import { MealPlanServiceProvider } from '../providers/meal-plan-service/meal-plan-service';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DefaultPageGuardService } from './services/default-page-guard.service';
+import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
 Sentry.init({
-  release: (<any>window).version,
+  release: (window as any).version,
   dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200'
 });
 
-export class SentryIonicErrorHandler extends IonicErrorHandler {
+export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
     super.handleError(error);
+
+    let token = '';
     try {
+      token = localStorage.getItem('token');
+    } catch (e) {}
+
+    try {
+      Sentry.addBreadcrumb({
+        category: 'auth',
+        message: 'Session: ' + token,
+        level: Sentry.Severity.Info
+      });
       Sentry.captureException(error.originalError || error);
     } catch (e) {
       console.error(e);
@@ -37,40 +41,25 @@ export class SentryIonicErrorHandler extends IonicErrorHandler {
   }
 }
 
-var mode = navigator.userAgent.match(/Windows Phone/i) ? 'md' : undefined; // Force windows phone to use Material Design
-
 @NgModule({
   declarations: [
-    MyApp
+    AppComponent
   ],
+  entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp, {
-      preloadModules: true,
-      mode: mode
-    }),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PipesModule,
-    BrowserAnimationsModule,
-    LoadingBarModule.forRoot(),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    LoadingBarModule
   ],
   providers: [
-    {provide: ErrorHandler, useClass: SentryIonicErrorHandler},
-    UserServiceProvider,
-    LabelServiceProvider,
-    RecipeServiceProvider,
-    MessagingServiceProvider,
-    LoadingServiceProvider,
-    ShoppingListServiceProvider,
-    WebsocketServiceProvider,
-    UtilServiceProvider,
-    MealPlanServiceProvider
-  ]
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    StatusBar,
+    SplashScreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    DefaultPageGuardService,
+    UnsavedChangesGuardService,
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

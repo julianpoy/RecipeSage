@@ -1,0 +1,30 @@
+.labelChips {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2px 4px 8px;
+
+  a {
+    color: var(--ion-text-color);
+    padding: 6px 12px;
+    border: 1px solid;
+    border-color: var(--ion-border-color);
+    border-radius: 20px;
+    margin: 2px 4px;
+    cursor: pointer;
+    transition: box-shadow 0.1s ease-in-out;
+
+    &:hover {
+      background-color: var(--ion-item-background-hover,rgba(var(--ion-text-color-rgb,0,0,0),0.04)); // Pulled from ion-item button hover
+    }
+
+    &.selected {
+      border-color: var(--ion-color-primary);
+      background-color: var(--ion-color-primary);
+      color: var(--ion-color-light);
+    }
+  }
+}
+
+.recipeItem {
+  cursor: pointer;
+}

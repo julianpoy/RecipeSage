@@ -9,7 +9,7 @@ if [ $? -eq 0 ]; then
 
     tar -czf deploy-staging.tgz ./www/*
 
-    ssh julian@staging.recipesage.com 'rm /tmp/deploy-staging.tgz; cd ~/Projects/chefbook-staging; git checkout Backend/package-lock.json; git pull; cd Backend; npm install; pm2 reload RecipeSageStagingAPI'
+    ssh julian@staging.recipesage.com 'rm /tmp/deploy-staging.tgz; cd ~/Projects/chefbook-staging; git checkout Backend/package-lock.json; git pull; cd Backend; npm install; cd ../SharedUtils; npm install; pm2 reload RecipeSageStagingAPI'
 
     scp deploy-staging.tgz julian@staging.recipesage.com:/tmp
 

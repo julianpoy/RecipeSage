@@ -9,6 +9,8 @@ var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
+var Recipe = require('../models').Recipe;
+var Message = require('../models').Message;
 
 // Service
 var SessionService = require('../services/sessions');
@@ -33,6 +35,50 @@ router.get(
 
   res.status(200).json(user);
 
+});
+
+router.get(
+  '/stats',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+  const userId = res.locals.session.userId;
+
+  Promise.all([
+    Recipe.count({
+      where: {
+        userId
+      }
+    }),
+    Recipe.count({
+      where: {
+        userId,
+        image: {
+          [Op.ne]: null
+        }
+      }
+    }),
+    Message.count({
+      where: {
+        [Op.or]: [{
+          toUserId: userId
+        }, {
+          fromUserId: userId
+        }]
+      }
+    })
+  ]).then(results => {
+    const [recipeCount, recipeImageCount, messageCount] = results;
+
+    res.status(200).json({
+      recipeCount,
+      recipeImageCount,
+      messageCount,
+      createdAt: res.locals.user.createdAt,
+      lastLogin: res.locals.user.lastLogin
+    });
+  }).catch(next);
 });
 
 /* Get public user listing by email */
@@ -368,8 +414,9 @@ router.delete(
       token: req.query.fcmToken,
       userId: res.locals.session.userId
     }
-  })
-  .catch(next);
+  }).then(() => {
+    res.status(200).send("ok");
+  }).catch(next);
 });
 
 module.exports = router;

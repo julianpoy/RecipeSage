@@ -1,0 +1,132 @@
+@import 'src/theme/shared-variables.scss';
+
+@media only screen and (max-width: $desktop-breakpoint) {
+  .metacontainer-desktop {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $desktop-breakpoint) {
+  .metacontainer-mobile {
+    display: none;
+  }
+}
+
+ion-thumbnail {
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+}
+
+.pre {
+  white-space: pre-wrap;
+}
+
+h2.recipeTitle {
+  margin-top: 0 !important;
+}
+
+.ingredientsInstructionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+
+  .ingredientsCol {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+
+  .instructionsCol {
+    min-width: 100%; // Force instructions column to wrap
+    max-width: 700px;
+  }
+
+  @media (min-width: 576px) {
+    flex-wrap: nowrap;
+
+    .instructionsCol {
+      min-width: auto; // Allow instructions column to wrap
+    }
+
+    .ingredientsCol {
+      width: 215px;
+    }
+  }
+}
+
+.ingredients {
+  ion-label {
+    margin: 0;
+  }
+
+  .scale {
+    cursor: pointer;
+  }
+
+  ion-label {
+    margin-top: 0;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .ingredient {
+    .sectionHeader {
+      display: block;
+      margin: 4px 0;
+    }
+
+    &:first-child {
+      .sectionHeader {
+        margin-top: 0;
+      }
+    }
+
+    &.complete {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    &.ingredientContent {
+      cursor: pointer;
+    }
+  }
+}
+
+.instructions {
+  ion-label {
+    margin-top: 0;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .instruction {
+    margin-bottom: 15px;
+
+    .instructionContent {
+      cursor: pointer;
+    }
+
+    span.complete .instructionContent {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+  }
+}
+
+.meta {
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  ion-col {
+    padding: 5px;
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}

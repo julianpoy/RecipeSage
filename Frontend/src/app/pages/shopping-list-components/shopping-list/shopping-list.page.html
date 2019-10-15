@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Shopping List - {{ list.title }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list lines="none">
+    <ion-list-header *ngIf="list.items.length > 0" class="ion-no-margin">
+      Items
+    </ion-list-header>
+    <div *ngIf="viewOptions.groupSimilar">
+      <div *ngFor="let group of list.itemsByGroup; let i = index;">
+        <ion-item>
+          <ion-label class="ion-text-wrap ion-no-margin">
+            <b class="groupTitle">{{ group.title }}:</b>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngFor="let item of group.items">
+          <ion-label class="ion-text-wrap ion-no-margin">
+            {{ item.title }}
+            <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+              For recipe:
+              <span>{{ item.recipe.title }}</span>
+            </p>
+            <p *ngIf="viewOptions.showAddedOn">
+              Added
+              <span>{{ formatItemCreationDate(item.createdAt) }}</span>
+            </p>
+            <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
+              <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+              <span>{{ item.owner.name || item.owner.email }}</span>
+            </p>
+          </ion-label>
+          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
+        </ion-item>
+      </div>
+    </div>
+    <div *ngIf="!viewOptions.groupSimilar">
+      <ion-item *ngFor="let item of list.items; let i = index;">
+        <ion-label class="ion-text-wrap">
+          {{ item.title }}
+          <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+            For recipe:
+            <span>{{ item.recipe.title }}</span>
+          </p>
+          <p *ngIf="viewOptions.showAddedOn">
+            Added
+            <span>{{ formatItemCreationDate(item.createdAt) }}</span>
+          </p>
+          <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
+            <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+            <span>{{ item.owner.name || item.owner.email }}</span>
+          </p>
+        </ion-label>
+        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
+      </ion-item>
+    </div>
+    <null-state *ngIf="list.items.length === 0 && initialLoadComplete">
+      <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          There are no items in this shopping list.
+          <br />
+          <ion-button (click)="newShoppingListItem()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            <ion-label>
+              Add the first item
+            </ion-label>
+          </ion-button>
+        </p>
+      </ion-label>
+    </null-state>
+  </ion-list>
+
+  <br />
+
+  <ion-list *ngIf="recipeIds.length > 0">
+    <ion-list-header>
+      Recipes in this list
+    </ion-list-header>
+    <ion-item *ngFor="let recipeId of recipeIds" (click)="removeRecipe(recipeId)">
+      <ion-icon name="trash" slot="start"></ion-icon>
+      <ion-label>
+        {{ itemsByRecipeId[recipeId][0].recipe.title }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <br />
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="newShoppingListItem()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

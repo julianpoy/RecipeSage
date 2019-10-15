@@ -1,0 +1,60 @@
+<div>
+  <ion-item class="selectedRecipe"
+    (click)="selectedRecipe = null"
+    *ngIf="selectedRecipe"
+    button>
+    <ion-avatar *ngIf="selectedRecipe.image" slot="start">
+      <img src="{{ selectedRecipe.image.location }}">
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ selectedRecipe.title }}</h2>
+      <p>Click to change</p>
+    </ion-label>
+  </ion-item>
+
+  <div class="dropdownSelect" *ngIf="!selectedRecipe">
+    <ion-searchbar
+      (ionChange)='onSearchInputChange($event)'
+      placeholder="Type to search for recipe..."
+      autocomplete="off"
+      #labelInputField
+      id="labelInputField"></ion-searchbar>
+    <div
+      class="autocomplete">
+      <button
+        class="suggestion"
+        *ngFor="let recipe of recipes"
+        (click)="selectRecipe(recipe)">
+        <ion-item class="suggestion-inner" button>
+          <ion-avatar *ngIf="recipe.image" slot="start">
+            <img src="{{ recipe.image.location }}">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ recipe.title }}</h2>
+            <p>Click to select</p>
+          </ion-label>
+        </ion-item>
+      </button>
+      <!-- Searching for user for which a thread does not exist -->
+      <button
+        class="suggestion"
+        *ngIf="searching">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>Searching for "{{ searchText }}"...</h2>
+          </ion-label>
+        </ion-item>
+      </button>
+      <!-- Searching for user for which a thread does not exist -->
+      <button
+        class="suggestion"
+        *ngIf="recipes.length === 0 && searchText.length > 0 && !searching">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>No results for "{{ searchText }}"</h2>
+          </ion-label>
+        </ion-item>
+      </button>
+    </div>
+  </div>
+</div>

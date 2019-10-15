@@ -9,14 +9,12 @@ module.exports = {
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": process.env.RS_DEV_DB_SSL == "true"
-    },
-    "operatorsAliases": false
+    }
   },
   "test": {
     "dialect": "sqlite",
     "storage": "test.sqlite3",
-    "logging": false,
-    "operatorsAliases": false
+    "logging": false
   },
   "staging": {
     "username": process.env.RS_STG_DB_USERNAME || "chefbook",
@@ -28,8 +26,7 @@ module.exports = {
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": process.env.RS_STG_DB_SSL == "true"
-    },
-    "operatorsAliases": false
+    }
   },
   "production": {
     "username": process.env.RS_PROD_DB_USERNAME || "chefbook",
@@ -41,7 +38,6 @@ module.exports = {
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": process.env.RS_PROD_DB_SSL == "true"
-    },
-    "operatorsAliases": false
+    }
   }
 }

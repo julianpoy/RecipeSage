@@ -1,0 +1,57 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Add item(s)</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <div>
+    <ion-segment [(ngModel)]="inputType">
+      <ion-segment-button value="manualEntry">
+        Manual Entry
+      </ion-segment-button>
+      <ion-segment-button value="recipe">
+        Choose Recipe
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="inputType">
+
+    <div *ngSwitchCase="'manualEntry'">
+      <ion-item>
+        <ion-label position="floating">Item title</ion-label>
+        <ion-input [(ngModel)]="itemTitle" type="text"></ion-input>
+      </ion-item>
+    </div>
+
+    <div *ngSwitchCase="'recipe'">
+      <br /><br />
+      <select-recipe
+      [(selectedRecipe)]="selectedRecipe"
+      ></select-recipe>
+    </div>
+  </div>
+
+  <br /><br />
+
+  <select-meal (mealChange)="meal = $event"></select-meal>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label>
+      Add to Meal Plan
+    </ion-label>
+  </ion-button>
+</ion-footer>

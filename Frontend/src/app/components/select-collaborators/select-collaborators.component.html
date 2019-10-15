@@ -1,0 +1,66 @@
+<div>
+  <div class='dropdownSelect'>
+    <h6>
+      Collaborators
+    </h6>
+
+    <div class="labels">
+      <span class="label" *ngFor="let userId of selectedThreads">
+        <ion-icon class="delete-label" (click)="removeCollaborator(userId)" name="trash" slot="start"></ion-icon>
+        {{ threadsByUserId[userId].name || threadsByUserId[userId].email }}
+      </span>
+    </div>
+
+    <input
+      [(ngModel)]='pendingThread'
+      (ngModelChange)='autofillUserName()'
+      (focus)='toggleAutocomplete(true)'
+      (focusout)='toggleAutocomplete(false, $event)'
+      (blur)='toggleAutocomplete(false, $event)'
+      (keyup.enter)="onAddCollaboratorEnter($event);"
+      placeholder="Add collaborators by email address"
+      autocomplete="off"
+      #labelInputField
+      id="labelInputField" />
+    <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
+      <button
+        class="suggestion"
+        *ngIf="pendingThread && pendingThread.length > 0 && selectedThreads.indexOf(pendingCollaboratorId) > -1">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>{{ pendingThread }}</h2>
+            <p>Already added</p>
+          </ion-label>
+        </ion-item>
+      </button>
+      <button class="suggestion"
+        *ngFor="let thread of existingThreads | shoppingListCollaboratorFilter:pendingThread+selectedThreads.join()+pendingCollaboratorId:pendingThread:selectedThreads"
+        (click)="addCollaborator(thread.id)">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>{{ threadsByUserId[thread.id].name || threadsByUserId[thread.id].email }}</h2>
+            <p>Click to add</p>
+          </ion-label>
+        </ion-item>
+      </button>
+      <!-- Searching for user for which a thread does not exist -->
+      <button class="suggestion" *ngIf="searchingForRecipient">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>{{ pendingThread }}</h2>
+            <p>Searching...</p>
+          </ion-label>
+        </ion-item>
+      </button>
+      <!-- Searching for user for which a thread does not exist -->
+      <button class="suggestion" *ngIf="pendingThread && !searchingForRecipient && !pendingCollaboratorId">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>{{ pendingThread }}</h2>
+            <p>User not found</p>
+          </ion-label>
+        </ion-item>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Export</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-label>
+      <p>After selecting to export your data, a file will begin to download. You may have to press "allow".</p>
+      <p>The exported file will contain all of your recipes in the selected format.</p>
+    </ion-label>
+  </ion-item>
+
+  <div class="ion-padding">
+  	<ion-button (click)="exportAsJSON()">Export as JSON (best)</ion-button><br />
+  	<ion-button (click)="exportAsXML()">Export as XML</ion-button><br />
+  	<ion-button (click)="exportAsTXT()">Export as Plain Text</ion-button>
+	</div>
+
+  <ion-item lines="none">
+    <ion-label>
+      <p><b>Note:</b> If you plan to re-import the data later, you'll need to select JSON format.</p>
+    </ion-label>
+  </ion-item>
+</ion-content>

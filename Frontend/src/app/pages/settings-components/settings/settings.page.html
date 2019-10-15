@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item (click)="goToImport()" class="cursor-pointer" button>
+      <ion-icon name="cloud-upload" slot="start"></ion-icon>
+      <ion-label>
+        Import Recipe Data
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="goToExport()" class="cursor-pointer" button>
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      <ion-label>
+        Export Recipe Data
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="goToAccount()" class="cursor-pointer" button>
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-label>
+        Account Settings & Stats
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="checkForUpdate()" class="cursor-pointer" button>
+      <ion-icon name="sync" slot="start"></ion-icon>
+      <ion-label>
+        Check for Update
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name='brush' slot="start"></ion-icon>
+      <ion-label>Theme</ion-label>
+      <ion-select [(ngModel)]="appTheme" (ngModelChange)="appThemeChanged();">
+        <ion-select-option value="default">System Default</ion-select-option>
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+        <ion-select-option value="black">Black (OLED)</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

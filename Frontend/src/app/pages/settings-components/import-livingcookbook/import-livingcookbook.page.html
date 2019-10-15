@@ -1,0 +1,136 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Import Recipes from Living Cookbook</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-item lines="none">
+    <ion-label class="ion-text-center ion-text-wrap">
+      <br /><br />
+      <p>
+        This will import your Living Cookbook database into Recipe Sage. <b>Please note this feature is in beta.</b><br />
+        All files must be in .lcb, .fdx or .fdxz format. Other formats will not work.
+      </p>
+      <br />
+      <p>
+        <b>The import task can take several minutes</b><br />
+        It depends on the format and size of your database file<br />
+      </p>
+      <br />
+      <p>
+        If you're having trouble with the import, send me an email with the database file and I can import it manually.<br />
+        If your database file is very large, you may have trouble importing it via this interface due to browser limitations.
+      </p>
+      <br />
+      <br />
+      <p>
+        Please consider donating if your database contains a large number of recipes or images.
+      </p>
+
+      <br /><br />
+      <b>1. Choose Import Options (if any):</b>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="option">
+    <ion-label>Exclude recipe images (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="excludeImages"></ion-checkbox>
+  </ion-item>
+
+  <ion-item lines="none" class="option">
+    <ion-label>Include stock "filler" LCB recipes (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
+  </ion-item>
+
+  <ion-item lines="none" class="option">
+    <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
+    <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
+  </ion-item>
+
+  <br />
+
+  <ion-item lines="none">
+    <ion-label class="ion-text-center ion-text-wrap">
+      <b>2. Select Your Living Cookbook Database:</b>
+    </ion-label>
+  </ion-item>
+
+  <div class="ion-text-center ion-padding">
+    <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
+    <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
+
+    <div class="ion-padding" *ngIf="showFileTypeWarning()">
+      <p>
+        Warning! This filetype does not end in .lcb, .fdx, or .fdxz<br />
+        It may not work.
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="!isFileTooLarge() && isFileLarge()">
+      <p>
+        <b>This database is very large.</b><br />
+        It may take a very long time to upload depending on your internet connection.<br />
+        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+          If you're having trouble, please contact me to have your database imported manually.
+        </a>
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="isFileTooLarge()">
+      <p>
+        <b>This file is too large to upload directly.</b><br />
+        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+          Please contact me to have your database imported manually.
+        </a>
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
+      <ion-item lines="none">
+        <ion-label class="ion-text-center ion-text-wrap">
+          <b>3. Upload!</b>
+        </ion-label>
+      </ion-item>
+
+      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">Upload and Import</ion-button>
+      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">Upload and Import Anyway</ion-button>
+      <ion-button *ngIf="loading">Importing, please wait...</ion-button>
+    </div>
+
+    <br /><br /><br /><br />
+
+    <ion-item lines="none">
+      <ion-label class="ion-text-center ion-text-wrap">
+        <a href="" (click)="troubleshoot = true; $event.preventDefault()">Click for Troubleshooting Help</a>
+        <br /><br />
+        <div *ngIf="troubleshoot">
+          <p>
+            If you find that the import isn't importing all of your recipes: <br />
+            Try selecting the option above for "Include stock "filler" LCB recipes" and try again.<br />
+            You might also try exporting your recipes from LivingCookbook as .FDX or .FDXZ format and uploading in that format instead.
+          </p>
+          <br />
+          <p>
+            If the import is taking a long time: <br />
+            Depending on your internet speed, database size, and image content, the import may take a long time.
+          </p>
+          <br />
+          <p>
+            If your database is too large: <br />
+            Upload your database to Firefox Send (<a href="https://send.firefox.com" target="_blank">https://send.firefox.com</a>)
+            and email me the link it gives you at the end.
+          </p>
+          <br />
+        </div>
+      </ion-label>
+    </ion-item>
+  </div>
+</ion-content>

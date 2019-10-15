@@ -1,8 +1,18 @@
 var SessionService = require('../services/sessions');
 var User = require('../models').User;
 
-exports.validateSession = function(types) {
+exports.validateSession = function(types, optional) {
   return function(req, res, next) {
+    if (!req.query.token) {
+      // Permit no token if optional
+      if (optional) return next();
+
+      // Throw unauthorized without pinging DB
+      let e = new Error('Session is not valid!');
+      e.status = 401;
+      return next(e)
+    }
+
     SessionService.validateSession(req.query.token, types).then(session => {
       res.locals.session = session;
       next();
@@ -16,7 +26,7 @@ exports.validateUser = function(req, res, next) {
     where: {
       id: res.locals.session.userId
     },
-    attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt']
+    attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt', 'lastLogin']
   }).then(user => {
     if (!user) {
       res.status(404).send("Your user was not found");

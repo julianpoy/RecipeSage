@@ -1,19 +1,11 @@
-// http://ionicframework.com/docs/theming/
+@import 'src/theme/shared-variables.scss';
 
-
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+// App Styles
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply to the entire application. These
+// styles are for the entire app and not just one component. Additionally, this
+// file can hold Sass mixins, functions, and placeholder classes to be imported
+// and used throughout the application.
 
 .bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
@@ -23,22 +15,34 @@
   font-size: 40px;
 }
 
-ion-thumbnail img {
-  object-fit: cover;
+.popover-content, .alert-wrapper {
+  --width: 280px;
+  --max-width: 280px;
 }
 
-.platform-core ion-thumbnail {
-  width: 200px;
-  height: 200px;
+ion-thumbnail {
+  width: 80px;
+  height: 80px;
 
   img {
+    object-fit: cover;
+  }
+}
+
+@media only screen and (min-width: $desktop-breakpoint) {
+  ion-thumbnail {
     width: 200px;
     height: 200px;
+  }
+
+  .popover-content, .alert-wrapper {
+    --width: 350px;
+    --max-width: 350px;
   }
 }
 
 .alertDanger {
-  color: map-get($colors, danger) !important;
+  color: var(--ion-color-danger) !important;
 }
 
 #loading-bar-spinner {
@@ -62,9 +66,6 @@ ion-thumbnail img {
 }
 
 .dropdownSelect {
-  padding-left: 16px;
-  padding-right: 16px;
-
   .labels {
     margin-bottom: 5px;
 
@@ -84,7 +85,8 @@ ion-thumbnail img {
 
   input {
     border: none;
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1px solid var(--ion-border-color);
+    background-color: transparent;
     padding: 7px;
 
     width: 100%;
@@ -94,35 +96,45 @@ ion-thumbnail img {
   .autocomplete {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     max-width: 600px;
-    max-height: 100px;
+    max-height: 200px;
     overflow-y: auto;
 
     button.suggestion {
       display: block;
       padding: 0;
-      background-color: white;
+      background-color: inherit;
       width: 100%;
       text-align: left;
-
-      ion-item {
-        cursor: pointer;
-
-        &:hover {
-          background-color: #00a8ff;
-        }
-
-        &:focus {
-          background-color: #00a8ff;
-        }
-
-        h2 {
-          margin-top: 0;
-        }
-
-        .hint {
-          float: right;
-        }
-      }
     }
   }
+}
+
+// For floating input placeholders
+ion-label[position=floating] {
+  color: #999 !important;
+}
+
+// Fix floating label vertical position issue.
+// This prop is overriden when label is in the floating state
+.label-floating.sc-ion-label-md-h {
+  transform: translate3d(0,122%,0);
+}
+
+
+.invisible {
+  position: absolute;
+  left: -1000px;
+  top: -1000px;
+  background: transparent;
+  color: transparent;
+  border: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+ion-toast {
+  --background: var(--ion-color-dark-tint);
+  --color: var(--ion-color-light);
 }

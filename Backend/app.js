@@ -7,6 +7,8 @@ var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
 
+var RS_VERSION = JSON.parse(fs.readFileSync('./package.json')).version;
+
 var testMode = process.env.NODE_ENV === 'test';
 var verboseMode = process.env.VERBOSE === 'true';
 
@@ -22,7 +24,7 @@ var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '1.7.8'
+  release: RS_VERSION
 }).install();
 
 // Routes
