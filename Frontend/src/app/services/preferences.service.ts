@@ -159,4 +159,11 @@ export class PreferencesService {
       Object.assign(this.preferences, savedPreferences);
     } catch (e) { }
   }
+
+  resetToDefaults() {
+    try {
+      localStorage.removeItem(PREFERENCE_LOCALSTORAGE_KEY);
+      window.location.reload();
+    } catch (e) { }
+  }
 }

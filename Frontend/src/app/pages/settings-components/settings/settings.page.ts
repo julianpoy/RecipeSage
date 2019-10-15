@@ -36,6 +36,27 @@ export class SettingsPage {
     }
   }
 
+  async resetPreferences() {
+    const alert = await this.alertCtrl.create({
+      header: 'Reset Preferences Warning',
+      message: `Resetting your preferences will set all app preferences back to their default state.<br /><br />
+                <b>Note:</b> This only affects this device.`,
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Reset',
+          handler: () => {
+            localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
+            this.preferencesService.resetToDefaults();
+          }
+        }]
+    });
+
+    alert.present();
+  }
+
   private applyAppTheme() {
     // Change in localStorage
     localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);

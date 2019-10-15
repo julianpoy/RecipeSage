@@ -54,5 +54,11 @@
         <ion-select-option value="black">Black (OLED)</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item (click)="resetPreferences()" class="cursor-pointer" button>
+      <ion-icon name="close" slot="start"></ion-icon>
+      <ion-label>
+        Reset All Preferences
+      </ion-label>
+    </ion-item>
   </ion-list>
 </ion-content>
