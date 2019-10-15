@@ -208,7 +208,7 @@ router.post(
       res.status(standardStatus).json(standardResponse);
     } else {
       return SessionService.generateSession(user.id, 'user').then(({ token }) => {
-        var link = origin + '/#/account?token=' + token;
+        var link = origin + '/#/settings/account?token=' + token;
         var html = `Hello,
 
         <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
