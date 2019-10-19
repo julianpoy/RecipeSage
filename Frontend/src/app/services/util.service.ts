@@ -256,4 +256,8 @@ export class UtilService {
       });
     }
   }
+
+  buildPublicRoutePath(hashlessRoutePath: string) {
+    return `${window.location.origin}/#/${hashlessRoutePath}`;
+  }
 }

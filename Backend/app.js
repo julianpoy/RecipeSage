@@ -37,6 +37,7 @@ var shoppingLists = require('./routes/shoppingLists');
 var mealPlans = require('./routes/mealPlans');
 var print = require('./routes/print');
 var grip = require('./routes/grip');
+var payments = require('./routes/payments');
 
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
@@ -66,6 +67,7 @@ app.use('/shoppingLists', shoppingLists);
 app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/grip', grip);
+app.use('/payments', payments);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());
 

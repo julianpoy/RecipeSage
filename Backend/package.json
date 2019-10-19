@@ -33,6 +33,7 @@
     "multer-imager": "git+https://git@github.com/julianpoy/multer-imager.git",
     "multer-s3": "^2.9.0",
     "node-cron": "^2.0.3",
+    "paypal-rest-sdk": "^1.8.1",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "pug": "^2.0.4",
@@ -43,6 +44,7 @@
     "sequelize": "^5.19.3",
     "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",
+    "stripe": "^7.10.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

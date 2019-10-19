@@ -139,6 +139,10 @@ ion-toast {
   --color: var(--ion-color-light);
 }
 
+ion-button.button-outline {
+  --border-width: 1px;
+}
+
 .split-pane-visible>.split-pane-side {
   --border: none;
   max-width: 300px !important;
