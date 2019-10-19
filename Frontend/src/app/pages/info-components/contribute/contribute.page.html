@@ -17,18 +17,6 @@
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
-    <!-- <ion-radio-group (ionChange)="setFrequency($event)">
-      <ion-item>
-        <ion-label>Monthly</ion-label>
-        <ion-radio slot="start" value="monthly"></ion-radio>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>One-Time</ion-label>
-        <ion-radio slot="start" value="single"></ion-radio>
-      </ion-item>
-    </ion-radio-group> -->
-
     <div class="frequency-row">
       <ion-button [fill]="frequency == 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
         <span>
