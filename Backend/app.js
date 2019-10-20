@@ -50,7 +50,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 if (!testMode) app.use(logger('dev'));
-app.use(bodyParser.json({limit: '250MB'}));
+app.use(bodyParser.json({
+  limit: '250MB',
+  verify: (req, res, buf) => {
+    var url = req.originalUrl;
+    if (url.startsWith('/payments/stripe/webhooks')) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
 app.use(bodyParser.urlencoded({ limit: '250MB', extended: false }));
 app.use(cookieParser());
 app.disable('x-powered-by');
