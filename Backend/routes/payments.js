@@ -13,7 +13,6 @@ var StripePayment = require('../models').StripePayment;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var StripeService = require('../services/stripe');
-var PaypalService = require('../services/paypal');
 var SubscriptionService = require('../services/subscriptions');
 
 router.post('/stripe/custom-session',
@@ -116,17 +115,6 @@ router.post('/stripe/webhooks', async (req, res, next) => {
 
     res.status(200).json({ received: true });
   } catch(e) {
-    next(e);
-  }
-})
-
-router.post('/paypal/webhooks', async (req, res, next) => {
-  try {
-    await PaypalService.verifyWebhook(req.headers, req.body, req.body.id);
-
-    console.log("ok!")
-  } catch (e) {
-    console.log(e)
     next(e);
   }
 })
