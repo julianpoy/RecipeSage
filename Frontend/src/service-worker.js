@@ -10,14 +10,6 @@ workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
 
-self.addEventListener('install', evt => {
-  caches.keys().then(function (names) {
-    for (let name of names) {
-      caches.delete(name);
-    }
-  });
-});
-
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
 workbox.routing.registerRoute(
