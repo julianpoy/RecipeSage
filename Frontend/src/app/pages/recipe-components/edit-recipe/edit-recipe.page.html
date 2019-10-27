@@ -11,22 +11,30 @@
 
 
 <ion-content class="ion-padding">
-  <input id="filePicker" type="file" (change)="markAsDirty(); setFile($event)" style="display: none;" accept="image/*" />
-  <div class="recipe-image" (click)="filePicker()">
-    <div class="image-frame">
-      <img *ngIf="recipe.image && !imageBlobURL" src="{{ recipe.image.location }}" />
-      <img *ngIf="imageBlobURL" [src]="imageBlobURL" />
-      <span *ngIf="!recipe.image && !imageBlobURL">
-        No Image
-      </span>
+  <input id="filePicker" [multiple]="capabilitiesService.capabilities.multipleImages" type="file" (change)="markAsDirty(); addImage($event)" style="display: none;" accept="image/*" />
+
+  <div class="image-carousel">
+    <div class="recipe-image" *ngFor="let image of images; let i = index">
+      <div class="image-frame">
+        <img src="{{ image.location }}" />
+      </div>
+      <div class="image-subtext" *ngIf="images.length > 1">
+        <ion-icon name="arrow-dropleft" *ngIf="i !== 0"></ion-icon>
+        <span>
+          {{ i + 1 }}
+        </span>
+        <ion-icon name="arrow-dropright" *ngIf="i !== (images.length - 1)"></ion-icon>
+      </div>
     </div>
-    <div class="image-subtext">
-      <span *ngIf="recipe.image || imageBlobURL">
-        Click to Change Image
-      </span>
-      <span *ngIf="!recipe.image && !imageBlobURL">
-        Click to Select Image
-      </span>
+
+    <div class="recipe-image" (click)="filePicker()" *ngIf="images.length === 0 || capabilitiesService.capabilities.multipleImages">
+      <div class="image-frame">
+        <span>
+          +
+          <br />
+          Click to Add Image
+        </span>
+      </div>
     </div>
   </div>
 

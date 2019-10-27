@@ -10,14 +10,19 @@ const CAPABILITY_GRACE_PERIOD = 7;
 const SUBSCRIPTION_EXTENSION_PERIOD = 31;
 
 const CAPABILITIES = {
-  HIGH_RES_IMAGES: 'highResImages'
+  HIGH_RES_IMAGES: 'highResImages',
+  MULTIPLE_IMAGES: 'multipleImages',
+  EXPANDABLE_PREVIEWS: 'expandablePreviews'
 };
+exports.CAPABILITIES = CAPABILITIES;
 
 const SUBSCRIPTION_MODELS = {
   "pyo-monthly": {
     title: "Choose your own price",
     capabilities: [
-      CAPABILITIES.HIGH_RES_IMAGES
+      CAPABILITIES.HIGH_RES_IMAGES,
+      CAPABILITIES.MULTIPLE_IMAGES,
+      CAPABILITIES.EXPANDABLE_PREVIEWS
     ]
   },
   "pyo-single": {
@@ -32,25 +37,35 @@ exports.modelsForCapability = capability => {
     .filter(model => model.capabilities.indexOf(capability) > -1);
 }
 
-exports.userHasCapability = async (userId, capability) => {
+exports.capabilitiesForUser = async userId => {
   // Allow users to continue to access expired features for grace period
   const mustBeValidUntil = moment().add(CAPABILITY_GRACE_PERIOD, 'days');
 
-  const activeSubscriptions = await UserSubscription.find({
+  const activeSubscriptions = await UserSubscription.findAll({
     where: {
       userId,
       name: { [Op.ne]: null },
-      [Op.or]: {
-        expires: { [Op.gte]: mustBeValidUntil },
-        expires: null
+      expires: {
+        [Op.or]: [
+          { [Op.gte]: mustBeValidUntil },
+          null
+        ]
       }
     }
   });
 
-  return !!activeSubscriptions.find(activeSubscription => {
-    const subscription = SUBSCRIPTION_MODELS[activeSubscription.subscription];
-    return subscription.capabilities.indexOf(capability) > -1;
-  });
+  return activeSubscriptions.reduce((acc, activeSubscription) => {
+    const capabilities = SUBSCRIPTION_MODELS[activeSubscription.name].capabilities;
+    return [
+      ...acc,
+      ...capabilities
+    ]
+  }, [])
+}
+
+exports.userHasCapability = async (userId, capability) => {
+  const capabilities = await exports.capabilitiesForUser(userId);
+  return capabilities.indexOf(capability) > -1;
 }
 
 exports.extend = async (userId, subscriptionName, expires, t) => {

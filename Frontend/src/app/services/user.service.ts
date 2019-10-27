@@ -110,6 +110,15 @@ export class UserService {
     }).then(response => response.data);
   }
 
+  capabilities() {
+    const url = this.utilService.getBase() + 'users/capabilities' + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'get',
+      url
+    }).then(response => response.data);
+  }
+
   checkForUpdate(params) {
     const url = this.utilService.getBase() + 'info/' + this.utilService.getTokenQuery() + '&version=' + encodeURIComponent(params.version);
 

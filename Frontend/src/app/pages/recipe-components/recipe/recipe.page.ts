@@ -6,11 +6,13 @@ import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recip
 import { LabelService } from '@/services/label.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
+import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 
 @Component({
   selector: 'page-recipe',
@@ -46,7 +48,8 @@ export class RecipePage {
     public route: ActivatedRoute,
     public utilService: UtilService,
     public recipeService: RecipeService,
-    public labelService: LabelService) {
+    public labelService: LabelService,
+    public capabilitiesService: CapabilitiesService) {
 
     this.updateIsLoggedIn();
 
@@ -546,5 +549,15 @@ export class RecipePage {
   prettyDateTime(datetime) {
     if (!datetime) return '';
     return this.utilService.formatDate(datetime, { times: true });
+  }
+
+  async openImageViewer() {
+    const imageViewerModal = await this.modalCtrl.create({
+      component: ImageViewerComponent,
+      componentProps: {
+        images: [this.recipe.image.location]
+      }
+    });
+    imageViewerModal.present();
   }
 }

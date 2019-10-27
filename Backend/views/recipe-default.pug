@@ -242,9 +242,9 @@ html
     table
       tbody
         tr
-          if recipe.image && recipe.image.location
+          if recipe.images && recipe.images[0]
             td(class='leftCol')
-              img(class='image', src= recipe.image.location)
+              img(class='image', src= recipe.images[0].location)
           td
             h1(class='sans header')= recipe.title
             if recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield

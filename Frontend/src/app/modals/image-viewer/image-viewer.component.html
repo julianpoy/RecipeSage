@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ imgTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
+  <ion-slides [options]="slideOpts">
+    <ion-slide *ngFor="let image of images">
+      <div class="swiper-zoom-container"><img [src]="image" height="100vh" /></div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<!-- <ion-footer *ngIf="imgDescription.length">
+  <ion-toolbar color="dark" text-center>
+    <ion-text>{{ imgDescription }}</ion-text>
+  </ion-toolbar>
+</ion-footer> -->

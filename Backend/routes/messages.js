@@ -75,7 +75,12 @@ router.post(
                 {
                   model: Recipe,
                   as: 'recipe',
-                  attributes: ['id', 'title', 'image']
+                  attributes: ['id', 'title', 'image'],
+                  include: [{
+                    model: Image,
+                    as: 'images',
+                    attributes: ['location']
+                  }]
                 },
                 {
                   model: Recipe,
