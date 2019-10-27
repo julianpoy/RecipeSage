@@ -32,7 +32,7 @@ workbox.routing.registerRoute(
     cacheName: 's3-image-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxEntries: 400,
+        maxEntries: 200,
         purgeOnQuotaError: true // Clear the image cache if we exceed the browser cache limit
       }),
     ],
