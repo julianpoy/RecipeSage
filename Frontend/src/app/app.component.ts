@@ -10,6 +10,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
+import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,9 @@ export class AppComponent {
 
   aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
 
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = GlobalPreferenceKey;
+
   constructor(
     private navCtrl: NavController,
     private route: ActivatedRoute,
@@ -44,7 +48,8 @@ export class AppComponent {
     private recipeService: RecipeService,
     private messagingService: MessagingService,
     private websocketService: WebsocketService,
-    private userService: UserService
+    private userService: UserService,
+    private preferencesService: PreferencesService
   ) {
 
     this.initializeApp();

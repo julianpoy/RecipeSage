@@ -138,3 +138,17 @@ ion-toast {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
 }
+
+.split-pane-visible>.split-pane-side {
+  --border: none;
+  max-width: 300px !important;
+  box-shadow: 1px 1px 7px black inset !important;
+}
+
+.split-pane-visible>ion-router-outlet.split-pane-main {
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.4) !important;
+}
+
+.sc-ion-label-ios-s > p, .sc-ion-label-md-s > p {
+  color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+}

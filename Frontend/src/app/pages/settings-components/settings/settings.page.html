@@ -13,31 +13,44 @@
 
 <ion-content>
   <ion-list>
-    <ion-item (click)="goToImport()" class="cursor-pointer" button>
+    <ion-list-header>
+      Data & Account
+    </ion-list-header>
+    <ion-item lines="inset" (click)="goToImport()" button>
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
         Import Recipe Data
       </ion-label>
     </ion-item>
-    <ion-item (click)="goToExport()" class="cursor-pointer" button>
+    <ion-item lines="inset" (click)="goToExport()" button>
       <ion-icon name="cloud-download" slot="start"></ion-icon>
       <ion-label>
         Export Recipe Data
       </ion-label>
     </ion-item>
-    <ion-item (click)="goToAccount()" class="cursor-pointer" button>
+    <ion-item lines="inset" (click)="goToAccount()" button>
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label>
         Account Settings & Stats
       </ion-label>
     </ion-item>
-    <ion-item (click)="checkForUpdate()" class="cursor-pointer" button>
+    <ion-item lines="inset" (click)="checkForUpdate()" button>
       <ion-icon name="sync" slot="start"></ion-icon>
       <ion-label>
         Check for Update
       </ion-label>
     </ion-item>
-    <ion-item>
+    <ion-list-header>
+      General Settings
+    </ion-list-header>
+    <ion-item lines="inset" *ngIf="showSplitPaneOption">
+      <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]" (ngModelChange)="toggleSplitPane(); savePreferences()"></ion-toggle>
+      <ion-label class="ion-text-wrap">
+        Enable Split Pane View on Large Screens
+      </ion-label>
+      <ion-icon name='laptop' slot="start"></ion-icon>
+    </ion-item>
+    <ion-item lines="inset">
       <ion-icon name='brush' slot="start"></ion-icon>
       <ion-label>Theme</ion-label>
       <ion-select [(ngModel)]="appTheme" (ngModelChange)="appThemeChanged();">
@@ -46,6 +59,12 @@
         <ion-select-option value="dark">Dark</ion-select-option>
         <ion-select-option value="black">Black (OLED)</ion-select-option>
       </ion-select>
+    </ion-item>
+    <ion-item lines="inset" (click)="resetPreferences()" button>
+      <ion-icon name="close" slot="start"></ion-icon>
+      <ion-label>
+        Reset All Preferences
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

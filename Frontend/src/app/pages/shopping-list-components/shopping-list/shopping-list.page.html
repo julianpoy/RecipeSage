@@ -22,7 +22,7 @@
     <ion-list-header *ngIf="list.items.length > 0" class="ion-no-margin">
       Items
     </ion-list-header>
-    <div *ngIf="viewOptions.groupSimilar">
+    <div *ngIf="preferences[preferenceKeys.GroupSimilar]">
       <div *ngFor="let group of list.itemsByGroup; let i = index;">
         <ion-item>
           <ion-label class="ion-text-wrap ion-no-margin">
@@ -32,16 +32,16 @@
         <ion-item *ngFor="let item of group.items">
           <ion-label class="ion-text-wrap ion-no-margin">
             {{ item.title }}
-            <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+            <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe">
               For recipe:
               <span>{{ item.recipe.title }}</span>
             </p>
-            <p *ngIf="viewOptions.showAddedOn">
+            <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
               Added
               <span>{{ formatItemCreationDate(item.createdAt) }}</span>
             </p>
-            <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
-              <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+            <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner">
+              <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
               <span>{{ item.owner.name || item.owner.email }}</span>
             </p>
           </ion-label>
@@ -49,20 +49,20 @@
         </ion-item>
       </div>
     </div>
-    <div *ngIf="!viewOptions.groupSimilar">
+    <div *ngIf="!preferences[preferenceKeys.GroupSimilar]">
       <ion-item *ngFor="let item of list.items; let i = index;">
         <ion-label class="ion-text-wrap">
           {{ item.title }}
-          <p *ngIf="viewOptions.showRecipeTitle && item.recipe">
+          <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe">
             For recipe:
             <span>{{ item.recipe.title }}</span>
           </p>
-          <p *ngIf="viewOptions.showAddedOn">
+          <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
             Added
             <span>{{ formatItemCreationDate(item.createdAt) }}</span>
           </p>
-          <p *ngIf="viewOptions.showAddedBy && list.collaborators.length > 0 && item.owner">
-            <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+          <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner">
+            <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
             <span>{{ item.owner.name || item.owner.email }}</span>
           </p>
         </ion-label>

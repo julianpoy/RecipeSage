@@ -29,6 +29,10 @@
   --ion-color-step-850: #e6e6e6;
   --ion-color-step-900: #eaeaea;
   --ion-color-step-950: #f4f4f4;
+
+  .alert-wrapper, ion-card {
+    border: 1px solid var(--ion-border-color);
+  }
 }
 
 @mixin darkModeVars() {
@@ -70,25 +74,26 @@
   --ion-text-color: var(--ion-color-dark);
   --ion-text-color-rgb: var(--ion-color-dark-rgb);
 
-  --ion-color-step-50: #1a1a1a;
-  --ion-color-step-100: #1e1e1e;
-  --ion-color-step-150: #222222;
-  --ion-color-step-200: #262626;
-  --ion-color-step-250: #2a2a2a;
-  --ion-color-step-300: #2e2e2e;
-  --ion-color-step-350: #323232;
-  --ion-color-step-400: #363636;
-  --ion-color-step-450: #3a3a3a;
-  --ion-color-step-500: #424242;
-  --ion-color-step-550: #464646;
-  --ion-color-step-600: #4a4a4a;
-  --ion-color-step-650: #4e4e4e;
-  --ion-color-step-700: #525252;
-  --ion-color-step-750: #565656;
-  --ion-color-step-800: #5a5a5a;
-  --ion-color-step-850: #5e5e5e;
-  --ion-color-step-900: #626262;
-  --ion-color-step-950: #666666;
+  // Generated from this: https://ionicframework.com/docs/theming/themes
+  --ion-color-step-50: #f4f4f4;
+  --ion-color-step-100: #e9e9ea;
+  --ion-color-step-150: #dededf;
+  --ion-color-step-200: #d3d3d4;
+  --ion-color-step-250: #c8c8c9;
+  --ion-color-step-300: #bdbdbf;
+  --ion-color-step-350: #b2b2b4;
+  --ion-color-step-400: #a7a7a9;
+  --ion-color-step-450: #9c9c9e;
+  --ion-color-step-500: #919294;
+  --ion-color-step-550: #858789;
+  --ion-color-step-600: #7a7c7e;
+  --ion-color-step-650: #6f7173;
+  --ion-color-step-700: #646669;
+  --ion-color-step-750: #595b5e;
+  --ion-color-step-800: #4e5053;
+  --ion-color-step-850: #434548;
+  --ion-color-step-900: #383a3d;
+  --ion-color-step-950: #2d2f33;
 }
 
 /** Ionic CSS Variables **/

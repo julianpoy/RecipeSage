@@ -9,20 +9,6 @@ workbox.setConfig({
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
-workbox.precaching.precacheAndRoute([
-  {
-    "url": "assets/fonts/ionicons.woff2?v=4.1.1",
-    "revision": '383676'
-  }
-]);
-
-self.addEventListener('install', evt => {
-  caches.keys().then(function (names) {
-    for (let name of names) {
-      caches.delete(name);
-    }
-  });
-});
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
@@ -32,7 +18,7 @@ workbox.routing.registerRoute(
     cacheName: 'api-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days, equal to our session invalidation
+        maxAgeSeconds: 60 * 60 * 24 * 14, // 14 Days
       }),
     ]
   })
@@ -46,7 +32,8 @@ workbox.routing.registerRoute(
     cacheName: 's3-image-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxEntries: 40
+        maxEntries: 200,
+        purgeOnQuotaError: true // Clear the image cache if we exceed the browser cache limit
       }),
     ],
   })

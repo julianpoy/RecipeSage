@@ -24,7 +24,6 @@
   <div class="mealplan-flex">
     <meal-calendar
       [mealPlan]="mealPlan"
-      [viewOptions]="viewOptions"
       (selectedDayChange)="selectedDay = $event"
       (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
 
@@ -61,12 +60,12 @@
           <ion-label class="ion-text-wrap">
             {{mealItem.title}}
 
-            <p *ngIf="viewOptions.showAddedOn">
+            <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
               Added
               <span>{{ formatItemCreationDate(mealItem.createdAt) }}</span>
             </p>
-            <p *ngIf="viewOptions.showAddedBy && mealPlan.collaborators.length > 0 && mealItem.owner">
-              <span *ngIf="!viewOptions.showAddedOn">Added </span>by
+            <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && mealPlan.collaborators.length > 0 && mealItem.owner">
+              <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
               <span>{{ mealItem.owner.name || mealItem.owner.email }}</span>
             </p>
           </ion-label>

@@ -42,7 +42,6 @@
   <div *ngIf="destinationMealPlan">
     <meal-calendar
       [mealPlan]="destinationMealPlan"
-      [viewOptions]="viewOptions"
       (selectedDayChange)="selectedDay = $event"
       (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
 

@@ -3,6 +3,7 @@ import { ToastController, AlertController, NavController, PopoverController } fr
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import { PreferencesService, ShoppingListPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'page-shopping-list-popover',
@@ -11,13 +12,16 @@ import { UtilService, RouteMap } from '@/services/util.service';
 })
 export class ShoppingListPopoverPage {
 
-  @Input() viewOptions: any;
   @Input() shoppingListId: any;
   @Input() shoppingList: any;
+
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = ShoppingListPreferenceKey;
 
   constructor(
     public navCtrl: NavController,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public loadingService: LoadingService,
     public shoppingListService: ShoppingListService,
     public toastCtrl: ToastController,
@@ -25,14 +29,13 @@ export class ShoppingListPopoverPage {
     public alertCtrl: AlertController
   ) {}
 
+  savePreferences() {
+    this.preferencesService.save();
 
-  saveViewOptions() {
-    localStorage.setItem('shoppingList.sortBy', this.viewOptions.sortBy);
-    localStorage.setItem('shoppingList.showAddedBy', this.viewOptions.showAddedBy);
-    localStorage.setItem('shoppingList.showAddedOn', this.viewOptions.showAddedOn);
-    localStorage.setItem('shoppingList.showRecipeTitle', this.viewOptions.showRecipeTitle);
-    localStorage.setItem('shoppingList.groupSimilar', this.viewOptions.groupSimilar);
+    this.dismiss();
+  }
 
+  dismiss() {
     this.popoverCtrl.dismiss();
   }
 

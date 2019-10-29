@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController } from '@ionic/angular';
 
 import { RouteMap } from '@/services/util.service';
+import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 
@@ -13,10 +15,55 @@ const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 export class SettingsPage {
   appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || 'default';
 
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = GlobalPreferenceKey;
+
+  showSplitPaneOption = false;
+
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public preferencesService: PreferencesService,
+    public quickTutorialService: QuickTutorialService) {
+
+    try {
+      this.showSplitPaneOption = screen.width >= 1200;
+    } catch (e) {
+      console.error('Could not get screen width', e);
+    }
+  }
+
+  savePreferences() {
+    this.preferencesService.save();
+  }
+
+  toggleSplitPane() {
+    if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
+      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.SplitPaneView);
+    }
+  }
+
+  async resetPreferences() {
+    const alert = await this.alertCtrl.create({
+      header: 'Reset Preferences Warning',
+      message: `Resetting your preferences will set all app preferences back to their default state.<br /><br />
+                This includes preferences set via menus on the home page, meal plans page, shopping list page, etc.<br /><br />
+                <b>Note:</b> This only affects this device.`,
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Reset',
+          handler: () => {
+            localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
+            this.preferencesService.resetToDefaults();
+          }
+        }]
+    });
+
+    alert.present();
   }
 
   private applyAppTheme() {
