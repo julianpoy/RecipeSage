@@ -15,7 +15,14 @@
 <ion-content class="ion-padding">
   <ion-item>
     <ion-label position="floating">Title</ion-label>
-    <ion-input [(ngModel)]="listTitle" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="listTitle"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocomplete="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <br /><br />
