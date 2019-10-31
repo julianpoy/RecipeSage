@@ -79,7 +79,8 @@ export class EditRecipePage {
   }
 
   getScrollHeight(el) {
-    return el.scrollHeight + 1;
+    // Math max to ensure text areas are at least 2 rows high
+    return Math.max(el.scrollHeight + 1, 54);
   }
 
   setInitialTextAreaSize() {

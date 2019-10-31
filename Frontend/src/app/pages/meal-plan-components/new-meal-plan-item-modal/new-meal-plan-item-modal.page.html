@@ -30,7 +30,11 @@
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
         <ion-label position="floating">Item title</ion-label>
-        <ion-input [(ngModel)]="itemTitle" type="text"></ion-input>
+        <ion-input [(ngModel)]="itemTitle" type="text"
+          autocapitalize="on"
+          autocomplete="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
       </ion-item>
     </div>
 
