@@ -3,8 +3,7 @@
     Options
   </ion-list-header>
 
-  <ion-item lines="inset">
-    <ion-icon name='list' slot="start"></ion-icon>
+  <ion-item lines="full">
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences();">
       <ion-select-option value="-title">Title</ion-select-option>
@@ -13,50 +12,46 @@
     </ion-select>
   </ion-item>
 
-  <ion-item lines="inset">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       Group Similar Items
     </ion-label>
-    <ion-icon name='attach' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item lines="inset">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]" (ngModelChange)="savePreferences()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       Show Recipe Title
     </ion-label>
-    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item lines="inset" *ngIf="shoppingList.collaborators.length > 0">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()"></ion-toggle>
+  <ion-item lines="full" *ngIf="shoppingList.collaborators.length > 0">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       Show Added By
     </ion-label>
-    <ion-icon name='contact' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item lines="inset">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       Show Added On
     </ion-label>
-    <ion-icon name='calendar' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item lines="inset">
+  <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
     <ion-icon name='print' slot="start"></ion-icon>
-    <ion-button (click)="print()" expand="full">Print</ion-button>
-  </ion-item>
+    Print
+  </ion-button>
 
-  <ion-item lines="inset">
+  <ion-button (click)="removeAllItems()" expand="block" size="small" class="ion-margin">
     <ion-icon name='remove-circle' slot="start"></ion-icon>
-    <ion-button (click)="removeAllItems()" expand="full">Remove all items</ion-button>
-  </ion-item>
+    Remove all items
+  </ion-button>
 
-  <ion-item lines="inset">
+  <ion-button (click)="deleteList()" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
-    <ion-button (click)="deleteList()" expand="full">Delete list</ion-button>
-  </ion-item>
+    Delete list
+  </ion-button>
 </ion-list>
