@@ -47,6 +47,7 @@
     <ion-label position="floating">Description</ion-label>
     <ion-textarea
       [(ngModel)]="recipe.description"
+      (ionInput)="updateTextAreaSize($event)"
       (ngModelChange)="markAsDirty()"
       type="text"
       value=""
