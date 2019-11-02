@@ -18,6 +18,10 @@ export class ImageViewerComponent {
     private modalCtrl: ModalController
   ) {}
 
+  ionViewWillEnter() {
+    this.slider.update();
+  }
+
   async slideDidChange() {
     const slideNum = await this.slider.getActiveIndex();
     this.slideNum = slideNum;
