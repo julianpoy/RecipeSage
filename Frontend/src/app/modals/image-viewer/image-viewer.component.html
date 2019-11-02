@@ -11,7 +11,7 @@
 
 <ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
   <ion-icon *ngIf="slideNum > 0" (click)="slider.slidePrev()" name="arrow-back" class="back"></ion-icon>
-  <ion-slides #slider (ionSlideDidChange)="slideDidChange()">
+  <ion-slides #slider (ionSlideDidChange)="slideDidChange()" pager="true">
     <ion-slide *ngFor="let imageUrl of imageUrls">
       <div><img [src]="imageUrl" /></div>
     </ion-slide>
