@@ -207,16 +207,16 @@ router.get(
 
   let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
   let labelAttributes = ['id', 'title'];
-  let recipeImageAttributes = ['order'];
   let imageAttributes = ['id', 'location'];
+  let recipeImageAttributes = ['id', 'order'];
   let fromUserAttributes = ['name', 'email'];
 
   let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
   let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
-  let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "recipeImages.${el}"`).join(', ');
   let imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
+  let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
   let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
-  let fields = `${recipeSelect}, ${labelSelect}, ${recipeImageSelect}, ${imageSelect}`;
+  let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
   if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
@@ -296,12 +296,10 @@ router.get(
     model: Recipe,
     include: [{
       model: Label,
-      as: 'labels',
-      attributes: labelAttributes
+      as: 'labels'
     }, {
       model: Image,
-      as: 'images',
-      attributes: imageAttributes
+      as: 'images'
     }]
   }
 
@@ -321,8 +319,6 @@ router.get(
     if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
       totalCount = parseInt(countResult[0].count, 10);
     }
-
-    console.log(recipes.filter(r => r.images && r.images.length > 0)[0].images)
 
     recipes = recipes.map(UtilService.sortRecipeImages);
 
