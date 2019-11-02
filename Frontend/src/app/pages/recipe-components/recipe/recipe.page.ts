@@ -555,7 +555,7 @@ export class RecipePage {
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
-        images: [this.recipe.image.location]
+        imageUrls: this.recipe.images.map(image => image.location)
       }
     });
     imageViewerModal.present();

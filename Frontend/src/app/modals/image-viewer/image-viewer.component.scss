@@ -1,3 +1,24 @@
-ion-slides {
+ion-content {
+  ion-slides {
     height: 100%;
+  }
+
+  ion-icon {
+    cursor: pointer;
+    z-index: 2; // ion-slides is using z-index :( need this to raise above
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    background: black;
+    border-radius: 40px;
+    transform: translateY(-50%);
+  }
+
+  .back {
+    left: 5px;
+  }
+
+  .forward {
+    right: 5px;
+  }
 }

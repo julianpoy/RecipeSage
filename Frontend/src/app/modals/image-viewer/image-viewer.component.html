@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
-      <ion-button (click)="closeModal()">
+      <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -10,15 +10,11 @@
 </ion-header>
 
 <ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
-  <ion-slides [options]="slideOpts">
-    <ion-slide *ngFor="let image of images">
-      <div class="swiper-zoom-container"><img [src]="image" height="100vh" /></div>
+  <ion-icon *ngIf="slideNum > 0" (click)="slider.slidePrev()" name="arrow-back" class="back"></ion-icon>
+  <ion-slides #slider (ionSlideDidChange)="slideDidChange()">
+    <ion-slide *ngFor="let imageUrl of imageUrls">
+      <div><img [src]="imageUrl" /></div>
     </ion-slide>
   </ion-slides>
+  <ion-icon *ngIf="slideNum < imageUrls.length - 1" (click)="slider.slideNext()" name="arrow-forward" class="forward"></ion-icon>
 </ion-content>
-
-<!-- <ion-footer *ngIf="imgDescription.length">
-  <ion-toolbar color="dark" text-center>
-    <ion-text>{{ imgDescription }}</ion-text>
-  </ion-toolbar>
-</ion-footer> -->

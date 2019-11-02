@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'image-viewer',
@@ -7,7 +8,22 @@ import { Component, Input } from '@angular/core';
 })
 export class ImageViewerComponent {
 
-  @Input() images: string[];
+  @Input() imageUrls: string[];
 
-  constructor() {}
+  @ViewChild('slider', { static: true }) slider;
+
+  slideNum = 0;
+
+  constructor(
+    private modalCtrl: ModalController
+  ) {}
+
+  async slideDidChange() {
+    const slideNum = await this.slider.getActiveIndex();
+    this.slideNum = slideNum;
+  }
+
+  dismiss() {
+    this.modalCtrl.dismiss();
+  }
 }
