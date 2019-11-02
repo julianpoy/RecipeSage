@@ -271,4 +271,14 @@ export class EditRecipePage {
   markAsClean() {
     this.unsavedChangesService.clearPendingChanges();
   }
+
+  reorderImage(image, direction: number) {
+    const imgIdx = this.images.indexOf(image);
+    let newImgIdx = imgIdx + direction;
+    if (newImgIdx < 0) newImgIdx = 0;
+    if (newImgIdx > this.images.length - 1) newImgIdx = this.images.length - 1;
+
+    this.images.splice(imgIdx, 1); // Remove
+    this.images.splice(newImgIdx, 0, image); // Insert
+  }
 }

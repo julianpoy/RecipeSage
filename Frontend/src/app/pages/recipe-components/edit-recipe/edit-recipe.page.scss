@@ -1,13 +1,14 @@
 .image-carousel {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .recipe-image {
   cursor: pointer;
   text-align: center;
   width: 200px;
-  margin: 0 auto;
+  margin: 0 16px;
   margin-bottom: 8px;
 
   .image-frame {
@@ -32,6 +33,18 @@
   }
 
   .image-subtext {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 4px;
+
+    ion-icon {
+      font-size: 32px;
+      margin: 0 8px;
+    }
+
+    .hide-reorder {
+      opacity: 0;
+    }
   }
 }
