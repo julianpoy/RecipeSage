@@ -250,7 +250,7 @@ export class AccountPage {
     const alert = await this.alertCtrl.create({
       header: 'Warning - You\'re about to delete all of your recipes!',
       message: `This action is PERMANENT.<br /><br />
-                All of your recipes and associated labels will be removed from the Recipe Sage system.`,
+                All of your recipes and associated labels will be removed from the RecipeSage system.`,
       buttons: [
         {
           text: 'Yes, continue',
