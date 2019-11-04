@@ -6,9 +6,9 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     var sequelize = queryInterface.sequelize;
 
-    return sequelize.transaction(async t => {
+    return sequelize.transaction(async transaction => {
       const [recipes] = await sequelize.query('SELECT id, "userId", image FROM "Recipes" WHERE image IS NOT NULL', {
-        transaction: t
+        transaction
       });
 
       const now = new Date();
@@ -22,7 +22,7 @@ module.exports = {
         createdAt: now,
         updatedAt: now
       })), {
-        transaction: t,
+        transaction,
         returning: true
       });
 
@@ -34,18 +34,45 @@ module.exports = {
         createdAt: now,
         updatedAt: now
       })), {
-        transaction: t
+        transaction
+      });
+
+      await queryInterface.removeColumn('Recipes', 'image', {
+        transaction
       });
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
+    var sequelize = queryInterface.sequelize;
 
-      Example:
-      return queryInterface.dropTable('users');
-    */
+    return sequelize.transaction(async transaction => {
+      await queryInterface.addColumn('Recipes', 'image', {
+        type: Sequelize.JSON,
+        transaction
+      });
+
+      const [recipeImages] = await sequelize.query('SELECT "recipeId", "json" FROM "Recipe_Images" INNER JOIN "Images" on "Images".id = "Recipe_Images"."imageId" WHERE "Recipe_Images".order = 0', {
+        transaction
+      });
+
+      await Promise.all(recipeImages.map(async recipeImage => {
+        queryInterface.bulkUpdate('Recipes', {
+          image: recipeImage.json // Vals
+        }, {
+          id: recipeImage.recipeId // Where
+        }, {
+          transaction
+        });
+      }));
+
+      await sequelize.query('DELETE FROM "Recipe_Images" WHERE true', {
+        transaction
+      });
+
+      await sequelize.query('DELETE FROM "Images" WHERE true', {
+        transaction
+      });
+    });
   }
 };
