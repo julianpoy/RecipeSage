@@ -257,7 +257,6 @@ module.exports = (sequelize, DataTypes) => {
       notes: this.notes,
       ingredients: this.ingredients,
       instructions: this.instructions,
-      image: img,
       folder: 'inbox',
       fromUserId: this.userId
     }, {
