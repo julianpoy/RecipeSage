@@ -10,6 +10,7 @@ var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Message = require('../models').Message;
 var FCMToken = require('../models').FCMToken;
+var Image = require('../models').Image;
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -75,7 +76,7 @@ router.post(
                 {
                   model: Recipe,
                   as: 'recipe',
-                  attributes: ['id', 'title', 'image'],
+                  attributes: ['id', 'title'],
                   include: [{
                     model: Image,
                     as: 'images',
@@ -85,13 +86,21 @@ router.post(
                 {
                   model: Recipe,
                   as: 'originalRecipe',
-                  attributes: ['id', 'title', 'image']
+                  attributes: ['id', 'title'],
+                  include: [{
+                    model: Image,
+                    as: 'images',
+                    attributes: ['location']
+                  }]
                 }
               ],
               plain: true,
               transaction: t
             }).then(function(message) {
               let m = message.toJSON();
+
+              m.recipe = UtilService.sortRecipeImages(m.recipe);
+              m.originalRecipe = UtilService.sortRecipeImages(m.originalRecipe);
 
               // For sender (just sent)
               m.otherUser = m.toUser;
@@ -144,12 +153,12 @@ router.get(
       {
         model: Recipe,
         as: 'recipe',
-        attributes: ['id', 'title', 'image']
+        attributes: ['id', 'title']
       },
       {
         model: Recipe,
         as: 'originalRecipe',
-        attributes: ['id', 'title', 'image']
+        attributes: ['id', 'title']
       }
     ],
     order: [
@@ -238,12 +247,22 @@ router.get(
       {
         model: Recipe,
         as: 'recipe',
-        attributes: ['id', 'title', 'image']
+        attributes: ['id', 'title'],
+        include: [{
+          model: Image,
+          as: 'images',
+          attributes: ['location']
+        }]
       },
       {
         model: Recipe,
         as: 'originalRecipe',
-        attributes: ['id', 'title', 'image']
+        attributes: ['id', 'title'],
+        include: [{
+          model: Image,
+          as: 'images',
+          attributes: ['location']
+        }]
       }
     ],
     order: [

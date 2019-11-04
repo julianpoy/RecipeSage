@@ -140,12 +140,12 @@ describe('messages', () => {
             {
               model: Recipe,
               as: 'recipe',
-              attributes: ['id', 'title', 'image']
+              attributes: ['id', 'title']
             },
             {
               model: Recipe,
               as: 'originalRecipe',
-              attributes: ['id', 'title', 'image']
+              attributes: ['id', 'title']
             }]
           }).then(message => {
             // Message itself
