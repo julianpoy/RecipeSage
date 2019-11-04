@@ -99,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
       beforeBulkDestroy: (options) => {
         return Recipe.findAll({
           where: options.where,
-          attributes: ['id', 'image'],
+          attributes: ['id'],
           transaction: options.transaction
         }).then(recipes => {
           afterCommitIfTransaction(options, () => {
@@ -242,7 +242,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   }
 
-  Recipe.prototype.share = async (recipientId, transaction) => {
+  Recipe.prototype.share = async function(recipientId, transaction) {
     const adjustedTitle = await Recipe.findTitle(recipientId, null, this.title, transaction);
 
     const recipe = await Recipe.create({
@@ -263,7 +263,7 @@ module.exports = (sequelize, DataTypes) => {
       transaction
     });
 
-    const Recipe_Image = require('./models').Recipe_Image;
+    const Recipe_Image = require('../models').Recipe_Image;
 
     const recipeImages = await Recipe_Image.findAll({
       where: {
@@ -281,6 +281,8 @@ module.exports = (sequelize, DataTypes) => {
         transaction
       });
     }
+
+    return recipe;
   }
 
   return Recipe;
