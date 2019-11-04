@@ -211,7 +211,7 @@ async function main() {
 
             if (imageRefs.length == 0) return;
 
-            if (!runConfig.multipleImages) imageRefs = [imageRefs[0]]; // Only use first image
+            if (!runConfig.multipleImages) imageRefs.splice(1); // Remove all but first image
 
             return Promise.all(lcbRecipe.imageRefs.map(imageRef => {
               const imageRef = lcbRecipe.imageRefs[0];
