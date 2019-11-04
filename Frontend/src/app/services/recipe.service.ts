@@ -25,7 +25,6 @@ export interface Recipe {
   labels: Label[];
   labels_flatlist: string;
   images: Image[];
-  image: any;
   imageFile: any;
   imageURL: string;
   destinationUserEmail: string;
@@ -128,7 +127,6 @@ export class RecipeService {
 
   share(data) {
     if (!data.destinationUserEmail) throw new Error('DestinationUserEmail required for share operation');
-    if (data.image) data.imageURL = data.image.location;
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
 

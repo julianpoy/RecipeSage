@@ -483,10 +483,6 @@ export class RecipePage {
   cloneRecipe() {
     const loading = this.loadingService.start();
 
-    if (this.recipe.image && this.recipe.image.location) {
-      this.recipe.imageURL = this.recipe.image.location;
-    }
-
     return new Promise((resolve, reject) => {
       this.recipeService.create(this.recipe).then(response => {
         resolve();
