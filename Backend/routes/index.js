@@ -361,10 +361,16 @@ router.post(
       console.log(req.file.path)
     }
 
+    const canImportMultipleImages = await SubscriptionsService.userHasCapability(
+      res.locals.session.userId,
+      SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+    );
+
     let optionalFlags = [];
     if (req.query.excludeImages) optionalFlags.push('--excludeImages');
     if (req.query.includeStockRecipes) optionalFlags.push('--includeStockRecipes');
     if (req.query.includeTechniques) optionalFlags.push('--includeTechniques');
+    if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
     let lcbImportJob = spawn(`node`, [`./lcbimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {
@@ -404,13 +410,13 @@ router.post(
       console.log(req.file.path)
     }
 
-    let optionalFlags = [];
-    if (req.query.excludeImages) optionalFlags.push('--excludeImages');
-
     const canImportMultipleImages = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
       SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
     );
+
+    let optionalFlags = [];
+    if (req.query.excludeImages) optionalFlags.push('--excludeImages');
     if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
     let lcbImportJob = spawn(`node`, [`./fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
