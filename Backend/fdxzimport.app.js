@@ -20,6 +20,7 @@ let runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
   excludeImages: process.argv.indexOf('--excludeImages') > -1,
+  multipleImages: process.argv.indexOf('--multipleImages') > -1,
 }
 
 var testMode = process.env.NODE_ENV === 'test';
@@ -186,7 +187,8 @@ async function main() {
           updatedAt: Date.now()
         },
         original: recipe,
-        lcbRecipeLabels
+        lcbRecipeLabels,
+        images: []
       }
     })
 
@@ -209,25 +211,28 @@ async function main() {
 
             if (imageRefs.length == 0) return;
 
-            const imageRef = lcbRecipe.imageRefs[0];
+            if (!runConfig.multipleImages) imageRefs = [imageRefs[0]]; // Only use first image
 
+            return Promise.all(lcbRecipe.imageRefs.map(imageRef => {
+              const imageRef = lcbRecipe.imageRefs[0];
 
-            if (imageRef._text) {
-              return UtilService.sendFileToS3(Buffer.from(imageRef._text, 'base64'), true).then(image => {
-                lcbRecipe.model.image = image;
+              if (imageRef._text) {
+                return UtilService.sendFileToS3(Buffer.from(imageRef._text, 'base64'), true).then(image => {
+                  lcbRecipe.images.push(image);
+                }).catch(() => { })
+              }
+
+              // let possibleFileNameRegex = imageFileNames.join('|')
+              let possibleFileNameRegex = imageRef._attributes.FileName;
+
+              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
+
+              if (possibleImageFiles.length == 0) return;
+
+              return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
+                lcbRecipe.images.push(image);
               }).catch(() => { })
-            }
-
-            // let possibleFileNameRegex = imageFileNames.join('|')
-            let possibleFileNameRegex = imageRef._attributes.FileName;
-
-            let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
-
-            if (possibleImageFiles.length == 0) return;
-
-            return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
-              lcbRecipe.model.image = image;
-            }).catch(() => { })
+            }));
           }))
         })
       }, Promise.resolve())
@@ -237,7 +242,13 @@ async function main() {
         transaction: t
       })
 
+      const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
+        pendingRecipeImages.push(...pendingRecipes[idx].images.map(image => ({
+          image,
+          recipeId: recipe.id
+        })));
+
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
@@ -262,6 +273,23 @@ async function main() {
           })
         });
       }))
+
+      const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
+        userId,
+        location: p.image.location,
+        key: p.image.key,
+        json: p.image
+      })), {
+        returning: true,
+        transaction: t
+      });
+
+      await Recipe_Image.bulkCreate(pendingRecipeImages.map((p, idx) => ({
+        recipeId: p.recipeId,
+        imageId: savedImages[idx].id
+      })), {
+        transaction: t
+      });
     }))
 
     await new Promise(resolve => {
