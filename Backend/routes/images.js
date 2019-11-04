@@ -6,8 +6,6 @@ var Raven = require('raven');
 var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
 var Image = require('../models').Image;
 
 // Service
