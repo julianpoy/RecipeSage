@@ -128,7 +128,7 @@ export class EditRecipePage {
         files[0],
         (renderedCanvas, exif) => {
           renderedCanvas.toBlob(myBlob => {
-            myBlob.name = this.recipe.imageFile.name;
+            myBlob.name = files[0].name;
             this.recipe.imageFile = myBlob;
             this.imageBlobURL = this.domSanitizationService.bypassSecurityTrustUrl(
               (window.URL || (window as any).webkitURL).createObjectURL(this.recipe.imageFile)
