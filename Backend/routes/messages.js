@@ -28,8 +28,8 @@ router.post(
     throw e;
   }
 
-  SQ.transaction(function(t) {
-    return User.findByPk(req.body.to, {
+  SQ.transaction(async transaction => {
+    const recipient = await User.findByPk(req.body.to, {
       include: [
         {
           model: FCMToken,
@@ -37,90 +37,84 @@ router.post(
           as: 'fcmTokens'
         }
       ],
-      transaction: t
-    }).then(function(recipient) {
-      if (!recipient) {
-        res.status(404).send('Could not find user under that ID.');
-      } else {
-        function shareRecipeStep() {
-          return Recipe.share(req.body.recipeId, req.body.to, t).then(function(sharedRecipe) {
-            return createMessageStep(sharedRecipe.id);
-          });
-        }
-
-        function createMessageStep(sharedRecipeId) {
-          return Message.create({
-            fromUserId: res.locals.session.userId,
-            toUserId: req.body.to,
-            body: req.body.body,
-            recipeId: sharedRecipeId,
-            originalRecipeId: req.body.recipeId
-          }, {
-            transaction: t
-          }).then(function(newMessage) {
-            return Message.findOne({
-              where: {
-                id: newMessage.id
-              },
-              include: [
-                {
-                  model: User,
-                  as: 'toUser',
-                  attributes: ['id', 'name', 'email']
-                },
-                {
-                  model: User,
-                  as: 'fromUser',
-                  attributes: ['id', 'name', 'email']
-                },
-                {
-                  model: Recipe,
-                  as: 'recipe',
-                  attributes: ['id', 'title'],
-                  include: [{
-                    model: Image,
-                    as: 'images',
-                    attributes: ['location']
-                  }]
-                },
-                {
-                  model: Recipe,
-                  as: 'originalRecipe',
-                  attributes: ['id', 'title'],
-                  include: [{
-                    model: Image,
-                    as: 'images',
-                    attributes: ['location']
-                  }]
-                }
-              ],
-              plain: true,
-              transaction: t
-            }).then(function(message) {
-              let m = message.toJSON();
-
-              m.recipe = UtilService.sortRecipeImages(m.recipe);
-              m.originalRecipe = UtilService.sortRecipeImages(m.originalRecipe);
-
-              // For sender (just sent)
-              m.otherUser = m.toUser;
-              res.status(201).json(m);
-
-              // Alert for recipient (now receiving via notification)
-              m.otherUser = m.fromUser;
-
-              UtilService.dispatchMessageNotification(recipient, m);
-            });
-          });
-        }
-
-        if (req.body.recipeId) {
-          return shareRecipeStep();
-        } else {
-          return createMessageStep();
-        }
-      }
+      transaction
     });
+
+    if (!recipient) {
+      return res.status(404).send('Could not find user under that ID.');
+    }
+
+    let sharedRecipeId;
+    if (req.body.recipeId) {
+      const sharedRecipe = await Recipe.share(req.body.recipeId, req.body.to, transaction);
+      sharedRecipeId = sharedRecipe.id;
+    }
+
+    const newMessage = await Message.create({
+      fromUserId: res.locals.session.userId,
+      toUserId: req.body.to,
+      body: req.body.body,
+      recipeId: sharedRecipeId,
+      originalRecipeId: req.body.recipeId || null
+    }, {
+      transaction
+    });
+
+    const fullMessage = await Message.findOne({
+      where: {
+        id: newMessage.id
+      },
+      include: [
+        {
+          model: User,
+          as: 'toUser',
+          attributes: ['id', 'name', 'email']
+        },
+        {
+          model: User,
+          as: 'fromUser',
+          attributes: ['id', 'name', 'email']
+        },
+        {
+          model: Recipe,
+          as: 'recipe',
+          attributes: ['id', 'title'],
+          include: [{
+            model: Image,
+            as: 'images',
+            attributes: ['location']
+          }]
+        },
+        {
+          model: Recipe,
+          as: 'originalRecipe',
+          attributes: ['id', 'title'],
+          include: [{
+            model: Image,
+            as: 'images',
+            attributes: ['location']
+          }]
+        }
+      ],
+      transaction
+    });
+
+    let m = fullMessage.toJSON();
+
+    if (m.recipe && m.originalRecipe) {
+      m.recipe = UtilService.sortRecipeImages(m.recipe);
+      m.originalRecipe = UtilService.sortRecipeImages(m.originalRecipe);
+    }
+
+    // Alert for recipient
+    m.otherUser = m.fromUser;
+    UtilService.dispatchMessageNotification(recipient, m);
+
+    // For sender
+    m.otherUser = m.toUser;
+    return m;
+  }).then(message => {
+    res.status(201).json(message);
   }).catch(next);
 });
 
