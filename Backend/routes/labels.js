@@ -90,7 +90,7 @@ router.delete(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  async (req, res, next) => {
 
   if (!req.query.recipeId || !req.query.labelId) {
     return res.status(412).json({
@@ -98,37 +98,44 @@ router.delete(
     });
   }
 
-  Label.findOne({
-    where: {
-      id: req.query.labelId,
-      userId: res.locals.session.userId
-    },
-    include: [{
-      model: Recipe,
-      as: 'recipes',
-      attributes: ['id']
-    }]
-  })
-  .then(function(label) {
-    if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
-      res.status(404).json({
-        msg: "Label does not exist!"
+  try {
+    await SQ.transaction(async transaction => {
+      const label = await Label.findOne({
+        where: {
+          id: req.query.labelId,
+          userId: res.locals.session.userId
+        },
+        include: [{
+          model: Recipe,
+          as: 'recipes',
+          attributes: ['id']
+        }],
+        transaction
       });
-    } else {
-      return SQ.transaction(function (t) {
-        return label.removeRecipe(req.query.recipeId, {transaction: t}).then(function() {
-          if (label.recipes.length === 1) {
-            return label.destroy({transaction: t}).then(function (data) {
-              res.status(200).json({});
-            });
-          } else {
-            res.status(200).json(label);
-          }
-        });
-      });
-    }
-  })
-  .catch(next);
+
+      if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
+        const e = new Error("Label does not exist!");
+        e.status = 404;
+        throw e;
+      }
+
+      await label.removeRecipe(req.query.recipeId, {
+        transaction
+      })
+
+      if (label.recipes.length === 1) {
+        await label.destroy({transaction});
+
+        return {}; // Label was deleted;
+      } else {
+        return label;
+      }
+    }).then(label => {
+      res.status(200).json(label);
+    });
+  } catch(e) {
+    next(e);
+  }
 });
 
 module.exports = router;
