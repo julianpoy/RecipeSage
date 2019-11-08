@@ -146,7 +146,9 @@ module.exports.secureUserMatch = (userHash, user) => {
 module.exports.secureRecipeMatch = (recipeHash, recipe) => {
   expect(recipeHash.id).to.equal(recipe.id)
   expect(recipeHash.title).to.equal(recipe.title)
-  expect(recipeHash.image).not.to.be.undefined
 
-  expect(Object.keys(recipeHash).length).to.equal(3)
+  let allowedFieldCount = 2
+  if (recipeHash.images) allowedFieldCount++
+
+  expect(Object.keys(recipeHash).length).to.equal(allowedFieldCount)
 }
