@@ -3,42 +3,45 @@
     Options
   </ion-list-header>
 
-  <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showLabels" (ngModelChange)="saveViewOptions()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-label>Layout</ion-label>
+    <ion-select [(ngModel)]="preferences[preferenceKeys.ViewType]" (ngModelChange)="savePreferences();">
+      <ion-select-option value="tiles">Tiles</ion-select-option>
+      <ion-select-option value="list">List</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabels]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Labels
     </ion-label>
-    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showLabelChips" (ngModelChange)="saveViewOptions()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Label Toggles
     </ion-label>
-    <ion-icon name='pricetag' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showImages" (ngModelChange)="saveViewOptions()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowImages]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Images
     </ion-label>
-    <ion-icon name='image' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showSource" (ngModelChange)="saveViewOptions()"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowSource]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Source
     </ion-label>
-    <ion-icon name='link' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-icon name='list' slot="start"></ion-icon>
+  <ion-item lines="full">
     <ion-label>Sort by</ion-label>
-    <ion-select [(ngModel)]="viewOptions.sortBy" (ngModelChange)="saveViewOptions(true);">
+    <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences(true);">
       <ion-select-option value="-title">Title</ion-select-option>
       <!--<ion-select-option value="label">Label</ion-select-option>-->
       <ion-select-option value="-createdAt">Created (newest first)</ion-select-option>
@@ -48,28 +51,21 @@
     </ion-select>
   </ion-item>
 
-  <ion-item class="cursor-pointer" (click)="openLabelFilter()">
-    <ion-icon name='funnel' slot="start"></ion-icon>
+  <ion-item lines="full" class="cursor-pointer" (click)="openLabelFilter()" button detail="false">
     <ion-label>Filter by Label</ion-label>
-    <ion-badge *ngIf="viewOptions.selectedLabels.length > 0" slot="end">{{viewOptions.selectedLabels.length}}</ion-badge>
-    <ion-icon name="arrow-dropdown" slot="end"></ion-icon>
+    <ion-badge *ngIf="selectedLabels.length > 0" slot="end">{{selectedLabels.length}}</ion-badge>
+    <ion-icon name="arrow-dropdown" mode="md" slot="end"></ion-icon>
   </ion-item>
 
-  <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.enableLabelIntersection" (ngModelChange)="saveViewOptions(true);"></ion-toggle>
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]" (ngModelChange)="savePreferences(true);" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Match All Labels
     </ion-label>
-    <ion-icon name='funnel' slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item *ngIf="!selectionMode">
-    <ion-icon name='checkmark' slot="start"></ion-icon>
-    <ion-button (click)="toggleSelectionMode()" expand="full">Select Multiple Recipes</ion-button>
-  </ion-item>
-
-  <ion-item *ngIf="selectionMode">
-    <ion-icon name='close' slot="start"></ion-icon>
-    <ion-button (click)="toggleSelectionMode()" expand="full">Unselect All Recipes</ion-button>
-  </ion-item>
+  <ion-button (click)="toggleSelectionMode()" expand="block" size="small" class="ion-margin">
+    <ion-icon [name]="selectionMode ? 'close' : 'checkmark'" slot="start"></ion-icon>
+    {{ selectionMode ? "Unselect All Recipes" : "Select Multiple Recipes" }}
+  </ion-button>
 </ion-list>

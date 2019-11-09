@@ -16,8 +16,8 @@
 <ion-content>
   <ion-list>
       <ion-item lines="none">
-        <ion-avatar *ngIf="recipe.image" slot="start">
-          <img src="{{ recipe.image.location }}">
+        <ion-avatar *ngIf="recipe.images && recipe.images.length > 0" slot="start">
+          <img src="{{ recipe.images[0].location }}">
         </ion-avatar>
         <ion-label>
           <h2>{{ recipe.title }}</h2>
@@ -27,7 +27,7 @@
         </ion-label>
       </ion-item>
 
-      <div>
+      <div class="share-method-container">
         <ion-segment (ionChange)="shareMethodChanged($event)">
           <ion-segment-button value="account" checked>
             RecipeSage
@@ -46,7 +46,11 @@
         <div *ngSwitchCase="'link'">
           <br />
           <ion-item lines="none">
-            Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
+            <ion-label class="ion-text-wrap">
+              <p>
+                Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
+              </p>
+            </ion-label>
           </ion-item>
           <div class="codeBlock">
             <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
@@ -157,7 +161,10 @@
           <div class="ion-padding">
             <ion-item>
               <ion-label position="floating">Recipient's account email...</ion-label>
-              <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
+              <ion-input
+                [(ngModel)]="recipientEmail"
+                (ngModelChange)='autofillUserName()'
+                type="email"></ion-input>
             </ion-item>
 
             <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">
@@ -173,7 +180,7 @@
           </div>
 
           <ion-list *ngIf="threads.length > 0">
-            <ion-radio-group [(ngModel)]="selectedThread" (ngModelChange)="selectRecipient(selectedThread)">
+            <ion-radio-group [(ngModel)]="selectedThread" (ionChange)="selectRecipient($event.detail.value)">
               <ion-list-header style="margin-bottom: 0;" lines="none">
                 Existing Conversations
               </ion-list-header>

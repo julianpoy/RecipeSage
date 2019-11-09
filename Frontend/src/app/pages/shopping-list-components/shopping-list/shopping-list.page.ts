@@ -6,6 +6,7 @@ import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { PreferencesService, ShoppingListPreferenceKey } from '@/services/preferences.service';
 
 import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';
 import { ShoppingListPopoverPage } from '../shopping-list-popover/shopping-list-popover.page';
@@ -25,7 +26,8 @@ export class ShoppingListPage {
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
-  viewOptions: any = {};
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = ShoppingListPreferenceKey;
 
   initialLoadComplete = false;
 
@@ -37,6 +39,7 @@ export class ShoppingListPage {
     public shoppingListService: ShoppingListService,
     public websocketService: WebsocketService,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
@@ -49,8 +52,6 @@ export class ShoppingListPage {
         this.loadList();
       }
     }, this);
-
-    this.loadViewOptions();
   }
 
 
@@ -253,32 +254,8 @@ export class ShoppingListPage {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  loadViewOptions() {
-    const defaults = {
-      sortBy: '-createdAt',
-      showAddedBy: false,
-      showAddedOn: false,
-      showRecipeTitle: true,
-      groupSimilar: false
-    };
-
-    this.viewOptions.sortBy = localStorage.getItem('shoppingList.sortBy');
-    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('shoppingList.showAddedBy'));
-    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('shoppingList.showAddedOn'));
-    this.viewOptions.showRecipeTitle = JSON.parse(localStorage.getItem('shoppingList.showRecipeTitle'));
-    this.viewOptions.groupSimilar = JSON.parse(localStorage.getItem('shoppingList.groupSimilar'));
-
-    for (const key in this.viewOptions) {
-      if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] == null) {
-          this.viewOptions[key] = defaults[key];
-        }
-      }
-    }
-  }
-
   ingredientSorter(a, b) {
-    switch (this.viewOptions.sortBy) {
+    switch (this.preferences[ShoppingListPreferenceKey.SortBy]) {
       case 'createdAt':
         const dateComp = (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any);
         if (dateComp === 0) {
@@ -325,8 +302,7 @@ export class ShoppingListPage {
       component: ShoppingListPopoverPage,
       componentProps: {
         shoppingListId: this.shoppingListId,
-        shoppingList: this.list,
-        viewOptions: this.viewOptions
+        shoppingList: this.list
       },
       event
     });

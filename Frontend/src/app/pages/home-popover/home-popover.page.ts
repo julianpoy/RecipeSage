@@ -4,6 +4,7 @@ import { ToastController, ModalController, IonSelect, PopoverController } from '
 import { LabelService } from '@/services/label.service';
 import { UtilService } from '@/services/util.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/resettable-select-popover.page';
 
 @Component({
@@ -15,9 +16,12 @@ export class HomePopoverPage {
 
   @ViewChild('filterByLabelSelect', { static: true }) filterByLabelSelect: IonSelect;
 
-  @Input() viewOptions: any;
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MyRecipesPreferenceKey;
 
   @Input() labels: any;
+
+  @Input() selectedLabels: any[];
 
   @Input() selectionMode: boolean;
 
@@ -25,6 +29,7 @@ export class HomePopoverPage {
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public quickTutorialService: QuickTutorialService,
     public labelService: LabelService) {
 
@@ -41,13 +46,13 @@ export class HomePopoverPage {
     });
   }
 
-  saveViewOptions(refreshSearch?: boolean) {
-    localStorage.setItem('enableLabelIntersection', this.viewOptions.enableLabelIntersection);
-    localStorage.setItem('showLabels', this.viewOptions.showLabels);
-    localStorage.setItem('showLabelChips', this.viewOptions.showLabelChips);
-    localStorage.setItem('showImages', this.viewOptions.showImages);
-    localStorage.setItem('showSource', this.viewOptions.showSource);
-    localStorage.setItem('sortBy', this.viewOptions.sortBy);
+  savePreferences(refreshSearch?: boolean) {
+    this.preferencesService.save();
+
+    this.dismiss(refreshSearch);
+  }
+
+  dismiss(refreshSearch?: boolean) {
     this.popoverCtrl.dismiss({
       refreshSearch
     });
@@ -60,14 +65,14 @@ export class HomePopoverPage {
         options: this.labels.map(label => ({
           title: `${label.title} (${label.recipeCount})`,
           value: label.title,
-          selected: this.viewOptions.selectedLabels.indexOf(label.title) > -1
+          selected: this.selectedLabels.indexOf(label.title) > -1
         }))
       }
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      this.viewOptions.selectedLabels.splice(0, this.viewOptions.selectedLabels.length, ...data.selectedLabels);
-      this.saveViewOptions(true);
+      this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      this.dismiss(true);
     });
     labelFilterPopover.present();
   }

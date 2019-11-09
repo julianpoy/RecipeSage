@@ -30,7 +30,14 @@
     <div *ngSwitchCase="'items'">
       <ion-item *ngFor="let item of itemFields">
         <ion-label position="floating">Item title</ion-label>
-        <ion-input [(ngModel)]="item.title" (ngModelChange)="addOrRemoveTextFields()" type="text" value=""></ion-input>
+        <ion-input
+          [(ngModel)]="item.title"
+          (ngModelChange)="addOrRemoveTextFields()"
+          type="text"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
       </ion-item>
     </div>
 

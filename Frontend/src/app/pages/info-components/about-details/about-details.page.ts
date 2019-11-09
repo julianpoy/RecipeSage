@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 import { RouteMap } from '@/services/util.service';
 
@@ -10,5 +11,11 @@ import { RouteMap } from '@/services/util.service';
 export class AboutDetailsPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
-  constructor() {}
+  constructor(
+    private navCtrl: NavController
+  ) {}
+
+  goToDonate() {
+    this.navCtrl.navigateForward(RouteMap.ContributePage.getPath());
+  }
 }

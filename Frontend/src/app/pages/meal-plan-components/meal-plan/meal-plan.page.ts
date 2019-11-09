@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController, PopoverController, AlertController } from '@ionic/angular';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
@@ -8,8 +9,8 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
+import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
 
-import dayjs, { Dayjs } from 'dayjs';
 import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
 import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
@@ -31,7 +32,8 @@ export class MealPlanPage {
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
-  viewOptions: any = {};
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MealPlanPreferenceKey;
 
   initialLoadComplete = false;
 
@@ -50,6 +52,7 @@ export class MealPlanPage {
     public recipeService: RecipeService,
     public websocketService: WebsocketService,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
@@ -61,8 +64,6 @@ export class MealPlanPage {
         this.loadMealPlan();
       }
     }, this);
-
-    this.loadViewOptions();
   }
 
   ionViewWillEnter() {
@@ -236,26 +237,6 @@ export class MealPlanPage {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  loadViewOptions() {
-    const defaults = {
-      showAddedBy: false,
-      showAddedOn: false,
-      startOfWeek: 'monday'
-    };
-
-    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
-    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
-    this.viewOptions.startOfWeek = localStorage.getItem('mealPlan.startOfWeek') || null;
-
-    for (const key in this.viewOptions) {
-      if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] == null) {
-          this.viewOptions[key] = defaults[key];
-        }
-      }
-    }
-  }
-
   openRecipe(recipe) {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
@@ -367,8 +348,7 @@ export class MealPlanPage {
       component: MealPlanPopoverPage,
       componentProps: {
         mealPlanId: this.mealPlanId,
-        mealPlan: this.mealPlan,
-        viewOptions: this.viewOptions
+        mealPlan: this.mealPlan
       },
       event
     });

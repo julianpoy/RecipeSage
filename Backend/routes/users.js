@@ -9,11 +9,15 @@ var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
+var Recipe = require('../models').Recipe;
+var Recipe_Image = require('../models').Recipe_Image;
+var Message = require('../models').Message;
 
 // Service
 var SessionService = require('../services/sessions');
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+var SubscriptionService = require('../services/subscriptions');
 
 router.get(
   '/',
@@ -33,6 +37,71 @@ router.get(
 
   res.status(200).json(user);
 
+});
+
+router.get(
+  '/capabilities',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  async (req, res, next) => {
+
+  const userCapabilities = await SubscriptionService.capabilitiesForUser(res.locals.session.userId);
+
+  const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
+
+  const capabilityMap = capabilityTypes.reduce((acc, capabilityType) => {
+    acc[capabilityType] = userCapabilities.indexOf(capabilityType) > -1;
+    return acc;
+  }, {});
+
+  res.status(200).json(capabilityMap);
+});
+
+router.get(
+  '/stats',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  function(req, res, next) {
+  const userId = res.locals.session.userId;
+
+  Promise.all([
+    Recipe.count({
+      where: {
+        userId
+      }
+    }),
+    Recipe_Image.count({
+      include: [{
+        model: Recipe,
+        as: 'recipes',
+        attributes: [],
+        where: {
+          userId
+        }
+      }]
+    }),
+    Message.count({
+      where: {
+        [Op.or]: [{
+          toUserId: userId
+        }, {
+          fromUserId: userId
+        }]
+      }
+    })
+  ]).then(results => {
+    const [recipeCount, recipeImageCount, messageCount] = results;
+
+    res.status(200).json({
+      recipeCount,
+      recipeImageCount,
+      messageCount,
+      createdAt: res.locals.user.createdAt,
+      lastLogin: res.locals.user.lastLogin
+    });
+  }).catch(next);
 });
 
 /* Get public user listing by email */
@@ -162,7 +231,7 @@ router.post(
       res.status(standardStatus).json(standardResponse);
     } else {
       return SessionService.generateSession(user.id, 'user').then(({ token }) => {
-        var link = origin + '/#/account?token=' + token;
+        var link = origin + '/#/settings/account?token=' + token;
         var html = `Hello,
 
         <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
@@ -368,8 +437,9 @@ router.delete(
       token: req.query.fcmToken,
       userId: res.locals.session.userId
     }
-  })
-  .catch(next);
+  }).then(() => {
+    res.status(200).send("ok");
+  }).catch(next);
 });
 
 module.exports = router;

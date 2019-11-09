@@ -2,3 +2,15 @@ ion-list {
   max-height: 400px;
   overflow-y: auto;
 }
+
+ion-list.ios {
+  margin-bottom: 0;
+}
+
+ion-header.ios {
+  border-bottom: 1px solid var(--ion-border-color);
+}
+
+ion-footer.ios {
+  border-top: 1px solid var(--ion-border-color);
+}

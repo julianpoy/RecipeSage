@@ -16,6 +16,10 @@ export class AboutPage {
     this.navCtrl.navigateForward(RouteMap.AboutDetailsPage.getPath());
   }
 
+  goToContact() {
+    this.navCtrl.navigateForward(RouteMap.ContactPage.getPath());
+  }
+
   goToContribute() {
     this.navCtrl.navigateForward(RouteMap.ContributePage.getPath());
   }

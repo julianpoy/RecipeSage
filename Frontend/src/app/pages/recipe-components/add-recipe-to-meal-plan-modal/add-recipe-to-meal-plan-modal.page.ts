@@ -29,8 +29,6 @@ export class AddRecipeToMealPlanModalPage {
   selectedDay: Dayjs = dayjs(new Date());
   selectedMealGroup: any[] = [];
 
-  viewOptions: any = {};
-
   constructor(
     public navCtrl: NavController,
     public mealPlanService: MealPlanService,
@@ -40,9 +38,7 @@ export class AddRecipeToMealPlanModalPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController
-  ) {
-    this.loadViewOptions();
-  }
+  ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
@@ -130,26 +126,6 @@ export class AddRecipeToMealPlanModalPage {
         }
       });
     });
-  }
-
-  loadViewOptions() {
-    const defaults = {
-      showAddedBy: false,
-      showAddedOn: false,
-      startOfWeek: 'monday'
-    };
-
-    this.viewOptions.showAddedBy = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
-    this.viewOptions.showAddedOn = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
-    this.viewOptions.startOfWeek = localStorage.getItem('mealPlan.startOfWeek') || null;
-
-    for (const key in this.viewOptions) {
-      if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] === null) {
-          this.viewOptions[key] = defaults[key];
-        }
-      }
-    }
   }
 
   currentScheduledMeals() {

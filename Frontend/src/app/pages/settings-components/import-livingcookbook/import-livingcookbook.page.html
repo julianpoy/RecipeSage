@@ -16,8 +16,8 @@
     <ion-label class="ion-text-center ion-text-wrap">
       <br /><br />
       <p>
-        This will import your Living Cookbook database into Recipe Sage. <b>Please note this feature is in beta.</b><br />
-        All files must be in .lcb format. Other formats will not work.
+        This will import your Living Cookbook database into RecipeSage. <b>Please note this feature is in beta.</b><br />
+        All files must be in .lcb, .fdx or .fdxz format. Other formats will not work.
       </p>
       <br />
       <p>
@@ -69,7 +69,7 @@
 
     <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>
-        Warning! This filetype does not end in .lcb<br />
+        Warning! This filetype does not end in .lcb, .fdx, or .fdxz<br />
         It may not work.
       </p>
     </div>
@@ -114,7 +114,8 @@
         <div *ngIf="troubleshoot">
           <p>
             If you find that the import isn't importing all of your recipes: <br />
-            Try selecting the option above for "Include stock "filler" LCB recipes" and try again.
+            Try selecting the option above for "Include stock "filler" LCB recipes" and try again.<br />
+            You might also try exporting your recipes from LivingCookbook as .FDX or .FDXZ format and uploading in that format instead.
           </p>
           <br />
           <p>

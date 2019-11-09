@@ -72,7 +72,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: '',
       allowNull: false
     },
-    image: DataTypes.JSONB,
     folder: {
       type: DataTypes.STRING,
       defaultValue: 'main',
@@ -85,16 +84,26 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeDestroy: (recipe, options) => {
-        return Recipe.findByPk(recipe.id, {
-          attributes: ['image'],
+        afterCommitIfTransaction(options, () => {
+          ElasticService.remove('recipes', recipe.id).catch(e => {
+            if (e.status != 404) {
+              e = new Error(e);
+              e.status = 500;
+              throw e;
+            }
+          }).catch(e => {
+            Raven.captureException(e);
+          });
+        });
+      },
+      beforeBulkDestroy: (options) => {
+        return Recipe.findAll({
+          where: options.where,
+          attributes: ['id'],
           transaction: options.transaction
-        }).then(recipe => {
-          if (recipe.image && recipe.image.key) {
-            return UtilService.deleteS3Object(recipe.image.key);
-          }
-        }).then(() => {
+        }).then(recipes => {
           afterCommitIfTransaction(options, () => {
-            ElasticService.remove('recipes', recipe.id).catch(e => {
+            ElasticService.bulk('delete', 'recipes', recipes).catch(e => {
               if (e.status != 404) {
                 e = new Error(e);
                 e.status = 500;
@@ -103,31 +112,6 @@ module.exports = (sequelize, DataTypes) => {
             }).catch(e => {
               Raven.captureException(e);
             });
-          })
-        });
-      },
-      beforeBulkDestroy: (options) => {
-        return Recipe.findAll({
-          where: options.where,
-          attributes: ['id', 'image'],
-          transaction: options.transaction
-        }).then(recipes => {
-          return Promise.all(recipes.map(recipe => {
-            if (recipe.image && recipe.image.key) {
-              return UtilService.deleteS3Object(recipe.image.key);
-            }
-          })).then(() => {
-            afterCommitIfTransaction(options, () => {
-              ElasticService.bulk('delete', 'recipes', recipes).catch(e => {
-                if (e.status != 404) {
-                  e = new Error(e);
-                  e.status = 500;
-                  throw e;
-                }
-              }).catch(e => {
-                Raven.captureException(e);
-              });
-            })
           });
         });
       },
@@ -210,6 +194,13 @@ module.exports = (sequelize, DataTypes) => {
     Recipe.hasMany(models.MealPlanItem, {
       foreignKey: 'recipeId',
     });
+
+    Recipe.belongsToMany(models.Image, {
+      foreignKey: 'recipeId',
+      otherKey: 'imageId',
+      as: 'images',
+      through: models.Recipe_Image
+    });
   };
 
   Recipe._findTitle = function(userId, recipeId, basename, transaction, ctr) {
@@ -251,35 +242,47 @@ module.exports = (sequelize, DataTypes) => {
     });
   }
 
-  Recipe.prototype.share = function(recipientId, transaction) {
-    return new Promise((resolve, reject) => {
-      if (this.image && this.image.location) {
-        UtilService.sendURLToS3(this.image.location).then(resolve).catch(reject)
-      } else {
-        resolve(null);
-      }
-    }).then(img => {
-      return Recipe.findTitle(recipientId, null, this.title, transaction).then(adjustedTitle => {
-        return Recipe.create({
-          userId: recipientId,
-          title: adjustedTitle,
-          description: this.description,
-          yield: this.yield,
-          activeTime: this.activeTime,
-          totalTime: this.totalTime,
-          source: this.source,
-          url: this.url,
-          notes: this.notes,
-          ingredients: this.ingredients,
-          instructions: this.instructions,
-          image: img,
-          folder: 'inbox',
-          fromUserId: this.userId
-        }, {
-          transaction
-        });
-      });
+  Recipe.prototype.share = async function(recipientId, transaction) {
+    const adjustedTitle = await Recipe.findTitle(recipientId, null, this.title, transaction);
+
+    const recipe = await Recipe.create({
+      userId: recipientId,
+      title: adjustedTitle,
+      description: this.description,
+      yield: this.yield,
+      activeTime: this.activeTime,
+      totalTime: this.totalTime,
+      source: this.source,
+      url: this.url,
+      notes: this.notes,
+      ingredients: this.ingredients,
+      instructions: this.instructions,
+      folder: 'inbox',
+      fromUserId: this.userId
+    }, {
+      transaction
     });
+
+    const Recipe_Image = require('../models').Recipe_Image;
+
+    const recipeImages = await Recipe_Image.findAll({
+      where: {
+        recipeId: this.id
+      },
+      transaction
+    });
+
+    if (recipeImages.length > 0) {
+      await Recipe_Image.bulkCreate(recipeImages.map(recipeImage => ({
+        recipeId: recipe.id,
+        imageId: recipeImage.imageId,
+        order: recipeImage.order
+      })), {
+        transaction
+      });
+    }
+
+    return recipe;
   }
 
   return Recipe;

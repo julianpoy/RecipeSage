@@ -63,7 +63,9 @@ export class MealPlansPage {
   loadPlans() {
     return new Promise((resolve, reject) => {
       this.mealPlanService.fetch().then(response => {
-        this.mealPlans = response;
+        this.mealPlans = response.sort((a, b) => {
+          return a.title.localeCompare(b.title);
+        });
 
         resolve();
       }).catch(async err => {

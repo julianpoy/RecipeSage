@@ -36,6 +36,10 @@ export const RouteMap = {
     getPath() { return `about/details`; },
     path: 'about/details',
   },
+  ContactPage: {
+    getPath() { return `about/contact`; },
+    path: 'about/contact',
+  },
   LegalPage: {
     getPath() { return `legal`; },
     path: 'legal',
@@ -195,7 +199,7 @@ export class UtilService {
     return url;
   }
 
-  formatDate(date, options?): string {
+  formatDate(date, options?: { now?: boolean, times?: boolean }): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
@@ -255,5 +259,9 @@ export class UtilService {
         year: 'numeric'
       });
     }
+  }
+
+  buildPublicRoutePath(hashlessRoutePath: string) {
+    return `${window.location.origin}/#/${hashlessRoutePath}`;
   }
 }

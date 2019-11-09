@@ -50,7 +50,7 @@ export class ImportLivingcookbookPage {
     if (this.imageFile) {
       return this.imageFile.name + ' Selected';
     } else {
-      return 'Choose .lcb file';
+      return 'Choose .lcb, .fdx, or .fdxz file';
     }
   }
 
@@ -72,9 +72,23 @@ export class ImportLivingcookbookPage {
     return false;
   }
 
+  isFileSelected() {
+    return this.imageFile && this.imageFile.name;
+  }
+
+  isLCBFormat() {
+    if (!this.isFileSelected()) return false;
+    return this.imageFile.name.toLowerCase().endsWith('.lcb');
+  }
+
+  isFDXZFormat() {
+    if (!this.isFileSelected()) return false;
+    return this.imageFile.name.toLowerCase().endsWith('.fdx') || this.imageFile.name.toLowerCase().endsWith('.fdxz');
+  }
+
   showFileTypeWarning() {
-    if (!this.imageFile || !this.imageFile.name) return false;
-    return !this.imageFile.name.toLowerCase().endsWith('.lcb');
+    if (!this.isFileSelected()) return false;
+    return !this.isLCBFormat() && !this.isFDXZFormat();
   }
 
   async presentToast(msg: string) {
@@ -87,7 +101,14 @@ export class ImportLivingcookbookPage {
   submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importLCB(this.imageFile, this.includeStockRecipes, this.includeTechniques, this.excludeImages).then(response => {
+    let importPromise;
+    if (this.isFDXZFormat()) {
+      importPromise = this.recipeService.importFDXZ(this.imageFile, this.excludeImages);
+    } else {
+      importPromise = this.recipeService.importLCB(this.imageFile, this.includeStockRecipes, this.includeTechniques, this.excludeImages);
+    }
+
+    importPromise.then(response => {
       this.loading.dismiss();
       this.loading = null;
 

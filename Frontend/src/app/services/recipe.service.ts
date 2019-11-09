@@ -6,6 +6,7 @@ import { Label } from './label.service';
 import fractionjs from 'fraction.js';
 import { HttpService } from './http.service';
 import { UtilService } from './util.service';
+import { Image } from './image.service';
 
 import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
 
@@ -23,7 +24,7 @@ export interface Recipe {
   instructions: string;
   labels: Label[];
   labels_flatlist: string;
-  image: any;
+  images: Image[];
   imageFile: any;
   imageURL: string;
   destinationUserEmail: string;
@@ -110,24 +111,12 @@ export class RecipeService {
   }
 
   create(data) {
-    const formData: FormData = new FormData();
-    if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
-
-    delete data.imageFile;
-
-    for (const key of Object.keys(data)) {
-      formData.append(key, data[key]);
-    }
-
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
 
     return this.httpService.request({
       method: 'post',
       url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
+      data
     }).then(response => {
       this.events.publish('recipe:created');
       this.events.publish('recipe:generalUpdate');
@@ -138,7 +127,6 @@ export class RecipeService {
 
   share(data) {
     if (!data.destinationUserEmail) throw new Error('DestinationUserEmail required for share operation');
-    if (data.image) data.imageURL = data.image.location;
 
     const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
 
@@ -154,24 +142,12 @@ export class RecipeService {
   }
 
   update(data) {
-    const formData: FormData = new FormData();
-    if (data.imageFile) formData.append('image', data.imageFile, data.imageFile.name);
-
-    delete data.imageFile;
-
-    for (const key of Object.keys(data)) {
-      formData.append(key, data[key]);
-    }
-
     const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
 
     return this.httpService.request({
       method: 'put',
       url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
+      data
     }).then(response => {
       this.events.publish('recipe:updated');
       this.events.publish('recipe:generalUpdate');
@@ -242,6 +218,27 @@ export class RecipeService {
       method: 'get',
       url
     }).then(response => response.data);
+  }
+
+  importFDXZ(fdxzFile, excludeImages?: boolean) {
+    const formData: FormData = new FormData();
+    formData.append('fdxzdb', fdxzFile, fdxzFile.name);
+
+    const url = `${this.utilService.getBase()}import/fdxz${this.utilService.getTokenQuery()}`
+      + `${excludeImages ? '&excludeImages=true' : ''}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: formData
+    }).then(response => {
+      this.events.publish('recipe:generalUpdate');
+
+      return response.data;
+    });
   }
 
   importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean, excludeImages?: boolean) {

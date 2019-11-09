@@ -1,11 +1,11 @@
 <ngx-loading-bar includeSpinner="false"></ngx-loading-bar>
 
 <ion-app>
-  <ion-split-pane disabled="true">
+  <ion-split-pane [disabled]="!preferences[preferenceKeys.EnableSplitPane]" when="(min-width: 1200px)">
     <ion-menu type="overlay">
       <ion-header>
         <ion-toolbar color="nav">
-          <ion-title>Recipe Sage</ion-title>
+          <ion-title>RecipeSage</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -40,9 +40,11 @@
       <ion-footer>
         <ion-toolbar>
 
-          <p>
-            &nbsp;&nbsp;v{{ version }}<br />
-            &nbsp;&nbsp;<a href="https://recipesage.com/#/about-details">Julian Poyourow</a>
+          <p class="ion-padding-start">
+            v{{ version }}<br />
+            <ion-menu-toggle auto-hide="false">
+              <a [routerLink]="[aboutDetailsHref]">Julian Poyourow</a>
+            </ion-menu-toggle>
           </p>
 
         </ion-toolbar>

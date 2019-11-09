@@ -3,6 +3,7 @@ import { NavController, ToastController, ModalController, AlertController, Popov
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'page-meal-plan-popover',
@@ -11,7 +12,9 @@ import { UtilService, RouteMap } from '@/services/util.service';
 })
 export class MealPlanPopoverPage {
 
-  viewOptions: any; // From nav params
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = MealPlanPreferenceKey;
+
   mealPlanId: any; // From nav params
   mealPlan: any; // From nav params
 
@@ -19,19 +22,20 @@ export class MealPlanPopoverPage {
     public popoverCtrl: PopoverController,
     public navCtrl: NavController,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController
   ) {}
 
-  ionViewDidLoad() { }
+  savePreferences() {
+    this.preferencesService.save();
 
-  saveViewOptions() {
-    localStorage.setItem('mealPlan.showAddedBy', this.viewOptions.showAddedBy);
-    localStorage.setItem('mealPlan.showAddedOn', this.viewOptions.showAddedOn);
-    localStorage.setItem('mealPlan.startOfWeek', this.viewOptions.startOfWeek);
+    this.dismiss();
+  }
 
+  dismiss() {
     this.popoverCtrl.dismiss();
   }
 

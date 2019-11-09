@@ -7,6 +7,8 @@ var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
 
+var RS_VERSION = JSON.parse(fs.readFileSync('./package.json')).version;
+
 var testMode = process.env.NODE_ENV === 'test';
 var verboseMode = process.env.VERBOSE === 'true';
 
@@ -22,7 +24,7 @@ var devMode = appConfig.environment === 'dev';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
-  release: '1.8.4'
+  release: RS_VERSION
 }).install();
 
 // Routes
@@ -35,6 +37,8 @@ var shoppingLists = require('./routes/shoppingLists');
 var mealPlans = require('./routes/mealPlans');
 var print = require('./routes/print');
 var grip = require('./routes/grip');
+var payments = require('./routes/payments');
+var images = require('./routes/images');
 
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
@@ -47,7 +51,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 if (!testMode) app.use(logger('dev'));
-app.use(bodyParser.json({limit: '250MB'}));
+app.use(bodyParser.json({
+  limit: '250MB',
+  verify: (req, res, buf) => {
+    var url = req.originalUrl;
+    if (url.startsWith('/payments/stripe/webhooks')) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
 app.use(bodyParser.urlencoded({ limit: '250MB', extended: false }));
 app.use(cookieParser());
 app.disable('x-powered-by');
@@ -64,6 +76,8 @@ app.use('/shoppingLists', shoppingLists);
 app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/grip', grip);
+app.use('/payments', payments);
+app.use('/images', images);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());
 

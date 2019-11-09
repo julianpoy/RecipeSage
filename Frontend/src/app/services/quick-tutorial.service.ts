@@ -11,7 +11,8 @@ interface QuickTutorialBlurb {
 // Changing mapped value names here will reset their viewed status
 export enum QuickTutorialOptions {
   MultipleRecipeSelection = 'multipleRecipeSelection',
-  MultipleLabelSelection = 'multipleLabelSelection'
+  MultipleLabelSelection = 'multipleLabelSelection',
+  SplitPaneView = 'splitPaneView'
 }
 
 type QuickTutorialBlurbs = {
@@ -32,6 +33,12 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
               You can click as many labels as you'd like to select,
               then use the buttons that appear in the header to take bulk actions.<br /><br />
               You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.`
+  },
+  [QuickTutorialOptions.SplitPaneView]: {
+    header: 'Split Pane View',
+    message: `Split pane view is only visible on devices with large screens (laptops, large tablets, etc).<br /><br />
+              When split pane view is enabled, the side menu will always be visible.<br /><br />
+              This feature is useful for optimizing the experience on larger devices.`
   }
 };
 

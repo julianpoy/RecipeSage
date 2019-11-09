@@ -10,6 +10,8 @@ import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
+import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +29,11 @@ export class AppComponent {
   unsupportedBrowser: boolean = !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem('seenOldBrowserWarning');
 
+  aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
+
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = GlobalPreferenceKey;
+
   constructor(
     private navCtrl: NavController,
     private route: ActivatedRoute,
@@ -42,7 +49,9 @@ export class AppComponent {
     private recipeService: RecipeService,
     private messagingService: MessagingService,
     private websocketService: WebsocketService,
-    private userService: UserService
+    private userService: UserService,
+    private preferencesService: PreferencesService,
+    private capabilitiesService: CapabilitiesService
   ) {
 
     this.initializeApp();

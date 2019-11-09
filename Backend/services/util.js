@@ -59,33 +59,38 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
 }
 
 exports.fetchImage = url => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     request.get({
       url: url,
       encoding: null
     }, (err, res, body) => {
-      if (err) throw err;
-
-      resolve({ res, body })
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ res, body });
+      }
     });
   })
 }
 
+const S3_DEFAULT_ACL = 'public-read';
+const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
+
 exports.sendBufferToS3 = buffer => {
   let key = new Date().getTime().toString();
-  let bucket = config.aws.bucket
-  let acl = 'public-read'
+  let bucket = config.aws.bucket;
 
   return s3.putObject({
     Bucket: bucket,
     Key: key,
-    ACL: acl,
+    ACL: S3_DEFAULT_ACL,
+    CacheControl: S3_DEFAULT_CACHECONTROL,
     Body: buffer // buffer
   }).promise().then(s3Response => {
     return {
       s3Response,
       key,
-      acl,
+      acl: S3_DEFAULT_ACL,
       bucket
     }
   })
@@ -99,7 +104,7 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
     size,
     bucket: config.aws.bucket,
     key,
-    acl: "public-read",
+    acl: S3_DEFAULT_ACL,
     metadata: {
       fieldName: "image"
     },
@@ -151,45 +156,61 @@ exports.sendFileToS3 = (file, isBuffer) => {
   })
 }
 
-exports.upload = multer({
-  storage: multerImager({
-    dirname: '/',
-    bucket: config.aws.bucket,
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
-    region: config.aws.region,
-    filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
-      cb(null, Date.now())                // i.e. with a timestamp
-    },                                    //
-    gm: {                                 // [Optional]: define graphicsmagick options
-      width: 200,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
-      // height: 200,
-      options: '',
-      format: 'jpg',                      // Default: jpg - Unused by our processor
-      process: (gm, options, inputStream, outputStream) => {
-        let pipeline = sharp()
-        pipeline.rotate() // Rotates based on EXIF data
-          .resize(200, 200) // Uses object-fit: cover by default
-          .jpeg({
-            quality: 55,
-            // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
-          })
-          .pipe(outputStream);
+exports.upload = async (fieldName, req, res, highResConversion) => {
+  const height = highResConversion ? 1024 : 200;
+  const width = highResConversion ? 1024 : 200;
+  const quality = highResConversion ? 85 : 55;
 
-        inputStream.pipe(pipeline);
+  await new Promise((resolve, reject) => {
+    multer({
+      storage: multerImager({
+        dirname: '/',
+        bucket: config.aws.bucket,
+        accessKeyId: config.aws.accessKeyId,
+        secretAccessKey: config.aws.secretAccessKey,
+        region: config.aws.region,
+        filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
+          cb(null, Date.now())                // i.e. with a timestamp
+        },                                    //
+        gm: {                                 // [Optional]: define graphicsmagick options
+          width,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
+          // height: 200,
+          options: '',
+          format: 'jpg',                      // Default: jpg - Unused by our processor
+          process: (gm, options, inputStream, outputStream) => {
+            let pipeline = sharp()
+            pipeline.rotate() // Rotates based on EXIF data
+              .resize(width, height) // Uses object-fit: cover by default
+              .jpeg({
+                quality,
+                // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
+              })
+              .pipe(outputStream);
+
+            inputStream.pipe(pipeline);
+          }
+        },
+        s3 : {                                // [Optional]: define s3 options
+          ACL: S3_DEFAULT_ACL,
+          CacheControl: S3_DEFAULT_CACHECONTROL,
+          Metadata: {
+            'acl': S3_DEFAULT_ACL,
+            'cache-control': S3_DEFAULT_CACHECONTROL
+          }
+        }
+      }),
+      limits: {
+        fileSize: 8 * 1024 * 1024 // 8MB
       }
-    },
-    s3 : {                                // [Optional]: define s3 options
-      ACL: 'public-read',
-      Metadata: {
-        'acl': 'public-read'
+    }).single(fieldName)(req, res, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
       }
-    }
-  }),
-  limits: {
-    fileSize: 8 * 1024 * 1024 // 8MB
-  }
-});
+    });
+  })
+};
 
 exports.deleteS3Object = key => {
   return new Promise((resolve, reject) => {
@@ -232,6 +253,16 @@ exports.dispatchImportNotification = (user, status, reason) => {
   return Promise.all(sendQueues);
 }
 
+exports.sortRecipeImages = recipe => {
+  if (recipe.toJSON) recipe = recipe.toJSON();
+
+  if (recipe.images && recipe.images.length > 0) {
+    recipe.images.sort((a, b) => a.Recipe_Image.order - b.Recipe_Image.order);
+  }
+
+  return recipe;
+}
+
 exports.dispatchMessageNotification = (user, fullMessage) => {
   var message = {
     id: fullMessage.id,
@@ -245,12 +276,10 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
     message.recipe = {
       id: fullMessage.recipe.id,
       title: fullMessage.recipe.title,
-      image: {}
+      images: fullMessage.recipe.images.map(image => ({
+        location: image.location
+      }))
     };
-
-    if (fullMessage.recipe.image) {
-      message.recipe.image.location = fullMessage.recipe.image.location;
-    }
   }
 
   let sendQueues = [];
@@ -301,4 +330,21 @@ exports.gunzip = buf => {
       resolve(result);
     })
   })
+}
+
+// CBs are an array of promises to be executed by chunkSize
+// Waits until previous is done before executing next chunk
+exports.executeInChunks = async (cbs, chunkSize) => {
+  if (chunkSize < 1) return Promise.resolve();
+
+  let chunks = [];
+  for (let i = 0; i < cbs.length; i += chunkSize) {
+    chunks.push(cbs.slice(i, i + chunkSize));
+  }
+
+  await chunks.reduce((acc, chunk) => {
+    return acc.then(() => {
+      return Promise.all(chunk.map(cb => cb()))
+    })
+  }, Promise.resolve())
 }

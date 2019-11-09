@@ -17,31 +17,69 @@
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
-    <a
-      class="donate monthly-paypal"
-      target="_blank"
-      href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GUFFC8V9ESPJQ&source=url">
-      Monthly
-    </a>
+    <div class="frequency-row">
+      <ion-button [fill]="frequency == 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
+        <span>
+          Monthly
+        </span>
+      </ion-button>
+      <ion-button [fill]="frequency == 'single' ? 'solid' : 'outline'" (click)="setFrequency('single')">
+        <span>
+          One-Time
+        </span>
+      </ion-button>
+    </div>
 
-    <!-- <br /> -->
+    <div class="amount-row" *ngIf="frequency == 'monthly'">
+      <ion-button [fill]="amount == 1 ? 'solid' : 'outline'" (click)="setAmount(1)">
+        $1.00
+      </ion-button>
+      <ion-button [fill]="amount == 5 ? 'solid' : 'outline'" (click)="setAmount(5)">
+        $5.00
+      </ion-button>
+      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+        $10.00
+      </ion-button>
+      <input
+        placeholder="Custom"
+        (focus)="focusCustom()"
+        [(ngModel)]="customAmount" />
+    </div>
 
-    <a
-      class="donate one-time-paypal"
-      target="_blank"
-      href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Y6WCWPZLJQWYY&source=url">
-      One-time
-    </a>
+    <div class="amount-row" *ngIf="frequency == 'single'">
+      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+        $10.00
+      </ion-button>
+      <ion-button [fill]="amount == 25 ? 'solid' : 'outline'" (click)="setAmount(25)">
+        $25.00
+      </ion-button>
+      <ion-button [fill]="amount == 50 ? 'solid' : 'outline'" (click)="setAmount(50)">
+        $50.00
+      </ion-button>
+      <input
+        placeholder="Custom"
+        (focus)="focusCustom()"
+        [(ngModel)]="customAmount" />
+    </div>
+
+    <div class="submit-row" *ngIf="frequency">
+      <ion-button [disabled]="!validAmount()" (click)="contribute()">
+        <span>
+          Contribute!
+        </span>
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+      </ion-button>
+    </div>
 
     <p>I truly appreciate any financial support you're able to give.</p>
 
     <p>
-      I want to keep Recipe Sage free and without ads, but hosting costs for recipes and images add up.
+      I want to keep RecipeSage free and without ads, but hosting costs for recipes and images add up.
     </p>
 
     <p>Monthly donations of a small amount are the most helpful!</p>
 
-    <a href="/#/about-details">A little about me</a>
+    <a href="/#/about/details">A little about me</a>
 
     <br />
   </div>

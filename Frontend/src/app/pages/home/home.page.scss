@@ -25,10 +25,44 @@
   }
 }
 
-ion-thumbnail {
-  --size: 200px !important;
-}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 
-.recipeItem {
-  cursor: pointer;
+  ion-card {
+    width: 200px;
+    box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
+
+    &:hover {
+      background-color: var(--ion-item-background-hover);
+    }
+
+    ion-card-content {
+      padding: 0;
+
+      .no-image {
+        img {
+          margin-top: 50px;
+          margin-bottom: 50px;
+          width: 100px;
+          height: 100px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+
+    ion-thumbnail {
+      width: 200px;
+      height: 200px;
+    }
+
+    ion-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    }
+  }
 }

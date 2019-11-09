@@ -18,7 +18,8 @@ let {
   associateLabel,
   createMessage,
   secureUserMatch,
-  secureRecipeMatch
+  secureRecipeMatch,
+  randomUuid
 } = require('../testutils');
 
 var UtilService = require('../services/util');
@@ -140,12 +141,12 @@ describe('messages', () => {
             {
               model: Recipe,
               as: 'recipe',
-              attributes: ['id', 'title', 'image']
+              attributes: ['id', 'title']
             },
             {
               model: Recipe,
               as: 'originalRecipe',
-              attributes: ['id', 'title', 'image']
+              attributes: ['id', 'title']
             }]
           }).then(message => {
             // Message itself
@@ -178,7 +179,7 @@ describe('messages', () => {
       let session = await createSession(user.id);
 
       let payload = {
-        to: 'invalid',
+        to: randomUuid(),
         body: randomString(40)
       };
 
@@ -197,7 +198,7 @@ describe('messages', () => {
       let session = await createSession(user.id);
 
       let payload = {
-        to: 'invalid',
+        to: randomUuid(),
         recipeId: recipe.id
       };
 
@@ -496,7 +497,7 @@ describe('messages', () => {
 
       let payload = {
         token: session.token,
-        user: 'invalid'
+        user: randomUuid()
       }
 
       await request(server)

@@ -13,7 +13,8 @@ let {
   createSession,
   createRecipe,
   createLabel,
-  associateLabel
+  associateLabel,
+  randomUuid
 } = require('../testutils');
 
 // DB
@@ -221,7 +222,7 @@ describe('labels', () => {
       })
 
       it('responds with associated recipes', () => {
-        expect(responseBody[0].recipeCount).to.equal(1)
+        expect(responseBody[0].recipeCount).to.equal('1')
       })
     })
 
@@ -361,7 +362,7 @@ describe('labels', () => {
 
       let payload = {
         token: session.token,
-        labelId: 'invalid',
+        labelId: randomUuid(),
         recipeId: recipe.id
       };
 

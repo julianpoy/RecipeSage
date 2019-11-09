@@ -17,8 +17,8 @@
   </ion-refresher>
   <ion-card>
     <ion-item lines="none">
-      <ion-thumbnail *ngIf="recipe.image" slot="start">
-        <img src="{{ recipe.image.location }}">
+      <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
+        <img src="{{ recipe.images[0].location }}">
       </ion-thumbnail>
 
       <ion-label>
@@ -177,29 +177,40 @@
         #labelInputField
         id="labelInputField" />
       <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
-        <ion-item
+        <button
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
-          (click)="addLabel(pendingLabel)"
-          button>
-          {{ pendingLabel }}
-          <span class="hint" slot="end">Click to create</span>
-        </ion-item>
-        <ion-item
+          (click)="addLabel(pendingLabel)">
+          <ion-item class="suggestion-inner" button>
+            <ion-label>
+              {{ pendingLabel }}
+              <p>
+                Click to create
+              </p>
+            </ion-label>
+          </ion-item>
+        </button>
+        <button
           class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1"
-          button>
-          {{ pendingLabel }}
-          <span class="hint" slot="end">Already added</span>
-        </ion-item>
-        <ion-item
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+          <ion-item class="suggestion-inner" button>
+            <ion-label>
+              {{ pendingLabel }}
+              <p>Already added</p>
+            </ion-label>
+          </ion-item>
+        </button>
+        <button
           class="suggestion"
           *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
-          (click)="addLabel(label)"
-          button>
-          {{ label }}
-          <span class="hint" slot="end">Click to add</span>
-        </ion-item>
+          (click)="addLabel(label)">
+          <ion-item class="suggestion-inner" button>
+            <ion-label>
+              {{ label }}
+              <p>Click to add</p>
+            </ion-label>
+          </ion-item>
+        </button>
       </div>
     </div>
 

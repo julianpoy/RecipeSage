@@ -11,73 +11,155 @@
 
 
 <ion-content class="ion-padding">
-  <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" accept="image/*" />
-  <div class="recipe-image" (click)="filePicker()">
-    <div class="image-frame">
-      <img *ngIf="recipe.image && !imageBlobURL" src="{{ recipe.image.location }}" />
-      <img *ngIf="imageBlobURL" [src]="imageBlobURL" />
-      <span *ngIf="!recipe.image && !imageBlobURL">
-        No Image
-      </span>
+  <input id="filePicker" [multiple]="capabilitiesService.capabilities.multipleImages" type="file" (change)="markAsDirty(); addImage($event)" style="display: none;" accept="image/*" />
+
+  <div class="image-carousel">
+    <div class="recipe-image" *ngFor="let image of images; let i = index">
+      <div class="image-frame">
+        <img src="{{ image.location }}" />
+      </div>
+      <div class="image-subtext" *ngIf="images.length > 1">
+        <ion-icon name="arrow-dropleft" [ngClass]="{ 'hide-reorder': i == 0 }" (click)="reorderImage(image, -1)"></ion-icon>
+        <span>
+          {{ i + 1 }}
+        </span>
+        <ion-icon name="arrow-dropright" [ngClass]="{ 'hide-reorder': i >= (images.length - 1) }" (click)="reorderImage(image, 1)"></ion-icon>
+      </div>
     </div>
-    <div class="image-subtext">
-      <span *ngIf="recipe.image || imageBlobURL">
-        Click to Change Image
-      </span>
-      <span *ngIf="!recipe.image && !imageBlobURL">
-        Click to Select Image
-      </span>
+
+    <div class="recipe-image" (click)="filePicker()" *ngIf="images.length === 0 || capabilitiesService.capabilities.multipleImages">
+      <div class="image-frame">
+        <span>
+          +
+          <br />
+          Click to Add Image
+        </span>
+      </div>
     </div>
   </div>
 
   <ion-item>
     <ion-label position="floating">Title</ion-label>
-    <ion-input [(ngModel)]="recipe.title" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.title"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Description</ion-label>
-    <ion-textarea [(ngModel)]="recipe.description" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.description"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Yield</ion-label>
-    <ion-input [(ngModel)]="recipe.yield" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.yield"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Active Time</ion-label>
-    <ion-input [(ngModel)]="recipe.activeTime" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.activeTime"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Total Time</ion-label>
-    <ion-input [(ngModel)]="recipe.totalTime" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.totalTime"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Source</ion-label>
-    <ion-input [(ngModel)]="recipe.source" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.source"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Source URL</ion-label>
-    <ion-input [(ngModel)]="recipe.url" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.url"
+      (ngModelChange)="markAsDirty()"
+      type="url"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Ingredients</ion-label>
-    <ion-textarea [(ngModel)]="recipe.ingredients" (ionInput)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.ingredients"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Instructions</ion-label>
-    <ion-textarea [(ngModel)]="recipe.instructions" (ionInput)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.instructions"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Notes</ion-label>
-    <ion-textarea [(ngModel)]="recipe.notes" (ionInput)="updateTextAreaSize($event)" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.notes"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <br />

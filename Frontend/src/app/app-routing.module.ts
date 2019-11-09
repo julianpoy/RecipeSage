@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { RouteMap } from './services/util.service';
+import { RouteMap, AuthType } from './services/util.service';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
+import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule',
     pathMatch: 'full',
-    canActivate: [DefaultPageGuardService]
+    canActivate: [DefaultPageGuardService],
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.HomePage.path,
-    loadChildren: '@/pages/home/home.module#HomePageModule'
+    loadChildren: '@/pages/home/home.module#HomePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.LabelsPage.path,
@@ -21,104 +24,140 @@ const routes: Routes = [
   },
   {
     path: RouteMap.AboutPage.path,
-    loadChildren: '@/pages/info-components/about/about.module#AboutPageModule'
+    loadChildren: '@/pages/info-components/about/about.module#AboutPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.AboutDetailsPage.path,
-    loadChildren: '@/pages/info-components/about-details/about-details.module#AboutDetailsPageModule'
+    loadChildren: '@/pages/info-components/about-details/about-details.module#AboutDetailsPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
+    path: RouteMap.ContactPage.path,
+    loadChildren: '@/pages/info-components/contact/contact.module#ContactPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.LegalPage.path,
-    loadChildren: '@/pages/info-components/legal/legal.module#LegalPageModule'
+    loadChildren: '@/pages/info-components/legal/legal.module#LegalPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ContributePage.path,
-    loadChildren: '@/pages/info-components/contribute/contribute.module#ContributePageModule'
+    loadChildren: '@/pages/info-components/contribute/contribute.module#ContributePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ContributeCancelPage.path,
-    loadChildren: '@/pages/info-components/contribute-cancel/contribute-cancel.module#ContributeCancelPageModule'
+    loadChildren: '@/pages/info-components/contribute-cancel/contribute-cancel.module#ContributeCancelPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ContributeThankYouPage.path,
-    loadChildren: '@/pages/info-components/contribute-thankyou/contribute-thankyou.module#ContributeThankYouPageModule'
+    loadChildren: '@/pages/info-components/contribute-thankyou/contribute-thankyou.module#ContributeThankYouPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ReleaseNotesPage.path,
-    loadChildren: '@/pages/info-components/release-notes/release-notes.module#ReleaseNotesPageModule'
+    loadChildren: '@/pages/info-components/release-notes/release-notes.module#ReleaseNotesPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.TipsTricksTutorialsPage.path,
-    loadChildren: '@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module#TipsTricksTutorialsPageModule'
+    loadChildren: '@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module#TipsTricksTutorialsPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.WelcomePage.path,
-    loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule'
+    loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.AuthPage.path,
-    loadChildren: '@/pages/auth/auth.module#AuthPageModule'
+    loadChildren: '@/pages/auth/auth.module#AuthPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.MealPlansPage.path,
-    loadChildren: '@/pages/meal-plan-components/meal-plans/meal-plans.module#MealPlansPageModule'
+    loadChildren: '@/pages/meal-plan-components/meal-plans/meal-plans.module#MealPlansPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.MealPlanPage.path,
-    loadChildren: '@/pages/meal-plan-components/meal-plan/meal-plan.module#MealPlanPageModule'
+    loadChildren: '@/pages/meal-plan-components/meal-plan/meal-plan.module#MealPlanPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.MessagesPage.path,
-    loadChildren: '@/pages/messaging-components/messages/messages.module#MessagesPageModule'
+    loadChildren: '@/pages/messaging-components/messages/messages.module#MessagesPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.MessageThreadPage.path,
-    loadChildren: '@/pages/messaging-components/message-thread/message-thread.module#MessageThreadPageModule'
+    loadChildren: '@/pages/messaging-components/message-thread/message-thread.module#MessageThreadPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.EditRecipePage.path,
-    loadChildren: '@/pages/recipe-components/edit-recipe/edit-recipe.module#EditRecipePageModule'
+    loadChildren: '@/pages/recipe-components/edit-recipe/edit-recipe.module#EditRecipePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.RecipePage.path,
-    loadChildren: '@/pages/recipe-components/recipe/recipe.module#RecipePageModule'
+    loadChildren: '@/pages/recipe-components/recipe/recipe.module#RecipePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.SettingsPage.path,
-    loadChildren: '@/pages/settings-components/settings/settings.module#SettingsPageModule'
+    loadChildren: '@/pages/settings-components/settings/settings.module#SettingsPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.AccountPage.path,
-    loadChildren: '@/pages/settings-components/account/account.module#AccountPageModule'
+    loadChildren: '@/pages/settings-components/account/account.module#AccountPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ExportPage.path,
-    loadChildren: '@/pages/settings-components/export/export.module#ExportPageModule'
+    loadChildren: '@/pages/settings-components/export/export.module#ExportPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ImportPage.path,
-    loadChildren: '@/pages/settings-components/import/import.module#ImportPageModule'
+    loadChildren: '@/pages/settings-components/import/import.module#ImportPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ImportLivingcookbookPage.path,
-    loadChildren: '@/pages/settings-components/import-livingcookbook/import-livingcookbook.module#ImportLivingcookbookPageModule'
+    loadChildren: '@/pages/settings-components/import-livingcookbook/import-livingcookbook.module#ImportLivingcookbookPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ImportPaprikaPage.path,
-    loadChildren: '@/pages/settings-components/import-paprika/import-paprika.module#ImportPaprikaPageModule'
+    loadChildren: '@/pages/settings-components/import-paprika/import-paprika.module#ImportPaprikaPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ImportPepperplatePage.path,
-    loadChildren: '@/pages/settings-components/import-pepperplate/import-pepperplate.module#ImportPepperplatePageModule'
+    loadChildren: '@/pages/settings-components/import-pepperplate/import-pepperplate.module#ImportPepperplatePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ShoppingListsPage.path,
-    loadChildren: '@/pages/shopping-list-components/shopping-lists/shopping-lists.module#ShoppingListsPageModule'
+    loadChildren: '@/pages/shopping-list-components/shopping-lists/shopping-lists.module#ShoppingListsPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
   },
   {
     path: RouteMap.ShoppingListPage.path,
-    loadChildren: '@/pages/shopping-list-components/shopping-list/shopping-list.module#ShoppingListPageModule'
-  }
+    loadChildren: '@/pages/shopping-list-components/shopping-list/shopping-list.module#ShoppingListPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  // Legacy route redirects
+  { path: 'about-details', redirectTo: '/about/details', pathMatch: 'full' },
+  { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
+  { path: 'edit-recipe', redirectTo: '/', pathMatch: 'full' },
+  // Catchall
+  { path: '**', loadChildren: '@/pages/error-pages/not-found/not-found.module#NotFoundPageModule' }
 ];
 
 @NgModule({
