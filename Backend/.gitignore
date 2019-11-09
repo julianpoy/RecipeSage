@@ -3,7 +3,4 @@ node_modules
 config/config.json
 config/firebase-credentials.json
 
-test.sqlite3
-test.sqlite3-journal
-
 package-lock.json
