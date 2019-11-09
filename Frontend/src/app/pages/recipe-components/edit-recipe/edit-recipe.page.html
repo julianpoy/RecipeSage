@@ -40,52 +40,126 @@
 
   <ion-item>
     <ion-label position="floating">Title</ion-label>
-    <ion-input [(ngModel)]="recipe.title" (ngModelChange)="markAsDirty()" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.title"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Description</ion-label>
-    <ion-textarea [(ngModel)]="recipe.description" (ngModelChange)="markAsDirty()" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.description"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Yield</ion-label>
-    <ion-input [(ngModel)]="recipe.yield" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.yield"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Active Time</ion-label>
-    <ion-input [(ngModel)]="recipe.activeTime" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.activeTime"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Total Time</ion-label>
-    <ion-input [(ngModel)]="recipe.totalTime" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.totalTime"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Source</ion-label>
-    <ion-input [(ngModel)]="recipe.source" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.source"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Source URL</ion-label>
-    <ion-input [(ngModel)]="recipe.url" (ngModelChange)="markAsDirty()" type="text" value=""></ion-input>
+    <ion-input
+      [(ngModel)]="recipe.url"
+      (ngModelChange)="markAsDirty()"
+      type="url"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Ingredients</ion-label>
-    <ion-textarea [(ngModel)]="recipe.ingredients" (ionInput)="updateTextAreaSize($event)" (ngModelChange)="markAsDirty()" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.ingredients"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Instructions</ion-label>
-    <ion-textarea [(ngModel)]="recipe.instructions" (ionInput)="updateTextAreaSize($event)" (ngModelChange)="markAsDirty()" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.instructions"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <ion-item>
     <ion-label position="floating">Notes</ion-label>
-    <ion-textarea [(ngModel)]="recipe.notes" (ionInput)="updateTextAreaSize($event)" (ngModelChange)="markAsDirty()" type="text" value=""></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="recipe.notes"
+      (ionInput)="updateTextAreaSize($event)"
+      (ngModelChange)="markAsDirty()"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
   </ion-item>
 
   <br />

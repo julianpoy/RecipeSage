@@ -575,6 +575,8 @@ router.put(
       });
     }
 
+    return updatedRecipe;
+  }).then(updatedRecipe => {
     res.status(200).json(updatedRecipe);
   }).catch(next);
 });

@@ -13,7 +13,8 @@ let {
   createSession,
   createRecipe,
   createLabel,
-  associateLabel
+  associateLabel,
+  randomUuid
 } = require('../testutils');
 
 // DB
@@ -224,7 +225,7 @@ describe('recipes', () => {
       await createRecipe(user.id);
 
       return request(server)
-        .get('/recipes/invalid')
+        .get(`/recipes/${randomUuid()}`)
         .query({ token: session.token })
         .expect(404);
     });
@@ -344,7 +345,7 @@ describe('recipes', () => {
       let recipe = await createRecipe(user.id);
 
       return request(server)
-        .put(`/recipes/invalid`)
+        .put(`/recipes/${randomUuid()}`)
         .send({})
         .query({ token: session.token })
         .expect(404);

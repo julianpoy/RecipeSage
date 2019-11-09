@@ -27,7 +27,7 @@
         </ion-label>
       </ion-item>
 
-      <div>
+      <div class="share-method-container">
         <ion-segment (ionChange)="shareMethodChanged($event)">
           <ion-segment-button value="account" checked>
             RecipeSage
@@ -161,7 +161,10 @@
           <div class="ion-padding">
             <ion-item>
               <ion-label position="floating">Recipient's account email...</ion-label>
-              <ion-input [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
+              <ion-input
+                [(ngModel)]="recipientEmail"
+                (ngModelChange)='autofillUserName()'
+                type="email"></ion-input>
             </ion-item>
 
             <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">

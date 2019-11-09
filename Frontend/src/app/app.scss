@@ -152,3 +152,7 @@ ion-button.button-outline {
 .split-pane-visible>ion-router-outlet.split-pane-main {
   box-shadow: 1px 1px 10px rgba(0,0,0,0.4) !important;
 }
+
+.sc-ion-label-ios-s > p, .sc-ion-label-md-s > p {
+  color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+}

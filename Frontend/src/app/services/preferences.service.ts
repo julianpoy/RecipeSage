@@ -64,8 +64,9 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowLabelChips]: false,
     [MyRecipesPreferenceKey.ShowImages]: true,
     [MyRecipesPreferenceKey.ShowSource]: false,
-     // Show list by default on small screens
-    [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
+    // TODO: Remove default list view after default settings go out
+    // Show list by default on small screens
+    [MyRecipesPreferenceKey.ViewType]: 'list' || Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,

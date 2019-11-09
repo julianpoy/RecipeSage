@@ -54,7 +54,7 @@ export class WebsocketService {
     let prot = 'ws';
     if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
 
-    this.connection = new WebSocket(prot + '://' + window.location.hostname + ':7999/grip/ws' + this.utilService.getTokenQuery());
+    this.connection = new WebSocket(prot + '://' + window.location.hostname + '/grip/ws' + this.utilService.getTokenQuery());
 
     this.connection.onopen = () => {
       this.handleMessage({
