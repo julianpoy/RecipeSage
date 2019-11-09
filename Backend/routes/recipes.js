@@ -10,117 +10,147 @@ var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
+var Image = require('../models').Image;
+var Recipe_Image = require('../models').Recipe_Image;
 
 // Service
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
+let SubscriptionsService = require('../services/subscriptions');
+
+// TODO: Remove this. Legacy frontend compat
+const legacyImageHandler = async (req, res, next) => {
+  req.imageIds = req.imageIds || [];
+
+  const imageIds = req.imageIds;
+  await UtilService.upload('image', req, res);
+  if (req.file) {
+    const uploadedFile = req.file;
+    const newImage = await Image.create({
+      userId: res.locals.session.userId,
+      location: uploadedFile.location,
+      key: uploadedFile.key,
+      json: uploadedFile
+    });
+
+    imageIds.unshift(newImage.id);
+  }
+
+  if (req.body.imageURL) {
+    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL);
+
+    const newImage = await Image.create({
+      userId: res.locals.session.userId,
+      location: uploadedFile.location,
+      key: uploadedFile.key,
+      json: uploadedFile
+    });
+
+    imageIds.unshift(newImage.id);
+  }
+
+  next();
+};
+
+const applyLegacyImageField = recipe => {
+  if (recipe.toJSON) recipe = recipe.toJSON();
+
+  if (recipe.images && recipe.images.length > 0) {
+    const image = recipe.images[0];
+    recipe.image = {
+      location: image.location
+    };
+  } else {
+    recipe.image = null;
+  }
+
+  return recipe;
+}
 
 //Create a new recipe
 router.post(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  UtilService.upload.single('image'),
-  function(req, res, next) {
+  legacyImageHandler,
+  async (req, res, next) => {
+
+  if (!req.body.title || req.body.title.length === 0) {
+    return res.status(412).send("Recipe title must be provided.");
+  }
 
   // If sending to another user, folder should be inbox. Otherwise, main.
   let folder = req.body.destinationUserEmail ? 'inbox' : 'main';
 
-  // Check for title
-  if (!req.body.title || req.body.title.length === 0) {
-    // This request is bad due to no title, but we already uploaded an image for it. Delete the image before erroring out
-    if (req.file && req.file.key) {
-      UtilService.deleteS3Object(req.file.key, function() {
-        res.status(412).send("Recipe title must be provided.");
-      }, next);
-    } else {
-      res.status(412).send("Recipe title must be provided.");
-    }
-  } else {
-    SQ.transaction(t => {
+  SQ.transaction(async transaction => {
+    const adjustedTitle = await Recipe.findTitle(res.locals.session.userId, null, req.body.title, transaction);
 
-      // Support for imageURLs instead of image files
-      return new Promise(function(resolve, reject) {
-        if (req.body.imageURL) {
-          UtilService.sendURLToS3(req.body.imageURL).then(resolve).catch(e => {
-            e.status = 415;
-            reject(e);
-          });
-        } else {
-          resolve(null);
-        }
-      }).then(function(img) {
-        var uploadedFile = img || req.file;
-
-        return Recipe.findTitle(res.locals.session.userId, null, req.body.title, t).then(function(adjustedTitle) {
-          return Recipe.create({
-            userId: res.locals.session.userId,
-            title: adjustedTitle,
-            description: req.body.description || '',
-            yield: req.body.yield || '',
-            activeTime: req.body.activeTime || '',
-            totalTime: req.body.totalTime || '',
-            source: req.body.source || '',
-            url: req.body.url || '',
-            notes: req.body.notes || '',
-            ingredients: req.body.ingredients || '',
-            instructions: req.body.instructions || '',
-            image: uploadedFile,
-            folder: folder
-          }, {
-            transaction: t
-          });
-        });
-      })
-    }).then(recipe => {
-      var serializedRecipe = recipe.toJSON();
-      serializedRecipe.labels = [];
-      res.status(201).json(serializedRecipe);
-    }).catch(function (err) {
-      if (req.file) {
-        return UtilService.deleteS3Object(req.file.key).then(function () {
-          next(err);
-        }).catch(function () {
-          next(err);
-        });
-      }
-
-      next(err);
+    const recipe = await Recipe.create({
+      userId: res.locals.session.userId,
+      title: adjustedTitle,
+      description: req.body.description || '',
+      yield: req.body.yield || '',
+      activeTime: req.body.activeTime || '',
+      totalTime: req.body.totalTime || '',
+      source: req.body.source || '',
+      url: req.body.url || '',
+      notes: req.body.notes || '',
+      ingredients: req.body.ingredients || '',
+      instructions: req.body.instructions || '',
+      folder: folder
+    }, {
+      transaction
     });
-  }
+
+    if (req.body.imageIds) {
+      await Recipe_Image.bulkCreate(req.body.imageIds.map((imageId, idx) => ({
+        imageId: imageId,
+        recipeId: recipe.id,
+        order: idx
+      })), {
+        transaction
+      });
+    }
+
+    return recipe;
+  }).then(recipe => {
+    var serializedRecipe = recipe.toJSON();
+    serializedRecipe.labels = [];
+    res.status(201).json(serializedRecipe);
+  }).catch(next);
 });
 
 //Get all of a user's recipes
-router.get(
-  '/',
-  cors(),
-  MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+// router.get(
+//   '/',
+//   cors(),
+//   MiddlewareService.validateSession(['user']),
+//   function(req, res, next) {
 
-  Recipe.findAll({
-    where: {
-      userId: res.locals.session.userId,
-      folder: req.query.folder || 'main'
-    },
-    attributes: ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
-    include: [{
-      model: User,
-      as: 'fromUser',
-      attributes: ['name', 'email']
-    },
-    {
-      model: Label,
-      as: 'labels',
-      attributes: ['id', 'title']
-    }],
-    order: [
-      ['title', 'ASC']
-    ],
-  }).then(function(recipes) {
-    res.status(200).json(recipes);
-  }).catch(next);
-});
+//   Recipe.findAll({
+//     where: {
+//       userId: res.locals.session.userId,
+//       folder: req.query.folder || 'main'
+//     },
+//     attributes: ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
+//     include: [{
+//       model: User,
+//       as: 'fromUser',
+//       attributes: ['name', 'email']
+//     },
+//     {
+//       model: Label,
+//       as: 'labels',
+//       attributes: ['id', 'title']
+//     }],
+//     order: [
+//       ['title', 'ASC']
+//     ],
+//   }).then(function(recipes) {
+//     res.status(200).json(recipes);
+//   }).catch(next);
+// });
 
 // Count a user's recipes
 router.get(
@@ -175,14 +205,18 @@ router.get(
     return acc;
   }, {});
 
-  let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'image', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
+  let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
   let labelAttributes = ['id', 'title'];
+  let imageAttributes = ['id', 'location'];
+  let recipeImageAttributes = ['id', 'order'];
   let fromUserAttributes = ['name', 'email'];
 
   let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
   let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
+  let imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
+  let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
   let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
-  let fields = `${recipeSelect}, ${labelSelect}`;
+  let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
   if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
@@ -217,6 +251,8 @@ router.get(
     INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
     INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
     INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
+    LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
     ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`
     :
@@ -231,8 +267,12 @@ router.get(
     INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
     LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
     LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+    LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
+    LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
     ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`;
+
+    console.log(fetchQuery);
 
   let countQueryOptions = {
     type: SQ.QueryTypes.SELECT,
@@ -256,8 +296,10 @@ router.get(
     model: Recipe,
     include: [{
       model: Label,
-      as: 'labels',
-      attributes: labelAttributes
+      as: 'labels'
+    }, {
+      model: Image,
+      as: 'images'
     }]
   }
 
@@ -277,6 +319,10 @@ router.get(
     if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
       totalCount = parseInt(countResult[0].count, 10);
     }
+
+    recipes = recipes.map(UtilService.sortRecipeImages);
+
+    recipes = recipes.map(applyLegacyImageField);
 
     res.status(200).json({
       data: recipes,
@@ -320,9 +366,17 @@ router.get(
           as: 'label_filter',
           attributes: [],
           ...labelFilter
+        }, {
+          model: Image,
+          as: 'images',
+          attributes: ['id', 'location']
         }],
         limit: 200
       }).then(recipes => {
+        recipes = recipes.map(UtilService.sortRecipeImages);
+
+        recipes = recipes.map(applyLegacyImageField);
+
         res.status(200).send({
           data: recipes.sort((a, b) => {
             return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
@@ -352,6 +406,11 @@ router.get(
       model: Label,
       as: 'labels',
       attributes: ['title']
+    },
+    {
+      model: Image,
+      as: 'images',
+      attributes: ['id', 'location']
     }],
     order: [
       ['title', 'ASC']
@@ -426,6 +485,11 @@ router.get(
       model: Label,
       as: 'labels',
       attributes: ['id', 'title', 'createdAt', 'updatedAt']
+    },
+    {
+      model: Image,
+      as: 'images',
+      attributes: ['id', 'location']
     }],
     order: [
       ['title', 'ASC']
@@ -435,6 +499,10 @@ router.get(
       res.status(404).send("Recipe with that ID not found!");
     } else {
       recipe = recipe.toJSON();
+
+      recipe = UtilService.sortRecipeImages(recipe);
+
+      recipe = applyLegacyImageField(recipe);
 
       recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
 
@@ -453,67 +521,64 @@ router.put(
   '/:id',
   cors(),
   MiddlewareService.validateSession(['user']),
-  UtilService.upload.single('image'),
-  function(req, res, next) {
+  legacyImageHandler,
+  async (req, res, next) => {
 
-  Recipe.findOne({
-    where: {
-      id: req.params.id,
-      userId: res.locals.session.userId
-    }
-  }).then(function(recipe) {
+  SQ.transaction(async transaction => {
+    const recipe = await Recipe.findOne({
+      where: {
+        id: req.params.id,
+        userId: res.locals.session.userId
+      },
+      transaction
+    });
+
     if (!recipe) {
-      res.status(404).json({
+      return res.status(404).json({
         msg: "Recipe with that ID does not exist!"
       });
-    } else {
-      return SQ.transaction(function(t) {
-        if (typeof req.body.description === 'string') recipe.description = req.body.description;
-        if (typeof req.body.yield === 'string') recipe.yield = req.body.yield;
-        if (typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
-        if (typeof req.body.totalTime === 'string') recipe.totalTime = req.body.totalTime;
-        if (typeof req.body.source === 'string') recipe.source = req.body.source;
-        if (typeof req.body.url === 'string') recipe.url = req.body.url;
-        if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
-        if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
-        if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
-        if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
-
-        // Check if user uploaded a new image. If so, delete the old image to save space and $$
-        var oldImage = recipe.image;
-        if (req.file) {
-          recipe.image = req.file;
-        }
-
-        return Recipe.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, t).then(function(adjustedTitle) {
-          recipe.title = adjustedTitle;
-
-          return recipe.save({transaction: t}).then(function (recipe) {
-            // Remove old (replaced) image from our S3 bucket
-            if (req.file && oldImage && oldImage.key) {
-              return UtilService.deleteS3Object(oldImage.key).then(function() {
-                return recipe;
-              });
-            }
-
-            return recipe;
-          });
-        });
-      });
     }
-  }).then(recipe => {
-    res.status(200).json(recipe);
-  }).catch(function(err) {
-    if (req.file) {
-      return UtilService.deleteS3Object(req.file.key).then(function() {
-        next(err);
-      }).catch(function() {
-        next(err);
+
+    if (typeof req.body.description === 'string') recipe.description = req.body.description;
+    if (typeof req.body.yield === 'string') recipe.yield = req.body.yield;
+    if (typeof req.body.activeTime === 'string') recipe.activeTime = req.body.activeTime;
+    if (typeof req.body.totalTime === 'string') recipe.totalTime = req.body.totalTime;
+    if (typeof req.body.source === 'string') recipe.source = req.body.source;
+    if (typeof req.body.url === 'string') recipe.url = req.body.url;
+    if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
+    if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
+    if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+    if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
+
+    const adjustedTitle = await Recipe.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, transaction);
+
+    recipe.title = adjustedTitle;
+
+    const updatedRecipe = await recipe.save({
+      transaction
+    });
+
+    if (req.body.imageIds) {
+      await Recipe_Image.destroy({
+        where: {
+          recipeId: recipe.id
+        },
+        transaction
+      });
+
+      await Recipe_Image.bulkCreate(req.body.imageIds.map((imageId, idx) => ({
+        recipeId: recipe.id,
+        imageId: imageId,
+        order: idx
+      })), {
+        transaction
       });
     }
 
-    next(err);
-  });
+    return updatedRecipe;
+  }).then(updatedRecipe => {
+    res.status(200).json(updatedRecipe);
+  }).catch(next);
 });
 
 router.delete(

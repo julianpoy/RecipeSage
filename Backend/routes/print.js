@@ -9,6 +9,8 @@ var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
+var Image = require('../models').Image;
+var Recipe_Image = require('../models').Recipe_Image;
 var Label = require('../models').Label;
 var ShoppingList = require('../models').ShoppingList;
 var ShoppingListItem = require('../models').ShoppingListItem;
@@ -119,6 +121,10 @@ router.get('/:recipeId',
       {
         model: Label,
         as: 'labels'
+      },
+      {
+        model: Image,
+        as: 'images'
       }
     ]
   }).then(function(rObj) {
@@ -133,6 +139,8 @@ router.get('/:recipeId',
     } else {
       let recipe = rObj.toJSON();
 
+      recipe = UtilService.sortRecipeImages(rObj);
+
       recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
 
       // There should be no fromUser after recipes have been moved out of the inbox
@@ -144,7 +152,7 @@ router.get('/:recipeId',
       recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), 1, true);
 
       if (!modifiers.titleImage) {
-        delete recipe.image;
+        recipe.images = [];
       }
 
       res.render('recipe-default', {

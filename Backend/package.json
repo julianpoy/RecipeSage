@@ -42,6 +42,7 @@
     "sequelize": "^5.19.3",
     "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",
+    "stripe": "^7.10.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

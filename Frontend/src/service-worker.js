@@ -69,7 +69,7 @@ messaging.setBackgroundMessageHandler(function(message) {
       notificationOptions.body = messageObj.body;
       if (messageObj.recipe) {
         notificationOptions.body = 'Shared a recipe with you: ' + messageObj.recipe.title;
-        notificationOptions.icon = messageObj.recipe.image.location;
+        notificationOptions.icon = messageObj.recipe.images[0].location;
       }
       notificationOptions.icon = notificationOptions.icon || RS_LOGO_URL;
 

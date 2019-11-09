@@ -30,7 +30,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: currentPasswordVersion,
       allowNull: false
     },
-    lastLogin: DataTypes.DATE
+    lastLogin: DataTypes.DATE,
+    stripeCustomerId: {
+      type: DataTypes.STRING,
+      unique: true
+    }
   }, {});
   User.associate = function(models) {
     User.hasMany(models.Session, {
@@ -87,6 +91,14 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'mealPlanId',
       as: 'collaboratingMealPlans',
       through: 'MealPlan_Collaborator'
+    });
+
+    User.hasMany(models.StripePayment, {
+      foreignKey: 'userId'
+    });
+
+    User.hasMany(models.UserSubscription, {
+      foreignKey: 'userId'
     });
   };
 

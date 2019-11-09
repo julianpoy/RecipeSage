@@ -23,7 +23,8 @@ let runConfig = {
   userId: process.argv[3],
   includeStockRecipes: process.argv.indexOf('--includeStockRecipes') > -1,
   excludeImages: process.argv.indexOf('--excludeImages') > -1,
-  includeTechniques: process.argv.indexOf('--includeTechniques') > -1
+  includeTechniques: process.argv.indexOf('--includeTechniques') > -1,
+  multipleImages: process.argv.indexOf('--multipleImages') > -1
 }
 
 var testMode = process.env.NODE_ENV === 'test';
@@ -314,21 +315,17 @@ async function main() {
 
       await chunkedRecipesWithImages.reduce((acc, lcbRecipeChunk) => {
         return acc.then(() => {
-          return Promise.all(lcbRecipeChunk.map(lcbRecipe => {
-            let imageFileNames = lcbRecipe.imageFileNames;
+          return Promise.all(lcbRecipeChunk.map(async lcbRecipe => {
+            await Promise.all(lcbRecipe.imageFileNames.map(imageFileName => {
+              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${imageFileName})$`, 'i'))
 
-            if (imageFileNames.length == 0) return;
+              if (possibleImageFiles.length == 0) return;
 
-            // let possibleFileNameRegex = imageFileNames.join('|')
-            let possibleFileNameRegex = imageFileNames[0];
-
-            let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
-
-            if (possibleImageFiles.length == 0) return;
-
-            return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
-              lcbRecipe.savedS3Image = image;
-            }).catch(() => { })
+              return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
+                lcbRecipe.images = lcbRecipe.images || [];
+                lcbRecipe.images.push(image);
+              }).catch(() => { })
+            }));
           }))
         })
       }, Promise.resolve())
@@ -337,7 +334,7 @@ async function main() {
 
       await Promise.all(tableMap.t_recipe.map(async lcbRecipe => {
 
-        let image = lcbRecipe.savedS3Image || null;
+        let images = lcbRecipe.images || [];
 
         let ingredients = (lcbIngredientsByRecipeId[lcbRecipe.recipeid] || [])
           .filter(lcbIngredient => lcbIngredient)
@@ -410,13 +407,13 @@ async function main() {
             notes,
             ingredients,
             instructions,
-            image: image,
             folder: 'main',
             fromUserId: null,
             createdAt,
             updatedAt
           },
-          lcbRecipeLabels
+          lcbRecipeLabels,
+          images
         })
       }));
 
@@ -427,12 +424,36 @@ async function main() {
         transaction: t
       })
 
+      const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
+        if (!runConfig.multipleImages) pendingRecipes[idx].images.splice(1);
+        pendingRecipeImages.push(...pendingRecipes[idx].images.map(image => ({
+          image: image,
+          recipeId: recipe.id
+        })));
+
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
         })
       })
+
+      const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
+        userId,
+        location: p.image.location,
+        key: p.image.key,
+        json: p.image
+      })), {
+        returning: true,
+        transaction: t
+      });
+
+      await Recipe_Image.bulkCreate(pendingRecipeImages.map((p, idx) => ({
+        recipeId: p.recipeId,
+        imageId: savedImages[idx].id
+      })), {
+        transaction: t
+      });
 
       metrics.tRecipesSaved = performance.now();
 

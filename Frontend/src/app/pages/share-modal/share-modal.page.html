@@ -16,8 +16,8 @@
 <ion-content>
   <ion-list>
       <ion-item lines="none">
-        <ion-avatar *ngIf="recipe.image" slot="start">
-          <img src="{{ recipe.image.location }}">
+        <ion-avatar *ngIf="recipe.images && recipe.images.length > 0" slot="start">
+          <img src="{{ recipe.images[0].location }}">
         </ion-avatar>
         <ion-label>
           <h2>{{ recipe.title }}</h2>

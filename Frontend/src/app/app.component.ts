@@ -11,6 +11,7 @@ import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'app-root',
@@ -49,7 +50,8 @@ export class AppComponent {
     private messagingService: MessagingService,
     private websocketService: WebsocketService,
     private userService: UserService,
-    private preferencesService: PreferencesService
+    private preferencesService: PreferencesService,
+    private capabilitiesService: CapabilitiesService
   ) {
 
     this.initializeApp();

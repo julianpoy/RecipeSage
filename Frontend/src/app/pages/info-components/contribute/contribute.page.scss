@@ -46,4 +46,46 @@
     font-weight: 600;
     font-size: 15px;
   }
+
+  ion-button span {
+    text-transform: none;
+  }
+
+  .frequency-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-row {
+    margin-top: 20px;
+  }
+
+  .amount-row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+    input {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      padding-left: 4px;
+      padding-right: 4px;
+      width: 80px;
+      text-align: center;
+      outline: none;
+      border: 1px solid var(--ion-border-color);
+
+      &:active, &:focus {
+        border: 1px solid var(--ion-color-primary);
+      }
+    }
+  }
+}
+
+.amount-row input {
+  border-radius: 4px;
+}
+
+.ios .amount-row input {
+  border-radius: 10px;
 }

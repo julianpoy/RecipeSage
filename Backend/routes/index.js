@@ -18,9 +18,12 @@ var Recipe = require('../models').Recipe;
 var FCMToken = require('../models').FCMToken;
 var Label = require('../models').Label;
 var Recipe_Label = require('../models').Recipe_Label;
+var Image = require('../models').Image;
+var Recipe_Image = require('../models').Recipe_Image;
 
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+var SubscriptionsService = require('../services/subscriptions');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -128,8 +131,7 @@ function saveRecipes(userId, recipes) {
       url: recipe.url,
       notes: recipe.notes,
       ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      image: recipe.image
+      instructions: recipe.instructions
     }));
 
     const savedRecipes = await Recipe.bulkCreate(serializedRecipes, {
@@ -137,13 +139,38 @@ function saveRecipes(userId, recipes) {
       transaction: t
     });
 
+    const pendingImageData = [];
     const recipesByLabelTitle = {};
     savedRecipes.map((savedRecipe, idx) => {
+      if (recipes[idx].image) {
+        pendingImageData.push({
+          image: recipes[idx].image,
+          recipeId: savedRecipe.id
+        });
+      }
+
       recipes[idx].rawCategories.map(rawCategory => {
         const labelTitle = rawCategory.trim().toLowerCase();
         recipesByLabelTitle[labelTitle] = recipesByLabelTitle[labelTitle] || [];
         recipesByLabelTitle[labelTitle].push(savedRecipe.id);
       });
+    });
+
+    const savedImages = await Image.bulkCreate(pendingImageData.map(p => ({
+      userId,
+      location: p.image.location,
+      key: p.image.key,
+      json: p.image
+    })), {
+      returning: true,
+      transaction: t
+    });
+
+    await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
+      recipeId: p.recipeId,
+      imageId: savedImages[idx].id
+    })), {
+      transaction: t
     });
 
     await Promise.all(Object.keys(recipesByLabelTitle).map(async labelTitle => {
@@ -334,10 +361,16 @@ router.post(
       console.log(req.file.path)
     }
 
+    const canImportMultipleImages = await SubscriptionsService.userHasCapability(
+      res.locals.session.userId,
+      SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+    );
+
     let optionalFlags = [];
     if (req.query.excludeImages) optionalFlags.push('--excludeImages');
     if (req.query.includeStockRecipes) optionalFlags.push('--includeStockRecipes');
     if (req.query.includeTechniques) optionalFlags.push('--includeTechniques');
+    if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
     let lcbImportJob = spawn(`node`, [`./lcbimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {
@@ -377,8 +410,14 @@ router.post(
       console.log(req.file.path)
     }
 
+    const canImportMultipleImages = await SubscriptionsService.userHasCapability(
+      res.locals.session.userId,
+      SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+    );
+
     let optionalFlags = [];
     if (req.query.excludeImages) optionalFlags.push('--excludeImages');
+    if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
     let lcbImportJob = spawn(`node`, [`./fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {

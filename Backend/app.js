@@ -37,6 +37,8 @@ var shoppingLists = require('./routes/shoppingLists');
 var mealPlans = require('./routes/mealPlans');
 var print = require('./routes/print');
 var grip = require('./routes/grip');
+var payments = require('./routes/payments');
+var images = require('./routes/images');
 
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
@@ -49,7 +51,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 if (!testMode) app.use(logger('dev'));
-app.use(bodyParser.json({limit: '250MB'}));
+app.use(bodyParser.json({
+  limit: '250MB',
+  verify: (req, res, buf) => {
+    var url = req.originalUrl;
+    if (url.startsWith('/payments/stripe/webhooks')) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
 app.use(bodyParser.urlencoded({ limit: '250MB', extended: false }));
 app.use(cookieParser());
 app.disable('x-powered-by');
@@ -66,6 +76,8 @@ app.use('/shoppingLists', shoppingLists);
 app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/grip', grip);
+app.use('/payments', payments);
+app.use('/images', images);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());
 
