@@ -1,7 +1,7 @@
-version: 2 # use CircleCI 2.0
+version: 2
 jobs:
-  test_backend: # runs not using Workflows must have a `build` job as entry point
-    working_directory: ~/recipesage # directory where steps will run
+  test_backend:
+    working_directory: ~/recipesage
     docker:
       - image: circleci/node:10.16.3
         environment:
