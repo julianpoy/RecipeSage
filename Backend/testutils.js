@@ -2,6 +2,8 @@ let {
   expect
 } = require('chai');
 
+const uuid = require('uuid/v4');
+
 var Op = require("sequelize").Op;
 var SQ = require('./models').sequelize;
 var User = require('./models').User;
@@ -149,4 +151,8 @@ module.exports.secureRecipeMatch = (recipeHash, recipe) => {
   expect(recipeHash.image).not.to.be.undefined
 
   expect(Object.keys(recipeHash).length).to.equal(3)
+}
+
+module.exports.randomUuid = () => {
+  return uuid();
 }

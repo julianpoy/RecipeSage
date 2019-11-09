@@ -492,15 +492,17 @@ router.put(
             // Remove old (replaced) image from our S3 bucket
             if (req.file && oldImage && oldImage.key) {
               return UtilService.deleteS3Object(oldImage.key).then(function() {
-                res.status(200).json(recipe);
+                return recipe;
               });
             }
 
-            res.status(200).json(recipe);
+            return recipe;
           });
         });
       });
     }
+  }).then(recipe => {
+    res.status(200).json(recipe);
   }).catch(function(err) {
     if (req.file) {
       return UtilService.deleteS3Object(req.file.key).then(function() {

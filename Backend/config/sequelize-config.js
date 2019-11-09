@@ -12,8 +12,16 @@ module.exports = {
     }
   },
   "test": {
-    "dialect": "sqlite",
-    "storage": "test.sqlite3",
+    "username": process.env.RS_TEST_DB_USERNAME || "chefbook",
+    "password": process.env.RS_TEST_DB_PASSWORD || "admin",
+    "database": process.env.RS_TEST_DB_DATABASE || "chefbook_test",
+    "port": process.env.RS_TEST_DB_PORT || "5432",
+    "host": process.env.RS_TEST_DB_HOST || "127.0.0.1",
+    "ssl": process.env.RS_TEST_DB_SSL == "true",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": process.env.RS_TEST_DB_SSL == "true"
+    },
     "logging": false
   },
   "staging": {
