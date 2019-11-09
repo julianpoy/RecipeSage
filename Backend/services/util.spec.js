@@ -539,9 +539,9 @@ describe('utils', () => {
         recipe: {
           id: "44",
           title: "recipeTitle",
-          image: {
+          images: [{
             location: "location"
-          }
+          }]
         }
       }
 
@@ -583,7 +583,7 @@ describe('utils', () => {
         expect(parsedMessage.toUser.name).to.equal("test2")
         expect(parsedMessage.recipe.id).to.equal("44")
         expect(parsedMessage.recipe.title).to.equal("recipeTitle")
-        expect(parsedMessage.recipe.image.location).to.equal("location")
+        expect(parsedMessage.recipe.images[0].location).to.equal("location")
       })
 
       it('sends no additional fields', () => {
@@ -593,7 +593,7 @@ describe('utils', () => {
         let parsedMessage = JSON.parse(stubMessageCall.message)
         expect(Object.keys(parsedMessage)).to.have.length(6)
         expect(Object.keys(parsedMessage.recipe)).to.have.length(3)
-        expect(Object.keys(parsedMessage.recipe.image)).to.have.length(1)
+        expect(Object.keys(parsedMessage.recipe.images)).to.have.length(1)
       })
     })
 
@@ -629,15 +629,16 @@ describe('utils', () => {
         expect(stubMessageCall.recipe.title).to.equal(message.recipe.title)
 
         // Recipe image should be immutable
-        expect(stubMessageCall.recipe.image).to.not.equal(message.recipe.image)
-        expect(stubMessageCall.recipe.image.location).to.equal(message.recipe.image.location)
+        expect(stubMessageCall.recipe.images).to.not.equal(message.recipe.images)
+        expect(stubMessageCall.recipe.images[0].location).to.equal(message.recipe.images[0].location)
       })
 
       it('sends no additional fields', () => {
         let stubMessageCall = gripBroadcastStub.getCalls()[0].args[2]
         expect(Object.keys(stubMessageCall)).to.have.length(6)
         expect(Object.keys(stubMessageCall.recipe)).to.have.length(3)
-        expect(Object.keys(stubMessageCall.recipe.image)).to.have.length(1)
+        expect(stubMessageCall.recipe.images).to.have.length(1)
+        expect(Object.keys(stubMessageCall.recipe.images[0])).to.have.length(1)
       })
     })
   })
