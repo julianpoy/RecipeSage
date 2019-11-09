@@ -9,7 +9,7 @@
     </ion-buttons>
 
     <ion-title>
-      My Labels - Manage
+      {{ selectionMode ? selectedLabelIds.length + ' Selected' : 'My Labels - Manage' }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -30,8 +30,11 @@
   </ion-refresher>
 
   <ion-list>
-    <ion-item (click)="selectionMode ? selectLabel(label) : manage(label)" *ngFor="let label of labels" button>
+    <ion-item
+      (click)="selectionMode ? selectLabel(label) : manage(label)"
+      *ngFor="let label of labels" button>
       <ion-label>{{label.title}}</ion-label>
+      <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">Selected</ion-badge>
       <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge>
     </ion-item>
   </ion-list>
