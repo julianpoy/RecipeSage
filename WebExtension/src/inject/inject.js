@@ -66,12 +66,16 @@ if (window[extensionContainerId]) {
       notes:        val => cleanKnownWords(val)
     };
 
+    const closestToRegExp = regExp => {
+      return (document.body.innerText.match(regExp) || '')[0] || '';
+    }
+
     const autoSnipResults = {
       title: formatFuncs.title(grabLongestMatchByClasses(['recipe-title', 'post-title'] || document.title.split(/-|\|/)[0])),
       source: formatFuncs.source(document.title.split(/-|\|/)[1] || window.location.hostname.split('.').reverse()[1]),
-      yield: formatFuncs.yield(grabLongestMatchByClasses(['yield', 'servings', 'serves'])),
-      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(['activeTime', 'active-time', 'prep', 'prep-time', 'time-active', 'time-prep'])),
-      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(['totalTime', 'total-time', 'time-total'])),
+      yield: formatFuncs.yield(grabLongestMatchByClasses(['yield', 'servings']) || closestToRegExp(/(serves|servings|yield): \d+/i)),
+      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(['activeTime', 'active-time', 'prep', 'prep-time', 'time-active', 'time-prep']) || closestToRegExp(/(active time|prep time): \d+/i)),
+      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(['totalTime', 'total-time', 'time-total']) || closestToRegExp(/(total time): \d+/i)),
       ingredients: formatFuncs.ingredients(grabLongestMatchByClasses(['ingredients'])),
       instructions: formatFuncs.instructions(grabLongestMatchByClasses(['instructions'])),
       notes: formatFuncs.notes(grabLongestMatchByClasses(['notes']))
