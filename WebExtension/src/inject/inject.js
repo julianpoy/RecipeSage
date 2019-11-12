@@ -14,12 +14,19 @@ if (window[extensionContainerId]) {
 
   // Grab our preferences
   chrome.storage.local.get(['enableAutoSnip'], preferences => {
+    const getClassRegExp = (classname, multiple) => {
+      modifiers = multiple ? 'g' : '';
+      return new RegExp(`class="((\\w|\\s|-)*${classname}(\\w|\\s|-)*)"`, modifiers);
+    }
+
     const softMatchElementsByClass = classname => {
-      const classRegexp = new RegExp(`class="((\\w|\\s|-)*${classname}(\\w|\\s|-)*)"`);
-      const matches = document.body.innerHTML.match(classRegexp);
+      const matches = document.body.innerHTML.match(getClassRegExp(classname, true));
 
       if (!matches) return [];
-      return document.getElementsByClassName(matches[1]) || [];
+      return matches.reduce((acc, match) => [
+        ...acc,
+        ...(document.getElementsByClassName(match.match(getClassRegExp(classname, false))[1]) || [])
+      ], []);
     }
 
     const grabLongestMatchByClasses = classnames => {
@@ -29,20 +36,19 @@ if (window[extensionContainerId]) {
     }
 
     const cleanKnownWords = textBlock => {
-      textBlock = textBlock.trim();
+      const generalBadWords = ['instructions', 'directions', 'procedure', 'you will need', 'ingredients', 'total time', 'active time', 'prep time', 'time', 'yield', 'servings', 'notes'];
+      const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust'];
 
-      const evilWords = new RegExp(`^(instructions|directions|procedure|you will need|ingredients|total time|active time|prep time|time|yield|servings|notes)`, 'gi');
-      textBlock = textBlock.replace(evilWords, ''); // Remove words that will be duplicates of field names
+      const badWords = [...generalBadWords, ...allRecipesBadWords].join('|');
 
-      textBlock = textBlock.replace(/^\s*\d+:?\s*\n/g, ''); // Remove digits that sit on their own lines with no other content
+      let filteredResult =  textBlock.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length !== 0) // Remove whitespace-only lines
+        .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
+        .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
+        .join('\n');
 
-      textBlock = textBlock.trim().replace(/^:/g, '').trim(); // Remove any hanging semicolons that we might have left
-
-      textBlock = textBlock.replace(/^\s*\n/g, ''); // Remove any whitespace-only lines
-
-      textBlock = textBlock.replace(/(^\s+)|(\s+$)/g, ''); // Trim leading and trailing spaces on each line
-
-      return textBlock;
+      return filteredResult;
     }
 
     const capitalizeEachWord = textBlock => {
