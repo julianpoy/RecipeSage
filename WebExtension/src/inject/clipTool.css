@@ -10,7 +10,7 @@
   width: 300px;
   padding: 10px;
 
-  z-index: 99999999999999999999999999;
+  z-index: 99999999999999999999999999 !important;
   background: white;
   box-shadow: 1px 1px 12px #666666;
 
