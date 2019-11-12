@@ -403,7 +403,7 @@ if (window[extensionContainerId]) {
 
     let submit = () => {
       fetchToken(token => {
-        return fetch(`https://rsdev.localhost/api/recipes?token=${token}`, {
+        return fetch(`https://recipesage.com/api/recipes?token=${token}`, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",
@@ -419,7 +419,7 @@ if (window[extensionContainerId]) {
                 `Recipe Saved!`,
                 `Click to open`,
                 4000,
-                `https://rsdev.localhost/#/recipe/${data.id}`
+                `https://recipesage.com/#/recipe/${data.id}`
               );
             });
           } else {
