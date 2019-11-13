@@ -1,0 +1,26 @@
+<textarea id="test"></textarea>
+<br />
+<button onclick="dothething()">Click me</button>
+
+<div id="output"></div>
+
+<div id="meta"></div>
+
+<script>
+window.dothething = () => {
+    const input = document.getElementById('test')
+    document.getElementById('output').innerText = input.value;
+}
+
+document.getElementById('output').addEventListener('mouseup', e => {
+  const outputVal = document.getElementById('output').innerText;
+  const selectedString = document.getSelection().toString()
+  console.log(selectedString)
+  const data = {
+    startIdx: outputVal.indexOf(selectedString),
+    endIdx: outputVal.indexOf(selectedString) + selectedString.length
+  };
+  document.getElementById('meta').innerText = JSON.stringify(data);
+  console.log(data);
+});
+</script>
