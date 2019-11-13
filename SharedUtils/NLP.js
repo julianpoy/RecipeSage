@@ -245,9 +245,9 @@ const run = async () => {
 
   console.log(nlpData.length)
 
-  const training = nlpData.slice(0, Math.floor(nlpData.length * 0.8))
+  const training = nlpData.slice(0, Math.floor(nlpData.length * 0.95))
 
-  const testing = nlpData.slice(Math.floor(nlpData.length * 0.8), nlpData.length)
+  const testing = nlpData.slice(Math.floor(nlpData.length * 0.95), nlpData.length)
 
   const maxTokenLength = nlpData.reduce((acc, item) => Math.max(acc, item.tokens.length), 0)
 
@@ -255,7 +255,9 @@ const run = async () => {
     ...padTokens(item.tokens, maxTokenLength),
   ]), [training.length, maxTokenLength]);
   const outputData = tf.tensor2d(training.map(item => [
-    item.type
+    item.type == 1 ? 1 : 0,
+    item.type == 2 ? 1 : 0,
+    item.type == 3 ? 1 : 0
   ]));
   const testingData = tf.tensor2d(testing.map(item => [
     ...padTokens(item.tokens, maxTokenLength),
@@ -319,7 +321,7 @@ const run = async () => {
   //   activation: 'relu',
   //   units: 1
   // }));
-  model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+  model.add(tf.layers.dense({ units: 3, activation: 'sigmoid' }));
 
   model.compile({
     loss: "binaryCrossentropy",
@@ -334,12 +336,17 @@ const run = async () => {
       const prediction = model.predict(testingData)
       prediction.print();
 
-      testing.map(testItem => {
+      const results = testing.map(testItem => {
         const t = tf.tensor2d([...padTokens(testItem.tokens, maxTokenLength)], [1, maxTokenLength])
         const predictOut = model.predict(t);
-        const score = predictOut.dataSync()[0];
-        console.log(score, testItem.type);
+        const score = predictOut.dataSync();
+        scoreMax = score.reduce((acc, el) => Math.max(el, acc), 0);
+        const chosenType = score.indexOf(scoreMax) + 1;
+        console.log(score, chosenType, testItem.type, chosenType == testItem.type);
+        return chosenType == testItem.type;
       })
+
+      console.log(results.reduce((acc, item) => acc = item ? acc + 1 : acc, 0), results.length)
 
       console.log('Evaluating model...');
       // const [testLoss, testAcc] =
