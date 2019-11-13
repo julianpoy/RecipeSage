@@ -29,24 +29,29 @@ if (window[extensionContainerId]) {
       ], []);
     }
 
-    const grabLongestMatchByClasses = classnames => {
-      return classnames.reduce((acc, classname) => [...acc, ...softMatchElementsByClass(classname)], [])
+    const grabLongestMatchByClasses = (preferredClassNames, fuzzyClassNames) => {
+      const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
+      const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
+
+      return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
         .map(element => element.innerText.trim())
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
 
     const cleanKnownWords = textBlock => {
       const generalBadWords = ['instructions', 'directions', 'procedure', 'you will need', 'ingredients', 'total time', 'active time', 'prep time', 'time', 'yield', 'servings', 'notes'];
-      const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust'];
+      const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust', 'the ingredient list now reflects the servings specified'];
 
       const badWords = [...generalBadWords, ...allRecipesBadWords].join('|');
 
       let filteredResult =  textBlock.split('\n')
-        .map(line => line.trim())
+        .map   (line => line.trim())
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
         .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
-        .join('\n');
+        .map   (line => line.replace(/^(total time|prep time|active time|yield):? ?/i, '')) // Remove direct field names for meta
+        .map   (line => line.trim())
+        .join  ('\n');
 
       return filteredResult;
     }
@@ -70,15 +75,46 @@ if (window[extensionContainerId]) {
       return (document.body.innerText.match(regExp) || '')[0] || '';
     }
 
+    const classMatchers = {
+      title: [
+        ['recipe-title'],
+        []
+      ],
+      yield: [
+        ['yield', 'servings'],
+        ['yield', 'servings']
+      ],
+      activeTime: [
+        ['activeTime', 'active-time', 'prep-time', 'time-active', 'time-prep'],
+        ['activeTime', 'active-time', 'prep-time', 'time-active', 'time-prep']
+      ],
+      totalTime: [
+        ['totalTime', 'total-time', 'time-total'],
+        ['totalTime', 'total-time', 'time-total']
+      ],
+      ingredients: [
+        ['ingredients'],
+        ['ingredients']
+      ],
+      instructions: [
+        ['instructions', 'recipe-instructions', 'directions'],
+        ['instructions', 'directions']
+      ],
+      notes: [
+        ['notes', 'recipe-notes'],
+        ['recipe-notes']
+      ]
+    }
+
     const autoSnipResults = {
-      title: formatFuncs.title(grabLongestMatchByClasses(['recipe-title', 'post-title'] || document.title.split(/-|\|/)[0])),
-      source: formatFuncs.source(document.title.split(/-|\|/)[1] || window.location.hostname.split('.').reverse()[1]),
-      yield: formatFuncs.yield(grabLongestMatchByClasses(['yield', 'servings']) || closestToRegExp(/(serves|servings|yield): \d+/i)),
-      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(['activeTime', 'active-time', 'prep', 'prep-time', 'time-active', 'time-prep']) || closestToRegExp(/(active time|prep time): \d+/i)),
-      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(['totalTime', 'total-time', 'time-total']) || closestToRegExp(/(total time): \d+/i)),
-      ingredients: formatFuncs.ingredients(grabLongestMatchByClasses(['ingredients'])),
-      instructions: formatFuncs.instructions(grabLongestMatchByClasses(['instructions'])),
-      notes: formatFuncs.notes(grabLongestMatchByClasses(['notes']))
+      title: formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
+      source: formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
+      yield: formatFuncs.yield(grabLongestMatchByClasses(...classMatchers.yield) || closestToRegExp(/(serves|servings|yield):?\s*\d+/i).replace('\n', '')),
+      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(...classMatchers.activeTime) || closestToRegExp(/(active time|prep time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(...classMatchers.totalTime) || closestToRegExp(/(total time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      ingredients: formatFuncs.ingredients(grabLongestMatchByClasses(...classMatchers.ingredients)),
+      instructions: formatFuncs.instructions(grabLongestMatchByClasses(...classMatchers.instructions)),
+      notes: formatFuncs.notes(grabLongestMatchByClasses(...classMatchers.notes))
     };
 
     let snippersByField = {};
@@ -269,7 +305,7 @@ if (window[extensionContainerId]) {
       createSnipper('Source URL', 'url', false, currentSnip.url, true);
       createSnipper('Ingredients', 'ingredients', true, currentSnip.ingredients);
       createSnipper('Instructions', 'instructions', true, currentSnip.instructions);
-      createSnipper('Notes', 'notes', true, currentSnip.notes, true);
+      createSnipper('Notes', 'notes', true, currentSnip.notes);
 
       let save = document.createElement('button');
       save.innerText = "Save";
