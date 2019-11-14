@@ -23,6 +23,18 @@
   color: black;
 }
 
+@media only screen and (min-width:1400px) {
+  .rs-chrome-container {
+    width: 325px;
+  }
+}
+
+@media only screen and (min-width:1700px) {
+  .rs-chrome-container {
+    width: 350px;
+  }
+}
+
 label {
   display: flex;
 }
