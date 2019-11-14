@@ -10,7 +10,7 @@
   width: 300px;
   padding: 10px;
 
-  z-index: 99999999999999999999999999;
+  z-index: 99999999999999999999999999 !important;
   background: white;
   box-shadow: 1px 1px 12px #666666;
 
@@ -21,6 +21,18 @@
   font-family: Arial,Helvetica,sans-serif;
 
   color: black;
+}
+
+@media only screen and (min-width:1400px) {
+  .rs-chrome-container {
+    width: 325px;
+  }
+}
+
+@media only screen and (min-width:1700px) {
+  .rs-chrome-container {
+    width: 350px;
+  }
 }
 
 label {
@@ -39,6 +51,18 @@ input, textarea {
   color: black;
   font-family: Arial,Helvetica,sans-serif;
   font-size: 12px;
+}
+
+textarea {
+  height: 30px;
+  min-height: 16px;
+  margin-bottom: 5px;
+}
+
+@media only screen and (min-height:950px) {
+	textarea {
+    height: 40px;
+  }
 }
 
 input:focus, textarea:focus {
@@ -108,5 +132,5 @@ button i {
 
 .save {
   width: 100%;
-  margin: 10px 0 0;
+  margin: 5px 0 0;
 }
