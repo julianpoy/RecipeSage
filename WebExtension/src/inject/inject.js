@@ -51,6 +51,7 @@ if (window[extensionContainerId]) {
         .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
         .map   (line => line.replace(/^(total time|prep time|active time|yield):? ?/i, '')) // Remove direct field names for meta
         .map   (line => line.trim())
+        .map   (line => line.match(/^([A-Z] *)+$/) ? `[${capitalizeEachWord(line.toLowerCase())}]` : line)
         .join  ('\n');
 
       return filteredResult;
