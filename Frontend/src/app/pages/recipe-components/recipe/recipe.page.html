@@ -152,7 +152,7 @@
     </ion-item>
 
     <ion-item *ngIf="recipe.id && !recipe.isOwner" lines="none">
-      <p>
+      <p class="ion-text-wrap">
         You can add labels once you save this recipe to your collection
       </p>
     </ion-item>
@@ -247,7 +247,7 @@
     <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
-          <p>
+          <p class="ion-text-wrap">
             This recipe does not belong to you yet.
           </p>
         </ion-label>
@@ -261,14 +261,14 @@
     <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
-          <p>
+          <p class="ion-text-wrap">
             Create an account or login to save this recipe to your collection.
           </p>
         </ion-label>
       </ion-item>
       <ion-button expand="block" (click)="authAndClone()">
         <ion-icon name="cloud-download" slot="start"></ion-icon>
-        Create an Account or Login To Save This Recipe
+        Register/Login to Save This Recipe
       </ion-button>
     </div>
 
