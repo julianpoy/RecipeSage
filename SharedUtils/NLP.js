@@ -19,7 +19,7 @@ const executeInChunks = async (cbs, chunkSize) => {
 }
 
 const request = require('request-promise');
-const tf = require('@tensorflow/tfjs-node');
+const tf = require('@tensorflow/tfjs-node-gpu');
 const fs = require('fs');
 
 var natural = require('natural');
@@ -27,6 +27,8 @@ var tokenizer = new natural.WordTokenizer();
 
 const noopToken = 'NOOP IGNORE TOKEN';
 const dict = [noopToken];
+
+const noopTokenIdx = dict.indexOf(noopToken);
 
 const mapToId = word => {
   let idx = dict.indexOf(word);
@@ -39,7 +41,6 @@ const mapToId = word => {
 const padTokens = (tokenSet, expectedLength) => {
   if (tokenSet.length >= expectedLength) return tokenSet;
 
-  const noopTokenIdx = dict.indexOf(noopToken);
   return tokenSet.concat((new Array(expectedLength - tokenSet.length)).fill(noopTokenIdx));
 }
 
@@ -202,6 +203,7 @@ const run = async () => {
   let instructions = [];
   let ingredients = [];
   let notes = [];
+  let undesiredData = [];
   recipes.forEach(recipe => {
     instructions.push(...recipe.instructions.split('\n').filter(filterZeroLength).map(line => ({
       tokens: tokenizer.tokenize(line).map(mapToId),
@@ -219,9 +221,15 @@ const run = async () => {
     })));
   });
 
-  const minNum = Math.min(instructions.length, ingredients.length, notes.length);
+  const randomStrings = fs.readFileSync('./tmp-randomstrings').toString().split('\n').map(el => el.trim()).filter(el => el.length > 0)
+  undesiredData.push(...randomStrings.map(line => ({
+    tokens: tokenizer.tokenize(line).map(mapToId),
+    type: 4
+  })));
 
-  let nlpData = [...instructions.slice(0, minNum - 1), ...ingredients.slice(0, minNum - 1), ...notes.slice(0, minNum - 1)];
+  const minNum = Math.min(instructions.length, ingredients.length, notes.length, undesiredData.length);
+
+  let nlpData = [...instructions.slice(0, minNum - 1), ...ingredients.slice(0, minNum - 1), ...notes.slice(0, minNum - 1), ...undesiredData.slice(0, minNum - 1)];
 
   nlpData = nlpData.sort(() => Math.floor((Math.random() * 3) - 1));
 
@@ -257,7 +265,8 @@ const run = async () => {
   const outputData = tf.tensor2d(training.map(item => [
     item.type == 1 ? 1 : 0,
     item.type == 2 ? 1 : 0,
-    item.type == 3 ? 1 : 0
+    item.type == 3 ? 1 : 0,
+    item.type == 4 ? 1 : 0
   ]));
   const testingData = tf.tensor2d(testing.map(item => [
     ...padTokens(item.tokens, maxTokenLength),
@@ -321,20 +330,20 @@ const run = async () => {
   //   activation: 'relu',
   //   units: 1
   // }));
-  model.add(tf.layers.dense({ units: 3, activation: 'sigmoid' }));
+  model.add(tf.layers.dense({ units: 4, activation: 'sigmoid' }));
 
   model.compile({
     loss: "binaryCrossentropy",
     optimizer: tf.train.adam(1e-5), // 0.06
   });
   const startTime = Date.now();
-  model.fit(trainingData, outputData, { epochs: 32, batchSize: 128, validationSplit: 0.1 })
+  model.fit(trainingData, outputData, { epochs: 512, batchSize: 128, validationSplit: 0.1 })
     .then(async (history) => {
       console.log(history);
       console.log("Done training in " + (Date.now() - startTime) / 1000 + " seconds.");
-      console.log(testing.slice(0, 4).map(el => el.type))
-      const prediction = model.predict(testingData)
-      prediction.print();
+      // console.log(testing.slice(0, 4).map(el => el.type))
+      // const prediction = model.predict(testingData)
+      // prediction.print();
 
       const results = testing.map(testItem => {
         const t = tf.tensor2d([...padTokens(testItem.tokens, maxTokenLength)], [1, maxTokenLength])
@@ -348,7 +357,21 @@ const run = async () => {
 
       console.log(results.reduce((acc, item) => acc = item ? acc + 1 : acc, 0), results.length)
 
-      console.log('Evaluating model...');
+      console.log('Saving model...');
+
+      fs.writeFileSync('/home/julian/Code/chefbook/nlp-model-meta', JSON.stringify({
+        training,
+        testing,
+        results,
+        nlpData,
+        dict,
+        maxTokenLength,
+        noopToken,
+
+      }))
+
+      await model.save('file:///home/julian/Code/chefbook/nlp-model-save');
+
       // const [testLoss, testAcc] =
       //   model.evaluate(testingData, testingDataOutput, { batchSize: 128 });
       // console.log(`Evaluation loss: ${(await testLoss.data())[0].toFixed(4)}`);
