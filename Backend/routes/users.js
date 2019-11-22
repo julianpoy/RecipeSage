@@ -39,6 +39,46 @@ router.get(
 
 });
 
+router.get
+
+router.get(
+  '/profile/:userId',
+  cors(),
+  MiddlewareService.validateSession(['user'], true),
+  async (req, res, next) => {
+    const profileUserId = req.params.userId;
+
+    let userIsFriend = false;
+    if (res.locals.session.userId) {
+      const friendship = await Friendship.findOne({
+        where: {
+          userId: req.params.userId,
+          friendId: profileUserId
+        }
+      });
+      userIsFriend = !!friendship;
+    }
+
+    const profileItems = await ProfileItem.find({
+      where: {
+        userId: profileUserId,
+        ...(userIsFriend ? {} : { visibility: "public" })
+      },
+      include: [{
+        model: Recipe,
+        as: 'recipe'
+      }, {
+        model: Label,
+        as: 'label'
+      }]
+    });
+
+    res.status(200).json({
+      profileItems
+    });
+  }
+)
+
 router.get(
   '/capabilities',
   cors(),
