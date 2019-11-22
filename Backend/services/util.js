@@ -76,6 +76,14 @@ exports.fetchImage = url => {
 const S3_DEFAULT_ACL = 'public-read';
 const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
 
+const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
+const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
+const HIGH_RES_IMG_CONVERSION_QUALITY = 85;
+
+const LOW_RES_IMG_CONVERSION_WIDTH = 200;
+const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
+const LOW_RES_IMG_CONVERSION_QUALITY = 55;
+
 exports.sendBufferToS3 = buffer => {
   let key = new Date().getTime().toString();
   let bucket = config.aws.bucket;
@@ -113,14 +121,18 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
   }
 }
 
-exports.convertImage = imageBuf => {
+exports.convertImage = (imageBuf, highResConversion) => {
+  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
+  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
+  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
+
   return new Promise((resolve, reject) => {
     try {
       sharp(imageBuf)
         .rotate() // Rotates based on EXIF data
-        .resize(200, 200) // Uses object-fit: cover by default
+        .resize(width, height) // Uses object-fit: cover by default
         .jpeg({
-          quality: 55,
+          quality,
           // chromaSubsampling: '4:4:4'
         })
         .toBuffer((err, buffer, info) => {
@@ -133,9 +145,9 @@ exports.convertImage = imageBuf => {
   })
 }
 
-exports.sendURLToS3 = url => {
+exports.sendURLToS3 = (url, highResConversion)  => {
   return exports.fetchImage(url).then(({ res, body }) => {
-    return exports.convertImage(body).then(convertedBuffer => {
+    return exports.convertImage(body, highResConversion).then(convertedBuffer => {
       return exports.sendBufferToS3(convertedBuffer).then(result => {
         return exports.formatS3ImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.s3Response.ETag);
       });
@@ -143,11 +155,11 @@ exports.sendURLToS3 = url => {
   })
 }
 
-exports.sendFileToS3 = (file, isBuffer) => {
+exports.sendFileToS3 = (file, isBuffer, highResConversion) => {
   let p = isBuffer ? Promise.resolve(file) : fs.readFile(file);
 
   return p.then(buf => {
-    return exports.convertImage(buf);
+    return exports.convertImage(buf, highResConversion);
   }).then(stream => {
     return exports.sendBufferToS3(stream);
   }).then(result => {
@@ -157,9 +169,9 @@ exports.sendFileToS3 = (file, isBuffer) => {
 }
 
 exports.upload = async (fieldName, req, res, highResConversion) => {
-  const height = highResConversion ? 1024 : 200;
-  const width = highResConversion ? 1024 : 200;
-  const quality = highResConversion ? 85 : 55;
+  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
+  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
+  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
 
   await new Promise((resolve, reject) => {
     multer({

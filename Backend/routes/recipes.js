@@ -21,6 +21,11 @@ let SubscriptionsService = require('../services/subscriptions');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
+  const highResConversion = await SubscriptionsService.userHasCapability(
+    res.locals.session.userId,
+    SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+  );
+
   req.body.imageIds = req.body.imageIds || [];
 
   const imageIds = req.body.imageIds;
@@ -38,7 +43,7 @@ const legacyImageHandler = async (req, res, next) => {
   }
 
   if (req.body.imageURL) {
-    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL);
+    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
 
     const newImage = await Image.create({
       userId: res.locals.session.userId,
