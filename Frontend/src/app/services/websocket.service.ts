@@ -51,6 +51,8 @@ export class WebsocketService {
 
   // Connection
   private connect() {
+    if (!this.utilService.isLoggedIn()) return this.queueReconnect();
+
     let prot = 'ws';
     if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
 
