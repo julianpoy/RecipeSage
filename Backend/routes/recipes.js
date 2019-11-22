@@ -21,9 +21,9 @@ let SubscriptionsService = require('../services/subscriptions');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
-  req.imageIds = req.imageIds || [];
+  req.body.imageIds = req.body.imageIds || [];
 
-  const imageIds = req.imageIds;
+  const imageIds = req.body.imageIds;
   await UtilService.upload('image', req, res);
   if (req.file) {
     const uploadedFile = req.file;
