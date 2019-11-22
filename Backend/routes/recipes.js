@@ -104,6 +104,13 @@ router.post(
     });
 
     if (req.body.imageIds) {
+      const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
+        res.locals.session.userId,
+        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+      );
+
+      if (!canUploadMultipleImages && req.body.imageIds.length > 0) req.body.imageIds.splice(1);
+
       await Recipe_Image.bulkCreate(req.body.imageIds.map((imageId, idx) => ({
         imageId: imageId,
         recipeId: recipe.id,
@@ -559,6 +566,13 @@ router.put(
     });
 
     if (req.body.imageIds) {
+      const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
+        res.locals.session.userId,
+        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+      );
+
+      if (!canUploadMultipleImages && req.body.imageIds.length > 0) req.body.imageIds.splice(1);
+
       await Recipe_Image.destroy({
         where: {
           recipeId: recipe.id
