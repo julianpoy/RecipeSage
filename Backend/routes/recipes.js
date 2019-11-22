@@ -133,37 +133,6 @@ router.post(
   }).catch(next);
 });
 
-//Get all of a user's recipes
-// router.get(
-//   '/',
-//   cors(),
-//   MiddlewareService.validateSession(['user']),
-//   function(req, res, next) {
-
-//   Recipe.findAll({
-//     where: {
-//       userId: res.locals.session.userId,
-//       folder: req.query.folder || 'main'
-//     },
-//     attributes: ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
-//     include: [{
-//       model: User,
-//       as: 'fromUser',
-//       attributes: ['name', 'email']
-//     },
-//     {
-//       model: Label,
-//       as: 'labels',
-//       attributes: ['id', 'title']
-//     }],
-//     order: [
-//       ['title', 'ASC']
-//     ],
-//   }).then(function(recipes) {
-//     res.status(200).json(recipes);
-//   }).catch(next);
-// });
-
 // Count a user's recipes
 router.get(
   '/count',
