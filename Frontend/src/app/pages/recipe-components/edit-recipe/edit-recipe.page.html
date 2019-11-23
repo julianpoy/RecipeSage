@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="recipe-image" (click)="filePicker()" *ngIf="images.length === 0 || capabilitiesService.capabilities.multipleImages">
+    <div class="recipe-image" (click)="filePicker()" *ngIf="images.length < 10 && (images.length === 0 || capabilitiesService.capabilities.multipleImages)">
       <div class="image-frame">
         <span>
           +
