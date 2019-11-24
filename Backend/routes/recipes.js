@@ -3,6 +3,7 @@ var router = express.Router();
 var cors = require('cors');
 var xmljs = require("xml-js");
 var Raven = require('raven');
+const moment = require('moment');
 
 // DB
 var Op = require("sequelize").Op;
@@ -114,7 +115,25 @@ router.post(
         SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
       );
 
-      if (!canUploadMultipleImages && req.body.imageIds.length > 0) req.body.imageIds.splice(1);
+      if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
+        const images = await Image.findAll({
+          where: {
+            id: {
+              [Op.in]: req.body.imageIds
+            }
+          },
+          transaction
+        });
+        const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+
+        req.body.imageIds = req.body.imageIds.filter((imageId, idx) =>
+          idx === 0 || // Allow first image always (users can always upload the first image)
+          imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+          moment(imagesById[imageId].createdAt).add(1, 'hour').isBefore(moment()) // Allow old images (user's subscription expired)
+        );
+      }
+
+      if (req.body.imageIds.length > 10) req.body.imageIds.splice(10); // Limit to 10 images per recipe max
 
       await Recipe_Image.bulkCreate(req.body.imageIds.map((imageId, idx) => ({
         imageId: imageId,
@@ -545,7 +564,25 @@ router.put(
         SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
       );
 
-      if (!canUploadMultipleImages && req.body.imageIds.length > 0) req.body.imageIds.splice(1);
+      if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
+        const images = await Image.findAll({
+          where: {
+            id: {
+              [Op.in]: req.body.imageIds
+            }
+          },
+          transaction
+        });
+        const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+
+        req.body.imageIds = req.body.imageIds.filter((imageId, idx) =>
+          idx === 0 || // Allow first image always (users can always upload the first image)
+          imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+          moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
+        );
+      }
+
+      if (req.body.imageIds.length > 10) req.body.imageIds.splice(10); // Limit to 10 images per recipe max
 
       await Recipe_Image.destroy({
         where: {
