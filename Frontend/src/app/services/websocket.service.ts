@@ -21,12 +21,12 @@ export class WebsocketService {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
-    window.onbeforeunload = () => {
+    window.addEventListener('beforeunload', e => {
       try {
         this.connection.onclose = () => {};
         this.connection.close();
       } catch (e) {}
-    };
+    });
   }
 
   isConnected() {
