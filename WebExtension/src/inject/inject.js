@@ -182,7 +182,6 @@ if (window[extensionContainerId]) {
     }
 
     const autoSnipResults = {
-      image:        grabClosestImageByClasses(...classMatchers.imageURL),
       imageURL:     formatFuncs.imageURL(getSrcFromImage(grabClosestImageByClasses(...classMatchers.imageURL))),
       title:        formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
       description:  formatFuncs.description(grabLongestMatchByClasses(...classMatchers.description)),
