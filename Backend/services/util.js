@@ -236,6 +236,20 @@ exports.deleteS3Object = key => {
   });
 }
 
+exports.deleteS3Objects = keys => {
+  return new Promise((resolve, reject) => {
+    s3.deleteObjects({
+      Bucket: config.aws.bucket,
+      Delete: {
+        Objects: keys.map(key => ({ Key: key }))
+      }
+    }, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+}
+
 exports.dispatchImportNotification = (user, status, reason) => {
   var event;
   if (status === 0) {
