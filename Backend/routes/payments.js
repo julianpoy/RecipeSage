@@ -80,7 +80,7 @@ router.post('/stripe/webhooks', async (req, res, next) => {
           });
 
           if (user) {
-            await SubscriptionService.extend(user.id, 'pyo-single', false, t);
+            await SubscriptionService.extend(user.id, 'pyo-single', t);
           }
         });
       }
@@ -108,7 +108,7 @@ router.post('/stripe/webhooks', async (req, res, next) => {
         if (user) {
           await Promise.all(invoice.lines.data.map(async lineItem => {
             const subscriptionModelName = lineItem.plan.product;
-            await SubscriptionService.extend(user.id, subscriptionModelName, true, t);
+            await SubscriptionService.extend(user.id, subscriptionModelName, t);
           }));
         }
       });
