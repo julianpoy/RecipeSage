@@ -2,6 +2,20 @@
   font-size: 24px;
 }
 
+.feature-list {
+  width: 325px;
+  margin-left: auto;
+  margin-right: auto;
+
+  p {
+    line-height: 22px;
+  }
+
+  ion-badge {
+    vertical-align: middle;
+  }
+}
+
 .card {
   position: relative;
   box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
@@ -74,6 +88,7 @@
       text-align: center;
       outline: none;
       border: 1px solid var(--ion-border-color);
+      background: transparent;
 
       &:active, &:focus {
         border: 1px solid var(--ion-color-primary);

@@ -146,6 +146,15 @@ export class EditRecipePage {
       return;
     }
 
+    if (this.images.length + files.length > 10) {
+      const imageUploadTooManyToast = await this.toastCtrl.create({
+        message: 'You can attach attach up to 10 images to a recipe',
+        showCloseButton: true
+      });
+      imageUploadTooManyToast.present();
+      return;
+    }
+
     const loading = this.loadingService.start();
 
     const MAX_FILE_SIZE_MB = 8;

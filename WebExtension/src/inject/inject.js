@@ -15,7 +15,7 @@ if (window[extensionContainerId]) {
   // Grab our preferences
   chrome.storage.local.get(['enableAutoSnip'], preferences => {
     const getClassRegExp = (classname, multiple) => {
-      modifiers = multiple ? 'g' : '';
+      modifiers = multiple ? 'gi' : 'i';
       return new RegExp(`class="((\\w|\\s|-)*${classname}(\\w|\\s|-)*)"`, modifiers);
     }
 
@@ -38,20 +38,31 @@ if (window[extensionContainerId]) {
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
 
+    const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
+      const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
+      const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
+
+      return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
+        .reduce((acc, element) => [...acc, ...element.querySelectorAll('img')], [])
+        .filter(element => element.src)
+        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+    }
+
     const cleanKnownWords = textBlock => {
       const generalBadWords = ['instructions', 'directions', 'procedure', 'you will need', 'ingredients', 'total time', 'active time', 'prep time', 'time', 'yield', 'servings', 'notes'];
-      const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust', 'the ingredient list now reflects the servings specified'];
+      const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust', 'the ingredient list now reflects the servings specified', 'footnotes'];
+      const tastyRecipesBadWords = ['scale 1x2x3x'];
 
-      const badWords = [...generalBadWords, ...allRecipesBadWords].join('|');
+      const badWords = [...generalBadWords, ...allRecipesBadWords, ...tastyRecipesBadWords].join('|');
 
       let filteredResult =  textBlock.split('\n')
         .map   (line => line.trim())
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
         .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
-        .map   (line => line.replace(/^(total time|prep time|active time|yield):? ?/i, '')) // Remove direct field names for meta
+        .map   (line => line.replace(/^(total time|prep time|active time|yield|servings):? ?/i, '')) // Remove direct field names for meta
         .map   (line => line.trim())
-        .map   (line => line.match(/^([A-Z] *)+$/) ? `[${capitalizeEachWord(line.toLowerCase())}]` : line)
+        .map   (line => line.match(/^([A-Z] *)+:? *$/) ? `[${capitalizeEachWord(line.toLowerCase()).replace(':', '')}]` : line)
         .join  ('\n');
 
       return filteredResult;
@@ -62,11 +73,13 @@ if (window[extensionContainerId]) {
     }
 
     const formatFuncs = {
+      imageURL:     val => val.trim(),
       title:        val => capitalizeEachWord(val.trim().toLowerCase()),
+      description:  val => val.length > 300 ? '' : cleanKnownWords(val),
       source:       val => val.trim(),
-      yield:        val => capitalizeEachWord(cleanKnownWords(val).toLowerCase()),
-      activeTime:   val => capitalizeEachWord(cleanKnownWords(val).toLowerCase()),
-      totalTime:    val => capitalizeEachWord(cleanKnownWords(val).toLowerCase()),
+      yield:        val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
+      activeTime:   val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
+      totalTime:    val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
       ingredients:  val => cleanKnownWords(val),
       instructions: val => cleanKnownWords(val),
       notes:        val => cleanKnownWords(val)
@@ -77,8 +90,36 @@ if (window[extensionContainerId]) {
     }
 
     const classMatchers = {
+      imageURL: [
+        [
+          'wprm-recipe-image', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+          'tasty-recipes-image', // TastyRecipes recipe embed tool - https://sallysbakingaddiction.com/quiche-recipe/
+          'hero-photo', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
+          'o-RecipeLead__m-RecipeMedia', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'recipe-lede-image', // Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
+          'recipe-body', // Generic, idea from Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
+          'recipe__hero', // Food52 - https://food52.com/recipes/81867-best-quiche-recipe
+        ],
+        [
+          'recipe-image',
+          'hero',
+          'recipe-content', // Generic, search for largest image within any recipe content block
+          'recipe-body', // Generic, search for largest image within any recipe content block
+          'recipe-intro', // Generic, search for largest image within any recipe content block
+          'recipe-' // Generic, search for largest image within any recipe content block
+        ]
+      ],
       title: [
-        ['recipe-title'],
+        [
+          'wprm-recipe-name', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+          'recipe-title' // Generic
+        ],
+        []
+      ],
+      description: [
+        [
+          'wprm-recipe-summary' // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+        ],
         []
       ],
       yield: [
@@ -94,28 +135,63 @@ if (window[extensionContainerId]) {
         ['totalTime', 'total-time', 'time-total']
       ],
       ingredients: [
-        ['ingredients'],
+        [
+          'wprm-recipe-ingredients-container', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+          'wprm-recipe-ingredients', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+          'tasty-recipes-ingredients', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
+          'o-Ingredients', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'recipe-ingredients',
+        ],
         ['ingredients']
       ],
       instructions: [
-        ['instructions', 'recipe-instructions', 'directions'],
+        [
+          'wprm-recipe-instructions', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+          'tasty-recipes-instructions', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
+          'recipe-directions__list', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
+          'o-Method', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'instructions', // Generic
+          'recipe-steps', // Generic
+          'recipe-instructions', // Generic
+          'directions' // Generic
+        ],
         ['instructions', 'directions']
       ],
       notes: [
-        ['notes', 'recipe-notes'],
+        [
+          'notes',
+          'recipe-notes',
+          'recipe-footnotes',
+          'recipe__tips', // King Arthur Flour - https://www.kingarthurflour.com/recipes/chocolate-cake-recipe
+          'wprm-recipe-notes-container' // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
+        ],
         ['recipe-notes']
       ]
     }
 
+    const getAttrIfExists = (el, attrName) => {
+      if (el.attributes[attrName]) return el.attributes[attrName].value;
+      return '';
+    }
+
+    const getSrcFromImage = img => {
+      if (!img) return '';
+
+      const closestSrc = getAttrIfExists(img, 'data-src') || getAttrIfExists(img, 'data-lazy-src') || img.currentSrc || img.src;
+      return closestSrc || '';
+    }
+
     const autoSnipResults = {
-      title: formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
-      source: formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
-      yield: formatFuncs.yield(grabLongestMatchByClasses(...classMatchers.yield) || closestToRegExp(/(serves|servings|yield):?\s*\d+/i).replace('\n', '')),
-      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(...classMatchers.activeTime) || closestToRegExp(/(active time|prep time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
-      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(...classMatchers.totalTime) || closestToRegExp(/(total time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
-      ingredients: formatFuncs.ingredients(grabLongestMatchByClasses(...classMatchers.ingredients)),
+      imageURL:     formatFuncs.imageURL(getSrcFromImage(grabClosestImageByClasses(...classMatchers.imageURL))),
+      title:        formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
+      description:  formatFuncs.description(grabLongestMatchByClasses(...classMatchers.description)),
+      source:       formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
+      yield:        formatFuncs.yield(grabLongestMatchByClasses(...classMatchers.yield) || closestToRegExp(/(serves|servings|yield):?\s*\d+/i).replace('\n', '')),
+      activeTime:   formatFuncs.activeTime(grabLongestMatchByClasses(...classMatchers.activeTime) || closestToRegExp(/(active time|prep time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      totalTime:    formatFuncs.totalTime(grabLongestMatchByClasses(...classMatchers.totalTime) || closestToRegExp(/(total time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      ingredients:  formatFuncs.ingredients(grabLongestMatchByClasses(...classMatchers.ingredients)),
       instructions: formatFuncs.instructions(grabLongestMatchByClasses(...classMatchers.instructions)),
-      notes: formatFuncs.notes(grabLongestMatchByClasses(...classMatchers.notes))
+      notes:        formatFuncs.notes(grabLongestMatchByClasses(...classMatchers.notes))
     };
 
     let snippersByField = {};
@@ -296,10 +372,10 @@ if (window[extensionContainerId]) {
       autoSnipToggleLabel.className = "enable-autosnip-label";
       preferencesContainer.appendChild(autoSnipToggleLabel);
 
-      imageURLInput = createSnipper('Image URL', 'imageURL', false, "", true).input;
+      imageURLInput = createSnipper('Image URL', 'imageURL', false, currentSnip.imageURL, true).input;
       createSnipper('Title', 'title', false, currentSnip.title);
-      createSnipper('Description', 'description');
-      createSnipper('Yield', 'yield', false, currentSnip.yield, false, );
+      createSnipper('Description', 'description', false, currentSnip.description, false);
+      createSnipper('Yield', 'yield', false, currentSnip.yield, false);
       createSnipper('Active Time', 'activeTime', false, currentSnip.activeTime);
       createSnipper('Total Time', 'totalTime', false, currentSnip.totalTime);
       createSnipper('Source', 'source', false, currentSnip.source);

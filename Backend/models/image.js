@@ -35,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
       as: 'recipes',
       through: models.Recipe_Image
     });
+
+    Image.hasMany(models.Recipe_Image, {
+      foreignKey: {
+        name: 'imageId',
+        allowNull: false
+      },
+      onDelete: 'CASCADE',
+    });
   };
   return Image;
 };

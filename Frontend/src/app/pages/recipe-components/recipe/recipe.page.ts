@@ -485,7 +485,10 @@ export class RecipePage {
     const loading = this.loadingService.start();
 
     return new Promise((resolve, reject) => {
-      this.recipeService.create(this.recipe).then(response => {
+      this.recipeService.create({
+        ...this.recipe,
+        imageIds: this.recipe.images.map(image => image.id)
+      }).then(response => {
         resolve();
 
         this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));

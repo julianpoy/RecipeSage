@@ -1,20 +1,28 @@
 .image-carousel {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  overflow-x: auto;
+  margin-bottom: 16px;
 }
 
 .recipe-image {
   cursor: pointer;
   text-align: center;
-  width: 200px;
-  margin: 0 16px;
-  margin-bottom: 8px;
+
+  &:first-child {
+    margin-left: auto;
+  }
+
+  &:last-child {
+    margin-right: auto;
+  }
 
   .image-frame {
     width: 200px;
     height: 200px;
-    margin: 0 auto;
+
+    margin: 0 16px;
+    margin-bottom: 8px;
+
     box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
 
     display: flex;

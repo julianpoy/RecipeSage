@@ -17,6 +17,14 @@
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
+    <p>I truly appreciate any financial support you're able to give.</p>
+
+    <p>
+      I want to keep RecipeSage free and without ads, but hosting costs for recipes and images add up.
+    </p>
+
+    <br />
+
     <div class="frequency-row">
       <ion-button [fill]="frequency == 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
         <span>
@@ -71,15 +79,35 @@
       </ion-button>
     </div>
 
-    <p>I truly appreciate any financial support you're able to give.</p>
 
-    <p>
-      I want to keep RecipeSage free and without ads, but hosting costs for recipes and images add up.
-    </p>
 
-    <p>Monthly donations of a small amount are the most helpful!</p>
+    <br />
 
-    <a href="/#/about/details">A little about me</a>
+    <p>As a thank you to those who help make RecipeSage possible,<br />
+    contributing unlocks a few features for your account:</p>
+
+    <div class="feature-list">
+      <p>
+        - Upload images in high resolution &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.highResImages" slot="end">Enabled</ion-badge><br />
+        - Upload multiple images for each recipe &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.multipleImages" slot="end">Enabled</ion-badge>
+      </p>
+    </div>
+
+    <br />
+
+    <i>
+      Monthly - Unlocked while subscribed. One-time - 1 year.
+
+      <br />
+
+      (These features are limited to contributors because they are costly to host)
+    </i>
+
+    <br />
+    <br />
+    <br />
+
+    <a href="/#/about/details">A little about me & RecipeSage</a>
 
     <br />
   </div>

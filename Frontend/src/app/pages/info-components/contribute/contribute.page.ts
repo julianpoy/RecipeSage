@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 
 import { UtilService, RouteMap } from '@/services/util.service';
 import { PaymentsService } from '@/services/payments.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'page-contribute',
@@ -17,8 +19,10 @@ export class ContributePage {
   customAmount: string;
 
   constructor(
+    private capabilitiesService: CapabilitiesService,
     private utilService: UtilService,
-    private paymentsService: PaymentsService
+    private paymentsService: PaymentsService,
+    private toastCtrl: ToastController
   ) {}
 
   setAmount(amount: number) {
@@ -55,7 +59,33 @@ export class ContributePage {
       isRecurring,
       this.utilService.buildPublicRoutePath(RouteMap.ContributeThankYouPage.getPath()),
       this.utilService.buildPublicRoutePath(RouteMap.ContributeCancelPage.getPath())
-    );
+    ).catch(async err => {
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 412:
+          const invalidAmount = await this.toastCtrl.create({
+            message: `Unfortunately the minimum amount is $${isRecurring ? 1 : 5} due to transaction fees - apologies`,
+            duration: 5000
+          });
+          invalidAmount.present();
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
+    });
+
+    if (!session) return;
 
     await this.paymentsService.launchStripeCheckout(session.id);
   }

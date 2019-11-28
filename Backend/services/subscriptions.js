@@ -7,7 +7,6 @@ var User = require('../models').User;
 var UserSubscription = require('../models').UserSubscription;
 
 const CAPABILITY_GRACE_PERIOD = 7;
-const SUBSCRIPTION_EXTENSION_PERIOD = 31;
 
 const CAPABILITIES = {
   HIGH_RES_IMAGES: 'highResImages',
@@ -19,6 +18,7 @@ exports.CAPABILITIES = CAPABILITIES;
 const SUBSCRIPTION_MODELS = {
   "pyo-monthly": {
     title: "Choose your own price",
+    expiresIn: 31,
     capabilities: [
       CAPABILITIES.HIGH_RES_IMAGES,
       CAPABILITIES.MULTIPLE_IMAGES,
@@ -27,7 +27,12 @@ const SUBSCRIPTION_MODELS = {
   },
   "pyo-single": {
     title: "Choose your own price - One time",
-    capabilities: []
+    expiresIn: 365,
+    capabilities: [
+      CAPABILITIES.HIGH_RES_IMAGES,
+      CAPABILITIES.MULTIPLE_IMAGES,
+      CAPABILITIES.EXPANDABLE_PREVIEWS
+    ]
   }
 };
 
@@ -68,7 +73,9 @@ exports.userHasCapability = async (userId, capability) => {
   return capabilities.indexOf(capability) > -1;
 }
 
-exports.extend = async (userId, subscriptionName, expires, t) => {
+exports.extend = async (userId, subscriptionName, t) => {
+  const renewalLength = SUBSCRIPTION_MODELS[subscriptionName].expiresIn;
+
   const existingSubscription = await UserSubscription.findOne({
     where: {
       userId,
@@ -77,18 +84,22 @@ exports.extend = async (userId, subscriptionName, expires, t) => {
     transaction: t
   });
   if (existingSubscription) {
+    const expires = moment(existingSubscription.expires || undefined).add(renewalLength, 'days');
+
     await UserSubscription.update(
-      { expires: expires === false ? null : moment(existingSubscription.expires || undefined).add(SUBSCRIPTION_EXTENSION_PERIOD, 'days') },
+      { expires },
       {
         where: { id: existingSubscription.id },
         transaction: t
       }
     )
   } else {
+    const expires = moment().add(renewalLength, 'days');
+
     await UserSubscription.create({
       userId,
       name: subscriptionName,
-      expires: expires === false ? null : moment().add(SUBSCRIPTION_EXTENSION_PERIOD, 'days')
+      expires
     }, {
       transaction: t
     })
