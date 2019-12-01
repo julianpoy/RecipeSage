@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ContributePage } from './contribute.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
+import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreement/tos-clickwrap-agreement.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
     FormsModule,
     ReactiveFormsModule,
     LogoIconModule,
+    TosClickwrapAgreementModule,
   ],
 })
 export class ContributePageModule {}
