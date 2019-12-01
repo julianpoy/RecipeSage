@@ -12,6 +12,7 @@ var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
 var Recipe_Image = require('../models').Recipe_Image;
 var Message = require('../models').Message;
+var Friendship = require('../models').Friendship;
 
 // Service
 var SessionService = require('../services/sessions');
@@ -23,40 +24,165 @@ router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
-  function(req, res, next) {
+  async (req, res, next) => {
+
+  const user = await User.findByPk(res.locals.session.userId);
 
   // Manually construct fields to avoid sending sensitive info
-  var user = {
-    id: res.locals.user.id,
-    name: res.locals.user.name,
-    email: res.locals.user.email,
-    createdAt: res.locals.user.createdAt,
-    updatedAt: res.locals.user.updatedAt
-  };
-
-  res.status(200).json(user);
-
+  res.status(200).json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    enableProfile: user.enableProfile,
+    profileImageId: user.profileImageId,
+    profileVisibility: user.profileVisibility,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt
+  });
 });
 
-router.get
+// Params:
+// profileImageId
+// enableProfile
+// profileVisibility
+// profileItems: [
+//   title
+//   type
+//   recipeId?
+//   labelId?
+//   visibility
+// ]
+
+router.put(
+  '/profile',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    const userId = res.locals.session.userId;
+
+    if (!req.body.profileImageId || !req.body.enableProfile || !["public", "friends-only"].find(req.body.profileVisibility)) {
+      const invalidParamsError = new Error("Invalid arguments");
+      invalidParamsError.status = 400;
+      throw invalidParamsError;
+    }
+
+    await SQ.transaction(async transaction => {
+      await User.update({
+        where: {
+          userId
+        },
+        transaction
+      }, {
+        profileImageId: req.body.profileImageId,
+        enableProfile: req.body.enableProfile,
+        profileVisibility: req.body.profileVisibility
+      });
+
+      await ProfileItem.destroy({
+        where: {
+          userId
+        },
+        transaction
+      });
+
+      const profileItems = req.body.profileItems.map((profileItem, idx) => {
+        const { title, type, recipeId, labelId, visibility } = profileItem;
+
+        if (!["public", "friends-only"].find(visibility)) {
+          const invalidVisibilityError = new Error("Invalid visibility type");
+          invalidVisibilityError.status = 400;
+          throw invalidVisibilityError;
+        }
+
+        if (!["all-recipes", "label", "recipe"].find(type)) {
+          const invalidTypeError = new Error("Invalid profile item type");
+          invalidTypeError.status = 400;
+          throw invalidTypeError;
+        }
+
+        return {
+          userId: res.locals.session.userId,
+          title,
+          type,
+          recipeId,
+          labelId,
+          visibility,
+          order: idx
+        };
+      });
+
+      await ProfileItem.bulkCreate(profileItems, {
+        transaction
+      });
+    });
+
+    res.status(200).send("Updated");
+  }
+);
+
+router.get(
+  '/profile',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    const profileItems = await ProfileItem.find({
+      where: {
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe,
+        as: 'recipe'
+      }, {
+        model: Label,
+        as: 'label'
+      }]
+    });
+
+    res.status(200).json({
+      profileItems
+    });
+  }
+)
 
 router.get(
   '/profile/:userId',
-  cors(),
   MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
     const profileUserId = req.params.userId;
 
+    const profileUser = await User.findByPk(profileUserId);
+    if (!profileUser) {
+      const profileUserNotFoundError = new Error("User with that id not found");
+      profileUserNotFoundError.status = 404;
+      throw profileUserNotFoundError;
+    }
+
+    if (!profileUser.enableProfile) {
+      const profileNotEnabledError = new Error("User does not have an active profile");
+      profileNotEnabledError.status = 403;
+    }
+
     let userIsFriend = false;
+    let hasPendingFriendInvite = false;
     if (res.locals.session.userId) {
       const friendship = await Friendship.findOne({
         where: {
-          userId: req.params.userId,
+          userId: profileUserId,
+          friendId: res.locals.session.userId
+        },
+        include: [{
+          model: User,
+          attributes: ['name']
+        }]
+      });
+      userIsFriend = !!friendship;
+
+      const pendingFriendship = await Friendship.findOne({
+        where: {
+          userId: res.locals.session.userId,
           friendId: profileUserId
         }
       });
-      userIsFriend = !!friendship;
+
+      hasPendingFriendInvite = !!pendingFriendship;
     }
 
     const profileItems = await ProfileItem.find({
@@ -74,10 +200,94 @@ router.get(
     });
 
     res.status(200).json({
+      hasPendingFriendInvite,
+      userIsFriend,
       profileItems
     });
   }
 )
+
+router.get('/friends',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    const myUserId = res.locals.session.userId;
+
+    const outgoingFriendships = await Friendship.findAll({
+      where: {
+        userId: myUserId
+      }
+    });
+
+    const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce((acc, outgoingFriendship) => (
+      { ...acc, [outgoingFriendship.friendId]: outgoingFriendship }
+    ), {});
+
+    const incomingFriendships = await Friendship.findAll({
+      where: {
+        friendId: res.locals.session.userId
+      }
+    });
+
+    const incomingFriendshipsByOtherUserId = incomingFriendships.reduce((acc, incomingFriendship) => (
+      { ...acc, [incomingFriendship.userId]: incomingFriendship }
+    ), {});
+
+    const friendshipSummary = [...outgoingFriendships, ...incomingFriendships].reduce((acc, friendship) => {
+      const friendId = friendship.userId === myUserId ? friendship.friendId : friendship.userId;
+
+      if (outgoingFriendshipsByOtherUserId[friendId] && incomingFriendshipsByOtherUserId[friendId]) {
+        // Friendship both ways. They are friends!
+        acc.friends.push({
+          friendId
+        });
+      } else if (outgoingFriendshipsByOtherUserId[friendId]) {
+        // We're requesting them as a friend!
+        acc.outgoingRequests.push({
+          friendId
+        });
+      } else if (incomingFriendshipsByOtherUserId[friendId]) {
+        // They're requesting us as a friend!
+        acc.incomingRequests.push({
+          friendId
+        });
+      }
+
+      return acc;
+    }, {
+      outgoingRequests: [],
+      incomingRequests: [],
+      friends: []
+    });
+
+    res.status(200).json(friendshipSummary);
+  }
+);
+
+router.post('/friends/:userId',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    const profileUserId = req.params.userId;
+
+    await SQ.transaction(async transaction => {
+      await Friendship.destroy({
+        where: {
+          userId: res.locals.session.userId,
+          friendId: profileUserId
+        },
+        transaction
+      });
+
+      await Friendship.create({
+        userId: res.locals.session.userId,
+        friendId: profileUserId
+      }, {
+        transaction
+      });
+    });
+
+    res.status(201).send("Created");
+  }
+);
 
 router.get(
   '/capabilities',
