@@ -4,11 +4,11 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ProfilePage } from './profile.page';
+import { PeoplePage } from './people.page';
 
 @NgModule({
   declarations: [
-    ProfilePage,
+    PeoplePage,
   ],
   imports: [
     CommonModule,
@@ -16,11 +16,11 @@ import { ProfilePage } from './profile.page';
     RouterModule.forChild([
       {
         path: '',
-        component: ProfilePage
+        component: PeoplePage
       }
     ]),
     FormsModule,
     ReactiveFormsModule
   ],
 })
-export class ProfilePageModule {}
+export class PeoplePageModule {}

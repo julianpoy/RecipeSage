@@ -7,9 +7,9 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 
 @Component({
-  selector: 'page-account',
-  templateUrl: 'account.page.html',
-  styleUrls: ['account.page.scss']
+  selector: 'page-my-profile',
+  templateUrl: 'my-profile.page.html',
+  styleUrls: ['my-profile.page.scss']
 })
 export class MyProfilePage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

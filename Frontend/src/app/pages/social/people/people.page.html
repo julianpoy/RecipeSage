@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>People</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br />
+
+  <ion-list>
+    <ion-item button>
+      <ion-label>My profile</ion-label>
+    </ion-item>
+    <ion-list-header *ngIf="friendships?.incomingRequests?.length > 0">
+      Friend invites
+    </ion-list-header>
+    <ion-item *ngFor="let friendship of friendships?.incomingRequests" button>
+      <ion-label>{{friendship.otherUser.name}}</ion-label>
+    </ion-item>
+    <ion-list-header *ngIf="friendships?.outgoingRequests?.length > 0">
+      Pending friend requests
+    </ion-list-header>
+    <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button>
+      <ion-label>{{friendship.otherUser.name}}</ion-label>
+    </ion-item>
+    <ion-list-header *ngIf="friendships?.friends?.length > 0">
+      Friends
+    </ion-list-header>
+    <ion-item *ngFor="let friendship of friendships?.friends" button>
+      <ion-label>{{friendship.otherUser.name}}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

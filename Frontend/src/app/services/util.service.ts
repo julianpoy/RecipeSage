@@ -112,6 +112,10 @@ export const RouteMap = {
     getPath(username: string) { return `people/${username}`; },
     path: 'people/:username',
   },
+  PeoplePage: {
+    getPath() { return `people`; },
+    path: 'people',
+  },
   SocialPage: {
     getPath() { return `people`; },
     path: 'people',

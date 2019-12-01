@@ -58,7 +58,7 @@ export class ProfilePage {
   async sendFriendInvite() {
     const loading = this.loadingService.start();
 
-    this.userService.sendFriendInvite(this.profile.id).then(async response => {
+    this.userService.addFriend(this.profile.id).then(async response => {
       loading.dismiss();
 
       const tst = await this.toastCtrl.create({
@@ -95,83 +95,43 @@ export class ProfilePage {
     });
   }
 
-  async acceptFriendInvite() {
-    const loading = this.loadingService.start();
+  // async removeFriend() {
+  //   const loading = this.loadingService.start();
 
-    this.userService.acceptFriendInvite(this.profile.id).then(async response => {
-      loading.dismiss();
+  //   this.userService.removeFriend(this.profile.id).then(async response => {
+  //     loading.dismiss();
 
-      const tst = await this.toastCtrl.create({
-        message: 'Friend invite sent!',
-        duration: 5000
-      });
-      tst.present();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 404:
-          (await this.toastCtrl.create({
-            message: 'We\'re having trouble finding that user.',
-            duration: 5000
-          })).present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
-  }
-
-  async removeFriend() {
-    const loading = this.loadingService.start();
-
-    this.userService.sendFriendInvite(this.profile.id).then(async response => {
-      loading.dismiss();
-
-      const tst = await this.toastCtrl.create({
-        message: 'Friend invite sent!',
-        duration: 5000
-      });
-      tst.present();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 404:
-          (await this.toastCtrl.create({
-            message: 'We\'re having trouble finding that user.',
-            duration: 5000
-          })).present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
-  }
+  //     const tst = await this.toastCtrl.create({
+  //       message: 'Friend invite sent!',
+  //       duration: 5000
+  //     });
+  //     tst.present();
+  //   }).catch(async err => {
+  //     loading.dismiss();
+  //     switch (err.response.status) {
+  //       case 0:
+  //         (await this.toastCtrl.create({
+  //           message: this.utilService.standardMessages.offlinePushMessage,
+  //           duration: 5000
+  //         })).present();
+  //         break;
+  //       case 401:
+  //         this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+  //         break;
+  //       case 404:
+  //         (await this.toastCtrl.create({
+  //           message: 'We\'re having trouble finding that user.',
+  //           duration: 5000
+  //         })).present();
+  //         break;
+  //       default:
+  //         const errorToast = await this.toastCtrl.create({
+  //           message: this.utilService.standardMessages.unexpectedError,
+  //           duration: 30000
+  //         });
+  //         errorToast.present();
+  //         break;
+  //     }
+  //   });
+  // }
 }

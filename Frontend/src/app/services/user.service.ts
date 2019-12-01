@@ -101,6 +101,42 @@ export class UserService {
     }).then(response => response.data);
   }
 
+  myProfile() {
+    const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'get',
+      url
+    }).then(response => response.data);
+  }
+
+  profile(userId: string) {
+    const url = this.utilService.getBase() + 'users/profile/' + userId + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'get',
+      url
+    }).then(response => response.data);
+  }
+
+  friends() {
+    const url = this.utilService.getBase() + 'users/friends' + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'get',
+      url
+    }).then(response => response.data);
+  }
+
+  addFriend(friendId: string) {
+    const url = this.utilService.getBase() + 'users/friends/' + friendId + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'post',
+      url
+    }).then(response => response.data);
+  }
+
   myStats() {
     const url = this.utilService.getBase() + 'users/stats' + this.utilService.getTokenQuery();
 
