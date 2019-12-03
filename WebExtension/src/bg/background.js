@@ -1,7 +1,7 @@
-let initClipTool = () => {
+let initClipTool = cb => {
   chrome.tabs.executeScript({
     file: 'src/inject/inject.js'
-  });
+  }, cb);
 }
 
 let messageActiveWindow = payload => {
@@ -14,10 +14,11 @@ chrome.contextMenus.create({
   title: "Snip Image for RecipeSage Clip Tool",
   contexts: ['image'],
   onclick: e => {
-    initClipTool();
-    messageActiveWindow({
-      action: 'snipImage',
-      event: e
+    initClipTool(() => {
+      messageActiveWindow({
+        action: 'snipImage',
+        event: e
+      });
     });
   }
 });
@@ -26,10 +27,11 @@ chrome.contextMenus.create({
   title: "Open RecipeSage Clip Tool",
   contexts: ['page'],
   onclick: e => {
-    initClipTool();
-    messageActiveWindow({
-      action: 'show',
-      event: e
+    initClipTool(() => {
+      messageActiveWindow({
+        action: 'show',
+        event: e
+      });
     });
   }
 });

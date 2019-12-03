@@ -21,111 +21,111 @@ export enum AuthType {
 
 export const RouteMap = {
   HomePage: {
-    getPath(folder: string) { return `list/${folder}`; },
+    getPath(folder: string) { return `/list/${folder}`; },
     path: 'list/:folder',
   },
   AboutPage: {
-    getPath() { return `about`; },
+    getPath() { return `/about`; },
     path: 'about',
   },
   AboutDetailsPage: {
-    getPath() { return `about/details`; },
+    getPath() { return `/about/details`; },
     path: 'about/details',
   },
   ContactPage: {
-    getPath() { return `about/contact`; },
+    getPath() { return `/about/contact`; },
     path: 'about/contact',
   },
   LegalPage: {
-    getPath() { return `legal`; },
+    getPath() { return `/legal`; },
     path: 'legal',
   },
   ContributePage: {
-    getPath() { return `contribute`; },
+    getPath() { return `/contribute`; },
     path: 'contribute',
   },
   ContributeCancelPage: {
-    getPath() { return `contribute/cancel`; },
+    getPath() { return `/contribute/cancel`; },
     path: 'contribute/cancel',
   },
   ContributeThankYouPage: {
-    getPath() { return `contribute/thankyou`; },
+    getPath() { return `/contribute/thankyou`; },
     path: 'contribute/thankyou',
   },
   ReleaseNotesPage: {
-    getPath() { return `release-notes`; },
+    getPath() { return `/release-notes`; },
     path: 'release-notes',
   },
   TipsTricksTutorialsPage: {
-    getPath() { return `tips-tricks-tutorials`; },
+    getPath() { return `/tips-tricks-tutorials`; },
     path: 'tips-tricks-tutorials',
   },
   WelcomePage: {
-    getPath() { return `welcome`; },
+    getPath() { return `/welcome`; },
     path: 'welcome',
   },
   AuthPage: {
-    getPath(authType: AuthType) { return `auth/${authType}`; },
+    getPath(authType: AuthType) { return `/auth/${authType}`; },
     path: 'auth/:authType',
   },
   MealPlansPage: {
-    getPath() { return `meal-planners`; },
+    getPath() { return `/meal-planners`; },
     path: 'meal-planners',
   },
   MealPlanPage: {
-    getPath(mealPlanId: string) { return `meal-planners/${mealPlanId}`; },
+    getPath(mealPlanId: string) { return `/meal-planners/${mealPlanId}`; },
     path: 'meal-planners/:mealPlanId',
   },
   MessagesPage: {
-    getPath() { return `messages`; },
+    getPath() { return `/messages`; },
     path: 'messages',
   },
   MessageThreadPage: {
-    getPath(otherUserId: string) { return `messages/${otherUserId}`; },
+    getPath(otherUserId: string) { return `/messages/${otherUserId}`; },
     path: 'messages/:otherUserId',
   },
   EditRecipePage: {
-    getPath(recipeId: string) { return `edit-recipe/${recipeId}`; },
+    getPath(recipeId: string) { return `/edit-recipe/${recipeId}`; },
     path: 'edit-recipe/:recipeId',
   },
   RecipePage: {
-    getPath(recipeId: string) { return `recipe/${recipeId}`; },
+    getPath(recipeId: string) { return `/recipe/${recipeId}`; },
     path: 'recipe/:recipeId',
   },
   SettingsPage: {
-    getPath() { return `settings`; },
+    getPath() { return `/settings`; },
     path: 'settings',
   },
   AccountPage: {
-    getPath() { return `settings/account`; },
+    getPath() { return `/settings/account`; },
     path: 'settings/account',
   },
   ExportPage: {
-    getPath() { return `settings/export`; },
+    getPath() { return `/settings/export`; },
     path: 'settings/export',
   },
   ImportPage: {
-    getPath() { return `settings/import`; },
+    getPath() { return `/settings/import`; },
     path: 'settings/import',
   },
   ImportLivingcookbookPage: {
-    getPath() { return `settings/import/livingcookbook`; },
+    getPath() { return `/settings/import/livingcookbook`; },
     path: 'settings/import/livingcookbook',
   },
   ImportPaprikaPage: {
-    getPath() { return `settings/import/paprika`; },
+    getPath() { return `/settings/import/paprika`; },
     path: 'settings/import/paprika',
   },
   ImportPepperplatePage: {
-    getPath() { return `settings/import/pepperplate`; },
+    getPath() { return `/settings/import/pepperplate`; },
     path: 'settings/import/pepperplate',
   },
   ShoppingListsPage: {
-    getPath() { return `shopping-lists`; },
+    getPath() { return `/shopping-lists`; },
     path: 'shopping-lists',
   },
   ShoppingListPage: {
-    getPath(shoppingListId: string) { return `shopping-lists/${shoppingListId}`; },
+    getPath(shoppingListId: string) { return `/shopping-lists/${shoppingListId}`; },
     path: 'shopping-lists/:shoppingListId',
   }
 };

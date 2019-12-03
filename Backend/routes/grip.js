@@ -33,8 +33,6 @@ router.all(
         if (e.message != 'Client disconnected unexpectedly.') throw e;
       }
 
-      console.log("got message", message)
-
       // If return value is null then connection is closed
       if (message == null) {
         ws.close();

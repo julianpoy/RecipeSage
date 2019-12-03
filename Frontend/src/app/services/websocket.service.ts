@@ -21,12 +21,12 @@ export class WebsocketService {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
-    window.onbeforeunload = () => {
+    window.addEventListener('beforeunload', e => {
       try {
         this.connection.onclose = () => {};
         this.connection.close();
       } catch (e) {}
-    };
+    });
   }
 
   isConnected() {
@@ -51,6 +51,8 @@ export class WebsocketService {
 
   // Connection
   private connect() {
+    if (!this.utilService.isLoggedIn()) return this.queueReconnect();
+
     let prot = 'ws';
     if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
 

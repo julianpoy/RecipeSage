@@ -3,6 +3,7 @@ var router = express.Router();
 var cors = require('cors');
 var xmljs = require("xml-js");
 var Raven = require('raven');
+const moment = require('moment');
 
 // DB
 var Op = require("sequelize").Op;
@@ -21,9 +22,14 @@ let SubscriptionsService = require('../services/subscriptions');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
-  req.imageIds = req.imageIds || [];
+  const highResConversion = await SubscriptionsService.userHasCapability(
+    res.locals.session.userId,
+    SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+  );
 
-  const imageIds = req.imageIds;
+  req.body.imageIds = req.body.imageIds || [];
+
+  const imageIds = req.body.imageIds;
   await UtilService.upload('image', req, res);
   if (req.file) {
     const uploadedFile = req.file;
@@ -38,7 +44,7 @@ const legacyImageHandler = async (req, res, next) => {
   }
 
   if (req.body.imageURL) {
-    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL);
+    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
 
     const newImage = await Image.create({
       userId: res.locals.session.userId,
@@ -104,6 +110,31 @@ router.post(
     });
 
     if (req.body.imageIds) {
+      const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
+        res.locals.session.userId,
+        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+      );
+
+      if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
+        const images = await Image.findAll({
+          where: {
+            id: {
+              [Op.in]: req.body.imageIds
+            }
+          },
+          transaction
+        });
+        const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+
+        req.body.imageIds = req.body.imageIds.filter((imageId, idx) =>
+          idx === 0 || // Allow first image always (users can always upload the first image)
+          imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+          moment(imagesById[imageId].createdAt).add(1, 'hour').isBefore(moment()) // Allow old images (user's subscription expired)
+        );
+      }
+
+      if (req.body.imageIds.length > 10) req.body.imageIds.splice(10); // Limit to 10 images per recipe max
+
       await Recipe_Image.bulkCreate(req.body.imageIds.map((imageId, idx) => ({
         imageId: imageId,
         recipeId: recipe.id,
@@ -120,37 +151,6 @@ router.post(
     res.status(201).json(serializedRecipe);
   }).catch(next);
 });
-
-//Get all of a user's recipes
-// router.get(
-//   '/',
-//   cors(),
-//   MiddlewareService.validateSession(['user']),
-//   function(req, res, next) {
-
-//   Recipe.findAll({
-//     where: {
-//       userId: res.locals.session.userId,
-//       folder: req.query.folder || 'main'
-//     },
-//     attributes: ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'],
-//     include: [{
-//       model: User,
-//       as: 'fromUser',
-//       attributes: ['name', 'email']
-//     },
-//     {
-//       model: Label,
-//       as: 'labels',
-//       attributes: ['id', 'title']
-//     }],
-//     order: [
-//       ['title', 'ASC']
-//     ],
-//   }).then(function(recipes) {
-//     res.status(200).json(recipes);
-//   }).catch(next);
-// });
 
 // Count a user's recipes
 router.get(
@@ -559,6 +559,31 @@ router.put(
     });
 
     if (req.body.imageIds) {
+      const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
+        res.locals.session.userId,
+        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+      );
+
+      if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
+        const images = await Image.findAll({
+          where: {
+            id: {
+              [Op.in]: req.body.imageIds
+            }
+          },
+          transaction
+        });
+        const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+
+        req.body.imageIds = req.body.imageIds.filter((imageId, idx) =>
+          idx === 0 || // Allow first image always (users can always upload the first image)
+          imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+          moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
+        );
+      }
+
+      if (req.body.imageIds.length > 10) req.body.imageIds.splice(10); // Limit to 10 images per recipe max
+
       await Recipe_Image.destroy({
         where: {
           recipeId: recipe.id
