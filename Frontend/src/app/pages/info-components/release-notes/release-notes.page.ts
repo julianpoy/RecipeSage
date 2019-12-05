@@ -10,5 +10,9 @@ import { RouteMap } from '@/services/util.service';
 export class ReleaseNotesPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
+  contributePath: string = RouteMap.ContributePage.getPath();
+  tipsTricksTutorialsPath: string = RouteMap.TipsTricksTutorialsPage.getPath();
+  aboutDetailsPath: string = RouteMap.AboutDetailsPage.getPath();
+
   constructor() {}
 }
