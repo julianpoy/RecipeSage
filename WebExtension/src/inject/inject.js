@@ -108,6 +108,7 @@ if (window[extensionContainerId]) {
           'recipe-lede-image', // Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe-body', // Generic, idea from Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe__hero', // Food52 - https://food52.com/recipes/81867-best-quiche-recipe
+          'content' // Generic, recognize content-body if matched directly
         ],
         [
           'recipe-image',
