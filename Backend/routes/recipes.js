@@ -27,9 +27,7 @@ const legacyImageHandler = async (req, res, next) => {
     SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
   );
 
-  req.body.imageIds = req.body.imageIds || [];
-
-  const imageIds = req.body.imageIds;
+  const imageIds = req.body.imageIds || [];
   await UtilService.upload('image', req, res);
   if (req.file) {
     const uploadedFile = req.file;
@@ -55,6 +53,8 @@ const legacyImageHandler = async (req, res, next) => {
 
     imageIds.unshift(newImage.id);
   }
+
+  req.body.imageIds = imageIds;
 
   next();
 };
