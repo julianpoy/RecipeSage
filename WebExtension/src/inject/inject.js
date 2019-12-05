@@ -14,6 +14,13 @@ if (window[extensionContainerId]) {
 
   // Grab our preferences
   chrome.storage.local.get(['enableAutoSnip'], preferences => {
+    // Save default preferences
+    if (!preferences.enableAutoSnip && preferences.enableAutoSnip !== false) {
+      chrome.storage.local.set({
+        enableAutoSnip: false
+      });
+    }
+
     const getClassRegExp = (classname, multiple) => {
       modifiers = multiple ? 'gi' : 'i';
       return new RegExp(`class="((\\w|\\s|-)*${classname}(\\w|\\s|-)*)"`, modifiers);
