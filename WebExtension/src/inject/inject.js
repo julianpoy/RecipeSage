@@ -53,7 +53,13 @@ if (window[extensionContainerId]) {
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
         .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
-        .filter(element => isImg(element) && element.src)
+        .filter(element =>
+          isImg(element) &&
+          element.src &&
+          element.complete && // Filter images that haven't completely loaded
+          element.naturalWidth > 0 && // Filter images that haven't loaded correctly
+          element.naturalHeight > 0
+        )
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
