@@ -111,8 +111,7 @@ if (window[extensionContainerId]) {
       ],
       title: [
         [
-          'wprm-recipe-name', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
-          'recipe-title' // Generic
+          'wprm-recipe-name' // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
         ],
         []
       ],
@@ -123,7 +122,7 @@ if (window[extensionContainerId]) {
         []
       ],
       yield: [
-        ['yield', 'servings'],
+        ['recipe-yield', 'recipe-servings', 'yield', 'servings'],
         ['yield', 'servings']
       ],
       activeTime: [
