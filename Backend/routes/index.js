@@ -145,7 +145,8 @@ function saveRecipes(userId, recipes) {
       if (recipes[idx].image) {
         pendingImageData.push({
           image: recipes[idx].image,
-          recipeId: savedRecipe.id
+          recipeId: savedRecipe.id,
+          order: 0 // Pepperplate only supports one image
         });
       }
 
@@ -168,7 +169,8 @@ function saveRecipes(userId, recipes) {
 
     await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
       recipeId: p.recipeId,
-      imageId: savedImages[idx].id
+      imageId: savedImages[idx].id,
+      order: p.order
     })), {
       transaction: t
     });

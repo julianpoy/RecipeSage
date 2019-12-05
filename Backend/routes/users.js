@@ -10,7 +10,7 @@ var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
-var Recipe_Image = require('../models').Recipe_Image;
+var Image = require('../models').Image;
 var Message = require('../models').Message;
 
 // Service
@@ -72,14 +72,14 @@ router.get(
         userId
       }
     }),
-    Recipe_Image.count({
+    Recipe.count({
+      where: {
+        userId
+      },
       include: [{
-        model: Recipe,
-        as: 'recipes',
-        attributes: [],
-        where: {
-          userId
-        }
+        model: Image,
+        as: "images",
+        required: true
       }]
     }),
     Message.count({
