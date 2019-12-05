@@ -1,6 +1,6 @@
 let initClipTool = cb => {
   chrome.tabs.executeScript({
-    file: 'src/inject/inject.js'
+    file: 'inject/inject.js'
   }, cb);
 }
 
