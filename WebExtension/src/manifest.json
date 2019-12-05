@@ -12,14 +12,14 @@
   },
   "background": {
     "scripts": [
-      "src/bg/background.js"
+      "bg/background.js"
     ],
     "persistent": true
   },
   "browser_action": {
     "default_icon": "icons/android-chrome-512x512.png",
     "default_title": "RecipeSage",
-    "default_popup": "src/browser_action/browser_action.html"
+    "default_popup": "browser_action/browser_action.html"
   },
   "permissions": [
     "https://recipesage.com/*",
@@ -31,10 +31,10 @@
   "web_accessible_resources": [
     "images/*.png",
     "icons/*.png",
-    "src/inject/*.css"
+    "inject/*.css"
   ],
   "options_ui": {
-    "page": "src/settings/settings.html",
+    "page": "settings/settings.html",
     "open_in_tab": false
   }
 }

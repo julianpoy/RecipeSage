@@ -287,7 +287,7 @@ if (window[extensionContainerId]) {
       document.body.appendChild(shadowRootContainer);
 
       let styles = document.createElement('link');
-      styles.href = chrome.extension.getURL('./src/inject/clipTool.css');
+      styles.href = chrome.extension.getURL('./inject/clipTool.css');
       styles.rel = 'stylesheet';
       styles.type = 'text/css';
       shadowRoot.appendChild(styles);
@@ -455,7 +455,7 @@ if (window[extensionContainerId]) {
       document.body.appendChild(alertShadowRootContainer);
 
       let alertStyles = document.createElement('link');
-      alertStyles.href = chrome.extension.getURL('./src/inject/alert.css');
+      alertStyles.href = chrome.extension.getURL('./inject/alert.css');
       alertStyles.rel = 'stylesheet';
       alertStyles.type = 'text/css';
       shadowRoot.appendChild(alertStyles);
