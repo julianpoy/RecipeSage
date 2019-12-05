@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "build": "mkdir -p dist && zip ./dist/rs-we.zip ./src/*",
+    "build": "rm -rf dist; mkdir -p dist && cd src && zip ../dist/rs-we.zip ./* ./**/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Julian Poyourow",
