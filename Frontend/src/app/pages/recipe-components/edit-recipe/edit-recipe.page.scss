@@ -1,7 +1,7 @@
 .image-carousel {
   display: flex;
   overflow-x: auto;
-  margin-bottom: 16px;
+  padding: 16px 0;
 }
 
 .recipe-image {
@@ -17,11 +17,11 @@
   }
 
   .image-frame {
+    position: relative;
     width: 200px;
     height: 200px;
 
-    margin: 0 16px;
-    margin-bottom: 8px;
+    margin: 8px 16px;
 
     box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
 
@@ -29,10 +29,30 @@
     justify-content: center;
     align-items: center;
 
+    @media only screen and (max-width:450px) {
+      width: 150px;
+      height: 150px;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(40%, -40%);
+      font-size: 20px;
+      background: var(--ion-background-color);
+      border-radius: 100%;
+    }
+
     img {
       width: 200px;
       height: 200px;
       object-fit: cover;
+
+      @media only screen and (max-width:450px) {
+        width: 150px;
+        height: 150px;
+      }
     }
 
     span {
@@ -47,7 +67,7 @@
     margin-top: 4px;
 
     ion-icon {
-      font-size: 32px;
+      font-size: 28px;
       margin: 0 8px;
     }
 
