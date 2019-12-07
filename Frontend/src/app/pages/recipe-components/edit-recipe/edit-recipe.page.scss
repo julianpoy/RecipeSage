@@ -17,17 +17,27 @@
   }
 
   .image-frame {
+    position: relative;
     width: 200px;
     height: 200px;
 
-    margin: 0 16px;
-    margin-bottom: 8px;
+    margin: 8px 16px;
 
     box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
 
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .remove-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(40%, -40%);
+      font-size: 20px;
+      background: var(--ion-background-color);
+      border-radius: 100%;
+    }
 
     img {
       width: 200px;
