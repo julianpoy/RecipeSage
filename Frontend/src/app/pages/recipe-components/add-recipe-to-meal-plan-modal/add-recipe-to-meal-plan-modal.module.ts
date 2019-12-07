@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddRecipeToMealPlanModalPage } from './add-recipe-to-meal-plan-modal.page';
 import { MealCalendarModule } from '@/components/meal-calendar/meal-calendar.module';
 import { SelectMealModule } from '@/components/select-meal/select-meal.module';
+import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { SelectMealModule } from '@/components/select-meal/select-meal.module';
     ReactiveFormsModule,
     MealCalendarModule,
     SelectMealModule,
+    NewMealPlanModalPageModule,
   ],
   entryComponents: [
     AddRecipeToMealPlanModalPage,
