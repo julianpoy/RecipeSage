@@ -56,6 +56,7 @@ export interface AppPreferenceTypes {
   providedIn: 'root'
 })
 export class PreferencesService {
+  // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
 
@@ -87,9 +88,11 @@ export class PreferencesService {
       this.clearOldPrefs();
     } else {
       this.load();
+      this.save();
     }
   }
 
+  // Compatibility for old preference style (individual keys)
   private loadOldPrefs() {
     try {
       const oldPreferences = {};
