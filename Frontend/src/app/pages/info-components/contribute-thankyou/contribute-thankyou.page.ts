@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { RouteMap } from '@/services/util.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'page-contribute-thankyou',
@@ -11,5 +12,7 @@ export class ContributeThankYouPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
   accountPath: string = RouteMap.AccountPage.getPath();
 
-  constructor() {}
+  constructor(private capabilitiesService: CapabilitiesService) {
+    this.capabilitiesService.updateCapabilities();
+  }
 }
