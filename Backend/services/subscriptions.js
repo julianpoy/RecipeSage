@@ -42,11 +42,11 @@ exports.modelsForCapability = capability => {
     .filter(model => model.capabilities.indexOf(capability) > -1);
 }
 
-exports.capabilitiesForUser = async userId => {
+exports.subscriptionsForUser = async (userId, includeExpired) => {
   // Allow users to continue to access expired features for grace period
-  const mustBeValidUntil = moment().add(CAPABILITY_GRACE_PERIOD, 'days');
+  const mustBeValidUntil = includeExpired ? moment('1980') : moment().subtract(CAPABILITY_GRACE_PERIOD, 'days');
 
-  const activeSubscriptions = await UserSubscription.findAll({
+  return UserSubscription.findAll({
     where: {
       userId,
       name: { [Op.ne]: null },
@@ -58,9 +58,17 @@ exports.capabilitiesForUser = async userId => {
       }
     }
   });
+}
+
+exports.capabilitiesForSubscription = subscriptionName => {
+  return SUBSCRIPTION_MODELS[subscriptionName].capabilities;
+}
+
+exports.capabilitiesForUser = async userId => {
+  const activeSubscriptions = await exports.subscriptionsForUser(userId);
 
   return activeSubscriptions.reduce((acc, activeSubscription) => {
-    const capabilities = SUBSCRIPTION_MODELS[activeSubscription.name].capabilities;
+    const capabilities = exports.capabilitiesForSubscription(activeSubscription.name);
     return [
       ...acc,
       ...capabilities
