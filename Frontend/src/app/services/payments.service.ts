@@ -15,6 +15,14 @@ export class PaymentsService {
     public httpService: HttpService,
     public utilService: UtilService
   ) {
+    const stripeScriptEl = document.createElement('script');
+    stripeScriptEl.onload = () => this.init();
+    stripeScriptEl.src = 'https://js.stripe.com/v3/';
+    document.head.appendChild(stripeScriptEl);
+
+  }
+
+  init() {
     this.stripe = (window as any).Stripe(STRIPE_PK);
   }
 
