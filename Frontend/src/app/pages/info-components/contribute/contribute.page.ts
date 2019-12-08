@@ -19,7 +19,7 @@ export class ContributePage {
   customAmount: string;
 
   constructor(
-    private capabilitiesService: CapabilitiesService,
+    public capabilitiesService: CapabilitiesService,
     private utilService: UtilService,
     private paymentsService: PaymentsService,
     private toastCtrl: ToastController
