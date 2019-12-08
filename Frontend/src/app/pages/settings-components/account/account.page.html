@@ -156,7 +156,7 @@
       <p>{{capabilitySubscriptions['highResImages']?.enabled ? 'Enabled' : 'Not enabled'}}</p>
       <p *ngIf="capabilitySubscriptions['highResImages'] && capabilitySubscriptions['highResImages'].expires !== -1">
         {{capabilitySubscriptions['highResImages'].expires ? capabilitySubscriptions['highResImages'].expires : 'Never Expires'}}
-        <span *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if monthly)</span>
+        <span *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if subscribed monthly)</span>
       </p>
     </ion-label>
   </ion-item>
@@ -167,7 +167,7 @@
       <p>{{capabilitySubscriptions['multipleImages']?.enabled ? 'Enabled' : 'Not enabled'}}</p>
       <p *ngIf="capabilitySubscriptions['multipleImages'] && capabilitySubscriptions['multipleImages'].expires !== -1">
         {{capabilitySubscriptions['multipleImages'].expires ? capabilitySubscriptions['multipleImages'].expires : 'Never Expires'}}
-        <span *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if monthly)</span>
+        <span *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if subscribed monthly)</span>
       </p>
     </ion-label>
   </ion-item>
