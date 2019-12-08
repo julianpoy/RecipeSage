@@ -136,6 +136,45 @@
   <br /><br />
 
   <ion-item lines="none">
+    <ion-icon name="heart" slot="start"></ion-icon>
+    <ion-label>
+      Bonus Feature Status
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <p>
+        <a [routerLink]="contributePath">Contributors</a> unlock certain features that are costly to host:
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>High Resolution Images</h2>
+      <p>{{capabilitySubscriptions['highResImages']?.enabled ? 'Enabled' : 'Not enabled'}}</p>
+      <p *ngIf="capabilitySubscriptions['highResImages'] && capabilitySubscriptions['highResImages'].expires !== -1">
+        {{capabilitySubscriptions['highResImages'].expires ? capabilitySubscriptions['highResImages'].expires : 'Never Expires'}}
+        <span *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if monthly)</span>
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap">
+    <ion-label>
+      <h2>Multiple Images Per Recipe</h2>
+      <p>{{capabilitySubscriptions['multipleImages']?.enabled ? 'Enabled' : 'Not enabled'}}</p>
+      <p *ngIf="capabilitySubscriptions['multipleImages'] && capabilitySubscriptions['multipleImages'].expires !== -1">
+        {{capabilitySubscriptions['multipleImages'].expires ? capabilitySubscriptions['multipleImages'].expires : 'Never Expires'}}
+        <span *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].enabled">(this will update automatically if monthly)</span>
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br />
+
+  <ion-item lines="none">
     <ion-icon name="warning" color="danger" slot="start"></ion-icon>
     <ion-label>
       Danger Zone!

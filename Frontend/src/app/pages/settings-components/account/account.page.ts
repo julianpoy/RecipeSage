@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { ToastController, AlertController, NavController } from '@ionic/angular';
 
+import { formatRelative } from 'date-fns';
+
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'page-account',
@@ -13,6 +16,7 @@ import { RecipeService } from '@/services/recipe.service';
 })
 export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
+  contributePath: string = RouteMap.ContributePage.getPath();
 
   account: any = {
     password: '123456'
@@ -24,6 +28,8 @@ export class AccountPage {
   emailChanged = false;
   passwordChanged = false;
 
+  capabilitySubscriptions: any = {};
+
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
@@ -31,13 +37,15 @@ export class AccountPage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
-    public userService: UserService) {
+    public userService: UserService,
+    public capabilitiesService: CapabilitiesService) {
 
     const loading = this.loadingService.start();
 
     Promise.all([
       this.userService.me(),
       this.userService.myStats(),
+      this.capabilitiesService.updateCapabilities()
     ]).then(([account, stats]) => {
       loading.dismiss();
 
@@ -47,6 +55,13 @@ export class AccountPage {
       this.stats = stats;
       this.stats.createdAt = this.utilService.formatDate(stats.createdAt, { now: true });
       this.stats.lastLogin = stats.lastLogin ? this.utilService.formatDate(stats.lastLogin, { now: true }) : this.stats.createdAt;
+
+      Object.keys(this.capabilitiesService.capabilities).map(capabilityName => {
+        this.capabilitySubscriptions[capabilityName] = {
+          enabled: this.capabilitiesService.capabilities[capabilityName],
+          expires: this.getExpiryForCapability(capabilityName)
+        };
+      });
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {
@@ -70,6 +85,31 @@ export class AccountPage {
     });
   }
 
+  getSubscriptionForCapability(capabilityName: string) {
+    if (!this.account || !this.account.subscriptions) return null;
+
+    try {
+      const matchingSubscriptions = this.account.subscriptions
+        .filter(subscription => subscription.capabilities.includes(capabilityName))
+        .sort((a, b) => {
+          if (a.expires == null) return -1;
+          if (b.expires == null) return 1;
+          return new Date(a.expires) < new Date(b.expires);
+        });
+      if (matchingSubscriptions) return matchingSubscriptions[0];
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  getExpiryForCapability(capabilityName: string) {
+    const subscription = this.getSubscriptionForCapability(capabilityName);
+    if (!subscription) return -1;
+    if (!subscription.expires) return false;
+
+    const expires = new Date(subscription.expires);
+    return `${new Date(subscription.expires) < new Date() ? 'Expired ' : 'Enabled until '}${formatRelative(expires, new Date())}`;
+  }
 
   async saveName() {
     if (!this.account.name || this.account.name.length === 0) {
