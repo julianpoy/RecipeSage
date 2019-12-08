@@ -75,7 +75,7 @@ jobs:
           key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
       - run:
           name: install-npm-frontend
-          command: 'cd Frontend && npm install'
+          command: 'cd Frontend && npm install && npm install -g ionic'
       - save_cache:
           key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
           paths:
