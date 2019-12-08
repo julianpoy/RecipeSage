@@ -9,6 +9,7 @@ import { RouteMap } from '@/services/util.service';
 })
 export class ContributeCancelPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
+  contributePath: string = RouteMap.ContributePage.getPath();
 
   constructor() {}
 }

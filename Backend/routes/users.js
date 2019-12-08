@@ -24,7 +24,14 @@ router.get(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  function(req, res, next) {
+  async function(req, res, next) {
+
+  const subscriptions = (await SubscriptionService.subscriptionsForUser(res.locals.session.userId, true)).map(subscription => {
+    return {
+      expires: subscription.expires,
+      capabilities: SubscriptionService.capabilitiesForSubscription(subscription.name)
+    };
+  });
 
   // Manually construct fields to avoid sending sensitive info
   var user = {
@@ -32,7 +39,8 @@ router.get(
     name: res.locals.user.name,
     email: res.locals.user.email,
     createdAt: res.locals.user.createdAt,
-    updatedAt: res.locals.user.updatedAt
+    updatedAt: res.locals.user.updatedAt,
+    subscriptions
   };
 
   res.status(200).json(user);
