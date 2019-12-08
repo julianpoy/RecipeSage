@@ -86,7 +86,7 @@ jobs:
           command: cd Frontend && npm run lint
       - run: # build frontend
           name: build-frontend
-          command: cd Frontend && npm run build
+          command: cd Frontend && ionic build --prod
 workflows:
   version: 2
   build_and_test:
