@@ -9,6 +9,7 @@ import { RouteMap } from '@/services/util.service';
 })
 export class ContributeThankYouPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
+  accountPath: string = RouteMap.AccountPage.getPath();
 
   constructor() {}
 }
