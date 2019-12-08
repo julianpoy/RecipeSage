@@ -7,7 +7,7 @@
     "ng": "ng",
     "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
     "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest && npm run compress",
-    "build": "ng build",
+    "build": "ionic build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
