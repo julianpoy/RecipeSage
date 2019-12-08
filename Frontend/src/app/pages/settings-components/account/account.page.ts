@@ -294,6 +294,7 @@ export class AccountPage {
       buttons: [
         {
           text: 'Yes, continue',
+          cssClass: 'alertDanger',
           handler: () => {
             const loading = this.loadingService.start();
 
