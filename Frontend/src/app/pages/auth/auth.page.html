@@ -58,9 +58,7 @@
         </div>
       </div>
 
-      <div>
-        <p *ngIf="!showLogin">By clicking Create Account, you agree to our <a href="" (click)="showLegal($event)">Terms</a></p>
-      </div>
+      <tos-clickwrap-agreement [actionTitle]="showLogin ? 'logging in' : 'creating an account'"></tos-clickwrap-agreement>
 
       <div class="ion-padding">
       	<ion-button expand="block" (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</ion-button>

@@ -11,6 +11,8 @@ var Recipe = require('./models').Recipe;
 var FCMToken = require('./models').FCMToken;
 var Label = require('./models').Label;
 var Recipe_Label = require('./models').Recipe_Label;
+var Recipe_Image = require('./models').Recipe_Image;
+var Image = require('./models').Image;
 
 var UtilService = require('./services/util');
 
@@ -214,8 +216,6 @@ async function main() {
             if (!runConfig.multipleImages) imageRefs.splice(1); // Remove all but first image
 
             return Promise.all(lcbRecipe.imageRefs.map(imageRef => {
-              const imageRef = lcbRecipe.imageRefs[0];
-
               if (imageRef._text) {
                 return UtilService.sendFileToS3(Buffer.from(imageRef._text, 'base64'), true).then(image => {
                   lcbRecipe.images.push(image);
@@ -244,9 +244,10 @@ async function main() {
 
       const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
-        pendingRecipeImages.push(...pendingRecipes[idx].images.map(image => ({
+        pendingRecipeImages.push(...pendingRecipes[idx].images.map((image, idx) => ({
           image,
-          recipeId: recipe.id
+          recipeId: recipe.id,
+          order: idx // This may need to be improved - currently it just depends on which image finishes uploading first
         })));
 
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
@@ -275,7 +276,7 @@ async function main() {
       }))
 
       const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
-        userId,
+        userId: runConfig.userId,
         location: p.image.location,
         key: p.image.key,
         json: p.image
@@ -286,7 +287,8 @@ async function main() {
 
       await Recipe_Image.bulkCreate(pendingRecipeImages.map((p, idx) => ({
         recipeId: p.recipeId,
-        imageId: savedImages[idx].id
+        imageId: savedImages[idx].id,
+        order: p.order
       })), {
         transaction: t
       });

@@ -5,24 +5,26 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <!-- <ion-title>Contribute!</ion-title> -->
+    <ion-title>We need your help!</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content class="ion-padding ion-text-center">
-  <p class="headline">No Amount is Too Little!</p>
+  <p class="headline">We need your help!</p>
 
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
     <p>
-      Every contribution helps, no matter how much!
+      RecipeSage is donation based - every contribution helps!
     </p>
 
+    <br />
+
     <p>
-      We don't get many donations, and this is a fairly small platform.
+      Unfortunately, RecipeSage doesn't get many donations since it is a fairly small platform.
     </p>
 
     <p>
@@ -30,12 +32,12 @@
     </p>
 
     <p>
-      Please reconsider - any amount is appreciated!
+      Please reconsider - your contribution is truly appreciated!
     </p>
 
     <a
       class="donate monthly-paypal"
-      href="/#/contribute">
+      [routerLink]="contributePath">
       Contribute
     </a>
     <br />

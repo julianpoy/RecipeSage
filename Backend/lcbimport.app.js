@@ -13,6 +13,8 @@ var Recipe = require('./models').Recipe;
 var FCMToken = require('./models').FCMToken;
 var Label = require('./models').Label;
 var Recipe_Label = require('./models').Recipe_Label;
+var Recipe_Image = require('./models').Recipe_Image;
+var Image = require('./models').Image;
 
 var UtilService = require('./services/util');
 
@@ -427,9 +429,10 @@ async function main() {
       const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
         if (!runConfig.multipleImages) pendingRecipes[idx].images.splice(1);
-        pendingRecipeImages.push(...pendingRecipes[idx].images.map(image => ({
+        pendingRecipeImages.push(...pendingRecipes[idx].images.map((image, idx) => ({
           image: image,
-          recipeId: recipe.id
+          recipeId: recipe.id,
+          order: idx // This may need to be improved - currently it just depends on which image finishes uploading first
         })));
 
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
@@ -439,7 +442,7 @@ async function main() {
       })
 
       const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
-        userId,
+        userId: runConfig.userId,
         location: p.image.location,
         key: p.image.key,
         json: p.image
@@ -450,7 +453,8 @@ async function main() {
 
       await Recipe_Image.bulkCreate(pendingRecipeImages.map((p, idx) => ({
         recipeId: p.recipeId,
-        imageId: savedImages[idx].id
+        imageId: savedImages[idx].id,
+        order: p.order
       })), {
         transaction: t
       });

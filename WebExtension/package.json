@@ -1,0 +1,12 @@
+{
+  "name": "rs-webextension",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "build": "rm -rf dist; mkdir -p dist && cd src && zip ../dist/rs-we.zip ./* ./**/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julian Poyourow",
+  "license": ""
+}

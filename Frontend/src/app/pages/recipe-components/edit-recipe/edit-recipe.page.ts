@@ -291,4 +291,9 @@ export class EditRecipePage {
     this.images.splice(imgIdx, 1); // Remove
     this.images.splice(newImgIdx, 0, image); // Insert
   }
+
+  removeImage(image) {
+    const imgIdx = this.images.indexOf(image);
+    this.images.splice(imgIdx, 1);
+  }
 }

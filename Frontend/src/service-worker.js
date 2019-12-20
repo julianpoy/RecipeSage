@@ -47,7 +47,10 @@ importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 
 firebase.initializeApp({
-  'messagingSenderId': '1064631313987'
+  appId: '1:1064631313987:android:b6ca7a14265a6a01',
+  apiKey: 'AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0',
+  projectId: 'chef-book',
+  messagingSenderId: '1064631313987'
 });
 
 const messaging = firebase.messaging();

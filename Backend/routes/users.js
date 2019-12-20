@@ -10,7 +10,7 @@ var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
-var Recipe_Image = require('../models').Recipe_Image;
+var Image = require('../models').Image;
 var Message = require('../models').Message;
 var Friendship = require('../models').Friendship;
 
@@ -28,6 +28,13 @@ router.get(
 
   const user = await User.findByPk(res.locals.session.userId);
 
+  const subscriptions = (await SubscriptionService.subscriptionsForUser(res.locals.session.userId, true)).map(subscription => {
+    return {
+      expires: subscription.expires,
+      capabilities: SubscriptionService.capabilitiesForSubscription(subscription.name)
+    };
+  });
+
   // Manually construct fields to avoid sending sensitive info
   res.status(200).json({
     id: user.id,
@@ -37,7 +44,8 @@ router.get(
     profileImageId: user.profileImageId,
     profileVisibility: user.profileVisibility,
     createdAt: user.createdAt,
-    updatedAt: user.updatedAt
+    updatedAt: user.updatedAt,
+    subscriptions
   });
 });
 
@@ -322,14 +330,14 @@ router.get(
         userId
       }
     }),
-    Recipe_Image.count({
+    Recipe.count({
+      where: {
+        userId
+      },
       include: [{
-        model: Recipe,
-        as: 'recipes',
-        attributes: [],
-        where: {
-          userId
-        }
+        model: Image,
+        as: "images",
+        required: true
       }]
     }),
     Message.count({

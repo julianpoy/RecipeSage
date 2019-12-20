@@ -15,9 +15,9 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card>
+  <ion-card class="ion-no-margin">
     <ion-item lines="none">
-      <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
+      <ion-thumbnail class="ion-margin-top" *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
         <img src="{{ recipe.images[0].location }}">
       </ion-thumbnail>
 
@@ -129,7 +129,7 @@
       </div>
     </div>
 
-    <div *ngIf="recipe.notes">
+    <div *ngIf="recipe.notes" class="ion-margin-top">
       <ion-item lines="none">
         <ion-icon name="paper" slot="start" size="large"></ion-icon>
         <ion-label>
@@ -141,10 +141,9 @@
           <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
         </ion-label>
       </ion-item>
-      <br />
     </div>
 
-    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-no-margin" lines="none">
+    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-margin-top" lines="none">
       <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
       <ion-label>
         <p>Labels</p>
@@ -216,11 +215,13 @@
 
     <br />
 
-    <ion-item>
+    <ion-item lines="full">
       <ion-label>
         <p>
-          Created {{ prettyDateTime(recipe.createdAt) }}<br />
-          Last edited {{ prettyDateTime(recipe.updatedAt) }}
+          <i>
+            Created {{ prettyDateTime(recipe.createdAt) }}<br />
+            Last edited {{ prettyDateTime(recipe.updatedAt) }}
+          </i>
         </p>
       </ion-label>
     </ion-item>
