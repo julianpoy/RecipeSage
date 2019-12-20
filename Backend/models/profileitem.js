@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ProfileItem.associate = function(models) {
     ProfileItem.belongsTo(models.User, {
+      as: 'user',
       foreignKey: {
         name: 'userId',
         allowNull: false
@@ -22,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ProfileItem.belongsTo(models.Label, {
+      as: 'label',
       foreignKey: {
         name: 'labelId',
         allowNull: true
@@ -30,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ProfileItem.belongsTo(models.Recipe, {
+      as: 'recipe',
       foreignKey: {
         name: 'recipeId',
         allowNull: true
