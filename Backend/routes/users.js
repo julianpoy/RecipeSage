@@ -10,9 +10,11 @@ var User = require('../models').User;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
+var Label = require('../models').Label;
 var Image = require('../models').Image;
 var Message = require('../models').Message;
 var Friendship = require('../models').Friendship;
+var ProfileItem = require('../models').ProfileItem;
 
 // Service
 var SessionService = require('../services/sessions');
@@ -131,7 +133,7 @@ router.get(
   '/profile',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const profileItems = await ProfileItem.find({
+    const profileItems = await ProfileItem.findAll({
       where: {
         userId: res.locals.session.userId
       },
@@ -193,7 +195,7 @@ router.get(
       hasPendingFriendInvite = !!pendingFriendship;
     }
 
-    const profileItems = await ProfileItem.find({
+    const profileItems = await ProfileItem.findAll({
       where: {
         userId: profileUserId,
         ...(userIsFriend ? {} : { visibility: "public" })
