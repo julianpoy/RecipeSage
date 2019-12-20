@@ -42,6 +42,9 @@ export class MessagingService {
 
       console.log('Has service worker registration. Beginning setup.');
       const config = {
+        appId: '1:1064631313987:android:b6ca7a14265a6a01',
+        apiKey: 'AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0',
+        projectId: 'chef-book',
         messagingSenderId: '1064631313987'
       };
       firebase.initializeApp(config);
