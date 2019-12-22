@@ -36,7 +36,7 @@
   <ion-searchbar
     *ngIf="folder === 'main'"
     (ionClear)="search('')"
-    (keyup.enter)="search($event.target.value); $event.target.blur()"
+    (keydown.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
 
   <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
