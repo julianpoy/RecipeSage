@@ -1,9 +1,6 @@
 var admin = require("firebase-admin");
 var Raven = require('raven');
 
-// DB
-var FCMToken = require('../models').FCMToken;
-
 var serviceAccount = require("../config/firebase-credentials.json");
 
 admin.initializeApp({
@@ -29,6 +26,8 @@ exports.sendMessage = (token, payload) => {
 
   return admin.messaging().send(message).catch(err => {
     if (invalidFcmTokenErrors.indexOf(err.errorInfo.code) > -1) {
+      const FCMToken = require('../models').FCMToken;
+
       return FCMToken.destroy({
         where: {
           token
