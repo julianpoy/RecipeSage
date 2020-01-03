@@ -12,18 +12,39 @@ module.exports = (sequelize, DataTypes) => {
     Friendship.belongsTo(models.User, {
       foreignKey: {
         name: 'userId',
-        allowNull: false
+        allowNull: false,
       },
+      as: 'user',
       onDelete: 'CASCADE',
     });
 
     Friendship.belongsTo(models.User, {
       foreignKey: {
         name: 'friendId',
-        allowNull: false
+        allowNull: false,
       },
+      as: 'friend',
       onDelete: 'CASCADE',
     });
   };
+
+  Friendship.areUsersFriends = async function (userId, friendId) {
+    const outgoingFriendship = await Friendship.findOne({
+      where: {
+        userId,
+        friendId
+      }
+    });
+
+    const incomingFriendship = await Friendship.findOne({
+      where: {
+        userId: friendId,
+        friendId: userId // Reverse relationship
+      }
+    });
+
+    return outgoingFriendship && incomingFriendship;
+  }
+
   return Friendship;
 };

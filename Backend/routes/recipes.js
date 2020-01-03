@@ -13,6 +13,8 @@ var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
 var Image = require('../models').Image;
 var Recipe_Image = require('../models').Recipe_Image;
+var Friendship = require('../models').Friendship;
+var ProfileItem = require('../models').ProfileItem;
 
 // Service
 var MiddlewareService = require('../services/middleware');
@@ -177,7 +179,46 @@ router.get(
   '/by-page',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  async (req, res, next) => {
+
+  let userId = res.locals.session.userId;
+  let folder = req.query.folder || 'main';
+  let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
+
+  if (req.query.userId) {
+    const user = await User.findByPk(req.query.userId);
+    userId = user.id;
+
+    const userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
+
+    let labelId;
+    if (labelFilter.length > 1) {
+      const tooManyLabelsErr = new Error("Can view maximum 1 label at a time from another user's profile");
+      tooManyLabelsErr.status = 400;
+      return next(tooManyLabelsErr);
+    } else if (labelFilter.length > 0) {
+      const label = await Label.findOne({
+        where: {
+          title: labelFilter[0]
+        }
+      });
+      labelId = label.id;
+    }
+
+    const profileItem = await ProfileItem.findOne({
+      where: {
+        userId,
+        ...(userIsFriend ? {} : { visibility: "public" }),
+        ...(labelId ? { type: "label", labelId } : { type: "all-recipes" })
+      }
+    });
+
+    if (!profileItem) {
+      const profileItemNotFound = new Error("Profile item not found or not visible");
+      profileItemNotFound.status = 404;
+      return next(profileItemNotFound);
+    }
+  }
 
   let sort = '"Recipe"."title" ASC';
   if (req.query.sort) {
@@ -200,7 +241,6 @@ router.get(
     }
   }
 
-  let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
   let labelFilterMap = labelFilter.reduce((acc, e, idx) => {
     acc[`labelFilter${idx}`] = e;
     return acc;
@@ -218,7 +258,7 @@ router.get(
   let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
   let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
   let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
-  if (req.query.folder === 'inbox') fields += `, ${fromUserSelect}`;
+  if (folder === 'inbox') fields += `, ${fromUserSelect}`;
 
   let countQuery = labelFilter.length > 0 ?
     `SELECT "Recipe".id
@@ -254,7 +294,7 @@ router.get(
     INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
     LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
     LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-    ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
+    ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`
     :
     `SELECT ${fields} FROM (SELECT "Recipe".id
@@ -270,7 +310,7 @@ router.get(
     LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
     LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
     LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-    ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
+    ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`;
 
     console.log(fetchQuery);
@@ -278,8 +318,8 @@ router.get(
   let countQueryOptions = {
     type: SQ.QueryTypes.SELECT,
     bind: {
-      userId: res.locals.session.userId,
-      folder: req.query.folder || 'main',
+      userId,
+      folder,
       ...labelFilterMap
     }
   }
@@ -288,8 +328,8 @@ router.get(
     type: SQ.QueryTypes.SELECT,
     hasJoin: true,
     bind: {
-      userId: res.locals.session.userId,
-      folder: req.query.folder || 'main',
+      userId,
+      folder,
       limit: Math.min(parseInt(req.query.count) || 100, 500),
       offset: req.query.offset || 0,
       ...labelFilterMap
@@ -304,7 +344,7 @@ router.get(
     }]
   }
 
-  if (req.query.folder === 'inbox') fetchQueryOptions.include.push({
+  if (folder === 'inbox') fetchQueryOptions.include.push({
     model: User,
     as: 'fromUser',
     attributes: fromUserAttributes

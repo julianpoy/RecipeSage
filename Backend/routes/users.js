@@ -133,6 +133,8 @@ router.get(
   '/profile',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
+    const user = await User.findByPk(res.locals.session.userId);
+
     const profileItems = await ProfileItem.findAll({
       where: {
         userId: res.locals.session.userId
@@ -147,6 +149,7 @@ router.get(
     });
 
     res.status(200).json({
+      name: user.name,
       profileItems
     });
   }
@@ -177,11 +180,7 @@ router.get(
         where: {
           userId: profileUserId,
           friendId: res.locals.session.userId
-        },
-        include: [{
-          model: User,
-          attributes: ['name']
-        }]
+        }
       });
       userIsFriend = !!friendship;
 
@@ -225,7 +224,12 @@ router.get('/friends',
     const outgoingFriendships = await Friendship.findAll({
       where: {
         userId: myUserId
-      }
+      },
+      include: [{
+        model: User,
+        as: 'friend',
+        attributes: ['id', 'name', 'email']
+      }]
     });
 
     const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce((acc, outgoingFriendship) => (
@@ -235,7 +239,12 @@ router.get('/friends',
     const incomingFriendships = await Friendship.findAll({
       where: {
         friendId: res.locals.session.userId
-      }
+      },
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name', 'email']
+      }]
     });
 
     const incomingFriendshipsByOtherUserId = incomingFriendships.reduce((acc, incomingFriendship) => (
@@ -247,18 +256,23 @@ router.get('/friends',
 
       if (outgoingFriendshipsByOtherUserId[friendId] && incomingFriendshipsByOtherUserId[friendId]) {
         // Friendship both ways. They are friends!
-        acc.friends.push({
-          friendId
-        });
+        if (!acc.friends.find(friendship => friendship.friendId === friendId)) { // Remove dupes
+          acc.friends.push({
+            friendId,
+            otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
+          });
+        }
       } else if (outgoingFriendshipsByOtherUserId[friendId]) {
         // We're requesting them as a friend!
         acc.outgoingRequests.push({
-          friendId
+          friendId,
+          otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
         });
       } else if (incomingFriendshipsByOtherUserId[friendId]) {
         // They're requesting us as a friend!
         acc.incomingRequests.push({
-          friendId
+          friendId,
+          otherUser: incomingFriendshipsByOtherUserId[friendId].user
         });
       }
 

@@ -11,13 +11,7 @@
 <ion-content>
   <br />
 
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
-      <p>
-        Here you can update and change aspects about your profile
-      </p>
-    </ion-label>
-  </ion-item>
+  <h3>{{ accountProfile?.name }}</h3>
 
   <br />
 
@@ -29,15 +23,15 @@
   </ion-item>
 
   <ion-list>
-    <div *ngFor="let item of profileItems">
-      <ion-item *ngIf="item.type == 'link'" button>
+    <div *ngFor="let item of accountProfile?.profileItems">
+      <ion-item *ngIf="item.type == 'recipe'" button>
         <ion-label>{{item.title}}</ion-label>
-        <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge>
+        <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
       </ion-item>
 
-      <ion-item *ngIf="item.type == 'link'" button>
+      <ion-item *ngIf="item.type == 'label'" button>
         <ion-label>{{item.title}}</ion-label>
-        <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge>
+        <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
       </ion-item>
     </div>
   </ion-list>

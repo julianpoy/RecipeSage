@@ -1,37 +1,89 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
     <ion-title>People</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="addLabelToSelectedRecipes()">
+        <ion-icon slot="start" name="contact"></ion-icon>
+        My Profile
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item-divider>
+    <ion-label>
+      My Profile
+    </ion-label>
+  </ion-item-divider>
+
+  <null-state *ngIf="!accountInfo?.enableProfile">
+    <ion-icon name="contact" class="big-icon" virtualSlot="header"></ion-icon>
+    <ion-label virtualSlot="body">
+      <p>
+        You haven't set up a profile.
+        <br /> Creating a profile allows you to share collections of recipes with friends.
+        <br />
+        <br />
+        <ion-button (click)="editProfile()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Create
+        </ion-button>
+      </p>
+    </ion-label>
+  </null-state>
+  
   <br />
 
+  <ion-item-divider>
+    <ion-label>
+      Friends & Invites
+    </ion-label>
+  </ion-item-divider>
   <ion-list>
-    <ion-item button>
-      <ion-label>My profile</ion-label>
-    </ion-item>
     <ion-list-header *ngIf="friendships?.incomingRequests?.length > 0">
       Friend invites
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.incomingRequests" button>
+    <ion-item *ngFor="let friendship of friendships?.incomingRequests" button (click)="openProfile(friendship.otherUser.id)">
       <ion-label>{{friendship.otherUser.name}}</ion-label>
+      <ion-button slot="end" (click)="addFriend(friendship.friendId)">Accept</ion-button>
+      <ion-button slot="end" color="danger">Decline</ion-button>
     </ion-item>
     <ion-list-header *ngIf="friendships?.outgoingRequests?.length > 0">
       Pending friend requests
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button>
+    <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button (click)="openProfile(friendship.otherUser.id)">
       <ion-label>{{friendship.otherUser.name}}</ion-label>
+      <ion-button slot="end" color="danger">Cancel</ion-button>
     </ion-item>
     <ion-list-header *ngIf="friendships?.friends?.length > 0">
       Friends
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.friends" button>
+    <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.id)">
       <ion-label>{{friendship.otherUser.name}}</ion-label>
+      <ion-button slot="end" color="danger">Unfriend</ion-button>
     </ion-item>
+
+    <null-state *ngIf="friendships?.incomingRequests?.length == 0 && friendships?.outgoingRequests?.length == 0 && friendships?.friends?.length == 0">
+      <ion-icon name="people" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          You don't have any friends added.
+          <br /> Adding someone as a friend allows you to collaborate on recipes, meal plans, and shopping lists.
+          <br /> To add someone, click the search icon.
+        </p>
+      </ion-label>
+    </null-state>
   </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="findProfile()" color="primary">
+      <ion-icon name="search"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
