@@ -239,7 +239,7 @@ export class HomePage implements AfterViewInit {
   }
 
   openRecipe(recipe, event?) {
-    if (event && event.srcEvent && (event.srcEvent.metaKey || event.srcEvent.ctrlKey)) {
+    if (event && (event.metaKey || event.ctrlKey)) {
       window.open(`#/recipe/${recipe.id}`);
       return;
     }
