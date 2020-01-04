@@ -42,16 +42,22 @@ function parseIngredients(ingredients, scale, boldify) {
     isHeader: false
   }));
 
-  // var measurementRegexp = /\d+(.\d+(.\d+)?)?/;
   var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+
+  // TODO: Replace measurementRegexp with this:
+  // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
+
   // Starts with [, anything inbetween, ends with ]
   var headerRegexp = /^\[.*\]$/;
 
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].content.trim(); // Trim only spaces (no newlines)
 
-    var measurementMatches = line.match(measurementRegexp);
     var headerMatches = line.match(headerRegexp);
+
+    const ingredientPartDelimiters = line.match(/ \+|plus /g); // Multipart measurements (1 cup + 1 tablespoon)
+    const ingredientParts = line.split(/ \+|plus /); // Multipart measurements (1 cup + 1 tablespoon)
+    var measurementMatches = ingredientParts.map(linePart => linePart.match(measurementRegexp));
 
     if (headerMatches && headerMatches.length > 0) {
       var header = headerMatches[0];
@@ -60,30 +66,51 @@ function parseIngredients(ingredients, scale, boldify) {
       if (boldify) headerContent = `<b class="sectionHeader">${headerContent}</b>`;
       lines[i].content = headerContent;
       lines[i].isHeader = true;
-    } else if (measurementMatches && measurementMatches.length > 0) {
-      var measurement = measurementMatches[0];
+    } else if (measurementMatches.find(el => el && el.length > 0)) {
+      const updatedIngredientParts = measurementMatches.map((el, idx) => {
+        if (!el) return ingredientParts[idx];
 
-      try {
-        var measurementParts = measurement.split(/-|to/);
+        try {
+          var measurement = el[0];
 
-        for (var j = 0; j < measurementParts.length; j++) {
-          // console.log(measurementParts[j].trim())
-          var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
-
-          // Preserve original fraction format if entered
-          if (measurementParts[j].indexOf('/') > -1) {
-            scaledMeasurement = scaledMeasurement.toFraction(true);
+          const measurementPartDelimiters = measurement.match(/-|to/g);
+          const measurementParts = measurement.split(/-|to/);
+  
+          for (var j = 0; j < measurementParts.length; j++) {
+            // console.log(measurementParts[j].trim())
+            var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
+  
+            // Preserve original fraction format if entered
+            if (measurementParts[j].indexOf('/') > -1) {
+              scaledMeasurement = scaledMeasurement.toFraction(true);
+            }
+  
+            if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
+            else measurementParts[j] = scaledMeasurement;
           }
 
-          if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
-          else measurementParts[j] = scaledMeasurement;
-        }
+          let updatedMeasurement;
+          if (measurementPartDelimiters) {
+            updatedMeasurement = measurementParts.reduce((acc, measurementPart, idx) => acc + measurementPart + (measurementPartDelimiters[idx] || ""), "");
+          } else {
+            updatedMeasurement = measurementParts.join(' to ');
+          }
 
-        lines[i].content = lines[i].content.replace(measurementRegexp, measurementParts.join(' to '));
-        lines[i].isHeader = false;
-      } catch (e) {
-        console.log("failed to parse", e)
+          return ingredientParts[idx].replace(measurementRegexp, updatedMeasurement);
+        } catch (e) {
+          console.error("failed to parse", e)
+          return ingredientParts[idx];
+        }
+      });
+
+      if (ingredientPartDelimiters) {
+        lines[i].content = updatedIngredientParts.reduce((acc, ingredientPart, idx) => acc + ingredientPart + (ingredientPartDelimiters[idx] || ""), "");
+      } else {
+        lines[i].content = updatedIngredientParts.join(" + ");
       }
+
+      lines[i].isHeader = false;
+
     }
   }
 
