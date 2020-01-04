@@ -374,3 +374,33 @@ exports.executeInChunks = async (cbs, chunkSize) => {
     })
   }, Promise.resolve())
 }
+
+const fractionMatchers = { // Regex & replacement value by charcode
+  189: [/\u00BD/g, '1/2'], // ½  \u00BD;
+  8531: [/\u2153/g, '1/3'], // ⅓  \u2153;
+  8532: [/\u2154/g, '2/3'], // ⅔  \u2154;
+  188: [/\u00BC/g, '1/4'], // ¼  \u00BC;
+  190: [/\u00BE/g, '3/4'], // ¾  \u00BE;
+  8533: [/\u2155/g, '1/5'], // ⅕  \u2155;
+  8534: [/\u2156/g, '2/5'], // ⅖  \u2156;
+  8535: [/\u2157/g, '3/5'], // ⅗  \u2157;
+  8536: [/\u2158/g, '4/5'], // ⅘  \u2158;
+  8537: [/\u2159/g, '1/6'], // ⅙  \u2159;
+  8538: [/\u215A/g, '5/6'], // ⅚  \u215A;
+  8528: [/\u2150/g, '1/7'], // ⅐  \u2150;
+  8539: [/\u215B/g, '1/8'], // ⅛  \u215B;
+  8540: [/\u215C/g, '3/8'], // ⅜  \u215C;
+  8541: [/\u215D/g, '5/8'], // ⅝  \u215D;
+  8542: [/\u215E/g, '7/8'], // ⅞  \u215E;
+  8529: [/\u2151/g, '1/9'], // ⅑  \u2151;
+  8530: [/\u2152/g, '1/10'], // ⅒ \u2152;
+};
+
+const fractionMatchRegexp = new RegExp(Object.values(fractionMatchers).map(matcher => matcher[0].source).join('|'), 'g');
+
+exports.replaceFractionsInText = rawText => {
+  return rawText.replace(fractionMatchRegexp, match => {
+    const matcher = fractionMatchers[match.charCodeAt(0)];
+    return matcher ? matcher[1] : match; // Fallback on original value if not found
+  });
+}

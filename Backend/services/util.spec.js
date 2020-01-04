@@ -35,7 +35,8 @@ let {
   sendFileToS3,
   dispatchImportNotification,
   dispatchMessageNotification,
-  findFilesByRegex
+  findFilesByRegex,
+  replaceFractionsInText
 } = require('../services/util');
 
 let UtilService = require('../services/util')
@@ -641,5 +642,23 @@ describe('utils', () => {
         expect(Object.keys(stubMessageCall.recipe.images[0])).to.have.length(1)
       })
     })
+  });
+
+  describe('replaceFractionsInText', () => {
+    it('replaces single instance alone', () => {
+      expect(replaceFractionsInText('½')).to.equal('1/2');
+    });
+
+    it('replaces single instance in sentence', () => {
+      expect(replaceFractionsInText('1 ½ cup')).to.equal('1 1/2 cup');
+    });
+
+    it('replaces multiple instances in sentence', () => {
+      expect(replaceFractionsInText('1 ½ cup, ⅒th strength')).to.equal('1 1/2 cup, 1/10th strength');
+    });
+
+    it('replaces multiple instances next to eachother', () => {
+      expect(replaceFractionsInText('½⅒')).to.equal('1/21/10');
+    });
   })
 });
