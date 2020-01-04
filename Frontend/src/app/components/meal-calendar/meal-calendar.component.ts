@@ -146,16 +146,19 @@ export class MealCalendarComponent {
       return comp;
     }).forEach(item => {
       item.scheduledDateObj = new Date(item.scheduled);
-      const month = item.scheduledDateObj.getMonth();
-      const day = item.scheduledDateObj.getDate();
-      this.mealsByDate[month] = this.mealsByDate[month] || {};
-      this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
-      this.mealsByDate[month][day].push(item);
+      const day = dayjs(item.scheduledDateObj);
+      this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
+      this.mealsByDate[day.year()][day.month()] = this.mealsByDate[day.year()][day.month()] || {};
+      this.mealsByDate[day.year()][day.month()][day.date()] = this.mealsByDate[day.year()][day.month()][day.date()] || [];
+      this.mealsByDate[day.year()][day.month()][day.date()].push(item);
     });
   }
 
   mealItemsByDay(day) {
-    return (this.mealsByDate[day.month()] || {})[day.date()] || [];
+    const months = this.mealsByDate[day.year()] || {};
+    const days = months[day.month()] || {};
+    const items = days[day.date()] || [];
+    return items;
   }
 
   formatItemCreationDate(plainTextDate) {
