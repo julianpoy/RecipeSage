@@ -435,9 +435,10 @@ export class RecipePage {
   private _deleteLabel(label) {
     const loading = this.loadingService.start();
 
-    label.recipeId = this.recipe.id;
-
-    this.labelService.remove(label).then(() => {
+    this.labelService.removeFromRecipe(
+      label.id,
+      this.recipe.id
+    ).then(() => {
       loading.dismiss();
 
       if (label.recipeCount === 1) {

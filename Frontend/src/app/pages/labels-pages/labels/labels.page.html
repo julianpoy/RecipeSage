@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button *ngIf="!selectionMode"></ion-menu-button>
+
+      <ion-button *ngIf="selectionMode" (click)="clearSelectedLabels()">
+        <ion-icon slot="icon-only" name="md-close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{ selectionMode ? selectedLabelIds.length + ' Selected' : 'My Labels - Manage' }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button *ngIf="selectionMode && selectedLabelIds.length > 0" (click)="deleteSelectedLabels()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #contentContainer>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item
+      (click)="selectionMode ? selectLabel(label) : manage(label)"
+      *ngFor="let label of labels" button>
+      <ion-label>{{label.title}}</ion-label>
+      <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">Selected</ion-badge>
+      <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loading">
+    <null-state *ngIf="labels.length === 0">
+      <ion-icon name="label" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          You don't have any labels yet.<br />
+          Labels can be created on the recipe details page.<br />
+          Labels only exist so long as they are assigned to at least one recipe.
+        </p>
+      </ion-label>
+    </null-state>
+  </ion-list>
+</ion-content>

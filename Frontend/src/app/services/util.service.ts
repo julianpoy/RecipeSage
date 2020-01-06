@@ -24,6 +24,10 @@ export const RouteMap = {
     getPath(folder: string) { return `/list/${folder}`; },
     path: 'list/:folder',
   },
+  LabelsPage: {
+    getPath() { return `labels`; },
+    path: 'labels',
+  },
   AboutPage: {
     getPath() { return `/about`; },
     path: 'about',
@@ -99,6 +103,22 @@ export const RouteMap = {
   AccountPage: {
     getPath() { return `/settings/account`; },
     path: 'settings/account',
+  },
+  MyProfilePage: {
+    getPath() { return `people/my-profile`; },
+    path: 'people/my-profile',
+  },
+  ProfilePage: {
+    getPath(username: string) { return `people/${username}`; },
+    path: 'people/:username',
+  },
+  PeoplePage: {
+    getPath() { return `people`; },
+    path: 'people',
+  },
+  SocialPage: {
+    getPath() { return `people`; },
+    path: 'people',
   },
   ExportPage: {
     getPath() { return `/settings/export`; },
