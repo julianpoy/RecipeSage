@@ -12,14 +12,13 @@ let zlib = require('zlib');
 // Service
 var FirebaseService = require('./firebase');
 var GripService = require('./grip');
-var config = require('../config/config.json');
 
 var s3 = new aws.S3();
 aws.config.update({
-  accessKeyId: config.aws.accessKeyId,
-  secretAccessKey: config.aws.secretAccessKey,
-  subregion: config.aws.region,
-  region: config.aws.region,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  subregion: process.env.AWS_REGION,
+  region: process.env.AWS_REGION,
 });
 
 exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
@@ -86,7 +85,7 @@ const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 exports.sendBufferToS3 = buffer => {
   let key = new Date().getTime().toString();
-  let bucket = config.aws.bucket;
+  let bucket = process.env.AWS_BUCKET;
 
   return s3.putObject({
     Bucket: bucket,
@@ -110,13 +109,13 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
     originalname: 'recipe-sage-img.jpg',
     mimetype,
     size,
-    bucket: config.aws.bucket,
+    bucket: process.env.AWS_BUCKET,
     key,
     acl: S3_DEFAULT_ACL,
     metadata: {
       fieldName: "image"
     },
-    location: 'https://' + config.aws.bucket + '.s3.' + config.aws.region + '.amazonaws.com/' + key,
+    location: 'https://' + process.env.AWS_BUCKET + '.s3.' + process.env.AWS_REGION + '.amazonaws.com/' + key,
     etag
   }
 }
@@ -177,10 +176,10 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
     multer({
       storage: multerImager({
         dirname: '/',
-        bucket: config.aws.bucket,
-        accessKeyId: config.aws.accessKeyId,
-        secretAccessKey: config.aws.secretAccessKey,
-        region: config.aws.region,
+        bucket: process.env.AWS_BUCKET,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        region: process.env.AWS_REGION,
         filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
           cb(null, Date.now())                // i.e. with a timestamp
         },                                    //
@@ -227,7 +226,7 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
 exports.deleteS3Object = key => {
   return new Promise((resolve, reject) => {
     s3.deleteObject({
-      Bucket: config.aws.bucket,
+      Bucket: process.env.AWS_BUCKET,
       Key: key
     }, (err, data) => {
       if (err) reject(err);
@@ -239,7 +238,7 @@ exports.deleteS3Object = key => {
 exports.deleteS3Objects = keys => {
   return new Promise((resolve, reject) => {
     s3.deleteObjects({
-      Bucket: config.aws.bucket,
+      Bucket: process.env.AWS_BUCKET,
       Delete: {
         Objects: keys.map(key => ({ Key: key }))
       }

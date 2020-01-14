@@ -1,20 +1,21 @@
 let elasticsearch = require('elasticsearch');
 
-var { enable, connectionString, indexPrefix } = require('../config/environment.js').elastic;
+const ENABLE = process.env.ELASTIC_ENABLE;
+const INDEX_PREFIX = process.env.ELASTIC_IDX_PREFIX;
 
 let client;
 
-if (enable) client = new elasticsearch.Client({
-  hosts: [connectionString]
+if (ENABLE) client = new elasticsearch.Client({
+  hosts: [process.env.ELASTIC_CONN]
 });
 
 let index = (index, document) => {
-  if (!enable) return Promise.resolve();
+  if (!ENABLE) return Promise.resolve();
 
   if (document.toJSON) document = document.toJSON();
 
   return client.index({
-    index: indexPrefix + index,
+    index: INDEX_PREFIX + index,
     type: index,
     id: document.id,
     body: document
@@ -22,22 +23,22 @@ let index = (index, document) => {
 };
 
 let remove = (index, docId) => {
-  if (!enable) return Promise.resolve();
+  if (!ENABLE) return Promise.resolve();
 
   return client.delete({
-    index: indexPrefix + index,
+    index: INDEX_PREFIX + index,
     type: index,
     id: docId
   });
 };
 
 let bulk = (action, index, documents) => {
-  if (!enable) return Promise.resolve();
+  if (!ENABLE) return Promise.resolve();
 
   let query = documents.reduce((acc, document) => {
     acc.push({
       [action]: {
-        _index: indexPrefix + index,
+        _index: INDEX_PREFIX + index,
         _type: index,
         _id: document.id
       }
@@ -57,10 +58,10 @@ let bulk = (action, index, documents) => {
 };
 
 let search = (index, userId, queryString) => {
-  if (!enable) throw new Error("ElasticSearch not enabled");
+  if (!ENABLE) throw new Error("ElasticSearch not enabled");
 
   return client.search({
-    index: indexPrefix + index,
+    index: INDEX_PREFIX + index,
     type: index,
     body: {
       query: {

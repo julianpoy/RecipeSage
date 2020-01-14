@@ -1,5 +1,3 @@
-var config = require('../config/config.json');
-
 var grip = require('grip');
 var expressGrip = require('express-grip');
 
@@ -8,7 +6,7 @@ expressGrip.configure({
     // pushpin config
     {
       'control_uri': 'http://localhost:5561',
-      'key': config.grip.key
+      'key': process.env.GRIP_KEY
     }
   ]
 });

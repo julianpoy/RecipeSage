@@ -1,51 +1,20 @@
+const config = {
+  username: process.env.POSTGRES_USERNAME,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE,
+  port: process.env.POSTGRES_PORT,
+  host: process.env.POSTGRES_HOST,
+  ssl: process.env.POSTGRES_SSL == "true",
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: process.env.POSTGRES_SSL == "true"
+  },
+  logging: POSTGRES_LOGGING == "true"
+};
+
 module.exports = {
-  "development": {
-    "username": process.env.RS_DEV_DB_USERNAME || "chefbook",
-    "password": process.env.RS_DEV_DB_PASSWORD || "admin",
-    "database": process.env.RS_DEV_DB_DATABASE || "chefbook",
-    "port"    : process.env.RS_DEV_DB_PORT     || "5432",
-    "host"    : process.env.RS_DEV_DB_HOST     || "127.0.0.1",
-    "ssl"     : process.env.RS_DEV_DB_SSL == "true",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": process.env.RS_DEV_DB_SSL == "true"
-    }
-  },
-  "test": {
-    "username": process.env.RS_TEST_DB_USERNAME || "chefbook",
-    "password": process.env.RS_TEST_DB_PASSWORD || "admin",
-    "database": process.env.RS_TEST_DB_DATABASE || "chefbook_test",
-    "port": process.env.RS_TEST_DB_PORT || "5432",
-    "host": process.env.RS_TEST_DB_HOST || "127.0.0.1",
-    "ssl": process.env.RS_TEST_DB_SSL == "true",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": process.env.RS_TEST_DB_SSL == "true"
-    },
-    "logging": false
-  },
-  "staging": {
-    "username": process.env.RS_STG_DB_USERNAME || "chefbook",
-    "password": process.env.RS_STG_DB_PASSWORD || null,
-    "database": process.env.RS_STG_DB_DATABASE || "chefbook",
-    "port"    : process.env.RS_STG_DB_PORT     || "5432",
-    "host"    : process.env.RS_STG_DB_HOST     || "127.0.0.1",
-    "ssl": process.env.RS_STG_DB_SSL == "true",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": process.env.RS_STG_DB_SSL == "true"
-    }
-  },
-  "production": {
-    "username": process.env.RS_PROD_DB_USERNAME || "chefbook",
-    "password": process.env.RS_PROD_DB_PASSWORD || null,
-    "database": process.env.RS_PROD_DB_DATABASE || "chefbook",
-    "port"    : process.env.RS_PROD_DB_PORT     || "5432",
-    "host"    : process.env.RS_PROD_DB_HOST     || "127.0.0.1",
-    "ssl": process.env.RS_PROD_DB_SSL == "true",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": process.env.RS_PROD_DB_SSL == "true"
-    }
-  }
+  development: config,
+  test: config,
+  staging: config,
+  production: config
 }

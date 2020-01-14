@@ -25,26 +25,14 @@ let runConfig = {
   multipleImages: process.argv.indexOf('--multipleImages') > -1,
 }
 
-var testMode = process.env.NODE_ENV === 'test';
-
-if (fs.existsSync("./config/config.json")) {
-  if (!testMode) console.log("config.json found");
-} else {
-  var content = fs.readFileSync('./config/config-template.json');
-  fs.writeFileSync('./config/config.json', content);
-  if (!testMode) console.log("config.json initialized");
-}
-var appConfig = require('./config/config.json');
-var devMode = appConfig.environment === 'dev';
-
-Raven.config(appConfig.sentry.dsn, {
-  environment: appConfig.environment,
+Raven.config(process.env.SENTRY_DSN, {
+  environment: process.env.NODE_ENV,
   release: RS_VERSION
 }).install();
 
 let logError = async err => {
   console.error(err);
-  if (!devMode) {
+  if (process.env.NODE_ENV !== 'development') {
     await new Promise(resolve => {
       Raven.captureException(err, {
         extra: {

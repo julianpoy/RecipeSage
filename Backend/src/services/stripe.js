@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.RS_STRIPE_SK);
+const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // DB
 var Op = require("sequelize").Op;
@@ -103,5 +103,5 @@ exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, succe
 };
 
 exports.validateEvent = (rawRequestBody, stripeSignature) => {
-  return stripe.webhooks.constructEvent(rawRequestBody, stripeSignature, process.env.RS_STRIPE_WEBHOOK_SECRET);
+  return stripe.webhooks.constructEvent(rawRequestBody, stripeSignature, process.env.STRIPE_WEBHOOK_SECRET);
 };
