@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
+    "start": "ionic serve --no-open --address 0.0.0.0 --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
     "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest && npm run compress",
     "build": "ionic build",
     "test": "ng test",
