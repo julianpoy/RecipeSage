@@ -7,7 +7,7 @@ var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
 
-var RS_VERSION = JSON.parse(fs.readFileSync('./package.json')).version;
+var RS_VERSION = JSON.parse(fs.readFileSync('../package.json')).version;
 
 var testMode = process.env.NODE_ENV === 'test';
 var verboseMode = process.env.VERBOSE === 'true';
@@ -20,7 +20,7 @@ if (fs.existsSync("./config/config.json")) {
   if (!testMode) console.log("config.json initialized");
 }
 var appConfig = require('./config/config.json');
-var devMode = appConfig.environment === 'dev';
+var devMode = process.env.NODE_ENV === 'development';
 
 Raven.config(appConfig.sentry.dsn, {
   environment: appConfig.environment,
@@ -63,9 +63,6 @@ app.use(bodyParser.json({
 app.use(bodyParser.urlencoded({ limit: '250MB', extended: false }));
 app.use(cookieParser());
 app.disable('x-powered-by');
-
-var frontendDir = appConfig.frontendDir || '../Frontend/www';
-app.use(express.static(path.join(__dirname, frontendDir)));
 
 app.use('/', index);
 app.use('/users', users);
