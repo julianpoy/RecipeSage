@@ -9,7 +9,7 @@ const config = {
   dialectOptions: {
     ssl: process.env.POSTGRES_SSL == "true"
   },
-  logging: POSTGRES_LOGGING == "true"
+  logging: process.env.POSTGRES_LOGGING == "true" && console.log
 };
 
 module.exports = {

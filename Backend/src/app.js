@@ -7,7 +7,7 @@ var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
 
-var RS_VERSION = JSON.parse(fs.readFileSync('../package.json')).version;
+var RS_VERSION = JSON.parse(fs.readFileSync(path.join(__dirname, '/../package.json'))).version;
 
 var testMode = process.env.NODE_ENV === 'test';
 var verboseMode = process.env.VERBOSE === 'true';
