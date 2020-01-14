@@ -29,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      - postgres
       - elasticsearch
       - pushpin
     build:
@@ -43,9 +43,9 @@ services:
       - AWS_BUCKET
       - NODE_ENV
       - VERBOSE=false
-      - POSTGRES_USERNAME
+      - POSTGRES_DB
+      - POSTGRES_USER
       - POSTGRES_PASSWORD
-      - POSTGRES_DATABASE
       - POSTGRES_PORT
       - POSTGRES_HOST
       - POSTGRES_SSL
@@ -74,7 +74,7 @@ services:
     ports:
       - "7999:7999"
       - "5560-5563:5560-5563"
-  db:
+  postgres:
     image: postgres
     restart: always
     environment:

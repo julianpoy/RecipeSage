@@ -1,7 +1,7 @@
 const config = {
-  username: process.env.POSTGRES_USERNAME,
+  username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
+  database: process.env.POSTGRES_DB,
   port: process.env.POSTGRES_PORT,
   host: process.env.POSTGRES_HOST,
   ssl: process.env.POSTGRES_SSL == "true",
