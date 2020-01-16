@@ -3,11 +3,33 @@ let elasticsearch = require('elasticsearch');
 const ENABLE = process.env.ELASTIC_ENABLE;
 const INDEX_PREFIX = process.env.ELASTIC_IDX_PREFIX;
 
+const AVAILABLE_INDEXES = [
+  'recipes'
+];
+
 let client;
 
-if (ENABLE) client = new elasticsearch.Client({
-  hosts: [process.env.ELASTIC_CONN]
-});
+const init = async () => {
+  try {
+    await client.ping();
+
+    await Promise.all(AVAILABLE_INDEXES.map(index => {
+      return client.indices.create({
+        index: INDEX_PREFIX + index
+      });
+    }));
+  } catch (e) {
+    setTimeout(init, 100);
+  }
+};
+
+if (ENABLE) {
+  client = new elasticsearch.Client({
+    hosts: [process.env.ELASTIC_CONN]
+  });
+
+  init();
+}
 
 let index = (index, document) => {
   if (!ENABLE) return Promise.resolve();
