@@ -271,10 +271,12 @@ router.get(
         return new Promise((resolve, reject) => {
           var interval = setInterval(() => {
             var loadMore = document.getElementById('loadmorelink');
-            if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display !== 'block') {
+            if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display == 'none') {
               clearInterval(interval);
 
-              let recipeURLs = [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(el => el.href)
+              let recipeURLs = [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(el => el.href);
+
+              recipeURLs = [...new Set(recipeURLs)]; // Dedupe
 
               resolve(recipeURLs)
               // return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
