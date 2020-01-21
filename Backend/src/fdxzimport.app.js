@@ -93,11 +93,24 @@ async function main() {
     let xml;
     let data;
     try {
-      xml = fs.readFileSync(xmlPath);
+      xml = fs.readFileSync(xmlPath, "utf8");
       data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
     } catch (err) {
-      err.status = 3; // Unrecognized file
-      throw err;
+      if (err.message.toLowerCase().includes("invalid attribute name")) {
+        try {
+          xml = xml.replace(/<RecipeNutrition.*\/>/g, '');
+          data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
+        } catch (err) {
+          fs.mkdirSync('/tmp/chefbook-fail-dump', { recursive: true });
+          fs.copyFileSync(xmlPath, `/tmp/chefbook-fail-dump/fdxz-fail-${Math.floor(Math.random() * 10 ** 10)}.xml`);
+          err.devmsg = "tried to replace RecipeNutrition, but failed";
+          err.status = 3; // Unrecognized file, could not parse
+          throw err;
+        }
+      } else {
+        err.status = 3; // Unrecognized file
+        throw err;
+      }
     }
 
     xml = null; // Save memory
