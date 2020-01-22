@@ -5,7 +5,7 @@ expressGrip.configure({
   gripProxies: [
     // pushpin config
     {
-      'control_uri': 'http://localhost:5561',
+      'control_uri': process.env.GRIP_URL,
       'key': process.env.GRIP_KEY
     }
   ]
