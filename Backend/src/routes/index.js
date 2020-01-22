@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-let puppeteer = require('puppeteer');
 var cors = require('cors');
 var Raven = require('raven');
 let multer = require('multer');
@@ -107,40 +106,189 @@ router.get('/deduperecipelabels', function(req, res, next) {
   }).catch(next);
 })
 
-function saveRecipes(userId, recipes) {
-  return SQ.transaction(async t => {
+const request = require('request-promise-native');
+const xmljs = require('xml-js');
+
+router.get(
+  '/scrape/pepperplate',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+
+  Raven.captureMessage('Starting import from PP API', {
+    level: 'info'
+  });
+
+  let response = await request({
+    url: "http://www.pepperplate.com/services/syncmanager5.asmx",
+    method: "POST",
+    headers: {
+      "content-type": "text/xml",
+    },
+    body: `<?xml version="1.0" encoding="utf-8"?>
+    <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+        <GenerateLoginToken xmlns="http://api.pepperplate.com/">
+          <email>${req.query.username}</email>
+          <password>${req.query.password}</password>
+        </GenerateLoginToken>
+      </soap:Body>
+    </soap:Envelope>
+    `
+  });
+
+  if (response.indexOf("<Status>UnknownEmail</Status>") > -1) {
+    return res.status(406).send("Incorrect username");
+  } else if (response.indexOf("<Status>IncorrectPassword</Status>") > -1) {
+    return res.status(406).send("Incorrect password");
+  }
+
+  const userToken = response.match(/<Token>(.*)<\/Token>/)[1];
+
+  const recipes = [];
+
+  let syncToken;
+  while (true) {
+    let response = await request({
+      url: "http://www.pepperplate.com/services/syncmanager5.asmx",
+      method: "POST",
+      headers: {
+        "content-type": "text/xml",
+      },
+      body: `<?xml version="1.0" encoding="utf-8"?>
+      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+          <RetrieveRecipes xmlns="http://api.pepperplate.com/">
+            <userToken>${userToken}</userToken>
+            ${syncToken ? `<syncToken>${syncToken}</syncToken>` : ""}
+            <count>50</count>
+          </RetrieveRecipes>
+        </soap:Body>
+      </soap:Envelope>
+      `
+    });
+
+    console.log("repeat")
+
+    const recipeJson = JSON.parse(xmljs.xml2json(response, { compact: true, spaces: 4 }));
+
+    syncToken = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["SynchronizationToken"]._text;
+
+    console.log("new sync token!", syncToken)
+
+    const items = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["Items"]["RecipeSync"];
+
+    if (items && items.length > 0) {
+      recipes.push(...items);
+    } else {
+      break;
+    }
+
+    if (!syncToken) {
+      break;
+    }
+  }
+
+  function objToArr(item) {
+    if (!item) return [];
+    if (item.length || item.length === 0) return item;
+    return [item];
+  }
+
+  await SQ.transaction(async transaction => {
+    const savedRecipes = await Recipe.bulkCreate(recipes.map(pepperRecipe => {
+      const ingredientGroups = objToArr((pepperRecipe.Ingredients || {}).IngredientSyncGroup);
+
+      const finalIngredients = ingredientGroups
+      .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
+      .map(ingredientGroup => {
+        let ingredients = [];
+        if (ingredientGroup.Title && ingredientGroup.Title._text) {
+          ingredients.push(`[${ingredientGroup.Title._text}]`);
+        }
+        const innerIngredients = objToArr((ingredientGroup.Ingredients || {}).IngredientSync)
+                                  .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
+                                  .map(ingredient => ingredient.Quantity._text + " " + ingredient.Text._text)
+                                  .join("\r\n");
+        return [...ingredients, innerIngredients].join('\r\n');
+      }).join('\r\n');
+
+      const directionGroups = objToArr((pepperRecipe.Directions || {}).DirectionSyncGroup);
+
+      const finalDirections = directionGroups
+      .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
+      .map(directionGroup => {
+        let directions = [];
+        if (directionGroup.Title && directionGroup.Title._text) {
+          directions.push(`[${directionGroup.Title._text}]`);
+        }
+        const innerDirections = objToArr((directionGroup.Directions || {}).DirectionSync)
+                                  .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
+                                  .map(direction => direction.Text._text)
+                                  .join("\r\n");
+        return [...directions, innerDirections].join('\r\n');
+      }).join('\r\n');
+
+      return {
+        userId: res.locals.session.userId,
+        title: pepperRecipe.Title._text,
+        description: (pepperRecipe.Description || {})._text || '',
+        notes: (pepperRecipe.Note || {})._text || '',
+        ingredients: finalIngredients,
+        instructions: finalDirections,
+        totalTime: (pepperRecipe.TotalTime || {})._text || '',
+        activeTime: (pepperRecipe.ActiveTime || {})._text || '',
+        source: (pepperRecipe.Source || {})._text || (pepperRecipe.ManualSource || {})._text || '',
+        url: (pepperRecipe.Url || {})._text || '',
+        yield: (pepperRecipe.Yield || {})._text || '',
+        folder: 'main',
+        fromUserId: null,
+      };
+    }), {
+      transaction,
+      returning: true
+    });
+
+    const recipeIdsByLabelTitle = recipes.reduce((acc, pepperRecipe, idx) => {
+      try {
+        acc[pepperRecipe.Tags.TagSync.Text._text] = acc[pepperRecipe.Tags.TagSync.Text._text] || [];
+        acc[pepperRecipe.Tags.TagSync.Text._text].push(savedRecipes[idx].id);
+      } catch (e) {}
+      return acc;
+    }, {});
+
+    await Promise.all(Object.keys(recipeIdsByLabelTitle).map(labelName => {
+      return Label.findOrCreate({
+        where: {
+          userId: res.locals.session.userId,
+          title: labelName
+        },
+        transaction
+      }).then(labels => {
+        return Recipe_Label.bulkCreate(recipeIdsByLabelTitle[labelName].map(recipeId => {
+          return {
+            labelId: labels[0].id,
+            recipeId
+          }
+        }), {
+          transaction
+        });
+      });
+    }));
 
     const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
 
-    await UtilService.executeInChunks(recipes.map(recipe => () => {
-      if (recipe.imageURL) {
-        return UtilService.sendURLToS3(recipe.imageURL).then(image => {
-          recipe.image = image;
+    await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
+      if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
+        return UtilService.sendURLToS3(pepperRecipe.ImageUrl._text).then(image => {
+          pepperRecipe.image = image;
         }).catch(() => {});
       }
     }), PEPPERPLATE_IMG_CHUNK_SIZE);
 
-    const serializedRecipes = recipes.map(recipe => ({
-      userId: userId,
-      title: recipe.title,
-      description: recipe.description,
-      yield: recipe.yield,
-      activeTime: recipe.activeTime,
-      totalTime: recipe.totalTime,
-      source: recipe.source,
-      url: recipe.url,
-      notes: recipe.notes,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions
-    }));
-
-    const savedRecipes = await Recipe.bulkCreate(serializedRecipes, {
-      returning: true,
-      transaction: t
-    });
-
     const pendingImageData = [];
-    const recipesByLabelTitle = {};
     savedRecipes.map((savedRecipe, idx) => {
       if (recipes[idx].image) {
         pendingImageData.push({
@@ -149,22 +297,16 @@ function saveRecipes(userId, recipes) {
           order: 0 // Pepperplate only supports one image
         });
       }
-
-      recipes[idx].rawCategories.map(rawCategory => {
-        const labelTitle = rawCategory.trim().toLowerCase();
-        recipesByLabelTitle[labelTitle] = recipesByLabelTitle[labelTitle] || [];
-        recipesByLabelTitle[labelTitle].push(savedRecipe.id);
-      });
     });
 
     const savedImages = await Image.bulkCreate(pendingImageData.map(p => ({
-      userId,
+      userId: res.locals.session.userId,
       location: p.image.location,
       key: p.image.key,
       json: p.image
     })), {
       returning: true,
-      transaction: t
+      transaction
     });
 
     await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
@@ -172,182 +314,17 @@ function saveRecipes(userId, recipes) {
       imageId: savedImages[idx].id,
       order: p.order
     })), {
-      transaction: t
+      transaction
     });
-
-    await Promise.all(Object.keys(recipesByLabelTitle).map(async labelTitle => {
-      const matchingLabels = await Label.findOrCreate({
-        where: {
-          userId: userId,
-          title: labelTitle
-        },
-        transaction: t
-      });
-
-      await Recipe_Label.bulkCreate(recipesByLabelTitle[labelTitle].map(savedRecipeId => ({
-        labelId: matchingLabels[0].id,
-        recipeId: savedRecipeId
-      })), {
-        transaction: t
-      });
-    }));
-  }).catch(err => {
-    console.log(err)
-    Raven.captureException(err);
   });
-};
 
-router.get(
-  '/scrape/pepperplate',
-  cors(),
-  MiddlewareService.validateSession(['user']),
-  async (req, res, next) => {
+  Raven.captureMessage('Imported from PP API', {
+    level: 'info'
+  });
 
-  User.findOne({
-    where: {
-      id: res.locals.session.userId
-    },
-    include: [
-      {
-        model: FCMToken,
-        as: 'fcmTokens',
-        attributes: ['id', 'token']
-      }
-    ]
-  }).then(async (user) => {
-    const browser = await puppeteer.launch({
-      headless: process.env.NODE_ENV !== 'development'
-    });
-
-    Raven.captureMessage('Starting import job', {
-      level: 'info'
-    });
-
-    res.status(200).json({
-      msg: "Starting scrape..."
-    });
-
-    try {
-      var username = req.query.username;
-      var password = req.query.password;
-
-      const page = await browser.newPage();
-
-      await page.goto('https://www.pepperplate.com/login.aspx', {
-        waitUntil: "networkidle2",
-        timeout: 120000
-      })
-
-      await page.waitForSelector('#cphMain_loginForm_tbEmail')
-      await page.waitForSelector('#cphMain_loginForm_tbPassword')
-      await page.waitForSelector('#cphMain_loginForm_ibSubmit')
-
-      await page.type('#cphMain_loginForm_tbEmail', username, { delay: 10 });
-
-      await page.type('#cphMain_loginForm_tbPassword', password, { delay: 10 });
-
-      const [response] = await Promise.all([
-        page.waitForNavigation({
-          waitUntil: "networkidle2",
-          timeout: 120000
-        }),
-        page.click('#cphMain_loginForm_ibSubmit'),
-      ]);
-
-      await Promise.race([
-        page.waitForSelector('.errors li'),
-        page.waitForSelector('#reclist')
-      ])
-
-      if (await page.$('.errors li')) {
-        UtilService.dispatchImportNotification(user, 1, 'invalidCredentials');
-
-        console.log("invalid credentials")
-        await browser.close();
-        return
-      }
-
-      let recipeURLResults = await page.evaluate(() => {
-        return new Promise((resolve, reject) => {
-          var interval = setInterval(() => {
-            var loadMore = document.getElementById('loadmorelink');
-            if (!document.getElementById('loadmorelink') || document.getElementById('loadmorelink').style.display == 'none') {
-              clearInterval(interval);
-
-              let recipeURLs = [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(el => el.href);
-
-              recipeURLs = [...new Set(recipeURLs)]; // Dedupe
-
-              resolve(recipeURLs)
-              // return [].slice.call(document.querySelectorAll('#reclist .listing .item p a')).map(function(el) { return el.href });
-            } else {
-              loadMore.click();
-            }
-          }, 700);
-        });
-      })
-
-      console.log(recipeURLResults)
-
-      // Dispatch a progress notification
-      UtilService.dispatchImportNotification(user, 2);
-
-      let recipeResults = []
-      for (var i = 0; i < recipeURLResults.length; i++) {
-        await page.goto(recipeURLResults[i], {
-          waitUntil: "domcontentloaded",
-          timeout: 120000
-        });
-
-        await page.waitForSelector('.dircontainer', {
-          visible: true
-        });
-
-        await page.waitFor(200); // Give pepperplate some rest time
-
-        let recipeResult = await page.evaluate(() => {
-          var els = {
-            title: (document.getElementById('cphMiddle_cphMain_lblTitle') || {}).innerText,
-            // description: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerText,
-            yield: (document.getElementById('cphMiddle_cphMain_lblYield') || {}).innerText,
-            activeTime: (document.getElementById('cphMiddle_cphMain_lblActiveTime') || {}).innerText,
-            totalTime: (document.getElementById('cphMiddle_cphMain_lblTotalTime') || {}).innerText,
-            source: (document.getElementById('cphMiddle_cphMain_hlSource') || {}).innerText,
-            url: (document.getElementById('cphMiddle_cphSidebar_hlOriginalRecipe') || {}).href,
-            notes: (document.getElementById('cphMiddle_cphMain_lblNotes') || {}).innerText,
-            ingredients: [].slice.call(document.querySelectorAll('.inggroups li ul li span.content')).map(function (el) { return el.innerText }).join("\r\n"),
-            instructions: [].slice.call(document.querySelectorAll('.dirgroups li ol li span')).map(function (el) { return el.innerText }).join("\r\n"),
-            imageURL: (document.getElementById('cphMiddle_cphMain_imgRecipeThumb') || { src: '' }).src,
-            rawCategories: (document.querySelector('#cphMiddle_cphMain_pnlTags span') || { innerText: '' }).innerText.split(',').map(function (el) { return el.trim().toLowerCase() }).filter(el => el && el.length > 0)
-          }
-
-          return Promise.resolve(els)
-        })
-
-        recipeResults.push(recipeResult);
-      }
-
-      await browser.close();
-
-      saveRecipes(res.locals.session.userId, recipeResults).then(function () {
-        UtilService.dispatchImportNotification(user, 0);
-        Raven.captureMessage('Import job completed succesfully', {
-          level: 'info'
-        });
-      }).catch(function (err) {
-        UtilService.dispatchImportNotification(user, 1, 'saving');
-        Raven.captureException('Import job failed');
-        next(err)
-      });
-    } catch(e) {
-      console.log(e)
-      Raven.captureException(e);
-
-      UtilService.dispatchImportNotification(user, 1, 'timeout');
-
-      await browser.close();
-    }
-  }).catch(next);
+  res.status(200).json({
+    msg: "Import complete"
+  });
 });
 
 router.post(
@@ -376,7 +353,10 @@ router.post(
     if (req.query.includeTechniques) optionalFlags.push('--includeTechniques');
     if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
-    let lcbImportJob = spawn(`node`, [`./lcbimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
+    let lcbImportJob = spawn(`node`, [`src/lcbimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
+    lcbImportJob.stderr.on('data', (data) => {
+      console.error(`lcbimport stderr: ${data}`);
+    });
     lcbImportJob.on('close', (code) => {
       switch (code) {
         case 0:
@@ -423,7 +403,7 @@ router.post(
     if (req.query.excludeImages) optionalFlags.push('--excludeImages');
     if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
-    let lcbImportJob = spawn(`node`, [`./fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
+    let lcbImportJob = spawn(`node`, [`src/fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {
       switch (code) {
         case 0:
