@@ -25,7 +25,7 @@ router.post('/stripe/custom-session',
     if (!isRecurring && amount < 500) return res.status(412).send("Minimum is $5 due to transaction fees, sorry!");
 
     let stripeCustomerId;
-    if (res.locals.session.userId) {
+    if (res.locals.session) {
       stripeCustomerId = await StripeService.createOrRetrieveCustomerId(res.locals.session.userId);
     }
 
