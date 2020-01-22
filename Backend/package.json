@@ -35,7 +35,6 @@
     "pg": "^7.17.1",
     "pg-hstore": "^2.3.3",
     "pug": "^2.0.4",
-    "puppeteer": "^1.20.0",
     "raven": "^2.6.4",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
