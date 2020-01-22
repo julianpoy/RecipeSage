@@ -46,7 +46,8 @@
       <br /><br />
 
       <div class="ion-padding">
-        <ion-button expand="block" (click)="scrapePepperplate()">Start Import</ion-button>
+        <ion-button expand="block" (click)="scrapePepperplate()" *ngIf="!loading">Start Import</ion-button>
+        <ion-button expand="block" *ngIf="loading">Importing, please wait...</ion-button>
       </div>
 
       <div class="ion-padding">

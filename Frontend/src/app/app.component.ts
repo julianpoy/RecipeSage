@@ -99,16 +99,16 @@ export class AppComponent {
       } catch (e) { }
     });
 
-    (window as any).onSWUpdate = () => {
-      console.log('Update is waiting for pause...');
-      if ((window as any).isHidden()) {
-        (window as any).location.reload(true);
-      } else {
-        this.events.subscribe('application:multitasking:paused', () => {
-          (window as any).location.reload(true);
-        });
-      }
-    };
+    // (window as any).onSWUpdate = () => {
+    //   console.log('Update is waiting for pause...');
+    //   if ((window as any).isHidden()) {
+    //     (window as any).location.reload(true);
+    //   } else {
+    //     this.events.subscribe('application:multitasking:paused', () => {
+    //       (window as any).location.reload(true);
+    //     });
+    //   }
+    // };
   }
 
   initEventListeners() {
