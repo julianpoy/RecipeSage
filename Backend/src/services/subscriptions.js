@@ -44,7 +44,7 @@ exports.modelsForCapability = capability => {
 
 exports.subscriptionsForUser = async (userId, includeExpired) => {
   // Allow users to continue to access expired features for grace period
-  const mustBeValidUntil = includeExpired ? moment('1980') : moment().subtract(CAPABILITY_GRACE_PERIOD, 'days');
+  const mustBeValidUntil = includeExpired ? moment(new Date('1980')) : moment().subtract(CAPABILITY_GRACE_PERIOD, 'days');
 
   return UserSubscription.findAll({
     where: {
