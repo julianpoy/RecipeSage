@@ -115,41 +115,11 @@ router.get(
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
-  Raven.captureMessage('Starting import from PP API', {
-    level: 'info'
-  });
-
-  let response = await request({
-    url: "http://www.pepperplate.com/services/syncmanager5.asmx",
-    method: "POST",
-    headers: {
-      "content-type": "text/xml",
-    },
-    body: `<?xml version="1.0" encoding="utf-8"?>
-    <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-      <soap:Body>
-        <GenerateLoginToken xmlns="http://api.pepperplate.com/">
-          <email>${req.query.username}</email>
-          <password>${req.query.password}</password>
-        </GenerateLoginToken>
-      </soap:Body>
-    </soap:Envelope>
-    `
-  });
-
-  if (response.indexOf("<Status>UnknownEmail</Status>") > -1) {
-    return res.status(406).send("Incorrect username");
-  } else if (response.indexOf("<Status>IncorrectPassword</Status>") > -1) {
-    return res.status(406).send("Incorrect password");
-  }
-
-  const userToken = response.match(/<Token>(.*)<\/Token>/)[1];
-
-  const recipes = [];
-
-  let syncToken;
-  while (true) {
+  try {
+    Raven.captureMessage('Starting import from PP API', {
+      level: 'info'
+    });
+  
     let response = await request({
       url: "http://www.pepperplate.com/services/syncmanager5.asmx",
       method: "POST",
@@ -160,171 +130,211 @@ router.get(
       <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
         <soap:Body>
-          <RetrieveRecipes xmlns="http://api.pepperplate.com/">
-            <userToken>${userToken}</userToken>
-            ${syncToken ? `<syncToken>${syncToken}</syncToken>` : ""}
-            <count>50</count>
-          </RetrieveRecipes>
+          <GenerateLoginToken xmlns="http://api.pepperplate.com/">
+            <email>${req.query.username}</email>
+            <password>${req.query.password}</password>
+          </GenerateLoginToken>
         </soap:Body>
       </soap:Envelope>
       `
     });
-
-    console.log("repeat")
-
-    const recipeJson = JSON.parse(xmljs.xml2json(response, { compact: true, spaces: 4 }));
-
-    syncToken = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["SynchronizationToken"]._text;
-
-    console.log("new sync token!", syncToken)
-
-    const items = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["Items"]["RecipeSync"];
-
-    if (items && items.length > 0) {
-      recipes.push(...items);
-    } else {
-      break;
+  
+    if (response.indexOf("<Status>UnknownEmail</Status>") > -1) {
+      return res.status(406).send("Incorrect username");
+    } else if (response.indexOf("<Status>IncorrectPassword</Status>") > -1) {
+      return res.status(406).send("Incorrect password");
     }
-
-    if (!syncToken) {
-      break;
-    }
-  }
-
-  function objToArr(item) {
-    if (!item) return [];
-    if (item.length || item.length === 0) return item;
-    return [item];
-  }
-
-  await SQ.transaction(async transaction => {
-    const savedRecipes = await Recipe.bulkCreate(recipes.map(pepperRecipe => {
-      const ingredientGroups = objToArr((pepperRecipe.Ingredients || {}).IngredientSyncGroup);
-
-      const finalIngredients = ingredientGroups
-      .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
-      .map(ingredientGroup => {
-        let ingredients = [];
-        if (ingredientGroup.Title && ingredientGroup.Title._text) {
-          ingredients.push(`[${ingredientGroup.Title._text}]`);
-        }
-        const innerIngredients = objToArr((ingredientGroup.Ingredients || {}).IngredientSync)
-                                  .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
-                                  .map(ingredient => ingredient.Quantity._text + " " + ingredient.Text._text)
-                                  .join("\r\n");
-        return [...ingredients, innerIngredients].join('\r\n');
-      }).join('\r\n');
-
-      const directionGroups = objToArr((pepperRecipe.Directions || {}).DirectionSyncGroup);
-
-      const finalDirections = directionGroups
-      .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
-      .map(directionGroup => {
-        let directions = [];
-        if (directionGroup.Title && directionGroup.Title._text) {
-          directions.push(`[${directionGroup.Title._text}]`);
-        }
-        const innerDirections = objToArr((directionGroup.Directions || {}).DirectionSync)
-                                  .sort((a, b) => parseInt((b.DisplayOrder || {})._text || 0, 10) - parseInt((a.DisplayOrder || {})._text || 0, 10))
-                                  .map(direction => direction.Text._text)
-                                  .join("\r\n");
-        return [...directions, innerDirections].join('\r\n');
-      }).join('\r\n');
-
-      return {
-        userId: res.locals.session.userId,
-        title: pepperRecipe.Title._text,
-        description: (pepperRecipe.Description || {})._text || '',
-        notes: (pepperRecipe.Note || {})._text || '',
-        ingredients: finalIngredients,
-        instructions: finalDirections,
-        totalTime: (pepperRecipe.TotalTime || {})._text || '',
-        activeTime: (pepperRecipe.ActiveTime || {})._text || '',
-        source: (pepperRecipe.Source || {})._text || (pepperRecipe.ManualSource || {})._text || '',
-        url: (pepperRecipe.Url || {})._text || '',
-        yield: (pepperRecipe.Yield || {})._text || '',
-        folder: 'main',
-        fromUserId: null,
-      };
-    }), {
-      transaction,
-      returning: true
-    });
-
-    const recipeIdsByLabelTitle = recipes.reduce((acc, pepperRecipe, idx) => {
-      try {
-        acc[pepperRecipe.Tags.TagSync.Text._text] = acc[pepperRecipe.Tags.TagSync.Text._text] || [];
-        acc[pepperRecipe.Tags.TagSync.Text._text].push(savedRecipes[idx].id);
-      } catch (e) {}
-      return acc;
-    }, {});
-
-    await Promise.all(Object.keys(recipeIdsByLabelTitle).map(labelName => {
-      return Label.findOrCreate({
-        where: {
-          userId: res.locals.session.userId,
-          title: labelName
+  
+    const userToken = response.match(/<Token>(.*)<\/Token>/)[1];
+  
+    let recipes = [];
+  
+    let syncToken;
+    while (true) {
+      let response = await request({
+        url: "http://www.pepperplate.com/services/syncmanager5.asmx",
+        method: "POST",
+        headers: {
+          "content-type": "text/xml",
         },
-        transaction
-      }).then(labels => {
-        return Recipe_Label.bulkCreate(recipeIdsByLabelTitle[labelName].map(recipeId => {
-          return {
-            labelId: labels[0].id,
-            recipeId
-          }
-        }), {
-          transaction
-        });
+        body: `<?xml version="1.0" encoding="utf-8"?>
+        <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+          <soap:Body>
+            <RetrieveRecipes xmlns="http://api.pepperplate.com/">
+              <userToken>${userToken}</userToken>
+              ${syncToken ? `<syncToken>${syncToken}</syncToken>` : ""}
+              <count>50</count>
+            </RetrieveRecipes>
+          </soap:Body>
+        </soap:Envelope>
+        `
       });
-    }));
-
-    const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
-
-    await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
-      if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
-        return UtilService.sendURLToS3(pepperRecipe.ImageUrl._text).then(image => {
-          pepperRecipe.image = image;
-        }).catch(() => {});
+  
+      console.log("repeat")
+  
+      const recipeJson = JSON.parse(xmljs.xml2json(response, { compact: true, spaces: 4 }));
+  
+      syncToken = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["SynchronizationToken"]._text;
+  
+      console.log("new sync token!", syncToken)
+  
+      const items = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["Items"]["RecipeSync"];
+  
+      if (items && items.length > 0) {
+        recipes.push(...items);
+      } else {
+        break;
       }
-    }), PEPPERPLATE_IMG_CHUNK_SIZE);
+  
+      if (!syncToken) {
+        break;
+      }
+    }
 
-    const pendingImageData = [];
-    savedRecipes.map((savedRecipe, idx) => {
-      if (recipes[idx].image) {
-        pendingImageData.push({
-          image: recipes[idx].image,
-          recipeId: savedRecipe.id,
-          order: 0 // Pepperplate only supports one image
+    recipes = recipes.filter(pepperRecipe => {
+      return (pepperRecipe.Delete || {})._text !== "true";
+    });
+  
+    function objToArr(item) {
+      if (!item) return [];
+      if (item.length || item.length === 0) return item;
+      return [item];
+    }
+  
+    await SQ.transaction(async transaction => {
+      const savedRecipes = await Recipe.bulkCreate(recipes.map(pepperRecipe => {
+        const ingredientGroups = objToArr((pepperRecipe.Ingredients || {}).IngredientSyncGroup);
+  
+        const finalIngredients = ingredientGroups
+        .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
+        .map(ingredientGroup => {
+          let ingredients = [];
+          if (ingredientGroup.Title && ingredientGroup.Title._text) {
+            ingredients.push(`[${ingredientGroup.Title._text}]`);
+          }
+          const innerIngredients = objToArr((ingredientGroup.Ingredients || {}).IngredientSync)
+                                    .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
+                                    .map(ingredient => (((ingredient.Quantity || {})._text || '') + " " + ingredient.Text._text).trim())
+                                    .join("\r\n");
+          return [...ingredients, innerIngredients].join('\r\n');
+        }).join('\r\n');
+  
+        const directionGroups = objToArr((pepperRecipe.Directions || {}).DirectionSyncGroup);
+  
+        const finalDirections = directionGroups
+        .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
+        .map(directionGroup => {
+          let directions = [];
+          if (directionGroup.Title && directionGroup.Title._text) {
+            directions.push(`[${directionGroup.Title._text}]`);
+          }
+          const innerDirections = objToArr((directionGroup.Directions || {}).DirectionSync)
+                                    .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
+                                    .map(direction => direction.Text._text)
+                                    .join("\r\n");
+          return [...directions, innerDirections].join('\r\n');
+        }).join('\r\n');
+  
+        return {
+          userId: res.locals.session.userId,
+          title: pepperRecipe.Title._text,
+          description: (pepperRecipe.Description || {})._text || '',
+          notes: (pepperRecipe.Note || {})._text || '',
+          ingredients: finalIngredients,
+          instructions: finalDirections,
+          totalTime: (pepperRecipe.TotalTime || {})._text || '',
+          activeTime: (pepperRecipe.ActiveTime || {})._text || '',
+          source: (pepperRecipe.Source || {})._text || (pepperRecipe.ManualSource || {})._text || '',
+          url: (pepperRecipe.Url || {})._text || '',
+          yield: (pepperRecipe.Yield || {})._text || '',
+          folder: 'main',
+          fromUserId: null,
+        };
+      }), {
+        transaction,
+        returning: true
+      });
+  
+      const recipeIdsByLabelTitle = recipes.reduce((acc, pepperRecipe, idx) => {
+        try {
+          objToArr((pepperRecipe.Tags || {}).TagSync).map(tag => {
+            acc[tag.Text._text] = acc[tag.Text._text] || [];
+            acc[tag.Text._text].push(savedRecipes[idx].id);
+          });
+        } catch (e) {}
+        return acc;
+      }, {});
+  
+      await Promise.all(Object.keys(recipeIdsByLabelTitle).filter(labelName => labelName && labelName.trim().length > 0).map(labelName => {
+        return Label.findOrCreate({
+          where: {
+            userId: res.locals.session.userId,
+            title: labelName.trim().toLowerCase()
+          },
+          transaction
+        }).then(labels => {
+          return Recipe_Label.bulkCreate(recipeIdsByLabelTitle[labelName].map(recipeId => {
+            return {
+              labelId: labels[0].id,
+              recipeId
+            }
+          }), {
+            transaction
+          });
         });
-      }
+      }));
+  
+      const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
+  
+      await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
+        if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
+          return UtilService.sendURLToS3(pepperRecipe.ImageUrl._text).then(image => {
+            pepperRecipe.image = image;
+          }).catch(() => {});
+        }
+      }), PEPPERPLATE_IMG_CHUNK_SIZE);
+  
+      const pendingImageData = [];
+      savedRecipes.map((savedRecipe, idx) => {
+        if (recipes[idx].image) {
+          pendingImageData.push({
+            image: recipes[idx].image,
+            recipeId: savedRecipe.id,
+            order: 0 // Pepperplate only supports one image
+          });
+        }
+      });
+  
+      const savedImages = await Image.bulkCreate(pendingImageData.map(p => ({
+        userId: res.locals.session.userId,
+        location: p.image.location,
+        key: p.image.key,
+        json: p.image
+      })), {
+        returning: true,
+        transaction
+      });
+  
+      await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
+        recipeId: p.recipeId,
+        imageId: savedImages[idx].id,
+        order: p.order
+      })), {
+        transaction
+      });
     });
-
-    const savedImages = await Image.bulkCreate(pendingImageData.map(p => ({
-      userId: res.locals.session.userId,
-      location: p.image.location,
-      key: p.image.key,
-      json: p.image
-    })), {
-      returning: true,
-      transaction
+  
+    Raven.captureMessage('Imported from PP API', {
+      level: 'info'
     });
-
-    await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
-      recipeId: p.recipeId,
-      imageId: savedImages[idx].id,
-      order: p.order
-    })), {
-      transaction
+  
+    res.status(200).json({
+      msg: "Import complete"
     });
-  });
-
-  Raven.captureMessage('Imported from PP API', {
-    level: 'info'
-  });
-
-  res.status(200).json({
-    msg: "Import complete"
-  });
+  } catch(e) {
+    next(e);
+  }
 });
 
 router.post(
