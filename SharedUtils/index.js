@@ -73,7 +73,7 @@ function parseIngredients(ingredients, scale, boldify) {
         try {
           var measurement = el[0];
 
-          const measurementPartDelimiters = measurement.match(/-|to/g);
+          const measurementPartDelimiters = measurement.match(/(-)|( to )|( - )/g);
           const measurementParts = measurement.split(/-|to/);
   
           for (var j = 0; j < measurementParts.length; j++) {
