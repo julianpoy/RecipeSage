@@ -130,4 +130,15 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+process.on('SIGTERM', () => {
+  console.log("RECEIVED SIGTERM - CLOSING SERVER");
+  server.close(() => {
+    console.log("SERVER CLOSED - RESTING");
+    setTimeout(() => {
+      console.log("EXITING");
+      process.exit(0);
+    }, 90 * 1000);
+  });
+});
+
 module.exports = server;
