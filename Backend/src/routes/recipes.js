@@ -273,8 +273,6 @@ router.get(
     ${req.query.folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
     ORDER BY ${sort}`;
 
-    console.log(fetchQuery);
-
   let countQueryOptions = {
     type: SQ.QueryTypes.SELECT,
     bind: {
