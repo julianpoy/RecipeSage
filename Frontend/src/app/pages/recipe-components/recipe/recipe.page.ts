@@ -57,6 +57,10 @@ export class RecipePage {
     this.recipe = {} as Recipe;
 
     this.applyScale();
+
+    document.addEventListener('click', event => {
+      if (this.showAutocomplete) this.toggleAutocomplete(false, event);
+    });
   }
 
   ionViewWillEnter() {
@@ -349,8 +353,11 @@ export class RecipePage {
   }
 
   toggleAutocomplete(show, event?) {
-    if (event && event.relatedTarget) {
-      if (event.relatedTarget.className.indexOf('suggestion') > -1) {
+    if (event) {
+      if (event.relatedTarget && event.relatedTarget.className.indexOf('suggestion') > -1) {
+        return;
+      }
+      if (event.target && (event.target.id.match('labelInputField') || event.target.className.match('suggestion'))) {
         return;
       }
     }
@@ -366,7 +373,6 @@ export class RecipePage {
       return;
     }
 
-    this.toggleAutocomplete(false);
     this.pendingLabel = '';
 
     const loading = this.loadingService.start();

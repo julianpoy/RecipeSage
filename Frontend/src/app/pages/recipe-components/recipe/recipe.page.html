@@ -168,14 +168,12 @@
       <input
         [(ngModel)]='pendingLabel'
         (focus)='toggleAutocomplete(true)'
-        (focusout)='toggleAutocomplete(false, $event)'
-        (blur)='toggleAutocomplete(false, $event)'
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         autocomplete="off"
         #labelInputField
         id="labelInputField" />
-      <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
+      <div class="autocomplete" *ngIf="showAutocomplete">
         <button
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
