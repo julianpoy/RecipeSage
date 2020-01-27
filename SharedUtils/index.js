@@ -21,7 +21,7 @@ const fractionMatchers = { // Regex & replacement value by charcode
   8530: [/\u2152/g, '1/10'], // ⅒ \u2152;
 };
 
-const fractionMatchRegexp = new RegExp(Object.values(fractionMatchers).map(matcher => matcher[0].source).join('|'), 'g');
+const fractionMatchRegexp = new RegExp(Object.keys(fractionMatchers).map(e => fractionMatchers[e]).map(matcher => matcher[0].source).join('|'), 'g');
 
 const replaceFractionsInText = rawText => {
   return rawText.replace(fractionMatchRegexp, match => {
