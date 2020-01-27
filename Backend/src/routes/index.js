@@ -115,10 +115,27 @@ router.get(
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
+  var XML_CHAR_MAP = {
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    '"': '&quot;',
+    "'": '&apos;'
+  };
+  
+  function escapeXml (s) {
+    return s.replace(/[<>&"']/g, function (ch) {
+      return XML_CHAR_MAP[ch];
+    });
+  }
+
   try {
     Raven.captureMessage('Starting import from PP API', {
       level: 'info'
     });
+
+    const username = escapeXml(req.query.username.trim());
+    const password = escapeXml(req.query.password);
   
     let response = await request({
       url: "http://www.pepperplate.com/services/syncmanager5.asmx",
@@ -131,8 +148,8 @@ router.get(
       xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
         <soap:Body>
           <GenerateLoginToken xmlns="http://api.pepperplate.com/">
-            <email>${req.query.username}</email>
-            <password>${req.query.password}</password>
+            <email>${username}</email>
+            <password>${password}</password>
           </GenerateLoginToken>
         </soap:Body>
       </soap:Envelope>
@@ -334,6 +351,7 @@ router.get(
     });
   } catch(e) {
     next(e);
+    Raven.captureException(e);
   }
 });
 
