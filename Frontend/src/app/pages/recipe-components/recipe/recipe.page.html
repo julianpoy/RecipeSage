@@ -167,7 +167,7 @@
 
       <input
         [(ngModel)]='pendingLabel'
-        (focus)='toggleAutocomplete(true)'
+        (click)='toggleAutocomplete(true); $event.stopPropagation();'
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         autocomplete="off"

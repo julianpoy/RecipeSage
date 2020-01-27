@@ -357,7 +357,7 @@ export class RecipePage {
       if (event.relatedTarget && event.relatedTarget.className.indexOf('suggestion') > -1) {
         return;
       }
-      if (event.target && (event.target.id.match('labelInputField') || event.target.className.match('suggestion'))) {
+      if (event.target && (event.target.id.match('labelInputField') || event.target.className.match('labelInputField') || event.target.className.match('suggestion'))) {
         return;
       }
     }
@@ -381,7 +381,7 @@ export class RecipePage {
       recipeId: this.recipe.id,
       title: title.toLowerCase()
     }).then(response => {
-      this.loadAll().then(() => {
+      this.loadAll().finally(() => {
         loading.dismiss();
       });
     }).catch(async err => {
@@ -444,23 +444,9 @@ export class RecipePage {
     label.recipeId = this.recipe.id;
 
     this.labelService.remove(label).then(() => {
-      loading.dismiss();
-
-      if (label.recipeCount === 1) {
-        const i = this.existingLabels.indexOf(label.title);
-        this.existingLabels.splice(i, 1);
-        delete this.labelObjectsByTitle[label.title];
-      } else {
-        label.recipeCount -= 1;
-      }
-
-      const lblIdx = this.recipe.labels.findIndex(el => {
-        return el.id === label.id;
+      this.loadAll().finally(() => {
+        loading.dismiss();
       });
-      this.recipe.labels.splice(lblIdx, 1);
-
-      const idx = this.selectedLabels.indexOf(label.title);
-      this.selectedLabels.splice(idx, 1);
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {
