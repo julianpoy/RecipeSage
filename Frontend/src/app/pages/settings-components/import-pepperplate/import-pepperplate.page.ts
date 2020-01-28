@@ -99,10 +99,12 @@ export class ImportPepperplatePage {
           }, 20000);
           break;
         default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
+          setTimeout(async () => {
+            (await this.toastCtrl.create({
+              message: "An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
+              showCloseButton: true
+            })).present();
+          }, 10000);
           break;
       }
     });
