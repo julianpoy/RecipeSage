@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { RouteMap } from '@/services/util.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'page-contribute-cancel',
@@ -11,5 +12,7 @@ export class ContributeCancelPage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
   contributePath: string = RouteMap.ContributePage.getPath();
 
-  constructor() {}
+  constructor(private capabilitiesService: CapabilitiesService) {
+    this.capabilitiesService.updateCapabilities();
+  }
 }

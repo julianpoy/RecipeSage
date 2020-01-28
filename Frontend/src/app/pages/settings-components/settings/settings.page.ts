@@ -4,6 +4,7 @@ import { NavController, ToastController, AlertController } from '@ionic/angular'
 import { RouteMap } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 
