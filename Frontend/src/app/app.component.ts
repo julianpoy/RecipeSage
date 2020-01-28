@@ -92,23 +92,7 @@ export class AppComponent {
   }
 
   initUpdateListeners() {
-    // When user pauses app (device locks, switches tabs, etc) try to update SW
-    this.events.subscribe('application:multitasking:paused', () => {
-      try {
-        (window as any).updateSW();
-      } catch (e) { }
-    });
-
-    (window as any).onSWUpdate = () => {
-    //   console.log('Update is waiting for pause...');
-    //   if ((window as any).isHidden()) {
-    //     (window as any).location.reload(true);
-    //   } else {
-    //     this.events.subscribe('application:multitasking:paused', () => {
-    //       (window as any).location.reload(true);
-    //     });
-    //   }
-    };
+    (window as any).appLoaded = true;
   }
 
   initEventListeners() {
@@ -198,32 +182,6 @@ export class AppComponent {
       });
       toast.present();
     });
-  }
-
-  initEventDispatchers() {
-    let hidden, visibilityChange;
-    if (typeof (document as any).hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
-      hidden = 'hidden';
-      visibilityChange = 'visibilitychange';
-    } else if (typeof (document as any).msHidden !== 'undefined') {
-      hidden = 'msHidden';
-      visibilityChange = 'msvisibilitychange';
-    } else if (typeof (document as any).webkitHidden !== 'undefined') {
-      hidden = 'webkitHidden';
-      visibilityChange = 'webkitvisibilitychange';
-    }
-
-    (window as any).isHidden = () => {
-      return document[hidden];
-    };
-
-    document.addEventListener(visibilityChange, () => {
-      if (document[hidden]) {
-        this.events.publish('application:multitasking:paused');
-      } else {
-        this.events.publish('application:multitasking:resumed');
-      }
-    }, false);
   }
 
   updateIsLoggedIn() {
