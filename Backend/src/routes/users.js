@@ -228,7 +228,13 @@ router.post(
     msg: ""
   }
 
-  var origin = req.get('origin');
+  let origin;
+  if (process.env.NODE_ENV === 'production') {
+    origin = 'https://recipesage.com';
+  } else {
+    // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
+    origin = req.get('origin');
+  }
 
   User.findOne({
     where: {
