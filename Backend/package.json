@@ -39,6 +39,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
     "sanitize-html": "^1.20.1",
+    "semver": "^7.1.1",
     "sequelize": "^5.21.3",
     "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",

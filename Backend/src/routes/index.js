@@ -7,6 +7,7 @@ let fs = require('fs-extra');
 let extract = require('extract-zip');
 const { spawn } = require('child_process');
 const performance = require('perf_hooks').performance;
+const semver = require('semver');
 let path = require('path');
 
 // DB
@@ -27,6 +28,19 @@ var SubscriptionsService = require('../services/subscriptions');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'RS API' });
+});
+
+const MIN_SUPPORTED_FRONTEND_VERSION = '>=2.0.0';
+router.get('/versioncheck', (req, res, next) => {
+  let supported = false;
+  if (req.query.version) {
+    const version = semver.coerce(req.query.version);
+    supported = semver.satisfies(version, MIN_SUPPORTED_FRONTEND_VERSION);
+  }
+
+  res.status(200).json({
+    supported
+  });
 });
 
 router.get('/deduperecipelabels', function(req, res, next) {
