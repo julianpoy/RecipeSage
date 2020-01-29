@@ -12,6 +12,7 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { VersionCheckService } from '@/services/versioncheck.service';
 
 @Component({
   selector: 'app-root',
@@ -51,7 +52,8 @@ export class AppComponent {
     private websocketService: WebsocketService,
     private userService: UserService,
     private preferencesService: PreferencesService,
-    private capabilitiesService: CapabilitiesService
+    private capabilitiesService: CapabilitiesService,
+    private versionCheckService: VersionCheckService
   ) {
 
     this.initializeApp();
