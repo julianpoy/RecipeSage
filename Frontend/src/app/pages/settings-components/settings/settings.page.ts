@@ -115,38 +115,29 @@ export class SettingsPage {
     this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
   }
 
-  checkForUpdate() {
-    (window as any).updateSW(async () => {
-      const alert = await this.alertCtrl.create({
-        header: 'App will reload',
-        subHeader: 'The app will reload to check for an update.',
-        buttons: [
-          {
-            text: 'Cancel',
-            handler: () => {
-            }
-          },
-          {
-            text: 'Continue',
-            handler: () => {
-              try {
-                (window as any).forceSWUpdate().then(() => {
-                  (window as any).location.reload(true);
-                });
-              } catch (e) {
+  async checkForUpdate() {
+    const alert = await this.alertCtrl.create({
+      header: 'App will reload',
+      subHeader: 'The app will reload to check for an update.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            try {
+              (window as any).forceSWUpdate().then(() => {
                 (window as any).location.reload(true);
-              }
+              });
+            } catch (e) {
+              (window as any).location.reload(true);
             }
-          }]
-      });
-      alert.present();
-    }, async () => {
-      const toast = await this.toastCtrl.create({
-        message: 'We were unable to check for an update at this time.',
-        duration: 4000
-      });
-
-      toast.present();
+          }
+        }]
     });
+    alert.present();
   }
 }
