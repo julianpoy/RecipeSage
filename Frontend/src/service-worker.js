@@ -80,55 +80,6 @@ messaging.setBackgroundMessageHandler(function(message) {
       };
       notificationOptions.tag = message.data.type + '-' + messageObj.otherUser.id;
       break;
-    case 'import:pepperplate:complete':
-      notificationTitle = 'Import complete!';
-
-      notificationOptions.body = 'Your recipes have been imported from Pepperplate.';
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type,
-      };
-      notificationOptions.tag = 'import:pepperplate';
-      break;
-    case 'import:pepperplate:failed':
-      var messageObj = JSON.parse(message.data.message);
-
-      var body = '';
-      if (messageObj.reason === 'timeout') {
-        body += 'Pepperplate service is unavailable right now.';
-      } else if (messageObj.reason === 'invalidCredentials') {
-        body += 'Incorrect Pepperplate username or password.';
-      } else if (messageObj.reason === 'saving') {
-        body += 'An error occured while fetching the recipes. Please try again later.';
-      } else {
-        return;
-      }
-
-      notificationTitle = 'Import failed';
-
-      notificationOptions.body = body;
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type
-      };
-      notificationOptions.tag = 'import:pepperplate';
-      break;
-    case 'import:pepperplate:working':
-      notificationTitle = 'Import in progress';
-
-      notificationOptions.body = 'Your Pepperplate recipes are being imported into RecipeSage';
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type
-      };
-      notificationOptions.tag = 'import:pepperplate';
-      break;
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
