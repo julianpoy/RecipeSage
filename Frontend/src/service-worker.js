@@ -6,19 +6,32 @@ workbox.setConfig({
   debug: false,
   modulePathPrefix: 'workbox-src/'
 });
-workbox.core.skipWaiting();
-workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
+
+// Index should be cached networkFirst - this way, users will always get the newest application version
+const MAX_OFFILE_APP_AGE = 30; // Days
+workbox.routing.registerRoute(
+  new RegExp('/index\.html'),
+  workbox.strategies.networkFirst({
+    cacheName: 'base-asset-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
+      }),
+    ]
+  })
+);
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
+const MAX_OFFLINE_API_AGE = 14; // Days
 workbox.routing.registerRoute(
   new RegExp('/api/'),
   workbox.strategies.networkFirst({
     cacheName: 'api-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 60 * 60 * 24 * 14, // 14 Days
+        maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_API_AGE,
       }),
     ]
   })

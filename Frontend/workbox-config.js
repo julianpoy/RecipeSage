@@ -2,11 +2,12 @@ module.exports = {
   "globDirectory": "www/",
   "globPatterns": [
     // "assets/fonts/roboto*.woff2",
-    "assets/**/*.png",
+    "assets/**/*.{png,jpg}",
+    "svg/*.svg",
     "*.css",
     "*.js",
-    "index.html",
-    "manifest.json"
+    // "index.html",
+    // "manifest.json"
   ],
   "dontCacheBustURLsMatching": new RegExp('.+\.[a-f0-9]{10}\..+'),
   "maximumFileSizeToCacheInBytes": 5000000,
