@@ -28,9 +28,9 @@ var messages = require('./routes/messages');
 var shoppingLists = require('./routes/shoppingLists');
 var mealPlans = require('./routes/mealPlans');
 var print = require('./routes/print');
-var grip = require('./routes/grip');
 var payments = require('./routes/payments');
 var images = require('./routes/images');
+var ws = require('./routes/ws');
 
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
@@ -64,9 +64,9 @@ app.use('/messages', messages);
 app.use('/shoppingLists', shoppingLists);
 app.use('/mealPlans', mealPlans);
 app.use('/print', print);
-app.use('/grip', grip);
 app.use('/payments', payments);
 app.use('/images', images);
+app.use('/ws', ws);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());
 

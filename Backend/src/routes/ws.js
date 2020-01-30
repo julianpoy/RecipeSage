@@ -7,7 +7,7 @@ var GripService = require('../services/grip');
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 
 router.all(
-  '/ws',
+  '/',
   MiddlewareService.validateSession(['user']),
   function (req, res, next) {
     // Reject non-WebSocket requests
