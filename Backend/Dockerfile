@@ -2,9 +2,6 @@ FROM node:12-alpine
 
 WORKDIR /app
 
-COPY Backend/package.json ./Backend/package.json
-COPY SharedUtils/package.json ./SharedUtils/package.json
-
 RUN apk add --no-cache \
     git \
     # === MDBTools Deps ===
@@ -30,6 +27,9 @@ RUN apk add --no-cache \
     cd /tmp && \
     apk del autoconf automake build-base glib-dev libc-dev unixodbc-dev flex-dev && \
     rm -rf mdbtools-0.7.1
+
+COPY Backend/package.json ./Backend/package.json
+COPY SharedUtils/package.json ./SharedUtils/package.json
 
 RUN cd Backend && npm install
 RUN cd SharedUtils && npm install
