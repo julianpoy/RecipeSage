@@ -3,8 +3,6 @@ import { AlertController } from '@ionic/angular';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
 
-import { Workbox } from 'workbox-window';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -45,6 +43,8 @@ export class VersionCheckService {
         });
         alert.present();
       }
+    }).catch(e => {
+      console.log("Unable to check for update.");
     });
   }
 }
