@@ -9,13 +9,11 @@ services:
     ports:
     - "80:80"
     - "443:443"
-    environment:
-    - NGINX_HOST=foobar.com
-    - NGINX_PORT=80
     command: nginx -g 'daemon off;'
     depends_on:
       - webapp
       - express
+      - pushpin
   webapp:
     ports:
       - "8100:8100"
@@ -35,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: ./Backend/Dockerfile
-    command: node src/bin/www
+    command: npx nodemon src/bin/www
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -52,7 +50,8 @@ services:
       - POSTGRES_LOGGING
       - GCM_KEYPAIR
       - SENTRY_DSN
-      - GRIP_KEY
+      - GRIP_URL=http://pushpin:5561/
+      - GRIP_KEY=changeme
       - ELASTIC_ENABLE
       - ELASTIC_IDX_PREFIX
       - ELASTIC_CONN
@@ -71,12 +70,15 @@ services:
       - 9200:9200
   pushpin:
     image: fanout/pushpin
+    environment:
+      - target=express:3000
     ports:
       - "7999:7999"
       - "5560-5563:5560-5563"
   postgres:
     image: postgres
-    restart: always
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_DB
       - POSTGRES_USER
