@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-static
+  labels:
+    app: rs-static
+spec:
+  selector:
+    matchLabels:
+      app: rs-static
+  template:
+    metadata:
+      labels:
+        app: rs-static
+    spec:
+      containers:
+      - name: rs-static
+        image: julianpoy/recipesage:static-$RELEASE_TAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 300m
+            memory: 300Mi
+      imagePullSecrets:
+      - name: myregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-static
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-static
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

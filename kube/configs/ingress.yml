@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: rs-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: 800m
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~ /service-worker.js {
+        expires -1;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+      }
+
+      location /api {
+        proxy_connect_timeout       300;
+        proxy_send_timeout          300;
+        proxy_read_timeout          300;
+        send_timeout                300;
+
+        proxy_set_header proxypassbase /api/;
+      }
+
+      location /grip/ws {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_connect_timeout 1h;
+        proxy_send_timeout 1h;
+        proxy_read_timeout 1h;
+      }
+spec:
+  rules:
+  - http:
+  - host: recipesage.com
+    http:
+      paths:
+      - path: /grip/()(ws)
+        backend:
+          serviceName: rs-pushpin
+          servicePort: 7999
+      - path: /api(/|$)(.*)
+        backend:
+          serviceName: rs-api
+          servicePort: 3000
+      - path: /()(.*)
+        backend:
+          serviceName: rs-static
+          servicePort: 80
+  tls:
+  - hosts:
+    - recipesage.com
+    - www.recipesage.com
+    - beta.recipesage.com
+    - staging.recipesage.com
+    secretName: rs-tls
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: julian@recipesage.com
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector: {}
+      dns01:
+        digitalocean:
+          tokenSecretRef:
+            name: digitalocean-key
+            key: access-token
