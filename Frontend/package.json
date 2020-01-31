@@ -59,6 +59,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^12.7.9",
+    "bread-compressor-cli": "^1.0.8",
     "codelyzer": "~4.5.0",
     "ionic": "^5.4.10",
     "jasmine-core": "~2.99.1",

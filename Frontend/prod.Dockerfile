@@ -15,11 +15,13 @@ COPY SharedUtils SharedUtils
 
 WORKDIR /app/Frontend
 
-CMD ["npm", "run", "dist"]
+RUN npm run dist
 
 
 FROM nginx
 
 COPY --from=builder /app/Frontend/www /usr/share/nginx/html
+
+RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" /usr/share/nginx/html/index.html
 
 EXPOSE 80
