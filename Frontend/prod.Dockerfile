@@ -1,5 +1,7 @@
 FROM node:12-alpine as builder
 
+ARG VERSION=development
+
 WORKDIR /app
 
 COPY Frontend/package.json ./Frontend/package.json
@@ -17,11 +19,11 @@ WORKDIR /app/Frontend
 
 RUN npm run dist
 
+RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" www/index.html
+
 
 FROM nginx
 
 COPY --from=builder /app/Frontend/www /usr/share/nginx/html
-
-RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" /usr/share/nginx/html/index.html
 
 EXPOSE 80
