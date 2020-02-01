@@ -2,6 +2,7 @@ version: 2
 jobs:
   test_backend:
     working_directory: ~/recipesage
+    context: RS API Env Vars
     docker:
       - image: circleci/node:10.16.3
         environment:
