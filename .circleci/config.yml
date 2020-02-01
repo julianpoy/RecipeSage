@@ -19,12 +19,12 @@ jobs:
           POSTGRES_LOGGING: false
           # GCM_KEYPAIR: notset
           # SENTRY_DSN: notset
-          # GRIP_URL: notset
-          # GRIP_KEY: notset
+          GRIP_URL: http://localhost:5561/
+          GRIP_KEY: changeme
           ELASTIC_ENABLE: false
-          # ELASTIC_IDX_PREFIX: notset
-          # ELASTIC_CONN: notset
-          # ELASTIC_PASSWORD: notset
+          ELASTIC_IDX_PREFIX: rs_test_
+          ELASTIC_CONN: http://elastic:elastic@localhost:9200
+          ELASTIC_PASSWORD: elastic
           # STRIPE_SK: notset
           # STRIPE_WEBHOOK_SECRET: notset
       - image: postgres:9.6.9
