@@ -357,7 +357,12 @@ export class RecipePage {
       if (event.relatedTarget && event.relatedTarget.className.indexOf('suggestion') > -1) {
         return;
       }
-      if (event.target && (event.target.id.match('labelInputField') || event.target.className.match('labelInputField') || event.target.className.match('suggestion'))) {
+      if (
+        event.target &&
+        (event.target.id.match('labelInputField') ||
+        event.target.className.match('labelInputField') ||
+        event.target.className.match('suggestion'))
+      ) {
         return;
       }
     }

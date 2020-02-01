@@ -44,7 +44,7 @@ export class VersionCheckService {
         alert.present();
       }
     }).catch(e => {
-      console.log("Unable to check for update.");
+      console.log('Unable to check for update.');
     });
   }
 }

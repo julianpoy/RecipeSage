@@ -56,7 +56,7 @@ export class ImportPepperplatePage {
       this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
 
       (await this.toastCtrl.create({
-        message: "Import complete!",
+        message: 'Import complete!',
         showCloseButton: true
       })).present();
 
@@ -78,7 +78,7 @@ export class ImportPepperplatePage {
           break;
         case 406:
           (await this.toastCtrl.create({
-            message: "Pepperplate rejected those credentials. Please try again.",
+            message: 'Pepperplate rejected those credentials. Please try again.',
             duration: 6000
           })).present();
           break;
@@ -94,14 +94,14 @@ export class ImportPepperplatePage {
                 }
               ]
             });
-      
+
             longTimeAlert.present();
           }, 20000);
           break;
         default:
           setTimeout(async () => {
             (await this.toastCtrl.create({
-              message: "An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
+              message: 'An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.',
               showCloseButton: true
             })).present();
           }, 10000);
