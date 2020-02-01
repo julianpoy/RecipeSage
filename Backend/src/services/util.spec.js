@@ -376,7 +376,7 @@ describe('utils', () => {
 
       formatS3ImageResponseStub = sinon.stub(UtilService, 'formatS3ImageResponse').returns(Promise.resolve(formattedS3Response))
 
-      let exampleFilePath = './test/exampleFiles/img1.png'
+      let exampleFilePath = path.join(__dirname, "../test/exampleFiles/img1.png")
       result = await sendFileToS3(exampleFilePath)
     })
 
@@ -413,7 +413,7 @@ describe('utils', () => {
     })
 
     it('returns empty array when it finds no files', () => {
-      let files = findFilesByRegex("../test/exampleFiles", new RegExp("doesnotexist"))
+      let files = findFilesByRegex(path.join(__dirname, "../test"), new RegExp("doesnotexist"))
 
       expect(files).to.be.an("array")
       expect(files).to.have.length(0)
