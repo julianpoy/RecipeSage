@@ -40,7 +40,7 @@ workbox.routing.registerRoute(
 // S3 assets don't share ID's so we can cache them indefinitely
 // Limit the cache to a maximum number of entries so as not to consume too much storage
 workbox.routing.registerRoute(
-  new RegExp('https://chefbook-prod\.s3\.amazonaws\.com/|https://chefbook-prod\.s3\.us-west-2\.amazonaws\.com/'),
+  /chefbook.*prod.*s3.*amazonaws/,
   workbox.strategies.cacheFirst({
     cacheName: 's3-image-cache',
     plugins: [
