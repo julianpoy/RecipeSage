@@ -38,6 +38,8 @@ router.get('/versioncheck', (req, res, next) => {
     supported = semver.satisfies(version, MIN_SUPPORTED_FRONTEND_VERSION);
   }
 
+  if (req.query.version === 'development') supported = true;
+
   res.status(200).json({
     supported
   });
