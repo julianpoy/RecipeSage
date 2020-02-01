@@ -43,7 +43,7 @@ jobs:
             - ./Backend/node_modules
       - run:
           name: extract-firebase-credentials
-          command: cd Backend/config && unzip -j -P $credentialskey firebase-credentials.json.zip
+          command: cd Backend/src/config && unzip -j -P $credentialskey firebase-credentials.json.zip
       # -------------- Tests -----------------
       - run: # run backend tests
           name: test-backend
