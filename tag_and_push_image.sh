@@ -10,7 +10,7 @@ then
 
     if ! [ -z "$2" ]
     then
-        docker image tag recipesage_express:latest julianpoy/recipesage:api-$2
+        docker image tag julianpoy/recipesage:api-latest julianpoy/recipesage:api-$2
         docker push julianpoy/recipesage:api-$2
     fi
 fi
