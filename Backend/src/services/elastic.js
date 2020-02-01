@@ -1,6 +1,6 @@
 let elasticsearch = require('elasticsearch');
 
-const ENABLE = process.env.ELASTIC_ENABLE;
+const ENABLE = process.env.ELASTIC_ENABLE === 'true' || process.env.ELASTIC_ENABLE === true;
 const INDEX_PREFIX = process.env.ELASTIC_IDX_PREFIX;
 
 const AVAILABLE_INDEXES = [
