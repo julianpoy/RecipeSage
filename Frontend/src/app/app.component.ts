@@ -12,6 +12,7 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { VersionCheckService } from '@/services/versioncheck.service';
 
 @Component({
   selector: 'app-root',
@@ -51,7 +52,8 @@ export class AppComponent {
     private websocketService: WebsocketService,
     private userService: UserService,
     private preferencesService: PreferencesService,
-    private capabilitiesService: CapabilitiesService
+    private capabilitiesService: CapabilitiesService,
+    private versionCheckService: VersionCheckService
   ) {
 
     this.initializeApp();
@@ -59,7 +61,6 @@ export class AppComponent {
     this.loadInboxCount();
     this.initUpdateListeners();
     this.initEventListeners();
-    this.initEventDispatchers();
 
     if ('Notification' in window && (Notification as any).permission === 'granted' && this.utilService.isLoggedIn()) {
       this.messagingService.requestNotifications();
@@ -92,23 +93,7 @@ export class AppComponent {
   }
 
   initUpdateListeners() {
-    // When user pauses app (device locks, switches tabs, etc) try to update SW
-    this.events.subscribe('application:multitasking:paused', () => {
-      try {
-        (window as any).updateSW();
-      } catch (e) { }
-    });
-
-    (window as any).onSWUpdate = () => {
-      console.log('Update is waiting for pause...');
-      if ((window as any).isHidden()) {
-        (window as any).location.reload(true);
-      } else {
-        this.events.subscribe('application:multitasking:paused', () => {
-          (window as any).location.reload(true);
-        });
-      }
-    };
+    (window as any).appLoaded = true;
   }
 
   initEventListeners() {
@@ -143,87 +128,6 @@ export class AppComponent {
       });
       toast.present();
     }, this);
-
-    this.websocketService.register('import:pepperplate:complete', payload => {
-      this.events.publish('import:pepperplate:complete');
-    }, this);
-
-    this.websocketService.register('import:pepperplate:failed', payload => {
-      this.events.publish('import:pepperplate:failed', payload.reason);
-    }, this);
-
-    this.websocketService.register('import:pepperplate:working', payload => {
-      this.events.publish('import:pepperplate:working');
-    }, this);
-
-    this.events.subscribe('import:pepperplate:complete', async () => {
-      const notification = 'Your recipes have been imported from Pepperplate.';
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        duration: 10000,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-
-    this.events.subscribe('import:pepperplate:failed', async reason => {
-      let notification = '';
-      if (reason === 'timeout') {
-        notification += 'Import failed: The Pepperplate API is unavailable right now.';
-      } else if (reason === 'invalidCredentials') {
-        notification += 'Import failed: Incorrect Pepperplate username or password.';
-      } else if (reason === 'saving') {
-        notification += 'Import failed: An error occured while fetching the recipes. Please try again later.';
-      } else {
-        return;
-      }
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-
-    this.events.subscribe('import:pepperplate:working', async () => {
-      const notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-  }
-
-  initEventDispatchers() {
-    let hidden, visibilityChange;
-    if (typeof (document as any).hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
-      hidden = 'hidden';
-      visibilityChange = 'visibilitychange';
-    } else if (typeof (document as any).msHidden !== 'undefined') {
-      hidden = 'msHidden';
-      visibilityChange = 'msvisibilitychange';
-    } else if (typeof (document as any).webkitHidden !== 'undefined') {
-      hidden = 'webkitHidden';
-      visibilityChange = 'webkitvisibilitychange';
-    }
-
-    (window as any).isHidden = () => {
-      return document[hidden];
-    };
-
-    document.addEventListener(visibilityChange, () => {
-      if (document[hidden]) {
-        this.events.publish('application:multitasking:paused');
-      } else {
-        this.events.publish('application:multitasking:resumed');
-      }
-    }, false);
   }
 
   updateIsLoggedIn() {

@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ionic serve --no-open --address rsdev.localhost --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
+    "start": "ionic serve --no-open --address 0.0.0.0 --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
     "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest && npm run compress",
     "build": "ionic build",
     "test": "ng test",
@@ -59,6 +59,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^12.7.9",
+    "bread-compressor-cli": "^1.0.8",
     "codelyzer": "~4.5.0",
     "ionic": "^5.4.10",
     "jasmine-core": "~2.99.1",

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, AlertController } from '@ionic/angular';
 
 import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
@@ -19,16 +19,19 @@ export class ImportPepperplatePage {
 
   errorMessage = '';
 
+  loading = false;
+
   constructor(
     public navCtrl: NavController,
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public utilService: UtilService,
     public recipeService: RecipeService) {
   }
 
 
-  scrapePepperplate() {
+  async scrapePepperplate() {
     if (this.username.trim().length === 0) {
       this.errorMessage = 'Please enter your pepperplate email/username.';
       return;
@@ -41,19 +44,24 @@ export class ImportPepperplatePage {
 
     const loading = this.loadingService.start();
 
+    this.loading = true;
+
     this.recipeService.scrapePepperplate({
       username: this.username,
       password: this.password
     }).then(async response => {
+      this.loading = false;
       loading.dismiss();
 
+      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+
       (await this.toastCtrl.create({
-        message: 'We\'ll start importing your recipes shortly! We\'ll alert you when the process begins.',
-        duration: 6000
+        message: 'Import complete!',
+        showCloseButton: true
       })).present();
 
-      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
     }).catch(async err => {
+      this.loading = false;
       loading.dismiss();
       switch (err.response.status) {
         case 0:
@@ -68,11 +76,35 @@ export class ImportPepperplatePage {
             duration: 6000
           })).present();
           break;
-        default:
+        case 406:
           (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
+            message: 'Pepperplate rejected those credentials. Please try again.',
             duration: 6000
           })).present();
+          break;
+        case 504:
+          setTimeout(async () => {
+            const longTimeAlert = await this.alertCtrl.create({
+              header: 'This is taking a little longer than expected',
+              message: `This can happen when Pepperplate is under heavy load. The import is still in progress. If you don't see your recipes appear, feel free to email me.`,
+              buttons: [
+                {
+                  text: 'Dismiss',
+                  handler: () => {}
+                }
+              ]
+            });
+
+            longTimeAlert.present();
+          }, 20000);
+          break;
+        default:
+          setTimeout(async () => {
+            (await this.toastCtrl.create({
+              message: 'An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.',
+              showCloseButton: true
+            })).present();
+          }, 10000);
           break;
       }
     });
