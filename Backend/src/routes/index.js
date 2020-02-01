@@ -626,8 +626,7 @@ router.post(
 )
 
 router.get('/embed/recipe/:recipeId', (req, res, next) => {
-  let redirectBase = req.headers.proxypassbase || '/';
-  res.redirect(302, `${redirectBase}print/${req.params.recipeId}${req._parsedUrl.search}`);
+  res.redirect(302, `/api/print/${req.params.recipeId}${req._parsedUrl.search}`);
 });
 
 module.exports = router;

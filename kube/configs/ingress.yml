@@ -7,29 +7,9 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/proxy-body-size: 800m
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location ~ /service-worker.js {
-        expires -1;
-        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-      }
-
-      location /api {
-        proxy_connect_timeout       300;
-        proxy_send_timeout          300;
-        proxy_read_timeout          300;
-        send_timeout                300;
-
-        proxy_set_header proxypassbase /api/;
-      }
-
-      location /grip/ws {
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "Upgrade";
-        proxy_connect_timeout 1h;
-        proxy_send_timeout 1h;
-        proxy_read_timeout 1h;
-      }
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 spec:
   rules:
   - http:
@@ -46,7 +26,7 @@ spec:
           servicePort: 3000
       - path: /()(.*)
         backend:
-          serviceName: rs-static
+          serviceName: rs-static-proxy
           servicePort: 80
   tls:
   - hosts:

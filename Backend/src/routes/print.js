@@ -32,8 +32,7 @@ router.get('/', (req, res, next) => {
 
   let modifierQuery = Object.keys(mappedModifiers).filter(m => mappedModifiers[m]).map(modifier => `&${modifier}=true`).join('')
 
-  let redirectBase = req.headers.proxypassbase || '/';
-  res.redirect(302, `${redirectBase}print/${req.query.recipeId}?printPreview=true&version=legacy${modifierQuery}`);
+  res.redirect(302, `/api/print/${req.query.recipeId}?printPreview=true&version=legacy${modifierQuery}`);
 })
 
 router.get('/shoppingList/:shoppingListId',

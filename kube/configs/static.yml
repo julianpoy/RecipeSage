@@ -25,6 +25,14 @@ spec:
           limits:
             cpu: 300m
             memory: 300Mi
+        volumeMounts:
+        - name: rs-static-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+      volumes:
+      - name: rs-static-config
+        configMap:
+          name: rs-static-config
       imagePullSecrets:
       - name: myregistrykey
 ---
@@ -40,3 +48,44 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rs-static-config
+data:
+  default.conf: |
+    server {
+      listen 80 default_server;
+
+      root /usr/share/nginx/html;
+      index index.html;
+
+      error_page 500 502 503 504 /50x.html;
+      location = /50x.html {
+        root /usr/share/nginx/html;
+        internal;
+      }
+
+      gzip on;
+      gzip_disable "msie6";
+
+      gzip_vary on;
+      gzip_static on;
+      gzip_min_length 20;
+      gzip_proxied any;
+      gzip_comp_level 6;
+      gzip_buffers 16 8k;
+      gzip_http_version 1.1;
+      gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript application/x-javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+
+      location /service-worker.js {
+        expires -1;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+      }
+
+      location /index.html {
+        expires -1;
+        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+      }
+    }

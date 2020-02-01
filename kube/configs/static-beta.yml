@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-static-beta
+  labels:
+    app: rs-static-beta
+spec:
+  selector:
+    matchLabels:
+      app: rs-static-beta
+  template:
+    metadata:
+      labels:
+        app: rs-static-beta
+    spec:
+      containers:
+      - name: rs-static-beta
+        image: julianpoy/recipesage:static-$RELEASE_TAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 20m
+            memory: 20Mi
+          limits:
+            cpu: 100m
+            memory: 150Mi
+        volumeMounts:
+        - name: rs-static-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+      volumes:
+      - name: rs-static-config
+        configMap:
+          name: rs-static-config
+      imagePullSecrets:
+      - name: myregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-static-beta
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-static-beta
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
