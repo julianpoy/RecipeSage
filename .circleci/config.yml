@@ -8,6 +8,25 @@ jobs:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
           RS_TEST_DB_DATABASE: chefbook_test
+          NODE_ENV: test
+          VERBOSE: true
+          POSTGRES_DB: chefbook_test
+          POSTGRES_USER: chefbook
+          POSTGRES_PASSWORD: admin
+          POSTGRES_PORT: 5432
+          POSTGRES_HOST: localhost
+          POSTGRES_SSL: false
+          POSTGRES_LOGGING: false
+          # GCM_KEYPAIR: notset
+          # SENTRY_DSN: notset
+          # GRIP_URL: notset
+          # GRIP_KEY: notset
+          ELASTIC_ENABLE: false
+          # ELASTIC_IDX_PREFIX: notset
+          # ELASTIC_CONN: notset
+          # ELASTIC_PASSWORD: notset
+          # STRIPE_SK: notset
+          # STRIPE_WEBHOOK_SECRET: notset
       - image: postgres:9.6.9
         environment:
           POSTGRES_USER: chefbook
