@@ -23,7 +23,9 @@ export class ContributePage {
     private utilService: UtilService,
     private paymentsService: PaymentsService,
     private toastCtrl: ToastController
-  ) {}
+  ) {
+    this.capabilitiesService.updateCapabilities();
+  }
 
   setAmount(amount: number) {
     this.amount = amount;

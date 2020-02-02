@@ -6,6 +6,7 @@ import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
 
 @Component({
   selector: 'page-auth-modal',
@@ -28,6 +29,7 @@ export class AuthModalPage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
+    public capabilitiesService: CapabilitiesService,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
     public userService: UserService) {
@@ -86,6 +88,7 @@ export class AuthModalPage {
         loading.dismiss();
 
         localStorage.setItem('token', response.token);
+        this.capabilitiesService.updateCapabilities();
 
         if ('Notification' in window && (Notification as any).permission === 'granted') {
           this.messagingService.requestNotifications();
@@ -116,6 +119,7 @@ export class AuthModalPage {
           loading.dismiss();
 
           localStorage.setItem('token', response.token);
+          this.capabilitiesService.updateCapabilities();
 
           if ('Notification' in window && (Notification as any).permission === 'granted') {
             this.messagingService.requestNotifications();

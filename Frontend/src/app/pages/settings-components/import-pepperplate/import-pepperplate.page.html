@@ -22,8 +22,10 @@
         </p>
         <br />
         <p>
-          If your username/password is incorrect, you'll receive a notification shortly.<br />
-          When the process is complete, you'll receive an alert and your recipe list will be updated.
+          If you have issues with the import process, feel free to send an email to <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a>.<br />
+          <b>Note: </b>If you have a very large recipe collection your browser may time out before the import is complete, resulting in an error.
+          To avoid creating duplicates, please check the "My Recipes" page before trying the import again.<br /><br />
+          If duplicates are created accidentally, you can use the "delete all recipes" button on the account page to start over.
         </p>
         <br />
         <p>
@@ -46,7 +48,8 @@
       <br /><br />
 
       <div class="ion-padding">
-        <ion-button expand="block" (click)="scrapePepperplate()">Start Import</ion-button>
+        <ion-button expand="block" (click)="scrapePepperplate()" *ngIf="!loading">Start Import</ion-button>
+        <ion-button expand="block" *ngIf="loading">Importing, please wait...</ion-button>
       </div>
 
       <div class="ion-padding">

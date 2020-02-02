@@ -1,6 +1,5 @@
 node_modules
 
-config/config.json
-config/firebase-credentials.json
+src/config/firebase-credentials.json
 
 package-lock.json

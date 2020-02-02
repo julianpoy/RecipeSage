@@ -6,19 +6,32 @@ workbox.setConfig({
   debug: false,
   modulePathPrefix: 'workbox-src/'
 });
-workbox.core.skipWaiting();
-workbox.core.clientsClaim();
 workbox.precaching.precacheAndRoute([]);
+
+// Index should be cached networkFirst - this way, users will always get the newest application version
+const MAX_OFFILE_APP_AGE = 30; // Days
+workbox.routing.registerRoute(
+  new RegExp('/index\.html'),
+  workbox.strategies.networkFirst({
+    cacheName: 'base-asset-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
+      }),
+    ]
+  })
+);
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
+const MAX_OFFLINE_API_AGE = 14; // Days
 workbox.routing.registerRoute(
   new RegExp('/api/'),
   workbox.strategies.networkFirst({
     cacheName: 'api-cache',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 60 * 60 * 24 * 14, // 14 Days
+        maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_API_AGE,
       }),
     ]
   })
@@ -27,7 +40,7 @@ workbox.routing.registerRoute(
 // S3 assets don't share ID's so we can cache them indefinitely
 // Limit the cache to a maximum number of entries so as not to consume too much storage
 workbox.routing.registerRoute(
-  new RegExp('https://chefbook-prod\.s3\.amazonaws\.com/|https://chefbook-prod\.s3\.us-west-2\.amazonaws\.com/'),
+  /chefbook.*prod.*s3.*amazonaws/,
   workbox.strategies.cacheFirst({
     cacheName: 's3-image-cache',
     plugins: [
@@ -79,55 +92,6 @@ messaging.setBackgroundMessageHandler(function(message) {
         otherUserId: messageObj.otherUser.id
       };
       notificationOptions.tag = message.data.type + '-' + messageObj.otherUser.id;
-      break;
-    case 'import:pepperplate:complete':
-      notificationTitle = 'Import complete!';
-
-      notificationOptions.body = 'Your recipes have been imported from Pepperplate.';
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type,
-      };
-      notificationOptions.tag = 'import:pepperplate';
-      break;
-    case 'import:pepperplate:failed':
-      var messageObj = JSON.parse(message.data.message);
-
-      var body = '';
-      if (messageObj.reason === 'timeout') {
-        body += 'Pepperplate service is unavailable right now.';
-      } else if (messageObj.reason === 'invalidCredentials') {
-        body += 'Incorrect Pepperplate username or password.';
-      } else if (messageObj.reason === 'saving') {
-        body += 'An error occured while fetching the recipes. Please try again later.';
-      } else {
-        return;
-      }
-
-      notificationTitle = 'Import failed';
-
-      notificationOptions.body = body;
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type
-      };
-      notificationOptions.tag = 'import:pepperplate';
-      break;
-    case 'import:pepperplate:working':
-      notificationTitle = 'Import in progress';
-
-      notificationOptions.body = 'Your Pepperplate recipes are being imported into RecipeSage';
-      notificationOptions.icon = RS_LOGO_URL;
-      notificationOptions.click_action = self.registration.scope;
-
-      notificationOptions.data = {
-        type: message.data.type
-      };
-      notificationOptions.tag = 'import:pepperplate';
       break;
   }
 

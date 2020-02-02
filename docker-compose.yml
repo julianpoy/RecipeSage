@@ -1,0 +1,85 @@
+version: '3.7'
+services:
+  proxy:
+    image: nginx
+    volumes:
+    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    - ./nginx/ssl.crt:/tmp/ssl.crt
+    - ./nginx/ssl.key:/tmp/ssl.key
+    ports:
+    - "80:80"
+    - "443:443"
+    command: nginx -g 'daemon off;'
+    depends_on:
+      - webapp
+      - express
+      - pushpin
+  webapp:
+    ports:
+      - "8100:8100"
+    build:
+      context: .
+      dockerfile: ./Frontend/Dockerfile
+    volumes:
+      - ./Frontend/src:/app/Frontend/src
+      - ./Frontend/package.json:/app/Frontend/package.json
+  express:
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - elasticsearch
+      - pushpin
+    build:
+      context: .
+      dockerfile: ./Backend/Dockerfile
+    command: npx nodemon src/bin/www
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_REGION
+      - AWS_BUCKET
+      - NODE_ENV
+      - VERBOSE=false
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_PORT
+      - POSTGRES_HOST
+      - POSTGRES_SSL
+      - POSTGRES_LOGGING
+      - GCM_KEYPAIR
+      - SENTRY_DSN
+      - GRIP_URL=http://pushpin:5561/
+      - GRIP_KEY=changeme
+      - ELASTIC_ENABLE
+      - ELASTIC_IDX_PREFIX
+      - ELASTIC_CONN
+      - ELASTIC_PASSWORD
+      - STRIPE_SK
+      - STRIPE_WEBHOOK_SECRET
+    volumes:
+      - ./Backend/src:/app/Backend/src
+      - ./Backend/package.json:/app/Backend/package.json
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD
+    ports:
+      - 9200:9200
+  pushpin:
+    image: fanout/pushpin
+    environment:
+      - target=express:3000
+    ports:
+      - "7999:7999"
+      - "5560-5563:5560-5563"
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD

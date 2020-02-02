@@ -29,7 +29,7 @@ export class ImportPaprikaPage {
   }
 
   setFile(event) {
-    const files = event.srcElement.files;
+    const files = (event.srcElement || event.target).files;
     if (!files) {
       return;
     }

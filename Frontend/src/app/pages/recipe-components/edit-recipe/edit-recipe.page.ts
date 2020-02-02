@@ -141,7 +141,7 @@ export class EditRecipePage {
   }
 
   async addImage(event) {
-    const files = event.srcElement.files;
+    const files = (event.srcElement || event.target).files;
     if (!files || !files[0]) {
       return;
     }
