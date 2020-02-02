@@ -104,22 +104,6 @@ export const RouteMap = {
     getPath() { return `/settings/account`; },
     path: 'settings/account',
   },
-  MyProfilePage: {
-    getPath() { return `people/my-profile`; },
-    path: 'people/my-profile',
-  },
-  ProfilePage: {
-    getPath(username: string) { return `people/${username}`; },
-    path: 'people/:username',
-  },
-  PeoplePage: {
-    getPath() { return `people`; },
-    path: 'people',
-  },
-  SocialPage: {
-    getPath() { return `people`; },
-    path: 'people',
-  },
   ExportPage: {
     getPath() { return `/settings/export`; },
     path: 'settings/export',
