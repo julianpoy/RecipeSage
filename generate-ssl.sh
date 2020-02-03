@@ -2,6 +2,8 @@
 
 cd nginx
 
+rm -rf ssl.crt
+rm -rf ssl.key
 rm rootCA.*
 rm ssl.*
 
