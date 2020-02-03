@@ -52,11 +52,18 @@ export class ManageLabelModalPage {
           this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           break;
         case 409:
-          const conflictToast = await this.toastCtrl.create({
-            message: 'Error: A label with that title already exists',
-            duration: 5000
+          const conflictAlert = await this.alertCtrl.create({
+            header: 'Error',
+            message: 'A label with that title already exists',
+            buttons: [
+              {
+                text: 'Dismiss',
+                handler: () => {}
+              }
+            ]
           });
-          conflictToast.present();
+
+          conflictAlert.present();
           break;
         default:
           const errorToast = await this.toastCtrl.create({
@@ -97,6 +104,59 @@ export class ManageLabelModalPage {
     });
 
     await renamePrompt.present();
+  }
+
+  async _delete() {
+    const loading = this.loadingService.start();
+
+    this.labelService.delete([this.label.id]).then(response => {
+      loading.dismiss();
+
+      this.modalCtrl.dismiss();
+    }).catch(async err => {
+      loading.dismiss();
+
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
+    });
+  }
+
+  async delete() {
+    const deletePrompt = await this.alertCtrl.create({
+      header: `Delete label: ${this.label.title}`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Confirm',
+          handler: response => {
+            this._delete();
+          }
+        }
+      ]
+    });
+
+    await deletePrompt.present();
   }
 
   cancel() {
