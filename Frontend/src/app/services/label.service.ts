@@ -18,12 +18,10 @@ export class LabelService {
 
   constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
 
-  fetch(options?: {
+  fetch(options: {
     title?: string
-  }) {
-    const { title } = options || {};
-
-    const titleQuery = title ? `&title=${encodeURIComponent(title)}` : '';
+  } = {}) {
+    const titleQuery = options.title ? `&title=${encodeURIComponent(options.title)}` : '';
 
     const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
 
