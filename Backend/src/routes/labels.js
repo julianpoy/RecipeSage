@@ -85,6 +85,85 @@ router.get(
   .catch(next);
 });
 
+//Get recipes associated with specific label
+router.get(
+  '/:labelId',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  Label.findOne({
+    where: {
+      id: req.query.labelId,
+      userId: res.locals.session.userId
+    },
+    include: [{
+      model: Recipe_Label,
+      as: 'recipe_labels',
+      attributes: [],
+    }],
+    attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
+    group: ['Label.id']
+  })
+  .then(label => {
+    res.status(200).json(label);
+  })
+  .catch(next);
+});
+
+//Combine two labels
+router.post(
+  '/merge',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  return SQ.transaction(async transaction => {
+    const oldLabel = await Label.findOne({
+      where: {
+        id: req.query.oldLabelId,
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe_Label,
+        as: 'recipe_labels',
+        attributes: ['recipeId'],
+      }],
+      transaction
+    });
+
+    const targetLabel = await Label.findOne({
+      where: {
+        id: req.query.targetLabelId,
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe_Label,
+        as: 'recipe_labels',
+        attributes: ['recipeId'],
+      }],
+      transaction
+    });
+    
+    const oldLabelRecipeIds = oldLabel.RecipeLabels.map(recipeLabel => recipeLabel.recipeId)
+    const targetLabelRecipeIds = targetLabel.RecipeLabels.map(recipeLabel => recipeLabel.recipeId)
+
+    const recipeIdsToUpdate = oldLabelRecipeIds.filter(recipeId => targetLabelRecipeIds.find(recipeId));
+
+    await Recipe_Label.update({
+      labelId: req.params.targetLabelId
+    }, {
+      where: {
+        labelId: req.params.oldLabelId,
+        recipeId: recipeIdsToUpdate
+      },
+      transaction
+    });
+  }).then(() => {
+    res.status(200);
+  }).catch(next);
+});
+
 //Delete a label from a recipe
 router.delete(
   '/',
