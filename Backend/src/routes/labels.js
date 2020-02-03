@@ -63,9 +63,15 @@ router.get(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  const addlOptions = {};
+  if (req.query.title) {
+    addlOptions.title = req.query.title;
+  }
+
   Label.findAll({
     where: {
-      userId: res.locals.session.userId
+      userId: res.locals.session.userId,
+      ...addlOptions
     },
     include: [{
       model: Recipe_Label,
@@ -118,10 +124,18 @@ router.post(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  if (!req.query.sourceLabelId || !req.query.targetLabelId) {
+    return res.status(400).send("Must pass sourceLabelId and targetLabelId");
+  }
+
+  if (req.query.sourceLabelId === req.query.targetLabelId) {
+    return res.status(400).send("Source label id cannot match destination label id");
+  }
+
   return SQ.transaction(async transaction => {
-    const oldLabel = await Label.findOne({
+    const sourceLabel = await Label.findOne({
       where: {
-        id: req.query.oldLabelId,
+        id: req.query.sourceLabelId,
         userId: res.locals.session.userId
       },
       include: [{
@@ -132,6 +146,8 @@ router.post(
       transaction
     });
 
+    if (!sourceLabel) return res.status("404").send("Source label not found");
+    
     const targetLabel = await Label.findOne({
       where: {
         id: req.query.targetLabelId,
@@ -144,23 +160,32 @@ router.post(
       }],
       transaction
     });
-    
-    const oldLabelRecipeIds = oldLabel.RecipeLabels.map(recipeLabel => recipeLabel.recipeId)
-    const targetLabelRecipeIds = targetLabel.RecipeLabels.map(recipeLabel => recipeLabel.recipeId)
 
-    const recipeIdsToUpdate = oldLabelRecipeIds.filter(recipeId => targetLabelRecipeIds.find(recipeId));
+    if (!targetLabel) return res.status("404").send("Target label not found");
+
+    const sourceLabelRecipeIds = sourceLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId)
+    const targetLabelRecipeIds = targetLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId)
+
+    const recipeIdsToUpdate = sourceLabelRecipeIds.filter(recipeId => !targetLabelRecipeIds.includes(recipeId));
 
     await Recipe_Label.update({
-      labelId: req.params.targetLabelId
+      labelId: req.query.targetLabelId
     }, {
       where: {
-        labelId: req.params.oldLabelId,
+        labelId: req.query.sourceLabelId,
         recipeId: recipeIdsToUpdate
       },
       transaction
     });
+
+    await Label.destroy({
+      where: {
+        id: req.query.sourceLabelId
+      },
+      transaction
+    });
   }).then(() => {
-    res.status(200);
+    res.status(200).send("ok");
   }).catch(next);
 });
 
