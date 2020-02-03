@@ -18,10 +18,14 @@ export class LabelService {
 
   constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
 
-  fetch(populate?: boolean) {
-    const populateQuery = populate ? '&populate=true' : '';
+  fetch(options?: {
+    title?: string
+  }) {
+    const { title } = options || {};
 
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + populateQuery;
+    const titleQuery = title ? `&title=${encodeURIComponent(title)}` : '';
+
+    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
 
     return this.httpService.request({
       method: 'get',
@@ -98,5 +102,15 @@ export class LabelService {
 
       return response.data;
     });
+  }
+
+  merge(sourceLabelId: string, targetLabelId: string) {
+    const url = this.utilService.getBase() + 'labels/merge' + this.utilService.getTokenQuery() +
+      `&sourceLabelId=${sourceLabelId}&targetLabelId=${targetLabelId}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url
+    }).then(response => response.data);
   }
 }
