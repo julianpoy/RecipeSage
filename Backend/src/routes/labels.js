@@ -189,7 +189,7 @@ router.post(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  if (!req.query.labelIds) {
+  if (!req.body.labelIds || !req.body.labelIds.length) {
     return res.status(412).json({
       msg: "LabelIds are required!"
     });
