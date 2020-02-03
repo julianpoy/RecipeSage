@@ -83,11 +83,16 @@ export class LabelService {
 
   // Deletes label and removes from all associated recipes
   delete(labelIds: string[]) {
-    const url = this.utilService.getBase() + 'labels/delete' + this.utilService.getTokenQuery() + '&labelIds=' + labelIds.join(',');
+    const url = this.utilService.getBase() + 'labels/delete-bulk' + this.utilService.getTokenQuery();
+
+    const data = {
+      labelIds
+    };
 
     return this.httpService.request({
       method: 'post',
-      url
+      url,
+      data
     }).then(response => {
       this.events.publish('label:deleted');
 
