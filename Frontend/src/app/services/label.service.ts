@@ -8,6 +8,7 @@ export interface Label {
   title: string;
   createdAt: string;
   updatedAt: string;
+  recipeCount?: number;
 }
 
 @Injectable({
