@@ -184,7 +184,7 @@ router.put(
 
 // Delete labels from all associated recipes
 router.post(
-  '/delete',
+  '/delete-bulk',
   cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
@@ -195,16 +195,14 @@ router.post(
     });
   }
 
-  Label.delete({
+  Label.destroy({
     where: {
       id: { [Op.in]: req.body.labelIds },
       userId: res.locals.session.userId
     }
-  })
-  .then(function(label) {
+  }).then(() => {
     res.status(200).send("ok");
-  })
-  .catch(next);
+  }).catch(next);
 });
 
 module.exports = router;
