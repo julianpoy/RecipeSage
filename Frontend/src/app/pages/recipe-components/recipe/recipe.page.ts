@@ -160,10 +160,7 @@ export class RecipePage {
           this.labelObjectsByTitle[label.title] = label;
         }
 
-        this.existingLabels.sort((a, b) => {
-          if (this.labelObjectsByTitle[a].recipeCount === this.labelObjectsByTitle[b].recipeCount) return 0;
-          return this.labelObjectsByTitle[a].recipeCount > this.labelObjectsByTitle[b].recipeCount ? -1 : 1;
-        });
+        this.existingLabels.sort((a, b) => a.localeCompare(b));
 
         resolve();
       }).catch(async err => {
