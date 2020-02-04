@@ -202,7 +202,7 @@ export class ManageLabelModalPage {
           role: 'cancel'
         }]
       });
-  
+
       await notFoundAlert.present();
       return;
     }
@@ -218,7 +218,7 @@ export class ManageLabelModalPage {
           role: 'cancel'
         }]
       });
-  
+
       await sameIdAlert.present();
       return;
     }
@@ -227,7 +227,7 @@ export class ManageLabelModalPage {
       await this.labelService.merge(this.label.id, targetLabel.id);
     } catch (err) {
       loading.dismiss();
-  
+
       switch (err.response.status) {
         case 0:
           const offlineToast = await this.toastCtrl.create({
