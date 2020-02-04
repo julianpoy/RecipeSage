@@ -1,0 +1,52 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-title>Manage Label: {{label.title}}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-label>
+      <h2 class="ion-text-capitalize">
+        {{label.title}}
+      </h2>
+      <p>
+        Tagged on: {{label.recipeCount}} recipes<br />
+        First created: {{createdAt}}<br />
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br />
+
+  <b>Note:</b> These actions are permenant
+
+
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="full" (click)="rename()">
+    <ion-icon name="create" slot="start"></ion-icon>
+    <ion-label>Rename</ion-label>
+  </ion-button>
+
+  <ion-button expand="full" (click)="merge()">
+    <ion-icon name="git-network" slot="start"></ion-icon>
+    <ion-label>Merge With Another Label</ion-label>
+  </ion-button>
+
+  <ion-button expand="full" color="danger" (click)="delete()">
+    <ion-icon name="trash" slot="start"></ion-icon>
+    <ion-label>Delete</ion-label>
+  </ion-button>
+</ion-footer>

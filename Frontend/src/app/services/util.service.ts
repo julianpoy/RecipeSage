@@ -24,6 +24,10 @@ export const RouteMap = {
     getPath(folder: string) { return `/list/${folder}`; },
     path: 'list/:folder',
   },
+  LabelsPage: {
+    getPath() { return `labels`; },
+    path: 'labels',
+  },
   AboutPage: {
     getPath() { return `/about`; },
     path: 'about',

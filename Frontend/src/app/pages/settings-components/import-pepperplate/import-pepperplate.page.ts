@@ -77,10 +77,15 @@ export class ImportPepperplatePage {
           })).present();
           break;
         case 406:
-          (await this.toastCtrl.create({
-            message: 'Pepperplate rejected those credentials. Please try again.',
-            duration: 6000
-          })).present();
+          const credentialsAlert = await this.alertCtrl.create({
+            header: 'Invalid Credentials',
+            message: `Pepperplate rejected those credentials. Please try again.`,
+            buttons: [{
+              text: 'Ok'
+            }]
+          });
+
+          credentialsAlert.present();
           break;
         case 504:
           setTimeout(async () => {

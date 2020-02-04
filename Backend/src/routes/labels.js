@@ -4,8 +4,8 @@ var cors = require('cors');
 var Raven = require('raven');
 
 // DB
+var Op = require('sequelize').Op;
 var SQ = require('../models').sequelize;
-var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
 var Recipe_Label = require('../models').Recipe_Label;
@@ -63,9 +63,15 @@ router.get(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  const addlOptions = {};
+  if (req.query.title) {
+    addlOptions.title = req.query.title;
+  }
+
   Label.findAll({
     where: {
-      userId: res.locals.session.userId
+      userId: res.locals.session.userId,
+      ...addlOptions
     },
     include: [{
       model: Recipe_Label,
@@ -83,6 +89,104 @@ router.get(
     res.status(200).json(labels);
   })
   .catch(next);
+});
+
+//Get recipes associated with specific label
+router.get(
+  '/:labelId',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  Label.findOne({
+    where: {
+      id: req.query.labelId,
+      userId: res.locals.session.userId
+    },
+    include: [{
+      model: Recipe_Label,
+      as: 'recipe_labels',
+      attributes: [],
+    }],
+    attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
+    group: ['Label.id']
+  })
+  .then(label => {
+    res.status(200).json(label);
+  })
+  .catch(next);
+});
+
+//Combine two labels
+router.post(
+  '/merge',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  if (!req.query.sourceLabelId || !req.query.targetLabelId) {
+    return res.status(400).send("Must pass sourceLabelId and targetLabelId");
+  }
+
+  if (req.query.sourceLabelId === req.query.targetLabelId) {
+    return res.status(400).send("Source label id cannot match destination label id");
+  }
+
+  return SQ.transaction(async transaction => {
+    const sourceLabel = await Label.findOne({
+      where: {
+        id: req.query.sourceLabelId,
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe_Label,
+        as: 'recipe_labels',
+        attributes: ['recipeId'],
+      }],
+      transaction
+    });
+
+    if (!sourceLabel) return res.status("404").send("Source label not found");
+    
+    const targetLabel = await Label.findOne({
+      where: {
+        id: req.query.targetLabelId,
+        userId: res.locals.session.userId
+      },
+      include: [{
+        model: Recipe_Label,
+        as: 'recipe_labels',
+        attributes: ['recipeId'],
+      }],
+      transaction
+    });
+
+    if (!targetLabel) return res.status("404").send("Target label not found");
+
+    const sourceLabelRecipeIds = sourceLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId)
+    const targetLabelRecipeIds = targetLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId)
+
+    const recipeIdsToUpdate = sourceLabelRecipeIds.filter(recipeId => !targetLabelRecipeIds.includes(recipeId));
+
+    await Recipe_Label.update({
+      labelId: req.query.targetLabelId
+    }, {
+      where: {
+        labelId: req.query.sourceLabelId,
+        recipeId: recipeIdsToUpdate
+      },
+      transaction
+    });
+
+    await Label.destroy({
+      where: {
+        id: req.query.sourceLabelId
+      },
+      transaction
+    });
+  }).then(() => {
+    res.status(200).send("ok");
+  }).catch(next);
 });
 
 //Delete a label from a recipe
@@ -136,6 +240,73 @@ router.delete(
   } catch(e) {
     next(e);
   }
+});
+
+// Update label for all associated recipes
+router.put(
+  '/:id',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  SQ.transaction(t => {
+    return Label.findOne({
+      where: {
+        id: req.params.id,
+        userId: res.locals.session.userId
+      }
+    }).then(label => {
+      if (!label) {
+        res.status(404).json({
+          msg: "Label with that ID does not exist!"
+        });
+      } else {
+        if (typeof req.body.title === 'string') label.title = req.body.title.toLowerCase().replace(',', '');
+
+        return Label.findAll({
+          where: {
+            id: { [Op.ne]: label.id },
+            title: req.body.title,
+            userId: res.locals.session.userId
+          },
+          transaction: t
+        }).then(labels => {
+          if (labels && labels.length > 0) {
+            res.status(409).json({
+              msg: "Label with that title already exists!"
+            });
+          } else {
+            return label.save({ transaction: t }).then(label => {
+              res.status(200).json(label);
+            });
+          }
+        });
+      }
+    });
+  }).catch(next);
+});
+
+// Delete labels from all associated recipes
+router.post(
+  '/delete-bulk',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  function(req, res, next) {
+
+  if (!req.body.labelIds || !req.body.labelIds.length) {
+    return res.status(412).json({
+      msg: "LabelIds are required!"
+    });
+  }
+
+  Label.destroy({
+    where: {
+      id: { [Op.in]: req.body.labelIds },
+      userId: res.locals.session.userId
+    }
+  }).then(() => {
+    res.status(200).send("ok");
+  }).catch(next);
 });
 
 module.exports = router;

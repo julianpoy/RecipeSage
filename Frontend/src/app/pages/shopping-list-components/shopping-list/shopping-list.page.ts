@@ -164,7 +164,6 @@ export class ShoppingListPage {
           duration: 5000,
           buttons: [{
             text: 'Undo',
-            role: 'cancel',
             handler: () => {
               this._addItems(items.map(el => {
                 return {

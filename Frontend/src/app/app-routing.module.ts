@@ -19,6 +19,10 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.LabelsPage.path,
+    loadChildren: '@/pages/labels-pages/labels/labels.module#LabelsPageModule'
+  },
+  {
     path: RouteMap.AboutPage.path,
     loadChildren: '@/pages/info-components/about/about.module#AboutPageModule',
     canDeactivate: [UnsavedChangesGuardService]
