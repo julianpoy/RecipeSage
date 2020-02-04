@@ -3,6 +3,7 @@ import { PopoverController } from '@ionic/angular';
 
 import { UtilService } from '@/services/util.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+import { PreferencesService, ManageLabelsPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'page-labels-popover',
@@ -11,7 +12,8 @@ import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tut
 })
 export class LabelsPopoverPage {
 
-  @Input() viewOptions: any;
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = ManageLabelsPreferenceKey;
 
   @Input() labels: any;
 
@@ -20,6 +22,7 @@ export class LabelsPopoverPage {
   constructor(
     public popoverCtrl: PopoverController,
     public utilService: UtilService,
+    public preferencesService: PreferencesService,
     public quickTutorialService: QuickTutorialService) {
 
   }
@@ -35,10 +38,9 @@ export class LabelsPopoverPage {
     });
   }
 
-  saveViewOptions(refreshSearch?: boolean) {
-    localStorage.setItem('showDates', this.viewOptions.showDates);
-    this.popoverCtrl.dismiss({
-      refreshSearch
-    });
+  savePreferences() {
+    this.preferencesService.save();
+
+    this.popoverCtrl.dismiss();
   }
 }
