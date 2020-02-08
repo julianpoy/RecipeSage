@@ -40,6 +40,13 @@
   </ion-item>
 
   <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeDescription]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
+    <ion-label class="ion-text-wrap">
+      Show Description
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="full">
     <ion-label>Sort by</ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences(true);">
       <ion-select-option value="-title">Title</ion-select-option>

@@ -12,6 +12,7 @@ export enum MyRecipesPreferenceKey {
   ShowLabelChips = 'myRecipes.showLabelChips',
   ShowImages = 'myRecipes.showImages',
   ShowSource = 'myRecipes.showSource',
+  ShowRecipeDescription = 'myRecipes.showRecipeDescription',
   ViewType = 'myRecipes.viewType',
   SortBy = 'myRecipes.sortBy'
 }
@@ -42,6 +43,7 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowLabelChips]: boolean;
   [MyRecipesPreferenceKey.ShowImages]: boolean;
   [MyRecipesPreferenceKey.ShowSource]: boolean;
+  [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
   [MyRecipesPreferenceKey.SortBy]: '-title' | '- createdAt' | 'createdAt' | '- updatedAt' | 'updatedAt';
 
@@ -71,6 +73,7 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowLabelChips]: false,
     [MyRecipesPreferenceKey.ShowImages]: true,
     [MyRecipesPreferenceKey.ShowSource]: false,
+    [MyRecipesPreferenceKey.ShowRecipeDescription]: true,
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
