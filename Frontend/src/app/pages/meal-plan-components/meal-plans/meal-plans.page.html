@@ -25,11 +25,14 @@
         </p>
         <p *ngIf="mealPlan.collaborators.length > 0">
           In collaboration with:
-          <span *ngFor="let user of mealPlan.collaborators">
-            <span *ngIf="mealPlan.myUserId !== user.id">{{ user.name || user.email }}</span>
+          <span *ngFor="let user of mealPlan.collaborators; last as isLast">
+            <span *ngIf="mealPlan.myUserId !== user.id">
+              {{ user.name || user.email }}<span *ngIf="!isLast || mealPlan.myUserId !== mealPlan.owner.id">,</span>
+            </span>
           </span>
-          <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">{{ mealPlan.owner.name || mealPlan.owner.email
-            }}</span>
+          <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">
+            {{ mealPlan.owner.name || mealPlan.owner.email }}
+          </span>
         </p>
         <p>
           <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">Created by {{ mealPlan.owner.name || mealPlan.owner.email

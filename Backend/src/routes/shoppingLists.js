@@ -98,38 +98,52 @@ router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function (req, res, next) {
+  async (req, res, next) => {
 
-    ShoppingList.findAll({
-      where: {
-        [Op.or]: [
-          { userId: res.locals.session.userId },
-          { '$collaborators.id$': res.locals.session.userId }
-        ]
-      },
-      include: [
-        {
+    try {
+      const shoppingListIds = (await ShoppingList.findAll({
+        where: {
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
+        include: [{
           model: User,
           as: 'collaborators',
-          attributes: ['id', 'name', 'email']
+          attributes: ['id']
+        }],
+        attributes: ['id']
+      })).map(result => result.id);
+
+      const shoppingLists = await ShoppingList.findAll({
+        where: {
+          id: shoppingListIds
         },
-        {
-          model: User,
-          as: 'owner',
-          attributes: ['id', 'name', 'email']
-        },
-        {
-          model: ShoppingListItem,
-          as: 'items',
-          attributes: []
-        }
-      ],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
-      group: ['ShoppingList.id', 'collaborators.id', 'collaborators->ShoppingList_Collaborator.id', 'owner.id'],
-      order: [
-        ['updatedAt', 'DESC']
-      ]
-    }).then(function(shoppingLists) {
+        include: [
+          {
+            model: User,
+            as: 'collaborators',
+            attributes: ['id', 'name', 'email']
+          },
+          {
+            model: User,
+            as: 'owner',
+            attributes: ['id', 'name', 'email']
+          },
+          {
+            model: ShoppingListItem,
+            as: 'items',
+            attributes: []
+          }
+        ],
+        attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
+        group: ['ShoppingList.id', 'collaborators.id', 'collaborators->ShoppingList_Collaborator.id', 'owner.id'],
+        order: [
+          ['updatedAt', 'DESC']
+        ]
+      });
+
       let s = shoppingLists.map(function(list) {
         let l = list.dataValues;
         l.myUserId = res.locals.session.userId;
@@ -138,7 +152,9 @@ router.get(
       });
 
       res.status(200).json(s);
-    }).catch(next);
+    } catch (e) {
+      next(e);
+    }
   });
 
 // Add items to a shopping list
@@ -320,60 +336,67 @@ router.get(
   '/:shoppingListId',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  async (req, res, next) => {
 
-    ShoppingList.findOne({
-      where: {
-        id: req.params.shoppingListId,
-        [Op.or]: [
-          { userId: res.locals.session.userId },
-          { '$collaborators.id$': res.locals.session.userId }
-        ]
-      },
-      include: [
-        {
+    try {
+      const shoppingList = await ShoppingList.findOne({
+        where: {
+          id: req.params.shoppingListId,
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
+        include: [{
+          model: User,
+          as: 'collaborators',
+          attributes: ['id']
+        }]
+      });
+
+      if (!shoppingList) {
+        return res.status(404).send("Recipe with that ID not found!");
+      }
+
+      const shoppingListSummary = await ShoppingList.findOne({
+        where: {
+          id: shoppingList.id
+        },
+        include: [{
           model: User,
           as: 'collaborators',
           attributes: ['id', 'name', 'email']
-        },
-        {
+        }, {
           model: User,
           as: 'owner',
           attributes: ['id', 'name', 'email']
-        },
-        {
+        }, {
           model: ShoppingListItem,
           as: 'items',
           attributes: ['id', 'title', 'completed', 'createdAt', 'updatedAt'],
-          include: [
-            {
-              model: User,
-              as: 'owner',
-              attributes: ['id', 'name', 'email']
-            },
-            {
-              model: MealPlanItem,
-              as: 'mealPlanItem',
-              attributes: ['id', 'title']
-            },
-            {
-              model: Recipe,
-              as: 'recipe',
-              attributes: ['id', 'title']
-            }
-          ]
-        }
-      ]
-    }).then(function(shoppingList) {
-      if (!shoppingList) {
-        res.status(404).send("Recipe with that ID not found!");
-      } else {
-        let s = shoppingList.toJSON();
-        s.itemsByGroup = groupShoppingListItems(shoppingList.items);
+          include: [{
+            model: User,
+            as: 'owner',
+            attributes: ['id', 'name', 'email']
+          }, {
+            model: MealPlanItem,
+            as: 'mealPlanItem',
+            attributes: ['id', 'title']
+          }, {
+            model: Recipe,
+            as: 'recipe',
+            attributes: ['id', 'title']
+          }]
+        }]
+      });
 
-        res.status(200).json(s);
-      }
-    }).catch(next);
+      let s = shoppingListSummary.toJSON();
+      s.itemsByGroup = groupShoppingListItems(s.items);
+
+      res.status(200).json(s);
+    } catch (e) {
+      next(e);
+    }
 });
 
 // Update a shopping list meta info (NOT INCLUDING ITEMS)
