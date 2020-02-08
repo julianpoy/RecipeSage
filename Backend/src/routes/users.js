@@ -167,9 +167,9 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  SQ.transaction(transaction => {
-    let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
+  SQ.transaction(transaction => {
     if (!UtilService.validateEmail(sanitizedEmail)) {
       let e = new Error('Email is not valid!');
       e.status = 412;
@@ -213,6 +213,46 @@ router.post(
     res.status(200).json({
       token
     });
+
+    var html = `Welcome to RecipeSage!
+
+    <br /><br />Thanks for joining our community of recipe collectors!
+    <br /><br />
+
+    Please feel free to contact me if you have questions, concerns or comments at <a href="mailto:julian@recipesage.com?subject=RecipeSage%20Support">julian@recipesage.com</a>.
+
+    <br />
+
+    <br /><br />Best,
+    <br />Julian Poyourow
+    <br />Developer of RecipeSage - <a href="https://recipesage.com">https://recipesage.com</a>
+    <br /><br />
+    <b>Social:</b><br />
+    Discord: <a href="https://discord.gg/yCfzBft">https://discord.gg/yCfzBft</a><br />
+    Facebook: <a href="https://www.facebook.com/recipesageofficial/">https://www.facebook.com/recipesageofficial/</a><br />
+    Instagram: <a href="https://www.instagram.com/recipesageofficial/">https://www.instagram.com/recipesageofficial/</a><br />
+    Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>`;
+
+    var plain = `Welcome to RecipeSage!
+
+Thanks for joining our community of recipe collectors!
+
+Please feel free to contact me if you have questions, concerns or comments at julian@recipesage.com.
+
+
+Best,
+Julian Poyourow
+Developer of RecipeSage - https://recipesage.com
+
+Social:
+https://discord.gg/yCfzBft
+https://www.facebook.com/recipesageofficial/
+https://www.instagram.com/recipesageofficial/
+https://twitter.com/RecipeSageO`;
+
+    UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
+      Raven.captureException(err);
+    });
   })
   .catch(next);
 });
@@ -254,24 +294,22 @@ router.post(
         <br /><br /><a href="` + link + `">Click here to reset your password</a>
         <br />or paste this url into your browser: ` + link + `
 
+        <br />
+
         <br /><br />Thank you,
         <br />Julian P.
-        <br />RecipeSage
-        <br /><br />
-        Please do not reply to this email.`;
+        <br />RecipeSage`;
 
         var plain = `Hello,
 
-        \n\nSomeone recently requested a password reset link for the RecipeSage account associated with this email address.
-        \n\nIf you did not request a password reset, please disregard this email.
+Someone recently requested a password reset link for the RecipeSage account associated with this email address.
+If you did not request a password reset, please disregard this email.
 
-        \n\nTo reset your password, paste this url into your browser: ` + link + `
+To reset your password, paste this url into your browser: ` + link + `
 
-        \n\nThank you,
-        \nJulian P.
-        \nRecipeSage
-        \n\n
-        Please do not reply to this email.`;
+Thank you,
+Julian P.
+RecipeSage`;
 
         return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
           res.status(standardStatus).json(standardResponse);

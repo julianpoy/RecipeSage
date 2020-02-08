@@ -48,7 +48,7 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
     },
     Source: '"RecipeSage" <noreply@recipesage.com>', /* required */
     ReplyToAddresses: [
-      'noreply@recipesage.com',
+      'julian@recipesage.com',
       /* more items */
     ],
   };
