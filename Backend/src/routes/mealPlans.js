@@ -61,39 +61,53 @@ router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function (req, res, next) {
-
-    MealPlan.findAll({
-      where: {
-        [Op.or]: [
-          { userId: res.locals.session.userId },
-          { '$collaborators.id$': res.locals.session.userId }
-        ]
-      },
-      include: [
-        {
+  async (req, res, next) => {
+    
+    try {
+      const mealPlanIds = (await MealPlan.findAll({
+        where: {
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
+        include: [{
           model: User,
           as: 'collaborators',
           attributes: ['id', 'name', 'email']
+        }],
+        attributes: ['id']
+      })).map(result => result.id);
+
+      const mealPlans = await MealPlan.findAll({
+        where: {
+          id: mealPlanIds
         },
-        {
-          model: User,
-          as: 'owner',
-          attributes: ['id', 'name', 'email']
-        },
-        {
-          model: MealPlanItem,
-          as: 'items',
-          attributes: []
-        }
-      ],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
-      group: ['MealPlan.id', 'collaborators.id', 'collaborators->MealPlan_Collaborator.id', 'owner.id'],
-      order: [
-        ['updatedAt', 'DESC']
-      ]
-    }).then(function(mealPlans) {
-      let mp = mealPlans.map(function (plan) {
+        include: [
+          {
+            model: User,
+            as: 'collaborators',
+            attributes: ['id', 'name', 'email']
+          },
+          {
+            model: User,
+            as: 'owner',
+            attributes: ['id', 'name', 'email']
+          },
+          {
+            model: MealPlanItem,
+            as: 'items',
+            attributes: []
+          }
+        ],
+        attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
+        group: ['MealPlan.id', 'collaborators.id', 'collaborators->MealPlan_Collaborator.id', 'owner.id'],
+        order: [
+          ['updatedAt', 'DESC']
+        ]
+      });
+
+      let mp = mealPlans.map(plan => {
         let p = plan.dataValues;
         p.myUserId = res.locals.session.userId;
 
@@ -101,7 +115,9 @@ router.get(
       });
 
       res.status(200).json(mp);
-    }).catch(next);
+    } catch (e) {
+      next(e);
+    }
   });
 
 // Add items to a meal plan
