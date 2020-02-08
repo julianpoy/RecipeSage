@@ -74,7 +74,7 @@ router.get(
         include: [{
           model: User,
           as: 'collaborators',
-          attributes: ['id', 'name', 'email']
+          attributes: ['id']
         }],
         attributes: ['id']
       })).map(result => result.id);
