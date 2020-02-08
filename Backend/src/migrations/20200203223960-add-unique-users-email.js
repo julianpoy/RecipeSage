@@ -2,13 +2,13 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addIndex('Users', {
-      fields: ['email'],
-      unique: true
+    return queryInterface.addConstraint('Users', ['email'], {
+      type: "UNIQUE",
+      name: 'Users_email_uk'
     });
   },
   
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeIndex('Users', ['email']);
+    return queryInterface.removeConstraint('Users', 'Users_email_uk');
   }
 };

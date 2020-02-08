@@ -383,6 +383,7 @@ async function main() {
             ...(lcbCookbooksById[lcbRecipe.cookbookid] || []).map(el => el.name.trim().toLowerCase())
           ])
         ].filter(el => el && el.length > 0)
+         .map(el => UtilService.cleanLabelTitle(el));
 
         return pendingRecipes.push({
           model: {
@@ -463,6 +464,7 @@ async function main() {
               recipeId
             }
           }), {
+            ignoreDuplicates: true,
             transaction: t
           })
         });

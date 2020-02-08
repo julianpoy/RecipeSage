@@ -373,3 +373,7 @@ exports.executeInChunks = async (cbs, chunkSize) => {
     })
   }, Promise.resolve())
 }
+
+exports.cleanLabelTitle = labelTitle => {
+  return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
+}

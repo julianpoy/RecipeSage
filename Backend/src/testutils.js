@@ -6,6 +6,7 @@ const uuid = require('uuid/v4');
 
 var Op = require("sequelize").Op;
 var SQ = require('./models').sequelize;
+var ModelNames = require('./models').modelNames;
 var User = require('./models').User;
 var FCMToken = require('./models').FCMToken;
 var Session = require('./models').Session;
@@ -25,6 +26,7 @@ let migrate = async (down) => {
       { env: process.env },
       (err, stdout, stderr) => {
         if (err) {
+          console.error(stdout);
           reject(err);
         } else {
           resolve();
@@ -39,7 +41,13 @@ let migrate = async (down) => {
 }
 
 module.exports.syncDB = async () => {
-  await SQ.sync({ force: true });
+  await Promise.all(ModelNames.map(async modelName => {
+    await require('./models')[modelName].destroy({
+      truncate: true,
+      cascade: true,
+      hooks: false
+    });
+  }));
 }
 
 module.exports.setup = async () => {
