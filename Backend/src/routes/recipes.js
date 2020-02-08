@@ -49,8 +49,7 @@ const legacyImageHandler = async (req, res, next) => {
         uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
       } catch (e) {
         e.status = 415;
-
-        return next(e);
+        throw e;
       }
 
       const newImage = await Image.create({
@@ -67,8 +66,6 @@ const legacyImageHandler = async (req, res, next) => {
 
     next();
   } catch (e) {
-    console.error(e);
-
     next(e);
   }
 };
