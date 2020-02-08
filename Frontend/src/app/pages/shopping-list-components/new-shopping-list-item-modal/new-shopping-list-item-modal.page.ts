@@ -53,7 +53,7 @@ export class NewShoppingListItemModalPage {
     let items;
     if (this.inputType === 'recipe') {
       items = this.selectedIngredients.map(ingredient => ({
-        title: ingredient.originalContent,
+        title: ingredient.content,
         recipeId: this.selectedRecipe.id
       }));
     } else {

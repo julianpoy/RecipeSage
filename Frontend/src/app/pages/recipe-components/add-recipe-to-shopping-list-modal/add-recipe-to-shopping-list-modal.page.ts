@@ -106,7 +106,7 @@ export class AddRecipeToShoppingListModalPage {
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
       items: this.selectedIngredients.map(ingredient => ({
-        title: ingredient.originalContent,
+        title: ingredient.content,
         recipeId: this.recipe.id,
         reference: this.reference
       }))
