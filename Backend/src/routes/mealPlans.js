@@ -294,65 +294,69 @@ router.get(
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
-  function(req, res, next) {
+  async (req, res, next) => {
 
-  MealPlan.findOne({
-    where: {
-      id: req.params.mealPlanId,
-      [Op.or]: [
-        { userId: res.locals.session.userId },
-        { '$collaborators.id$': res.locals.session.userId }
-      ]
-    },
-    include: [
-      {
+  try {
+    const mealPlan = await MealPlan.findOne({
+      where: {
+        id: req.params.mealPlanId,
+        [Op.or]: [
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
+        ]
+      },
+      include: [{
+        model: User,
+        as: 'collaborators',
+        attributes: ['id']
+      }]
+    });
+
+    if (!mealPlan) {
+      res.status(404).send("Meal plan with that ID not found or you do not have access!");
+    }
+
+    const mealPlanSummary = await MealPlan.findOne({
+      where: {
+        id: mealPlan.id
+      },
+      include: [{
         model: User,
         as: 'collaborators',
         attributes: ['id', 'name', 'email']
-      },
-      {
+      }, {
         model: User,
         as: 'owner',
         attributes: ['id', 'name', 'email']
-      },
-      {
+      }, {
         model: MealPlanItem,
         as: 'items',
         attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
-        include: [
-          {
-            model: User,
-            as: 'owner',
-            attributes: ['id', 'name', 'email']
-          },
-          {
-            model: ShoppingListItem,
-            as: 'shoppingListItems',
-            attributes: ['id', 'title'],
-            include: [
-              {
-                model: ShoppingList,
-                as: 'shoppingList',
-                attributes: ['id', 'title']
-              }
-            ]
-          },
-          {
-            model: Recipe,
-            as: 'recipe',
+        include: [{
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'name', 'email']
+        }, {
+          model: ShoppingListItem,
+          as: 'shoppingListItems',
+          attributes: ['id', 'title'],
+          include: [{
+            model: ShoppingList,
+            as: 'shoppingList',
             attributes: ['id', 'title']
-          }
-        ]
-      }
-    ]
-  }).then(function (shoppingList) {
-    if (!shoppingList) {
-      res.status(404).send("Shopping list with that ID not found!");
-    } else {
-      res.status(200).json(shoppingList);
-    }
-  }).catch(next);
+          }]
+        }, {
+          model: Recipe,
+          as: 'recipe',
+          attributes: ['id', 'title']
+        }]
+      }]
+    });
 
+    res.status(200).json(mealPlanSummary);
+  } catch (e) {
+    next(e);
+  }
 });
 
 // Update a meal plan meta info (NOT INCLUDING ITEMS)
