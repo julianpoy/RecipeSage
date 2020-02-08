@@ -12,7 +12,7 @@
       <ion-label>{{ ingredient.content }}</ion-label>
       <ion-checkbox [(ngModel)]="ingredientBinders[i]" (ngModelChange)="toggleIngredient(i)" checked="true"></ion-checkbox>
     </ion-item>
-    <br /><br />
+    <br />
     <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
   </div>
   <div *ngIf="!scaledIngredients || scaledIngredients.length === 0">
