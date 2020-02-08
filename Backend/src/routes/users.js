@@ -294,11 +294,11 @@ router.post(
         <br /><br /><a href="` + link + `">Click here to reset your password</a>
         <br />or paste this url into your browser: ` + link + `
 
+        <br />
+
         <br /><br />Thank you,
         <br />Julian P.
-        <br />RecipeSage
-        <br /><br />
-        Please do not reply to this email.`;
+        <br />RecipeSage`;
 
         var plain = `Hello,
 
@@ -309,9 +309,7 @@ To reset your password, paste this url into your browser: ` + link + `
 
 Thank you,
 Julian P.
-RecipeSage
-
-Please do not reply to this email.`;
+RecipeSage`;
 
         return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
           res.status(standardStatus).json(standardResponse);
