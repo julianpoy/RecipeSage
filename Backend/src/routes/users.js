@@ -214,7 +214,7 @@ router.post(
       token
     });
 
-    var html = `Welcome to RecipeSage!
+    var html = `Welcome to RecipeSage!<br />
 
     <br /><br />Thanks for joining our community of recipe collectors!
     <br /><br />
@@ -234,6 +234,7 @@ router.post(
     Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>`;
 
     var plain = `Welcome to RecipeSage!
+
 
 Thanks for joining our community of recipe collectors!
 
