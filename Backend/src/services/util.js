@@ -375,5 +375,5 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 }
 
 exports.cleanLabelTitle = labelTitle => {
-  return (labelTitle || '').trim().toLowerCase().replace(',', '');
+  return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
 }
