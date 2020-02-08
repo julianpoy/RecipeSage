@@ -292,8 +292,14 @@ router.get(
       const recipeIdsByLabelTitle = recipes.reduce((acc, pepperRecipe, idx) => {
         try {
           objToArr((pepperRecipe.Tags || {}).TagSync).map(tag => {
-            acc[tag.Text._text] = acc[tag.Text._text] || [];
-            acc[tag.Text._text].push(savedRecipes[idx].id);
+            // Avoid dupes potentially returned by PP API
+            const labelTitle = tag.Text._text.trim().toLowerCase();
+
+            acc[labelTitle] = acc[labelTitle] || [];
+            // Avoid dupes potentially returned by PP API
+            if (!acc[labelTitle].includes(savedRecipes[idx].id)) {
+              acc[labelTitle].push(savedRecipes[idx].id);
+            }
           });
         } catch (e) {}
         return acc;
