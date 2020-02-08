@@ -22,42 +22,55 @@ let SubscriptionsService = require('../services/subscriptions');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
-  const highResConversion = await SubscriptionsService.userHasCapability(
-    res.locals.session.userId,
-    SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
-  );
+  try {
+    const highResConversion = await SubscriptionsService.userHasCapability(
+      res.locals.session.userId,
+      SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+    );
 
-  await UtilService.upload('image', req, res);
-  if (req.file) {
-    const uploadedFile = req.file;
-    const newImage = await Image.create({
-      userId: res.locals.session.userId,
-      location: uploadedFile.location,
-      key: uploadedFile.key,
-      json: uploadedFile
-    });
+    await UtilService.upload('image', req, res);
+    if (req.file) {
+      const uploadedFile = req.file;
+      const newImage = await Image.create({
+        userId: res.locals.session.userId,
+        location: uploadedFile.location,
+        key: uploadedFile.key,
+        json: uploadedFile
+      });
 
-    const imageIds = req.body.imageIds || [];
-    imageIds.unshift(newImage.id);
-    req.body.imageIds = imageIds;
+      const imageIds = req.body.imageIds || [];
+      imageIds.unshift(newImage.id);
+      req.body.imageIds = imageIds;
+    }
+
+    if (req.body.imageURL) {
+      let uploadedFile;
+      try {
+        uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
+      } catch (e) {
+        e.status = 415;
+
+        return next(e);
+      }
+
+      const newImage = await Image.create({
+        userId: res.locals.session.userId,
+        location: uploadedFile.location,
+        key: uploadedFile.key,
+        json: uploadedFile
+      });
+
+      const imageIds = req.body.imageIds || [];
+      imageIds.unshift(newImage.id);
+      req.body.imageIds = imageIds;
+    }
+
+    next();
+  } catch (e) {
+    console.error(e);
+
+    next(e);
   }
-
-  if (req.body.imageURL) {
-    const uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
-
-    const newImage = await Image.create({
-      userId: res.locals.session.userId,
-      location: uploadedFile.location,
-      key: uploadedFile.key,
-      json: uploadedFile
-    });
-
-    const imageIds = req.body.imageIds || [];
-    imageIds.unshift(newImage.id);
-    req.body.imageIds = imageIds;
-  }
-
-  next();
 };
 
 const applyLegacyImageField = recipe => {
