@@ -187,7 +187,7 @@ describe('utils', () => {
         expect(Source).to.equal('"RecipeSage" <noreply@recipesage.com>')
 
         expect(ReplyToAddresses).to.have.length(1)
-        expect(ReplyToAddresses).to.contain('noreply@recipesage.com')
+        expect(ReplyToAddresses).to.contain('julian@recipesage.com')
       })
     })
   })
