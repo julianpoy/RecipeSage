@@ -396,6 +396,23 @@ router.get(
     where: {
       userId: res.locals.session.userId,
     },
+    attributes: [
+      'id',
+      'title',
+      'description',
+      'yield',
+      'activeTime',
+      'totalTime',
+      'source',
+      'url',
+      'notes',
+      'ingredients',
+      'instructions',
+      'folder',
+      'createdAt',
+      'updatedAt',
+      'userId',
+    ],
     include: [{
       model: User,
       as: 'fromUser',
@@ -435,9 +452,11 @@ router.get(
         for (var i = 0; i < recipes_j.length; i++) {
           let recipe = recipes_j[i];
 
-          recipe.labels = recipe.labels.map(function (el) {
-            return el.title;
-          }).join(',');
+          recipe.labels = recipe.labels.map(label => label.title).join(', ');
+
+          recipe.images = recipe.images.map(image => image.location).join(', ');
+
+          delete recipe.fromUser;
 
           for (var key in recipe) {
             if (recipe.hasOwnProperty(key)) {
