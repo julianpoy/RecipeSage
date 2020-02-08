@@ -302,16 +302,16 @@ router.post(
 
         var plain = `Hello,
 
-        \n\nSomeone recently requested a password reset link for the RecipeSage account associated with this email address.
-        \n\nIf you did not request a password reset, please disregard this email.
+Someone recently requested a password reset link for the RecipeSage account associated with this email address.
+If you did not request a password reset, please disregard this email.
 
-        \n\nTo reset your password, paste this url into your browser: ` + link + `
+To reset your password, paste this url into your browser: ` + link + `
 
-        \n\nThank you,
-        \nJulian P.
-        \nRecipeSage
-        \n\n
-        Please do not reply to this email.`;
+Thank you,
+Julian P.
+RecipeSage
+
+Please do not reply to this email.`;
 
         return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
           res.status(standardStatus).json(standardResponse);
