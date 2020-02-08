@@ -17,15 +17,15 @@ module.exports = {
         transaction
       });
 
-      await queryInterface.addIndex('Recipe_Labels', {
-        fields: ['labelId', 'recipeId'],
-        unique: true,
+      await queryInterface.addConstraint('Recipe_Labels', ['labelId', 'recipeId'], {
+        type: "UNIQUE",
+        name: 'Recipe_Labels_labelId_recipeId_uk',
         transaction
       });
     });
   },
   
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeIndex('Recipes', ['labelId', 'recipeId']);
+    return queryInterface.removeConstraint('Recipe_Labels', 'Recipe_Labels_labelId_recipeId_uk');
   }
 };

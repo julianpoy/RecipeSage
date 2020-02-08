@@ -80,15 +80,15 @@ module.exports = {
       console.log("Label titles updated:", labelTitlesUpdated);
       console.log("Users affected:", usersAffected);
 
-      await queryInterface.addIndex('Labels', {
-        fields: ['userId', 'title'],
-        unique: true,
+      await queryInterface.addConstraint('Labels', ['userId', 'title'], {
+        type: "UNIQUE",
+        name: 'Labels_userId_title_uk',
         transaction
       });
     });
   },
   
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeIndex('Labels', ['userId', 'title']);
+    return queryInterface.removeConstraint('Labels', 'Labels_userId_title_uk');
   }
 };
