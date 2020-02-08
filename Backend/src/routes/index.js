@@ -45,83 +45,6 @@ router.get('/versioncheck', (req, res, next) => {
   });
 });
 
-router.get('/deduperecipelabels', function(req, res, next) {
-  SQ.transaction(t => {
-    return User.findAll({
-      attributes: ['id'],
-      transaction: t
-    }).then(users => {
-      return Promise.all(users.map(user => {
-        let recipeIdsByLabelTitle = {};
-        let labelIdsByLabelTitle = {};
-
-        return Label.findAll({
-          where: {
-            userId: user.id
-          },
-          attributes: ['id', 'title'],
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }],
-          transaction: t
-        }).then(labels => {
-          return Promise.all(labels.map(label => {
-            recipeIdsByLabelTitle[label.title] = recipeIdsByLabelTitle[label.title] || [];
-            label.recipes.map(recipe => {
-              recipeIdsByLabelTitle[label.title].push(recipe.id);
-            })
-
-            labelIdsByLabelTitle[label.title] = labelIdsByLabelTitle[label.title] || [];
-            if (labelIdsByLabelTitle[label.title].indexOf(label.id) == -1) labelIdsByLabelTitle[label.title].push(label.id);
-          }))
-        }).then(() => {
-          return Object.entries(labelIdsByLabelTitle).filter(([labelTitle, labelIds]) => labelIds.length > 1).length
-        }).then(dupeCount => {
-          if (dupeCount > 0) {
-            return Label.destroy({
-              where: {
-                userId: user.id
-              },
-              transaction: t
-            }).then(() => {
-              return Label.bulkCreate(
-                Object.entries(recipeIdsByLabelTitle)
-                .filter(([labelTitle, recipeIds]) => labelTitle.trim().length > 0 && recipeIds.length > 0)
-                .map(([labelTitle, recipeIds]) => {
-
-                return {
-                  userId: user.id,
-                  title: labelTitle
-                };
-              }), {
-                transaction: t
-              }).then(labels => {
-                return Recipe_Label.bulkCreate(
-                  labels.reduce((acc, label) => {
-                    let subQueries = recipeIdsByLabelTitle[label.title].map(recipeId => {
-                      return {
-                        labelId: label.id,
-                        recipeId
-                      }
-                    });
-
-                    acc.concat(subQueries);
-                    return acc;
-                  }, []), {
-                    transaction: t
-                  }
-                )
-              });
-            })
-          }
-        })
-      }))
-    })
-  }).catch(next);
-})
-
 const request = require('request-promise-native');
 const xmljs = require('xml-js');
 
@@ -313,6 +236,7 @@ router.get(
               recipeId
             }
           }), {
+            ignoreDuplicates: true,
             transaction
           });
         });
@@ -591,6 +515,7 @@ router.post(
                     recipeId
                   }
                 }), {
+                  ignoreDuplicates: true,
                   transaction: t
                 })
               });

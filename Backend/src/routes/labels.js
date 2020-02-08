@@ -46,6 +46,7 @@ router.post(
         recipeId,
         labelId: label.id
       })), {
+        ignoreDuplicates: true,
         transaction: t
       }).then(() => {
         return label

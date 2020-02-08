@@ -271,6 +271,7 @@ async function main() {
               recipeId
             }
           }), {
+            ignoreDuplicates: true,
             transaction: t
           })
         });

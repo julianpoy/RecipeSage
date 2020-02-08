@@ -107,6 +107,7 @@ function saveRecipes(userId, recipes) {
         labelId: matchingLabels[0].id,
         recipeId: savedRecipeId
       })), {
+        ignoreDuplicates: true,
         transaction: t
       });
     }));
