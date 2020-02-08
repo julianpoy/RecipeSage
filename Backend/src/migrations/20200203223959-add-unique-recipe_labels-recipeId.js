@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.sequelize.transaction(async transaction => {
+    return queryInterface.sequelize.transaction(async transaction => {
       // Delete all duplicate label->recipe relationships
       await queryInterface.sequelize.query(`
         DELETE FROM "Recipe_Labels" rl
