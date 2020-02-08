@@ -12,6 +12,7 @@ var Recipe_Label = require('../models').Recipe_Label;
 
 // Services
 var MiddlewareService = require('../services/middleware');
+var UtilService = require('../services/util');
 
 //Add a label to a recipeId or recipeIds
 router.post(
@@ -20,7 +21,9 @@ router.post(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  if (!req.body.title || req.body.title.length === 0) {
+  const title = UtilService.cleanLabelTitle(req.body.title || '');
+
+  if (!title || title.length === 0) {
     var e = new Error("Label title must be provided.");
     e.status = 412;
     return next(e);
@@ -38,7 +41,7 @@ router.post(
     return Label.findOrCreate({
       where: {
         userId: res.locals.session.userId,
-        title: req.body.title.toLowerCase().replace(',', '')
+        title
       },
       transaction: t
     }).then(([label]) => {
@@ -250,6 +253,12 @@ router.put(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
+  if (typeof req.body.title === 'string' && UtilService.cleanLabelTitle(req.body.title).length === 0) {
+    var e = new Error("Label title must be longer than 0.");
+    e.status = 400;
+    return next(e);
+  }
+
   SQ.transaction(t => {
     return Label.findOne({
       where: {
@@ -262,7 +271,7 @@ router.put(
           msg: "Label with that ID does not exist!"
         });
       } else {
-        if (typeof req.body.title === 'string') label.title = req.body.title.toLowerCase().replace(',', '');
+        if (typeof req.body.title === 'string') label.title = UtilService.cleanLabelTitle(req.body.title);
 
         return Label.findAll({
           where: {

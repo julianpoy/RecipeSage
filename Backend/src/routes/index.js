@@ -216,7 +216,7 @@ router.get(
         try {
           objToArr((pepperRecipe.Tags || {}).TagSync).map(tag => {
             // Avoid dupes potentially returned by PP API
-            const labelTitle = tag.Text._text.trim().toLowerCase();
+            const labelTitle = UtilService.cleanLabelTitle(tag.Text._text);
 
             acc[labelTitle] = acc[labelTitle] || [];
             // Avoid dupes potentially returned by PP API
@@ -228,11 +228,11 @@ router.get(
         return acc;
       }, {});
   
-      await Promise.all(Object.keys(recipeIdsByLabelTitle).filter(labelName => labelName && labelName.trim().length > 0).map(labelName => {
+      await Promise.all(Object.keys(recipeIdsByLabelTitle).filter(labelName => labelName && labelName.length > 0).map(labelName => {
         return Label.findOrCreate({
           where: {
             userId: res.locals.session.userId,
-            title: labelName.trim().toLowerCase()
+            title: labelName
           },
           transaction
         }).then(labels => {
@@ -484,7 +484,7 @@ router.post(
                         fromUserId: null,
                         url: recipeData.source_url
                       },
-                      labels: (recipeData.categories || []).map(e => e.trim().toLowerCase()).filter(e => e)
+                      labels: (recipeData.categories || []).map(e => UtilService.cleanLabelTitle(e)).filter(e => e && e.length > 0)
                     });
                   });
                 })

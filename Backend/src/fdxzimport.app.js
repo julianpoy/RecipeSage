@@ -170,6 +170,7 @@ async function main() {
           ...[lcbCookbookNamesById[recipe.CookbookID] || ''].map(el => el.trim().toLowerCase())
         ])
       ].filter(el => el && el.length > 0)
+       .map(el => UtilService.cleanLabelTitle(el));
 
       return {
         model: {
