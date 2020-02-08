@@ -9,6 +9,8 @@ const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
+db.modelNames = [];
+
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -17,6 +19,7 @@ fs
   .forEach(file => {
     const model = sequelize['import'](path.join(__dirname, file));
     db[model.name] = model;
+    db.modelNames.push(model.name);
   });
 
 Object.keys(db).forEach(modelName => {
