@@ -33,9 +33,7 @@ export class AddRecipeToShoppingListModalPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController
-  ) {
-    this.scale = this.scale || 1;
-  }
+  ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
