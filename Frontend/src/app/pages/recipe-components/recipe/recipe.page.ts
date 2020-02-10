@@ -274,7 +274,7 @@ export class RecipePage {
       component: AddRecipeToShoppingListModalPage,
       componentProps: {
         recipe: this.recipe,
-        recipeScale: this.scale
+        scale: this.scale
       }
     });
 
