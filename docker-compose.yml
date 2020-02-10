@@ -21,6 +21,8 @@ services:
       context: .
       dockerfile: ./Frontend/Dockerfile
     volumes:
+      - ./SharedUtils/index.d.ts:/app/SharedUtils/index.d.ts
+      - ./SharedUtils/index.js:/app/SharedUtils/index.js
       - ./Frontend/src:/app/Frontend/src
       - ./Frontend/package.json:/app/Frontend/package.json
   express:
@@ -59,6 +61,8 @@ services:
       - STRIPE_SK
       - STRIPE_WEBHOOK_SECRET
     volumes:
+      - ./SharedUtils/index.d.ts:/app/SharedUtils/index.d.ts
+      - ./SharedUtils/index.js:/app/SharedUtils/index.js
       - ./Backend/src:/app/Backend/src
       - ./Backend/package.json:/app/Backend/package.json
   elasticsearch:
