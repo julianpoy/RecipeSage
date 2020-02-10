@@ -1,0 +1,8 @@
+{
+  "appId": "com.recipesage.app",
+  "appName": "RecipeSage",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
