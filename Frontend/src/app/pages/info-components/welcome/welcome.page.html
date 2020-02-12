@@ -35,7 +35,8 @@
 
     <div class="screen">
       <picture>
-        <img src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+        <img *ngIf="!isIOS" src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+        <img *ngIf="isIOS" src="assets/stockphotos/my-recipes-ios.jpg" alt="My Recipes Preview">
       </picture>
     </div>
 
