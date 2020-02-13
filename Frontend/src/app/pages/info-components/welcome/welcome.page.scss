@@ -36,7 +36,7 @@ $content-layer: 2;
   }
 
   .intro-fold-dimmer {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.6);
   }
 
   .title, .screen, .welcomeContent {
@@ -57,6 +57,15 @@ $content-layer: 2;
         font-size: 3.5rem;
       }
     }
+
+    .subtitle {
+      font-size: 1.5rem;
+    }
+  }
+
+  a.login {
+    cursor: pointer;
+    color: white;
   }
 
   .screen {
