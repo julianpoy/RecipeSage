@@ -15,7 +15,7 @@ $content-layer: 2;
     bottom: 62%;
     z-index: $bg-layer; // Move this below all other layers
 
-    @media only screen and (min-width:400px) {
+    @media only screen and (min-width:450px) {
       bottom: 55%;
     }
   }
@@ -53,15 +53,16 @@ $content-layer: 2;
     color: white;
     padding: 25px;
     padding-top: 80px;
+    padding-bottom: 60px;
 
-    @media only screen and (min-width: 400px) {
+    @media only screen and (min-width: 450px) {
       padding: 60px;
     }
 
     h1 {
       font-size: 2.5rem;
 
-      @media only screen and (min-width:400px) {
+      @media only screen and (min-width:450px) {
         font-size: 3.5rem;
       }
     }
@@ -69,7 +70,7 @@ $content-layer: 2;
     .subtitle {
       font-size: 1.2rem;
 
-      @media only screen and (min-width: 400px) {
+      @media only screen and (min-width: 450px) {
         padding: 1.5rem;
       }
     }
