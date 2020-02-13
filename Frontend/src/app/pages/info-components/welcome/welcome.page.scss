@@ -12,8 +12,12 @@ $content-layer: 2;
     left: 0;
     right: 0;
     top: 0;
-    bottom: 60%;
+    bottom: 62%;
     z-index: $bg-layer; // Move this below all other layers
+
+    @media only screen and (min-width:400px) {
+      bottom: 55%;
+    }
   }
 
   .intro-fold {
