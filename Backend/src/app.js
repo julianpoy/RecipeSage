@@ -35,7 +35,19 @@ var ws = require('./routes/ws');
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
 
-app.options('*', cors());
+var corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://localhost', 'capacitor://localhost'];
+var corsOptions = {
+  origin: (origin, callback) => {
+    if (corsWhitelist.indexOf(origin) !== -1) {
+      callback(null, true); // Enable CORS for whitelisted domains
+    } else {
+      callback(null, { origin: false }); // Disable CORS, domain not on whitelist
+    }
+  }
+};
+
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // view engine setup
