@@ -26,6 +26,14 @@ export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
     super.handleError(error);
 
+    const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+    if (chunkFailedMessage.test(error.message)) {
+      const shouldReload = confirm('There was a connection interruption while loading this page. Press okay to reload.');
+      if (shouldReload) {
+        window.location.reload(true);
+      }
+    }
+
     let token = '';
     try {
       token = localStorage.getItem('token');
