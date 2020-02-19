@@ -8,8 +8,8 @@ import { RouteMap, AuthType } from '@/services/util.service';
   styleUrls: ['welcome.page.scss']
 })
 export class WelcomePage {
-  isIOS: boolean = this.platform.is("ios");
-  isCapacitor: boolean = this.platform.is("capacitor");
+  isIOS: boolean = this.platform.is('ios');
+  isCapacitor: boolean = this.platform.is('capacitor');
 
   constructor(
     public navCtrl: NavController,
