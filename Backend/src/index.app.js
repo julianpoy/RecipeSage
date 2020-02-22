@@ -17,7 +17,7 @@ cron.schedule('*/1 * * * *', () => {
         { indexedAt: { [Op.lt]: lt } }
       ]
     },
-    limit: 400,
+    limit: 1000,
     order: [
       ['indexedAt', 'ASC']
     ]
