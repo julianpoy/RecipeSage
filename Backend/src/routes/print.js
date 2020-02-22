@@ -20,7 +20,7 @@ var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 
 // SharedUtils
-var SharedUtils = require('../../../SharedUtils');
+var SharedUtils = require('../../../SharedUtils/src');
 
 router.get('/', (req, res, next) => {
   let originalModifiers = req.query.modifiers ? req.query.modifiers.split(',') : [];

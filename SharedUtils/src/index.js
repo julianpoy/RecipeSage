@@ -30,6 +30,49 @@ const replaceFractionsInText = rawText => {
   });
 }
 
+const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+
+const quantityRegexp = /(cup|tablespoon|tblspn|tbsp|tbs|tb|teaspoon|tspn|tsp|t|ounce|oz|gram|g|ml|kg)s? /;
+
+const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
+//cup
+//tbsp
+//tablespoon
+//teaspoon
+//tsp
+//g
+//slice
+//tbs
+//oz
+//ml
+//tspn
+//tblspn
+//tb
+//gram
+//t
+//ounce
+//kg
+//()
+
+//grated
+//heaped
+//chopped
+//about
+//slice
+
+function stripIngredient(ingredient) {
+  const trimmed = ingredient
+    .replace(measurementRegexp, '').trim()
+    .replace(quantityRegexp, '').trim()
+    .replace(fillerWordsRegexp, '').trim();
+
+  if (trimmed !== ingredient) {
+    return stripIngredient(trimmed);
+  } else {
+    return trimmed;
+  }
+}
+
 function parseIngredients(ingredients, scale, boldify) {
   if (!ingredients) return [];
 
@@ -41,8 +84,6 @@ function parseIngredients(ingredients, scale, boldify) {
     complete: false,
     isHeader: false
   }));
-
-  var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
 
   // TODO: Replace measurementRegexp with this:
   // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
@@ -75,16 +116,16 @@ function parseIngredients(ingredients, scale, boldify) {
 
           const measurementPartDelimiters = measurement.match(/(-)|( to )|( - )/g);
           const measurementParts = measurement.split(/-|to/);
-  
+
           for (var j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
             var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
-  
+
             // Preserve original fraction format if entered
             if (measurementParts[j].indexOf('/') > -1) {
               scaledMeasurement = scaledMeasurement.toFraction(true);
             }
-  
+
             if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
             else measurementParts[j] = scaledMeasurement;
           }
@@ -153,5 +194,6 @@ function parseInstructions(instructions) {
 
 module.exports = {
   parseIngredients,
-  parseInstructions
+  parseInstructions,
+  stripIngredient
 }

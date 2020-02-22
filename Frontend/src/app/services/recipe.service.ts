@@ -8,7 +8,7 @@ import { HttpService } from './http.service';
 import { UtilService } from './util.service';
 import { Image } from './image.service';
 
-import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
+import { parseIngredients, parseInstructions } from '../../../../SharedUtils/src';
 
 export interface Recipe {
   id: string;
