@@ -20,7 +20,7 @@ const runIndexOp = async () => {
           { indexedAt: { [Op.lt]: lt } }
         ]
       },
-      limit: 500
+      limit: 250
     });
 
     if (!recipes || recipes.length === 0) {
@@ -51,7 +51,7 @@ const runIndexOp = async () => {
   }
 };
 
-runInterval = setInterval(runIndexOp, 500);
+runInterval = setInterval(runIndexOp, 1000);
 
 process.on('SIGTERM', () => {
   console.log("RECEIVED SIGTERM - STOPPING JOB");
