@@ -61,10 +61,10 @@ const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
 //slice
 
 function stripIngredient(ingredient) {
-  const trimmed = ingredient
+  const trimmed = replaceFractionsInText(ingredient)
     .replace(measurementRegexp, '').trim()
-    .replace(quantityRegexp, '').trim()
-    .replace(fillerWordsRegexp, '').trim();
+    .replace(new RegExp(quantityRegexp, 'i'), '').trim()
+    .replace(new RegExp(fillerWordsRegexp, 'i'), '').trim();
 
   if (trimmed !== ingredient) {
     return stripIngredient(trimmed);
