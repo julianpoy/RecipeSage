@@ -32,7 +32,7 @@ const replaceFractionsInText = rawText => {
 
 const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
 
-const quantityRegexp = /(cup|tablespoon|tblspn|tbsp|tbs|tb|teaspoon|tspn|tsp|t|ounce|oz|gram|g|ml|kg)s? /;
+const quantityRegexp = /(cup|tablespoon|tblspn|tbsp|tbs|tb|teaspoon|teasp|teas|tspn|tsp|t|ounce|oz|gram|g|ml|kg)s?(\.)? /;
 
 const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
 //cup
@@ -61,10 +61,10 @@ const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
 //slice
 
 function stripIngredient(ingredient) {
-  const trimmed = replaceFractionsInText(ingredient)
-    .replace(measurementRegexp, '').trim()
-    .replace(new RegExp(quantityRegexp, 'i'), '').trim()
-    .replace(new RegExp(fillerWordsRegexp, 'i'), '').trim();
+  const trimmed = replaceFractionsInText(ingredient).trim()
+    .replace(new RegExp(`^(${measurementRegexp.source})`), '').trim()
+    .replace(new RegExp(`^(${quantityRegexp.source})`, 'i'), '').trim()
+    .replace(new RegExp(`^(${fillerWordsRegexp.source})`, 'i'), '').trim();
 
   if (trimmed !== ingredient) {
     return stripIngredient(trimmed);
