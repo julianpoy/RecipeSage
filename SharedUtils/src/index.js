@@ -60,6 +60,14 @@ const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
 //about
 //slice
 
+function getMeasurementForIngredient(ingredient) {
+  const measurementMatch = replaceFractionsInText(ingredient).trim()
+    .match(new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`, ''));
+
+  if (measurementMatch) return measurementMatch[0].trim();
+  return null;
+}
+
 function stripIngredient(ingredient) {
   const trimmed = replaceFractionsInText(ingredient).trim()
     .replace(new RegExp(`^(${measurementRegexp.source})`), '').trim()
@@ -195,5 +203,6 @@ function parseInstructions(instructions) {
 module.exports = {
   parseIngredients,
   parseInstructions,
-  stripIngredient
+  stripIngredient,
+  getMeasurementForIngredient
 }
