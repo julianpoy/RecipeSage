@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rs-index-recipes-2019-02-21
+spec:
+  template:
+    spec:
+      containers:
+      - name: rs-index-recipes-2019-02-21
+        image: julianpoy/recipesage:api-2.3.6-3
+        command: ["node"]
+        args: ["src/index.app.js"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+        envFrom:
+        - secretRef:
+            name: rs-api-env
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: myregistrykey
+
