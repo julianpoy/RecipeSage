@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BASE_URL } from 'src/environments/environment';
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -154,7 +155,7 @@ export class UtilService {
   constructor(public sanitizer: DomSanitizer) {}
 
   getBase(): string {
-    return this.devBase;
+    return BASE_URL ? `${BASE_URL}/api/` : this.devBase;
   }
 
   removeToken() {
