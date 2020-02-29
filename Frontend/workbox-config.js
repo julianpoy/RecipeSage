@@ -2,7 +2,7 @@ module.exports = {
   "globDirectory": "www/",
   "globPatterns": [
     // "assets/fonts/roboto*.woff2",
-    "assets/**/*.{png,jpg}",
+    // "assets/**/*.{png,jpg}",
     "svg/*.svg",
     "*.css",
     "*.js",
