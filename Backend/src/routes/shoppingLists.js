@@ -21,9 +21,6 @@ var GripService = require('../services/grip');
 var SharedUtils = require('../../../SharedUtils/src');
 var ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 
-// Data
-var ingredientsList = require('../constants/ingredients.json');
-
 router.post(
   '/',
   cors(),
@@ -60,60 +57,6 @@ router.post(
     });
   }).catch(next);
 });
-
-function groupShoppingListItems(items) {
-  // Ingredient grouping into map by ingredientName
-  const itemGrouper = {};
-  for (var i = 0; i < items.length; i++) {
-    const item = items[i];
-    const itemTitle = item.title.toLowerCase();
-
-    const foundIngredientGroup = ingredientsList.some(ingredient => {
-      if (itemTitle.includes(ingredient.toLowerCase())) {
-        itemGrouper[ingredient] = itemGrouper[ingredient] || [];
-        itemGrouper[ingredient].push(item);
-        return true;
-      }
-
-      return false;
-    });
-
-    if (!foundIngredientGroup) {
-      itemGrouper[itemTitle] = itemGrouper[itemTitle] || [];
-      itemGrouper[itemTitle].push(item);
-    }
-  }
-
-  // Load map of groups by ingredientName into array of objects
-  const result = [];
-  for (let [ingredientName, items] of Object.entries(itemGrouper)) {
-    const measurements = items.map(item => SharedUtils.getMeasurementsForIngredient(item.title));
-    let title = ingredientName;
-
-    if (!measurements.find(measurementSet => !measurementSet.length)) {
-      const Unitz = SharedUtils.unitUtils.Unitz;
-      const combinedUz = measurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
-      if (combinedUz) {
-        const combinedMeasurements = combinedUz.sort().output({
-          unitSpacer: " ",
-          unit: Unitz.OutputUnit.LONG
-        });
-
-        title = combinedMeasurements + " " + ingredientName;
-      }
-    }
-
-    items.forEach(item => item.groupTitle = title);
-
-    result.push({
-      title,
-      items,
-      completed: false
-    });
-  }
-
-  return result;
-}
 
 router.get(
   '/',
@@ -412,7 +355,7 @@ router.get(
       });
 
       let s = shoppingListSummary.toJSON();
-      s.itemsByGroup = groupShoppingListItems(s.items);
+      s.itemsByGroup = ShoppingListCategorizerService.groupShoppingListItems(s.items); // TODO: Remove this field from API. Field grouping only
       s.items.forEach(item => item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(item.title));
 
       res.status(200).json(s);
