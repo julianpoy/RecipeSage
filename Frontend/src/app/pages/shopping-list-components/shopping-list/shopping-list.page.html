@@ -19,17 +19,79 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
-    <ion-list-header *ngIf="list.items.length > 0" class="ion-no-margin">
-      Items
-    </ion-list-header>
-    <div *ngIf="preferences[preferenceKeys.GroupSimilar]">
-      <div *ngFor="let group of list.itemsByGroup; let i = index;">
-        <ion-item>
+    <div *ngIf="preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let categoryTitle of categoryTitles">
+        <ion-list-header>
+          <ion-title class="ion-no-padding">{{ categoryTitle }}</ion-title>
+        </ion-list-header>
+        <ion-item *ngFor="let groupTitle of groupTitlesByCategoryTitle[categoryTitle]" class="shopping-list-item">
           <ion-label class="ion-text-wrap ion-no-margin">
-            <b class="groupTitle">{{ group.title }}:</b>
+            <span *ngIf="itemsByGroupTitle[groupTitle].length > 1">{{ groupTitle }}</span>
+            <span *ngIf="itemsByGroupTitle[groupTitle].length === 1">{{ itemsByGroupTitle[groupTitle][0].title }}</span>
+            <div *ngIf="itemsByGroupTitle[groupTitle].length > 1">
+              <p>
+                Items:
+              </p>
+              <p *ngFor="let item of itemsByGroupTitle[groupTitle]">
+                {{ item.title }}
+              </p>
+            </div>
+            <div *ngIf="itemsByGroupTitle[groupTitle].length === 1">
+              <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && itemsByGroupTitle[groupTitle][0].recipe">
+                For recipe:
+                <span>{{ itemsByGroupTitle[groupTitle][0].recipe.title }}</span>
+              </p>
+              <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
+                Added
+                <span>{{ formatItemCreationDate(itemsByGroupTitle[groupTitle][0].createdAt) }}</span>
+              </p>
+              <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && itemsByGroupTitle[groupTitle][0].owner">
+                <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
+                <span>{{ itemsByGroupTitle[groupTitle][0].owner.name || itemsByGroupTitle[groupTitle][0].owner.email }}</span>
+              </p>
+            </div>
           </ion-label>
+          <ion-checkbox slot="start" [(ngModel)]="itemsByGroupTitle[groupTitle][0].completed" (ngModelChange)="removeItems(itemsByGroupTitle[groupTitle])"></ion-checkbox>
         </ion-item>
-        <ion-item *ngFor="let item of group.items">
+      </div>
+    </div>
+    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
+      <ion-item *ngFor="let groupTitle of groupTitles" class="shopping-list-item">
+        <ion-label class="ion-text-wrap ion-no-margin">
+          <span *ngIf="itemsByGroupTitle[groupTitle].length > 1">{{ groupTitle }}</span>
+          <span *ngIf="itemsByGroupTitle[groupTitle].length === 1">{{ itemsByGroupTitle[groupTitle][0].title }}</span>
+          <div *ngIf="itemsByGroupTitle[groupTitle].length > 1">
+            <p>
+              Items:
+            </p>
+            <p *ngFor="let item of itemsByGroupTitle[groupTitle]">
+              {{ item.title }}
+            </p>
+          </div>
+          <div *ngIf="itemsByGroupTitle[groupTitle].length === 1">
+            <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && itemsByGroupTitle[groupTitle][0].recipe">
+              For recipe:
+              <span>{{ itemsByGroupTitle[groupTitle][0].recipe.title }}</span>
+            </p>
+            <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
+              Added
+              <span>{{ formatItemCreationDate(itemsByGroupTitle[groupTitle][0].createdAt) }}</span>
+            </p>
+            <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && itemsByGroupTitle[groupTitle][0].owner">
+              <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
+              <span>{{ itemsByGroupTitle[groupTitle][0].owner.name || itemsByGroupTitle[groupTitle][0].owner.email }}</span>
+            </p>
+          </div>
+        </ion-label>
+        <ion-checkbox slot="start" [(ngModel)]="itemsByGroupTitle[groupTitle][0].completed" (ngModelChange)="removeItems(itemsByGroupTitle[groupTitle])"></ion-checkbox>
+      </ion-item>
+    </div>
+    <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let categoryTitle of categoryTitles">
+        <ion-list-header>
+          <ion-title class="ion-no-padding">{{ categoryTitle }}</ion-title>
+        </ion-list-header>
+        <ion-item *ngFor="let item of itemsByCategoryTitle[categoryTitle]">
           <ion-label class="ion-text-wrap ion-no-margin">
             {{ item.title }}
             <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe">
@@ -45,11 +107,11 @@
               <span>{{ item.owner.name || item.owner.email }}</span>
             </p>
           </ion-label>
-          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
+          <ion-checkbox slot="start" [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
         </ion-item>
       </div>
     </div>
-    <div *ngIf="!preferences[preferenceKeys.GroupSimilar]">
+    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
       <ion-item *ngFor="let item of list.items; let i = index;">
         <ion-label class="ion-text-wrap">
           {{ item.title }}
@@ -66,7 +128,7 @@
             <span>{{ item.owner.name || item.owner.email }}</span>
           </p>
         </ion-label>
-        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
+        <ion-checkbox slot="start" [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
       </ion-item>
     </div>
     <null-state *ngIf="list.items.length === 0 && initialLoadComplete">
