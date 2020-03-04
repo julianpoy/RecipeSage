@@ -18,6 +18,8 @@ var ShoppingListItem = require('../models').ShoppingListItem;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var GripService = require('../services/grip');
+var SharedUtils = require('../../../SharedUtils/src');
+var ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 
 // Data
 var ingredientsList = require('../constants/ingredients.json');
@@ -61,12 +63,15 @@ router.post(
 
 function groupShoppingListItems(items) {
   // Ingredient grouping into map by ingredientName
-  var itemGrouper = {};
+  const itemGrouper = {};
   for (var i = 0; i < items.length; i++) {
-    var foundIngredientGroup = ingredientsList.some(ingredient => {
-      if (items[i].title.toLowerCase().indexOf(ingredient.toLowerCase()) > -1) {
+    const item = items[i];
+    const itemTitle = item.title.toLowerCase();
+
+    const foundIngredientGroup = ingredientsList.some(ingredient => {
+      if (itemTitle.includes(ingredient.toLowerCase())) {
         itemGrouper[ingredient] = itemGrouper[ingredient] || [];
-        itemGrouper[ingredient].push(items[i]);
+        itemGrouper[ingredient].push(item);
         return true;
       }
 
@@ -74,21 +79,37 @@ function groupShoppingListItems(items) {
     });
 
     if (!foundIngredientGroup) {
-      itemGrouper.ungrouped = itemGrouper.ungrouped || [];
-      itemGrouper.ungrouped.push(items[i]);
+      itemGrouper[itemTitle] = itemGrouper[itemTitle] || [];
+      itemGrouper[itemTitle].push(item);
     }
   }
 
   // Load map of groups by ingredientName into array of objects
-  var result = [];
-  for (var key in itemGrouper) {
-    if (itemGrouper.hasOwnProperty(key)) {
-      result.push({
-        title: key,
-        items: itemGrouper[key],
-        completed: false
-      });
+  const result = [];
+  for (let [ingredientName, items] of Object.entries(itemGrouper)) {
+    const measurements = items.map(item => SharedUtils.getMeasurementsForIngredient(item.title));
+    let title = ingredientName;
+
+    if (!measurements.find(measurementSet => !measurementSet.length)) {
+      const Unitz = SharedUtils.unitUtils.Unitz;
+      const combinedUz = measurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
+      if (combinedUz) {
+        const combinedMeasurements = combinedUz.sort().output({
+          unitSpacer: " ",
+          unit: Unitz.OutputUnit.LONG
+        });
+
+        title = combinedMeasurements + " " + ingredientName;
+      }
     }
+
+    items.forEach(item => item.groupTitle = title);
+
+    result.push({
+      title,
+      items,
+      completed: false
+    });
   }
 
   return result;
@@ -392,6 +413,7 @@ router.get(
 
       let s = shoppingListSummary.toJSON();
       s.itemsByGroup = groupShoppingListItems(s.items);
+      s.items.forEach(item => item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(item.title));
 
       res.status(200).json(s);
     } catch (e) {
