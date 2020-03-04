@@ -32,7 +32,8 @@ export enum ShoppingListPreferenceKey {
   ShowAddedBy = 'ShoppingList.showAddedBy',
   ShowAddedOn = 'ShoppingList.showAddedOn',
   ShowRecipeTitle = 'ShoppingList.showRecipeTitle',
-  GroupSimilar = 'ShoppingList.groupSimilar'
+  GroupSimilar = 'ShoppingList.groupSimilar',
+  GroupCategories = 'ShoppingList.groupCategories'
 }
 
 export interface AppPreferenceTypes {
@@ -58,6 +59,7 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.ShowAddedOn]: boolean;
   [ShoppingListPreferenceKey.ShowRecipeTitle]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
+  [ShoppingListPreferenceKey.GroupCategories]: boolean;
 }
 
 @Injectable({
@@ -88,7 +90,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
-    [ShoppingListPreferenceKey.GroupSimilar]: false
+    [ShoppingListPreferenceKey.GroupSimilar]: false,
+    [ShoppingListPreferenceKey.GroupCategories]: true
   };
 
   constructor() {
