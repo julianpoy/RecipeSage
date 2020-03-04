@@ -1,0 +1,18 @@
+<ion-item class="shopping-list-item">
+  <ion-label class="ion-text-wrap ion-no-margin">
+    {{ title }}
+    <p *ngIf="recipeTitle">
+      For recipe:
+      <span>{{ recipeTitle }}</span>
+    </p>
+    <p *ngIf="createdAt">
+      Added
+      <span>{{ formatItemCreationDate(createdAt) }}</span>
+    </p>
+    <p *ngIf="ownerName">
+      <span *ngIf="!createdAt">Added </span>by
+      <span>{{ ownerName }}</span>
+    </p>
+  </ion-label>
+  <ion-checkbox slot="start" [(ngModel)]="completed" (ngModelChange)="onComplete.emit()"></ion-checkbox>
+</ion-item>
