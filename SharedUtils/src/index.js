@@ -1,4 +1,5 @@
 let fractionjs = require('fraction.js');
+let unitUtils = require('./units.js');
 
 const fractionMatchers = { // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, ' 1/2'], // ½  \u00BD;
@@ -30,42 +31,34 @@ const replaceFractionsInText = rawText => {
   });
 }
 
+// Starts with [, anything inbetween, ends with ]
+var headerRegexp = /^\[.*\]$/;
+
+const multipartQuantifierRegexp = / \+|plus /;
+
 const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+// TODO: Replace measurementRegexp with this:
+// var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
-const quantityRegexp = /(cup|tablespoon|tblspn|tbsp|tbs|tb|teaspoon|teasp|teas|tspn|tsp|t|ounce|oz|gram|g|ml|kg)s?(\.)? /;
+const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)? `);
 
-const fillerWordsRegexp = /(grated|heaped|chopped|about|(slice(s)?)) /;
-//cup
-//tbsp
-//tablespoon
-//teaspoon
-//tsp
-//g
-//slice
-//tbs
-//oz
-//ml
-//tspn
-//tblspn
-//tb
-//gram
-//t
-//ounce
-//kg
-//()
+const fillerWordsRegexp = /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
 
-//grated
-//heaped
-//chopped
-//about
-//slice
+function getMeasurementsForIngredient(ingredient) {
+  const strippedIngredient = replaceFractionsInText(ingredient);
 
-function getMeasurementForIngredient(ingredient) {
-  const measurementMatch = replaceFractionsInText(ingredient).trim()
-    .match(new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`, ''));
+  return strippedIngredient.split(multipartQuantifierRegexp).map(ingredientPart => {
+    const measurementMatch = ingredientPart.replace(/\(.*?\)/g, '') // Remove all (notes)
+      .trim()
+      .match(new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`, 'i'));
 
-  if (measurementMatch) return measurementMatch[0].trim();
-  return null;
+    if (measurementMatch) return measurementMatch[0].trim();
+    return null;
+  }).filter(measurement => measurement);
+}
+
+function isHeader(input) {
+  return line.match(headerRegexp);
 }
 
 function stripIngredient(ingredient) {
@@ -93,19 +86,13 @@ function parseIngredients(ingredients, scale, boldify) {
     isHeader: false
   }));
 
-  // TODO: Replace measurementRegexp with this:
-  // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
-
-  // Starts with [, anything inbetween, ends with ]
-  var headerRegexp = /^\[.*\]$/;
-
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].content.trim(); // Trim only spaces (no newlines)
 
     var headerMatches = line.match(headerRegexp);
 
-    const ingredientPartDelimiters = line.match(/ \+|plus /g); // Multipart measurements (1 cup + 1 tablespoon)
-    const ingredientParts = line.split(/ \+|plus /); // Multipart measurements (1 cup + 1 tablespoon)
+    const ingredientPartDelimiters = line.match(new RegExp(multipartQuantifierRegexp, 'g')); // Multipart measurements (1 cup + 1 tablespoon)
+    const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
     var measurementMatches = ingredientParts.map(linePart => linePart.match(measurementRegexp));
 
     if (headerMatches && headerMatches.length > 0) {
@@ -204,5 +191,6 @@ module.exports = {
   parseIngredients,
   parseInstructions,
   stripIngredient,
-  getMeasurementForIngredient
+  getMeasurementsForIngredient,
+  unitUtils
 }
