@@ -26,9 +26,11 @@ export class ShoppingListPage {
   items: any[] = [];
   groupTitles: string[] = [];
   categoryTitles: string[] = [];
+  categoryTitleCollapsed = {};
   itemsByGroupTitle: any = {};
   itemsByCategoryTitle: any = {};
-  groupTitlesByCategoryTitle: any = {};
+  groupsByCategoryTitle: any = {};
+  groupTitleExpanded: any = {};
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
@@ -114,14 +116,22 @@ export class ShoppingListPage {
       acc[item.categoryTitle].push(item);
       return acc;
     }, {});
-    this.groupTitlesByCategoryTitle = this.items.reduce((acc, item) => {
+    this.groupsByCategoryTitle = this.items.reduce((acc, item) => {
       acc[item.categoryTitle] = acc[item.categoryTitle] || [];
       const arr = acc[item.categoryTitle];
-      if (!arr.includes(item.groupTitle)) arr.push(item.groupTitle);
+      let grouping = arr.find(el => el.title === item.groupTitle);
+      if (!grouping) {
+        grouping = {
+          title: item.groupTitle,
+          items: []
+        };
+        arr.push(grouping);
+      }
+      grouping.items.push(item);
       return acc;
     }, {});
 
-    console.log(this.itemsByGroupTitle, this.groupTitlesByCategoryTitle);
+    console.log(this.groupsByCategoryTitle);
 
     this.applySort();
   }
