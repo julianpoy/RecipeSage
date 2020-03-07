@@ -44,12 +44,17 @@ const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*
 
 const fillerWordsRegexp = /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
 
+const notesRegexp = /\(.*?\)/;
+
+function stripNotes(ingredient) {
+  return ingredient.replace(new RegExp(notesRegexp, 'g'), '').trim();
+}
+
 function getMeasurementsForIngredient(ingredient) {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
   return strippedIngredient.split(multipartQuantifierRegexp).map(ingredientPart => {
-    const measurementMatch = ingredientPart.replace(/\(.*?\)/g, '') // Remove all (notes)
-      .trim()
+    const measurementMatch = stripNotes(ingredientPart)
       .match(new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`, 'i'));
 
     if (measurementMatch) return measurementMatch[0].trim();
