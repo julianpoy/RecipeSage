@@ -1,4 +1,5 @@
 const SharedUtils = require('../../../SharedUtils/src');
+const Unitz = SharedUtils.unitUtils.Unitz;
 
 const ingredientsList = require('../constants/ingredients.json');
 const itemCategories = require('../constants/itemCategories.json');
@@ -26,7 +27,7 @@ const categoryForTitle = itemTitle => {
 };
 
 exports.getCategoryTitle = itemTitle => {
-  if (itemTitle.includes("canned")) return "Canned";
+  if (itemTitle.includes("canned") || itemTitle.includes(" can ")) return "Canned";
   if (itemTitle.includes("frozen")) return "Frozen";
 
   const titleMatch = categoryForTitle(itemTitle);
@@ -65,7 +66,6 @@ exports.groupShoppingListItems = items => {
     let title = ingredientName;
 
     if (!measurements.find(measurementSet => !measurementSet.length)) {
-      const Unitz = SharedUtils.unitUtils.Unitz;
       const combinedUz = measurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
