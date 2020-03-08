@@ -37,7 +37,7 @@
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-              (onComplete)="removeItems($event)"></shopping-list-group>
+              (complete)="removeItems($event)"></shopping-list-group>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-          (onComplete)="removeItems($event)"></shopping-list-group>
+          (complete)="removeItems($event)"></shopping-list-group>
       </div>
     </div>
     <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
@@ -69,7 +69,7 @@
               [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
               [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
               [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-              (onComplete)="removeItems([item])"></shopping-list-item>
+              (complete)="removeItems([item])"></shopping-list-item>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
           [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
           [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
           [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-          (onComplete)="removeItems([item])"></shopping-list-item>
+          (complete)="removeItems([item])"></shopping-list-item>
       </div>
     </div>
     <null-state *ngIf="list.items.length === 0 && initialLoadComplete">
