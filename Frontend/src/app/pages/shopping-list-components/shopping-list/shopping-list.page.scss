@@ -1,3 +1,28 @@
-.groupTitle {
-  text-transform: capitalize;
+.category-container {
+  margin-bottom: 8px;
+}
+
+ion-list-header {
+  cursor: pointer;
+
+  ion-icon {
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+}
+
+.shopping-list-item:nth-child(odd) {
+  background: var(--ion-background-shade-color);
+
+  shopping-list-item, ion-item.groupedItem {
+    --background: var(--ion-background-shade-color);
+  }
+}
+
+.delete-recipe {
+  transition: 0.1s;
+}
+
+.delete-recipe:hover {
+  color: var(--ion-color-danger);
 }

@@ -1,4 +1,5 @@
 let fractionjs = require('fraction.js');
+let unitUtils = require('./units.js');
 
 const fractionMatchers = { // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, ' 1/2'], // ½  \u00BD;
@@ -30,6 +31,70 @@ const replaceFractionsInText = rawText => {
   });
 }
 
+// Starts with [, anything inbetween, ends with ]
+var headerRegexp = /^\[.*\]$/;
+
+const multipartQuantifierRegexp = / \+|plus /;
+
+const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+// TODO: Replace measurementRegexp with this:
+// var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
+
+const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)? `);
+
+const measurementQuantityRegExp = new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`); // Should always be used with 'i' flag
+
+const fillerWordsRegexp = /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
+
+const notesRegexp = /\(.*?\)/;
+
+function stripNotes(ingredient) {
+  return ingredient.replace(new RegExp(notesRegexp, 'g'), '').trim();
+}
+
+function getMeasurementsForIngredient(ingredient) {
+  const strippedIngredient = replaceFractionsInText(ingredient);
+
+  return strippedIngredient.split(multipartQuantifierRegexp).map(ingredientPart => {
+    const measurementMatch = stripNotes(ingredientPart)
+      .match(new RegExp(measurementQuantityRegExp.source, 'i'));
+
+    if (measurementMatch) return measurementMatch[0].trim();
+    return null;
+  }).filter(measurement => measurement);
+}
+
+function getTitleForIngredient(ingredient) {
+  const strippedIngredient = replaceFractionsInText(ingredient);
+
+  const ingredientPartDelimiters = strippedIngredient.match(new RegExp(multipartQuantifierRegexp, 'ig'));
+
+  return strippedIngredient
+    .split(multipartQuantifierRegexp)
+    .map(ingredientPart => {
+      return stripNotes(ingredientPart).replace(new RegExp(measurementQuantityRegExp, 'i'), "");
+    })
+    .reduce((acc, ingredientPart, idx) => acc + ingredientPart + (ingredientPartDelimiters ? ingredientPartDelimiters[idx] : ''), "")
+    .trim();
+}
+
+function isHeader(input) {
+  return line.match(headerRegexp);
+}
+
+function stripIngredient(ingredient) {
+  const trimmed = replaceFractionsInText(ingredient).trim()
+    .replace(new RegExp(`^(${measurementRegexp.source})`), '').trim()
+    .replace(new RegExp(`^(${quantityRegexp.source})`, 'i'), '').trim()
+    .replace(new RegExp(`^(${fillerWordsRegexp.source})`, 'i'), '').trim();
+
+  if (trimmed !== ingredient) {
+    return stripIngredient(trimmed);
+  } else {
+    return trimmed;
+  }
+}
+
 function parseIngredients(ingredients, scale, boldify) {
   if (!ingredients) return [];
 
@@ -42,21 +107,13 @@ function parseIngredients(ingredients, scale, boldify) {
     isHeader: false
   }));
 
-  var measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
-
-  // TODO: Replace measurementRegexp with this:
-  // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
-
-  // Starts with [, anything inbetween, ends with ]
-  var headerRegexp = /^\[.*\]$/;
-
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].content.trim(); // Trim only spaces (no newlines)
 
     var headerMatches = line.match(headerRegexp);
 
-    const ingredientPartDelimiters = line.match(/ \+|plus /g); // Multipart measurements (1 cup + 1 tablespoon)
-    const ingredientParts = line.split(/ \+|plus /); // Multipart measurements (1 cup + 1 tablespoon)
+    const ingredientPartDelimiters = line.match(new RegExp(multipartQuantifierRegexp, 'g')); // Multipart measurements (1 cup + 1 tablespoon)
+    const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
     var measurementMatches = ingredientParts.map(linePart => linePart.match(measurementRegexp));
 
     if (headerMatches && headerMatches.length > 0) {
@@ -75,16 +132,16 @@ function parseIngredients(ingredients, scale, boldify) {
 
           const measurementPartDelimiters = measurement.match(/(-)|( to )|( - )/g);
           const measurementParts = measurement.split(/-|to/);
-  
+
           for (var j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
             var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
-  
+
             // Preserve original fraction format if entered
             if (measurementParts[j].indexOf('/') > -1) {
               scaledMeasurement = scaledMeasurement.toFraction(true);
             }
-  
+
             if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
             else measurementParts[j] = scaledMeasurement;
           }
@@ -153,5 +210,9 @@ function parseInstructions(instructions) {
 
 module.exports = {
   parseIngredients,
-  parseInstructions
+  parseInstructions,
+  stripIngredient,
+  getMeasurementsForIngredient,
+  getTitleForIngredient,
+  unitUtils
 }

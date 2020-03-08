@@ -13,6 +13,13 @@
   </ion-item>
 
   <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupCategories]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
+    <ion-label>
+      Group Items by Category
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       Group Similar Items

@@ -19,62 +19,78 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
-    <ion-list-header *ngIf="list.items.length > 0" class="ion-no-margin">
-      Items
-    </ion-list-header>
-    <div *ngIf="preferences[preferenceKeys.GroupSimilar]">
-      <div *ngFor="let group of list.itemsByGroup; let i = index;">
-        <ion-item>
-          <ion-label class="ion-text-wrap ion-no-margin">
-            <b class="groupTitle">{{ group.title }}:</b>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngFor="let item of group.items">
-          <ion-label class="ion-text-wrap ion-no-margin">
-            {{ item.title }}
-            <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe">
-              For recipe:
-              <span>{{ item.recipe.title }}</span>
-            </p>
-            <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
-              Added
-              <span>{{ formatItemCreationDate(item.createdAt) }}</span>
-            </p>
-            <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner">
-              <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
-              <span>{{ item.owner.name || item.owner.email }}</span>
-            </p>
-          </ion-label>
-          <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
-        </ion-item>
+    <div *ngIf="preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let categoryTitle of categoryTitles" class="category-container">
+        <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
+          <ion-title class="ion-no-padding">
+            {{ categoryTitle }}
+            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="arrow-dropdown"></ion-icon>
+            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="arrow-dropup"></ion-icon>
+          </ion-title>
+        </ion-list-header>
+        <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
+          <div *ngFor="let group of groupsByCategoryTitle[categoryTitle]" class="shopping-list-item">
+            <shopping-list-group
+              [group]="group"
+              [categoryTitle]="categoryTitle"
+              [groupTitleExpanded]="groupTitleExpanded"
+              [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+              [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
+              (complete)="removeItems($event)"></shopping-list-group>
+          </div>
+        </div>
       </div>
     </div>
-    <div *ngIf="!preferences[preferenceKeys.GroupSimilar]">
-      <ion-item *ngFor="let item of list.items; let i = index;">
-        <ion-label class="ion-text-wrap">
-          {{ item.title }}
-          <p *ngIf="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe">
-            For recipe:
-            <span>{{ item.recipe.title }}</span>
-          </p>
-          <p *ngIf="preferences[preferenceKeys.ShowAddedOn]">
-            Added
-            <span>{{ formatItemCreationDate(item.createdAt) }}</span>
-          </p>
-          <p *ngIf="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner">
-            <span *ngIf="!preferences[preferenceKeys.ShowAddedOn]">Added </span>by
-            <span>{{ item.owner.name || item.owner.email }}</span>
-          </p>
-        </ion-label>
-        <ion-checkbox [(ngModel)]="item.completed" (ngModelChange)="removeItems([item])"></ion-checkbox>
-      </ion-item>
+    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let groupTitle of groupTitles" class="shopping-list-item">
+        <shopping-list-group
+          [group]="{ title: groupTitle, items: itemsByGroupTitle[groupTitle] }"
+          [groupTitleExpanded]="groupTitleExpanded"
+          [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+          [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
+          (complete)="removeItems($event)"></shopping-list-group>
+      </div>
+    </div>
+    <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let categoryTitle of categoryTitles" class="category-container">
+        <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
+          <ion-title class="ion-no-padding">
+            {{ categoryTitle }}
+            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="arrow-dropdown"></ion-icon>
+            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="arrow-dropup"></ion-icon>
+          </ion-title>
+        </ion-list-header>
+        <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
+          <div *ngFor="let item of itemsByCategoryTitle[categoryTitle]" class="shopping-list-item">
+            <shopping-list-item
+              [title]="item.title"
+              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
+              (complete)="removeItems([item])"></shopping-list-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
+      <div *ngFor="let item of list.items" class="shopping-list-item">
+        <shopping-list-item
+          [title]="item.title"
+          [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+          [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+          [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
+          (complete)="removeItems([item])"></shopping-list-item>
+      </div>
     </div>
     <null-state *ngIf="list.items.length === 0 && initialLoadComplete">
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          There are no items in this shopping list.
-          <br />
+          There are no items in this shopping list.<br />
+          Use the menu in the upper right hand corner to enable or disable automatic grouping.
+          <br /><br />
           <ion-button (click)="newShoppingListItem()">
             <ion-icon name="add" slot="start"></ion-icon>
             <ion-label>
@@ -92,9 +108,9 @@
     <ion-list-header>
       Recipes in this list
     </ion-list-header>
-    <ion-item *ngFor="let recipeId of recipeIds" (click)="removeRecipe(recipeId)">
-      <ion-icon name="trash" slot="start"></ion-icon>
-      <ion-label>
+    <ion-item *ngFor="let recipeId of recipeIds" button>
+      <ion-icon class="delete-recipe" name="trash" slot="start" (click)="removeRecipe(recipeId)"></ion-icon>
+      <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe.id)">
         {{ itemsByRecipeId[recipeId][0].recipe.title }}
       </ion-label>
     </ion-item>

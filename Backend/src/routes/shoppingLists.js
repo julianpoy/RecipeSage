@@ -18,9 +18,8 @@ var ShoppingListItem = require('../models').ShoppingListItem;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var GripService = require('../services/grip');
-
-// Data
-var ingredientsList = require('../constants/ingredients.json');
+var SharedUtils = require('../../../SharedUtils/src');
+var ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 
 router.post(
   '/',
@@ -58,41 +57,6 @@ router.post(
     });
   }).catch(next);
 });
-
-function groupShoppingListItems(items) {
-  // Ingredient grouping into map by ingredientName
-  var itemGrouper = {};
-  for (var i = 0; i < items.length; i++) {
-    var foundIngredientGroup = ingredientsList.some(ingredient => {
-      if (items[i].title.toLowerCase().indexOf(ingredient.toLowerCase()) > -1) {
-        itemGrouper[ingredient] = itemGrouper[ingredient] || [];
-        itemGrouper[ingredient].push(items[i]);
-        return true;
-      }
-
-      return false;
-    });
-
-    if (!foundIngredientGroup) {
-      itemGrouper.ungrouped = itemGrouper.ungrouped || [];
-      itemGrouper.ungrouped.push(items[i]);
-    }
-  }
-
-  // Load map of groups by ingredientName into array of objects
-  var result = [];
-  for (var key in itemGrouper) {
-    if (itemGrouper.hasOwnProperty(key)) {
-      result.push({
-        title: key,
-        items: itemGrouper[key],
-        completed: false
-      });
-    }
-  }
-
-  return result;
-}
 
 router.get(
   '/',
@@ -391,7 +355,8 @@ router.get(
       });
 
       let s = shoppingListSummary.toJSON();
-      s.itemsByGroup = groupShoppingListItems(s.items);
+      s.itemsByGroup = ShoppingListCategorizerService.groupShoppingListItems(s.items); // TODO: Remove this field from API. Field grouping only
+      s.items.forEach(item => item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(item.title));
 
       res.status(200).json(s);
     } catch (e) {
