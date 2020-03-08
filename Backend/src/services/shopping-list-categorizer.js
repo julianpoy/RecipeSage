@@ -25,7 +25,12 @@ exports.getCategoryTitle = itemTitle => {
   if (itemTitle.includes("canned") || itemTitle.includes(" can ")) return "Canned";
   if (itemTitle.includes("frozen")) return "Frozen";
 
-  const itemTitleMatch = itemTitles.find(potentialMatch => potentialMatch.split(" ").filter(token => !itemTitle.includes(token)).length === 0);
+  const itemTitleMatch = itemTitles.find(potentialMatch => {
+    const potentialChunks = potentialMatch.charAt(0) === '*' ? [potentialMatch.substring(1)] : potentialMatch.split(" "); // Matchers beginning with * should be matched whole
+    const diffChunks = potentialChunks.filter(token => !itemTitle.includes(token)); // Filter by any chunks that _do not_ match our itemTitle
+
+    return diffChunks.length === 0;
+  });
   if (!itemTitleMatch) return "Uncategorized";
 
   const category = itemCategories[itemTitleMatch];
