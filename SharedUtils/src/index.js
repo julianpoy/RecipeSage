@@ -42,6 +42,8 @@ const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([
 
 const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)? `);
 
+const measurementQuantityRegExp = new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`); // Should always be used with 'i' flag
+
 const fillerWordsRegexp = /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
 
 const notesRegexp = /\(.*?\)/;
@@ -55,11 +57,25 @@ function getMeasurementsForIngredient(ingredient) {
 
   return strippedIngredient.split(multipartQuantifierRegexp).map(ingredientPart => {
     const measurementMatch = stripNotes(ingredientPart)
-      .match(new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`, 'i'));
+      .match(new RegExp(measurementQuantityRegExp.source, 'i'));
 
     if (measurementMatch) return measurementMatch[0].trim();
     return null;
   }).filter(measurement => measurement);
+}
+
+function getTitleForIngredient(ingredient) {
+  const strippedIngredient = replaceFractionsInText(ingredient);
+
+  const ingredientPartDelimiters = strippedIngredient.match(new RegExp(multipartQuantifierRegexp, 'ig'));
+
+  return strippedIngredient
+    .split(multipartQuantifierRegexp)
+    .map(ingredientPart => {
+      return stripNotes(ingredientPart).replace(new RegExp(measurementQuantityRegExp, 'i'), "");
+    })
+    .reduce((acc, ingredientPart, idx) => acc + ingredientPart + (ingredientPartDelimiters ? ingredientPartDelimiters[idx] : ''), "")
+    .trim();
 }
 
 function isHeader(input) {
@@ -197,5 +213,6 @@ module.exports = {
   parseInstructions,
   stripIngredient,
   getMeasurementsForIngredient,
+  getTitleForIngredient,
   unitUtils
 }
