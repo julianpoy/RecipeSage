@@ -363,4 +363,8 @@ export class ShoppingListPage {
 
     popover.present();
   }
+
+  openRecipe(id) {
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
+  }
 }

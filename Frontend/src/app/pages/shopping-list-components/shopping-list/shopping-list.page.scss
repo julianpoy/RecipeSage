@@ -18,3 +18,11 @@ ion-list-header {
     --background: var(--ion-background-shade-color);
   }
 }
+
+.delete-recipe {
+  transition: 0.1s;
+}
+
+.delete-recipe:hover {
+  color: var(--ion-color-danger);
+}

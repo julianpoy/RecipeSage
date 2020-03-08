@@ -107,9 +107,9 @@
     <ion-list-header>
       Recipes in this list
     </ion-list-header>
-    <ion-item *ngFor="let recipeId of recipeIds" (click)="removeRecipe(recipeId)">
-      <ion-icon name="trash" slot="start"></ion-icon>
-      <ion-label>
+    <ion-item *ngFor="let recipeId of recipeIds" button>
+      <ion-icon class="delete-recipe" name="trash" slot="start" (click)="removeRecipe(recipeId)"></ion-icon>
+      <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe.id)">
         {{ itemsByRecipeId[recipeId][0].recipe.title }}
       </ion-label>
     </ion-item>
