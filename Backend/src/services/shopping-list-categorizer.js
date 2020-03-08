@@ -12,10 +12,13 @@ const formattedCategoryTitles = {
   "meat": "Meats",
   "bakery": "Baked Goods",
   "grocery": "Grocery Items",
-  "liquor": "Liquor"
+  "liquor": "Liquor",
+  "seafood": "Seafood",
+  "nonfood": "Non-Food and Household",
+  "deli": "Deli"
 };
 
-const capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase + word.substring(1)).join(" ");
+const capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
 
 const categoryForTitle = itemTitle => {
   itemTitle = itemTitle.toLowerCase();
@@ -54,8 +57,9 @@ exports.groupShoppingListItems = items => {
     });
 
     if (!foundIngredientGroup) {
-      itemGrouper[itemTitle] = itemGrouper[itemTitle] || [];
-      itemGrouper[itemTitle].push(item);
+      const strippedIngredientTitle = SharedUtils.getTitleForIngredient(itemTitle);
+      itemGrouper[strippedIngredientTitle] = itemGrouper[strippedIngredientTitle] || [];
+      itemGrouper[strippedIngredientTitle].push(item);
     }
   }
 
