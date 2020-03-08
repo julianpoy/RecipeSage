@@ -90,7 +90,7 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
-    [ShoppingListPreferenceKey.GroupSimilar]: false,
+    [ShoppingListPreferenceKey.GroupSimilar]: true,
     [ShoppingListPreferenceKey.GroupCategories]: true
   };
 
