@@ -20,23 +20,16 @@ const formattedCategoryTitles = {
 
 const capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
 
-const categoryForTitle = itemTitle => {
-  itemTitle = itemTitle.toLowerCase();
-  const itemTitleMatch = itemTitles.find(potentialMatch => potentialMatch.split(" ").filter(token => !itemTitle.includes(token)).length === 0);
-  if (!itemTitleMatch) return null;
-
-  const category = itemCategories[itemTitleMatch];
-  return formattedCategoryTitles[category] || capitalizeEachWord(category);
-};
-
 exports.getCategoryTitle = itemTitle => {
+  itemTitle = itemTitle.toLowerCase();
   if (itemTitle.includes("canned") || itemTitle.includes(" can ")) return "Canned";
   if (itemTitle.includes("frozen")) return "Frozen";
 
-  const titleMatch = categoryForTitle(itemTitle);
-  if (titleMatch) return titleMatch;
+  const itemTitleMatch = itemTitles.find(potentialMatch => potentialMatch.split(" ").filter(token => !itemTitle.includes(token)).length === 0);
+  if (!itemTitleMatch) return "Uncategorized";
 
-  return "Uncategorized";
+  const category = itemCategories[itemTitleMatch];
+  return formattedCategoryTitles[category] || capitalizeEachWord(category);
 };
 
 exports.groupShoppingListItems = items => {
