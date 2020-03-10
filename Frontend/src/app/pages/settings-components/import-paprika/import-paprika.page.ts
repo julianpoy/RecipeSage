@@ -97,8 +97,10 @@ export class ImportPaprikaPage {
           (await this.toastCtrl.create({
             message: `Hmm, we had trouble extracting that file. Please make sure it is in Paprika Recipe Format directly from the app.
                       If you\'re having trouble, please feel free to send me an email.`,
-            showCloseButton: true,
-            // dismissOnPageChange: true
+            buttons: [{
+              text: 'Close',
+              role: 'cancel'
+            }]
           })).present();
           break;
         case 504:
@@ -108,7 +110,10 @@ export class ImportPaprikaPage {
             (await this.toastCtrl.create({
               message: `The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes.
                         If your recipes do not appear, please send me an email.`,
-              showCloseButton: true
+              buttons: [{
+                text: 'Close',
+                role: 'cancel'
+              }]
             })).present();
             this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
           }, 20000);

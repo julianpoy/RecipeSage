@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
+import { EventService } from './event.service';
 
 export interface Label {
   id: string;
@@ -16,7 +16,7 @@ export interface Label {
 })
 export class LabelService {
 
-  constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
+  constructor(public events: EventService, public utilService: UtilService, public httpService: HttpService) {}
 
   fetch(options: {
     title?: string
