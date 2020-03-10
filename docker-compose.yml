@@ -31,6 +31,7 @@ services:
       - postgres
       - elasticsearch
       - pushpin
+      - browserless
     build:
       context: .
       dockerfile: ./Backend/Dockerfile
@@ -85,3 +86,8 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+  browserless:
+    image: browserless/chrome:1.28.0-chrome-stable
+    environment:
+      - MAX_CONCURRENT_SESSIONS=3
+      - MAX_QUEUE_LENGTH=10
