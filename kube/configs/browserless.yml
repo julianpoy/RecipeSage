@@ -20,9 +20,9 @@ spec:
         - containerPort: 3000
         env:
         - name: MAX_CONCURRENT_SESSIONS
-          value: 3
+          value: "3"
         - name: MAX_QUEUE_LENGTH
-          value: 10
+          value: "10"
         resources:
           requests:
             cpu: 100m
