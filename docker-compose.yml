@@ -60,6 +60,8 @@ services:
       - ELASTIC_PASSWORD
       - STRIPE_SK
       - STRIPE_WEBHOOK_SECRET
+      - BROWSERLESS_HOST=browserless
+      - BROWSERLESS_PORT=3000
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
       - ./Backend/src:/app/Backend/src
