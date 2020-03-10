@@ -29,7 +29,7 @@ spec:
             memory: 150Mi
           limits:
             cpu: 1
-            memory: 500Mi
+            memory: 700Mi
 ---
 apiVersion: v1
 kind: Service
