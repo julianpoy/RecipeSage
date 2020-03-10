@@ -3,11 +3,12 @@ import 'firebase/messaging';
 
 import { Injectable } from '@angular/core';
 
-import { Events, ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular';
 
 import { UserService } from './user.service';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
+import { EventService } from './event.service';
 
 export interface Message {
   id: string;
@@ -30,7 +31,7 @@ export class MessagingService {
   private unsubscribeOnTokenRefresh = () => { };
 
   constructor(
-  public events: Events,
+  public events: EventService,
   public utilService: UtilService,
   public httpService: HttpService,
   public userService: UserService,
@@ -42,6 +43,9 @@ export class MessagingService {
 
       console.log('Has service worker registration. Beginning setup.');
       const config = {
+        appId: '1:1064631313987:android:b6ca7a14265a6a01',
+        apiKey: 'AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0',
+        projectId: 'chef-book',
         messagingSenderId: '1064631313987'
       };
       firebase.initializeApp(config);

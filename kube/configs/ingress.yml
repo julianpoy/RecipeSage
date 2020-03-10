@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: rs-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: 800m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+spec:
+  rules:
+  - http:
+  - host: recipesage.com
+    http:
+      paths:
+      - path: /grip/()(ws)
+        backend:
+          serviceName: rs-pushpin
+          servicePort: 7999
+      - path: /api(/|$)(.*)
+        backend:
+          serviceName: rs-api
+          servicePort: 3000
+      - path: /()(.*)
+        backend:
+          serviceName: rs-static-proxy
+          servicePort: 80
+  tls:
+  - hosts:
+    - recipesage.com
+    - www.recipesage.com
+    - beta.recipesage.com
+    - staging.recipesage.com
+    secretName: rs-tls
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: julian@recipesage.com
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector: {}
+      dns01:
+        digitalocean:
+          tokenSecretRef:
+            name: digitalocean-key
+            key: access-token

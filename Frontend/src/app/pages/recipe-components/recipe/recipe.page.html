@@ -15,9 +15,9 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card>
+  <ion-card class="ion-no-margin">
     <ion-item lines="none">
-      <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
+      <ion-thumbnail class="ion-margin-top" *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
         <img src="{{ recipe.images[0].location }}">
       </ion-thumbnail>
 
@@ -129,9 +129,9 @@
       </div>
     </div>
 
-    <div *ngIf="recipe.notes">
+    <div *ngIf="recipe.notes" class="ion-margin-top">
       <ion-item lines="none">
-        <ion-icon name="paper" slot="start" size="large"></ion-icon>
+        <ion-icon name="document-text" slot="start" size="large"></ion-icon>
         <ion-label>
           <p>Notes</p>
         </ion-label>
@@ -141,10 +141,9 @@
           <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
         </ion-label>
       </ion-item>
-      <br />
     </div>
 
-    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-no-margin" lines="none">
+    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-margin-top" lines="none">
       <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
       <ion-label>
         <p>Labels</p>
@@ -168,15 +167,13 @@
 
       <input
         [(ngModel)]='pendingLabel'
-        (focus)='toggleAutocomplete(true)'
-        (focusout)='toggleAutocomplete(false, $event)'
-        (blur)='toggleAutocomplete(false, $event)'
+        (click)='toggleAutocomplete(true); $event.stopPropagation();'
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         autocomplete="off"
         #labelInputField
         id="labelInputField" />
-      <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
+      <div class="autocomplete" *ngIf="showAutocomplete">
         <button
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
@@ -216,11 +213,13 @@
 
     <br />
 
-    <ion-item>
+    <ion-item lines="full">
       <ion-label>
         <p>
-          Created {{ prettyDateTime(recipe.createdAt) }}<br />
-          Last edited {{ prettyDateTime(recipe.updatedAt) }}
+          <i>
+            Created {{ prettyDateTime(recipe.createdAt) }}<br />
+            Last edited {{ prettyDateTime(recipe.updatedAt) }}
+          </i>
         </p>
       </ion-label>
     </ion-item>

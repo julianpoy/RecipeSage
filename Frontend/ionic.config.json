@@ -1,5 +1,7 @@
 {
   "name": "recipeSage",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

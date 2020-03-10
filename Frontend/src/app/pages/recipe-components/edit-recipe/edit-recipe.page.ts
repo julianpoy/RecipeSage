@@ -141,7 +141,7 @@ export class EditRecipePage {
   }
 
   async addImage(event) {
-    const files = event.srcElement.files;
+    const files = (event.srcElement || event.target).files;
     if (!files || !files[0]) {
       return;
     }
@@ -149,7 +149,10 @@ export class EditRecipePage {
     if (this.images.length + files.length > 10) {
       const imageUploadTooManyToast = await this.toastCtrl.create({
         message: 'You can attach attach up to 10 images to a recipe',
-        showCloseButton: true
+        buttons: [{
+          text: 'Close',
+          role: 'cancel'
+        }]
       });
       imageUploadTooManyToast.present();
       return;
@@ -175,7 +178,10 @@ export class EditRecipePage {
     } catch (e) {
       const imageUploadErrorToast = await this.toastCtrl.create({
         message: 'There was an error processing one or more of the images that you selected',
-        showCloseButton: true
+        buttons: [{
+          text: 'Close',
+          role: 'cancel'
+        }]
       });
       imageUploadErrorToast.present();
       console.error(e);
@@ -240,6 +246,7 @@ export class EditRecipePage {
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
+        console.log(err)
         switch (err.response.status) {
           case 0:
             (await this.toastCtrl.create({
@@ -290,5 +297,10 @@ export class EditRecipePage {
 
     this.images.splice(imgIdx, 1); // Remove
     this.images.splice(newImgIdx, 0, image); // Insert
+  }
+
+  removeImage(image) {
+    const imgIdx = this.images.indexOf(image);
+    this.images.splice(imgIdx, 1);
   }
 }

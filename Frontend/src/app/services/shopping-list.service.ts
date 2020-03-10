@@ -1,14 +1,14 @@
-import { Events } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
+import { EventService } from './event.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingListService {
 
-  constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
+  constructor(public events: EventService, public utilService: UtilService, public httpService: HttpService) {}
 
   fetch() {
     const url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();

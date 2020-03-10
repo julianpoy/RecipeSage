@@ -23,6 +23,14 @@ export class ShoppingListPage {
   shoppingListId: string;
   list: any = { items: [], collaborators: [] };
 
+  items: any[] = [];
+  groupTitles: string[] = [];
+  categoryTitles: string[] = [];
+  categoryTitleCollapsed = {};
+  itemsByGroupTitle: any = {};
+  itemsByCategoryTitle: any = {};
+  groupsByCategoryTitle: any = {};
+  groupTitleExpanded: any = {};
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
@@ -78,14 +86,13 @@ export class ShoppingListPage {
 
   processIncomingList(list) {
     this.list = list;
-    this.applySort();
 
-    const items = (this.list.items || []);
+    this.items = (this.list.items || []);
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
 
-    for (const item of items) {
+    for (const item of this.items) {
       // Recipe grouping
       if (!item.recipe) continue;
 
@@ -96,6 +103,37 @@ export class ShoppingListPage {
       if (!this.itemsByRecipeId[recipeId]) this.itemsByRecipeId[recipeId] = [];
       this.itemsByRecipeId[recipeId].push(item);
     }
+
+    this.groupTitles = Array.from(new Set(this.items.map(item => item.groupTitle)));
+    this.categoryTitles = Array.from(new Set(this.items.map(item => item.categoryTitle)));
+    this.itemsByGroupTitle = this.items.reduce((acc, item) => {
+      acc[item.groupTitle] = acc[item.groupTitle] || [];
+      acc[item.groupTitle].push(item);
+      return acc;
+    }, {});
+    this.itemsByCategoryTitle = this.items.reduce((acc, item) => {
+      acc[item.categoryTitle] = acc[item.categoryTitle] || [];
+      acc[item.categoryTitle].push(item);
+      return acc;
+    }, {});
+    this.groupsByCategoryTitle = this.items.reduce((acc, item) => {
+      acc[item.categoryTitle] = acc[item.categoryTitle] || [];
+      const arr = acc[item.categoryTitle];
+      let grouping = arr.find(el => el.title === item.groupTitle);
+      if (!grouping) {
+        grouping = {
+          title: item.groupTitle,
+          items: []
+        };
+        arr.push(grouping);
+      }
+      grouping.items.push(item);
+      return acc;
+    }, {});
+
+    console.log(this.groupsByCategoryTitle);
+
+    this.applySort();
   }
 
   loadList() {
@@ -105,6 +143,7 @@ export class ShoppingListPage {
 
         resolve();
       }).catch(async err => {
+        console.log(err);
         switch (err.response.status) {
           case 0:
             const offlineToast = await this.toastCtrl.create({
@@ -164,7 +203,6 @@ export class ShoppingListPage {
           duration: 5000,
           buttons: [{
             text: 'Undo',
-            role: 'cancel',
             handler: () => {
               this._addItems(items.map(el => {
                 return {
@@ -280,21 +318,33 @@ export class ShoppingListPage {
 
   applySort() {
     // Sort individual items
-    this.list.items = this.list.items.sort((a, b) => {
+    this.items = this.items.sort((a, b) => {
       return this.ingredientSorter(a, b);
     });
 
     // Sort groups by title (always)
-    this.list.itemsByGroup = this.list.itemsByGroup.sort((a, b) => {
-      return a.title.localeCompare(b.title);
+    this.groupTitles = this.groupTitles.sort((a, b) => {
+      return a.localeCompare(b);
+    });
+
+    // Sort categories by title (always)
+    this.categoryTitles = this.categoryTitles.sort((a, b) => {
+      return a.localeCompare(b);
     });
 
     // Sort items within each group
-    for (const itemGroup of this.list.itemsByGroup) {
-      itemGroup.items = itemGroup.items.sort((a, b) => {
+    Object.keys(this.itemsByGroupTitle).forEach(groupTitle => {
+      this.itemsByGroupTitle[groupTitle] = this.itemsByGroupTitle[groupTitle].sort((a, b) => {
         return this.ingredientSorter(a, b);
       });
-    }
+    });
+
+    // Sort items within each category
+    Object.keys(this.itemsByCategoryTitle).forEach(categoryTitle => {
+      this.itemsByCategoryTitle[categoryTitle] = this.itemsByCategoryTitle[categoryTitle].sort((a, b) => {
+        return this.ingredientSorter(a, b);
+      });
+    });
   }
 
   async presentPopover(event) {
@@ -312,5 +362,9 @@ export class ShoppingListPage {
     });
 
     popover.present();
+  }
+
+  openRecipe(id) {
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
   }
 }

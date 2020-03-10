@@ -8,6 +8,17 @@ jobs:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
           RS_TEST_DB_DATABASE: chefbook_test
+          NODE_ENV: test
+          VERBOSE: true
+          POSTGRES_DB: chefbook_test
+          POSTGRES_USER: chefbook
+          POSTGRES_PASSWORD: admin
+          POSTGRES_PORT: 5432
+          POSTGRES_HOST: localhost
+          POSTGRES_SSL: false
+          POSTGRES_LOGGING: false
+          GRIP_URL: http://localhost:5561/
+          GRIP_KEY: changeme
       - image: postgres:9.6.9
         environment:
           POSTGRES_USER: chefbook
@@ -43,10 +54,7 @@ jobs:
             - ./Backend/node_modules
       - run:
           name: extract-firebase-credentials
-          command: cd Backend/config && unzip -j -P $credentialskey firebase-credentials.json.zip
-      - run:
-          name: extract-config
-          command: cd Backend/config && unzip -j -P $credentialskey config.json.zip
+          command: cd Backend/src/config && unzip -j -P $credentialskey firebase-credentials.json.zip
       # -------------- Tests -----------------
       - run: # run backend tests
           name: test-backend
@@ -86,10 +94,11 @@ jobs:
           command: cd Frontend && npm run lint
       - run: # build frontend
           name: build-frontend
-          command: cd Frontend && npm run build
+          command: cd Frontend && npm run build -- --prod
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_backend
+      - test_backend:
+          context: "RS API Env Vars"
       - build_frontend

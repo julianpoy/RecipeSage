@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { UtilService } from './util.service';
 
+const CAPABILITY_RETRY_RATE = 5000;
+
 @Injectable({
   providedIn: 'root'
 })
 export class CapabilitiesService {
+  retryTimeout;
+
   capabilities = {
     highResImages: false,
     multipleImages: false,
@@ -24,9 +28,13 @@ export class CapabilitiesService {
       if (!this.utilService.isLoggedIn()) throw new Error('User is not logged in');
       this.capabilities = await this.userService.capabilities();
     } catch (e) {
-      setTimeout(() => {
+      if (this.retryTimeout) {
+        clearTimeout(this.retryTimeout);
+      }
+
+      this.retryTimeout = setTimeout(() => {
         this.updateCapabilities();
-      }, 1000);
+      }, CAPABILITY_RETRY_RATE);
     }
   }
 }

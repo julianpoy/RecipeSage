@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>RecipeSage</title>
+  <title>RecipeSage - The Personal Recipe Keeper</title>
 
   <base href="/" />
 
@@ -12,8 +12,7 @@
   <meta name="msapplication-tap-highlight" content="no" />
   <meta name="msapplication-config" content="assets/icon/browserconfig.xml">
 
-  <meta name="Description" content="Create, store, share and browse your recipes online.
-    Free, easy to use, and mobile friendly.">
+  <meta name="Description" content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly.">
 
   <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32x32.png">
@@ -55,35 +54,23 @@
       window.deferredInstallPrompt = e;
     });
 
-    window.updateSW = function(resolve, reject) {
-      resolve = resolve || function() {};
-      reject = reject || function() {};
-
-      if (!window.swRegistration) {
-        reject();
-        return;
-      }
-
-      var updatePromise = window.swRegistration.update();
-
-      updatePromise.then(resolve, reject);
-    }
-
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(registration => {
-          window.swRegistration = registration;
-          if (window.onSWRegistration) window.onSWRegistration.call(null);
-
-          var UPDATE_INTERVAL = 1000 * 60 * 10; // EVERY 10 MINUTES
-          setInterval(window.updateSW, UPDATE_INTERVAL);
-          window.updateSW();
-        })
-        .catch(err => console.error('Error', err));
+      navigator.serviceWorker.register('service-worker.js', {
+        updateViaCache: 'none'
+      }).then(registration => {
+        window.swRegistration = registration;
+        if (window.onSWRegistration) window.onSWRegistration.call(null);
+      }).catch(err => console.error('Error', err));
 
       navigator.serviceWorker.addEventListener('controllerchange', function() {
-        if (window.onSWUpdate) window.onSWUpdate.call(null);
-        else window.location.reload(true);
+        // Recovery if we have a SW in a frozen state
+        if (!window.appLoaded) {
+          setTimeout(function () {
+            if (!window.appLoaded) {
+              window.location.reload(true);
+            }
+          }, 2000);
+        }
       });
 
       window.forceSWUpdate = function() {
@@ -91,7 +78,9 @@
           Promise.all(registrations.map(function(registration) {
             registration.unregister();
           })).then(function() {
-            return navigator.serviceWorker.register('service-worker.js');
+            return navigator.serviceWorker.register('service-worker.js', {
+              updateViaCache: 'none'
+            });
           });
         });
       }
@@ -122,7 +111,7 @@
   </script>
 
   <script>
-    window.version = '2.1.2';
+    window.version = 'development';
   </script>
 
   <!-- Matomo -->
@@ -165,8 +154,6 @@
         break;
     }
   </script>
-
-  <script src="https://js.stripe.com/v3/"></script>
 </body>
 
 </html>

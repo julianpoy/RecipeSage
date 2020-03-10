@@ -20,12 +20,134 @@
 
   <br />
 
-  <b>v2.2.0</b> - November 21, 2019<br />
-  - Add support for multiple images (donors only for now to cover the costs associated)<br />
-  - Add support for high res images (donors only for now to cover the costs associated)<br />
+  <b>v2.4.0</b> - March 8, 2020<br />
+  - New! Shopping list automatic item categorization (toggleable)<br />
+  - New! Improved shopping list grouping (toggleable) - The existing "group similar items" will now combine measurements, and has a simpler, collapsable structure for grouping items<br />
+  - Clicking a recipe title listed at the bottom of the shopping list now opens the recipe rather than removing the items associated<br />
+  - Improved welcome page - add login button to welcome text, improve sizing on smaller device screens, update screenshot for IOS devices<br />
+
+  <br />
+
+  <b>v2.3.6</b> - February 10, 2020<br />
+  - Current recipe scale will now carry over to the "Add recipe to shopping list" dialogue<br />
+  - Fix an issue where fraction symbols would not scale correctly if there wasn't a space between then symbol and an adjacent number<br />
+
+  <br />
+
+  <b>v2.3.5</b> - February 9, 2020<br />
+  - Fixed an issue with the download & install menu for Chrome 77+<br />
+
+  <br />
+
+  <b>v2.3.4</b> - February 9, 2020<br />
+  - Added an option to hide recipe description on the My Recipes page<br />
+
+  <br />
+
+  <b>v2.3.3</b> - February 8, 2020<br />
+  - Added a welcome email for new users<br />
+  - Fixed an issue for the clip tool where bad image urls would trigger an "Unexpected error..." message. Bad image urls now trigger a more descriptive message<br />
+
+  <br />
+
+  <b>v2.3.2</b> - February 8, 2020<br />
+  - Fixed an issue where duplicate labels could be created for a recipe<br />
+  - Fixed an issue where label count would be incorrect<br />
+
+  <br />
+
+  <b>v2.3.1</b> - February 7, 2020<br />
+  - Fixed an issue where the app would show an extra status bar at the top<br />
+  - Fixed an issue where scaling ingredients when adding to shopping list would appear in shopping list unscaled<br />
+  - Fixed an issue where exporting in text format would not include recipe images<br />
+  - Fixed an issue where shopping lists and meal plans would not display collaborators in some cases<br />
+  - Performance improvements<br />
+
+  <br />
+
+  <b>v2.3.0</b> - February 3, 2020<br />
+  - Added label management page<br />
+  - Rename a label across all of its recipes<br />
+  - Delete a label from all associated recipes<br />
+  - Merge two labels together across all of their recipes<br />
+  - Alphabetical sorting in the label suggestion drop-down<br />
+  - Fixed a bug where the undo button wouldn't work when removing shopping list items<br />
+
+  <br />
+
+  <b>v2.2.9</b> - January 31, 2020<br />
+  - Improve image caching<br />
+
+  <br />
+
+  <b>v2.2.8</b> - January 28, 2020<br />
+  - Reduce application network usage<br />
+  - Fixed a bug where password reset would send a URL with an invalid domain<br />
+  - Fixed an issue where the app may not open on old browsers (Chrome 49 and below)<br />
+  - Improve Pepperplate import instructions and messaging<br />
+
+  <br />
+
+  <b>v2.2.7</b> - January 25, 2020<br />
+  - Large performance improvements, especially for users with large recipe databases<br />
+  - Improved search performance, especially when filtering by label while searching<br />
+  - Fixed a bug on Safari where adding labels to recipes via the suggestion dropdown was broken<br />
+  - Fixed a bug where the label suggestion dropdown would stop appearing after adding a label via the keyboard+enter<br />
+  - Fixed an issue where the page may refresh unexpectedly on some devices<br />
+
+  <br />
+
+  <b>v2.2.6</b> - January 23, 2020<br />
+  - Fix issues with importing Pepperplate labels (Pepperplate has partially discontinued support for multiple labels - this fix should bring those labels over for new imports)<br />
+
+  <br />
+
+  <b>v2.2.5</b> - January 22, 2020<br />
+  - Improve support for Pepperplate formatting<br />
+  - Improve Pepperplate import speed<br />
+  - Eliminate Pepperplate duplication issues<br />
+  - Fix Pepperplate missing recipes issues<br />
+  - Better Pepperplate import stability when Pepperplate is running slow<br />
+
+  <br />
+
+  <b>v2.2.4</b> - January 21, 2020<br />
+  - Add instructional modal for Pepperplate import<br />
+
+  <br />
+
+  <b>v2.2.3</b> - January 4, 2020<br />
+  - Ingredient scaling notation support for "2 cups + 1 tablespoon" (support for + and plus directly between measurements)<br />
+
+  <br />
+
+  <b>v2.2.2</b> - January 3, 2020<br />
+  - Fixed an issue where ctrl+click would not work for opening recipes from the "My Recipes" page<br />
+  - Fixed an issue where meal planner would show items from previous years over items from current year<br />
+  - Unicode fractions are now displayed and converted properly for recipe ingredient scaling<br />
+
+  <br />
+
+  <b>v2.2.1</b> - December 21, 2019<br />
+  - Fixed an issue where recipe search would not work on IOS 13 devices<br />
+
+  <br />
+
+  <b>v2.2.0</b> - December 7, 2019<br />
+  - Tile layout is now the default layout type - layout switching is available from the dropdown menu on the my recipes page<br />
+  - WebExtension automatic field detection - <a [routerLink]="tipsTricksTutorialsPath">view tutorial</a><br />
+  - Recipe images can now be expanded by clicking the recipe image on the recipe details page<br />
+  - Add support for multiple images - (<a [routerLink]="contributePath">contributor bonus</a>)<br />
+  - Add support for high res images (<a [routerLink]="contributePath">contributor bonus</a>)<br />
   - Update contribution page<br />
+  - Add more to the <a [routerLink]="aboutDetailsPath">about me page</a><br />
   - Add dates to release notes<br />
   - Add social link to Discord channel<br />
+  - Add remove button to delete image(s) from recipe on edit recipe page<br />
+  - App page title is now more descriptive - more visible in search results<br />
+  - Improve readability of welcome page by darkening welcome image<br />
+  - Improve spacing on recipe details page to improve readability<br />
+  - Fixed an issue where adding recipe to a meal plan was broken if no meal plans existed<br />
 
   <br />
 

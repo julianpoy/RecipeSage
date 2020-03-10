@@ -1,4 +1,4 @@
-import { Events, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 
 import { Label } from './label.service';
@@ -6,9 +6,10 @@ import { Label } from './label.service';
 import fractionjs from 'fraction.js';
 import { HttpService } from './http.service';
 import { UtilService } from './util.service';
+import { EventService } from './event.service';
 import { Image } from './image.service';
 
-import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
+import { parseIngredients, parseInstructions } from '../../../../SharedUtils/src';
 
 export interface Recipe {
   id: string;
@@ -57,7 +58,7 @@ export class RecipeService {
 
   constructor(
   public alertCtrl: AlertController,
-  public events: Events,
+  public events: EventService,
   public httpService: HttpService,
   public utilService: UtilService) {}
 

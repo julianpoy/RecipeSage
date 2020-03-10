@@ -42,6 +42,8 @@
       padding: 0;
 
       .no-image {
+        display: flex;
+
         img {
           margin-top: 50px;
           margin-bottom: 50px;

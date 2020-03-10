@@ -12,8 +12,13 @@ export enum MyRecipesPreferenceKey {
   ShowLabelChips = 'myRecipes.showLabelChips',
   ShowImages = 'myRecipes.showImages',
   ShowSource = 'myRecipes.showSource',
+  ShowRecipeDescription = 'myRecipes.showRecipeDescription',
   ViewType = 'myRecipes.viewType',
   SortBy = 'myRecipes.sortBy'
+}
+
+export enum ManageLabelsPreferenceKey {
+  ShowCreatedAt = 'manageLabels.showCreatedAt'
 }
 
 export enum MealPlanPreferenceKey {
@@ -27,7 +32,8 @@ export enum ShoppingListPreferenceKey {
   ShowAddedBy = 'ShoppingList.showAddedBy',
   ShowAddedOn = 'ShoppingList.showAddedOn',
   ShowRecipeTitle = 'ShoppingList.showRecipeTitle',
-  GroupSimilar = 'ShoppingList.groupSimilar'
+  GroupSimilar = 'ShoppingList.groupSimilar',
+  GroupCategories = 'ShoppingList.groupCategories'
 }
 
 export interface AppPreferenceTypes {
@@ -38,8 +44,11 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowLabelChips]: boolean;
   [MyRecipesPreferenceKey.ShowImages]: boolean;
   [MyRecipesPreferenceKey.ShowSource]: boolean;
+  [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
   [MyRecipesPreferenceKey.SortBy]: '-title' | '- createdAt' | 'createdAt' | '- updatedAt' | 'updatedAt';
+
+  [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;
@@ -50,12 +59,14 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.ShowAddedOn]: boolean;
   [ShoppingListPreferenceKey.ShowRecipeTitle]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
+  [ShoppingListPreferenceKey.GroupCategories]: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PreferencesService {
+  // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
 
@@ -64,10 +75,12 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowLabelChips]: false,
     [MyRecipesPreferenceKey.ShowImages]: true,
     [MyRecipesPreferenceKey.ShowSource]: false,
-    // TODO: Remove default list view after default settings go out
+    [MyRecipesPreferenceKey.ShowRecipeDescription]: true,
     // Show list by default on small screens
-    [MyRecipesPreferenceKey.ViewType]: 'list' || Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
+    [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
+
+    [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,
@@ -77,7 +90,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
-    [ShoppingListPreferenceKey.GroupSimilar]: false
+    [ShoppingListPreferenceKey.GroupSimilar]: true,
+    [ShoppingListPreferenceKey.GroupCategories]: true
   };
 
   constructor() {
@@ -88,9 +102,11 @@ export class PreferencesService {
       this.clearOldPrefs();
     } else {
       this.load();
+      this.save();
     }
   }
 
+  // Compatibility for old preference style (individual keys)
   private loadOldPrefs() {
     try {
       const oldPreferences = {};

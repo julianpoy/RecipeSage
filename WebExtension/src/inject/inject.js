@@ -38,13 +38,28 @@ if (window[extensionContainerId]) {
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
 
+    const isImg = element => element.tagName.toLowerCase().trim() === 'img';
+
+    const getImgElementsWithin = element => {
+      const matchedImgElements = [];
+      if (isImg(element)) matchedImgElements.push(element);
+      matchedImgElements.push(...element.querySelectorAll('img'));
+      return matchedImgElements;
+    }
+
     const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
       const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
-        .reduce((acc, element) => [...acc, ...element.querySelectorAll('img')], [])
-        .filter(element => element.src)
+        .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
+        .filter(element =>
+          isImg(element) &&
+          element.src &&
+          element.complete && // Filter images that haven't completely loaded
+          element.naturalWidth > 0 && // Filter images that haven't loaded correctly
+          element.naturalHeight > 0
+        )
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
@@ -99,6 +114,7 @@ if (window[extensionContainerId]) {
           'recipe-lede-image', // Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe-body', // Generic, idea from Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe__hero', // Food52 - https://food52.com/recipes/81867-best-quiche-recipe
+          'content' // Generic, recognize content-body if matched directly
         ],
         [
           'recipe-image',
@@ -111,8 +127,7 @@ if (window[extensionContainerId]) {
       ],
       title: [
         [
-          'wprm-recipe-name', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
-          'recipe-title' // Generic
+          'wprm-recipe-name' // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
         ],
         []
       ],
@@ -123,7 +138,7 @@ if (window[extensionContainerId]) {
         []
       ],
       yield: [
-        ['yield', 'servings'],
+        ['recipe-yield', 'recipe-servings', 'yield', 'servings'],
         ['yield', 'servings']
       ],
       activeTime: [
@@ -287,7 +302,7 @@ if (window[extensionContainerId]) {
       document.body.appendChild(shadowRootContainer);
 
       let styles = document.createElement('link');
-      styles.href = chrome.extension.getURL('./src/inject/clipTool.css');
+      styles.href = chrome.extension.getURL('./inject/clipTool.css');
       styles.rel = 'stylesheet';
       styles.type = 'text/css';
       shadowRoot.appendChild(styles);
@@ -455,7 +470,7 @@ if (window[extensionContainerId]) {
       document.body.appendChild(alertShadowRootContainer);
 
       let alertStyles = document.createElement('link');
-      alertStyles.href = chrome.extension.getURL('./src/inject/alert.css');
+      alertStyles.href = chrome.extension.getURL('./inject/alert.css');
       alertStyles.rel = 'stylesheet';
       alertStyles.type = 'text/css';
       shadowRoot.appendChild(alertStyles);

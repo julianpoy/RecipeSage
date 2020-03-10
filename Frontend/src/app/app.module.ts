@@ -14,14 +14,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
 import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
+import { environment } from 'src/environments/environment';
+
 Sentry.init({
   release: (window as any).version,
+  environment: environment.production ? 'production' : 'dev',
   dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200'
 });
 
 export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
     super.handleError(error);
+
+    const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+    if (chunkFailedMessage.test(error.message)) {
+      const shouldReload = confirm('There was a connection interruption while loading this page. Press okay to reload.');
+      if (shouldReload) {
+        window.location.reload(true);
+      }
+    }
 
     let token = '';
     try {

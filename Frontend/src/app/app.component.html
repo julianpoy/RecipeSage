@@ -1,8 +1,8 @@
 <ngx-loading-bar includeSpinner="false"></ngx-loading-bar>
 
 <ion-app>
-  <ion-split-pane [disabled]="!preferences[preferenceKeys.EnableSplitPane]" when="(min-width: 1200px)">
-    <ion-menu type="overlay">
+  <ion-split-pane contentId="main-content" [disabled]="!preferences[preferenceKeys.EnableSplitPane]" when="(min-width: 1200px)">
+    <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar color="nav">
           <ion-title>RecipeSage</ion-title>
@@ -50,6 +50,6 @@
         </ion-toolbar>
       </ion-footer>
     </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

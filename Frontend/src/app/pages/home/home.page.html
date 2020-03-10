@@ -4,7 +4,7 @@
       <ion-menu-button *ngIf="!selectionMode"></ion-menu-button>
 
       <ion-button *ngIf="selectionMode" (click)="clearSelectedRecipes()">
-        <ion-icon slot="icon-only" name="md-close"></ion-icon>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -36,7 +36,7 @@
   <ion-searchbar
     *ngIf="folder === 'main'"
     (ionClear)="search('')"
-    (keyup.enter)="search($event.target.value); $event.target.blur()"
+    (keydown.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
 
   <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
@@ -72,7 +72,7 @@
           <ion-item lines="none">
             <ion-label>
               <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
-              <p class="ion-text-wrap">{{ recipe.description }}</p>
+              <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
               <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
 
               <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
@@ -110,7 +110,7 @@
 
         <ion-label>
           <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
-          <p class="ion-text-wrap">{{ recipe.description }}</p>
+          <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
           <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
 
           <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
