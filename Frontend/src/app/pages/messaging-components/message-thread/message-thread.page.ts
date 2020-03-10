@@ -1,12 +1,13 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController, Events } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 import * as linkifyStr from 'linkifyjs/string';
 
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
+import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 @Component({
@@ -35,7 +36,7 @@ export class MessageThreadPage {
     private changeDetector: ChangeDetectorRef,
     public navCtrl: NavController,
     public route: ActivatedRoute,
-    public events: Events,
+    public events: EventService,
     public toastCtrl: ToastController,
     public loadingService: LoadingService,
     public websocketService: WebsocketService,

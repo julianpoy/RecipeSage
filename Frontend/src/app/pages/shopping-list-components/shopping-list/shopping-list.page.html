@@ -24,8 +24,8 @@
         <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
           <ion-title class="ion-no-padding">
             {{ categoryTitle }}
-            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="arrow-dropdown"></ion-icon>
-            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="arrow-dropup"></ion-icon>
+            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="caret-down"></ion-icon>
+            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="caret-up"></ion-icon>
           </ion-title>
         </ion-list-header>
         <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
@@ -58,8 +58,8 @@
         <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
           <ion-title class="ion-no-padding">
             {{ categoryTitle }}
-            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="arrow-dropdown"></ion-icon>
-            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="arrow-dropup"></ion-icon>
+            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="caret-down"></ion-icon>
+            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="caret-up"></ion-icon>
           </ion-title>
         </ion-list-header>
         <div *ngIf="!categoryTitleCollapsed[categoryTitle]">

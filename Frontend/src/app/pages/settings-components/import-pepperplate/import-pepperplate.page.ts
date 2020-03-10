@@ -57,7 +57,10 @@ export class ImportPepperplatePage {
 
       (await this.toastCtrl.create({
         message: 'Import complete!',
-        showCloseButton: true
+        buttons: [{
+          text: 'Close',
+          role: 'cancel'
+        }]
       })).present();
 
     }).catch(async err => {
@@ -107,7 +110,10 @@ export class ImportPepperplatePage {
           setTimeout(async () => {
             (await this.toastCtrl.create({
               message: 'An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.',
-              showCloseButton: true
+              buttons: [{
+                text: 'Close',
+                role: 'cancel'
+              }]
             })).present();
           }, 10000);
           break;

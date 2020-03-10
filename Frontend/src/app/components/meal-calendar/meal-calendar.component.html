@@ -5,7 +5,7 @@
       fill="clear"
       [disabled]="!canMoveCalendar(-1)"
       (click)="moveCalendar(-1)">
-      <ion-icon name="arrow-dropleft" slot="icon-only"></ion-icon>
+      <ion-icon name="caret-back" slot="icon-only"></ion-icon>
     </ion-button>
     <span>{{ prettyMonthName(center) }}</span>
     <ion-button
@@ -13,7 +13,7 @@
       fill="clear"
       [disabled]="!canMoveCalendar(1)"
       (click)="moveCalendar(1)">
-      <ion-icon name="arrow-dropright" slot="icon-only"></ion-icon>
+      <ion-icon name="caret-forward" slot="icon-only"></ion-icon>
     </ion-button>
   </div>
 

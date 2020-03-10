@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
-import { Platform, MenuController, ToastController, AlertController, NavController, Events } from '@ionic/angular';
+import { Platform, MenuController, ToastController, AlertController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -13,6 +13,7 @@ import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { VersionCheckService } from '@/services/versioncheck.service';
+import { EventService } from '@/services/event.service';
 
 @Component({
   selector: 'app-root',
@@ -43,7 +44,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private menuCtrl: MenuController,
-    private events: Events,
+    private events: EventService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private utilService: UtilService,
@@ -143,8 +144,8 @@ export class AppComponent {
 
     const loggedOutPages = [
       { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { title: 'Log In', icon: 'ios-nutrition', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { title: 'Create an Account', icon: 'ios-leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
@@ -152,9 +153,9 @@ export class AppComponent {
     const loggedInPages = [
       { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
       { title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      { title: 'Messages', icon: 'chatboxes', url: RouteMap.MessagesPage.getPath() },
+      { title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
       { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { title: 'Create Recipe', icon: 'md-add', url: RouteMap.EditRecipePage.getPath('new') },
+      { title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
       { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
       { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
