@@ -328,6 +328,12 @@ export class EditRecipePage {
             duration: 5000
           })).present();
           break;
+        case 400:
+          (await this.toastCtrl.create({
+            message: 'Failed to autofill from that URL',
+            duration: 5000
+          })).present();
+          break;
         default:
           (await this.toastCtrl.create({
             message: this.utilService.standardMessages.unexpectedError,

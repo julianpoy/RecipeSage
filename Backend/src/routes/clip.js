@@ -10,10 +10,15 @@ const clipRecipe = async clipUrl => {
 
   const page = await browser.newPage();
 
-  await page.goto(clipUrl, {
-    waitUntil: "networkidle2",
-    timeout: 15000
-  });
+  try {
+    await page.goto(clipUrl, {
+      waitUntil: "networkidle2",
+      timeout: 15000
+    });
+  } catch(err) {
+    err.status = 400;
+    throw err;
+  }
 
   const recipeData = await page.evaluate(() => {
     const getClassRegExp = (classname, multiple) => {
