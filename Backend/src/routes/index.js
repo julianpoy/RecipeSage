@@ -24,6 +24,7 @@ var Recipe_Image = require('../models').Recipe_Image;
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var SubscriptionsService = require('../services/subscriptions');
+const jobTrackerService = require('../services/job-tracker');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -61,7 +62,7 @@ router.get(
     '"': '&quot;',
     "'": '&apos;'
   };
-  
+
   function escapeXml (s) {
     return s.replace(/[<>&"']/g, function (ch) {
       return XML_CHAR_MAP[ch];
@@ -75,7 +76,7 @@ router.get(
 
     const username = escapeXml(req.query.username.trim());
     const password = escapeXml(req.query.password);
-  
+
     let response = await request({
       url: "http://www.pepperplate.com/services/syncmanager5.asmx",
       method: "POST",
@@ -94,17 +95,17 @@ router.get(
       </soap:Envelope>
       `
     });
-  
+
     if (response.indexOf("<Status>UnknownEmail</Status>") > -1) {
       return res.status(406).send("Incorrect username");
     } else if (response.indexOf("<Status>IncorrectPassword</Status>") > -1) {
       return res.status(406).send("Incorrect password");
     }
-  
+
     const userToken = response.match(/<Token>(.*)<\/Token>/)[1];
-  
+
     let recipes = [];
-  
+
     let syncToken;
     while (true) {
       let response = await request({
@@ -126,23 +127,23 @@ router.get(
         </soap:Envelope>
         `
       });
-  
+
       console.log("repeat")
-  
+
       const recipeJson = JSON.parse(xmljs.xml2json(response, { compact: true, spaces: 4 }));
-  
+
       syncToken = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["SynchronizationToken"]._text;
-  
+
       console.log("new sync token!", syncToken)
-  
+
       const items = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["Items"]["RecipeSync"];
-  
+
       if (items && items.length > 0) {
         recipes.push(...items);
       } else {
         break;
       }
-  
+
       if (!syncToken) {
         break;
       }
@@ -151,17 +152,17 @@ router.get(
     recipes = recipes.filter(pepperRecipe => {
       return (pepperRecipe.Delete || {})._text !== "true";
     });
-  
+
     function objToArr(item) {
       if (!item) return [];
       if (item.length || item.length === 0) return item;
       return [item];
     }
-  
+
     await SQ.transaction(async transaction => {
       const savedRecipes = await Recipe.bulkCreate(recipes.map(pepperRecipe => {
         const ingredientGroups = objToArr((pepperRecipe.Ingredients || {}).IngredientSyncGroup);
-  
+
         const finalIngredients = ingredientGroups
         .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
         .map(ingredientGroup => {
@@ -175,9 +176,9 @@ router.get(
                                     .join("\r\n");
           return [...ingredients, innerIngredients].join('\r\n');
         }).join('\r\n');
-  
+
         const directionGroups = objToArr((pepperRecipe.Directions || {}).DirectionSyncGroup);
-  
+
         const finalDirections = directionGroups
         .sort((a, b) => parseInt((a.DisplayOrder || {})._text || 0, 10) - parseInt((b.DisplayOrder || {})._text || 0, 10))
         .map(directionGroup => {
@@ -191,7 +192,7 @@ router.get(
                                     .join("\r\n");
           return [...directions, innerDirections].join('\r\n');
         }).join('\r\n');
-  
+
         return {
           userId: res.locals.session.userId,
           title: pepperRecipe.Title._text,
@@ -211,7 +212,7 @@ router.get(
         transaction,
         returning: true
       });
-  
+
       const recipeIdsByLabelTitle = recipes.reduce((acc, pepperRecipe, idx) => {
         try {
           objToArr((pepperRecipe.Tags || {}).TagSync).map(tag => {
@@ -227,7 +228,7 @@ router.get(
         } catch (e) {}
         return acc;
       }, {});
-  
+
       await Promise.all(Object.keys(recipeIdsByLabelTitle).filter(labelName => labelName && labelName.length > 0).map(labelName => {
         return Label.findOrCreate({
           where: {
@@ -247,9 +248,9 @@ router.get(
           });
         });
       }));
-  
+
       const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
-  
+
       await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
         if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
           return UtilService.sendURLToS3(pepperRecipe.ImageUrl._text).then(image => {
@@ -257,7 +258,7 @@ router.get(
           }).catch(() => {});
         }
       }), PEPPERPLATE_IMG_CHUNK_SIZE);
-  
+
       const pendingImageData = [];
       savedRecipes.map((savedRecipe, idx) => {
         if (recipes[idx].image) {
@@ -268,7 +269,7 @@ router.get(
           });
         }
       });
-  
+
       const savedImages = await Image.bulkCreate(pendingImageData.map(p => ({
         userId: res.locals.session.userId,
         location: p.image.location,
@@ -278,7 +279,7 @@ router.get(
         returning: true,
         transaction
       });
-  
+
       await Recipe_Image.bulkCreate(pendingImageData.map((p, idx) => ({
         recipeId: p.recipeId,
         imageId: savedImages[idx].id,
@@ -287,11 +288,11 @@ router.get(
         transaction
       });
     });
-  
+
     Raven.captureMessage('Imported from PP API', {
       level: 'info'
     });
-  
+
     res.status(200).json({
       msg: "Import complete"
     });
@@ -327,6 +328,11 @@ router.post(
     if (req.query.includeTechniques) optionalFlags.push('--includeTechniques');
     if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
+    const job = {
+      complete: false
+    };
+    jobTrackerService.addJob(job);
+
     let lcbImportJob = spawn(`node`, [`src/lcbimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.stderr.on('data', (data) => {
       console.error(`lcbimport stderr: ${data}`);
@@ -349,6 +355,7 @@ router.post(
           next(unexpectedErr);
           break;
       }
+      job.complete = true;
     });
   }
 )
@@ -377,6 +384,11 @@ router.post(
     if (req.query.excludeImages) optionalFlags.push('--excludeImages');
     if (canImportMultipleImages) optionalFlags.push('--multipleImages');
 
+    const job = {
+      complete: false
+    };
+    jobTrackerService.addJob(job);
+
     let lcbImportJob = spawn(`node`, [`src/fdxzimport.app.js`, req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {
       switch (code) {
@@ -396,6 +408,7 @@ router.post(
           next(unexpectedErr);
           break;
       }
+      job.complete = true;
     });
   }
 )
