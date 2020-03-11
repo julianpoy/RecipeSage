@@ -13,6 +13,10 @@ const runIndexOp = async () => {
     let lt = new Date();
     lt.setDate(lt.getDate() - 7);
 
+    if (process.env.INDEX_BEFORE) {
+      lt = new Date(process.env.INDEX_BEFORE);
+    }
+
     const recipes = await Recipe.findAll({
       where: {
         [Op.or]: [
