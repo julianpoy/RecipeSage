@@ -368,9 +368,6 @@ async function main() {
         // Add recipeTips and join with double return
         notes = [...notes, ...recipeTips, ...techniqueNotes].join('\r\n\r\n')
 
-        let createdAt = new Date(lcbRecipe.createdate || Date.now())
-        let updatedAt = new Date(lcbRecipe.modifieddate || Date.now())
-
         let totalTime = (lcbRecipe.readyintime || '').toString().trim()
         if (lcbRecipe.cookingtime) {
           totalTime += ` (${lcbRecipe.cookingtime.toString().trim()} cooking time)`;
@@ -399,9 +396,7 @@ async function main() {
             ingredients,
             instructions,
             folder: 'main',
-            fromUserId: null,
-            createdAt,
-            updatedAt
+            fromUserId: null
           },
           lcbRecipeLabels,
           images
