@@ -29,6 +29,11 @@ spec:
         envFrom:
         - secretRef:
             name: rs-api-env
+        env:
+        - name: BROWSERLESS_HOST
+          value: "rs-browserless"
+        - name: BROWSERLESS_PORT
+          value: "3000"
         volumeMounts:
         - name: firebase-credentials
           mountPath: /app/Backend/src/config/firebase-credentials.json

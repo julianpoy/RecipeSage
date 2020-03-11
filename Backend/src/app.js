@@ -30,6 +30,7 @@ var mealPlans = require('./routes/mealPlans');
 var print = require('./routes/print');
 var payments = require('./routes/payments');
 var images = require('./routes/images');
+var clip = require('./routes/clip');
 var ws = require('./routes/ws');
 
 var app = express();
@@ -78,6 +79,7 @@ app.use('/mealPlans', mealPlans);
 app.use('/print', print);
 app.use('/payments', payments);
 app.use('/images', images);
+app.use('/clip', clip);
 app.use('/ws', ws);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());

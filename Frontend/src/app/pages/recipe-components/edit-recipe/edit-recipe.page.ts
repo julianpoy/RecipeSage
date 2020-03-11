@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import loadImage from 'blueimp-load-image';
 
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -31,8 +31,10 @@ export class EditRecipePage {
     public route: ActivatedRoute,
     public navCtrl: NavController,
     public toastCtrl: ToastController,
+    public alertCtrl: AlertController,
     public utilService: UtilService,
     public unsavedChangesService: UnsavedChangesService,
+    public loadingCtrl: LoadingController,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
     public imageService: ImageService,
@@ -48,7 +50,6 @@ export class EditRecipePage {
       this.recipeService.fetchById(this.recipeId).then(recipe => {
         this.recipe = recipe;
         this.images = recipe.images;
-        setTimeout(() => this.setInitialTextAreaSize());
         loading.dismiss();
       }).catch(async err => {
         loading.dismiss();
@@ -82,28 +83,6 @@ export class EditRecipePage {
     }
 
     this.defaultBackHref = this.recipeId ? RouteMap.RecipePage.getPath(this.recipeId) : RouteMap.HomePage.getPath('main');
-  }
-
-  getScrollHeight(el) {
-    // Math max to ensure text areas are at least 2 rows high
-    return Math.max(el.scrollHeight + 1, 54);
-  }
-
-  setInitialTextAreaSize() {
-    const textAreas = Array.from(document.getElementsByTagName('textarea'));
-    for (const textArea of textAreas) {
-      textArea.style.height = `${this.getScrollHeight(textArea)}px`;
-    }
-  }
-
-  ionViewWillEnter() {
-    this.setInitialTextAreaSize();
-  }
-
-  updateTextAreaSize(event) {
-    const el = event.target.children[0];
-    el.style.height = 'auto';
-    el.style.height = `${this.getScrollHeight(el)}px`;
   }
 
   goToAuth(cb?: () => any) {
@@ -302,5 +281,61 @@ export class EditRecipePage {
   removeImage(image) {
     const imgIdx = this.images.indexOf(image);
     this.images.splice(imgIdx, 1);
+  }
+
+  async clipFromUrl() {
+    const clipPrompt = await this.alertCtrl.create({
+      header: 'Autofill fields from URL',
+      subHeader: 'Enter a website URL to grab recipe data',
+      message: 'Note: This feature is in beta',
+      inputs: [{
+        name: 'url',
+        type: 'text',
+        placeholder: 'Recipe URL'
+      }],
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+      }, {
+        text: 'Ok',
+        handler: data => {
+          this._clipFromUrl(data.url);
+        }
+      }]
+    });
+
+    await clipPrompt.present();
+  }
+
+  async _clipFromUrl(url: string) {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...'
+    });
+    await loading.present();
+    try {
+      const fields = await this.recipeService.clipFromUrl(url);
+      console.log(fields);
+
+      const autofillFields = ['title', 'description', 'source', 'yield', 'activeTime', 'totalTime', 'ingredients', 'instructions', 'notes'];
+      autofillFields.forEach(fieldName => fields[fieldName] ? this.recipe[fieldName] = fields[fieldName] : null);
+
+      console.log(this.recipe)
+    } catch(err) {
+      switch (err?.response?.status) {
+        case 0:
+          (await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlinePushMessage,
+            duration: 5000
+          })).present();
+          break;
+        default:
+          (await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 6000
+          })).present();
+          break;
+      }
+    }
+    loading.dismiss();
   }
 }
