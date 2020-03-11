@@ -8,6 +8,7 @@ var app = require('../app');
 var constants = require('constants');
 var debug = require('debug')('chefbook-backend:server');
 var fs = require("fs");
+const jobTracker = require('../services/job-tracker.js');
 
 var ssl = false;
 
@@ -130,14 +131,24 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+const exit = () => {
+  console.log("EXITING");
+  process.exit(0);
+};
+
+const attemptExit = () => {
+  const jobsWaiting = jobTracker.getRunningJobs().length;
+  console.log("Jobs waiting: ", jobsWaiting);
+  if (jobsWaiting === 0) exit();
+};
+
 process.on('SIGTERM', () => {
   console.log("RECEIVED SIGTERM - CLOSING SERVER");
   server.close(() => {
     console.log("SERVER CLOSED - RESTING");
-    setTimeout(() => {
-      console.log("EXITING");
-      process.exit(0);
-    }, 90 * 1000);
+
+    setInterval(attemptExit, 5 * 1000); // Job check interval
+    setTimeout(exit, 300 * 1000); // Max job wait
   });
 });
 
