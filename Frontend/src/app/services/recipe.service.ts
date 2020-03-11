@@ -203,6 +203,15 @@ export class RecipeService {
     });
   }
 
+  clipFromUrl(clipUrl: string) {
+    const url = this.utilService.getBase() + 'clip/' + this.utilService.getTokenQuery() + '&url=' + encodeURIComponent(clipUrl);
+
+    return this.httpService.request({
+      method: 'get',
+      url
+    }).then(response => response.data);
+  }
+
   print(recipe, template) {
     window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery()
                 + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
