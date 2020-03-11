@@ -17,6 +17,13 @@ spec:
       - name: rs-elastic-chown
         image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
         command: ["chown", "-v", "elasticsearch:elasticsearch", "/usr/share/elasticsearch/data"]
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 100Mi
+          limits:
+            cpu: 0.1
+            memory: 500Mi
         volumeMounts:
         - name: data
           mountPath: /usr/share/elasticsearch/data
