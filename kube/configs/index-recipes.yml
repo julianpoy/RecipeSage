@@ -1,13 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: rs-index-recipes-2019-02-21
+  name: rs-index-recipes-2020-03-10
 spec:
   template:
     spec:
       containers:
-      - name: rs-index-recipes-2019-02-21
-        image: julianpoy/recipesage:api-2.3.6-3
+      - name: rs-index-recipes-2020-03-10
+        image: julianpoy/recipesage:api-2.4.0-b6
         command: ["node"]
         args: ["src/index.app.js"]
         resources:
@@ -19,6 +19,9 @@ spec:
         envFrom:
         - secretRef:
             name: rs-api-env
+        env:
+        - name: INDEX_BEFORE
+          value: "2020-03-10 22:30"
       restartPolicy: Never
       imagePullSecrets:
       - name: myregistrykey
