@@ -1,6 +1,6 @@
 <ngx-loading-bar includeSpinner="false"></ngx-loading-bar>
 
-<ion-app>
+<ion-app [class]="{ cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0 }">
   <ion-split-pane contentId="main-content" [disabled]="!preferences[preferenceKeys.EnableSplitPane]" when="(min-width: 1200px)">
     <ion-menu contentId="main-content" type="overlay">
       <ion-header>
@@ -53,3 +53,4 @@
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
+<cooking-toolbar *ngIf="cookingToolbarService.pinnedRecipes.length > 0"></cooking-toolbar>

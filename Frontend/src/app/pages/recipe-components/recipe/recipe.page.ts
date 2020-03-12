@@ -4,6 +4,7 @@ import { NavController, AlertController, ToastController, ModalController } from
 
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
@@ -49,6 +50,7 @@ export class RecipePage {
     public utilService: UtilService,
     public recipeService: RecipeService,
     public labelService: LabelService,
+    public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService) {
 
     this.updateIsLoggedIn();
@@ -553,5 +555,13 @@ export class RecipePage {
       }
     });
     imageViewerModal.present();
+  }
+
+  pinRecipe() {
+    this.cookingToolbarService.pinRecipe({
+      id: this.recipe.id,
+      title: this.recipe.title,
+      imageUrl: this.recipe.images[0]?.location
+    });
   }
 }

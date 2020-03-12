@@ -14,6 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
 import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
+import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolbar.module';
+
 import { environment } from 'src/environments/environment';
 
 Sentry.init({
@@ -61,7 +63,8 @@ export class SentryErrorHandler extends ErrorHandler {
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    LoadingBarModule
+    LoadingBarModule,
+    CookingToolbarModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: SentryErrorHandler },

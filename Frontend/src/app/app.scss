@@ -7,6 +7,10 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
+ion-app.cookingToolbarOpen {
+  bottom: 60px;
+}
+
 .bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
 }
