@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, AlertController, ToastController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
@@ -14,6 +14,7 @@ import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.p
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
+import { RecipePopoverPage } from '../recipe-popover/recipe-popover.page';
 
 @Component({
   selector: 'page-recipe',
@@ -45,6 +46,7 @@ export class RecipePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
     public route: ActivatedRoute,
     public utilService: UtilService,
@@ -563,5 +565,23 @@ export class RecipePage {
       title: this.recipe.title,
       imageUrl: this.recipe.images[0]?.location
     });
+  }
+
+  unpinRecipe() {
+    this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  async presentPopover(event) {
+    const popover = await this.popoverCtrl.create({
+      component: RecipePopoverPage,
+      componentProps: {
+        recipeId: this.recipeId,
+        recipe: this.recipe,
+        scale: this.scale
+      },
+      event
+    });
+
+    popover.present();
   }
 }

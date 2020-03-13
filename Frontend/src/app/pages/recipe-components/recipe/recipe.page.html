@@ -6,6 +6,12 @@
     </ion-buttons>
 
     <ion-title>Recipe Details: {{ recipe.title }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -315,9 +321,9 @@
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
-        <ion-button (click)="pinRecipe()" fill="clear" size="small">
+        <ion-button (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()" fill="clear" size="small">
           <ion-icon name="pin" slot="start"></ion-icon>
-          Pin Open
+          {{ cookingToolbarService.isPinned(recipeId) ? "Unpin Recipe" : "Pin Recipe Open" }}
         </ion-button>
       </ion-col>
     </ion-row>

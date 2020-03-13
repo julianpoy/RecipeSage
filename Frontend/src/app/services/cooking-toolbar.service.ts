@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+
 export interface PinnedRecipe {
   imageUrl?: string
   title: string
@@ -12,17 +14,21 @@ export interface PinnedRecipe {
 export class CookingToolbarService {
   pinnedRecipes: PinnedRecipe[] = [];
 
-  constructor() {}
+  constructor(
+    private quickTutorialService: QuickTutorialService
+  ) {}
 
   pinRecipe(recipe: PinnedRecipe) {
     this.pinnedRecipes.push(recipe);
+
+    this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.PinnedRecipes);
   }
 
   isPinned(recipeId: string) {
     return this.pinnedRecipes.some(recipe => recipe.id === recipeId);
   }
 
-  removePin(recipeId: string) {
+  unpinRecipe(recipeId: string) {
     const recipeIdx = this.pinnedRecipes.findIndex(recipe => recipe.id === recipeId);
 
     this.pinnedRecipes.splice(recipeIdx, 1);
