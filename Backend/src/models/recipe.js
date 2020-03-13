@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeDestroy: (recipe, options) => {
         afterCommitIfTransaction(options, () => {
-          ElasticService.remove('recipes', recipe.id).catch(e => {
+          ElasticService.deleteRecipes([recipe.id]).catch(e => {
             if (e.status != 404) {
               e = new Error(e);
               e.status = 500;
@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
           transaction: options.transaction
         }).then(recipes => {
           afterCommitIfTransaction(options, () => {
-            ElasticService.bulk('delete', 'recipes', recipes).catch(e => {
+            ElasticService.deleteRecipes(recipes).catch(e => {
               if (e.status != 404) {
                 e = new Error(e);
                 e.status = 500;
@@ -117,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       afterUpdate: (recipe, options) => {
         afterCommitIfTransaction(options, () => {
-          ElasticService.index('recipes', recipe).catch(e => {
+          ElasticService.indexRecipes([recipe]).catch(e => {
             Raven.captureException(e);
           });
         });
@@ -128,7 +128,7 @@ module.exports = (sequelize, DataTypes) => {
           transaction: options.transaction
         }).then(recipes => {
           afterCommitIfTransaction(options, () => {
-            ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+            ElasticService.indexRecipes(recipes).catch(e => {
               Raven.captureException(e);
             });
           });
@@ -136,14 +136,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       afterCreate: (recipe, options) => {
         afterCommitIfTransaction(options, () => {
-          ElasticService.index('recipes', recipe).catch(e => {
+          ElasticService.indexRecipes([recipe]).catch(e => {
             Raven.captureException(e);
           });
         })
       },
       afterBulkCreate: (recipes, options) => {
         afterCommitIfTransaction(options, () => {
-          ElasticService.bulk('index', 'recipes', recipes).catch(e => {
+          ElasticService.indexRecipes(recipes).catch(e => {
             Raven.captureException(e);
           });
         });

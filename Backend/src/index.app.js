@@ -6,6 +6,9 @@ let Op = SQ.Op;
 
 var Recipe = require('./models').Recipe;
 
+const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || 250);
+const BATCH_INTERVAL = parseInt(process.env.BATCH_INTERVAL || 1) * 1000;
+
 let runInterval;
 
 const runIndexOp = async () => {
@@ -24,7 +27,7 @@ const runIndexOp = async () => {
           { indexedAt: { [Op.lt]: lt } }
         ]
       },
-      limit: 250
+      limit: BATCH_SIZE
     });
 
     if (!recipes || recipes.length === 0) {
@@ -34,7 +37,7 @@ const runIndexOp = async () => {
       return;
     };
 
-    await ElasticService.bulk('index', 'recipes', recipes);
+    await ElasticService.indexRecipes(recipes);
 
     let ids = recipes.map(r => r.id);
     await Recipe.update(
@@ -55,11 +58,12 @@ const runIndexOp = async () => {
   }
 };
 
-runInterval = setInterval(runIndexOp, 1000);
+runInterval = setInterval(runIndexOp, BATCH_INTERVAL);
 
 process.on('SIGTERM', () => {
   console.log("RECEIVED SIGTERM - STOPPING JOB");
   server.close(() => {
+    clearInterval(runInterval);
     console.log("JOB STOPPED - RESTING");
     setTimeout(() => {
       console.log("EXITING");
