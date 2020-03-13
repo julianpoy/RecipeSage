@@ -345,8 +345,8 @@ router.get(
   cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
-    ElasticService.search('recipes', res.locals.session.userId, req.query.query).then(results => {
-      let searchHits = results.hits.hits;
+    ElasticService.searchRecipes(res.locals.session.userId, req.query.query).then(results => {
+      let searchHits = results.body.hits.hits;
 
       let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
         acc[hit._id] = hit;

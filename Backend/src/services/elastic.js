@@ -1,11 +1,9 @@
-let elasticsearch = require('elasticsearch');
+let elasticsearch = require('@elastic/elasticsearch');
 
 const ENABLE = process.env.ELASTIC_ENABLE === 'true' || process.env.ELASTIC_ENABLE === true;
 const INDEX_PREFIX = process.env.ELASTIC_IDX_PREFIX;
 
-const AVAILABLE_INDEXES = [
-  'recipes'
-];
+const getFullIndexName = index => INDEX_PREFIX + index;
 
 let client;
 
@@ -13,11 +11,33 @@ const init = async () => {
   try {
     await client.ping();
 
-    await Promise.all(AVAILABLE_INDEXES.map(index => {
-      return client.indices.create({
-        index: INDEX_PREFIX + index
+    const recipesIdxExistsCall = await client.indices.exists({
+      index: getFullIndexName('recipes')
+    });
+
+    if (!recipesIdxExistsCall.body) {
+      await client.indices.create({
+        index: getFullIndexName('recipes'),
+        body: {
+          mappings: {
+            properties: {
+              title: {
+                type: 'text',
+                analyzer: "english", // Enable stemming
+                fields: {
+                  keyword: {
+                    type: 'keyword',
+                    ignore_above: 256
+                  }
+                }
+              }
+            }
+          }
+        }
       });
-    }));
+    }
+
+    console.log("Elastic initialized");
   } catch (e) {
     setTimeout(init, 100);
   }
@@ -25,66 +45,69 @@ const init = async () => {
 
 if (ENABLE) {
   client = new elasticsearch.Client({
-    hosts: [process.env.ELASTIC_CONN]
+    node: process.env.ELASTIC_CONN
   });
 
   init();
 }
 
-let index = (index, document) => {
+const indexRecipes = recipes => {
   if (!ENABLE) return Promise.resolve();
 
-  if (document.toJSON) document = document.toJSON();
+  const actions = recipes.reduce((acc, recipe) => {
+    if (recipe.toJSON) recipe = recipe.toJSON();
 
-  return client.index({
-    index: INDEX_PREFIX + index,
-    type: index,
-    id: document.id,
-    body: document
-  });
-};
+    const { userId, title, source, description, ingredients, instructions, notes } = recipe;
 
-let remove = (index, docId) => {
-  if (!ENABLE) return Promise.resolve();
-
-  return client.delete({
-    index: INDEX_PREFIX + index,
-    type: index,
-    id: docId
-  });
-};
-
-let bulk = (action, index, documents) => {
-  if (!ENABLE) return Promise.resolve();
-
-  let query = documents.reduce((acc, document) => {
-    acc.push({
-      [action]: {
-        _index: INDEX_PREFIX + index,
-        _type: index,
-        _id: document.id
+    const action = {
+      index: {
+        _index: getFullIndexName('recipes'),
+        _id: recipe.id
       }
-    });
+    };
 
-    if (action !== 'delete') {
-      if (document.toJSON) document = document.toJSON();
-      acc.push(document);
-    }
+    const document = {
+      userId,
+      title,
+      source,
+      description,
+      ingredients,
+      instructions,
+      notes
+    };
 
-    return acc;
-  }, [])
+    return [...acc, action, document];
+  }, []);
+
+  if (actions.length === 0) return Promise.resolve();
 
   return client.bulk({
-    body: query
+    body: actions
   });
 };
 
-let search = (index, userId, queryString) => {
+const deleteRecipes = recipeIds => {
+  if (!ENABLE) return Promise.resolve();
+
+  const actions = recipeIds.map(recipeId => ({
+    delete: {
+      _index: getFullIndexName('recipes'),
+      _id: recipeId
+    }
+  }));
+
+  if (actions.length === 0) return Promise.resolve();
+
+  return client.bulk({
+    body: actions
+  });
+};
+
+const searchRecipes = (userId, queryString) => {
   if (!ENABLE) throw new Error("ElasticSearch not enabled");
 
   return client.search({
-    index: INDEX_PREFIX + index,
-    type: index,
+    index: getFullIndexName('recipes'),
     body: {
       query: {
         bool: {
@@ -117,8 +140,7 @@ let search = (index, userId, queryString) => {
 };
 
 module.exports = {
-  index,
-  remove,
-  bulk,
-  search
+  indexRecipes,
+  deleteRecipes,
+  searchRecipes
 };
