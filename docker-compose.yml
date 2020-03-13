@@ -67,7 +67,7 @@ services:
       - ./Backend/src:/app/Backend/src
       - ./Backend/package.json:/app/Backend/package.json
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD
