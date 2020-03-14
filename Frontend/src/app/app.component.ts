@@ -56,7 +56,7 @@ export class AppComponent {
     private preferencesService: PreferencesService,
     private capabilitiesService: CapabilitiesService,
     private versionCheckService: VersionCheckService,
-    private cookingToolbarService: CookingToolbarService,
+    public cookingToolbarService: CookingToolbarService,
   ) {
 
     this.initializeApp();

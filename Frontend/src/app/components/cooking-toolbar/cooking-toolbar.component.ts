@@ -13,7 +13,7 @@ export class CookingToolbarComponent {
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
-    private cookingToolbarService: CookingToolbarService
+    public cookingToolbarService: CookingToolbarService
   ) {}
 
   openRecipe(recipeId: string) {
