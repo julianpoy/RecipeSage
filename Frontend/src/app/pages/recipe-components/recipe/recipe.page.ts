@@ -14,7 +14,6 @@ import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.p
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
-import { RecipePopoverPage } from '../recipe-popover/recipe-popover.page';
 
 @Component({
   selector: 'page-recipe',
@@ -569,19 +568,5 @@ export class RecipePage {
 
   unpinRecipe() {
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
-  }
-
-  async presentPopover(event) {
-    const popover = await this.popoverCtrl.create({
-      component: RecipePopoverPage,
-      componentProps: {
-        recipeId: this.recipeId,
-        recipe: this.recipe,
-        scale: this.scale
-      },
-      event
-    });
-
-    popover.present();
   }
 }
