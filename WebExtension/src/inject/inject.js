@@ -55,7 +55,7 @@ if (window[extensionContainerId]) {
         .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
         .filter(element =>
           isImg(element) &&
-          element.src &&
+          getSrcFromImage(element) &&
           element.complete && // Filter images that haven't completely loaded
           element.naturalWidth > 0 && // Filter images that haven't loaded correctly
           element.naturalHeight > 0
@@ -70,7 +70,7 @@ if (window[extensionContainerId]) {
 
       const badWords = [...generalBadWords, ...allRecipesBadWords, ...tastyRecipesBadWords].join('|');
 
-      let filteredResult =  textBlock.split('\n')
+      let filteredResult = textBlock.split('\n')
         .map   (line => line.trim())
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
@@ -165,6 +165,7 @@ if (window[extensionContainerId]) {
           'tasty-recipes-instructions', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
           'recipe-directions__list', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
           'o-Method', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'steps-area', // Bon Appetit - https://www.bonappetit.com/recipe/chocolate-babka
           'instructions', // Generic
           'recipe-steps', // Generic
           'recipe-instructions', // Generic
