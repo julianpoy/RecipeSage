@@ -20,6 +20,12 @@ const clipRecipe = async clipUrl => {
     throw err;
   }
 
+  await page.evaluate(() => {
+    try {
+      window.scrollTo(0, document.body.scrollHeight);
+    } catch(e) {}
+  });
+
   const recipeData = await page.evaluate(() => {
     const getClassRegExp = (classname, multiple) => {
       modifiers = multiple ? 'gi' : 'i';
@@ -46,6 +52,7 @@ const clipRecipe = async clipUrl => {
     }
 
     const isImg = element => element.tagName.toLowerCase().trim() === 'img';
+    const isPicture = element => element.tagName.toLowerCase().trim() === 'picture';
 
     const getImgElementsWithin = element => {
       const matchedImgElements = [];
@@ -62,12 +69,27 @@ const clipRecipe = async clipUrl => {
         element.naturalHeight > 0;
     }
 
+    const getImageDimensions = element => {
+      const parent = element.parentNode;
+      const isParentPicture = parent && isPicture(parent);
+      const offsetHeight = isParentPicture ? Math.max(element.offsetHeight, parent.offsetHeight) : element.offsetHeight;
+      const offsetWidth = isParentPicture ? Math.max(element.offsetWidth, parent.offsetWidth) : element.offsetWidth;
+
+      return {
+        offsetHeight,
+        offsetWidth
+      }
+    }
+
     const grabLargestImage = () => {
       const matches = document.querySelectorAll('img');
 
       return [...matches]
         .filter(element => isValidImage(element))
-        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+        .reduce((max, element) => {
+          const { offsetWidth, offsetHeight } = getImageDimensions(element);
+          return (offsetHeight * offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max
+        }, null)
     }
 
     const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
@@ -77,7 +99,10 @@ const clipRecipe = async clipUrl => {
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
         .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
         .filter(element => isValidImage(element))
-        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+        .reduce((max, element) => {
+          const { offsetWidth, offsetHeight } = getImageDimensions(element);
+          return (offsetHeight * offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max
+        }, null)
     }
 
     const cleanKnownWords = textBlock => {
