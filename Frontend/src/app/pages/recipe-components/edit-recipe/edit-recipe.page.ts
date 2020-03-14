@@ -326,7 +326,7 @@ export class EditRecipePage {
           const image = await this.imageService.createFromUrl(fields.imageURL);
           this.images.push(image);
         } catch(err) {
-          console.log("Error clipping image:", err);
+          console.log('Error clipping image:', err);
         }
       }
     } catch(err) {
