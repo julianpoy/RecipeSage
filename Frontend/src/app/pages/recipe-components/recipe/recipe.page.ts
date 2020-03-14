@@ -8,6 +8,8 @@ import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { RecipeCompletionTrackerService } from '@/services/recipe-completion-tracker.service';
+
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
@@ -47,6 +49,7 @@ export class RecipePage {
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
+    public recipeCompletionTrackerService: RecipeCompletionTrackerService,
     public route: ActivatedRoute,
     public utilService: UtilService,
     public recipeService: RecipeService,
@@ -187,14 +190,24 @@ export class RecipePage {
   }
 
 
-  instructionClicked(event, instruction: Instruction) {
+  instructionClicked(event, instruction: Instruction, idx: number) {
     if (instruction.isHeader) return;
-    instruction.complete = !instruction.complete;
+
+    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
   }
 
-  ingredientClicked(event, ingredient: Instruction) {
+  ingredientClicked(event, ingredient: Instruction, idx: number) {
     if (ingredient.isHeader) return;
-    ingredient.complete = !ingredient.complete;
+
+    this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
+  }
+
+  getInstructionComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getInstructionComplete(this.recipeId, idx);
+  }
+
+  getIngredientComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx);
   }
 
   changeScale() {

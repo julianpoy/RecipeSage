@@ -93,11 +93,11 @@
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let ingredient of ingredients"
+            <p *ngFor="let ingredient of ingredients; index as ingredientIdx"
               [innerHTML]="ingredient.content"
               class="ingredient ion-text-wrap"
-              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: ingredient.complete }"
-              (click)="ingredientClicked($event, ingredient)"></p>
+              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
+              (click)="ingredientClicked($event, ingredient, ingredientIdx)"></p>
             <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
             <p>
               <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
@@ -114,12 +114,12 @@
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let instruction of instructions" class="instruction ion-text-wrap">
+            <p *ngFor="let instruction of instructions; index as instructionIdx" class="instruction ion-text-wrap">
               <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
               <span
                 *ngIf="!instruction.isHeader"
-                (click)="instructionClicked($event, instruction)"
-                [ngClass]="{ complete: instruction.complete }">
+                (click)="instructionClicked($event, instruction, instructionIdx)"
+                [ngClass]="{ complete: getInstructionComplete(instructionIdx) }">
                 <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
               </span>
             </p>
