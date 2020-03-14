@@ -47,19 +47,29 @@ if (window[extensionContainerId]) {
       return matchedImgElements;
     }
 
+    const isValidImage = element => {
+      return isImg(element) &&
+        getSrcFromImage(element) &&
+        element.complete && // Filter images that haven't completely loaded
+        element.naturalWidth > 0 && // Filter images that haven't loaded correctly
+        element.naturalHeight > 0;
+    }
+
+    const grabLargestImage = () => {
+      const matches = document.querySelectorAll('img');
+
+      return [...matches]
+        .filter(element => isValidImage(element))
+        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+    }
+
     const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
       const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
         .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
-        .filter(element =>
-          isImg(element) &&
-          getSrcFromImage(element) &&
-          element.complete && // Filter images that haven't completely loaded
-          element.naturalWidth > 0 && // Filter images that haven't loaded correctly
-          element.naturalHeight > 0
-        )
+        .filter(element => isValidImage(element))
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 

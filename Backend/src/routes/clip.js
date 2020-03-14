@@ -45,11 +45,28 @@ const clipRecipe = async clipUrl => {
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
 
+    const isImg = element => element.tagName.toLowerCase().trim() === 'img';
+
+    const getImgElementsWithin = element => {
+      const matchedImgElements = [];
+      if (isImg(element)) matchedImgElements.push(element);
+      matchedImgElements.push(...element.querySelectorAll('img'));
+      return matchedImgElements;
+    }
+
+    const isValidImage = element => {
+      return isImg(element) &&
+        getSrcFromImage(element) &&
+        element.complete && // Filter images that haven't completely loaded
+        element.naturalWidth > 0 && // Filter images that haven't loaded correctly
+        element.naturalHeight > 0;
+    }
+
     const grabLargestImage = () => {
       const matches = document.querySelectorAll('img');
 
       return [...matches]
-        .filter(element => getSrcFromImage(element))
+        .filter(element => isValidImage(element))
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
@@ -58,8 +75,8 @@ const clipRecipe = async clipUrl => {
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
-        .reduce((acc, element) => [...acc, ...element.querySelectorAll('img')], [])
-        .filter(element => element.src)
+        .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
+        .filter(element => isValidImage(element))
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
