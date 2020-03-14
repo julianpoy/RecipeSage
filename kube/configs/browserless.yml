@@ -23,6 +23,8 @@ spec:
           value: "3"
         - name: MAX_QUEUE_LENGTH
           value: "10"
+        - name: DEFAULT_BLOCK_ADS
+          value: "true"
         resources:
           requests:
             cpu: 100m
