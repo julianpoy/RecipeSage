@@ -45,6 +45,14 @@ const clipRecipe = async clipUrl => {
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
 
+    const grabLargestImage = () => {
+      const matches = document.querySelectorAll('img');
+
+      return [...matches]
+        .filter(element => element.src)
+        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+    }
+
     const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
       const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
@@ -189,7 +197,7 @@ const clipRecipe = async clipUrl => {
     }
 
     const autoSnipResults = {
-      imageURL: formatFuncs.imageURL(getSrcFromImage(grabClosestImageByClasses(...classMatchers.imageURL))),
+      imageURL: formatFuncs.imageURL(getSrcFromImage(grabLargestImage())),
       title: formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
       description: formatFuncs.description(grabLongestMatchByClasses(...classMatchers.description)),
       source: formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
