@@ -13,7 +13,7 @@ const clipRecipe = async clipUrl => {
   try {
     await page.goto(clipUrl, {
       waitUntil: "networkidle2",
-      timeout: 15000
+      timeout: 25000
     });
   } catch(err) {
     err.status = 400;
