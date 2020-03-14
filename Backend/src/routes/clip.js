@@ -71,14 +71,14 @@ const clipRecipe = async clipUrl => {
       const badWords = [...generalBadWords, ...allRecipesBadWords, ...tastyRecipesBadWords].join('|');
 
       let filteredResult = textBlock.split('\n')
-        .map(line => line.trim())
+        .map   (line => line.trim())
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
         .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
-        .map(line => line.replace(/^(total time|prep time|active time|yield|servings):? ?/i, '')) // Remove direct field names for meta
-        .map(line => line.trim())
-        .map(line => line.match(/^([A-Z] *)+:? *$/) ? `[${capitalizeEachWord(line.toLowerCase()).replace(':', '')}]` : line)
-        .join('\n');
+        .map   (line => line.replace(/^(total time|prep time|active time|yield|servings):? ?/i, '')) // Remove direct field names for meta
+        .map   (line => line.trim())
+        .map   (line => line.match(/^([A-Z] *)+:? *$/) ? `[${capitalizeEachWord(line.toLowerCase()).replace(':', '')}]` : line)
+        .join  ('\n');
 
       return filteredResult;
     }
@@ -88,16 +88,16 @@ const clipRecipe = async clipUrl => {
     }
 
     const formatFuncs = {
-      imageURL: val => val.trim(),
-      title: val => capitalizeEachWord(val.trim().toLowerCase()),
-      description: val => val.length > 300 ? '' : cleanKnownWords(val),
-      source: val => val.trim(),
-      yield: val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
-      activeTime: val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
-      totalTime: val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
-      ingredients: val => cleanKnownWords(val),
+      imageURL:     val => val.trim(),
+      title:        val => capitalizeEachWord(val.trim().toLowerCase()),
+      description:  val => val.length > 300 ? '' : cleanKnownWords(val),
+      source:       val => val.trim(),
+      yield:        val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
+      activeTime:   val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
+      totalTime:    val => val.length > 30 ? '' : capitalizeEachWord(cleanKnownWords(val).trim().toLowerCase()),
+      ingredients:  val => cleanKnownWords(val),
       instructions: val => cleanKnownWords(val),
-      notes: val => cleanKnownWords(val)
+      notes:        val => cleanKnownWords(val)
     };
 
     const closestToRegExp = regExp => {
@@ -114,6 +114,7 @@ const clipRecipe = async clipUrl => {
           'recipe-lede-image', // Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe-body', // Generic, idea from Delish - https://www.delish.com/cooking/recipe-ideas/a25648042/crustless-quiche-recipe/
           'recipe__hero', // Food52 - https://food52.com/recipes/81867-best-quiche-recipe
+          'content' // Generic, recognize content-body if matched directly
         ],
         [
           'recipe-image',
@@ -126,8 +127,7 @@ const clipRecipe = async clipUrl => {
       ],
       title: [
         [
-          'wprm-recipe-name', // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
-          'recipe-title' // Generic
+          'wprm-recipe-name' // Wordpress recipe embed tool - https://panlasangpinoy.com/leche-flan/
         ],
         []
       ],
@@ -138,7 +138,7 @@ const clipRecipe = async clipUrl => {
         []
       ],
       yield: [
-        ['yield', 'servings'],
+        ['recipe-yield', 'recipe-servings', 'yield', 'servings'],
         ['yield', 'servings']
       ],
       activeTime: [
@@ -165,6 +165,7 @@ const clipRecipe = async clipUrl => {
           'tasty-recipes-instructions', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
           'recipe-directions__list', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
           'o-Method', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'steps-area', // Bon Appetit - https://www.bonappetit.com/recipe/chocolate-babka
           'instructions', // Generic
           'recipe-steps', // Generic
           'recipe-instructions', // Generic
@@ -197,16 +198,16 @@ const clipRecipe = async clipUrl => {
     }
 
     const autoSnipResults = {
-      imageURL: formatFuncs.imageURL(getSrcFromImage(grabLargestImage())),
-      title: formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
-      description: formatFuncs.description(grabLongestMatchByClasses(...classMatchers.description)),
-      source: formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
-      yield: formatFuncs.yield(grabLongestMatchByClasses(...classMatchers.yield) || closestToRegExp(/(serves|servings|yield):?\s*\d+/i).replace('\n', '')),
-      activeTime: formatFuncs.activeTime(grabLongestMatchByClasses(...classMatchers.activeTime) || closestToRegExp(/(active time|prep time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
-      totalTime: formatFuncs.totalTime(grabLongestMatchByClasses(...classMatchers.totalTime) || closestToRegExp(/(total time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
-      ingredients: formatFuncs.ingredients(grabLongestMatchByClasses(...classMatchers.ingredients)),
+      imageURL:     formatFuncs.imageURL(getSrcFromImage(grabLargestImage())),
+      title:        formatFuncs.title(grabLongestMatchByClasses(...classMatchers.title) || document.title.split(/ -|\| /)[0]),
+      description:  formatFuncs.description(grabLongestMatchByClasses(...classMatchers.description)),
+      source:       formatFuncs.source(document.title.split(/ -|\| /)[1] || window.location.hostname.split('.').reverse()[1]),
+      yield:        formatFuncs.yield(grabLongestMatchByClasses(...classMatchers.yield) || closestToRegExp(/(serves|servings|yield):?\s*\d+/i).replace('\n', '')),
+      activeTime:   formatFuncs.activeTime(grabLongestMatchByClasses(...classMatchers.activeTime) || closestToRegExp(/(active time|prep time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      totalTime:    formatFuncs.totalTime(grabLongestMatchByClasses(...classMatchers.totalTime) || closestToRegExp(/(total time):?\s*(\d+ (hour(s?)|hr(s?)|minute(s?)|min(s?))? ?(and)? ?)+/i).replace('\n', '')),
+      ingredients:  formatFuncs.ingredients(grabLongestMatchByClasses(...classMatchers.ingredients)),
       instructions: formatFuncs.instructions(grabLongestMatchByClasses(...classMatchers.instructions)),
-      notes: formatFuncs.notes(grabLongestMatchByClasses(...classMatchers.notes))
+      notes:        formatFuncs.notes(grabLongestMatchByClasses(...classMatchers.notes))
     };
 
     return autoSnipResults;
