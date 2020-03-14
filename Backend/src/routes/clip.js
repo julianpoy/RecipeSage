@@ -49,7 +49,7 @@ const clipRecipe = async clipUrl => {
       const matches = document.querySelectorAll('img');
 
       return [...matches]
-        .filter(element => element.src)
+        .filter(element => getSrcFromImage(element))
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
