@@ -4,10 +4,19 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class RecipeCompletionTrackerService {
+  scaleByRecipeId = {};
   ingredientCompletionByRecipeId = {};
   instructionCompletionByRecipeId = {};
 
   constructor() {}
+
+  setRecipeScale(recipeId: string, scale: number) {
+    this.scaleByRecipeId[recipeId] = scale;
+  }
+
+  getRecipeScale(recipeId: string) {
+    return this.scaleByRecipeId[recipeId] || 1;
+  }
 
   toggleIngredientComplete(recipeId: string, idx: number) {
     this.ingredientCompletionByRecipeId[recipeId] = this.ingredientCompletionByRecipeId[recipeId] || [];

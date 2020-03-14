@@ -62,6 +62,8 @@ export class RecipePage {
     this.recipeId = this.route.snapshot.paramMap.get('recipeId');
     this.recipe = {} as Recipe;
 
+    this.scale = this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
+
     this.applyScale();
 
     document.addEventListener('click', event => {
@@ -213,6 +215,7 @@ export class RecipePage {
   changeScale() {
     this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
       this.scale = scale;
+      this.recipeCompletionTrackerService.setRecipeScale(this.recipeId, scale);
       this.applyScale();
     });
   }
