@@ -22,7 +22,7 @@ const capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).
 
 exports.getCategoryTitle = itemTitle => {
   itemTitle = itemTitle.toLowerCase();
-  if (itemTitle.includes("canned") || itemTitle.includes(" can ")) return "Canned";
+  if (itemTitle.includes("canned") || itemTitle.includes(" can ") || itemTitle.includes(" cans ")) return "Canned";
   if (itemTitle.includes("frozen")) return "Frozen";
 
   const itemTitleMatch = itemTitles.find(potentialMatch => {
