@@ -23,12 +23,14 @@ spec:
           value: "3"
         - name: MAX_QUEUE_LENGTH
           value: "10"
+        - name: DEFAULT_BLOCK_ADS
+          value: "true"
         resources:
           requests:
             cpu: 100m
             memory: 150Mi
           limits:
-            cpu: 1
+            cpu: 1.2
             memory: 700Mi
 ---
 apiVersion: v1
@@ -59,4 +61,4 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 85
+      targetAverageUtilization: 100

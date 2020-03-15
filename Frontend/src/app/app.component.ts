@@ -13,6 +13,7 @@ import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { VersionCheckService } from '@/services/versioncheck.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { EventService } from '@/services/event.service';
 
 @Component({
@@ -54,7 +55,8 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private capabilitiesService: CapabilitiesService,
-    private versionCheckService: VersionCheckService
+    private versionCheckService: VersionCheckService,
+    public cookingToolbarService: CookingToolbarService,
   ) {
 
     this.initializeApp();

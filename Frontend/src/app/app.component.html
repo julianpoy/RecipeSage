@@ -50,6 +50,8 @@
         </ion-toolbar>
       </ion-footer>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content" [class]="{ cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0 }"></ion-router-outlet>
+
+    <cooking-toolbar *ngIf="cookingToolbarService.pinnedRecipes.length > 0"></cooking-toolbar>
   </ion-split-pane>
 </ion-app>

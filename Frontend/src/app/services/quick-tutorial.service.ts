@@ -12,7 +12,8 @@ interface QuickTutorialBlurb {
 export enum QuickTutorialOptions {
   MultipleRecipeSelection = 'multipleRecipeSelection',
   MultipleLabelSelection = 'multipleLabelSelection',
-  SplitPaneView = 'splitPaneView'
+  SplitPaneView = 'splitPaneView',
+  PinnedRecipes = 'pinnedRecipes'
 }
 
 type QuickTutorialBlurbs = {
@@ -39,6 +40,13 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
     message: `Split pane view is only visible on devices with large screens (laptops, large tablets, etc).<br /><br />
               When split pane view is enabled, the side menu will always be visible.<br /><br />
               This feature is useful for optimizing the experience on larger devices.`
+  },
+  [QuickTutorialOptions.PinnedRecipes]: {
+    header: 'Pinned Recipes',
+    message: `This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking.<br /><br />
+              Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with
+              the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until
+              you close the application.`
   }
 };
 

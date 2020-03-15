@@ -24,7 +24,7 @@ router.post('/',
     );
 
     let file;
-    if (req.body.url) {
+    if (req.body.imageURL) {
       try {
         file = await UtilService.sendURLToS3(req.body.imageURL, encodeInHighRes);
       } catch (e) {

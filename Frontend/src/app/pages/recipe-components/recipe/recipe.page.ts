@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, AlertController, ToastController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { RecipeCompletionTrackerService } from '@/services/recipe-completion-tracker.service';
+
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
@@ -44,17 +47,22 @@ export class RecipePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
+    public recipeCompletionTrackerService: RecipeCompletionTrackerService,
     public route: ActivatedRoute,
     public utilService: UtilService,
     public recipeService: RecipeService,
     public labelService: LabelService,
+    public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService) {
 
     this.updateIsLoggedIn();
 
     this.recipeId = this.route.snapshot.paramMap.get('recipeId');
     this.recipe = {} as Recipe;
+
+    this.scale = this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
 
     this.applyScale();
 
@@ -184,19 +192,30 @@ export class RecipePage {
   }
 
 
-  instructionClicked(event, instruction: Instruction) {
+  instructionClicked(event, instruction: Instruction, idx: number) {
     if (instruction.isHeader) return;
-    instruction.complete = !instruction.complete;
+
+    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
   }
 
-  ingredientClicked(event, ingredient: Instruction) {
+  ingredientClicked(event, ingredient: Instruction, idx: number) {
     if (ingredient.isHeader) return;
-    ingredient.complete = !ingredient.complete;
+
+    this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
+  }
+
+  getInstructionComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getInstructionComplete(this.recipeId, idx);
+  }
+
+  getIngredientComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx);
   }
 
   changeScale() {
     this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
       this.scale = scale;
+      this.recipeCompletionTrackerService.setRecipeScale(this.recipeId, scale);
       this.applyScale();
     });
   }
@@ -553,5 +572,17 @@ export class RecipePage {
       }
     });
     imageViewerModal.present();
+  }
+
+  pinRecipe() {
+    this.cookingToolbarService.pinRecipe({
+      id: this.recipe.id,
+      title: this.recipe.title,
+      imageUrl: this.recipe.images[0]?.location
+    });
+  }
+
+  unpinRecipe() {
+    this.cookingToolbarService.unpinRecipe(this.recipe.id);
   }
 }

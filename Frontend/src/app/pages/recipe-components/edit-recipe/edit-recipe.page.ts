@@ -319,7 +319,16 @@ export class EditRecipePage {
       const autofillFields = ['title', 'description', 'source', 'yield', 'activeTime', 'totalTime', 'ingredients', 'instructions', 'notes'];
       autofillFields.forEach(fieldName => fields[fieldName] ? this.recipe[fieldName] = fields[fieldName] : null);
 
-      console.log(this.recipe)
+      this.recipe.url = url;
+
+      if (fields.imageURL?.trim()) {
+        try {
+          const image = await this.imageService.createFromUrl(fields.imageURL);
+          this.images.push(image);
+        } catch(err) {
+          console.log('Error clipping image:', err);
+        }
+      }
     } catch(err) {
       switch (err?.response?.status) {
         case 0:

@@ -22,8 +22,8 @@ spec:
         args: ["src/bin/www"]
         resources:
           requests:
-            cpu: 0.5
-            memory: 450Mi
+            cpu: 250m
+            memory: 300Mi
           limits:
             cpu: 1
         envFrom:
@@ -68,10 +68,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-api
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 3
   metrics:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 85
+      targetAverageUtilization: 100
