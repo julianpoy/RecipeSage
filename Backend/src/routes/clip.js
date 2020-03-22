@@ -42,11 +42,18 @@ const clipRecipe = async clipUrl => {
       ], []);
     }
 
+    const applyLIBlockStyling = element => {
+      [...element.querySelectorAll('li')].forEach(li => li.style.display = 'block');
+
+      return element;
+    }
+
     const grabLongestMatchByClasses = (preferredClassNames, fuzzyClassNames) => {
       const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
+        .map(element => applyLIBlockStyling(element))
         .map(element => element.innerText.trim())
         .reduce((max, match) => match.length > max.length ? match : max, '')
     }
@@ -88,6 +95,8 @@ const clipRecipe = async clipUrl => {
         .filter(element => isValidImage(element))
         .reduce((max, element) => {
           const { offsetWidth, offsetHeight } = getImageDimensions(element);
+          if (offsetWidth < 200 && offsetHeight < 200) return max; // Do not use images smaller than 200x200
+
           return (offsetHeight * offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max
         }, null)
     }
@@ -106,7 +115,24 @@ const clipRecipe = async clipUrl => {
     }
 
     const cleanKnownWords = textBlock => {
-      const generalBadWords = ['instructions', 'directions', 'procedure', 'you will need', 'ingredients', 'total time', 'active time', 'prep time', 'time', 'yield', 'servings', 'notes'];
+      const generalBadWords = [
+        'instructions',
+        'directions',
+        'procedure',
+        'method',
+        'you will need',
+        'how to make it',
+        'ingredients',
+        'total time',
+        'active time',
+        'prep time',
+        'time',
+        'yield',
+        'servings',
+        'notes',
+        'select all ingredients',
+        'select all'
+      ];
       const allRecipesBadWords = ['decrease serving', 'increase serving', 'adjust', 'the ingredient list now reflects the servings specified', 'footnotes'];
       const tastyRecipesBadWords = ['scale 1x2x3x'];
 
@@ -117,7 +143,7 @@ const clipRecipe = async clipUrl => {
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
         .filter(line => !line.match(/^(step *)?\d+:?$/i)) // Remove digits and steps that sit on their own lines
-        .map   (line => line.replace(/^(total time|prep time|active time|yield|servings):? ?/i, '')) // Remove direct field names for meta
+        .map   (line => line.replace(/^(total time|prep time|active time|yield|servings|serves):? ?/i, '')) // Remove direct field names for meta
         .map   (line => line.trim())
         .map   (line => line.match(/^([A-Z] *)+:? *$/) ? `[${capitalizeEachWord(line.toLowerCase()).replace(':', '')}]` : line)
         .join  ('\n');
@@ -198,6 +224,7 @@ const clipRecipe = async clipUrl => {
           'tasty-recipes-ingredients', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
           'o-Ingredients', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
           'recipe-ingredients',
+          'recipe-ingredients-section', // Taste.com.au - https://www.taste.com.au/recipes/healthy-feta-mint-beef-patties-griled-vegies-hummus-recipe/pxacqmfu?r=recipes/dinnerrecipesfortwo&c=1j53ce29/Dinner%20recipes%20for%20two
         ],
         ['ingredients']
       ],
@@ -208,12 +235,13 @@ const clipRecipe = async clipUrl => {
           'recipe-directions__list', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
           'o-Method', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
           'steps-area', // Bon Appetit - https://www.bonappetit.com/recipe/chocolate-babka
+          'recipe-method-section', // Taste.com.au - https://www.taste.com.au/recipes/healthy-feta-mint-beef-patties-griled-vegies-hummus-recipe/pxacqmfu?r=recipes/dinnerrecipesfortwo&c=1j53ce29/Dinner%20recipes%20for%20two
           'instructions', // Generic
           'recipe-steps', // Generic
           'recipe-instructions', // Generic
           'directions' // Generic
         ],
-        ['instructions', 'directions']
+        ['instructions', 'directions', 'recipe-method']
       ],
       notes: [
         [
