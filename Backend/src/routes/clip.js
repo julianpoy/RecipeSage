@@ -12,6 +12,8 @@ const clipRecipe = async clipUrl => {
 
   const page = await browser.newPage();
 
+  await page.setBypassCSP(true);
+
   try {
     await page.goto(clipUrl, {
       waitUntil: "networkidle2",
