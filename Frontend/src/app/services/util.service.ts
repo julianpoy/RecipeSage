@@ -12,6 +12,7 @@ export interface RecipeTemplateModifiers {
   hideSourceURL?: boolean;
   printPreview?: boolean;
   showPrintButton?: boolean;
+  print?: boolean; // Triggers immediate print
 }
 
 // TODO: Create more types for various page getPath methods
