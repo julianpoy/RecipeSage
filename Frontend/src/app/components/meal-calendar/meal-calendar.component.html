@@ -3,15 +3,13 @@
     <ion-button
       class="previous"
       fill="clear"
-      [disabled]="!canMoveCalendar(-1)"
       (click)="moveCalendar(-1)">
       <ion-icon name="caret-back" slot="icon-only"></ion-icon>
     </ion-button>
-    <span>{{ prettyMonthName(center) }}</span>
+    <span>{{ calendarTitle() }}</span>
     <ion-button
       class="next"
       fill="clear"
-      [disabled]="!canMoveCalendar(1)"
       (click)="moveCalendar(1)">
       <ion-icon name="caret-forward" slot="icon-only"></ion-icon>
     </ion-button>
@@ -26,13 +24,13 @@
     <ion-row class="week" *ngFor="let weekOfMonth of weeksOfMonth">
       <ion-col class="day" *ngFor="let day of weekOfMonth" (click)="selectedDay = day" (keyup.enter)="selectedDay = day"
         [ngClass]="{
-            'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
-            'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+            'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+            'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
           }" tabindex="0">
         <div class="date" [ngClass]="{
-              'selected': selectedDay && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+              'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
               'inactive': center.getMonth() !== day.month(),
-              'today'   : today.getMonth() === day.month() && today.getDate() === day.date()
+              'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
             }">
           {{day.date()}}
         </div>
