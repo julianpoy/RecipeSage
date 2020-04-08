@@ -35,6 +35,8 @@
         width: 28px;
         line-height: 18px;
 
+        word-wrap: normal;
+
         &.inactive {
           color: var(--ion-color-medium);
         }

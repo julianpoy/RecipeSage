@@ -102,28 +102,20 @@ export class MealCalendarComponent {
     return new Date(this.center.getFullYear(), newMonth, 1);
   }
 
-  // Checks if calendar can move in specified direction. Positive = next month, negative = last month
-  canMoveCalendar(direction) {
-    const newCenter = this.getNewCenter(direction);
-    if (direction > 0) {
-      const maximum = new Date(this.today.getFullYear() + 1, this.today.getMonth(), 0); // Can't see last month next year
-      return newCenter < maximum;
-    } else {
-      const minimum = new Date(this.today.getFullYear(), this.today.getMonth(), 1); // Can't be less than the first day of this month
-      return newCenter >= minimum;
+  // Moves the calendar. Positive = next month, negative = last month
+  moveCalendar(direction) {
+    this.center = this.getNewCenter(direction);
+    const bounds = this.generateCalendar();
+
+    if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
+      this.selectedDay = dayjs(this.center);
     }
   }
 
-  // Moves the calendar. Positive = next month, negative = last month
-  moveCalendar(direction) {
-    if (this.canMoveCalendar(direction)) {
-      this.center = this.getNewCenter(direction);
-      const bounds = this.generateCalendar();
+  calendarTitle() {
+    const includeYear = this.center.getFullYear() !== this.today.getFullYear();
 
-      if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
-        this.selectedDay = dayjs(this.center);
-      }
-    }
+    return this.prettyMonthName(this.center) + (includeYear ? ` ${this.center.getFullYear()}` : '')
   }
 
   prettyMonthName(date) {

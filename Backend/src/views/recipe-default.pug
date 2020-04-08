@@ -302,7 +302,6 @@ html
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {
       window.print();
-      window.onafterprint = window.close;
     }
 
     window.addEventListener('message', function(e) {
