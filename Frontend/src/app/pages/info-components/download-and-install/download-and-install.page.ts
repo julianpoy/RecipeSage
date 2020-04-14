@@ -11,10 +11,11 @@ export class DownloadAndInstallPage {
   showDesktop = false;
 
   constructor() {
-    if (window.pwaPromptInterval) clearInterval(window.pwaPromptInterval);
-    window.pwaPromptInterval = setInterval(() => {
+    const wind = window as any;
+    if (wind.pwaPromptInterval) clearInterval(wind.pwaPromptInterval);
+    wind.pwaPromptInterval = setInterval(() => {
       this.pwaPromptCapable()
-    }, 1000);
+    }, 500);
   }
 
   toggleAndroid() {
