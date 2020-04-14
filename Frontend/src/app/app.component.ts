@@ -148,6 +148,7 @@ export class AppComponent {
       { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
       { title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
       { title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
@@ -160,6 +161,7 @@ export class AppComponent {
       { title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
       { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
       { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
       { title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
@@ -172,27 +174,6 @@ export class AppComponent {
     }
 
     return pages;
-  }
-
-  readyForPrompt() {
-    return !!(window as any).deferredInstallPrompt;
-  }
-
-  showInstallPrompt() {
-    const installPrompt = (window as any).deferredInstallPrompt;
-    if (installPrompt) {
-      installPrompt.prompt();
-
-      installPrompt.userChoice
-        .then(choiceResult => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-            (window as any).deferredInstallPrompt = null;
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-        });
-    }
   }
 
   loadInboxCount() {

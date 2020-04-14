@@ -19,14 +19,6 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="isLoggedIn && readyForPrompt()" (click)="showInstallPrompt()" button>
-              <ion-icon slot="start" name="cloud-download"></ion-icon>
-              <ion-label>
-                Download & Install
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
             <ion-item *ngIf="isLoggedIn" (click)="logout()" button>
               <ion-icon slot="start" name="log-out"></ion-icon>
               <ion-label>

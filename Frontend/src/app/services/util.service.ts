@@ -38,6 +38,10 @@ export const RouteMap = {
     getPath() { return `/about/details`; },
     path: 'about/details',
   },
+  DownloadAndInstallPage: {
+    getPath() { return `/install`; },
+    path: 'install',
+  },
   ContactPage: {
     getPath() { return `/about/contact`; },
     path: 'about/contact',
