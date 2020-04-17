@@ -406,6 +406,28 @@
       </p>
     </div>
 
+    <div *ngIf="active == 'faq'" class="ion-padding">
+      <br />
+      <h2>General FAQ</h2>
+      <p>
+        <b>Q: My search results include results that don't match the search</b><br />
+        The RecipeSage search tool returns results that are as "close" to your match as possible, but also includes misspellings and similar words.<br />
+        Searches will return matches with the exact search text further up in the results list.<br />
+      </p>
+
+      <p>
+        <b>Q: Is RecipeSage compatible with IOS and Android?</b><br />
+        Yep! You can use RecipeSage in the browser on your mobile device, or install it to your device.<br />
+        See our install instructions here: <a href="/#/install">Download & Install</a>.
+      </p>
+
+      <p>
+        <b>Q: Is RecipeSage Open Source?</b><br />
+        Yes, in part - I'm working on it! Open sourcing a large project like this takes time - I've open sourced several components so far.<br />
+        Check out the <a href="/#/about/contact">Discord server</a> for more info!<br />
+      </p>
+    </div>
+
     <br /><br />
 
     <ion-button class="ion-float-left" fill="clear" (click)="active = ''">
