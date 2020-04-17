@@ -28,6 +28,11 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.DownloadAndInstallPage.path,
+    loadChildren: '@/pages/info-components/download-and-install/download-and-install.module#DownloadAndInstallPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
     path: RouteMap.AboutDetailsPage.path,
     loadChildren: '@/pages/info-components/about-details/about-details.module#AboutDetailsPageModule',
     canDeactivate: [UnsavedChangesGuardService]
