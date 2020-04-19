@@ -4,9 +4,14 @@
   "description": "",
   "main": "",
   "scripts": {
-    "build": "rm -rf dist; mkdir -p dist && cd src && zip ../dist/rs-we.zip ./* ./**/*",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack --watch",
+    "build": "rm -rf dist; webpack && cd dist && zip rs-we.zip ./* ./**/*"
   },
   "author": "Julian Poyourow",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
 }
