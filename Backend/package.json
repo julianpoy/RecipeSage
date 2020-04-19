@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "~7.6.0",
-    "@julianpoy/recipe-clipper": "^1.1.0",
+    "@julianpoy/recipe-clipper": "^1.2.0",
     "aws-sdk": "^2.543.0",
     "body-parser": "~1.19.0",
     "cookie-parser": "^1.4.4",
