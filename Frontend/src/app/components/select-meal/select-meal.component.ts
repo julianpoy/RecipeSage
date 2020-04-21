@@ -38,11 +38,13 @@ export class SelectMealComponent {
     const lastUsedMeal = localStorage.getItem(LAST_USED_MEAL_VAR);
     const mealExists = this.mealOptions.find(option => option.key === lastUsedMeal);
 
-    if (mealExists) this.meal = lastUsedMeal;
+    if (mealExists) {
+      this.meal = lastUsedMeal;
 
-    setTimeout(() => {
-      this.mealChanged();
-    });
+      setTimeout(() => {
+        this.mealChanged();
+      });
+    }
   }
 
   saveLastUsedMeal() {
