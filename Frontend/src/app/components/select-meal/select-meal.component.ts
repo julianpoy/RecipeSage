@@ -39,6 +39,10 @@ export class SelectMealComponent {
     const mealExists = this.mealOptions.find(option => option.key === lastUsedMeal);
 
     if (mealExists) this.meal = lastUsedMeal;
+
+    setTimeout(() => {
+      this.mealChanged();
+    });
   }
 
   saveLastUsedMeal() {
