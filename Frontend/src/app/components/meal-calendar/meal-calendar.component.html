@@ -28,13 +28,16 @@
             'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
           }" tabindex="0">
         <div class="date" [ngClass]="{
-              'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
-              'inactive': center.getMonth() !== day.month(),
-              'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
-            }">
+          'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+          'inactive': center.getMonth() !== day.month(),
+          'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
+        }">
           {{day.date()}}
         </div>
-        <div class="recipe-dot" *ngFor="let mealItem of mealItemsByDay(day)"></div>
+        <div class="meal-group" *ngFor="let mealName of mealItemsByDay(day).meals">
+          <span class="meal-title" *ngIf="true">{{ mealName }}</span><br />
+          <calendar-item *ngFor="let mealItem of mealItemsByDay(day).items[mealName]" [mealItem]="mealItem"></calendar-item>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

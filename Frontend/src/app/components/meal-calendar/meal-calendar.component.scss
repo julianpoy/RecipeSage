@@ -30,6 +30,8 @@
         display: inline-block;
         text-align: center;
 
+        margin-bottom: 5px;
+
         padding: 5px;
         height: 28px;
         width: 28px;
@@ -47,15 +49,21 @@
         }
       }
 
-      .recipe-dot {
-        width: 10px;
-        height: 10px;
-        background: var(--ion-color-primary);
-        border-radius: 45px;
+      .meal-group {
+        .meal-title {
+          text-transform: capitalize;
+          font-weight: bold;
+        }
 
-        display: inline-block;
-        margin: 1px;
-        vertical-align: middle;
+        calendar-item {
+          display: block;
+          margin-top: 5px;
+          margin-bottom: 5px;
+
+          background-color: var(--ion-color-primary);
+          border-radius: 4px;
+          padding: 3px 6px;
+        }
       }
     }
   }
