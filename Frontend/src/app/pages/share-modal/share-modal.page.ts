@@ -72,8 +72,7 @@ export class ShareModalPage {
 
   updateEmbed(updateURL?: boolean) {
     if (updateURL) {
-      this.recipePreviewURL = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.embedConfig);
-      this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
+      this.recipePreviewURL = this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
     }
 
     this.recipeEmbedCode = `<iframe
