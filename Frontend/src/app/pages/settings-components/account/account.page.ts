@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToastController, AlertController, NavController } from '@ionic/angular';
 
-import { formatRelative } from 'date-fns';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -108,7 +108,7 @@ export class AccountPage {
     if (!subscription.expires) return false;
 
     const expires = new Date(subscription.expires);
-    return `${new Date(subscription.expires) < new Date() ? 'Expired ' : 'Enabled until '}${formatRelative(expires, new Date())}`;
+    return `${new Date(subscription.expires) < new Date() ? 'Expired ' : 'Enabled until '}${dayjs(expires).format('YYYY-MM-DD')}`;
   }
 
   async saveName() {
