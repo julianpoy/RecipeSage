@@ -16,6 +16,8 @@ export class ResettableSelectPopoverPage {
     selected: boolean
   }];
 
+  @Input() nullMessage: string;
+
   @Output() selectedValueChange = new EventEmitter();
 
   constructor(private popoverCtrl: PopoverController) {}
