@@ -138,7 +138,7 @@
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
         <ion-label>
-          <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+          <p class="pre" [innerHTML]="notes || 'No Notes'"></p>
         </ion-label>
       </ion-item>
     </div>
