@@ -24,7 +24,7 @@ workbox.routing.registerRoute(
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
-const MAX_OFFLINE_API_AGE = 14; // Days
+const MAX_OFFLINE_API_AGE = 30; // Days
 workbox.routing.registerRoute(
   new RegExp('/api/'),
   workbox.strategies.networkFirst({
