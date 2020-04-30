@@ -1,6 +1,12 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
+interface Option {
+  title: string,
+  value: string,
+  selected: boolean
+}
+
 @Component({
   selector: 'resettable-select-popover-page',
   templateUrl: 'resettable-select-popover.page.html',
@@ -10,11 +16,7 @@ export class ResettableSelectPopoverPage {
 
   resetToggled = false; // Stores current state of reset all checkbox
 
-  @Input() options: [{
-    title: string,
-    value: string,
-    selected: boolean
-  }];
+  @Input() options: Option[];
 
   @Input() nullMessage: string;
 
