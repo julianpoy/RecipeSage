@@ -33,7 +33,6 @@
     "axios": "^0.19.2",
     "blueimp-load-image": "^2.26.0",
     "core-js": "^3.6.5",
-    "date-fns": "^2.12.0",
     "dayjs": "^1.8.25",
     "firebase": "^7.6.1",
     "fraction.js": "^4.0.12",
