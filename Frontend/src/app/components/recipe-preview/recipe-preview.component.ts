@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'recipe-preview',
@@ -14,7 +15,7 @@ export class RecipePreviewComponent {
 
   @Output() click = new EventEmitter();
 
-  constructor() {}
+  constructor(public sanitizer: DomSanitizer) {}
 
   onClick(event) {
     this.click.emit(event);
