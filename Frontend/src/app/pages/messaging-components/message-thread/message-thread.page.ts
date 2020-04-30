@@ -2,8 +2,7 @@ import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 
-import * as linkifyStr from 'linkifyjs/string';
-
+import { linkifyStr } from '@/utils/linkify';
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
@@ -257,15 +256,6 @@ export class MessageThreadPage {
   }
 
   parseMessage(message) {
-    let updated = message;
-
-    updated = linkifyStr(updated, {
-      target: {
-        url: '_blank'
-      },
-      className: 'linkified'
-    });
-
-    return updated;
+    return linkifyStr(message);
   }
 }
