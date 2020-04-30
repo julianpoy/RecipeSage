@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
 
+import { linkifyStr } from '@/utils/linkify';
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
@@ -31,6 +32,7 @@ export class RecipePage {
   recipeId: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
+  notes: string;
 
   scale = 1;
 
@@ -114,6 +116,10 @@ export class RecipePage {
 
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
           this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
+        }
+
+        if (this.recipe.notes && this.recipe.notes.length > 0) {
+          this.notes = linkifyStr(this.recipe.notes);
         }
 
         this.applyScale();
