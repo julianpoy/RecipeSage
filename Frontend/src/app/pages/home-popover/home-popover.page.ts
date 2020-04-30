@@ -67,7 +67,7 @@ export class HomePopoverPage {
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1
         })),
-        nullMessage: "You don't have any labels. You can create labels on the recipe details page."
+        nullMessage: 'You don\'t have any labels. You can create labels on the recipe details page.'
       }
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
