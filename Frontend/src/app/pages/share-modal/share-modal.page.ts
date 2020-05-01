@@ -185,7 +185,7 @@ export class ShareModalPage {
         title: this.recipe.title,
         text: `${this.recipe.title}:`,
         url: this.recipeURL,
-      }).then(() => this.cancel());
+      }).then(() => this.cancel()).catch(() => {});
     }
   }
 
