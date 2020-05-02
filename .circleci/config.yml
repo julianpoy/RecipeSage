@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.15
 jobs:
   test_backend:
     working_directory: ~/recipesage
@@ -59,7 +61,7 @@ jobs:
       - run: # run backend tests
           name: test-backend
           command: cd Backend && npm run test:ci
-  build_frontend:
+  build_test_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: circleci/node:10.16.3
@@ -94,11 +96,109 @@ jobs:
           command: cd Frontend && npm run lint
       - run: # build frontend
           name: build-frontend
-          command: cd Frontend && npm run build -- --prod
+          command: cd Frontend && npm run dist
+      - persist_to_workspace:
+          root: Frontend
+          paths:
+            - www
+  build_push_backend:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: docker-login
+          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: tag-and-push-api
+          command: ./tag_and_push_image.sh api $CIRCLE_TAG
+  push_frontend:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - run: sudo apt update
+      - run:
+          name: install-s3cmd
+          command: sudo apt install s3cmd
+      - run:
+          name: s3-keys
+          command: echo -e "[default] \naccess_key = $AWS_ACCESS_KEY_ID \nsecret_key = $AWS_SECRET_ACCESS_KEY \n" > ~/.s3cfg
+      - attach_workspace:
+          at: .
+      - run:
+          name: set-frontend-version
+          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
+      # === Versioned ===
+      - run:
+          name: sync-versioned-non-hashed
+          command: |
+            s3cmd sync www s3://chefbook-static/frontend/$CIRCLE_TAG \
+            --rexclude=".+\.[a-f0-9]{20}\..+" \
+            --acl-public \
+            --add-header="Cache-Control:max-age=600, must-revalidate" \
+            --recursive
+      - run:
+          name: sync-versioned-hashed
+          command: |
+            s3cmd sync www s3://chefbook-static/frontend/$CIRCLE_TAG \
+            --rexclude=".*" \
+            --rinclude=".+\.[a-f0-9]{20}\..+" \
+            --acl-public \
+            --add-header="Cache-Control:max-age=604800, must-revalidate" \
+            --recursive
+      - run:
+          name: sync-latest-non-hashed
+          command: |
+            s3cmd sync www s3://chefbook-static/frontend/latest \
+            --rexclude=".+\.[a-f0-9]{20}\..+" \
+            --acl-public \
+            --add-header="Cache-Control:max-age=600, must-revalidate" \
+            --recursive
+      - run:
+          name: sync-latest-hashed
+          command: |
+            s3cmd sync www s3://chefbook-static/frontend/latest \
+            --rexclude=".*" \
+            --rinclude=".+\.[a-f0-9]{20}\..+" \
+            --acl-public \
+            --add-header="Cache-Control:max-age=604800, must-revalidate" \
+            --recursive
 workflows:
   version: 2
   build_and_test:
     jobs:
       - test_backend:
           context: "RS API Env Vars"
-      - build_frontend
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - build_test_frontend:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - build_push_backend:
+          requires:
+            - test_backend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - push_frontend:
+          requires:
+            - build_test_frontend
+          filters:
+            tags:
+              only: /.*/
+              # only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              only: /.*/
+              # ignore: /.*/
+

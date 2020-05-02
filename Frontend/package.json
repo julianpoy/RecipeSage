@@ -6,8 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve --no-open --address 0.0.0.0 --disableHostCheck --no-livereload -- --disable-host-check --no-live-reload",
-    "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest && npm run compress",
-    "dist:ios": "shx rm -rf www/* && ionic build --prod && workbox injectManifest",
+    "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest",
     "build": "ionic build",
     "test": "ng test",
     "lint": "ng lint",
