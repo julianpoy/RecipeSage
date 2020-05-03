@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -18,23 +18,53 @@ import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolb
 
 import { environment } from 'src/environments/environment';
 
+const checkChunkLoadError = (error) => {
+  const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
+  const isChunkFailedError = chunkFailedErrorRegExp.test(error.message);
+
+  if (isChunkFailedError && !(window as any).currentChunkError) {
+    (window as any).currentChunkError = true;
+
+    const shouldReload = confirm('There was a connection interruption while loading this page. Do you want to reload the application?');
+    if (shouldReload) {
+      window.location.reload(true);
+    }
+  }
+
+  return isChunkFailedError;
+}
+
+const checkSupressedError = (error) => {
+  const supressedErrorRegExp = /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(\.isProxied)|(\[object Undefined\])/;
+
+  return supressedErrorRegExp.test(error.message);
+}
+
+const origConsoleError = console.error;
+console.error = (...args) => {
+  try {
+    checkChunkLoadError(args[0]);
+  } catch(e) {}
+
+  origConsoleError(...args);
+}
+
 Sentry.init({
   release: (window as any).version,
   environment: environment.production ? 'production' : 'dev',
-  dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200'
+  dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200',
+  beforeSend(event, hint) {
+    const error = hint.originalException;
+    if (checkChunkLoadError(error)) return null;
+    if (checkSupressedError(error)) return null;
+    return event;
+  }
 });
 
+@Injectable()
 export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
     super.handleError(error);
-
-    const chunkFailedMessage = /Loading chunk [\d]+ failed/;
-    if (chunkFailedMessage.test(error.message)) {
-      const shouldReload = confirm('There was a connection interruption while loading this page. Press okay to reload.');
-      if (shouldReload) {
-        window.location.reload(true);
-      }
-    }
 
     let token = '';
     try {
