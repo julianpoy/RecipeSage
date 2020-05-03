@@ -9,7 +9,7 @@ module.exports = {
     // "index.html",
     "manifest.json"
   ],
-  "dontCacheBustURLsMatching": new RegExp('.+\.[a-f0-9]{10}\..+'),
+  "dontCacheBustURLsMatching": new RegExp('.+\.[a-f0-9]{20}\..+'),
   "maximumFileSizeToCacheInBytes": 5000000,
   "swSrc": "src/service-worker.js",
   "swDest": "www/service-worker.js"
