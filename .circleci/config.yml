@@ -131,41 +131,9 @@ jobs:
       - run:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
-      # === Versioned ===
       - run:
-          name: sync-versioned-non-hashed
-          command: |
-            s3cmd sync www s3://chefbook-static/frontend/$CIRCLE_TAG \
-            --rexclude=".+\.[a-f0-9]{20}\..+" \
-            --acl-public \
-            --add-header="Cache-Control:max-age=600, must-revalidate" \
-            --recursive
-      - run:
-          name: sync-versioned-hashed
-          command: |
-            s3cmd sync www s3://chefbook-static/frontend/$CIRCLE_TAG \
-            --rexclude=".*" \
-            --rinclude=".+\.[a-f0-9]{20}\..+" \
-            --acl-public \
-            --add-header="Cache-Control:max-age=604800, must-revalidate" \
-            --recursive
-      - run:
-          name: sync-latest-non-hashed
-          command: |
-            s3cmd sync www s3://chefbook-static/frontend/latest \
-            --rexclude=".+\.[a-f0-9]{20}\..+" \
-            --acl-public \
-            --add-header="Cache-Control:max-age=600, must-revalidate" \
-            --recursive
-      - run:
-          name: sync-latest-hashed
-          command: |
-            s3cmd sync www s3://chefbook-static/frontend/latest \
-            --rexclude=".*" \
-            --rinclude=".+\.[a-f0-9]{20}\..+" \
-            --acl-public \
-            --add-header="Cache-Control:max-age=604800, must-revalidate" \
-            --recursive
+          name: sync-s3
+          command: ./push_static_s3.sh $CIRCLE_TAG
 workflows:
   version: 2
   build_and_test:
