@@ -11,7 +11,7 @@ then
 fi
 
 # Versioned, non-hashed
-s3cmd sync www s3://chefbook-static/frontend/$TAG/ \
+s3cmd sync www/* s3://chefbook-static/frontend/$TAG/ \
   --rexclude=".+\.[a-f0-9]{20}\..+" \
   --acl-public \
   --add-header="Cache-Control:max-age=600, must-revalidate" \
@@ -21,7 +21,7 @@ s3cmd sync www s3://chefbook-static/frontend/$TAG/ \
   --region=$AWS_REGION
 
 # Versioned, hashed
-s3cmd sync www s3://chefbook-static/frontend/$TAG/ \
+s3cmd sync www/* s3://chefbook-static/frontend/$TAG/ \
   --rexclude=".*" \
   --rinclude=".+\.[a-f0-9]{20}\..+" \
   --acl-public \
@@ -32,7 +32,7 @@ s3cmd sync www s3://chefbook-static/frontend/$TAG/ \
   --region=$AWS_REGION
 
 # Latest, non-hashed
-s3cmd sync www s3://chefbook-static/frontend/latest/ \
+s3cmd sync www/* s3://chefbook-static/frontend/latest/ \
   --rexclude=".+\.[a-f0-9]{20}\..+" \
   --acl-public \
   --add-header="Cache-Control:max-age=600, must-revalidate" \
@@ -42,7 +42,7 @@ s3cmd sync www s3://chefbook-static/frontend/latest/ \
   --region=$AWS_REGION
 
 # Latest, hashed
-s3cmd sync www s3://chefbook-static/frontend/latest/ \
+s3cmd sync www/* s3://chefbook-static/frontend/latest/ \
   --rexclude=".*" \
   --rinclude=".+\.[a-f0-9]{20}\..+" \
   --acl-public \
