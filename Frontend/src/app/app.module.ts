@@ -44,7 +44,7 @@ const origConsoleError = console.error;
 console.error = (...args) => {
   try {
     checkChunkLoadError(args[0]);
-  } catch() {}
+  } catch(e) {}
 
   origConsoleError(...args);
 }
