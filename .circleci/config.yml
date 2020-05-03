@@ -101,6 +101,7 @@ jobs:
           root: Frontend
           paths:
             - www
+            - push_static_s3.sh
   build_push_backend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
