@@ -29,12 +29,28 @@ spec:
         backend:
           serviceName: rs-static-proxy
           servicePort: 80
+  - host: api.recipesage.com
+    http:
+      paths:
+      - path: /(api/?)?(.*)
+        backend:
+          serviceName: rs-api
+          servicePort: 3000
+  - host: grip.recipesage.com
+    http:
+      paths:
+      - path: /(grip/)?(ws)
+        backend:
+          serviceName: rs-pushpin
+          servicePort: 7999
   tls:
   - hosts:
     - recipesage.com
     - www.recipesage.com
     - beta.recipesage.com
     - staging.recipesage.com
+    - api.recipesage.com
+    - grip.recipesage.com
     secretName: rs-tls
 ---
 apiVersion: cert-manager.io/v1alpha2
