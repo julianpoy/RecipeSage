@@ -67,7 +67,9 @@ spec:
     solvers:
     - selector: {}
       dns01:
-        digitalocean:
-          tokenSecretRef:
-            name: digitalocean-key
-            key: access-token
+        route53:
+          region: us-east-1
+          accessKeyId: AKIAZLFSMAZJ7MRMVGFN
+          secretAccessKeySecretRef:
+            name: cert-manager-aws
+            key: secret-access-key
