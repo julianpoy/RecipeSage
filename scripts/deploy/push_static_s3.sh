@@ -12,6 +12,8 @@ then
   exit 1
 fi
 
+mkdir -p www-revhashed
+
 find www/ -regextype egrep -regex '.+\.[a-f0-9]{20}\..+' -exec mv -t www-revhashed/ -- {} +
 
 sync_to_s3 () {
