@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cd nginx
+PWD=$(dirname "$0")
+cd $PWD
+cd ../nginx
 
 rm -rf ssl.crt
 rm -rf ssl.key

@@ -4,4 +4,4 @@ export const environment = {
 
 export const STRIPE_PK = 'pk_live_6dE9NkafE9ZxIvSZZDydtPO900Spjfw3XS';
 
-export const BASE_URL = 'https://recipesage.com';
+export const API_BASE_URL = 'https://api.recipesage.com/';

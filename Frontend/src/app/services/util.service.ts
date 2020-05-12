@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BASE_URL } from 'src/environments/environment';
+import { API_BASE_URL } from 'src/environments/environment';
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -159,7 +159,7 @@ export class UtilService {
   constructor() {}
 
   getBase(): string {
-    return BASE_URL ? `${BASE_URL}/api/` : this.devBase;
+    return API_BASE_URL || this.devBase;
   }
 
   removeToken() {

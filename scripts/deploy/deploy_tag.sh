@@ -32,10 +32,10 @@ fi
 
 if [ "$1" == "static" ] || [ "$1" == "all" ]
 then
-    envsubst < kube/configs/static.yml | kubectl apply -f -
+    aws s3 sync s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/prod
 fi
 
 if [ "$1" == "static-beta" ] || [ "$1" == "all" ]
 then
-    envsubst < kube/configs/static-beta.yml | kubectl apply -f -
+    aws s3 sync s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/beta
 fi

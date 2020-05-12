@@ -3,7 +3,7 @@ module.exports = {
   "globPatterns": [
     // "assets/fonts/roboto*.woff2",
     // "assets/**/*.{png,jpg}",
-    "svg/*.svg",
+    //"svg/*.svg",
     "*.css",
     "*.js",
     // "index.html",

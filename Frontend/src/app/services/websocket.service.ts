@@ -80,7 +80,7 @@ export class WebsocketService {
   }
 
   public queueReconnect() {
-    const RECONNECT_TIMEOUT_WAIT = 3000; // Time to wait before attempting reconnect in MS
+    const RECONNECT_TIMEOUT_WAIT = 2000 + Math.floor(Math.random() * 2000); // Time to wait before attempting reconnect in MS
 
     if (this.reconnectTimeout) return;
 

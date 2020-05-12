@@ -120,13 +120,6 @@ jobs:
       - image: circleci/node:10.16.3
     steps:
       - checkout
-      - run: sudo apt update
-      - run:
-          name: install-s3cmd
-          command: sudo apt install s3cmd
-      - run:
-          name: s3-keys
-          command: echo -e "[default] \naccess_key = $AWS_ACCESS_KEY_ID \nsecret_key = $AWS_SECRET_ACCESS_KEY \n" > ~/.s3cfg
       - attach_workspace:
           at: .
       - run:
@@ -134,7 +127,7 @@ jobs:
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
       - run:
           name: sync-s3
-          command: ./push_static_s3.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
 workflows:
   version: 2
   build_and_test:
