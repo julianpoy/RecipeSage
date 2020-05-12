@@ -113,7 +113,7 @@ jobs:
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: tag-and-push-api
-          command: ./tag_and_push_image.sh api $CIRCLE_TAG
+          command: ./scripts/deploy/push_api_docker.sh $CIRCLE_TAG
   push_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
