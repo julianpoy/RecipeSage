@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
+import { GRIP_WS_URL } from 'src/environments/environment';
 
-/*
-  Generated class for the WebsocketService provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable({
   providedIn: 'root'
 })
@@ -56,7 +51,9 @@ export class WebsocketService {
     let prot = 'ws';
     if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
 
-    this.connection = new WebSocket(prot + '://' + window.location.hostname + '/grip/ws' + this.utilService.getTokenQuery());
+    const connBaseUrl = GRIP_WS_URL || prot + '://' + window.location.hostname + '/grip/ws';
+
+    this.connection = new WebSocket(connBaseUrl + this.utilService.getTokenQuery());
 
     this.connection.onopen = () => {
       this.handleMessage({

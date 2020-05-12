@@ -9,6 +9,7 @@ export const environment = {
 export const STRIPE_PK = 'pk_test_eBbi3a7mWEH73JQPB965gDB800buCgF4Gd';
 
 export const API_BASE_URL = null;
+export const GRIP_WS_URL = null;
 
 /*
  * For easier debugging in development mode, you can import the following file
