@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-s3: circleci/aws-s3@1.0.15
+  aws-cli: circleci/aws-cli@1.0.0
 jobs:
   test_backend:
     working_directory: ~/recipesage
@@ -120,6 +120,7 @@ jobs:
       - image: circleci/node:10.16.3
     steps:
       - checkout
+      - aws-cli/setup
       - attach_workspace:
           at: .
       - run:
