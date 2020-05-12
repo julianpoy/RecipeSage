@@ -22,7 +22,7 @@ sync_to_s3 () {
 
   aws s3 sync $DIR s3://chefbook-static/frontend/$TAG/ \
     --acl public-read \
-    --cache-control "Cache-Control:max-age=${CACHE_AGE}, must-revalidate"
+    --cache-control "max-age=${CACHE_AGE}, must-revalidate"
 }
 
 # Push to tagged path
