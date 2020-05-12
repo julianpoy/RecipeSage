@@ -69,7 +69,7 @@ spec:
       dns01:
         route53:
           region: us-east-1
-          accessKeyId: AKIAZLFSMAZJ7MRMVGFN
+          accessKeyID: AKIAZLFSMAZJ7MRMVGFN
           secretAccessKeySecretRef:
             name: cert-manager-aws
             key: secret-access-key
