@@ -10,7 +10,13 @@ export class RecipePreviewComponent {
 
   @Input() selected: boolean;
   @Input() landscape: boolean;
-  @Input() url: string;
+
+  trustedPreviewSrc: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+  @Input()
+  set url(url: string) {
+    this.trustedPreviewSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
+  }
+
   @Input() description: string;
 
   @Output() click = new EventEmitter();

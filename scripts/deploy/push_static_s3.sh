@@ -16,18 +16,25 @@ mkdir -p www-revhashed
 
 find www/ -regextype egrep -regex '.+\.[a-f0-9]{20}\..+' -exec mv -t www-revhashed/ -- {} +
 
-sync_to_s3 () {
-  DIR=$1
-  CACHE_AGE=$2
+# Time sensitive assets only
+aws s3 sync www s3://chefbook-static/frontend/$TAG/ \
+  --exclude "*" \
+  --include "index.html" \
+  --include "service-worker.js" \
+  --acl public-read \
+  --cache-control "max-age=600, must-revalidate"
 
-  aws s3 sync $DIR s3://chefbook-static/frontend/$TAG/ \
-    --acl public-read \
-    --cache-control "max-age=${CACHE_AGE}, must-revalidate"
-}
+# General, non-revhashed frontend files - semi time sensitive
+aws s3 sync www s3://chefbook-static/frontend/$TAG/ \
+  --exclude "index.html" \
+  --exclude "service-worker.js" \
+  --acl public-read \
+  --cache-control "max-age=86400, must-revalidate"
 
-# Push to tagged path
-sync_to_s3 www 600
-sync_to_s3 www-revhashed 604800
+# Revhashed files (previously copied to www-revhashed) - persist long-term
+aws s3 sync www-revhashed s3://chefbook-static/frontend/$TAG/ \
+  --acl public-read \
+  --cache-control "max-age=604800, must-revalidate"
 
 # Push to latest (STG)
 aws s3 sync s3://chefbook-static/frontend/$TAG/ s3://chefbook-static/frontend/latest

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+POSTGRES_USER=recipesage_dev
+POSTGRES_DB=recipesage_dev
+
 if ! [ -z "$1" ]
 then
     cp $1 restore.sql
