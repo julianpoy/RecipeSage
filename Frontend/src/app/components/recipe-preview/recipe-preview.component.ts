@@ -11,10 +11,10 @@ export class RecipePreviewComponent {
   @Input() selected: boolean;
   @Input() landscape: boolean;
 
-  trustedPreviewSrc: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl("");
+  trustedPreviewSrc: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
   @Input()
   set url(url: string) {
-    this.trustedPreviewSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url || "");
+    this.trustedPreviewSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
   }
 
   @Input() description: string;
