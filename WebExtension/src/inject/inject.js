@@ -542,7 +542,7 @@ if (window[extensionContainerId]) {
 
     let submit = () => {
       fetchToken(token => {
-        return fetch(`https://recipesage.com/api/recipes?token=${token}`, {
+        return fetch(`https://api.recipesage.com/recipes?token=${token}`, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",

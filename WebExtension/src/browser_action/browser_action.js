@@ -7,7 +7,7 @@ let messageActiveWindow = (payload, cb) => {
 let token;
 
 let login = () => {
-  return fetch("https://recipesage.com/api/users/login", {
+  return fetch("https://api.recipesage.com/users/login", {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
