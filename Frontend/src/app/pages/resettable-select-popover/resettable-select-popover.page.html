@@ -13,6 +13,12 @@
       {{option.title}}
     </ion-label>
   </ion-item>
+
+  <ion-item *ngIf="options.length === 0">
+    <ion-label class="ion-text-wrap">
+      {{nullMessage}}
+    </ion-label>
+  </ion-item>
 </ion-list>
 
 <ion-footer>

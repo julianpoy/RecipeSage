@@ -39,25 +39,25 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
-      - AWS_REGION
-      - AWS_BUCKET
-      - NODE_ENV
+      - AWS_REGION=us-west-2
+      - AWS_BUCKET=chefbook-dev
+      - NODE_ENV=development
       - VERBOSE=false
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_PORT
-      - POSTGRES_HOST
-      - POSTGRES_SSL
-      - POSTGRES_LOGGING
+      - POSTGRES_DB=recipesage_dev
+      - POSTGRES_USER=recipesage_dev
+      - POSTGRES_PASSWORD=recipesage_dev
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+      - POSTGRES_SSL=false
+      - POSTGRES_LOGGING=true
       - GCM_KEYPAIR
       - SENTRY_DSN
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
-      - ELASTIC_ENABLE
-      - ELASTIC_IDX_PREFIX
-      - ELASTIC_CONN
-      - ELASTIC_PASSWORD
+      - ELASTIC_ENABLE=true
+      - ELASTIC_IDX_PREFIX=rs_dev_
+      - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
+      - ELASTIC_PASSWORD=recipesage_dev
       - STRIPE_SK
       - STRIPE_WEBHOOK_SECRET
       - BROWSERLESS_HOST=browserless
@@ -70,7 +70,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
     environment:
       - discovery.type=single-node
-      - ELASTIC_PASSWORD
+      - ELASTIC_PASSWORD=recipesage_dev
     ports:
       - 9200:9200
   pushpin:
@@ -85,9 +85,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+      - POSTGRES_DB=recipesage_dev
+      - POSTGRES_USER=recipesage_dev
+      - POSTGRES_PASSWORD=recipesage_dev
   browserless:
     image: browserless/chrome:1.28.0-chrome-stable
     environment:

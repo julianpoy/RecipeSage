@@ -81,7 +81,7 @@ export class PrintRecipeModalPage {
     public recipeService: RecipeService) {
     setTimeout(() => {
       for (const template of this.templates) {
-        template.url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, template.modifiers);
+        template.url = this.utilService.generateRecipeTemplateURL(this.recipe.id, template.modifiers);
       }
     });
   }

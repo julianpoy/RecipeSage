@@ -36,7 +36,7 @@ var ws = require('./routes/ws');
 var app = express();
 if (!devMode) app.use(Raven.requestHandler());
 
-var corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://localhost', 'capacitor://localhost'];
+var corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost'];
 var corsOptions = {
   origin: (origin, callback) => {
     if (corsWhitelist.indexOf(origin) !== -1) {

@@ -72,8 +72,7 @@ export class ShareModalPage {
 
   updateEmbed(updateURL?: boolean) {
     if (updateURL) {
-      this.recipePreviewURL = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, this.embedConfig);
-      this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
+      this.recipePreviewURL = this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
     }
 
     this.recipeEmbedCode = `<iframe
@@ -186,7 +185,7 @@ export class ShareModalPage {
         title: this.recipe.title,
         text: `${this.recipe.title}:`,
         url: this.recipeURL,
-      }).then(() => this.cancel());
+      }).then(() => this.cancel()).catch(() => {});
     }
   }
 

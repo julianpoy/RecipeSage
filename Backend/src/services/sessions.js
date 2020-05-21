@@ -6,9 +6,9 @@ var Sequelize = require('sequelize');
 var Session = require('../models').Session;
 var Op = Sequelize.Op;
 
-var SESSION_VALIDITY_LENGTH = 7; // Initial session validity time
-var SET_GRACE_WHEN = 5; // Set token expiry equal to grace period if session will expire in X days
-var SESSION_GRACE_PERIOD = 7; // Should always be more than SET_GRACE_WHEN
+var SESSION_VALIDITY_LENGTH = 30; // Initial session validity time
+var SET_GRACE_WHEN = 29; // Set token expiry equal to grace period if session will expire in X days
+var SESSION_GRACE_PERIOD = 30; // Should always be more than SET_GRACE_WHEN
 
 //Checks if a token exists, and returns the corrosponding userId
 exports.validateSession = function(token, type) {

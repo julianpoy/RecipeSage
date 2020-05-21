@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'recipe-preview',
@@ -9,12 +10,18 @@ export class RecipePreviewComponent {
 
   @Input() selected: boolean;
   @Input() landscape: boolean;
-  @Input() url: string;
+
+  trustedPreviewSrc: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+  @Input()
+  set url(url: string) {
+    this.trustedPreviewSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
+  }
+
   @Input() description: string;
 
   @Output() click = new EventEmitter();
 
-  constructor() {}
+  constructor(public sanitizer: DomSanitizer) {}
 
   onClick(event) {
     this.click.emit(event);

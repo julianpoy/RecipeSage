@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { BASE_URL } from 'src/environments/environment';
+import { API_BASE_URL } from 'src/environments/environment';
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -157,10 +156,10 @@ export class UtilService {
     unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
   };
 
-  constructor(public sanitizer: DomSanitizer) {}
+  constructor() {}
 
   getBase(): string {
-    return BASE_URL ? `${BASE_URL}/api/` : this.devBase;
+    return API_BASE_URL || this.devBase;
   }
 
   removeToken() {
@@ -186,11 +185,6 @@ export class UtilService {
 
   generatePrintShoppingListURL(shoppingListId) {
     return `${this.getBase()}print/shoppingList/${shoppingListId}${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
-  }
-
-  generateTrustedRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): SafeResourceUrl {
-    const url = this.generateRecipeTemplateURL(recipeId, modifiers);
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
