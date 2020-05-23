@@ -174,15 +174,24 @@ export class MealCalendarComponent {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  dragStart(event, mealItem) {
-    mealItem.dragging = true;
-    event.dataTransfer.setData("mealItemId", mealItem.id);
-  }
-  dragEnd(event, mealItem) {
-    mealItem.dragging = false;
+  selectedDays = [];
+  dayDragStart(event, day) {
+    event.dataTransfer.setData("type", "dayDrag");
+    event.dataTransfer.setData("startDate", day.unix());
+    this.selectedDays = [day];
+
+    var img = document.createElement('img');
+    img.src = '/svg/scan.svg';
+    document.body.appendChild(img)
+    event.dataTransfer.setDragImage(img, 0, 0);
   }
 
-  dragDrop(event, day) {
+  dayDragEnd(event, day) {
+    //const startDate = event.dataTransfer.getData("startDate");
+    //selectedDays = dayjs(startDate);
+  }
+
+  dayDragDrop(event, day) {
     event.preventDefault();
     const mealItemId = event.dataTransfer.getData("mealItemId");
     const mealItem = this.mealPlan.items.find(mealItem => mealItem.id === mealItemId);
@@ -193,7 +202,8 @@ export class MealCalendarComponent {
       day: day.unix()
     });
   }
-  dragOver(event, day) {
+
+  dayDragOver(event, day) {
     event.preventDefault();
   }
 }
