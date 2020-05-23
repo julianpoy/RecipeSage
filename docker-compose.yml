@@ -43,6 +43,7 @@ services:
       - AWS_BUCKET=chefbook-dev
       - NODE_ENV=development
       - VERBOSE=false
+      - VERSION=development
       - POSTGRES_DB=recipesage_dev
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
