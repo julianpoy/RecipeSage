@@ -2,7 +2,7 @@
 
 set -e
 
-docker build -f Backend/Dockerfile -t julianpoy/recipesage:api-latest .
+docker build --build-arg VERSION=$1 -f Backend/Dockerfile -t julianpoy/recipesage:api-latest .
 
 docker push julianpoy/recipesage:api-latest
 
