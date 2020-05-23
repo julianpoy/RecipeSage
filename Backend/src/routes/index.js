@@ -28,7 +28,7 @@ const jobTrackerService = require('../services/job-tracker');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'RS API' });
+  res.render('index', { version: process.env.VERSION });
 });
 
 const MIN_SUPPORTED_FRONTEND_VERSION = '>=2.0.0';
