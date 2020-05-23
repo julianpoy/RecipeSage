@@ -68,7 +68,8 @@ exports.groupShoppingListItems = items => {
     let title = ingredientName;
 
     if (!measurements.find(measurementSet => !measurementSet.length)) {
-      const combinedUz = measurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
+      const flatMeasurements = measurements.reduce((acc, val) => acc.concat(val), []); // Flatten (equiv to .flat)
+      const combinedUz = flatMeasurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
           unitSpacer: " ",

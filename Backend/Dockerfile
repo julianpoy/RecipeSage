@@ -37,4 +37,8 @@ RUN cd SharedUtils && npm install
 COPY Backend Backend
 COPY SharedUtils SharedUtils
 
+# Include version build arg within the container env
+ARG VERSION
+ENV VERSION=$VERSION
+
 WORKDIR /app/Backend

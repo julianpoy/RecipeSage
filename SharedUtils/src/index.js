@@ -34,13 +34,13 @@ const replaceFractionsInText = rawText => {
 // Starts with [, anything inbetween, ends with ]
 var headerRegexp = /^\[.*\]$/;
 
-const multipartQuantifierRegexp = / \+|plus /;
+const multipartQuantifierRegexp = / \+ | plus /;
 
 const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
-const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)? `);
+const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)?( |$)`);
 
 const measurementQuantityRegExp = new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`); // Should always be used with 'i' flag
 
@@ -74,7 +74,7 @@ function getTitleForIngredient(ingredient) {
     .map(ingredientPart => {
       return stripNotes(ingredientPart).replace(new RegExp(measurementQuantityRegExp, 'i'), "");
     })
-    .reduce((acc, ingredientPart, idx) => acc + ingredientPart + (ingredientPartDelimiters ? ingredientPartDelimiters[idx] : ''), "")
+    .reduce((acc, ingredientPart, idx) => acc + ingredientPart + (ingredientPartDelimiters ? ingredientPartDelimiters[idx] || '' : ''), "")
     .trim();
 }
 
