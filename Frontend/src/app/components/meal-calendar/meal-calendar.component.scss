@@ -1,3 +1,23 @@
+.mealplan-flex {
+  display: flex;
+  flex-wrap: wrap;
+
+  > * {
+    flex-grow: 1;
+    width: 50%;
+  }
+
+  > .meal-list {
+    padding-bottom: 4rem;
+  }
+
+  @media screen and (max-width:900px) {
+    > * {
+      width: 100%;
+    }
+  }
+}
+
 .calendar-nav {
   text-align: center;
   line-height: 44px;
@@ -9,60 +29,147 @@
 }
 
 .calendar {
-  .week {
-    .day {
-      border: 1px solid;
-      border-color: var(--ion-border-color);
-      min-height: 80px;
-      cursor: pointer;
-      outline: none;
+  .day-title {
+    text-align: center;
+  }
 
-      &:hover {
-        background: var(--ion-border-color);
-      }
+  &.full {
+    .week {
+      .day {
+        border: 1px solid;
+        border-color: var(--ion-border-color);
+        min-height: 80px;
+        cursor: pointer;
+        outline: none;
+        overflow: hidden; // Force same-size columns
 
-      &.selected {
-        background: var(--ion-border-color);
-      }
-
-      .date {
-        border-radius: 45px;
-        display: inline-block;
-        text-align: center;
-
-        margin-bottom: 5px;
-
-        padding: 5px;
-        height: 28px;
-        width: 28px;
-        line-height: 18px;
-
-        word-wrap: normal;
-
-        &.inactive {
-          color: var(--ion-color-medium);
+        &:hover {
+          background: var(--ion-border-color);
         }
 
-        &.today {
-          background: var(--ion-color-primary);
-          color: var(--ion-color-light);
-        }
-      }
-
-      .meal-group {
-        .meal-title {
-          text-transform: capitalize;
-          font-weight: bold;
+        &.selected {
+          background: var(--ion-border-color);
         }
 
-        calendar-item {
-          display: block;
-          margin-top: 5px;
+        .date {
+          border-radius: 45px;
+          display: inline-block;
+          text-align: center;
+
           margin-bottom: 5px;
 
-          background-color: var(--ion-color-primary);
-          border-radius: 4px;
-          padding: 3px 6px;
+          height: 28px;
+          width: 28px;
+          line-height: 28px;
+          padding-left: 1px; // Align center but slightly right within bubble
+
+          word-wrap: normal;
+
+          &.inactive {
+            color: var(--ion-color-medium);
+          }
+
+          &.today {
+            background: var(--ion-color-primary);
+            color: var(--ion-color-light);
+          }
+        }
+
+        .meal-group {
+          .meal-title {
+            text-transform: capitalize;
+            font-weight: bold;
+          }
+
+          calendar-item {
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+
+            //border: 1px solid var(--ion-color-primary);
+            //border-left: 4px solid var(--ion-color-secondary);
+            background-color: var(--ion-background-tint-color);
+            border-radius: 4px;
+            padding: 3px 6px;
+
+            &.dragging {
+              opacity: 50%;
+            }
+
+            &.breakfast {
+              border-left: 4px solid var(--ion-color-danger);
+            }
+
+            &.lunch {
+              border-left: 4px solid var(--ion-color-warning);
+            }
+
+            &.dinner {
+              border-left: 4px solid var(--ion-color-success);
+            }
+
+            &.snacks {
+              border-left: 4px solid var(--ion-color-tertiary);
+            }
+
+            &.other {
+              border-left: 4px solid var(--ion-color-dark);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.split, &.outline {
+    .week {
+      .day {
+        text-align: center;
+        cursor: pointer;
+        outline: none;
+
+        .date {
+          border-radius: 45px;
+          display: inline-block;
+          text-align: center;
+
+          margin-bottom: 2px;
+
+          height: 28px;
+          width: 28px;
+          line-height: 28px;
+          padding-left: 1px; // Align center but slightly right within bubble
+
+          word-wrap: normal;
+
+          &.inactive {
+            color: var(--ion-color-medium);
+          }
+
+          &.today {
+            color: var(--ion-color-primary);
+          }
+
+          &.selected {
+            background: var(--ion-color-primary);
+            color: var(--ion-color-light);
+          }
+        }
+
+        .meal-marker-container {
+          line-height: 0;
+
+          .meal-marker {
+            width: 5px;
+            height: 5px;
+            margin: 2px;
+            margin-top: 0;
+            border-radius: 50%;
+            background: var(--ion-color-primary);
+            display: inline-block;
+          }
         }
       }
     }

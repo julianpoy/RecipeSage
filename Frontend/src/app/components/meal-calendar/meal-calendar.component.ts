@@ -20,6 +20,9 @@ export class MealCalendarComponent {
   }
   get mealPlan() { return this._mealPlan; }
 
+  @Input() enableEditing: boolean = false;
+  @Input() mode: string = "outline";
+
   mealsByDate: any = {};
 
   preferences = this.preferencesService.preferences;
@@ -32,6 +35,9 @@ export class MealCalendarComponent {
 
   @Output() selectedMealGroupChange = new EventEmitter<any[]>();
   @Output() selectedDayChange = new EventEmitter<Dayjs>();
+
+  @Output() itemMoved = new EventEmitter<any>();
+  @Output() itemClicked = new EventEmitter<any>();
 
   private _selectedDay: Dayjs = dayjs(this.today);
 
@@ -67,7 +73,7 @@ export class MealCalendarComponent {
     const endOfCalendar = endOfMonth.endOf('week');
 
     if (preferences[MealPlanPreferenceKey.StartOfWeek] === 'monday') {
-      this.dayTitles = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      this.dayTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       startOfCalendar = startOfCalendar.add(1, 'day');
 
       // Special case for months starting on sunday: Add an additional week before
@@ -75,7 +81,7 @@ export class MealCalendarComponent {
         startOfCalendar = startOfMonth.subtract(1, 'week').add(1, 'day');
       }
     } else {
-      this.dayTitles = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      this.dayTitles = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
 
     let iteratorDate = dayjs(startOfCalendar);
@@ -142,26 +148,52 @@ export class MealCalendarComponent {
       this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
       this.mealsByDate[day.year()][day.month()] = this.mealsByDate[day.year()][day.month()] || {};
       const dayData = this.mealsByDate[day.year()][day.month()][day.date()] = this.mealsByDate[day.year()][day.month()][day.date()] || {
-        items: {
+        itemsByMeal: {
           breakfast: [],
           lunch: [],
           dinner: [],
           snacks: [],
           other: [],
         },
+        items: [],
         meals: ["breakfast", "lunch", "dinner", "snacks", "other"]
       };
-      dayData.items[item.meal].push(item);
+      dayData.itemsByMeal[item.meal].push(item);
+      dayData.items.push(item);
     });
   }
 
   mealItemsByDay(day) {
     return this.mealsByDate[day.year()]?.[day.month()]?.[day.date()] || {
-      meals: []
+      meals: [],
+      items: []
     };
   }
 
   formatItemCreationDate(plainTextDate) {
     return this.utilService.formatDate(plainTextDate, { now: true });
+  }
+
+  dragStart(event, mealItem) {
+    mealItem.dragging = true;
+    event.dataTransfer.setData("mealItemId", mealItem.id);
+  }
+  dragEnd(event, mealItem) {
+    mealItem.dragging = false;
+  }
+
+  dragDrop(event, day) {
+    event.preventDefault();
+    const mealItemId = event.dataTransfer.getData("mealItemId");
+    const mealItem = this.mealPlan.items.find(mealItem => mealItem.id === mealItemId);
+    if (!mealItem) return;
+
+    this.itemMoved.emit({
+      mealItem,
+      day: day.unix()
+    });
+  }
+  dragOver(event, day) {
+    event.preventDefault();
   }
 }

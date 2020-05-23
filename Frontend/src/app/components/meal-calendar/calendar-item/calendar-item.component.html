@@ -1,13 +1,13 @@
-<div
-  class="item-dot"
-  [ngClass]="{
-    'breakfast': mealItem.meal === 'breakfast',
-    'lunch': mealItem.meal === 'lunch',
-    'dinner': mealItem.meal === 'dinner',
-    'snacks': mealItem.meal === 'snacks',
-    'other': mealItem.meal === 'other'
-  }"
-></div>
+<!--<div-->
+  <!--class="item-dot"-->
+  <!--[ngClass]="{-->
+    <!--'breakfast': mealItem.meal === 'breakfast',-->
+    <!--'lunch': mealItem.meal === 'lunch',-->
+    <!--'dinner': mealItem.meal === 'dinner',-->
+    <!--'snacks': mealItem.meal === 'snacks',-->
+    <!--'other': mealItem.meal === 'other'-->
+  <!--}"-->
+<!--></div>-->
 <span *ngIf="false" class="item-meal-letter">
   <b>{{ mealItem.meal.substring(0, 1).toUpperCase() }}</b>
 </span>

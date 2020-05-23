@@ -15,17 +15,16 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
   <br />
-
   <div class="mealplan-flex">
     <meal-calendar
       [mealPlan]="mealPlan"
       (selectedDayChange)="selectedDay = $event"
-      (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
+      (selectedMealGroupChange)="selectedMealGroup = $event"
+      (itemClicked)="itemClicked($event)"
+      (itemMoved)="itemMoved($event)"
+      enableEditing="true"
+      mode="{{calendarMode}}"></meal-calendar>
   </div>
 
   <br /><br /><br /><br />

@@ -25,6 +25,8 @@ export class MealPlanPage {
 
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
 
+  calendarMode: string = window.innerWidth > 600 ? "full" : "split";
+
   mealPlanId: string; // From nav params
   mealPlan: any = { items: [], collaborators: [] };
   selectedMealGroup: any = [];
@@ -358,5 +360,12 @@ export class MealPlanPage {
     });
 
     popover.present();
+  }
+
+  itemClicked(mealItem) {
+    console.log("EDIT", mealItem)
+  }
+  itemMoved({ day, mealItem }) {
+    console.log(day, mealItem)
   }
 }
