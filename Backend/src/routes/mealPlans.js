@@ -8,6 +8,7 @@ var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
+var Image = require('../models').Image;
 var Message = require('../models').Message;
 var Label = require('../models').Label;
 var MealPlan = require('../models').MealPlan;
@@ -62,7 +63,7 @@ router.get(
   cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    
+
     try {
       const mealPlanIds = (await MealPlan.findAll({
         where: {
@@ -348,7 +349,12 @@ router.get(
         }, {
           model: Recipe,
           as: 'recipe',
-          attributes: ['id', 'title']
+          attributes: ['id', 'title'],
+          include: [{
+            model: Image,
+            as: 'images',
+            attributes: ['id', 'location']
+          }]
         }]
       }]
     });
