@@ -18,7 +18,7 @@ export class NewMealPlanItemModalPage {
   @Input() recipe;
   @Input() title: any = '';
   @Input() meal: any;
-  @Input() scheduled: any;
+  @Input() scheduled = new Date();
 
   constructor(
     public navCtrl: NavController,
@@ -27,7 +27,6 @@ export class NewMealPlanItemModalPage {
     public loadingService: LoadingService,
     public utilService: UtilService,
     public toastCtrl: ToastController) {
-
   }
 
   isFormValid() {

@@ -191,7 +191,7 @@ export class MealPlanPage {
       title: item.title,
       recipeId: item.recipeId || null,
       meal: item.meal,
-      scheduled: item.date
+      scheduled: item.scheduled
     }).then(response => {
       this.reference = response.reference;
 
@@ -366,7 +366,8 @@ export class MealPlanPage {
     const modal = await this.modalCtrl.create({
       component: MealPlanItemDetailsModalPage,
       componentProps: {
-        mealItem
+        mealItem,
+        mealPlanId: this.mealPlanId
       },
     });
 

@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Add item(s)</ion-title>
+    <ion-title>{{ isEditing ? 'Update Meal Plan Item' : 'Add Meal Plan Item' }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -30,7 +30,7 @@
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
         <ion-label position="floating">Item title</ion-label>
-        <ion-input [(ngModel)]="itemTitle" type="text"
+        <ion-input [(ngModel)]="title" type="text"
           autocapitalize="on"
           autocomplete="on"
           autocorrect="on"
@@ -41,7 +41,7 @@
     <div *ngSwitchCase="'recipe'">
       <br /><br />
       <select-recipe
-      [(selectedRecipe)]="selectedRecipe"
+      [(selectedRecipe)]="recipe"
       ></select-recipe>
     </div>
   </div>
@@ -54,7 +54,8 @@
       [min]="todayYear - 1"
       [max]="todayYear + 1"
       displayFormat="YYYY-MM-DD"
-      [value]="date"
+      [value]="scheduled.toString()"
+      (change)="scheduled = $event"
     ></ion-datetime>
   </ion-item>
 
@@ -65,9 +66,9 @@
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
-    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-icon name="calendar" slot="start"></ion-icon>
     <ion-label>
-      Add to Meal Plan
+      {{ isEditing ? 'Save Changes' : 'Add to Meal Plan' }}
     </ion-label>
   </ion-button>
 </ion-footer>

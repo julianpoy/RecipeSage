@@ -1,6 +1,6 @@
 import { Input, Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
-import { RecipeService } from '@/services/recipe.service';
+import { MealPlanService } from '@/services/meal-plan.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
@@ -15,12 +15,13 @@ import dayjs, { Dayjs } from 'dayjs';
 })
 export class MealPlanItemDetailsModalPage {
 
+  @Input() mealPlanId;
   @Input() mealItem;
 
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
-    public recipeService: RecipeService,
+    public mealPlanService: MealPlanService,
     public loadingService: LoadingService,
     public utilService: UtilService,
     public toastCtrl: ToastController) {
@@ -36,37 +37,41 @@ export class MealPlanItemDetailsModalPage {
       component: NewMealPlanItemModalPage,
       componentProps: {
         isEditing: true,
-        inputType: !!this.mealItem.recipe,
+        inputType: this.mealItem.recipe ? 'recipe' : 'manualEntry',
         title: this.mealItem.title,
         recipe: this.mealItem.recipe,
-        date: this.mealItem.date,
+        scheduled: this.mealItem.scheduled,
         meal: this.mealItem.meal
       }
     });
     modal.present();
-    modal.onDidDismiss().then(({ data }) => {
-      if (!data || !data.item) return;
-      this._updateItem(data.item);
-    });
+
+    const { data } = await modal.onDidDismiss();
+    if (!data || !data.item) return;
+
+    this._updateItem(data.item);
   }
 
   async _updateItem(item) {
     const loading = this.loadingService.start();
 
     try {
-      const response = await this.mealPlanService.addItem({
+      const response = await this.mealPlanService.bulkUpdateItems({
         id: this.mealPlanId,
-        title: item.title,
-        recipeId: item.recipeId || null,
-        meal: item.meal,
-        scheduled: item.date
+        items: [{
+          id: this.mealItem.id,
+          title: item.title,
+          recipeId: item.recipeId || null,
+          meal: item.meal,
+          scheduled: item.scheduled
+        }]
       });
 
       this.close({
         refresh: true,
         reference: response.reference
       });
-    } catch(async err => {
+    } catch(err) {
       switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
@@ -87,7 +92,7 @@ export class MealPlanItemDetailsModalPage {
         })).present();
         break;
       }
-    });
+    }
 
     loading.dismiss();
   }
@@ -96,21 +101,23 @@ export class MealPlanItemDetailsModalPage {
 
   }
 
-  _addItem(item) {
+  async _addItem(item) {
     const loading = this.loadingService.start();
 
-    this.mealPlanService.addItem({
-      id: this.mealPlanId,
-      title: item.title,
-      recipeId: item.recipeId || null,
-      meal: item.meal,
-      scheduled: item.date
-    }).then(response => {
-      this.reference = response.reference;
+    try {
+      const response = await this.mealPlanService.addItem({
+        id: this.mealPlanId,
+        title: item.title,
+        recipeId: item.recipeId || null,
+        meal: item.meal,
+        scheduled: item.scheduled
+      });
 
-      this.loadMealPlan().then(loading.dismiss);
-    }).catch(async err => {
-      loading.dismiss();
+      this.close({
+        refresh: true,
+        reference: response.reference
+      });
+    } catch(err) {
       switch (err.response.status) {
         case 0:
           (await this.toastCtrl.create({
@@ -131,7 +138,9 @@ export class MealPlanItemDetailsModalPage {
         })).present();
         break;
       }
-    });
+    }
+
+    loading.dismiss();
   }
 
   async delete() {

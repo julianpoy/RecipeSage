@@ -57,6 +57,16 @@ export class MealPlanService {
     }).then(response => response.data);
   }
 
+  bulkUpdateItems(data) {
+    const url = this.utilService.getBase() + `mealPlans/${data.id}/items/bulk${this.utilService.getTokenQuery()}`;
+
+    return this.httpService.request({
+      method: 'put',
+      url,
+      data
+    }).then(response => response.data);
+  }
+
   remove(data) {
     const url = this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`;
 
