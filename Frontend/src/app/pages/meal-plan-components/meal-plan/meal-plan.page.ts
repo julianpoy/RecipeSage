@@ -15,6 +15,7 @@ import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
 import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
+import { MealPlanItemDetailsModalPage } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
 
 @Component({
   selector: 'page-meal-plan',
@@ -36,8 +37,6 @@ export class MealPlanPage {
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
-
-  initialLoadComplete = false;
 
   selectedDay: Dayjs = dayjs(new Date());
 
@@ -69,16 +68,7 @@ export class MealPlanPage {
   }
 
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
-
-    this.initialLoadComplete = false;
-    this.loadMealPlan().then(() => {
-      loading.dismiss();
-      this.initialLoadComplete = true;
-    }, () => {
-      loading.dismiss();
-      this.initialLoadComplete = true;
-    });
+    this.loadWithProgress();
   }
 
   refresh(loader) {
@@ -86,6 +76,13 @@ export class MealPlanPage {
       loader.target.complete();
     }, () => {
       loader.target.complete();
+    });
+  }
+
+  loadWithProgress() {
+    const loading = this.loadingService.start();
+    this.loadMealPlan().finally(() => {
+      loading.dismiss();
     });
   }
 
@@ -194,7 +191,7 @@ export class MealPlanPage {
       title: item.title,
       recipeId: item.recipeId || null,
       meal: item.meal,
-      scheduled: this.selectedDay.toDate()
+      scheduled: item.date
     }).then(response => {
       this.reference = response.reference;
 
@@ -226,7 +223,10 @@ export class MealPlanPage {
 
   async newMealPlanItem() {
     const modal = await this.modalCtrl.create({
-      component: NewMealPlanItemModalPage
+      component: NewMealPlanItemModalPage,
+      componentProps: {
+        scheduled: this.selectedDay.toDate()
+      }
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
@@ -362,10 +362,22 @@ export class MealPlanPage {
     popover.present();
   }
 
-  itemClicked(mealItem) {
-    console.log("EDIT", mealItem)
+  async itemClicked(mealItem) {
+    const modal = await this.modalCtrl.create({
+      component: MealPlanItemDetailsModalPage,
+      componentProps: {
+        mealItem
+      },
+    });
+
+    modal.onDidDismiss().then(() => {
+      this.loadMealPlan();
+    });
+
+    modal.present();
   }
   itemMoved({ day, mealItem }) {
     console.log(day, mealItem)
+    alert(`you moved: ${mealItem.title} to ${day.format()}`)
   }
 }

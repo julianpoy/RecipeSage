@@ -48,7 +48,7 @@ export class MealPlanService {
   }
 
   update(data) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery();
+    const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
 
     return this.httpService.request({
       method: 'put',

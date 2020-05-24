@@ -15,12 +15,12 @@
 
 <ion-content class="ion-padding">
   <div>
-    <ion-segment [(ngModel)]="inputType" value="manualEntry">
-      <ion-segment-button value="manualEntry">
-        Manual Entry
-      </ion-segment-button>
+    <ion-segment [(ngModel)]="inputType" value="recipe">
       <ion-segment-button value="recipe">
         Choose Recipe
+      </ion-segment-button>
+      <ion-segment-button value="manualEntry">
+        Manual Entry
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -45,6 +45,18 @@
       ></select-recipe>
     </div>
   </div>
+
+  <br /><br />
+
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <ion-datetime
+      [min]="todayYear - 1"
+      [max]="todayYear + 1"
+      displayFormat="YYYY-MM-DD"
+      [value]="date"
+    ></ion-datetime>
+  </ion-item>
 
   <br /><br />
 
