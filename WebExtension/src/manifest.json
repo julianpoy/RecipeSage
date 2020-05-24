@@ -23,6 +23,7 @@
   },
   "permissions": [
     "https://recipesage.com/*",
+    "https://api.recipesage.com/*",
     "storage",
     "contextMenus",
     "activeTab",

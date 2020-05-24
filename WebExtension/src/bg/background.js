@@ -41,7 +41,7 @@ let renewToken = () => {
   chrome.storage.local.get(['token'], result => {
     token = result.token;
 
-    if (token) fetch(`https://recipesage.com/api/users/sessioncheck?token=${token}`).then(response => {
+    if (token) fetch(`https://api.recipesage.com/users/sessioncheck?token=${token}`).then(response => {
       if (!response.ok && response.status == 401) {
         chrome.storage.local.set({ token: null });
       }
