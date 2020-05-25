@@ -61,7 +61,7 @@
 
   <br /><br />
 
-  <select-meal (mealChange)="meal = $event"></select-meal>
+  <select-meal [meal]="meal" (mealChange)="meal = $event"></select-meal>
 </ion-content>
 
 <ion-footer class="ion-padding">
