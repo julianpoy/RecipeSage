@@ -1,3 +1,7 @@
+.group {
+  margin-bottom: 10px;
+}
+
 .meal-title {
   text-transform: capitalize;
   font-weight: bold;
@@ -5,14 +9,14 @@
 
 calendar-item {
   display: block;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 
   box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 
   background-color: var(--ion-background-tint-color);
   border-radius: 4px;
-  padding: 3px 6px;
+  padding: 8px;
 
   &.dragging {
     opacity: 50%;
