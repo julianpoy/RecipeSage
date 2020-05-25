@@ -18,6 +18,10 @@ calendar-item {
   border-radius: 4px;
   padding: 8px;
 
+  &:hover {
+    background-color: var(--ion-background-tint-active-color);
+  }
+
   &.dragging {
     opacity: 50%;
   }
@@ -39,6 +43,6 @@ calendar-item {
   }
 
   &.other {
-    border-left: 4px solid var(--ion-color-dark);
+    border-left: 4px solid var(--ion-text-color);
   }
 }
