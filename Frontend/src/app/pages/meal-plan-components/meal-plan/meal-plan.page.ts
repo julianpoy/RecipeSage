@@ -315,12 +315,11 @@ export class MealPlanPage {
         mealPlanId: this.mealPlanId
       },
     });
-
-    modal.onDidDismiss().then(() => {
-      this.loadMealPlan();
-    });
-
     modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.reference) this.reference = data.reference;
+    if (data?.refresh) this.loadWithProgress();
   }
 
   async itemMoved({ day, mealItem }) {
@@ -343,7 +342,7 @@ export class MealPlanPage {
     const item = data.item;
 
     const loading = this.loadingService.start();
-    await this.mealPlanService.updateMealPlanItems(this.mealPlanId, [{
+    const response = await this.mealPlanService.updateMealPlanItems(this.mealPlanId, [{
       id: mealItem.id,
       title: item.title,
       recipeId: item.recipeId,
@@ -351,5 +350,10 @@ export class MealPlanPage {
       meal: item.meal
     }]);
     loading.dismiss();
+
+    if (response) {
+      this.reference = response.reference;
+      this.loadWithProgress();
+    }
   }
 }
