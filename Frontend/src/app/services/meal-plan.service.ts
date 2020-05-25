@@ -95,6 +95,37 @@ export class MealPlanService {
     }
   }
 
+  async addMealPlanItems(mealPlanId: string, mealPlanItems: {
+    title: string,
+    recipeId?: string,
+    meal: string,
+    scheduled: string
+  }[]) {
+    const url = this.utilService.getBase() + `mealPlans/${mealPlanId}/items/bulk${this.utilService.getTokenQuery()}`;
+
+    try {
+      const requestBody = {
+        id: mealPlanId,
+        items: mealPlanItems.map(item => ({
+          title: item.title,
+          recipeId: item.recipeId || null,
+          meal: item.meal,
+          scheduled: item.scheduled
+        }))
+      };
+
+      const { data } = await this.httpService.request({
+        method: 'post',
+        url,
+        data: requestBody
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
+  }
+
   remove(data) {
     const url = this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`;
 

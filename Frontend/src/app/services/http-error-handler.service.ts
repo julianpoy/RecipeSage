@@ -29,10 +29,11 @@ export class HttpErrorHandlerService {
 
   handleError(error, errorHandlers?: ErrorHandlers) {
     const statusCode = error?.response?.status;
+    // Rethrow all non-http errors
     if (!statusCode) throw error;
 
     // Use provided error handlers first
-    if (errorHandlers && errorHandlers[statusCode]) {
+    if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode]();
     // Fallback to default
     } else if (this.defaultErrorHandlers[statusCode]) {

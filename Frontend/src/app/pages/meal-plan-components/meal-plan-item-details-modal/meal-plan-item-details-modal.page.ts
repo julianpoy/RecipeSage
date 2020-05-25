@@ -71,7 +71,40 @@ export class MealPlanItemDetailsModalPage {
   }
 
   async clone() {
+    const modal = await this.modalCtrl.create({
+      component: NewMealPlanItemModalPage,
+      componentProps: {
+        isEditing: false,
+        inputType: this.mealItem.recipe ? 'recipe' : 'manualEntry',
+        title: this.mealItem.title,
+        recipe: this.mealItem.recipe,
+        scheduled: this.mealItem.scheduled,
+        meal: this.mealItem.meal
+      }
+    });
+    modal.present();
 
+    const { data } = await modal.onDidDismiss();
+    if (!data || !data.item) return;
+    const item = data.item;
+
+    const loading = this.loadingService.start();
+
+    const response = await this.mealPlanService.addMealPlanItems(this.mealPlanId, [{
+      title: item.title,
+      recipeId: item.recipeId,
+      scheduled: item.scheduled,
+      meal: item.meal
+    }]);
+
+    loading.dismiss();
+
+    if (response) {
+      this.close({
+        refresh: true,
+        reference: response.reference
+      });
+    }
   }
 
   async _addItem(item) {
