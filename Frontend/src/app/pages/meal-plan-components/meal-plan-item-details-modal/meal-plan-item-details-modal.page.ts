@@ -108,48 +108,6 @@ export class MealPlanItemDetailsModalPage {
     }
   }
 
-  async _addItem(item) {
-    const loading = this.loadingService.start();
-
-    try {
-      const response = await this.mealPlanService.addItem({
-        id: this.mealPlanId,
-        title: item.title,
-        recipeId: item.recipeId || null,
-        meal: item.meal,
-        scheduled: item.scheduled
-      });
-
-      this.close({
-        refresh: true,
-        reference: response.reference
-      });
-    } catch(err) {
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-          message: this.utilService.standardMessages.offlinePushMessage,
-          duration: 5000
-        })).present();
-        break;
-        case 401:
-          (await this.toastCtrl.create({
-          message: this.utilService.standardMessages.unauthorized,
-          duration: 6000
-        })).present();
-        break;
-        default:
-          (await this.toastCtrl.create({
-          message: this.utilService.standardMessages.unexpectedError,
-          duration: 6000
-        })).present();
-        break;
-      }
-    }
-
-    loading.dismiss();
-  }
-
   async delete() {
     const alert = await this.alertCtrl.create({
       header: 'Confirm Removal',
