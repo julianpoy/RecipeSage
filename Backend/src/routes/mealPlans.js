@@ -259,7 +259,8 @@ router.delete(
       if (mealPlan) {
         return MealPlanItem.destroy({
           where: {
-            id: req.query.itemId
+            id: req.query.itemId,
+            mealPlanId: mealPlan.id
           }
         }).then(function () {
           let reference = Date.now();
