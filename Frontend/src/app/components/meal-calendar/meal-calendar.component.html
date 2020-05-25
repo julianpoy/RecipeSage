@@ -64,17 +64,8 @@
     <ion-item *ngIf="mealItemsByDay(this.selectedDay).items.length === 0">
       <ion-label class="ion-text-wrap ion-text-center">
         <br />
-        <br />
-        <br />
         <p>
           There are no meals scheduled for this day.
-          <br />
-          <ion-button (click)="newMealPlanItem()">
-            <ion-icon name="add" slot="start"></ion-icon>
-            <ion-label>
-              Add a meal
-            </ion-label>
-          </ion-button>
         </p>
       </ion-label>
     </ion-item>
