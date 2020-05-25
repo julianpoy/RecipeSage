@@ -128,61 +128,6 @@ export class MealPlanPage {
     });
   }
 
-  async removeItem(item) {
-    const alert = await this.alertCtrl.create({
-      header: 'Confirm Removal',
-      message: 'This will remove "' + (item.recipe || item).title + '" from this meal plan.',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Remove',
-          handler: () => {
-            this._removeItem(item);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  _removeItem(item) {
-    const loading = this.loadingService.start();
-
-    this.mealPlanService.remove({
-      id: this.mealPlanId,
-      itemId: item.id
-    }).then(response => {
-      this.reference = response.reference || 0;
-
-      this.loadMealPlan().then(loading.dismiss);
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
-  }
-
   _addItem(item) {
     const loading = this.loadingService.start();
 

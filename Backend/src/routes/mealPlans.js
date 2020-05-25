@@ -338,7 +338,7 @@ router.put(
 
       let reference = Date.now();
 
-      var deletedItemBroadcast = {
+      var updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -348,9 +348,9 @@ router.put(
         reference
       };
 
-      GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', deletedItemBroadcast);
+      GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
       for (var i = 0; i < mealPlan.collaborators.length; i++) {
-        GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', deletedItemBroadcast);
+        GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
       res.status(200).json({
@@ -401,7 +401,7 @@ router.post(
 
       let reference = Date.now();
 
-      var deletedItemBroadcast = {
+      var updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -411,9 +411,71 @@ router.post(
         reference
       };
 
-      GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', deletedItemBroadcast);
+      GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
       for (var i = 0; i < mealPlan.collaborators.length; i++) {
-        GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', deletedItemBroadcast);
+        GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
+      }
+
+      res.status(200).json({
+        reference
+      });
+    }).catch(next);
+  });
+
+router.delete(
+  '/:mealPlanId/items/bulk',
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  async (req, res, next) => {
+
+    SQ.transaction(async transaction => {
+      const mealPlan = await MealPlan.findOne({
+        where: {
+          id: req.params.mealPlanId,
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
+        include: [
+          {
+            model: User,
+            as: 'collaborators',
+            attributes: ['id']
+          }
+        ],
+        transaction
+      });
+
+      if (!mealPlan) return res.status(404).send('Meal plan does not exist or you do not have access');
+
+      const mealPlanItemIds = req.query.itemIds.split(',');
+      if (!mealPlanItemIds || mealPlanItemIds.length === 0) return res.status(400).send("Must provide itemIds");
+
+      await MealPlanItem.destroy({
+        where: {
+          id: mealPlanItemIds,
+          mealPlanId: mealPlan.id
+        },
+        transaction
+      });
+
+      let reference = Date.now();
+
+      var updateBroadcast = {
+        mealPlanId: mealPlan.id,
+        updatedBy: {
+          id: res.locals.user.id,
+          name: res.locals.user.name,
+          email: res.locals.user.email
+        },
+        reference
+      };
+
+      GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
+      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+        GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
       res.status(200).json({

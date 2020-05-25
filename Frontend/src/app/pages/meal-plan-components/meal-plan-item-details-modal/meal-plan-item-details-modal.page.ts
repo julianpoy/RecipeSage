@@ -1,5 +1,5 @@
 import { Input, Component } from '@angular/core';
-import { NavController, ModalController, ToastController } from '@ionic/angular';
+import { NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -21,6 +21,7 @@ export class MealPlanItemDetailsModalPage {
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
+    public alertCtrl: AlertController,
     public mealPlanService: MealPlanService,
     public loadingService: LoadingService,
     public utilService: UtilService,
@@ -150,7 +151,38 @@ export class MealPlanItemDetailsModalPage {
   }
 
   async delete() {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirm Removal',
+      message: 'This will remove "' + (this.mealItem.recipe || this.mealItem).title + '" from this meal plan.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Remove',
+          handler: () => {
+            this._delete();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 
+  async _delete() {
+    const loading = this.loadingService.start();
+
+    const response = await this.mealPlanService.deleteMealPlanItems(this.mealPlanId, [this.mealItem.id])
+
+    loading.dismiss();
+
+    if (response) {
+      this.close({
+        refresh: true,
+        reference: response.reference
+      });
+    }
   }
 
   formatDate(date) {

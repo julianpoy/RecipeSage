@@ -126,6 +126,21 @@ export class MealPlanService {
     }
   }
 
+  async deleteMealPlanItems(mealPlanId: string, mealPlanItemIds: string[]) {
+    const url = this.utilService.getBase() + `mealPlans/${mealPlanId}/items/bulk${this.utilService.getTokenQuery()}&itemIds=${mealPlanItemIds.join(',')}`;
+
+    try {
+      const { data } = await this.httpService.request({
+        method: 'delete',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
+  }
+
   remove(data) {
     const url = this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`;
 
