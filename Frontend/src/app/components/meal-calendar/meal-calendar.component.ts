@@ -197,6 +197,15 @@ export class MealCalendarComponent {
     const mealItem = this.mealPlan.items.find(mealItem => mealItem.id === mealItemId);
     if (!mealItem) return;
 
+    const currDate = new Date(mealItem.scheduled);
+    const newDate = day.toDate();
+    // Do not trigger event if the item has not moved to a different day
+    if (
+      currDate.getFullYear() === newDate.getFullYear() &&
+      currDate.getMonth() === newDate.getMonth() &&
+      currDate.getDate() === newDate.getDate()
+    ) return;
+
     this.itemMoved.emit({
       mealItem,
       day: day.toString()
