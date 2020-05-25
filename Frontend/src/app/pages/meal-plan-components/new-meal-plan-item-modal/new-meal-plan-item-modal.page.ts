@@ -29,6 +29,10 @@ export class NewMealPlanItemModalPage {
     public toastCtrl: ToastController) {
   }
 
+  scheduledDateChange(event) {
+    this.scheduled = event.detail.value;
+  }
+
   isFormValid() {
     if (this.inputType === 'recipe' && !this.recipe) return false;
 

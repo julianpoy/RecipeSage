@@ -377,8 +377,34 @@ export class MealPlanPage {
 
     modal.present();
   }
-  itemMoved({ day, mealItem }) {
+
+  async itemMoved({ day, mealItem }) {
     console.log(day, mealItem)
-    alert(`you moved: ${mealItem.title} to ${day.format()}`)
+    const modal = await this.modalCtrl.create({
+      component: NewMealPlanItemModalPage,
+      componentProps: {
+        isEditing: true,
+        inputType: mealItem.recipe ? 'recipe' : 'manualEntry',
+        title: mealItem.title,
+        recipe: mealItem.recipe,
+        scheduled: day,
+        meal: mealItem.meal
+      }
+    });
+    modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (!data || !data.item) return;
+    const item = data.item;
+
+    const loading = this.loadingService.start();
+    await this.mealPlanService.updateMealPlanItems(this.mealPlanId, [{
+      id: mealItem.id,
+      title: item.title,
+      recipeId: item.recipeId,
+      scheduled: item.scheduled,
+      meal: item.meal
+    }]);
+    loading.dismiss();
   }
 }

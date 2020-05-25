@@ -55,7 +55,7 @@
       [max]="todayYear + 1"
       displayFormat="YYYY-MM-DD"
       [value]="scheduled.toString()"
-      (change)="scheduled = $event"
+      (ionChange)="scheduledDateChange($event)"
     ></ion-datetime>
   </ion-item>
 

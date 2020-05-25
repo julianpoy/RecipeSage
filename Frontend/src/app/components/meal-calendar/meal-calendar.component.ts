@@ -199,7 +199,7 @@ export class MealCalendarComponent {
 
     this.itemMoved.emit({
       mealItem,
-      day: day.unix()
+      day: day.toString()
     });
   }
 
