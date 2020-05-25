@@ -20,7 +20,14 @@
     </ion-avatar>
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
-      <p>Scheduled for {{ mealItem.meal }} on {{ formatDate(mealItem.scheduled) }}</p>
+      <p class="mealItem-meta">
+        <ion-icon name="calendar"></ion-icon>
+        <span>Scheduled for {{ mealItem.meal }} on {{ formatDate(mealItem.scheduled) }}</span>
+      </p>
+      <p class="mealItem-meta">
+        <ion-icon name="person"></ion-icon>
+        <span>Last modified by {{ mealItem.owner.name }} on {{ formatDate(mealItem.updatedAt) }}</span>
+      </p>
       <p *ngIf="mealItem.recipe">Click to open recipe</p>
     </ion-label>
   </ion-item>
