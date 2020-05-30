@@ -40,7 +40,7 @@ workbox.routing.registerRoute(
 // Limit the maxiumum age so that requests aren't too stale.
 const MAX_OFFLINE_API_AGE = 30; // Days
 workbox.routing.registerRoute(
-  new RegExp('/api/'),
+  new RegExp('api\\.recipesage\\.com'),
   workbox.strategies.networkFirst({
     cacheName: 'api-cache',
     plugins: [
