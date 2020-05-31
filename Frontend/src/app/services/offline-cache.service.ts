@@ -40,8 +40,8 @@ export class OfflineCacheService {
 
   async updateAllRecipes() {
     const knownRecipeIds = Array.from(this.knownRecipeIds);
-    for (var i = 0; i < knownRecipeIds.length; i++) {
-      await this.updateRecipe(knownRecipeIds[i]);
+    for (let knownRecipeId of knownRecipeIds) {
+      await this.updateRecipe(knownRecipeId);
 
       await this.syncPause();
     }
@@ -59,8 +59,8 @@ export class OfflineCacheService {
       '-updatedAt',
       'updatedAt'
     ];
-    for (var i = 0; i < sorts.length; i++) {
-      await this.updateRecipeList('main', sorts[i]);
+    for (let sort of sorts) {
+      await this.updateRecipeList('main', sort);
     }
   }
 
@@ -77,7 +77,7 @@ export class OfflineCacheService {
     await this.syncPause();
 
     const pageCount = Math.ceil(firstFetch.totalCount / 50);
-    for (var i = 1; i < pageCount; i++) {
+    for (let i = 1; i < pageCount; i++) {
       const page = await this.recipeService.fetch({
         folder: 'main',
         sortBy: '-title',

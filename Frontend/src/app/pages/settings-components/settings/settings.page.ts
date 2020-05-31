@@ -58,7 +58,7 @@ export class SettingsPage {
       try {
         await this.offlineCacheService.fullSync();
       } catch(e) {
-        setTimeout(() => alert("There was an error while syncing. Please report this."));
+        setTimeout(() => alert('There was an error while syncing. Please report this.'));
         throw e;
       }
       await loading.dismiss();
