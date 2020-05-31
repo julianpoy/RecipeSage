@@ -28,9 +28,8 @@
           *ngFor="let day of weekOfMonth"
           (click)="selectedDay = day"
           (keyup.enter)="selectedDay = day"
-          draggable="{{ enableEditing }}"
-          (dragStart)="dayDragStart($event, day)"
-          (dragEnd)="dayDragEnd($event, day)"
+          (mousedown)="dayMouseDown($event, day)"
+          (mouseup)="dayMouseUp($event, day)"
           (dragover)="dayDragOver($event, day)"
           (drop)="dayDragDrop($event, day)"
           [ngClass]="{

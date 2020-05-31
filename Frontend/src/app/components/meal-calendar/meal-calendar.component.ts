@@ -175,15 +175,35 @@ export class MealCalendarComponent {
   }
 
   selectedDays = [];
-  dayDragStart(event, day) {
-    event.dataTransfer.setData("type", "dayDrag");
-    event.dataTransfer.setData("startDate", day.unix());
-    this.selectedDays = [day];
+  dayDragInProgress = false;
+  dayMouseDown(event, day) {
+    this.dayDragInProgress = true;
+    this.selectedDays = [day.toDate()];
+    console.log(event, day)
 
-    var img = document.createElement('img');
-    img.src = '/svg/scan.svg';
-    document.body.appendChild(img)
-    event.dataTransfer.setDragImage(img, 0, 0);
+    document.addEventListener("mouseup", () => {
+      console.log("mouseup!")
+    })
+    //event.dataTransfer.setData("type", "dayDrag");
+    //event.dataTransfer.setData("startDate", day.unix());
+    //this.selectedDays = [day];
+
+    //var img = document.createElement('img');
+    //img.src = '/svg/scan.svg';
+    //document.body.appendChild(img)
+    //event.dataTransfer.setDragImage(img, 0, 0);
+  }
+
+  dayMouseOver(event, day) {
+    if (this.dayDragInProgress) {
+      console.log("drag in progress")
+    }
+  }
+
+  dayMouseUp(event, day) {
+    if (this.dayDragInProgress) {
+      console.log("yep!")
+    }
   }
 
   dayDragEnd(event, day) {

@@ -26,6 +26,21 @@
   </ion-item>
 
   <ion-button (click)="deleteMealPlan()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='copy' slot="start"></ion-icon>
+    Copy selected day
+  </ion-button>
+
+  <ion-button (click)="deleteMealPlan()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='cut' slot="start"></ion-icon>
+    Move selected day
+  </ion-button>
+
+  <ion-button (click)="deleteMealPlan()" expand="block" size="small" class="ion-margin">
+    <ion-icon [name]="selectionMode ? 'close' : 'checkmark'" slot="start"></ion-icon>
+    {{ selectionMode ? 'Exit multiple day selection' : 'Select multiple days' }}
+  </ion-button>
+
+  <ion-button (click)="deleteMealPlan()" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
     Delete meal plan
   </ion-button>
