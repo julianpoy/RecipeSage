@@ -40,7 +40,7 @@ export class OfflineCacheService {
 
   async updateAllRecipes() {
     const knownRecipeIds = Array.from(this.knownRecipeIds);
-    for (let knownRecipeId of knownRecipeIds) {
+    for (const knownRecipeId of knownRecipeIds) {
       await this.updateRecipe(knownRecipeId);
 
       await this.syncPause();
@@ -59,7 +59,7 @@ export class OfflineCacheService {
       '-updatedAt',
       'updatedAt'
     ];
-    for (let sort of sorts) {
+    for (const sort of sorts) {
       await this.updateRecipeList('main', sort);
     }
   }
