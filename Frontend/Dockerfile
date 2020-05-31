@@ -13,6 +13,10 @@ RUN cd SharedUtils && npm install
 COPY Frontend Frontend
 COPY SharedUtils SharedUtils
 
+WORKDIR /app/SharedUtils
+
+RUN npm run build
+
 WORKDIR /app/Frontend
 
 EXPOSE 8100

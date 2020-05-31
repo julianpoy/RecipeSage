@@ -34,7 +34,7 @@
     window.queryParams = {};
     var queryString = (window.location.search || window.location.href).split('?')[1];
     if (queryString) {
-      var query = queryString.split("&").forEach(el => {
+      var query = queryString.split("&").forEach(function(el) {
         var tuple = el.split('=');
 
         window.queryParams[tuple[0]] = tuple[1];
@@ -47,7 +47,7 @@
   </script>
 
   <script>
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', function(e) {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
       // Stash the event so it can be triggered later.
@@ -57,10 +57,12 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js', {
         updateViaCache: 'none'
-      }).then(registration => {
+      }).then(function(registration) {
         window.swRegistration = registration;
         if (window.onSWRegistration) window.onSWRegistration.call(null);
-      }).catch(err => console.error('Error', err));
+      }).catch(function(err) {
+        console.error('Error', err)
+      });
 
       navigator.serviceWorker.addEventListener('controllerchange', function() {
         // Recovery if we have a SW in a frozen state

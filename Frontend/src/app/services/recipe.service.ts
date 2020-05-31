@@ -9,7 +9,7 @@ import { UtilService } from './util.service';
 import { EventService } from './event.service';
 import { Image } from './image.service';
 
-import { parseIngredients, parseInstructions } from '../../../../SharedUtils/src';
+import { parseIngredients, parseInstructions } from '../../../../SharedUtils';
 
 export interface Recipe {
   id: string;
