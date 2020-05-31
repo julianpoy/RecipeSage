@@ -11,7 +11,7 @@ workbox.precaching.precacheAndRoute([]);
 // Index should be cached networkFirst - this way, users will always get the newest application version
 const MAX_OFFILE_APP_AGE = 30; // Days
 workbox.routing.registerRoute(
-  new RegExp('/index\\.html'),
+  /\/index\.html/,
   workbox.strategies.networkFirst({
     cacheName: 'base-asset-cache',
     plugins: [
@@ -25,7 +25,7 @@ workbox.routing.registerRoute(
 // Icons should be served cache first - they almost never change, and serving an old version is accepable
 const MAX_SVG_ICON_AGE = 60; // Days
 workbox.routing.registerRoute(
-  new RegExp('/svg/.*\\.svg'),
+  /\/svg\/.*\.svg/,
   workbox.strategies.cacheFirst({
     cacheName: 'svg-icon-cache',
     plugins: [
@@ -40,7 +40,7 @@ workbox.routing.registerRoute(
 // Limit the maxiumum age so that requests aren't too stale.
 const MAX_OFFLINE_API_AGE = 60; // Days
 workbox.routing.registerRoute(
-  new RegExp('https://api\\.recipesage\\.com'),
+  /https:\/\/api\.recipesage\.com/,
   workbox.strategies.networkFirst({
     cacheName: 'api-cache',
     plugins: [
@@ -54,7 +54,7 @@ workbox.routing.registerRoute(
 // S3 assets don't share ID's so we can cache them indefinitely
 // Limit the cache to a maximum number of entries so as not to consume too much storage
 workbox.routing.registerRoute(
-  new RegExp('https://chefbook-prod.*amazonaws.com/'),
+  /https:\/\/chefbook-prod.*amazonaws\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 's3-image-cache',
     plugins: [
