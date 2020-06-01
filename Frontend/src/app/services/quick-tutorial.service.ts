@@ -13,6 +13,7 @@ export enum QuickTutorialOptions {
   MultipleRecipeSelection = 'multipleRecipeSelection',
   MultipleLabelSelection = 'multipleLabelSelection',
   SplitPaneView = 'splitPaneView',
+  ExperimentalOfflineCache = 'experimentalOfflineCache',
   PinnedRecipes = 'pinnedRecipes'
 }
 
@@ -40,6 +41,12 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
     message: `Split pane view is only visible on devices with large screens (laptops, large tablets, etc).<br /><br />
               When split pane view is enabled, the side menu will always be visible.<br /><br />
               This feature is useful for optimizing the experience on larger devices.`
+  },
+  [QuickTutorialOptions.ExperimentalOfflineCache]: {
+    header: 'Experimental Offline Cache',
+    message: `Experimental offline cache is <b>experimental</b>. RecipeSage normally caches recipes you access automatically, but this will now fetch <b>all</b> of your recipes in the background.<br /><br />
+    Your system may remove cached recipes automatically if it needs the storage, or when you do not use the app for long periods of time.<br /><br />
+    <b>Important note:</b> Filtering by label and searching will not work. This may work in future implementations, but not for this test implementation.`
   },
   [QuickTutorialOptions.PinnedRecipes]: {
     header: 'Pinned Recipes',
@@ -95,11 +102,11 @@ export class QuickTutorialService {
         buttons: ['Okay']
       });
 
-      tutorialAlert.onDidDismiss().then(() => {
-        this.markQuickTutorialAsSeen(quickTutorialKey);
-      });
-
       await tutorialAlert.present();
+
+      await tutorialAlert.onDidDismiss();
+
+      this.markQuickTutorialAsSeen(quickTutorialKey);
     }
   }
 }

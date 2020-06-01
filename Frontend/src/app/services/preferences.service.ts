@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
 export enum GlobalPreferenceKey {
-  EnableSplitPane = 'global.enableSplitPane'
+  EnableSplitPane = 'global.enableSplitPane',
+  EnableExperimentalOfflineCache = 'global.enableExperimentalOfflineCache'
 }
 
 export enum MyRecipesPreferenceKey {
@@ -38,6 +39,7 @@ export enum ShoppingListPreferenceKey {
 
 export interface AppPreferenceTypes {
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
+  [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
 
   [MyRecipesPreferenceKey.EnableLabelIntersection]: boolean;
   [MyRecipesPreferenceKey.ShowLabels]: boolean;
@@ -69,6 +71,7 @@ export class PreferencesService {
   // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
+    [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
 
     [MyRecipesPreferenceKey.EnableLabelIntersection]: false,
     [MyRecipesPreferenceKey.ShowLabels]: true,
