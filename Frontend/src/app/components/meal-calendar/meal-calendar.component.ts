@@ -213,6 +213,7 @@ export class MealCalendarComponent {
 
   dayDragDrop(event, day) {
     event.preventDefault();
+    this.highlightedDay = null;
     const mealItemId = event.dataTransfer.getData("mealItemId");
     const mealItem = this.mealPlan.items.find(mealItem => mealItem.id === mealItemId);
     if (!mealItem) return;
@@ -232,7 +233,13 @@ export class MealCalendarComponent {
     });
   }
 
+  highlightedDay;
   dayDragOver(event, day) {
     event.preventDefault();
+    this.highlightedDay = day;
+  }
+
+  itemDragEnd() {
+    this.highlightedDay = null;
   }
 }

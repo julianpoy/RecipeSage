@@ -42,13 +42,18 @@
         cursor: pointer;
         outline: none;
         overflow: hidden; // Force same-size columns
+        transition: background-color 0.1s;
 
         &:hover {
-          background: rgba(0,0,0,0.017);
+          background-color: rgba(0,0,0,0.017);
         }
 
         &.selected {
-          background: var(--ion-border-color);
+          background-color: var(--ion-border-color);
+        }
+
+        &.highlighted {
+          background-color: rgba(var(--ion-color-primary-rgb), 0.2);
         }
 
         .date {

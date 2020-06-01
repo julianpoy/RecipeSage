@@ -33,8 +33,9 @@
           (dragover)="dayDragOver($event, day)"
           (drop)="dayDragDrop($event, day)"
           [ngClass]="{
-              'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
-              'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
+              'selected'   : selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
+              'today'      : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date(),
+              'highlighted': day === highlightedDay
             }" tabindex="0">
           <div class="date" [ngClass]="{
             'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
@@ -44,7 +45,7 @@
             {{day.date()}}
           </div>
           <div *ngIf="mode === 'full'">
-            <meal-group [mealItems]="mealItemsByDay(day)" [enableEditing]="enableEditing" (itemClicked)="itemClicked.emit($event)"></meal-group>
+            <meal-group [mealItems]="mealItemsByDay(day)" [enableEditing]="enableEditing" (itemClicked)="itemClicked.emit($event)" (itemDragEnd)="itemDragEnd()"></meal-group>
           </div>
           <div class="meal-marker-container" *ngIf="mode === 'split' || mode === 'outline'">
             <div class="meal-marker" *ngFor="let mealItem of mealItemsByDay(day).items"></div>

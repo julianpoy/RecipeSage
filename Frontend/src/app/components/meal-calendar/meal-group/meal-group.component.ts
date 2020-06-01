@@ -10,6 +10,7 @@ export class MealGroupComponent {
   @Input() enableEditing;
 
   @Output() itemClicked = new EventEmitter<any>();
+  @Output() itemDragEnd = new EventEmitter<any>();
 
   constructor() {}
 
@@ -20,5 +21,6 @@ export class MealGroupComponent {
 
   dragEnd(event, mealItem) {
     mealItem.dragging = false;
+    this.itemDragEnd.emit();
   }
 }
