@@ -50,13 +50,7 @@
 
   <ion-item>
     <ion-label>Date</ion-label>
-    <ion-datetime
-      [min]="todayYear - 1"
-      [max]="todayYear + 1"
-      displayFormat="YYYY-MM-DD"
-      [value]="scheduled.toString()"
-      (ionChange)="scheduledDateChange($event)"
-    ></ion-datetime>
+    <input class="rs-date" type="date" autofill="true" value="{{ sanitizedScheduled }}" (change)="scheduledDateChange($event)" />
   </ion-item>
 
   <br /><br />
