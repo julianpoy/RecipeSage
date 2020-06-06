@@ -160,3 +160,10 @@ ion-button.button-outline {
 .sc-ion-label-ios-s > p, .sc-ion-label-md-s > p {
   color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
 }
+
+.rs-date {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
