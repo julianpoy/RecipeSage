@@ -19,10 +19,11 @@
   <div class="mealplan-flex">
     <meal-calendar
       [mealPlan]="mealPlan"
-      (selectedDayChange)="selectedDay = $event"
-      (selectedMealGroupChange)="selectedMealGroup = $event"
+      (selectedDaysChange)="setSelectedDays($event)"
       (itemClicked)="itemClicked($event)"
       (itemMoved)="itemMoved($event)"
+      (dayClicked)="dayClicked($event)"
+      (mealsByDateChange)="setMealsByDate($event)"
       enableEditing="true"
       mode="{{calendarMode}}"></meal-calendar>
   </div>
