@@ -161,7 +161,7 @@ export class MealCalendarComponent {
       return comp;
     }).forEach(item => {
       item.scheduledDateObj = new Date(item.scheduled);
-      const day = dayjs.utc(item.scheduled);
+      const day = dayjs(item.scheduled);
       this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
       this.mealsByDate[day.year()][day.month()] = this.mealsByDate[day.year()][day.month()] || {};
       const dayData = this.mealsByDate[day.year()][day.month()][day.date()] = this.mealsByDate[day.year()][day.month()][day.date()] || {
