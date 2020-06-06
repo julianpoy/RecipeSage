@@ -16,14 +16,21 @@ export class MealCalendarComponent {
   set mealPlan(mealPlan) {
     this._mealPlan = mealPlan;
     this.processIncomingMealPlan();
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
   }
   get mealPlan() { return this._mealPlan; }
 
   @Input() enableEditing: boolean = false;
   @Input() mode: string = "outline";
 
-  mealsByDate: any = {};
+  @Output() mealsByDateChange = new EventEmitter<any>();
+  _mealsByDate: any = {};
+  set mealsByDate(mealsByDate) {
+    this._mealsByDate = mealsByDate;
+    this.mealsByDateChange.emit(mealsByDate);
+  }
+  get mealsByDate() {
+    return this._mealsByDate;
+  }
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
@@ -33,31 +40,36 @@ export class MealCalendarComponent {
   center: Date = new Date(this.today);
   dayTitles: string[];
 
-  @Output() selectedMealGroupChange = new EventEmitter<any[]>();
-  @Output() selectedDayChange = new EventEmitter<Dayjs>();
+  @Output() selectedDaysChange = new EventEmitter<number[]>();
 
   @Output() itemMoved = new EventEmitter<any>();
   @Output() itemClicked = new EventEmitter<any>();
+  @Output() dayClicked = new EventEmitter<any>();
 
-  private _selectedDay: Dayjs = dayjs(this.today);
+  private _selectedDays: number[] = [this.getToday().getTime()];
 
-  set selectedDay(selectedDay) {
-    this._selectedDay = selectedDay;
-    this.selectedDayChange.emit(selectedDay);
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
+  set selectedDays(selectedDays) {
+    this._selectedDays = selectedDays;
+    this.selectedDaysChange.emit(selectedDays);
   }
 
-  get selectedDay() {
-    return this._selectedDay;
+  get selectedDays() {
+    return this._selectedDays;
   }
 
   constructor(
     public utilService: UtilService,
     public preferencesService: PreferencesService
   ) {
-    this.selectedDayChange.emit(this.selectedDay);
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
+    setTimeout(() => {
+      this.mealsByDateChange.emit(this.mealsByDate);
+      this.selectedDaysChange.emit(this.selectedDays);
+    });
     this.generateCalendar();
+
+    document.addEventListener("mouseup", () => {
+      this.dayDragInProgress = false;
+    });
   }
 
   // Generates calendar array centered around specified day (today).
@@ -101,11 +113,16 @@ export class MealCalendarComponent {
   }
 
   // Gets new calendar center date. Positive = next month, negative = last month
-  getNewCenter(direction) {
+  getNewCenter(direction): Date {
     const currentMonth = this.center.getMonth();
     const newMonth = direction > 0 ? currentMonth + 1 : currentMonth - 1;
 
     return new Date(this.center.getFullYear(), newMonth, 1);
+  }
+
+  getToday(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }
 
   // Moves the calendar. Positive = next month, negative = last month
@@ -113,8 +130,8 @@ export class MealCalendarComponent {
     this.center = this.getNewCenter(direction);
     const bounds = this.generateCalendar();
 
-    if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
-      this.selectedDay = dayjs(this.center);
+    if (dayjs(this.selectedDays[0]).isBefore(bounds[0]) || dayjs(this.selectedDays[0]).isAfter(bounds[1])) {
+      this.selectedDays = [this.center.getTime()];
     }
   }
 
@@ -144,7 +161,7 @@ export class MealCalendarComponent {
       return comp;
     }).forEach(item => {
       item.scheduledDateObj = new Date(item.scheduled);
-      const day = dayjs(item.scheduledDateObj);
+      const day = dayjs.utc(item.scheduled);
       this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
       this.mealsByDate[day.year()][day.month()] = this.mealsByDate[day.year()][day.month()] || {};
       const dayData = this.mealsByDate[day.year()][day.month()][day.date()] = this.mealsByDate[day.year()][day.month()][day.date()] || {
@@ -158,6 +175,7 @@ export class MealCalendarComponent {
         items: [],
         meals: ["breakfast", "lunch", "dinner", "snacks", "other"]
       };
+      console.log(dayData, day.year(), day.month(), day.date())
       dayData.itemsByMeal[item.meal].push(item);
       dayData.items.push(item);
     });
@@ -174,41 +192,47 @@ export class MealCalendarComponent {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  selectedDays = [];
+  isSelected(day) {
+    return this.selectedDays.includes(day.toDate().getTime())
+  }
+
   dayDragInProgress = false;
+
+  dayKeyEnter(event, day) {
+    this.dayMouseDown(event, day);
+    this.dayMouseUp(event, day);
+  }
+
   dayMouseDown(event, day) {
     this.dayDragInProgress = true;
-    this.selectedDays = [day.toDate()];
-    console.log(event, day)
+    if (event.shiftKey) this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
+    else this.selectedDays = [day.toDate().getTime()];
+    this.dayClicked.emit(day.toDate());
+  }
 
-    document.addEventListener("mouseup", () => {
-      console.log("mouseup!")
-    })
-    //event.dataTransfer.setData("type", "dayDrag");
-    //event.dataTransfer.setData("startDate", day.unix());
-    //this.selectedDays = [day];
+  getDaysBetween(day1: number, day2: number): number[] {
+    const days = [day1];
+    let iterDate = new Date(day1);
 
-    //var img = document.createElement('img');
-    //img.src = '/svg/scan.svg';
-    //document.body.appendChild(img)
-    //event.dataTransfer.setDragImage(img, 0, 0);
+    iterDate.setDate(iterDate.getDate() + 1);
+
+    while(iterDate <= new Date(day2)) {
+      days.push(iterDate.getTime());
+
+      iterDate.setDate(iterDate.getDate() + 1);
+    }
+
+    return days;
   }
 
   dayMouseOver(event, day) {
     if (this.dayDragInProgress) {
-      console.log("drag in progress")
+      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
     }
   }
 
   dayMouseUp(event, day) {
-    if (this.dayDragInProgress) {
-      console.log("yep!")
-    }
-  }
-
-  dayDragEnd(event, day) {
-    //const startDate = event.dataTransfer.getData("startDate");
-    //selectedDays = dayjs(startDate);
+    this.dayDragInProgress = false;
   }
 
   dayDragDrop(event, day) {

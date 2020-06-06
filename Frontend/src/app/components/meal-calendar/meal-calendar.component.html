@@ -26,21 +26,20 @@
         <ion-col
           class="day"
           *ngFor="let day of weekOfMonth"
-          (click)="selectedDay = day"
-          (keyup.enter)="selectedDay = day"
+          (keyup.enter)="dayKeyEnter($event, day)"
           (mousedown)="dayMouseDown($event, day)"
           (mouseup)="dayMouseUp($event, day)"
+          (mouseover)="dayMouseOver($event, day)"
           (dragover)="dayDragOver($event, day)"
           (drop)="dayDragDrop($event, day)"
           [ngClass]="{
-              'selected'   : selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
               'today'      : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date(),
-              'highlighted': day === highlightedDay
+              'highlighted': day === highlightedDay || isSelected(day)
             }" tabindex="0">
           <div class="date" [ngClass]="{
-            'selected': selectedDay && selectedDay.year() === day.year() && selectedDay.month() === day.month() && selectedDay.date() === day.date(),
             'inactive': center.getMonth() !== day.month(),
-            'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date()
+            'today'   : today.getFullYear() === day.year() && today.getMonth() === day.month() && today.getDate() === day.date(),
+            'highlighted': day === highlightedDay || isSelected(day)
           }">
             {{day.date()}}
           </div>
@@ -61,7 +60,16 @@
       </ion-label>
     </ion-item>
 
-    <ion-item *ngIf="mealItemsByDay(this.selectedDay).items.length === 0">
+    <ion-item *ngIf="this.selectedDays === 0 || this.selectedDays.length > 1">
+      <ion-label class="ion-text-wrap ion-text-center">
+        <br />
+        <p>
+          Select a day to see meals for that day.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="this.selectedDays.length === 1 && mealItemsByDay(this.selectedDays[0]).items.length === 0">
       <ion-label class="ion-text-wrap ion-text-center">
         <br />
         <p>
@@ -70,7 +78,7 @@
       </ion-label>
     </ion-item>
 
-    <meal-group [mealItems]="mealItemsByDay(this.selectedDay)" [enableEditing]="enableEditing" (itemClicked)="itemClicked.emit($event)"></meal-group>
+    <meal-group *ngIf="this.selectedDays.length === 1" [mealItems]="mealItemsByDay(this.selectedDays[0])" [enableEditing]="enableEditing" (itemClicked)="itemClicked.emit($event)"></meal-group>
   </ion-list>
 </div>
 

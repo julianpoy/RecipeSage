@@ -33,6 +33,10 @@
     text-align: center;
   }
 
+  .week {
+    user-select: none;
+  }
+
   &.full {
     .week {
       .day {
