@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Input, Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
@@ -11,13 +11,14 @@ import { UtilService } from '@/services/util.service';
 })
 export class NewMealPlanItemModalPage {
 
-  inputType = 'manualEntry';
+  @Input() isEditing = false;
+  @Input() inputType = 'recipe';
+  @Input() recipe;
+  @Input() title: any = '';
+  @Input() meal: any;
+  @Input() scheduled = new Date();
 
-  itemTitle: any = '';
-
-  selectedRecipe: any;
-
-  meal: any;
+  sanitizedScheduled;
 
   constructor(
     public navCtrl: NavController,
@@ -27,16 +28,33 @@ export class NewMealPlanItemModalPage {
     public utilService: UtilService,
     public toastCtrl: ToastController) {
 
+    setTimeout(() => {
+      this.setSanitizedScheduled();
+    });
+  }
+
+  setSanitizedScheduled() {
+    const scheduled = new Date(this.scheduled);
+    const year = scheduled.getFullYear();
+    const month = (scheduled.getMonth() + 1).toString().padStart(2, '0');
+    const date = scheduled.getDate().toString().padStart(2, '0');
+
+    this.sanitizedScheduled = `${year}-${month}-${date}`;
+  }
+
+  scheduledDateChange(event) {
+    const [year, month, date] = event.target.value.split('-');
+    const scheduled = new Date();
+    scheduled.setDate(date);
+    scheduled.setMonth(month - 1);
+    scheduled.setFullYear(year);
+    this.scheduled = scheduled;
   }
 
   isFormValid() {
-    if (this.inputType === 'recipe' && !this.selectedRecipe) {
-      return false;
-    }
+    if (this.inputType === 'recipe' && !this.recipe) return false;
 
-    if (this.inputType === 'manualEntry' && (!this.itemTitle || this.itemTitle.length === 0)) {
-      return false;
-    }
+    if (this.inputType === 'manualEntry' && (!this.title || this.title.length === 0)) return false;
 
     if (!this.meal) return false;
 
@@ -47,16 +65,17 @@ export class NewMealPlanItemModalPage {
     let item;
     if (this.inputType === 'recipe') {
       item = {
-        title: this.selectedRecipe.title,
-        recipeId: this.selectedRecipe.id
+        title: this.recipe.title,
+        recipeId: this.recipe.id
       };
     } else {
       item = {
-        title: this.itemTitle
+        title: this.title
       };
     }
 
     item.meal = this.meal;
+    item.scheduled = this.scheduled;
 
     this.modalCtrl.dismiss({
       item

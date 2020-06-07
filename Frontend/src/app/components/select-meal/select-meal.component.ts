@@ -29,9 +29,12 @@ export class SelectMealComponent {
   }];
 
   constructor() {
-    if (!this.meal) {
-      this.selectLastUsedMeal();
-    }
+    // Wait until after props are set
+    setTimeout(() => {
+      if (!this.meal) {
+        this.selectLastUsedMeal();
+      }
+    });
   }
 
   selectLastUsedMeal() {

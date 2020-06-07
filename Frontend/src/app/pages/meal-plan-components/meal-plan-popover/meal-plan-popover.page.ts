@@ -32,11 +32,31 @@ export class MealPlanPopoverPage {
   savePreferences() {
     this.preferencesService.save();
 
-    this.dismiss();
+    this.popoverCtrl.dismiss({
+      reload: true
+    });
   }
 
   dismiss() {
     this.popoverCtrl.dismiss();
+  }
+
+  copySelected() {
+    this.popoverCtrl.dismiss({
+      copy: true
+    });
+  }
+
+  moveSelected() {
+    this.popoverCtrl.dismiss({
+      move: true
+    });
+  }
+
+  deleteSelected() {
+    this.popoverCtrl.dismiss({
+      delete: true
+    });
   }
 
   async deleteMealPlan() {
