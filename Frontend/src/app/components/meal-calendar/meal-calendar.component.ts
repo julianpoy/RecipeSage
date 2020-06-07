@@ -19,8 +19,8 @@ export class MealCalendarComponent {
   }
   get mealPlan() { return this._mealPlan; }
 
-  @Input() enableEditing: boolean = false;
-  @Input() mode: string = "outline";
+  @Input() enableEditing = false;
+  @Input() mode = 'outline';
 
   @Output() mealsByDateChange = new EventEmitter<any>();
   _mealsByDate: any = {};
@@ -47,6 +47,8 @@ export class MealCalendarComponent {
   @Output() dayClicked = new EventEmitter<any>();
 
   private _selectedDays: number[] = [this.getToday().getTime()];
+  highlightedDay;
+  dayDragInProgress = false;
 
   set selectedDays(selectedDays) {
     this._selectedDays = selectedDays;
@@ -67,7 +69,7 @@ export class MealCalendarComponent {
     });
     this.generateCalendar();
 
-    document.addEventListener("mouseup", () => {
+    document.addEventListener('mouseup', () => {
       this.dayDragInProgress = false;
     });
   }
@@ -173,7 +175,7 @@ export class MealCalendarComponent {
           other: [],
         },
         items: [],
-        meals: ["breakfast", "lunch", "dinner", "snacks", "other"]
+        meals: ['breakfast', 'lunch', 'dinner', 'snacks', 'other']
       };
       console.log(dayData, day.year(), day.month(), day.date())
       dayData.itemsByMeal[item.meal].push(item);
@@ -197,8 +199,6 @@ export class MealCalendarComponent {
     return this.selectedDays.includes(day.toDate().getTime())
   }
 
-  dayDragInProgress = false;
-
   dayKeyEnter(event, day) {
     this.dayMouseDown(event, day);
     this.dayMouseUp(event, day);
@@ -213,7 +213,7 @@ export class MealCalendarComponent {
 
   getDaysBetween(day1: number, day2: number): number[] {
     const days = [day1];
-    let iterDate = new Date(day1);
+    const iterDate = new Date(day1);
 
     iterDate.setDate(iterDate.getDate() + 1);
 
@@ -239,8 +239,8 @@ export class MealCalendarComponent {
   dayDragDrop(event, day) {
     event.preventDefault();
     this.highlightedDay = null;
-    const mealItemId = event.dataTransfer.getData("mealItemId");
-    const mealItem = this.mealPlan.items.find(mealItem => mealItem.id === mealItemId);
+    const mealItemId = event.dataTransfer.getData('mealItemId');
+    const mealItem = this.mealPlan.items.find(item => item.id === mealItemId);
     if (!mealItem) return;
 
     const currDate = new Date(mealItem.scheduled);
@@ -258,7 +258,6 @@ export class MealCalendarComponent {
     });
   }
 
-  highlightedDay;
   dayDragOver(event, day) {
     event.preventDefault();
     this.highlightedDay = day;

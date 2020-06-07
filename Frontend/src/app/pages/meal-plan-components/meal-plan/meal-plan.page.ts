@@ -26,7 +26,10 @@ export class MealPlanPage {
 
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();
 
-  calendarMode: string = window.innerWidth > 600 ? "full" : "split";
+  calendarMode: string = window.innerWidth > 600 ? 'full' : 'split';
+  dayCopyInProgress = false;
+  dayMoveInProgress = false;
+  selectedDaysInProgress;
 
   mealPlanId: string; // From nav params
   mealPlan: any = { items: [], collaborators: [] };
@@ -370,14 +373,11 @@ export class MealPlanPage {
     return this.selectedDays.map(unix => this.getItemsOnDay(unix).length).reduce((acc, el) => acc + el, 0);
   }
 
-  dayCopyInProgress: boolean = false;
-  dayMoveInProgress: boolean = false;
-  selectedDaysInProgress;
   async startBulkCopy() {
     this.dayCopyInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      const alert = await this.alertCtrl.create({
+      const emptyAlert = await this.alertCtrl.create({
         header: 'Empty day(s) selected',
         message: 'The day(s) you\'ve selected do not contain any meal plan items. To copy items, you\'ll need to select at least one day with meal plan items.',
         buttons: [
@@ -394,12 +394,12 @@ export class MealPlanPage {
           }
         ]
       });
-      alert.present();
+      emptyAlert.present();
 
       return;
     }
 
-    const alert = await this.alertCtrl.create({
+    const copyAlert = await this.alertCtrl.create({
       header: 'Copy To',
       message: 'This will copy the meal items on the selected days to a series of days starting on the day you select.<br /><br />Please click the day you\'d like to copy to.',
       buttons: [
@@ -416,14 +416,14 @@ export class MealPlanPage {
         }
       ]
     });
-    alert.present();
+    copyAlert.present();
   }
 
   async startBulkMove() {
     this.dayMoveInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      const alert = await this.alertCtrl.create({
+      const emptyAlert = await this.alertCtrl.create({
         header: 'Empty day(s) selected',
         message: 'The day(s) you\'ve selected do not contain any meal plan items. To move items, you\'ll need to select at least one day with meal plan items.',
         buttons: [
@@ -440,12 +440,12 @@ export class MealPlanPage {
           }
         ]
       });
-      alert.present();
+      emptyAlert.present();
 
       return;
     }
 
-    const alert = await this.alertCtrl.create({
+    const moveAlert = await this.alertCtrl.create({
       header: 'Move To',
       message: 'This will move the meal items on the selected days to a series of days starting on the day you select.<br /><br />Please click the day you\'d like to move to.',
       buttons: [
@@ -462,14 +462,14 @@ export class MealPlanPage {
         }
       ]
     });
-    alert.present();
+    moveAlert.present();
   }
 
   async bulkDelete() {
     this.dayMoveInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      const alert = await this.alertCtrl.create({
+      const emptyAlert = await this.alertCtrl.create({
         header: 'Empty day(s) selected',
         message: 'The day(s) you\'ve selected do not contain any meal plan items. To delete items, you\'ll need to select at least one day with meal plan items.',
         buttons: [
@@ -486,14 +486,14 @@ export class MealPlanPage {
           }
         ]
       });
-      alert.present();
+      emptyAlert.present();
 
       return;
     }
 
     const selectedDayList = this.selectedDays.map(day => dayjs(day).format('MMM D')).join(', ');
 
-    const alert = await this.alertCtrl.create({
+    const deleteAlert = await this.alertCtrl.create({
       header: 'Delete Meal Plan Items',
       message: `This will delete all items on ${selectedDayList}`,
       buttons: [
@@ -509,12 +509,12 @@ export class MealPlanPage {
         }
       ]
     });
-    alert.present();
+    deleteAlert.present();
   }
 
   async dayClicked(day) {
     if (this.dayMoveInProgress || this.dayCopyInProgress) {
-      const selectedDayList = this.selectedDaysInProgress.map(day => dayjs(day).format('MMM D')).join(', ');
+      const selectedDayList = this.selectedDaysInProgress.map(selectedDay => dayjs(selectedDay).format('MMM D')).join(', ');
       const destDay = dayjs(day).format('MMM D');
 
       if (this.dayCopyInProgress) {
@@ -576,8 +576,8 @@ export class MealPlanPage {
   async _moveSelectedTo(day) {
     const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], 'day');
 
-    const updatedItems = this.selectedDaysInProgress.map(day =>
-     this.getItemsOnDay(day).map(item => ({
+    const updatedItems = this.selectedDaysInProgress.map(selectedDay =>
+     this.getItemsOnDay(selectedDay).map(item => ({
        id: item.id,
        title: item.title,
        recipeId: item.recipeId,
@@ -599,8 +599,8 @@ export class MealPlanPage {
   async _copySelectedTo(day) {
     const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], 'day');
 
-    const newItems = this.selectedDaysInProgress.map(day =>
-     this.getItemsOnDay(day).map(item => ({
+    const newItems = this.selectedDaysInProgress.map(selectedDay =>
+     this.getItemsOnDay(selectedDay).map(item => ({
        title: item.title,
        recipeId: item.recipeId,
        scheduled: dayjs(item.scheduled).add(dayDiff, 'day').toDate(),

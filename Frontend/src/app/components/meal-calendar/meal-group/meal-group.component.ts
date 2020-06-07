@@ -16,7 +16,7 @@ export class MealGroupComponent {
 
   dragStart(event, mealItem) {
     mealItem.dragging = true;
-    event.dataTransfer.setData("mealItemId", mealItem.id);
+    event.dataTransfer.setData('mealItemId', mealItem.id);
   }
 
   dragEnd(event, mealItem) {
