@@ -13,6 +13,7 @@ precacheAndRoute(self.__WB_MANIFEST || []);
 
 self.addEventListener('install', async (event) => {
   const networkFirstPrecacheUrls = [
+    "/",
     "/index.html"
   ];
   event.waitUntil(
