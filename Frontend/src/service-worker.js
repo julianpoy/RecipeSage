@@ -17,7 +17,7 @@ self.addEventListener('install', async (event) => {
   ];
   event.waitUntil(
     caches.open('base-asset-cache')
-      .then((cache) => cache.add(networkFirstPrecacheUrls))
+      .then((cache) => cache.addAll(networkFirstPrecacheUrls))
   );
 });
 
