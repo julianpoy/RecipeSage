@@ -42,7 +42,7 @@
   <div *ngIf="destinationMealPlan">
     <meal-calendar
       [mealPlan]="destinationMealPlan"
-      (selectedDayChange)="selectedDay = $event"></meal-calendar>
+      (selectedDaysChange)="selectedDays = $event"></meal-calendar>
   </div>
 </ion-content>
 

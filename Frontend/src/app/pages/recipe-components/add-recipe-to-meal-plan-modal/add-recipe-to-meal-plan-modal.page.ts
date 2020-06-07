@@ -26,7 +26,7 @@ export class AddRecipeToMealPlanModalPage {
 
   @Input() reference: any;
 
-  selectedDay: Dayjs = dayjs(new Date());
+  selectedDays: number[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -143,7 +143,7 @@ export class AddRecipeToMealPlanModalPage {
       title: this.recipe.title,
       recipeId: this.recipe.id,
       meal: this.meal,
-      scheduled: this.selectedDay.toDate()
+      scheduled: new Date(this.selectedDays[0])
     }).then(response => {
       loading.dismiss();
 
