@@ -27,7 +27,6 @@ export class AddRecipeToMealPlanModalPage {
   @Input() reference: any;
 
   selectedDay: Dayjs = dayjs(new Date());
-  selectedMealGroup: any[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -126,10 +125,6 @@ export class AddRecipeToMealPlanModalPage {
         }
       });
     });
-  }
-
-  currentScheduledMeals() {
-    return this.selectedMealGroup.map(e => e.title).join(', ');
   }
 
   isFormValid() {

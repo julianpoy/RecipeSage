@@ -52,6 +52,16 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <p *ngIf="mode === 'outline'">
+      <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length > 0">
+        <i>Recipes scheduled on this day:</i>&nbsp; {{ mealItemTitlesByDay(this.selectedDays[0]).join(', ') }}
+      </span>
+
+      <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length === 0">
+        <i>No recipes are currently scheduled on this day.</i>
+      </span>
+    </p>
   </div>
   <ion-list *ngIf="mode === 'split'" class="meal-list" lines="none" class="ion-padding">
     <ion-item lines="none">

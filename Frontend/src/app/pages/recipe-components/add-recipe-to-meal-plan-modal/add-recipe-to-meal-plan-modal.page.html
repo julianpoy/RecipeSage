@@ -42,18 +42,7 @@
   <div *ngIf="destinationMealPlan">
     <meal-calendar
       [mealPlan]="destinationMealPlan"
-      (selectedDayChange)="selectedDay = $event"
-      (selectedMealGroupChange)="selectedMealGroup = $event"></meal-calendar>
-
-    <p>
-      <span *ngIf="selectedMealGroup.length > 0">
-        <i>Recipes scheduled on this day:</i>&nbsp; {{ currentScheduledMeals() }}
-      </span>
-
-      <span *ngIf="selectedMealGroup.length === 0">
-        <i>No recipes are currently scheduled on this day.</i>
-      </span>
-    </p>
+      (selectedDayChange)="selectedDay = $event"></meal-calendar>
   </div>
 </ion-content>
 

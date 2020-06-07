@@ -191,6 +191,11 @@ export class MealCalendarComponent {
     };
   }
 
+  mealItemTitlesByDay(date) {
+    const mealItems = this.mealItemsByDay(date);
+    return mealItems.items.map(item => item.title);
+  }
+
   formatItemCreationDate(plainTextDate) {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
