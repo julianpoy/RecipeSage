@@ -72,7 +72,7 @@ export class MealPlanPopoverPage {
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: 'Delete Meal Plan',
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteMealPlan();

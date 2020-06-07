@@ -389,7 +389,8 @@ export class MealPlanPage {
           role: 'cancel'
         },
         {
-          text: 'Ok',
+          text: 'Delete',
+          cssClass: 'alertDanger',
           handler: () => {
             this._deleteSelected();
           }
