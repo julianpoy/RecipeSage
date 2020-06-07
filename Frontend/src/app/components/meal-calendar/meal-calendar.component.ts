@@ -243,6 +243,7 @@ export class MealCalendarComponent {
 
   dayDragDrop(event, day) {
     event.preventDefault();
+    this.dayDragInProgress = false;
     this.highlightedDay = null;
     const mealItemId = event.dataTransfer.getData('mealItemId');
     const mealItem = this.mealPlan.items.find(item => item.id === mealItemId);
