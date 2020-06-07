@@ -1,21 +1,34 @@
 'use strict';
 
-importScripts('workbox-src/workbox-sw.js');
-/* global workbox */
-workbox.setConfig({
-  debug: false,
-  modulePathPrefix: 'workbox-src/'
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+
+const { precaching, routing, strategies, expiration } = workbox;
+
+const { precacheAndRoute } = precaching;
+const { registerRoute } = routing;
+const { NetworkFirst, CacheFirst } = strategies;
+const { ExpirationPlugin } = expiration;
+
+precacheAndRoute(self.__WB_MANIFEST || []);
+
+self.addEventListener('install', async (event) => {
+  const networkFirstPrecacheUrls = [
+    "/index.html"
+  ];
+  event.waitUntil(
+    caches.open('base-asset-cache')
+      .then((cache) => cache.add(networkFirstPrecacheUrls))
+  );
 });
-workbox.precaching.precacheAndRoute([]);
 
 // Index should be cached networkFirst - this way, users will always get the newest application version
 const MAX_OFFILE_APP_AGE = 30; // Days
-workbox.routing.registerRoute(
-  new RegExp('/index\.html'),
-  workbox.strategies.networkFirst({
+registerRoute(
+  /\/index\.html/,
+  new NetworkFirst({
     cacheName: 'base-asset-cache',
     plugins: [
-      new workbox.expiration.Plugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
       }),
     ]
@@ -24,12 +37,12 @@ workbox.routing.registerRoute(
 
 // Icons should be served cache first - they almost never change, and serving an old version is accepable
 const MAX_SVG_ICON_AGE = 60; // Days
-workbox.routing.registerRoute(
-  new RegExp('/svg/.*\.svg'),
-  workbox.strategies.cacheFirst({
+registerRoute(
+  /\/svg\/.*\.svg/,
+  new CacheFirst({
     cacheName: 'svg-icon-cache',
     plugins: [
-      new workbox.expiration.Plugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_SVG_ICON_AGE,
       }),
     ]
@@ -38,13 +51,13 @@ workbox.routing.registerRoute(
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.
-const MAX_OFFLINE_API_AGE = 30; // Days
-workbox.routing.registerRoute(
-  new RegExp('/api/'),
-  workbox.strategies.networkFirst({
+const MAX_OFFLINE_API_AGE = 60; // Days
+registerRoute(
+  /https:\/\/api\.recipesage\.com/,
+  new NetworkFirst({
     cacheName: 'api-cache',
     plugins: [
-      new workbox.expiration.Plugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_API_AGE,
       }),
     ]
@@ -53,12 +66,12 @@ workbox.routing.registerRoute(
 
 // S3 assets don't share ID's so we can cache them indefinitely
 // Limit the cache to a maximum number of entries so as not to consume too much storage
-workbox.routing.registerRoute(
-  /chefbook.*prod.*s3.*amazonaws/,
-  workbox.strategies.cacheFirst({
+registerRoute(
+  /https:\/\/chefbook-prod.*amazonaws\.com\//,
+  new CacheFirst({
     cacheName: 's3-image-cache',
     plugins: [
-      new workbox.expiration.Plugin({
+      new ExpirationPlugin({
         maxEntries: 200,
         purgeOnQuotaError: true // Clear the image cache if we exceed the browser cache limit
       }),
