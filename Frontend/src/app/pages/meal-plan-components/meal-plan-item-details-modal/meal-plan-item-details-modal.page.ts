@@ -1,10 +1,12 @@
 import { Input, Component } from '@angular/core';
 import { NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { MealPlanService } from '@/services/meal-plan.service';
+import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
+import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -23,6 +25,7 @@ export class MealPlanItemDetailsModalPage {
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public mealPlanService: MealPlanService,
+    public recipeService: RecipeService,
     public loadingService: LoadingService,
     public utilService: UtilService,
     public toastCtrl: ToastController) {
@@ -140,6 +143,23 @@ export class MealPlanItemDetailsModalPage {
         refresh: true,
         reference: response.reference
       });
+    }
+  }
+
+  async addToShoppingList() {
+    const loading = this.loadingService.start();
+    // Fetch complete recipe (this page is provided with only topical recipe details)
+    const response = await this.recipeService.getRecipeById(this.mealItem.recipe.id);
+    loading.dismiss();
+
+    if (response) {
+      const addRecipeToShoppingListModal = await this.modalCtrl.create({
+        component: AddRecipeToShoppingListModalPage,
+        componentProps: {
+          recipe: response
+        }
+      });
+      addRecipeToShoppingListModal.present();
     }
   }
 
