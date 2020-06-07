@@ -122,6 +122,7 @@ export class MealPlanItemDetailsModalPage {
         },
         {
           text: 'Remove',
+          cssClass: 'alertDanger',
           handler: () => {
             this._delete();
           }
