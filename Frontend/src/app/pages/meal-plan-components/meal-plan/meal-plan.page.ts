@@ -7,13 +7,11 @@ import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
 
 import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
-import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
 import { MealPlanItemDetailsModalPage } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
 
@@ -54,7 +52,6 @@ export class MealPlanPage {
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
     public shoppingListService: ShoppingListService,
-    public recipeService: RecipeService,
     public websocketService: WebsocketService,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
@@ -181,116 +178,6 @@ export class MealPlanPage {
     modal.onDidDismiss().then(({ data }) => {
       if (!data || !data.item) return;
       this._addItem(data.item);
-    });
-  }
-
-  formatItemCreationDate(plainTextDate) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
-  }
-
-  openRecipe(recipe) {
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
-  }
-
-  addMealPlanItemToShoppingList(mealPlanItem) {
-    // Fetch complete recipe (this page is provided with only topical recipe details)
-    this.recipeService.fetchById(mealPlanItem.recipe.id).then(async response => {
-      const addRecipeToShoppingListModal = await this.modalCtrl.create({
-        component: AddRecipeToShoppingListModalPage,
-        componentProps: {
-          recipe: response,
-          reference: mealPlanItem.id
-        }
-      });
-      addRecipeToShoppingListModal.present();
-    }).catch(async err => {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 404:
-          let errorToast = await this.toastCtrl.create({
-            message: 'Recipe not found. Does this recipe URL exist?',
-            duration: 30000,
-            // dismissOnPageChange: true
-          });
-          errorToast.present();
-          break;
-        default:
-          errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
-  }
-
-  async removeMealPlanItemFromShoppingList(mealPlanItem) {
-    const alert = await this.alertCtrl.create({
-      header: 'Confirm Removal',
-      message: 'This will remove the linked copy of "' + (mealPlanItem.recipe || mealPlanItem).title + '" from your shopping list.',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Remove',
-          handler: () => {
-            this._removeMealPlanItemFromShoppingList(mealPlanItem);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-  _removeMealPlanItemFromShoppingList(mealPlanItem) {
-    const elIds = mealPlanItem.shoppingListItems.map(el => {
-      return el.id;
-    });
-
-    const loading = this.loadingService.start();
-
-    this.shoppingListService.remove({
-      id: mealPlanItem.shoppingListId,
-      items: elIds
-    }).then(response => {
-      loading.dismiss();
-
-      delete mealPlanItem.shoppingListItems;
-      delete mealPlanItem.shoppingListId;
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
     });
   }
 
@@ -502,7 +389,8 @@ export class MealPlanPage {
           role: 'cancel'
         },
         {
-          text: 'Ok',
+          text: 'Delete',
+          cssClass: 'alertDanger',
           handler: () => {
             this._deleteSelected();
           }

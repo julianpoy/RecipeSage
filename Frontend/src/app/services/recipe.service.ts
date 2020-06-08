@@ -5,6 +5,7 @@ import { Label } from './label.service';
 
 import fractionjs from 'fraction.js';
 import { HttpService } from './http.service';
+import { HttpErrorHandlerService } from './http-error-handler.service';
 import { UtilService } from './util.service';
 import { EventService } from './event.service';
 import { Image } from './image.service';
@@ -60,6 +61,7 @@ export class RecipeService {
   public alertCtrl: AlertController,
   public events: EventService,
   public httpService: HttpService,
+  private httpErrorHandlerService: HttpErrorHandlerService,
   public utilService: UtilService) {}
 
   getExportURL(format) {
@@ -109,6 +111,21 @@ export class RecipeService {
       method: 'get',
       url
     }).then(response => response.data);
+  }
+
+  async getRecipeById(recipeId: string) {
+    const url = this.utilService.getBase() + `recipes/${recipeId}${this.utilService.getTokenQuery()}`;
+
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
   }
 
   create(data) {

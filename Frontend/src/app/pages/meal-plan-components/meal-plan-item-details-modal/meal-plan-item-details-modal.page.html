@@ -34,6 +34,13 @@
 
   <br />
 
+  <ion-item *ngIf="mealItem.recipe?.id" (click)="addToShoppingList()" button>
+    <ion-icon slot="start" name="cart"></ion-icon>
+    <ion-label>
+      <h2>Add this recipe to shopping list</h2>
+    </ion-label>
+  </ion-item>
+
   <ion-item (click)="edit()" button>
     <ion-icon slot="start" name="create"></ion-icon>
     <ion-label>
@@ -49,8 +56,8 @@
   </ion-item>
 
   <ion-item (click)="delete()" button>
-    <ion-icon slot="start" name="trash"></ion-icon>
-    <ion-label>
+    <ion-icon slot="start" name="trash" color="danger"></ion-icon>
+    <ion-label color="danger">
       <h2>Delete this item</h2>
     </ion-label>
   </ion-item>
