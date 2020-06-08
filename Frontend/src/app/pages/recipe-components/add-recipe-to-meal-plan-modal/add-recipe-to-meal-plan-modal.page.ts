@@ -26,8 +26,7 @@ export class AddRecipeToMealPlanModalPage {
 
   @Input() reference: any;
 
-  selectedDay: Dayjs = dayjs(new Date());
-  selectedMealGroup: any[] = [];
+  selectedDays: number[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -128,10 +127,6 @@ export class AddRecipeToMealPlanModalPage {
     });
   }
 
-  currentScheduledMeals() {
-    return this.selectedMealGroup.map(e => e.title).join(', ');
-  }
-
   isFormValid() {
     if (!this.destinationMealPlan) return false;
 
@@ -148,7 +143,7 @@ export class AddRecipeToMealPlanModalPage {
       title: this.recipe.title,
       recipeId: this.recipe.id,
       meal: this.meal,
-      scheduled: this.selectedDay.toDate()
+      scheduled: new Date(this.selectedDays[0])
     }).then(response => {
       loading.dismiss();
 

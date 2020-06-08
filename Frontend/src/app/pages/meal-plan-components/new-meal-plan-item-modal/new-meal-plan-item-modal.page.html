@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Add item(s)</ion-title>
+    <ion-title>{{ isEditing ? 'Update Meal Plan Item' : 'Add Meal Plan Item' }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -15,12 +15,12 @@
 
 <ion-content class="ion-padding">
   <div>
-    <ion-segment [(ngModel)]="inputType" value="manualEntry">
-      <ion-segment-button value="manualEntry">
-        Manual Entry
-      </ion-segment-button>
+    <ion-segment [(ngModel)]="inputType" value="recipe">
       <ion-segment-button value="recipe">
         Choose Recipe
+      </ion-segment-button>
+      <ion-segment-button value="manualEntry">
+        Manual Entry
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -30,7 +30,7 @@
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
         <ion-label position="floating">Item title</ion-label>
-        <ion-input [(ngModel)]="itemTitle" type="text"
+        <ion-input [(ngModel)]="title" type="text"
           autocapitalize="on"
           autocomplete="on"
           autocorrect="on"
@@ -41,21 +41,28 @@
     <div *ngSwitchCase="'recipe'">
       <br /><br />
       <select-recipe
-      [(selectedRecipe)]="selectedRecipe"
+      [(selectedRecipe)]="recipe"
       ></select-recipe>
     </div>
   </div>
 
   <br /><br />
 
-  <select-meal (mealChange)="meal = $event"></select-meal>
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <input class="rs-date" type="date" autofill="true" value="{{ sanitizedScheduled }}" (change)="scheduledDateChange($event)" />
+  </ion-item>
+
+  <br /><br />
+
+  <select-meal [meal]="meal" (mealChange)="meal = $event"></select-meal>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
-    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-icon name="calendar" slot="start"></ion-icon>
     <ion-label>
-      Add to Meal Plan
+      {{ isEditing ? 'Save Changes' : 'Add to Meal Plan' }}
     </ion-label>
   </ion-button>
 </ion-footer>
