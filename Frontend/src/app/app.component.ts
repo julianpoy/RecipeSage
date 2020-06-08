@@ -15,6 +15,7 @@ import { CapabilitiesService } from '@/services/capabilities.service';
 import { VersionCheckService } from '@/services/versioncheck.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { EventService } from '@/services/event.service';
+import { OfflineCacheService } from '@/services/offline-cache.service';
 
 @Component({
   selector: 'app-root',
@@ -56,6 +57,7 @@ export class AppComponent {
     private preferencesService: PreferencesService,
     private capabilitiesService: CapabilitiesService,
     private versionCheckService: VersionCheckService,
+    private offlineCacheService: OfflineCacheService,
     public cookingToolbarService: CookingToolbarService,
   ) {
 
