@@ -64,7 +64,7 @@
         button>
         <ion-card-content>
           <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" size="200px">
-            <img [src]="recipe.images[0].location" />
+            <img [src]="recipe.images[0].location" crossorigin="anonymous" />
           </ion-thumbnail>
           <div *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]" class="no-image">
             <img src="/assets/imgs/logo_green.png" />
@@ -105,7 +105,7 @@
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
         button>
         <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" slot="start" size="200px">
-          <img [src]="recipe.images[0].location" />
+          <img [src]="recipe.images[0].location" crossorigin="anonymous" />
         </ion-thumbnail>
 
         <ion-label>

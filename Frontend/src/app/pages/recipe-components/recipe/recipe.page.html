@@ -18,7 +18,7 @@
   <ion-card class="ion-no-margin">
     <ion-item lines="none">
       <ion-thumbnail class="ion-margin-top" *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
-        <img src="{{ recipe.images[0].location }}">
+        <img src="{{ recipe.images[0].location }}" crossorigin="anonymous">
       </ion-thumbnail>
 
       <ion-label>
