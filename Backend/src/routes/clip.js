@@ -26,7 +26,11 @@ const clipRecipe = async clipUrl => {
 
   await page.evaluate(() => {
     try {
+      // Force lazyload for content listening to scroll
       window.scrollTo(0, document.body.scrollHeight);
+      // Fix UMD for sites that define reserved names globally
+      window.define = null;
+      window.exports = null;
     } catch(e) {}
   });
 
