@@ -245,7 +245,7 @@ export class MealCalendarComponent {
     event.preventDefault();
     this.dayDragInProgress = false;
     this.highlightedDay = null;
-    const mealItemId = event.dataTransfer.getData('mealItemId');
+    const mealItemId = event.dataTransfer.getData('text');
     const mealItem = this.mealPlan.items.find(item => item.id === mealItemId);
     if (!mealItem) return;
 
