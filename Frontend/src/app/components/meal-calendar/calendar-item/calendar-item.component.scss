@@ -17,7 +17,7 @@
   vertical-align: middle;
 
   &.breakfast {
-    background: var(--ion-color-danger);
+    background: var(--ion-color-success);
   }
 
   &.lunch {
@@ -25,7 +25,7 @@
   }
 
   &.dinner {
-    background: var(--ion-color-success);
+    background: var(--ion-color-danger);
   }
 
   &.snacks {
