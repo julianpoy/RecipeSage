@@ -27,6 +27,8 @@ const clipRecipe = async clipUrl => {
   await page.evaluate(() => {
     try {
       window.scrollTo(0, document.body.scrollHeight);
+      window.define = null;
+      window.exports = null;
     } catch(e) {}
   });
 
