@@ -17,6 +17,7 @@ export class MealGroupComponent {
   dragStart(event, mealItem) {
     mealItem.dragging = true;
     event.dataTransfer.setData('mealItemId', mealItem.id);
+    event.dataTransfer.setData('text', mealItem.id); // Must set 'text' prop for Android dragndrop, otherwise evt will be cancelled
   }
 
   dragEnd(event, mealItem) {
