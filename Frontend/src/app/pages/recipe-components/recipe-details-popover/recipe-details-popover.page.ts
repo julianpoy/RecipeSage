@@ -10,6 +10,8 @@ import { CookingToolbarService } from '@/services/cooking-toolbar.service';
   styleUrls: ['recipe-details-popover.page.scss']
 })
 export class RecipeDetailsPopoverPage {
+  recipeId;
+
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;
 
@@ -18,7 +20,7 @@ export class RecipeDetailsPopoverPage {
   constructor(
     private preferencesService: PreferencesService,
     private wakeLockService: WakeLockService,
-    private cookingToolbarService: CookingToolbarService,
+    public cookingToolbarService: CookingToolbarService,
     private popoverCtrl: PopoverController
   ) {
     this.wakeLockCapable = this.wakeLockService.isCapable;
