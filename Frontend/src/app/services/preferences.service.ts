@@ -17,6 +17,10 @@ export enum MyRecipesPreferenceKey {
   SortBy = 'myRecipes.sortBy'
 }
 
+export enum RecipeDetailsPreferenceKey {
+  EnableWakeLock = 'recipeDetails.enableWakeLock',
+}
+
 export enum ManageLabelsPreferenceKey {
   ShowCreatedAt = 'manageLabels.showCreatedAt'
 }
@@ -47,6 +51,8 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
   [MyRecipesPreferenceKey.SortBy]: '-title' | '- createdAt' | 'createdAt' | '- updatedAt' | 'updatedAt';
+
+  [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
 
   [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 
@@ -79,6 +85,8 @@ export class PreferencesService {
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
+
+    [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
 
     [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 

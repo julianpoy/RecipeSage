@@ -9,11 +9,14 @@ import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { WakeLockService } from '@/services/wakelock.service';
+import { PreferencesService, RecipeDetailsPreferenceKey } from '@/services/preferences.service';
 import { RecipeCompletionTrackerService } from '@/services/recipe-completion-tracker.service';
 
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
+import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-details-popover.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
@@ -27,6 +30,8 @@ import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.compone
 export class RecipePage {
 
   defaultBackHref: string = RouteMap.HomePage.getPath('main');
+
+  wakeLockRequest;
 
   recipe: Recipe;
   recipeId: string;
@@ -51,6 +56,8 @@ export class RecipePage {
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
+    public preferencesService: PreferencesService,
+    public wakeLockService: WakeLockService,
     public recipeCompletionTrackerService: RecipeCompletionTrackerService,
     public route: ActivatedRoute,
     public utilService: UtilService,
@@ -84,6 +91,12 @@ export class RecipePage {
     }, () => {
       loading.dismiss();
     });
+
+    this.setupWakeLock();
+  }
+
+  ionViewWillLeave() {
+    this.releaseWakeLock();
   }
 
   refresh(loader) {
@@ -197,6 +210,53 @@ export class RecipePage {
     });
   }
 
+  async presentPopover(event) {
+    const popover = await this.popoverCtrl.create({
+      component: RecipeDetailsPopoverPage,
+      componentProps: {
+        recipeId: this.recipeId,
+      },
+      event
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+    if (!data || !data.action) return;
+    switch(data.action) {
+      case 'updateWakeLock':
+        const wlEnabled = this.preferencesService.preferences[RecipeDetailsPreferenceKey.EnableWakeLock];
+        wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
+        break;
+      case 'addToShoppingList':
+        this.addRecipeToShoppingList();
+        break;
+      case 'addToMealPlan':
+        this.addRecipeToMealPlan();
+        break;
+      case 'share':
+        this.shareRecipe();
+        break;
+      case 'print':
+        this.printRecipe();
+        break;
+      case 'unpin':
+        this.unpinRecipe();
+        break;
+      case 'pin':
+        this.pinRecipe();
+        break;
+      case 'edit':
+        this.editRecipe();
+        break;
+      case 'clone':
+        this.cloneRecipe();
+        break;
+      case 'delete':
+        this.deleteRecipe();
+        break;
+    }
+  }
 
   instructionClicked(event, instruction: Instruction, idx: number) {
     if (instruction.isHeader) return;
@@ -590,5 +650,16 @@ export class RecipePage {
 
   unpinRecipe() {
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  setupWakeLock() {
+    if (!this.wakeLockRequest && this.preferencesService.preferences[RecipeDetailsPreferenceKey.EnableWakeLock]) {
+      this.wakeLockService.request().then(wl => this.wakeLockRequest = wl);
+    }
+  }
+
+  releaseWakeLock() {
+    if (this.wakeLockRequest) this.wakeLockRequest.release();
+    this.wakeLockRequest = null;
   }
 }
