@@ -39,7 +39,7 @@ export class WakeLockService {
           this.wakeLock = null;
         });
 
-        console.log("WakeLock requested");
+        console.log('WakeLock requested');
       } catch(e) {
         this.wakeLock = null;
       }
@@ -53,7 +53,7 @@ export class WakeLockService {
       } catch(e) {}
       this.wakeLock = null;
 
-      console.log("WakeLock released");
+      console.log('WakeLock released');
     }
   }
 
