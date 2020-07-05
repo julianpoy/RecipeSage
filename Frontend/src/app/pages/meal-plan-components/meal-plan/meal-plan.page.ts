@@ -468,7 +468,7 @@ export class MealPlanPage {
      this.getItemsOnDay(selectedDay).map(item => ({
        id: item.id,
        title: item.title,
-       recipeId: item.recipeId,
+       recipeId: item.recipeId || item.recipe?.id,
        scheduled: dayjs(item.scheduled).add(dayDiff, 'day').toDate(),
        meal: item.meal
      }))
@@ -490,7 +490,7 @@ export class MealPlanPage {
     const newItems = this.selectedDaysInProgress.map(selectedDay =>
      this.getItemsOnDay(selectedDay).map(item => ({
        title: item.title,
-       recipeId: item.recipeId,
+       recipeId: item.recipeId || item.recipe?.id,
        scheduled: dayjs(item.scheduled).add(dayDiff, 'day').toDate(),
        meal: item.meal
      }))
