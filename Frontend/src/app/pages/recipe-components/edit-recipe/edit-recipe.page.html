@@ -17,7 +17,7 @@
     <div class="recipe-image" *ngFor="let image of images; let i = index">
       <div class="image-frame">
         <ion-icon name="remove-circle" class="remove-image" (click)="removeImage(image)" color="danger"></ion-icon>
-        <img src="{{ image.location }}" crossorigin="anonymous" />
+        <img src="{{ image.location }}" />
       </div>
       <div class="image-subtext" *ngIf="images.length > 1">
         <ion-icon name="caret-back" [ngClass]="{ 'hide-reorder': i == 0 }" (click)="reorderImage(image, -1)"></ion-icon>

@@ -34,7 +34,7 @@
         <!-- RECIPIENT -->
         <ion-item *ngIf="message.recipe" (click)="openRecipe(message.recipe)" lines="none">
           <ion-avatar *ngIf="message.recipe.images && message.recipe.images.length > 0" slot="start">
-            <img src="{{ message.recipe.images[0].location }}" crossorigin="anonymous">
+            <img src="{{ message.recipe.images[0].location }}">
           </ion-avatar>
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
@@ -54,7 +54,7 @@
         <!-- SENDER -->
         <ion-item *ngIf="message.originalRecipe" (click)="openRecipe(message.originalRecipe)" lines="none">
           <ion-avatar *ngIf="message.originalRecipe.images && message.originalRecipe.images.length > 0" slot="start">
-            <img src="{{ message.originalRecipe.images[0].location }}" crossorigin="anonymous">
+            <img src="{{ message.originalRecipe.images[0].location }}">
           </ion-avatar>
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.originalRecipe.title }}</h2>
