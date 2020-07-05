@@ -75,7 +75,7 @@ services:
     ports:
       - 9200:9200
   pushpin:
-    image: fanout/pushpin
+    image: fanout/pushpin:1.27.0
     environment:
       - target=express:3000
     ports:
