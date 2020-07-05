@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
 import { RecipeService } from '@/services/recipe.service';
 import { EventService } from '@/services/event.service';
 
@@ -11,10 +12,14 @@ export class OfflineCacheService {
   knownRecipeIds = new Set();
   constructor(
     private preferencesService: PreferencesService,
+    private featureFlagService: FeatureFlagService,
     private recipeService: RecipeService,
     private events: EventService
   ) {
-    if (this.preferencesService.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
+    const ffEnabled = this.featureFlagService.flags[GlobalFeatureFlagKeys.EnableExperimentalOfflineCache];
+    const preferenceEnabled = this.preferencesService.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache];
+
+    if (ffEnabled && preferenceEnabled) {
       this.events.subscribe('recipe:created', () => {
         this.updateAllRecipeLists();
       });

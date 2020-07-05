@@ -50,7 +50,7 @@
       </ion-label>
       <ion-icon name='tablet-landscape' slot="start"></ion-icon>
     </ion-item>
-    <ion-item lines="inset">
+    <ion-item lines="inset" *ngIf="featureFlags[featureFlagKeys.EnableExperimentalOfflineCache]">
       <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]" (ngModelChange)="toggleOfflineCache(); savePreferences()"></ion-toggle>
       <ion-label class="ion-text-wrap">
         Experimental: Cache all recipes offline

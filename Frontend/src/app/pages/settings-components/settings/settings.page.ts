@@ -3,6 +3,7 @@ import { NavController, ToastController, AlertController, LoadingController } fr
 
 import { RouteMap } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { OfflineCacheService } from '@/services/offline-cache.service';
@@ -20,6 +21,9 @@ export class SettingsPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
+  featureFlags = this.featureFlagService.flags;
+  featureFlagKeys = GlobalFeatureFlagKeys;
+
   showSplitPaneOption = false;
 
   constructor(
@@ -29,6 +33,7 @@ export class SettingsPage {
     public loadingCtrl: LoadingController,
     public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
+    public featureFlagService: FeatureFlagService,
     public quickTutorialService: QuickTutorialService) {
 
     try {
