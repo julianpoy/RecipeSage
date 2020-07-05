@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, AlertController } from '@ionic/angular';
+import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 
 import { RouteMap } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { OfflineCacheService } from '@/services/offline-cache.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 
@@ -19,13 +21,19 @@ export class SettingsPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
+  featureFlags = this.featureFlagService.flags;
+  featureFlagKeys = GlobalFeatureFlagKeys;
+
   showSplitPaneOption = false;
 
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
+    public featureFlagService: FeatureFlagService,
     public quickTutorialService: QuickTutorialService) {
 
     try {
@@ -42,6 +50,23 @@ export class SettingsPage {
   toggleSplitPane() {
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
       this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.SplitPaneView);
+    }
+  }
+
+  async toggleOfflineCache() {
+    if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
+      await this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.ExperimentalOfflineCache);
+      const loading = await this.loadingCtrl.create({
+        message: 'Fetching all recipes, please wait...'
+      });
+      await loading.present();
+      try {
+        await this.offlineCacheService.fullSync();
+      } catch(e) {
+        setTimeout(() => alert('There was an error while syncing. Please report this.'));
+        throw e;
+      }
+      await loading.dismiss();
     }
   }
 
