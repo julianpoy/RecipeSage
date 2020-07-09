@@ -20,6 +20,7 @@ const clipRecipe = async clipUrl => {
       timeout: 25000
     });
   } catch(err) {
+    console.log("Timed out", err);
     err.status = 400;
     throw err;
   }
