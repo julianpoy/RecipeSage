@@ -5,6 +5,8 @@ const puppeteer = require('puppeteer-core');
 
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
+const loggerService = require('../services/logger');
+
 const clipRecipe = async clipUrl => {
   const browser = await puppeteer.connect({
     browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`
@@ -21,6 +23,13 @@ const clipRecipe = async clipUrl => {
     });
   } catch(err) {
     console.log("Timed out", err);
+    loggerService.capture("Clip failed", {
+      level: 'warning',
+      err,
+      data: {
+        clipUrl
+      }
+    });
     err.status = 400;
     throw err;
   }
@@ -41,6 +50,14 @@ const clipRecipe = async clipUrl => {
   });
 
   console.log(JSON.stringify(recipeData));
+
+  loggerService.capture("Clip success", {
+    level: 'info',
+    data: {
+      recipeData,
+      clipUrl
+    }
+  });
   return recipeData;
 };
 
