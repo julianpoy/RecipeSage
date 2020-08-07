@@ -103,6 +103,27 @@ const deleteRecipes = recipeIds => {
   });
 };
 
+const deleteRecipesByUser = userId => {
+  if (!ENABLE) return Promise.resolve();
+
+  return client.deleteByQuery({
+    index: getFullIndexName('recipes'),
+    body: {
+      query: {
+        bool: {
+          filter: {
+            query_string: {
+              fields: ["userId"],
+              analyzer: "standard",
+              query: userId,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 const searchRecipes = (userId, queryString) => {
   if (!ENABLE) throw new Error("ElasticSearch not enabled");
 
@@ -142,5 +163,6 @@ const searchRecipes = (userId, queryString) => {
 module.exports = {
   indexRecipes,
   deleteRecipes,
+  deleteRecipesByUser,
   searchRecipes
 };
