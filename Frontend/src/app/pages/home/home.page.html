@@ -28,79 +28,66 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #contentContainer>
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
+<ion-content class="viewport">
   <ion-searchbar
     *ngIf="folder === 'main'"
     (ionClear)="search('')"
     (keydown.enter)="search($event.target.value); $event.target.blur()"
-  ></ion-searchbar>
+    ></ion-searchbar>
+  <div style="overflow-y: scroll; height: 100%;" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }">
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-  <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
-    <a
-      *ngFor="let label of labels"
-      [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
-      (click)="toggleLabel(label.title)">
-      {{ label.title }} ({{ label.recipeCount }})
-    </a>
-  </div>
 
-  <virtual-scroller
-    *ngIf="preferences[preferenceKeys.ViewType] === 'tiles'"
-    #scroll
-    bufferAmount="5"
-    (vsEnd)="fetchMoreRecipes($event)"
-    [items]="recipes"
-    [parentScroll]="scrollElement"
-    [enableUnequalChildrenSizes]="true">
 
-    <div #container class="card-container">
-      <ion-card *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn"
-        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
-        (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
-        button>
-        <ion-card-content>
-          <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" size="200px">
-            <img [src]="recipe.images[0].location" />
-          </ion-thumbnail>
-          <div *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]" class="no-image">
-            <img src="/assets/imgs/logo_green.png" />
-          </div>
-          <ion-item lines="none">
-            <ion-label>
-              <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
-              <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
-              <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
-
-              <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-                <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
-              </p>
-
-              <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
-                Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
-              </p>
-            </ion-label>
-          </ion-item>
-        </ion-card-content>
-        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">Selected</ion-badge>
-      </ion-card>
+    <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
+      <a
+        *ngFor="let label of labels"
+        [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
+        (click)="toggleLabel(label.title)">
+        {{ label.title }} ({{ label.recipeCount }})
+      </a>
     </div>
-  </virtual-scroller>
 
-  <virtual-scroller
-    *ngIf="preferences[preferenceKeys.ViewType] === 'list'"
-    #scroll
-    bufferAmount="5"
-    (vsEnd)="fetchMoreRecipes($event)"
-    [items]="recipes"
-    [parentScroll]="scrollElement"
-    [enableUnequalChildrenSizes]="true">
+    <div class="viewport" *ngIf="preferences[preferenceKeys.ViewType] === 'tiles'">
+      <div *uiScroll="let recipe of datasource">
+        <div class="card-container">
+          <ion-card
+            [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+            (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+            button>
+            <ion-card-content>
+              <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" size="200px">
+                <img [src]="recipe.images[0].location" />
+              </ion-thumbnail>
+              <div *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]" class="no-image">
+                <img src="/assets/imgs/logo_green.png" />
+              </div>
+              <ion-item lines="none">
+                <ion-label>
+                  <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+                  <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
+                  <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
 
-    <div #container>
-      <ion-item *ngFor="let recipe of scroll.viewPortItems; trackBy: trackByFn" class="recipeItem"
+                  <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+                    <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+                  </p>
+
+                  <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
+                    Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
+                  </p>
+                </ion-label>
+              </ion-item>
+            </ion-card-content>
+            <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">Selected</ion-badge>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+
+    <div *uiScroll="let recipe of datasource" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }" class="hi">
+      <ion-item class="recipeItem"
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
         button>
@@ -125,58 +112,60 @@
         <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">Selected</ion-badge>
       </ion-item>
     </div>
-  </virtual-scroller>
 
-  <ion-list *ngIf="!loading">
-    <null-state *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
-      <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
-      <ion-label virtualSlot="body">
-        <h2>Welcome to RecipeSage!</h2>
-        <br /><br />
-        <p>
-          This is where your recipes will appear.<br />
-          It looks like you don't have any recipes yet.<br />
-          <b>Click the + button in the bottom right corner to add one!</b><br />
-
+    <ion-list>
+      <null-state *ngIf="shouldDisplayWelcome()">
+        <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
+        <ion-label virtualSlot="body">
+          <h2>Welcome to RecipeSage!</h2>
           <br /><br />
+          <p>
+            This is where your recipes will appear.<br />
+            It looks like you don't have any recipes yet.<br />
+            <b>Click the + button in the bottom right corner to add one!</b><br />
 
-          You can also import recipes!<br />
-          Use the side menu to go to settings -> import
+            <br /><br />
 
-          <br /><br />
+            You can also import recipes!<br />
+            Use the side menu to go to settings -> import
 
-          For desktop browsers, you can use our<br />
-          <a href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo" target="_blank">Chrome</a>
-          &
-          <a href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/" target="_blank">Firefox</a>
-          extensions to clip recipes from the web<br />
+            <br /><br />
 
-          <br /><br />
+            For desktop browsers, you can use our<br />
+            <a href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo" target="_blank">Chrome</a>
+            &
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/" target="_blank">Firefox</a>
+            extensions to clip recipes from the web<br />
 
-          See the <a href="/#/tips-tricks-tutorials">Tips Tricks & Tutorials page</a> for detailed how-tos
-        </p>
-      </ion-label>
-    </null-state>
-    <null-state *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0">
-      <ion-icon name="mail-open" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          Your recipe inbox is empty.<br />
-          When someone sends you a recipe, it will show up here!
-        </p>
-      </ion-label>
-    </null-state>
-    <null-state *ngIf="recipes && recipes.length === 0 && searchText.length > 0">
-      <ion-icon name="search" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          No search results.<br /><br />
-          Search includes:<br />
-          Title, description, source, ingredients, instructions, and notes.
-        </p>
-      </ion-label>
-    </null-state>
-  </ion-list>
+            <br /><br />
+
+            See the <a href="/#/tips-tricks-tutorials">Tips Tricks & Tutorials page</a> for detailed how-tos
+          </p>
+        </ion-label>
+      </null-state>
+      <null-state *ngIf="shouldDisplayInboxEmpty()">
+        <ion-icon name="mail-open" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            Your recipe inbox is empty.<br />
+            When someone sends you a recipe, it will show up here!
+          </p>
+        </ion-label>
+      </null-state>
+      {{ searchResults.length }}
+      {{ searchText }}
+      <null-state *ngIf="shouldDisplayNoResults()">
+        <ion-icon name="search" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            No search results.<br /><br />
+            Search includes:<br />
+            Title, description, source, ingredients, instructions, and notes.
+          </p>
+        </ion-label>
+      </null-state>
+    </ion-list>
+  </div>
 
   <ion-fab *ngIf="folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newRecipe()" color="primary">

@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { Datasource, IDatasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -19,21 +20,18 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
-  recipes: Recipe[] = [];
-  recipeFetchBuffer = 25;
-  fetchPerPage = 50;
-  lastRecipeCount = 0;
-  totalRecipeCount: number;
+  knownRecipesById: { [key: string]: Recipe } = {};
+  totalRecipeCount = -1;
 
-  loading = true;
   selectedRecipeIds: string[] = [];
   selectionMode = false;
 
   searchText = '';
+  searchResults: Recipe[] = [];
 
   folder: string;
   folderTitle: string;
@@ -41,10 +39,16 @@ export class HomePage implements AfterViewInit {
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
 
-  reloadPending = true;
+  reloadPending = false;
 
-  @ViewChild('contentContainer', { static: true }) contentContainer;
-  scrollElement;
+  datasource: IDataSource = new Datasource({
+    get: (idx, count) => this.loadRecipes(idx, count),
+    settings: {
+      startIndex: 0,
+      padding: 2, // # of viewports worth of extra items to keep
+      bufferSize: 50, // Minimum # to fetch in a single pagination request
+    }
+  });
 
   constructor(
     public navCtrl: NavController,
@@ -93,10 +97,6 @@ export class HomePage implements AfterViewInit {
     }, this);
   }
 
-  ngAfterViewInit() {
-    this.getScrollElement();
-  }
-
   ionViewWillEnter() {
     this.clearSelectedRecipes();
 
@@ -118,17 +118,6 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  fetchMoreRecipes(event) {
-    if (this.searchText) return;
-
-    const shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
-
-    const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
-    if (shouldFetchMore && moreToScroll) {
-      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
-    }
-  }
-
   resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
@@ -148,88 +137,63 @@ export class HomePage implements AfterViewInit {
     });
   }
 
+  resetAndLoadRecipes() {
+    this.datasource.adapter.reload();
+  }
+
   resetAndLoadLabels() {
     this.labels = [];
     return this.loadLabels();
   }
 
-  resetAndLoadRecipes() {
-    this.loading = true;
-    this.resetRecipes();
+  async loadRecipes(offset, numToFetch) {
+    if (offset < 0) return console.log("requested invalid offset: ", offset);
 
-    return this._resetAndLoadRecipes().then(() => {
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    });
-  }
-
-  _resetAndLoadRecipes() {
+    console.log("load request at offset", offset, "for", numToFetch, "recipes.");
     if (this.searchText && this.searchText.trim().length > 0) {
-      return this.search(this.searchText);
+      return this.searchResults.slice(offset, offset + numToFetch);
     }
-    return this.loadRecipes(0, this.fetchPerPage);
-  }
 
-  resetRecipes() {
-    this.recipes = [];
-    this.lastRecipeCount = 0;
-  }
+    return this.recipeService.fetch({
+      folder: this.folder,
+      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      offset,
+      count: numToFetch,
+      labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+      ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+    }).then(response => {
 
-  loadRecipes(offset, numToFetch) {
-    this.lastRecipeCount += numToFetch;
+      this.totalRecipeCount = response.totalCount;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetch({
-        folder: this.folder,
-        sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
-        offset,
-        count: numToFetch,
-        labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
+      response.data.forEach(recipe => this.knownRecipesById[recipe.id] = recipe);
 
-        this.totalRecipeCount = response.totalCount;
+      return response.data;
 
-        this.recipes = this.recipes.concat(response.data);
-
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    }).catch(async err => {
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 
-  loadLabels() {
-    return new Promise((resolve, reject) => {
-      this.labelService.fetch().then(response => {
-        this.labels = response;
-
-        resolve();
-      }).catch(err => {
-        reject(err);
-      });
-    });
+  async loadLabels() {
+    this.labels = await this.labelService.fetch();
   }
 
   toggleLabel(labelTitle) {
@@ -272,10 +236,6 @@ export class HomePage implements AfterViewInit {
     popover.present();
   }
 
-  async getScrollElement() {
-    this.scrollElement = await this.contentContainer.getScrollElement();
-  }
-
   newRecipe() {
     this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath('new'));
   }
@@ -291,40 +251,35 @@ export class HomePage implements AfterViewInit {
 
     this.searchText = text;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.search(text, {
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
-        loading.dismiss();
+    return this.recipeService.search(text, {
+      ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+    }).then(response => {
+      loading.dismiss();
 
-        this.resetRecipes();
-        this.recipes = response.data;
+      this.searchResults = response.data;
+      this.datasource.adapter.reload();
+    }).catch(async err => {
+      loading.dismiss();
 
-        resolve();
-      }).catch(async err => {
-        loading.dismiss();
-
-        reject();
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 
@@ -399,7 +354,8 @@ export class HomePage implements AfterViewInit {
   }
 
   async deleteSelectedRecipes() {
-    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title)
+    const recipeNames = this.selectedRecipeIds.map(recipeId => this.knownRecipesById[recipeId]?.title)
+                                              .filter(name => name)
                                               .join('<br />');
 
     const alert = await this.alertCtrl.create({
@@ -448,5 +404,17 @@ export class HomePage implements AfterViewInit {
       ]
     });
     alert.present();
+  }
+
+  shouldDisplayWelcome() {
+    return this.folder === 'main' && this.totalRecipeCount === 0 && this.searchText.length === 0 && this.selectedLabels.length === 0
+  }
+
+  shouldDisplayInboxEmpty() {
+    return this.folder === 'inbox' && this.totalRecipeCount === 0 && this.searchText.length === 0
+  }
+
+  shouldDisplayNoResults() {
+    return !this.searchResults?.length && this.searchText.length > 0
   }
 }

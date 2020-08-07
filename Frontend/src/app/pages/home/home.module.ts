@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { UiScrollModule } from 'ngx-ui-scroll';
 
 import { HomePage } from './home.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
@@ -23,7 +24,7 @@ import { NullStateModule } from '@/components/null-state/null-state.module';
     LogoIconModule,
     NullStateModule,
     HomePopoverPageModule,
-    VirtualScrollerModule,
+    UiScrollModule,
   ],
   declarations: [HomePage]
 })
