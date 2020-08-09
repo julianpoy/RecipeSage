@@ -29,26 +29,16 @@
 </ion-header>
 
 <ion-content class="viewport">
-  <ion-searchbar
-    *ngIf="folder === 'main'"
-    (ionClear)="search('')"
-    (keydown.enter)="search($event.target.value); $event.target.blur()"
-    ></ion-searchbar>
   <div style="overflow-y: scroll; height: 100%;" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }">
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-
-
-    <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
-      <a
-        *ngFor="let label of labels"
-        [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
-        (click)="toggleLabel(label.title)">
-        {{ label.title }} ({{ label.recipeCount }})
-      </a>
-    </div>
+    <ion-searchbar
+      *ngIf="folder === 'main'"
+      (ionClear)="search('')"
+      (keydown.enter)="search($event.target.value); $event.target.blur()"
+    ></ion-searchbar>
 
     <div class="viewport" *ngIf="preferences[preferenceKeys.ViewType] === 'tiles'">
       <div *uiScroll="let recipe of datasource">
@@ -86,7 +76,16 @@
       </div>
     </div>
 
-    <div *uiScroll="let recipe of datasource" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }" class="hi">
+    <div *uiScroll="let recipe of datasource" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }">
+      <div class="labelChips" *ngIf="preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
+        <a
+          *ngFor="let label of labels"
+          [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
+          (click)="toggleLabel(label.title)">
+          {{ label.title }} ({{ label.recipeCount }})
+        </a>
+      </div>
+
       <ion-item class="recipeItem"
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
@@ -152,8 +151,6 @@
           </p>
         </ion-label>
       </null-state>
-      {{ searchResults.length }}
-      {{ searchText }}
       <null-state *ngIf="shouldDisplayNoResults()">
         <ion-icon name="search" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">

@@ -151,7 +151,10 @@ export class HomePage {
 
     console.log("load request at offset", offset, "for", numToFetch, "recipes.");
     if (this.searchText && this.searchText.trim().length > 0) {
-      return this.searchResults.slice(offset, offset + numToFetch);
+      console.log("search active");
+      const items = this.searchResults.slice(offset, offset + numToFetch);
+      console.log("search returning", items);
+      return items;
     }
 
     return this.recipeService.fetch({
