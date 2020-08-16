@@ -83,11 +83,11 @@
           [ngClass]="{ selected: selectedRecipeIds.indexOf(tiledRecipe.id) > -1 }"
           (click)="selectionMode ? selectRecipe(tiledRecipe) : openRecipe(tiledRecipe, $event)"
           >
-            <div style="height: 200px;">
-              <ion-thumbnail *ngIf="tiledRecipe.images && tiledRecipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" size="200px">
+            <div style="height: 200px;" *ngIf="preferences[preferenceKeys.ShowImages]">
+              <ion-thumbnail *ngIf="tiledRecipe.images && tiledRecipe.images.length > 0" size="200px">
                 <img [src]="tiledRecipe.images[0].location" />
               </ion-thumbnail>
-              <div *ngIf="!tiledRecipe.image && preferences[preferenceKeys.ShowImages]" class="no-image">
+              <div *ngIf="!tiledRecipe.image" class="no-image">
                 <img src="/assets/imgs/logo_green.png" />
               </div>
             </div>
