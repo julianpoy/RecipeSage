@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-
 import { LabelsPage } from './labels.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 import { LabelsPopoverPageModule } from '@/pages/labels-pages/labels-popover/labels-popover.module';
@@ -25,7 +23,6 @@ import { NullStateModule } from '@/components/null-state/null-state.module';
     NullStateModule,
     LabelsPopoverPageModule,
     ManageLabelModalPageModule,
-    VirtualScrollerModule,
   ],
   declarations: [LabelsPage]
 })

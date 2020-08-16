@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { Datasource, IDatasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -14,37 +15,48 @@ import { LabelService, Label } from '@/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
+const RECIPE_TILE_SIZE_PX = 220;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
+  loading = true;
+
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
   recipes: Recipe[] = [];
-  recipeFetchBuffer = 25;
-  fetchPerPage = 50;
-  lastRecipeCount = 0;
-  totalRecipeCount: number;
+  knownRecipesById: { [key: string]: Recipe } = {};
+  totalRecipeCount = -1;
 
-  loading = true;
   selectedRecipeIds: string[] = [];
   selectionMode = false;
 
   searchText = '';
+  searchResults: Recipe[] = [];
 
   folder: string;
   folderTitle: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
+  viewType = this.preferences[this.preferenceKeys.ViewType];
 
-  reloadPending = true;
+  reloadPending = false;
 
-  @ViewChild('contentContainer', { static: true }) contentContainer;
-  scrollElement;
+  datasource: IDatasource = new Datasource({
+    get: (idx, count) => this.dataSourceGet(idx, count),
+    settings: {
+      startIndex: 0,
+      padding: 3, // # of viewports worth of extra items to keep
+      // bufferSize: 25, // Minimum # to fetch in a single pagination request
+    }
+  });
+
+  rowRatio = 1;
 
   constructor(
     public navCtrl: NavController,
@@ -72,6 +84,18 @@ export class HomePage implements AfterViewInit {
         break;
     }
 
+    this.updateRowRatio();
+
+    this.resetAndLoadLabels();
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.updateRowRatio();
+      }, 200);
+    });
+
     events.subscribe('recipe:created', () => this.reloadPending = true);
     events.subscribe('recipe:modified', () => this.reloadPending = true);
     events.subscribe('recipe:deleted', () => this.reloadPending = true);
@@ -91,10 +115,6 @@ export class HomePage implements AfterViewInit {
         this.resetAndLoadRecipes();
       }
     }, this);
-  }
-
-  ngAfterViewInit() {
-    this.getScrollElement();
   }
 
   ionViewWillEnter() {
@@ -118,17 +138,6 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  fetchMoreRecipes(event) {
-    if (this.searchText) return;
-
-    const shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
-
-    const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
-    if (shouldFetchMore && moreToScroll) {
-      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
-    }
-  }
-
   resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
@@ -148,88 +157,106 @@ export class HomePage implements AfterViewInit {
     });
   }
 
+  resetAndLoadRecipes() {
+    this.recipes = [];
+    this.knownRecipesById = {};
+    this.datasource.adapter.reload();
+  }
+
   resetAndLoadLabels() {
     this.labels = [];
     return this.loadLabels();
   }
 
-  resetAndLoadRecipes() {
-    this.loading = true;
-    this.resetRecipes();
-
-    return this._resetAndLoadRecipes().then(() => {
-      this.loading = false;
-    }, () => {
-      this.loading = false;
-    });
-  }
-
-  _resetAndLoadRecipes() {
-    if (this.searchText && this.searchText.trim().length > 0) {
-      return this.search(this.searchText);
+  async dataSourceGet(offset, numToFetch) {
+    if (this.preferences[this.preferenceKeys.ViewType] === 'list') {
+      return this.loadRecipes(offset, numToFetch);
     }
-    return this.loadRecipes(0, this.fetchPerPage);
+
+    if (this.preferences[this.preferenceKeys.ViewType] === 'tiles') {
+      const rowRatio = this.rowRatio;
+      const recipes = await this.loadRecipes(offset * rowRatio, numToFetch * rowRatio);
+
+      return (recipes || []).reduce((acc, recipe, idx) => {
+        const groupIdx = Math.floor(idx / rowRatio);
+
+        acc[groupIdx] = acc[groupIdx] || [];
+        acc[groupIdx].push(recipe);
+        return acc;
+      }, []);
+    }
   }
 
-  resetRecipes() {
-    this.recipes = [];
-    this.lastRecipeCount = 0;
+  async loadRecipes(offset, numToFetch) {
+    if (offset < 0) return console.log('requested invalid offset: ', offset);
+
+    if (this.searchText && this.searchText.trim().length > 0) {
+      const items = this.searchResults.slice(offset, offset + numToFetch);
+      return items;
+    }
+
+    const stepSize = 50;
+    const startOffset = Math.floor(this.recipes.length / stepSize) * stepSize;
+
+    for (let currOffset = startOffset; currOffset < offset + numToFetch; currOffset += stepSize) {
+      const alreadyHaveRequested = currOffset + stepSize < this.recipes.length;
+      const alreadyHaveAll = this.totalRecipeCount === this.recipes.length;
+      const greaterThanTotalCount = this.totalRecipeCount !== -1 && offset > this.totalRecipeCount;
+
+      if (!alreadyHaveRequested && !greaterThanTotalCount && !alreadyHaveAll) {
+        await this._loadRecipes(currOffset, stepSize);
+      }
+    }
+
+    return this.recipes.slice(offset, offset + numToFetch);
   }
 
-  loadRecipes(offset, numToFetch) {
-    this.lastRecipeCount += numToFetch;
+  async _loadRecipes(offset, numToFetch) {
+    this.loading = true;
+    return this.recipeService.fetch({
+      folder: this.folder,
+      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      offset,
+      count: numToFetch,
+      labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+      ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+    }).then(response => {
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetch({
-        folder: this.folder,
-        sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
-        offset,
-        count: numToFetch,
-        labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
+      this.totalRecipeCount = response.totalCount;
 
-        this.totalRecipeCount = response.totalCount;
+      response.data.forEach(recipe => this.knownRecipesById[recipe.id] = recipe);
 
-        this.recipes = this.recipes.concat(response.data);
+      this.recipes.splice(offset, response.data.length, ...response.data);
 
-        resolve();
-      }).catch(async err => {
-        reject();
+      this.loading = false;
 
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+      return response.data;
+
+    }).catch(async err => {
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 
-  loadLabels() {
-    return new Promise((resolve, reject) => {
-      this.labelService.fetch().then(response => {
-        this.labels = response;
-
-        resolve();
-      }).catch(err => {
-        reject(err);
-      });
-    });
+  async loadLabels() {
+    this.labels = await this.labelService.fetch();
   }
 
   toggleLabel(labelTitle) {
@@ -259,21 +286,27 @@ export class HomePage implements AfterViewInit {
     });
 
     popover.onDidDismiss().then(({ data }) => {
-      if (!data) return;
-      if (data.refreshSearch) this.resetAndLoadRecipes();
-      if (typeof data.selectionMode === 'boolean') {
-        this.selectionMode = data.selectionMode;
-        if (!this.selectionMode) {
-          this.clearSelectedRecipes();
+      if (data) {
+        if (data.refreshSearch) this.resetAndLoadRecipes();
+        if (typeof data.selectionMode === 'boolean') {
+          this.selectionMode = data.selectionMode;
+          if (!this.selectionMode) {
+            this.clearSelectedRecipes();
+          }
         }
       }
+
+      this.updateViewType();
     });
 
     popover.present();
   }
 
-  async getScrollElement() {
-    this.scrollElement = await this.contentContainer.getScrollElement();
+  updateViewType() {
+    const previousViewType = this.viewType;
+
+    this.viewType = this.preferences[this.preferenceKeys.ViewType];
+    if (this.viewType !== previousViewType) this.datasource.adapter.reload();
   }
 
   newRecipe() {
@@ -288,43 +321,40 @@ export class HomePage implements AfterViewInit {
     }
 
     const loading = this.loadingService.start();
+    this.loading = true;
 
     this.searchText = text;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.search(text, {
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
-        loading.dismiss();
+    return this.recipeService.search(text, {
+      ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+    }).then(response => {
+      loading.dismiss();
 
-        this.resetRecipes();
-        this.recipes = response.data;
+      this.searchResults = response.data;
+      this.datasource.adapter.reload();
+      this.loading = false;
+    }).catch(async err => {
+      loading.dismiss();
 
-        resolve();
-      }).catch(async err => {
-        loading.dismiss();
-
-        reject();
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
     });
   }
 
@@ -399,7 +429,8 @@ export class HomePage implements AfterViewInit {
   }
 
   async deleteSelectedRecipes() {
-    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title)
+    const recipeNames = this.selectedRecipeIds.map(recipeId => this.knownRecipesById[recipeId]?.title)
+                                              .filter(name => name)
                                               .join('<br />');
 
     const alert = await this.alertCtrl.create({
@@ -448,5 +479,30 @@ export class HomePage implements AfterViewInit {
       ]
     });
     alert.present();
+  }
+
+  updateRowRatio() {
+    const previousRowRatio = this.rowRatio;
+    const ASSUMED_SCROLLBAR_WIDTH_PX = 20;
+    const availableWidth = window.innerWidth - ASSUMED_SCROLLBAR_WIDTH_PX;
+    this.rowRatio = Math.floor(availableWidth / RECIPE_TILE_SIZE_PX);
+    const isTileMode = this.preferences[this.preferenceKeys.ViewType] === 'tiles'
+    if (isTileMode && this.rowRatio !== previousRowRatio) this.datasource.adapter.reload();
+  }
+
+  shouldDisplayWelcome() {
+    return !this.loading
+      && this.folder === 'main'
+      && this.totalRecipeCount === 0
+      && this.searchText.length === 0
+      && this.selectedLabels.length === 0
+  }
+
+  shouldDisplayInboxEmpty() {
+    return !this.loading && this.folder === 'inbox' && this.totalRecipeCount === 0 && this.searchText.length === 0
+  }
+
+  shouldDisplayNoResults() {
+    return !this.loading && !this.searchResults?.length && this.searchText.length > 0
   }
 }
