@@ -52,11 +52,11 @@ export class HomePage {
     settings: {
       startIndex: 0,
       padding: 3, // # of viewports worth of extra items to keep
-      //bufferSize: 25, // Minimum # to fetch in a single pagination request
+      // bufferSize: 25, // Minimum # to fetch in a single pagination request
     }
   });
 
-  rowRatio: number = 1;
+  rowRatio = 1;
 
   constructor(
     public navCtrl: NavController,
@@ -188,7 +188,7 @@ export class HomePage {
   }
 
   async loadRecipes(offset, numToFetch) {
-    if (offset < 0) return console.log("requested invalid offset: ", offset);
+    if (offset < 0) return console.log('requested invalid offset: ', offset);
 
     if (this.searchText && this.searchText.trim().length > 0) {
       const items = this.searchResults.slice(offset, offset + numToFetch);
@@ -491,7 +491,11 @@ export class HomePage {
   }
 
   shouldDisplayWelcome() {
-    return !this.loading && this.folder === 'main' && this.totalRecipeCount === 0 && this.searchText.length === 0 && this.selectedLabels.length === 0
+    return !this.loading
+      && this.folder === 'main'
+      && this.totalRecipeCount === 0
+      && this.searchText.length === 0
+      && this.selectedLabels.length === 0
   }
 
   shouldDisplayInboxEmpty() {
