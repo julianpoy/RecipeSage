@@ -15,15 +15,20 @@ import { LabelService, Label } from '@/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
+const RECIPE_TILE_SIZE_PX = 220;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
 export class HomePage {
+  loading = true;
+
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
+  recipes: Recipe[] = [];
   knownRecipesById: { [key: string]: Recipe } = {};
   totalRecipeCount = -1;
 
@@ -38,17 +43,20 @@ export class HomePage {
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
+  viewType = this.preferences[this.preferenceKeys.ViewType];
 
   reloadPending = false;
 
-  datasource: IDataSource = new Datasource({
-    get: (idx, count) => this.loadRecipes(idx, count),
+  datasource: IDatasource = new Datasource({
+    get: (idx, count) => this.dataSourceGet(idx, count),
     settings: {
       startIndex: 0,
-      padding: 2, // # of viewports worth of extra items to keep
-      bufferSize: 50, // Minimum # to fetch in a single pagination request
+      padding: 3, // # of viewports worth of extra items to keep
+      //bufferSize: 25, // Minimum # to fetch in a single pagination request
     }
   });
+
+  rowRatio: number = 1;
 
   constructor(
     public navCtrl: NavController,
@@ -75,6 +83,18 @@ export class HomePage {
         this.folderTitle = 'My Recipes';
         break;
     }
+
+    this.updateRowRatio();
+
+    this.resetAndLoadLabels();
+
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.updateRowRatio();
+      }, 200);
+    });
 
     events.subscribe('recipe:created', () => this.reloadPending = true);
     events.subscribe('recipe:modified', () => this.reloadPending = true);
@@ -138,6 +158,8 @@ export class HomePage {
   }
 
   resetAndLoadRecipes() {
+    this.recipes = [];
+    this.knownRecipesById = {};
     this.datasource.adapter.reload();
   }
 
@@ -146,17 +168,51 @@ export class HomePage {
     return this.loadLabels();
   }
 
+  async dataSourceGet(offset, numToFetch) {
+    if (this.preferences[this.preferenceKeys.ViewType] === 'list') {
+      return this.loadRecipes(offset, numToFetch);
+    }
+
+    if (this.preferences[this.preferenceKeys.ViewType] === 'tiles') {
+      const rowRatio = this.rowRatio;
+      const recipes = await this.loadRecipes(offset * rowRatio, numToFetch * rowRatio);
+
+      return (recipes || []).reduce((acc, recipe, idx) => {
+        const groupIdx = Math.floor(idx / rowRatio);
+
+        acc[groupIdx] = acc[groupIdx] || [];
+        acc[groupIdx].push(recipe);
+        return acc;
+      }, []);
+    }
+  }
+
   async loadRecipes(offset, numToFetch) {
     if (offset < 0) return console.log("requested invalid offset: ", offset);
 
-    console.log("load request at offset", offset, "for", numToFetch, "recipes.");
     if (this.searchText && this.searchText.trim().length > 0) {
-      console.log("search active");
       const items = this.searchResults.slice(offset, offset + numToFetch);
-      console.log("search returning", items);
       return items;
     }
 
+    const stepSize = 50;
+    const startOffset = Math.floor(this.recipes.length / stepSize) * stepSize;
+
+    for (let currOffset = startOffset; currOffset < offset + numToFetch; currOffset += stepSize) {
+      const alreadyHaveRequested = currOffset + stepSize < this.recipes.length;
+      const alreadyHaveAll = this.totalRecipeCount === this.recipes.length;
+      const greaterThanTotalCount = this.totalRecipeCount !== -1 && offset > this.totalRecipeCount;
+
+      if (!alreadyHaveRequested && !greaterThanTotalCount && !alreadyHaveAll) {
+        await this._loadRecipes(currOffset, stepSize);
+      }
+    }
+
+    return this.recipes.slice(offset, offset + numToFetch);
+  }
+
+  async _loadRecipes(offset, numToFetch) {
+    this.loading = true;
     return this.recipeService.fetch({
       folder: this.folder,
       sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
@@ -169,6 +225,10 @@ export class HomePage {
       this.totalRecipeCount = response.totalCount;
 
       response.data.forEach(recipe => this.knownRecipesById[recipe.id] = recipe);
+
+      this.recipes.splice(offset, response.data.length, ...response.data);
+
+      this.loading = false;
 
       return response.data;
 
@@ -226,17 +286,27 @@ export class HomePage {
     });
 
     popover.onDidDismiss().then(({ data }) => {
-      if (!data) return;
-      if (data.refreshSearch) this.resetAndLoadRecipes();
-      if (typeof data.selectionMode === 'boolean') {
-        this.selectionMode = data.selectionMode;
-        if (!this.selectionMode) {
-          this.clearSelectedRecipes();
+      if (data) {
+        if (data.refreshSearch) this.resetAndLoadRecipes();
+        if (typeof data.selectionMode === 'boolean') {
+          this.selectionMode = data.selectionMode;
+          if (!this.selectionMode) {
+            this.clearSelectedRecipes();
+          }
         }
       }
+
+      this.updateViewType();
     });
 
     popover.present();
+  }
+
+  updateViewType() {
+    const previousViewType = this.viewType;
+
+    this.viewType = this.preferences[this.preferenceKeys.ViewType];
+    if (this.viewType !== previousViewType) this.datasource.adapter.reload();
   }
 
   newRecipe() {
@@ -251,6 +321,7 @@ export class HomePage {
     }
 
     const loading = this.loadingService.start();
+    this.loading = true;
 
     this.searchText = text;
 
@@ -261,6 +332,7 @@ export class HomePage {
 
       this.searchResults = response.data;
       this.datasource.adapter.reload();
+      this.loading = false;
     }).catch(async err => {
       loading.dismiss();
 
@@ -409,15 +481,24 @@ export class HomePage {
     alert.present();
   }
 
+  updateRowRatio() {
+    const previousRowRatio = this.rowRatio;
+    const ASSUMED_SCROLLBAR_WIDTH_PX = 20;
+    const availableWidth = window.innerWidth - ASSUMED_SCROLLBAR_WIDTH_PX;
+    this.rowRatio = Math.floor(availableWidth / RECIPE_TILE_SIZE_PX);
+    const isTileMode = this.preferences[this.preferenceKeys.ViewType] === 'tiles'
+    if (isTileMode && this.rowRatio !== previousRowRatio) this.datasource.adapter.reload();
+  }
+
   shouldDisplayWelcome() {
-    return this.folder === 'main' && this.totalRecipeCount === 0 && this.searchText.length === 0 && this.selectedLabels.length === 0
+    return !this.loading && this.folder === 'main' && this.totalRecipeCount === 0 && this.searchText.length === 0 && this.selectedLabels.length === 0
   }
 
   shouldDisplayInboxEmpty() {
-    return this.folder === 'inbox' && this.totalRecipeCount === 0 && this.searchText.length === 0
+    return !this.loading && this.folder === 'inbox' && this.totalRecipeCount === 0 && this.searchText.length === 0
   }
 
   shouldDisplayNoResults() {
-    return !this.searchResults?.length && this.searchText.length > 0
+    return !this.loading && !this.searchResults?.length && this.searchText.length > 0
   }
 }
