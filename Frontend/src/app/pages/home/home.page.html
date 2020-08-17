@@ -30,9 +30,9 @@
 
 <ion-content class="viewport">
   <div style="overflow-y: scroll; height: 100%;" [ngClass]="{ 'hide-ui-scroll': shouldDisplayWelcome() || shouldDisplayInboxEmpty() || shouldDisplayNoResults() }">
-    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
+    <!--<ion-refresher slot="fixed" (ionRefresh)="refresh($event)">-->
+      <!--<ion-refresher-content></ion-refresher-content>-->
+    <!--</ion-refresher>-->
 
     <ion-searchbar
       *ngIf="folder === 'main'"
