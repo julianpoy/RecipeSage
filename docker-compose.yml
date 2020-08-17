@@ -22,11 +22,8 @@ services:
       dockerfile: ./Frontend/Dockerfile
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
       - ./Frontend/src:/app/Frontend/src
       - ./Frontend/package.json:/app/Frontend/package.json
-      - ./Frontend/package-lock.json:/app/Frontend/package-lock.json
   express:
     ports:
       - "3000:3000"
@@ -68,11 +65,8 @@ services:
       - BROWSERLESS_PORT=3000
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
       - ./Backend/src:/app/Backend/src
       - ./Backend/package.json:/app/Backend/package.json
-      - ./Backend/package-lock.json:/app/Backend/package-lock.json
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
     environment:

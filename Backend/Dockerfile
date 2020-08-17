@@ -29,9 +29,7 @@ RUN apk add --no-cache \
     rm -rf mdbtools-0.7.1
 
 COPY Backend/package.json ./Backend/package.json
-COPY Backend/package-lock.json ./Backend/package-lock.json
 COPY SharedUtils/package.json ./SharedUtils/package.json
-COPY SharedUtils/package-lock.json ./SharedUtils/package-lock.json
 
 RUN cd Backend && npm install
 RUN cd SharedUtils && npm install

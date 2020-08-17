@@ -7,10 +7,6 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
-.hide-ui-scroll div[ui-scroll] {
-  display: none;
-}
-
 ion-router-outlet.cookingToolbarOpen {
   bottom: 60px;
 }
