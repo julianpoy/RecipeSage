@@ -56,9 +56,11 @@
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
         button>
-        <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" slot="start" size="200px">
-          <img [src]="recipe.images[0].location" />
-        </ion-thumbnail>
+        <div *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" class="thumbnail-container" style="margin: 8px 16px 8px 0">
+          <ion-thumbnail size="200px">
+            <img [src]="recipe.images[0].location" />
+          </ion-thumbnail>
+        </div>
 
         <ion-label>
           <h2 class="ion-text-wrap">{{ recipe.title }}</h2>

@@ -28,6 +28,11 @@ ion-router-outlet.cookingToolbarOpen {
   --max-width: 280px;
 }
 
+.thumbnail-container {
+  width: 80px;
+  height: 80px;
+}
+
 ion-thumbnail {
   width: 80px;
   height: 80px;
@@ -38,6 +43,11 @@ ion-thumbnail {
 }
 
 @media only screen and (min-width: $desktop-breakpoint) {
+  .thumbnail-container {
+    width: 200px;
+    height: 200px;
+  }
+
   ion-thumbnail {
     width: 200px;
     height: 200px;
