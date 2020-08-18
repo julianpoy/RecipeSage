@@ -110,14 +110,6 @@ export class HomePage implements AfterViewInit {
     }
   }
 
-  refresh(refresher) {
-    this.resetAndLoadAll().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
-  }
-
   fetchMoreRecipes(event) {
     if (this.searchText) return;
 
