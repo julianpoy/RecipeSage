@@ -7,6 +7,7 @@ import { UtilService } from '@/services/util.service';
 import { LabelService, Label } from '@/services/label.service';
 import { LabelsPopoverPage } from '@/pages/labels-pages/labels-popover/labels-popover.page';
 import { ManageLabelModalPage } from '@/pages/labels-pages/manage-label-modal/manage-label-modal.page';
+import { PreferencesService, ManageLabelsPreferenceKey } from '@/services/preferences.service';
 
 @Component({
   selector: 'page-labels',
@@ -14,13 +15,14 @@ import { ManageLabelModalPage } from '@/pages/labels-pages/manage-label-modal/ma
   styleUrls: ['labels.page.scss']
 })
 export class LabelsPage {
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = ManageLabelsPreferenceKey;
+
   labels: Label[] = [];
 
   loading = true;
   selectedLabelIds: string[] = [];
   selectionMode = false;
-
-  viewOptions: any = {};
 
   constructor(
     public navCtrl: NavController,
@@ -30,18 +32,15 @@ export class LabelsPage {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public labelService: LabelService,
-    public utilService: UtilService) {
-
-    this.loadViewOptions();
+    public utilService: UtilService,
+    public preferencesService: PreferencesService) {
   }
 
   ionViewWillEnter() {
     this.clearSelectedLabels();
 
     const loading = this.loadingService.start();
-    this.loadLabels().then(() => {
-      loading.dismiss();
-    }, () => {
+    this.loadLabels().finally(() => {
       loading.dismiss();
     });
   }
@@ -54,33 +53,13 @@ export class LabelsPage {
     });
   }
 
-  loadViewOptions() {
-    const defaults = {
-      showDates: false
-    };
-
-    this.viewOptions.showDates = JSON.parse(localStorage.getItem('showDates'));
-
-    for (const key in this.viewOptions) {
-      if (this.viewOptions.hasOwnProperty(key)) {
-        if (this.viewOptions[key] == null) {
-          this.viewOptions[key] = defaults[key];
-        }
-      }
-    }
-  }
-
   loadLabels() {
     this.labels = [];
+    this.loading = true;
 
-    return new Promise((resolve, reject) => {
-      this.labelService.fetch().then(response => {
-        this.labels = response;
-
-        resolve();
-      }).catch(err => {
-        reject(err);
-      });
+    return this.labelService.fetch().then(response => {
+      this.labels = response;
+      this.loading = false;
     });
   }
 
@@ -88,7 +67,6 @@ export class LabelsPage {
     const popover = await this.popoverCtrl.create({
       component: LabelsPopoverPage,
       componentProps: {
-        viewOptions: this.viewOptions,
         selectionMode: this.selectionMode
       },
       event
@@ -120,7 +98,10 @@ export class LabelsPage {
     });
 
     manageModal.onDidDismiss().then(() => {
-      this.loadLabels();
+      const loading = this.loadingService.start();
+      this.loadLabels().finally(() => {
+        loading.dismiss();
+      });
     });
 
     manageModal.present();
@@ -190,5 +171,9 @@ export class LabelsPage {
       ]
     });
     alert.present();
+  }
+
+  formatDate(input: string) {
+    return this.utilService.formatDate(input);
   }
 }

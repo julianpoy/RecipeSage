@@ -12,8 +12,12 @@ $content-layer: 2;
     left: 0;
     right: 0;
     top: 0;
-    bottom: 50%;
+    bottom: 62%;
     z-index: $bg-layer; // Move this below all other layers
+
+    @media only screen and (min-width:450px) {
+      bottom: 55%;
+    }
   }
 
   .intro-fold {
@@ -36,7 +40,7 @@ $content-layer: 2;
   }
 
   .intro-fold-dimmer {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.6);
   }
 
   .title, .screen, .welcomeContent {
@@ -47,23 +51,40 @@ $content-layer: 2;
   .title {
     text-align: center;
     color: white;
-    padding: 60px;
+    padding: 25px;
     padding-top: 80px;
+    padding-bottom: 60px;
+
+    @media only screen and (min-width: 450px) {
+      padding: 60px;
+    }
 
     h1 {
       font-size: 2.5rem;
 
-      @media only screen and (min-width:350px) {
+      @media only screen and (min-width:450px) {
         font-size: 3.5rem;
       }
     }
+
+    .subtitle {
+      font-size: 1.2rem;
+
+      @media only screen and (min-width: 450px) {
+        padding: 1.5rem;
+      }
+    }
+  }
+
+  a.login {
+    cursor: pointer;
+    color: white;
   }
 
   .screen {
     margin-left: auto;
     margin-right: auto;
     max-width: 200px;
-    box-shadow: 1px 1px 40px rgba(0, 0, 0, 0.35);
 
     @media only screen and (min-width:350px) {
       max-width: 300px;
@@ -71,6 +92,14 @@ $content-layer: 2;
 
     @media only screen and (min-width:500px) {
       max-width: 400px;
+    }
+
+    img {
+      box-shadow: 1px 1px 40px rgba(0, 0, 0, 0.35);
+
+      &.ios {
+        border-radius: 15px;
+      }
     }
   }
 
@@ -88,5 +117,9 @@ $content-layer: 2;
     li {
       padding: 2px 0px;
     }
+  }
+
+  .footer-action {
+    text-align: center;
   }
 }

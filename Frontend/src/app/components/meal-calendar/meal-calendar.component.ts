@@ -16,11 +16,21 @@ export class MealCalendarComponent {
   set mealPlan(mealPlan) {
     this._mealPlan = mealPlan;
     this.processIncomingMealPlan();
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
   }
   get mealPlan() { return this._mealPlan; }
 
-  mealsByDate: any = {};
+  @Input() enableEditing = false;
+  @Input() mode = 'outline';
+
+  @Output() mealsByDateChange = new EventEmitter<any>();
+  _mealsByDate: any = {};
+  set mealsByDate(mealsByDate) {
+    this._mealsByDate = mealsByDate;
+    this.mealsByDateChange.emit(mealsByDate);
+  }
+  get mealsByDate() {
+    return this._mealsByDate;
+  }
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
@@ -30,28 +40,38 @@ export class MealCalendarComponent {
   center: Date = new Date(this.today);
   dayTitles: string[];
 
-  @Output() selectedMealGroupChange = new EventEmitter<any[]>();
-  @Output() selectedDayChange = new EventEmitter<Dayjs>();
+  @Output() selectedDaysChange = new EventEmitter<number[]>();
 
-  private _selectedDay: Dayjs = dayjs(this.today);
+  @Output() itemMoved = new EventEmitter<any>();
+  @Output() itemClicked = new EventEmitter<any>();
+  @Output() dayClicked = new EventEmitter<any>();
 
-  set selectedDay(selectedDay) {
-    this._selectedDay = selectedDay;
-    this.selectedDayChange.emit(selectedDay);
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
+  private _selectedDays: number[] = [this.getToday().getTime()];
+  highlightedDay;
+  dayDragInProgress = false;
+
+  set selectedDays(selectedDays) {
+    this._selectedDays = selectedDays;
+    this.selectedDaysChange.emit(selectedDays);
   }
 
-  get selectedDay() {
-    return this._selectedDay;
+  get selectedDays() {
+    return this._selectedDays;
   }
 
   constructor(
     public utilService: UtilService,
     public preferencesService: PreferencesService
   ) {
-    this.selectedDayChange.emit(this.selectedDay);
-    this.selectedMealGroupChange.emit(this.mealItemsByDay(this.selectedDay));
+    setTimeout(() => {
+      this.mealsByDateChange.emit(this.mealsByDate);
+      this.selectedDaysChange.emit(this.selectedDays);
+    });
     this.generateCalendar();
+
+    document.addEventListener('mouseup', () => {
+      this.dayDragInProgress = false;
+    });
   }
 
   // Generates calendar array centered around specified day (today).
@@ -67,7 +87,7 @@ export class MealCalendarComponent {
     const endOfCalendar = endOfMonth.endOf('week');
 
     if (preferences[MealPlanPreferenceKey.StartOfWeek] === 'monday') {
-      this.dayTitles = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      this.dayTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       startOfCalendar = startOfCalendar.add(1, 'day');
 
       // Special case for months starting on sunday: Add an additional week before
@@ -75,7 +95,7 @@ export class MealCalendarComponent {
         startOfCalendar = startOfMonth.subtract(1, 'week').add(1, 'day');
       }
     } else {
-      this.dayTitles = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      this.dayTitles = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
 
     let iteratorDate = dayjs(startOfCalendar);
@@ -95,35 +115,32 @@ export class MealCalendarComponent {
   }
 
   // Gets new calendar center date. Positive = next month, negative = last month
-  getNewCenter(direction) {
+  getNewCenter(direction): Date {
     const currentMonth = this.center.getMonth();
     const newMonth = direction > 0 ? currentMonth + 1 : currentMonth - 1;
 
     return new Date(this.center.getFullYear(), newMonth, 1);
   }
 
-  // Checks if calendar can move in specified direction. Positive = next month, negative = last month
-  canMoveCalendar(direction) {
-    const newCenter = this.getNewCenter(direction);
-    if (direction > 0) {
-      const maximum = new Date(this.today.getFullYear() + 1, this.today.getMonth(), 0); // Can't see last month next year
-      return newCenter < maximum;
-    } else {
-      const minimum = new Date(this.today.getFullYear(), this.today.getMonth(), 1); // Can't be less than the first day of this month
-      return newCenter >= minimum;
-    }
+  getToday(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }
 
   // Moves the calendar. Positive = next month, negative = last month
   moveCalendar(direction) {
-    if (this.canMoveCalendar(direction)) {
-      this.center = this.getNewCenter(direction);
-      const bounds = this.generateCalendar();
+    this.center = this.getNewCenter(direction);
+    const bounds = this.generateCalendar();
 
-      if (this.selectedDay.isBefore(bounds[0]) || this.selectedDay.isAfter(bounds[1])) {
-        this.selectedDay = dayjs(this.center);
-      }
+    if (dayjs(this.selectedDays[0]).isBefore(bounds[0]) || dayjs(this.selectedDays[0]).isAfter(bounds[1])) {
+      this.selectedDays = [this.center.getTime()];
     }
+  }
+
+  calendarTitle() {
+    const includeYear = this.center.getFullYear() !== this.today.getFullYear();
+
+    return this.prettyMonthName(this.center) + (includeYear ? ` ${this.center.getFullYear()}` : '')
   }
 
   prettyMonthName(date) {
@@ -146,19 +163,113 @@ export class MealCalendarComponent {
       return comp;
     }).forEach(item => {
       item.scheduledDateObj = new Date(item.scheduled);
-      const month = item.scheduledDateObj.getMonth();
-      const day = item.scheduledDateObj.getDate();
-      this.mealsByDate[month] = this.mealsByDate[month] || {};
-      this.mealsByDate[month][day] = this.mealsByDate[month][day] || [];
-      this.mealsByDate[month][day].push(item);
+      const day = dayjs(item.scheduledDateObj);
+      this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
+      this.mealsByDate[day.year()][day.month()] = this.mealsByDate[day.year()][day.month()] || {};
+      const dayData = this.mealsByDate[day.year()][day.month()][day.date()] = this.mealsByDate[day.year()][day.month()][day.date()] || {
+        itemsByMeal: {
+          breakfast: [],
+          lunch: [],
+          dinner: [],
+          snacks: [],
+          other: [],
+        },
+        items: [],
+        meals: ['breakfast', 'lunch', 'dinner', 'snacks', 'other']
+      };
+      console.log(dayData, day.year(), day.month(), day.date())
+      dayData.itemsByMeal[item.meal].push(item);
+      dayData.items.push(item);
     });
   }
 
-  mealItemsByDay(day) {
-    return (this.mealsByDate[day.month()] || {})[day.date()] || [];
+  mealItemsByDay(date) {
+    const day = dayjs(date);
+    return this.mealsByDate[day.year()]?.[day.month()]?.[day.date()] || {
+      meals: [],
+      items: []
+    };
+  }
+
+  mealItemTitlesByDay(date) {
+    const mealItems = this.mealItemsByDay(date);
+    return mealItems.items.map(item => item.title);
   }
 
   formatItemCreationDate(plainTextDate) {
     return this.utilService.formatDate(plainTextDate, { now: true });
+  }
+
+  isSelected(day) {
+    return this.selectedDays.includes(day.toDate().getTime())
+  }
+
+  dayKeyEnter(event, day) {
+    this.dayMouseDown(event, day);
+    this.dayMouseUp(event, day);
+  }
+
+  dayMouseDown(event, day) {
+    this.dayDragInProgress = true;
+    if (event.shiftKey) this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
+    else this.selectedDays = [day.toDate().getTime()];
+    this.dayClicked.emit(day.toDate());
+  }
+
+  getDaysBetween(day1: number, day2: number): number[] {
+    const days = [day1];
+    const iterDate = new Date(day1);
+
+    iterDate.setDate(iterDate.getDate() + 1);
+
+    while(iterDate <= new Date(day2)) {
+      days.push(iterDate.getTime());
+
+      iterDate.setDate(iterDate.getDate() + 1);
+    }
+
+    return days;
+  }
+
+  dayMouseOver(event, day) {
+    if (this.dayDragInProgress) {
+      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
+    }
+  }
+
+  dayMouseUp(event, day) {
+    this.dayDragInProgress = false;
+  }
+
+  dayDragDrop(event, day) {
+    event.preventDefault();
+    this.dayDragInProgress = false;
+    this.highlightedDay = null;
+    const mealItemId = event.dataTransfer.getData('text');
+    const mealItem = this.mealPlan.items.find(item => item.id === mealItemId);
+    if (!mealItem) return;
+
+    const currDate = new Date(mealItem.scheduled);
+    const newDate = day.toDate();
+    // Do not trigger event if the item has not moved to a different day
+    if (
+      currDate.getFullYear() === newDate.getFullYear() &&
+      currDate.getMonth() === newDate.getMonth() &&
+      currDate.getDate() === newDate.getDate()
+    ) return;
+
+    this.itemMoved.emit({
+      mealItem,
+      day: day.toString()
+    });
+  }
+
+  dayDragOver(event, day) {
+    event.preventDefault();
+    this.highlightedDay = day;
+  }
+
+  itemDragEnd() {
+    this.highlightedDay = null;
   }
 }

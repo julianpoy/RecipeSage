@@ -66,13 +66,16 @@ export class HomePopoverPage {
           title: `${label.title} (${label.recipeCount})`,
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1
-        }))
+        })),
+        nullMessage: 'You don\'t have any labels. You can create labels on the recipe details page.'
       }
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
       this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
-      this.dismiss(true);
+      setTimeout(() => {
+        this.dismiss(true);
+      })
     });
     labelFilterPopover.present();
   }

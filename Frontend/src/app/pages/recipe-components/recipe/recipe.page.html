@@ -6,8 +6,13 @@
     </ion-buttons>
 
     <ion-title>Recipe Details: {{ recipe.title }}</ion-title>
-  </ion-toolbar>
 
+    <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 
@@ -93,11 +98,11 @@
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let ingredient of ingredients"
+            <p *ngFor="let ingredient of ingredients; index as ingredientIdx"
               [innerHTML]="ingredient.content"
               class="ingredient ion-text-wrap"
-              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: ingredient.complete }"
-              (click)="ingredientClicked($event, ingredient)"></p>
+              [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
+              (click)="ingredientClicked($event, ingredient, ingredientIdx)"></p>
             <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
             <p>
               <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
@@ -114,12 +119,12 @@
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let instruction of instructions" class="instruction ion-text-wrap">
+            <p *ngFor="let instruction of instructions; index as instructionIdx" class="instruction ion-text-wrap">
               <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
               <span
                 *ngIf="!instruction.isHeader"
-                (click)="instructionClicked($event, instruction)"
-                [ngClass]="{ complete: instruction.complete }">
+                (click)="instructionClicked($event, instruction, instructionIdx)"
+                [ngClass]="{ complete: getInstructionComplete(instructionIdx) }">
                 <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
               </span>
             </p>
@@ -131,14 +136,14 @@
 
     <div *ngIf="recipe.notes" class="ion-margin-top">
       <ion-item lines="none">
-        <ion-icon name="paper" slot="start" size="large"></ion-icon>
+        <ion-icon name="document-text" slot="start" size="large"></ion-icon>
         <ion-label>
           <p>Notes</p>
         </ion-label>
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
         <ion-label>
-          <p class="pre">{{ recipe.notes || 'No Notes' }}</p>
+          <p class="pre" [innerHTML]="notes || 'No Notes'"></p>
         </ion-label>
       </ion-item>
     </div>
@@ -167,15 +172,13 @@
 
       <input
         [(ngModel)]='pendingLabel'
-        (focus)='toggleAutocomplete(true)'
-        (focusout)='toggleAutocomplete(false, $event)'
-        (blur)='toggleAutocomplete(false, $event)'
+        (click)='toggleAutocomplete(true); $event.stopPropagation();'
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         autocomplete="off"
         #labelInputField
         id="labelInputField" />
-      <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
+      <div class="autocomplete" *ngIf="showAutocomplete">
         <button
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
@@ -314,6 +317,12 @@
         <ion-button (click)="cloneRecipe()" fill="clear" size="small">
           <ion-icon name="copy" slot="start"></ion-icon>
           Make a Copy
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()" fill="clear" size="small">
+          <ion-icon name="pin" slot="start"></ion-icon>
+          {{ cookingToolbarService.isPinned(recipeId) ? "Unpin Recipe" : "Pin Recipe Open" }}
         </ion-button>
       </ion-col>
     </ion-row>

@@ -52,6 +52,22 @@ h2.recipeTitle {
       width: 215px;
     }
   }
+
+  @media (min-width: 1000px) {
+    .ingredientsCol {
+      width: 275px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .instructionsCol {
+      max-width: 900px;
+    }
+
+    .ingredientsCol {
+      width: 325px;
+    }
+  }
 }
 
 .ingredients {

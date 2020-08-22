@@ -33,9 +33,7 @@ export class AddRecipeToShoppingListModalPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController
-  ) {
-    this.scale = this.scale || 1;
-  }
+  ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
@@ -106,9 +104,9 @@ export class AddRecipeToShoppingListModalPage {
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
       items: this.selectedIngredients.map(ingredient => ({
-        title: ingredient.originalContent,
+        title: ingredient.content,
         recipeId: this.recipe.id,
-        reference: this.reference
+        reference: this.reference || Date.now()
       }))
     }).then(response => {
       loading.dismiss();

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, AlertController } from '@ionic/angular';
+import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 
 import { RouteMap } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+import { CapabilitiesService } from '@/services/capabilities.service';
+import { OfflineCacheService } from '@/services/offline-cache.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 
@@ -18,13 +21,19 @@ export class SettingsPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
+  featureFlags = this.featureFlagService.flags;
+  featureFlagKeys = GlobalFeatureFlagKeys;
+
   showSplitPaneOption = false;
 
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
+    public featureFlagService: FeatureFlagService,
     public quickTutorialService: QuickTutorialService) {
 
     try {
@@ -41,6 +50,23 @@ export class SettingsPage {
   toggleSplitPane() {
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
       this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.SplitPaneView);
+    }
+  }
+
+  async toggleOfflineCache() {
+    if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
+      await this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.ExperimentalOfflineCache);
+      const loading = await this.loadingCtrl.create({
+        message: 'Fetching all recipes, please wait...'
+      });
+      await loading.present();
+      try {
+        await this.offlineCacheService.fullSync();
+      } catch(e) {
+        setTimeout(() => alert('There was an error while syncing. Please report this.'));
+        throw e;
+      }
+      await loading.dismiss();
     }
   }
 
@@ -114,38 +140,29 @@ export class SettingsPage {
     this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
   }
 
-  checkForUpdate() {
-    (window as any).updateSW(async () => {
-      const alert = await this.alertCtrl.create({
-        header: 'App will reload',
-        subHeader: 'The app will reload to check for an update.',
-        buttons: [
-          {
-            text: 'Cancel',
-            handler: () => {
-            }
-          },
-          {
-            text: 'Continue',
-            handler: () => {
-              try {
-                (window as any).forceSWUpdate().then(() => {
-                  (window as any).location.reload(true);
-                });
-              } catch (e) {
+  async checkForUpdate() {
+    const alert = await this.alertCtrl.create({
+      header: 'App will reload',
+      subHeader: 'The app will reload to check for an update.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            try {
+              (window as any).forceSWUpdate().then(() => {
                 (window as any).location.reload(true);
-              }
+              });
+            } catch (e) {
+              (window as any).location.reload(true);
             }
-          }]
-      });
-      alert.present();
-    }, async () => {
-      const toast = await this.toastCtrl.create({
-        message: 'We were unable to check for an update at this time.',
-        duration: 4000
-      });
-
-      toast.present();
+          }
+        }]
     });
+    alert.present();
   }
 }

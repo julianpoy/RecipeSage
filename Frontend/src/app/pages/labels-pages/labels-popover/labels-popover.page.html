@@ -4,9 +4,9 @@
   </ion-list-header>
 
   <ion-item>
-    <ion-toggle [(ngModel)]="viewOptions.showDates" (ngModelChange)="saveViewOptions()"></ion-toggle>
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowCreatedAt]" (ngModelChange)="savePreferences()"></ion-toggle>
     <ion-label class="ion-text-wrap">
-      Show Created/Updated At
+      Show Created At
     </ion-label>
     <ion-icon name='calendar' slot="start"></ion-icon>
   </ion-item>

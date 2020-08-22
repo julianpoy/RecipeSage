@@ -33,4 +33,18 @@ export class ImageService {
       data: formData
     }).then(response => response.data);
   }
+
+  createFromUrl(imageURL: string) {
+    const data = {
+      imageURL
+    };
+
+    const url = this.utilService.getBase() + 'images/' + this.utilService.getTokenQuery();
+
+    return this.httpService.request({
+      method: 'post',
+      url,
+      data
+    }).then(response => response.data);
+  }
 }

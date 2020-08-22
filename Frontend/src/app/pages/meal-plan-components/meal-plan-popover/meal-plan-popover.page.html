@@ -3,19 +3,19 @@
     Options
   </ion-list-header>
 
-  <ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
-    <ion-label>
-      Show Added By
-    </ion-label>
-  </ion-item>
+  <!--<ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">-->
+    <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
+    <!--<ion-label>-->
+      <!--Show Added By-->
+    <!--</ion-label>-->
+  <!--</ion-item>-->
 
-  <ion-item lines="full">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
-    <ion-label>
-      Show Added On
-    </ion-label>
-  </ion-item>
+  <!--<ion-item lines="full">-->
+    <!--<ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>-->
+    <!--<ion-label>-->
+      <!--Show Added On-->
+    <!--</ion-label>-->
+  <!--</ion-item>-->
 
   <ion-item lines="full">
     <ion-label>Start week on</ion-label>
@@ -25,7 +25,26 @@
     </ion-select>
   </ion-item>
 
-  <ion-button (click)="deleteMealPlan()" expand="block" size="small" class="ion-margin">
+  <ion-button (click)="copySelected()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='copy' slot="start"></ion-icon>
+    Copy selected day(s)
+  </ion-button>
+
+  <ion-button (click)="moveSelected()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='cut' slot="start"></ion-icon>
+    Move selected day(s)
+  </ion-button>
+
+  <ion-button (click)="deleteSelected()" color="danger" expand="block" size="small" class="ion-margin">
+    <ion-icon name='trash' slot="start"></ion-icon>
+    Delete selected day(s)
+  </ion-button>
+
+  <ion-list-header>
+    Danger Zone
+  </ion-list-header>
+
+  <ion-button (click)="deleteMealPlan()" color="danger" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
     Delete meal plan
   </ion-button>

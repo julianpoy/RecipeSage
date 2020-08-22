@@ -23,7 +23,7 @@
       <ion-button fill="clear" slot="end">Open</ion-button>
     </ion-item>
     <ion-item>
-      <ion-icon name="clock" slot="start"></ion-icon>
+      <ion-icon name="time" slot="start"></ion-icon>
       <ion-label>
         <h2>More Tutorials are Coming Soon</h2>
         <p>Please feel free to email me if you need help</p>
@@ -152,7 +152,7 @@
         Click the scale link to choose a different recipe scale. A dialogue will pop up for the recipe scale.
         Enter a number or a fraction and the ingredient quantities (shown in bold) will adjust.<br /><br />
         Keep in mind that any measurements that are not shown in bold aren't recognized and won't be scaled.<br /><br />
-        Values entered into the scale field are not permenant. Once you close this recipe, the scale will default back
+        Values entered into the scale field are not permanent. Once you close this recipe, the scale will default back
         to the scale entered in the recipe editor.
       </p>
 
@@ -190,8 +190,8 @@
         </li>
         <li>
           <p>
-            <b>Delete</b>: This button will start the process of deleting this recipe permenantly. Don't worry, you'll
-            be prompted before the recipe is deleted. Confirming the deletion dialogue will completely and permenantly
+            <b>Delete</b>: This button will start the process of deleting this recipe permanently. Don't worry, you'll
+            be prompted before the recipe is deleted. Confirming the deletion dialogue will completely and permanently
             remove the recipe from the system.
           </p>
         </li>
@@ -403,6 +403,28 @@
 
         If the clip tool gets a field wrong, you can always select a different block of text on the page and hit the snip button next to
         that field. The field will then be overwritten with your selection.
+      </p>
+    </div>
+
+    <div *ngIf="active == 'faq'" class="ion-padding">
+      <br />
+      <h2>General FAQ</h2>
+      <p>
+        <b>Q: My search results include results that don't match the search</b><br />
+        The RecipeSage search tool returns results that are as "close" to your match as possible, but also includes misspellings and similar words.<br />
+        Searches will return matches with the exact search text further up in the results list.<br />
+      </p>
+
+      <p>
+        <b>Q: Is RecipeSage compatible with IOS and Android?</b><br />
+        Yep! You can use RecipeSage in the browser on your mobile device, or install it to your device.<br />
+        See our install instructions here: <a href="/#/install">Download & Install</a>.
+      </p>
+
+      <p>
+        <b>Q: Is RecipeSage Open Source?</b><br />
+        Yes, in part - I'm working on it! Open sourcing a large project like this takes time - I've open sourced several components so far.<br />
+        Check out the <a href="/#/about/contact">Discord server</a> for more info!<br />
       </p>
     </div>
 

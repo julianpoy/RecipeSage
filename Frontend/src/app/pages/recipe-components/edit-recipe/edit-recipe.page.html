@@ -20,11 +20,11 @@
         <img src="{{ image.location }}" />
       </div>
       <div class="image-subtext" *ngIf="images.length > 1">
-        <ion-icon name="arrow-dropleft" [ngClass]="{ 'hide-reorder': i == 0 }" (click)="reorderImage(image, -1)"></ion-icon>
+        <ion-icon name="caret-back" [ngClass]="{ 'hide-reorder': i == 0 }" (click)="reorderImage(image, -1)"></ion-icon>
         <span>
           {{ i + 1 }}
         </span>
-        <ion-icon name="arrow-dropright" [ngClass]="{ 'hide-reorder': i >= (images.length - 1) }" (click)="reorderImage(image, 1)"></ion-icon>
+        <ion-icon name="caret-forward" [ngClass]="{ 'hide-reorder': i >= (images.length - 1) }" (click)="reorderImage(image, 1)"></ion-icon>
       </div>
     </div>
 
@@ -40,8 +40,14 @@
   </div>
 
   <div class="ion-padding">
+    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
+      <ion-icon name="clipboard" slot="start"></ion-icon>
+      Autofill fields from URL (beta)
+    </ion-button>
+    <br />
+    <br />
     <ion-item>
-      <ion-label position="floating">Title</ion-label>
+      <ion-label position="stacked">Title</ion-label>
       <ion-input
         [(ngModel)]="recipe.title"
         (ngModelChange)="markAsDirty()"
@@ -53,11 +59,11 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Description</ion-label>
+      <ion-label position="stacked">Description</ion-label>
       <ion-textarea
         [(ngModel)]="recipe.description"
-        (ionInput)="updateTextAreaSize($event)"
         (ngModelChange)="markAsDirty()"
+        auto-grow="true"
         type="text"
         value=""
         autocapitalize="on"
@@ -66,7 +72,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Yield</ion-label>
+      <ion-label position="stacked">Yield</ion-label>
       <ion-input
         [(ngModel)]="recipe.yield"
         (ngModelChange)="markAsDirty()"
@@ -78,7 +84,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Active Time</ion-label>
+      <ion-label position="stacked">Active Time</ion-label>
       <ion-input
         [(ngModel)]="recipe.activeTime"
         (ngModelChange)="markAsDirty()"
@@ -90,7 +96,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Total Time</ion-label>
+      <ion-label position="stacked">Total Time</ion-label>
       <ion-input
         [(ngModel)]="recipe.totalTime"
         (ngModelChange)="markAsDirty()"
@@ -102,7 +108,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Source</ion-label>
+      <ion-label position="stacked">Source</ion-label>
       <ion-input
         [(ngModel)]="recipe.source"
         (ngModelChange)="markAsDirty()"
@@ -114,7 +120,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Source URL</ion-label>
+      <ion-label position="stacked">Source URL</ion-label>
       <ion-input
         [(ngModel)]="recipe.url"
         (ngModelChange)="markAsDirty()"
@@ -126,11 +132,11 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Ingredients</ion-label>
+      <ion-label position="stacked">Ingredients</ion-label>
       <ion-textarea
         [(ngModel)]="recipe.ingredients"
-        (ionInput)="updateTextAreaSize($event)"
         (ngModelChange)="markAsDirty()"
+        auto-grow="true"
         type="text"
         value=""
         autocapitalize="on"
@@ -139,11 +145,11 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Instructions</ion-label>
+      <ion-label position="stacked">Instructions</ion-label>
       <ion-textarea
         [(ngModel)]="recipe.instructions"
-        (ionInput)="updateTextAreaSize($event)"
         (ngModelChange)="markAsDirty()"
+        auto-grow="true"
         type="text"
         value=""
         autocapitalize="on"
@@ -152,11 +158,11 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Notes</ion-label>
+      <ion-label position="stacked">Notes</ion-label>
       <ion-textarea
         [(ngModel)]="recipe.notes"
-        (ionInput)="updateTextAreaSize($event)"
         (ngModelChange)="markAsDirty()"
+        auto-grow="true"
         type="text"
         value=""
         autocapitalize="on"

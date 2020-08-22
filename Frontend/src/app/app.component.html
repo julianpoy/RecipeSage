@@ -19,14 +19,6 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="isLoggedIn && readyForPrompt()" (click)="showInstallPrompt()" button>
-              <ion-icon slot="start" name="cloud-download"></ion-icon>
-              <ion-label>
-                Download & Install
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
             <ion-item *ngIf="isLoggedIn" (click)="logout()" button>
               <ion-icon slot="start" name="log-out"></ion-icon>
               <ion-label>
@@ -41,7 +33,7 @@
         <ion-toolbar>
 
           <p class="ion-padding-start">
-            v{{ version }}<br />
+            {{ version }}<br />
             <ion-menu-toggle auto-hide="false">
               <a [routerLink]="[aboutDetailsHref]">Julian Poyourow</a>
             </ion-menu-toggle>
@@ -50,6 +42,8 @@
         </ion-toolbar>
       </ion-footer>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content" [class]="{ cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0 }"></ion-router-outlet>
+
+    <cooking-toolbar *ngIf="cookingToolbarService.pinnedRecipes.length > 0"></cooking-toolbar>
   </ion-split-pane>
 </ion-app>

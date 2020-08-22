@@ -29,13 +29,18 @@ export class TipsTricksTutorialsPage {
     }, {
       title: 'Recipe Details Page',
       description: 'Individual recipe view',
-      icon: 'paper',
+      icon: 'document-outline',
       tag: 'recipeDetails'
     }, {
       title: 'Clip Tool Browser Extension',
       description: 'The RecipeSage browser plugin',
       icon: 'cut',
       tag: 'webExtension'
+    }, {
+      title: 'General FAQ',
+      description: 'Common questions we receive',
+      icon: 'help-outline',
+      tag: 'faq'
     }];
 
     this.tutorialsByTag = {};

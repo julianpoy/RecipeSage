@@ -1,0 +1,102 @@
+version: '3.7'
+services:
+  proxy:
+    image: nginx
+    volumes:
+    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    - ./nginx/ssl.crt:/tmp/ssl.crt
+    - ./nginx/ssl.key:/tmp/ssl.key
+    ports:
+    - "80:80"
+    - "443:443"
+    command: nginx -g 'daemon off;'
+    depends_on:
+      - webapp
+      - express
+      - pushpin
+  webapp:
+    ports:
+      - "8100:8100"
+    build:
+      context: .
+      dockerfile: ./Frontend/Dockerfile
+    volumes:
+      - ./SharedUtils/src:/app/SharedUtils/src
+      - ./SharedUtils/package.json:/app/SharedUtils/package.json
+      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
+      - ./Frontend/src:/app/Frontend/src
+      - ./Frontend/package.json:/app/Frontend/package.json
+      - ./Frontend/package-lock.json:/app/Frontend/package-lock.json
+  express:
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - elasticsearch
+      - pushpin
+      - browserless
+    build:
+      context: .
+      dockerfile: ./Backend/Dockerfile
+    command: npx nodemon --watch ../SharedUtils --watch . src/bin/www
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_REGION=us-west-2
+      - AWS_BUCKET=chefbook-dev
+      - NODE_ENV=development
+      - VERBOSE=false
+      - VERSION=development
+      - POSTGRES_DB=recipesage_dev
+      - POSTGRES_USER=recipesage_dev
+      - POSTGRES_PASSWORD=recipesage_dev
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+      - POSTGRES_SSL=false
+      - POSTGRES_LOGGING=true
+      - GCM_KEYPAIR
+      - SENTRY_DSN
+      - GRIP_URL=http://pushpin:5561/
+      - GRIP_KEY=changeme
+      - ELASTIC_ENABLE=true
+      - ELASTIC_IDX_PREFIX=rs_dev_
+      - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
+      - ELASTIC_PASSWORD=recipesage_dev
+      - STRIPE_SK
+      - STRIPE_WEBHOOK_SECRET
+      - BROWSERLESS_HOST=browserless
+      - BROWSERLESS_PORT=3000
+    volumes:
+      - ./SharedUtils/src:/app/SharedUtils/src
+      - ./SharedUtils/package.json:/app/SharedUtils/package.json
+      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
+      - ./Backend/src:/app/Backend/src
+      - ./Backend/package.json:/app/Backend/package.json
+      - ./Backend/package-lock.json:/app/Backend/package-lock.json
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=recipesage_dev
+    ports:
+      - 9200:9200
+  pushpin:
+    image: fanout/pushpin:1.27.0
+    environment:
+      - target=express:3000
+    ports:
+      - "7999:7999"
+      - "5560-5563:5560-5563"
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=recipesage_dev
+      - POSTGRES_USER=recipesage_dev
+      - POSTGRES_PASSWORD=recipesage_dev
+  browserless:
+    image: browserless/chrome:1.28.0-chrome-stable
+    environment:
+      - MAX_CONCURRENT_SESSIONS=3
+      - MAX_QUEUE_LENGTH=10

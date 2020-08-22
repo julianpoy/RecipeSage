@@ -81,21 +81,19 @@ export class PrintRecipeModalPage {
     public recipeService: RecipeService) {
     setTimeout(() => {
       for (const template of this.templates) {
-        template.url = this.utilService.generateTrustedRecipeTemplateURL(this.recipe.id, template.modifiers);
+        template.url = this.utilService.generateRecipeTemplateURL(this.recipe.id, template.modifiers);
       }
     });
   }
 
 
   print() {
-    const template = document.getElementById('selectedTemplateFrame');
-    try {
-      (template as any).contentWindow.print();
-    } catch (e) {
-      (template as any).contentWindow.postMessage({
-        action: 'print'
-      }, window.location.origin);
-    }
+    const template = this.templates[this.selectedTemplate];
+    const printUrl = this.utilService.generateRecipeTemplateURL(this.recipe.id, {
+      ...template.modifiers,
+      print: true
+    })
+    window.open(printUrl, '_blank', 'rel="noopener"');
     this.modalCtrl.dismiss();
   }
 

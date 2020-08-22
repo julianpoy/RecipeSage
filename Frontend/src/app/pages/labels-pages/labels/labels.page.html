@@ -4,7 +4,7 @@
       <ion-menu-button *ngIf="!selectionMode"></ion-menu-button>
 
       <ion-button *ngIf="selectionMode" (click)="clearSelectedLabels()">
-        <ion-icon slot="icon-only" name="md-close"></ion-icon>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -29,19 +29,29 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list>
+  <ion-list *ngIf="!loading && labels.length > 0">
+    <ion-item>
+      <ion-label>
+        <p>You have {{labels.length}} total labels. Click a label to view.</p>
+      </ion-label>
+    </ion-item>
     <ion-item
       (click)="selectionMode ? selectLabel(label) : manage(label)"
       *ngFor="let label of labels" button>
-      <ion-label>{{label.title}}</ion-label>
+      <ion-label>
+        {{label.title}}
+        <p>
+          {{label.recipeCount}} Recipes<br />
+          <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">Created {{formatDate(label.createdAt)}}</span>
+        </p>
+      </ion-label>
       <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">Selected</ion-badge>
-      <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge>
     </ion-item>
   </ion-list>
 
   <ion-list *ngIf="!loading">
     <null-state *ngIf="labels.length === 0">
-      <ion-icon name="label" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-icon name="pricetags" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
           You don't have any labels yet.<br />

@@ -1,0 +1,309 @@
+html
+  head
+    title= recipe.title
+    script(type="text/javascript").
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//a.recipesage.com/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    script(type="module" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.esm.js")
+    script(nomodule="" src="https://unpkg.com/ionicons@4.5.9-0/dist/ionicons/ionicons.js")
+    link(href="https://fonts.googleapis.com/css?family=Noto+Serif|Noto+Sans", rel="stylesheet")
+    style(type='text/css').
+      body {
+        position: relative;
+        margin: 0.635cm;
+        font-family: 'Noto+Sans', sans-serif;
+        font-size: 14px;
+      }
+
+      body.printPreview {
+        font-family: 'Noto+Serif', serif;
+        font-size: 12px;
+      }
+
+      body.halfsheet {
+        max-width: 50%;
+      }
+
+      .header {
+        font-size: 20px;
+      }
+
+      .sans {
+        font-family: 'Noto+Sans', sans-serif;
+      }
+
+      .meta {
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+        padding: 4px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .meta > div {
+        flex: 0 0 auto;
+        padding: 5px;
+      }
+
+      .image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      table {
+        width: 100%;
+        font-size: inherit;
+      }
+
+      .prewrap {
+        white-space: pre-wrap;
+      }
+
+      .leftCol {
+        width: 200px;
+        padding-right: 20px;
+      }
+
+      .ingrInstrContainer {
+        margin-top: 10px;
+        display: flex;
+      }
+
+      .verticalInstrIng .ingrInstrContainer {
+        flex-wrap: wrap;
+      }
+
+      .ingredients {
+        min-width: 215px;
+      }
+
+      .verticalInstrIng .ingredients {
+        max-width: initial;
+        margin-left: 40px;
+        margin-bottom: 10px;
+      }
+
+      .twocolIngr .ingredients {
+        column-count: 2;
+      }
+
+      .ingredient {
+        margin-top: 0px;
+        margin-bottom: 8px;
+        padding-right: 20px;
+      }
+
+      .verticalInstrIng .ingredient {
+        margin-bottom: 2px;
+      }
+
+      .ingredient.ingredientHeader {
+        line-height: 170%;
+      }
+
+      .instruction {
+        display: grid;
+        grid-template-columns: min-content auto;
+
+        margin-top: 0;
+        vertical-align: top;
+        padding-bottom: 10px;
+      }
+
+      .verticalInstrIng .instruction {
+        padding-bottom: 8px;
+      }
+
+      .instruction .count {
+        font-weight: bold;
+        padding-right: 10px;
+      }
+
+      .action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .printPreview .action-buttons {
+        display: none;
+      }
+
+      .logo-tagline {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-tagline .openInRS {
+        margin: 10px;
+        font-size: 14px;
+      }
+
+      .logo-tagline .logo-icon .bg {
+        box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+        display: inline-block;
+        border-radius: 100%;
+        background: #353b48;
+        padding: 6px;
+        bottom: middle;
+        width: 18px;
+        height: 18px;
+      }
+
+      .logo-tagline .logo-icon .bg img {
+        max-width: 100%;
+      }
+
+      .print-icon {
+        font-size: 28px;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: color 0.01s;
+      }
+
+      .print-icon:hover {
+        color: #00a8ff;
+      }
+
+      .printed-on {
+        display: none;
+      }
+
+      span.recipe-source-url {
+        display: none;
+      }
+
+      .printPreview span.recipe-source-url {
+        display: block;
+      }
+
+      .printPreview a.recipe-source-url {
+        display: none;
+      }
+
+      @media print {
+        a.recipe-source-url {
+          display: none;
+        }
+
+        span.recipe-source-url {
+          display: block;
+        }
+      }
+
+      @media print {
+        .action-buttons {
+          display: none;
+        }
+
+        .printed-on {
+          display: block;
+        }
+
+        body {
+          font-family: 'Noto+Serif', serif;
+          font-size: 12px;
+        }
+      }
+
+    if modifiers.halfsheet
+      style(type='text/css').
+        @media print {
+          @page {size: landscape}
+        }
+    else
+      style(type='text/css').
+        @media print {
+          @page {size: portrait}
+        }
+
+  body(class=(modifiers.verticalInstrIng ? 'verticalInstrIng ' : '') + (modifiers.halfsheet ? 'halfsheet ' : '') + (modifiers.twocolIngr ? 'twocolIngr ' : '') + (modifiers.printPreview ? 'printPreview ' : ''))
+    div(class="action-buttons")
+      div(class="logo-tagline")
+        div(class="logo-icon")
+          a(href=recipeURL target="_blank")
+            div(class="bg")
+              img(src="https://recipesage.com/assets/imgs/logo_green.png")
+        a(class="openInRS" href=recipeURL target="_blank") Click to Open in RecipeSage
+      if modifiers.showPrintButton
+        ion-icon(name="print" class="print-icon" onclick="window.print()")
+    table
+      tbody
+        tr
+          if recipe.images && recipe.images[0]
+            td(class='leftCol')
+              img(class='image', src= recipe.images[0].location)
+          td
+            h1(class='sans header')= recipe.title
+            if recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield
+              div(class='meta')
+                if recipe.source
+                  div
+                    b(class='sans') Source:&nbsp;&nbsp;
+                    span= recipe.source
+                if recipe.activeTime
+                  div
+                    b(class='sans') Active Time:&nbsp;&nbsp;
+                    span= recipe.activeTime
+                if recipe.totalTime
+                  div
+                    b(class='sans') Total Time:&nbsp;&nbsp;
+                    span= recipe.totalTime
+                if recipe.yield
+                  div
+                    b(class='sans') Yield:&nbsp;&nbsp;
+                    span= recipe.yield
+            p= recipe.description
+            if recipe.labels
+              -var labelIdx = 0
+              each label in recipe.labels
+                i= label.title
+                if ++labelIdx < recipe.labels.length
+                  i ,&nbsp;
+    div(class='ingrInstrContainer')
+      div(class='ingredients')
+        each ingredient in recipe.ingredients
+          p(class=('ingredient ' + (ingredient.isHeader ? 'ingredientHeader' : ''))) !{ingredient.content}
+      div(class='instructions')
+        each instruction in recipe.instructions
+          div(class='instruction')
+            if instruction.isHeader
+              b= instruction.content
+            else
+              b(class='count')= instruction.count
+              span= instruction.content
+
+    if recipe.notes && !modifiers.hideNotes
+      p(class='sans')
+        b Notes:
+      p(class='prewrap')= recipe.notes
+
+    if recipe.url && !modifiers.hideSourceURL
+      b(class='sans') Source URL:&nbsp;
+      span(class="recipe-source-url")= recipe.url
+      a(class="recipe-source-url" href=recipe.url)= recipe.url
+
+    p(class="printed-on")
+      i Printed on&nbsp;
+      i= date
+
+  script(type='text/javascript').
+    if (window.location.href.indexOf('print=true') > -1) {
+      window.print();
+    }
+
+    window.addEventListener('message', function(e) {
+      if (e.data == 'print') window.print();
+    });

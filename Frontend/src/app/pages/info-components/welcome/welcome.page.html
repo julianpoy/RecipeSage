@@ -23,40 +23,59 @@
         All of your recipes in one place
       </h1>
 
+      <p class="subtitle">
+        A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android
+      </p>
+
       <br />
 
       <ion-button (click)="goToAuth('register')" style="margin: 0;">
-        <ion-icon name="ios-leaf" slot="start"></ion-icon>
+        <ion-icon name="leaf" slot="start"></ion-icon>
         <ion-label>
           Create an account
+        </ion-label>
+      </ion-button>
+
+      <br />
+      <br />
+
+      <ion-button (click)="goToAuth('login')" size="small">
+        <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
+        <ion-label>
+          Log In
         </ion-label>
       </ion-button>
     </div>
 
     <div class="screen">
       <picture>
-        <img src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+        <img *ngIf="!isIOS" src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
+        <img *ngIf="isIOS" class="ios" src="assets/stockphotos/my-recipes-ios.jpg" alt="My Recipes Preview">
       </picture>
     </div>
 
     <div class="ion-padding welcomeContent">
-      <h2>Welcome to RecipeSage!</h2>
+      <span class="sectionHeader">Welcome to RecipeSage!</span><br />
 
-      RecipeSage is a homegrown personal recipe keeper
+      <br />
+
+      RecipeSage is free (donation based) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.<br /><br />
+
+      Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.
 
       <br /><br /><br />
 
       <span class="sectionHeader">What can RecipeSage do?</span><br />
 
       <ul>
-        <li>Store all of your recipes in one place</li>
-        <li>Assign labels to your recipes and filter by label</li>
-        <li>Powerful search within your recipe collection</li>
-        <li>Send recipes and notes to your friends and family</li>
-        <li>Create collaborative shopping lists and meal plans</li>
-        <li>Clip recipes directly from the web</li>
-        <li>Import from Pepperplate, Living Cookbook, and Paprika</li>
-        <li>Export your recipes in multiple formats for data portability</li>
+        <li><b>Import from any URL:</b> Create a recipe simply by punching in a web URL</li>
+        <li><b>Powerful search:</b> Search every field within your recipes including misspellings and similar words</li>
+        <li><b>Labelling/categorization system:</b> Tag your recipes and filter by tags</li>
+        <li><b>Drag and drop meal planning:</b> Schedule your meals interactively, quickly and easily</li>
+        <li><b>Shopping lists:</b> Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined</li>
+        <li><b>Sharing:</b> Share your recipes, collaborate on meal plans and shopping lists with your family or friends</li>
+        <li><b>Import:</b> Supports Pepperplate, Living Cookbook, and Paprika</li>
+        <li><b>Export:</b> Back up your recipes in multiple formats for data portability</li>
       </ul>
 
       <span class="sectionHeader">Why RecipeSage?</span><br />
@@ -64,29 +83,31 @@
       <ul>
         <li>Free (donation based)</li>
         <li>Easy to use</li>
-        <li>Mobile compatible</li>
-        <li>Chrome and Firefox extensions make it easy to clip recipes from the web</li>
+        <li>Available on desktop and all mobile devices</li>
+        <li>Import recipes from any URL</li>
       </ul>
 
       <br /><br />
 
-      <ion-button (click)="goToAuth('register')" style="margin: 0;">
-        <ion-icon name="ios-leaf" slot="start"></ion-icon>
-        <ion-label>
-          Create an account
-        </ion-label>
-      </ion-button>
+      <div class="footer-action">
+        <ion-button (click)="goToAuth('register')" style="margin: 0;">
+          <ion-icon name="leaf" slot="start"></ion-icon>
+          <ion-label>
+            Create an account
+          </ion-label>
+        </ion-button>
 
-      <br /><br />
+        <br /><br />
 
-      <ion-button (click)="goToAuth('login')" style="margin: 0;">
-        <ion-icon name="ios-nutrition" slot="start"></ion-icon>
-        <ion-label>
-          Log In
-        </ion-label>
-      </ion-button>
+        <ion-button (click)="goToAuth('login')" size="small">
+          <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
+          <ion-label>
+            Log In
+          </ion-label>
+        </ion-button>
+      </div>
 
-      <br /><br /><br /><br />
+      <br /><br /><br /><br /><br />
     </div>
   </div>
 </ion-content>

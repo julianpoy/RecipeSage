@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
-import { Platform, MenuController, ToastController, AlertController, NavController, Events } from '@ionic/angular';
+import { Platform, MenuController, ToastController, AlertController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -12,6 +12,10 @@ import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { VersionCheckService } from '@/services/versioncheck.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
+import { EventService } from '@/services/event.service';
+import { OfflineCacheService } from '@/services/offline-cache.service';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +46,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private menuCtrl: MenuController,
-    private events: Events,
+    private events: EventService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private utilService: UtilService,
@@ -51,7 +55,10 @@ export class AppComponent {
     private websocketService: WebsocketService,
     private userService: UserService,
     private preferencesService: PreferencesService,
-    private capabilitiesService: CapabilitiesService
+    private capabilitiesService: CapabilitiesService,
+    private versionCheckService: VersionCheckService,
+    private offlineCacheService: OfflineCacheService,
+    public cookingToolbarService: CookingToolbarService,
   ) {
 
     this.initializeApp();
@@ -59,7 +66,6 @@ export class AppComponent {
     this.loadInboxCount();
     this.initUpdateListeners();
     this.initEventListeners();
-    this.initEventDispatchers();
 
     if ('Notification' in window && (Notification as any).permission === 'granted' && this.utilService.isLoggedIn()) {
       this.messagingService.requestNotifications();
@@ -92,23 +98,7 @@ export class AppComponent {
   }
 
   initUpdateListeners() {
-    // When user pauses app (device locks, switches tabs, etc) try to update SW
-    this.events.subscribe('application:multitasking:paused', () => {
-      try {
-        (window as any).updateSW();
-      } catch (e) { }
-    });
-
-    (window as any).onSWUpdate = () => {
-      console.log('Update is waiting for pause...');
-      if ((window as any).isHidden()) {
-        (window as any).location.reload(true);
-      } else {
-        this.events.subscribe('application:multitasking:paused', () => {
-          (window as any).location.reload(true);
-        });
-      }
-    };
+    (window as any).appLoaded = true;
   }
 
   initEventListeners() {
@@ -143,87 +133,6 @@ export class AppComponent {
       });
       toast.present();
     }, this);
-
-    this.websocketService.register('import:pepperplate:complete', payload => {
-      this.events.publish('import:pepperplate:complete');
-    }, this);
-
-    this.websocketService.register('import:pepperplate:failed', payload => {
-      this.events.publish('import:pepperplate:failed', payload.reason);
-    }, this);
-
-    this.websocketService.register('import:pepperplate:working', payload => {
-      this.events.publish('import:pepperplate:working');
-    }, this);
-
-    this.events.subscribe('import:pepperplate:complete', async () => {
-      const notification = 'Your recipes have been imported from Pepperplate.';
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        duration: 10000,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-
-    this.events.subscribe('import:pepperplate:failed', async reason => {
-      let notification = '';
-      if (reason === 'timeout') {
-        notification += 'Import failed: The Pepperplate API is unavailable right now.';
-      } else if (reason === 'invalidCredentials') {
-        notification += 'Import failed: Incorrect Pepperplate username or password.';
-      } else if (reason === 'saving') {
-        notification += 'Import failed: An error occured while fetching the recipes. Please try again later.';
-      } else {
-        return;
-      }
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-
-    this.events.subscribe('import:pepperplate:working', async () => {
-      const notification = 'Your Pepperplate recipes are being imported into RecipeSage. We\'ll alert you when the process is complete.';
-
-      const toast = await this.toastCtrl.create({
-        message: notification,
-        showCloseButton: true,
-        closeButtonText: 'Close'
-      });
-      toast.present();
-    });
-  }
-
-  initEventDispatchers() {
-    let hidden, visibilityChange;
-    if (typeof (document as any).hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support
-      hidden = 'hidden';
-      visibilityChange = 'visibilitychange';
-    } else if (typeof (document as any).msHidden !== 'undefined') {
-      hidden = 'msHidden';
-      visibilityChange = 'msvisibilitychange';
-    } else if (typeof (document as any).webkitHidden !== 'undefined') {
-      hidden = 'webkitHidden';
-      visibilityChange = 'webkitvisibilitychange';
-    }
-
-    (window as any).isHidden = () => {
-      return document[hidden];
-    };
-
-    document.addEventListener(visibilityChange, () => {
-      if (document[hidden]) {
-        this.events.publish('application:multitasking:paused');
-      } else {
-        this.events.publish('application:multitasking:resumed');
-      }
-    }, false);
   }
 
   updateIsLoggedIn() {
@@ -239,8 +148,9 @@ export class AppComponent {
 
     const loggedOutPages = [
       { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { title: 'Log In', icon: 'ios-nutrition', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { title: 'Create an Account', icon: 'ios-leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
@@ -249,11 +159,12 @@ export class AppComponent {
       { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
       { title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
       { title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() },
-      { title: 'Messages', icon: 'chatboxes', url: RouteMap.MessagesPage.getPath() },
+      { title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
       { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { title: 'Create Recipe', icon: 'md-add', url: RouteMap.EditRecipePage.getPath('new') },
+      { title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
       { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
       { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
       { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
       { title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
       { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
@@ -266,27 +177,6 @@ export class AppComponent {
     }
 
     return pages;
-  }
-
-  readyForPrompt() {
-    return !!(window as any).deferredInstallPrompt;
-  }
-
-  showInstallPrompt() {
-    const installPrompt = (window as any).deferredInstallPrompt;
-    if (installPrompt) {
-      installPrompt.prompt();
-
-      installPrompt.userChoice
-        .then(choiceResult => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-            (window as any).deferredInstallPrompt = null;
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-        });
-    }
   }
 
   loadInboxCount() {

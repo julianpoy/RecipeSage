@@ -25,10 +25,14 @@
         </p>
         <p *ngIf="shoppingList.collaborators.length > 0">
           In collaboration with:
-          <span *ngFor="let user of shoppingList.collaborators">
-            <span *ngIf="shoppingList.myUserId !== user.id">{{ user.name || user.email }}</span>
+          <span *ngFor="let user of shoppingList.collaborators; last as isLast">
+            <span *ngIf="shoppingList.myUserId !== user.id">
+              {{ user.name || user.email }}<span *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id">,</span>
+            </span>
           </span>
-          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">{{ shoppingList.owner.name || shoppingList.owner.email }}</span>
+          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
+            {{ shoppingList.owner.name || shoppingList.owner.email }}
+          </span>
         </p>
         <p>
           <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">Created by {{ shoppingList.owner.name || shoppingList.owner.email }}</span>

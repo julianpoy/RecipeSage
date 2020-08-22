@@ -1,12 +1,8 @@
 <div>
   <ion-item>
     <ion-label>Select Meal</ion-label>
-    <ion-select [(ngModel)]="meal" (ngModelChange)="mealChange.emit(meal)">
-      <ion-select-option value="breakfast">Breakfast</ion-select-option>
-      <ion-select-option value="lunch">Lunch</ion-select-option>
-      <ion-select-option value="dinner">Dinner</ion-select-option>
-      <ion-select-option value="snacks">Snack</ion-select-option>
-      <ion-select-option value="other">Other</ion-select-option>
+    <ion-select [(ngModel)]="meal" (ngModelChange)="mealChanged()">
+      <ion-select-option *ngFor="let mealOption of mealOptions" [value]="mealOption.key">{{ mealOption.title }}</ion-select-option>
     </ion-select>
   </ion-item>
 </div>

@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@1.0.0
 jobs:
   test_backend:
     working_directory: ~/recipesage
@@ -8,6 +10,17 @@ jobs:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
           RS_TEST_DB_DATABASE: chefbook_test
+          NODE_ENV: test
+          VERBOSE: true
+          POSTGRES_DB: chefbook_test
+          POSTGRES_USER: chefbook
+          POSTGRES_PASSWORD: admin
+          POSTGRES_PORT: 5432
+          POSTGRES_HOST: localhost
+          POSTGRES_SSL: false
+          POSTGRES_LOGGING: false
+          GRIP_URL: http://localhost:5561/
+          GRIP_KEY: changeme
       - image: postgres:9.6.9
         environment:
           POSTGRES_USER: chefbook
@@ -43,15 +56,12 @@ jobs:
             - ./Backend/node_modules
       - run:
           name: extract-firebase-credentials
-          command: cd Backend/config && unzip -j -P $credentialskey firebase-credentials.json.zip
-      - run:
-          name: extract-config
-          command: cd Backend/config && unzip -j -P $credentialskey config.json.zip
+          command: cd Backend/src/config && unzip -j -P $credentialskey firebase-credentials.json.zip
       # -------------- Tests -----------------
       - run: # run backend tests
           name: test-backend
           command: cd Backend && npm run test:ci
-  build_frontend:
+  build_test_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: circleci/node:10.16.3
@@ -86,10 +96,70 @@ jobs:
           command: cd Frontend && npm run lint
       - run: # build frontend
           name: build-frontend
-          command: cd Frontend && npm run build -- --prod
+          command: cd Frontend && npm run dist
+      - persist_to_workspace:
+          root: Frontend
+          paths:
+            - www
+  build_push_backend:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: docker-login
+          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: tag-and-push-api
+          command: ./scripts/deploy/push_api_docker.sh $CIRCLE_TAG
+  push_frontend:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - aws-cli/setup
+      - attach_workspace:
+          at: .
+      - run:
+          name: set-frontend-version
+          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
+      - run:
+          name: sync-s3
+          command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_backend
-      - build_frontend
+      - test_backend:
+          context: "RS API Env Vars"
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - build_test_frontend:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - build_push_backend:
+          requires:
+            - test_backend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - push_frontend:
+          requires:
+            - build_test_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+

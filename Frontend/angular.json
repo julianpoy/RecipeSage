@@ -23,36 +23,6 @@
               "src/manifest.json",
               "src/service-worker.js",
               {
-                "glob": "workbox-sw.js",
-                "input": "node_modules/workbox-sw/build",
-                "output": "workbox-src"
-              },
-              {
-                "glob": "workbox-core.prod.js",
-                "input": "node_modules/workbox-core/build",
-                "output": "workbox-src"
-              },
-              {
-                "glob": "workbox-precaching.prod.js",
-                "input": "node_modules/workbox-precaching/build",
-                "output": "workbox-src"
-              },
-              {
-                "glob": "workbox-routing.prod.js",
-                "input": "node_modules/workbox-routing/build",
-                "output": "workbox-src"
-              },
-              {
-                "glob": "workbox-strategies.prod.js",
-                "input": "node_modules/workbox-strategies/build",
-                "output": "workbox-src"
-              },
-              {
-                "glob": "workbox-expiration.prod.js",
-                "input": "node_modules/workbox-expiration/build",
-                "output": "workbox-src"
-              },
-              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"

@@ -1,7 +1,7 @@
 let loggedInMessage = document.getElementById('loggedInMessage'), loggedOutMessage = document.getElementById('loggedOutMessage');
 chrome.storage.local.get(['token'], function (result) {
   if (result.token) {
-    fetch(`https://recipesage.com/api/users?token=${result.token}`).then(response => response.json())
+    fetch(`https://api.recipesage.com/users?token=${result.token}`).then(response => response.json())
       .then(response => {
         document.getElementById('loggedInEmail').innerText = response.email;
         loggedInMessage.style.display = 'block';

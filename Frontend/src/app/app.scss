@@ -7,6 +7,10 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
+ion-router-outlet.cookingToolbarOpen {
+  bottom: 60px;
+}
+
 .bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
 }
@@ -155,4 +159,11 @@ ion-button.button-outline {
 
 .sc-ion-label-ios-s > p, .sc-ion-label-md-s > p {
   color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+}
+
+.rs-date {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }

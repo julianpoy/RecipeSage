@@ -47,19 +47,29 @@ if (window[extensionContainerId]) {
       return matchedImgElements;
     }
 
+    const isValidImage = element => {
+      return isImg(element) &&
+        getSrcFromImage(element) &&
+        element.complete && // Filter images that haven't completely loaded
+        element.naturalWidth > 0 && // Filter images that haven't loaded correctly
+        element.naturalHeight > 0;
+    }
+
+    const grabLargestImage = () => {
+      const matches = document.querySelectorAll('img');
+
+      return [...matches]
+        .filter(element => isValidImage(element))
+        .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
+    }
+
     const grabClosestImageByClasses = (preferredClassNames, fuzzyClassNames) => {
       const exactMatches = preferredClassNames.reduce((acc, className) => [...acc, ...document.getElementsByClassName(className)], [])
       const fuzzyMatches = fuzzyClassNames.reduce((acc, className) => [...acc, ...softMatchElementsByClass(className)], [])
 
       return (exactMatches.length > 0 ? exactMatches : fuzzyMatches)
         .reduce((acc, element) => [...acc, ...getImgElementsWithin(element)], [])
-        .filter(element =>
-          isImg(element) &&
-          element.src &&
-          element.complete && // Filter images that haven't completely loaded
-          element.naturalWidth > 0 && // Filter images that haven't loaded correctly
-          element.naturalHeight > 0
-        )
+        .filter(element => isValidImage(element))
         .reduce((max, element) => (element.offsetHeight * element.offsetWidth) > (max ? (max.offsetHeight * max.offsetWidth) : 0) ? element : max, null)
     }
 
@@ -70,7 +80,7 @@ if (window[extensionContainerId]) {
 
       const badWords = [...generalBadWords, ...allRecipesBadWords, ...tastyRecipesBadWords].join('|');
 
-      let filteredResult =  textBlock.split('\n')
+      let filteredResult = textBlock.split('\n')
         .map   (line => line.trim())
         .filter(line => line.length !== 0) // Remove whitespace-only lines
         .filter(line => badWords.indexOf(line.toLowerCase()) === -1) // Remove words that will be a duplicate of field names
@@ -165,6 +175,7 @@ if (window[extensionContainerId]) {
           'tasty-recipes-instructions', // Tasty recipes embed tool - https://myheartbeets.com/paleo-tortilla-chips/
           'recipe-directions__list', // AllRecipes - https://www.allrecipes.com/recipe/231244/asparagus-mushroom-bacon-crustless-quiche/
           'o-Method', // FoodNetwork - https://www.foodnetwork.com/recipes/paula-deen/spinach-and-bacon-quiche-recipe-2131172
+          'steps-area', // Bon Appetit - https://www.bonappetit.com/recipe/chocolate-babka
           'instructions', // Generic
           'recipe-steps', // Generic
           'recipe-instructions', // Generic
@@ -531,7 +542,7 @@ if (window[extensionContainerId]) {
 
     let submit = () => {
       fetchToken(token => {
-        return fetch(`https://recipesage.com/api/recipes?token=${token}`, {
+        return fetch(`https://api.recipesage.com/recipes?token=${token}`, {
           method: "POST",
           mode: "cors",
           cache: "no-cache",

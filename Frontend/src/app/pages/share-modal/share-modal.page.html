@@ -28,8 +28,8 @@
       </ion-item>
 
       <div class="share-method-container">
-        <ion-segment (ionChange)="shareMethodChanged($event)">
-          <ion-segment-button value="account" checked>
+        <ion-segment (ionChange)="shareMethodChanged($event)" value="account">
+          <ion-segment-button value="account">
             RecipeSage
           </ion-segment-button>
           <ion-segment-button value="link">
@@ -90,7 +90,7 @@
               <ion-label>
                 Disable Columns
               </ion-label>
-              <ion-icon name='swap' slot="start"></ion-icon>
+              <ion-icon name='swap-horizontal' slot="start"></ion-icon>
             </ion-item>
 
             <ion-item>
@@ -123,7 +123,7 @@
               <ion-label>
                 Hide Notes
               </ion-label>
-              <ion-icon name='paper' slot="start"></ion-icon>
+              <ion-icon name='document-text' slot="start"></ion-icon>
             </ion-item>
           </div>
 

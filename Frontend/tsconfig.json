@@ -16,11 +16,12 @@
       "node_modules/@types"
     ],
     "lib": [
+      "es2019",
       "es2018",
       "dom"
     ],
     "paths": {
-      "@/*": ["src/app/*"],
+      "@/*": ["src/app/*"]
     }
   }
 }

@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
 export enum GlobalPreferenceKey {
-  EnableSplitPane = 'global.enableSplitPane'
+  EnableSplitPane = 'global.enableSplitPane',
+  EnableExperimentalOfflineCache = 'global.enableExperimentalOfflineCache'
 }
 
 export enum MyRecipesPreferenceKey {
@@ -12,8 +13,17 @@ export enum MyRecipesPreferenceKey {
   ShowLabelChips = 'myRecipes.showLabelChips',
   ShowImages = 'myRecipes.showImages',
   ShowSource = 'myRecipes.showSource',
+  ShowRecipeDescription = 'myRecipes.showRecipeDescription',
   ViewType = 'myRecipes.viewType',
   SortBy = 'myRecipes.sortBy'
+}
+
+export enum RecipeDetailsPreferenceKey {
+  EnableWakeLock = 'recipeDetails.enableWakeLock',
+}
+
+export enum ManageLabelsPreferenceKey {
+  ShowCreatedAt = 'manageLabels.showCreatedAt'
 }
 
 export enum MealPlanPreferenceKey {
@@ -27,19 +37,26 @@ export enum ShoppingListPreferenceKey {
   ShowAddedBy = 'ShoppingList.showAddedBy',
   ShowAddedOn = 'ShoppingList.showAddedOn',
   ShowRecipeTitle = 'ShoppingList.showRecipeTitle',
-  GroupSimilar = 'ShoppingList.groupSimilar'
+  GroupSimilar = 'ShoppingList.groupSimilar',
+  GroupCategories = 'ShoppingList.groupCategories'
 }
 
 export interface AppPreferenceTypes {
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
+  [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
 
   [MyRecipesPreferenceKey.EnableLabelIntersection]: boolean;
   [MyRecipesPreferenceKey.ShowLabels]: boolean;
   [MyRecipesPreferenceKey.ShowLabelChips]: boolean;
   [MyRecipesPreferenceKey.ShowImages]: boolean;
   [MyRecipesPreferenceKey.ShowSource]: boolean;
+  [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
   [MyRecipesPreferenceKey.SortBy]: '-title' | '- createdAt' | 'createdAt' | '- updatedAt' | 'updatedAt';
+
+  [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
+
+  [ManageLabelsPreferenceKey.ShowCreatedAt]: boolean;
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;
@@ -50,6 +67,7 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.ShowAddedOn]: boolean;
   [ShoppingListPreferenceKey.ShowRecipeTitle]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
+  [ShoppingListPreferenceKey.GroupCategories]: boolean;
 }
 
 @Injectable({
@@ -59,15 +77,21 @@ export class PreferencesService {
   // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
+    [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
 
     [MyRecipesPreferenceKey.EnableLabelIntersection]: false,
     [MyRecipesPreferenceKey.ShowLabels]: true,
     [MyRecipesPreferenceKey.ShowLabelChips]: false,
     [MyRecipesPreferenceKey.ShowImages]: true,
     [MyRecipesPreferenceKey.ShowSource]: false,
+    [MyRecipesPreferenceKey.ShowRecipeDescription]: true,
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
+
+    [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
+
+    [ManageLabelsPreferenceKey.ShowCreatedAt]: true,
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,
@@ -77,7 +101,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
-    [ShoppingListPreferenceKey.GroupSimilar]: false
+    [ShoppingListPreferenceKey.GroupSimilar]: true,
+    [ShoppingListPreferenceKey.GroupCategories]: true
   };
 
   constructor() {

@@ -1,12 +1,13 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Events, NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
+import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
@@ -48,7 +49,7 @@ export class HomePage implements AfterViewInit {
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
-    public events: Events,
+    public events: EventService,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
     public alertCtrl: AlertController,
@@ -107,14 +108,6 @@ export class HomePage implements AfterViewInit {
         loading.dismiss();
       });
     }
-  }
-
-  refresh(refresher) {
-    this.resetAndLoadAll().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
   }
 
   fetchMoreRecipes(event) {
@@ -239,7 +232,7 @@ export class HomePage implements AfterViewInit {
   }
 
   openRecipe(recipe, event?) {
-    if (event && event.srcEvent && (event.srcEvent.metaKey || event.srcEvent.ctrlKey)) {
+    if (event && (event.metaKey || event.ctrlKey)) {
       window.open(`#/recipe/${recipe.id}`);
       return;
     }

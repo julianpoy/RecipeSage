@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, AlertController, ToastController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
 
+import { linkifyStr } from '@/utils/linkify';
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { WakeLockService } from '@/services/wakelock.service';
+import { PreferencesService, RecipeDetailsPreferenceKey } from '@/services/preferences.service';
+import { RecipeCompletionTrackerService } from '@/services/recipe-completion-tracker.service';
+
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
+import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-details-popover.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
@@ -24,10 +31,13 @@ export class RecipePage {
 
   defaultBackHref: string = RouteMap.HomePage.getPath('main');
 
+  wakeLockRequest;
+
   recipe: Recipe;
   recipeId: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
+  notes: string;
 
   scale = 1;
 
@@ -44,11 +54,16 @@ export class RecipePage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
+    public preferencesService: PreferencesService,
+    public wakeLockService: WakeLockService,
+    public recipeCompletionTrackerService: RecipeCompletionTrackerService,
     public route: ActivatedRoute,
     public utilService: UtilService,
     public recipeService: RecipeService,
     public labelService: LabelService,
+    public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService) {
 
     this.updateIsLoggedIn();
@@ -56,7 +71,13 @@ export class RecipePage {
     this.recipeId = this.route.snapshot.paramMap.get('recipeId');
     this.recipe = {} as Recipe;
 
+    this.scale = this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
+
     this.applyScale();
+
+    document.addEventListener('click', event => {
+      if (this.showAutocomplete) this.toggleAutocomplete(false, event);
+    });
   }
 
   ionViewWillEnter() {
@@ -70,6 +91,12 @@ export class RecipePage {
     }, () => {
       loading.dismiss();
     });
+
+    this.setupWakeLock();
+  }
+
+  ionViewWillLeave() {
+    this.releaseWakeLock();
   }
 
   refresh(loader) {
@@ -102,6 +129,10 @@ export class RecipePage {
 
         if (this.recipe.instructions && this.recipe.instructions.length > 0) {
           this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
+        }
+
+        if (this.recipe.notes && this.recipe.notes.length > 0) {
+          this.notes = linkifyStr(this.recipe.notes);
         }
 
         this.applyScale();
@@ -156,10 +187,7 @@ export class RecipePage {
           this.labelObjectsByTitle[label.title] = label;
         }
 
-        this.existingLabels.sort((a, b) => {
-          if (this.labelObjectsByTitle[a].recipeCount === this.labelObjectsByTitle[b].recipeCount) return 0;
-          return this.labelObjectsByTitle[a].recipeCount > this.labelObjectsByTitle[b].recipeCount ? -1 : 1;
-        });
+        this.existingLabels.sort((a, b) => a.localeCompare(b));
 
         resolve();
       }).catch(async err => {
@@ -182,20 +210,78 @@ export class RecipePage {
     });
   }
 
+  async presentPopover(event) {
+    const popover = await this.popoverCtrl.create({
+      component: RecipeDetailsPopoverPage,
+      componentProps: {
+        recipeId: this.recipeId,
+      },
+      event
+    });
 
-  instructionClicked(event, instruction: Instruction) {
-    if (instruction.isHeader) return;
-    instruction.complete = !instruction.complete;
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+    if (!data || !data.action) return;
+    switch(data.action) {
+      case 'updateWakeLock':
+        const wlEnabled = this.preferencesService.preferences[RecipeDetailsPreferenceKey.EnableWakeLock];
+        wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
+        break;
+      case 'addToShoppingList':
+        this.addRecipeToShoppingList();
+        break;
+      case 'addToMealPlan':
+        this.addRecipeToMealPlan();
+        break;
+      case 'share':
+        this.shareRecipe();
+        break;
+      case 'print':
+        this.printRecipe();
+        break;
+      case 'unpin':
+        this.unpinRecipe();
+        break;
+      case 'pin':
+        this.pinRecipe();
+        break;
+      case 'edit':
+        this.editRecipe();
+        break;
+      case 'clone':
+        this.cloneRecipe();
+        break;
+      case 'delete':
+        this.deleteRecipe();
+        break;
+    }
   }
 
-  ingredientClicked(event, ingredient: Instruction) {
+  instructionClicked(event, instruction: Instruction, idx: number) {
+    if (instruction.isHeader) return;
+
+    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
+  }
+
+  ingredientClicked(event, ingredient: Instruction, idx: number) {
     if (ingredient.isHeader) return;
-    ingredient.complete = !ingredient.complete;
+
+    this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
+  }
+
+  getInstructionComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getInstructionComplete(this.recipeId, idx);
+  }
+
+  getIngredientComplete(idx: number) {
+    return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx);
   }
 
   changeScale() {
     this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
       this.scale = scale;
+      this.recipeCompletionTrackerService.setRecipeScale(this.recipeId, scale);
       this.applyScale();
     });
   }
@@ -273,7 +359,7 @@ export class RecipePage {
       component: AddRecipeToShoppingListModalPage,
       componentProps: {
         recipe: this.recipe,
-        recipeScale: this.scale
+        scale: this.scale
       }
     });
 
@@ -349,8 +435,16 @@ export class RecipePage {
   }
 
   toggleAutocomplete(show, event?) {
-    if (event && event.relatedTarget) {
-      if (event.relatedTarget.className.indexOf('suggestion') > -1) {
+    if (event) {
+      if (event.relatedTarget && event.relatedTarget.className.indexOf('suggestion') > -1) {
+        return;
+      }
+      if (
+        event.target &&
+        (event.target.id.match('labelInputField') ||
+        event.target.className.match('labelInputField') ||
+        event.target.className.match('suggestion'))
+      ) {
         return;
       }
     }
@@ -366,7 +460,6 @@ export class RecipePage {
       return;
     }
 
-    this.toggleAutocomplete(false);
     this.pendingLabel = '';
 
     const loading = this.loadingService.start();
@@ -375,7 +468,7 @@ export class RecipePage {
       recipeId: this.recipe.id,
       title: title.toLowerCase()
     }).then(response => {
-      this.loadAll().then(() => {
+      this.loadAll().finally(() => {
         loading.dismiss();
       });
     }).catch(async err => {
@@ -439,23 +532,9 @@ export class RecipePage {
       label.id,
       this.recipe.id
     ).then(() => {
-      loading.dismiss();
-
-      if (label.recipeCount === 1) {
-        const i = this.existingLabels.indexOf(label.title);
-        this.existingLabels.splice(i, 1);
-        delete this.labelObjectsByTitle[label.title];
-      } else {
-        label.recipeCount -= 1;
-      }
-
-      const lblIdx = this.recipe.labels.findIndex(el => {
-        return el.id === label.id;
+      this.loadAll().finally(() => {
+        loading.dismiss();
       });
-      this.recipe.labels.splice(lblIdx, 1);
-
-      const idx = this.selectedLabels.indexOf(label.title);
-      this.selectedLabels.splice(idx, 1);
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {
@@ -559,5 +638,28 @@ export class RecipePage {
       }
     });
     imageViewerModal.present();
+  }
+
+  pinRecipe() {
+    this.cookingToolbarService.pinRecipe({
+      id: this.recipe.id,
+      title: this.recipe.title,
+      imageUrl: this.recipe.images[0]?.location
+    });
+  }
+
+  unpinRecipe() {
+    this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  setupWakeLock() {
+    if (!this.wakeLockRequest && this.preferencesService.preferences[RecipeDetailsPreferenceKey.EnableWakeLock]) {
+      this.wakeLockService.request().then(wl => this.wakeLockRequest = wl);
+    }
+  }
+
+  releaseWakeLock() {
+    if (this.wakeLockRequest) this.wakeLockRequest.release();
+    this.wakeLockRequest = null;
   }
 }

@@ -1,0 +1,38 @@
+.item-title {
+  vertical-align: middle;
+}
+
+.item-meal-letter {
+  vertical-align: middle;
+}
+
+.item-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--ion-color-primary);
+  border-radius: 45px;
+
+  display: inline-block;
+  margin: 1px;
+  vertical-align: middle;
+
+  &.breakfast {
+    background: var(--ion-color-success);
+  }
+
+  &.lunch {
+    background: var(--ion-color-warning);
+  }
+
+  &.dinner {
+    background: var(--ion-color-danger);
+  }
+
+  &.snacks {
+    background: var(--ion-color-tertiary);
+  }
+
+  &.other {
+    background: var(--ion-color-dark);
+  }
+}

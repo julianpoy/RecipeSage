@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, ModalController, Events } from '@ionic/angular';
+import { NavController, ToastController, ModalController } from '@ionic/angular';
 
 import { MessagingService } from '@/services/messaging.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
+import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 
@@ -20,7 +21,7 @@ export class MessagesPage {
 
   constructor(
     public navCtrl: NavController,
-    public events: Events,
+    public events: EventService,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public utilService: UtilService,
