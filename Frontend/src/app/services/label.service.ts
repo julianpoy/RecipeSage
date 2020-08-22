@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Events } from '@ionic/angular';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
+import { EventService } from './event.service';
 
 export interface Label {
   id: string;
   title: string;
   createdAt: string;
   updatedAt: string;
+  recipeCount?: number;
 }
 
 @Injectable({
@@ -15,12 +16,14 @@ export interface Label {
 })
 export class LabelService {
 
-  constructor(public events: Events, public utilService: UtilService, public httpService: HttpService) {}
+  constructor(public events: EventService, public utilService: UtilService, public httpService: HttpService) {}
 
-  fetch(populate?: boolean) {
-    const populateQuery = populate ? '&populate=true' : '';
+  fetch(options: {
+    title?: string
+  } = {}) {
+    const titleQuery = options.title ? `&title=${encodeURIComponent(options.title)}` : '';
 
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + populateQuery;
+    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
 
     return this.httpService.request({
       method: 'get',
@@ -82,15 +85,30 @@ export class LabelService {
 
   // Deletes label and removes from all associated recipes
   delete(labelIds: string[]) {
-    const url = this.utilService.getBase() + 'labels/delete' + this.utilService.getTokenQuery() + '&labelIds=' + labelIds.join(',');
+    const url = this.utilService.getBase() + 'labels/delete-bulk' + this.utilService.getTokenQuery();
+
+    const data = {
+      labelIds
+    };
 
     return this.httpService.request({
       method: 'post',
-      url
+      url,
+      data
     }).then(response => {
       this.events.publish('label:deleted');
 
       return response.data;
     });
+  }
+
+  merge(sourceLabelId: string, targetLabelId: string) {
+    const url = this.utilService.getBase() + 'labels/merge' + this.utilService.getTokenQuery() +
+      `&sourceLabelId=${sourceLabelId}&targetLabelId=${targetLabelId}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url
+    }).then(response => response.data);
   }
 }
