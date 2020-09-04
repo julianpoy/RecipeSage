@@ -69,12 +69,6 @@ router.put(
   async (req, res, next) => {
     const userId = res.locals.session.userId;
 
-    if (!req.body.profileImageId || !req.body.enableProfile || !["public", "friends-only"].find(req.body.profileVisibility)) {
-      const invalidParamsError = new Error("Invalid arguments");
-      invalidParamsError.status = 400;
-      throw invalidParamsError;
-    }
-
     await SQ.transaction(async transaction => {
       await User.update({
         where: {
@@ -82,47 +76,49 @@ router.put(
         },
         transaction
       }, {
-        profileImageId: req.body.profileImageId,
-        enableProfile: req.body.enableProfile,
-        profileVisibility: req.body.profileVisibility
+        ...(req.body.profileImageId !== undefined ? { profileImageId: req.body.profileImageId } : {}),
+        ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
+        ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
       });
 
-      await ProfileItem.destroy({
-        where: {
-          userId
-        },
-        transaction
-      });
+      if (req.body.profileItems) {
+        await ProfileItem.destroy({
+          where: {
+            userId
+          },
+          transaction
+        });
 
-      const profileItems = req.body.profileItems.map((profileItem, idx) => {
-        const { title, type, recipeId, labelId, visibility } = profileItem;
+        const profileItems = req.body.profileItems.map((profileItem, idx) => {
+          const { title, type, recipeId, labelId, visibility } = profileItem;
 
-        if (!["public", "friends-only"].find(visibility)) {
-          const invalidVisibilityError = new Error("Invalid visibility type");
-          invalidVisibilityError.status = 400;
-          throw invalidVisibilityError;
-        }
+          if (!["public", "friends-only"].find(visibility)) {
+            const invalidVisibilityError = new Error("Invalid visibility type");
+            invalidVisibilityError.status = 400;
+            throw invalidVisibilityError;
+          }
 
-        if (!["all-recipes", "label", "recipe"].find(type)) {
-          const invalidTypeError = new Error("Invalid profile item type");
-          invalidTypeError.status = 400;
-          throw invalidTypeError;
-        }
+          if (!["all-recipes", "label", "recipe"].find(type)) {
+            const invalidTypeError = new Error("Invalid profile item type");
+            invalidTypeError.status = 400;
+            throw invalidTypeError;
+          }
 
-        return {
-          userId: res.locals.session.userId,
-          title,
-          type,
-          recipeId,
-          labelId,
-          visibility,
-          order: idx
-        };
-      });
+          return {
+            userId: res.locals.session.userId,
+            title,
+            type,
+            recipeId,
+            labelId,
+            visibility,
+            order: idx
+          };
+        });
 
-      await ProfileItem.bulkCreate(profileItems, {
-        transaction
-      });
+        await ProfileItem.bulkCreate(profileItems, {
+          transaction
+        });
+      }
     });
 
     res.status(200).send("Updated");
