@@ -144,7 +144,10 @@ router.get(
       }]
     });
 
+    // Note: Should be the same as /profile/:userId
     res.status(200).json({
+      hasPendingFriendInvite: false,
+      userIsFriend: true,
       name: user.name,
       profileItems
     });
@@ -204,9 +207,11 @@ router.get(
       }]
     });
 
+    // Note: Should be the same as /profile
     res.status(200).json({
       hasPendingFriendInvite,
       userIsFriend,
+      name: profileUser.name,
       profileItems
     });
   }
