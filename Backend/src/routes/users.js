@@ -170,6 +170,7 @@ router.get(
     if (!profileUser.enableProfile) {
       const profileNotEnabledError = new Error("User does not have an active profile");
       profileNotEnabledError.status = 403;
+      throw profileNotEnabledError;
     }
 
     let userIsFriend = false;
