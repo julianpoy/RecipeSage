@@ -77,6 +77,7 @@ router.put(
         transaction
       }, {
         ...(req.body.profileImageId !== undefined ? { profileImageId: req.body.profileImageId } : {}),
+        ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
         ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
         ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
       });
@@ -149,6 +150,7 @@ router.get(
       hasPendingFriendInvite: false,
       userIsFriend: true,
       name: user.name,
+      handle: user.handle,
       profileItems
     });
   }
@@ -213,6 +215,7 @@ router.get(
       hasPendingFriendInvite,
       userIsFriend,
       name: profileUser.name,
+      handle: profileUser.handle,
       profileItems
     });
   }
