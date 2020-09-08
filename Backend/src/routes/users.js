@@ -69,6 +69,13 @@ router.put(
   async (req, res, next) => {
     const userId = res.locals.session.userId;
 
+    const EVIL_HANDLE_REGEXP = /[^A-Za-z0-9_.]/;
+    if (req.body.handle && req.body.handle.match(EVIL_HANDLE_REGEXP)) {
+      const badHandleError = new Error("Handle must only contain A-z 0-9 _ .");
+      badHandleError.status = 400;
+      throw badHandleError;
+    }
+
     await SQ.transaction(async transaction => {
       await User.update({
         where: {
