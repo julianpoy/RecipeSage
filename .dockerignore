@@ -1,0 +1,10 @@
+SharedUtils/node_modules
+SharedUtils/npm-debug.log
+
+Backend/node_modules
+Backend/npm-debug.log
+
+Frontend/node_modules
+Frontend/npm-debug.log
+
+.git
