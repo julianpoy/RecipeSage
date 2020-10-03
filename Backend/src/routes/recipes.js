@@ -653,11 +653,13 @@ router.delete(
         },
         transaction: t
       })
-    })
+    }).then(() => {
+      return ElasticService.deleteRecipesByUser(res.locals.session.userId);
+    });
   }).then(() => {
     res.status(200).send({})
   }).catch(next);
-})
+});
 
 router.post(
   '/delete-bulk',
@@ -775,5 +777,18 @@ router.delete(
   .catch(next);
 });
 
+router.post('/reindex', MiddlewareService.validateSession(['user']), async (req, res, next) => {
+  const recipes = await Recipe.findAll({
+    where: {
+      userId: res.locals.session.userId,
+    }
+  });
+
+  await ElasticService.deleteRecipesByUser(res.locals.session.userId);
+
+  await ElasticService.indexRecipes(recipes);
+
+  res.status(200).send({});
+});
 
 module.exports = router;
