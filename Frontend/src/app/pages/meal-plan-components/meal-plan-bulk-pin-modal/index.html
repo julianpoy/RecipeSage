@@ -1,0 +1,74 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Pin Meal Items</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-label>
+      Select the meal items that you'd like to pin open.<br />
+      <b>Note:</b> You can only pin items that are linked to recipes.<br />
+    </ion-label>
+  </ion-item>
+
+  <br />
+
+  <ion-button
+    *ngIf="!allSelected"
+    color="primary"
+    (click)="selectAllRecipes()"
+    size="small"
+    fill="clear"
+  >
+    Select All
+  </ion-button>
+  <ion-button
+    *ngIf="allSelected"
+    color="primary"
+    (click)="deselectAll()"
+    size="small"
+    fill="clear"
+    >
+    Deselect All
+  </ion-button>
+  <ion-list>
+    <ion-item *ngFor="let mealItem of mealItems">
+      <ion-label>
+        {{ mealItem.recipe?.title || mealItem.title }}
+        <span *ngIf="!mealItem.recipe?.id">(not linked to a recipe)</span>
+      </ion-label>
+      <ion-checkbox
+        slot="start"
+        [disabled]="!mealItem.recipe?.id"
+        [(ngModel)]="recipeIdSelectionMap[mealItem.recipe?.id]"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <div class="split-footer">
+    <ion-button expand="block" (click)="close()">
+      <ion-icon name="close" slot="start"></ion-icon>
+      <ion-label>
+        Cancel
+      </ion-label>
+    </ion-button>
+    <ion-button expand="block" (click)="pinRecipes(); close()">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>
+        Pin
+      </ion-label>
+    </ion-button>
+  </div>
+</ion-footer>
