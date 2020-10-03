@@ -41,6 +41,12 @@ export class MealPlanPopoverPage {
     this.popoverCtrl.dismiss();
   }
 
+  pinRecipes() {
+    this.popoverCtrl.dismiss({
+      pinRecipes: true
+    });
+  }
+
   copySelected() {
     this.popoverCtrl.dismiss({
       copy: true

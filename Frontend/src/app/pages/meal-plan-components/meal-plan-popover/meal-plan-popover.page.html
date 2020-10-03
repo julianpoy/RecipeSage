@@ -25,6 +25,15 @@
     </ion-select>
   </ion-item>
 
+  <ion-list-header>
+    Actions
+  </ion-list-header>
+
+  <ion-button (click)="pinRecipes()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='pin' slot="start"></ion-icon>
+    Pin recipes open
+  </ion-button>
+
   <ion-button (click)="copySelected()" expand="block" size="small" class="ion-margin">
     <ion-icon name='copy' slot="start"></ion-icon>
     Copy selected day(s)

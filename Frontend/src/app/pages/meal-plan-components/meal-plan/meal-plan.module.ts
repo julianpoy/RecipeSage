@@ -9,6 +9,7 @@ import { NewMealPlanItemModalPageModule } from '@/pages/meal-plan-components/new
 import { AddRecipeToShoppingListModalPageModule } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.module';
 import { MealPlanPopoverPageModule } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.module';
 import { MealPlanItemDetailsModalPageModule } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.module';
+import { MealPlanBulkPinModalPageModule } from '@/pages/meal-plan-components/meal-plan-bulk-pin-modal/module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MealPlanItemDetailsModalPageModule } from '@/pages/meal-plan-components
     AddRecipeToShoppingListModalPageModule,
     MealPlanPopoverPageModule,
     MealPlanItemDetailsModalPageModule,
+    MealPlanBulkPinModalPageModule,
   ],
 })
 export class MealPlanPageModule {}
