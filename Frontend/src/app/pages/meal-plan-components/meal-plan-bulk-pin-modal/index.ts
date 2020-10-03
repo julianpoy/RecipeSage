@@ -47,7 +47,7 @@ export class MealPlanBulkPinModalPage {
   pinRecipes() {
     Object.keys(this.recipeIdSelectionMap).forEach(recipeId => {
       if (!this.recipeIdSelectionMap[recipeId]) return;
-      const mealItem = this.mealItems.find(mealItem => mealItem.recipe?.id === recipeId);
+      const mealItem = this.mealItems.find(item => item.recipe?.id === recipeId);
 
       if (mealItem) {
         this.cookingToolbarService.pinRecipe({
