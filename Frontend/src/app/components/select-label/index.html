@@ -1,0 +1,45 @@
+<div>
+  <ion-item class="selectedLabel"
+    (click)="selectedLabel = null"
+    *ngIf="selectedLabel"
+    button>
+
+    <ion-label>
+      <h2>{{ selectedLabel.title }}</h2>
+      <p>Click to change</p>
+    </ion-label>
+  </ion-item>
+
+  <div class="dropdownSelect" *ngIf="!selectedLabel">
+    <ion-searchbar
+      (ionChange)='onSearchInputChange($event)'
+      placeholder="Type to search for label..."
+      autocomplete="off"
+    ></ion-searchbar>
+    <div
+      class="autocomplete">
+      <button
+        class="suggestion"
+        *ngFor="let label of results"
+        (click)="selectLabel(label)">
+        <ion-item class="suggestion-inner" button>
+
+          <ion-label>
+            <h2>{{ label.title }}</h2>
+            <p>Click to select</p>
+          </ion-label>
+        </ion-item>
+      </button>
+      <!-- Searching for label which does not exist -->
+      <button
+        class="suggestion"
+        *ngIf="results.length === 0 && searchText.length > 0">
+        <ion-item class="suggestion-inner" button>
+          <ion-label>
+            <h2>No labels called "{{ searchText }}"</h2>
+          </ion-label>
+        </ion-item>
+      </button>
+    </div>
+  </div>
+</div>

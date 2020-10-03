@@ -29,9 +29,9 @@ export class ProfilePage {
 
     const loading = this.loadingService.start();
 
-    const username = this.route.snapshot.paramMap.get('username');
+    const identifier = this.route.snapshot.paramMap.get('identifier');
 
-    this.userService.profile(username).then(response => {
+    this.userService.getProfileByUserIdOrHandle(identifier).then(response => {
       loading.dismiss();
 
       this.profile = response;

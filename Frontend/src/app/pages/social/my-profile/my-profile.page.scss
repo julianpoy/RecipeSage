@@ -1,1 +1,56 @@
+.image-frame {
+  width: 150px;
+  height: 150px;
 
+  overflow: hidden;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.25);
+  border-radius: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  cursor: pointer;
+
+  .image {
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.profile-details {
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .username-preview, .handle-preview {
+    text-align: center;
+    cursor: pointer;
+
+    ion-icon {
+      color: var(--ion-color-primary);
+      vertical-align: middle;
+    }
+  }
+
+  .username-preview {
+    margin-bottom: 0;
+  }
+
+  .handle-preview {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 14px;
+  }
+}

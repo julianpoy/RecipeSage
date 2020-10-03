@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MyProfilePage } from './my-profile.page';
+import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
+import { NullStateModule } from '../../../components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { MyProfilePage } from './my-profile.page';
       }
     ]),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiImageUploadModule,
+    NullStateModule,
   ],
 })
 export class MyProfilePageModule {}

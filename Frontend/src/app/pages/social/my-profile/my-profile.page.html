@@ -11,19 +11,43 @@
 <ion-content>
   <br />
 
-  <h3>{{ accountProfile?.name }}</h3>
+  <multi-image-upload [images]="myProfile?.profileImages" (imageUpdate)="updatedProfileFields.profileImages = myProfile?.profileImages; markAsDirty();"></multi-image-upload>
+
+  <div class="profile-details">
+    <h3 class="username-preview" *ngIf="!revealNameInput" (click)="revealNameInput = true">{{ myProfile?.name }} <ion-icon name="pencil"></ion-icon></h3>
+    <ion-item class="username-edit" *ngIf="revealNameInput">
+      <ion-label position="stacked">Name/Nickname</ion-label>
+      <ion-input [(ngModel)]="myProfile.name" (ngModelChange)="updatedProfileFields.name = myProfile.name"></ion-input>
+    </ion-item>
+    <h5 class="handle-preview" *ngIf="!revealHandleInput" (click)="revealHandleInput = true">@{{ myProfile?.handle }} <ion-icon name="pencil"></ion-icon></h5>
+    <ion-item class="handle-edit" *ngIf="revealHandleInput">
+      <ion-label position="stacked">Unique @handle</ion-label>
+      <ion-input [(ngModel)]="myProfile.handle" (ngModelChange)="updatedProfileFields.handle = myProfile.handle"></ion-input>
+    </ion-item>
+
+    <ion-item class="enable-profile" lines="full" *ngIf="accountInfo">
+      <ion-toggle [(ngModel)]="accountInfo.enableProfile" (ngModelChange)="updatedProfileFields.enableProfile = accountInfo?.enableProfile; markAsDirty();" slot="start"></ion-toggle>
+      <ion-label class="ion-text-wrap">
+        Enable Profile
+      </ion-label>
+    </ion-item>
+  </div>
 
   <br />
 
   <ion-item lines="none">
     <ion-icon name="key" slot="start"></ion-icon>
     <ion-label>
-      Pinned Recipes & Labels
+      Pinned Recipes &amp; Labels
     </ion-label>
+    <ion-button slot="end" (click)="startNewProfileItem()">
+      Add
+      <ion-icon name="add" slot="start"></ion-icon>
+    </ion-button>
   </ion-item>
 
-  <ion-list>
-    <div *ngFor="let item of accountProfile?.profileItems">
+  <ion-list *ngIf="myProfile?.profileItems?.length">
+    <div *ngFor="let item of myProfile?.profileItems">
       <ion-item *ngIf="item.type == 'recipe'" button>
         <ion-label>{{item.title}}</ion-label>
         <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
@@ -35,4 +59,20 @@
       </ion-item>
     </div>
   </ion-list>
+
+  <null-state *ngIf="!myProfile?.profileItems?.length">
+    <ion-icon name="bookmarks" class="big-icon" virtualSlot="header"></ion-icon>
+    <ion-label virtualSlot="body">
+      <p>
+        You have nothing on your profile yet.<br />
+        To add your first profile item, click the "add" button to the right.
+      </p>
+    </ion-label>
+  </null-state>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-padding-horizontal">
+    <ion-button expand="block" [disabled]="!isUpdatePending() || !inputIsValid()" (click)="save()">Save</ion-button>
+  </ion-toolbar>
+</ion-footer>

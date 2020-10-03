@@ -36,9 +36,9 @@ export class PeoplePage {
     const loading = this.loadingService.start();
 
     Promise.all([
-      this.userService.friends(),
+      this.userService.getMyFriends(),
       this.userService.me(),
-      this.userService.myProfile()
+      this.userService.getMyProfile()
     ]).then(([friendships, accountInfo, myProfile]) => {
       loading.dismiss();
 
@@ -108,5 +108,9 @@ export class PeoplePage {
 
   async openProfile(userId) {
     this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(userId));
+  }
+
+  async editProfile() {
+    this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
 }

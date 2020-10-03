@@ -278,6 +278,16 @@ exports.dispatchImportNotification = (user, status, reason) => {
   return Promise.all(sendQueues);
 }
 
+exports.sortUserProfileImages = user => {
+  if (user.toJSON) user = user.toJSON();
+
+  if (user.profileImages && user.profileImages.length > 0) {
+    user.profileImages.sort((a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order);
+  }
+
+  return user;
+}
+
 exports.sortRecipeImages = recipe => {
   if (recipe.toJSON) recipe = recipe.toJSON();
 

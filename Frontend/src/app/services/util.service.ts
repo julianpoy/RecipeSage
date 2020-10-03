@@ -114,8 +114,8 @@ export const RouteMap = {
     path: 'people/my-profile',
   },
   ProfilePage: {
-    getPath(username: string) { return `people/${username}`; },
-    path: 'people/:username',
+    getPath(identifier: string) { return `people/${identifier}`; },
+    path: 'people/:identifier',
   },
   PeoplePage: {
     getPath() { return `people`; },

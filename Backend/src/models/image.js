@@ -29,6 +29,21 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
+    Image.belongsToMany(models.User, {
+      foreignKey: 'imageId',
+      otherKey: 'userId',
+      as: 'userProfiles',
+      through: models.User_Profile_Image
+    });
+
+    Image.hasMany(models.User_Profile_Image, {
+      foreignKey: {
+        name: 'imageId',
+        allowNull: false
+      },
+      onDelete: 'CASCADE',
+    });
+
     Image.belongsToMany(models.Recipe, {
       foreignKey: 'imageId',
       otherKey: 'recipeId',

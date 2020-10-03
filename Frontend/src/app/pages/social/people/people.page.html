@@ -7,7 +7,7 @@
     <ion-title>People</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="addLabelToSelectedRecipes()">
+      <ion-button (click)="editProfile()">
         <ion-icon slot="start" name="contact"></ion-icon>
         My Profile
       </ion-button>
@@ -16,18 +16,12 @@
 </ion-header>
 
 <ion-content>
-  <ion-item-divider>
-    <ion-label>
-      My Profile
-    </ion-label>
-  </ion-item-divider>
-
   <null-state *ngIf="!accountInfo?.enableProfile">
     <ion-icon name="contact" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
       <p>
         You haven't set up a profile.
-        <br /> Creating a profile allows you to share collections of recipes with friends.
+        <br /> Creating a profile allows you to share collections of recipes with friends and the public.
         <br />
         <br />
         <ion-button (click)="editProfile()">
@@ -37,15 +31,15 @@
       </p>
     </ion-label>
   </null-state>
-  
+
   <br />
 
-  <ion-item-divider>
+  <ion-item-divider *ngIf="accountInfo?.enableProfile">
     <ion-label>
-      Friends & Invites
+      Friends &amp; Invites
     </ion-label>
   </ion-item-divider>
-  <ion-list>
+  <ion-list *ngIf="accountInfo?.enableProfile">
     <ion-list-header *ngIf="friendships?.incomingRequests?.length > 0">
       Friend invites
     </ion-list-header>

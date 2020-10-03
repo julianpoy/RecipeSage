@@ -7,6 +7,7 @@ var Raven = require('raven');
 var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
 var User = require('../models').User;
+var User_Profile_Image = require('../models').User_Profile_Image;
 var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 var Recipe = require('../models').Recipe;
@@ -42,8 +43,8 @@ router.get(
     id: user.id,
     name: user.name,
     email: user.email,
+    handle: user.handle,
     enableProfile: user.enableProfile,
-    profileImageId: user.profileImageId,
     profileVisibility: user.profileVisibility,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
@@ -78,15 +79,15 @@ router.put(
 
     await SQ.transaction(async transaction => {
       await User.update({
-        where: {
-          userId
-        },
-        transaction
-      }, {
-        ...(req.body.profileImageId !== undefined ? { profileImageId: req.body.profileImageId } : {}),
+        ...(req.body.name !== undefined ? { name: req.body.name } : {}),
         ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
         ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
         ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
+      }, {
+        where: {
+          id: userId
+        },
+        transaction
       });
 
       if (req.body.profileItems) {
@@ -127,6 +128,48 @@ router.put(
           transaction
         });
       }
+
+      if (req.body.profileImageIds) {
+        const canUploadMultipleImages = await SubscriptionService.userHasCapability(
+          res.locals.session.userId,
+          SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
+        );
+
+        if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
+          const images = await Image.findAll({
+            where: {
+              id: {
+                [Op.in]: req.body.profileImageIds
+              }
+            },
+            transaction
+          });
+          const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+
+          req.body.profileImageIds = req.body.profileImageIds.filter((imageId, idx) =>
+            idx === 0 || // Allow first image always (users can always upload the first image)
+            imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+            moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
+          );
+        }
+
+        if (req.body.profileImageIds.length > 10) req.body.profileImageIds.splice(10); // Limit to 10 images per recipe max
+
+        await User_Profile_Image.destroy({
+          where: {
+            userId: res.locals.session.userId
+          },
+          transaction
+        });
+
+        await User_Profile_Image.bulkCreate(req.body.profileImageIds.map((imageId, idx) => ({
+          userId: res.locals.session.userId,
+          imageId: imageId,
+          order: idx
+        })), {
+          transaction
+        });
+      }
     });
 
     res.status(200).send("Updated");
@@ -137,7 +180,15 @@ router.get(
   '/profile',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const user = await User.findByPk(res.locals.session.userId);
+    let user = await User.findByPk(res.locals.session.userId, {
+      include: [{
+        model: Image,
+        as: 'profileImages',
+        attributes: ['id', 'location']
+      }]
+    });
+
+    user = UtilService.sortUserProfileImages(user);
 
     const profileItems = await ProfileItem.findAll({
       where: {
@@ -158,6 +209,8 @@ router.get(
       userIsFriend: true,
       name: user.name,
       handle: user.handle,
+      enableProfile: user.enableProfile,
+      profileImages: user.profileImages,
       profileItems
     });
   }
@@ -169,7 +222,14 @@ router.get(
   async (req, res, next) => {
     const profileUserId = req.params.userId;
 
-    const profileUser = await User.findByPk(profileUserId);
+    const profileUser = await User.findByPk(profileUserId, {
+      include: [{
+        model: Image,
+        as: 'profileImages',
+        attributes: ['id', 'location']
+      }]
+    });
+
     if (!profileUser) {
       const profileUserNotFoundError = new Error("User with that id not found");
       profileUserNotFoundError.status = 404;
@@ -223,6 +283,8 @@ router.get(
       userIsFriend,
       name: profileUser.name,
       handle: profileUser.handle,
+      enableProfile: user.enableProfile,
+      profileImages: user.profileImages,
       profileItems
     });
   }

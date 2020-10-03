@@ -1,0 +1,75 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Add Profile Item</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <select-user (selectedUserChange)="onSelectedUserChange($event)"></select-user>
+  <ion-list>
+    <ion-radio-group [value]="itemType" (ionChange)="itemType = $event">
+      <ion-list-header>
+        <ion-label>Item Type</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label>A Recipe</ion-label>
+        <ion-radio slot="start" value="recipe"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>A Label</ion-label>
+        <ion-radio slot="start" value="label"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>All of My Recipes</ion-label>
+        <ion-radio slot="start" value="all-recipes"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-list>
+    <ion-radio-group [value]="itemVisibility" (ionChange)="itemVisibility = $event">
+      <ion-list-header>
+        <ion-label>Item Visibility</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label>Public</ion-label>
+        <ion-radio slot="start" value="public"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Friends Only</ion-label>
+        <ion-radio slot="start" value="friends-only"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-item>
+    <ion-label position="stacked">Item Title</ion-label>
+    <ion-input [(ngModel)]="itemTitle"></ion-input>
+  </ion-item>
+
+  <select-recipe *ngIf="itemType === 'recipe'" [(selectedRecipe)]="selectedRecipe"></select-recipe>
+  <select-label *ngIf="itemType === 'label'" [(selectedLabel)]="selectedLabel"></select-label>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="add()" [disabled]="!isValid()">
+    <ion-icon name="checkmark" slot="start"></ion-icon>
+    <ion-label>
+      Done
+    </ion-label>
+  </ion-button>
+</ion-footer>

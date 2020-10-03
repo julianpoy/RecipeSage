@@ -1,12 +1,48 @@
 import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
+import { HttpErrorHandlerService } from './http-error-handler.service';
+
+export interface ProfileItem {
+  title: string,
+  type: 'all-recipes' | 'label' | 'recipe',
+  recipeId?: string,
+  labelId?: string,
+  visibility: 'public' | 'friends-only',
+  order: number,
+}
+
+export interface ProfileImage {
+  id: string,
+  location: string,
+}
+
+export interface UserProfile {
+  name: string,
+  handle?: string,
+  profileImages: ProfileImage[],
+  enableProfile: boolean,
+  profileVisibility: 'public' | 'friends-only',
+  profileItems: ProfileItem[],
+}
+
+export interface UserProfileUpdate {
+  name?: string,
+  handle?: string,
+  profileImageIds?: string[],
+  enableProfile?: boolean,
+  profileItems?: ProfileItem[],
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(public utilService: UtilService, public httpService: HttpService) {}
+  constructor(
+    private utilService: UtilService,
+    private httpService: HttpService,
+    private httpErrorHandlerService: HttpErrorHandlerService,
+  ) {}
 
   register(data) {
     const url = this.utilService.getBase() + 'users/register';
@@ -101,31 +137,67 @@ export class UserService {
     }).then(response => response.data);
   }
 
-  myProfile() {
+  async getMyProfile(): Promise<UserProfile> {
     const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
 
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
   }
 
-  profile(userId: string) {
-    const url = this.utilService.getBase() + 'users/profile/' + userId + this.utilService.getTokenQuery();
+  async updateMyProfile(profile: Partial<UserProfileUpdate>): Promise<boolean> {
+    const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
 
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+    try {
+      await this.httpService.request({
+        method: 'put',
+        url,
+        data: profile,
+      });
+
+      return true;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+
+      return false;
+    }
   }
 
-  friends() {
+  async getProfileByUserIdOrHandle(identifier: string): Promise<UserProfile> {
+    const url = this.utilService.getBase() + 'users/profile/' + identifier + this.utilService.getTokenQuery();
+
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
+  }
+
+  async getMyFriends() {
     const url = this.utilService.getBase() + 'users/friends' + this.utilService.getTokenQuery();
 
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
   }
 
   addFriend(friendId: string) {
