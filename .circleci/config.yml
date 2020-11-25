@@ -131,6 +131,9 @@ jobs:
           command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
       - setup_remote_docker
       - run:
+          name: docker-login
+          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
           name: tag-and-push-static
           command: ./scripts/deploy/push_static_docker.sh $CIRCLE_TAG
 workflows:
