@@ -2,7 +2,7 @@
 
 set -e
 
-docker build -f Frontend/prod.Dockerfile -t julianpoy/recipesage:static-latest --build-arg VERSION=$2 .
+docker build -f Frontend/circle.Dockerfile -t julianpoy/recipesage:static-latest --build-arg VERSION=$2 .
 
 docker push julianpoy/recipesage:static-latest
 
