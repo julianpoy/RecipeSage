@@ -4,12 +4,16 @@ var Raven = require('raven');
 // DB
 var FCMToken = require('../models').FCMToken;
 
-var serviceAccount = require("../config/firebase-credentials.json");
+try {
+  var serviceAccount = require("../config/firebase-credentials.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://chef-book.firebaseio.com"
-});
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://chef-book.firebaseio.com"
+  });
+} catch(e) {
+  console.log("Error while initializing firebase for notifications");
+}
 
 let invalidFcmTokenErrors = [
   'messaging/registration-token-not-registered'
