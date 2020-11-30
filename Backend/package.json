@@ -47,11 +47,13 @@
     "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",
     "stripe": "^7.10.0",
+    "umzug": "^2.3.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "nodemon": "^2.0.6",
     "sequelize-cli": "^5.5.1",
     "sinon": "^7.5.0",
     "supertest": "^4.0.2"
