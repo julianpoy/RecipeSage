@@ -1,7 +1,7 @@
 FROM rs-api-builder as builder
 
 RUN npx pkg ./src/migrate.js --targets=node12-alpine-x64 --output migrate
-RUN npx pkg ./src/bin/www --targets=node12-alpine-x64 --output www
+RUN npx pkg package.json --targets=node12-alpine-x64 --output www
 
 FROM node:12-alpine
 
