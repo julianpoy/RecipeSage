@@ -14,7 +14,14 @@
   },
   "bin": "src/bin/www",
   "pkg": {
-    "assets": "src/views/*"
+    "scripts": [
+      "src/migrations/*",
+      "src/models/*"
+    ],
+    "assets": [
+      "src/public/stylesheets/*",
+      "src/views/*"
+    ]
   },
   "dependencies": {
     "@elastic/elasticsearch": "~7.6.0",
