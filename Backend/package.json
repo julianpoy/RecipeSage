@@ -20,7 +20,8 @@
     ],
     "assets": [
       "src/public/stylesheets/*",
-      "src/views/*"
+      "src/views/*",
+      "node_modules/**/*"
     ]
   },
   "dependencies": {
