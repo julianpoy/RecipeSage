@@ -13,13 +13,21 @@ let zlib = require('zlib');
 var FirebaseService = require('./firebase');
 var GripService = require('./grip');
 
-var s3 = new aws.S3();
-aws.config.update({
+const s3Config = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   subregion: process.env.AWS_REGION,
   region: process.env.AWS_REGION,
-});
+};
+
+if (process.env.AWS_ENDPOINT) s3Config.endpoint = process.env.AWS_ENDPOINT; // Needed for minio
+if (process.env.AWS_S3_FORCE_PATH_STYLE !== null) s3Config.s3ForcePathStyle = process.env.AWS_S3_FORCE_PATH_STYLE; // Needed for minio
+if (process.env.AWS_S3_SIGNATURE_VERSION) s3Config.signatureVersion = process.env.AWS_S3_SIGNATURE_VERSION; // Needed for minio
+
+var s3 = new aws.S3();
+aws.config.update(s3Config);
+
+exports.generateS3Location = key => process.env.AWS_S3_PUBLIC_PATH ? process.env.AWS_S3_PUBLIC_PATH + key : 'https://' + process.env.AWS_BUCKET + '.s3.' + process.env.AWS_REGION + '.amazonaws.com/' + key;
 
 exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
@@ -115,7 +123,7 @@ exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
     metadata: {
       fieldName: "image"
     },
-    location: 'https://' + process.env.AWS_BUCKET + '.s3.' + process.env.AWS_REGION + '.amazonaws.com/' + key,
+    location: exports.generateS3Location(key),
     etag
   }
 }
@@ -177,9 +185,7 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
       storage: multerImager({
         dirname: '/',
         bucket: process.env.AWS_BUCKET,
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: process.env.AWS_REGION,
+        ...s3Config,
         filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
           cb(null, Date.now())                // i.e. with a timestamp
         },                                    //
