@@ -34,7 +34,7 @@ const clipRecipe = async clipUrl => {
     throw err;
   }
 
-  await page.evaluate(() => {
+  await page.evaluate(`() => {
     try {
       // Force lazyload for content listening to scroll
       window.scrollTo(0, document.body.scrollHeight);
@@ -42,7 +42,7 @@ const clipRecipe = async clipUrl => {
       window.define = null;
       window.exports = null;
     } catch(e) {}
-  });
+  }`);
 
   await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
   const recipeData = await page.evaluate(() => {
