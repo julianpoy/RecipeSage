@@ -111,7 +111,7 @@ export class AppComponent {
     // _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
 
-    const u = "//a.recipesage.com/";
+    const u = '//a.recipesage.com/';
     _paq.push(['setTrackerUrl', u + 'piwik.php']);
     _paq.push(['setSiteId', '1']);
     const g = document.createElement('script');
