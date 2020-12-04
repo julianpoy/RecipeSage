@@ -5,6 +5,8 @@ import { Platform, MenuController, ToastController, AlertController, NavControll
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { ENABLE_ANALYTICS } from '../environments/environment';
+
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -61,6 +63,10 @@ export class AppComponent {
     public cookingToolbarService: CookingToolbarService,
   ) {
 
+    if (ENABLE_ANALYTICS) {
+      this.initAnalytics();
+    }
+
     this.initializeApp();
 
     this.loadInboxCount();
@@ -95,6 +101,27 @@ export class AppComponent {
 
       oldBrowserAlert.present();
     }
+  }
+
+  initAnalytics() {
+    const _paq = (window as any)._paq || [];
+
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    // _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+
+    const u = "//a.recipesage.com/";
+    _paq.push(['setTrackerUrl', u + 'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    const g = document.createElement('script');
+    const s = document.getElementsByTagName('script')[0];
+    g.type = 'text/javascript';
+    g.async = true;
+    g.defer = true;
+    g.src = u + 'piwik.js';
+    s.parentNode.insertBefore(g, s);
+
+    (window as any)._paq = _paq;
   }
 
   initUpdateListeners() {
@@ -208,6 +235,8 @@ export class AppComponent {
         const viewName = event.url;
 
         const _paq = (window as any)._paq;
+
+        if (!_paq) return;
 
         if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
         currentUrl = '' + window.location.hash.substr(1);
