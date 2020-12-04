@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 import { UtilService, RouteMap } from '@/services/util.service';
 import { PaymentsService } from '@/services/payments.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
@@ -24,6 +26,11 @@ export class ContributePage {
     private paymentsService: PaymentsService,
     private toastCtrl: ToastController
   ) {
+    if (IS_SELFHOST) {
+      window.alert('Opening the RecipeSage site, since selfhosted versions aren\'t linked to Stripe');
+      window.location.href = 'https://recipesage.com/#/contribute';
+    }
+
     this.capabilitiesService.updateCapabilities();
   }
 

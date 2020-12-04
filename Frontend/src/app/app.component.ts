@@ -5,7 +5,7 @@ import { Platform, MenuController, ToastController, AlertController, NavControll
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { ENABLE_ANALYTICS } from '../environments/environment';
+import { ENABLE_ANALYTICS, IS_SELFHOST } from '../environments/environment';
 
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
@@ -24,6 +24,7 @@ import { OfflineCacheService } from '@/services/offline-cache.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  isSelfHost = IS_SELFHOST;
   isLoggedIn: boolean;
 
   navList: { title: string, icon: string, url: string }[];
@@ -245,7 +246,6 @@ export class AppComponent {
 
         // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
         _paq.push(['deleteCustomVariables', 'page']);
-        _paq.push(['setGenerationTimeMs', 0]);
         _paq.push(['trackPageView']);
 
         // make Matomo aware of newly added content

@@ -2,6 +2,8 @@ export const environment = {
   production: true
 };
 
+export const IS_SELFHOST = true;
+
 export const ENABLE_ANALYTICS = false;
 
 export const STRIPE_PK = '';
