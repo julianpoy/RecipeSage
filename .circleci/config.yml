@@ -104,7 +104,8 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
@@ -118,7 +119,8 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - attach_workspace:
           at: .
       - run:
