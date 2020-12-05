@@ -17,8 +17,8 @@ COPY SharedUtils SharedUtils
 
 WORKDIR /app/Frontend
 
-RUN npx ionic build --prod --configuration=selfhost
-RUN npx workbox injectManifest
+RUN npm run build:selfhost
+RUN npm run workbox
 
 RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" www/index.html
 
