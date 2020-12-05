@@ -4,7 +4,8 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      <img src="assets/recipesage-white-trimmed.png" alt="RecipeSage Logo" style="display:inline-block" height="40px" />
+      <span *ngIf="isSelfHost">RecipeSage Self Hosted</span>
+      <img *ngIf="!isSelfHost" src="assets/recipesage-white-trimmed.png" alt="RecipeSage Logo" style="display:inline-block" height="40px" />
       <!--RecipeSage-->
     </ion-title>
   </ion-toolbar>
@@ -19,11 +20,19 @@
     <div class="intro-fold-dimmer"></div>
 
     <div class="title">
-      <h1>
+      <h1 *ngIf="isSelfHost">
+        RecipeSage Self Hosted!
+      </h1>
+
+      <h1 *ngIf="!isSelfHost">
         All of your recipes in one place
       </h1>
 
-      <p class="subtitle">
+      <p class="subtitle" *ngIf="isSelfHost">
+        An unofficial selfhosted version of <a href="https://recipesage.com">RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android
+      </p>
+
+      <p class="subtitle" *ngIf="!isSelfHost">
         A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android
       </p>
 

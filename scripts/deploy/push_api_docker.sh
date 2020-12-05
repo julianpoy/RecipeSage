@@ -3,7 +3,7 @@
 set -e
 
 docker build --build-arg VERSION=$1 -f Backend/Dockerfile -t julianpoy/recipesage:api-latest -t rs-api-builder .
-docker build --build-arg VERSION=$1 -f Backend/pkg.Dockerfile -t julianpoy/recipesage-selfhost:api-latest .
+docker build --build-arg VERSION=$1 -f Backend/selfhost.Dockerfile -t julianpoy/recipesage-selfhost:api-latest .
 
 docker push julianpoy/recipesage:api-latest
 docker push julianpoy/recipesage-selfhost:api-latest

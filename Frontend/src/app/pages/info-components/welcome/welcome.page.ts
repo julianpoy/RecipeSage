@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
 import { RouteMap, AuthType } from '@/services/util.service';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 @Component({
   selector: 'page-welcome',
   templateUrl: 'welcome.page.html',
   styleUrls: ['welcome.page.scss']
 })
 export class WelcomePage {
+  isSelfHost = IS_SELFHOST;
   isIOS: boolean = this.platform.is('ios');
   isCapacitor: boolean = this.platform.is('capacitor');
 

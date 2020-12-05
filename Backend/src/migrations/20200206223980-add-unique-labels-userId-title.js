@@ -9,7 +9,7 @@ module.exports = {
         GROUP BY
             "userId",
             "title"
-        HAVING 
+        HAVING
             COUNT(id) > 1;
       `, {
         transaction,
@@ -78,7 +78,7 @@ module.exports = {
       }
 
       console.log("Label titles updated:", labelTitlesUpdated);
-      console.log("Users affected:", usersAffected);
+      console.log("Accounts with labels migrated:", usersAffected);
 
       await queryInterface.addConstraint('Labels', ['userId', 'title'], {
         type: "UNIQUE",
@@ -87,7 +87,7 @@ module.exports = {
       });
     });
   },
-  
+
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeConstraint('Labels', 'Labels_userId_title_uk');
   }

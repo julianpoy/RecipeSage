@@ -12,6 +12,18 @@
     "test:services": "npm run mocha \"./src/services/**/*.spec.js\"",
     "test:models": "npm run mocha \"./src/models/**/*.spec.js\""
   },
+  "bin": "src/bin/www",
+  "pkg": {
+    "scripts": [
+      "src/migrations/*",
+      "src/models/*"
+    ],
+    "assets": [
+      "src/public/stylesheets/*",
+      "src/views/*",
+      "node_modules/**/*"
+    ]
+  },
   "dependencies": {
     "@elastic/elasticsearch": "~7.6.0",
     "@julianpoy/recipe-clipper": "^1.2.0",

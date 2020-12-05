@@ -42,7 +42,7 @@ router.post('/',
 
     const image = await Image.create({
       userId: res.locals.session.userId,
-      location: file.location,
+      location: UtilService.generateS3Location(file.key),
       key: file.key,
       json: file
     });
