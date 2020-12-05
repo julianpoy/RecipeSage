@@ -36,22 +36,22 @@ jobs:
           command: 'sudo npm install -g sequelize'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Backend -----------------
       - restore_cache:
-          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
       - run:
           name: install-npm-backend
           command: 'cd Backend && npm install'
       - save_cache:
-          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
           paths:
             - ./Backend/node_modules
       # -------------- Tests -----------------
@@ -69,22 +69,22 @@ jobs:
           command: 'sudo npm install -g npm@latest'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Frontend -----------------
       - restore_cache:
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
       - run:
           name: install-npm-frontend
           command: 'cd Frontend && npm install'
       - save_cache:
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
           paths:
             - ./Frontend/node_modules
       # -------------- Tests -----------------
