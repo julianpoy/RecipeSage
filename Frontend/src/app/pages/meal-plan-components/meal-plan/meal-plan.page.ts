@@ -14,6 +14,7 @@ import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
 import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
 import { MealPlanItemDetailsModalPage } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
+import { MealPlanBulkPinModalPage } from '@/pages/meal-plan-components/meal-plan-bulk-pin-modal';
 
 @Component({
   selector: 'page-meal-plan',
@@ -199,6 +200,7 @@ export class MealPlanPage {
     if (data?.copy) this.startBulkCopy();
     if (data?.move) this.startBulkMove();
     if (data?.delete) this.bulkDelete();
+    if (data?.pinRecipes) this.bulkPinRecipes();
   }
 
   async itemClicked(mealItem) {
@@ -353,8 +355,6 @@ export class MealPlanPage {
   }
 
   async bulkDelete() {
-    this.dayMoveInProgress = false;
-
     if (this.getSelectedMealItemCount() === 0) {
       const emptyAlert = await this.alertCtrl.create({
         header: 'Empty day(s) selected',
@@ -366,10 +366,6 @@ export class MealPlanPage {
           },
           {
             text: 'Ok',
-            handler: () => {
-              this.dayCopyInProgress = true;
-              this.selectedDaysInProgress = [...this.selectedDays];
-            }
           }
         ]
       });
@@ -398,6 +394,37 @@ export class MealPlanPage {
       ]
     });
     deleteAlert.present();
+  }
+
+  async bulkPinRecipes() {
+    if (this.getSelectedMealItemCount() === 0) {
+      const emptyAlert = await this.alertCtrl.create({
+        header: 'Empty day(s) selected',
+        message: 'The day(s) you\'ve selected do not contain any meal plan items. To pin recipes, you\'ll need to select at least one day with meal plan items.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'Ok'
+          }
+        ]
+      });
+      emptyAlert.present();
+
+      return;
+    }
+
+    const selectedItems = this.selectedDays.map(selectedDay => this.getItemsOnDay(selectedDay)).flat();
+
+    const modal = await this.modalCtrl.create({
+      component: MealPlanBulkPinModalPage,
+      componentProps: {
+        mealItems: selectedItems
+      }
+    });
+    modal.present();
   }
 
   async dayClicked(day) {

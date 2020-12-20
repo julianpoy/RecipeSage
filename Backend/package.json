@@ -12,6 +12,18 @@
     "test:services": "npm run mocha \"./src/services/**/*.spec.js\"",
     "test:models": "npm run mocha \"./src/models/**/*.spec.js\""
   },
+  "bin": "src/bin/www",
+  "pkg": {
+    "scripts": [
+      "src/migrations/*",
+      "src/models/*"
+    ],
+    "assets": [
+      "src/public/stylesheets/*",
+      "src/views/*",
+      "node_modules/**/*"
+    ]
+  },
   "dependencies": {
     "@elastic/elasticsearch": "~7.6.0",
     "@julianpoy/recipe-clipper": "^1.2.0",
@@ -25,6 +37,7 @@
     "extract-zip": "^1.6.7",
     "firebase-admin": "^8.6.0",
     "fs-extra": "^8.0.1",
+    "graylog2": "^0.2.1",
     "grip": "^1.5.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
     "moment": "^2.24.0",
@@ -46,11 +59,13 @@
     "sharp": "^0.23.1",
     "sqlite3": "^4.1.0",
     "stripe": "^7.10.0",
+    "umzug": "^2.3.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "nodemon": "^2.0.6",
     "sequelize-cli": "^5.5.1",
     "sinon": "^7.5.0",
     "supertest": "^4.0.2"

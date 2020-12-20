@@ -5,6 +5,8 @@ import { Platform, MenuController, ToastController, AlertController, NavControll
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { ENABLE_ANALYTICS, IS_SELFHOST } from '../environments/environment';
+
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -22,6 +24,7 @@ import { OfflineCacheService } from '@/services/offline-cache.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  isSelfHost = IS_SELFHOST;
   isLoggedIn: boolean;
 
   navList: { title: string, icon: string, url: string }[];
@@ -61,6 +64,10 @@ export class AppComponent {
     public cookingToolbarService: CookingToolbarService,
   ) {
 
+    if (ENABLE_ANALYTICS) {
+      this.initAnalytics();
+    }
+
     this.initializeApp();
 
     this.loadInboxCount();
@@ -95,6 +102,27 @@ export class AppComponent {
 
       oldBrowserAlert.present();
     }
+  }
+
+  initAnalytics() {
+    const _paq = (window as any)._paq || [];
+
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    // _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+
+    const u = '//a.recipesage.com/';
+    _paq.push(['setTrackerUrl', u + 'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    const g = document.createElement('script');
+    const s = document.getElementsByTagName('script')[0];
+    g.type = 'text/javascript';
+    g.async = true;
+    g.defer = true;
+    g.src = u + 'piwik.js';
+    s.parentNode.insertBefore(g, s);
+
+    (window as any)._paq = _paq;
   }
 
   initUpdateListeners() {
@@ -210,6 +238,8 @@ export class AppComponent {
 
         const _paq = (window as any)._paq;
 
+        if (!_paq) return;
+
         if (currentUrl) _paq.push(['setReferrerUrl', currentUrl]);
         currentUrl = '' + window.location.hash.substr(1);
         _paq.push(['setCustomUrl', currentUrl]);
@@ -217,7 +247,6 @@ export class AppComponent {
 
         // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
         _paq.push(['deleteCustomVariables', 'page']);
-        _paq.push(['setGenerationTimeMs', 0]);
         _paq.push(['trackPageView']);
 
         // make Matomo aware of newly added content

@@ -3,6 +3,7 @@ import { NavController, ModalController, AlertController, ToastController } from
 import { MealPlanService } from '@/services/meal-plan.service';
 import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
+import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
@@ -25,6 +26,7 @@ export class MealPlanItemDetailsModalPage {
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public mealPlanService: MealPlanService,
+    public cookingToolbarService: CookingToolbarService,
     public recipeService: RecipeService,
     public loadingService: LoadingService,
     public utilService: UtilService,
@@ -162,6 +164,18 @@ export class MealPlanItemDetailsModalPage {
       });
       addRecipeToShoppingListModal.present();
     }
+  }
+
+  pinRecipe() {
+    this.cookingToolbarService.pinRecipe({
+      id: this.mealItem.recipe.id,
+      title: this.mealItem.recipe.title,
+      imageUrl: this.mealItem.recipe.images[0]?.location
+    });
+  }
+
+  unpinRecipe() {
+    this.cookingToolbarService.unpinRecipe(this.mealItem.recipe.id);
   }
 
   formatDate(date) {

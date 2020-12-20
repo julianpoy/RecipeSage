@@ -5,7 +5,7 @@ jobs:
   test_backend:
     working_directory: ~/recipesage
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -36,27 +36,24 @@ jobs:
           command: 'sudo npm install -g sequelize'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Backend -----------------
       - restore_cache:
-          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
       - run:
           name: install-npm-backend
           command: 'cd Backend && npm install'
       - save_cache:
-          key: backend-dependency-cache-{{ checksum "Backend/package.json" }}
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
           paths:
             - ./Backend/node_modules
-      - run:
-          name: extract-firebase-credentials
-          command: cd Backend/src/config && unzip -j -P $credentialskey firebase-credentials.json.zip
       # -------------- Tests -----------------
       - run: # run backend tests
           name: test-backend
@@ -64,7 +61,7 @@ jobs:
   build_test_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12
     steps:
       - checkout
       - run:
@@ -72,22 +69,22 @@ jobs:
           command: 'sudo npm install -g npm@latest'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Frontend -----------------
       - restore_cache:
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
       - run:
           name: install-npm-frontend
           command: 'cd Frontend && npm install'
       - save_cache:
-          key: frontend-dependency-cache-{{ checksum "Frontend/package.json" }}
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
           paths:
             - ./Frontend/node_modules
       # -------------- Tests -----------------
@@ -104,10 +101,11 @@ jobs:
   build_push_backend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
@@ -117,18 +115,27 @@ jobs:
   push_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:12
     steps:
       - checkout
       - aws-cli/setup
+      - setup_remote_docker:
+          version: 19.03.13
       - attach_workspace:
           at: .
       - run:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
       - run:
+          name: docker-login
+          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: tag-and-push-static
+          command: ./scripts/deploy/push_static_docker.sh $CIRCLE_TAG
+      - run:
           name: sync-s3
           command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
+
 workflows:
   version: 2
   build_and_test:

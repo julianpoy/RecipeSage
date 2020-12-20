@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var fs = require('fs');
 var Raven = require('raven');
+const pug = require('pug');
+const loggerService = require('./services/logger');
 
 var RS_VERSION = process.env.VERSION || JSON.parse(fs.readFileSync(path.join(__dirname, '/../package.json'))).version;
 
@@ -103,6 +105,8 @@ let logError = err => {
     } else {
       Raven.captureException(err);
     }
+
+    loggerService.captureException(err);
   }
 }
 

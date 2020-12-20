@@ -175,7 +175,7 @@ export class UtilService {
   constructor() {}
 
   getBase(): string {
-    return API_BASE_URL || this.devBase;
+    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || this.devBase;
   }
 
   removeToken() {

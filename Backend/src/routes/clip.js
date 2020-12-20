@@ -5,6 +5,8 @@ const puppeteer = require('puppeteer-core');
 
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
+const loggerService = require('../services/logger');
+
 const clipRecipe = async clipUrl => {
   const browser = await puppeteer.connect({
     browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`
@@ -20,11 +22,19 @@ const clipRecipe = async clipUrl => {
       timeout: 25000
     });
   } catch(err) {
+    console.log("Timed out", err);
+    loggerService.capture("Clip failed", {
+      level: 'warning',
+      err,
+      data: {
+        clipUrl
+      }
+    });
     err.status = 400;
     throw err;
   }
 
-  await page.evaluate(() => {
+  await page.evaluate(`() => {
     try {
       // Force lazyload for content listening to scroll
       window.scrollTo(0, document.body.scrollHeight);
@@ -32,7 +42,7 @@ const clipRecipe = async clipUrl => {
       window.define = null;
       window.exports = null;
     } catch(e) {}
-  });
+  }`);
 
   await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
   const recipeData = await page.evaluate(() => {
@@ -40,6 +50,14 @@ const clipRecipe = async clipUrl => {
   });
 
   console.log(JSON.stringify(recipeData));
+
+  loggerService.capture("Clip success", {
+    level: 'info',
+    data: {
+      recipeData,
+      clipUrl
+    }
+  });
   return recipeData;
 };
 

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -15,6 +17,8 @@ import { CapabilitiesService } from '@/services/capabilities.service';
   providers: [ UserService ]
 })
 export class AuthPage {
+  isSelfHost = IS_SELFHOST;
+
   name = '';
   email = '';
   password = '';
