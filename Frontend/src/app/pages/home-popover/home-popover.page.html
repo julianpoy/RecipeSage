@@ -18,7 +18,7 @@
     </ion-label>
   </ion-item>
 
-  <ion-item lines="full">
+  <ion-item lines="full" *ngIf="!guestMode">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Show Label Toggles
@@ -58,21 +58,27 @@
     </ion-select>
   </ion-item>
 
-  <ion-item lines="full" class="cursor-pointer" (click)="openLabelFilter()" button detail="false">
+  <ion-item lines="full" *ngIf="!guestMode" class="cursor-pointer" (click)="openLabelFilter()" button detail="false">
     <ion-label>Filter by Label</ion-label>
     <ion-badge *ngIf="selectedLabels.length > 0" slot="end">{{selectedLabels.length}}</ion-badge>
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
 
-  <ion-item lines="full">
+  <ion-item lines="full" *ngIf="!guestMode">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]" (ngModelChange)="savePreferences(true);" slot="start"></ion-toggle>
     <ion-label class="ion-text-wrap">
       Match All Labels
     </ion-label>
   </ion-item>
 
-  <ion-button (click)="toggleSelectionMode()" expand="block" size="small" class="ion-margin">
+  <ion-button *ngIf="!guestMode" (click)="toggleSelectionMode()" expand="block" size="small" class="ion-margin">
     <ion-icon [name]="selectionMode ? 'close' : 'checkmark'" slot="start"></ion-icon>
     {{ selectionMode ? "Unselect All Recipes" : "Select Multiple Recipes" }}
   </ion-button>
+
+  <ion-item lines="none" *ngIf="guestMode">
+    <p>
+      Note: some options are hidden, since this is a shared collection
+    </p>
+  </ion-item>
 </ion-list>

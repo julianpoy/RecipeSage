@@ -265,6 +265,7 @@ export class HomePage implements AfterViewInit {
     const popover = await this.popoverCtrl.create({
       component: HomePopoverPage,
       componentProps: {
+        guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
         selectionMode: this.selectionMode
