@@ -7,10 +7,22 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    title: DataTypes.STRING,
-    type: DataTypes.STRING,
-    visibility: DataTypes.STRING,
-    order: DataTypes.INTEGER
+    title: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    type: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    visibility: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    order: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
   }, {});
   ProfileItem.associate = function(models) {
     ProfileItem.belongsTo(models.User, {
