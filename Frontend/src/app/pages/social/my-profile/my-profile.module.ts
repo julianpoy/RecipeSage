@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MyProfilePage } from './my-profile.page';
+import { AddProfileItemModalModule } from '../add-profile-item-modal/add-profile-item-modal.module';
 import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
 import { NullStateModule } from '../../../components/null-state/null-state.module';
 
@@ -23,6 +24,7 @@ import { NullStateModule } from '../../../components/null-state/null-state.modul
     ]),
     FormsModule,
     ReactiveFormsModule,
+    AddProfileItemModalModule,
     MultiImageUploadModule,
     NullStateModule,
   ],

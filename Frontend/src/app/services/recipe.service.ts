@@ -81,6 +81,7 @@ export class RecipeService {
   fetch(options) {
     let url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
     if (options.folder)                              url += '&folder=' + options.folder;
+    if (options.userId)                              url += '&userId=' + options.userId;
     if (options.sortBy)                              url += '&sort=' + options.sortBy;
     if (options.offset)                              url += '&offset=' + options.offset;
     if (options.count)                               url += '&count=' + options.count;

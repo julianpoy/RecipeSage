@@ -101,13 +101,13 @@ router.put(
         const profileItems = req.body.profileItems.map((profileItem, idx) => {
           const { title, type, recipeId, labelId, visibility } = profileItem;
 
-          if (!["public", "friends-only"].find(visibility)) {
+          if (!["public", "friends-only"].includes(visibility)) {
             const invalidVisibilityError = new Error("Invalid visibility type");
             invalidVisibilityError.status = 400;
             throw invalidVisibilityError;
           }
 
-          if (!["all-recipes", "label", "recipe"].find(type)) {
+          if (!["all-recipes", "label", "recipe"].includes(type)) {
             const invalidTypeError = new Error("Invalid profile item type");
             invalidTypeError.status = 400;
             throw invalidTypeError;
@@ -216,79 +216,102 @@ router.get(
   }
 )
 
-router.get(
-  '/profile/:userId',
-  MiddlewareService.validateSession(['user'], true),
-  async (req, res, next) => {
-    const profileUserId = req.params.userId;
-
-    const profileUser = await User.findByPk(profileUserId, {
-      include: [{
-        model: Image,
-        as: 'profileImages',
-        attributes: ['id', 'location']
-      }]
+const getUserProfile = async (req, res, next) => {
+  let profileUserId;
+  if (req.params.handle) {
+    const user = await User.findOne({
+      where: {
+        handle: req.params.handle,
+      }
     });
-
-    if (!profileUser) {
-      const profileUserNotFoundError = new Error("User with that id not found");
+    if (!user) {
+      const profileUserNotFoundError = new Error("User with that handle not found");
       profileUserNotFoundError.status = 404;
       throw profileUserNotFoundError;
     }
+    profileUserId = user.id;
+  } else {
+    profileUserId = req.params.userId;
+  }
 
-    if (!profileUser.enableProfile) {
-      const profileNotEnabledError = new Error("User does not have an active profile");
-      profileNotEnabledError.status = 403;
-      throw profileNotEnabledError;
-    }
+  const profileUser = await User.findByPk(profileUserId, {
+    include: [{
+      model: Image,
+      as: 'profileImages',
+      attributes: ['id', 'location']
+    }]
+  });
 
-    let userIsFriend = false;
-    let hasPendingFriendInvite = false;
-    if (res.locals.session.userId) {
-      const friendship = await Friendship.findOne({
-        where: {
-          userId: profileUserId,
-          friendId: res.locals.session.userId
-        }
-      });
-      userIsFriend = !!friendship;
+  if (!profileUser) {
+    const profileUserNotFoundError = new Error("User with that id not found");
+    profileUserNotFoundError.status = 404;
+    throw profileUserNotFoundError;
+  }
 
-      const pendingFriendship = await Friendship.findOne({
-        where: {
-          userId: res.locals.session.userId,
-          friendId: profileUserId
-        }
-      });
+  if (!profileUser.enableProfile) {
+    const profileNotEnabledError = new Error("User does not have an active profile");
+    profileNotEnabledError.status = 403;
+    throw profileNotEnabledError;
+  }
 
-      hasPendingFriendInvite = !!pendingFriendship;
-    }
-
-    const profileItems = await ProfileItem.findAll({
+  let userIsFriend = false;
+  let hasPendingFriendInvite = false;
+  if (res.locals.session.userId) {
+    const friendship = await Friendship.findOne({
       where: {
         userId: profileUserId,
-        ...(userIsFriend ? {} : { visibility: "public" })
-      },
-      include: [{
-        model: Recipe,
-        as: 'recipe'
-      }, {
-        model: Label,
-        as: 'label'
-      }]
+        friendId: res.locals.session.userId
+      }
+    });
+    userIsFriend = !!friendship;
+
+    const pendingFriendship = await Friendship.findOne({
+      where: {
+        userId: res.locals.session.userId,
+        friendId: profileUserId
+      }
     });
 
-    // Note: Should be the same as /profile
-    res.status(200).json({
-      hasPendingFriendInvite,
-      userIsFriend,
-      name: profileUser.name,
-      handle: profileUser.handle,
-      enableProfile: user.enableProfile,
-      profileImages: user.profileImages,
-      profileItems
-    });
+    hasPendingFriendInvite = !!pendingFriendship;
   }
-)
+
+  const profileItems = await ProfileItem.findAll({
+    where: {
+      userId: profileUserId,
+      ...(userIsFriend ? {} : { visibility: "public" })
+    },
+    include: [{
+      model: Recipe,
+      as: 'recipe'
+    }, {
+      model: Label,
+      as: 'label'
+    }]
+  });
+
+  // Note: Should be the same as /profile
+  res.status(200).json({
+    hasPendingFriendInvite,
+    userIsFriend,
+    name: profileUser.name,
+    handle: profileUser.handle,
+    enableProfile: profileUser.enableProfile,
+    profileImages: profileUser.profileImages,
+    profileItems
+  });
+}
+
+router.get(
+  '/profile/by-handle/:handle',
+  MiddlewareService.validateSession(['user'], true),
+  getUserProfile
+);
+
+router.get(
+  '/profile/:userId',
+  MiddlewareService.validateSession(['user'], true),
+  getUserProfile
+);
 
 router.get('/friends',
   MiddlewareService.validateSession(['user']),
@@ -384,6 +407,23 @@ router.post('/friends/:userId',
     });
 
     res.status(201).send("Created");
+  }
+);
+
+router.get(
+  '/handle-info/:handle',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    const user = await User.findOne({
+      where: {
+        handle: req.params.handle,
+      },
+      attributes: ['id'],
+    });
+
+    res.status(200).json({
+      available: !user,
+    });
   }
 );
 

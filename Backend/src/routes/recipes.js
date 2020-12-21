@@ -209,7 +209,8 @@ router.get(
     } else if (labelFilter.length > 0) {
       const label = await Label.findOne({
         where: {
-          title: labelFilter[0]
+          title: labelFilter[0],
+          userId
         }
       });
       labelId = label.id;

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
+import { isHandleValid } from '../../../../../SharedUtils/src';
+
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -55,32 +57,30 @@ export class SelectUserComponent {
     }, PAUSE_BEFORE_SEARCH);
   }
 
-  async search(email) {
+  async search(input) {
+    input = input || "";
     const loading = this.loadingService.start();
 
-    try {
-      this.results = [await this.userService.getUserByEmail(email)];
-    } catch (err) {
-      console.log(err);
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 404: // Result not found
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
+    const results = [];
+
+    const handle = input.startsWith('@') ? input.substring(1) : input;
+    if (isHandleValid(handle)) {
+      const profile = await this.userService.getProfileByHandle(input);
+      if (profile) {
+        const user = await this.userService.getUserById(input);
+        if (user) {
+          results.push(user);
+        }
       }
     }
+
+    results.push(
+      await this.userService.getUserByEmail(input, {
+        404: () => {}
+      })
+    );
+
+    this.results = results;
 
     loading.dismiss();
   }

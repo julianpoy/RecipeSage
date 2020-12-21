@@ -5,19 +5,12 @@
     </ion-buttons>
 
     <ion-title>People</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="editProfile()">
-        <ion-icon slot="start" name="contact"></ion-icon>
-        My Profile
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <null-state *ngIf="!accountInfo?.enableProfile">
-    <ion-icon name="contact" class="big-icon" virtualSlot="header"></ion-icon>
+    <ion-icon name="person-circle" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
       <p>
         You haven't set up a profile.
@@ -32,35 +25,61 @@
     </ion-label>
   </null-state>
 
+  <ion-item button (click)="editProfile()">
+    <ion-icon slot="start" name="person-circle" *ngIf="!myProfile?.profileImages?.length"></ion-icon>
+    <ion-avatar slot="start" *ngIf="myProfile?.profileImages?.length">
+      <img [src]="myProfile.profileImages[0].location">
+    </ion-avatar>
+    <ion-label>View/edit my profile</ion-label>
+  </ion-item>
+
+  <br />
+  <br />
   <br />
 
   <ion-item-divider *ngIf="accountInfo?.enableProfile">
     <ion-label>
-      Friends &amp; Invites
+      My Friends &amp; Friendship Invites
     </ion-label>
   </ion-item-divider>
+  <ion-list-header *ngIf="friendships?.friends?.length > 0">
+    Friends
+  </ion-list-header>
+  <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.id)">
+    <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
+    <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
+      <img [src]="friendship.otherUser.profileImages[0].location">
+    </ion-avatar>
+    <ion-label>{{friendship.otherUser.name}}</ion-label>
+    <ion-button slot="end" color="danger">Unfriend</ion-button>
+  </ion-item>
+
+  <br />
+
   <ion-list *ngIf="accountInfo?.enableProfile">
     <ion-list-header *ngIf="friendships?.incomingRequests?.length > 0">
-      Friend invites
+      Friend invites (incoming)
     </ion-list-header>
     <ion-item *ngFor="let friendship of friendships?.incomingRequests" button (click)="openProfile(friendship.otherUser.id)">
+      <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
+      <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
+        <img [src]="friendship.otherUser.profileImages[0].location">
+      </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button slot="end" (click)="addFriend(friendship.friendId)">Accept</ion-button>
       <ion-button slot="end" color="danger">Decline</ion-button>
     </ion-item>
+
     <ion-list-header *ngIf="friendships?.outgoingRequests?.length > 0">
-      Pending friend requests
+      Pending (sent) friend requests
     </ion-list-header>
     <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button (click)="openProfile(friendship.otherUser.id)">
+      <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
+      <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
+        <img [src]="friendship.otherUser.profileImages[0].location">
+      </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button slot="end" color="danger">Cancel</ion-button>
-    </ion-item>
-    <ion-list-header *ngIf="friendships?.friends?.length > 0">
-      Friends
-    </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.id)">
-      <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button slot="end" color="danger">Unfriend</ion-button>
     </ion-item>
 
     <null-state *ngIf="friendships?.incomingRequests?.length == 0 && friendships?.outgoingRequests?.length == 0 && friendships?.friends?.length == 0">

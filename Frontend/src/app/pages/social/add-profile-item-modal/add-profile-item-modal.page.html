@@ -13,12 +13,14 @@
 </ion-header>
 
 
-<ion-content>
-  <select-user (selectedUserChange)="onSelectedUserChange($event)"></select-user>
-  <ion-list>
-    <ion-radio-group [value]="itemType" (ionChange)="itemType = $event">
+<ion-content class="ion-padding">
+  <ion-list *ngIf="!itemType">
+    <ion-radio-group (ionChange)="itemType = $event?.detail?.value">
       <ion-list-header>
-        <ion-label>Item Type</ion-label>
+        <ion-item>
+          <ion-icon name="folder-open" slot="start"></ion-icon>
+          <ion-label>What Would You Like to Share?</ion-label>
+        </ion-item>
       </ion-list-header>
 
       <ion-item>
@@ -38,35 +40,61 @@
     </ion-radio-group>
   </ion-list>
 
-  <ion-list>
-    <ion-radio-group [value]="itemVisibility" (ionChange)="itemVisibility = $event">
+  <ion-item *ngIf="itemType" (click)="itemType = null" button>
+    <ion-icon name="folder-open" slot="start"></ion-icon>
+    <ion-label>
+      <h2>Profile Item Type: {{ capitalize(itemTypePrettyNameMap[itemType]) }}</h2>
+      <p>Click to change</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="(itemType === 'recipe' || itemType === 'label') && !isItemSelected()" class="ion-margin-top">
+    <ion-icon name="search" slot="start"></ion-icon>
+    <ion-label>
+      <p>Select your {{ itemTypePrettyNameMap[itemType] }}</p>
+    </ion-label>
+  </ion-item>
+  <select-recipe *ngIf="itemType === 'recipe'" [(selectedRecipe)]="selectedRecipe"></select-recipe>
+  <select-label *ngIf="itemType === 'label'" [(selectedLabel)]="selectedLabel"></select-label>
+
+  <ion-list *ngIf="isItemSelected() && !itemVisibility" class="ion-margin-top">
+    <ion-radio-group [value]="itemVisibility" (ionChange)="itemVisibility = $event?.detail?.value">
       <ion-list-header>
-        <ion-label>Item Visibility</ion-label>
+        <ion-item>
+          <ion-icon name="eye" slot="start"></ion-icon>
+          <ion-label>Who Should Be Able to See This?</ion-label>
+        </ion-item>
       </ion-list-header>
 
       <ion-item>
-        <ion-label>Public</ion-label>
+        <ion-label>Anyone (Public)</ion-label>
         <ion-radio slot="start" value="public"></ion-radio>
       </ion-item>
 
       <ion-item>
-        <ion-label>Friends Only</ion-label>
+        <ion-label>My Friends Only</ion-label>
         <ion-radio slot="start" value="friends-only"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
 
-  <ion-item>
-    <ion-label position="stacked">Item Title</ion-label>
-    <ion-input [(ngModel)]="itemTitle"></ion-input>
+  <ion-item *ngIf="itemVisibility" (click)="itemVisibility = null" button>
+    <ion-icon name="eye" slot="start"></ion-icon>
+    <ion-label>
+      <h2>Visibility: {{ capitalize(visibilityTypePrettyNameMap[itemVisibility]) }}</h2>
+      <p>Click to change</p>
+    </ion-label>
   </ion-item>
 
-  <select-recipe *ngIf="itemType === 'recipe'" [(selectedRecipe)]="selectedRecipe"></select-recipe>
-  <select-label *ngIf="itemType === 'label'" [(selectedLabel)]="selectedLabel"></select-label>
+  <ion-item *ngIf="itemVisibility" class="ion-margin-top">
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-label position="stacked">Featured Title</ion-label>
+    <ion-input [(ngModel)]="itemTitle"></ion-input>
+  </ion-item>
 </ion-content>
 
 <ion-footer class="ion-padding">
-  <ion-button expand="block" (click)="add()" [disabled]="!isValid()">
+  <ion-button expand="block" (click)="done()" [disabled]="!isValid()">
     <ion-icon name="checkmark" slot="start"></ion-icon>
     <ion-label>
       Done

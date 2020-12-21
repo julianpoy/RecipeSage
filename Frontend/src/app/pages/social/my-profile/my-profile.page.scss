@@ -1,56 +1,42 @@
-.image-frame {
-  width: 150px;
-  height: 150px;
+.error {
+  color: var(--ion-color-danger);
+}
 
-  overflow: hidden;
-
+.setup-screen {
+  margin-top: 60px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 
-  box-shadow: 1px 1px 7px rgba(0,0,0,0.25);
-  border-radius: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  cursor: pointer;
-
-  .image {
-    width: 100%;
-    height: 100%;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+  .intro {
+    margin-bottom: 40px;
+    text-align: center;
   }
 }
 
-.profile-details {
-  max-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
+.profile-details-container {
+  display: flex;
 
-  .username-preview, .handle-preview {
-    text-align: center;
-    cursor: pointer;
+  .profile-details {
+    padding-top: 20px;
 
-    ion-icon {
-      color: var(--ion-color-primary);
-      vertical-align: middle;
+    .username-preview, .handle-preview {
+      cursor: pointer;
+
+      ion-icon {
+        color: var(--ion-color-primary);
+        vertical-align: middle;
+      }
     }
-  }
 
-  .username-preview {
-    margin-bottom: 0;
-  }
+    .username-preview {
+      margin-bottom: 0;
+    }
 
-  .handle-preview {
-    margin-top: 0.5rem;
-    margin-bottom: 2rem;
-    font-size: 14px;
+    .handle-preview {
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+      font-size: 14px;
+    }
   }
 }

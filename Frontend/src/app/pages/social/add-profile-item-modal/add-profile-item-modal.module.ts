@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { AddProfileItemModalPage } from './add-friend-modal.page';
+import { AddProfileItemModalPage } from './add-profile-item-modal.page';
 import { SelectRecipeModule } from '../../../components/select-recipe/select-recipe.module';
 import { SelectLabelModule } from '../../../components/select-label/module';
 

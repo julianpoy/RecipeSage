@@ -12,8 +12,19 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class AddProfileItemModalPage {
 
-  itemType = "recipe";
-  itemVisibility = "public";
+  itemType = null;
+  itemTypePrettyNameMap = {
+    "recipe": "recipe",
+    "label": "label",
+    "all-recipes": "all recipes",
+  };
+
+  itemVisibility = null;
+  visibilityTypePrettyNameMap = {
+    "public": "public",
+    "friends-only": "friends only",
+  };
+
   itemTitle = "";
 
   selectedRecipe;
@@ -32,39 +43,33 @@ export class AddProfileItemModalPage {
     this.modalCtrl.dismiss();
   }
 
-  onSelectedUserChange(event) {
-    this.recipientId = event ? event.id : null;
+  done() {
+    const { itemType, itemVisibility, itemTitle, selectedRecipe, selectedLabel } = this;
+
+    this.modalCtrl.dismiss({
+      item: {
+        title: itemTitle,
+        type: itemType,
+        visibility: itemVisibility,
+        label: selectedLabel || null,
+        recipe: selectedRecipe || null,
+      }
+    });
   }
 
-  async send() {
-    const loading = this.loadingService.start();
+  isValid() {
+    return this.itemTitle && this.itemVisibility && this.isItemSelected();
+  }
 
-    try {
-      await this.userService.addFriend(this.recipientId);
-      this.modalCtrl.dismiss();
-    } catch(err) {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    }
+  isItemSelected() {
+    return this.itemType && (
+      this.itemType === 'all-recipes'
+      || this.selectedRecipe
+      || this.selectedLabel
+    );
+  }
 
-    loading.dismiss();
+  capitalize(str: string) {
+    return `${str[0].toUpperCase()}${str.substring(1)}`;
   }
 }

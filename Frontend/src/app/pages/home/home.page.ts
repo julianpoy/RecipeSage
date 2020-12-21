@@ -46,6 +46,8 @@ export class HomePage implements AfterViewInit {
   @ViewChild('contentContainer', { static: true }) contentContainer;
   scrollElement;
 
+  userId = null;
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
@@ -70,6 +72,18 @@ export class HomePage implements AfterViewInit {
       default:
         this.folderTitle = 'My Recipes';
         break;
+    }
+    this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || "").split(",").filter(e => e);
+    this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
+    if (this.userId) {
+      if (this.selectedLabels.length) {
+        this.folderTitle = `Shared Label: ${this.selectedLabels[0]}`;
+      } else {
+        this.folderTitle = 'Shared Recipes';
+      }
+      this.userService.getProfileByUserId(this.userId).then(profile => {
+        this.folderTitle = `${profile.name}'s ${this.folderTitle}`;
+      });
     }
 
     events.subscribe('recipe:created', () => this.reloadPending = true);
@@ -174,6 +188,7 @@ export class HomePage implements AfterViewInit {
     return new Promise((resolve, reject) => {
       this.recipeService.fetch({
         folder: this.folder,
+        userId: this.userId,
         sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
         offset,
         count: numToFetch,
@@ -199,6 +214,13 @@ export class HomePage implements AfterViewInit {
             break;
           case 401:
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+            break;
+          case 404:
+            const noAccessToast = await this.toastCtrl.create({
+              message: "It seems like you don't have access to this resource",
+              duration: 5000
+            });
+            noAccessToast.present();
             break;
           default:
             const errorToast = await this.toastCtrl.create({
