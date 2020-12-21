@@ -14,11 +14,21 @@
   }
 }
 
+multi-image-upload {
+  max-width: 100%;
+}
+
 .profile-details-container {
   display: flex;
+  flex-wrap: wrap;
 
   .profile-details {
     padding-top: 20px;
+    min-width: 400px;
+
+    &.break {
+      flex-basis: 100%;
+    }
 
     .username-preview, .handle-preview {
       cursor: pointer;
