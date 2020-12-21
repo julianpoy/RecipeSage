@@ -34,31 +34,8 @@ export class AddFriendModalPage {
   async send() {
     const loading = this.loadingService.start();
 
-    try {
-      await this.userService.addFriend(this.recipientId);
-      this.modalCtrl.dismiss();
-    } catch(err) {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    }
+    await this.userService.addFriend(this.recipientId);
+    this.modalCtrl.dismiss();
 
     loading.dismiss();
   }

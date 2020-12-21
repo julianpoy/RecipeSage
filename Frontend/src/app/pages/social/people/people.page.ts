@@ -79,31 +79,12 @@ export class PeoplePage {
   }
 
   async addFriend(friendId) {
-    try {
-      await this.userService.addFriend(friendId);
-      await this.load();
-    } catch(err) {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    }
+    await this.userService.addFriend(friendId);
+    await this.load();
+  }
+
+  async deleteFriend(friendId) {
+    await this.userService.deleteFriend(friendId);
   }
 
   async openProfile(userId) {

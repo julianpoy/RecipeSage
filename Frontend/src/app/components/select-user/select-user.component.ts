@@ -65,15 +65,14 @@ export class SelectUserComponent {
 
     const handle = input.startsWith('@') ? input.substring(1) : input;
     if (isHandleValid(handle)) {
-      const profile = await this.userService.getProfileByHandle(input, {
+      const profile = await this.userService.getProfileByHandle(handle, {
         403: () => {},
         404: () => {}
       });
       if (profile) {
-        const user = await this.userService.getUserById(input);
-        if (user) {
-          results.push(user);
-        }
+        // TODO: Currently this pushes a profile rather than the direct user info
+        // This should be cleaned up - preferrably with some typing
+        results.push(profile);
       }
     }
 

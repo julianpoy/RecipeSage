@@ -51,7 +51,7 @@
       <img [src]="friendship.otherUser.profileImages[0].location">
     </ion-avatar>
     <ion-label>{{friendship.otherUser.name}}</ion-label>
-    <ion-button slot="end" color="danger">Unfriend</ion-button>
+    <ion-button slot="end" color="danger" (click)="deleteFriend(friendship.otherUser.id)">Unfriend</ion-button>
   </ion-item>
 
   <br />
@@ -67,7 +67,7 @@
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button slot="end" (click)="addFriend(friendship.friendId)">Accept</ion-button>
-      <ion-button slot="end" color="danger">Decline</ion-button>
+      <ion-button slot="end" color="danger" (click)="deleteFriend(friendship.otherUser.id)">Decline</ion-button>
     </ion-item>
 
     <ion-list-header *ngIf="friendships?.outgoingRequests?.length > 0">
@@ -79,7 +79,7 @@
         <img [src]="friendship.otherUser.profileImages[0].location">
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button slot="end" color="danger">Cancel</ion-button>
+      <ion-button slot="end" color="danger" (click)="deleteFriend(friendship.otherUser.id)">Cancel</ion-button>
     </ion-item>
 
     <null-state *ngIf="friendships?.incomingRequests?.length == 0 && friendships?.outgoingRequests?.length == 0 && friendships?.friends?.length == 0">

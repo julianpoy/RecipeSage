@@ -29,6 +29,7 @@ export interface ProfileImage {
 }
 
 export interface UserProfile {
+  id: string,
   name: string,
   handle?: string,
   profileImages: ProfileImage[],
@@ -267,13 +268,38 @@ export class UserService {
     }
   }
 
-  addFriend(friendId: string) {
+  async addFriend(friendId: string): Promise<boolean> {
     const url = this.utilService.getBase() + 'users/friends/' + friendId + this.utilService.getTokenQuery();
 
-    return this.httpService.request({
-      method: 'post',
-      url
-    }).then(response => response.data);
+    try {
+      await this.httpService.request({
+        method: 'post',
+        url,
+      });
+
+      return true;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+
+      return false;
+    }
+  }
+
+  async deleteFriend(friendId: string): Promise<boolean> {
+    const url = this.utilService.getBase() + 'users/friends/' + friendId + this.utilService.getTokenQuery();
+
+    try {
+      await this.httpService.request({
+        method: 'delete',
+        url,
+      });
+
+      return true;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+
+      return false;
+    }
   }
 
   myStats() {
