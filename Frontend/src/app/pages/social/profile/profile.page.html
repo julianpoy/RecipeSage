@@ -71,11 +71,13 @@
 
 <ion-footer *ngIf="profile && !profile?.isMe">
   <ion-toolbar class="ion-padding-horizontal" *ngIf="isLoggedIn()">
-    <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">Send Friend Request</ion-button>
-    <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Cancel Friend Request</ion-button>
-    <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
-    <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">Decline Friend Request</ion-button>
-    <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Unfriend</ion-button>
+    <div class="action-button-container">
+      <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">Send Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Cancel Friend Request</ion-button>
+      <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">Decline Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Unfriend</ion-button>
+    </div>
   </ion-toolbar>
   <ion-toolbar class="ion-padding-horizontal" *ngIf="!isLoggedIn()">
     <ion-button expand="block" disabled="true">Log In/Register to Add Friend</ion-button>

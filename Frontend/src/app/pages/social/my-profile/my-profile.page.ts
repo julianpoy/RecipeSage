@@ -59,6 +59,10 @@ export class MyProfilePage {
       this.myProfile = myProfile;
 
       this.requiresSetup = !this.myProfile.name || !this.myProfile.handle;
+
+      if (this.requiresSetup) {
+        this.updatedProfileFields.enableProfile = true;
+      }
     }).catch(async err => {
       loading.dismiss();
       switch (err.response.status) {

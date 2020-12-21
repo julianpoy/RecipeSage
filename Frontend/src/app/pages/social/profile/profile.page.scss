@@ -37,13 +37,11 @@
   }
 }
 
-ion-footer {
-  ion-toolbar {
-    display: flex;
+.action-button-container {
+  display: flex;
 
-    ion-button {
-      flex-grow: 1;
-      flex-basis: 0;
-    }
+  ion-button {
+    flex-grow: 1;
+    flex-basis: 0;
   }
 }
