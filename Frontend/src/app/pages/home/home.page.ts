@@ -148,7 +148,10 @@ export class HomePage implements AfterViewInit {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = this.labels.map(e => e.title);
 
-      this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+      if (!this.userId) {
+        // Only filter out labels that don't exist in our collection if we're not actually browsing our collection
+        this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+      }
 
       return this.resetAndLoadRecipes();
     });

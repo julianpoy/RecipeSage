@@ -46,7 +46,7 @@
     <ion-list-header *ngIf="friendships?.friends?.length > 0">
       Friends
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.id)">
+    <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.handle)">
       <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
       <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
         <img [src]="friendship.otherUser.profileImages[0].location">
@@ -58,7 +58,7 @@
     <ion-list-header *ngIf="friendships?.incomingRequests?.length > 0">
       Friend invites (incoming)
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.incomingRequests" button (click)="openProfile(friendship.otherUser.id)">
+    <ion-item *ngFor="let friendship of friendships?.incomingRequests" button (click)="openProfile(friendship.otherUser.handle)">
       <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
       <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
         <img [src]="friendship.otherUser.profileImages[0].location">
@@ -71,7 +71,7 @@
     <ion-list-header *ngIf="friendships?.outgoingRequests?.length > 0">
       Pending (sent) friend requests
     </ion-list-header>
-    <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button (click)="openProfile(friendship.otherUser.id)">
+    <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button (click)="openProfile(friendship.otherUser.handle)">
       <ion-icon slot="start" name="person-circle" *ngIf="!friendship.otherUser.profileImages?.length"></ion-icon>
       <ion-avatar slot="start" *ngIf="friendship.otherUser.profileImages?.length">
         <img [src]="friendship.otherUser.profileImages[0].location">

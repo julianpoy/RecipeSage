@@ -110,8 +110,8 @@ export class PeoplePage {
     await this.load();
   }
 
-  async openProfile(userId) {
-    this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(userId));
+  async openProfile(handle) {
+    this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${handle}`));
   }
 
   async editProfile() {

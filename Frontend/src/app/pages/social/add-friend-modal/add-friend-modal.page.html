@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Add Friend</ion-title>
+    <ion-title>Find User</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -22,6 +22,12 @@
     <ion-icon name="send" slot="start"></ion-icon>
     <ion-label>
       Send Friend Request
+    </ion-label>
+  </ion-button>
+  <ion-button expand="block" (click)="open()" [disabled]="!recipientId">
+    <ion-icon name="open" slot="start"></ion-icon>
+    <ion-label>
+      Open Profile
     </ion-label>
   </ion-button>
 </ion-footer>

@@ -32,6 +32,8 @@ export interface UserProfile {
   id: string,
   name: string,
   handle?: string,
+  incomingFriendship: boolean,
+  outgoingFriendship: boolean,
   profileImages: ProfileImage[],
   enableProfile: boolean,
   profileVisibility: 'public' | 'friends-only',
@@ -208,7 +210,7 @@ export class UserService {
     }
   }
 
-  async getProfileByUserId(userId: string): Promise<UserProfile> {
+  async getProfileByUserId(userId: string, errorHandlers?: ErrorHandlers): Promise<UserProfile> {
     const url = this.utilService.getBase() + 'users/profile/' + userId + this.utilService.getTokenQuery();
 
     try {
@@ -219,7 +221,7 @@ export class UserService {
 
       return data;
     } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
     }
   }
 

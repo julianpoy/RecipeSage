@@ -217,8 +217,8 @@ router.get(
       // Note: Should be the same as /profile/:userId
       res.status(200).json({
         id: user.id,
-        hasPendingFriendInvite: false,
-        userIsFriend: true,
+        incomingFriendship: false,
+        outgoingFriendship: false,
         name: user.name,
         handle: user.handle,
         enableProfile: user.enableProfile,
@@ -270,31 +270,31 @@ const getUserProfile = async (req, res, next) => {
       throw profileNotEnabledError;
     }
 
-    let userIsFriend = false;
-    let hasPendingFriendInvite = false;
+    let outgoingFriendship = false;
+    let incomingFriendship = false;
     if (res.locals.session.userId) {
-      const friendship = await Friendship.findOne({
+      const incoming = await Friendship.findOne({
         where: {
           userId: profileUserId,
           friendId: res.locals.session.userId
         }
       });
-      userIsFriend = !!friendship;
+      incomingFriendship = !!incoming;
 
-      const pendingFriendship = await Friendship.findOne({
+      const outgoing = await Friendship.findOne({
         where: {
           userId: res.locals.session.userId,
           friendId: profileUserId
         }
       });
 
-      hasPendingFriendInvite = !!pendingFriendship;
+      outgoingFriendship = !!outgoing;
     }
 
     const profileItems = await ProfileItem.findAll({
       where: {
         userId: profileUserId,
-        ...(userIsFriend ? {} : { visibility: "public" })
+        ...(incomingFriendship ? {} : { visibility: "public" })
       },
       include: [{
         model: Recipe,
@@ -308,8 +308,8 @@ const getUserProfile = async (req, res, next) => {
     // Note: Should be the same as /profile
     res.status(200).json({
       id: profileUser.id,
-      hasPendingFriendInvite,
-      userIsFriend,
+      incomingFriendship,
+      outgoingFriendship,
       name: profileUser.name,
       handle: profileUser.handle,
       enableProfile: profileUser.enableProfile,
@@ -346,7 +346,12 @@ router.get('/friends',
         include: [{
           model: User,
           as: 'friend',
-          attributes: ['id', 'name', 'email']
+          attributes: ['id', 'name', 'handle', 'enableProfile'],
+          include: [{
+            model: Image,
+            as: 'profileImages',
+            attributes: ['id', 'location']
+          }]
         }]
       });
 
@@ -361,7 +366,12 @@ router.get('/friends',
         include: [{
           model: User,
           as: 'user',
-          attributes: ['id', 'name', 'email']
+          attributes: ['id', 'name', 'handle', 'enableProfile'],
+          include: [{
+            model: Image,
+            as: 'profileImages',
+            attributes: ['id', 'location']
+          }]
         }]
       });
 
@@ -465,6 +475,8 @@ router.delete('/friends/:userId',
           transaction
         });
       });
+
+      res.status(200).send("Friendship removed");
     } catch(err) {
       next(err);
     }

@@ -94,14 +94,16 @@ export class MyProfilePage {
         message: 'You\'ll need to enable your profile to interact with sharing features, such as sending friend requests.',
         buttons: [
           {
-            text: 'Cancel',
+            text: 'Ignore',
             role: 'cancel',
             handler: () => { }
           },
           {
-            text: 'Setup',
+            text: 'Enable',
             handler: () => {
-              this.editProfile();
+              this.updatedProfileFields.enableProfile = true
+              this.myProfile.enableProfile = true;
+              this.accountInfo.enableProfile = true;
             }
           }
         ]
@@ -205,14 +207,4 @@ export class MyProfilePage {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }
-
-  // recipeLink(recipeId: string) {
-  //   return RouteMap.RecipePage.getPath(recipeId);
-  // }
-
-  // labelLink(labelId: string) {
-  //   return RouteMap.HomePage.getPath('main', {
-  //     userId:
-  //   });
-  // }
 }

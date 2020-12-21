@@ -15,6 +15,7 @@ import { RecipeService } from '@/services/recipe.service';
 export class ProfilePage {
   defaultBackHref: string = RouteMap.SocialPage.getPath();
 
+  handle: string;
   profile;
 
   constructor(
@@ -27,35 +28,46 @@ export class ProfilePage {
     public recipeService: RecipeService,
     public userService: UserService) {
 
-    const loading = this.loadingService.start();
-
-    const handle = this.route.snapshot.paramMap.get('handle');
-
-    this.userService.getProfileByHandle(handle).then(response => {
-      loading.dismiss();
-
-      this.profile = response;
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
+    this.handle = this.route.snapshot.paramMap.get('handle').substring(1);
+    this.load();
   }
 
-  async sendFriendInvite() {
+  async profileDisabledError() {
+    const alert = await this.alertCtrl.create({
+      header: 'Profile is not enabled',
+      message: 'This user has disabled their profile and is therefore private/inaccessible.',
+      buttons: [
+        {
+          text: 'Okay',
+          handler: () => {
+            this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  async load() {
+    const loading = this.loadingService.start();
+    this.profile = await this.userService.getProfileByHandle(this.handle, {
+      403: () => this.profileDisabledError()
+    });
+
+    loading.dismiss();
+  }
+
+  open(item) {
+    if(item.type === "all-recipes") {
+      this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId }));
+    } else if(item.type === "label") {
+      this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId, selectedLabels: [item.label.title] }));
+    } else if (item.type === "recipe") {
+      this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
+    }
+  }
+
+  async addFriend() {
     const loading = this.loadingService.start();
 
     await this.userService.addFriend(this.profile.id);
@@ -63,9 +75,36 @@ export class ProfilePage {
 
     const tst = await this.toastCtrl.create({
       message: 'Friend invite sent!',
-      duration: 5000
+      duration: 5000,
+      buttons: [{
+        side: 'end',
+        role: 'cancel',
+        text: 'Dismiss',
+      }]
     });
     tst.present();
+
+    this.load();
+  }
+
+  async deleteFriend() {
+    const loading = this.loadingService.start();
+
+    await this.userService.deleteFriend(this.profile.id);
+    loading.dismiss();
+
+    const tst = await this.toastCtrl.create({
+      message: 'Friendship removed',
+      duration: 5000,
+      buttons: [{
+        side: 'end',
+        role: 'cancel',
+        text: 'Dismiss',
+      }]
+    });
+    tst.present();
+
+    this.load();
   }
 
   // async removeFriend() {

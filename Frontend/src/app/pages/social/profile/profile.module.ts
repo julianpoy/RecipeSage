@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ProfilePage } from './profile.page';
+import { NullStateModule } from '../../../components/null-state/null-state.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProfilePage } from './profile.page';
       }
     ]),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NullStateModule,
   ],
 })
 export class ProfilePageModule {}
