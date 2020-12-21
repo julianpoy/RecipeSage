@@ -20,6 +20,8 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
   styleUrls: ['home.page.scss']
 })
 export class HomePage implements AfterViewInit {
+  defaultBackHref: string = RouteMap.PeoplePage.getPath();
+
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
@@ -85,6 +87,7 @@ export class HomePage implements AfterViewInit {
         this.folderTitle = `${profile.name}'s ${this.folderTitle}`;
       });
     }
+    this.setDefaultBackHref();
 
     events.subscribe('recipe:created', () => this.reloadPending = true);
     events.subscribe('recipe:modified', () => this.reloadPending = true);
@@ -121,6 +124,14 @@ export class HomePage implements AfterViewInit {
       }, () => {
         loading.dismiss();
       });
+    }
+  }
+
+  async setDefaultBackHref() {
+    if (this.userId) {
+      const profile = await this.userService.getProfileByUserId(this.userId);
+
+      this.defaultBackHref = RouteMap.ProfilePage.getPath(`@${profile.handle}`);
     }
   }
 
