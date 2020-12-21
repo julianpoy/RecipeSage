@@ -15,7 +15,7 @@ module.exports = {
       'Users',
       'profileVisibility',
       {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         defaultValue: null
       }
     );
