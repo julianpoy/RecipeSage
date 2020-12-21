@@ -65,7 +65,10 @@ export class SelectUserComponent {
 
     const handle = input.startsWith('@') ? input.substring(1) : input;
     if (isHandleValid(handle)) {
-      const profile = await this.userService.getProfileByHandle(input);
+      const profile = await this.userService.getProfileByHandle(input, {
+        403: () => {},
+        404: () => {}
+      });
       if (profile) {
         const user = await this.userService.getUserById(input);
         if (user) {
@@ -74,11 +77,11 @@ export class SelectUserComponent {
       }
     }
 
-    results.push(
-      await this.userService.getUserByEmail(input, {
-        404: () => {}
-      })
-    );
+    const user = await this.userService.getUserByEmail(input, {
+      404: () => {}
+    });
+
+    if (user) results.push(user);
 
     this.results = results;
 

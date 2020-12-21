@@ -135,13 +135,19 @@ export class UserService {
     }).then(response => response.data);
   }
 
-  getUserByEmail(email) {
+  async getUserByEmail(email, errorHandlers?: ErrorHandlers): Promise<any> {
     const url = this.utilService.getBase() + 'users/by-email' + this.utilService.getTokenQuery() + '&email=' + encodeURIComponent(email);
 
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
+    }
   }
 
   me() {
@@ -227,7 +233,7 @@ export class UserService {
 
       return data;
     } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
     }
   }
 

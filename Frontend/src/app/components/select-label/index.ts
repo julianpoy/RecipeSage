@@ -41,7 +41,7 @@ export class SelectLabelComponent {
 
   async load() {
     const loading = this.loadingService.start();
-    const labels = this.labelService.getMyLabels();
+    const labels = await this.labelService.getMyLabels();
     if (labels) {
       this.labels = labels;
       this.results = this.labels;

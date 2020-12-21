@@ -91,25 +91,27 @@ export class SelectCollaboratorsComponent {
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
-    this.autofillTimeout = setTimeout(() => {
-      this.userService.getUserByEmail(this.pendingThread.trim()).then(response => {
-        if (!this.threadsByUserId[response.id]) {
-          this.existingThreads.push(response);
-          this.threadsByUserId[response.id] = response;
+    this.autofillTimeout = setTimeout(async () => {
+      const user = await this.userService.getUserByEmail(this.pendingThread.trim(), {
+        404: () => {}
+      });
+
+      if (user) {
+        if (!this.threadsByUserId[user.id]) {
+          this.existingThreads.push(user);
+          this.threadsByUserId[user.id] = user;
         }
 
-        this.pendingCollaboratorName = response.name || response.email;
-        this.pendingCollaboratorId = response.id;
-        this.searchingForRecipient = false;
-
-        if (callback) callback.call(null);
-      }).catch(err => {
+        this.pendingCollaboratorName = user.name || user.email;
+        this.pendingCollaboratorId = user.id;
+      } else {
         this.pendingCollaboratorName = '';
         this.pendingCollaboratorId = '';
-        this.searchingForRecipient = false;
+      }
 
-        if (callback) callback.call(null);
-      });
+      this.searchingForRecipient = false;
+
+      if (callback) callback.call(null);
     }, 500);
   }
 
