@@ -23,34 +23,41 @@ var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 var SubscriptionService = require('../services/subscriptions');
 
+// SharedUtils
+var SharedUtils = require('../../../SharedUtils/src');
+
 router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
+    try {
+      const user = await User.findByPk(res.locals.session.userId);
 
-  const user = await User.findByPk(res.locals.session.userId);
+      const subscriptions = (await SubscriptionService.subscriptionsForUser(res.locals.session.userId, true)).map(subscription => {
+        return {
+          expires: subscription.expires,
+          capabilities: SubscriptionService.capabilitiesForSubscription(subscription.name)
+        };
+      });
 
-  const subscriptions = (await SubscriptionService.subscriptionsForUser(res.locals.session.userId, true)).map(subscription => {
-    return {
-      expires: subscription.expires,
-      capabilities: SubscriptionService.capabilitiesForSubscription(subscription.name)
-    };
-  });
-
-  // Manually construct fields to avoid sending sensitive info
-  res.status(200).json({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    handle: user.handle,
-    enableProfile: user.enableProfile,
-    profileVisibility: user.profileVisibility,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    subscriptions
-  });
-});
+      // Manually construct fields to avoid sending sensitive info
+      res.status(200).json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        handle: user.handle,
+        enableProfile: user.enableProfile,
+        profileVisibility: user.profileVisibility,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        subscriptions
+      });
+    } catch(err) {
+      next(err);
+    }
+  }
+);
 
 // Params:
 // profileImageId
@@ -68,111 +75,114 @@ router.put(
   '/profile',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const userId = res.locals.session.userId;
+    try {
+      const userId = res.locals.session.userId;
 
-    const EVIL_HANDLE_REGEXP = /[^A-Za-z0-9_.]/;
-    if (req.body.handle && req.body.handle.match(EVIL_HANDLE_REGEXP)) {
-      const badHandleError = new Error("Handle must only contain A-z 0-9 _ .");
-      badHandleError.status = 400;
-      throw badHandleError;
-    }
+      if (req.body.handle !== undefined && !SharedUtils.isHandleValid(req.body.handle)) {
+        const badHandleError = new Error("Handle must only contain A-z 0-9 _ .");
+        badHandleError.status = 400;
+        throw badHandleError;
+      }
 
-    await SQ.transaction(async transaction => {
-      await User.update({
-        ...(req.body.name !== undefined ? { name: req.body.name } : {}),
-        ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
-        ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
-        ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
-      }, {
-        where: {
-          id: userId
-        },
-        transaction
-      });
-
-      if (req.body.profileItems) {
-        await ProfileItem.destroy({
+      await SQ.transaction(async transaction => {
+        await User.update({
+          ...(req.body.name !== undefined ? { name: req.body.name } : {}),
+          ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
+          ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
+          ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
+        }, {
           where: {
-            userId
+            id: userId
           },
           transaction
         });
 
-        const profileItems = req.body.profileItems.map((profileItem, idx) => {
-          const { title, type, recipeId, labelId, visibility } = profileItem;
-
-          if (!["public", "friends-only"].includes(visibility)) {
-            const invalidVisibilityError = new Error("Invalid visibility type");
-            invalidVisibilityError.status = 400;
-            throw invalidVisibilityError;
-          }
-
-          if (!["all-recipes", "label", "recipe"].includes(type)) {
-            const invalidTypeError = new Error("Invalid profile item type");
-            invalidTypeError.status = 400;
-            throw invalidTypeError;
-          }
-
-          return {
-            userId: res.locals.session.userId,
-            title,
-            type,
-            recipeId,
-            labelId,
-            visibility,
-            order: idx
-          };
-        });
-
-        await ProfileItem.bulkCreate(profileItems, {
-          transaction
-        });
-      }
-
-      if (req.body.profileImageIds) {
-        const canUploadMultipleImages = await SubscriptionService.userHasCapability(
-          res.locals.session.userId,
-          SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
-        );
-
-        if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
-          const images = await Image.findAll({
+        if (req.body.profileItems) {
+          await ProfileItem.destroy({
             where: {
-              id: {
-                [Op.in]: req.body.profileImageIds
-              }
+              userId
             },
             transaction
           });
-          const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
 
-          req.body.profileImageIds = req.body.profileImageIds.filter((imageId, idx) =>
-            idx === 0 || // Allow first image always (users can always upload the first image)
-            imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
-            moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
-          );
+          const profileItems = req.body.profileItems.map((profileItem, idx) => {
+            const { title, type, recipeId, labelId, visibility } = profileItem;
+
+            if (!["public", "friends-only"].includes(visibility)) {
+              const invalidVisibilityError = new Error("Invalid visibility type");
+              invalidVisibilityError.status = 400;
+              throw invalidVisibilityError;
+            }
+
+            if (!["all-recipes", "label", "recipe"].includes(type)) {
+              const invalidTypeError = new Error("Invalid profile item type");
+              invalidTypeError.status = 400;
+              throw invalidTypeError;
+            }
+
+            return {
+              userId: res.locals.session.userId,
+              title,
+              type,
+              recipeId,
+              labelId,
+              visibility,
+              order: idx
+            };
+          });
+
+          await ProfileItem.bulkCreate(profileItems, {
+            transaction
+          });
         }
 
-        if (req.body.profileImageIds.length > 10) req.body.profileImageIds.splice(10); // Limit to 10 images per recipe max
+        if (req.body.profileImageIds) {
+          const canUploadMultipleImages = await SubscriptionService.userHasCapability(
+            res.locals.session.userId,
+            SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
+          );
 
-        await User_Profile_Image.destroy({
-          where: {
-            userId: res.locals.session.userId
-          },
-          transaction
-        });
+          if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
+            const images = await Image.findAll({
+              where: {
+                id: {
+                  [Op.in]: req.body.profileImageIds
+                }
+              },
+              transaction
+            });
+            const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
 
-        await User_Profile_Image.bulkCreate(req.body.profileImageIds.map((imageId, idx) => ({
-          userId: res.locals.session.userId,
-          imageId: imageId,
-          order: idx
-        })), {
-          transaction
-        });
-      }
-    });
+            req.body.profileImageIds = req.body.profileImageIds.filter((imageId, idx) =>
+              idx === 0 || // Allow first image always (users can always upload the first image)
+              imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+              moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
+            );
+          }
 
-    res.status(200).send("Updated");
+          if (req.body.profileImageIds.length > 10) req.body.profileImageIds.splice(10); // Limit to 10 images per recipe max
+
+          await User_Profile_Image.destroy({
+            where: {
+              userId: res.locals.session.userId
+            },
+            transaction
+          });
+
+          await User_Profile_Image.bulkCreate(req.body.profileImageIds.map((imageId, idx) => ({
+            userId: res.locals.session.userId,
+            imageId: imageId,
+            order: idx
+          })), {
+            transaction
+          });
+        }
+      });
+
+      res.status(200).send("Updated");
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
@@ -180,7 +190,66 @@ router.get(
   '/profile',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    let user = await User.findByPk(res.locals.session.userId, {
+    try {
+      let user = await User.findByPk(res.locals.session.userId, {
+        include: [{
+          model: Image,
+          as: 'profileImages',
+          attributes: ['id', 'location']
+        }]
+      });
+
+      user = UtilService.sortUserProfileImages(user);
+
+      const profileItems = await ProfileItem.findAll({
+        where: {
+          userId: res.locals.session.userId
+        },
+        include: [{
+          model: Recipe,
+          as: 'recipe'
+        }, {
+          model: Label,
+          as: 'label'
+        }]
+      });
+
+      // Note: Should be the same as /profile/:userId
+      res.status(200).json({
+        hasPendingFriendInvite: false,
+        userIsFriend: true,
+        name: user.name,
+        handle: user.handle,
+        enableProfile: user.enableProfile,
+        profileImages: user.profileImages,
+        profileItems
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+)
+
+const getUserProfile = async (req, res, next) => {
+  try {
+    let profileUserId;
+    if (req.params.handle) {
+      const user = await User.findOne({
+        where: {
+          handle: req.params.handle,
+        }
+      });
+      if (!user) {
+        const profileUserNotFoundError = new Error("User with that handle not found");
+        profileUserNotFoundError.status = 404;
+        throw profileUserNotFoundError;
+      }
+      profileUserId = user.id;
+    } else {
+      profileUserId = req.params.userId;
+    }
+
+    const profileUser = await User.findByPk(profileUserId, {
       include: [{
         model: Image,
         as: 'profileImages',
@@ -188,11 +257,43 @@ router.get(
       }]
     });
 
-    user = UtilService.sortUserProfileImages(user);
+    if (!profileUser) {
+      const profileUserNotFoundError = new Error("User with that id not found");
+      profileUserNotFoundError.status = 404;
+      throw profileUserNotFoundError;
+    }
+
+    if (!profileUser.enableProfile) {
+      const profileNotEnabledError = new Error("User does not have an active profile");
+      profileNotEnabledError.status = 403;
+      throw profileNotEnabledError;
+    }
+
+    let userIsFriend = false;
+    let hasPendingFriendInvite = false;
+    if (res.locals.session.userId) {
+      const friendship = await Friendship.findOne({
+        where: {
+          userId: profileUserId,
+          friendId: res.locals.session.userId
+        }
+      });
+      userIsFriend = !!friendship;
+
+      const pendingFriendship = await Friendship.findOne({
+        where: {
+          userId: res.locals.session.userId,
+          friendId: profileUserId
+        }
+      });
+
+      hasPendingFriendInvite = !!pendingFriendship;
+    }
 
     const profileItems = await ProfileItem.findAll({
       where: {
-        userId: res.locals.session.userId
+        userId: profileUserId,
+        ...(userIsFriend ? {} : { visibility: "public" })
       },
       include: [{
         model: Recipe,
@@ -203,102 +304,19 @@ router.get(
       }]
     });
 
-    // Note: Should be the same as /profile/:userId
+    // Note: Should be the same as /profile
     res.status(200).json({
-      hasPendingFriendInvite: false,
-      userIsFriend: true,
-      name: user.name,
-      handle: user.handle,
-      enableProfile: user.enableProfile,
-      profileImages: user.profileImages,
+      hasPendingFriendInvite,
+      userIsFriend,
+      name: profileUser.name,
+      handle: profileUser.handle,
+      enableProfile: profileUser.enableProfile,
+      profileImages: profileUser.profileImages,
       profileItems
     });
+  } catch(err) {
+    next(err);
   }
-)
-
-const getUserProfile = async (req, res, next) => {
-  let profileUserId;
-  if (req.params.handle) {
-    const user = await User.findOne({
-      where: {
-        handle: req.params.handle,
-      }
-    });
-    if (!user) {
-      const profileUserNotFoundError = new Error("User with that handle not found");
-      profileUserNotFoundError.status = 404;
-      throw profileUserNotFoundError;
-    }
-    profileUserId = user.id;
-  } else {
-    profileUserId = req.params.userId;
-  }
-
-  const profileUser = await User.findByPk(profileUserId, {
-    include: [{
-      model: Image,
-      as: 'profileImages',
-      attributes: ['id', 'location']
-    }]
-  });
-
-  if (!profileUser) {
-    const profileUserNotFoundError = new Error("User with that id not found");
-    profileUserNotFoundError.status = 404;
-    throw profileUserNotFoundError;
-  }
-
-  if (!profileUser.enableProfile) {
-    const profileNotEnabledError = new Error("User does not have an active profile");
-    profileNotEnabledError.status = 403;
-    throw profileNotEnabledError;
-  }
-
-  let userIsFriend = false;
-  let hasPendingFriendInvite = false;
-  if (res.locals.session.userId) {
-    const friendship = await Friendship.findOne({
-      where: {
-        userId: profileUserId,
-        friendId: res.locals.session.userId
-      }
-    });
-    userIsFriend = !!friendship;
-
-    const pendingFriendship = await Friendship.findOne({
-      where: {
-        userId: res.locals.session.userId,
-        friendId: profileUserId
-      }
-    });
-
-    hasPendingFriendInvite = !!pendingFriendship;
-  }
-
-  const profileItems = await ProfileItem.findAll({
-    where: {
-      userId: profileUserId,
-      ...(userIsFriend ? {} : { visibility: "public" })
-    },
-    include: [{
-      model: Recipe,
-      as: 'recipe'
-    }, {
-      model: Label,
-      as: 'label'
-    }]
-  });
-
-  // Note: Should be the same as /profile
-  res.status(200).json({
-    hasPendingFriendInvite,
-    userIsFriend,
-    name: profileUser.name,
-    handle: profileUser.handle,
-    enableProfile: profileUser.enableProfile,
-    profileImages: profileUser.profileImages,
-    profileItems
-  });
 }
 
 router.get(
@@ -316,97 +334,105 @@ router.get(
 router.get('/friends',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const myUserId = res.locals.session.userId;
+    try {
+      const myUserId = res.locals.session.userId;
 
-    const outgoingFriendships = await Friendship.findAll({
-      where: {
-        userId: myUserId
-      },
-      include: [{
-        model: User,
-        as: 'friend',
-        attributes: ['id', 'name', 'email']
-      }]
-    });
+      const outgoingFriendships = await Friendship.findAll({
+        where: {
+          userId: myUserId
+        },
+        include: [{
+          model: User,
+          as: 'friend',
+          attributes: ['id', 'name', 'email']
+        }]
+      });
 
-    const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce((acc, outgoingFriendship) => (
-      { ...acc, [outgoingFriendship.friendId]: outgoingFriendship }
-    ), {});
+      const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce((acc, outgoingFriendship) => (
+        { ...acc, [outgoingFriendship.friendId]: outgoingFriendship }
+      ), {});
 
-    const incomingFriendships = await Friendship.findAll({
-      where: {
-        friendId: res.locals.session.userId
-      },
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['id', 'name', 'email']
-      }]
-    });
+      const incomingFriendships = await Friendship.findAll({
+        where: {
+          friendId: res.locals.session.userId
+        },
+        include: [{
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name', 'email']
+        }]
+      });
 
-    const incomingFriendshipsByOtherUserId = incomingFriendships.reduce((acc, incomingFriendship) => (
-      { ...acc, [incomingFriendship.userId]: incomingFriendship }
-    ), {});
+      const incomingFriendshipsByOtherUserId = incomingFriendships.reduce((acc, incomingFriendship) => (
+        { ...acc, [incomingFriendship.userId]: incomingFriendship }
+      ), {});
 
-    const friendshipSummary = [...outgoingFriendships, ...incomingFriendships].reduce((acc, friendship) => {
-      const friendId = friendship.userId === myUserId ? friendship.friendId : friendship.userId;
+      const friendshipSummary = [...outgoingFriendships, ...incomingFriendships].reduce((acc, friendship) => {
+        const friendId = friendship.userId === myUserId ? friendship.friendId : friendship.userId;
 
-      if (outgoingFriendshipsByOtherUserId[friendId] && incomingFriendshipsByOtherUserId[friendId]) {
-        // Friendship both ways. They are friends!
-        if (!acc.friends.find(friendship => friendship.friendId === friendId)) { // Remove dupes
-          acc.friends.push({
+        if (outgoingFriendshipsByOtherUserId[friendId] && incomingFriendshipsByOtherUserId[friendId]) {
+          // Friendship both ways. They are friends!
+          if (!acc.friends.find(friendship => friendship.friendId === friendId)) { // Remove dupes
+            acc.friends.push({
+              friendId,
+              otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
+            });
+          }
+        } else if (outgoingFriendshipsByOtherUserId[friendId]) {
+          // We're requesting them as a friend!
+          acc.outgoingRequests.push({
             friendId,
             otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
           });
+        } else if (incomingFriendshipsByOtherUserId[friendId]) {
+          // They're requesting us as a friend!
+          acc.incomingRequests.push({
+            friendId,
+            otherUser: incomingFriendshipsByOtherUserId[friendId].user
+          });
         }
-      } else if (outgoingFriendshipsByOtherUserId[friendId]) {
-        // We're requesting them as a friend!
-        acc.outgoingRequests.push({
-          friendId,
-          otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
-        });
-      } else if (incomingFriendshipsByOtherUserId[friendId]) {
-        // They're requesting us as a friend!
-        acc.incomingRequests.push({
-          friendId,
-          otherUser: incomingFriendshipsByOtherUserId[friendId].user
-        });
-      }
 
-      return acc;
-    }, {
-      outgoingRequests: [],
-      incomingRequests: [],
-      friends: []
-    });
+        return acc;
+      }, {
+        outgoingRequests: [],
+        incomingRequests: [],
+        friends: []
+      });
 
-    res.status(200).json(friendshipSummary);
+      res.status(200).json(friendshipSummary);
+    } catch(err) {
+      next(err);
+    }
   }
 );
 
 router.post('/friends/:userId',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const profileUserId = req.params.userId;
+    try {
+      const profileUserId = req.params.userId;
 
-    await SQ.transaction(async transaction => {
-      await Friendship.destroy({
-        where: {
+      await SQ.transaction(async transaction => {
+        await Friendship.destroy({
+          where: {
+            userId: res.locals.session.userId,
+            friendId: profileUserId
+          },
+          transaction
+        });
+
+        await Friendship.create({
           userId: res.locals.session.userId,
           friendId: profileUserId
-        },
-        transaction
+        }, {
+          transaction
+        });
       });
 
-      await Friendship.create({
-        userId: res.locals.session.userId,
-        friendId: profileUserId
-      }, {
-        transaction
-      });
-    });
-
-    res.status(201).send("Created");
+      res.status(201).send("Created");
+    } catch(err) {
+      next(err);
+    }
   }
 );
 
@@ -414,16 +440,20 @@ router.get(
   '/handle-info/:handle',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
-    const user = await User.findOne({
-      where: {
-        handle: req.params.handle,
-      },
-      attributes: ['id'],
-    });
+    try {
+      const user = await User.findOne({
+        where: {
+          handle: req.params.handle,
+        },
+        attributes: ['id'],
+      });
 
-    res.status(200).json({
-      available: !user,
-    });
+      res.status(200).json({
+        available: !user,
+      });
+    } catch(err) {
+      next(err);
+    }
   }
 );
 
@@ -433,18 +463,22 @@ router.get(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
+    try {
+      const userCapabilities = await SubscriptionService.capabilitiesForUser(res.locals.session.userId);
 
-  const userCapabilities = await SubscriptionService.capabilitiesForUser(res.locals.session.userId);
+      const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
 
-  const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
+      const capabilityMap = capabilityTypes.reduce((acc, capabilityType) => {
+        acc[capabilityType] = userCapabilities.indexOf(capabilityType) > -1;
+        return acc;
+      }, {});
 
-  const capabilityMap = capabilityTypes.reduce((acc, capabilityType) => {
-    acc[capabilityType] = userCapabilities.indexOf(capabilityType) > -1;
-    return acc;
-  }, {});
-
-  res.status(200).json(capabilityMap);
-});
+      res.status(200).json(capabilityMap);
+    } catch(err) {
+      next(err);
+    }
+  }
+);
 
 router.get(
   '/stats',
