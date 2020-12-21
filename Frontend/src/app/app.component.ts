@@ -186,7 +186,7 @@ export class AppComponent {
     const loggedInPages = [
       { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
       { title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      { title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() },
+      ...(this.isSelfHost ? [] : [{ title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() }]),
       { title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
       { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
       { title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
