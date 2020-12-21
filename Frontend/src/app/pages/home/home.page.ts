@@ -75,7 +75,7 @@ export class HomePage implements AfterViewInit {
         this.folderTitle = 'My Recipes';
         break;
     }
-    this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || "").split(",").filter(e => e);
+    this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
       if (this.selectedLabels.length) {
@@ -231,7 +231,7 @@ export class HomePage implements AfterViewInit {
             break;
           case 404:
             const noAccessToast = await this.toastCtrl.create({
-              message: "It seems like you don't have access to this resource",
+              message: 'It seems like you don\'t have access to this resource',
               duration: 5000
             });
             noAccessToast.present();

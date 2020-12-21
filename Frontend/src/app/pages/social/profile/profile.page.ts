@@ -58,11 +58,11 @@ export class ProfilePage {
   }
 
   open(item) {
-    if(item.type === "all-recipes") {
+    if(item.type === 'all-recipes') {
       this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId }));
-    } else if(item.type === "label") {
+    } else if(item.type === 'label') {
       this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId, selectedLabels: [item.label.title] }));
-    } else if (item.type === "recipe") {
+    } else if (item.type === 'recipe') {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }

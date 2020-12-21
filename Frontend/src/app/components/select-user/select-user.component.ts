@@ -30,7 +30,7 @@ export class SelectUserComponent {
 
   results = [];
   searchTimeout;
-  searchText = "";
+  searchText = '';
   searching = false;
 
   constructor(
@@ -58,7 +58,7 @@ export class SelectUserComponent {
   }
 
   async search(input) {
-    input = input || "";
+    input = input || '';
     const loading = this.loadingService.start();
 
     const results = [];
@@ -94,7 +94,7 @@ export class SelectUserComponent {
   clearSelectedUser() {
     this.selectedUser = null;
     this.results = [];
-    this.searchText = "";
+    this.searchText = '';
     this.searching = false;
   }
 }

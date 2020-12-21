@@ -14,18 +14,18 @@ export class AddProfileItemModalPage {
 
   itemType = null;
   itemTypePrettyNameMap = {
-    "recipe": "recipe",
-    "label": "label",
-    "all-recipes": "all recipes",
+    recipe: 'recipe',
+    label: 'label',
+    'all-recipes': 'all recipes',
   };
 
   itemVisibility = null;
   visibilityTypePrettyNameMap = {
-    "public": "public",
-    "friends-only": "friends only",
+    public: 'public',
+    'friends-only': 'friends only',
   };
 
-  itemTitle = "";
+  itemTitle = '';
 
   selectedRecipe;
   selectedLabel;

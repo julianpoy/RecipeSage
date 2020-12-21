@@ -22,9 +22,9 @@ export class MyProfilePage {
 
   accountInfo;
   myProfile: UserProfile;
-  requiresSetup: boolean = false;
+  requiresSetup = false;
 
-  isHandleAvailable: boolean = true;
+  isHandleAvailable = true;
   handleInputTimeout;
 
   updatedProfileFields: Partial<UserProfile> = {};
@@ -173,7 +173,7 @@ export class MyProfilePage {
       }));
     }
 
-    console.log("updating", update)
+    console.log('updating', update)
     const updated = await this.userService.updateMyProfile(update);
     loading.dismiss();
     if (updated) {
@@ -199,11 +199,11 @@ export class MyProfilePage {
   }
 
   open(item) {
-    if(item.type === "all-recipes") {
+    if(item.type === 'all-recipes') {
       this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId }));
-    } else if(item.type === "label") {
+    } else if(item.type === 'label') {
       this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId, selectedLabels: [item.label.title] }));
-    } else if (item.type === "recipe") {
+    } else if (item.type === 'recipe') {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }

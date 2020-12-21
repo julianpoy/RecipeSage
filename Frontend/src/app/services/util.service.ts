@@ -32,7 +32,9 @@ export const RouteMap = {
 
       const params = [];
       if (filters?.userId) params.push(`userId=${filters.userId}`);
-      if (filters?.selectedLabels) params.push(`labels=${filters.selectedLabels.map(labelName => encodeURIComponent(labelName)).join(',')}`);
+      if (filters?.selectedLabels) {
+        params.push(`labels=${filters.selectedLabels.map(labelName => encodeURIComponent(labelName)).join(',')}`);
+      }
 
       if (params.length > 0) url += `?${params.join('&')}`;
 

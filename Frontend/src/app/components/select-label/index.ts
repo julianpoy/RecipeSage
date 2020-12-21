@@ -50,7 +50,7 @@ export class SelectLabelComponent {
   }
 
   onSearchInputChange(event) {
-    this.searchText = event.detail.value || "";
+    this.searchText = event.detail.value || '';
 
     this.results = this.labels.filter(label => label.title.includes(this.searchText));
   }
