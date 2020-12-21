@@ -188,198 +188,209 @@ router.get(
 router.get(
   '/by-page',
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
-
-  let userId = res.locals.session.userId;
-  let folder = req.query.folder || 'main';
-  let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
-
-  if (req.query.userId) {
-    const user = await User.findByPk(req.query.userId);
-    userId = user.id;
-
-    const userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
-
-    let labelId;
-    if (labelFilter.length > 1) {
-      const tooManyLabelsErr = new Error("Can view maximum 1 label at a time from another user's profile");
-      tooManyLabelsErr.status = 400;
-      return next(tooManyLabelsErr);
-    } else if (labelFilter.length > 0) {
-      const label = await Label.findOne({
-        where: {
-          title: labelFilter[0],
-          userId
-        }
-      });
-      labelId = label.id;
-    }
-
-    const profileItem = await ProfileItem.findOne({
-      where: {
-        userId,
-        ...(userIsFriend ? {} : { visibility: "public" }),
-        ...(labelId ? { type: "label", labelId } : { type: "all-recipes" })
+    try {
+      if (!res.locals.session && !req.query.userId) {
+        const mustBeLoggedInError = new Error('You must be logged in to request this resource');
+        mustBeLoggedInError.status = 400;
+        throw mustBeLoggedInError;
       }
-    });
 
-    if (!profileItem) {
-      const profileItemNotFound = new Error("Profile item not found or not visible");
-      profileItemNotFound.status = 404;
-      return next(profileItemNotFound);
+      let userId = res.locals.session ? res.locals.session.userId : null;
+      let folder = req.query.folder || 'main';
+      let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
+
+      if (req.query.userId) {
+        const user = await User.findByPk(req.query.userId);
+        userId = user.id;
+
+        let userIsFriend = false;
+        if (res.locals.session) userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
+
+        let labelId;
+        if (labelFilter.length > 1) {
+          const tooManyLabelsErr = new Error("Can view maximum 1 label at a time from another user's profile");
+          tooManyLabelsErr.status = 400;
+          return next(tooManyLabelsErr);
+        } else if (labelFilter.length > 0) {
+          const label = await Label.findOne({
+            where: {
+              title: labelFilter[0],
+              userId
+            }
+          });
+          labelId = label.id;
+        }
+
+        const profileItem = await ProfileItem.findOne({
+          where: {
+            userId,
+            ...(userIsFriend ? {} : { visibility: "public" }),
+            ...(labelId ? { type: "label", labelId } : { type: "all-recipes" })
+          }
+        });
+
+        if (!profileItem) {
+          const profileItemNotFound = new Error("Profile item not found or not visible");
+          profileItemNotFound.status = 404;
+          return next(profileItemNotFound);
+        }
+      }
+
+      let sort = '"Recipe"."title" ASC';
+      if (req.query.sort) {
+        switch(req.query.sort){
+          case "-title":
+            sort = '"Recipe"."title" ASC';
+            break;
+          case "createdAt":
+            sort = '"Recipe"."createdAt" ASC';
+            break;
+          case "-createdAt":
+            sort = '"Recipe"."createdAt" DESC';
+            break;
+          case "updatedAt":
+            sort = '"Recipe"."updatedAt" ASC';
+            break;
+          case "-updatedAt":
+            sort = '"Recipe"."updatedAt" DESC';
+            break;
+        }
+      }
+
+      let labelFilterMap = labelFilter.reduce((acc, e, idx) => {
+        acc[`labelFilter${idx}`] = e;
+        return acc;
+      }, {});
+
+      let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
+      let labelAttributes = ['id', 'title'];
+      let imageAttributes = ['id', 'location'];
+      let recipeImageAttributes = ['id', 'order'];
+      let fromUserAttributes = ['name', 'email'];
+
+      let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
+      let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
+      let imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
+      let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
+      let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
+      let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
+      if (folder === 'inbox') fields += `, ${fromUserSelect}`;
+
+      let countQuery = labelFilter.length > 0 ?
+        `SELECT "Recipe".id
+        FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
+        WHERE "Recipe_Label"."labelId" = "Label".id
+        AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+        AND "Recipe".id = "Recipe_Label"."recipeId"
+        AND "Recipe"."userId" = $userId
+        AND "Recipe"."folder" = $folder
+        GROUP BY "Recipe".id
+        ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}`
+        :
+        `SELECT count("Recipe".id)
+        FROM "Recipes" AS "Recipe"
+        WHERE "Recipe"."userId" = $userId
+        AND "Recipe"."folder" = $folder`;
+
+      let fetchQuery = labelFilter.length > 0 ?
+        `SELECT ${fields} from (SELECT "Recipe".id
+        FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
+        WHERE "Recipe_Label"."labelId" = "Label".id
+        AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+        AND "Recipe".id = "Recipe_Label"."recipeId"
+        AND "Recipe"."userId" = $userId
+        AND "Recipe"."folder" = $folder
+        GROUP BY "Recipe".id
+        ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}
+        ORDER BY ${sort}
+        LIMIT $limit
+        OFFSET $offset) AS pag
+        INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
+        INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
+        INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+        LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
+        LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
+        ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
+        ORDER BY ${sort}`
+        :
+        `SELECT ${fields} FROM (SELECT "Recipe".id
+        FROM "Recipes" AS "Recipe"
+        WHERE "Recipe"."userId" = $userId
+        AND "Recipe"."folder" = $folder
+        GROUP BY "Recipe".id
+        ORDER BY ${sort}
+        LIMIT $limit
+        OFFSET $offset) AS pag
+        INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
+        LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
+        LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+        LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
+        LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
+        ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
+        ORDER BY ${sort}`;
+
+      let countQueryOptions = {
+        type: SQ.QueryTypes.SELECT,
+        bind: {
+          userId,
+          folder,
+          ...labelFilterMap
+        }
+      }
+
+      let fetchQueryOptions = {
+        type: SQ.QueryTypes.SELECT,
+        hasJoin: true,
+        bind: {
+          userId,
+          folder,
+          limit: Math.min(parseInt(req.query.count) || 100, 500),
+          offset: req.query.offset || 0,
+          ...labelFilterMap
+        },
+        model: Recipe,
+        include: [{
+          model: Label,
+          as: 'labels'
+        }, {
+          model: Image,
+          as: 'images'
+        }]
+      }
+
+      if (folder === 'inbox') fetchQueryOptions.include.push({
+        model: User,
+        as: 'fromUser',
+        attributes: fromUserAttributes
+      })
+
+      Recipe._validateIncludedElements(fetchQueryOptions);
+
+      Promise.all([
+        SQ.query(countQuery, countQueryOptions),
+        SQ.query(fetchQuery, fetchQueryOptions)
+      ]).then(([countResult, recipes]) => {
+        let totalCount = countResult.length;
+        if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
+          totalCount = parseInt(countResult[0].count, 10);
+        }
+
+        recipes = recipes.map(UtilService.sortRecipeImages);
+
+        recipes = recipes.map(applyLegacyImageField);
+
+        res.status(200).json({
+          data: recipes,
+          totalCount
+        });
+      }).catch(next);
+    } catch(err) {
+      next(err);
     }
   }
-
-  let sort = '"Recipe"."title" ASC';
-  if (req.query.sort) {
-    switch(req.query.sort){
-      case "-title":
-        sort = '"Recipe"."title" ASC';
-        break;
-      case "createdAt":
-        sort = '"Recipe"."createdAt" ASC';
-        break;
-      case "-createdAt":
-        sort = '"Recipe"."createdAt" DESC';
-        break;
-      case "updatedAt":
-        sort = '"Recipe"."updatedAt" ASC';
-        break;
-      case "-updatedAt":
-        sort = '"Recipe"."updatedAt" DESC';
-        break;
-    }
-  }
-
-  let labelFilterMap = labelFilter.reduce((acc, e, idx) => {
-    acc[`labelFilter${idx}`] = e;
-    return acc;
-  }, {});
-
-  let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
-  let labelAttributes = ['id', 'title'];
-  let imageAttributes = ['id', 'location'];
-  let recipeImageAttributes = ['id', 'order'];
-  let fromUserAttributes = ['name', 'email'];
-
-  let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
-  let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
-  let imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
-  let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
-  let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
-  let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
-  if (folder === 'inbox') fields += `, ${fromUserSelect}`;
-
-  let countQuery = labelFilter.length > 0 ?
-    `SELECT "Recipe".id
-    FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
-    WHERE "Recipe_Label"."labelId" = "Label".id
-    AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
-    AND "Recipe".id = "Recipe_Label"."recipeId"
-    AND "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder
-    GROUP BY "Recipe".id
-    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}`
-    :
-    `SELECT count("Recipe".id)
-    FROM "Recipes" AS "Recipe"
-    WHERE "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder`;
-
-  let fetchQuery = labelFilter.length > 0 ?
-    `SELECT ${fields} from (SELECT "Recipe".id
-    FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
-    WHERE "Recipe_Label"."labelId" = "Label".id
-    AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
-    AND "Recipe".id = "Recipe_Label"."recipeId"
-    AND "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder
-    GROUP BY "Recipe".id
-    ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}
-    ORDER BY ${sort}
-    LIMIT $limit
-    OFFSET $offset) AS pag
-    INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
-    INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
-    INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
-    LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
-    LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-    ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
-    ORDER BY ${sort}`
-    :
-    `SELECT ${fields} FROM (SELECT "Recipe".id
-    FROM "Recipes" AS "Recipe"
-    WHERE "Recipe"."userId" = $userId
-    AND "Recipe"."folder" = $folder
-    GROUP BY "Recipe".id
-    ORDER BY ${sort}
-    LIMIT $limit
-    OFFSET $offset) AS pag
-    INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
-    LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
-    LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
-    LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
-    LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-    ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
-    ORDER BY ${sort}`;
-
-  let countQueryOptions = {
-    type: SQ.QueryTypes.SELECT,
-    bind: {
-      userId,
-      folder,
-      ...labelFilterMap
-    }
-  }
-
-  let fetchQueryOptions = {
-    type: SQ.QueryTypes.SELECT,
-    hasJoin: true,
-    bind: {
-      userId,
-      folder,
-      limit: Math.min(parseInt(req.query.count) || 100, 500),
-      offset: req.query.offset || 0,
-      ...labelFilterMap
-    },
-    model: Recipe,
-    include: [{
-      model: Label,
-      as: 'labels'
-    }, {
-      model: Image,
-      as: 'images'
-    }]
-  }
-
-  if (folder === 'inbox') fetchQueryOptions.include.push({
-    model: User,
-    as: 'fromUser',
-    attributes: fromUserAttributes
-  })
-
-  Recipe._validateIncludedElements(fetchQueryOptions);
-
-  Promise.all([
-    SQ.query(countQuery, countQueryOptions),
-    SQ.query(fetchQuery, fetchQueryOptions)
-  ]).then(([countResult, recipes]) => {
-    let totalCount = countResult.length;
-    if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
-      totalCount = parseInt(countResult[0].count, 10);
-    }
-
-    recipes = recipes.map(UtilService.sortRecipeImages);
-
-    recipes = recipes.map(applyLegacyImageField);
-
-    res.status(200).json({
-      data: recipes,
-      totalCount
-    });
-  }).catch(next);
-});
+);
 
 router.get(
   '/search',
