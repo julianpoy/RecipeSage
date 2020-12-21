@@ -30,6 +30,7 @@ export class AppComponent {
   navList: { title: string, icon: string, url: string }[];
 
   inboxCount: number;
+  friendRequestCount: number;
 
   version: number = (window as any).version;
 
@@ -71,6 +72,7 @@ export class AppComponent {
     this.initializeApp();
 
     this.loadInboxCount();
+    this.loadFriendRequestCount();
     this.initUpdateListeners();
     this.initEventListeners();
 
@@ -175,27 +177,27 @@ export class AppComponent {
     let pages = [];
 
     const loggedOutPages = [
-      { title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
-      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'welcome', title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
+      { id: 'login', title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { id: 'register', title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     const loggedInPages = [
-      { title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
-      { title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      ...(this.isSelfHost ? [] : [{ title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() }]),
-      { title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
-      { title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
-      { title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
-      { title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
-      { title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
-      { title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'home', title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
+      { id: 'labels', title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
+      ...(this.isSelfHost ? [] : [{ id: 'people', title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() }]),
+      { id: 'messages', title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
+      { id: 'inbox', title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
+      { id: 'newrecipe', title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
+      { id: 'shopping', title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
+      { id: 'meals', title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'settings', title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
+      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     if (this.utilService.isLoggedIn()) {
@@ -215,6 +217,12 @@ export class AppComponent {
 
       this.events.publish('recipe:inbox:count', this.inboxCount);
     }, () => { });
+  }
+
+  async loadFriendRequestCount() {
+    const friends = await this.userService.getMyFriends();
+
+    this.friendRequestCount = friends?.incomingRequests?.length || null;
   }
 
   initializeApp() {
