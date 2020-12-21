@@ -31,7 +31,7 @@ export class MultiImageUploadComponent {
     private userService: UserService,
     private imageService: ImageService,
     private loadingService: LoadingService,
-    private capabilitiesService: CapabilitiesService,
+    public capabilitiesService: CapabilitiesService,
   ) {}
 
   filePicker() {

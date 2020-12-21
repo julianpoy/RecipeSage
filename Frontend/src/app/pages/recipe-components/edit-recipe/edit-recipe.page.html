@@ -11,7 +11,7 @@
 
 
 <ion-content>
-  <multi-image-upload [images]="images" (onImageAdded)="markAsDirty(); addImage($event)"></multi-image-upload>
+  <multi-image-upload [images]="images" (onImageAdded)="markAsDirty();"></multi-image-upload>
 
   <div class="ion-padding">
     <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
