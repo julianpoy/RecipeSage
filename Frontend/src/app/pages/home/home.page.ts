@@ -149,7 +149,9 @@ export class HomePage implements AfterViewInit {
   resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
-    if (this.selectedLabels.length === 0) {
+    // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
+    // Or if we're loading someone elses collection (in which case we can't verify)
+    if (this.selectedLabels.length === 0 || this.userId) {
       return Promise.all([
         this.resetAndLoadLabels(),
         this.resetAndLoadRecipes()
@@ -159,10 +161,7 @@ export class HomePage implements AfterViewInit {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = this.labels.map(e => e.title);
 
-      if (!this.userId) {
-        // Only filter out labels that don't exist in our collection if we're not actually browsing our collection
-        this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
-      }
+      this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
 
       return this.resetAndLoadRecipes();
     });

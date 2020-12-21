@@ -273,7 +273,7 @@ const getUserProfile = async (req, res, next) => {
 
     let outgoingFriendship = false;
     let incomingFriendship = false;
-    if (res.locals.session.userId) {
+    if (res.locals.session && res.locals.session.userId) {
       const incoming = await Friendship.findOne({
         where: {
           userId: profileUserId,
@@ -311,7 +311,7 @@ const getUserProfile = async (req, res, next) => {
       id: profileUser.id,
       incomingFriendship,
       outgoingFriendship,
-      isMe: res.locals.session.userId === profileUser.id,
+      isMe: res.locals.session && res.locals.session.userId === profileUser.id,
       name: profileUser.name,
       handle: profileUser.handle,
       enableProfile: profileUser.enableProfile,
