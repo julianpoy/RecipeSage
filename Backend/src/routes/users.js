@@ -216,6 +216,7 @@ router.get(
 
       // Note: Should be the same as /profile/:userId
       res.status(200).json({
+        id: user.id,
         hasPendingFriendInvite: false,
         userIsFriend: true,
         name: user.name,
@@ -306,6 +307,7 @@ const getUserProfile = async (req, res, next) => {
 
     // Note: Should be the same as /profile
     res.status(200).json({
+      id: profileUser.id,
       hasPendingFriendInvite,
       userIsFriend,
       name: profileUser.name,
@@ -412,6 +414,12 @@ router.post('/friends/:userId',
     try {
       const profileUserId = req.params.userId;
 
+      if (profileUserId === res.locals.session.userId) {
+        const selfFriendshipError = new Error("You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though...");
+        selfFriendshipError.status = 400;
+        throw selfFriendshipError;
+      }
+
       await SQ.transaction(async transaction => {
         await Friendship.destroy({
           where: {
@@ -430,6 +438,33 @@ router.post('/friends/:userId',
       });
 
       res.status(201).send("Created");
+    } catch(err) {
+      next(err);
+    }
+  }
+);
+
+router.delete('/friends/:userId',
+  MiddlewareService.validateSession(['user']),
+  async (req, res, next) => {
+    try {
+      await SQ.transaction(async transaction => {
+        await Friendship.destroy({
+          where: {
+            userId: res.locals.session.userId,
+            friendId: req.params.userId
+          },
+          transaction
+        });
+
+        await Friendship.destroy({
+          where: {
+            userId: req.params.userId,
+            friendId: res.locals.session.userId
+          },
+          transaction
+        });
+      });
     } catch(err) {
       next(err);
     }
