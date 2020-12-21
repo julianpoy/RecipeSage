@@ -63,7 +63,20 @@
         </ion-item>
         <ion-item class="handle-edit" *ngIf="revealHandleInput">
           <ion-label position="stacked">Unique @handle</ion-label>
-          <ion-input [(ngModel)]="myProfile.handle" (ngModelChange)="updatedProfileFields.handle = myProfile.handle"></ion-input>
+          <ion-input [(ngModel)]="myProfile.handle" (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput()"></ion-input>
+        </ion-item>
+        <ion-item lines="none" *ngIf="revealHandleInput">
+          <ion-label>
+            <p class="error" *ngIf="updatedProfileFields.handle && !isHandleAvailable">
+            That handle is taken
+            </p>
+            <p class="error" *ngIf="updatedProfileFields.handle && !isHandleValid()">
+            Handle is invalid
+            </p>
+            <p>
+            Note: Handle must be unique, and must not contain any special characters.
+            </p>
+          </ion-label>
         </ion-item>
 
         <ion-item class="enable-profile" lines="full" *ngIf="accountInfo">
@@ -71,6 +84,13 @@
           <ion-label class="ion-text-wrap">
             Enable Profile
           </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-button (click)="viewProfile()">
+            View Profile
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+          </ion-button>
         </ion-item>
       </div>
     </div>

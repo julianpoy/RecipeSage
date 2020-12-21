@@ -34,6 +34,7 @@ export interface UserProfile {
   handle?: string,
   incomingFriendship: boolean,
   outgoingFriendship: boolean,
+  isMe: boolean,
   profileImages: ProfileImage[],
   enableProfile: boolean,
   profileVisibility: 'public' | 'friends-only',

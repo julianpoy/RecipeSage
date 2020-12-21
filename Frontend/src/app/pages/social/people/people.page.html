@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content>
-  <null-state *ngIf="!accountInfo?.enableProfile">
+  <null-state *ngIf="accountInfo && !accountInfo?.enableProfile">
     <ion-icon name="person-circle" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
       <p>

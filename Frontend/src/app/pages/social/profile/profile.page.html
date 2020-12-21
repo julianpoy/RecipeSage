@@ -16,7 +16,7 @@
       <div *ngIf="!profile.profileImages || profile.profileImages.length === 0" class="no-image">
         <img src="/assets/imgs/logo_green.png" />
       </div>
-      <ion-thumbnail class="ion-margin-top" *ngIf="profile.profileImages && profile.profileImages.length > 0" slot="start" (click)="openImageViewer()">
+      <ion-thumbnail class="profile-image ion-margin-top" *ngIf="profile.profileImages && profile.profileImages.length > 0" slot="start" (click)="openImageViewer()">
         <img src="{{ profile.profileImages[0].location }}">
       </ion-thumbnail>
 
@@ -68,11 +68,11 @@
   </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="profile && !profile?.isMe">
   <ion-toolbar class="ion-padding-horizontal">
     <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">Send Friend Request</ion-button>
     <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Cancel Friend Request</ion-button>
-    <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
+    <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
     <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">Decline Friend Request</ion-button>
     <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Unfriend</ion-button>
   </ion-toolbar>

@@ -29,6 +29,9 @@ export class PeoplePage {
     public recipeService: RecipeService,
     public userService: UserService) {
 
+  }
+
+  ionViewWillEnter() {
     this.load();
   }
 

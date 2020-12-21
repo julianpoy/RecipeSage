@@ -179,7 +179,7 @@ export class MyProfilePage {
     if (updated) {
       this.updatedProfileFields = {};
       this.markAsClean();
-      this.load();
+      await this.load();
     }
   }
 
@@ -196,6 +196,36 @@ export class MyProfilePage {
 
       this.markAsDirty();
     }
+  }
+
+  async viewProfile() {
+    if (Object.keys(this.updatedProfileFields).length > 0) {
+      const alert = await this.alertCtrl.create({
+        header: 'Unsaved Changes',
+        message: 'You\'ll need to save your changes before you can view what your profile looks like.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          },
+          {
+            text: 'Save',
+            handler: async () => {
+              await this.save();
+              this.viewProfile();
+            }
+          }
+        ]
+      });
+      alert.present();
+      return;
+    }
+    if (!this.myProfile?.enableProfile) {
+      this.checkProfileEnabled();
+      return;
+    }
+    this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${this.myProfile.handle}`));
   }
 
   open(item) {

@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ProfilePage } from './profile.page';
 import { NullStateModule } from '../../../components/null-state/null-state.module';
+import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { NullStateModule } from '../../../components/null-state/null-state.modul
     FormsModule,
     ReactiveFormsModule,
     NullStateModule,
+    ImageViewerModule,
   ],
 })
 export class ProfilePageModule {}

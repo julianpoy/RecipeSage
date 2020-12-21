@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController, AlertController, NavController } from '@ionic/angular';
+import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
+import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 
 @Component({
   selector: 'page-profile',
@@ -23,13 +24,13 @@ export class ProfilePage {
     public route: ActivatedRoute,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
     public userService: UserService) {
 
     this.handle = this.route.snapshot.paramMap.get('handle').substring(1);
-    this.load();
   }
 
   async profileDisabledError() {
@@ -48,6 +49,10 @@ export class ProfilePage {
     alert.present();
   }
 
+  ionViewWillEnter() {
+    this.load();
+  }
+
   async load() {
     const loading = this.loadingService.start();
     this.profile = await this.userService.getProfileByHandle(this.handle, {
@@ -55,6 +60,16 @@ export class ProfilePage {
     });
 
     loading.dismiss();
+  }
+
+  async openImageViewer() {
+    const imageViewerModal = await this.modalCtrl.create({
+      component: ImageViewerComponent,
+      componentProps: {
+        imageUrls: this.profile.profileImages.map(image => image.location)
+      }
+    });
+    imageViewerModal.present();
   }
 
   open(item) {
