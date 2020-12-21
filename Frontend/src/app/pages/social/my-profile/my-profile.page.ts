@@ -41,13 +41,15 @@ export class MyProfilePage {
     public recipeService: RecipeService,
     public userService: UserService) {
 
-    this.load();
+    this.load().then(() => {
+      this.checkProfileEnabled();
+    });
   }
 
   load() {
     const loading = this.loadingService.start();
 
-    Promise.all([
+    return Promise.all([
       this.userService.me(),
       this.userService.getMyProfile()
     ]).then(([accountInfo, myProfile]) => {
@@ -78,6 +80,34 @@ export class MyProfilePage {
           break;
       }
     });
+  }
+
+  async checkProfileEnabled() {
+    if (
+      this.myProfile &&
+      this.myProfile.handle &&
+      this.myProfile.name &&
+      !this.myProfile.enableProfile
+    ) {
+      const alert = await this.alertCtrl.create({
+        header: 'Profile Not Enabled',
+        message: 'You\'ll need to enable your profile to interact with sharing features, such as sending friend requests.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          },
+          {
+            text: 'Setup',
+            handler: () => {
+              this.editProfile();
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
   }
 
   async checkHandleAvailable(handle: string) {

@@ -69,6 +69,28 @@ export class PeoplePage {
   }
 
   async findProfile() {
+    if (!this.accountInfo?.enableProfile) {
+      const alert = await this.alertCtrl.create({
+        header: 'Profile Not Setup',
+        message: 'You\'ll need to setup your profile before you can go adding friends.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          },
+          {
+            text: 'Setup',
+            handler: () => {
+              this.editProfile();
+            }
+          }
+        ]
+      });
+      alert.present();
+      return;
+    }
+
     const modal = await this.modalCtrl.create({
       component: AddFriendModalPage
     });
@@ -85,6 +107,7 @@ export class PeoplePage {
 
   async deleteFriend(friendId) {
     await this.userService.deleteFriend(friendId);
+    await this.load();
   }
 
   async openProfile(userId) {
