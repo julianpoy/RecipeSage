@@ -144,6 +144,16 @@ export class AppComponent {
       this.loadInboxCount();
     });
 
+    this.events.subscribe('auth:login', () => {
+      this.loadInboxCount();
+      this.loadFriendRequestCount();
+    });
+
+    this.events.subscribe('auth:register', () => {
+      this.loadInboxCount();
+      this.loadFriendRequestCount();
+    });
+
     this.websocketService.register('messages:new', async payload => {
       if (this.route.snapshot.url.toString().indexOf(RouteMap.MessagesPage.getPath())) return;
       const notification = 'New message from ' + (payload.otherUser.name || payload.otherUser.email);
@@ -214,8 +224,6 @@ export class AppComponent {
 
     this.recipeService.count({ folder: 'inbox' }).then(response => {
       this.inboxCount = response.count;
-
-      this.events.publish('recipe:inbox:count', this.inboxCount);
     }, () => { });
   }
 
