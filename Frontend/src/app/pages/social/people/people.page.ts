@@ -120,4 +120,9 @@ export class PeoplePage {
   async editProfile() {
     this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
+
+  async refresh(refresher) {
+    refresher.target.complete();
+    this.load();
+  }
 }

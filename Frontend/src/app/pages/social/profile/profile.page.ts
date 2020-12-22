@@ -125,4 +125,9 @@ export class ProfilePage {
   isLoggedIn() {
     return this.utilService.isLoggedIn();
   }
+
+  async refresh(refresher) {
+    refresher.target.complete();
+    this.load();
+  }
 }
