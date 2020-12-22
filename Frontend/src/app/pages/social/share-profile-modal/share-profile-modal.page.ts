@@ -75,4 +75,35 @@ export class ShareProfileModalPage {
 
     document.execCommand('copy');
   }
+
+  openFacebook() {
+    const win = window.open() as any;
+    win.opener = null;
+    win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.getProfileUrl())}`;
+  }
+
+  openTwitter() {
+    const message = `${this.profile.name}'s RecipeSage profile`;
+    const win = window.open() as any;
+    win.opener = null;
+    win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(this.getProfileUrl())}&text=${encodeURIComponent(message)}`;
+  }
+
+  openPinterest() {
+    const message = encodeURIComponent(`${this.profile.name}'s RecipeSage profile`);
+    const imageUrl = encodeURIComponent(this.profile.profileImages[0]?.location || '');
+    const url = encodeURIComponent(this.getProfileUrl());
+    const win = window.open() as any;
+    win.opener = null;
+    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${message}`;
+  }
+
+  openEmail() {
+    const subject = encodeURIComponent(`${this.profile.name}'s RecipeSage profile`);
+    const message = encodeURIComponent(`Click to view ${this.profile.name}'s public RecipeSage profile: \n`);
+    const url = encodeURIComponent(this.getProfileUrl());
+    const win = window.open() as any;
+    win.opener = null;
+    win.location = `mailto:info@example.com?&subject=${subject}&body=${message}${url}`;
+  }
 }

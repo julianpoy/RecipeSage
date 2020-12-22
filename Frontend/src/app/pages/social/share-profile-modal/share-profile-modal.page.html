@@ -36,6 +36,21 @@
     </div>
     <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="profileUrl"></textarea>
   </div>
+
+  <div class="share-icon-container">
+    <ion-item lines="none" (click)="openFacebook()" button>
+      <ion-icon name="logo-facebook"></ion-icon>
+    </ion-item>
+    <ion-item lines="none" (click)="openTwitter()" button>
+      <ion-icon name="logo-twitter"></ion-icon>
+    </ion-item>
+    <ion-item lines="none" (click)="openPinterest()" button>
+      <ion-icon name="logo-pinterest"></ion-icon>
+    </ion-item>
+    <ion-item lines="none" (click)="openEmail()" button>
+      <ion-icon name="mail"></ion-icon>
+    </ion-item>
+  </div>
 </ion-content>
 
 <ion-footer class="ion-padding">
