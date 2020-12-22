@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
 export interface ErrorHandlers {
-  [code: string]: () => {}
+  [code: string]: () => any
 }
 
 @Injectable({

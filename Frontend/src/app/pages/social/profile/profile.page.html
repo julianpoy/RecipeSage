@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button *ngIf="!isLoggedIn()"></ion-menu-button>
+      <ion-back-button *ngIf="isLoggedIn()" [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{profile?.name}}'s Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="profile">
+    <br />
+
+    <div class="profile-details-container">
+      <div *ngIf="!profile.profileImages || profile.profileImages.length === 0" class="no-image">
+        <img src="/assets/imgs/logo_green.png" />
+      </div>
+      <ion-thumbnail class="profile-image ion-margin-top" *ngIf="profile.profileImages && profile.profileImages.length > 0" slot="start" (click)="openImageViewer()">
+        <img src="{{ profile.profileImages[0].location }}">
+      </ion-thumbnail>
+
+      <div class="profile-details">
+        <ion-item>
+          <h3 class="username">{{ profile?.name }}</h3>
+        </ion-item>
+        <ion-item>
+          <h5 class="handle">@{{ profile?.handle }}</h5>
+        </ion-item>
+      </div>
+    </div>
+
+    <br />
+
+    <ion-item lines="none">
+      <ion-icon name="key" slot="start"></ion-icon>
+      <ion-label>
+        Pinned Recipes &amp; Labels
+      </ion-label>
+    </ion-item>
+
+    <ion-list *ngIf="profile?.profileItems?.length">
+      <div *ngFor="let item of profile?.profileItems">
+        <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
+          <ion-label>{{item.title}}</ion-label>
+          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+        </ion-item>
+        <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
+          <ion-label>{{item.title}}</ion-label>
+          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+        </ion-item>
+
+        <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
+          <ion-label>{{item.title}}</ion-label>
+          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+        </ion-item>
+      </div>
+    </ion-list>
+
+    <null-state *ngIf="!profile?.profileItems?.length">
+      <ion-icon name="bookmarks" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          {{profile.name}} hasn't added anything to their profile yet.<br />
+        </p>
+      </ion-label>
+    </null-state>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="profile && !profile?.isMe">
+  <ion-toolbar class="ion-padding-horizontal" *ngIf="isLoggedIn()">
+    <div class="action-button-container">
+      <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">Send Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Cancel Friend Request</ion-button>
+      <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">Decline Friend Request</ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Unfriend</ion-button>
+    </div>
+  </ion-toolbar>
+  <ion-toolbar class="ion-padding-horizontal" *ngIf="!isLoggedIn()">
+    <ion-button expand="block" disabled="true">Log In/Register to Add Friend</ion-button>
+  </ion-toolbar>
+</ion-footer>

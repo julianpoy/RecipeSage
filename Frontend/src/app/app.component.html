@@ -16,6 +16,8 @@
               <ion-label>
                 {{p.title}}
               </ion-label>
+              <ion-badge *ngIf="p.id === 'people' && friendRequestCount > 0">{{friendRequestCount}}</ion-badge>
+              <ion-badge *ngIf="p.id === 'inbox' && inboxCount > 0">{{inboxCount}}</ion-badge>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">

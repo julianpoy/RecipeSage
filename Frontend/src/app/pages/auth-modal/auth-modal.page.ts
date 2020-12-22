@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController } from '@ionic/angular';
 
+import { EventService } from '@/services/event.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -24,6 +25,7 @@ export class AuthModalPage {
   showLogin = true;
 
   constructor(
+    public events: EventService,
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     public utilService: UtilService,
@@ -94,6 +96,7 @@ export class AuthModalPage {
           this.messagingService.requestNotifications();
         }
 
+        this.events.publish('auth:login');
         this.dismiss();
       }).catch(err => {
         loading.dismiss();
@@ -125,6 +128,7 @@ export class AuthModalPage {
             this.messagingService.requestNotifications();
           }
 
+          this.events.publish('auth:register');
           this.dismiss();
         }).catch(err => {
           loading.dismiss();

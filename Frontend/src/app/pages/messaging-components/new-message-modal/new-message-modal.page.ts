@@ -36,27 +36,20 @@ export class NewMessageModalPage {
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
-    this.autofillTimeout = setTimeout(() => {
-      this.userService.getUserByEmail(this.recipientEmail.trim()).then(response => {
-        this.recipientName = response.name || response.email;
-        this.searching = false;
-        this.recipientId = response.id;
-      }).catch(async err => {
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          default:
-            this.recipientName = '';
-            this.recipientId = '';
-            this.searching = false;
-            break;
-        }
+    this.autofillTimeout = setTimeout(async () => {
+      const user = await this.userService.getUserByEmail(this.recipientEmail.trim(), {
+        404: () => {}
       });
+
+      if (user) {
+        this.recipientName = user.name || user.email;
+        this.recipientId = user.id;
+      } else {
+        this.recipientName = '';
+        this.recipientId = '';
+      }
+
+      this.searching = false;
     }, 500);
   }
 

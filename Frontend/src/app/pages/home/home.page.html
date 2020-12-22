@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-menu-button *ngIf="!selectionMode"></ion-menu-button>
+      <ion-menu-button *ngIf="!selectionMode && !userId"></ion-menu-button>
+      <ion-back-button *ngIf="!selectionMode && userId" [defaultHref]="defaultBackHref"></ion-back-button>
 
       <ion-button *ngIf="selectionMode" (click)="clearSelectedRecipes()">
         <ion-icon slot="icon-only" name="close"></ion-icon>

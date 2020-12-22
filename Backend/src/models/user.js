@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     name: DataTypes.TEXT,
+    handle: DataTypes.STRING,
     email: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -34,11 +35,23 @@ module.exports = (sequelize, DataTypes) => {
     stripeCustomerId: {
       type: DataTypes.STRING,
       unique: true
-    }
+    },
+    enableProfile: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
   }, {});
   User.associate = function(models) {
     User.hasMany(models.Session, {
       foreignKey: 'userId'
+    });
+
+    User.belongsToMany(models.Image, {
+      foreignKey: 'userId',
+      otherKey: 'imageId',
+      as: 'profileImages',
+      through: models.User_Profile_Image
     });
 
     User.hasMany(models.FCMToken, {

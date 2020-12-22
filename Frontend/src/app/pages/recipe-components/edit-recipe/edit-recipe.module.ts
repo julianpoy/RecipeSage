@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { EditRecipePage } from './edit-recipe.page';
+import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { EditRecipePage } from './edit-recipe.page';
         path: '',
         component: EditRecipePage
       }
-    ])
+    ]),
+    MultiImageUploadModule,
   ],
 })
 export class EditRecipePageModule {}

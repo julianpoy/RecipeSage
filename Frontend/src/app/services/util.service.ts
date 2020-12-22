@@ -20,9 +20,26 @@ export enum AuthType {
   Register = 'register'
 }
 
+export interface HomePageFilters {
+  userId?: string,
+  selectedLabels?: string[],
+}
+
 export const RouteMap = {
   HomePage: {
-    getPath(folder: string) { return `/list/${folder}`; },
+    getPath(folder: string, filters?: HomePageFilters) {
+      let url = `/list/${folder}`;
+
+      const params = [];
+      if (filters?.userId) params.push(`userId=${filters.userId}`);
+      if (filters?.selectedLabels) {
+        params.push(`labels=${filters.selectedLabels.map(labelName => encodeURIComponent(labelName)).join(',')}`);
+      }
+
+      if (params.length > 0) url += `?${params.join('&')}`;
+
+      return url;
+    },
     path: 'list/:folder',
   },
   LabelsPage: {
@@ -108,6 +125,22 @@ export const RouteMap = {
   AccountPage: {
     getPath() { return `/settings/account`; },
     path: 'settings/account',
+  },
+  MyProfilePage: {
+    getPath() { return `people/my-profile`; },
+    path: 'people/my-profile',
+  },
+  ProfilePage: {
+    getPath(handle: string) { return `people/${handle}`; },
+    path: 'people/:handle',
+  },
+  PeoplePage: {
+    getPath() { return `people`; },
+    path: 'people',
+  },
+  SocialPage: {
+    getPath() { return `people`; },
+    path: 'people',
   },
   ExportPage: {
     getPath() { return `/settings/export`; },

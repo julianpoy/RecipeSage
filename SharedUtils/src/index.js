@@ -1,6 +1,26 @@
 let fractionjs = require('fraction.js');
 let unitUtils = require('./units.js');
 
+// If a handle matches this regexp, it is invalid
+const EVIL_HANDLE_REGEXP = /[^A-Za-z0-9_.]/;
+
+// Handles may not contain these words
+const HANDLE_DENYLIST = [
+  "recipesage",
+  "admin",
+];
+
+const isHandleValid = handle => {
+  if (!handle) return false;
+  if (handle.match(EVIL_HANDLE_REGEXP)) return false;
+
+  for (var i = 0; i < HANDLE_DENYLIST.length; i++) {
+    if (handle.toLowerCase().indexOf(HANDLE_DENYLIST[i]) > -1) return false;
+  }
+
+  return true;
+};
+
 const fractionMatchers = { // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, ' 1/2'], // ½  \u00BD;
   8531: [/ ?\u2153/g, ' 1/3'], // ⅓  \u2153;
@@ -214,5 +234,6 @@ module.exports = {
   stripIngredient,
   getMeasurementsForIngredient,
   getTitleForIngredient,
-  unitUtils
+  unitUtils,
+  isHandleValid,
 }

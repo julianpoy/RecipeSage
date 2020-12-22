@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
 import { EventService } from './event.service';
+import { HttpErrorHandlerService } from './http-error-handler.service';
 
 export interface Label {
   id: string;
@@ -16,7 +17,12 @@ export interface Label {
 })
 export class LabelService {
 
-  constructor(public events: EventService, public utilService: UtilService, public httpService: HttpService) {}
+  constructor(
+    public events: EventService,
+    public utilService: UtilService,
+    public httpService: HttpService,
+    public httpErrorHandlerService: HttpErrorHandlerService,
+  ) {}
 
   fetch(options: {
     title?: string
@@ -29,6 +35,27 @@ export class LabelService {
       method: 'get',
       url
     }).then(response => response.data);
+  }
+
+  async getMyLabels(
+    options: {
+      title?: string
+    } = {}
+  ) {
+    const titleQuery = options.title ? `&title=${encodeURIComponent(options.title)}` : '';
+
+    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
+
+    try {
+      const { data } = await this.httpService.request({
+        method: 'get',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
   }
 
   create(data) {

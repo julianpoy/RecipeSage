@@ -123,6 +123,21 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.PeoplePage.path,
+    loadChildren: '@/pages/social/people/people.module#PeoplePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
+    path: RouteMap.MyProfilePage.path,
+    loadChildren: '@/pages/social/my-profile/my-profile.module#MyProfilePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
+    path: RouteMap.ProfilePage.path,
+    loadChildren: '@/pages/social/profile/profile.module#ProfilePageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
     path: RouteMap.ExportPage.path,
     loadChildren: '@/pages/settings-components/export/export.module#ExportPageModule',
     canDeactivate: [UnsavedChangesGuardService]

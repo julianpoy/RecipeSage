@@ -20,6 +20,8 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
   styleUrls: ['home.page.scss']
 })
 export class HomePage implements AfterViewInit {
+  defaultBackHref: string = RouteMap.PeoplePage.getPath();
+
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
@@ -46,6 +48,8 @@ export class HomePage implements AfterViewInit {
   @ViewChild('contentContainer', { static: true }) contentContainer;
   scrollElement;
 
+  userId = null;
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
@@ -71,6 +75,19 @@ export class HomePage implements AfterViewInit {
         this.folderTitle = 'My Recipes';
         break;
     }
+    this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
+    this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
+    if (this.userId) {
+      if (this.selectedLabels.length) {
+        this.folderTitle = `Shared Label: ${this.selectedLabels[0]}`;
+      } else {
+        this.folderTitle = 'Shared Recipes';
+      }
+      this.userService.getProfileByUserId(this.userId).then(profile => {
+        this.folderTitle = `${profile.name}'s ${this.folderTitle}`;
+      });
+    }
+    this.setDefaultBackHref();
 
     events.subscribe('recipe:created', () => this.reloadPending = true);
     events.subscribe('recipe:modified', () => this.reloadPending = true);
@@ -110,6 +127,14 @@ export class HomePage implements AfterViewInit {
     }
   }
 
+  async setDefaultBackHref() {
+    if (this.userId) {
+      const profile = await this.userService.getProfileByUserId(this.userId);
+
+      this.defaultBackHref = RouteMap.ProfilePage.getPath(`@${profile.handle}`);
+    }
+  }
+
   fetchMoreRecipes(event) {
     if (this.searchText) return;
 
@@ -124,7 +149,9 @@ export class HomePage implements AfterViewInit {
   resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
-    if (this.selectedLabels.length === 0) {
+    // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
+    // Or if we're loading someone elses collection (in which case we can't verify)
+    if (this.selectedLabels.length === 0 || this.userId) {
       return Promise.all([
         this.resetAndLoadLabels(),
         this.resetAndLoadRecipes()
@@ -174,6 +201,7 @@ export class HomePage implements AfterViewInit {
     return new Promise((resolve, reject) => {
       this.recipeService.fetch({
         folder: this.folder,
+        userId: this.userId,
         sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
         offset,
         count: numToFetch,
@@ -199,6 +227,13 @@ export class HomePage implements AfterViewInit {
             break;
           case 401:
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+            break;
+          case 404:
+            const noAccessToast = await this.toastCtrl.create({
+              message: 'It seems like you don\'t have access to this resource',
+              duration: 5000
+            });
+            noAccessToast.present();
             break;
           default:
             const errorToast = await this.toastCtrl.create({
@@ -243,6 +278,7 @@ export class HomePage implements AfterViewInit {
     const popover = await this.popoverCtrl.create({
       component: HomePopoverPage,
       componentProps: {
+        guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
         selectionMode: this.selectionMode

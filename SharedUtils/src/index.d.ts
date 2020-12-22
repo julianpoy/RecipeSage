@@ -1,3 +1,5 @@
+export function isHandleValid(handle: string): boolean
+
 export function parseIngredients(ingredients: string, scale: number, boldify?: boolean): {
   content: string,
   originalContent: string,

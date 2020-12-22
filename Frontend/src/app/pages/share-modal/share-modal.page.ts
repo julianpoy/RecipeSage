@@ -128,18 +128,21 @@ export class ShareModalPage {
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
-    this.autofillTimeout = setTimeout(() => {
-      this.userService.getUserByEmail(this.recipientEmail.trim()).then(response => {
-        this.recipientName = response.name || response.email;
-        this.recipientId = response.id;
-        this.selectedThread = null;
-        this.searchingForRecipient = false;
-      }).catch(err => {
+    this.autofillTimeout = setTimeout(async () => {
+      const user = await this.userService.getUserByEmail(this.recipientEmail.trim(), {
+        404: () => {}
+      });
+
+      if (user) {
+        this.recipientName = user.name || user.email;
+        this.recipientId = user.id;
+      } else {
         this.recipientName = '';
         this.recipientId = '';
-        this.selectedThread = null;
-        this.searchingForRecipient = false;
-      });
+      }
+
+      this.selectedThread = null;
+      this.searchingForRecipient = false;
     }, 500);
   }
 

@@ -1,0 +1,47 @@
+.no-image {
+  display: flex;
+  width: 200px;
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.5);
+  margin: 10px;
+
+  img {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100px;
+    height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.profile-image {
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.5);
+  margin: 10px;
+}
+
+.profile-details-container {
+  display: flex;
+
+  .profile-details {
+    padding-top: 20px;
+
+    .username {
+      margin-bottom: 0;
+    }
+
+    .handle {
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+      font-size: 14px;
+    }
+  }
+}
+
+.action-button-container {
+  display: flex;
+
+  ion-button {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+}

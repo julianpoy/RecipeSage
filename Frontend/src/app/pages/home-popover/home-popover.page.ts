@@ -25,6 +25,8 @@ export class HomePopoverPage {
 
   @Input() selectionMode: boolean;
 
+  @Input() guestMode: boolean;
+
   constructor(
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,

@@ -4,6 +4,7 @@ import { NavController, ToastController } from '@ionic/angular';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
+import { EventService } from '@/services/event.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -29,6 +30,7 @@ export class AuthPage {
   redirect: string;
 
   constructor(
+    public events: EventService,
     public navCtrl: NavController,
     public utilService: UtilService,
     public loadingService: LoadingService,
@@ -102,6 +104,7 @@ export class AuthPage {
           this.messagingService.requestNotifications();
         }
 
+        this.events.publish('auth:login');
         this.handleRedirect();
       }).catch(err => {
         loading.dismiss();
@@ -133,6 +136,7 @@ export class AuthPage {
             this.messagingService.requestNotifications();
           }
 
+          this.events.publish('auth:register');
           this.handleRedirect();
         }).catch(err => {
           loading.dismiss();
