@@ -197,11 +197,13 @@ router.get(
         throw mustBeLoggedInError;
       }
 
-      let userId = res.locals.session ? res.locals.session.userId : null;
+      const myUserId = res.locals.session ? res.locals.session.userId : null;
+      let userId = myUserId;
       let folder = req.query.folder || 'main';
       let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
 
-      if (req.query.userId) {
+      // Only check for shared items if we're browsing another user's recipes
+      if (req.query.userId && myUserId !== req.query.userId) {
         const user = await User.findByPk(req.query.userId);
         userId = user.id;
 
@@ -404,10 +406,12 @@ router.get(
         throw mustBeLoggedInError;
       }
 
-      let userId = res.locals.session ? res.locals.session.userId : null;
+      const myUserId = res.locals.session ? res.locals.session.userId : null;
+      let userId = myUserId;
       let labels = req.query.labels ? req.query.labels.split(',') : [];
 
-      if (req.query.userId) {
+      // Only check for shared items if we're browsing another user's recipes
+      if (req.query.userId && myUserId !== req.query.userId) {
         const user = await User.findByPk(req.query.userId);
         userId = user.id;
 
