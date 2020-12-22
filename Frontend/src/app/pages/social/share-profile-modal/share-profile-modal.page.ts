@@ -54,7 +54,7 @@ export class ShareProfileModalPage {
   }
 
   getProfileUrl() {
-    if (!this.profile) return "Error loading profile url";
+    if (!this.profile) return 'Error loading profile url';
     return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(`@${this.profile.handle}`)}`;
   }
 

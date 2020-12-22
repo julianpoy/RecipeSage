@@ -13,7 +13,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 export class NewMessageModalPage {
 
   @Input() initialRecipientId: string;
-  recipientId: string = '';
+  recipientId = '';
   recipientInfo;
 
   message = '';
