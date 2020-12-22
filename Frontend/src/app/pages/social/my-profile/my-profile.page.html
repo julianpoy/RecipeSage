@@ -117,11 +117,15 @@
     </ion-item>
 
     <ion-list *ngIf="myProfile?.profileItems?.length">
-      <div *ngFor="let item of myProfile?.profileItems">
+      <div *ngFor="let item of myProfile?.profileItems; let idx = index">
         <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
           <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+            Remove
+          <ion-icon name="trash" slot="start"></ion-icon>
+      </ion-button>
         </ion-item>
         <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
           <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
@@ -129,12 +133,20 @@
           </ion-avatar>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+            Remove
+            <ion-icon name="trash" slot="start"></ion-icon>
+          </ion-button>
         </ion-item>
 
         <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
           <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
+          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+            Remove
+            <ion-icon name="trash" slot="start"></ion-icon>
+          </ion-button>
         </ion-item>
       </div>
     </ion-list>
