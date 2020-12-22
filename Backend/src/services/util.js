@@ -338,6 +338,24 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   return Promise.all(sendQueues);
 }
 
+exports.dispatchFriendshipNotification = (message, fromUser, toUser) => {
+  const type = "people:friendship:received";
+
+  let sendQueues = [];
+  if (user.fcmTokens) {
+    var notification = {
+      type,
+      message: JSON.stringify(message)
+    };
+
+    sendQueues.push(FirebaseService.sendMessages(toUser.fcmTokens.map(fcmToken => fcmToken.token), notification));
+  }
+
+  sendQueues.push(GripService.broadcast(toUser.id, type, message));
+
+  return Promise.all(sendQueues);
+}
+
 exports.findFilesByRegex = (searchPath, regex) => {
   if (!fs.existsSync(searchPath)) {
     return [];

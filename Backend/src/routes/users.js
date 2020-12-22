@@ -424,9 +424,16 @@ router.post('/friends/:userId',
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
     try {
-      const profileUserId = req.params.userId;
+      const user = await User.findByPk(res.locals.session.userId);
+      const profileUser = await User.findByPk(req.params.userId, {
+        include: [{
+          model: FCMToken,
+          attributes: ['id', 'token'],
+          as: 'fcmTokens'
+        }]
+      });
 
-      if (profileUserId === res.locals.session.userId) {
+      if (user.id === profileUser.id) {
         const selfFriendshipError = new Error("You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though...");
         selfFriendshipError.status = 400;
         throw selfFriendshipError;
@@ -435,21 +442,35 @@ router.post('/friends/:userId',
       await SQ.transaction(async transaction => {
         await Friendship.destroy({
           where: {
-            userId: res.locals.session.userId,
-            friendId: profileUserId
+            userId: user.id,
+            friendId: profileUser.id
           },
           transaction
         });
 
         await Friendship.create({
-          userId: res.locals.session.userId,
-          friendId: profileUserId
+          userId: user.id,
+          friendId: profileUser.id
         }, {
           transaction
         });
       });
 
       res.status(201).send("Created");
+
+      const message = {
+        createdBy: {
+          id: user.id,
+          name: user.name,
+          handle: user.handle,
+        }
+      };
+
+      UtilService.dispatchFriendshipNotification(
+        message,
+        user,
+        profileUser
+      );
     } catch(err) {
       next(err);
     }
