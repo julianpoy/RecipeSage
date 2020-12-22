@@ -220,7 +220,11 @@ export class AppComponent {
   }
 
   async loadFriendRequestCount() {
-    const friends = await this.userService.getMyFriends();
+    if (!localStorage.getItem('token')) return;
+
+    const friends = await this.userService.getMyFriends({
+      401: () => {}
+    });
 
     this.friendRequestCount = friends?.incomingRequests?.length || null;
   }

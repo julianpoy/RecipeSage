@@ -256,7 +256,7 @@ export class UserService {
     }
   }
 
-  async getMyFriends() {
+  async getMyFriends(errorHandlers?: ErrorHandlers) {
     const url = this.utilService.getBase() + 'users/friends' + this.utilService.getTokenQuery();
 
     try {
@@ -267,7 +267,7 @@ export class UserService {
 
       return data;
     } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
     }
   }
 
