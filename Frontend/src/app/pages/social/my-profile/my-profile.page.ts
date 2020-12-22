@@ -4,6 +4,7 @@ import { ToastController, AlertController, ModalController, NavController } from
 import { isHandleValid } from '../../../../../../SharedUtils/src';
 
 import { AddProfileItemModalPage } from '../add-profile-item-modal/add-profile-item-modal.page';
+import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
 
 import { UserService, UserProfile } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -200,6 +201,16 @@ export class MyProfilePage {
 
       this.markAsDirty();
     }
+  }
+
+  async shareProfile() {
+    const modal = await this.modalCtrl.create({
+      component: ShareProfileModalPage,
+      componentProps: {
+        profile: this.myProfile
+      }
+    });
+    modal.present();
   }
 
   async viewProfile() {

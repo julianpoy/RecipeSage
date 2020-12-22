@@ -86,12 +86,20 @@
           </ion-label>
         </ion-item>
 
-        <ion-item lines="none">
-          <ion-button (click)="viewProfile()">
-            View Profile
-            <ion-icon name="arrow-forward" slot="end"></ion-icon>
-          </ion-button>
-        </ion-item>
+        <div style="display: flex;">
+          <ion-item lines="none">
+            <ion-button (click)="shareProfile()">
+              Share
+              <ion-icon name="share-social" slot="end"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-button (click)="viewProfile()">
+              View Profile
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </div>
       </div>
     </div>
 

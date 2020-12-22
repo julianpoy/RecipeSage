@@ -8,6 +8,7 @@ import { ProfilePage } from './profile.page';
 import { NullStateModule } from '../../../components/null-state/null-state.module';
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { NewMessageModalPageModule } from '@/pages/messaging-components/new-message-modal/new-message-modal.module';
+import { ShareProfileModalPageModule } from '../share-profile-modal/share-profile-modal.module';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NewMessageModalPageModule } from '@/pages/messaging-components/new-mess
     NullStateModule,
     ImageViewerModule,
     NewMessageModalPageModule,
+    ShareProfileModalPageModule,
   ],
 })
 export class ProfilePageModule {}
