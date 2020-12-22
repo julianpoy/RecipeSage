@@ -91,7 +91,7 @@ export class ShareProfileModalPage {
 
   openPinterest() {
     const message = encodeURIComponent(`${this.profile.name}'s RecipeSage profile`);
-    const imageUrl = encodeURIComponent(this.profile.profileImages[0]?.location || '');
+    const imageUrl = encodeURIComponent(this.profile.profileImages?.[0]?.location || '');
     const url = encodeURIComponent(this.getProfileUrl());
     const win = window.open() as any;
     win.opener = null;
