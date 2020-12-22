@@ -207,7 +207,11 @@ router.get(
         },
         include: [{
           model: Recipe,
-          as: 'recipe'
+          as: 'recipe',
+          include: [{
+            model: Image,
+            as: 'images',
+          }],
         }, {
           model: Label,
           as: 'label'
@@ -299,7 +303,11 @@ const getUserProfile = async (req, res, next) => {
       },
       include: [{
         model: Recipe,
-        as: 'recipe'
+        as: 'recipe',
+        include: [{
+          model: Image,
+          as: 'images',
+        }],
       }, {
         model: Label,
         as: 'label'
