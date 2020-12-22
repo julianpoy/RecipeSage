@@ -644,7 +644,7 @@ export class RecipePage {
     this.cookingToolbarService.pinRecipe({
       id: this.recipe.id,
       title: this.recipe.title,
-      imageUrl: this.recipe.images[0]?.location
+      imageUrl: this.recipe.images?.[0]?.location
     });
   }
 

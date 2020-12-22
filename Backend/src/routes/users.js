@@ -207,7 +207,11 @@ router.get(
         },
         include: [{
           model: Recipe,
-          as: 'recipe'
+          as: 'recipe',
+          include: [{
+            model: Image,
+            as: 'images',
+          }],
         }, {
           model: Label,
           as: 'label'
@@ -299,7 +303,11 @@ const getUserProfile = async (req, res, next) => {
       },
       include: [{
         model: Recipe,
-        as: 'recipe'
+        as: 'recipe',
+        include: [{
+          model: Image,
+          as: 'images',
+        }],
       }, {
         model: Label,
         as: 'label'
@@ -957,5 +965,28 @@ router.delete(
     res.status(200).send("ok");
   }).catch(next);
 });
+
+/* Get public user listing by id */
+router.get(
+  '/:userId',
+  cors(),
+  async (req, res, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId, {
+        attributes: ['id', 'name', 'handle']
+      })
+
+      if (!user) {
+        const notFoundErr = new Error('User not found');
+        notFoundErr.status = 404;
+        throw notFoundErr;
+      }
+
+      res.status(200).json(user);
+    } catch(err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = router;
