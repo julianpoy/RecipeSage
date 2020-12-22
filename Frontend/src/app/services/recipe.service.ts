@@ -94,9 +94,10 @@ export class RecipeService {
     }).then(response => response.data);
   }
 
-  search(query: string, options?: { labels?: string[] }) {
+  search(query: string, options?: { userId?: string, labels?: string[] }) {
     let url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
     if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
+    if (options && options.userId) url += '&userId=' + options.userId;
     url += '&query=' + query;
 
     return this.httpService.request({
