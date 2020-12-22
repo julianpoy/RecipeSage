@@ -87,7 +87,7 @@ router.put(
       await SQ.transaction(async transaction => {
         await User.update({
           ...(req.body.name !== undefined ? { name: req.body.name } : {}),
-          ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
+          ...(req.body.handle !== undefined ? { handle: req.body.handle.toLowerCase() } : {}),
           ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
           ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
         }, {
@@ -238,7 +238,7 @@ const getUserProfile = async (req, res, next) => {
     if (req.params.handle) {
       const user = await User.findOne({
         where: {
-          handle: req.params.handle,
+          handle: req.params.handle.toLowerCase(),
         }
       });
       if (!user) {
@@ -492,7 +492,7 @@ router.get(
     try {
       const user = await User.findOne({
         where: {
-          handle: req.params.handle,
+          handle: req.params.handle.toLowerCase(),
         },
         attributes: ['id'],
       });
