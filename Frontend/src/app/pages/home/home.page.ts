@@ -321,7 +321,8 @@ export class HomePage implements AfterViewInit {
 
     return new Promise((resolve, reject) => {
       this.recipeService.search(text, {
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {}),
+        userId: this.userId || undefined,
       }).then(response => {
         loading.dismiss();
 
