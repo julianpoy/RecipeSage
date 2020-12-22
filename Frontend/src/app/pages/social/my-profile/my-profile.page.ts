@@ -203,6 +203,13 @@ export class MyProfilePage {
     }
   }
 
+  async removeProfileItem(idx) {
+    this.myProfile.profileItems.splice(idx, 1);
+    this.updatedProfileFields.profileItems = this.myProfile.profileItems;
+
+    this.markAsDirty();
+  }
+
   async shareProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
       const alert = await this.alertCtrl.create({
