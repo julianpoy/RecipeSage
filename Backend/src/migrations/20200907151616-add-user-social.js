@@ -6,6 +6,7 @@ module.exports = {
       'Users',
       'enableProfile',
       {
+        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
       }
