@@ -221,8 +221,8 @@ router.get(
       // Note: Should be the same as /profile/:userId
       res.status(200).json({
         id: user.id,
-        incomingFriendship: false,
-        outgoingFriendship: false,
+        incomingFriendship: true,
+        outgoingFriendship: true,
         isMe: true,
         name: user.name,
         handle: user.handle,
@@ -278,22 +278,28 @@ const getUserProfile = async (req, res, next) => {
     let outgoingFriendship = false;
     let incomingFriendship = false;
     if (res.locals.session && res.locals.session.userId) {
-      const incoming = await Friendship.findOne({
-        where: {
-          userId: profileUserId,
-          friendId: res.locals.session.userId
-        }
-      });
-      incomingFriendship = !!incoming;
+      // User is always "friends" with themselves
+      if (res.locals.session.userId === profileUserId) {
+        incomingFriendship = true;
+        outgoingFriendship = true;
+      } else {
+        const incoming = await Friendship.findOne({
+          where: {
+            userId: profileUserId,
+            friendId: res.locals.session.userId
+          }
+        });
+        incomingFriendship = !!incoming;
 
-      const outgoing = await Friendship.findOne({
-        where: {
-          userId: res.locals.session.userId,
-          friendId: profileUserId
-        }
-      });
+        const outgoing = await Friendship.findOne({
+          where: {
+            userId: res.locals.session.userId,
+            friendId: profileUserId
+          }
+        });
 
-      outgoingFriendship = !!outgoing;
+        outgoingFriendship = !!outgoing;
+      }
     }
 
     const profileItems = await ProfileItem.findAll({
