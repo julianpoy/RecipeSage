@@ -111,15 +111,20 @@
     <ion-list *ngIf="myProfile?.profileItems?.length">
       <div *ngFor="let item of myProfile?.profileItems">
         <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
+          <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
         </ion-item>
         <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
+          <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
+            <img [src]="item.recipe.images[0].location">
+          </ion-avatar>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
         </ion-item>
 
         <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
+          <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
           <ion-label>{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
         </ion-item>
