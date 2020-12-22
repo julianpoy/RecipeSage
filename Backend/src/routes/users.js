@@ -575,29 +575,6 @@ router.get(
   }).catch(next);
 });
 
-/* Get public user listing by id */
-router.get(
-  '/:userId',
-  cors(),
-  async (req, res, next) => {
-    try {
-      const user = await User.findByPk(req.params.userId, {
-        attributes: ['id', 'name', 'handle']
-      })
-
-      if (!user) {
-        const notFoundErr = new Error('User not found');
-        notFoundErr.status = 404;
-        throw notFoundErr;
-      }
-
-      res.status(200).json(user);
-    } catch(err) {
-      next(err);
-    }
-  }
-);
-
 /* Get public user listing by email */
 router.get(
   '/by-email',
@@ -980,5 +957,28 @@ router.delete(
     res.status(200).send("ok");
   }).catch(next);
 });
+
+/* Get public user listing by id */
+router.get(
+  '/:userId',
+  cors(),
+  async (req, res, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId, {
+        attributes: ['id', 'name', 'handle']
+      })
+
+      if (!user) {
+        const notFoundErr = new Error('User not found');
+        notFoundErr.status = 404;
+        throw notFoundErr;
+      }
+
+      res.status(200).json(user);
+    } catch(err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = router;
