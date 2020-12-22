@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 
 import { UserService } from '@/services/user.service';
@@ -12,12 +12,9 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class NewMessageModalPage {
 
-  searching = false;
-  autofillTimeout: any;
-
-  recipientEmail = '';
-  recipientName = '';
-  recipientId = '';
+  @Input() initialRecipientId: string;
+  recipientId: string = '';
+  recipientInfo;
 
   message = '';
 
@@ -28,29 +25,20 @@ export class NewMessageModalPage {
     public userService: UserService,
     public utilService: UtilService,
     public messagingService: MessagingService) {
+
+    setTimeout(() => {
+      if (this.initialRecipientId) {
+        this.setSelectedUser(this.initialRecipientId);
+      }
+    });
   }
 
+  async setSelectedUser(recipientId) {
+    this.recipientInfo = await this.userService.getUserById(recipientId);
+  }
 
-  autofillUserName() {
-    this.searching = true;
-
-    if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
-
-    this.autofillTimeout = setTimeout(async () => {
-      const user = await this.userService.getUserByEmail(this.recipientEmail.trim(), {
-        404: () => {}
-      });
-
-      if (user) {
-        this.recipientName = user.name || user.email;
-        this.recipientId = user.id;
-      } else {
-        this.recipientName = '';
-        this.recipientId = '';
-      }
-
-      this.searching = false;
-    }, 500);
+  onSelectedUserChange(event) {
+    this.recipientId = event ? event.id : null;
   }
 
   send() {

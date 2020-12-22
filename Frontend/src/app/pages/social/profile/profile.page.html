@@ -32,6 +32,14 @@
         <ion-item>
           <h5 class="handle">@{{ profile?.handle }}</h5>
         </ion-item>
+        <div class="profile-icon-buttons">
+          <ion-item lines="none" (click)="share()" button>
+            <ion-icon name="share-social"></ion-icon>
+          </ion-item>
+          <ion-item lines="none" (click)="sendMessage()" *ngIf="isLoggedIn() && !profile?.isMe" button>
+            <ion-icon name="mail"></ion-icon>
+          </ion-item>
+        </div>
       </div>
     </div>
 

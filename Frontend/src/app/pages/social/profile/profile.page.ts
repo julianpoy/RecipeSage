@@ -7,6 +7,7 @@ import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
+import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 
 @Component({
   selector: 'page-profile',
@@ -120,6 +121,16 @@ export class ProfilePage {
     tst.present();
 
     this.load();
+  }
+
+  async sendMessage() {
+    const modal = await this.modalCtrl.create({
+      component: NewMessageModalPage,
+      componentProps: {
+        initialRecipientId: this.profile.id
+      }
+    });
+    modal.present();
   }
 
   isLoggedIn() {
