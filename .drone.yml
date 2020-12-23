@@ -51,7 +51,9 @@ steps:
     DOCKER_PAT:
       from_secret: DOCKER_PAT
   when:
-    ref: [ refs/heads/master, refs/tags/* ]
+    branch:
+    - master
+    ref: [ refs/tags/* ]
 
 ---
 
@@ -90,7 +92,9 @@ steps:
     DOCKER_PAT:
       from_secret: DOCKER_PAT
   when:
-    ref: [ refs/heads/master, refs/tags/* ]
+    branch:
+    - master
+    ref: [ refs/tags/* ]
 - name: Push S3
   image: amazon/aws-cli
   commands:
@@ -103,4 +107,6 @@ steps:
     AWS_DEFAULT_REGION: us-west-2
     AWS_REGION: us-west-2
   when:
-    ref: [ refs/heads/master, refs/tags/* ]
+    branch:
+    - master
+    ref: [ refs/tags/* ]
