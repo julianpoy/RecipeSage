@@ -45,6 +45,9 @@ steps:
   commands:
   - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
   - sh ./scripts/deploy/push_api_docker.sh $DRONE_TAG
+  volumes:
+  - name: docker_sock
+    path: /var/run/docker.sock
   environment:
     DOCKER_USER:
       from_secret: DOCKER_USER
@@ -54,6 +57,11 @@ steps:
     branch:
     - master
     ref: [ refs/tags/* ]
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
 
 ---
 
@@ -88,6 +96,9 @@ steps:
   commands:
   - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
   - sh ./scripts/deploy/push_static_docker.sh $DRONE_TAG
+  volumes:
+  - name: docker_sock
+    path: /var/run/docker.sock
   environment:
     DOCKER_USER:
       from_secret: DOCKER_USER
@@ -112,3 +123,8 @@ steps:
     branch:
     - master
     ref: [ refs/tags/* ]
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
