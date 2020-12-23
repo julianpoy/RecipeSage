@@ -44,7 +44,7 @@ steps:
   image: docker
   commands:
   - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
-  - bash ./scripts/deploy/push_api_docker.sh $DRONE_TAG
+  - sh ./scripts/deploy/push_api_docker.sh $DRONE_TAG
   environment:
     DOCKER_USER:
       from_secret: DOCKER_USER
@@ -87,7 +87,7 @@ steps:
   image: docker
   commands:
   - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
-  - bash ./scripts/deploy/push_static_docker.sh $DRONE_TAG
+  - sh ./scripts/deploy/push_static_docker.sh $DRONE_TAG
   environment:
     DOCKER_USER:
       from_secret: DOCKER_USER
@@ -100,7 +100,7 @@ steps:
 - name: Push S3
   image: amazon/aws-cli
   commands:
-  - bash ./scripts/deploy/push_static_s3.sh $DRONE_TAG
+  - sh ./scripts/deploy/push_static_s3.sh $DRONE_TAG
   environment:
     AWS_ACCESS_KEY_ID:
       from_secret: AWS_ACCESS_KEY_ID
