@@ -1,0 +1,106 @@
+kind: pipeline
+name: ci-backend
+
+environment:
+
+services:
+- name: postgres
+  image: postgres:9.6.9
+  environment:
+    POSTGRES_USER: chefbook
+    POSTGRES_PASSWORD: admin
+    POSTGRES_DB: chefbook_test
+
+steps:
+- name: Install Dependencies
+  image: node:12
+  commands:
+  - cd /drone/src/Backend && npm install
+  - cd /drone/src/SharedUtils && npm install
+- name: Test
+  image: node:12
+  environment:
+    NODE_ENV: test
+    VERBOSE: true
+    POSTGRES_DB: chefbook_test
+    POSTGRES_USER: chefbook
+    POSTGRES_PASSWORD: admin
+    POSTGRES_PORT: 5432
+    POSTGRES_HOST: postgres
+    POSTGRES_SSL: false
+    POSTGRES_LOGGING: false
+    GRIP_URL: http://localhost:5561/
+    GRIP_KEY: changeme
+    AWS_ACCESS_KEY_ID:
+      from_secret: AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: AWS_SECRET_ACCESS_KEY
+    AWS_DEFAULT_REGION: us-west-2
+    AWS_REGION: us-west-2
+    AWS_BUCKET: chefbook-dev
+  commands:
+  - cd Backend && npm run test:ci
+- name: Push
+  image: docker
+  commands:
+  - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+  - ./scripts/deploy/push_api_docker.sh $DRONE_TAG
+  environment:
+    DOCKER_USER:
+      from_secret: DOCKER_USER
+    DOCKER_PAT:
+      from_secret: DOCKER_PAT
+  when:
+    ref: [ refs/heads/master, refs/tags/* ]
+
+---
+
+kind: pipeline
+name: ci-frontend
+
+steps:
+- name: Install Dependencies
+  image: node:12
+  commands:
+  - cd /drone/src/Frontend && npm install
+  - cd /drone/src/SharedUtils && npm install
+- name: Lint
+  image: node:12
+  commands:
+  - cd Frontend && npm run lint
+- name: Build
+  image: node:12
+  commands:
+  - cd Frontend && npm run dist
+- name: Tag
+  image: node:12
+  commands:
+  - mv Frontend/www www
+  - sed -i "s/window.version = 'development';/window.version = '${DRONE_TAG}';/" www/index.html
+  when:
+    ref: [ refs/heads/master, refs/tags/* ]
+- name: Push Docker
+  image: docker
+  commands:
+  - echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+  - ./scripts/deploy/push_static_docker.sh $DRONE_TAG
+  environment:
+    DOCKER_USER:
+      from_secret: DOCKER_USER
+    DOCKER_PAT:
+      from_secret: DOCKER_PAT
+  when:
+    ref: [ refs/heads/master, refs/tags/* ]
+- name: Push S3
+  image: amazon/aws-cli
+  commands:
+  - ./scripts/deploy/push_static_s3.sh $DRONE_TAG
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: AWS_SECRET_ACCESS_KEY
+    AWS_DEFAULT_REGION: us-west-2
+    AWS_REGION: us-west-2
+  when:
+    ref: [ refs/heads/master, refs/tags/* ]
