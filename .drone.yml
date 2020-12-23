@@ -80,7 +80,9 @@ steps:
   - mv Frontend/www www
   - sed -i "s/window.version = 'development';/window.version = '${DRONE_TAG}';/" www/index.html
   when:
-    ref: [ refs/heads/master, refs/tags/* ]
+    branch:
+    - master
+    ref: [ refs/tags/* ]
 - name: Push Docker
   image: docker
   commands:
