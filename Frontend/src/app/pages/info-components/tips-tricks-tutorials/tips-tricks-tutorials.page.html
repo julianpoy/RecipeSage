@@ -5,7 +5,8 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Tips, Tricks and Tutorials</ion-title>
+    <ion-title *ngIf="!active">Tips, Tricks and Tutorials</ion-title>
+    <ion-title *ngIf="active">Tutorial - {{tutorialsByTag[active].title}}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -33,10 +34,6 @@
 
   <div *ngIf="active" class="container">
     <br />
-    <ion-button class="ion-float-left" fill="clear" (click)="close()">
-      Close Tutorial
-    </ion-button>
-
     <div *ngIf="active == 'home'" class="ion-padding">
       <br />
       <h2>My Recipes Page</h2>
@@ -429,10 +426,6 @@
     </div>
 
     <br /><br />
-
-    <ion-button class="ion-float-left" fill="clear" (click)="close()">
-      Close Tutorial
-    </ion-button>
 
     <ion-button class="ion-float-right" fill="clear" (click)="next()" [disabled]="isLast()">
       Next Tutorial

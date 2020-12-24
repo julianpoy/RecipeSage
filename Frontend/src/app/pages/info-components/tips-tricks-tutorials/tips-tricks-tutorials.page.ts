@@ -60,6 +60,7 @@ export class TipsTricksTutorialsPage {
     if (tutorialType) {
       const initialTutorial = this.tutorials.find(tutorial => tutorial.type === tutorialType);
       if (initialTutorial) this.active = initialTutorial.tag;
+      this.defaultBackHref = RouteMap.TipsTricksTutorialsPage.getPath();
     }
   }
 
