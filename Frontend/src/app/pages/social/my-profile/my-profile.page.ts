@@ -285,4 +285,14 @@ export class MyProfilePage {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }
+
+  ionReorder(event) {
+    const item = this.myProfile.profileItems.splice(event.detail.from, 1)?.[0];
+    if (item) {
+      this.myProfile.profileItems.splice(event.detail.to, 0, item);
+      this.updatedProfileFields.profileItems = this.myProfile.profileItems;
+    }
+
+    event.detail.complete(!!item);
+  }
 }
