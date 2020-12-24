@@ -106,9 +106,9 @@
 
     <br />
 
-    <ion-item lines="none">
+    <ion-item lines="full">
       <ion-icon name="key" slot="start"></ion-icon>
-      <ion-label>
+      <ion-label class="ion-text-wrap">
         Pinned Recipes &amp; Labels
       </ion-label>
       <ion-button slot="end" (click)="startNewProfileItem()">
@@ -117,39 +117,51 @@
       </ion-button>
     </ion-item>
 
-    <ion-list *ngIf="myProfile?.profileItems?.length">
-      <div *ngFor="let item of myProfile?.profileItems; let idx = index">
-        <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
-          <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
-          <ion-label>{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
-            Remove
-          <ion-icon name="trash" slot="start"></ion-icon>
-      </ion-button>
-        </ion-item>
-        <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
-          <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
-            <img [src]="item.recipe.images[0].location">
-          </ion-avatar>
-          <ion-label>{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
-            Remove
-            <ion-icon name="trash" slot="start"></ion-icon>
-          </ion-button>
-        </ion-item>
+    <ion-list *ngIf="myProfile?.profileItems?.length" class="profile-items-list">
+      <ion-reorder-group (ionItemReorder)="ionReorder($event)" disabled="false">
+        <ng-container *ngFor="let item of myProfile?.profileItems; let idx = index">
+          <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
+            <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 
-        <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
-          <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
-          <ion-label>{{item.title}}</ion-label>
-          <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->
-          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
-            Remove
-            <ion-icon name="trash" slot="start"></ion-icon>
-          </ion-button>
-        </ion-item>
-      </div>
+            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+              <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+            <!--</ion-button>-->
+            <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+
+          <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
+            <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
+              <img [src]="item.recipe.images[0].location">
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
+
+            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+              <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+            <!--</ion-button>-->
+            <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+
+          <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
+            <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
+
+            <!--<ion-button slot="end" (click)="$event.stopPropagation(); editProfileItem(idx)">-->
+              <!--<ion-icon name="pencil" slot="icon-only"></ion-icon>-->
+            <!--</ion-button>-->
+            <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); removeProfileItem(idx)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+        </ng-container>
+      </ion-reorder-group>
     </ion-list>
 
     <null-state *ngIf="!myProfile?.profileItems?.length">
@@ -162,6 +174,9 @@
       </ion-label>
     </null-state>
   </div>
+  <br />
+  <br />
+  <br />
 </ion-content>
 
 <ion-footer>
