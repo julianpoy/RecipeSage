@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="myProfile && requiresSetup" class="setup-screen">
+  <div *ngIf="myProfile && requiresSetup" class="setup-screen ion-padding">
     <div class="intro">
       <h3>Welcome to your profile!</h3>
       Before you get started, there are a few things that you'll need to set up.
@@ -20,6 +20,7 @@
       <ion-label position="stacked">Name/Nickname</ion-label>
       <ion-input [(ngModel)]="myProfile.name" (ngModelChange)="updatedProfileFields.name = myProfile.name"></ion-input>
     </ion-item>
+    <br />
     <br />
 
     Now, choose the handle for your profile, for example: @superchef
@@ -36,7 +37,7 @@
         <p class="error" *ngIf="updatedProfileFields.handle && !isHandleValid()">
           Handle is invalid
         </p>
-        <p>
+        <p class="ion-text-wrap">
           Note: Handle must be unique, and must not contain any special characters.
         </p>
       </ion-label>
@@ -73,7 +74,7 @@
             <p class="error" *ngIf="updatedProfileFields.handle && !isHandleValid()">
             Handle is invalid
             </p>
-            <p>
+            <p class="ion-text-wrap">
             Note: Handle must be unique, and must not contain any special characters.
             </p>
           </ion-label>

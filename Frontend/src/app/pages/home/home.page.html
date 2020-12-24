@@ -125,7 +125,17 @@
   </virtual-scroller>
 
   <ion-list *ngIf="!loading">
-    <null-state *ngIf="folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
+    <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
+      <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
+      <ion-label virtualSlot="body">
+        <h2>This user's collection is empty</h2>
+        <br /><br />
+        <p>
+          This shared collection has no recipes in it.<br />
+        </p>
+      </ion-label>
+    </null-state>
+    <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
       <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
         <h2>Welcome to RecipeSage!</h2>
@@ -175,7 +185,7 @@
     </null-state>
   </ion-list>
 
-  <ion-fab *ngIf="folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab *ngIf="!userId && folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="newRecipe()" color="primary">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

@@ -1,7 +1,10 @@
 ion-footer {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
   ion-button {
-    flex-basis: 50%;
+    flex-basis: 45%;
+    flex-grow: 1;
   }
 }
