@@ -20,6 +20,14 @@ export enum AuthType {
   Register = 'register'
 }
 
+export enum TutorialType {
+  MyRecipes = 'my-recipes',
+  EditRecipes = 'edit-recipes',
+  RecipeDetails = 'recipe-details',
+  BrowserExtension = 'browser-extension',
+  GeneralFAQ = 'faq',
+}
+
 export interface HomePageFilters {
   userId?: string,
   selectedLabels?: string[],
@@ -85,6 +93,10 @@ export const RouteMap = {
   TipsTricksTutorialsPage: {
     getPath() { return `/tips-tricks-tutorials`; },
     path: 'tips-tricks-tutorials',
+  },
+  TutorialPage: {
+    getPath(tutorialType: TutorialType) { return `/tips-tricks-tutorials/${tutorialType}`; },
+    path: 'tips-tricks-tutorials/:tutorialType',
   },
   WelcomePage: {
     getPath() { return `/welcome`; },

@@ -14,7 +14,7 @@
 <ion-content>
   <!-- Click a tutorial to get started!<br /> -->
   <ion-list *ngIf="!active" inset="true">
-    <ion-item *ngFor="let tutorial of tutorials" (click)="active = tutorial.tag">
+    <ion-item *ngFor="let tutorial of tutorials" (click)="open(tutorial.type)">
       <ion-icon name="{{tutorial.icon}}" slot="start"></ion-icon>
       <ion-label>
         <h2>{{tutorial.title}}</h2>
@@ -33,7 +33,7 @@
 
   <div *ngIf="active" class="container">
     <br />
-    <ion-button class="ion-float-left" fill="clear" (click)="active = ''">
+    <ion-button class="ion-float-left" fill="clear" (click)="close()">
       Close Tutorial
     </ion-button>
 
@@ -430,7 +430,7 @@
 
     <br /><br />
 
-    <ion-button class="ion-float-left" fill="clear" (click)="active = ''">
+    <ion-button class="ion-float-left" fill="clear" (click)="close()">
       Close Tutorial
     </ion-button>
 
