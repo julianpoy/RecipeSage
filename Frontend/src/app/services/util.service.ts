@@ -24,6 +24,7 @@ export enum TutorialType {
   MyRecipes = 'my-recipes',
   EditRecipes = 'edit-recipes',
   RecipeDetails = 'recipe-details',
+  PeopleProfile = 'people-profile',
   BrowserExtension = 'browser-extension',
   GeneralFAQ = 'faq',
 }

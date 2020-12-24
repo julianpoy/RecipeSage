@@ -40,6 +40,12 @@ export class TipsTricksTutorialsPage {
       tag: 'recipeDetails',
       type: TutorialType.RecipeDetails,
     }, {
+      title: 'People & Profile',
+      description: 'People and library sharing features',
+      icon: 'person-circle',
+      tag: 'peopleProfile',
+      type: TutorialType.PeopleProfile,
+    }, {
       title: 'Clip Tool Browser Extension',
       description: 'The RecipeSage browser plugin',
       icon: 'cut',

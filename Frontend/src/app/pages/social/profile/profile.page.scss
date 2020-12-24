@@ -21,10 +21,13 @@
 
 .profile-details-container {
   display: flex;
+  align-items: center;
+
+  ion-thumbnail {
+    align-self: flex-start;
+  }
 
   .profile-details {
-    padding-top: 20px;
-
     .username {
       margin-bottom: 0;
     }
