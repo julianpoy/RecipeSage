@@ -21,6 +21,8 @@ export class ProfilePage {
   handle: string;
   profile;
 
+  myProfile;
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
@@ -60,6 +62,8 @@ export class ProfilePage {
     this.profile = await this.userService.getProfileByHandle(this.handle, {
       403: () => this.profileDisabledError()
     });
+
+    this.myProfile = await this.userService.getMyProfile();
 
     loading.dismiss();
   }
@@ -146,6 +150,10 @@ export class ProfilePage {
 
   isLoggedIn() {
     return this.utilService.isLoggedIn();
+  }
+
+  setupMyProfile() {
+    this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
 
   async refresh(refresher) {
