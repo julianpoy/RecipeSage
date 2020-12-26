@@ -67,6 +67,8 @@ services:
       - STRIPE_WEBHOOK_SECRET
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
+      - GRAYLOG_HOST=graylog
+      - GRAYLOG_PORT=12201
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
       - ./SharedUtils/package.json:/app/SharedUtils/package.json
