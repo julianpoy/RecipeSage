@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-2020-12-21
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate-2020-12-21
+        image: julianpoy/recipesage:api-v2.6.0-beta1
+        command: ["npx"]
+        args: ["sequelize", "db:migrate"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+        envFrom:
+        - secretRef:
+            name: rs-api-env
+        volumeMounts:
+        - name: firebase-credentials
+          mountPath: /app/Backend/src/config/firebase-credentials.json
+          subPath: firebase-credentials.json
+      volumes:
+        - name: firebase-credentials
+          configMap:
+            name: firebase-credentials
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: myregistrykey
+
