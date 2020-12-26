@@ -109,6 +109,8 @@ export class MyProfilePage {
               this.updatedProfileFields.enableProfile = true
               this.myProfile.enableProfile = true;
               this.accountInfo.enableProfile = true;
+
+              this.markAsDirty();
             }
           }
         ]
