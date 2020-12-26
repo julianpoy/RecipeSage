@@ -21,6 +21,8 @@ try {
 //   data: { ...any }
 // }
 const capture = async (message, body) => {
+  if (process.env.NODE_ENV === "test") return;
+
   try {
     await logger.log(message, {
       NODE_ENV: process.env.NODE_ENV,
