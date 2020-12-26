@@ -24,9 +24,9 @@ const capture = async (message, body) => {
   try {
     await logger.log(message, {
       NODE_ENV: process.env.NODE_ENV,
-      level: body.info || null,
+      level: body.level || null,
       userId: body.userId || null,
-      token: body.session || null,
+      token: body.token || null,
       err: body.err || null,
       data: body.data || null
     });
