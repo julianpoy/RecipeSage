@@ -12,33 +12,21 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list>
-    <ion-item>
-      <ion-label position="floating">Recipient email</ion-label>
-      <ion-input type="email" value="" [(ngModel)]="recipientEmail" (ngModelChange)='autofillUserName()'></ion-input>
-    </ion-item>
+  <select-user (selectedUserChange)="onSelectedUserChange($event)" [selectedUser]="recipientInfo"></select-user>
+  <ion-item *ngIf="!recipientId">
+    <ion-label>
+      <p>
+        Enter a RecipeSage user email or @handle
+      </p>
+    </ion-label>
+  </ion-item>
 
-    <ion-item lines="none">
-      <ion-label>
-        <p *ngIf="recipientEmail.length > 0 && !searching">
-          {{ recipientName ? 'User found: ' + recipientName : "No user found with that email..." }}
-        </p>
-        <p *ngIf="recipientEmail.length == 0 && !searching">
-          Enter an email address to search for a user
-        </p>
-        <p *ngIf="searching">
-          Searcing for user...
-        </p>
-      </ion-label>
-    </ion-item>
+  <br /><br />
 
-    <br /><br />
-
-    <ion-item>
-      <ion-label position="floating">Compose a message</ion-label>
-      <ion-textarea [(ngModel)]="message" placeholder="Hello! I'd like to chat on RecipeSage"></ion-textarea>
-    </ion-item>
-  </ion-list>
+  <ion-item>
+    <ion-label position="floating">Compose a message</ion-label>
+    <ion-textarea [(ngModel)]="message" placeholder="Hello! I'd like to chat on RecipeSage"></ion-textarea>
+  </ion-item>
 </ion-content>
 
 <ion-footer class="ion-padding">

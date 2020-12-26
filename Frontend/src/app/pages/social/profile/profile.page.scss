@@ -21,10 +21,13 @@
 
 .profile-details-container {
   display: flex;
+  align-items: center;
+
+  ion-thumbnail {
+    align-self: flex-start;
+  }
 
   .profile-details {
-    padding-top: 20px;
-
     .username {
       margin-bottom: 0;
     }
@@ -44,4 +47,14 @@
     flex-grow: 1;
     flex-basis: 0;
   }
+}
+
+.profile-icon-buttons {
+  display: flex;
+  text-align: center;
+}
+
+.item-icon {
+  width: 40px;
+  margin-right: 16px;
 }

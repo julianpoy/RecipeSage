@@ -4,6 +4,7 @@ import { ToastController, AlertController, ModalController, NavController } from
 import { isHandleValid } from '../../../../../../SharedUtils/src';
 
 import { AddProfileItemModalPage } from '../add-profile-item-modal/add-profile-item-modal.page';
+import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
 
 import { UserService, UserProfile } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -108,6 +109,8 @@ export class MyProfilePage {
               this.updatedProfileFields.enableProfile = true
               this.myProfile.enableProfile = true;
               this.accountInfo.enableProfile = true;
+
+              this.markAsDirty();
             }
           }
         ]
@@ -202,6 +205,49 @@ export class MyProfilePage {
     }
   }
 
+  async removeProfileItem(idx) {
+    this.myProfile.profileItems.splice(idx, 1);
+    this.updatedProfileFields.profileItems = this.myProfile.profileItems;
+
+    this.markAsDirty();
+  }
+
+  async shareProfile() {
+    if (Object.keys(this.updatedProfileFields).length > 0) {
+      const alert = await this.alertCtrl.create({
+        header: 'Unsaved Changes',
+        message: 'You\'ll need to save your changes before you can share your profile.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => { }
+          },
+          {
+            text: 'Save',
+            handler: async () => {
+              await this.save();
+              this.shareProfile();
+            }
+          }
+        ]
+      });
+      alert.present();
+      return;
+    }
+    if (!this.myProfile?.enableProfile) {
+      this.checkProfileEnabled();
+      return;
+    }
+    const modal = await this.modalCtrl.create({
+      component: ShareProfileModalPage,
+      componentProps: {
+        profile: this.myProfile
+      }
+    });
+    modal.present();
+  }
+
   async viewProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
       const alert = await this.alertCtrl.create({
@@ -240,5 +286,15 @@ export class MyProfilePage {
     } else if (item.type === 'recipe') {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
+  }
+
+  ionReorder(event) {
+    const item = this.myProfile.profileItems.splice(event.detail.from, 1)?.[0];
+    if (item) {
+      this.myProfile.profileItems.splice(event.detail.to, 0, item);
+      this.updatedProfileFields.profileItems = this.myProfile.profileItems;
+    }
+
+    event.detail.complete(!!item);
   }
 }

@@ -4,6 +4,10 @@ ion-content {
 
 ion-list ion-item {
   cursor: pointer;
+
+  .md & {
+    --border-width: 0 0 0 0;
+  }
 }
 
 .container {

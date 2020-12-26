@@ -73,6 +73,11 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.TutorialPage.path,
+    loadChildren: '@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module#TipsTricksTutorialsPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
     path: RouteMap.WelcomePage.path,
     loadChildren: '@/pages/info-components/welcome/welcome.module#WelcomePageModule',
     canDeactivate: [UnsavedChangesGuardService]

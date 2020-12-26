@@ -7,6 +7,8 @@ import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
+import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
+import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
 
 @Component({
   selector: 'page-profile',
@@ -18,6 +20,8 @@ export class ProfilePage {
 
   handle: string;
   profile;
+
+  myProfile;
 
   constructor(
     public navCtrl: NavController,
@@ -58,6 +62,8 @@ export class ProfilePage {
     this.profile = await this.userService.getProfileByHandle(this.handle, {
       403: () => this.profileDisabledError()
     });
+
+    this.myProfile = await this.userService.getMyProfile();
 
     loading.dismiss();
   }
@@ -122,8 +128,32 @@ export class ProfilePage {
     this.load();
   }
 
+  async shareProfile() {
+    const modal = await this.modalCtrl.create({
+      component: ShareProfileModalPage,
+      componentProps: {
+        profile: this.profile
+      }
+    });
+    modal.present();
+  }
+
+  async sendMessage() {
+    const modal = await this.modalCtrl.create({
+      component: NewMessageModalPage,
+      componentProps: {
+        initialRecipientId: this.profile.id
+      }
+    });
+    modal.present();
+  }
+
   isLoggedIn() {
     return this.utilService.isLoggedIn();
+  }
+
+  setupMyProfile() {
+    this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
 
   async refresh(refresher) {

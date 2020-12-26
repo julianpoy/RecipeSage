@@ -142,9 +142,17 @@ exports.convertImage = (imageBuf, highResConversion) => {
           quality,
           // chromaSubsampling: '4:4:4'
         })
+        .on('error', function(e) {
+          console.error('Sharp Error: ' + e);
+          reject(e);
+        })
         .toBuffer((err, buffer, info) => {
           if (err) reject(err);
           resolve(buffer);
+        })
+        .on('error', function(e) {
+          console.error('Sharp Error: ' + e);
+          reject(e);
         });
     } catch (e) {
       reject();
@@ -202,7 +210,15 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
                 quality,
                 // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
               })
-              .pipe(outputStream);
+              .on('error', function(e) {
+                console.error('Sharp Error: ' + e);
+                reject(e);
+              })
+              .pipe(outputStream)
+              .on('error', function(e) {
+                console.error('Sharp Error: ' + e);
+                reject(e);
+              });
 
             inputStream.pipe(pipeline);
           }

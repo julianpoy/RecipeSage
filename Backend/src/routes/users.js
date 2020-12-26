@@ -87,7 +87,7 @@ router.put(
       await SQ.transaction(async transaction => {
         await User.update({
           ...(req.body.name !== undefined ? { name: req.body.name } : {}),
-          ...(req.body.handle !== undefined ? { handle: req.body.handle } : {}),
+          ...(req.body.handle !== undefined ? { handle: req.body.handle.toLowerCase() } : {}),
           ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
           ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
         }, {
@@ -207,7 +207,11 @@ router.get(
         },
         include: [{
           model: Recipe,
-          as: 'recipe'
+          as: 'recipe',
+          include: [{
+            model: Image,
+            as: 'images',
+          }],
         }, {
           model: Label,
           as: 'label'
@@ -217,8 +221,8 @@ router.get(
       // Note: Should be the same as /profile/:userId
       res.status(200).json({
         id: user.id,
-        incomingFriendship: false,
-        outgoingFriendship: false,
+        incomingFriendship: true,
+        outgoingFriendship: true,
         isMe: true,
         name: user.name,
         handle: user.handle,
@@ -238,7 +242,7 @@ const getUserProfile = async (req, res, next) => {
     if (req.params.handle) {
       const user = await User.findOne({
         where: {
-          handle: req.params.handle,
+          handle: req.params.handle.toLowerCase(),
         }
       });
       if (!user) {
@@ -274,22 +278,28 @@ const getUserProfile = async (req, res, next) => {
     let outgoingFriendship = false;
     let incomingFriendship = false;
     if (res.locals.session && res.locals.session.userId) {
-      const incoming = await Friendship.findOne({
-        where: {
-          userId: profileUserId,
-          friendId: res.locals.session.userId
-        }
-      });
-      incomingFriendship = !!incoming;
+      // User is always "friends" with themselves
+      if (res.locals.session.userId === profileUserId) {
+        incomingFriendship = true;
+        outgoingFriendship = true;
+      } else {
+        const incoming = await Friendship.findOne({
+          where: {
+            userId: profileUserId,
+            friendId: res.locals.session.userId
+          }
+        });
+        incomingFriendship = !!incoming;
 
-      const outgoing = await Friendship.findOne({
-        where: {
-          userId: res.locals.session.userId,
-          friendId: profileUserId
-        }
-      });
+        const outgoing = await Friendship.findOne({
+          where: {
+            userId: res.locals.session.userId,
+            friendId: profileUserId
+          }
+        });
 
-      outgoingFriendship = !!outgoing;
+        outgoingFriendship = !!outgoing;
+      }
     }
 
     const profileItems = await ProfileItem.findAll({
@@ -299,7 +309,11 @@ const getUserProfile = async (req, res, next) => {
       },
       include: [{
         model: Recipe,
-        as: 'recipe'
+        as: 'recipe',
+        include: [{
+          model: Image,
+          as: 'images',
+        }],
       }, {
         model: Label,
         as: 'label'
@@ -492,7 +506,7 @@ router.get(
     try {
       const user = await User.findOne({
         where: {
-          handle: req.params.handle,
+          handle: req.params.handle.toLowerCase(),
         },
         attributes: ['id'],
       });
@@ -957,5 +971,28 @@ router.delete(
     res.status(200).send("ok");
   }).catch(next);
 });
+
+/* Get public user listing by id */
+router.get(
+  '/:userId',
+  cors(),
+  async (req, res, next) => {
+    try {
+      const user = await User.findByPk(req.params.userId, {
+        attributes: ['id', 'name', 'handle']
+      })
+
+      if (!user) {
+        const notFoundErr = new Error('User not found');
+        notFoundErr.status = 404;
+        throw notFoundErr;
+      }
+
+      res.status(200).json(user);
+    } catch(err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = router;

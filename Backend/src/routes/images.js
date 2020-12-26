@@ -32,8 +32,13 @@ router.post('/',
         throw e;
       }
     } else {
-      await UtilService.upload('image', req, res, encodeInHighRes);
-      file = req.file;
+      try {
+        await UtilService.upload('image', req, res, encodeInHighRes);
+        file = req.file;
+      } catch (e) {
+        e.status = 415;
+        throw e;
+      }
     }
 
     if (!file) {

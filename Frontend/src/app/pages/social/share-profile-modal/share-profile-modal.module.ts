@@ -1,24 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 
-import { NewMessageModalPage } from './new-message-modal.page';
-import { SelectUserModule } from '@/components/select-user/select-user.module';
+import { ShareProfileModalPage } from './share-profile-modal.page';
 
 @NgModule({
   declarations: [
-    NewMessageModalPage,
+    ShareProfileModalPage,
   ],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
-    SelectUserModule,
   ],
   entryComponents: [
-    NewMessageModalPage,
+    ShareProfileModalPage,
   ],
 })
-export class NewMessageModalPageModule {}
+export class ShareProfileModalPageModule {}

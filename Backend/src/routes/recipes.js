@@ -197,11 +197,13 @@ router.get(
         throw mustBeLoggedInError;
       }
 
-      let userId = res.locals.session ? res.locals.session.userId : null;
+      const myUserId = res.locals.session ? res.locals.session.userId : null;
+      let userId = myUserId;
       let folder = req.query.folder || 'main';
       let labelFilter = req.query.labels ? req.query.labels.split(',') : [];
 
-      if (req.query.userId) {
+      // Only check for shared items if we're browsing another user's recipes
+      if (req.query.userId && myUserId !== req.query.userId) {
         const user = await User.findByPk(req.query.userId);
         userId = user.id;
 
@@ -395,56 +397,108 @@ router.get(
 router.get(
   '/search',
   cors(),
-  MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
-    ElasticService.searchRecipes(res.locals.session.userId, req.query.query).then(results => {
-      let searchHits = results.body.hits.hits;
+  MiddlewareService.validateSession(['user'], true),
+  async (req, res, next) => {
+    try {
+      if (!res.locals.session && !req.query.userId) {
+        const mustBeLoggedInError = new Error('You must be logged in to request this resource');
+        mustBeLoggedInError.status = 400;
+        throw mustBeLoggedInError;
+      }
 
-      let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
-        acc[hit._id] = hit;
-        return acc;
-      }, {});
+      const myUserId = res.locals.session ? res.locals.session.userId : null;
+      let userId = myUserId;
+      let labels = req.query.labels ? req.query.labels.split(',') : [];
 
-      let labelFilter = {}
-      if (req.query.labels) {
-        labelFilter.where = {
-          title: req.query.labels.split(',')
+      // Only check for shared items if we're browsing another user's recipes
+      if (req.query.userId && myUserId !== req.query.userId) {
+        const user = await User.findByPk(req.query.userId);
+        userId = user.id;
+
+        let userIsFriend = false;
+        if (res.locals.session) userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
+
+        let labelId;
+        if (labels.length > 1) {
+          const tooManyLabelsErr = new Error("Can view maximum 1 label at a time from another user's profile");
+          tooManyLabelsErr.status = 400;
+          return next(tooManyLabelsErr);
+        } else if (labels.length > 0) {
+          const label = await Label.findOne({
+            where: {
+              title: labels[0],
+              userId
+            }
+          });
+          labelId = label.id;
+        }
+
+        const profileItem = await ProfileItem.findOne({
+          where: {
+            userId,
+            ...(userIsFriend ? {} : { visibility: "public" }),
+            ...(labelId ? { type: "label", labelId } : { type: "all-recipes" })
+          }
+        });
+
+        if (!profileItem) {
+          const profileItemNotFound = new Error("Profile item not found or not visible");
+          profileItemNotFound.status = 404;
+          return next(profileItemNotFound);
         }
       }
 
-      return Recipe.findAll({
-        where: {
-          id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
-          userId: res.locals.session.userId,
-          folder: 'main'
-        },
-        include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id', 'title']
-        }, {
-          model: Label,
-          as: 'label_filter',
-          attributes: [],
-          ...labelFilter
-        }, {
-          model: Image,
-          as: 'images',
-          attributes: ['id', 'location']
-        }],
-        limit: 200
-      }).then(recipes => {
-        recipes = recipes.map(UtilService.sortRecipeImages);
+      ElasticService.searchRecipes(userId, req.query.query).then(results => {
+        let searchHits = results.body.hits.hits;
 
-        recipes = recipes.map(applyLegacyImageField);
+        let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
+          acc[hit._id] = hit;
+          return acc;
+        }, {});
 
-        res.status(200).send({
-          data: recipes.sort((a, b) => {
-            return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
-          })
-        });
-      })
-    }).catch(next);
+        let labelFilter = {}
+        if (req.query.labels) {
+          labelFilter.where = {
+            title: labels
+          }
+        }
+
+        return Recipe.findAll({
+          where: {
+            id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
+            userId,
+            folder: 'main'
+          },
+          include: [{
+            model: Label,
+            as: 'labels',
+            attributes: ['id', 'title']
+          }, {
+            model: Label,
+            as: 'label_filter',
+            attributes: [],
+            ...labelFilter
+          }, {
+            model: Image,
+            as: 'images',
+            attributes: ['id', 'location']
+          }],
+          limit: 200
+        }).then(recipes => {
+          recipes = recipes.map(UtilService.sortRecipeImages);
+
+          recipes = recipes.map(applyLegacyImageField);
+
+          res.status(200).send({
+            data: recipes.sort((a, b) => {
+              return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
+            })
+          });
+        })
+      }).catch(next);
+    } catch(err) {
+      next(err);
+    }
   }
 )
 

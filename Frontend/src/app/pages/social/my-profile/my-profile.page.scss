@@ -50,3 +50,16 @@ multi-image-upload {
     }
   }
 }
+
+.profile-items-list {
+  ion-item {
+    ion-button, ion-reorder {
+      margin-left: 16px;
+    }
+  }
+}
+
+.item-icon {
+  width: 40px;
+  margin-right: 16px;
+}
