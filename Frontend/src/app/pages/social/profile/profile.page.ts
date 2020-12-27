@@ -63,7 +63,9 @@ export class ProfilePage {
       403: () => this.profileDisabledError()
     });
 
-    this.myProfile = await this.userService.getMyProfile();
+    this.myProfile = await this.userService.getMyProfile({
+      401: () => {},
+    });
 
     loading.dismiss();
   }
