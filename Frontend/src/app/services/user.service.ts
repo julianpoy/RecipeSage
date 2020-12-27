@@ -163,7 +163,7 @@ export class UserService {
     }).then(response => response.data);
   }
 
-  async getMyProfile(): Promise<UserProfile> {
+  async getMyProfile(errorHandlers?: ErrorHandlers): Promise<UserProfile> {
     const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
 
     try {
@@ -174,7 +174,7 @@ export class UserService {
 
       return data;
     } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
     }
   }
 
