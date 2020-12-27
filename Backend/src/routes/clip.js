@@ -9,7 +9,7 @@ const loggerService = require('../services/logger');
 
 const clipRecipe = async clipUrl => {
   const browser = await puppeteer.connect({
-    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`
+    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds`
   });
 
   const page = await browser.newPage();
