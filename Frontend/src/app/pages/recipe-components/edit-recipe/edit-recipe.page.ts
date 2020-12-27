@@ -183,6 +183,21 @@ export class EditRecipePage {
     this.unsavedChangesService.clearPendingChanges();
   }
 
+  isValidHttpUrl(input: string) {
+    let url;
+
+    // Fallback for browsers without URL constructor
+    if (!URL) return true;
+
+    try {
+      url = new URL(input);
+    } catch (err) {
+      return false;
+    }
+
+    return url.protocol.startsWith('http');
+  }
+
   async clipFromUrl() {
     const clipPrompt = await this.alertCtrl.create({
       header: 'Autofill fields from URL',
@@ -198,7 +213,15 @@ export class EditRecipePage {
         role: 'cancel',
       }, {
         text: 'Ok',
-        handler: data => {
+        handler: async data => {
+          const { url } = data;
+          if (!url || !this.isValidHttpUrl(url)) {
+            (await this.toastCtrl.create({
+              message: 'Error: You must provide a valid URL',
+              duration: 5000
+            })).present();
+            return;
+          }
           this._clipFromUrl(data.url);
         }
       }]

@@ -9,7 +9,7 @@ const loggerService = require('../services/logger');
 
 const clipRecipe = async clipUrl => {
   const browser = await puppeteer.connect({
-    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`
+    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds`
   });
 
   const page = await browser.newPage();
@@ -63,7 +63,12 @@ const clipRecipe = async clipUrl => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const recipeData = await clipRecipe(req.query.url);
+    const url = (req.query.url || "").trim();
+    if (!url) {
+      return res.status(400).send("Must provide a URL");
+    }
+
+    const recipeData = await clipRecipe(url);
 
     res.status(200).json(recipeData);
   } catch(e) {
