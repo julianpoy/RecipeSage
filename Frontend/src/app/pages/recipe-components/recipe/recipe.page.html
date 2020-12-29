@@ -34,8 +34,8 @@
             <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>Source: </b>
-                <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
-                <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
+                <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+                <span *ngIf='!recipe.url?.trim()'>{{ recipe.source }}</span>
               </p>
             </ion-col>
             <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
@@ -59,8 +59,8 @@
           <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
             <p>
               <b>Source: </b>
-              <a *ngIf='recipe.url.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
-              <span *ngIf='!recipe.url.trim()'>{{ recipe.source }}</span>
+              <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank">{{ recipe.source.trim() || recipe.url }}</a>
+              <span *ngIf='!recipe.url?.trim()'>{{ recipe.source }}</span>
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
