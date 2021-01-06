@@ -32,7 +32,7 @@
     "@ionic/angular": "^5.3.4",
     "@ngx-loading-bar/core": "^4.2.0",
     "@sentry/browser": "^5.7.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "blueimp-load-image": "^2.26.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.25",
