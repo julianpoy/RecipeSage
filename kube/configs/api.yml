@@ -34,6 +34,8 @@ spec:
           value: "rs-browserless"
         - name: BROWSERLESS_PORT
           value: "3000"
+        - name: INGREDIENT_INSTRUCTION_CLASSIFIER_URL
+          value: http://ingredient-instruction-classifier:3000/
         volumeMounts:
         - name: firebase-credentials
           mountPath: /app/Backend/src/config/firebase-credentials.json

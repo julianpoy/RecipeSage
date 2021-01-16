@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
 const puppeteer = require('puppeteer-core');
 
@@ -7,14 +8,43 @@ const RecipeClipper = require('@julianpoy/recipe-clipper');
 
 const loggerService = require('../services/logger');
 
+const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+
 const clipRecipe = async clipUrl => {
   const browser = await puppeteer.connect({
-    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds`
+    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`
   });
 
   const page = await browser.newPage();
 
   await page.setBypassCSP(true);
+
+  await page.setRequestInterception(true);
+  page.on('request', async interceptedRequest => {
+    if (interceptedRequest.url() === INTERCEPT_PLACEHOLDER_URL) {
+      try {
+        const response = await fetch(process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: interceptedRequest.postData(),
+        });
+
+        const text = await response.text();
+
+        interceptedRequest.respond({
+          content: 'application/json',
+          body: text
+        });
+      } catch(e) {
+        console.log("Error while classifying", e);
+        request.abort();
+      }
+    } else {
+      interceptedRequest.continue();
+    }
+  });
 
   try {
     await page.goto(clipUrl, {
@@ -45,9 +75,10 @@ const clipRecipe = async clipUrl => {
   }`);
 
   await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
-  const recipeData = await page.evaluate(() => {
+  const recipeData = await page.evaluate((interceptUrl) => {
+    window.RC_ML_CLASSIFY_ENDPOINT = interceptUrl;
     return window.RecipeClipper.clipRecipe();
-  });
+  }, INTERCEPT_PLACEHOLDER_URL);
 
   console.log(JSON.stringify(recipeData));
 
