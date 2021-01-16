@@ -69,6 +69,7 @@ services:
       - BROWSERLESS_PORT=3000
       - GRAYLOG_HOST=graylog
       - GRAYLOG_PORT=12201
+      - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
       - ./SharedUtils/package.json:/app/SharedUtils/package.json
@@ -104,6 +105,8 @@ services:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10
       - DEFAULT_BLOCK_ADS=true
+  ingredient-instruction-classifier:
+    image: julianpoy/ingredient-instruction-classifier:latest
 
 
   graylog_mongodb:
