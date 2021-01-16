@@ -46,6 +46,7 @@
     "multer-imager": "git+https://git@github.com/julianpoy/multer-imager.git",
     "multer-s3": "^2.9.0",
     "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.1",
     "pg": "7.17.1",
     "pg-hstore": "^2.3.3",
     "pug": "^2.0.4",
