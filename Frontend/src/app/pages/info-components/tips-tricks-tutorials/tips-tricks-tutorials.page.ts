@@ -22,6 +22,12 @@ export class TipsTricksTutorialsPage {
     public navCtrl: NavController,
   ) {
     this.tutorials = [{
+      title: 'General FAQ',
+      description: 'Common questions we receive',
+      icon: 'help-outline',
+      tag: 'faq',
+      type: TutorialType.GeneralFAQ,
+    }, {
       title: 'My Recipes Page',
       description: 'The main page of RecipeSage',
       icon: 'book',
@@ -51,12 +57,6 @@ export class TipsTricksTutorialsPage {
       icon: 'cut',
       tag: 'webExtension',
       type: TutorialType.BrowserExtension,
-    }, {
-      title: 'General FAQ',
-      description: 'Common questions we receive',
-      icon: 'help-outline',
-      tag: 'faq',
-      type: TutorialType.GeneralFAQ,
     }];
 
     this.tutorialsByTag = {};
