@@ -17,7 +17,7 @@
   <ion-list *ngIf="!itemType">
     <ion-radio-group (ionChange)="itemType = $event?.detail?.value">
       <ion-list-header>
-        <ion-item>
+        <ion-item lines="none">
           <ion-icon name="folder-open" slot="start"></ion-icon>
           <ion-label>What Would You Like to Share?</ion-label>
         </ion-item>
@@ -94,6 +94,9 @@
 </ion-content>
 
 <ion-footer class="ion-padding">
+  <p>
+    By adding this item, you agree to the <a href="/#/legal" (click)="cancel();">RecipeSage Sharing Policy</a>.
+  </p>
   <ion-button expand="block" (click)="done()" [disabled]="!isValid()">
     <ion-icon name="checkmark" slot="start"></ion-icon>
     <ion-label>
