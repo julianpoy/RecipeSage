@@ -16,6 +16,7 @@ spec:
             memory: 100Mi
           limits:
             cpu: 100m
+            memory: 1G
         envFrom:
         - secretRef:
             name: rs-api-env
