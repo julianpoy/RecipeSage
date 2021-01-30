@@ -58,4 +58,4 @@ spec:
   - type: Resource
     resource:
       name: memory
-      targetAverageUtilization: 50 # Percentage of request
+      targetAverageUtilization: 65 # Percentage of request
