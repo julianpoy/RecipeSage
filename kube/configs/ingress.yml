@@ -48,21 +48,6 @@ metadata:
 spec:
   rules:
   - http:
-  - host: recipesage.com
-    http:
-      paths:
-      - path: /grip/()(ws)
-        backend:
-          serviceName: rs-pushpin
-          servicePort: 7999
-      - path: /api(/|$)(.*)
-        backend:
-          serviceName: rs-api
-          servicePort: 3000
-      - path: /()(.*)
-        backend:
-          serviceName: rs-static-proxy
-          servicePort: 80
   - host: api.recipesage.com
     http:
       paths:
