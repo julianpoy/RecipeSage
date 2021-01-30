@@ -105,6 +105,13 @@ services:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10
       - DEFAULT_BLOCK_ADS=true
+      - DEFAULT_LAUNCH_ARGS=["--disable-web-security"]
+      - WORKSPACE_DELETE_EXPIRED=true
+      - WORKSPACE_EXPIRE_DAYS=1
+      - EXIT_ON_HEALTH_FAILURE=true
+      - PREBOOT_CHROME=true
+      - KEEP_ALIVE=true
+      - FUNCTION_ENABLE_INCOGNITO_MODE=true
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
 

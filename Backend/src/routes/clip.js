@@ -10,86 +10,109 @@ const loggerService = require('../services/logger');
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 
-const clipRecipe = async clipUrl => {
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`
-  });
-
-  const page = await browser.newPage();
-
-  await page.setBypassCSP(true);
-
-  await page.setRequestInterception(true);
-  page.on('request', async interceptedRequest => {
-    if (interceptedRequest.url() === INTERCEPT_PLACEHOLDER_URL) {
-      try {
-        const response = await fetch(process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: interceptedRequest.postData(),
-        });
-
-        const text = await response.text();
-
-        interceptedRequest.respond({
-          content: 'application/json',
-          body: text
-        });
-      } catch(e) {
-        console.log("Error while classifying", e);
-        request.abort();
-      }
-    } else {
-      interceptedRequest.continue();
-    }
-  });
-
+const disconnectPuppeteer = (browser) => {
   try {
-    await page.goto(clipUrl, {
-      waitUntil: "networkidle2",
-      timeout: 25000
-    });
-  } catch(err) {
-    console.log("Timed out", err);
-    loggerService.capture("Clip failed", {
+    browser.disconnect();
+  } catch(e) {
+    loggerService.capture("Error while disconnecting from browserless", {
       level: 'warning',
-      err,
       data: {
+        error: e
+      }
+    });
+  }
+};
+
+const clipRecipe = async clipUrl => {
+  let browser;
+  try {
+    browser = await puppeteer.connect({
+      browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`
+    });
+
+    const page = await browser.newPage();
+
+    await page.setBypassCSP(true);
+
+    await page.setRequestInterception(true);
+    page.on('request', async interceptedRequest => {
+      if (interceptedRequest.url() === INTERCEPT_PLACEHOLDER_URL) {
+        try {
+          const response = await fetch(process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: interceptedRequest.postData(),
+          });
+
+          const text = await response.text();
+
+          interceptedRequest.respond({
+            content: 'application/json',
+            body: text
+          });
+        } catch(e) {
+          console.log("Error while classifying", e);
+          request.abort();
+        }
+      } else {
+        interceptedRequest.continue();
+      }
+    });
+
+    try {
+      await page.goto(clipUrl, {
+        waitUntil: "networkidle2",
+        timeout: 25000
+      });
+    } catch(err) {
+      err.status = 400;
+      loggerService.capture("Clip failed", {
+        level: 'warning',
+        err,
+        data: {
+          clipUrl
+        }
+      });
+      throw err;
+    }
+
+    await page.evaluate(`() => {
+      try {
+        // Force lazyload for content listening to scroll
+        window.scrollTo(0, document.body.scrollHeight);
+      } catch(e) {}
+
+      try {
+        // Fix UMD for sites that define reserved names globally
+        window.define = null;
+        window.exports = null;
+      } catch(e) {}
+    }`);
+
+    await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
+    const recipeData = await page.evaluate((interceptUrl) => {
+      window.RC_ML_CLASSIFY_ENDPOINT = interceptUrl;
+      return window.RecipeClipper.clipRecipe();
+    }, INTERCEPT_PLACEHOLDER_URL);
+
+    loggerService.capture("Clip success", {
+      level: 'info',
+      data: {
+        recipeData,
         clipUrl
       }
     });
-    err.status = 400;
-    throw err;
+
+    disconnectPuppeteer(browser);
+
+    return recipeData;
+  } catch (e) {
+    disconnectPuppeteer(browser);
+
+    throw e;
   }
-
-  await page.evaluate(`() => {
-    try {
-      // Force lazyload for content listening to scroll
-      window.scrollTo(0, document.body.scrollHeight);
-      // Fix UMD for sites that define reserved names globally
-      window.define = null;
-      window.exports = null;
-    } catch(e) {}
-  }`);
-
-  await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
-  const recipeData = await page.evaluate((interceptUrl) => {
-    window.RC_ML_CLASSIFY_ENDPOINT = interceptUrl;
-    return window.RecipeClipper.clipRecipe();
-  }, INTERCEPT_PLACEHOLDER_URL);
-
-  console.log(JSON.stringify(recipeData));
-
-  loggerService.capture("Clip success", {
-    level: 'info',
-    data: {
-      recipeData,
-      clipUrl
-    }
-  });
-  return recipeData;
 };
 
 router.get('/', async (req, res, next) => {

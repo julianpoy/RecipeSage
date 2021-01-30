@@ -54,4 +54,8 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 100
+      targetAverageUtilization: 100 # Percentage of request
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 65 # Percentage of request
