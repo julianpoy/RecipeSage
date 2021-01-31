@@ -11,6 +11,7 @@ export class EditRecipePopoverPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;
 
+  canAddImages;
   addImageByUrlPrompt;
 
   constructor(

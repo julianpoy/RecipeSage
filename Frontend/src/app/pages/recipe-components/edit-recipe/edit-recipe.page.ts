@@ -301,19 +301,8 @@ export class EditRecipePage {
         },
         {
           text: 'Add',
-          handler: async data => {
-            if (data.imageUrl?.trim()) {
-              const loading = await this.loadingCtrl.create({
-                message: 'Downloading image...'
-              });
-              await loading.present();
-
-              try {
-                await this.addImageByUrl(data.imageUrl.trim());
-              } catch(e){}
-
-              loading.dismiss();
-            }
+          handler: data => {
+            this._addImageByUrlPrompt(data);
           }
         }
       ]
@@ -322,10 +311,38 @@ export class EditRecipePage {
     await alert.present();
   }
 
+  async _addImageByUrlPrompt(data) {
+    if (!data.imageUrl?.trim()) return;
+
+    const imageUrl = data.imageUrl.trim();
+
+    if (this.isValidHttpUrl(imageUrl)) {
+      const loading = await this.loadingCtrl.create({
+        message: 'Downloading image...'
+      });
+      await loading.present();
+
+      try {
+        await this.addImageByUrl(imageUrl);
+      } catch(e){}
+
+      loading.dismiss();
+    } else {
+      const invalidUrlToast = await this.toastCtrl.create({
+        message: 'Please enter a valid image URL',
+        duration: 5000
+      });
+      invalidUrlToast.present();
+    }
+  }
+
   async presentPopover(event) {
+    const canAddImages = this.images.length < 10 && (this.images.length === 0 || this.capabilitiesService.capabilities.multipleImages);
+
     const popover = await this.popoverCtrl.create({
       component: EditRecipePopoverPage,
       componentProps: {
+        canAddImages,
         addImageByUrlPrompt: this.addImageByUrlPrompt.bind(this),
       },
       event
