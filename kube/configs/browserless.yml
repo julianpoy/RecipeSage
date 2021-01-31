@@ -60,7 +60,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-browserless
@@ -75,8 +75,6 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 200 # Percentage of request
-  - type: Resource
-    resource:
-      name: memory
-      targetAverageUtilization: 150 # Percentage of request
+      target:
+        type: Utilization
+        averageValue: 400m
