@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
+import { NavController, ToastController, AlertController, PopoverController, LoadingController } from '@ionic/angular';
 
 import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
@@ -9,6 +9,8 @@ import { LoadingService } from '@/services/loading.service';
 import { UnsavedChangesService } from '@/services/unsaved-changes.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { ImageService } from '@/services/image.service';
+
+import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
 
 @Component({
   selector: 'page-edit-recipe',
@@ -31,6 +33,7 @@ export class EditRecipePage {
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public popoverCtrl: PopoverController,
     public utilService: UtilService,
     public unsavedChangesService: UnsavedChangesService,
     public loadingCtrl: LoadingController,
@@ -198,6 +201,11 @@ export class EditRecipePage {
     return url.protocol.startsWith('http');
   }
 
+  async addImageByUrl(url: string) {
+    const image = await this.imageService.createFromUrl(url);
+    this.images.push(image);
+  }
+
   async clipFromUrl() {
     const clipPrompt = await this.alertCtrl.create({
       header: 'Autofill fields from URL',
@@ -246,8 +254,7 @@ export class EditRecipePage {
 
       if (fields.imageURL?.trim()) {
         try {
-          const image = await this.imageService.createFromUrl(fields.imageURL);
-          this.images.push(image);
+          await this.addImageByUrl(fields.imageURL);
         } catch(err) {
           console.log('Error clipping image:', err);
         }
@@ -275,5 +282,72 @@ export class EditRecipePage {
       }
     }
     loading.dismiss();
+  }
+
+  async addImageByUrlPrompt() {
+    const alert = await this.alertCtrl.create({
+      header: 'Add Image by URL',
+      message: 'Enter an image URL to be added to the recipe',
+      inputs: [
+        {
+          name: 'imageUrl',
+          placeholder: 'Image URL'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => { }
+        },
+        {
+          text: 'Add',
+          handler: data => {
+            this._addImageByUrlPrompt(data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async _addImageByUrlPrompt(data) {
+    if (!data.imageUrl?.trim()) return;
+
+    const imageUrl = data.imageUrl.trim();
+
+    if (this.isValidHttpUrl(imageUrl)) {
+      const loading = await this.loadingCtrl.create({
+        message: 'Downloading image...'
+      });
+      await loading.present();
+
+      try {
+        await this.addImageByUrl(imageUrl);
+      } catch(e){}
+
+      loading.dismiss();
+    } else {
+      const invalidUrlToast = await this.toastCtrl.create({
+        message: 'Please enter a valid image URL',
+        duration: 5000
+      });
+      invalidUrlToast.present();
+    }
+  }
+
+  async presentPopover(event) {
+    const canAddImages = this.images.length < 10 && (this.images.length === 0 || this.capabilitiesService.capabilities.multipleImages);
+
+    const popover = await this.popoverCtrl.create({
+      component: EditRecipePopoverPage,
+      componentProps: {
+        canAddImages,
+        addImageByUrlPrompt: this.addImageByUrlPrompt.bind(this),
+      },
+      event
+    });
+
+    await popover.present();
   }
 }
