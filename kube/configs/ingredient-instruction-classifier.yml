@@ -15,9 +15,14 @@ spec:
     spec:
       containers:
       - name: rs-ingredient-instruction-classifier
-        image: julianpoy/ingredient-instruction-classifier:1.0.5
+        image: julianpoy/ingredient-instruction-classifier:1.1.0
         ports:
         - containerPort: 3000
+        env:
+        - name: SENTENCE_EMBEDDING_BATCH_SIZE
+          value: "100"
+        - name: PREDICTION_CONCURRENCY
+          value: "1"
         resources:
           requests:
             cpu: 500m
