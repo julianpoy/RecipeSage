@@ -62,7 +62,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-api
@@ -72,9 +72,11 @@ spec:
     kind: Deployment
     name: rs-api
   minReplicas: 2
-  maxReplicas: 3
+  maxReplicas: 4
   metrics:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 100
+      target:
+        type: Utilization
+        averageValue: 500m
