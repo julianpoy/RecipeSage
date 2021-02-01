@@ -145,7 +145,6 @@ export class RecipePage {
 
         resolve();
       }).catch(async err => {
-        console.log(err);
         switch (err.response.status) {
           case 0:
             const offlineToast = await this.toastCtrl.create({
