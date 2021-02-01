@@ -581,7 +581,8 @@ export class RecipePage {
     return new Promise((resolve, reject) => {
       this.recipeService.create({
         ...this.recipe,
-        imageIds: this.recipe.images.map(image => image.id)
+        imageIds: this.recipe.images.map(image => image.id),
+        labels: this.recipe.isOwner ? this.recipe.labels.map(label => label.title) : [],
       }).then(response => {
         resolve();
 

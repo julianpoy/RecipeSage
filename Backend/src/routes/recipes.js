@@ -11,6 +11,7 @@ var SQ = require('../models').sequelize;
 var User = require('../models').User;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
+var Recipe_Label = require('../models').Recipe_Label;
 var Image = require('../models').Image;
 var Recipe_Image = require('../models').Recipe_Image;
 var Friendship = require('../models').Friendship;
@@ -153,6 +154,40 @@ router.post(
         recipeId: recipe.id,
         order: idx
       })), {
+        transaction
+      });
+    }
+
+    if (req.body.labels && req.body.labels.length > 0 && !req.body.destinationUserEmail) {
+      const sanitizedLabelTitles = req.body.labels.map(title => UtilService.cleanLabelTitle(title || '')).filter(el => el.trim());
+      const labelTitles = [...new Set(sanitizedLabelTitles)]; // Dedupe
+
+      await Label.bulkCreate(labelTitles.map(title => ({
+        userId: res.locals.session.userId,
+        title,
+      })), {
+        ignoreDuplicates: true,
+        transaction,
+      });
+
+      const labels = await Label.findAll({
+        where: {
+          userId: res.locals.session.userId,
+          title: labelTitles,
+        },
+        attributes: ['id'],
+        transaction,
+      });
+
+      if (labels.length !== labelTitles.length) {
+        throw new Error("Labels length did not match labelTitles length. Orphaned labels!");
+      }
+
+      await Recipe_Label.bulkCreate(labels.map(label => ({
+        recipeId: recipe.id,
+        labelId: label.id
+      })), {
+        ignoreDuplicates: true,
         transaction
       });
     }
