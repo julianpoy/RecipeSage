@@ -20,6 +20,7 @@ import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-detai
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
 import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
+import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
 
 @Component({
   selector: 'page-recipe',
@@ -282,12 +283,22 @@ export class RecipePage {
     return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx);
   }
 
-  changeScale() {
-    this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
-      this.scale = scale;
-      this.recipeCompletionTrackerService.setRecipeScale(this.recipeId, scale);
-      this.applyScale();
+  async changeScale() {
+    const popover = await this.popoverCtrl.create({
+      component: ScaleRecipeComponent,
+      componentProps: {
+        scale: this.scale.toString()
+      }
     });
+
+    await popover.present();
+    const { data } = await popover.onDidDismiss();
+
+    if (data?.scale) {
+      this.scale = data.scale;
+      this.recipeCompletionTrackerService.setRecipeScale(this.recipeId, this.scale);
+      this.applyScale();
+    }
   }
 
   applyScale() {
