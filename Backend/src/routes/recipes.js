@@ -158,7 +158,7 @@ router.post(
       });
     }
 
-    if (req.body.labels && req.body.labels.length > 0) {
+    if (req.body.labels && req.body.labels.length > 0 && !req.body.destinationUserEmail) {
       const sanitizedLabelTitles = req.body.labels.map(title => UtilService.cleanLabelTitle(title || '')).filter(el => el.trim());
       const labelTitles = [...new Set(sanitizedLabelTitles)]; // Dedupe
 
