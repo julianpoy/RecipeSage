@@ -149,6 +149,7 @@ router.get('/:recipeId',
 
       recipe.instructions = SharedUtils.parseInstructions(sanitizeHtml(recipe.instructions));
       recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), 1, true);
+      recipe.notes = SharedUtils.parseNotes(sanitizeHtml(recipe.notes));
 
       if (!modifiers.titleImage) {
         recipe.images = [];

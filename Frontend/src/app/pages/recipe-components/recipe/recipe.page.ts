@@ -37,7 +37,7 @@ export class RecipePage {
   recipeId: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
-  notes: string;
+  notes;
 
   scale = 1;
 
@@ -132,7 +132,11 @@ export class RecipePage {
         }
 
         if (this.recipe.notes && this.recipe.notes.length > 0) {
-          this.notes = linkifyStr(this.recipe.notes);
+          this.notes = this.recipeService.parseNotes(this.recipe.notes)
+            .map(note => ({
+              ...note,
+              content: linkifyStr(note.content),
+            }));
         }
 
         this.applyScale();
@@ -141,6 +145,7 @@ export class RecipePage {
 
         resolve();
       }).catch(async err => {
+        console.log(err);
         switch (err.response.status) {
           case 0:
             const offlineToast = await this.toastCtrl.create({

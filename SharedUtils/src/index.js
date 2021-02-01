@@ -228,9 +228,35 @@ function parseInstructions(instructions) {
   });
 }
 
+function parseNotes(notes) {
+  // Starts with [, anything inbetween, ends with ]
+  var headerRegexp = /^\[.*\]$/;
+
+  return notes.split(/\r?\n/).map(note => {
+    let line = note.trim();
+    var headerMatches = line.match(headerRegexp);
+
+    if (headerMatches && headerMatches.length > 0) {
+      var header = headerMatches[0];
+      var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+
+      return {
+        content: headerContent,
+        isHeader: true,
+      }
+    } else {
+      return {
+        content: line,
+        isHeader: false,
+      }
+    }
+  });
+}
+
 module.exports = {
   parseIngredients,
   parseInstructions,
+  parseNotes,
   stripIngredient,
   getMeasurementsForIngredient,
   getTitleForIngredient,
