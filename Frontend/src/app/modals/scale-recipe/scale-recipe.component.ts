@@ -8,7 +8,7 @@ import fractionjs from 'fraction.js';
   styleUrls: ['scale-recipe.component.scss']
 })
 export class ScaleRecipeComponent {
-  scale: number;
+  scale: string;
 
   constructor(private popoverCtrl: PopoverController) {}
 
