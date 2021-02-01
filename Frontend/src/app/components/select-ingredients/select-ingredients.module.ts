@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SelectIngredientsComponent } from './select-ingredients.component';
+import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { SelectIngredientsComponent } from './select-ingredients.component';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    ScaleRecipeModule,
   ],
   exports: [
     SelectIngredientsComponent

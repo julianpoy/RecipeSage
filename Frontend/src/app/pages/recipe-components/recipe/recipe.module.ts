@@ -14,6 +14,7 @@ import { PrintRecipeModalPageModule } from '../print-recipe-modal/print-recipe-m
 import { ShareModalPageModule } from '@/pages/share-modal/share-modal.module';
 import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
+import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
     ShareModalPageModule,
     AuthModalPageModule,
     ImageViewerModule,
+    ScaleRecipeModule,
   ],
 })
 export class RecipePageModule {}

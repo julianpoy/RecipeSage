@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
 import { RecipeService, Ingredient } from '../../services/recipe.service';
+
+import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
 
 @Component({
   selector: 'select-ingredients',
@@ -38,13 +41,26 @@ export class SelectIngredientsComponent {
     this.applyScale();
   }
 
-  constructor(public recipeService: RecipeService) {}
+  constructor(
+    private popoverCtrl: PopoverController,
+    public recipeService: RecipeService,
+  ) {}
 
-  changeScale() {
-    this.recipeService.scaleIngredientsPrompt(this.scale, scale => {
-      this.scale = scale;
-      this.applyScale();
+  async changeScale() {
+    const popover = await this.popoverCtrl.create({
+      component: ScaleRecipeComponent,
+      componentProps: {
+        scale: this.scale.toString()
+      }
     });
+
+    await popover.present();
+    const { data } = await popover.onDidDismiss();
+
+    if (data?.scale) {
+      this.scale = data.scale;
+      this.applyScale();
+    }
   }
 
   applyScale(init?: boolean) {

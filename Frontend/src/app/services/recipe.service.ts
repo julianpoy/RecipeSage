@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 
 import { Label } from './label.service';
 
-import fractionjs from 'fraction.js';
 import { HttpService } from './http.service';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { UtilService } from './util.service';
@@ -328,41 +327,5 @@ export class RecipeService {
 
   parseNotes(notes: string): Note[] {
     return parseNotes(notes);
-  }
-
-  async scaleIngredientsPrompt(currentScale: number, cb) {
-    const alert = await this.alertCtrl.create({
-      header: 'Recipe Scale',
-      message: 'Enter a number or fraction to scale the recipe',
-      inputs: [
-        {
-          name: 'scale',
-          value: currentScale.toString(),
-          placeholder: 'Scale'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: () => { }
-        },
-        {
-          text: 'Apply',
-          handler: data => {
-            // Support fractions
-            const parsed = fractionjs(data.scale).valueOf();
-            // Trim long/repeating decimals
-            let rounded = Number(parsed.toFixed(3));
-            // Check for falsy values
-            if (!rounded || rounded <= 0) rounded = 1;
-            // Check for invalid values
-            // rounded = parseFloat(rounded) || 1;
-            cb(rounded);
-          }
-        }
-      ]
-    });
-
-    alert.present();
   }
 }
