@@ -288,7 +288,13 @@ html
     if recipe.notes && !modifiers.hideNotes
       p(class='sans')
         b Notes:
-      p(class='prewrap')= recipe.notes
+      each note in recipe.notes
+        div(class='note')
+          if note.isHeader
+            b= note.content
+          else
+            span= note.content
+      br
 
     if recipe.url && !modifiers.hideSourceURL
       b(class='sans') Source URL:&nbsp;

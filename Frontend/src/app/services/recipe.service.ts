@@ -10,7 +10,7 @@ import { UtilService } from './util.service';
 import { EventService } from './event.service';
 import { Image } from './image.service';
 
-import { parseIngredients, parseInstructions } from '../../../../SharedUtils/src';
+import { parseIngredients, parseInstructions, parseNotes } from '../../../../SharedUtils/src';
 
 export interface Recipe {
   id: string;
@@ -50,6 +50,11 @@ export interface Instruction {
   isHeader: boolean;
   complete: boolean;
   count: number;
+}
+
+export interface Note {
+  content: string;
+  isHeader: boolean;
 }
 
 @Injectable({
@@ -319,6 +324,10 @@ export class RecipeService {
 
   parseInstructions(instructions: string): Instruction[] {
     return parseInstructions(instructions);
+  }
+
+  parseNotes(notes: string): Note[] {
+    return parseNotes(notes);
   }
 
   async scaleIngredientsPrompt(currentScale: number, cb) {

@@ -13,3 +13,8 @@ export function parseInstructions(instructions: string): {
   count: number,
   complete: boolean
 }[];
+
+export function parseNotes(notes: string): {
+  content: string,
+  isHeader: boolean,
+}[];
