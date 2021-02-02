@@ -205,7 +205,9 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
           process: (gm, options, inputStream, outputStream) => {
             let pipeline = sharp()
             pipeline.rotate() // Rotates based on EXIF data
-              .resize(width, height) // Uses object-fit: cover by default
+              .resize(width, height, {
+                fit: highResConversion ? 'inside' : 'cover',
+              })
               .jpeg({
                 quality,
                 // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
