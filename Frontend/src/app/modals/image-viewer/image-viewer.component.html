@@ -13,7 +13,7 @@
   <ion-icon *ngIf="slideNum > 0" (click)="slider.slidePrev()" name="arrow-back" class="back"></ion-icon>
   <ion-slides #slider (ionSlideDidChange)="slideDidChange()" pager="true">
     <ion-slide *ngFor="let imageUrl of imageUrls">
-      <div><img [src]="imageUrl" /></div>
+      <div class="image-container"><img [src]="imageUrl" /></div>
     </ion-slide>
   </ion-slides>
   <ion-icon *ngIf="slideNum < imageUrls.length - 1" (click)="slider.slideNext()" name="arrow-forward" class="forward"></ion-icon>
