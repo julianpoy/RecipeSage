@@ -100,6 +100,6 @@
     </div>
   </ion-toolbar>
   <ion-toolbar class="ion-padding-horizontal" *ngIf="!isLoggedIn()">
-    <ion-button expand="block" disabled="true">Log In/Register to Add Friend</ion-button>
+    <ion-button expand="block" (click)="authAndAddFriend()">Log In/Register to Add Friend</ion-button>
   </ion-toolbar>
 </ion-footer>

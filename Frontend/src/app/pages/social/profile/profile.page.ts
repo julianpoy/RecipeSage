@@ -9,6 +9,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
+import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 
 @Component({
   selector: 'page-profile',
@@ -158,8 +159,57 @@ export class ProfilePage {
     this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
 
+  async setupMyProfileAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Your profile isn\'t setup yet',
+      message: 'To add this user as a friend, you need to setup your profile.',
+      buttons: [{
+        text: 'Cancel',
+      }, {
+        text: 'Setup',
+        handler: () => {
+          this.setupMyProfile();
+        }
+      }]
+    });
+    await alert.present();
+    await alert.onDidDismiss();
+  }
+
   async refresh(refresher) {
     refresher.target.complete();
     this.load();
+  }
+
+  async auth() {
+    const authModal = await this.modalCtrl.create({
+      component: AuthModalPage,
+      componentProps: {
+        register: true
+      }
+    });
+    await authModal.present();
+    await authModal.onDidDismiss();
+  }
+
+  async authAndAddFriend() {
+    await this.auth();
+    await this.load();
+
+    if (this.profile?.incomingFriendship || this.profile?.outgoingFriendship) {
+      const tst = await this.toastCtrl.create({
+        message: 'It looks like you already have a friendship in progress. Please try again.',
+        duration: 3000,
+      });
+      await tst.present();
+      return;
+    }
+
+    if (!this.myProfile?.enableProfile) {
+      this.setupMyProfileAlert();
+      return;
+    }
+
+    await this.addFriend();
   }
 }

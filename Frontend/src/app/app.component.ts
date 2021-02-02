@@ -145,11 +145,15 @@ export class AppComponent {
     });
 
     this.events.subscribe('auth:login', () => {
+      this.updateIsLoggedIn();
+      this.updateNavList();
       this.loadInboxCount();
       this.loadFriendRequestCount();
     });
 
     this.events.subscribe('auth:register', () => {
+      this.updateIsLoggedIn();
+      this.updateNavList();
       this.loadInboxCount();
       this.loadFriendRequestCount();
     });
@@ -248,8 +252,8 @@ export class AppComponent {
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
-      this.updateNavList();
       this.updateIsLoggedIn();
+      this.updateNavList();
 
       this.checkBrowserCompatibility();
 
