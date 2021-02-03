@@ -1,0 +1,24 @@
+const express = require('express');
+const router = express.Router();
+const fetch = require('node-fetch');
+
+router.post('/ingredient-instruction-classifier', async (req, res, next) => {
+  try {
+    const response = await fetch(process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body),
+    });
+
+    const json = await response.json();
+
+    res.status(200).send(json);
+  } catch(e) {
+    next(e);
+  }
+});
+
+module.exports = router;
+

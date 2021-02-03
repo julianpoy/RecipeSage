@@ -33,6 +33,7 @@ var print = require('./routes/print');
 var payments = require('./routes/payments');
 var images = require('./routes/images');
 var clip = require('./routes/clip');
+var proxy = require('./routes/proxy');
 var ws = require('./routes/ws');
 
 var app = express();
@@ -82,6 +83,7 @@ app.use('/print', print);
 app.use('/payments', payments);
 app.use('/images', images);
 app.use('/clip', clip);
+app.use('/proxy', proxy);
 app.use('/ws', ws);
 
 if (!devMode && !testMode) app.use(Raven.errorHandler());
