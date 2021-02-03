@@ -15,21 +15,38 @@ if (window[extensionContainerId]) {
 
   console.log("Loading RecipeSage Browser Extension");
 
+  let shadowRootContainer = document.createElement('div')
+  shadowRootContainer.id = extensionContainerId;
+  let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
+  document.body.appendChild(shadowRootContainer);
+
+  let styles = document.createElement('link');
+  styles.href = chrome.extension.getURL('./inject/clipTool.css');
+  styles.rel = 'stylesheet';
+  styles.type = 'text/css';
+  shadowRoot.appendChild(styles);
+
+  let ionIcons = document.createElement('link');
+  ionIcons.href = 'https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css';
+  ionIcons.rel = 'stylesheet';
+  ionIcons.type = 'text/css';
+  document.head.appendChild(ionIcons);
+  shadowRoot.appendChild(ionIcons.cloneNode());
+
   // Grab our preferences
-  chrome.storage.local.get(['enableAutoSnip'], preferences => {
-    let autoSnipPendingContainer = document.createElement('div');
-    autoSnipPendingContainer.className = "rs-autoSnipPendingContainer";
-    document.body.appendChild(autoSnipPendingContainer);
-
-    let autoSnipPending = document.createElement('div');
-    autoSnipPending.className = "autoSnipPending";
-    autoSnipPending.innerText = "Grabbing Recipe Content...";
-    autoSnipPendingContainer.appendChild(autoSnipPending);
-
-    return;
-
+  chrome.storage.local.get(['disableAutoSnip'], preferences => {
+    let autoSnipPendingContainer;
     let autoSnipPromise = Promise.resolve();
-    if (preferences.enableAutoSnip) {
+    if (!preferences.disableAutoSnip) {
+      autoSnipPendingContainer = document.createElement('div');
+      autoSnipPendingContainer.className = "rs-autoSnipPendingContainer";
+      shadowRoot.appendChild(autoSnipPendingContainer);
+
+      let autoSnipPending = document.createElement('div');
+      autoSnipPending.className = "autoSnipPending";
+      autoSnipPending.innerText = "Grabbing Recipe Content...";
+      autoSnipPendingContainer.appendChild(autoSnipPending);
+
       autoSnipPromise = RecipeClipper.clipRecipe().catch((err) => {
         alert("Error while attempting to automatically clip recipe from page");
       });
@@ -38,7 +55,12 @@ if (window[extensionContainerId]) {
     autoSnipPromise.then(autoSnipResults => {
       autoSnipResults = autoSnipResults || {};
 
-      document.body.removeChild(autoSnipPendingContainer);
+      if (autoSnipPendingContainer) {
+        setTimeout(() => {
+          // Timeout so that overlay doesn't flash in the case of instant (local only) autosnip
+          shadowRoot.removeChild(autoSnipPendingContainer);
+        }, 250);
+      }
 
       let snippersByField = {};
 
@@ -46,7 +68,7 @@ if (window[extensionContainerId]) {
       let currentSnip = {
         url: window.location.href
       };
-      if (preferences.enableAutoSnip) currentSnip = { ...currentSnip, ...autoSnipResults }
+      if (preferences.disableAutoSnip) currentSnip = { ...currentSnip, ...autoSnipResults }
       let isDirty = false;
       let imageURLInput;
 
@@ -127,25 +149,6 @@ if (window[extensionContainerId]) {
       }
 
       let init = () => {
-        let shadowRootContainer = document.createElement('div')
-        shadowRootContainer.id = extensionContainerId;
-        let shadowRoot = shadowRootContainer.attachShadow({ mode: 'closed' })
-        document.body.appendChild(shadowRootContainer);
-
-        let styles = document.createElement('link');
-        styles.href = chrome.extension.getURL('./inject/clipTool.css');
-        styles.rel = 'stylesheet';
-        styles.type = 'text/css';
-        shadowRoot.appendChild(styles);
-
-
-        let ionIcons = document.createElement('link');
-        ionIcons.href = 'https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css';
-        ionIcons.rel = 'stylesheet';
-        ionIcons.type = 'text/css';
-        document.head.appendChild(ionIcons);
-        shadowRoot.appendChild(ionIcons.cloneNode());
-
         container = document.createElement('div')
         container.className = 'rs-chrome-container';
         container.style.display = 'none';
@@ -200,10 +203,10 @@ if (window[extensionContainerId]) {
 
         let autoSnipToggle = document.createElement('input');
         autoSnipToggle.className = "enable-autosnip";
-        autoSnipToggle.checked = preferences.enableAutoSnip;
+        autoSnipToggle.checked = !preferences.disableAutoSnip;
         autoSnipToggle.type = "checkbox";
         autoSnipToggle.onchange = e => {
-          preferences.enableAutoSnip = autoSnipToggle.checked;
+          preferences.disableAutoSnip = !autoSnipToggle.checked;
           savePreferences();
           displayAlert(
             'Preferences saved!',
