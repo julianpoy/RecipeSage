@@ -3,6 +3,25 @@
   contain: content;
 }
 
+.rs-autoSnipPendingContainer {
+  z-index: 99999999999999999999999999 !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: rgba(0,0,0,0.2);
+}
+
+.rs-autoSnipPendingContainer .autoSnipPending {
+  padding: 10px;
+  background-color: white;
+  text-align: center;
+  font-size: 16px;
+  line-height: 18px;
+}
+
 .rs-chrome-container {
   position: fixed;
   right: 10px;
