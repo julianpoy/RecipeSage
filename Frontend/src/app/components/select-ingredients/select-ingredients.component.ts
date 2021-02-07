@@ -81,6 +81,8 @@ export class SelectIngredientsComponent {
     } else {
       this.selectedIngredients.splice(this.selectedIngredients.indexOf(this.scaledIngredients[i]), 1);
     }
+
+    this.selectedIngredientsChange.emit(this.selectedIngredients);
   }
 
   resetAll() {
