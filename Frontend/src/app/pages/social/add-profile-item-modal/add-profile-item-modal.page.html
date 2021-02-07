@@ -94,9 +94,13 @@
 </ion-content>
 
 <ion-footer class="ion-padding">
-  <p>
-    By adding this item, you agree to the <a href="/#/legal" (click)="cancel();">RecipeSage Sharing Policy</a>.
-  </p>
+  <ion-item class="sharing-tos">
+    <ion-label>
+      <p>
+        By adding this item, you agree to the <a href="/#/legal?scrollTo=sharing" (click)="cancel();">RecipeSage Sharing Policy</a>.
+      </p>
+    </ion-label>
+  </ion-item>
   <ion-button expand="block" (click)="done()" [disabled]="!isValid()">
     <ion-icon name="checkmark" slot="start"></ion-icon>
     <ion-label>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
@@ -13,5 +14,19 @@ export class LegalPage {
   isSelfHost = IS_SELFHOST;
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
-  constructor() {}
+  @ViewChild('content') content;
+
+  constructor(
+    public route: ActivatedRoute,
+  ) {}
+
+  ngAfterViewInit() {
+    const scrollToSection = this.route.snapshot.queryParamMap.get('scrollTo');
+
+    if (scrollToSection === 'sharing') {
+      setTimeout(() => {
+        this.content.scrollToBottom(200);
+      });
+    }
+  }
 }
