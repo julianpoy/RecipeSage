@@ -110,11 +110,14 @@ export class AddRecipeToShoppingListModalPage {
 
     const reference = this.reference || Date.now();
 
-    const items = Object.entries(this.selectedIngredientsByRecipe).map(([recipeId, ingredients]) => (ingredients as Ingredient[]).map(ingredient => ({
-      title: ingredient.content,
-      recipeId,
-      reference,
-    }))).flat();
+    const items = Object.entries(this.selectedIngredientsByRecipe)
+      .map(([recipeId, ingredients]) =>
+        (ingredients as Ingredient[]).map(ingredient => ({
+          title: ingredient.content,
+          recipeId,
+          reference,
+        }))
+      ).flat();
 
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
