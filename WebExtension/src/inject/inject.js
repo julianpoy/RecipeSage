@@ -1,7 +1,6 @@
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 var extensionContainerId = "recipeSageBrowserExtensionRootContainer";
 
-window.RC_ML_CLASSIFY_ENDPOINT = "https://api.recipesage.com/proxy/ingredient-instruction-classifier";
 
 if (window[extensionContainerId]) {
   // Looks like a popup already exists. Try to trigger it
@@ -14,6 +13,14 @@ if (window[extensionContainerId]) {
   window[extensionContainerId] = true; // Mark as loading so that we don't create duplicate popups
 
   console.log("Loading RecipeSage Browser Extension");
+
+  const fetchToken = () => {
+    return new Promise(resolve => {
+      chrome.storage.local.get(['token'], (result) => {
+        resolve(result.token);
+      });
+    });
+  }
 
   let shadowRootContainer = document.createElement('div')
   shadowRootContainer.id = extensionContainerId;
@@ -47,8 +54,12 @@ if (window[extensionContainerId]) {
       autoSnipPending.innerText = "Grabbing Recipe Content...";
       autoSnipPendingContainer.appendChild(autoSnipPending);
 
-      autoSnipPromise = RecipeClipper.clipRecipe().catch((err) => {
-        alert("Error while attempting to automatically clip recipe from page");
+      autoSnipPromise = fetchToken().then(token => {
+        window.RC_ML_CLASSIFY_ENDPOINT = "https://api.recipesage.com/proxy/ingredient-instruction-classifier?token=" + token;
+
+        return RecipeClipper.clipRecipe().catch((err) => {
+          alert("Error while attempting to automatically clip recipe from page");
+        });
       });
     }
 
@@ -71,12 +82,6 @@ if (window[extensionContainerId]) {
       if (preferences.disableAutoSnip) currentSnip = { ...currentSnip, ...autoSnipResults }
       let isDirty = false;
       let imageURLInput;
-
-      let fetchToken = (callback) => {
-        chrome.storage.local.get(['token'], function (result) {
-          callback(result.token);
-        });
-      }
 
       savePreferences = cb => {
         chrome.storage.local.set(preferences, cb);
@@ -364,7 +369,7 @@ if (window[extensionContainerId]) {
       }
 
       let submit = () => {
-        fetchToken(token => {
+        fetchToken().then(token => {
           return fetch(`https://api.recipesage.com/recipes?token=${token}`, {
             method: "POST",
             mode: "cors",
