@@ -3,6 +3,32 @@
   contain: content;
 }
 
+.rs-autoSnipPendingContainer {
+  z-index: 99999999999999999999999999 !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0.4);
+}
+
+.rs-autoSnipPendingContainer .autoSnipPending {
+  padding: 20px;
+  background-color: #00a8ff;
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 18px;
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.4);
+}
+
 .rs-chrome-container {
   position: fixed;
   right: 10px;
@@ -10,7 +36,7 @@
   width: 300px;
   padding: 10px;
 
-  z-index: 99999999999999999999999999 !important;
+  z-index: 9999999999999999999999999 !important;
   background: white;
   box-shadow: 1px 1px 12px #666666;
 
