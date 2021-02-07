@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 
+const MiddlewareService = require('../services/middleware');
+
 router.post(
   '/ingredient-instruction-classifier',
   MiddlewareService.validateSession(['user']),
