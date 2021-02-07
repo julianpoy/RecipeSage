@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add Recipe To Shopping List</ion-title>
+    <ion-title>Add Recipe{{ recipes.length > 1 ? 's' : ''}} To Shopping List</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -39,12 +39,19 @@
     </p>
   </div>
 
-  <select-ingredients
-    [ingredients]="recipe.ingredients"
-    [initialScale]="scale"
-    (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
-
   <br />
+
+  <div *ngFor="let recipe of recipes">
+    <div *ngIf="recipes.length > 1">
+      <b>{{recipe.title}}</b>
+    </div>
+    <select-ingredients
+      [ingredients]="recipe.ingredients"
+      [initialScale]="scale"
+      (selectedIngredientsChange)="selectedIngredientsChange(recipe.id, $event)"></select-ingredients>
+    <br />
+    <br />
+  </div>
 </ion-content>
 
 <ion-footer class="ion-padding">
