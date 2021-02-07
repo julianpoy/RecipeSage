@@ -15,6 +15,7 @@ import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-p
 import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
 import { MealPlanItemDetailsModalPage } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
 import { MealPlanBulkPinModalPage } from '@/pages/meal-plan-components/meal-plan-bulk-pin-modal';
+import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 
 @Component({
   selector: 'page-meal-plan',
@@ -201,6 +202,7 @@ export class MealPlanPage {
     if (data?.move) this.startBulkMove();
     if (data?.delete) this.bulkDelete();
     if (data?.pinRecipes) this.bulkPinRecipes();
+    if (data?.bulkAddToShoppingList) this.bulkAddToShoppingList();
   }
 
   async itemClicked(mealItem) {
@@ -262,29 +264,31 @@ export class MealPlanPage {
     return this.selectedDays.map(unix => this.getItemsOnDay(unix).length).reduce((acc, el) => acc + el, 0);
   }
 
+  async emptyDaysSelectedAlert(attemptedAction: string, okCb?: () => any) {
+    const emptyAlert = await this.alertCtrl.create({
+      header: 'Empty day(s) selected',
+      message: `The day(s) you\'ve selected do not contain any meal plan items. To ${attemptedAction}, you\'ll need to select at least one day with meal plan items.`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            if (okCb) okCb();
+          }
+        }
+      ]
+    });
+    await emptyAlert.present();
+  }
+
   async startBulkCopy() {
     this.dayCopyInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      const emptyAlert = await this.alertCtrl.create({
-        header: 'Empty day(s) selected',
-        message: 'The day(s) you\'ve selected do not contain any meal plan items. To copy items, you\'ll need to select at least one day with meal plan items.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok',
-            handler: () => {
-              this.dayCopyInProgress = true;
-              this.selectedDaysInProgress = [...this.selectedDays];
-            }
-          }
-        ]
-      });
-      emptyAlert.present();
-
+      this.emptyDaysSelectedAlert('copy items');
       return;
     }
 
@@ -312,25 +316,7 @@ export class MealPlanPage {
     this.dayMoveInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      const emptyAlert = await this.alertCtrl.create({
-        header: 'Empty day(s) selected',
-        message: 'The day(s) you\'ve selected do not contain any meal plan items. To move items, you\'ll need to select at least one day with meal plan items.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok',
-            handler: () => {
-              this.dayCopyInProgress = true;
-              this.selectedDaysInProgress = [...this.selectedDays];
-            }
-          }
-        ]
-      });
-      emptyAlert.present();
-
+      this.emptyDaysSelectedAlert('move items');
       return;
     }
 
@@ -356,21 +342,7 @@ export class MealPlanPage {
 
   async bulkDelete() {
     if (this.getSelectedMealItemCount() === 0) {
-      const emptyAlert = await this.alertCtrl.create({
-        header: 'Empty day(s) selected',
-        message: 'The day(s) you\'ve selected do not contain any meal plan items. To delete items, you\'ll need to select at least one day with meal plan items.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok',
-          }
-        ]
-      });
-      emptyAlert.present();
-
+      this.emptyDaysSelectedAlert('delete items');
       return;
     }
 
@@ -398,21 +370,7 @@ export class MealPlanPage {
 
   async bulkPinRecipes() {
     if (this.getSelectedMealItemCount() === 0) {
-      const emptyAlert = await this.alertCtrl.create({
-        header: 'Empty day(s) selected',
-        message: 'The day(s) you\'ve selected do not contain any meal plan items. To pin recipes, you\'ll need to select at least one day with meal plan items.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'Ok'
-          }
-        ]
-      });
-      emptyAlert.present();
-
+      this.emptyDaysSelectedAlert('pin recipes');
       return;
     }
 
@@ -424,6 +382,38 @@ export class MealPlanPage {
         mealItems: selectedItems
       }
     });
+    modal.present();
+  }
+
+  async bulkAddToShoppingList() {
+    if (this.getSelectedMealItemCount() === 0) {
+      this.emptyDaysSelectedAlert('pin recipes');
+      return;
+    }
+
+    const selectedItems = this.selectedDays.map(selectedDay => this.getItemsOnDay(selectedDay)).flat();
+    const selectedRecipes = selectedItems.map(item => item.recipe).filter(e => e);
+
+    if (selectedRecipes.length === 0) {
+      const noRecipesAlert = await this.alertCtrl.create({
+        header: 'No Recipes',
+        message: 'The selected days contain no recipes.\nKeep in mind that only meal items that are recipes can be added to the shopping list.\nYou cannot add manually entered meal items to the shopping list from here.',
+        buttons: [{
+          text: 'Ok',
+        }]
+      });
+      await noRecipesAlert.present();
+      return;
+    }
+
+    const modal = await this.modalCtrl.create({
+      component: AddRecipeToShoppingListModalPage,
+      componentProps: {
+        recipes: selectedRecipes,
+        scale: 1
+      }
+    });
+
     modal.present();
   }
 

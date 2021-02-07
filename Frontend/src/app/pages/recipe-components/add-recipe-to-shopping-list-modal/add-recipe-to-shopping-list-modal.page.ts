@@ -14,8 +14,9 @@ import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-s
 })
 export class AddRecipeToShoppingListModalPage {
 
-  @Input() recipe: any;
+  @Input() recipes: any[];
   @Input() scale: any = 1;
+  selectedIngredientsByRecipe = {};
   selectedIngredients: Ingredient[] = [];
 
   shoppingLists: any;
@@ -90,6 +91,12 @@ export class AddRecipeToShoppingListModalPage {
     });
   }
 
+  selectedIngredientsChange(recipeId, selectedIngredients) {
+    this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
+
+    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat();
+  }
+
   isFormValid() {
     if (!this.destinationShoppingList) return false;
 
@@ -101,13 +108,20 @@ export class AddRecipeToShoppingListModalPage {
 
     this.saveLastUsedShoppingList();
 
+    const reference = this.reference || Date.now();
+
+    const items = Object.entries(this.selectedIngredientsByRecipe)
+      .map(([recipeId, ingredients]) =>
+        (ingredients as Ingredient[]).map(ingredient => ({
+          title: ingredient.content,
+          recipeId,
+          reference,
+        }))
+      ).flat();
+
     this.shoppingListService.addItems({
       id: this.destinationShoppingList.id,
-      items: this.selectedIngredients.map(ingredient => ({
-        title: ingredient.content,
-        recipeId: this.recipe.id,
-        reference: this.reference || Date.now()
-      }))
+      items,
     }).then(response => {
       loading.dismiss();
 

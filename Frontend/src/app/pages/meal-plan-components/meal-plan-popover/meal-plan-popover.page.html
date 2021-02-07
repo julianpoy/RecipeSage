@@ -34,6 +34,11 @@
     Pin recipes open
   </ion-button>
 
+  <ion-button (click)="bulkAddToShoppingList()" expand="block" size="small" class="ion-margin">
+    <ion-icon name='cart' slot="start"></ion-icon>
+    Add selected to shopping list
+  </ion-button>
+
   <ion-button (click)="copySelected()" expand="block" size="small" class="ion-margin">
     <ion-icon name='copy' slot="start"></ion-icon>
     Copy selected day(s)

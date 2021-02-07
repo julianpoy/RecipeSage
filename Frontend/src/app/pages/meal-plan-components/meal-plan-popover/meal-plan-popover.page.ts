@@ -41,6 +41,12 @@ export class MealPlanPopoverPage {
     this.popoverCtrl.dismiss();
   }
 
+  bulkAddToShoppingList() {
+    this.popoverCtrl.dismiss({
+      bulkAddToShoppingList: true
+    });
+  }
+
   pinRecipes() {
     this.popoverCtrl.dismiss({
       pinRecipes: true

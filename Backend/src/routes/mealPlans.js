@@ -544,7 +544,7 @@ router.get(
         }, {
           model: Recipe,
           as: 'recipe',
-          attributes: ['id', 'title'],
+          attributes: ['id', 'title', 'ingredients'],
           include: [{
             model: Image,
             as: 'images',
