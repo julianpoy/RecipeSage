@@ -44,4 +44,4 @@ Pricing for commercial licenses will depend on usage, and any associated fees ar
 # CLA
 Contributor license agreement.
 
-When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the CLA file in the repo for the complete CLA.
+When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
