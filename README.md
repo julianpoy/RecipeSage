@@ -4,6 +4,17 @@
 
 Share and collaborate on recipes, manage household shopping lists and meal planning, and import recipes from anywhere on the web instantly.
 
+What can RecipeSage do?
+
+- Import from any URL: Create a recipe simply by punching in a web URL
+- Powerful search: Search every field within your recipes including misspellings and similar words
+- Labelling/categorization system: Tag your recipes and filter by tags
+- Drag and drop meal planning: Schedule your meals interactively, quickly and easily
+- Shopping lists: Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined
+- Sharing: Share your recipes, collaborate on meal plans and shopping lists with your family or friends
+- Import: Supports Pepperplate, Living Cookbook, and Paprika
+- Export: Back up your recipes in multiple formats for data portability
+
 # Features
 
 <img src="Assets/myrecipes-desktop.png"></img>
