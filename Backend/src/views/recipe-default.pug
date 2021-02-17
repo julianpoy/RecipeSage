@@ -280,6 +280,7 @@ html
         each instruction in recipe.instructions
           div(class='instruction')
             if instruction.isHeader
+              span
               b= instruction.content
             else
               b(class='count')= instruction.count
