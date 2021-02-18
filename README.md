@@ -1,4 +1,4 @@
-<img align="left" width="100" height="100" src="Frontend/src/assets/imgs/logo_green.png"></img>
+<a href="https://recipesage.com"><img align="left" width="100" height="100" src="Frontend/src/assets/imgs/logo_green.png"></img></a>
 
 # RecipeSage - A Collaborative Recipe Keeper, Meal Planner, and Shopping List Organizer
 
@@ -14,6 +14,8 @@ What can RecipeSage do?
 - Sharing: Share your recipes, collaborate on meal plans and shopping lists with your family or friends
 - Import: Supports Pepperplate, Living Cookbook, and Paprika
 - Export: Back up your recipes in multiple formats for data portability
+
+You can access the hosted version of RecipeSage here: https://recipesage.com
 
 # Features
 
@@ -45,3 +47,9 @@ Pricing for commercial licenses will depend on usage, and any associated fees ar
 Contributor license agreement.
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
+
+# Self Hosting
+
+To selfhost RecipeSage, you can use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
+
+You're welcome to configure or set up your own selfhost based on this repository, but you may run into complications.
