@@ -39,6 +39,7 @@
     "fs-extra": "^8.0.1",
     "graylog2": "^0.2.1",
     "grip": "^1.5.0",
+    "jsdom": "^16.4.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
