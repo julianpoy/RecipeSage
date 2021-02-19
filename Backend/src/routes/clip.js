@@ -94,8 +94,9 @@ const clipRecipe = async clipUrl => {
 
     await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
     const recipeData = await page.evaluate((interceptUrl) => {
-      window.RC_ML_CLASSIFY_ENDPOINT = interceptUrl;
-      return window.RecipeClipper.clipRecipe();
+      return window.RecipeClipper.clipRecipe({
+        mlClassifyEndpoint: interceptUrl,
+      });
     }, INTERCEPT_PLACEHOLDER_URL);
 
     loggerService.capture("Clip success", {
