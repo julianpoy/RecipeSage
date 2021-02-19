@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 
 const puppeteer = require('puppeteer-core');
 
+const jsdom = require("jsdom");
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
 const loggerService = require('../services/logger');
@@ -115,6 +116,23 @@ const clipRecipe = async clipUrl => {
   }
 };
 
+const clipRecipeJSDOM = async url => {
+  const response = await fetch(url);
+
+  const document = await response.text();
+
+  const dom = new jsdom.JSDOM(document);
+
+  const { window } = dom;
+
+  window.fetch = fetch;
+
+  return await RecipeClipper.clipRecipe({
+    window,
+    mlClassifyEndpoint: process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL,
+  });
+};
+
 router.get('/', async (req, res, next) => {
   try {
     const url = (req.query.url || "").trim();
@@ -122,7 +140,12 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send("Must provide a URL");
     }
 
-    const recipeData = await clipRecipe(url);
+    let recipeData;
+    try {
+      recipeData = await clipRecipe(url);
+    } catch(e) {
+      recipeData = await clipRecipeJSDOM(url);
+    }
 
     res.status(200).json(recipeData);
   } catch(e) {
