@@ -159,7 +159,7 @@ export class MealPlanItemDetailsModalPage {
       const addRecipeToShoppingListModal = await this.modalCtrl.create({
         component: AddRecipeToShoppingListModalPage,
         componentProps: {
-          recipe: response
+          recipes: [response]
         }
       });
       addRecipeToShoppingListModal.present();

@@ -373,7 +373,7 @@ export class RecipePage {
     const modal = await this.modalCtrl.create({
       component: AddRecipeToShoppingListModalPage,
       componentProps: {
-        recipe: this.recipe,
+        recipes: [this.recipe],
         scale: this.scale
       }
     });
