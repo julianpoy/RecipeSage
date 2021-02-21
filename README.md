@@ -4,21 +4,22 @@
 
 Share and collaborate on recipes, manage household shopping lists and meal planning, and import recipes from anywhere on the web instantly.
 
-What can RecipeSage do?
+## :fork_and_knife: What can RecipeSage do?
 
-- Import from any URL: Create a recipe simply by punching in a web URL
-- Powerful search: Search every field within your recipes including misspellings and similar words
-- Labelling/categorization system: Tag your recipes and filter by tags
-- Drag and drop meal planning: Schedule your meals interactively, quickly and easily
-- Shopping lists: Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined
-- Sharing: Share your recipes, collaborate on meal plans and shopping lists with your family or friends
-- Import: Supports Pepperplate, Living Cookbook, and Paprika
-- Export: Back up your recipes in multiple formats for data portability
+- **Import from any URL**: Create a recipe simply by punching in a web URL
+- **Powerful search**: Search every field within your recipes including misspellings and similar words
+- **Labelling/categorization system**: Tag your recipes and filter by tags
+- **Drag and drop meal planning**: Schedule your meals interactively, quickly and easily
+- **Shopping lists**: Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined
+- **Sharing and public profiles**: Share your recipe collection and collaborate on meal plans/shopping lists with your family or friends
+- **Import**: Supports Pepperplate, Living Cookbook, and Paprika
+- **Export**: Back up your recipes in multiple formats for data portability
+- **Dark mode**: Never blind yourself at night again! *(or leave dark mode enabled all the time like I do)*
 
 You can access the hosted version of RecipeSage here: https://recipesage.com
 You can also selfhost your own copy or RecipeSage (see https://github.com/julianpoy/recipesage#self-hosting)
 
-# Features
+# :hamburger: GIFs
 
 ### Store your recipes
 All of your recipes in one place, and access them from any device.
@@ -42,6 +43,12 @@ Meal plans support drag and drop, shopping lists support automatic item categori
 
 <img src="Assets/mealplan.gif"></img>
 
+# Self Hosting
+
+To selfhost RecipeSage, I recommend that you use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
+
+You're welcome to configure or set up your own selfhost config based on this repository, but you may run into complications. The selfhost repository is setup to be easy to spin up, while this repository is oriented towards development.
+
 # License
 
 RecipeSage is dual-licensed.
@@ -55,9 +62,3 @@ Pricing for commercial licenses will depend on usage, and any associated fees ar
 Contributor license agreement.
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
-
-# Self Hosting
-
-To selfhost RecipeSage, you can use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
-
-You're welcome to configure or set up your own selfhost based on this repository, but you may run into complications.
