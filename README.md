@@ -16,23 +16,31 @@ What can RecipeSage do?
 - Export: Back up your recipes in multiple formats for data portability
 
 You can access the hosted version of RecipeSage here: https://recipesage.com
+You can also selfhost your own copy or RecipeSage (see https://github.com/julianpoy/recipesage#self-hosting)
 
 # Features
 
-<img src="Assets/myrecipes-desktop.png"></img>
+### Store your recipes
+All of your recipes in one place, and access them from any device.
 
-Web-based PWA that functions like a native app on mobile.
-<br /><br />
+<img src="Assets/myrecipes.gif"></img>
 
-<img src="Assets/createrecipe-desktop.png"></img>
+### Progressive Web App
+Feels native on every device, and can be installed to the homescreen.
 
+<img src="Assets/recipe-mobile.gif"></img>
+
+### Automatically import from any URL
 Import recipes from any website out there *(see [RecipeClipper](https://github.com/julianpoy/recipeclipper) for more info on how it does this)*.
-<br /><br />
 
-<img src="Assets/mealplan-desktop.png"></img>
+<img src="Assets/automatic-import.gif"></img>
 
-Organize your meal plans & shopping lists, with draggable items and automatic categorization.
-<br /><br />
+### Plan your meals and shopping
+A built-in meal planner makes it easy to plan your meals. Meal plans and shopping lists can be shared between multiple people!
+
+Meal plans support drag and drop, shopping lists support automatic item categorization.
+
+<img src="Assets/mealplan.gif"></img>
 
 # License
 
