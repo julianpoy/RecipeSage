@@ -17,6 +17,7 @@ Share and collaborate on recipes, manage household shopping lists and meal plann
 - **Dark mode**: Never blind yourself at night again! *(or leave dark mode enabled all the time like I do)*
 
 You can access the hosted version of RecipeSage here: https://recipesage.com
+
 You can also selfhost your own copy or RecipeSage (see https://github.com/julianpoy/recipesage#self-hosting)
 
 # :hamburger: GIFs
