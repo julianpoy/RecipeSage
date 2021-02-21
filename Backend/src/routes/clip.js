@@ -10,6 +10,7 @@ const RecipeClipper = require('@julianpoy/recipe-clipper');
 const loggerService = require('../services/logger');
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+const sanitizeHtml = require('sanitize-html');
 
 const disconnectPuppeteer = (browser) => {
   try {
@@ -126,6 +127,15 @@ const clipRecipeJSDOM = async url => {
 
   const { window } = dom;
 
+  Object.defineProperty(window.Element.prototype, 'innerText', {
+    get() {
+      return sanitizeHtml(this.textContent, {
+        allowedTags: [], // remove all tags and return text content only
+        allowedAttributes: {}, // remove all tags and return text content only
+      });
+    }
+  });
+
   window.fetch = fetch;
 
   return await RecipeClipper.clipRecipe({
@@ -134,6 +144,18 @@ const clipRecipeJSDOM = async url => {
   });
 };
 
+const objDiffKeys = (obj1, obj2) => {
+  obj1 = obj1 || {};
+  obj2 = obj2 || {};
+
+  const keys = [...new Set([
+    ...Object.keys(obj1),
+    ...Object.keys(obj2),
+  ])];
+
+  return keys.filter(key => obj1[key] !== obj2[key]);
+}
+
 router.get('/', async (req, res, next) => {
   try {
     const url = (req.query.url || "").trim();
@@ -141,14 +163,32 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send("Must provide a URL");
     }
 
-    let recipeData;
-    try {
-      recipeData = await clipRecipe(url);
-    } catch(e) {
-      recipeData = await clipRecipeJSDOM(url);
-    }
+    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
+      clipRecipe(url),
+      clipRecipeJSDOM(url),
+    ]);
 
-    res.status(200).json(recipeData);
+    const recipeData = clipRecipeResult.value;
+    const recipeDataJSDOM = clipRecipeJSDOMResult.value;
+
+    const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
+    const diff = differentKeys.reduce((acc, key) => {
+      acc[key] = {
+        recipeData: recipeData[key],
+        recipeDataJSDOM: recipeDataJSDOM[key],
+      }
+      return acc;
+    }, {});
+
+    loggerService.capture("Clip compare", {
+      level: 'info',
+      data: {
+        diff: diff,
+        fieldDiffCount: differentKeys.length,
+      }
+    });
+
+    res.status(200).json(recipeData || recipeDataJSDOM);
   } catch(e) {
     next(e);
   }
