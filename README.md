@@ -43,13 +43,13 @@ Meal plans support drag and drop, shopping lists support automatic item categori
 
 <img src="Assets/mealplan.gif"></img>
 
-# Self Hosting
+# :ramen: Self Hosting
 
 To selfhost RecipeSage, I recommend that you use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
 
 You're welcome to configure or set up your own selfhost config based on this repository, but you may run into complications. The selfhost repository is setup to be easy to spin up, while this repository is oriented towards development.
 
-# License
+# :bread: License
 
 RecipeSage is dual-licensed.
 
@@ -58,7 +58,7 @@ For all **non-commercial usage**, RecipeSage is available for use under the term
 For all **commercial usage**, RecipeSage is available for proprietary licensing upon request. You may contact me at julian@recipesage.com to request a license.
 Pricing for commercial licenses will depend on usage, and any associated fees are intended to support the project and community as a whole.
 
-# CLA
+# :doughnut: CLA
 Contributor license agreement.
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
