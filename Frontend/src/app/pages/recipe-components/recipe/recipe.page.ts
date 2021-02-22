@@ -396,7 +396,8 @@ export class RecipePage {
     const printRecipeModal = await this.modalCtrl.create({
       component: PrintRecipeModalPage,
       componentProps: {
-        recipe: this.recipe
+        recipe: this.recipe,
+        scale: this.scale
       }
     });
 

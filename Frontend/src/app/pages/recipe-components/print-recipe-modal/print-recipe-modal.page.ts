@@ -20,6 +20,7 @@ export interface PrintOption {
 export class PrintRecipeModalPage {
 
   @Input() recipe: Recipe;
+  @Input() scale: number;
 
   selectedTemplate = -1;
   templates: PrintOption[] = [{
@@ -81,6 +82,7 @@ export class PrintRecipeModalPage {
     public recipeService: RecipeService) {
     setTimeout(() => {
       for (const template of this.templates) {
+        template.modifiers.scale = this.scale;
         template.url = this.utilService.generateRecipeTemplateURL(this.recipe.id, template.modifiers);
       }
     });
