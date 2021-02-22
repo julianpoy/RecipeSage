@@ -32,7 +32,7 @@ export class ShareModalPage {
   hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string;
 
-  enableJSONLD: boolean = true;
+  enableJSONLD = true;
   embedHeight = 800;
   embedWidth = 600;
   embedConfig: RecipeTemplateModifiers = {
