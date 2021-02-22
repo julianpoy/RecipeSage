@@ -12,6 +12,7 @@ export interface RecipeTemplateModifiers {
   printPreview?: boolean;
   showPrintButton?: boolean;
   print?: boolean; // Triggers immediate print
+  scale?: number;
 }
 
 // TODO: Create more types for various page getPath methods

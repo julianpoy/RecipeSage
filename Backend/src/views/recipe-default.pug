@@ -276,6 +276,11 @@ html
       div(class='ingredients')
         each ingredient in recipe.ingredients
           p(class=('ingredient ' + (ingredient.isHeader ? 'ingredientHeader' : ''))) !{ingredient.content}
+        if modifiers.scale !== 1
+          p
+            i Ingredients at&nbsp;
+            i= modifiers.scale
+            i x scale
       div(class='instructions')
         each instruction in recipe.instructions
           div(class='instruction')

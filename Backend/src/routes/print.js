@@ -109,7 +109,8 @@ router.get('/:recipeId',
     hideSource: !!req.query.hideSource,
     hideSourceURL: !!req.query.hideSourceURL,
     printPreview: !!req.query.printPreview,
-    showPrintButton: !!req.query.showPrintButton
+    showPrintButton: !!req.query.showPrintButton,
+    scale: parseFloat(req.query.scale || 1, 10),
   };
 
   Recipe.findOne({
@@ -148,7 +149,7 @@ router.get('/:recipeId',
       if (!recipe.isOwner) recipe.labels = [];
 
       recipe.instructions = SharedUtils.parseInstructions(sanitizeHtml(recipe.instructions));
-      recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), 1, true);
+      recipe.ingredients = SharedUtils.parseIngredients(sanitizeHtml(recipe.ingredients), modifiers.scale, true);
       recipe.notes = SharedUtils.parseNotes(sanitizeHtml(recipe.notes));
 
       if (!modifiers.titleImage) {
