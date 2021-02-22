@@ -32,6 +32,7 @@ export class ShareModalPage {
   hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string;
 
+  enableJSONLD = true;
   embedHeight = 800;
   embedWidth = 600;
   embedConfig: RecipeTemplateModifiers = {
@@ -75,11 +76,28 @@ export class ShareModalPage {
       this.recipePreviewURL = this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
     }
 
-    this.recipeEmbedCode = `<iframe
+    const jsonLDCode = `<script>
+      fetch('https://api.recipesage.com/recipes/${this.recipe.id}/json-ld')
+      .then(response => response.text())
+      .then(structuredDataText => {
+        const script = document.createElement('script');
+        script.setAttribute('type', 'application/ld+json');
+        script.textContent = structuredDataText;
+        document.head.appendChild(script);
+      });
+    </script>`;
+
+    const iframeCode = `<iframe
       style="box-shadow: 1px 1px 14px rgb(100,100,100); border: none; height: ${this.embedHeight}px; width: ${this.embedWidth}px;"
       src="${this.recipeEmbedURL}"
       scrolling="auto"
       frameborder="0"></iframe>`;
+
+    let embedCode = '';
+    if (this.enableJSONLD) embedCode += `${jsonLDCode}\n`;
+    embedCode += iframeCode;
+
+    this.recipeEmbedCode = embedCode;
   }
 
   loadThreads() {
