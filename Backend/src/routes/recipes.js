@@ -698,11 +698,6 @@ router.get(
           id: req.params.recipeId
         },
         include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id', 'title', 'createdAt', 'updatedAt']
-        },
-        {
           model: Image,
           as: 'images',
           attributes: ['id', 'location']
@@ -720,8 +715,6 @@ router.get(
 
       recipe = UtilService.sortRecipeImages(recipe);
 
-      if (!recipe.isOwner) recipe.labels = [];
-
       const jsonLD = {
         "@context": "http://schema.org",
         "@type": "Recipe",
@@ -730,7 +723,6 @@ router.get(
         image: recipe.images.map(image => image.location),
         name: recipe.title,
         prepTime: recipe.activeTime,
-        recipeCategory: recipe.labels.map(label => label.title),
         recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false).map(el => el.content),
         recipeInstructions: SharedUtils.parseInstructions(recipe.instructions).map(el => ({
           "@type": "HowToStep",
