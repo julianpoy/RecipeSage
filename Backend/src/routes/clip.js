@@ -168,8 +168,8 @@ router.get('/', async (req, res, next) => {
       clipRecipeJSDOM(url),
     ]);
 
-    const recipeData = clipRecipeResult.value;
-    const recipeDataJSDOM = clipRecipeJSDOMResult.value;
+    const recipeData = clipRecipeResult.value || {};
+    const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
 
     const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
     const diff = differentKeys.reduce((acc, key) => {
@@ -188,7 +188,11 @@ router.get('/', async (req, res, next) => {
       }
     });
 
-    res.status(200).json(recipeData || recipeDataJSDOM);
+    if (Object.keys(recipeData).length) {
+      res.status(200).json(recipeData);
+    } else {
+      res.status(200).json(recipeDataJSDOM);
+    }
   } catch(e) {
     next(e);
   }
