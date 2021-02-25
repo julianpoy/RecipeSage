@@ -229,7 +229,7 @@ router.get(
     try {
       if (!res.locals.session && !req.query.userId) {
         const mustBeLoggedInError = new Error('You must be logged in to request this resource');
-        mustBeLoggedInError.status = 400;
+        mustBeLoggedInError.status = 401;
         throw mustBeLoggedInError;
       }
 
