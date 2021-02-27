@@ -18,7 +18,7 @@ Share and collaborate on recipes, manage household shopping lists and meal plann
 
 You can access the hosted version of RecipeSage here: https://recipesage.com
 
-You can also selfhost your own copy or RecipeSage (see https://github.com/julianpoy/recipesage#self-hosting)
+You can also selfhost your own copy or RecipeSage (see https://github.com/julianpoy/recipesage#ramen-self-hosting)
 
 # :hamburger: GIFs
 
