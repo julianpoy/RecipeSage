@@ -4,7 +4,6 @@ $content-layer: 2;
 
 .intro-container {
   position: relative;
-  background-color: rgba(0,0,0,0.025);
   z-index: $container-layer; // Move this below
 
   .intro-fold, .intro-fold-dimmer {
@@ -12,12 +11,8 @@ $content-layer: 2;
     left: 0;
     right: 0;
     top: 0;
-    bottom: 62%;
+    bottom: 15%;
     z-index: $bg-layer; // Move this below all other layers
-
-    @media only screen and (min-width:450px) {
-      bottom: 55%;
-    }
   }
 
   .intro-fold {
@@ -43,7 +38,7 @@ $content-layer: 2;
     background-color: rgba(0,0,0,0.6);
   }
 
-  .title, .screen, .welcomeContent {
+  .title, .screen {
     position: relative;
     z-index: $content-layer;
   }
@@ -76,11 +71,6 @@ $content-layer: 2;
     }
   }
 
-  a.login {
-    cursor: pointer;
-    color: white;
-  }
-
   .screen {
     margin-left: auto;
     margin-right: auto;
@@ -102,24 +92,32 @@ $content-layer: 2;
       }
     }
   }
+}
 
-  .welcomeContent {
-    margin-top: 50px;
-    max-width: var(--content-max-width);
-    margin-left: auto;
-    margin-right: auto;
+.welcomeContent {
+  margin-top: 50px;
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
 
-    .sectionHeader {
-      font-size: 1.5rem;
-      font-weight: 500;
-    }
-
-    li {
-      padding: 2px 0px;
-    }
+  .sectionHeader {
+    font-size: 1.5rem;
+    font-weight: 500;
   }
 
-  .footer-action {
-    text-align: center;
+  li {
+    padding: 2px 0px;
   }
+
+  .demovideo {
+    max-width: 100%;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.4);
+  }
+}
+
+.footer-action {
+  text-align: center;
 }
