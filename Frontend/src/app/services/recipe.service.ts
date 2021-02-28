@@ -69,7 +69,7 @@ export class RecipeService {
   public utilService: UtilService) {}
 
   getExportURL(format) {
-    return this.utilService.getBase() + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
+    return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
   count(options) {
