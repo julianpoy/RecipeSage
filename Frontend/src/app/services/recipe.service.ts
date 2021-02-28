@@ -69,7 +69,7 @@ export class RecipeService {
   public utilService: UtilService) {}
 
   getExportURL(format) {
-    return this.utilService.getBase() + 'recipes/export' + this.utilService.getTokenQuery() + '&format=' + format;
+    return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
   count(options) {
@@ -302,6 +302,26 @@ export class RecipeService {
     formData.append('paprikadb', paprikaFile, paprikaFile.name);
 
     const url = `${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: formData
+    }).then(response => {
+      this.events.publish('recipe:generalUpdate');
+
+      return response.data;
+    });
+  }
+
+  importJSONLD(jsonLDFile) {
+    const formData: FormData = new FormData();
+    formData.append('jsonLD', jsonLDFile, jsonLDFile.name);
+
+    const url = `${this.utilService.getBase()}data/import/json-ld${this.utilService.getTokenQuery()}`;
 
     return this.httpService.request({
       method: 'post',

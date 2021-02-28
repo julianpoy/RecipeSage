@@ -163,6 +163,11 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService]
   },
   {
+    path: RouteMap.ImportJSONLDPage.path,
+    loadChildren: '@/pages/settings-components/import-json-ld/import-json-ld.module#ImportJSONLDPageModule',
+    canDeactivate: [UnsavedChangesGuardService]
+  },
+  {
     path: RouteMap.ImportPepperplatePage.path,
     loadChildren: '@/pages/settings-components/import-pepperplate/import-pepperplate.module#ImportPepperplatePageModule',
     canDeactivate: [UnsavedChangesGuardService]

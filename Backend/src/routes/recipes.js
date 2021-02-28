@@ -23,6 +23,7 @@ var UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
 let SubscriptionsService = require('../services/subscriptions');
 const SharedUtils = require('../../../SharedUtils/src');
+const JSONLDService = require('../services/json-ld');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
@@ -715,22 +716,7 @@ router.get(
 
       recipe = UtilService.sortRecipeImages(recipe);
 
-      const jsonLD = {
-        "@context": "http://schema.org",
-        "@type": "Recipe",
-        datePublished: (new Date(recipe.createdAt)).toISOString(),
-        description: recipe.description,
-        image: recipe.images.map(image => image.location),
-        name: recipe.title,
-        prepTime: recipe.activeTime,
-        recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false).map(el => el.content),
-        recipeInstructions: SharedUtils.parseInstructions(recipe.instructions).map(el => ({
-          "@type": "HowToStep",
-          text: el.content,
-        })),
-        recipeYield: recipe.yield,
-        totalTime: recipe.totalTime,
-      };
+      const jsonLD = JSONLDService.recipeToJSONLD(recipe);
 
       res.status(200).json(jsonLD);
     } catch(e) {
