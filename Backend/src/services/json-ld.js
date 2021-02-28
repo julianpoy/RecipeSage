@@ -8,11 +8,13 @@ const recipeToJSONLD = (recipe) => ({
   image: recipe.images.map(image => image.location),
   name: recipe.title,
   prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
-  recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false).map(el => el.content),
-  recipeInstructions: SharedUtils.parseInstructions(recipe.instructions).map(el => ({
-    "@type": "HowToStep",
-    text: el.content,
-  })),
+  recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false)
+                               .map(el => el.isHeader ? `[${el.content}]` : el.content),
+  recipeInstructions: SharedUtils.parseInstructions(recipe.instructions)
+                                 .map(el => ({
+                                    "@type": el.isHeader ? "HowToSection" : "HowToStep",
+                                    text: el.isHeader ? `[${el.content}]` : el.content,
+                                  })),
   recipeYield: recipe.yield,
   totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
   recipeCategory: recipe.labels.map(label => label.title),

@@ -1,3 +1,4 @@
+const UtilService = require('./util');
 const SharedUtils = require('../../../SharedUtils/src');
 const Unitz = SharedUtils.unitUtils.Unitz;
 
@@ -18,8 +19,6 @@ const formattedCategoryTitles = {
   "deli": "Deli"
 };
 
-const capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
-
 exports.getCategoryTitle = itemTitle => {
   itemTitle = itemTitle.toLowerCase();
   if (itemTitle.includes("canned") || itemTitle.includes(" can ") || itemTitle.includes(" cans ")) return "Canned";
@@ -34,7 +33,7 @@ exports.getCategoryTitle = itemTitle => {
   if (!itemTitleMatch) return "Uncategorized";
 
   const category = itemCategories[itemTitleMatch];
-  return formattedCategoryTitles[category] || capitalizeEachWord(category);
+  return formattedCategoryTitles[category] || UtilService.capitalizeEachWord(category);
 };
 
 exports.groupShoppingListItems = items => {
