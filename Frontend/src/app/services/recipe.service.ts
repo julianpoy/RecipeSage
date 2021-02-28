@@ -317,6 +317,26 @@ export class RecipeService {
     });
   }
 
+  importJSONLD(jsonLDFile) {
+    const formData: FormData = new FormData();
+    formData.append('jsonLD', jsonLDFile, jsonLDFile.name);
+
+    const url = `${this.utilService.getBase()}data/import/json-ld${this.utilService.getTokenQuery()}`;
+
+    return this.httpService.request({
+      method: 'post',
+      url,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: formData
+    }).then(response => {
+      this.events.publish('recipe:generalUpdate');
+
+      return response.data;
+    });
+  }
+
   parseIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {
     return parseIngredients(ingredients, scale, boldify);
   }

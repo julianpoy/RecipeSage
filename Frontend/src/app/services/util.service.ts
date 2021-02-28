@@ -172,6 +172,10 @@ export const RouteMap = {
     getPath() { return `/settings/import/paprika`; },
     path: 'settings/import/paprika',
   },
+  ImportJSONLDPage: {
+    getPath() { return `/settings/import/json-ld`; },
+    path: 'settings/import/json-ld',
+  },
   ImportPepperplatePage: {
     getPath() { return `/settings/import/pepperplate`; },
     path: 'settings/import/pepperplate',

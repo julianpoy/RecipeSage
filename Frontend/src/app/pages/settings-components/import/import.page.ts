@@ -15,6 +15,10 @@ export class ImportPage {
     public navCtrl: NavController) {
   }
 
+  goToImportJSONLD() {
+    this.navCtrl.navigateForward(RouteMap.ImportJSONLDPage.getPath());
+  }
+
   goToImportPepperplate() {
     this.navCtrl.navigateForward(RouteMap.ImportPepperplatePage.getPath());
   }
