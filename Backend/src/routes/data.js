@@ -156,6 +156,7 @@ router.get('/export/json-ld',
 
 const CONCURRENT_IMAGE_IMPORTS = 2;
 const MAX_IMAGES = 10;
+const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
 const importStandardizedRecipes = async (userId, recipesToImport) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
@@ -166,6 +167,10 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
     userId,
     SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
   );
+
+  if (recipesToImport.length > MAX_IMPORT_LIMIT) {
+    throw new Error("Too many recipes to import in one batch");
+  }
 
   return sequelize.transaction(async transaction => {
     const limit = pLimit(CONCURRENT_IMAGE_IMPORTS);
