@@ -411,3 +411,6 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 exports.cleanLabelTitle = labelTitle => {
   return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
 }
+
+exports.capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
+
