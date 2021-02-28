@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pLimit = require('p-limit');
 const xmljs = require("xml-js");
+const multer = require('multer');
 
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
@@ -261,9 +262,15 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
 
 router.post('/import/json-ld',
   MiddlewareService.validateSession(['user']),
+  multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: '100MB', files: 1 }
+  }).single('jsonLD'),
   async (req, res, next) => {
     try {
       let jsonLD = req.body.jsonLD;
+
+      if (!jsonLD && req.file) jsonLD = JSON.parse(req.file.buffer.toString());
 
       if (!jsonLD) return res.status(400).send("No data. Only Recipe types are supported at this time.");
 
