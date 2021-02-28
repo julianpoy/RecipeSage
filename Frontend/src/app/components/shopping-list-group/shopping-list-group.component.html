@@ -17,7 +17,7 @@
         </ion-item>
       </ion-col>
       <ion-col size="auto">
-        <ion-button (click)="groupTitleExpanded[categoryTitle + group.title] = !groupTitleExpanded[categoryTitle + group.title]" fill="clear" color="light">
+        <ion-button (click)="groupTitleExpanded[categoryTitle + group.title] = !groupTitleExpanded[categoryTitle + group.title]" fill="clear" color="dark">
           <ion-icon *ngIf="groupTitleExpanded[categoryTitle + group.title]" name="caret-down"></ion-icon>
           <ion-icon *ngIf="!groupTitleExpanded[categoryTitle + group.title]" name="caret-up"></ion-icon>
         </ion-button>
