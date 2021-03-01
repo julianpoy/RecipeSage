@@ -1,0 +1,67 @@
+{
+  "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
+  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.title": "All of your recipes in one place",
+  "pages.welcome.subtitle": "A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.registerButton": "Create an account",
+  "pages.welcome.loginButton": "Log In",
+  "pages.welcome.appDemoImageAlt": "My Recipes Preview",
+
+  "pages.welcome.description.welcome": "Welcome to RecipeSage!",
+  "pages.welcome.description.1": "RecipeSage is free (donation based) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.",
+  "pages.welcome.description.2": "Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.",
+
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features.1.title": "Import from any URL:",
+  "pages.welcome.description.features.1.description": "Create a recipe simply by punching in a web URL",
+  "pages.welcome.description.features.2.title": "Powerful search:",
+  "pages.welcome.description.features.2.description": "Search every field within your recipes including misspellings and similar words",
+  "pages.welcome.description.features.3.title": "Labelling/categorization system:",
+  "pages.welcome.description.features.3.description": "Tag your recipes and filter by tags",
+  "pages.welcome.description.features.4.title": "Drag and drop meal planning:",
+  "pages.welcome.description.features.4.description": "Schedule your meals interactively, quickly and easily",
+  "pages.welcome.description.features.5.title": "Shopping lists:",
+  "pages.welcome.description.features.5.description": "Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined",
+  "pages.welcome.description.features.6.title": "Sharing:",
+  "pages.welcome.description.features.6.description": "Share your recipes, collaborate on meal plans and shopping lists with your family or friends",
+  "pages.welcome.description.features.7.title": "Import:",
+  "pages.welcome.description.features.7.description": "Supports Pepperplate, Living Cookbook, and Paprika",
+  "pages.welcome.description.features.8.title": "Export:",
+  "pages.welcome.description.features.8.description": "Back up your recipes in multiple formats for data portability",
+
+  "pages.welcome.description.cta": "Why RecipeSage?",
+  "pages.welcome.description.cta.1": "Free (donation based)",
+  "pages.welcome.description.cta.2": "Easy to use",
+  "pages.welcome.description.cta.3": "Available on desktop and all mobile devices",
+  "pages.welcome.description.cta.4": "Import recipes from any URL",
+
+  "====== Pages.Auth ======": "",
+
+  "pages.auth.title.login": "Log In",
+  "pages.auth.title.register": "Create an Account",
+
+  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href='https://recipesage.com'>RecipeSage.com</a> or any of the accounts located on the main site.",
+
+  "pages.auth.welcome.login": "Welcome back!",
+  "pages.auth.welcome.login.sub": "Please login with your account details below.",
+
+  "pages.auth.welcome.register": "Welcome!",
+  "pages.auth.welcome.register.sub1": "We need a few details to create your account.",
+  "pages.auth.welcome.register.sub2": "After this, you'll be set up and ready to go.",
+
+  "pages.auth.input.name": "Full Name or Nickname",
+  "pages.auth.input.email": "Email",
+  "pages.auth.input.password": "Password",
+  "pages.auth.input.confirmPassword": "Confirm Password",
+
+  "pages.auth.selfhostWarning2": "Make sure you trust the site owner of this selfhost copy",
+
+  "pages.auth.button.login": "Log In",
+  "pages.auth.button.register": "Create Account",
+  "pages.auth.button.forgotPassword": "Forgot password",
+  "pages.auth.button.registerInstead": "Create an account instead",
+  "pages.auth.button.loginInstead": "Log in instead",
+
+  "====== Pages.Home ======": ""
+}

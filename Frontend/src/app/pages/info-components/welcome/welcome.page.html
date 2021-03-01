@@ -21,19 +21,19 @@
 
     <div class="title">
       <h1 *ngIf="isSelfHost">
-        RecipeSage Self Hosted!
+        {{ 'pages.welcome.selfhostTitle' | translate }}
       </h1>
 
       <h1 *ngIf="!isSelfHost">
-        All of your recipes in one place
+        {{ 'pages.welcome.title' | translate }}
       </h1>
 
       <p class="subtitle" *ngIf="isSelfHost">
-        An unofficial selfhosted version of <a href="https://recipesage.com">RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android
+        {{ 'pages.welcome.selfhostSubtitle' | translate }}
       </p>
 
       <p class="subtitle" *ngIf="!isSelfHost">
-        A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android
+        {{ 'pages.welcome.subtitle' | translate }}
       </p>
 
       <br />
@@ -41,7 +41,7 @@
       <ion-button (click)="goToAuth('register')" style="margin: 0;">
         <ion-icon name="leaf" slot="start"></ion-icon>
         <ion-label>
-          Create an account
+          {{ 'pages.welcome.registerButton' | translate }}
         </ion-label>
       </ion-button>
 
@@ -51,49 +51,49 @@
       <ion-button (click)="goToAuth('login')" size="small">
         <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
         <ion-label>
-          Log In
+          {{ 'pages.welcome.loginButton' | translate }}
         </ion-label>
       </ion-button>
     </div>
 
     <div class="screen">
       <picture>
-        <img *ngIf="!isIOS" src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="My Recipes Preview">
-        <img *ngIf="isIOS" class="ios" src="assets/stockphotos/my-recipes-ios.jpg" alt="My Recipes Preview">
+        <img *ngIf="!isIOS" src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}">
+        <img *ngIf="isIOS" class="ios" src="assets/stockphotos/my-recipes-ios.jpg" alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}">
       </picture>
     </div>
 
     <div class="ion-padding welcomeContent">
-      <span class="sectionHeader">Welcome to RecipeSage!</span><br />
+      <span class="sectionHeader">{{ 'pages.welcome.description.welcome' | translate }}</span><br />
 
       <br />
 
-      RecipeSage is free (donation based) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.<br /><br />
+      {{ 'pages.welcome.description.1' | translate }}<br /><br />
 
-      Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.
+      {{ 'pages.welcome.description.2' | translate }}
 
       <br /><br /><br />
 
-      <span class="sectionHeader">What can RecipeSage do?</span><br />
+      <span class="sectionHeader">{{ 'pages.welcome.description.features' | translate }}</span><br />
 
       <ul>
-        <li><b>Import from any URL:</b> Create a recipe simply by punching in a web URL</li>
-        <li><b>Powerful search:</b> Search every field within your recipes including misspellings and similar words</li>
-        <li><b>Labelling/categorization system:</b> Tag your recipes and filter by tags</li>
-        <li><b>Drag and drop meal planning:</b> Schedule your meals interactively, quickly and easily</li>
-        <li><b>Shopping lists:</b> Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined</li>
-        <li><b>Sharing:</b> Share your recipes, collaborate on meal plans and shopping lists with your family or friends</li>
-        <li><b>Import:</b> Supports Pepperplate, Living Cookbook, and Paprika</li>
-        <li><b>Export:</b> Back up your recipes in multiple formats for data portability</li>
+        <li><b>{{ 'pages.welcome.description.features.1.title' | translate }}</b> {{ 'pages.welcome.description.features.1.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.2.title' | translate }}</b> {{ 'pages.welcome.description.features.2.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.3.title' | translate }}</b> {{ 'pages.welcome.description.features.3.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.4.title' | translate }}</b> {{ 'pages.welcome.description.features.4.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.5.title' | translate }}</b> {{ 'pages.welcome.description.features.5.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.6.title' | translate }}</b> {{ 'pages.welcome.description.features.6.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.7.title' | translate }}</b> {{ 'pages.welcome.description.features.7.description' | translate }}</li>
+        <li><b>{{ 'pages.welcome.description.features.8.title' | translate }}</b> {{ 'pages.welcome.description.features.8.description' | translate }}</li>
       </ul>
 
-      <span class="sectionHeader">Why RecipeSage?</span><br />
+      <span class="sectionHeader">{{ 'pages.welcome.description.cta' | translate }}</span><br />
 
       <ul>
-        <li>Free (donation based)</li>
-        <li>Easy to use</li>
-        <li>Available on desktop and all mobile devices</li>
-        <li>Import recipes from any URL</li>
+        <li>{{ 'pages.welcome.description.cta.1' | translate }}</li>
+        <li>{{ 'pages.welcome.description.cta.2' | translate }}</li>
+        <li>{{ 'pages.welcome.description.cta.3' | translate }}</li>
+        <li>{{ 'pages.welcome.description.cta.4' | translate }}</li>
       </ul>
 
       <br /><br />
@@ -102,7 +102,7 @@
         <ion-button (click)="goToAuth('register')" style="margin: 0;">
           <ion-icon name="leaf" slot="start"></ion-icon>
           <ion-label>
-            Create an account
+            {{ 'pages.welcome.registerButton' | translate }}
           </ion-label>
         </ion-button>
 
@@ -111,7 +111,7 @@
         <ion-button (click)="goToAuth('login')" size="small">
           <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
           <ion-label>
-            Log In
+            {{ 'pages.welcome.loginButton' | translate }}
           </ion-label>
         </ion-button>
       </div>

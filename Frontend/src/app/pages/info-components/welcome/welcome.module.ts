@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { WelcomePage } from './welcome.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     WelcomePage,
@@ -17,7 +19,8 @@ import { WelcomePage } from './welcome.page';
         path: '',
         component: WelcomePage
       }
-    ])
+    ]),
+    GlobalModule,
   ],
 })
 export class WelcomePageModule {}
