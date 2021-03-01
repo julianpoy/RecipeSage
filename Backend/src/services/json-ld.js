@@ -5,7 +5,7 @@ const recipeToJSONLD = (recipe) => ({
   "@type": "Recipe",
   datePublished: (new Date(recipe.createdAt)).toISOString(),
   description: recipe.description,
-  image: recipe.images.map(image => image.location),
+  image: (recipe.images || []).map(image => image.location),
   name: recipe.title,
   prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
   recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false)
@@ -17,7 +17,7 @@ const recipeToJSONLD = (recipe) => ({
                                   })),
   recipeYield: recipe.yield,
   totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
-  recipeCategory: recipe.labels.map(label => label.title),
+  recipeCategory: (recipe.labels || []).map(label => label.title),
   creditText: recipe.source,
   isBasedOn: recipe.url,
   comment: [{
