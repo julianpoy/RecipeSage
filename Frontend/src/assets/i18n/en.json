@@ -63,5 +63,45 @@
   "pages.auth.button.registerInstead": "Create an account instead",
   "pages.auth.button.loginInstead": "Log in instead",
 
-  "====== Pages.Home ======": ""
+  "====== Pages.Home ======": "",
+
+  "pages.home.title.selectionMode": "{{count}} Selected",
+  "pages.home.title.main": "My Recipes",
+  "pages.home.title.inbox": "Recipe Inbox",
+
+  "pages.home.title.sharedAll": "Shared Recipes",
+  "pages.home.title.sharedLabel": "Shared Label: {{label}}",
+  "pages.home.title.sharedAll.withProfile": "{{name}}'s Shared Recipes",
+  "pages.home.title.sharedLabel.withProfile": "{{name}}'s Shared Label: {{label}}",
+
+  "pages.home.search.placeholder": "Search",
+
+  "pages.home.recipe.source": "Source:",
+  "pages.home.recipe.from": "From:",
+  "pages.home.recipe.labels": "Labels:",
+  "pages.home.recipe.selected": "Selected",
+
+  "pages.home.errors.emptyCollection.title": "This user's collection is empty",
+  "pages.home.errors.emptyCollection.message": "This shared collection has no recipes in it.",
+
+  "pages.home.errors.noRecipes.title": "Welcome to RecipeSage!",
+  "pages.home.errors.noRecipes.message1": "This is where your recipes will appear.",
+  "pages.home.errors.noRecipes.message2": "It looks like you don't have any recipes yet.",
+  "pages.home.errors.noRecipes.message3": "Click the + button in the bottom right corner to add one!",
+  "pages.home.errors.noRecipes.message4": "You can also import recipes!",
+  "pages.home.errors.noRecipes.message5": "Use the side menu to go to settings -> import",
+  "pages.home.errors.noRecipes.message6": "You can install the clip tool extension on desktop browsers:",
+  "pages.home.errors.noRecipes.message7": "For detailed how-tos, visit the Tips Tricks & Tutorials page",
+
+  "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
+  "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
+
+
+  "pages.home.errors.noSearchResults.message1": "No search results.",
+  "pages.home.errors.noSearchResults.message2": "Search includes:",
+  "pages.home.errors.noSearchResults.message3": "Title, description, source, ingredients, instructions, and notes.",
+
+
+
+  "trailing.comma.placeholder": ""
 }

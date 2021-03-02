@@ -9,9 +9,25 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ selectionMode ? selectedRecipeIds.length + ' Selected' : folderTitle }}
+    <ion-title *ngIf="!userId && selectionMode">
+      {{ 'pages.home.title.selectionMode' | translate:{count: selectedRecipeIds.length} }}
     </ion-title>
+    <ion-title *ngIf="!userId && !selectionMode">
+      {{ 'pages.home.title.' + folder | translate }}
+    </ion-title>
+    <ion-title *ngIf="userId && otherUserProfile && this.selectedLabels.length">
+      {{ 'pages.home.title.sharedLabel.withProfile' | translate:{name: otherUserProfile.name, label: selectedLabels[0]} }}
+    </ion-title>
+    <ion-title *ngIf="userId && otherUserProfile && !this.selectedLabels.length">
+      {{ 'pages.home.title.sharedAll.withProfile' | translate:{name: otherUserProfile.name} }}
+    </ion-title>
+    <ion-title *ngIf="userId && !otherUserProfile && this.selectedLabels.length">
+      {{ 'pages.home.title.sharedLabel' | translate:{label: selectedLabels[0]} }}
+    </ion-title>
+    <ion-title *ngIf="userId && !otherUserProfile && !this.selectedLabels.length">
+      {{ 'pages.home.title.sharedAll' | translate }}
+    </ion-title>
+
 
     <ion-buttons slot="end">
       <ion-button *ngIf="selectionMode && selectedRecipeIds.length > 0 && folder === 'main'" (click)="addLabelToSelectedRecipes()">
@@ -32,6 +48,7 @@
 <ion-content #contentContainer>
   <ion-searchbar
     *ngIf="folder === 'main'"
+    placeholder="{{ 'pages.home.search.placeholder' | translate }}"
     (ionClear)="search('')"
     (keydown.enter)="search($event.target.value); $event.target.blur()"
   ></ion-searchbar>
@@ -70,19 +87,19 @@
             <ion-label>
               <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
               <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
-              <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
+              <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">{{ 'pages.home.recipe.source' | translate }} {{ recipe.source || recipe.url }}</p>
 
               <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-                <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+                <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
               </p>
 
               <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
-                Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
+                {{ 'pages.home.recipe.labels' | translate }} <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
               </p>
             </ion-label>
           </ion-item>
         </ion-card-content>
-        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">Selected</ion-badge>
+        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>
       </ion-card>
     </div>
   </virtual-scroller>
@@ -108,18 +125,18 @@
         <ion-label>
           <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
           <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
-          <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
+          <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">{{ 'pages.home.recipe.source' | translate }} {{ recipe.source || recipe.url }}</p>
 
           <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-            <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+            <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
           </p>
 
           <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
-            Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,&nbsp;</span></span>
+            {{ 'pages.home.recipe.labels' | translate }} <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,&nbsp;</span></span>
           </p>
         </ion-label>
 
-        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">Selected</ion-badge>
+        <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>
       </ion-item>
     </div>
   </virtual-scroller>
@@ -128,39 +145,38 @@
     <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
       <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
-        <h2>This user's collection is empty</h2>
+        <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
         <br /><br />
         <p>
-          This shared collection has no recipes in it.<br />
+          {{ 'pages.home.errors.emptyCollection.message' | translate }}<br />
         </p>
       </ion-label>
     </null-state>
     <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
       <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
-        <h2>Welcome to RecipeSage!</h2>
+        <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
         <br /><br />
         <p>
-          This is where your recipes will appear.<br />
-          It looks like you don't have any recipes yet.<br />
-          <b>Click the + button in the bottom right corner to add one!</b><br />
+          {{ 'pages.home.errors.noRecipes.message1' | translate }}<br />
+          {{ 'pages.home.errors.noRecipes.message2' | translate }}<br />
+          <b>{{ 'pages.home.errors.noRecipes.message3' | translate }}</b><br />
 
           <br /><br />
 
-          You can also import recipes!<br />
-          Use the side menu to go to settings -> import
+          {{ 'pages.home.errors.noRecipes.message4' | translate }}<br />
+          {{ 'pages.home.errors.noRecipes.message5' | translate }}
 
           <br /><br />
 
-          For desktop browsers, you can use our<br />
+          {{ 'pages.home.errors.noRecipes.message6' | translate }}<br />
           <a href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo" target="_blank">Chrome</a>
-          &
+          &amp;
           <a href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/" target="_blank">Firefox</a>
-          extensions to clip recipes from the web<br />
 
           <br /><br />
 
-          See the <a href="/#/tips-tricks-tutorials">Tips Tricks & Tutorials page</a> for detailed how-tos
+          <a href="/#/tips-tricks-tutorials">{{ 'pages.home.errors.noRecipes.message7' | translate }}</a>
         </p>
       </ion-label>
     </null-state>
@@ -168,8 +184,8 @@
       <ion-icon name="mail-open" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          Your recipe inbox is empty.<br />
-          When someone sends you a recipe, it will show up here!
+          {{ 'pages.home.errors.inboxEmpty.message1' | translate }}<br />
+          {{ 'pages.home.errors.inboxEmpty.message2' | translate }}
         </p>
       </ion-label>
     </null-state>
@@ -177,9 +193,9 @@
       <ion-icon name="search" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          No search results.<br /><br />
-          Search includes:<br />
-          Title, description, source, ingredients, instructions, and notes.
+          {{ 'pages.home.errors.noSearchResults.message1' | translate }}<br /><br />
+          {{ 'pages.home.errors.noSearchResults.message2' | translate }}<br />
+          {{ 'pages.home.errors.noSearchResults.message3' | translate }}
         </p>
       </ion-label>
     </null-state>
