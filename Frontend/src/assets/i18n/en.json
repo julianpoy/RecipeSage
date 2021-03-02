@@ -101,7 +101,41 @@
   "pages.home.errors.noSearchResults.message2": "Search includes:",
   "pages.home.errors.noSearchResults.message3": "Title, description, source, ingredients, instructions, and notes.",
 
+  "====== Pages.NotFound ======": "",
 
+  "pages.notfound.title": "Page Not Found",
+  "pages.notfound.error.title": "Page Not Found!",
+  "pages.notfound.error.message1" : "It looks like the page you are looking for doesn't exist.",
+  "pages.notfound.error.message2" : "Check to see if you typed the URL correctly.",
+  "pages.notfound.error.message3" : "If you're still having trouble, or if somewhere in the app took you here, please contact me.",
+  "pages.notfound.error.contact" : "Contact me",
+  "pages.notfound.error.goHome" : "Click here to go to your recipes",
+
+  "====== Pages.HomePopover ======": "",
+
+  "pages.homepopover.options": "Options",
+  "pages.homepopover.options.layout": "Layout",
+  "pages.homepopover.options.layout.tiles": "Tiles",
+  "pages.homepopover.options.layout.list": "List",
+  "pages.homepopover.options.showLabels": "Show Labels",
+  "pages.homepopover.options.showLabelToggles": "Show Label Toggles",
+  "pages.homepopover.options.showImages": "Show Images",
+  "pages.homepopover.options.showSource": "Show Source",
+  "pages.homepopover.options.showRecipeDescription": "Show Description",
+
+  "pages.homepopover.options.sortBy": "Sort by",
+  "pages.homepopover.options.sortBy.title": "Title",
+  "pages.homepopover.options.sortBy.createdNewest": "Created (newest first)",
+  "pages.homepopover.options.sortBy.createdOldest": "Created (oldest first)",
+  "pages.homepopover.options.sortBy.updatedNewest": "Updated (newest first)",
+  "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
+
+  "pages.homepopover.options.filterByLabel": "Filter by Label",
+  "pages.homepopover.options.matchAllLabels": "Match All Labels",
+  "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
+  "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
+
+  "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
   "trailing.comma.placeholder": ""
 }
