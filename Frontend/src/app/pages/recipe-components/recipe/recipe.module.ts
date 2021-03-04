@@ -15,6 +15,7 @@ import { ShareModalPageModule } from '@/pages/share-modal/share-modal.module';
 import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
+import { GlobalModule } from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
       }
     ]),
     PipesModule,
+    GlobalModule,
     RecipeDetailsPopoverPageModule,
     AddRecipeToShoppingListModalPageModule,
     AddRecipeToMealPlanModalPageModule,

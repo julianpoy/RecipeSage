@@ -137,6 +137,53 @@
 
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
+
+  "pages.recipeDetails.pageTitle": "Recipe Details",
+  "pages.recipeDetails.source": "Source",
+  "pages.recipeDetails.activeTime": "Active Time",
+  "pages.recipeDetails.totalTime": "Total Time",
+  "pages.recipeDetails.yield": "Yield",
+
+  "pages.recipeDetails.sentBy": "This recipe was sent to you by {{name}}",
+  "pages.recipeDetails.sentByAction": "Add this recipe to your recipes by clicking the button at the bottom of the page.",
+
+  "pages.recipeDetails.ingredients": "Ingredients",
+  "pages.recipeDetails.noIngredients": "No Ingredients",
+
+  "pages.recipeDetails.scaleStatus": "{{scale}}x scale (click to change)",
+
+  "pages.recipeDetails.instructions": "Instructions",
+  "pages.recipeDetails.noInstructions": "No Instructions",
+
+  "pages.recipeDetails.notes": "Notes",
+  "pages.recipeDetails.noNotes": "No Notes",
+
+  "pages.recipeDetails.labels": "Labels",
+  "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
+
+  "pages.recipeDetails.labels.clickToCreate": "Click to create",
+  "pages.recipeDetails.labels.alreadyAdded": "Already added",
+  "pages.recipeDetails.labels.clickToAdd": "Click to add",
+
+  "pages.recipeDetails.created": "Created",
+  "pages.recipeDetails.updated": "Last edited",
+  "pages.recipeDetails.saveToMyRecipes": "Save This Recipe to My Recipes",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.doesNotBelongToYou": "This recipe does not belong to you yet.",
+  "pages.recipeDetails.requiresAccountToSave": "Create an account or login to save this recipe to your collection.",
+  "pages.recipeDetails.registerOrLoginToSave": "Register/Login to Save This Recipe",
+
+  "pages.recipeDetails.edit": "Edit",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetails.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetails.share": "Share",
+  "pages.recipeDetails.print": "Print",
+  "pages.recipeDetails.makeACopy": "Make a Copy",
+
+  "pages.recipeDetails.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetails.unPinRecipe": "Unpin Recipe",
+
   "====== Pages.ResettableSelectPopover ======": "",
 
   "pages.rselectpopover.resetAll": "Reset All",
