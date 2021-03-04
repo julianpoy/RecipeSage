@@ -137,5 +137,10 @@
 
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
+  "====== Pages.ResettableSelectPopover ======": "",
+
+  "pages.rselectpopover.resetAll": "Reset All",
+  "pages.rselectpopover.done": "Done",
+
   "trailing.comma.placeholder": ""
 }
