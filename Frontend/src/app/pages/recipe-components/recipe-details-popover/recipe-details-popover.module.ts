@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { RecipeDetailsPopoverPage } from './recipe-details-popover.page';
+import { GlobalModule } from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { RecipeDetailsPopoverPage } from './recipe-details-popover.page';
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GlobalModule,
   ],
   entryComponents: [
     RecipeDetailsPopoverPage

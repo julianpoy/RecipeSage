@@ -137,6 +137,7 @@
 
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
+  "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "Recipe Details",
   "pages.recipeDetails.source": "Source",
@@ -183,6 +184,24 @@
 
   "pages.recipeDetails.pinRecipe": "Pin Recipe Open",
   "pages.recipeDetails.unPinRecipe": "Unpin Recipe",
+
+  "====== Pages.RecipeDetailsPopover ======": "",
+
+  "pages.recipeDetailsPopover.options": "Options",
+  "pages.recipeDetailsPopover.keepScreenOn": "Keep Screen On",
+  "pages.recipeDetailsPopover.actions": "Actions",
+  "pages.recipeDetailsPopover.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetailsPopover.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetailsPopover.share": "Share",
+  "pages.recipeDetailsPopover.print": "Print",
+
+  "pages.recipeDetailsPopover.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetailsPopover.unPinRecipe": "Unpin Recipe",
+
+  "pages.recipeDetailsPopover.edit": "Edit",
+  "pages.recipeDetailsPopover.makeACopy": "Make a Copy",
+  "pages.recipeDetailsPopover.dangerZone": "Danger Zone",
+  "pages.recipeDetailsPopover.delete": "Delete Recipe",
 
   "====== Pages.ResettableSelectPopover ======": "",
 
