@@ -465,7 +465,7 @@ router.post(
                   let recipeData = JSON.parse(data.toString());
 
                   let imageP = recipeData.photo_data ?
-                    UtilService.sendFileToS3(new Buffer(recipeData.photo_data, "base64"), true) : Promise.resolve();
+                    UtilService.sendFileToS3(Buffer.from(recipeData.photo_data, "base64"), true) : Promise.resolve();
 
                   return imageP.then(image => {
                     let notes = [
