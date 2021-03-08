@@ -301,7 +301,7 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append('paprikadb', paprikaFile, paprikaFile.name);
 
-    const url = `${this.utilService.getBase()}import/paprika${this.utilService.getTokenQuery()}`;
+    const url = `${this.utilService.getBase()}data/import/paprika${this.utilService.getTokenQuery()}`;
 
     return this.httpService.request({
       method: 'post',
