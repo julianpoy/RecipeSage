@@ -509,7 +509,7 @@ router.get(
     });
 
     if (!mealPlan) {
-      res.status(404).send("Meal plan with that ID not found or you do not have access!");
+      return res.status(404).send("Meal plan with that ID not found or you do not have access!");
     }
 
     const mealPlanSummary = await MealPlan.findOne({

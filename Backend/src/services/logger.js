@@ -21,7 +21,7 @@ try {
 //   data: { ...any }
 // }
 const capture = async (message, body) => {
-  if (process.env.NODE_ENV === "test") return;
+  if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "selfhost") return;
 
   try {
     await logger.log(message, {
@@ -32,7 +32,6 @@ const capture = async (message, body) => {
       err: body.err || null,
       data: body.data || null
     });
-    console.log("logged")
   } catch(e) {
     console.error("Could not send log to Graylog", e);
   }
@@ -45,7 +44,23 @@ const captureException = (exception) => {
   });
 };
 
+const captureInfo = (message, body = {}) => {
+  capture(message, {
+    level: 'info',
+    ...body,
+  });
+};
+
+const captureWarning = (message, body = {}) => {
+  capture(message, {
+    level: 'warning',
+    ...body,
+  });
+};
+
 module.exports = {
   capture,
-  captureException
+  captureException,
+  captureInfo,
+  captureWarning,
 };
