@@ -3,11 +3,15 @@ const router = express.Router();
 const pLimit = require('p-limit');
 const xmljs = require("xml-js");
 const multer = require('multer');
+const fs = require('fs-extra');
+const extract = require('extract-zip');
+const path = require('path');
 
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
 const JSONLDService = require('../services/json-ld');
+const LoggerService = require('../services/logger');
 
 const {
   Recipe,
@@ -157,7 +161,7 @@ router.get('/export/json-ld',
 const CONCURRENT_IMAGE_IMPORTS = 2;
 const MAX_IMAGES = 10;
 const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
-const importStandardizedRecipes = async (userId, recipesToImport) => {
+const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
     SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
@@ -231,7 +235,11 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
         el.images
           .filter((_, idx) => idx === 0 || canUploadMultipleImages)
           .filter((_, idx) => idx < MAX_IMAGES)
-          .map(imageURL => limit(() => UtilService.sendURLToS3(imageURL, highResConversion)))
+          .map(image => limit(() =>
+            imagesAsBuffer ?
+              UtilService.sendFileToS3(image, true, highResConversion) :
+              UtilService.sendURLToS3(image, highResConversion)
+          ))
       );
     }));
 
@@ -296,6 +304,99 @@ router.post('/import/json-ld',
     }
   }
 );
+
+router.post(
+  '/import/paprika',
+  MiddlewareService.validateSession(['user']),
+  multer({
+    dest: '/tmp/paprika-import/',
+  }).single('paprikadb'),
+  async (req, res, next) => {
+    let zipPath, extractPath;
+    try {
+      if (!req.file) {
+        const badFormatError = new Error("Request must include multipart file under paprikadb field");
+        badFormatError.status = 400;
+        throw badFormatError;
+      }
+
+      LoggerService.captureInfo("Paprika Import Started");
+
+      zipPath = req.file.path;
+      extractPath = zipPath + '-extract';
+
+      await new Promise((resolve, reject) => {
+        extract(zipPath, { dir: extractPath }, err => {
+          if (err) {
+            if (err.message === 'end of central directory record signature not found') err.status = 406;
+            reject(err);
+          }
+          else resolve();
+        })
+      });
+
+      const fileNames = await fs.readdir(extractPath);
+
+      const recipes = [];
+      for (const fileName of fileNames) {
+        const filePath = path.join(extractPath, fileName);
+
+        const fileBuf = await fs.readFile(filePath);
+        const fileContents = await UtilService.gunzip(fileBuf);
+
+        const recipeData = JSON.parse(fileContents.toString());
+
+        const notes = [
+          recipeData.notes,
+          recipeData.nutritional_info ? `Nutritional Info: ${recipeData.difficulty}` : '',
+          recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : '',
+          recipeData.rating ? `Rating: ${recipeData.rating}` : ''
+        ].filter(e => e && e.length > 0).join('\n');
+
+        const totalTime = [
+          recipeData.total_time,
+          recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : ''
+        ].filter(e => e).join(' ');
+
+        const labels = (recipeData.categories || [])
+          .map(e => UtilService.cleanLabelTitle(e))
+          .filter(e => e)
+
+        // Supports only the first image at the moment
+        const images = recipeData.photo_data ? [Buffer.from(recipeData.photo_data, "base64")] : [];
+
+        recipes.push({
+          title: recipeData.name,
+          description: recipeData.description,
+          ingredients: recipeData.ingredients,
+          instructions: recipeData.directions,
+          yield: recipeData.servings,
+          totalTime,
+          activeTime: recipeData.prep_time,
+          notes,
+          source: recipeData.source,
+          folder: 'main',
+          fromUserId: null,
+          url: recipeData.source_url,
+
+          labels,
+          images
+        });
+      }
+
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+
+      await importStandardizedRecipes(res.locals.session.userId, recipes, true);
+
+      res.status(201).send("Import complete");
+    } catch(err) {
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+      next(err);
+    }
+  }
+)
 
 module.exports = router;
 
