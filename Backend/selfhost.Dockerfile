@@ -9,6 +9,7 @@ FROM node:12-alpine
 RUN apk add --no-cache vips
 
 COPY --from=builder /app/Backend/migrate /app/migrate
+COPY --from=builder /app/Backend/activate /app/activate
 COPY --from=builder /app/Backend/www /app/www
 COPY --from=builder /app/Backend/node_modules/sharp /app/modules/sharp
 RUN ln -s /app/modules/sharp/build/Release/sharp.node /app/sharp.node
