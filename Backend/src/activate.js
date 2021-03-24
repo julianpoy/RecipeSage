@@ -5,8 +5,8 @@ const User = require('./models').User;
 
 const subscriptionService = require('./services/subscriptions');
 
-const email = process.argv[1];
-const subName = process.argv[2];
+const email = process.argv[2];
+const subName = process.argv[3];
 
 if (!email) return console.log("You must provide an email address as the first argument");
 
