@@ -14,4 +14,11 @@ then
   docker image tag julianpoy/recipesage-selfhost:static-latest julianpoy/recipesage-selfhost:static-$1
   docker push julianpoy/recipesage:static-$1
   docker push julianpoy/recipesage-selfhost:static-$1
+
+  docker rmi julianpoy/recipesage:static-$1
+  docker rmi julianpoy/recipesage-selfhost:static-$1
 fi
+
+docker rmi julianpoy/recipesage:static-latest
+docker rmi julianpoy/recipesage-selfhost:static-latest
+
