@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
@@ -18,6 +20,7 @@ import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
 })
 export class ProfilePage {
   defaultBackHref: string = RouteMap.SocialPage.getPath();
+  isSelfHost = IS_SELFHOST;
 
   handle: string;
   profile;

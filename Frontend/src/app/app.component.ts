@@ -202,7 +202,7 @@ export class AppComponent {
     const loggedInPages = [
       { id: 'home', title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
       { id: 'labels', title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      ...(this.isSelfHost ? [] : [{ id: 'people', title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() }]),
+      { id: 'people', title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() },
       { id: 'messages', title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
       { id: 'inbox', title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
       { id: 'newrecipe', title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
