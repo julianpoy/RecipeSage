@@ -17,6 +17,14 @@
   <div *ngIf="profile">
     <br />
 
+    <ion-item *ngIf="isSelfHost" lines="none">
+      <ion-label>
+        Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href="https://recipesage.com" target="_blank" rel="noreferrer noopener">RecipeSage.com</a> or any of the accounts located on the main site.
+      </ion-label>
+    </ion-item>
+
+    <br />
+
     <div class="profile-details-container">
       <div *ngIf="!profile.profileImages || profile.profileImages.length === 0" class="no-image">
         <img src="/assets/imgs/logo_green.png" />
