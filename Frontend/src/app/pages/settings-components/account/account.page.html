@@ -175,14 +175,36 @@
   <br /><br />
 
   <ion-item lines="none">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label>
+      Actions
+    </ion-label>
+  </ion-item>
+
+  <ion-button (click)="reindexRecipes()" class="ion-margin-start ion-margin-top">
+    Reset Search Index
+  </ion-button>
+
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">
+      <p>
+      Resetting your search index can help if you find that some recipes never appear in your search results at all.<br />
+      <b>Note:</b> This has <i>no effect</i> on the data within your recipe collection.
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br /><br />
+
+  <ion-item lines="none">
     <ion-icon name="warning" color="danger" slot="start"></ion-icon>
     <ion-label>
       Danger Zone!
     </ion-label>
   </ion-item>
 
-  <ion-item lines="none" class="ion-text-wrap">
-    <ion-label>
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">
       <p>
         Be careful with these actions - they are permanent.<br />
         You will be asked a to confirm any action you take here.
@@ -190,7 +212,15 @@
     </ion-label>
   </ion-item>
 
-  <ion-button color="danger" (click)="deleteAllRecipes()" class="ion-margin">
+  <ion-button color="danger" (click)="deleteAllRecipes()" class="ion-margin-start ion-margin-top">
     Delete All Recipes
   </ion-button>
+
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">
+      <p>
+        Deleting all of your recipes can take several minutes and is a permenant action.
+      </p>
+    </ion-label>
+  </ion-item>
 </ion-content>

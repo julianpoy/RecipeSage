@@ -286,6 +286,21 @@ export class AccountPage {
     });
   }
 
+  async reindexRecipes() {
+    const loading = this.loadingService.start();
+
+    await this.recipeService.reindex();
+
+    loading.dismiss();
+
+    const toast = await this.toastCtrl.create({
+      message: 'Your recipes have been reindexed',
+      duration: 5000
+    });
+
+    toast.present();
+  }
+
   async deleteAllRecipes() {
     const alert = await this.alertCtrl.create({
       header: 'Warning - You\'re about to delete all of your recipes!',
