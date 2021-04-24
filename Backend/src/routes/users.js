@@ -642,51 +642,57 @@ router.post(
 router.post(
   '/register',
   cors(),
-  function(req, res, next) {
+  async (req, res, next) => {
 
-  let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+  try {
+    if (process.env.DISABLE_REGISTRATION) throw new Error('Registration is disabled');
 
-  SQ.transaction(transaction => {
-    if (!UtilService.validateEmail(sanitizedEmail)) {
-      let e = new Error('Email is not valid!');
-      e.status = 412;
-      throw e;
-    } else if (!UtilService.validatePassword(req.body.password)) {
-      let e = new Error('Password is not valid!');
-      e.status = 411;
-      throw e;
-    } else {
-      //Check if a user with that email already exists
-      return User.findOne({
+    let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+
+    const token = await SQ.transaction(async transaction => {
+      if (!UtilService.validateEmail(sanitizedEmail)) {
+        let e = new Error('Email is not valid!');
+        e.status = 412;
+        throw e;
+      }
+
+      if (!UtilService.validatePassword(req.body.password)) {
+        let e = new Error('Password is not valid!');
+        e.status = 411;
+        throw e;
+      }
+
+      const user = await User.findOne({
         where: {
           email: sanitizedEmail
         },
         attributes: ['id'],
         transaction
-      }).then(user => {
-        if (user) {
-          let e = new Error("Account with that email address already exists!");
-          e.status = 406;
-          throw e;
-        }
-
-        let hashedPasswordData = User.generateHashedPassword(req.body.password);
-
-        return User.create({
-          name: (req.body.name || sanitizedEmail).trim(),
-          email: sanitizedEmail,
-          passwordHash: hashedPasswordData.hash,
-          passwordSalt: hashedPasswordData.salt,
-          passwordVersion: hashedPasswordData.version
-        }, { transaction }).then(newUser => {
-          return SessionService.generateSession(newUser.id, 'user', transaction).then(({ token }) => {
-            return token
-          });
-        });
       });
-    }
-  })
-  .then(token => {
+
+      if (user) {
+        let e = new Error("Account with that email address already exists!");
+        e.status = 406;
+        throw e;
+      }
+
+      let hashedPasswordData = User.generateHashedPassword(req.body.password);
+
+      const newUser = await User.create({
+        name: (req.body.name || sanitizedEmail).trim(),
+        email: sanitizedEmail,
+        passwordHash: hashedPasswordData.hash,
+        passwordSalt: hashedPasswordData.salt,
+        passwordVersion: hashedPasswordData.version
+      }, {
+        transaction
+      });
+
+      const session = await SessionService.generateSession(newUser.id, 'user', transaction);
+
+      return session.token;
+    });
+
     res.status(200).json({
       token
     });
@@ -731,8 +737,9 @@ https://twitter.com/RecipeSageO`;
     UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
       Raven.captureException(err);
     });
-  })
-  .catch(next);
+  } catch(err) {
+    next(err);
+  }
 });
 
 /* Forgot password */
