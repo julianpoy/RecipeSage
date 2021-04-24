@@ -226,6 +226,21 @@ export class RecipeService {
     });
   }
 
+  async reindex() {
+    const url = this.utilService.getBase() + `recipes/reindex${this.utilService.getTokenQuery()}`;
+
+    try {
+      const { data } = await this.httpService.request({
+        method: 'post',
+        url
+      });
+
+      return data;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err);
+    }
+  }
+
   clipFromUrl(clipUrl: string) {
     const url = this.utilService.getBase() + 'clip/' + this.utilService.getTokenQuery() + '&url=' + encodeURIComponent(clipUrl);
 
