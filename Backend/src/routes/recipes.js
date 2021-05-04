@@ -22,6 +22,8 @@ var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
 let SubscriptionsService = require('../services/subscriptions');
+const SharedUtils = require('../../../SharedUtils/src');
+const JSONLDService = require('../services/json-ld');
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
@@ -228,7 +230,7 @@ router.get(
     try {
       if (!res.locals.session && !req.query.userId) {
         const mustBeLoggedInError = new Error('You must be logged in to request this resource');
-        mustBeLoggedInError.status = 400;
+        mustBeLoggedInError.status = 401;
         throw mustBeLoggedInError;
       }
 
@@ -684,6 +686,44 @@ router.get(
     }
   }).catch(next);
 });
+
+router.get(
+  '/:recipeId/json-ld',
+  cors(),
+  MiddlewareService.validateSession(['user'], true),
+  async (req, res, next) => {
+    try {
+
+      let recipe = await Recipe.findOne({
+        where: {
+          id: req.params.recipeId
+        },
+        include: [{
+          model: Image,
+          as: 'images',
+          attributes: ['id', 'location']
+        }],
+        order: [
+          ['title', 'ASC']
+        ],
+      });
+
+      if (!recipe) {
+        return res.status(404).send("Recipe with that ID not found!");
+      }
+
+      recipe = recipe.toJSON();
+
+      recipe = UtilService.sortRecipeImages(recipe);
+
+      const jsonLD = JSONLDService.recipeToJSONLD(recipe);
+
+      res.status(200).json(jsonLD);
+    } catch(e) {
+      next(e);
+    }
+  }
+);
 
 //Update a recipe
 router.put(

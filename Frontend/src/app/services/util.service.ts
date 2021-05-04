@@ -12,6 +12,7 @@ export interface RecipeTemplateModifiers {
   printPreview?: boolean;
   showPrintButton?: boolean;
   print?: boolean; // Triggers immediate print
+  scale?: number;
 }
 
 // TODO: Create more types for various page getPath methods
@@ -170,6 +171,10 @@ export const RouteMap = {
   ImportPaprikaPage: {
     getPath() { return `/settings/import/paprika`; },
     path: 'settings/import/paprika',
+  },
+  ImportJSONLDPage: {
+    getPath() { return `/settings/import/json-ld`; },
+    path: 'settings/import/json-ld',
   },
   ImportPepperplatePage: {
     getPath() { return `/settings/import/pepperplate`; },

@@ -8,7 +8,7 @@
   "pages.welcome.appDemoImageAlt": "My Recipes Preview",
 
   "pages.welcome.description.welcome": "Welcome to RecipeSage!",
-  "pages.welcome.description.1": "RecipeSage is free (donation based) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.",
+  "pages.welcome.description.1": "RecipeSage is a free (donation based & open source) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.",
   "pages.welcome.description.2": "Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.",
 
   "pages.welcome.description.features": "What can RecipeSage do?",
@@ -32,9 +32,10 @@
 
   "pages.welcome.description.cta": "Why RecipeSage?",
   "pages.welcome.description.cta.1": "Free (donation based)",
-  "pages.welcome.description.cta.2": "Easy to use",
-  "pages.welcome.description.cta.3": "Available on desktop and all mobile devices",
-  "pages.welcome.description.cta.4": "Import recipes from any URL",
+  "pages.welcome.description.cta.2": "Open source",
+  "pages.welcome.description.cta.3": "Easy to use",
+  "pages.welcome.description.cta.4": "Available on desktop and all mobile devices",
+  "pages.welcome.description.cta.5": "Import recipes from any URL",
 
   "====== Pages.Auth ======": "",
 

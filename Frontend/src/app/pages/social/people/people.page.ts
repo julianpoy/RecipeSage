@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
@@ -14,6 +16,7 @@ import { AddFriendModalPage } from '../add-friend-modal/add-friend-modal.page';
 })
 export class PeoplePage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
+  isSelfHost = IS_SELFHOST;
 
   friendships;
   accountInfo;

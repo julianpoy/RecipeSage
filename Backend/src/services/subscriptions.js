@@ -33,6 +33,15 @@ const SUBSCRIPTION_MODELS = {
       CAPABILITIES.MULTIPLE_IMAGES,
       CAPABILITIES.EXPANDABLE_PREVIEWS
     ]
+  },
+  "forever": {
+    title: "The Forever Subscription...",
+    expiresIn: 3650, // 10 years - okay, not quite forever
+    capabilities: [
+      CAPABILITIES.HIGH_RES_IMAGES,
+      CAPABILITIES.MULTIPLE_IMAGES,
+      CAPABILITIES.EXPANDABLE_PREVIEWS
+    ]
   }
 };
 

@@ -4,11 +4,13 @@ const fetch = require('node-fetch');
 
 const puppeteer = require('puppeteer-core');
 
+const jsdom = require("jsdom");
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
 const loggerService = require('../services/logger');
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+const sanitizeHtml = require('sanitize-html');
 
 const disconnectPuppeteer = (browser) => {
   try {
@@ -93,8 +95,9 @@ const clipRecipe = async clipUrl => {
 
     await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
     const recipeData = await page.evaluate((interceptUrl) => {
-      window.RC_ML_CLASSIFY_ENDPOINT = interceptUrl;
-      return window.RecipeClipper.clipRecipe();
+      return window.RecipeClipper.clipRecipe({
+        mlClassifyEndpoint: interceptUrl,
+      });
     }, INTERCEPT_PLACEHOLDER_URL);
 
     loggerService.capture("Clip success", {
@@ -115,6 +118,44 @@ const clipRecipe = async clipUrl => {
   }
 };
 
+const clipRecipeJSDOM = async url => {
+  const response = await fetch(url);
+
+  const document = await response.text();
+
+  const dom = new jsdom.JSDOM(document);
+
+  const { window } = dom;
+
+  Object.defineProperty(window.Element.prototype, 'innerText', {
+    get() {
+      return sanitizeHtml(this.textContent, {
+        allowedTags: [], // remove all tags and return text content only
+        allowedAttributes: {}, // remove all tags and return text content only
+      });
+    }
+  });
+
+  window.fetch = fetch;
+
+  return await RecipeClipper.clipRecipe({
+    window,
+    mlClassifyEndpoint: process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL,
+  });
+};
+
+const objDiffKeys = (obj1, obj2) => {
+  obj1 = obj1 || {};
+  obj2 = obj2 || {};
+
+  const keys = [...new Set([
+    ...Object.keys(obj1),
+    ...Object.keys(obj2),
+  ])];
+
+  return keys.filter(key => obj1[key] !== obj2[key]);
+}
+
 router.get('/', async (req, res, next) => {
   try {
     const url = (req.query.url || "").trim();
@@ -122,9 +163,36 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send("Must provide a URL");
     }
 
-    const recipeData = await clipRecipe(url);
+    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
+      clipRecipe(url),
+      clipRecipeJSDOM(url),
+    ]);
 
-    res.status(200).json(recipeData);
+    const recipeData = clipRecipeResult.value || {};
+    const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
+
+    const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
+    const diff = differentKeys.reduce((acc, key) => {
+      acc[key] = {
+        recipeData: recipeData[key],
+        recipeDataJSDOM: recipeDataJSDOM[key],
+      }
+      return acc;
+    }, {});
+
+    loggerService.capture("Clip compare", {
+      level: 'info',
+      data: {
+        diff: diff,
+        fieldDiffCount: differentKeys.length,
+      }
+    });
+
+    if (Object.keys(recipeData).length) {
+      res.status(200).json(recipeData);
+    } else {
+      res.status(200).json(recipeDataJSDOM);
+    }
   } catch(e) {
     next(e);
   }

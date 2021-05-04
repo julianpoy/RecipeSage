@@ -1,0 +1,67 @@
+<ion-header>
+
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Import Recipes from JSON-LD File</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-item lines="none">
+    <ion-label class="ion-text-center ion-text-wrap">
+      <br /><br />
+      <p>
+        This will import a JSON-LD (ends in .json) file into RecipeSage (this is one of the file formats exported by RecipeSage).
+      </p>
+      <br />
+      <p>
+        <b>The import task can take several minutes</b><br />
+        It depends on the format and size of your file<br />
+      </p>
+      <br />
+      <p>
+        If you're having trouble with the import, send me an email with the file and I can import it manually.<br />
+        If your file is very large, you may have trouble importing it via this interface due to browser limitations.
+      </p>
+      <br />
+      <br />
+      <p>
+        Please consider donating if your file contains a large number of recipes or images.
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <br />
+
+  <div class="ion-text-center ion-padding">
+    <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" accept=".json" />
+    <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
+
+    <div class="ion-padding" *ngIf="showFileTypeWarning()">
+      <p>
+        Warning! This filetype does not end in .json<br />
+        It may not work.
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="isFileTooLarge()">
+      <p>
+        <b>This file is too large to upload directly.</b><br />
+        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+          Please contact me to have your database imported manually.
+        </a>
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
+      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">Upload and Import</ion-button>
+      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">Upload and Import Anyway</ion-button>
+      <ion-button *ngIf="loading">Importing, please wait...</ion-button>
+    </div>
+  </div>
+</ion-content>

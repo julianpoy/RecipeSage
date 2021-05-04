@@ -24,8 +24,7 @@ if (process.env.AWS_ENDPOINT) s3Config.endpoint = process.env.AWS_ENDPOINT; // N
 if (process.env.AWS_S3_FORCE_PATH_STYLE !== null) s3Config.s3ForcePathStyle = process.env.AWS_S3_FORCE_PATH_STYLE; // Needed for minio
 if (process.env.AWS_S3_SIGNATURE_VERSION) s3Config.signatureVersion = process.env.AWS_S3_SIGNATURE_VERSION; // Needed for minio
 
-var s3 = new aws.S3();
-aws.config.update(s3Config);
+const s3 = new aws.S3(s3Config);
 
 exports.generateS3Location = key => process.env.AWS_S3_PUBLIC_PATH ? process.env.AWS_S3_PUBLIC_PATH + key : 'https://' + process.env.AWS_BUCKET + '.s3.' + process.env.AWS_REGION + '.amazonaws.com/' + key;
 
@@ -411,3 +410,6 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 exports.cleanLabelTitle = labelTitle => {
   return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
 }
+
+exports.capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
+

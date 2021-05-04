@@ -22,8 +22,8 @@ export class ExportPage {
     window.open(exportUrl);
   }
 
-  exportAsJSON() {
-    this.export('json');
+  exportAsJSONLD() {
+    this.export('json-ld');
   }
 
   exportAsXML() {

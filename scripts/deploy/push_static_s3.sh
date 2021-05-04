@@ -22,19 +22,19 @@ aws s3 sync www s3://chefbook-static/frontend/$TAG/ \
   --include "index.html" \
   --include "service-worker.js" \
   --acl public-read \
-  --cache-control "max-age=3600, must-revalidate"
+  --cache-control "public, max-age=3600, must-revalidate"
 
 # General, non-revhashed frontend files - semi time sensitive
 aws s3 sync www s3://chefbook-static/frontend/$TAG/ \
   --exclude "index.html" \
   --exclude "service-worker.js" \
   --acl public-read \
-  --cache-control "max-age=604800, must-revalidate"
+  --cache-control "public, max-age=604800, must-revalidate"
 
 # Revhashed files (previously copied to www-revhashed) - persist long-term
 aws s3 sync www-revhashed s3://chefbook-static/frontend/$TAG/ \
   --acl public-read \
-  --cache-control "max-age=2592000, must-revalidate"
+  --cache-control "public, max-age=2592000, immutable"
 
 # Push to latest (STG)
 aws s3 sync s3://chefbook-static/frontend/$TAG/ s3://chefbook-static/frontend/latest

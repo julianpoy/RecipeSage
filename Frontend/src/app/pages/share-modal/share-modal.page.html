@@ -143,6 +143,17 @@
             <ion-icon name='resize' slot="start"></ion-icon>
           </ion-item>
 
+          <ion-item>
+            <ion-toggle
+              [(ngModel)]="enableJSONLD"
+              (ngModelChange)="updateEmbed();"
+              slot="start"></ion-toggle>
+            <ion-label>
+              Enable JSON-LD for SEO
+            </ion-label>
+            <ion-icon name='resize' slot="start"></ion-icon>
+          </ion-item>
+
           <ion-item lines="none">
             Copy the code below and paste it into your website HTML
           </ion-item>

@@ -13,6 +13,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <ion-item *ngIf="isSelfHost" lines="none">
+    <ion-label>
+      Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href="https://recipesage.com" target="_blank" rel="noreferrer noopener">RecipeSage.com</a> or any of the accounts located on the main site.
+    </ion-label>
+  </ion-item>
+
+  <br />
+
   <null-state *ngIf="accountInfo && !accountInfo?.enableProfile">
     <ion-icon name="person-circle" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
