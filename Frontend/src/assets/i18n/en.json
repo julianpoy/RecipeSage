@@ -270,5 +270,33 @@
   "pages.contributeCancel.cta.4": "Please reconsider - your contribution is truly appreciated!",
   "pages.contributeCancel.contribute": "Contribute",
 
+  "====== Pages.DownloadAndInstall ======": "",
+
+  "pages.downloadAndInstall.title": "Download & Install",
+  "pages.downloadAndInstall.subtitle": "Click a platform for installation instructions",
+  "pages.downloadAndInstall.done": "This will install RecipeSage as a native application on your device.",
+
+  "pages.downloadAndInstall.thisDevice": "This Device",
+
+  "pages.downloadAndInstall.android.title": "Android Device",
+  "pages.downloadAndInstall.android.instructionHeader": "To install RecipeSage on Android:",
+  "pages.downloadAndInstall.android.step.1": "Open the Chrome browser",
+  "pages.downloadAndInstall.android.step.2": "Open the browser menu via a button in your browser that looks like this:",
+  "pages.downloadAndInstall.android.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.ios.title": "Apple Mobile Device",
+  "pages.downloadAndInstall.ios.instructionHeader": "To install RecipeSage on Apple Mobile Devices (IOS):",
+  "pages.downloadAndInstall.ios.step.1": "Open Safari",
+  "pages.downloadAndInstall.ios.step.2": "Open the share menu via a button in the bottom bar that looks like this:",
+  "pages.downloadAndInstall.ios.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.desktop.title": "Desktop or Laptop Devices",
+  "pages.downloadAndInstall.desktop.instructionHeader": "To install RecipeSage on desktop or laptop devices:",
+  "pages.downloadAndInstall.desktop.step.1": "Open Google Chrome browser",
+  "pages.downloadAndInstall.desktop.step.2": "Open the browser menu via the button in the top right corner that looks like this:",
+  "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
+
+
+
   "trailing.comma.placeholder": ""
 }
