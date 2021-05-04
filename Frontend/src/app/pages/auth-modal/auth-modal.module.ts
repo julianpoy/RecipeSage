@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { AuthModalPage } from './auth-modal.page';
 import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreement/tos-clickwrap-agreement.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AuthModalPage,
@@ -12,6 +14,7 @@ import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreemen
   imports: [
     CommonModule,
     IonicModule,
+    GlobalModule,
     TosClickwrapAgreementModule,
   ],
   entryComponents: [
