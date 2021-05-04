@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController } from '@ionic/angular';
 
+import { IS_SELFHOST } from 'src/environments/environment';
+
 import { EventService } from '@/services/event.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -16,6 +18,8 @@ import { CapabilitiesService } from '@/services/capabilities.service';
 })
 export class AuthModalPage {
   @Input() register: boolean;
+
+  isSelfHost = IS_SELFHOST;
 
   name = '';
   email = '';
