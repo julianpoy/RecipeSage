@@ -8,6 +8,8 @@ import { ContributePage } from './contribute.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreement/tos-clickwrap-agreement.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ContributePage,
@@ -21,6 +23,7 @@ import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreemen
         component: ContributePage
       }
     ]),
+    GlobalModule,
     FormsModule,
     ReactiveFormsModule,
     LogoIconModule,

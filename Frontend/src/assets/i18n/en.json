@@ -221,8 +221,54 @@
   "pages.about.emailMe": "Feel free to email me at",
   "pages.about.socialTitle": "Social Media",
 
+  "====== Pages.Contact ======": "",
+
+  "pages.contact.title": "Contact Me",
+  "pages.contact.subtitle": "Contact Info",
+  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, please email me at",
+  "pages.contact.website": "Additional contact info is available on my personal website, or via the social media links below. My personal website is",
+  "pages.contact.socialTitle": "Social Media",
+
+  "====== Pages.Contribute ======": "",
+
+  "pages.contribute.title": "Contribute",
+  "pages.contribute.subtitle": "Contribute to RecipeSage",
+  "pages.contribute.mission": "My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.",
+  "pages.contribute.purpose": "However, as RecipeSage grows, hosting costs for servers and images begin to add up.",
+  "pages.contribute.monthly": "Monthly",
+  "pages.contribute.monthly.description": "You will unlock bonus features for the months that you are subscribed.",
+  "pages.contribute.oneTime": "One-Time",
+  "pages.contribute.oneTime.description": "You will unlock bonus features for one year.",
+  "pages.contribute.custom": "Custom",
+  "pages.contribute.action": "Contribute!",
+  "pages.contribute.tosActionTitle": "contributing",
+
+  "pages.contribute.bonus.title": "As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features for your account. You will be able to:",
+  "pages.contribute.bonus.feature.1": "Upload images in high-resolution",
+  "pages.contribute.bonus.feature.2": "Upload multiple images for each recipe",
+  "pages.contribute.bonus.enabled": "Enabled",
+
+  "pages.contribute.bonus.reason": "Bonus features features are accessible only to contributors because these particular features are costly for me to host.",
+
+  "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
+  "pages.contribute.cta.2": "Please consider contributing toward the ongoing maintenance of RecipeSage.",
 
 
+  "====== Pages.ContributeThankYou ======": "",
+
+  "pages.contributeThankYou.title": "Thank You!",
+  "pages.contributeThankYou.thanks": "Thank you for being a part of the RecipeSage family and helping to keep it alive!",
+  "pages.contributeThankYou.bonus": "Bonus features should be unlocked for your account shortly.",
+  "pages.contributeThankYou.questions": "Please feel free to contact me with any questions, concerns or comments.",
+
+  "====== Pages.ContributeCancel ======": "",
+
+  "pages.contributeCancel.title": "We need your help!",
+  "pages.contributeCancel.cta.1": "RecipeSage is donation based - every contribution helps!",
+  "pages.contributeCancel.cta.2": "Unfortunately, RecipeSage doesn't get many donations since it is a fairly small platform.",
+  "pages.contributeCancel.cta.3": "In order to keep things free while paying for server costs, we need your help.",
+  "pages.contributeCancel.cta.4": "Please reconsider - your contribution is truly appreciated!",
+  "pages.contributeCancel.contribute": "Contribute",
 
   "trailing.comma.placeholder": ""
 }
