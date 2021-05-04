@@ -208,5 +208,20 @@
   "pages.rselectpopover.resetAll": "Reset All",
   "pages.rselectpopover.done": "Done",
 
+  "====== Pages.About ======": "",
+
+  "pages.about.title": "About & Support",
+  "pages.about.links.details": "About Me & RecipeSage",
+  "pages.about.links.contact": "Contact",
+  "pages.about.links.contribute": "Contribute!",
+  "pages.about.links.tipsTricksTutorials": "Tips, tricks and tutorials",
+  "pages.about.links.releaseNotes": "Release Notes",
+  "pages.about.links.legal": "Legal, agreements and disclaimers",
+  "pages.about.emailMe": "Feel free to email me at",
+  "pages.about.socialTitle": "Social Media",
+
+
+
+
   "trailing.comma.placeholder": ""
 }

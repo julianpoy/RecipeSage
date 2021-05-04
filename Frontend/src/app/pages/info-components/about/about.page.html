@@ -5,46 +5,44 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>About &amp; Support</ion-title>
+    <ion-title>{{ 'pages.about.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content class="ion-padding">
-  <p>Hello! I'm Julian Poyourow. I made RecipeSage as a free alternative to many of the online recipe programs.</p>
-
   <ion-list>
     <ion-item button (click)="goToAboutDetails()">
       <ion-icon name="person" slot="start"></ion-icon>
-      More About Me &amp; RecipeSage
+      {{ 'pages.about.links.details' | translate }}
     </ion-item>
     <ion-item button (click)="goToContact()">
       <ion-icon name="send" slot="start"></ion-icon>
-      Contact
+      {{ 'pages.about.links.contact' | translate }}
     </ion-item>
     <ion-item button (click)="goToContribute()">
       <ion-icon name="heart" slot="start"></ion-icon>
-      Contribute!
+      {{ 'pages.about.links.contribute' | translate }}
     </ion-item>
     <ion-item button (click)="goToTipsTricksTutorials()">
       <ion-icon name="help" slot="start"></ion-icon>
-      Tips, tricks and tutorials
+      {{ 'pages.about.links.tipsTricksTutorials' | translate }}
     </ion-item>
     <ion-item button (click)="goToReleaseNotes()">
       <ion-icon name="archive" slot="start"></ion-icon>
-      Release Notes
+      {{ 'pages.about.links.releaseNotes' | translate }}
     </ion-item>
     <ion-item button (click)="goToLegal()">
       <ion-icon name="list" slot="start"></ion-icon>
-      Legal, agreements and disclaimers
+      {{ 'pages.about.links.legal' | translate }}
     </ion-item>
   </ion-list>
 
-  <p>Feel free to email me at <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a>.</p>
+  <p>{{ 'pages.about.emailMe' | translate }} <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a>.</p>
 
 
   <br />
-  <p><b>Social Media</b></p>
+  <p><b>{{ 'pages.about.socialTitle' | translate }}</b></p>
   <social-links></social-links>
 </ion-content>
