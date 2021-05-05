@@ -5,6 +5,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { LabelsPopoverPage } from './labels-popover.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     LabelsPopoverPage,
@@ -14,6 +16,7 @@ import { LabelsPopoverPage } from './labels-popover.page';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    GlobalModule,
   ],
   entryComponents: [
     LabelsPopoverPage

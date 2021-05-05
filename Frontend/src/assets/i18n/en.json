@@ -296,7 +296,25 @@
   "pages.downloadAndInstall.desktop.step.2": "Open the browser menu via the button in the top right corner that looks like this:",
   "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
 
+  "====== Pages.LabelsPopover ======": "",
 
+  "pages.labelsPopover.title": "Options",
+  "pages.labelsPopover.options.showCreatedAt": "Show Created At",
+  "pages.labelsPopover.options.selectMultipleLabels": "Select Multiple Labels",
+  "pages.labelsPopover.options.unselectLabels": "Unselect All Labels",
+
+  "====== Pages.Labels ======": "",
+
+  "pages.labels.title": "My Labels - Manage",
+  "pages.labels.selectionModeTitle": "{{count}} Selected",
+  "pages.labels.subtitle": "You have {{count}} total labels. Click a label to view.",
+  "pages.labels.label.recipeCount": "{{count}} Recipes",
+  "pages.labels.label.createdAt": "Created {{dateString}}",
+  "pages.labels.label.selected": "Selected",
+
+  "pages.labels.nullState.1": "You don't have any labels yet.",
+  "pages.labels.nullState.2": "Labels can be created on the recipe details page.",
+  "pages.labels.nullState.3": "Labels only exist so long as they are assigned to at least one recipe.",
 
   "trailing.comma.placeholder": ""
 }
