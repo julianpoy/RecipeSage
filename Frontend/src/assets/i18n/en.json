@@ -316,5 +316,15 @@
   "pages.labels.nullState.2": "Labels can be created on the recipe details page.",
   "pages.labels.nullState.3": "Labels only exist so long as they are assigned to at least one recipe.",
 
+  "====== Pages.ManageLabelModal ======": "",
+
+  "pages.manageLabelModal.title": "Manage Label: {{name}}",
+  "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
+  "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
+  "pages.manageLabelModal.warning": "Note: These actions are permanent",
+  "pages.manageLabelModal.rename": "Rename",
+  "pages.manageLabelModal.merge": "Merge With Another Label",
+  "pages.manageLabelModal.delete": "Delete",
+
   "trailing.comma.placeholder": ""
 }
