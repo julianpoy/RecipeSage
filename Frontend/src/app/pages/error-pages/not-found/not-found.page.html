@@ -5,7 +5,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Page Not Found</ion-title>
+    <ion-title>{{ 'pages.notfound.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -15,14 +15,15 @@
   <null-state>
     <ion-icon name="compass" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
-      <h2>Page Not Found!</h2>
+      <h2>{{ 'pages.notfound.error.title' | translate }}</h2>
       <br /><br />
       <p>
-        It looks like the page you are looking for doesn't exist.<br />
-        Check to see if you typed the URL correctly.<br />
-        If you're still having trouble, or if somewhere in the app took you here,
-        please <a (click)="$event.preventDefault(); goToContact()" href="">contact me</a>.<br />
-        <a (click)="$event.preventDefault(); goToHome()" href="">Click here to go to your recipes</a><br />
+        {{ 'pages.notfound.error.message1' | translate }}<br />
+        {{ 'pages.notfound.error.message2' | translate }}<br />
+        {{ 'pages.notfound.error.message3' | translate }}<br />
+        <br />
+        <a (click)="$event.preventDefault(); goToContact()" href="">{{ 'pages.notfound.error.contact' | translate }}</a><br />
+        <a (click)="$event.preventDefault(); goToHome()" href="">{{ 'pages.notfound.error.goHome' | translate }}</a><br />
       </p>
     </ion-label>
   </null-state>

@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { AboutPage } from './about.page';
 import { SocialLinksModule } from '@/components/social-links/social-links.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AboutPage,
@@ -19,6 +21,7 @@ import { SocialLinksModule } from '@/components/social-links/social-links.module
         component: AboutPage
       }
     ]),
+    GlobalModule,
     SocialLinksModule
   ],
 })

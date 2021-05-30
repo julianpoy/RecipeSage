@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { AuthPage } from './auth.page';
 import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreement/tos-clickwrap-agreement.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AuthPage,
@@ -19,6 +21,7 @@ import { TosClickwrapAgreementModule } from '@/components/tos-clickwrap-agreemen
         component: AuthPage
       }
     ]),
+    GlobalModule,
     TosClickwrapAgreementModule
   ],
 })

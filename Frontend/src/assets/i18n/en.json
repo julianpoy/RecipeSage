@@ -1,0 +1,330 @@
+{
+  "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
+  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.title": "All of your recipes in one place",
+  "pages.welcome.subtitle": "A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.registerButton": "Create an account",
+  "pages.welcome.loginButton": "Log In",
+  "pages.welcome.appDemoImageAlt": "My Recipes Preview",
+
+  "pages.welcome.description.welcome": "Welcome to RecipeSage!",
+  "pages.welcome.description.1": "RecipeSage is a free (donation based & open source) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.",
+  "pages.welcome.description.2": "Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.",
+
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features.1.title": "Import from any URL:",
+  "pages.welcome.description.features.1.description": "Create a recipe simply by punching in a web URL",
+  "pages.welcome.description.features.2.title": "Powerful search:",
+  "pages.welcome.description.features.2.description": "Search every field within your recipes including misspellings and similar words",
+  "pages.welcome.description.features.3.title": "Labelling/categorization system:",
+  "pages.welcome.description.features.3.description": "Tag your recipes and filter by tags",
+  "pages.welcome.description.features.4.title": "Drag and drop meal planning:",
+  "pages.welcome.description.features.4.description": "Schedule your meals interactively, quickly and easily",
+  "pages.welcome.description.features.5.title": "Shopping lists:",
+  "pages.welcome.description.features.5.description": "Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined",
+  "pages.welcome.description.features.6.title": "Sharing:",
+  "pages.welcome.description.features.6.description": "Share your recipes, collaborate on meal plans and shopping lists with your family or friends",
+  "pages.welcome.description.features.7.title": "Import:",
+  "pages.welcome.description.features.7.description": "Supports Pepperplate, Living Cookbook, and Paprika",
+  "pages.welcome.description.features.8.title": "Export:",
+  "pages.welcome.description.features.8.description": "Back up your recipes in multiple formats for data portability",
+
+  "pages.welcome.description.cta": "Why RecipeSage?",
+  "pages.welcome.description.cta.1": "Free (donation based)",
+  "pages.welcome.description.cta.2": "Open source",
+  "pages.welcome.description.cta.3": "Easy to use",
+  "pages.welcome.description.cta.4": "Available on desktop and all mobile devices",
+  "pages.welcome.description.cta.5": "Import recipes from any URL",
+
+  "====== Pages.Auth ======": "",
+
+  "pages.auth.title.login": "Log In",
+  "pages.auth.title.register": "Create an Account",
+
+  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href='https://recipesage.com'>RecipeSage.com</a> or any of the accounts located on the main site.",
+
+  "pages.auth.welcome.login": "Welcome back!",
+  "pages.auth.welcome.login.sub": "Please login with your account details below.",
+
+  "pages.auth.welcome.register": "Welcome!",
+  "pages.auth.welcome.register.sub1": "We need a few details to create your account.",
+  "pages.auth.welcome.register.sub2": "After this, you'll be set up and ready to go.",
+
+  "pages.auth.input.name": "Full Name or Nickname",
+  "pages.auth.input.email": "Email",
+  "pages.auth.input.password": "Password",
+  "pages.auth.input.confirmPassword": "Confirm Password",
+
+  "pages.auth.selfhostWarning2": "Make sure you trust the site owner of this selfhost copy",
+
+  "pages.auth.button.login": "Log In",
+  "pages.auth.button.register": "Create Account",
+  "pages.auth.button.forgotPassword": "Forgot password",
+  "pages.auth.button.registerInstead": "Create an account instead",
+  "pages.auth.button.loginInstead": "Log in instead",
+
+  "====== Pages.Home ======": "",
+
+  "pages.home.title.selectionMode": "{{count}} Selected",
+  "pages.home.title.main": "My Recipes",
+  "pages.home.title.inbox": "Recipe Inbox",
+
+  "pages.home.title.sharedAll": "Shared Recipes",
+  "pages.home.title.sharedLabel": "Shared Label: {{label}}",
+  "pages.home.title.sharedAll.withProfile": "{{name}}'s Shared Recipes",
+  "pages.home.title.sharedLabel.withProfile": "{{name}}'s Shared Label: {{label}}",
+
+  "pages.home.search.placeholder": "Search",
+
+  "pages.home.recipe.source": "Source:",
+  "pages.home.recipe.from": "From:",
+  "pages.home.recipe.labels": "Labels:",
+  "pages.home.recipe.selected": "Selected",
+
+  "pages.home.errors.emptyCollection.title": "This user's collection is empty",
+  "pages.home.errors.emptyCollection.message": "This shared collection has no recipes in it.",
+
+  "pages.home.errors.noRecipes.title": "Welcome to RecipeSage!",
+  "pages.home.errors.noRecipes.message1": "This is where your recipes will appear.",
+  "pages.home.errors.noRecipes.message2": "It looks like you don't have any recipes yet.",
+  "pages.home.errors.noRecipes.message3": "Click the + button in the bottom right corner to add one!",
+  "pages.home.errors.noRecipes.message4": "You can also import recipes!",
+  "pages.home.errors.noRecipes.message5": "Use the side menu to go to settings -> import",
+  "pages.home.errors.noRecipes.message6": "You can install the clip tool extension on desktop browsers:",
+  "pages.home.errors.noRecipes.message7": "For detailed how-tos, visit the Tips Tricks & Tutorials page",
+
+  "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
+  "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
+
+
+  "pages.home.errors.noSearchResults.message1": "No search results.",
+  "pages.home.errors.noSearchResults.message2": "Search includes:",
+  "pages.home.errors.noSearchResults.message3": "Title, description, source, ingredients, instructions, and notes.",
+
+  "====== Pages.NotFound ======": "",
+
+  "pages.notfound.title": "Page Not Found",
+  "pages.notfound.error.title": "Page Not Found!",
+  "pages.notfound.error.message1" : "It looks like the page you are looking for doesn't exist.",
+  "pages.notfound.error.message2" : "Check to see if you typed the URL correctly.",
+  "pages.notfound.error.message3" : "If you're still having trouble, or if somewhere in the app took you here, please contact me.",
+  "pages.notfound.error.contact" : "Contact me",
+  "pages.notfound.error.goHome" : "Click here to go to your recipes",
+
+  "====== Pages.HomePopover ======": "",
+
+  "pages.homepopover.options": "Options",
+  "pages.homepopover.options.layout": "Layout",
+  "pages.homepopover.options.layout.tiles": "Tiles",
+  "pages.homepopover.options.layout.list": "List",
+  "pages.homepopover.options.showLabels": "Show Labels",
+  "pages.homepopover.options.showLabelToggles": "Show Label Toggles",
+  "pages.homepopover.options.showImages": "Show Images",
+  "pages.homepopover.options.showSource": "Show Source",
+  "pages.homepopover.options.showRecipeDescription": "Show Description",
+
+  "pages.homepopover.options.sortBy": "Sort by",
+  "pages.homepopover.options.sortBy.title": "Title",
+  "pages.homepopover.options.sortBy.createdNewest": "Created (newest first)",
+  "pages.homepopover.options.sortBy.createdOldest": "Created (oldest first)",
+  "pages.homepopover.options.sortBy.updatedNewest": "Updated (newest first)",
+  "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
+
+  "pages.homepopover.options.filterByLabel": "Filter by Label",
+  "pages.homepopover.options.matchAllLabels": "Match All Labels",
+  "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
+  "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
+
+  "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
+
+  "====== Pages.RecipeDetails ======": "",
+
+  "pages.recipeDetails.pageTitle": "Recipe Details",
+  "pages.recipeDetails.source": "Source",
+  "pages.recipeDetails.activeTime": "Active Time",
+  "pages.recipeDetails.totalTime": "Total Time",
+  "pages.recipeDetails.yield": "Yield",
+
+  "pages.recipeDetails.sentBy": "This recipe was sent to you by {{name}}",
+  "pages.recipeDetails.sentByAction": "Add this recipe to your recipes by clicking the button at the bottom of the page.",
+
+  "pages.recipeDetails.ingredients": "Ingredients",
+  "pages.recipeDetails.noIngredients": "No Ingredients",
+
+  "pages.recipeDetails.scaleStatus": "{{scale}}x scale (click to change)",
+
+  "pages.recipeDetails.instructions": "Instructions",
+  "pages.recipeDetails.noInstructions": "No Instructions",
+
+  "pages.recipeDetails.notes": "Notes",
+  "pages.recipeDetails.noNotes": "No Notes",
+
+  "pages.recipeDetails.labels": "Labels",
+  "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
+
+  "pages.recipeDetails.labels.clickToCreate": "Click to create",
+  "pages.recipeDetails.labels.alreadyAdded": "Already added",
+  "pages.recipeDetails.labels.clickToAdd": "Click to add",
+
+  "pages.recipeDetails.created": "Created",
+  "pages.recipeDetails.updated": "Last edited",
+  "pages.recipeDetails.saveToMyRecipes": "Save This Recipe to My Recipes",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.doesNotBelongToYou": "This recipe does not belong to you yet.",
+  "pages.recipeDetails.requiresAccountToSave": "Create an account or login to save this recipe to your collection.",
+  "pages.recipeDetails.registerOrLoginToSave": "Register/Login to Save This Recipe",
+
+  "pages.recipeDetails.edit": "Edit",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetails.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetails.share": "Share",
+  "pages.recipeDetails.print": "Print",
+  "pages.recipeDetails.makeACopy": "Make a Copy",
+
+  "pages.recipeDetails.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetails.unPinRecipe": "Unpin Recipe",
+
+  "====== Pages.RecipeDetailsPopover ======": "",
+
+  "pages.recipeDetailsPopover.options": "Options",
+  "pages.recipeDetailsPopover.keepScreenOn": "Keep Screen On",
+  "pages.recipeDetailsPopover.actions": "Actions",
+  "pages.recipeDetailsPopover.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetailsPopover.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetailsPopover.share": "Share",
+  "pages.recipeDetailsPopover.print": "Print",
+
+  "pages.recipeDetailsPopover.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetailsPopover.unPinRecipe": "Unpin Recipe",
+
+  "pages.recipeDetailsPopover.edit": "Edit",
+  "pages.recipeDetailsPopover.makeACopy": "Make a Copy",
+  "pages.recipeDetailsPopover.dangerZone": "Danger Zone",
+  "pages.recipeDetailsPopover.delete": "Delete Recipe",
+
+  "====== Pages.ResettableSelectPopover ======": "",
+
+  "pages.rselectpopover.resetAll": "Reset All",
+  "pages.rselectpopover.done": "Done",
+
+  "====== Pages.About ======": "",
+
+  "pages.about.title": "About & Support",
+  "pages.about.links.details": "About Me & RecipeSage",
+  "pages.about.links.contact": "Contact",
+  "pages.about.links.contribute": "Contribute!",
+  "pages.about.links.tipsTricksTutorials": "Tips, tricks and tutorials",
+  "pages.about.links.releaseNotes": "Release Notes",
+  "pages.about.links.legal": "Legal, agreements and disclaimers",
+  "pages.about.emailMe": "Feel free to email me at",
+  "pages.about.socialTitle": "Social Media",
+
+  "====== Pages.Contact ======": "",
+
+  "pages.contact.title": "Contact Me",
+  "pages.contact.subtitle": "Contact Info",
+  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, please email me at",
+  "pages.contact.website": "Additional contact info is available on my personal website, or via the social media links below. My personal website is",
+  "pages.contact.socialTitle": "Social Media",
+
+  "====== Pages.Contribute ======": "",
+
+  "pages.contribute.title": "Contribute",
+  "pages.contribute.subtitle": "Contribute to RecipeSage",
+  "pages.contribute.mission": "My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.",
+  "pages.contribute.purpose": "However, as RecipeSage grows, hosting costs for servers and images begin to add up.",
+  "pages.contribute.monthly": "Monthly",
+  "pages.contribute.monthly.description": "You will unlock bonus features for the months that you are subscribed.",
+  "pages.contribute.oneTime": "One-Time",
+  "pages.contribute.oneTime.description": "You will unlock bonus features for one year.",
+  "pages.contribute.custom": "Custom",
+  "pages.contribute.action": "Contribute!",
+  "pages.contribute.tosActionTitle": "contributing",
+
+  "pages.contribute.bonus.title": "As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features for your account. You will be able to:",
+  "pages.contribute.bonus.feature.1": "Upload images in high-resolution",
+  "pages.contribute.bonus.feature.2": "Upload multiple images for each recipe",
+  "pages.contribute.bonus.enabled": "Enabled",
+
+  "pages.contribute.bonus.reason": "Bonus features features are accessible only to contributors because these particular features are costly for me to host.",
+
+  "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
+  "pages.contribute.cta.2": "Please consider contributing toward the ongoing maintenance of RecipeSage.",
+
+
+  "====== Pages.ContributeThankYou ======": "",
+
+  "pages.contributeThankYou.title": "Thank You!",
+  "pages.contributeThankYou.thanks": "Thank you for being a part of the RecipeSage family and helping to keep it alive!",
+  "pages.contributeThankYou.bonus": "Bonus features should be unlocked for your account shortly.",
+  "pages.contributeThankYou.questions": "Please feel free to contact me with any questions, concerns or comments.",
+
+  "====== Pages.ContributeCancel ======": "",
+
+  "pages.contributeCancel.title": "We need your help!",
+  "pages.contributeCancel.cta.1": "RecipeSage is donation based - every contribution helps!",
+  "pages.contributeCancel.cta.2": "Unfortunately, RecipeSage doesn't get many donations since it is a fairly small platform.",
+  "pages.contributeCancel.cta.3": "In order to keep things free while paying for server costs, we need your help.",
+  "pages.contributeCancel.cta.4": "Please reconsider - your contribution is truly appreciated!",
+  "pages.contributeCancel.contribute": "Contribute",
+
+  "====== Pages.DownloadAndInstall ======": "",
+
+  "pages.downloadAndInstall.title": "Download & Install",
+  "pages.downloadAndInstall.subtitle": "Click a platform for installation instructions",
+  "pages.downloadAndInstall.done": "This will install RecipeSage as a native application on your device.",
+
+  "pages.downloadAndInstall.thisDevice": "This Device",
+
+  "pages.downloadAndInstall.android.title": "Android Device",
+  "pages.downloadAndInstall.android.instructionHeader": "To install RecipeSage on Android:",
+  "pages.downloadAndInstall.android.step.1": "Open the Chrome browser",
+  "pages.downloadAndInstall.android.step.2": "Open the browser menu via a button in your browser that looks like this:",
+  "pages.downloadAndInstall.android.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.ios.title": "Apple Mobile Device",
+  "pages.downloadAndInstall.ios.instructionHeader": "To install RecipeSage on Apple Mobile Devices (IOS):",
+  "pages.downloadAndInstall.ios.step.1": "Open Safari",
+  "pages.downloadAndInstall.ios.step.2": "Open the share menu via a button in the bottom bar that looks like this:",
+  "pages.downloadAndInstall.ios.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.desktop.title": "Desktop or Laptop Devices",
+  "pages.downloadAndInstall.desktop.instructionHeader": "To install RecipeSage on desktop or laptop devices:",
+  "pages.downloadAndInstall.desktop.step.1": "Open Google Chrome browser",
+  "pages.downloadAndInstall.desktop.step.2": "Open the browser menu via the button in the top right corner that looks like this:",
+  "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
+
+  "====== Pages.LabelsPopover ======": "",
+
+  "pages.labelsPopover.title": "Options",
+  "pages.labelsPopover.options.showCreatedAt": "Show Created At",
+  "pages.labelsPopover.options.selectMultipleLabels": "Select Multiple Labels",
+  "pages.labelsPopover.options.unselectLabels": "Unselect All Labels",
+
+  "====== Pages.Labels ======": "",
+
+  "pages.labels.title": "My Labels - Manage",
+  "pages.labels.selectionModeTitle": "{{count}} Selected",
+  "pages.labels.subtitle": "You have {{count}} total labels. Click a label to view.",
+  "pages.labels.label.recipeCount": "{{count}} Recipes",
+  "pages.labels.label.createdAt": "Created {{dateString}}",
+  "pages.labels.label.selected": "Selected",
+
+  "pages.labels.nullState.1": "You don't have any labels yet.",
+  "pages.labels.nullState.2": "Labels can be created on the recipe details page.",
+  "pages.labels.nullState.3": "Labels only exist so long as they are assigned to at least one recipe.",
+
+  "====== Pages.ManageLabelModal ======": "",
+
+  "pages.manageLabelModal.title": "Manage Label: {{name}}",
+  "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
+  "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
+  "pages.manageLabelModal.warning": "Note: These actions are permanent",
+  "pages.manageLabelModal.rename": "Rename",
+  "pages.manageLabelModal.merge": "Merge With Another Label",
+  "pages.manageLabelModal.delete": "Delete",
+
+  "trailing.comma.placeholder": ""
+}

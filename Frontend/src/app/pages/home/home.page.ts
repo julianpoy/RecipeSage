@@ -38,7 +38,6 @@ export class HomePage implements AfterViewInit {
   searchText = '';
 
   folder: string;
-  folderTitle: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -49,6 +48,8 @@ export class HomePage implements AfterViewInit {
   scrollElement;
 
   userId = null;
+
+  otherUserProfile;
 
   constructor(
     public navCtrl: NavController,
@@ -67,24 +68,11 @@ export class HomePage implements AfterViewInit {
     public messagingService: MessagingService) {
 
     this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
-    switch (this.folder) {
-      case 'inbox':
-        this.folderTitle = 'Recipe Inbox';
-        break;
-      default:
-        this.folderTitle = 'My Recipes';
-        break;
-    }
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
-      if (this.selectedLabels.length) {
-        this.folderTitle = `Shared Label: ${this.selectedLabels[0]}`;
-      } else {
-        this.folderTitle = 'Shared Recipes';
-      }
       this.userService.getProfileByUserId(this.userId).then(profile => {
-        this.folderTitle = `${profile.name}'s ${this.folderTitle}`;
+        this.otherUserProfile = profile;
       });
     }
     this.setDefaultBackHref();

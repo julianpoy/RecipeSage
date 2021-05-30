@@ -5,19 +5,19 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Contact Me</ion-title>
+    <ion-title>{{ 'pages.contact.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content class="ion-padding">
-  <p><b>Contact Info</b></p>
+  <p><b>{{ 'pages.contact.subtitle' | translate }}</b></p>
 
-  <p>Feel free to shoot me an email at <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a></p>
-  <p>My personal website is <a href="https://julianpoyourow.com" target="_blank" rel="noreferrer noopener">julianpoyourow.com</a></p>
+  <p>{{ 'pages.contact.emailMe' | translate }} <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a></p>
+  <p>{{ 'pages.contact.website' | translate }} <a href="https://julianpoyourow.com" target="_blank" rel="noreferrer noopener">julianpoyourow.com</a></p>
 
   <br />
-  <p><b>Social Media</b></p>
+  <p><b>{{ 'pages.contact.socialTitle' | translate }}</b></p>
   <social-links></social-links>
 </ion-content>

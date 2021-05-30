@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar color="nav">
-    <ion-title>Manage Label: {{label.title}}</ion-title>
+    <ion-title>{{ 'pages.manageLabelModal.title' | translate:{name:label.title} }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -21,15 +21,15 @@
         {{label.title}}
       </h2>
       <p>
-        Tagged on: {{label.recipeCount}} recipes<br />
-        First created: {{createdAt}}<br />
+        {{ 'pages.manageLabelModal.recipeCount' | translate:{count:label.recipeCount} }}<br />
+        {{ 'pages.manageLabelModal.createdAt' | translate:{dateString:createdAt} }}<br />
       </p>
     </ion-label>
   </ion-item>
 
   <br /><br />
 
-  <b>Note:</b> These actions are permanent
+  {{ 'pages.manageLabelModal.warning' | translate }}
 
 
 </ion-content>
@@ -37,16 +37,16 @@
 <ion-footer class="ion-padding">
   <ion-button expand="full" (click)="rename()">
     <ion-icon name="create" slot="start"></ion-icon>
-    <ion-label>Rename</ion-label>
+    <ion-label>{{ 'pages.manageLabelModal.rename' | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="full" (click)="merge()">
     <ion-icon name="git-network" slot="start"></ion-icon>
-    <ion-label>Merge With Another Label</ion-label>
+    <ion-label>{{ 'pages.manageLabelModal.merge' | translate }}</ion-label>
   </ion-button>
 
   <ion-button expand="full" color="danger" (click)="delete()">
     <ion-icon name="trash" slot="start"></ion-icon>
-    <ion-label>Delete</ion-label>
+    <ion-label>{{ 'pages.manageLabelModal.delete' | translate }}</ion-label>
   </ion-button>
 </ion-footer>

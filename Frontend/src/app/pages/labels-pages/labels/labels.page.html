@@ -8,8 +8,11 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ selectionMode ? selectedLabelIds.length + ' Selected' : 'My Labels - Manage' }}
+    <ion-title *ngIf="selectionMode">
+      {{ 'pages.labels.selectionModeTitle' | translate:{count:selectedLabelIds.length} }}
+    </ion-title>
+    <ion-title *ngIf="!selectionMode">
+      {{ 'pages.labels.title' | translate }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -32,7 +35,7 @@
   <ion-list *ngIf="!loading && labels.length > 0">
     <ion-item>
       <ion-label>
-        <p>You have {{labels.length}} total labels. Click a label to view.</p>
+        <p>{{ 'pages.labels.subtitle' | translate:{count:labels.length} }}</p>
       </ion-label>
     </ion-item>
     <ion-item
@@ -41,11 +44,15 @@
       <ion-label>
         {{label.title}}
         <p>
-          {{label.recipeCount}} Recipes<br />
-          <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">Created {{formatDate(label.createdAt)}}</span>
+          {{ 'pages.labels.label.recipeCount' | translate:{count:label.recipeCount} }}<br />
+          <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">
+            {{ 'pages.labels.label.createdAt' | translate:{dateString:formatDate(label.createdAt)} }}
+          </span>
         </p>
       </ion-label>
-      <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">Selected</ion-badge>
+      <ion-badge *ngIf="selectedLabelIds.indexOf(label.id) > -1" slot="end">
+        {{ 'pages.labels.label.selected' | translate }}
+      </ion-badge>
     </ion-item>
   </ion-list>
 
@@ -54,9 +61,9 @@
       <ion-icon name="pricetags" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          You don't have any labels yet.<br />
-          Labels can be created on the recipe details page.<br />
-          Labels only exist so long as they are assigned to at least one recipe.
+          {{ 'pages.labels.nullState.1' | translate }}<br />
+          {{ 'pages.labels.nullState.2' | translate }}<br />
+          {{ 'pages.labels.nullState.3' | translate }}
         </p>
       </ion-label>
     </null-state>

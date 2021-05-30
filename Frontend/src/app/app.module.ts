@@ -1,10 +1,14 @@
 import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import * as Sentry from '@sentry/browser';
@@ -61,6 +65,10 @@ Sentry.init({
   }
 });
 
+export function createTranslateLoader(http: HttpClient) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 @Injectable()
 export class SentryErrorHandler extends ErrorHandler {
   handleError(error) {
@@ -92,6 +100,15 @@ export class SentryErrorHandler extends ErrorHandler {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    HttpClientModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient]
+        },
+        defaultLanguage: 'en'
+    }),
     AppRoutingModule,
     LoadingBarModule,
     CookingToolbarModule

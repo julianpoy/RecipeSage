@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { NotFoundPage } from './not-found.page';
 import { NullStateModule } from '@/components/null-state/null-state.module';
+import { GlobalModule } from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { NullStateModule } from '@/components/null-state/null-state.module';
         component: NotFoundPage
       }
     ]),
+    GlobalModule,
     NullStateModule
   ],
 })

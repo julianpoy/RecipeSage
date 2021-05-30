@@ -4,7 +4,8 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>{{ showLogin ? 'Log In' : 'Create an Account' }}</ion-title>
+    <ion-title *ngIf="showLogin">{{ 'pages.auth.title.login' | translate }}</ion-title>
+    <ion-title *ngIf="!showLogin">{{ 'pages.auth.title.register' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,47 +18,47 @@
         <br /><br />
 
         <div *ngIf="isSelfHost">
-          Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href="https://recipesage.com" target="_blank" rel="noreferrer noopener">RecipeSage.com</a> or any of the accounts located on the main site.
+          {{ 'pages.auth.selfhostWarning' | translate }}
         </div>
 
         <br /><br />
 
         <div class="welcome" *ngIf="showLogin">
-          <h2>Welcome back!</h2>
-          <span>Please login with your account details below.</span>
+          <h2>{{ 'pages.auth.welcome.login' | translate }}</h2>
+          <span>{{ 'pages.auth.welcome.login.sub' | translate }}</span>
         </div>
 
         <div class="welcome" *ngIf="!showLogin">
-          <h2>Welcome!</h2>
-          <span>We need a few details to create your account.</span><br />
-          <span>After this, you'll be set up and ready to go.</span>
+          <h2>{{ 'pages.auth.welcome.register' | translate }}</h2>
+          <span>{{ 'pages.auth.welcome.register.sub1' | translate }}</span><br />
+          <span>{{ 'pages.auth.welcome.register.sub2' | translate }}</span>
         </div>
 
         <br /><br /><br /><br />
 
         <div *ngIf="!showLogin">
           <label>
-            Full Name or Nickname<br />
+            {{ 'pages.auth.input.name' | translate }}<br />
             <input id="name" type="text" />
           </label>
           <br /><br />
         </div>
 
         <label>
-          Email<br />
+          {{ 'pages.auth.input.email' | translate }}<br />
           <input id="email" type="email" />
         </label>
         <br /><br />
 
         <label>
-          Password<br />
+          {{ 'pages.auth.input.password' | translate }}<br />
           <input id="password" (keyup.enter)="showLogin && auth()" type="password" />
         </label>
         <br /><br />
 
         <div *ngIf="!showLogin">
           <label>
-            Confirm Password<br />
+            {{ 'pages.auth.input.confirmPassword' | translate }}<br />
             <input id="confirmPassword" (keyup.enter)="auth()" type="password" />
           </label>
           <br /><br />
@@ -66,18 +67,22 @@
 
       <tos-clickwrap-agreement *ngIf="!isSelfHost" [actionTitle]="showLogin ? 'logging in' : 'creating an account'"></tos-clickwrap-agreement>
 
-      <div *ngIf="isSelfHost">Make sure you trust the site owner of this selfhost copy</div>
+      <div *ngIf="isSelfHost">{{ 'pages.auth.selfhostWarning2' | translate }}</div>
 
       <div class="ion-padding">
-      	<ion-button expand="block" (click)="auth()">{{ showLogin ? "Log In" : "Create Account" }}</ion-button>
+      	<ion-button *ngIf="showLogin" expand="block" (click)="auth()">{{ 'pages.auth.button.login' | translate }}</ion-button>
+        <ion-button *ngIf="!showLogin" expand="block" (click)="auth()">{{ 'pages.auth.button.register' | translate }}</ion-button>
   		</div>
 
       <div>
-        <ion-button fill="clear" expand="block" *ngIf="showLogin" (click)="forgotPassword()">Forgot password</ion-button>
+        <ion-button fill="clear" expand="block" *ngIf="showLogin" (click)="forgotPassword()">{{ 'pages.auth.button.forgotPassword' | translate }}</ion-button>
       </div>
 
       <div>
-        <ion-button fill="clear" expand="block" (click)="toggleLogin()">{{ showLogin ? "Create an account instead" : "Log in instead" }}</ion-button>
+        <ion-button fill="clear" expand="block" (click)="toggleLogin()">
+          <span *ngIf="showLogin">{{ 'pages.auth.button.registerInstead' | translate }}</span>
+          <span *ngIf="!showLogin">{{ 'pages.auth.button.loginInstead' | translate }}</span>
+        </ion-button>
       </div>
     </ion-list>
   </div>

@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { ContributeCancelPage } from './contribute-cancel.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ContributeCancelPage,
@@ -19,6 +21,7 @@ import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
         component: ContributeCancelPage
       }
     ]),
+    GlobalModule,
     LogoIconModule,
   ],
 })
