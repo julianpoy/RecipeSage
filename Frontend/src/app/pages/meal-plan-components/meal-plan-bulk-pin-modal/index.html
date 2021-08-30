@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Pin Meal Items</ion-title>
+    <ion-title>
+      {{ 'pages.mealPlanBulkPinModal.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="close()">
@@ -16,8 +18,8 @@
 <ion-content class="ion-padding">
   <ion-item lines="none">
     <ion-label>
-      Select the meal items that you'd like to pin open.<br />
-      <b>Note:</b> You can only pin items that are linked to recipes.<br />
+      {{ 'pages.mealPlanBulkPinModal.instructions1' | translate }}<br />
+      {{ 'pages.mealPlanBulkPinModal.instructions2' | translate }}<br />
     </ion-label>
   </ion-item>
 
@@ -30,7 +32,7 @@
     size="small"
     fill="clear"
   >
-    Select All
+    {{ 'pages.mealPlanBulkPinModal.selectAll' | translate }}
   </ion-button>
   <ion-button
     *ngIf="allSelected"
@@ -39,13 +41,15 @@
     size="small"
     fill="clear"
     >
-    Deselect All
+    {{ 'pages.mealPlanBulkPinModal.deselectAll' | translate }}
   </ion-button>
   <ion-list>
     <ion-item *ngFor="let mealItem of mealItems">
       <ion-label>
         {{ mealItem.recipe?.title || mealItem.title }}
-        <span *ngIf="!mealItem.recipe?.id">(not linked to a recipe)</span>
+        <span *ngIf="!mealItem.recipe?.id">
+          {{ 'pages.mealPlanBulkPinModal.notLinkedToRecipe' | translate }}
+        </span>
       </ion-label>
       <ion-checkbox
         slot="start"
@@ -61,13 +65,13 @@
     <ion-button expand="block" (click)="close()">
       <ion-icon name="close" slot="start"></ion-icon>
       <ion-label>
-        Cancel
+        {{ 'pages.mealPlanBulkPinModal.cancel' | translate }}
       </ion-label>
     </ion-button>
     <ion-button expand="block" (click)="pinRecipes(); close()">
       <ion-icon name="pin" slot="start"></ion-icon>
       <ion-label>
-        Pin
+        {{ 'pages.mealPlanBulkPinModal.pin' | translate }}
       </ion-label>
     </ion-button>
   </div>

@@ -4,7 +4,9 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Conversation with {{ messages[0] ? messages[0].otherUser.name || messages[0].otherUser.email : '' }}</ion-title>
+    <ion-title>
+      {{ 'pages.messageThread.title' | translate:{name:(messages[0]?.otherUser.name || messages[0]?.otherUser.email || '')} }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button class="reload" [ngClass]="{ reloading: reloading }" (click)="reload()">
@@ -39,13 +41,19 @@
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
             <p class="description">{{ message.recipe.description }}</p>
-            <p class="description">Click to open</p>
+            <p class="description">
+              {{ 'pages.messageThread.clickToOpen' | translate }}
+            </p>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="!message.recipe" (click)="setSelectedChat(i)" lines="none">
           <ion-label>
-            <h2 class="ion-text-wrap">Recipe deleted</h2>
-            <p class="description">Your copy of this recipe no longer exists</p>
+            <h2 class="ion-text-wrap">
+              {{ 'pages.messageThread.recipeDeleted' | translate }}
+            </h2>
+            <p class="description">
+              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </div>
@@ -59,13 +67,19 @@
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.originalRecipe.title }}</h2>
             <p class="description">{{ message.originalRecipe.description }}</p>
-            <p class="description">A copy of this recipe was sent</p>
+            <p class="description">
+              {{ 'pages.messageThread.recipeCopySent' | translate }}
+            </p>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="!message.originalRecipe" (click)="setSelectedChat(i)" lines="none">
           <ion-label>
-            <h2 class="ion-text-wrap">Recipe deleted</h2>
-            <p class="description">Your copy of this recipe no longer exists</p>
+            <h2 class="ion-text-wrap">
+              {{ 'pages.messageThread.recipeDeleted' | translate }}
+            </h2>
+            <p class="description">
+              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </div>

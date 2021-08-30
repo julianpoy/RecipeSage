@@ -5,11 +5,14 @@ import { RouterModule } from '@angular/router';
 
 import { ImportPaprikaPage } from './import-paprika.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ImportPaprikaPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

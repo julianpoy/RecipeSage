@@ -1,7 +1,12 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>{{ isEditing ? 'Update Meal Plan Item' : 'Add Meal Plan Item' }}</ion-title>
+    <ion-title *ngIf="isEditing">
+      {{ 'pages.newMealPlanItemModal.title.update' | translate }}
+    </ion-title>
+    <ion-title *ngIf="!isEditing">
+      {{ 'pages.newMealPlanItemModal.title.new' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -17,10 +22,10 @@
   <div>
     <ion-segment [(ngModel)]="inputType" value="recipe">
       <ion-segment-button value="recipe">
-        Choose Recipe
+        {{ 'pages.newMealPlanItemModal.inputType.recipe' | translate }}
       </ion-segment-button>
       <ion-segment-button value="manualEntry">
-        Manual Entry
+        {{ 'pages.newMealPlanItemModal.inputType.manual' | translate }}
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -29,7 +34,9 @@
 
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
-        <ion-label position="floating">Item title</ion-label>
+        <ion-label position="floating">
+          {{ 'pages.newMealPlanItemModal.itemTitle' | translate }}
+        </ion-label>
         <ion-input [(ngModel)]="title" type="text"
           autocapitalize="on"
           autocomplete="on"
@@ -49,7 +56,9 @@
   <br /><br />
 
   <ion-item>
-    <ion-label>Date</ion-label>
+    <ion-label>
+      {{ 'pages.newMealPlanItemModal.date' | translate }}
+    </ion-label>
     <input class="rs-date" type="date" autofill="true" value="{{ sanitizedScheduled }}" (change)="scheduledDateChange($event)" />
   </ion-item>
 
@@ -61,8 +70,11 @@
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="calendar" slot="start"></ion-icon>
-    <ion-label>
-      {{ isEditing ? 'Save Changes' : 'Add to Meal Plan' }}
+    <ion-label *ngIf="isEditing">
+      {{ 'pages.newMealPlanItemModal.save' | translate }}
+    </ion-label>
+    <ion-label *ngIf="!isEditing">
+      {{ 'pages.newMealPlanItemModal.create' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

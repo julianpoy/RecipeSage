@@ -6,11 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AccountPage } from './account.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AccountPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

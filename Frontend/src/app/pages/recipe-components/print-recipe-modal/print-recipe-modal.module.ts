@@ -5,11 +5,14 @@ import { IonicModule } from '@ionic/angular';
 import { PrintRecipeModalPage } from './print-recipe-modal.page';
 import { RecipePreviewModule } from '@/components/recipe-preview/recipe-preview.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     PrintRecipeModalPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RecipePreviewModule,

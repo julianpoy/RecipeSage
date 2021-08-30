@@ -5,7 +5,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Import Recipes from Living Cookbook</ion-title>
+    <ion-title>{{ 'pages.importLivingCookbook.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -16,42 +16,43 @@
     <ion-label class="ion-text-center ion-text-wrap">
       <br /><br />
       <p>
-        This will import your Living Cookbook database into RecipeSage. <b>Please note this feature is in beta.</b><br />
-        All files must be in .lcb, .fdx or .fdxz format. Other formats will not work.
+        {{ 'pages.importLivingCookbook.description1' | translate }}<br />
+        <b>{{ 'pages.importLivingCookbook.betaWarning' | translate }}<br />
+        {{ 'pages.importLivingCookbook.description2' | translate }
       </p>
       <br />
       <p>
-        <b>The import task can take several minutes</b><br />
-        It depends on the format and size of your database file<br />
+        <b>{{ 'pages.importLivingCookbook.timeWarning' | translate }}</b><br />
+        {{ 'pages.importLivingCookbook.timeWarning.explaination' | translate }}<br />
       </p>
       <br />
       <p>
-        If you're having trouble with the import, send me an email with the database file and I can import it manually.<br />
-        If your database file is very large, you may have trouble importing it via this interface due to browser limitations.
+        {{ 'pages.importLivingCookbook.contactMe' | translate }}<br />
+        {{ 'pages.importLivingCookbook.sizeWarning' | translate }}
       </p>
       <br />
       <br />
       <p>
-        Please consider donating if your database contains a large number of recipes or images.
+        {{ 'pages.importLivingCookbook.donate' | translate }}
       </p>
 
       <br /><br />
-      <b>1. Choose Import Options (if any):</b>
+      <b>{{ 'pages.importLivingCookbook.step1' | translate }}</b>
     </ion-label>
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label>Exclude recipe images (optional, not recommended)</ion-label>
+    <ion-label>{{ 'pages.importLivingCookbook.step1.excludeImages' | translate }}</ion-label>
     <ion-checkbox [(ngModel)]="excludeImages"></ion-checkbox>
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label>Include stock "filler" LCB recipes (optional, not recommended)</ion-label>
+    <ion-label>{{ 'pages.importLivingCookbook.step1.includeStock' | translate }}</ion-label>
     <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label>Copy techniques to recipe notes (optional, not recommended)</ion-label>
+    <ion-label>{{ 'pages.importLivingCookbook.step1.includeTechniques' | translate }}</ion-label>
     <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
   </ion-item>
 
@@ -59,7 +60,7 @@
 
   <ion-item lines="none">
     <ion-label class="ion-text-center ion-text-wrap">
-      <b>2. Select Your Living Cookbook Database:</b>
+      <b>{{ 'pages.importLivingCookbook.step2' | translate }}</b>
     </ion-label>
   </ion-item>
 
@@ -69,26 +70,25 @@
 
     <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>
-        Warning! This filetype does not end in .lcb, .fdx, or .fdxz<br />
-        It may not work.
+        {{ 'pages.importLivingCookbook.step2.fileTypeWarning' | translate }}
       </p>
     </div>
 
     <div class="ion-padding" *ngIf="!isFileTooLarge() && isFileLarge()">
       <p>
-        <b>This database is very large.</b><br />
-        It may take a very long time to upload depending on your internet connection.<br />
+        <b>{{ 'pages.importLivingCookbook.step2.sizeWarning' | translate }}</b><br />
+        {{ 'pages.importLivingCookbook.step2.sizeWarning.time' | translate }}<br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          If you're having trouble, please contact me to have your database imported manually.
+          {{ 'pages.importLivingCookbook.step2.sizeWarning.contact' | translate }}<br />
         </a>
       </p>
     </div>
 
     <div class="ion-padding" *ngIf="isFileTooLarge()">
       <p>
-        <b>This file is too large to upload directly.</b><br />
+        <b>{{ 'pages.importLivingCookbook.step2.sizeError' | translate }}</b><br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          Please contact me to have your database imported manually.
+          {{ 'pages.importLivingCookbook.step2.sizeError.contact' | translate }}
         </a>
       </p>
     </div>
@@ -96,37 +96,36 @@
     <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
       <ion-item lines="none">
         <ion-label class="ion-text-center ion-text-wrap">
-          <b>3. Upload!</b>
+          <b>{{ 'pages.importLivingCookbook.step3' | translate }}</b>
         </ion-label>
       </ion-item>
 
-      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">Upload and Import</ion-button>
-      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">Upload and Import Anyway</ion-button>
-      <ion-button *ngIf="loading">Importing, please wait...</ion-button>
+      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">{{ 'pages.importLivingCookbook.step3.upload' | translate }}</ion-button>
+      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">{{ 'pages.importLivingCookbook.step3.upload.ignoreWarning' | translate }}</ion-button>
+      <ion-button *ngIf="loading">{{ 'pages.importLivingCookbook.step3.loading' | translate }}</ion-button>
     </div>
 
     <br /><br /><br /><br />
 
     <ion-item lines="none">
       <ion-label class="ion-text-center ion-text-wrap">
-        <a href="" (click)="troubleshoot = true; $event.preventDefault()">Click for Troubleshooting Help</a>
+        <a href="" (click)="troubleshoot = true; $event.preventDefault()">{{ 'pages.importLivingCookbook.troubleshooting' | translate }}</a>
         <br /><br />
         <div *ngIf="troubleshoot">
           <p>
-            If you find that the import isn't importing all of your recipes: <br />
-            Try selecting the option above for "Include stock "filler" LCB recipes" and try again.<br />
-            You might also try exporting your recipes from LivingCookbook as .FDX or .FDXZ format and uploading in that format instead.
+            {{ 'pages.importLivingCookbook.troubleshooting.missing.1' | translate }}<br />
+            {{ 'pages.importLivingCookbook.troubleshooting.missing.2' | translate }}<br />
+            {{ 'pages.importLivingCookbook.troubleshooting.missing.3' | translate }}
           </p>
           <br />
           <p>
-            If the import is taking a long time: <br />
-            Depending on your internet speed, database size, and image content, the import may take a long time.
+            {{ 'pages.importLivingCookbook.troubleshooting.longTime.1' | translate }}<br />
+            {{ 'pages.importLivingCookbook.troubleshooting.longTime.2' | translate }}
           </p>
           <br />
           <p>
-            If your database is too large: <br />
-            Upload your database to Firefox Send (<a href="https://send.firefox.com" target="_blank" rel="noreferrer noopener">https://send.firefox.com</a>)
-            and email me the link it gives you at the end.
+            {{ 'pages.importLivingCookbook.troubleshooting.tooLarge.1' | translate }}<br />
+            {{ 'pages.importLivingCookbook.troubleshooting.tooLarge.2' | translate }}
           </p>
           <br />
         </div>

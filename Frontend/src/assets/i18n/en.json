@@ -326,5 +326,297 @@
   "pages.manageLabelModal.merge": "Merge With Another Label",
   "pages.manageLabelModal.delete": "Delete",
 
+  "====== Pages.MealPlan ======": "",
+
+  "pages.mealPlan.title": "Meal Plan - {{name}}",
+
+  "====== Pages.MealPlanBulkPinModal ======": "",
+
+  "pages.mealPlanBulkPinModal.title": "Pin Meal Items",
+  "pages.mealPlanBulkPinModal.instructions1": "Select the meal items that you'd like to pin open.",
+  "pages.mealPlanBulkPinModal.instructions2": "Note: You can only pin items that are linked to recipes.",
+  "pages.mealPlanBulkPinModal.selectAll": "Select All",
+  "pages.mealPlanBulkPinModal.deselectAll": "Deselect All",
+  "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(not linked to a recipe)",
+  "pages.mealPlanBulkPinModal.cancel": "Cancel",
+  "pages.mealPlanBulkPinModal.pin": "Pin",
+
+  "====== Pages.MealPlanBulkPinModal ======": "",
+
+  "pages.mealPlanItemDetailsModal.title": "Meal Plan Item Details",
+  "pages.mealPlanItemDetailsModal.scheduled": "Scheduled for {{meal}} on {{date}}",
+  "pages.mealPlanItemDetailsModal.lastModified": "Last modified by {{name}} on {{date}}",
+  "pages.mealPlanItemDetailsModal.clickToOpen": "Click to open recipe",
+
+  "pages.mealPlanItemDetailsModal.actions.addToShoppingList": "Add this recipe to shopping list",
+  "pages.mealPlanItemDetailsModal.actions.pinRecipe": "Pin this recipe open",
+  "pages.mealPlanItemDetailsModal.actions.unpinRecipe": "Unpin this recipe",
+  "pages.mealPlanItemDetailsModal.actions.edit": "Edit this item",
+  "pages.mealPlanItemDetailsModal.actions.duplicate": "Duplicate this item",
+  "pages.mealPlanItemDetailsModal.actions.delete": "Delete this item",
+  "pages.mealPlanItemDetailsModal.actions.close": "Close",
+
+  "====== Pages.MealPlanPopover ======": "",
+
+  "pages.mealPlanPopover.options.title": "Options",
+  "pages.mealPlanPopover.options.startWeekOn.title": "Start week on",
+  "pages.mealPlanPopover.options.startWeekOn.monday": "Monday",
+  "pages.mealPlanPopover.options.startWeekOn.sunday": "Sunday",
+
+
+  "pages.mealPlanPopover.actions.title": "Actions",
+  "pages.mealPlanPopover.actions.pinRecipesOpen": "Pin recipes open",
+  "pages.mealPlanPopover.actions.addToShoppingList": "Add selected to shopping list",
+  "pages.mealPlanPopover.actions.copyDays": "Copy selected day(s)",
+  "pages.mealPlanPopover.actions.moveDays": "Move selected day(s)",
+  "pages.mealPlanPopover.actions.deleteDays": "Delete selected day(s)",
+
+  "pages.mealPlanPopover.dangerZone.title": "Danger Zone",
+  "pages.mealPlanPopover.dangerZone.delete": "Delete meal plan",
+
+  "====== Pages.MealPlans ======": "",
+
+  "pages.mealPlans.title": "Meal Plans",
+  "pages.mealPlans.metadata.createdOn": "Created {{date}}",
+  "pages.mealPlans.metadata.collaborators": "In collaboration with:",
+  "pages.mealPlans.metadata.createdBy": "Created by {{name}}",
+  "pages.mealPlans.metadata.youOwn": "You own this meal plan",
+
+  "pages.mealPlans.noPlans": "You have no meal plans.",
+  "pages.mealPlans.toCreate": "To create a meal plan, press the plus button in the bottom corner.",
+
+  "====== Pages.NewMealPlanItemModal ======": "",
+
+  "pages.newMealPlanItemModal.title.update": "Update Meal Plan Item",
+  "pages.newMealPlanItemModal.title.new": "Add Meal Plan Item",
+  "pages.newMealPlanItemModal.inputType.recipe": "Choose Recipe",
+  "pages.newMealPlanItemModal.inputType.manual": "Manual Entry",
+  "pages.newMealPlanItemModal.itemTitle": "Item title",
+  "pages.newMealPlanItemModal.date": "Date",
+
+  "pages.newMealPlanItemModal.save": "Save Changes",
+  "pages.newMealPlanItemModal.create": "Add to Meal Plan",
+
+  "====== Pages.NewMealPlanModal ======": "",
+
+  "pages.newMealPlanModal.title": "New meal planner",
+  "pages.newMealPlanModal.input.title": "Title",
+  "pages.newMealPlanModal.createAndShare": "Create and Share",
+  "pages.newMealPlanModal.create": "Create",
+
+  "====== Pages.MessageThread ======": "",
+
+  "pages.messageThread.title": "Conversation with {{name}}",
+  "pages.messageThread.clickToOpen": "Click to open",
+  "pages.messageThread.recipeDeleted": "Recipe deleted",
+  "pages.messageThread.yourRecipeDeleted": "Your copy of this recipe no longer exists",
+  "pages.messageThread.recipeCopySent": "A copy of this recipe was sent",
+
+  "====== Pages.Messages ======": "",
+
+  "pages.messages.title": "Messages",
+  "pages.messages.history.you": "You",
+  "pages.messages.history.sentRecipe": "Sent a recipe",
+
+  "pages.messages.noMessages": "You have no message threads.",
+  "pages.messages.instructions": "To start a conversation with someone, press the plus button in the bottom corner.",
+
+  "pages.messages.warning": "Warning:",
+  "pages.messages.notificationsRequired": "Notifications must be enabled for messaging to work properly.",
+  "pages.messages.notificationsInstructions": "See how to re-enable notifications here",
+
+  "====== Pages.NewMessageModal ======": "",
+
+  "pages.newMessageModal.title": "New Message Thread",
+  "pages.newMessageModal.input.target": "Enter a RecipeSage user email or @handle",
+  "pages.newMessageModal.compose": "Compose a message",
+  "pages.newMessageModal.input.messagePlaceholder": "Hello! I'd like to chat on RecipeSage",
+  "pages.newMessageModal.send": "Send",
+
+  "====== Pages.AddRecipeToMealPlanModal ======": "",
+
+  "pages.addRecipeToMealPlanModal.title": "Add Recipe To Meal Plan",
+  "pages.addRecipeToMealPlanModal.instructions1": "First, select the destination meal plan:",
+  "pages.addRecipeToMealPlanModal.loading": "Loading meal plans...",
+  "pages.addRecipeToMealPlanModal.selectDestination": "Select Meal Plan",
+  "pages.addRecipeToMealPlanModal.noMealPlans": "You have no meal plans.",
+  "pages.addRecipeToMealPlanModal.createMealPlan": "Create a Meal Plan",
+
+  "pages.addRecipeToMealPlanModal.add": "Add to Meal Plan",
+  "pages.addRecipeToMealPlanModal.selectMealPlan": "Select a meal plan",
+  "pages.addRecipeToMealPlanModal.selectMeal": "Select a meal",
+
+  "====== Pages.AddRecipeToMealPlanModal ======": "",
+
+  "pages.addRecipeToShoppingListModal.title.singular": "Add Recipe To Shopping List",
+  "pages.addRecipeToShoppingListModal.title.plural": "Add Recipes To Shopping List",
+  "pages.addRecipeToShoppingListModal.selectDestination": "Select the destination shopping list:",
+  "pages.addRecipeToShoppingListModal.loading": "Loading shopping lists...",
+  "pages.addRecipeToShoppingListModal.destination": "Destination Shopping List",
+  "pages.addRecipeToShoppingListModal.noShoppingLists": "You have no shopping lists.",
+  "pages.addRecipeToShoppingListModal.createShoppingList": "Create a Shopping List",
+  "pages.addRecipeToShoppingListModal.add": "Add to List",
+
+  "====== Pages.EditRecipe ======": "",
+
+  "pages.editRecipe.title.edit": "Edit Recipe",
+  "pages.editRecipe.title.new": "New Recipe",
+  "pages.editRecipe.autoclip": "Autofill fields from URL (beta)",
+
+  "pages.editRecipe.input.title": "Title",
+  "pages.editRecipe.input.description": "Description",
+  "pages.editRecipe.input.yield": "Yield",
+  "pages.editRecipe.input.activeTime": "Active Time",
+  "pages.editRecipe.input.totalTime": "Total Time",
+  "pages.editRecipe.input.source": "Source",
+  "pages.editRecipe.input.sourceUrl": "Source URL",
+  "pages.editRecipe.input.ingredients": "Ingredients",
+  "pages.editRecipe.input.instructions": "Instructions",
+  "pages.editRecipe.input.notes": "Notes",
+
+  "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
+  "pages.editRecipe.save": "Save",
+  "pages.editRecipe.create": "Create",
+
+  "====== Pages.EditRecipe ======": "",
+
+  "pages.editRecipePopover.actions": "Actions",
+  "pages.editRecipePopover.addImage": "Add Image by URL",
+
+  "====== Pages.PrintRecipeModal ======": "",
+
+  "pages.printRecipeModal.title": "Select print layout",
+  "pages.printRecipeModal.print": "Print",
+
+  "====== Pages.Account ======": "",
+
+  "pages.account.title": "Account & Credentials",
+
+  "pages.account.description": "Here you can update and change aspects about your account",
+  "pages.account.creds.title": "Credentials and Details",
+  "pages.account.creds.name": "Name/Nickname",
+  "pages.account.creds.name.save": "Save Name",
+  "pages.account.creds.email": "Email",
+  "pages.account.creds.email.save": "Save Email",
+  "pages.account.creds.password": "Password",
+  "pages.account.creds.password.confirm": "Confirm Password",
+  "pages.account.creds.password.save": "Save Password",
+  "pages.account.creds.instructions": "To change a field above, tap the field, edit it, and press the save button that appears.",
+
+  "pages.account.stats.title": "Stats",
+  "pages.account.stats.recipeCount": "Recipe Count",
+  "pages.account.stats.recipeImageCount": "Recipe Image Count",
+  "pages.account.stats.messageCount": "Total Message Count",
+  "pages.account.stats.createdAt": "Account Created",
+  "pages.account.stats.lastLogin": "Last Login",
+
+  "pages.account.bonus.title": "Bonus Feature Status",
+  "pages.account.bonus.description": "Contributors unlock certain features that are costly to host:",
+  "pages.account.bonus.highResImages": "High Resolution Images",
+  "pages.account.bonus.multipleImages": "Multiple Images Per Recipe",
+
+  "pages.account.bonus.enabled": "Enabled",
+  "pages.account.bonus.notEnabled": "Not Enabled",
+  "pages.account.bonus.subscriptionNeverExpires": "Never Expires",
+  "pages.account.bonus.automaticRenewal": "(this will update automatically if subscribed monthly)",
+
+  "pages.account.actions.title": "Actions",
+  "pages.account.actions.resetSearch": "Reset Search Index",
+  "pages.account.actions.resetSearch.description1": "Resetting your search index can help if you find that some recipes never appear in your search results at all.",
+  "pages.account.actions.resetSearch.description2": "Note: This has no effect on the data within your recipe collection.",
+
+  "pages.account.dangerZone.title": "Danger Zone!",
+  "pages.account.dangerZone.warning1": "Be careful with these actions - they are permanent.",
+  "pages.account.dangerZone.warning2": "You will be asked a to confirm any action you take here.",
+  "pages.account.dangerZone.deleteAllRecipes": "Delete All Recipes",
+  "pages.account.dangerZone.deleteAllRecipes.description": "Deleting all of your recipes can take several minutes and is a permenant action.",
+
+  "====== Pages.Account ======": "",
+
+  "pages.export.title": "Export",
+  "pages.export.description1": "After selecting to export your data, a file will begin to download. You may have to press \"allow\".",
+  "pages.export.description2": "The exported file will contain all of your recipes in the selected format.",
+  "pages.export.description3": "Note: If you plan to re-import the data later, you'll need to select JSON-LD format.",
+  "pages.export.jsonld": "Export as JSON-LD (best)",
+  "pages.export.xml": "Export as XML",
+  "pages.export.txt": "Export as Plain Text",
+
+  "====== Pages.Import ======": "",
+
+  "pages.import.title": "Import",
+  "pages.import.description1": "RecipeSage supports importing from Pepperplate, Living Cookbook, and Paprika.",
+  "pages.import.description2": "Importing recipes will add all recipes from the file/account you've selected to your RecipeSage account.",
+  "pages.import.description3": "If you're having trouble with the import, please send me an email.",
+  "pages.import.jsonld": "Import from JSON-LD file",
+  "pages.import.pepperplate": "Import from Pepperplate",
+  "pages.import.livingCookbook": "Import Living Cookbook File",
+  "pages.import.paprika": "Import Paprika Recipes File",
+
+  "====== Pages.ImportJSONLD ======": "",
+
+  "pages.importJsonLD.title": "Import Recipes from JSON-LD File",
+  "pages.importJsonLD.description1": "This will import a JSON-LD (ends in .json) file into RecipeSage (this is one of the file formats exported by RecipeSage).",
+  "pages.importJsonLD.description2": "The import task can take several minutes",
+  "pages.importJsonLD.description3": "It depends on the format and size of your file",
+  "pages.importJsonLD.description4": "If you're having trouble with the import, send me an email with the file and I can import it manually.",
+  "pages.importJsonLD.description5": "If your file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importJsonLD.description6": "Please consider donating if your file contains a large number of recipes or images.",
+
+  "pages.importJsonLD.fileTypeWarning": "Warning! This filetype does not end in .json. It may not work!",
+  "pages.importJsonLD.fileTooLarge": "This file is too large to upload directly.",
+  "pages.importJsonLD.fileTooLarge.contact": "Please contact me to have your database imported manually.",
+
+  "pages.importJsonLD.upload": "Upload and Import",
+  "pages.importJsonLD.upload.ignoreWarning": "Upload and Import Anyway",
+  "pages.importJsonLD.loading": "Importing, please wait...",
+
+  "====== Pages.ImportLivingCookbook ======": "",
+
+  "pages.importLivingCookbook.title": "Import Recipes from Living Cookbook",
+  "pages.importLivingCookbook.description1": "This will import your Living Cookbook database into RecipeSage.",
+  "pages.importLivingCookbook.betaWarning": "Please note this feature is in beta.",
+  "pages.importLivingCookbook.description2": "All files must be in .lcb, .fdx or .fdxz format. Other formats will not work.",
+  "pages.importLivingCookbook.timeWarning": "The import task can take several minutes",
+  "pages.importLivingCookbook.timeWarning.description": "It depends on the format and size of your database file",
+  "pages.importLivingCookbook.contactMe": "If you're having trouble with the import, send me an email with the database file and I can import it manually.",
+  "pages.importLivingCookbook.sizeWarning": "If your database file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importLivingCookbook.donate": "Please consider donating if your database contains a large number of recipes or images.",
+
+  "pages.importLivingCookbook.step1": "1. Choose Import Options (if any):",
+  "pages.importLivingCookbook.step1.excludeImages": "Exclude recipe images (optional, not recommended)",
+  "pages.importLivingCookbook.step1.includeStock": "Include stock \"filler\" LCB recipes (optional, not recommended)",
+  "pages.importLivingCookbook.step1.includeTechniques": "Copy techniques to recipe notes (optional, not recommended)",
+
+  "pages.importLivingCookbook.step2": "2. Select Your Living Cookbook Database:",
+  "pages.importLivingCookbook.step2.fileTypeWarning": "Warning! This filetype does not end in .lcb, .fdx, or .fdxz. It may not work.",
+
+  "pages.importLivingCookbook.step2.sizeWarning": "This database is very large.",
+  "pages.importLivingCookbook.step2.sizeWarning.time": "It may take a very long time to upload depending on your internet connection.",
+  "pages.importLivingCookbook.step2.sizeWarning.contact": "If you're having trouble, please contact me to have your database imported manually.",
+
+  "pages.importLivingCookbook.step2.sizeError": "This file is too large to upload directly.",
+  "pages.importLivingCookbook.step2.sizeError.contact": "Please contact me to have your database imported manually.",
+
+  "pages.importLivingCookbook.step3": "3. Upload!",
+  "pages.importLivingCookbook.step3.upload": "Upload and Import",
+  "pages.importLivingCookbook.step3.upload.ignoreWarning": "Upload and Import Anyway",
+  "pages.importLivingCookbook.step3.loading": "Importing, please wait...",
+
+  "pages.importLivingCookbook.troubleshooting": "Click for Troubleshooting Help",
+  "pages.importLivingCookbook.troubleshooting.missing.1": "If you find that the import isn't importing all of your recipes:",
+  "pages.importLivingCookbook.troubleshooting.missing.2": "Try selecting the option above for \"Include stock 'filler' LCB recipes\" and try again.",
+  "pages.importLivingCookbook.troubleshooting.missing.3": "You might also try exporting your recipes from LivingCookbook as .FDX or .FDXZ format and uploading in that format instead.",
+
+  "pages.importLivingCookbook.troubleshooting.longTime.1": "If the import is taking a long time:",
+  "pages.importLivingCookbook.troubleshooting.longTime.2": "Depending on your internet speed, database size, and image content, the import may take a long time.",
+
+  "pages.importLivingCookbook.troubleshooting.tooLarge.1": "If your database is too large:",
+  "pages.importLivingCookbook.troubleshooting.tooLarge.2": "Please upload your database file to a service such as Google Drive and send me a link. I'll import it for you.",
+
+
+
+
+
+
   "trailing.comma.placeholder": ""
 }

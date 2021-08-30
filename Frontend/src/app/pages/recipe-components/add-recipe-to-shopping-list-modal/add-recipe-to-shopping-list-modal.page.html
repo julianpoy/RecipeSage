@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add Recipe{{ recipes.length > 1 ? 's' : ''}} To Shopping List</ion-title>
+    <ion-title *ngIf="recipes.length > 1">
+      {{ 'pages.addRecipeToShoppingListModal.title.plural' | translate }}
+    </ion-title>
+    <ion-title *ngIf="recipes.length <= 1">
+      {{ 'pages.addRecipeToShoppingListModal.title.singular' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -13,15 +18,17 @@
 <ion-content class="ion-padding">
 
   <p>
-    Select the destination shopping list:
+    {{ 'pages.addRecipeToShoppingListModal.selectDestination' | translate }}
   </p>
 
   <p *ngIf="!shoppingLists">
-    Loading shopping lists...
+    {{ 'pages.addRecipeToShoppingListModal.loading' | translate }}
   </p>
 
   <ion-item *ngIf="shoppingLists && shoppingLists.length > 0">
-    <ion-label>Destination Shopping List</ion-label>
+    <ion-label>
+      {{ 'pages.addRecipeToShoppingListModal.destination' | translate }}
+    </ion-label>
     <ion-select [(ngModel)]="destinationShoppingList">
       <ion-select-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-select-option>
     </ion-select>
@@ -29,11 +36,11 @@
 
   <div *ngIf="shoppingLists && shoppingLists.length === 0" (click)="createShoppingList()">
     <p>
-      You have no shopping lists.<br /><br />
+      {{ 'pages.addRecipeToShoppingListModal.noShoppingLists' | translate }}<br /><br />
       <ion-button>
         <ion-icon name="list" slot="start"></ion-icon>
         <ion-label>
-          Create a Shopping List
+          {{ 'pages.addRecipeToShoppingListModal.createShoppingList' | translate }}
         </ion-label>
       </ion-button>
     </p>
@@ -58,7 +65,7 @@
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
-      Add to List
+      {{ 'pages.addRecipeToShoppingListModal.add' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

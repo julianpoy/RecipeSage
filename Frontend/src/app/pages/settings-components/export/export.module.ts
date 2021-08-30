@@ -5,11 +5,14 @@ import { RouterModule } from '@angular/router';
 
 import { ExportPage } from './export.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ExportPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([
