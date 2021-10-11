@@ -15,6 +15,9 @@ import { LabelService, Label } from '@/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
+const TILE_WIDTH = 200;
+const TILE_PADD = 20;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
@@ -31,6 +34,8 @@ export class HomePage {
   fetchPerPage = 50;
   lastRecipeCount = 0;
   totalRecipeCount: number;
+
+  tileColCount: number;
 
   loading = true;
   selectedRecipeIds: string[] = [];
@@ -63,6 +68,10 @@ export class HomePage {
     public preferencesService: PreferencesService,
     public websocketService: WebsocketService,
     public messagingService: MessagingService) {
+
+    this.updateTileColCount();
+
+    window.addEventListener('resize', () => this.updateTileColCount());
 
     this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
     switch (this.folder) {
@@ -102,12 +111,41 @@ export class HomePage {
     });
   }
 
+  updateTileColCount() {
+    const tileColCount = Math.floor(window.innerWidth / (TILE_WIDTH + TILE_PADD));
+
+    if (tileColCount !== this.tileColCount) {
+      this.tileColCount = tileColCount;
+
+      this.datasource.adapter.reset();
+    }
+  }
+
   datasource = new Datasource<Recipe>({
     get: async (index, count) => {
+      const originalCount = count;
+      const isTiled = this.preferences[MyRecipesPreferenceKey.ViewType] === 'tiles';
+      if (isTiled) {
+        index = index * this.tileColCount;
+        count = count * this.tileColCount;
+      }
+
       await this.fetchMoreRecipes(index + count);
 
       const recipes = this.recipes.slice(index, index + count);
-      console.log(recipes);
+
+      if (isTiled) {
+        const recipeGroups = [];
+        const groupCount = recipes.length / this.tileColCount;
+
+        for (var i = 0; i < groupCount; i++) {
+          const recipeIdx = i * this.tileColCount;
+          recipeGroups.push(recipes.slice(recipeIdx, recipeIdx + this.tileColCount));
+        }
+
+        return recipeGroups;
+      }
+
       return recipes;
     },
     settings: {

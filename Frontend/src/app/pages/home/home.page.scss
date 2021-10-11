@@ -3,18 +3,6 @@
   overflow-y: auto;
 }
 
-.recipe-image {
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-}
-
-.recipe-card {
-  height: 300px;
-  //width: 200px;
-  overflow: hidden;
-}
-
 .labelChips {
   display: flex;
   flex-wrap: wrap;
@@ -42,13 +30,16 @@
   }
 }
 
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 200px);
-  grid-gap: 20px;
-  padding-right: 20px;
+.recipe-group-row {
+  .recipe-group {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 
-  ion-card {
+  .recipe-card {
+    position: relative;
     width: 200px;
     box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
 
@@ -56,24 +47,7 @@
       background-color: var(--ion-item-background-hover);
     }
 
-    ion-card-content {
-      padding: 0;
-
-      .no-image {
-        display: flex;
-
-        img {
-          margin-top: 50px;
-          margin-bottom: 50px;
-          width: 100px;
-          height: 100px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-    }
-
-    ion-thumbnail {
+    img {
       width: 200px;
       height: 200px;
     }
