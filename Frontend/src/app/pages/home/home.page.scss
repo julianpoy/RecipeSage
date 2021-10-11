@@ -1,3 +1,20 @@
+.infinite-scrolling-container {
+  height: 500px;
+  overflow-y: auto;
+}
+
+.recipe-image {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.recipe-card {
+  height: 300px;
+  //width: 200px;
+  overflow: hidden;
+}
+
 .labelChips {
   display: flex;
   flex-wrap: wrap;

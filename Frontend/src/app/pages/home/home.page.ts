@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { Datasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -19,7 +20,7 @@ import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
   labels: Label[] = [];
@@ -44,9 +45,6 @@ export class HomePage implements AfterViewInit {
   preferenceKeys = MyRecipesPreferenceKey;
 
   reloadPending = true;
-
-  @ViewChild('contentContainer', { static: true }) contentContainer;
-  scrollElement;
 
   userId = null;
 
@@ -102,17 +100,23 @@ export class HomePage implements AfterViewInit {
         loading.dismiss();
       });
     });
-
-    this.websocketService.register('messages:new', payload => {
-      if (payload.recipe && this.folder === 'inbox') {
-        this.resetAndLoadRecipes();
-      }
-    }, this);
   }
 
-  ngAfterViewInit() {
-    this.getScrollElement();
-  }
+  datasource = new Datasource<Recipe>({
+    get: async (index, count) => {
+      await this.fetchMoreRecipes(index + count);
+
+      const recipes = this.recipes.slice(index, index + count);
+      console.log(recipes);
+      return recipes;
+    },
+    settings: {
+      minIndex: 0,
+      startIndex: 0,
+      bufferSize: 25,
+      padding: 5,
+    }
+  });
 
   ionViewWillEnter() {
     this.clearSelectedRecipes();
@@ -135,14 +139,14 @@ export class HomePage implements AfterViewInit {
     }
   }
 
-  fetchMoreRecipes(event) {
+  fetchMoreRecipes(endIndex) {
     if (this.searchText) return;
 
-    const shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
+    const shouldFetchMore = this.lastRecipeCount < endIndex + this.recipeFetchBuffer;
 
     const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
     if (shouldFetchMore && moreToScroll) {
-      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
+      return this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
     }
   }
 
@@ -183,11 +187,13 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  _resetAndLoadRecipes() {
+  async _resetAndLoadRecipes() {
     if (this.searchText && this.searchText.trim().length > 0) {
-      return this.search(this.searchText);
+      await this.search(this.searchText);
+    } else {
+      await this.loadRecipes(0, this.fetchPerPage);
     }
-    return this.loadRecipes(0, this.fetchPerPage);
+    return this.datasource.adapter.reset();
   }
 
   resetRecipes() {
@@ -198,52 +204,48 @@ export class HomePage implements AfterViewInit {
   loadRecipes(offset, numToFetch) {
     this.lastRecipeCount += numToFetch;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetch({
-        folder: this.folder,
-        userId: this.userId,
-        sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
-        offset,
-        count: numToFetch,
-        labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
+    return this.recipeService.fetch({
+      folder: this.folder,
+      userId: this.userId,
+      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      offset,
+      count: numToFetch,
+      labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+      ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
+    }).then(response => {
 
-        this.totalRecipeCount = response.totalCount;
+      this.totalRecipeCount = response.totalCount;
 
-        this.recipes = this.recipes.concat(response.data);
+      this.recipes = this.recipes.concat(response.data);
+    }).catch(async err => {
+      switch (err.response.status) {
+        case 0:
+          const offlineToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.offlineFetchMessage,
+            duration: 5000
+          });
+          offlineToast.present();
+          break;
+        case 401:
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
+          break;
+        case 404:
+          const noAccessToast = await this.toastCtrl.create({
+            message: 'It seems like you don\'t have access to this resource',
+            duration: 5000
+          });
+          noAccessToast.present();
+          break;
+        default:
+          const errorToast = await this.toastCtrl.create({
+            message: this.utilService.standardMessages.unexpectedError,
+            duration: 30000
+          });
+          errorToast.present();
+          break;
+      }
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          case 404:
-            const noAccessToast = await this.toastCtrl.create({
-              message: 'It seems like you don\'t have access to this resource',
-              duration: 5000
-            });
-            noAccessToast.present();
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+      return [];
     });
   }
 
@@ -298,10 +300,6 @@ export class HomePage implements AfterViewInit {
     });
 
     popover.present();
-  }
-
-  async getScrollElement() {
-    this.scrollElement = await this.contentContainer.getScrollElement();
   }
 
   newRecipe() {

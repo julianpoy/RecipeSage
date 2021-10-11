@@ -29,12 +29,66 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #contentContainer>
-  <ion-searchbar
-    *ngIf="folder === 'main'"
-    (ionClear)="search('')"
-    (keydown.enter)="search($event.target.value); $event.target.blur()"
-  ></ion-searchbar>
+<ion-content *ngIf="false">
+  <div class="infinite-scrolling-container" *ngIf="recipes && recipes.length > 0">
+    <div *uiScroll="let recipe of datasource">
+      <div
+        class="recipe-card"
+        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+        (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+      >
+        <div class="recipe-image">
+          <img [src]="recipe.images[0].location" *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" />
+          <img *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]" src="/assets/imgs/logo_green.png" />
+        </div>
+        <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+        <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
+        <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
+
+        <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+        <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+        </p>
+
+        <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
+        Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
+        </p>
+        <!--<ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">Selected</ion-badge>-->
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-content>
+  <div class="infinite-scrolling-container" *ngIf="recipes && recipes.length > 0">
+    <ion-item *uiScroll="let recipe of datasource" class="recipeItem"
+      [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+      (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
+      button>
+      <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" slot="start" size="200px">
+        <img [src]="recipe.images[0].location" />
+      </ion-thumbnail>
+
+      <ion-label>
+        <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+        <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
+        <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">Source: {{ recipe.source || recipe.url }}</p>
+
+        <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+          <b>From: {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+        </p>
+
+        <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
+          Labels: <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,&nbsp;</span></span>
+        </p>
+      </ion-label>
+
+      <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1" slot="end">Selected</ion-badge>
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-content #contentContainer *ngIf="false">
+
 
   <div class="labelChips" *ngIf="!userId && preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
     <a
