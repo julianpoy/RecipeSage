@@ -53,6 +53,41 @@ export class HomePage {
 
   userId = null;
 
+  datasource = new Datasource<Recipe>({
+    get: async (index, count) => {
+      const originalCount = count;
+      const isTiled = this.preferences[MyRecipesPreferenceKey.ViewType] === 'tiles';
+      if (isTiled) {
+        index = index * this.tileColCount;
+        count = count * this.tileColCount;
+      }
+
+      await this.fetchMoreRecipes(index + count);
+
+      const recipes = this.recipes.slice(index, index + count);
+
+      if (isTiled) {
+        const recipeGroups = [];
+        const groupCount = recipes.length / this.tileColCount;
+
+        for (let i = 0; i < groupCount; i++) {
+          const recipeIdx = i * this.tileColCount;
+          recipeGroups.push(recipes.slice(recipeIdx, recipeIdx + this.tileColCount));
+        }
+
+        return recipeGroups;
+      }
+
+      return recipes;
+    },
+    settings: {
+      minIndex: 0,
+      startIndex: 0,
+      bufferSize: 25,
+      padding: 5,
+    }
+  });
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
@@ -104,6 +139,14 @@ export class HomePage {
     events.subscribe('import:pepperplate:complete', () => this.resetAndLoadAll());
   }
 
+  ionViewWillEnter() {
+    this.clearSelectedRecipes();
+
+    if (this.reloadPending) {
+      this.resetAndLoadAll();
+    }
+  }
+
   updateTileColCount() {
     const tileColCount = Math.floor(window.innerWidth / (TILE_WIDTH + TILE_PADD));
 
@@ -111,49 +154,6 @@ export class HomePage {
       this.tileColCount = tileColCount;
 
       this.datasource.adapter.reset();
-    }
-  }
-
-  datasource = new Datasource<Recipe>({
-    get: async (index, count) => {
-      const originalCount = count;
-      const isTiled = this.preferences[MyRecipesPreferenceKey.ViewType] === 'tiles';
-      if (isTiled) {
-        index = index * this.tileColCount;
-        count = count * this.tileColCount;
-      }
-
-      await this.fetchMoreRecipes(index + count);
-
-      const recipes = this.recipes.slice(index, index + count);
-
-      if (isTiled) {
-        const recipeGroups = [];
-        const groupCount = recipes.length / this.tileColCount;
-
-        for (var i = 0; i < groupCount; i++) {
-          const recipeIdx = i * this.tileColCount;
-          recipeGroups.push(recipes.slice(recipeIdx, recipeIdx + this.tileColCount));
-        }
-
-        return recipeGroups;
-      }
-
-      return recipes;
-    },
-    settings: {
-      minIndex: 0,
-      startIndex: 0,
-      bufferSize: 25,
-      padding: 5,
-    }
-  });
-
-  ionViewWillEnter() {
-    this.clearSelectedRecipes();
-
-    if (this.reloadPending) {
-      this.resetAndLoadAll();
     }
   }
 
