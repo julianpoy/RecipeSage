@@ -30,7 +30,23 @@
 </ion-header>
 
 <ion-content>
+  <div *ngIf="!recipes || recipes.length === 0">
+    <ion-searchbar
+      [value]="searchText"
+      *ngIf="folder === 'main'"
+      (ionClear)="search('')"
+      (keydown.enter)="search($event.target.value); $event.target.blur()"
+    ></ion-searchbar>
+  </div>
+
   <div class="infinite-scrolling-container" *ngIf="preferences[preferenceKeys.ViewType] === 'list' && recipes && recipes.length > 0">
+    <ion-searchbar
+      [value]="searchText"
+      *ngIf="folder === 'main'"
+      (ionClear)="search('')"
+      (keydown.enter)="search($event.target.value); $event.target.blur()"
+    ></ion-searchbar>
+
     <div class="labelChips" *ngIf="!userId && preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
       <a
         *ngFor="let label of labels"
@@ -67,6 +83,13 @@
   </div>
 
   <div class="infinite-scrolling-container" *ngIf="preferences[preferenceKeys.ViewType] === 'tiles' && recipes && recipes.length > 0">
+    <ion-searchbar
+      [value]="searchText"
+      *ngIf="folder === 'main'"
+      (ionClear)="search('')"
+      (keydown.enter)="search($event.target.value); $event.target.blur()"
+    ></ion-searchbar>
+
     <div class="labelChips" *ngIf="!userId && preferences[preferenceKeys.ShowLabelChips] && folder === 'main' && labels.length > 0">
       <a
         *ngFor="let label of labels"
