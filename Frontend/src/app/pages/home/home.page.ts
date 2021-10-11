@@ -101,14 +101,7 @@ export class HomePage {
     events.subscribe('recipe:deleted', () => this.reloadPending = true);
     events.subscribe('label:created', () => this.reloadPending = true);
     events.subscribe('label:deleted', () => this.reloadPending = true);
-    events.subscribe('import:pepperplate:complete', () => {
-      const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(() => {
-        loading.dismiss();
-      }, () => {
-        loading.dismiss();
-      });
-    });
+    events.subscribe('import:pepperplate:complete', () => this.resetAndLoadAll());
   }
 
   updateTileColCount() {
@@ -160,12 +153,7 @@ export class HomePage {
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
-      const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(() => {
-        loading.dismiss();
-      }, () => {
-        loading.dismiss();
-      });
+      this.resetAndLoadAll();
     }
   }
 
@@ -242,6 +230,8 @@ export class HomePage {
   loadRecipes(offset, numToFetch) {
     this.lastRecipeCount += numToFetch;
 
+    const loading = this.loadingService.start();
+
     return this.recipeService.fetch({
       folder: this.folder,
       userId: this.userId,
@@ -255,7 +245,10 @@ export class HomePage {
       this.totalRecipeCount = response.totalCount;
 
       this.recipes = this.recipes.concat(response.data);
+
+      loading.dismiss();
     }).catch(async err => {
+      loading.dismiss();
       switch (err.response.status) {
         case 0:
           const offlineToast = await this.toastCtrl.create({
