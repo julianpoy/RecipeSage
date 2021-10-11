@@ -31,7 +31,7 @@ export class HomePage {
 
   recipes: Recipe[] = [];
   recipeFetchBuffer = 25;
-  fetchPerPage = 50;
+  fetchPerPage = 100;
   lastRecipeCount = 0;
   totalRecipeCount: number;
 
