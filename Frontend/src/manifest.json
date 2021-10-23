@@ -37,6 +37,15 @@
       "url": "/#/meal-planners?utm_source=homescreen"
     }
   ],
+  "share_target": {
+      "action": "/shareTarget",
+      "method": "GET",
+      "params": {
+        "title": "title",
+        "text": "text",
+        "url": "url"
+    }
+  },
   "background_color": "#353b48",
   "theme_color": "#353b48",
   "gcm_sender_id": "103953800507"
