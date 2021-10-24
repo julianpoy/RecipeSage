@@ -8,6 +8,7 @@ import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
+import { getQueryParam } from '@/utils/queryParams';
 
 @Component({
   selector: 'page-account',
@@ -39,6 +40,9 @@ export class AccountPage {
     public recipeService: RecipeService,
     public userService: UserService,
     public capabilitiesService: CapabilitiesService) {
+
+    const resetToken = getQueryParam('token');
+    if (resetToken) localStorage.setItem('token', resetToken);
 
     const loading = this.loadingService.start();
 
