@@ -6,7 +6,7 @@ export const getQueryParams = () => {
 
   return Object.fromEntries(
     queryString
-      .split("&")
+      .split('&')
       .map(el => el.split('='))
       .map(([key, val]) => [decodeURIComponent(key), decodeURIComponent(val)])
   );
