@@ -1,5 +1,6 @@
-let fractionjs = require('fraction.js');
-let unitUtils = require('./units.js');
+const fractionjs = require('fraction.js');
+const unitUtils = require('./units.js');
+const getShoppingListItemGroupings = require('./get-shopping-list-item-groupings.js');
 
 // If a handle matches this regexp, it is invalid
 const EVIL_HANDLE_REGEXP = /[^A-Za-z0-9_.]/;
@@ -262,4 +263,5 @@ module.exports = {
   getTitleForIngredient,
   unitUtils,
   isHandleValid,
+  getShoppingListItemGroupings,
 }

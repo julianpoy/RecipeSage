@@ -18,3 +18,12 @@ export function parseNotes(notes: string): {
   content: string,
   isHeader: boolean,
 }[];
+
+export function getShoppingListItemGroupings(items: any, sortBy: string): {
+  items: any[],
+  groupTitles: string[],
+  categoryTitles: string[],
+  itemsByGroupTitle: any,
+  itemsByCategoryTitle: any,
+  groupsByCategoryTitle: any,
+};

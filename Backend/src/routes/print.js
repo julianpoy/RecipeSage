@@ -1,26 +1,27 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-var Raven = require('raven');
-var sanitizeHtml = require('sanitize-html');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const Raven = require('raven');
+const sanitizeHtml = require('sanitize-html');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Image = require('../models').Image;
-var Recipe_Image = require('../models').Recipe_Image;
-var Label = require('../models').Label;
-var ShoppingList = require('../models').ShoppingList;
-var ShoppingListItem = require('../models').ShoppingListItem;
+const Op = require("sequelize").Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Image = require('../models').Image;
+const Recipe_Image = require('../models').Recipe_Image;
+const Label = require('../models').Label;
+const ShoppingList = require('../models').ShoppingList;
+const ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
+const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 
 // SharedUtils
-var SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('../../../SharedUtils/src');
 
 router.get('/', (req, res, next) => {
   let originalModifiers = req.query.modifiers ? req.query.modifiers.split(',') : [];
@@ -37,60 +38,74 @@ router.get('/', (req, res, next) => {
 
 router.get('/shoppingList/:shoppingListId',
   MiddlewareService.validateSession(['user']),
-  function (req, res, next) {
+  async (req, res, next) => {
 
-  if (!req.query.version) return res.status(400).send("Missing parameter: version");
+  try {
+    if (!req.query.version) return res.status(400).send("Missing parameter: version");
 
-  var modifiers = {
-    version: req.query.version
-  };
+    const modifiers = {
+      version: req.query.version,
+      groupCategories: req.query.groupCategories,
+      groupSimilar: req.query.groupSimilar,
+      sortBy: req.query.sortBy || '-title',
+    };
 
-  ShoppingList.findOne({
-    where: {
-      id: req.params.shoppingListId,
-      [Op.or]: [
-        { userId: res.locals.session.userId },
-        { '$collaborators.id$': res.locals.session.userId }
-      ]
-    },
-    include: [{
-      model: ShoppingListItem,
-      as: 'items',
-      attributes: ['title'],
-    }, {
-      model: User,
-      as: 'collaborators',
-      attributes: ['id']
-    }]
-  }).then(function(sObj) {
-    if (!sObj) {
-      res.render('error', {
+    const shoppingListSummary = await ShoppingList.findOne({
+      where: {
+        id: req.params.shoppingListId,
+        [Op.or]: [
+          { userId: res.locals.session.userId },
+          { '$collaborators.id$': res.locals.session.userId }
+        ]
+      },
+      include: [{
+        model: ShoppingListItem,
+        as: 'items',
+        attributes: ['title'],
+      }, {
+        model: User,
+        as: 'collaborators',
+        attributes: ['id']
+      }]
+    });
+
+    if (!shoppingListSummary) {
+      return res.render('error', {
         message: '404',
         error: {
           status: 'Shopping list not found',
           stack: ''
         }
       });
-    } else {
-      let shoppingList = sObj.toJSON();
-
-      res.render('shoppinglist-default', {
-        shoppingList,
-        date: (new Date).toDateString(),
-        modifiers: modifiers
-      });
     }
-  }).catch(function(err) {
-    res.render('error', {
-      message: '500',
-      error: {
-        status: 'Error while loading shopping list',
-        stack: ''
-      }
-    });
 
-    next(err);
-  });
+    const shoppingList = shoppingListSummary.toJSON();
+    ShoppingListCategorizerService.groupShoppingListItems(shoppingList.items);
+    shoppingList.items.forEach(item => item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(item.title));
+
+    const {
+      items,
+      groupTitles,
+      categoryTitles,
+      itemsByGroupTitle,
+      itemsByCategoryTitle,
+      groupsByCategoryTitle,
+    } = SharedUtils.getShoppingListItemGroupings(shoppingList.items, modifiers.sortBy);
+
+    res.render('shoppinglist-default', {
+      title: shoppingList.title,
+      items,
+      groupTitles,
+      categoryTitles,
+      itemsByGroupTitle,
+      itemsByCategoryTitle,
+      groupsByCategoryTitle,
+      date: (new Date).toDateString(),
+      modifiers,
+    });
+  } catch(e) {
+    next(e);
+  }
 });
 
 router.get('/:recipeId',
