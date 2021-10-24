@@ -1,6 +1,6 @@
 html
   head
-    title= shoppingList.title
+    title= title
     script(type="text/javascript").
       var _paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
@@ -26,19 +26,81 @@ html
         column-count: 2;
       }
 
-      .item {
-        margin: 5px 0px;
+      .items > .set:first-child > .setTitle {
+        margin-top: 0;
       }
 
-    h2(class="title")= shoppingList.title
+      .setTitle {
+        margin: 5px 0px 0px 0px;
+      }
 
+      .categoryTitle {
+        margin-bottom: 5px;
+      }
+
+      .items > div, .items p {
+        margin: 0px 0px 5px 0px;
+      }
+
+      .subSet {
+        margin-left: 15px;
+      }
+
+      .hint {
+        font-size: 11px;
+      }
+
+      .doNotBreak {
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        position: relative;
+      }
+
+  h2= title
+
+  if !modifiers.groupSimilar && !modifiers.groupCategories
     div(class="items")
-      each item in shoppingList.items
-        p(class="item")= item.title
+      each item in items
+        p= item.title
 
-    p(class="printed-on")
-      i Printed on&nbsp;
-      i= date
+  if !modifiers.groupSimilar && modifiers.groupCategories
+    div(class="items")
+      each categoryTitle in categoryTitles
+        div(class="set doNotBreak")
+          div(class="setTitle categoryTitle")
+            b= categoryTitle
+          div(class="subSet")
+            each item in itemsByCategoryTitle[categoryTitle]
+              p= item.title
+
+  if modifiers.groupSimilar && !modifiers.groupCategories
+    div(class="items")
+      each groupTitle in groupTitles
+        div(class="set doNotBreak")
+          div(class="setTitle")= groupTitle
+          div(class="subSet hint")
+            each item in itemsByGroupTitle[groupTitle]
+              i= item.title
+              br
+
+  if modifiers.groupSimilar && modifiers.groupCategories
+    div(class="items")
+      each categoryTitle in categoryTitles
+        div(class="set doNotBreak")
+          div(class="setTitle categoryTitle")
+            b= categoryTitle
+          each group in groupsByCategoryTitle[categoryTitle]
+            div(class="subSet doNotBreak")
+              div(class="setTitle")= group.title
+              div(class="subSet hint")
+                each item in group.items
+                  i= item.title
+                  br
+
+  p(class="printed-on")
+    i Printed on&nbsp;
+    i= date
 
   script(type='text/javascript').
     if (window.location.href.indexOf('print=true') > -1) {

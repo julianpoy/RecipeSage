@@ -234,8 +234,14 @@ export class UtilService {
     return `?false=false`;
   }
 
-  generatePrintShoppingListURL(shoppingListId) {
-    return `${this.getBase()}print/shoppingList/${shoppingListId}${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
+  generatePrintShoppingListURL(shoppingListId, options) {
+    let query = `${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
+
+    if (options?.groupSimilar)    query += '&groupSimilar=true';
+    if (options?.groupCategories) query += '&groupCategories=true';
+    if (options?.sortBy)          query += `&sortBy=${options.sortBy}`;
+
+    return `${this.getBase()}print/shoppingList/${shoppingListId}${query}`;
   }
 
   generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
