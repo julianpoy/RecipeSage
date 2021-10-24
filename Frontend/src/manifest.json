@@ -38,12 +38,12 @@
     }
   ],
   "share_target": {
-      "action": "/shareTarget",
-      "method": "GET",
-      "params": {
-        "title": "title",
-        "text": "text",
-        "url": "url"
+    "action": "/#/edit-recipe/new",
+    "method": "GET",
+    "params": {
+      "title": "sharetarget-title",
+      "text": "sharetarget-text",
+      "url": "autofill-url"
     }
   },
   "background_color": "#353b48",

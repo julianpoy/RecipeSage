@@ -9,6 +9,7 @@ import { LoadingService } from '@/services/loading.service';
 import { UnsavedChangesService } from '@/services/unsaved-changes.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { ImageService } from '@/services/image.service';
+import { getQueryParam } from '@/utils/queryParams';
 
 import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
 
@@ -46,19 +47,7 @@ export class EditRecipePage {
     const recipeId = this.route.snapshot.paramMap.get('recipeId');
 
     if (recipeId === 'new') {
-      // Check if we're passing parameters to new, if so, attempt to automatically import the given recipe
-      let url = this.route.snapshot.queryParamMap.get('url');
-      let text = this.route.snapshot.queryParamMap.get('text');
-      let title = this.route.snapshot.queryParamMap.get('title');
-      if ( this.findLastUrlInString(url) != null ) {
-        this._clipFromUrl(this.findLastUrlInString(url));
-      }
-      else if ( this.findLastUrlInString(text) != null ) {
-        this._clipFromUrl(this.findLastUrlInString(text));
-      }
-      else if ( this.findLastUrlInString(title) != null ) {
-        this._clipFromUrl(this.findLastUrlInString(title));
-      }
+      this.checkAutoClip();
     }
 
     if (recipeId !== 'new') {
@@ -107,14 +96,28 @@ export class EditRecipePage {
     // TODO: Needs functionality
   }
 
+  checkAutoClip() {
+    // Check if we're handling a Web Share API launch. If so, attempt to automatically import the given recipe
+    const autofillUrl = getQueryParam('autofill-url');
+    const sharetargetText = getQueryParam('sharetarget-text');
+    const sharetargetTitle = getQueryParam('sharetarget-title');
+
+    const autoClipSource = autofillUrl || sharetargetText || sharetargetTitle;
+
+    if (autoClipSource) this.autoClip(autoClipSource);
+  }
+
+  autoClip(source: string) {
+    this._clipFromUrl(this.findLastUrlInString(source));
+  }
+
   findLastUrlInString(s) {
-    if ( typeof(s) != "string" ) { return; }
+    if (typeof s !== 'string' ) return;
 
     // Robust URL finding regex from https://www.regextester.com/93652
+    // TODO: Replace this with a lib
     let matchedUrl = s.match(/(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/gi);
-    if ( matchedUrl !== null ) {
-      return matchedUrl[matchedUrl.length - 1];
-    }
+    if (matchedUrl) return matchedUrl.pop();
   }
 
   async save() {
