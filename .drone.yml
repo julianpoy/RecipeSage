@@ -3,43 +3,43 @@ name: ci-backend
 
 environment:
 
-services:
-- name: postgres
-  image: postgres:9.6.9
-  environment:
-    POSTGRES_USER: chefbook
-    POSTGRES_PASSWORD: admin
-    POSTGRES_DB: chefbook_test
+#services:
+#- name: postgres
+  #image: postgres:9.6.9
+  #environment:
+    #POSTGRES_USER: chefbook
+    #POSTGRES_PASSWORD: admin
+    #POSTGRES_DB: chefbook_test
 
 steps:
-- name: Install Dependencies
-  image: node:12
-  commands:
-  - cd /drone/src/Backend && npm install
-  - cd /drone/src/SharedUtils && npm install
-- name: Test
-  image: node:12
-  environment:
-    NODE_ENV: test
-    VERBOSE: true
-    POSTGRES_DB: chefbook_test
-    POSTGRES_USER: chefbook
-    POSTGRES_PASSWORD: admin
-    POSTGRES_PORT: 5432
-    POSTGRES_HOST: postgres
-    POSTGRES_SSL: false
-    POSTGRES_LOGGING: false
-    GRIP_URL: http://localhost:5561/
-    GRIP_KEY: changeme
-    AWS_ACCESS_KEY_ID:
-      from_secret: AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: AWS_SECRET_ACCESS_KEY
-    AWS_DEFAULT_REGION: us-west-2
-    AWS_REGION: us-west-2
-    AWS_BUCKET: chefbook-dev
-  commands:
-  - cd Backend && npm run test:ci
+#- name: Install Dependencies
+  #image: node:12
+  #commands:
+  #- cd /drone/src/Backend && npm install
+  #- cd /drone/src/SharedUtils && npm install
+#- name: Test
+  #image: node:12
+  #environment:
+    #NODE_ENV: test
+    #VERBOSE: true
+    #POSTGRES_DB: chefbook_test
+    #POSTGRES_USER: chefbook
+    #POSTGRES_PASSWORD: admin
+    #POSTGRES_PORT: 5432
+    #POSTGRES_HOST: postgres
+    #POSTGRES_SSL: false
+    #POSTGRES_LOGGING: false
+    #GRIP_URL: http://localhost:5561/
+    #GRIP_KEY: changeme
+    #AWS_ACCESS_KEY_ID:
+      #from_secret: AWS_ACCESS_KEY_ID
+    #AWS_SECRET_ACCESS_KEY:
+      #from_secret: AWS_SECRET_ACCESS_KEY
+    #AWS_DEFAULT_REGION: us-west-2
+    #AWS_REGION: us-west-2
+    #AWS_BUCKET: chefbook-dev
+  #commands:
+  #- cd Backend && npm run test:ci
 - name: Push
   image: docker
   commands:
