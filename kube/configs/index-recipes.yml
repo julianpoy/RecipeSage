@@ -1,37 +1,37 @@
 apiVersion: batch/v1
-kind: Job
+kind: CronJob
 metadata:
-  name: rs-index-recipes-2020-08-24
+  name: index-recipes-cron
 spec:
-  template:
+  schedule: "0 6 * * 2"
+  jobTemplate:
     spec:
-      containers:
-      - name: rs-index-recipes-2020-08-24
-        image: julianpoy/recipesage:api-v2.5.3
-        command: ["node"]
-        args: ["src/index.app.js"]
-        resources:
-          requests:
-            cpu: 50m
-            memory: 100Mi
-          limits:
-            cpu: 100m
-            memory: 1G
-        envFrom:
-        - secretRef:
-            name: rs-api-env
-        env:
-        - name: INDEX_BEFORE
-          value: "2020-08-24 00:00"
-        volumeMounts:
-        - name: firebase-credentials
-          mountPath: /app/Backend/src/config/firebase-credentials.json
-          subPath: firebase-credentials.json
-      volumes:
-        - name: firebase-credentials
-          configMap:
-            name: firebase-credentials
-      restartPolicy: Never
-      imagePullSecrets:
-      - name: myregistrykey
+      template:
+        spec:
+          containers:
+          - name: index-recipes-cron-runner
+            image: julianpoy/recipesage:api-v2.7.2-beta3
+            command: ["node"]
+            args: ["src/index.app.js"]
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                cpu: 100m
+                memory: 1G
+            envFrom:
+            - secretRef:
+                name: rs-api-env
+            volumeMounts:
+            - name: firebase-credentials
+              mountPath: /app/Backend/src/config/firebase-credentials.json
+              subPath: firebase-credentials.json
+          volumes:
+            - name: firebase-credentials
+              configMap:
+                name: firebase-credentials
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: myregistrykey
 
