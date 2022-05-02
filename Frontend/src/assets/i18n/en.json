@@ -613,6 +613,174 @@
   "pages.importLivingCookbook.troubleshooting.tooLarge.1": "If your database is too large:",
   "pages.importLivingCookbook.troubleshooting.tooLarge.2": "Please upload your database file to a service such as Google Drive and send me a link. I'll import it for you.",
 
+  "====== Pages.ImportPaprika ======": "",
+
+  "pages.importPaprika.title": "Import Recipes from Paprika File",
+
+  "pages.importPaprika.description1": "This will import your Paprika export file into RecipeSage. Please note this feature is in beta.",
+  "pages.importPaprika.description2": "All files must be in .paprikarecipes format (export as Paprika Recipe Format in Paprika settings). Other formats will not work.",
+  "pages.importPaprika.description3": "The import task can take several minutes",
+  "pages.importPaprika.description4": "It depends on the format and size of your file",
+  "pages.importPaprika.description5": "If you're having trouble with the import, send me an email with the file and I can import it manually.",
+  "pages.importPaprika.description6": "If your file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importPaprika.description7": "Please consider donating if your file contains a large number of recipes or images.",
+  "pages.importPaprika.description8": "Warning! This filetype does not end in .paprikarecipes",
+  "pages.importPaprika.description9": "It may not work.",
+
+  "====== Pages.ImportPepperplate ======": "",
+
+  "pages.importPepperplate.title": "Import Recipes from Pepperplate",
+  "pages.importPepperplate.description1": "The import task can take several minutes and depends on the availability of Pepperplate servers.",
+  "pages.importPepperplate.description2": "You will only see the imported recipes in your library once the full import task is complete.",
+  "pages.importPepperplate.description3": "If you have issues with the import process, feel free to reach out.",
+  "pages.importPepperplate.description4": "Note: If you have a very large recipe collection your browser may time out before the import is complete, resulting in an error.",
+  "pages.importPepperplate.description5": "To avoid creating duplicates, please check the \"My Recipes\" page before trying the import again.",
+  "pages.importPepperplate.description6": "If duplicates are created accidentally, you can use the \"delete all recipes\" button on the account page to start over.",
+
+  "pages.importPepperplate.description7": "Please enter the credentials associated with your Pepperplate account:",
+  "pages.importPepperplate.username": "Pepperplate Email/Username",
+  "pages.importPepperplate.password": "Pepperplate Password",
+
+  "pages.importPepperplate.start": "Start Import",
+  "pages.importPepperplate.loading": "Importing, please wait...",
+
+  "====== Pages.Settings ======": "",
+
+  "pages.settings.title": "Settings",
+  "pages.settings.sction1.title": "Data & Account",
+  "pages.settings.import": "Import Recipe Data",
+  "pages.settings.export": "Export Recipe Data",
+  "pages.settings.account": "Account Settings & Stats",
+  "pages.settings.update": "Check for Update",
+  "pages.settings.section2.title": "General Settings",
+  "pages.settings.splitPane": "Enable Split Pane View on Large Screens",
+  "pages.settings.cache": "Experimental: Cache all recipes offline",
+  "pages.settings.theme": "Theme",
+  "pages.settings.theme.default": "System Default",
+  "pages.settings.theme.light": "Light",
+  "pages.settings.theme.dark": "Dark",
+  "pages.settings.theme.black": "Black (OLED)",
+  "pages.settings.reset": "Reset All Preferences",
+
+  "====== Pages.Share ======": "",
+
+  "pages.share.title": "Share Recipe",
+  "pages.share.description": "When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.",
+  "pages.share.byAccount": "RecipeSage",
+  "pages.share.byLink": "Link",
+  "pages.share.byEmbed": "Embed",
+  "pages.share.byLink.copy": "To share, copy the link below",
+  "pages.share.byLink.shareIcon": "or press the share icon",
+
+  "pages.share.byEmbed.image": "Show Title Image",
+  "pages.share.byEmbed.columns": "Disable Columns",
+  "pages.share.byEmbed.print": "Show Print Button",
+  "pages.share.byEmbed.sources": "Hide Sources",
+  "pages.share.byEmbed.notes": "Hide Notes",
+  "pages.share.byEmbed.height": "Height (not shown)",
+  "pages.share.byEmbed.width": "Width (not shown)",
+  "pages.share.byEmbed.jsonLD": "Enable JSON-LD for SEO",
+  "pages.share.byEmbed.copy": "Copy the code below and paste it into your website HTML",
+
+  "pages.share.byAccount.prompt": "Recipient's account email...",
+  "pages.share.byAccount.found": "RecipeSage user found: {{name}}. Press send to share recipe.",
+  "pages.share.byAccount.notfound": "No RecipeSage user found with that email address.",
+  "pages.share.byAccount.description": "Enter another user's email address to search",
+  "pages.share.byAccount.selectBelow": "or select a conversation below",
+  "pages.share.byAccount.searching": "Searcing for user...",
+  "pages.share.byAccount.conversations": "Existing Conversations",
+
+  "pages.share.send": "Send",
+  "pages.share.close": "Close",
+
+  "====== Pages.NewShoppingListItem ======": "",
+
+  "pages.newShoppingListItem.title": "Add item(s)",
+  "pages.newShoppingListItem.items": "Items",
+  "pages.newShoppingListItem.recipe": "Recipe",
+  "pages.newShoppingListItem.itemTitle": "Item title",
+  "pages.newShoppingListItem.add": "Add to List",
+
+  "====== Pages.NewShoppingList ======": "",
+
+  "pages.newShoppingList.title": "New shopping list",
+  "pages.newShoppingList.listTitle": "Title",
+  "pages.newShoppingList.create": "Create",
+  "pages.newShoppingList.share": "and Share",
+
+  "====== Pages.ShoppingList ======": "",
+
+  "pages.shoppingList.title": "Shopping List - {{title}}",
+  "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
+  "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
+  "pages.shoppingList.nullState.add": "Add the first item",
+  "pages.shoppingList.recipes": "Recipes in this list",
+
+  "====== Pages.ShoppingListPopover ======": "",
+
+  "pages.shoppingListPopover.title": "Options",
+
+  "pages.shoppingListPopover.sortBy": "Sort by",
+  "pages.shoppingListPopover.sortBy.title": "Title",
+  "pages.shoppingListPopover.sortBy.createdDesc": "Created (newest first)",
+  "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
+
+  "pages.shoppingListPopover.groupCategories": "Group Items by Category",
+  "pages.shoppingListPopover.groupSimilar.": "Group Similar Items",
+  "pages.shoppingListPopover.showTitle": "Show Recipe Title",
+  "pages.shoppingListPopover.showAddedBy": "Show Added By",
+  "pages.shoppingListPopover.showAddedOn": "Show Added On",
+  "pages.shoppingListPopover.print": "Print",
+  "pages.shoppingListPopover.removeAll": "Remove all items",
+  "pages.shoppingListPopover.delete": "Delete list",
+
+  "====== Pages.ShoppingLists ======": "",
+
+  "pages.shoppingLists.title": "Shopping Lists",
+  "pages.shoppingLists.created": "Created {{date}}",
+  "pages.shoppingLists.collaboration": "In collaboration with:",
+  "pages.shoppingLists.createdBy": "Created by {{name}}",
+  "pages.shoppingLists.owner": "You own this list",
+  "pages.shoppingLists.nullState.1": "You have no shopping lists.",
+  "pages.shoppingLists.nullState.2": "To create a shopping list, press the plus button in the bottom corner.",
+
+  "====== Pages.AddFriend ======": "",
+
+  "pages.addFriend.title": "Find User",
+  "pages.addFriend.profileWarning": "Note: The desired user must have enabled their profile.",
+  "pages.addFriend.send": "Send Friend Request",
+  "pages.addFriend.open": "Open Profile",
+
+  "====== Pages.AddProfileItem ======": "",
+
+  "pages.addProfileItem.title": "Add Profile Item",
+  "pages.addProfileItem.prompt": "What Would You Like to Share?",
+  "pages.addProfileItem.recipe": "A Recipe",
+  "pages.addProfileItem.label": "A Label",
+  "pages.addProfileItem.allRecipes": "All of My Recipes",
+
+  "pages.addProfileItem.type": "Profile Item Type:",
+  "pages.addProfileItem.type.recipe": "Recipe",
+  "pages.addProfileItem.type.label": "Label",
+  "pages.addProfileItem.type.allRecipes": "All Recipes",
+
+  "pages.addProfileItem.change": "Click to change",
+  "pages.addProfileItem.select": "Select your",
+  "pages.addProfileItem.select.recipe": "recipe",
+  "pages.addProfileItem.select.label": "label",
+
+  "pages.addProfileItem.selectVisibility": "Who Should Be Able to See This?",
+  "pages.addProfileItem.selectVisibility.public": "Anyone (Public)",
+  "pages.addProfileItem.selectVisibility.friends": "My Friends Only",
+
+  "pages.addProfileItem.visibility": "Visibility:",
+  "pages.addProfileItem.visibility.public": "public",
+  "pages.addProfileItem.visibility.friends": "friends only",
+
+  "pages.addProfileItem.itemTitle": "Featured Title",
+  "pages.addProfileItem.tos": "By adding this item, you agree to the RecipeSage Sharing Policy",
+  "pages.addProfileItem.done": "Done",
+
 
 
 

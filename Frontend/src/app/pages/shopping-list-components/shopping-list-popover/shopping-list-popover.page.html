@@ -1,64 +1,72 @@
 <ion-list no-border>
   <ion-list-header>
-    Options
+    {{ 'pages.shoppingListPopover.title' | translate }}
   </ion-list-header>
 
   <ion-item lines="full">
-    <ion-label>Sort by</ion-label>
+    <ion-label>
+      {{ 'pages.shoppingListPopover.sortBy' | translate }}
+    </ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.SortBy]" (ngModelChange)="savePreferences();">
-      <ion-select-option value="-title">Title</ion-select-option>
-      <ion-select-option value="-createdAt">Created (newest first)</ion-select-option>
-      <ion-select-option value="createdAt">Created (oldest first)</ion-select-option>
+      <ion-select-option value="-title">
+        {{ 'pages.shoppingListPopover.sortBy.title' | translate }}
+      </ion-select-option>
+      <ion-select-option value="-createdAt">
+        {{ 'pages.shoppingListPopover.sortBy.createdDesc' | translate }}
+      </ion-select-option>
+      <ion-select-option value="createdAt">
+        {{ 'pages.shoppingListPopover.sortBy.createdAsc' | translate }}
+      </ion-select-option>
     </ion-select>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupCategories]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
-      Group Items by Category
+      {{ 'pages.shoppingListPopover.groupCategories' | translate }}
     </ion-label>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupSimilar]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
-      Group Similar Items
+      {{ 'pages.shoppingListPopover.groupSimilar' | translate }}
     </ion-label>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
-      Show Recipe Title
+      {{ 'pages.shoppingListPopover.showTitle' | translate }}
     </ion-label>
   </ion-item>
 
   <ion-item lines="full" *ngIf="shoppingList.collaborators.length > 0">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
-      Show Added By
+      {{ 'pages.shoppingListPopover.showAddedBy' | translate }}
     </ion-label>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
-      Show Added On
+      {{ 'pages.shoppingListPopover.showAddedOn' | translate }}
     </ion-label>
   </ion-item>
 
   <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
     <ion-icon name='print' slot="start"></ion-icon>
-    Print
+    {{ 'pages.shoppingListPopover.print' | translate }}
   </ion-button>
 
   <ion-button (click)="removeAllItems()" expand="block" size="small" class="ion-margin">
     <ion-icon name='remove-circle' slot="start"></ion-icon>
-    Remove all items
+    {{ 'pages.shoppingListPopover.removeAll' | translate }}
   </ion-button>
 
   <ion-button (click)="deleteList()" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
-    Delete list
+    {{ 'pages.shoppingListPopover.delete' | translate }}
   </ion-button>
 </ion-list>

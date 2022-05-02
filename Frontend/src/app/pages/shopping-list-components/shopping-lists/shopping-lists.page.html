@@ -4,7 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Shopping Lists</ion-title>
+    <ion-title>
+      {{ 'pages.shoppingLists.title' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -21,10 +23,10 @@
       <ion-label>
         <h2>{{ shoppingList.title }}</h2>
         <p>
-          Created {{ formatItemCreationDate(shoppingList.createdAt) }}
+          {{ 'pages.shoppingLists.created' | translate:{date:formatItemCreationDate(shoppingList.createdAt)} }}
         </p>
         <p *ngIf="shoppingList.collaborators.length > 0">
-          In collaboration with:
+          {{ 'pages.shoppingLists.collaboration' | translate }}
           <span *ngFor="let user of shoppingList.collaborators; last as isLast">
             <span *ngIf="shoppingList.myUserId !== user.id">
               {{ user.name || user.email }}<span *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id">,</span>
@@ -35,8 +37,12 @@
           </span>
         </p>
         <p>
-          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">Created by {{ shoppingList.owner.name || shoppingList.owner.email }}</span>
-          <span *ngIf="shoppingList.myUserId === shoppingList.owner.id">You own this list</span>
+          <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
+            {{ 'pages.shoppingLists.createdBy' | translate:{name:(shoppingList.owner.name || shoppingList.owner.email)} }}
+          </span>
+          <span *ngIf="shoppingList.myUserId === shoppingList.owner.id">
+            {{ 'pages.shoppingLists.owner' | translate }}
+          </span>
         </p>
       </ion-label>
       <ion-badge slot="end">{{ shoppingList.itemCount }}</ion-badge>
@@ -45,8 +51,8 @@
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          You have no shopping lists.
-          <br /> To create a shopping list, press the plus button in the bottom corner.
+          {{ 'pages.shoppingLists.nullState.1' | translate }}<br />
+          {{ 'pages.shoppingLists.nullState.2' | translate }}
         </p>
       </ion-label>
     </null-state>

@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Find User</ion-title>
+    <ion-title>
+      {{ 'pages.addFriend.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -18,7 +20,7 @@
   <ion-item>
     <ion-label>
       <p>
-        Note: The desired user must have enabled their profile.
+        {{ 'pages.addFriend.profileWarning' | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -28,13 +30,13 @@
   <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
     <ion-label>
-      Send Friend Request
+      {{ 'pages.addFriend.send' | translate }}
     </ion-label>
   </ion-button>
   <ion-button expand="block" (click)="open()" [disabled]="!recipientId">
     <ion-icon name="open" slot="start"></ion-icon>
     <ion-label>
-      Open Profile
+      {{ 'pages.addFriend.open' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Add item(s)</ion-title>
+    <ion-title>
+      {{ 'pages.newShoppingListItem.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -17,10 +19,10 @@
   <div>
     <ion-segment (ionChange)="inputTypeChanged($event)" value="items">
       <ion-segment-button value="items">
-        Items
+        {{ 'pages.newShoppingListItem.items' | translate }}
       </ion-segment-button>
       <ion-segment-button value="recipe">
-        Recipe
+        {{ 'pages.newShoppingListItem.recipe' | translate }}
       </ion-segment-button>
     </ion-segment>
   </div>
@@ -29,7 +31,9 @@
 
     <div *ngSwitchCase="'items'">
       <ion-item *ngFor="let item of itemFields">
-        <ion-label position="floating">Item title</ion-label>
+        <ion-label position="floating">
+          {{ 'pages.newShoppingListItem.itemTitle' | translate }}
+        </ion-label>
         <ion-input
           [(ngModel)]="item.title"
           (ngModelChange)="addOrRemoveTextFields()"
@@ -58,7 +62,7 @@
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
-      Add to List
+      {{ 'pages.newShoppingListItem.add' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

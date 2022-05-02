@@ -5,7 +5,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Import Recipes from Paprika File</ion-title>
+    <ion-title>{{ 'pages.importPaprika.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -16,23 +16,25 @@
     <ion-label class="ion-text-center ion-text-wrap">
       <br /><br />
       <p>
-        This will import your Paprika export file into RecipeSage. <b>Please note this feature is in beta.</b><br />
-        All files must be in .paprikarecipes format (export as Paprika Recipe Format in Paprika settings). Other formats will not work.
+        {{ 'pages.importPaprika.description1' | translate }}<br />
+        {{ 'pages.importPaprika.description2' | translate }}
       </p>
       <br />
       <p>
-        <b>The import task can take several minutes</b><br />
-        It depends on the format and size of your file<br />
+        <b>
+          {{ 'pages.importPaprika.description3' | translate }}
+        </b><br />
+        {{ 'pages.importPaprika.description4' | translate }}<br />
       </p>
       <br />
       <p>
-        If you're having trouble with the import, send me an email with the file and I can import it manually.<br />
-        If your file is very large, you may have trouble importing it via this interface due to browser limitations.
+        {{ 'pages.importPaprika.description5' | translate }}<br />
+        {{ 'pages.importPaprika.description6' | translate }}
       </p>
       <br />
       <br />
       <p>
-        Please consider donating if your file contains a large number of recipes or images.
+        {{ 'pages.importPaprika.description7' | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -45,24 +47,30 @@
 
     <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>
-        Warning! This filetype does not end in .paprikarecipes<br />
-        It may not work.
+        {{ 'pages.importPaprika.description8' | translate }}<br />
+        {{ 'pages.importPaprika.description9' | translate }}
       </p>
     </div>
 
     <div class="ion-padding" *ngIf="isFileTooLarge()">
       <p>
-        <b>This file is too large to upload directly.</b><br />
+        <b>{{ 'pages.importLivingCookbook.step2.sizeError' | translate }}</b><br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          Please contact me to have your database imported manually.
+          {{ 'pages.importLivingCookbook.step2.sizeError.contact' | translate }}
         </a>
       </p>
     </div>
 
     <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
-      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">Upload and Import</ion-button>
-      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">Upload and Import Anyway</ion-button>
-      <ion-button *ngIf="loading">Importing, please wait...</ion-button>
+      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">
+        {{ 'pages.importLivingCookbook.step3.upload' | translate }}
+      </ion-button>
+      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">
+        {{ 'pages.importLivingCookbook.step3.upload.ignoreWarning' | translate }}
+      </ion-button>
+      <ion-button *ngIf="loading">
+        {{ 'pages.importLivingCookbook.step3.loading' | translate }}
+      </ion-button>
     </div>
   </div>
 </ion-content>
