@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Share {{profile?.name}}'s Profile</ion-title>
+    <ion-title>
+      {{ 'pages.shareProfile.title' | translate:{name: profile?.name} }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -14,28 +16,13 @@
 
 
 <ion-content>
-  <div>
-    <br />
-    <ion-item lines="none">
-      <ion-label class="ion-text-wrap">
-        <p>
-          Copy the link below<span *ngIf="!hasWebShareAPI">&nbsp;or press the share icon</span>&nbsp;to share
-        </p>
-      </ion-label>
-    </ion-item>
-    <div class="codeBlock">
-      <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
-        {{ profileUrl }}
-      </div>
-      <ion-button fill="clear" *ngIf="hasWebShareAPI" (click)="webShare()">
-        <ion-icon name="share" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
-        <ion-icon name="copy" slot="icon-only"></ion-icon>
-      </ion-button>
-    </div>
-    <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="profileUrl"></textarea>
-  </div>
+  <copy-with-webshare
+    *ngSwitchCase="'link'"
+    [webshareTitle]="`${profile.name}'s RecipeSage profile`"
+    [webshareText]="`Click to view ${this.profile.name}'s public RecipeSage profile`"
+    [webshareURL]="profileUrl"
+    [copyText]="profileUrl"
+  />
 
   <div class="share-icon-container">
     <ion-item lines="none" (click)="openFacebook()" button>
@@ -57,7 +44,7 @@
   <ion-button expand="block" (click)="cancel()">
     <ion-icon name="close" slot="start"></ion-icon>
     <ion-label>
-      Close
+      {{ 'pages.shareProfile.close' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

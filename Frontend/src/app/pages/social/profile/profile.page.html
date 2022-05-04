@@ -5,7 +5,9 @@
       <ion-back-button *ngIf="isLoggedIn()" [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{profile?.name}}'s Profile</ion-title>
+    <ion-title>
+      {{ 'pages.profile.title' | translate:{name:profile?.name} }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,11 +19,7 @@
   <div *ngIf="profile">
     <br />
 
-    <ion-item *ngIf="isSelfHost" lines="none">
-      <ion-label>
-        Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href="https://recipesage.com" target="_blank" rel="noreferrer noopener">RecipeSage.com</a> or any of the accounts located on the main site.
-      </ion-label>
-    </ion-item>
+    <selfhost-warning-item *ngIf="isSelfHost" />
 
     <br />
 
@@ -56,7 +54,7 @@
     <ion-item lines="none">
       <ion-icon name="key" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
-        Pinned Recipes &amp; Labels
+        {{ 'pages.profile.pinned' | translate }}
       </ion-label>
     </ion-item>
 
@@ -87,7 +85,8 @@
       <ion-icon name="bookmarks" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          {{profile.name}} hasn't added anything to their profile yet.<br />
+          {{ 'pages.profile.nullState' | translate:{name:profile.name} }}
+          <br />
         </p>
       </ion-label>
     </null-state>
@@ -97,17 +96,31 @@
 <ion-footer *ngIf="profile && !profile?.isMe">
   <ion-toolbar class="ion-padding-horizontal" *ngIf="isLoggedIn()">
     <div class="action-button-container" *ngIf="myProfile?.enableProfile">
-      <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">Send Friend Request</ion-button>
-      <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Cancel Friend Request</ion-button>
-      <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">Accept Friend Request</ion-button>
-      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">Decline Friend Request</ion-button>
-      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">Unfriend</ion-button>
+      <ion-button expand="block" (click)="addFriend()" *ngIf="!profile?.incomingFriendship && !profile?.outgoingFriendship">
+        {{ 'pages.profile.send' | translate }}
+      </ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="!profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">
+        {{ 'pages.profile.cancel' | translate }}
+      </ion-button>
+      <ion-button expand="block" (click)="addFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship">
+        {{ 'pages.profile.accept' | translate }}
+      </ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && !profile?.outgoingFriendship" color="danger">
+        {{ 'pages.profile.decline' | translate }}
+      </ion-button>
+      <ion-button expand="block" (click)="deleteFriend()" *ngIf="profile?.incomingFriendship && profile?.outgoingFriendship" color="danger">
+        {{ 'pages.profile.unfriend' | translate }}
+      </ion-button>
     </div>
     <div class="action-button-container" *ngIf="!myProfile?.enableProfile">
-      <ion-button expand="block" (click)="setupMyProfile()">Setup Your Profile to Add Friend</ion-button>
+      <ion-button expand="block" (click)="setupMyProfile()">
+        {{ 'pages.profile.setup' | translate }}
+      </ion-button>
     </div>
   </ion-toolbar>
   <ion-toolbar class="ion-padding-horizontal" *ngIf="!isLoggedIn()">
-    <ion-button expand="block" (click)="authAndAddFriend()">Log In/Register to Add Friend</ion-button>
+    <ion-button expand="block" (click)="authAndAddFriend()">
+      {{ 'pages.profile.login' | translate }}
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

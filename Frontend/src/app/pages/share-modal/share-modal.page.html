@@ -45,31 +45,13 @@
 
       <div [ngSwitch]="shareMethod">
 
-        <div *ngSwitchCase="'link'">
-          <br />
-          <ion-item lines="none">
-            <ion-label class="ion-text-wrap">
-              <p>
-                {{ 'pages.share.byLink.copy' | translate }}
-                <span *ngIf="!hasWebShareAPI">
-                  {{ 'pages.share.byLink.shareIcon' | translate }}
-                </span>
-              </p>
-            </ion-label>
-          </ion-item>
-          <div class="codeBlock">
-            <div class="code" [ngClass]="{ hasActionButton: hasWebShareAPI }">
-              {{ recipeURL }}
-            </div>
-            <ion-button fill="clear" *ngIf="hasWebShareAPI" (click)="webShare()">
-              <ion-icon name="share" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" *ngIf="!hasWebShareAPI && hasCopyAPI" (click)="copyCodeToClipboard()">
-              <ion-icon name="copy" slot="icon-only"></ion-icon>
-            </ion-button>
-          </div>
-          <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeURL"></textarea>
-        </div>
+        <copy-with-webshare
+          *ngSwitchCase="'link'"
+          [webshareTitle]="recipe.title"
+          [webshareText]="recipe.title + ':'"
+          [webshareURL]="recipeURL"
+          [copyText]="recipeURL"
+        />
 
         <div *ngSwitchCase="'embed'">
           <br />

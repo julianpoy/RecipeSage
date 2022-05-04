@@ -28,8 +28,6 @@ export class ShareModalPage {
   autofillTimeout: any;
   shareMethod = 'account';
 
-  hasCopyAPI: boolean = !!document.execCommand;
-  hasWebShareAPI: boolean = !!(navigator as any).share;
   recipeURL: string;
 
   enableJSONLD = true;
@@ -198,24 +196,6 @@ export class ShareModalPage {
           break;
       }
     });
-  }
-
-  webShare() {
-    if (this.hasWebShareAPI) {
-      (navigator as any).share({
-        title: this.recipe.title,
-        text: `${this.recipe.title}:`,
-        url: this.recipeURL,
-      }).then(() => this.cancel()).catch(() => {});
-    }
-  }
-
-  copyCodeToClipboard() {
-    const copyText = document.getElementById('codeBlockCopy') as any;
-
-    copyText.select();
-
-    document.execCommand('copy');
   }
 
   shareMethodChanged(event) {
