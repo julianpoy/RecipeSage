@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -28,7 +28,8 @@ RUN apk add --no-cache \
     apk del autoconf automake build-base glib-dev libc-dev unixodbc-dev flex-dev && \
     rm -rf mdbtools-0.7.1
 
-RUN apk add --no-cache python3
+# node-gyp
+RUN apk add --no-cache python3 make
 
 COPY Backend/package.json ./Backend/package.json
 COPY Backend/package-lock.json ./Backend/package-lock.json
