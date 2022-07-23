@@ -18,11 +18,11 @@
 <ion-content>
   <copy-with-webshare
     *ngSwitchCase="'link'"
-    [webshareTitle]="`${profile.name}'s RecipeSage profile`"
-    [webshareText]="`Click to view ${this.profile.name}'s public RecipeSage profile`"
+    [webshareTitle]="profile.name + '\'s RecipeSage profile'"
+    [webshareText]="'Click to view' + this.profile.name + '\'s public RecipeSage profile'"
     [webshareURL]="profileUrl"
     [copyText]="profileUrl"
-  />
+  ></copy-with-webshare>
 
   <div class="share-icon-container">
     <ion-item lines="none" (click)="openFacebook()" button>

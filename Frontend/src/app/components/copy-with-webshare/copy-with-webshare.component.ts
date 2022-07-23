@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'copy-with-webshare',
   templateUrl: 'copy-with-webshare.component.html',
-  styleUrls: ['./copy-with-webshare.scss']
+  styleUrls: ['./copy-with-webshare.component.scss']
 })
 export class CopyWithWebshareComponent {
   @Input() webshareTitle: string;
@@ -12,13 +12,13 @@ export class CopyWithWebshareComponent {
   @Input() copyText: string;
 
   hasCopyAPI: boolean = !!document.execCommand;
-  hasWebShareAPI: boolean = !!navigator.share;
+  hasWebShareAPI: boolean = !!(navigator as any).share;
 
   constructor() {}
 
   webShare() {
     if (this.hasWebShareAPI) {
-      navigator.share({
+      (navigator as any).share({
         title: this.webshareTitle,
         text: this.webshareText,
         url: this.webshareURL,

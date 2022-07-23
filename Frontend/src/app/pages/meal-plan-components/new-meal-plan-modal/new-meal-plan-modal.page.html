@@ -37,7 +37,7 @@
     <ion-label *ngIf="selectedThreads.length > 0">
       {{ 'pages.newMealPlanModal.createAndShare' | translate }}
     </ion-label>
-    <ion-label *ngIf="selectedThreads.length = 0">
+    <ion-label *ngIf="selectedThreads.length === 0">
       {{ 'pages.newMealPlanModal.create' | translate }}
     </ion-label>
   </ion-button>
