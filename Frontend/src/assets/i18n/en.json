@@ -839,5 +839,93 @@
   "pages.shareProfile.close": "Close",
 
 
+  "====== Components.CopyWithWebshare ======": "",
+
+  "components.copyWithWebshare.instructions": "To share, copy the link below",
+  "components.copyWithWebshare.shareIcon": "or press the share icon",
+
+  "====== Components.MealCalendar ======": "",
+
+  "components.mealCalendar.recipes": "Recipes scheduled on this day",
+  "components.mealCalendar.noRecipes": "No recipes are currently scheduled on this day.",
+  "components.mealCalendar.meals": "Meals For This Day",
+  "components.mealCalendar.selectDay": "Select a day to see meals for that day.",
+  "components.mealCalendar.noMeals": "There are no meals scheduled for this day.",
+
+  "====== Components.MealCalendar ======": "",
+
+  "components.multiImageUpload.add": "Click to Add Image",
+
+  "====== Components.SelectCollaborators ======": "",
+
+  "components.selectCollaborators.added": "Already added",
+  "components.selectCollaborators.add": "Click to add",
+  "components.selectCollaborators.searching": "Searching...",
+  "components.selectCollaborators.notFound": "User not found",
+
+  "====== Components.SelectIngredients ======": "",
+
+  "components.selectIngredients.title": "Select the ingredients you'd like to add:",
+  "components.selectIngredients.toggleAll": "Select/Deselect All",
+  "components.selectIngredients.scale": "{{scale}}x scale (click to change)",
+  "components.selectIngredients.null": "This recipe has no ingredients.",
+
+  "====== Components.SelectLabel ======": "",
+
+  "components.selectLabel.change": "Click to change",
+  "components.selectLabel.select": "Click to select",
+  "components.selectLabel.null": "No labels called \"{{name}}\"",
+
+  "====== Components.SelectMeal ======": "",
+
+  "components.selectMeal.title": "Select Meal",
+
+  "====== Components.SelectRecipe ======": "",
+
+  "components.selectRecipe.change": "Click to change",
+  "components.selectRecipe.select": "Click to select",
+  "components.selectRecipe.searching": "Searching for \"{{name}}\"...",
+  "components.selectRecipe.null": "No results for \"{{searchText}}\"",
+
+  "====== Components.SelectUser ======": "",
+
+  "components.selectUser.change": "Click to change",
+  "components.selectUser.select": "Click to select",
+  "components.selectUser.searching": "Searching for \"{{name}}\"...",
+  "components.selectUser.null": "No results for \"{{searchText}}\"",
+
+  "====== Components.SelfhostWarning ======": "",
+
+  "components.selfhostWarning.1": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with",
+  "components.selfhostWarning.2": "or any of the accounts located on the main site.",
+
+  "====== Components.ShoppingListItem ======": "",
+
+  "components.shoppingListItem.recipe": "For recipe:",
+  "components.shoppingListItem.added": "Added",
+  "components.shoppingListItem.addedBy": "Added by",
+
+  "====== Components.TosClickwrap ======": "",
+
+  "components.tos.warning": "By continuing, you're agreeing to the RecipeSage",
+  "components.tos.title": "Terms of Service",
+
+  "====== Modals.ScaleRecipe ======": "",
+
+  "components.scaleRecipe.title": "Scale Recipe",
+  "components.scaleRecipe.change": "Adjust the scale of the recipe",
+  "components.scaleRecipe.click": "Click a button or enter a scale manually",
+  "components.scaleRecipe.manual": "Or, enter a number or fraction",
+  "components.scaleRecipe.cancel": "Cancel",
+  "components.scaleRecipe.apply": "Apply",
+
+  "====== Errors ======": "",
+
+  "errors.offline": "It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.",
+  "errors.unauthorized": "You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.",
+  "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
+
+
+
   "trailing.comma.placeholder": ""
 }

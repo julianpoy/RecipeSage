@@ -8,7 +8,9 @@
     </ion-avatar> -->
     <ion-label>
       <h2>{{ selectedUser.name }}</h2>
-      <p>Click to change</p>
+      <p>
+        {{ 'components.selectUser.change' | translate }}
+      </p>
     </ion-label>
   </ion-item>
 
@@ -32,7 +34,9 @@
           </ion-avatar> -->
           <ion-label>
             <h2>{{ user.name }}</h2>
-            <p>Click to select</p>
+            <p>
+              {{ 'components.selectUser.select' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -41,7 +45,9 @@
         *ngIf="searching">
         <ion-item class="suggestion-inner" button>
           <ion-label>
-            <h2>Searching for "{{ searchText }}"...</h2>
+            <h2>
+              {{ 'components.selectUser.searching' | translate:{name:searchText} }}
+            </h2>
           </ion-label>
         </ion-item>
       </button>
@@ -50,7 +56,9 @@
         *ngIf="results.length === 0 && searchText.length > 0 && !searching">
         <ion-item class="suggestion-inner" button>
           <ion-label>
-            <h2>No results for "{{ searchText }}"</h2>
+            <h2>
+              {{ 'components.selectUser.null' | translate:{name:searchText} }}
+            </h2>
           </ion-label>
         </ion-item>
       </button>

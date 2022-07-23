@@ -55,18 +55,18 @@
 
     <p *ngIf="mode === 'outline'">
       <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length > 0">
-        <i>Recipes scheduled on this day:</i>&nbsp; {{ mealItemTitlesByDay(this.selectedDays[0]).join(', ') }}
+        <i>{{ 'components.mealCalendar.recipes' | translate }}:</i>&nbsp; {{ mealItemTitlesByDay(this.selectedDays[0]).join(', ') }}
       </span>
 
       <span *ngIf="mealItemsByDay(this.selectedDays[0]).items.length === 0">
-        <i>No recipes are currently scheduled on this day.</i>
+        <i>{{ 'components.mealCalendar.noRecipes' | translate }}</i>
       </span>
     </p>
   </div>
   <ion-list *ngIf="mode === 'split'" class="meal-list" lines="none" class="ion-padding">
     <ion-item lines="none">
       <ion-label class="ion-text-center ion-no-padding">
-        Meals For This Day:
+        {{ 'components.mealCalendar.meals' | translate }}:
       </ion-label>
     </ion-item>
 
@@ -74,7 +74,7 @@
       <ion-label class="ion-text-wrap ion-text-center">
         <br />
         <p>
-          Select a day to see meals for that day.
+          {{ 'components.mealCalendar.selectDay' | translate }}
         </p>
       </ion-label>
     </ion-item>
@@ -83,7 +83,7 @@
       <ion-label class="ion-text-wrap ion-text-center">
         <br />
         <p>
-          There are no meals scheduled for this day.
+          {{ 'components.mealCalendar.noMeals' | translate }}
         </p>
       </ion-label>
     </ion-item>

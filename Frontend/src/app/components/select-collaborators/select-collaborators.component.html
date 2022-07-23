@@ -29,7 +29,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>Already added</p>
+            <p>
+              {{ 'components.selectCollaborators.added' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -39,7 +41,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ threadsByUserId[thread.id].name || threadsByUserId[thread.id].email }}</h2>
-            <p>Click to add</p>
+            <p>
+              {{ 'components.selectCollaborators.add' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -48,7 +52,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>Searching...</p>
+            <p>
+              {{ 'components.selectCollaborators.searching' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -57,7 +63,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>User not found</p>
+            <p>
+              {{ 'components.selectCollaborators.notFound' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>

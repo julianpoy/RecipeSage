@@ -1,6 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Scale Recipe</ion-title>
+    <ion-title>
+      {{ 'components.scaleRecipe.title' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,8 +10,8 @@
   <ion-item lines="none">
     <ion-label>
       <p>
-      Adjust the scale of the recipe<br />
-      Click a button or enter a scale manually
+        {{ 'components.scaleRecipe.change' | translate }}<br />
+        {{ 'components.scaleRecipe.click' | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -23,7 +25,9 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">Or, enter a number or fraction</ion-label>
+    <ion-label position="stacked">
+      {{ 'components.scaleRecipe.manual' | translate }}
+    </ion-label>
     <ion-input [(ngModel)]="scale"></ion-input>
   </ion-item>
 
@@ -33,12 +37,12 @@
 <ion-footer>
   <ion-button (click)="close()" fill="clear" class="ion-float-end">
     <ion-label>
-      Cancel
+      {{ 'components.scaleRecipe.cancel' | translate }}
     </ion-label>
   </ion-button>
   <ion-button (click)="apply()" fill="clear" class="ion-float-end">
     <ion-label>
-      Apply
+      {{ 'components.scaleRecipe.apply' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

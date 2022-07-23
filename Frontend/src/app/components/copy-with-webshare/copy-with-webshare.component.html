@@ -3,9 +3,9 @@
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
       <p>
-        To share, copy the link below
+        {{ 'components.copyWithWebshare.instructions' | translate }}
         <span *ngIf="!hasWebShareAPI">
-          or press the share icon
+          {{ 'components.copyWithWebshare.shareIcon' | translate }}
         </span>
       </p>
     </ion-label>
