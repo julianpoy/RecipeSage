@@ -59,8 +59,8 @@
     "sanitize-html": "^2.3.2",
     "semver": "^7.1.1",
     "sequelize": "^5.21.3",
-    "sharp": "^0.30.5",
-    "sqlite3": "^4.1.0",
+    "sharp": "^0.30.7",
+    "sqlite3": "^5.0.10",
     "stripe": "^7.10.0",
     "umzug": "^2.3.0",
     "xml-js": "^1.6.11"
