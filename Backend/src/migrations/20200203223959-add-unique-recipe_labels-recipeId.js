@@ -17,14 +17,15 @@ module.exports = {
         transaction
       });
 
-      await queryInterface.addConstraint('Recipe_Labels', ['labelId', 'recipeId'], {
+      await queryInterface.addConstraint('Recipe_Labels', {
         type: "UNIQUE",
         name: 'Recipe_Labels_labelId_recipeId_uk',
+        fields: ['labelId', 'recipeId'],
         transaction
       });
     });
   },
-  
+
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeConstraint('Recipe_Labels', 'Recipe_Labels_labelId_recipeId_uk');
   }
