@@ -80,9 +80,10 @@ module.exports = {
       console.log("Label titles updated:", labelTitlesUpdated);
       console.log("Accounts with labels migrated:", usersAffected);
 
-      await queryInterface.addConstraint('Labels', ['userId', 'title'], {
+      await queryInterface.addConstraint('Labels', {
         type: "UNIQUE",
         name: 'Labels_userId_title_uk',
+        fields: ['userId', 'title'],
         transaction
       });
     });
