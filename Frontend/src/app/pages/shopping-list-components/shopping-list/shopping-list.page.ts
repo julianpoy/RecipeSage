@@ -7,6 +7,7 @@ import { ShoppingListService } from '@/services/shopping-list.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { PreferencesService, ShoppingListPreferenceKey } from '@/services/preferences.service';
+import { getShoppingListItemGroupings } from '../../../../../../SharedUtils/src';
 
 import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';
 import { ShoppingListPopoverPage } from '../shopping-list-popover/shopping-list-popover.page';
@@ -84,15 +85,15 @@ export class ShoppingListPage {
     });
   }
 
-  processIncomingList(list) {
-    this.list = list;
+  processList(list?) {
+    if (list) this.list = list;
 
-    this.items = (this.list.items || []);
+    const items = this.list.items;
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
 
-    for (const item of this.items) {
+    for (const item of items) {
       // Recipe grouping
       if (!item.recipe) continue;
 
@@ -104,42 +105,27 @@ export class ShoppingListPage {
       this.itemsByRecipeId[recipeId].push(item);
     }
 
-    this.groupTitles = Array.from(new Set(this.items.map(item => item.groupTitle)));
-    this.categoryTitles = Array.from(new Set(this.items.map(item => item.categoryTitle)));
-    this.itemsByGroupTitle = this.items.reduce((acc, item) => {
-      acc[item.groupTitle] = acc[item.groupTitle] || [];
-      acc[item.groupTitle].push(item);
-      return acc;
-    }, {});
-    this.itemsByCategoryTitle = this.items.reduce((acc, item) => {
-      acc[item.categoryTitle] = acc[item.categoryTitle] || [];
-      acc[item.categoryTitle].push(item);
-      return acc;
-    }, {});
-    this.groupsByCategoryTitle = this.items.reduce((acc, item) => {
-      acc[item.categoryTitle] = acc[item.categoryTitle] || [];
-      const arr = acc[item.categoryTitle];
-      let grouping = arr.find(el => el.title === item.groupTitle);
-      if (!grouping) {
-        grouping = {
-          title: item.groupTitle,
-          items: []
-        };
-        arr.push(grouping);
-      }
-      grouping.items.push(item);
-      return acc;
-    }, {});
+    const {
+      items: sortedItems,
+      groupTitles,
+      categoryTitles,
+      itemsByGroupTitle,
+      itemsByCategoryTitle,
+      groupsByCategoryTitle,
+    } = getShoppingListItemGroupings(items, this.preferencesService[ShoppingListPreferenceKey.SortBy]);
 
-    console.log(this.groupsByCategoryTitle);
-
-    this.applySort();
+    this.items = sortedItems;
+    this.groupTitles = groupTitles;
+    this.categoryTitles = categoryTitles;
+    this.itemsByGroupTitle = itemsByGroupTitle;
+    this.itemsByCategoryTitle = itemsByCategoryTitle;
+    this.groupsByCategoryTitle = groupsByCategoryTitle;
   }
 
   loadList() {
     return new Promise((resolve, reject) => {
       this.shoppingListService.fetchById(this.shoppingListId).then(response => {
-        this.processIncomingList(response);
+        this.processList(response);
 
         resolve();
       }).catch(async err => {
@@ -292,61 +278,6 @@ export class ShoppingListPage {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  ingredientSorter(a, b) {
-    switch (this.preferences[ShoppingListPreferenceKey.SortBy]) {
-      case 'createdAt':
-        const dateComp = (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any);
-        if (dateComp === 0) {
-          return a.title.localeCompare(b.title);
-        }
-        return dateComp;
-      case '-createdAt':
-        const reverseDateComp = (new Date(b.createdAt) as any) - (new Date(a.createdAt) as any);
-        if (reverseDateComp === 0) {
-          return a.title.localeCompare(b.title);
-        }
-        return reverseDateComp;
-      case '-title':
-      default:
-        const localeComp = a.title.localeCompare(b.title);
-        if (localeComp === 0) {
-          return (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any);
-        }
-        return localeComp;
-    }
-  }
-
-  applySort() {
-    // Sort individual items
-    this.items = this.items.sort((a, b) => {
-      return this.ingredientSorter(a, b);
-    });
-
-    // Sort groups by title (always)
-    this.groupTitles = this.groupTitles.sort((a, b) => {
-      return a.localeCompare(b);
-    });
-
-    // Sort categories by title (always)
-    this.categoryTitles = this.categoryTitles.sort((a, b) => {
-      return a.localeCompare(b);
-    });
-
-    // Sort items within each group
-    Object.keys(this.itemsByGroupTitle).forEach(groupTitle => {
-      this.itemsByGroupTitle[groupTitle] = this.itemsByGroupTitle[groupTitle].sort((a, b) => {
-        return this.ingredientSorter(a, b);
-      });
-    });
-
-    // Sort items within each category
-    Object.keys(this.itemsByCategoryTitle).forEach(categoryTitle => {
-      this.itemsByCategoryTitle[categoryTitle] = this.itemsByCategoryTitle[categoryTitle].sort((a, b) => {
-        return this.ingredientSorter(a, b);
-      });
-    });
-  }
-
   async presentPopover(event) {
     const popover = await this.popoverCtrl.create({
       component: ShoppingListPopoverPage,
@@ -358,7 +289,7 @@ export class ShoppingListPage {
     });
 
     popover.onDidDismiss().then(() => {
-      this.applySort();
+      this.processList();
     });
 
     popover.present();

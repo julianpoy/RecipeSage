@@ -40,7 +40,14 @@ export class ShoppingListPopoverPage {
   }
 
   print() {
-    window.open(this.utilService.generatePrintShoppingListURL(this.shoppingListId));
+    window.open(this.utilService.generatePrintShoppingListURL(
+      this.shoppingListId,
+      {
+        groupSimilar: this.preferences[ShoppingListPreferenceKey.GroupSimilar],
+        groupCategories: this.preferences[ShoppingListPreferenceKey.GroupCategories],
+        sortBy: this.preferencesService[ShoppingListPreferenceKey.SortBy],
+      },
+    ));
   }
 
   async removeAllItems() {

@@ -7,7 +7,10 @@ const config = {
   ssl: process.env.POSTGRES_SSL == "true",
   dialect: "postgres",
   dialectOptions: {
-    ssl: process.env.POSTGRES_SSL == "true"
+    ssl: process.env.POSTGRES_SSL == "true" ? {
+      require: true,
+      rejectUnauthorized: false
+    } : false,
   },
   logging: process.env.POSTGRES_LOGGING == "true" && console.log
 };
