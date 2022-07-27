@@ -19,7 +19,7 @@
   "private": true,
   "dependencies": {
     "@angular/common": "^9.1.3",
-    "@angular/core": "^9.1.3",
+    "@angular/core": "^11.0.5",
     "@angular/forms": "^9.1.3",
     "@angular/platform-browser": "^9.1.3",
     "@angular/platform-browser-dynamic": "^9.1.3",
