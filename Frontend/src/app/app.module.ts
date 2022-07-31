@@ -83,7 +83,7 @@ export class SentryErrorHandler extends ErrorHandler {
       Sentry.addBreadcrumb({
         category: 'auth',
         message: 'Session: ' + token,
-        level: Sentry.Severity.Info
+        level: 'info',
       });
       Sentry.captureException(error.originalError || error);
     } catch (e) {

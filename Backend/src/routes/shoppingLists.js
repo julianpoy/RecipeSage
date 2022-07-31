@@ -355,7 +355,7 @@ router.get(
       });
 
       let s = shoppingListSummary.toJSON();
-      s.itemsByGroup = ShoppingListCategorizerService.groupShoppingListItems(s.items); // TODO: Remove this field from API. Field grouping only
+      ShoppingListCategorizerService.groupShoppingListItems(s.items);
       s.items.forEach(item => item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(item.title));
 
       res.status(200).json(s);

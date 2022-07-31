@@ -1,4 +1,4 @@
-FROM node:12-alpine as builder
+FROM node:18-alpine as builder
 
 ARG VERSION=development
 
