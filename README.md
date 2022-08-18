@@ -65,3 +65,12 @@ Contributor license agreement.
 This allows RecipeSage to continue to provide the hosted instance, as well as license the API to other projects that may not have compatible licenses with AGPL.
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
+
+# 🐤: Contributing
+Setting-up your development environment.
+
+Your development environment can be setup with a few easy steps.
+1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
+2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
+3. Run the migrations scripts; `docker-compose exec express npx sequelize-cli db:migrate`
+4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`
