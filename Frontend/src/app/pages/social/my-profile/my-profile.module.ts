@@ -9,6 +9,7 @@ import { AddProfileItemModalModule } from '../add-profile-item-modal/add-profile
 import { ShareProfileModalPageModule } from '../share-profile-modal/share-profile-modal.module';
 import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
 import { NullStateModule } from '../../../components/null-state/null-state.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { NullStateModule } from '../../../components/null-state/null-state.modul
     ShareProfileModalPageModule,
     MultiImageUploadModule,
     NullStateModule,
+    GlobalModule
   ],
 })
 export class MyProfilePageModule {}

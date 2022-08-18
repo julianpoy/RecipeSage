@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { TipsTricksTutorialsPage } from './tips-tricks-tutorials.page';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { TipsTricksTutorialsPage } from './tips-tricks-tutorials.page';
         path: '',
         component: TipsTricksTutorialsPage
       }
-    ])
+    ]),
+    GlobalModule
   ],
 })
 export class TipsTricksTutorialsPageModule {}

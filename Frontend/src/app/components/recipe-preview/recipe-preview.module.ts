@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { RecipePreviewComponent } from './recipe-preview.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { RecipePreviewComponent } from './recipe-preview.component';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    GlobalModule,
   ],
   exports: [
     RecipePreviewComponent

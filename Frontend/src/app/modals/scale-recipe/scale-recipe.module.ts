@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ScaleRecipeComponent } from './scale-recipe.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { ScaleRecipeComponent } from './scale-recipe.component';
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GlobalModule,
   ],
   entryComponents: [
     ScaleRecipeComponent

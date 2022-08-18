@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { SelectLabelComponent } from './index';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { SelectLabelComponent } from './index';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    GlobalModule
   ],
   exports: [
     SelectLabelComponent

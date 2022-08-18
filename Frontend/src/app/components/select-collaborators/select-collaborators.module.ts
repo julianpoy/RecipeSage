@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PipesModule } from '@/pipes/pipes.module';
 import { SelectCollaboratorsComponent } from './select-collaborators.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SelectCollaboratorsComponent } from './select-collaborators.component';
     FormsModule,
     ReactiveFormsModule,
     PipesModule,
+    GlobalModule,
   ],
   exports: [
     SelectCollaboratorsComponent

@@ -10,6 +10,7 @@ import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { NewMessageModalPageModule } from '@/pages/messaging-components/new-message-modal/new-message-modal.module';
 import { ShareProfileModalPageModule } from '../share-profile-modal/share-profile-modal.module';
 import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
     NewMessageModalPageModule,
     ShareProfileModalPageModule,
     AuthModalPageModule,
+    GlobalModule
   ],
 })
 export class ProfilePageModule {}

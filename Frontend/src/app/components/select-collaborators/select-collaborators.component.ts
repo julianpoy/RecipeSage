@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '../../services/loading.service';
 import { MessagingService } from '../../services/messaging.service';
@@ -41,6 +42,7 @@ export class SelectCollaboratorsComponent {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
+    public translate: TranslateService,
   ) {
     this.loadThreads().then(() => { }, () => { });
   }
@@ -131,8 +133,9 @@ export class SelectCollaboratorsComponent {
 
         this.addCollaborator(this.pendingCollaboratorId);
       } else {
+        const message = await this.translate.get('components.selectCollaborators.notFoundError').toPromise();
         (await this.toastCtrl.create({
-          message: 'Could not find user with that email address.',
+          message,
           duration: 6000
         })).present();
       }
@@ -141,8 +144,9 @@ export class SelectCollaboratorsComponent {
 
   async addCollaborator(userId) {
     if (userId.length === 0) {
+      const message = await this.translate.get('components.selectCollaborators.invalidEmail').toPromise();
       (await this.toastCtrl.create({
-        message: 'Please enter a valid email and press enter.',
+        message,
         duration: 6000
       })).present();
       return;

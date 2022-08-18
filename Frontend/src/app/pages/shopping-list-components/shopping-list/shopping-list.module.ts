@@ -10,6 +10,7 @@ import { ShoppingListPopoverPageModule } from '../shopping-list-popover/shopping
 import { NullStateModule } from '@/components/null-state/null-state.module';
 import { ShoppingListItemModule } from '@/components/shopping-list-item/shopping-list-item.module';
 import { ShoppingListGroupModule } from '@/components/shopping-list-group/shopping-list-group.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ShoppingListGroupModule } from '@/components/shopping-list-group/shoppi
     ShoppingListPopoverPageModule,
     NullStateModule,
     ShoppingListItemModule,
-    ShoppingListGroupModule
+    ShoppingListGroupModule,
+    GlobalModule
   ],
 })
 export class ShoppingListPageModule {}

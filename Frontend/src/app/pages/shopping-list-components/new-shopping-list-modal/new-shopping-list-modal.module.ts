@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { NewShoppingListModalPage } from './new-shopping-list-modal.page';
 import { SelectCollaboratorsModule } from '@/components/select-collaborators/select-collaborators.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SelectCollaboratorsModule } from '@/components/select-collaborators/sel
     FormsModule,
     ReactiveFormsModule,
     SelectCollaboratorsModule,
+    GlobalModule
   ],
   entryComponents: [
     NewShoppingListModalPage,

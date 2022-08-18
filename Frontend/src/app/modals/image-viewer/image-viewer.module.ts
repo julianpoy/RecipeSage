@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { ImageViewerComponent } from './image-viewer.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { ImageViewerComponent } from './image-viewer.component';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    GlobalModule,
   ],
   exports: [
     ImageViewerComponent

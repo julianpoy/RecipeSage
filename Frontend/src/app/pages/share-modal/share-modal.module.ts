@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ShareModalPage } from './share-modal.page';
 import { RecipePreviewModule } from '@/components/recipe-preview/recipe-preview.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { RecipePreviewModule } from '@/components/recipe-preview/recipe-preview.
     FormsModule,
     ReactiveFormsModule,
     RecipePreviewModule,
+    GlobalModule
   ],
   entryComponents: [
     ShareModalPage,

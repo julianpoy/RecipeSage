@@ -186,6 +186,16 @@
   "pages.recipeDetails.pinRecipe": "Pin Recipe Open",
   "pages.recipeDetails.unPinRecipe": "Unpin Recipe",
 
+  "pages.recipeDetails.delete.header": "Confirm Delete",
+  "pages.recipeDetails.delete.message": "This will permanently delete the recipe from your account. This action is irreversible.",
+
+  "pages.recipeDetails.enterLabelWarning": "Please enter a label and press enter to label this recipe.",
+
+  "pages.recipeDetails.deleteLabel.header": "Confirm Label Removal",
+  "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
+
+  "pages.recipeDetails.cloned": "The recipe has been saved to your account",
+
   "====== Pages.RecipeDetailsPopover ======": "",
 
   "pages.recipeDetailsPopover.options": "Options",
@@ -838,6 +848,9 @@
   "pages.shareProfile.title": "Share {{name}}'s Profile",
   "pages.shareProfile.close": "Close",
 
+  "====== Components.CookingToolbar ======": "",
+
+  "components.cookingToolbar.clear": "Clear All Pinned Recipes?",
 
   "====== Components.CopyWithWebshare ======": "",
 
@@ -855,6 +868,9 @@
   "====== Components.MealCalendar ======": "",
 
   "components.multiImageUpload.add": "Click to Add Image",
+  "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
+  "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
+
 
   "====== Components.SelectCollaborators ======": "",
 
@@ -862,6 +878,8 @@
   "components.selectCollaborators.add": "Click to add",
   "components.selectCollaborators.searching": "Searching...",
   "components.selectCollaborators.notFound": "User not found",
+  "components.selectCollaborators.notFoundError": "Could not find user with that email address.",
+  "components.selectCollaborators.invalidEmail": "Please enter a valid email and press enter.",
 
   "====== Components.SelectIngredients ======": "",
 
@@ -921,10 +939,16 @@
 
   "====== Errors ======": "",
 
-  "errors.offline": "It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.",
+  "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
   "errors.unauthorized": "You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.",
   "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
 
+  "====== Generic ======": "",
+
+  "generic.delete": "Delete",
+  "generic.cancel": "Cancel",
+  "generic.confirm": "Confirm",
+  "generic.close": "Close",
 
 
   "trailing.comma.placeholder": ""

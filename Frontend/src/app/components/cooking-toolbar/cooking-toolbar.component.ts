@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RouteMap } from '@/services/util.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
@@ -13,6 +14,7 @@ export class CookingToolbarComponent {
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
+    private translate: TranslateService,
     public cookingToolbarService: CookingToolbarService
   ) {}
 
@@ -21,15 +23,19 @@ export class CookingToolbarComponent {
   }
 
   async clearPins() {
+    const header = await this.translate.get('components.cookingToolbar.clear').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const confirm = await this.translate.get('generic.confirm').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Clear All Pinned Recipes?',
+      header,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel'
         },
         {
-          text: 'Clear',
+          text: confirm,
           handler: () => {
             this.cookingToolbarService.clearPins();
           }

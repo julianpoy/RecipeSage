@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { SelectUserComponent } from './select-user.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { SelectUserComponent } from './select-user.component';
     CommonModule,
     IonicModule,
     RouterModule,
+    GlobalModule
   ],
   exports: [
     SelectUserComponent

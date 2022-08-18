@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { linkifyStr } from '@/utils/linkify';
 import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
@@ -65,7 +66,9 @@ export class RecipePage {
     public recipeService: RecipeService,
     public labelService: LabelService,
     public cookingToolbarService: CookingToolbarService,
-    public capabilitiesService: CapabilitiesService) {
+    public capabilitiesService: CapabilitiesService,
+    public translate: TranslateService,
+  ) {
 
     this.updateIsLoggedIn();
 
@@ -310,17 +313,22 @@ export class RecipePage {
   }
 
   async deleteRecipe() {
+    const header = await this.translate.get('pages.recipeDetails.delete.header').toPromise();
+    const message = await this.translate.get('pages.recipeDetails.delete.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: 'This will permanently delete the recipe from your account. This action is irreversible.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteRecipe();
@@ -469,8 +477,9 @@ export class RecipePage {
 
   async addLabel(title) {
     if (title.length === 0) {
+      const message = await this.translate.get('pages.recipeDetails.enterLabelWarning').toPromise();
       (await this.toastCtrl.create({
-        message: 'Please enter a label and press enter to label this recipe.',
+        message,
         duration: 6000
       })).present();
       return;
@@ -519,19 +528,24 @@ export class RecipePage {
   }
 
   async deleteLabel(label) {
+    const header = await this.translate.get('pages.recipeDetails.deleteLabel.header').toPromise();
+    const message = await this.translate.get('pages.recipeDetails.deleteLabel.message', {title: label.title}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Label Removal',
-      message: 'This will remove the label "' + label.title + '" from this recipe.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => {
             // this.selectedLabels.push(label.title);
           }
         },
         {
-          text: 'Remove',
+          text: del,
           handler: () => {
             this._deleteLabel(label);
           }
@@ -634,8 +648,9 @@ export class RecipePage {
   authAndClone() {
     this.goToAuth(() => {
       this.cloneRecipe().then(async () => {
+        const message = await this.translate.get('pages.recipeDetails.cloned').toPromise();
         (await this.toastCtrl.create({
-          message: 'The recipe has been saved to your account',
+          message,
           duration: 5000
         })).present();
       });

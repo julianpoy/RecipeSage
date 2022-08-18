@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { ReleaseNotesPage } from './release-notes.page';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ReleaseNotesPage } from './release-notes.page';
         path: '',
         component: ReleaseNotesPage
       }
-    ])
+    ]),
+    GlobalModule
   ],
 })
 export class ReleaseNotesPageModule {}

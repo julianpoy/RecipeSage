@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PeoplePage } from './people.page';
 import { NullStateModule } from '@/components/null-state/null-state.module';
 import { AddFriendModalPageModule } from '../add-friend-modal/add-friend-modal.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AddFriendModalPageModule } from '../add-friend-modal/add-friend-modal.m
     FormsModule,
     ReactiveFormsModule,
     NullStateModule,
-    AddFriendModalPageModule
+    AddFriendModalPageModule,
+    GlobalModule
   ],
 })
 export class PeoplePageModule {}

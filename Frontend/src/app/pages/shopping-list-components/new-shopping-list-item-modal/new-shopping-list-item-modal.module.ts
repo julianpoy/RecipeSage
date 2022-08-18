@@ -7,6 +7,7 @@ import { NewShoppingListItemModalPage } from './new-shopping-list-item-modal.pag
 
 import { SelectRecipeModule } from '@/components/select-recipe/select-recipe.module';
 import { SelectIngredientsModule } from '@/components/select-ingredients/select-ingredients.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SelectIngredientsModule } from '@/components/select-ingredients/select-
     FormsModule,
     ReactiveFormsModule,
     SelectRecipeModule,
-    SelectIngredientsModule
+    SelectIngredientsModule,
+    GlobalModule
   ],
   entryComponents: [
     NewShoppingListItemModalPage,
