@@ -1,5 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
@@ -55,6 +56,7 @@ export class HomePage implements AfterViewInit {
     public navCtrl: NavController,
     public route: ActivatedRoute,
     public events: EventService,
+    public translate: TranslateService,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
     public alertCtrl: AlertController,
@@ -364,21 +366,27 @@ export class HomePage implements AfterViewInit {
   }
 
   async addLabelToSelectedRecipes() {
+    const header = await this.translate.get('pages.home.addLabel.header').toPromise();
+    const message = await this.translate.get('pages.home.addLabel.message').toPromise();
+    const placeholder = await this.translate.get('pages.home.addLabel.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const save = await this.translate.get('generic.save').toPromise();
+
     const prompt = await this.alertCtrl.create({
-      header: 'Add Label to Selected Recipes',
-      message: 'Enter the name for the label',
+      header,
+      message,
       inputs: [
         {
           name: 'labelName',
-          placeholder: 'Label Name'
+          placeholder,
         },
       ],
       buttons: [
         {
-          text: 'Cancel'
+          text: cancel
         },
         {
-          text: 'Save',
+          text: save,
           handler: ({ labelName }) => {
             const loading = this.loadingService.start();
             this.labelService.createBulk({
@@ -419,18 +427,22 @@ export class HomePage implements AfterViewInit {
     const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title)
                                               .join('<br />');
 
+    const header = await this.translate.get('pages.home.deleteSelected.header').toPromise();
+    const message = await this.translate.get('pages.home.deleteSelected.message', {recipeNames}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: `This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />
-                The following recipes will be deleted:<br />${recipeNames}`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             const loading = this.loadingService.start();

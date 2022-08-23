@@ -64,6 +64,17 @@
   "pages.auth.button.registerInstead": "Create an account instead",
   "pages.auth.button.loginInstead": "Log in instead",
 
+  "pages.auth.error.invalidEmail": "Please enter a valid email address.",
+  "pages.auth.error.noName": "Please enter a name (you can enter a nickname!)",
+  "pages.auth.error.noPassword": "Please enter a password.",
+  "pages.auth.error.passwordLength": "Please enter a password at least 6 characters long.",
+  "pages.auth.error.noEmail": "Please enter your email address.",
+  "pages.auth.error.passwordMatch": "The password and confirmation you entered do not match.",
+  "pages.auth.error.incorrectLogin": "It looks like that email or password isn't correct.",
+  "pages.auth.error.emailTaken": "An account with that email address already exists.",
+
+  "pages.auth.forgot.toast": "If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.",
+
   "====== Pages.Home ======": "",
 
   "pages.home.title.selectionMode": "{{count}} Selected",
@@ -101,6 +112,15 @@
   "pages.home.errors.noSearchResults.message1": "No search results.",
   "pages.home.errors.noSearchResults.message2": "Search includes:",
   "pages.home.errors.noSearchResults.message3": "Title, description, source, ingredients, instructions, and notes.",
+
+  "pages.home.addLabel.header": "Add Label to Selected Recipes",
+  "pages.home.addLabel.message": "Enter the name for the label",
+  "pages.home.addLabel.placeholder": "Label Name",
+
+  "pages.home.deleteSelected.header": "Confirm Delete",
+  "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible.",
+  "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible. The following recipes will be deleted: {{recipeNames}}",
+
 
   "====== Pages.NotFound ======": "",
 
@@ -949,6 +969,7 @@
   "generic.cancel": "Cancel",
   "generic.confirm": "Confirm",
   "generic.close": "Close",
+  "generic.save": "Save",
 
 
   "trailing.comma.placeholder": ""

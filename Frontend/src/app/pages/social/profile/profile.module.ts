@@ -9,7 +9,6 @@ import { NullStateModule } from '../../../components/null-state/null-state.modul
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { NewMessageModalPageModule } from '@/pages/messaging-components/new-message-modal/new-message-modal.module';
 import { ShareProfileModalPageModule } from '../share-profile-modal/share-profile-modal.module';
-import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
 import {GlobalModule} from '@/global.module';
 
 @NgModule({
@@ -31,7 +30,6 @@ import {GlobalModule} from '@/global.module';
     ImageViewerModule,
     NewMessageModalPageModule,
     ShareProfileModalPageModule,
-    AuthModalPageModule,
     GlobalModule
   ],
 })

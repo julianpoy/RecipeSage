@@ -19,7 +19,7 @@ import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/a
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-details-popover.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
-import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
+import { AuthPage } from '@/pages/auth/auth.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
 
@@ -633,7 +633,7 @@ export class RecipePage {
 
   async goToAuth(cb?: () => any) {
     const authModal = await this.modalCtrl.create({
-      component: AuthModalPage,
+      component: AuthPage,
       componentProps: {
         register: !this.isLoggedIn
       }

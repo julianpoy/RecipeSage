@@ -144,14 +144,7 @@ export class AppComponent {
       this.loadInboxCount();
     });
 
-    this.events.subscribe('auth:login', () => {
-      this.updateIsLoggedIn();
-      this.updateNavList();
-      this.loadInboxCount();
-      this.loadFriendRequestCount();
-    });
-
-    this.events.subscribe('auth:register', () => {
+    this.events.subscribe('auth', () => {
       this.updateIsLoggedIn();
       this.updateNavList();
       this.loadInboxCount();

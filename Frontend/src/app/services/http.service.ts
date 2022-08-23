@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export interface HttpResponse {
+export interface HttpResponse<ResponseType> {
   status: number;
-  data: any;
+  data: ResponseType;
 }
 
-export class HttpError extends Error {
-  public response: HttpResponse;
+export class HttpError<ResponseType> extends Error {
+  public response: HttpResponse<ResponseType>;
 
-  constructor(message: string, response: HttpResponse) {
+  constructor(message: string, response: HttpResponse<ResponseType>) {
     super(message);
 
     this.response = response;
@@ -35,21 +35,23 @@ export class HttpService {
     });
   }
 
-  request(data: AxiosRequestConfig): Promise<HttpResponse> {
-    return this.axiosClient.request(data).then(response => {
+  async request<ResponseType>(requestConfig: AxiosRequestConfig) {
+    try {
+      const { status, data } = await this.axiosClient.request<ResponseType>(requestConfig);
+
       return {
-        status: response.status,
-        data: response.data
+        status,
+        data
       };
-    }).catch(err => {
+    } catch(err) {
       const response = {
         status: err.response ? err.response.status : 0, // 0 For no network
         data: err.response ? err.response.data : null
       };
 
-      const httpError = new HttpError(err.message, response);
+      const httpError = new HttpError<ResponseType>(err.message, response);
 
       throw httpError;
-    });
+    }
   }
 }

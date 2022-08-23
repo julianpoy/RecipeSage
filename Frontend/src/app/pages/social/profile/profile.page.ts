@@ -11,7 +11,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
-import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
+import { AuthPage } from '@/pages/auth/auth.page';
 
 @Component({
   selector: 'page-profile',
@@ -186,7 +186,7 @@ export class ProfilePage {
 
   async auth() {
     const authModal = await this.modalCtrl.create({
-      component: AuthModalPage,
+      component: AuthPage,
       componentProps: {
         register: true
       }

@@ -64,24 +64,43 @@ export class UserService {
     private httpErrorHandlerService: HttpErrorHandlerService,
   ) {}
 
-  register(data) {
+  async register(payload: {
+    name: string,
+    email: string,
+    password: string
+  }, errorHandlers?: ErrorHandlers) {
     const url = this.utilService.getBase() + 'users/register';
 
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+    try {
+      const { data } = await this.httpService.request<{ token: string }>({
+        method: 'post',
+        url,
+        data: payload
+      });
+
+      return data.token;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
+    }
   }
 
-  login(data) {
+  async login(payload: {
+    email: string,
+    password: string
+  }, errorHandlers?: ErrorHandlers) {
     const url = this.utilService.getBase() + 'users/login';
 
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+    try {
+      const { data } = await this.httpService.request<{ token: string }>({
+        method: 'post',
+        url,
+        data: payload
+      });
+
+      return data.token;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
+    }
   }
 
   logout() {
@@ -94,14 +113,22 @@ export class UserService {
     }).then(response => response.data);
   }
 
-  forgot(data) {
-    const url = this.utilService.getBase() + 'users/forgot';
+  async forgot(payload: {
+    email: string
+  }, errorHandlers?: ErrorHandlers) {
+    try {
+      const url = this.utilService.getBase() + 'users/forgot';
 
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+      await this.httpService.request<void>({
+        method: 'post',
+        url,
+        data: payload
+      });
+
+      return true;
+    } catch(err) {
+      this.httpErrorHandlerService.handleError(err, errorHandlers);
+    }
   }
 
   update(data) {
