@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Raven = require('raven');
 const pLimit = require('p-limit');
 const xmljs = require("xml-js");
 const multer = require('multer');
@@ -11,7 +12,6 @@ const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
 const JSONLDService = require('../services/json-ld');
-const LoggerService = require('../services/logger');
 
 const {
   Recipe,
@@ -320,7 +320,7 @@ router.post(
         throw badFormatError;
       }
 
-      LoggerService.captureInfo("Paprika Import Started");
+      Raven.captureMessage('Paprika Import Started');
 
       zipPath = req.file.path;
       extractPath = zipPath + '-extract';
