@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
+const Raven = require('raven');
 
 const puppeteer = require('puppeteer-core');
 
 const jsdom = require("jsdom");
 const RecipeClipper = require('@julianpoy/recipe-clipper');
-
-const loggerService = require('../services/logger');
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 const sanitizeHtml = require('sanitize-html');
@@ -16,12 +15,7 @@ const disconnectPuppeteer = (browser) => {
   try {
     browser.disconnect();
   } catch(e) {
-    loggerService.capture("Error while disconnecting from browserless", {
-      level: 'warning',
-      data: {
-        error: e
-      }
-    });
+    Raven.captureException(e);
   }
 };
 
@@ -70,12 +64,10 @@ const clipRecipe = async clipUrl => {
       });
     } catch(err) {
       err.status = 400;
-      loggerService.capture("Clip failed", {
-        level: 'warning',
-        err,
-        data: {
+      Raven.captureException(err, {
+        extra: {
           clipUrl
-        }
+        },
       });
       throw err;
     }
@@ -100,12 +92,11 @@ const clipRecipe = async clipUrl => {
       });
     }, INTERCEPT_PLACEHOLDER_URL);
 
-    loggerService.capture("Clip success", {
-      level: 'info',
-      data: {
+    Raven.captureMessage("Clip success", {
+      extra: {
         recipeData,
         clipUrl
-      }
+      },
     });
 
     disconnectPuppeteer(browser);
@@ -180,12 +171,11 @@ router.get('/', async (req, res, next) => {
       return acc;
     }, {});
 
-    loggerService.capture("Clip compare", {
-      level: 'info',
-      data: {
+    Raven.captureMessage("Clip stats", {
+      extra: {
         diff: diff,
         fieldDiffCount: differentKeys.length,
-      }
+      },
     });
 
     if (Object.keys(recipeData).length) {
