@@ -824,7 +824,7 @@
   "====== Pages.Settings ======": "",
 
   "pages.settings.title": "Settings",
-  "pages.settings.sction1.title": "Data & Account",
+  "pages.settings.section1.title": "Data & Account",
   "pages.settings.import": "Import Recipe Data",
   "pages.settings.export": "Export Recipe Data",
   "pages.settings.account": "Account Settings & Stats",
