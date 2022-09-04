@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload",
+    "start": "ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload --optimization=false",
     "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest",
     "build": "ionic build",
     "build:prod": "ionic build --prod",
