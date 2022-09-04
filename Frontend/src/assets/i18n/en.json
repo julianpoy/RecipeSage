@@ -1159,6 +1159,24 @@
   "components.scaleRecipe.cancel": "Cancel",
   "components.scaleRecipe.apply": "Apply",
 
+  "====== Services.QuickTutorial ======": "",
+
+  "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
+  "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",
+  "services.quickTutorial.multipleLabelSelection.header": "Multiple Label Selection",
+  "services.quickTutorial.multipleLabelSelection.message": "You're now in multiple label selection mode. You can click as many labels as you'd like to select, then use the buttons that appear in the header to take bulk actions. You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.",
+  "services.quickTutorial.splitPaneView.header": "Split Pane View",
+  "services.quickTutorial.splitPaneView.message": "Split pane view is only visible on devices with large screens (laptops, large tablets, etc). When split pane view is enabled, the side menu will always be visible. This feature is useful for optimizing the experience on larger devices.",
+  "services.quickTutorial.experimentalOfflineCache.header": "Experimental Offline Cache",
+  "services.quickTutorial.experimentalOfflineCache.message": "Experimental offline cache is a test feature. RecipeSage normally caches recipes you access automatically, but this will now fetch all of your recipes in the background. Your system may remove cached recipes automatically if it needs the storage, or when you do not use the app for long periods of time. Important note: Filtering by label and searching will not work. This may work in future implementations, but not for this test implementation.",
+  "services.quickTutorial.pinnedRecipes.header": "Pinned Recipes",
+  "services.quickTutorial.pinnedRecipes.message": "This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking. Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until you close the application.",
+
+  "====== Services.Util ======": "",
+
+  "services.util.justNow": "just now",
+  "services.util.today": "today",
+
   "====== Errors ======": "",
 
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
