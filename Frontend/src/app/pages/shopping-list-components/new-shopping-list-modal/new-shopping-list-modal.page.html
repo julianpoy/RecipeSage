@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>New shopping list</ion-title>
+    <ion-title>
+      {{ 'pages.newShoppingList.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -14,7 +16,9 @@
 
 <ion-content class="ion-padding">
   <ion-item>
-    <ion-label position="floating">Title</ion-label>
+    <ion-label position="floating">
+      {{ 'pages.newShoppingList.listTitle' | translate }}
+    </ion-label>
     <ion-input
       [(ngModel)]="listTitle"
       type="text"
@@ -27,14 +31,17 @@
 
   <br /><br />
 
-  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
+  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
-      Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
+      {{ 'pages.newShoppingList.create' | translate }}
+      <span *ngIf="selectedCollaboratorIds.length > 0">
+        {{ 'pages.newShoppingList.share' | translate }}
+      </span>
     </ion-label>
   </ion-button>
 </ion-footer>

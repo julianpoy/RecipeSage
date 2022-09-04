@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 import { Platform, MenuController, ToastController, AlertController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -12,7 +13,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
-import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { VersionCheckService } from '@/services/versioncheck.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
@@ -43,6 +44,7 @@ export class AppComponent {
   preferenceKeys = GlobalPreferenceKey;
 
   constructor(
+    private translate: TranslateService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private router: Router,
@@ -64,6 +66,8 @@ export class AppComponent {
     private offlineCacheService: OfflineCacheService,
     public cookingToolbarService: CookingToolbarService,
   ) {
+    const language = this.preferencesService.preferences[GlobalPreferenceKey.Language];
+    this.translate.use(language || this.utilService.getAppBrowserLang());
 
     if (ENABLE_ANALYTICS) {
       this.initAnalytics();
@@ -87,13 +91,16 @@ export class AppComponent {
   // Attached to pagechange so keep this light
   async checkBrowserCompatibility() {
     if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.utilService.isLoggedIn()) {
+      const header = await this.translate.get('pages.app.oldBrowserAlert.header').toPromise();
+      const message = await this.translate.get('pages.app.oldBrowserAlert.message').toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const oldBrowserAlert = await this.alertCtrl.create({
-        header: 'Unsupported Browser',
-        message: `It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.
-                  <br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.`,
+        header,
+        message,
         buttons: [
           {
-            text: 'Dismiss',
+            text: okay,
             handler: () => {
               this.seenOldBrowserWarning = true;
               localStorage.setItem('seenOldBrowserWarning', 'true');
@@ -144,14 +151,7 @@ export class AppComponent {
       this.loadInboxCount();
     });
 
-    this.events.subscribe('auth:login', () => {
-      this.updateIsLoggedIn();
-      this.updateNavList();
-      this.loadInboxCount();
-      this.loadFriendRequestCount();
-    });
-
-    this.events.subscribe('auth:register', () => {
+    this.events.subscribe('auth', () => {
       this.updateIsLoggedIn();
       this.updateNavList();
       this.loadInboxCount();
@@ -183,35 +183,52 @@ export class AppComponent {
     this.isLoggedIn = this.utilService.isLoggedIn();
   }
 
-  updateNavList() {
-    this.navList = this.generateNavList();
+  async updateNavList() {
+    this.navList = await this.generateNavList();
   }
 
-  generateNavList() {
+  async generateNavList() {
     let pages = [];
 
+    const welcome = await this.translate.get('pages.app.nav.welcome').toPromise();
+    const login = await this.translate.get('pages.app.nav.login').toPromise();
+    const register = await this.translate.get('pages.app.nav.register').toPromise();
+    const download = await this.translate.get('pages.app.nav.download').toPromise();
+    const contribute = await this.translate.get('pages.app.nav.contribute').toPromise();
+    const about = await this.translate.get('pages.app.nav.about').toPromise();
+
+    const home = await this.translate.get('pages.app.nav.home').toPromise();
+    const labels = await this.translate.get('pages.app.nav.labels').toPromise();
+    const people = await this.translate.get('pages.app.nav.people').toPromise();
+    const messages = await this.translate.get('pages.app.nav.messages').toPromise();
+    const inbox = await this.translate.get('pages.app.nav.inbox').toPromise();
+    const newrecipe = await this.translate.get('pages.app.nav.newrecipe').toPromise();
+    const shopping = await this.translate.get('pages.app.nav.shopping').toPromise();
+    const meals = await this.translate.get('pages.app.nav.meals').toPromise();
+    const settings = await this.translate.get('pages.app.nav.settings').toPromise();
+
     const loggedOutPages = [
-      { id: 'welcome', title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { id: 'login', title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { id: 'register', title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
-      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'welcome', title: welcome, icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
+      { id: 'login', title: login, icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { id: 'register', title: register, icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     const loggedInPages = [
-      { id: 'home', title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
-      { id: 'labels', title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      { id: 'people', title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() },
-      { id: 'messages', title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
-      { id: 'inbox', title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { id: 'newrecipe', title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
-      { id: 'shopping', title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
-      { id: 'meals', title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
-      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'settings', title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
-      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'home', title: home, icon: 'book', url: RouteMap.HomePage.getPath('main') },
+      { id: 'labels', title: labels, icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
+      { id: 'people', title: people, icon: 'people', url: RouteMap.PeoplePage.getPath() },
+      { id: 'messages', title: messages, icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
+      { id: 'inbox', title: inbox, icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
+      { id: 'newrecipe', title: newrecipe, icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
+      { id: 'shopping', title: shopping, icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
+      { id: 'meals', title: meals, icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'settings', title: settings, icon: 'settings', url: RouteMap.SettingsPage.getPath() },
+      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     if (this.utilService.isLoggedIn()) {
@@ -223,22 +240,24 @@ export class AppComponent {
     return pages;
   }
 
-  loadInboxCount() {
+  async loadInboxCount() {
     if (!localStorage.getItem('token')) return;
 
-    this.recipeService.count({ folder: 'inbox' }).then(response => {
-      this.inboxCount = response.count;
-    }, () => { });
+    const response = await this.recipeService.count({ folder: 'inbox' });
+    if (!response.success) return;
+
+    this.inboxCount = response.data.count;
   }
 
   async loadFriendRequestCount() {
     if (!localStorage.getItem('token')) return;
 
-    const friends = await this.userService.getMyFriends({
+    const response = await this.userService.getMyFriends({
       401: () => {}
     });
+    if (!response.success) return;
 
-    this.friendRequestCount = friends?.incomingRequests?.length || null;
+    this.friendRequestCount = response.data.incomingRequests?.length || null;
   }
 
   initializeApp() {
@@ -293,23 +312,10 @@ export class AppComponent {
   logout() {
     this.messagingService.disableNotifications();
 
-    this.userService.logout().then(() => {
-      this._logout();
-    }, async err => {
-      switch (err.response.status) {
-        case 0:
-        case 401:
-        case 404:
-          this._logout();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          });
-          errorToast.present();
-          break;
-      }
+    this.userService.logout({
+      '*': () => {},
     });
+
+    this._logout();
   }
 }

@@ -4,41 +4,49 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Edit Profile</ion-title>
+    <ion-title>
+      {{ 'pages.myProfile.title' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div *ngIf="myProfile && requiresSetup" class="setup-screen ion-padding">
     <div class="intro">
-      <h3>Welcome to your profile!</h3>
-      Before you get started, there are a few things that you'll need to set up.
+      <h3>
+        {{ 'pages.myProfile.welcome' | translate }}
+      </h3>
+      {{ 'pages.myProfile.setup1' | translate }}
     </div>
 
-    First, choose the name or nickname to be shown on your profile.
+    {{ 'pages.myProfile.setup.name' | translate }}
     <ion-item>
-      <ion-label position="stacked">Name/Nickname</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.myProfile.name' | translate }}
+      </ion-label>
       <ion-input [(ngModel)]="myProfile.name" (ngModelChange)="updatedProfileFields.name = myProfile.name"></ion-input>
     </ion-item>
     <br />
     <br />
 
-    Now, choose the handle for your profile, for example: @superchef
+    {{ 'pages.myProfile.setup2' | translate }}
     <ion-item>
-      <ion-label position="stacked">Unique @handle</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.myProfile.handle' | translate }}
+      </ion-label>
       <ion-input [(ngModel)]="myProfile.handle" (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput();"></ion-input>
 
     </ion-item>
     <ion-item lines="none">
       <ion-label>
         <p class="error" *ngIf="updatedProfileFields.handle && !isHandleAvailable">
-          That handle is taken
+          {{ 'pages.myProfile.handle.taken' | translate }}
         </p>
         <p class="error" *ngIf="updatedProfileFields.handle && !isHandleValid()">
-          Handle is invalid
+          {{ 'pages.myProfile.handle.invalid' | translate }}
         </p>
         <p class="ion-text-wrap">
-          Note: Handle must be unique, and must not contain any special characters.
+          {{ 'pages.myProfile.handle.unique' | translate }}
         </p>
       </ion-label>
     </ion-item>
@@ -56,26 +64,30 @@
           <h3 class="username-preview" (click)="revealNameInput = true">{{ myProfile?.name }} <ion-icon name="pencil"></ion-icon></h3>
         </ion-item>
         <ion-item class="username-edit" *ngIf="revealNameInput">
-          <ion-label position="stacked">Name/Nickname</ion-label>
+          <ion-label position="stacked">
+            {{ 'pages.myProfile.name' | translate }}
+          </ion-label>
           <ion-input [(ngModel)]="myProfile.name" (ngModelChange)="updatedProfileFields.name = myProfile.name"></ion-input>
         </ion-item>
         <ion-item *ngIf="!revealHandleInput" lines="none">
           <h5 class="handle-preview" (click)="revealHandleInput = true">@{{ myProfile?.handle }} <ion-icon name="pencil"></ion-icon></h5>
         </ion-item>
         <ion-item class="handle-edit" *ngIf="revealHandleInput">
-          <ion-label position="stacked">Unique @handle</ion-label>
+          <ion-label position="stacked">
+            {{ 'pages.myProfile.handle' | translate }}
+          </ion-label>
           <ion-input [(ngModel)]="myProfile.handle" (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput()"></ion-input>
         </ion-item>
         <ion-item lines="none" *ngIf="revealHandleInput">
           <ion-label>
             <p class="error" *ngIf="updatedProfileFields.handle && !isHandleAvailable">
-            That handle is taken
+            {{ 'pages.myProfile.handle.taken' | translate }}
             </p>
             <p class="error" *ngIf="updatedProfileFields.handle && !isHandleValid()">
-            Handle is invalid
+            {{ 'pages.myProfile.handle.invalid' | translate }}
             </p>
             <p class="ion-text-wrap">
-            Note: Handle must be unique, and must not contain any special characters.
+            {{ 'pages.myProfile.handle.unique' | translate }}
             </p>
           </ion-label>
         </ion-item>
@@ -83,20 +95,20 @@
         <ion-item class="enable-profile" lines="none" *ngIf="accountInfo">
           <ion-toggle [(ngModel)]="accountInfo.enableProfile" (ngModelChange)="updatedProfileFields.enableProfile = accountInfo?.enableProfile; markAsDirty();" slot="start"></ion-toggle>
           <ion-label class="ion-text-wrap">
-            Enable Profile
+            {{ 'pages.myProfile.enable' | translate }}
           </ion-label>
         </ion-item>
 
         <div style="display: flex;">
           <ion-item lines="none">
             <ion-button (click)="shareProfile()">
-              Share
+              {{ 'pages.myProfile.share' | translate }}
               <ion-icon name="share-social" slot="end"></ion-icon>
             </ion-button>
           </ion-item>
           <ion-item lines="none">
             <ion-button (click)="viewProfile()">
-              View Profile
+              {{ 'pages.myProfile.view' | translate }}
               <ion-icon name="arrow-forward" slot="end"></ion-icon>
             </ion-button>
           </ion-item>
@@ -109,10 +121,10 @@
     <ion-item lines="full">
       <ion-icon name="key" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap">
-        Pinned Recipes &amp; Labels
+        {{ 'pages.myProfile.pinned' | translate }}
       </ion-label>
       <ion-button slot="end" (click)="startNewProfileItem()">
-        Add
+        {{ 'pages.myProfile.add' | translate }}
         <ion-icon name="add" slot="start"></ion-icon>
       </ion-button>
     </ion-item>
@@ -120,7 +132,7 @@
     <ion-list *ngIf="myProfile?.profileItems?.length" class="profile-items-list">
       <ion-reorder-group (ionItemReorder)="ionReorder($event)" disabled="false">
         <ng-container *ngFor="let item of myProfile?.profileItems; let idx = index">
-          <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'all-recipes'" button (click)="open(item)">
             <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 
@@ -133,7 +145,7 @@
             <ion-reorder slot="end"></ion-reorder>
           </ion-item>
 
-          <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'recipe'" button (click)="open(item)">
             <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
               <img [src]="item.recipe.images[0].location">
             </ion-avatar>
@@ -148,7 +160,7 @@
             <ion-reorder slot="end"></ion-reorder>
           </ion-item>
 
-          <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'label'" button (click)="open(item)">
             <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 
@@ -168,8 +180,8 @@
       <ion-icon name="bookmarks" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          You have nothing on your profile yet.<br />
-          To add your first profile item, click the "add" button to the right.
+          {{ 'pages.myProfile.nullState.1' | translate }}<br />
+          {{ 'pages.myProfile.nullState.2' | translate }}
         </p>
       </ion-label>
     </null-state>
@@ -181,6 +193,8 @@
 
 <ion-footer>
   <ion-toolbar class="ion-padding-horizontal">
-    <ion-button expand="block" [disabled]="!isUpdatePending() || !inputIsValid()" (click)="save()">Save</ion-button>
+    <ion-button expand="block" [disabled]="!isUpdatePending() || !inputIsValid()" (click)="save()">
+      {{ 'pages.myProfile.save' | translate }}<br />
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

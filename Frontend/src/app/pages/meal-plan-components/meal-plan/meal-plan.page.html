@@ -4,7 +4,9 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Meal Plan - {{ mealPlan.title }}</ion-title>
+    <ion-title>
+      {{ 'pages.mealPlan.title' | translate:{name:mealPlan.title} }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">

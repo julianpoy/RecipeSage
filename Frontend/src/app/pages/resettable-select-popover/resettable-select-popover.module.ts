@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ResettableSelectPopoverPage } from './resettable-select-popover.page';
+import { GlobalModule } from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { ResettableSelectPopoverPage } from './resettable-select-popover.page';
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GlobalModule,
   ],
   entryComponents: [
     ResettableSelectPopoverPage

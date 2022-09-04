@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ShoppingListGroupComponent } from './shopping-list-group.component';
 import { ShoppingListItemModule } from '@/components/shopping-list-item/shopping-list-item.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ShoppingListItemModule } from '@/components/shopping-list-item/shopping
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
-    ShoppingListItemModule
+    ShoppingListItemModule,
+    GlobalModule
   ],
   exports: [
     ShoppingListGroupComponent

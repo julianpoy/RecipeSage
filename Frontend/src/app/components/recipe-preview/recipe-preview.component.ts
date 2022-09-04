@@ -19,11 +19,11 @@ export class RecipePreviewComponent {
 
   @Input() description: string;
 
-  @Output() click = new EventEmitter();
+  @Output() previewClick = new EventEmitter();
 
   constructor(public sanitizer: DomSanitizer) {}
 
   onClick(event) {
-    this.click.emit(event);
+    this.previewClick.emit(event);
   }
 }

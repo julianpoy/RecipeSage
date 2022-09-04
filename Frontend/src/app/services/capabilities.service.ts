@@ -8,7 +8,7 @@ const CAPABILITY_RETRY_RATE = 5000;
   providedIn: 'root'
 })
 export class CapabilitiesService {
-  retryTimeout;
+  retryTimeout: any;
 
   capabilities = {
     highResImages: false,
@@ -23,18 +23,22 @@ export class CapabilitiesService {
     this.updateCapabilities();
   }
 
-  async updateCapabilities() {
-    try {
-      if (!this.utilService.isLoggedIn()) throw new Error('User is not logged in');
-      this.capabilities = await this.userService.capabilities();
-    } catch (e) {
-      if (this.retryTimeout) {
-        clearTimeout(this.retryTimeout);
-      }
-
-      this.retryTimeout = setTimeout(() => {
-        this.updateCapabilities();
-      }, CAPABILITY_RETRY_RATE);
+  retry() {
+    if (this.retryTimeout) {
+      clearTimeout(this.retryTimeout);
     }
+
+    this.retryTimeout = setTimeout(() => {
+      this.updateCapabilities();
+    }, CAPABILITY_RETRY_RATE);
+  }
+
+  async updateCapabilities() {
+    if (!this.utilService.isLoggedIn()) return this.retry();
+
+    const response = await this.userService.capabilities();
+    if (!response.success) return this.retry();
+
+    this.capabilities = response.data;
   }
 }

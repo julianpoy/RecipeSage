@@ -18,7 +18,7 @@ export class VersionCheckService {
   async checkVersion() {
     const url = this.utilService.getBase() + 'versioncheck?version=' + (window as any).version;
 
-    return this.httpService.request({
+    this.httpService.request<{ supported: boolean }>({
       method: 'get',
       url
     }).then(async res => {

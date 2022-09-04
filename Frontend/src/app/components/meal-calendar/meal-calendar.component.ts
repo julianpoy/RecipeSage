@@ -144,7 +144,7 @@ export class MealCalendarComponent {
   }
 
   prettyMonthName(date) {
-    return date.toLocaleString(this.utilService.lang, { month: 'long' });
+    return date.toLocaleString(window.navigator.language, { month: 'long' });
   }
 
   processIncomingMealPlan() {

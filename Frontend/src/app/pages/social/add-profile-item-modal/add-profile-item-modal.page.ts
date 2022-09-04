@@ -13,11 +13,6 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 export class AddProfileItemModalPage {
 
   itemType = null;
-  itemTypePrettyNameMap = {
-    recipe: 'recipe',
-    label: 'label',
-    'all-recipes': 'all recipes',
-  };
 
   itemVisibility = null;
   visibilityTypePrettyNameMap = {
@@ -67,9 +62,5 @@ export class AddProfileItemModalPage {
       || this.selectedRecipe
       || this.selectedLabel
     );
-  }
-
-  capitalize(str: string) {
-    return `${str[0].toUpperCase()}${str.substring(1)}`;
   }
 }

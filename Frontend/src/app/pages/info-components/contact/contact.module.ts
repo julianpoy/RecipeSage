@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { ContactPage } from './contact.page';
 import { SocialLinksModule } from '@/components/social-links/social-links.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ContactPage,
@@ -19,6 +21,7 @@ import { SocialLinksModule } from '@/components/social-links/social-links.module
         component: ContactPage
       }
     ]),
+    GlobalModule,
     SocialLinksModule
   ],
 })

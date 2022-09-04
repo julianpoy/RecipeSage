@@ -15,7 +15,7 @@ export class NewMealPlanModalPage {
 
   mealPlanTitle = '';
 
-  selectedThreads: any = [];
+  selectedCollaboratorIds: any = [];
 
   constructor(
     public navCtrl: NavController,
@@ -28,43 +28,20 @@ export class NewMealPlanModalPage {
 
   }
 
-  save() {
+  async save() {
     const loading = this.loadingService.start();
 
-    this.mealPlanService.create({
+    const response = await this.mealPlanService.create({
       title: this.mealPlanTitle,
-      collaborators: this.selectedThreads
-    }).then(response => {
-      loading.dismiss();
-      this.modalCtrl.dismiss({
-        success: true
-      });
-      this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(response.id));
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss({
-            success: false
-          });
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+      collaborators: this.selectedCollaboratorIds
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss({
+      success: true
+    });
+    this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(response.data.id));
   }
 
   cancel() {

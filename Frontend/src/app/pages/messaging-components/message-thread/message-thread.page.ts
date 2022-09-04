@@ -8,6 +8,7 @@ import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap } from '@/services/util.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'page-message-thread',
@@ -24,7 +25,7 @@ export class MessageThreadPage {
 
   otherUserId = '';
   pendingMessage = '';
-  messagePlaceholder = 'Message...';
+  messagePlaceholder = '';
   reloading = false;
 
   isViewLoaded = true;
@@ -34,6 +35,7 @@ export class MessageThreadPage {
   constructor(
     private changeDetector: ChangeDetectorRef,
     public navCtrl: NavController,
+    public translate: TranslateService,
     public route: ActivatedRoute,
     public events: EventService,
     public toastCtrl: ToastController,
@@ -59,6 +61,8 @@ export class MessageThreadPage {
   }
 
   ionViewWillEnter() {
+    this.translate.get('pages.messageThread.messagePlaceholder').toPromise().then((str: string) => this.messagePlaceholder = str);
+
     this.isViewLoaded = true;
 
     if (!this.otherUserId) {
@@ -103,15 +107,13 @@ export class MessageThreadPage {
     });
   }
 
-  scrollToBottom(animate?, delay?, callback?) {
+  scrollToBottom(animate?: boolean, delay?: boolean, callback?: () => any) {
     const animationDuration = animate ? 300 : 0;
 
     if (delay) {
       setTimeout(() => {
         this.content.scrollToBottom(animationDuration);
-        if (callback) {
-          callback.call(this);
-        }
+        callback?.();
       });
     } else {
       this.content.scrollToBottom(animationDuration);
@@ -120,7 +122,7 @@ export class MessageThreadPage {
 
   keyboardOpened() {
     window.onresize = () => {
-      this.scrollToBottom.call(this, false, true);
+      this.scrollToBottom(false, true);
       window.onresize = null;
     };
   }
@@ -129,38 +131,28 @@ export class MessageThreadPage {
     return item.id;
   }
 
-  loadMessages(isInitialLoad?) {
-    return new Promise((resolve, reject) => {
-      this.messagingService.fetch(this.otherUserId).then(response => {
-        this.messages = response.map(message => {
-          // Reuse messages that have already been parsed for performance. Otherwise, send it through linkify
-          if (this.messagesById[message.id]) {
-            message.body = this.messagesById[message.id].body;
-          } else {
-            message.body = this.parseMessage(message.body);
-          }
-
-          this.messagesById[message.id] = message;
-
-          return message;
-        });
-
-        this.processMessages();
-
-        this.scrollToBottom.call(this, !isInitialLoad, true, () => {
-          resolve();
-        });
-      }).catch(err => {
-        reject();
-
-        if (!this.isViewLoaded) return;
-        switch (err.response.status) {
-          default:
-            this.navCtrl.navigateRoot(RouteMap.MessagesPage.getPath());
-            break;
-        }
-      });
+  async loadMessages(isInitialLoad?: boolean) {
+    const response = await this.messagingService.fetch({
+      user: this.otherUserId,
     });
+    if (!response.success) return;
+
+    this.messages = response.data.map(message => {
+      // Reuse messages that have already been parsed for performance. Otherwise, send it through linkify
+      if (this.messagesById[message.id]) {
+        message.body = this.messagesById[message.id].body;
+      } else {
+        message.body = this.parseMessage(message.body);
+      }
+
+      this.messagesById[message.id] = message;
+
+      return message;
+    });
+
+    this.processMessages();
+
+    this.scrollToBottom(!isInitialLoad, true);
   }
 
   processMessages() {
@@ -172,48 +164,30 @@ export class MessageThreadPage {
     }
   }
 
-  sendMessage() {
+  async sendMessage() {
     if (!this.pendingMessage) return;
+
+    const sending = await this.translate.get('pages.messageThread.sending').toPromise();
+    const sent = await this.translate.get('pages.messageThread.sent').toPromise();
+    const message = await this.translate.get('pages.messageThread.messagePlaceholder').toPromise();
 
     const myMessage = this.pendingMessage;
     this.pendingMessage = '';
-    this.messagePlaceholder = 'Sending...';
+    this.messagePlaceholder = sending;
 
-    this.messagingService.create({
+    const response = await this.messagingService.create({
       to: this.otherUserId,
       body: myMessage
-    }).then(response => {
-      this.messagePlaceholder = 'Sent!';
-
-      setTimeout(() => {
-        this.messagePlaceholder = 'Message...';
-      }, 1000);
-
-      this.messages.push(response);
-
-      this.processMessages();
-
-      this.scrollToBottom(true, true);
-    }).catch(async err => {
-      this.messagePlaceholder = 'Message...';
-      this.pendingMessage = myMessage;
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: 'Failed to send message.',
-            duration: 5000
-          });
-          errorToast.present();
-          break;
-      }
     });
+    if (!response.success) return this.pendingMessage = myMessage;
+
+    this.messagePlaceholder = sent;
+
+    setTimeout(() => {
+      this.messagePlaceholder = message;
+    }, 1000);
+
+    this.loadMessages();
   }
 
   openRecipe(recipe) {

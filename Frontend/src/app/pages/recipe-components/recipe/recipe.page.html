@@ -5,7 +5,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Recipe Details: {{ recipe.title }}</ion-title>
+    <ion-title>{{ 'pages.recipeDetails.pageTitle' | translate }}: {{ recipe.title }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -33,19 +33,19 @@
           <ion-row class="ion-justify-content-start">
             <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
-                <b>Source: </b>
+                <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
                 <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || recipe.url }}</a>
                 <span *ngIf='!recipe.url?.trim()'>{{ recipe.source?.trim() }}</span>
               </p>
             </ion-col>
             <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>Active Time: </b>{{ recipe.activeTime }}</p>
+              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{ recipe.activeTime }}</p>
             </ion-col>
             <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>Total Time: </b>{{ recipe.totalTime }}</p>
+              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{ recipe.totalTime }}</p>
             </ion-col>
             <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>Yield: </b>{{ recipe.yield }}</p>
+              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{ recipe.yield }}</p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -58,22 +58,25 @@
         <ion-row class="ion-justify-content-start">
           <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
             <p>
-              <b>Source: </b>
+              <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
               <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || recipe.url }}</a>
               <span *ngIf='!recipe.url?.trim()'>{{ recipe.source?.trim() }}</span>
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
             <p>
-              <b>Active Time: </b>{{ recipe.activeTime }}</p>
+              <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{ recipe.activeTime }}
+            </p>
           </ion-col>
           <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
             <p>
-              <b>Total Time: </b>{{ recipe.totalTime }}</p>
+              <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{ recipe.totalTime }}
+            </p>
           </ion-col>
           <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
             <p>
-              <b>Yield: </b>{{ recipe.yield }}</p>
+              <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{ recipe.yield }}
+            </p>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -81,8 +84,8 @@
 
     <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
       <p class="ion-text-wrap">
-        <b>This recipe was sent to you by {{ recipe.fromUser.name || recipe.fromUser.email }}</b><br />
-        Add this recipe to your recipes by clicking the button at the bottom of the page.<br /><br />
+        <b>{{ 'pages.recipeDetails.sentBy' | translate:{name: recipe.fromUser.name} }}</b><br />
+        {{ 'pages.recipeDetails.sentByAction' | translate }}<br /><br />
       </p>
     </ion-item>
 
@@ -93,7 +96,7 @@
         <ion-item lines="none">
           <ion-icon name="book" slot="start" size="large"></ion-icon>
           <ion-label>
-            <p>Ingredients</p>
+            <p>{{ 'pages.recipeDetails.ingredients' | translate }}</p>
           </ion-label>
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
@@ -103,9 +106,9 @@
               class="ingredient ion-text-wrap"
               [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
               (click)="ingredientClicked($event, ingredient, ingredientIdx)"></p>
-            <p *ngIf="!ingredients || ingredients.length === 0">No Ingredients</p>
+            <p *ngIf="!ingredients || ingredients.length === 0">{{ 'pages.recipeDetails.noIngredients' | translate }}</p>
             <p>
-              <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
+            <a class="scale" (click)="changeScale()">{{ 'pages.recipeDetails.scaleStatus' | translate:{scale:scale} }}</a>
             </p>
           </ion-label>
         </ion-item>
@@ -114,7 +117,7 @@
         <ion-item lines="none">
           <ion-icon name="list" slot="start" size="large"></ion-icon>
           <ion-label>
-            <p>Instructions</p>
+            <p>{{ 'pages.recipeDetails.instructions' | translate }}</p>
           </ion-label>
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
@@ -128,7 +131,7 @@
                 <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
               </span>
             </p>
-            <p *ngIf="!instructions || instructions.length === 0">No Instructions</p>
+            <p *ngIf="!instructions || instructions.length === 0">{{ 'pages.recipeDetails.noInstructions' | translate }}</p>
           </ion-label>
         </ion-item>
       </div>
@@ -138,7 +141,7 @@
       <ion-item lines="none">
         <ion-icon name="document-text" slot="start" size="large"></ion-icon>
         <ion-label>
-          <p>Notes</p>
+          <p>{{ 'pages.recipeDetails.notes' | translate }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
@@ -148,7 +151,7 @@
             [ngClass]="{ header: note.isHeader }"
             class="ion-text-wrap"
           ></p>
-          <p *ngIf="!notes || notes.length === 0">No Ingredients</p>
+          <p *ngIf="!notes || notes.length === 0">{{ 'pages.recipeDetails.noNotes' | translate }}</p>
         </ion-label>
       </ion-item>
     </div>
@@ -156,13 +159,13 @@
     <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-margin-top" lines="none">
       <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
       <ion-label>
-        <p>Labels</p>
+        <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
       </ion-label>
     </ion-item>
 
     <ion-item *ngIf="recipe.id && !recipe.isOwner" lines="none">
       <p class="ion-text-wrap">
-        You can add labels once you save this recipe to your collection
+        {{ 'pages.recipeDetails.mustSaveBeforeLabelling' | translate }}
       </p>
     </ion-item>
 
@@ -192,7 +195,7 @@
             <ion-label>
               {{ pendingLabel }}
               <p>
-                Click to create
+                {{ 'pages.recipeDetails.labels.clickToCreate' | translate }}
               </p>
             </ion-label>
           </ion-item>
@@ -203,7 +206,7 @@
           <ion-item class="suggestion-inner" button>
             <ion-label>
               {{ pendingLabel }}
-              <p>Already added</p>
+              <p>{{ 'pages.recipeDetails.labels.alreadyAdded' | translate }}</p>
             </ion-label>
           </ion-item>
         </button>
@@ -214,7 +217,7 @@
           <ion-item class="suggestion-inner" button>
             <ion-label>
               {{ label }}
-              <p>Click to add</p>
+              <p>{{ 'pages.recipeDetails.labels.clickToAdd' | translate }}</p>
             </ion-label>
           </ion-item>
         </button>
@@ -227,8 +230,8 @@
       <ion-label>
         <p>
           <i>
-            Created {{ prettyDateTime(recipe.createdAt) }}<br />
-            Last edited {{ prettyDateTime(recipe.updatedAt) }}
+            {{ 'pages.recipeDetails.created' | translate }} {{ prettyDateTime(recipe.createdAt) }}<br />
+            {{ 'pages.recipeDetails.updated' | translate }} {{ prettyDateTime(recipe.updatedAt) }}
           </i>
         </p>
       </ion-label>
@@ -240,13 +243,13 @@
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
           	<ion-button expand="block" (click)="moveToFolder('main')">
           	  <ion-icon name="cloud-download" slot="start"></ion-icon>
-          	  Save This Recipe to My Recipes
+              {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
           	</ion-button>
           </ion-col>
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
           	<ion-button color="danger" expand="block" (click)="deleteRecipe()">
         	    <ion-icon name="trash" slot="start"></ion-icon>
-          	  Delete
+              {{ 'pages.recipeDetails.delete' | translate }}
         	  </ion-button>
           </ion-col>
         </ion-row>
@@ -257,13 +260,13 @@
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
-            This recipe does not belong to you yet.
+            {{ 'pages.recipeDetails.doesNotBelongToYou' | translate }}
           </p>
         </ion-label>
       </ion-item>
       <ion-button expand="block" (click)="cloneRecipe()">
         <ion-icon name="cloud-download" slot="start"></ion-icon>
-        Save This Recipe to My Recipes
+        {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
       </ion-button>
     </div>
 
@@ -271,13 +274,13 @@
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
-            Create an account or login to save this recipe to your collection.
+            {{ 'pages.recipeDetails.requiresAccountToSave' | translate }}
           </p>
         </ion-label>
       </ion-item>
       <ion-button expand="block" (click)="authAndClone()">
         <ion-icon name="cloud-download" slot="start"></ion-icon>
-        Register/Login to Save This Recipe
+        {{ 'pages.recipeDetails.registerOrLoginToSave' | translate }}
       </ion-button>
     </div>
 
@@ -285,49 +288,54 @@
       <ion-col class="ion-text-center">
         <ion-button (click)="editRecipe()" fill="clear" size="small">
           <ion-icon name="create" slot="start"></ion-icon>
-          Edit
+          {{ 'pages.recipeDetails.edit' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="deleteRecipe()" fill="clear" size="small">
           <ion-icon name="trash" slot="start"></ion-icon>
-          Delete
+          {{ 'pages.recipeDetails.delete' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="addRecipeToShoppingList()" fill="clear" size="small">
           <ion-icon name="list" slot="start"></ion-icon>
-          Add to Shopping List
+          {{ 'pages.recipeDetails.addToShoppingList' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="addRecipeToMealPlan()" fill="clear" size="small">
           <ion-icon name="calendar" slot="start"></ion-icon>
-          Add to Meal Plan
+          {{ 'pages.recipeDetails.addToMealPlan' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="shareRecipe()" fill="clear" size="small">
           <ion-icon name="share" slot="start"></ion-icon>
-          Share
+          {{ 'pages.recipeDetails.share' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="printRecipe()" fill="clear" size="small">
           <ion-icon name="print" slot="start"></ion-icon>
-          Print
+          {{ 'pages.recipeDetails.print' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="cloneRecipe()" fill="clear" size="small">
           <ion-icon name="copy" slot="start"></ion-icon>
-          Make a Copy
+          {{ 'pages.recipeDetails.makeACopy' | translate }}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
         <ion-button (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()" fill="clear" size="small">
           <ion-icon name="pin" slot="start"></ion-icon>
-          {{ cookingToolbarService.isPinned(recipeId) ? "Unpin Recipe" : "Pin Recipe Open" }}
+          <span *ngIf="!cookingToolbarService.isPinned(recipeId)">
+            {{ 'pages.recipeDetails.pinRecipe' | translate }}
+          </span>
+          <span *ngIf="cookingToolbarService.isPinned(recipeId)">
+            {{ 'pages.recipeDetails.unPinRecipe' | translate }}
+          </span>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -1,6 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>New Message Thread</ion-title>
+    <ion-title>
+      {{ 'pages.newMessageModal.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -16,7 +18,7 @@
   <ion-item *ngIf="!recipientId">
     <ion-label>
       <p>
-        Enter a RecipeSage user email or @handle
+        {{ 'pages.newMessageModal.input.target' | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -24,8 +26,10 @@
   <br /><br />
 
   <ion-item>
-    <ion-label position="floating">Compose a message</ion-label>
-    <ion-textarea [(ngModel)]="message" placeholder="Hello! I'd like to chat on RecipeSage"></ion-textarea>
+    <ion-label position="floating">
+      {{ 'pages.newMessageModal.compose' | translate }}
+    </ion-label>
+    <ion-textarea [(ngModel)]="message" placeholder="{{ 'pages.newMessageModal.input.messagePlaceholder' | translate }}"></ion-textarea>
   </ion-item>
 </ion-content>
 
@@ -33,7 +37,7 @@
   <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
     <ion-label>
-      Send
+      {{ 'pages.newMessageModal.send' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

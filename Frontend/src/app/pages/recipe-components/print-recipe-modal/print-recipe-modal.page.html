@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>Select print layout</ion-title>
+    <ion-title>{{ 'pages.printRecipeModal.title' | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -21,7 +21,7 @@
       [url]="template.url"
       [description]="template.description"
       *ngFor="let template of templates; let i = index" (click)="selectedTemplate = i"
-      (click)="selectedTemplate = i"></recipe-preview>
+      (previewClick)="selectedTemplate = i"></recipe-preview>
   </div>
 </ion-content>
 
@@ -29,7 +29,7 @@
   <ion-button expand="block" (click)="print()" [disabled]="selectedTemplate === -1">
     <ion-icon name="print" slot="start"></ion-icon>
     <ion-label>
-      Print
+      {{ 'pages.printRecipeModal.print' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

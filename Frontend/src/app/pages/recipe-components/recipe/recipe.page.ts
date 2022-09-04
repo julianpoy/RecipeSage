@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { linkifyStr } from '@/utils/linkify';
-import { RecipeService, Recipe, Instruction, Ingredient } from '@/services/recipe.service';
+import { RecipeService, Recipe, Instruction, Ingredient, Note } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
@@ -18,7 +19,7 @@ import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/a
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-details-popover.page';
 import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
-import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
+import { AuthPage } from '@/pages/auth/auth.page';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
 
@@ -32,19 +33,21 @@ export class RecipePage {
 
   defaultBackHref: string = RouteMap.HomePage.getPath('main');
 
-  wakeLockRequest;
+  wakeLockRequest: null | {
+    release: () => void,
+  } = null;
 
   recipe: Recipe;
   recipeId: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
-  notes;
+  notes: Note[];
 
   scale = 1;
 
   labelObjectsByTitle: any = {};
-  existingLabels: any = [];
-  selectedLabels: any = [];
+  existingLabels: string[] = [];
+  selectedLabels: string[] = [];
   pendingLabel = '';
   showAutocomplete = false;
 
@@ -65,7 +68,9 @@ export class RecipePage {
     public recipeService: RecipeService,
     public labelService: LabelService,
     public cookingToolbarService: CookingToolbarService,
-    public capabilitiesService: CapabilitiesService) {
+    public capabilitiesService: CapabilitiesService,
+    public translate: TranslateService,
+  ) {
 
     this.updateIsLoggedIn();
 
@@ -119,100 +124,46 @@ export class RecipePage {
     return Promise.all([this.loadRecipe(), this.loadLabels()]);
   }
 
-  loadRecipe() {
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetchById(this.recipeId).then(response => {
-        this.recipe = response;
+  async loadRecipe() {
+    const response = await this.recipeService.fetchById(this.recipeId);
+    if (!response.success) return;
 
-        if (this.recipe.url && !this.recipe.url.trim().startsWith('http')) {
-          this.recipe.url = 'http://' + this.recipe.url.trim();
-        }
+    this.recipe = response.data;
 
-        if (this.recipe.instructions && this.recipe.instructions.length > 0) {
-          this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
-        }
+    if (this.recipe.url && !this.recipe.url.trim().startsWith('http')) {
+      this.recipe.url = 'http://' + this.recipe.url.trim();
+    }
 
-        if (this.recipe.notes && this.recipe.notes.length > 0) {
-          this.notes = this.recipeService.parseNotes(this.recipe.notes)
-            .map(note => ({
-              ...note,
-              content: linkifyStr(note.content),
-            }));
-        }
+    if (this.recipe.instructions && this.recipe.instructions.length > 0) {
+      this.instructions = this.recipeService.parseInstructions(this.recipe.instructions);
+    }
 
-        this.applyScale();
+    if (this.recipe.notes && this.recipe.notes.length > 0) {
+      this.notes = this.recipeService.parseNotes(this.recipe.notes)
+        .map(note => ({
+          ...note,
+          content: linkifyStr(note.content),
+        }));
+    }
 
-        this.selectedLabels = this.recipe.labels.map(label => label.title);
+    this.applyScale();
 
-        resolve();
-      }).catch(async err => {
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.goToAuth(() => {
-              this.loadAll();
-            });
-            break;
-          case 404:
-            let errorToast = await this.toastCtrl.create({
-              message: 'Recipe not found. Does this recipe URL exist?',
-              duration: 30000,
-              // dismissOnPageChange: true
-            });
-            errorToast.present();
-            break;
-          default:
-            errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-
-        reject();
-      });
-    });
+    this.selectedLabels = this.recipe.labels.map(label => label.title);
   }
 
-  loadLabels() {
-    return new Promise((resolve, reject) => {
-      this.labelService.fetch().then(response => {
-        this.labelObjectsByTitle = {};
-        this.existingLabels = [];
+  async loadLabels() {
+    const response = await this.labelService.fetch();
+    if (!response.success) return;
 
-        for (const label of response) {
-          this.existingLabels.push(label.title);
-          this.labelObjectsByTitle[label.title] = label;
-        }
+    this.labelObjectsByTitle = {};
+    this.existingLabels = [];
 
-        this.existingLabels.sort((a, b) => a.localeCompare(b));
+    for (const label of response.data) {
+      this.existingLabels.push(label.title);
+      this.labelObjectsByTitle[label.title] = label;
+    }
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-          case 401:
-            // Ignore, handled by main loader
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
-    });
+    this.existingLabels.sort((a, b) => a.localeCompare(b));
   }
 
   async presentPopover(event) {
@@ -310,17 +261,22 @@ export class RecipePage {
   }
 
   async deleteRecipe() {
+    const header = await this.translate.get('pages.recipeDetails.delete.header').toPromise();
+    const message = await this.translate.get('pages.recipeDetails.delete.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: 'This will permanently delete the recipe from your account. This action is irreversible.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteRecipe();
@@ -331,42 +287,15 @@ export class RecipePage {
     alert.present();
   }
 
-  private _deleteRecipe() {
+  private async _deleteRecipe() {
     const loading = this.loadingService.start();
 
-    this.recipeService.remove(this.recipe).then(response => {
-      loading.dismiss();
+    const response = await this.recipeService.delete(this.recipe.id);
 
-      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        case 404:
-          (await this.toastCtrl.create({
-            message: 'Can\'t find the recipe you\'re trying to delete.',
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath(this.recipe.folder));
   }
 
   async addRecipeToShoppingList() {
@@ -414,40 +343,19 @@ export class RecipePage {
     shareModal.present();
   }
 
-  moveToFolder(folderName) {
+  async moveToFolder(folderName: string) {
     const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;
 
     console.log(this.recipe);
 
-    this.recipeService.update(this.recipe).then(response => {
-      loading.dismiss();
+    const response = await this.recipeService.update(this.recipe);
 
-      this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.data.id)); // TODO: Check that this "refresh" works with new router
   }
 
   toggleAutocomplete(show, event?) {
@@ -467,10 +375,11 @@ export class RecipePage {
     this.showAutocomplete = show;
   }
 
-  async addLabel(title) {
+  async addLabel(title: string) {
     if (title.length === 0) {
+      const message = await this.translate.get('pages.recipeDetails.enterLabelWarning').toPromise();
       (await this.toastCtrl.create({
-        message: 'Please enter a label and press enter to label this recipe.',
+        message,
         duration: 6000
       })).present();
       return;
@@ -480,58 +389,33 @@ export class RecipePage {
 
     const loading = this.loadingService.start();
 
-    this.labelService.create({
+    await this.labelService.create({
       recipeId: this.recipe.id,
       title: title.toLowerCase()
-    }).then(response => {
-      this.loadAll().finally(() => {
-        loading.dismiss();
-      });
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        case 404:
-          (await this.toastCtrl.create({
-            message: 'Can\'t find the recipe you\'re trying to add a label to. Please try again or reload this recipe page.',
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
     });
+    this.loadAll();
+    loading.dismiss();
   }
 
   async deleteLabel(label) {
+    const header = await this.translate.get('pages.recipeDetails.deleteLabel.header').toPromise();
+    const message = await this.translate.get('pages.recipeDetails.deleteLabel.message', {title: label.title}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Label Removal',
-      message: 'This will remove the label "' + label.title + '" from this recipe.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => {
             // this.selectedLabels.push(label.title);
           }
         },
         {
-          text: 'Remove',
+          text: del,
           handler: () => {
             this._deleteLabel(label);
           }
@@ -541,85 +425,34 @@ export class RecipePage {
     alert.present();
   }
 
-  private _deleteLabel(label) {
+  private async _deleteLabel(label) {
     const loading = this.loadingService.start();
 
-    this.labelService.removeFromRecipe(
-      label.id,
-      this.recipe.id
-    ).then(() => {
-      this.loadAll().finally(() => {
-        loading.dismiss();
-      });
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 404:
-          (await this.toastCtrl.create({
-            message: 'Can\'t find the recipe you\'re trying to delete a label from. Please try again or reload this recipe page.',
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
+    await this.labelService.removeFromRecipe({
+      labelId: label.id,
+      recipeId: this.recipe.id
     });
+    await this.loadAll();
+    loading.dismiss();
   }
 
-  cloneRecipe() {
+  async cloneRecipe() {
     const loading = this.loadingService.start();
-
-    return new Promise((resolve, reject) => {
-      this.recipeService.create({
-        ...this.recipe,
-        imageIds: this.recipe.images.map(image => image.id),
-        labels: this.recipe.isOwner ? this.recipe.labels.map(label => label.title) : [],
-      }).then(response => {
-        resolve();
-
-        this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
-
-        loading.dismiss();
-      }).catch(async err => {
-        reject();
-        loading.dismiss();
-        switch (err.response.status) {
-          case 0:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            })).present();
-            break;
-          case 401:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unauthorized,
-              duration: 6000
-            })).present();
-            break;
-          default:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
-            })).present();
-            break;
-        }
-      });
+    const response = await this.recipeService.create({
+      ...this.recipe,
+      imageIds: this.recipe.images.map(image => image.id),
+      labels: this.recipe.isOwner ? this.recipe.labels.map(label => label.title) : [],
     });
+
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.data.id));
   }
 
   async goToAuth(cb?: () => any) {
     const authModal = await this.modalCtrl.create({
-      component: AuthModalPage,
+      component: AuthPage,
       componentProps: {
         register: !this.isLoggedIn
       }
@@ -634,8 +467,9 @@ export class RecipePage {
   authAndClone() {
     this.goToAuth(() => {
       this.cloneRecipe().then(async () => {
+        const message = await this.translate.get('pages.recipeDetails.cloned').toPromise();
         (await this.toastCtrl.create({
-          message: 'The recipe has been saved to your account',
+          message,
           duration: 5000
         })).present();
       });

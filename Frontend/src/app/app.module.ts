@@ -1,10 +1,14 @@
 import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import * as Sentry from '@sentry/browser';
@@ -17,6 +21,7 @@ import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.ser
 import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolbar.module';
 
 import { environment } from 'src/environments/environment';
+import {SupportedLanguages} from './services/preferences.service';
 
 const checkChunkLoadError = (error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
@@ -46,7 +51,7 @@ console.error = (...args) => {
     checkChunkLoadError(args[0]);
   } catch(e) {}
 
-  origConsoleError(...args);
+  origConsoleError.apply(console, args);
 }
 
 Sentry.init({
@@ -60,6 +65,10 @@ Sentry.init({
     return event;
   }
 });
+
+export function createTranslateLoader(http: HttpClient) {
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @Injectable()
 export class SentryErrorHandler extends ErrorHandler {
@@ -92,6 +101,15 @@ export class SentryErrorHandler extends ErrorHandler {
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    HttpClientModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient]
+        },
+        defaultLanguage: SupportedLanguages.EN_US
+    }),
     AppRoutingModule,
     LoadingBarModule,
     CookingToolbarModule

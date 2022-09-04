@@ -7,11 +7,14 @@ import { NewMealPlanItemModalPage } from './new-meal-plan-item-modal.page';
 import { SelectRecipeModule } from '@/components/select-recipe/select-recipe.module';
 import { SelectMealModule } from '@/components/select-meal/select-meal.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     NewMealPlanItemModalPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,

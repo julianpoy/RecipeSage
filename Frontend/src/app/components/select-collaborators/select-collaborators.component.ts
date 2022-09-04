@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '../../services/loading.service';
 import { MessagingService } from '../../services/messaging.service';
@@ -13,14 +14,14 @@ import { UserService } from '../../services/user.service';
 })
 export class SelectCollaboratorsComponent {
 
-  _selectedThreads: any;
+  _selectedCollaboratorIds: string[];
   @Input()
-  set selectedThreads(val) {
-    this._selectedThreads = val;
+  set selectedCollaboratorIds(val) {
+    this._selectedCollaboratorIds = val;
   }
 
-  get selectedThreads() {
-    return this._selectedThreads;
+  get selectedCollaboratorIds() {
+    return this._selectedCollaboratorIds;
   }
 
   threadsByUserId: any = {};
@@ -41,48 +42,19 @@ export class SelectCollaboratorsComponent {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
+    public translate: TranslateService,
   ) {
     this.loadThreads().then(() => { }, () => { });
   }
 
-  loadThreads() {
-    return new Promise((resolve, reject) => {
-      this.messagingService.threads().then(response => {
-        this.existingThreads = response.map(el => {
-          this.threadsByUserId[el.otherUser.id] = el.otherUser;
-          console.log(el.otherUser);
-          return el.otherUser;
-        });
+  async loadThreads() {
+    const response = await this.messagingService.threads();
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            // TODO: This may need to be improved. Previously, this tried to dismiss as a modal with return message
-            const unauthorizedToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unauthorized,
-              duration: 30000
-            });
-            unauthorizedToast.present();
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    this.existingThreads = response.data.map(el => {
+      this.threadsByUserId[el.otherUser.id] = el.otherUser;
+      console.log(el.otherUser);
+      return el.otherUser;
     });
   }
 
@@ -92,11 +64,14 @@ export class SelectCollaboratorsComponent {
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
     this.autofillTimeout = setTimeout(async () => {
-      const user = await this.userService.getUserByEmail(this.pendingThread.trim(), {
+      const response = await this.userService.getUserByEmail({
+        email: this.pendingThread.trim(),
+      }, {
         404: () => {}
       });
 
-      if (user) {
+      if (response.success) {
+        const user = response.data;
         if (!this.threadsByUserId[user.id]) {
           this.existingThreads.push(user);
           this.threadsByUserId[user.id] = user;
@@ -131,8 +106,9 @@ export class SelectCollaboratorsComponent {
 
         this.addCollaborator(this.pendingCollaboratorId);
       } else {
+        const message = await this.translate.get('components.selectCollaborators.notFoundError').toPromise();
         (await this.toastCtrl.create({
-          message: 'Could not find user with that email address.',
+          message,
           duration: 6000
         })).present();
       }
@@ -141,14 +117,15 @@ export class SelectCollaboratorsComponent {
 
   async addCollaborator(userId) {
     if (userId.length === 0) {
+      const message = await this.translate.get('components.selectCollaborators.invalidEmail').toPromise();
       (await this.toastCtrl.create({
-        message: 'Please enter a valid email and press enter.',
+        message,
         duration: 6000
       })).present();
       return;
     }
 
-    this.selectedThreads.push(userId);
+    this.selectedCollaboratorIds.push(userId);
 
     this.toggleAutocomplete(false);
 
@@ -156,6 +133,6 @@ export class SelectCollaboratorsComponent {
   }
 
   removeCollaborator(userId) {
-    this.selectedThreads.splice(this.selectedThreads.indexOf(userId), 1);
+    this.selectedCollaboratorIds.splice(this.selectedCollaboratorIds.indexOf(userId), 1);
   }
 }

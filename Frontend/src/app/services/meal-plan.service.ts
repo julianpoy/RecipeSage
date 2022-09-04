@@ -1,7 +1,54 @@
 import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
-import { HttpErrorHandlerService } from './http-error-handler.service';
+import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
+
+interface MealPlanCollaborator {
+  id: string,
+  name: string,
+  email: string,
+}
+
+type MealPlans = {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  itemCount: string,
+  myUserId: string,
+  collaborators: MealPlanCollaborator[],
+  owner: MealPlanCollaborator,
+}[];
+
+export interface MealPlan {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  userId: string,
+  collaborators: MealPlanCollaborator[],
+  owner: MealPlanCollaborator,
+  items: MealPlanItem[],
+}
+
+export interface MealPlanItem {
+  id: string,
+  title: string,
+  scheduled: string,
+  meal: string,
+  updatedAt: string,
+  createdAt: string,
+  owner: MealPlanCollaborator,
+  recipe: null | {
+    id: string,
+    title: string,
+    ingredients: string,
+    images: {
+      id: string,
+      location: string,
+    }[],
+  },
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,148 +61,122 @@ export class MealPlanService {
     private httpErrorHandlerService: HttpErrorHandlerService
   ) {}
 
-  fetch() {
-    const url = this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetch(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<MealPlans>(
+      'mealPlans',
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  fetchById(mealPlanId) {
-    const url = this.utilService.getBase() + 'mealPlans/' + mealPlanId + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetchById(mealPlanId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<MealPlan>(
+      `mealPlans/${mealPlanId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  create(data) {
-    const url = this.utilService.getBase() + 'mealPlans/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
-  }
-
-  addItem(data) {
-    const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
-  }
-
-  update(data) {
-    const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'put',
-      url,
-      data
-    }).then(response => response.data);
-  }
-
-  async updateMealPlanItems(mealPlanId: string, mealPlanItems: {
-    id: string,
+  create(payload: {
     title: string,
-    recipeId?: string,
-    meal: string,
-    scheduled: string
-  }[]) {
-    const url = this.utilService.getBase() + `mealPlans/${mealPlanId}/items/bulk${this.utilService.getTokenQuery()}`;
-
-    try {
-      const requestBody = {
-        id: mealPlanId,
-        items: mealPlanItems.map(item => ({
-          id: item.id,
-          title: item.title,
-          recipeId: item.recipeId || null,
-          meal: item.meal,
-          scheduled: item.scheduled
-        }))
-      };
-
-      const { data } = await this.httpService.request({
-        method: 'put',
-        url,
-        data: requestBody
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+    collaborators: string[],
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{ id: string }>(
+      `mealPlans`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  async addMealPlanItems(mealPlanId: string, mealPlanItems: {
+  addItem(mealPlanId: string, payload: {
     title: string,
-    recipeId?: string,
+    recipeId: string | null,
     meal: string,
-    scheduled: string
-  }[]) {
-    const url = this.utilService.getBase() + `mealPlans/${mealPlanId}/items/bulk${this.utilService.getTokenQuery()}`;
-
-    try {
-      const requestBody = {
-        id: mealPlanId,
-        items: mealPlanItems.map(item => ({
-          title: item.title,
-          recipeId: item.recipeId || null,
-          meal: item.meal,
-          scheduled: item.scheduled
-        }))
-      };
-
-      const { data } = await this.httpService.request({
-        method: 'post',
-        url,
-        data: requestBody
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+    scheduled: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  async deleteMealPlanItems(mealPlanId: string, mealPlanItemIds: string[]) {
-    const url = this.utilService.getBase() + `mealPlans/${mealPlanId}/items/bulk${this.utilService.getTokenQuery()}&itemIds=${mealPlanItemIds.join(',')}`;
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'delete',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+  update(mealPlanId: string, payload: {
+    title: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}`,
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  remove(data) {
-    const url = this.utilService.getBase() + `mealPlans/${data.id}/items${this.utilService.getTokenQuery()}&itemId=${data.itemId}`;
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => response.data);
+  updateItems(mealPlanId: string, payload: {
+    items: {
+      id: string,
+      title: string,
+      recipeId?: string,
+      meal: string,
+      scheduled: string
+    }[]
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}/items/bulk`,
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  unlink(data) {
-    const url = this.utilService.getBase() + 'mealPlans/' + data.id + this.utilService.getTokenQuery();
+  addItems(mealPlanId: string, payload: {
+    items: {
+      title: string,
+      recipeId?: string,
+      meal: string,
+      scheduled: string
+    }[]
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}/items/bulk`,
+      'POST',
+      payload,
+      errorHandlers
+    );
+  }
 
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => response.data);
+  deleteItems(mealPlanId: string, payload: {
+    itemIds: string[]
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}/items/bulk`,
+      'DELETE',
+      payload,
+      errorHandlers
+    );
+  }
+
+  deleteItem(mealPlanId: string, payload: {
+    itemId: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}/items`,
+      'DELETE',
+      payload,
+      errorHandlers
+    );
+  }
+
+  delete(mealPlanId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `mealPlans/${mealPlanId}`,
+      'DELETE',
+      {},
+      errorHandlers
+    );
   }
 }

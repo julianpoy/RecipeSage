@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import loadImage from 'blueimp-load-image';
+import {TranslateService} from '@ngx-translate/core';
 
 import { UserService } from '@/services/user.service';
 import { ImageService } from '@/services/image.service';
@@ -31,6 +32,7 @@ export class MultiImageUploadComponent {
     private userService: UserService,
     private imageService: ImageService,
     private loadingService: LoadingService,
+    private translate: TranslateService,
     public capabilitiesService: CapabilitiesService,
   ) {}
 
@@ -45,10 +47,13 @@ export class MultiImageUploadComponent {
     }
 
     if (this.images.length + files.length > 10) {
+      const message = await this.translate.get('components.multiImageUpload.imageLimit').toPromise();
+      const close = await this.translate.get('generic.close').toPromise();
+
       const imageUploadTooManyToast = await this.toastCtrl.create({
-        message: 'You can attach attach up to 10 images',
+        message,
         buttons: [{
-          text: 'Close',
+          text: close,
           role: 'cancel'
         }]
       });
@@ -74,10 +79,13 @@ export class MultiImageUploadComponent {
         this.images.push(image);
       }));
     } catch (e) {
+      const message = await this.translate.get('components.multiImageUpload.imageError').toPromise();
+      const close = await this.translate.get('generic.close').toPromise();
+
       const imageUploadErrorToast = await this.toastCtrl.create({
-        message: 'There was an error processing one or more of the images that you selected',
+        message,
         buttons: [{
-          text: 'Close',
+          text: close,
           role: 'cancel'
         }]
       });

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { SocialLinksComponent } from './social-links.component';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { SocialLinksComponent } from './social-links.component';
   ],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    GlobalModule
   ],
   exports: [
     SocialLinksComponent

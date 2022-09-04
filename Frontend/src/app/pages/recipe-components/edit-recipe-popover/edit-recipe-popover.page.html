@@ -1,10 +1,10 @@
 <ion-list no-border>
   <ion-list-header>
-    Actions
+    {{ 'pages.editRecipePopover.actions' | translate }}
   </ion-list-header>
 
   <ion-button [disabled]="!canAddImages" (click)="dismiss(); addImageByUrlPrompt()" expand="block" size="small" class="ion-margin">
     <ion-icon name='image' slot="start"></ion-icon>
-    Add Image by URL
+    {{ 'pages.editRecipePopover.addImage' | translate }}
   </ion-button>
 </ion-list>

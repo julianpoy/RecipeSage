@@ -5,7 +5,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Import</ion-title>
+    <ion-title>{{ 'pages.import.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -16,12 +16,12 @@
     <ion-label class="ion-text-center ion-text-wrap">
       <br /><br />
       <p>
-        RecipeSage supports importing from Pepperplate, Living Cookbook, and Paprika.
+        {{ 'pages.import.description1' | translate }}
       </p>
       <br />
       <p>
-        Importing recipes will add all recipes from the file/account you've selected to your RecipeSage account.<br />
-        If you're having trouble with the import, please send me an email.
+        {{ 'pages.import.description2' | translate }}<br />
+        {{ 'pages.import.description3' | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -32,25 +32,25 @@
     <ion-item (click)="goToImportJSONLD()" class="cursor-pointer">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
-        Import from JSON-LD file
+        {{ 'pages.import.jsonld' | translate }}
       </ion-label>
     </ion-item>
     <ion-item (click)="goToImportPepperplate()" class="cursor-pointer">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
-        Import from Pepperplate
+        {{ 'pages.import.pepperplate' | translate }}
       </ion-label>
     </ion-item>
     <ion-item (click)="goToImportLC()" class="cursor-pointer">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
-        Import Living Cookbook File
+        {{ 'pages.import.livingCookbook' | translate }}
       </ion-label>
     </ion-item>
     <ion-item (click)="goToImportPaprika()" class="cursor-pointer">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       <ion-label>
-        Import Paprika Recipes File
+        {{ 'pages.import.paprika' | translate }}
       </ion-label>
     </ion-item>
   </ion-list>

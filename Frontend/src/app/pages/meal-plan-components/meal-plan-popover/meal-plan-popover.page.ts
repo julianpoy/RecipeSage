@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
+
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -20,6 +22,7 @@ export class MealPlanPopoverPage {
 
   constructor(
     public popoverCtrl: PopoverController,
+    public translate: TranslateService,
     public navCtrl: NavController,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
@@ -72,19 +75,22 @@ export class MealPlanPopoverPage {
   }
 
   async deleteMealPlan() {
+    const header = await this.translate.get('pages.mealPlanPopover.delete.header').toPromise();
+    const message = await this.translate.get('pages.mealPlanPopover.delete.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: `This will <b>permanently</b> remove this meal plan from your account.<br /><br />
-                <b>Note</b>: If you\'re only a collaborator on this meal plan, it\'ll only be removed from your account.
-                If you own this meal plan, it will be removed from all other collaborators accounts.`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete Meal Plan',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteMealPlan();
@@ -95,39 +101,14 @@ export class MealPlanPopoverPage {
     alert.present();
   }
 
-  _deleteMealPlan() {
+  async _deleteMealPlan() {
     const loading = this.loadingService.start();
 
-    this.mealPlanService.unlink({
-      id: this.mealPlanId
-    }).then(() => {
-      loading.dismiss();
+    const response = await this.mealPlanService.delete(this.mealPlanId);
+    loading.dismiss();
+    if (!response.success) return;
 
-      this.popoverCtrl.dismiss();
-
-      this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
+    this.popoverCtrl.dismiss();
+    this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
   }
 }

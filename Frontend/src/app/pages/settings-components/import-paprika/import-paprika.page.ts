@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '@/services/loading.service';
 import { RecipeService } from '@/services/recipe.service';
@@ -20,6 +21,7 @@ export class ImportPaprikaPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
@@ -39,14 +41,6 @@ export class ImportPaprikaPage {
 
   filePicker() {
     document.getElementById('filePicker').click();
-  }
-
-  filePickerText() {
-    if (this.imageFile) {
-      return this.imageFile.name + ' Selected';
-    } else {
-      return 'Choose .paprikarecipes file';
-    }
   }
 
   isFileTooLarge() {
@@ -69,61 +63,46 @@ export class ImportPaprikaPage {
     })).present();
   }
 
-  submit() {
+  async submit() {
     this.loading = this.loadingService.start();
 
-    this.recipeService.importPaprika(this.imageFile).then(response => {
-      this.loading.dismiss();
-      this.loading = null;
+    const response = await this.recipeService.importPaprika(this.imageFile, {
+      406: async () => {
+        const message = await this.translate.get('pages.importPaprika.error').toPromise();
+        const close = await this.translate.get('generic.close').toPromise();
 
-      this.presentToast('Import was successful!');
+        (await this.toastCtrl.create({
+          message,
+          buttons: [{
+            text: close,
+            role: 'cancel'
+          }]
+        })).present();
+      },
+      504: async () => {
+        setTimeout(async () => {
+          const message = await this.translate.get('pages.importPaprika.timeout').toPromise();
+          const close = await this.translate.get('generic.close').toPromise();
 
-      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
-    }).catch(async err => {
-      switch (err.response.status) {
-        case 0:
-          this.loading.dismiss();
-          this.loading = null;
-          this.presentToast(this.utilService.standardMessages.offlinePushMessage);
-          break;
-        case 401:
-          this.loading.dismiss();
-          this.loading = null;
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 406:
-          this.loading.dismiss();
-          this.loading = null;
           (await this.toastCtrl.create({
-            message: `Hmm, we had trouble extracting that file. Please make sure it is in Paprika Recipe Format directly from the app.
-                      If you\'re having trouble, please feel free to send me an email.`,
+            message,
             buttons: [{
-              text: 'Close',
+              text: close,
               role: 'cancel'
             }]
           })).present();
-          break;
-        case 504:
-          setTimeout(async () => {
-            this.loading.dismiss();
-            this.loading = null;
-            (await this.toastCtrl.create({
-              message: `The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes.
-                        If your recipes do not appear, please send me an email.`,
-              buttons: [{
-                text: 'Close',
-                role: 'cancel'
-              }]
-            })).present();
-            this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
-          }, 20000);
-          break;
-        default:
-          this.loading.dismiss();
-          this.loading = null;
-          this.presentToast(this.utilService.standardMessages.unexpectedError);
-          break;
-      }
+          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+        }, 20000);
+      },
     });
+    this.loading.dismiss();
+    this.loading = null;
+    if (!response.success) return;
+
+    const message = await this.translate.get('pages.importPaprika.success').toPromise();
+
+    this.presentToast(message);
+
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
   }
 }

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 import { API_BASE_URL } from 'src/environments/environment';
+import {SupportedLanguages} from './preferences.service';
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -195,19 +197,29 @@ export const RouteMap = {
 })
 export class UtilService {
 
-  lang = ((window.navigator as any).userLanguage || window.navigator.language);
-
   devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
 
-  standardMessages = {
-    offlineFetchMessage: `It looks like you\'re offline.
-                          While offline, we\'re only able to fetch data you\'ve previously accessed on this device.`,
-    offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-    unexpectedError: 'An unexpected error occured. Please try again.',
-    unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
-  };
+  constructor(
+    private translate: TranslateService,
+  ) {}
 
-  constructor() {}
+  getAppBrowserLang(): string {
+    const navLang = window.navigator.language.toLowerCase();
+    if (Object.values(SupportedLanguages).some((el) => el === navLang)) return navLang;
+
+    try {
+      const locale = new (Intl as any).Locale([navLang]).maximize();
+
+      const languageCode = `${locale.language}-${locale.region}`.toLowerCase();
+
+      if (!Object.values(SupportedLanguages).some((el) => el === languageCode)) throw new Error(`Navigator language not supported: ${languageCode}`);
+
+      return languageCode;
+    } catch(e) {
+      console.error(e);
+      return SupportedLanguages.EN_US;
+    }
+  }
 
   getBase(): string {
     return (window as any).API_BASE_OVERRIDE || API_BASE_URL || this.devBase;
@@ -217,7 +229,7 @@ export class UtilService {
     localStorage.removeItem('token');
   }
 
-  setToken(token) {
+  setToken(token: string) {
     localStorage.setItem('token', token);
   }
 
@@ -234,7 +246,11 @@ export class UtilService {
     return `?false=false`;
   }
 
-  generatePrintShoppingListURL(shoppingListId, options) {
+  generatePrintShoppingListURL(shoppingListId: string, options?: {
+    groupSimilar?: boolean,
+    groupCategories?: boolean,
+    sortBy?: string,
+  }) {
     let query = `${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
 
     if (options?.groupSimilar)    query += '&groupSimilar=true';
@@ -256,7 +272,7 @@ export class UtilService {
     return url;
   }
 
-  formatDate(date, options?: { now?: boolean, times?: boolean }): string {
+  formatDate(date: string | number | Date, options?: { now?: boolean, times?: boolean }): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
@@ -273,22 +289,24 @@ export class UtilService {
     const toFormat = new Date(date);
 
     if (options.now && aFewMomentsAgoAfter < toFormat) {
-      return 'just now';
+      const justNow = this.translate.instant('services.util.justNow');
+      if (justNow) return justNow;
     }
 
     if (!options.times && todayAfter < toFormat) {
-      return 'today';
+      const today = this.translate.instant('services.util.today');
+      if (today) return today;
     }
 
     if (options.times && todayAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         hour: 'numeric',
         minute: 'numeric'
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         weekday: 'long',
         hour: 'numeric',
         minute: 'numeric'
@@ -296,19 +314,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         weekday: 'long'
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         month: 'numeric',
         day: 'numeric',
         year: 'numeric'
       });
     } else {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         hour: 'numeric',
         minute: 'numeric',
         month: 'numeric',

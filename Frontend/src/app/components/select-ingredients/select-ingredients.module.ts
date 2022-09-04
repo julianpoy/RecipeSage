@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SelectIngredientsComponent } from './select-ingredients.component';
 import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
     FormsModule,
     ReactiveFormsModule,
     ScaleRecipeModule,
+    GlobalModule,
   ],
   exports: [
     SelectIngredientsComponent

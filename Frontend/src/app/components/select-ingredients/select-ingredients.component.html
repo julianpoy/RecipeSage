@@ -1,11 +1,13 @@
 <div>
   <div *ngIf="scaledIngredients && scaledIngredients.length > 0">
     <p>
-      Select the ingredients you'd like to add:
+      {{ 'components.selectIngredients.title' | translate }}
     </p>
 
     <ion-item>
-      <ion-label>Select/Deselect All</ion-label>
+      <ion-label>
+        {{ 'components.selectIngredients.toggleAll' | translate }}
+      </ion-label>
       <ion-checkbox [(ngModel)]="allSelected" (ngModelChange)="resetAll()" checked="true"></ion-checkbox>
     </ion-item>
     <ion-item *ngFor="let ingredient of scaledIngredients; let i = index;">
@@ -13,11 +15,15 @@
       <ion-checkbox [(ngModel)]="ingredientBinders[i]" (ngModelChange)="toggleIngredient(i)" checked="true"></ion-checkbox>
     </ion-item>
     <br />
-    <a class="scale" (click)="changeScale()">{{ scale }}x scale (click to change)</a>
+    <a class="scale" (click)="changeScale()">
+      {{ 'components.selectIngredients.scale' | translate:{scale:scale} }}
+    </a>
   </div>
   <div *ngIf="!scaledIngredients || scaledIngredients.length === 0">
     <p>
-      <b>This recipe has no ingredients.</b>
+      <b>
+        {{ 'components.selectIngredients.null' | translate }}
+      </b>
     </p>
   </div>
 </div>

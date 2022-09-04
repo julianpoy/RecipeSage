@@ -4,7 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>People</ion-title>
+    <ion-title>
+      {{ 'pages.people.title' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,11 +15,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-item *ngIf="isSelfHost" lines="none">
-    <ion-label>
-      Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href="https://recipesage.com" target="_blank" rel="noreferrer noopener">RecipeSage.com</a> or any of the accounts located on the main site.
-    </ion-label>
-  </ion-item>
+  <selfhost-warning-item *ngIf="isSelfHost"></selfhost-warning-item>
 
   <br />
 
@@ -25,13 +23,13 @@
     <ion-icon name="person-circle" class="big-icon" virtualSlot="header"></ion-icon>
     <ion-label virtualSlot="body">
       <p>
-        You haven't set up a profile.
-        <br /> Creating a profile allows you to share collections of recipes with friends and the public.
+        {{ 'pages.people.nullState.1' | translate }}<br />
+        {{ 'pages.people.nullState.2' | translate }}
         <br />
         <br />
         <ion-button (click)="editProfile()">
           <ion-icon slot="start" name="add"></ion-icon>
-          Create
+          {{ 'pages.people.create' | translate }}
         </ion-button>
       </p>
     </ion-label>
@@ -42,7 +40,9 @@
     <ion-avatar slot="start" *ngIf="myProfile?.profileImages?.length">
       <img [src]="myProfile.profileImages[0].location">
     </ion-avatar>
-    <ion-label>View/edit my profile</ion-label>
+    <ion-label>
+      {{ 'pages.people.edit' | translate }}
+    </ion-label>
   </ion-item>
 
   <br />
@@ -52,7 +52,7 @@
   <ion-list *ngIf="accountInfo?.enableProfile">
     <ion-item-divider *ngIf="friendships?.friends?.length > 0">
       <ion-label>
-        Friends
+        {{ 'pages.people.friends' | translate }}
       </ion-label>
     </ion-item-divider>
     <ion-item *ngFor="let friendship of friendships?.friends" button (click)="openProfile(friendship.otherUser.handle)">
@@ -61,12 +61,14 @@
         <img [src]="friendship.otherUser.profileImages[0].location">
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">Unfriend</ion-button>
+      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">
+        {{ 'pages.people.unfriend' | translate }}
+      </ion-button>
     </ion-item>
 
     <ion-item-divider *ngIf="friendships?.incomingRequests?.length > 0">
       <ion-label>
-        Friend invites (incoming)
+        {{ 'pages.people.invites' | translate }}
       </ion-label>
     </ion-item-divider>
     <ion-item *ngFor="let friendship of friendships?.incomingRequests" button (click)="openProfile(friendship.otherUser.handle)">
@@ -75,13 +77,17 @@
         <img [src]="friendship.otherUser.profileImages[0].location">
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button slot="end" (click)="$event.stopPropagation(); addFriend(friendship.friendId)">Accept</ion-button>
-      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">Decline</ion-button>
+      <ion-button slot="end" (click)="$event.stopPropagation(); addFriend(friendship.friendId)">
+        {{ 'pages.people.accept' | translate }}
+      </ion-button>
+      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">
+        {{ 'pages.people.decline' | translate }}
+      </ion-button>
     </ion-item>
 
     <ion-item-divider *ngIf="friendships?.outgoingRequests?.length > 0">
       <ion-label>
-        Pending (sent) friend requests
+        {{ 'pages.people.sentInvites' | translate }}
       </ion-label>
     </ion-item-divider>
     <ion-item *ngFor="let friendship of friendships?.outgoingRequests" button (click)="openProfile(friendship.otherUser.handle)">
@@ -90,16 +96,18 @@
         <img [src]="friendship.otherUser.profileImages[0].location">
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
-      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">Cancel</ion-button>
+      <ion-button slot="end" color="danger" (click)="$event.stopPropagation(); deleteFriend(friendship.otherUser.id)">
+        {{ 'pages.people.cancel' | translate }}
+      </ion-button>
     </ion-item>
 
-    <null-state *ngIf="friendships?.incomingRequests?.length == 0 && friendships?.outgoingRequests?.length == 0 && friendships?.friends?.length == 0">
+    <null-state *ngIf="friendships?.incomingRequests?.length === 0 && friendships?.outgoingRequests?.length === 0 && friendships?.friends?.length === 0">
       <ion-icon name="people" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          You don't have any friends added.
-          <br /> Adding someone as a friend allows you to collaborate on recipes, meal plans, and shopping lists.
-          <br /> To add someone, click the search icon.
+          {{ 'pages.people.noFriends.1' | translate }}<br />
+          {{ 'pages.people.noFriends.2' | translate }}<br />
+          {{ 'pages.people.noFriends.3' | translate }}
         </p>
       </ion-label>
     </null-state>

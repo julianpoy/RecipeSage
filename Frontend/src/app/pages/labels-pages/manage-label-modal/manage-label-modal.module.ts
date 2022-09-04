@@ -4,6 +4,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { ManageLabelModalPage } from './manage-label-modal.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ManageLabelModalPage,
@@ -11,6 +13,7 @@ import { ManageLabelModalPage } from './manage-label-modal.page';
   imports: [
     CommonModule,
     IonicModule,
+    GlobalModule,
   ],
   entryComponents: [
     ManageLabelModalPage,

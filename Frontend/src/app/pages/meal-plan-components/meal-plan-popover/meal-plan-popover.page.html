@@ -1,6 +1,6 @@
 <ion-list no-border>
   <ion-list-header>
-    Options
+    {{ 'pages.mealPlanPopover.options.title' | translate }}
   </ion-list-header>
 
   <!--<ion-item lines="full" *ngIf="mealPlan.collaborators.length > 0">-->
@@ -18,48 +18,54 @@
   <!--</ion-item>-->
 
   <ion-item lines="full">
-    <ion-label>Start week on</ion-label>
+    <ion-label>
+      {{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}
+    </ion-label>
     <ion-select [(ngModel)]="preferences[preferenceKeys.StartOfWeek]" (ngModelChange)="savePreferences();">
-      <ion-select-option value="sunday">Sunday</ion-select-option>
-      <ion-select-option value="monday">Monday</ion-select-option>
+      <ion-select-option value="sunday">
+        {{ 'pages.mealPlanPopover.options.startWeekOn.sunday' | translate }}
+      </ion-select-option>
+      <ion-select-option value="monday">
+        {{ 'pages.mealPlanPopover.options.startWeekOn.monday' | translate }}
+      </ion-select-option>
     </ion-select>
   </ion-item>
 
   <ion-list-header>
-    Actions
+    {{ 'pages.mealPlanPopover.actions.title' | translate }}
   </ion-list-header>
 
   <ion-button (click)="pinRecipes()" expand="block" size="small" class="ion-margin">
     <ion-icon name='pin' slot="start"></ion-icon>
-    Pin recipes open
+    {{ 'pages.mealPlanPopover.actions.pinRecipesOpen' | translate }}
   </ion-button>
 
   <ion-button (click)="bulkAddToShoppingList()" expand="block" size="small" class="ion-margin">
     <ion-icon name='cart' slot="start"></ion-icon>
-    Add selected to shopping list
+    {{ 'pages.mealPlanPopover.actions.addToShoppingList' | translate }}
   </ion-button>
 
   <ion-button (click)="copySelected()" expand="block" size="small" class="ion-margin">
     <ion-icon name='copy' slot="start"></ion-icon>
-    Copy selected day(s)
+    {{ 'pages.mealPlanPopover.actions.copyDays' | translate }}
   </ion-button>
 
   <ion-button (click)="moveSelected()" expand="block" size="small" class="ion-margin">
     <ion-icon name='cut' slot="start"></ion-icon>
-    Move selected day(s)
+    {{ 'pages.mealPlanPopover.actions.moveDays' | translate }}
   </ion-button>
 
   <ion-button (click)="deleteSelected()" color="danger" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
-    Delete selected day(s)
+    {{ 'pages.mealPlanPopover.actions.deleteDays' | translate }}
   </ion-button>
 
   <ion-list-header>
-    Danger Zone
+    {{ 'pages.mealPlanPopover.dangerZone.title' | translate }}
   </ion-list-header>
 
   <ion-button (click)="deleteMealPlan()" color="danger" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
-    Delete meal plan
+    {{ 'pages.mealPlanPopover.dangerZone.delete' | translate }}
   </ion-button>
 </ion-list>

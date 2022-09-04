@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RecipeService } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
@@ -23,6 +24,7 @@ export class ImportPepperplatePage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -33,12 +35,14 @@ export class ImportPepperplatePage {
 
   async scrapePepperplate() {
     if (this.username.trim().length === 0) {
-      this.errorMessage = 'Please enter your pepperplate email/username.';
+      const message = await this.translate.get('pages.importPepperplate.usernameRequired').toPromise();
+      this.errorMessage = message;
       return;
     }
 
     if (this.password.trim().length === 0) {
-      this.errorMessage = 'Please enter your pepperplate password.';
+      const message = await this.translate.get('pages.importPepperplate.passwordRequired').toPromise();
+      this.errorMessage = message;
       return;
     }
 
@@ -46,79 +50,72 @@ export class ImportPepperplatePage {
 
     this.loading = true;
 
-    this.recipeService.scrapePepperplate({
+    const response = await this.recipeService.scrapePepperplate({
       username: this.username,
       password: this.password
-    }).then(async response => {
-      this.loading = false;
-      loading.dismiss();
+    }, {
+      406: async () => {
+        const header = await this.translate.get('pages.importPepperplate.invalid.header').toPromise();
+        const message = await this.translate.get('pages.importPepperplate.invalid.message').toPromise();
+        const okay = await this.translate.get('generic.okay').toPromise();
 
-      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+        (await this.alertCtrl.create({
+          header,
+          message,
+          buttons: [{
+            text: okay
+          }]
+        })).present();
+      },
+      504: () => {
+        setTimeout(async () => {
+          const header = await this.translate.get('pages.importPepperplate.timeout.header').toPromise();
+          const message = await this.translate.get('pages.importPepperplate.timeout.message').toPromise();
+          const okay = await this.translate.get('generic.okay').toPromise();
 
-      (await this.toastCtrl.create({
-        message: 'Import complete!',
-        buttons: [{
-          text: 'Close',
-          role: 'cancel'
-        }]
-      })).present();
-
-    }).catch(async err => {
-      this.loading = false;
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
+          (await this.alertCtrl.create({
+            header,
+            message,
+            buttons: [
+              {
+                text: okay,
+                handler: () => {}
+              }
+            ]
           })).present();
-          break;
-        case 401:
+        }, 20000);
+      },
+      '*': () => {
+        setTimeout(async () => {
+          const message = await this.translate.get('pages.importPepperplate.error.message').toPromise();
+          const okay = await this.translate.get('generic.okay').toPromise();
+
           (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        case 406:
-          const credentialsAlert = await this.alertCtrl.create({
-            header: 'Invalid Credentials',
-            message: `Pepperplate rejected those credentials. Please try again.`,
+            message,
             buttons: [{
-              text: 'Ok'
+              text: okay,
+              role: 'cancel'
             }]
-          });
-
-          credentialsAlert.present();
-          break;
-        case 504:
-          setTimeout(async () => {
-            const longTimeAlert = await this.alertCtrl.create({
-              header: 'This is taking a little longer than expected',
-              message: `This can happen when Pepperplate is under heavy load. The import is still in progress. If you don't see your recipes appear, feel free to email me.`,
-              buttons: [
-                {
-                  text: 'Dismiss',
-                  handler: () => {}
-                }
-              ]
-            });
-
-            longTimeAlert.present();
-          }, 20000);
-          break;
-        default:
-          setTimeout(async () => {
-            (await this.toastCtrl.create({
-              message: 'An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.',
-              buttons: [{
-                text: 'Close',
-                role: 'cancel'
-              }]
-            })).present();
-          }, 10000);
-          break;
-      }
+          })).present();
+        }, 10000);
+      },
     });
-  }
+    this.loading = false;
+    loading.dismiss();
 
+    if (!response.success) return;
+
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+
+    const message = await this.translate.get('pages.importPepperplate.success').toPromise();
+    const close = await this.translate.get('generic.close').toPromise();
+
+    (await this.toastCtrl.create({
+      message,
+      buttons: [{
+        text: close,
+        role: 'cancel'
+      }]
+    })).present();
+  }
 }

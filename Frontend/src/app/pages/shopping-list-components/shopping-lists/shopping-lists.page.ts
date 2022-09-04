@@ -37,59 +37,27 @@ export class ShoppingListsPage {
   }
 
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     const loading = this.loadingService.start();
-
     this.initialLoadComplete = false;
 
-    this.loadLists().then(() => {
-      loading.dismiss();
-      this.initialLoadComplete = true;
-    }, () => {
-      loading.dismiss();
-      this.initialLoadComplete = true;
-    });
+    await this.loadLists();
+
+    loading.dismiss();
+    this.initialLoadComplete = true;
   }
 
-  refresh(refresher) {
-    this.loadLists().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
+  async refresh(refresher) {
+    await this.loadLists();
+    refresher.target.complete();
   }
 
-  loadLists() {
-    return new Promise((resolve, reject) => {
-      this.shoppingListService.fetch().then(response => {
-        this.shoppingLists = response.sort((a, b) => {
-          return a.title.localeCompare(b.title);
-        });
+  async loadLists() {
+    const response = await this.shoppingListService.fetch();
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    this.shoppingLists = response.data.sort((a, b) => {
+      return a.title.localeCompare(b.title);
     });
   }
 
@@ -100,11 +68,11 @@ export class ShoppingListsPage {
     modal.present();
   }
 
-  openShoppingList(listId) {
+  openShoppingList(listId: string) {
     this.navCtrl.navigateForward(RouteMap.ShoppingListPage.getPath(listId));
   }
 
-  formatItemCreationDate(plainTextDate) {
+  formatItemCreationDate(plainTextDate: string) {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 }

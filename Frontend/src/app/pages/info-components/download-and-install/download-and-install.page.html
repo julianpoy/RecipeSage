@@ -5,7 +5,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Download &amp; Install</ion-title>
+    <ion-title>{{ 'pages.downloadAndInstall.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
@@ -13,57 +13,57 @@
 
 <ion-content class="ion-padding">
   <p>
-    Click a platform for installation instructions
+    {{ 'pages.downloadAndInstall.subtitle' | translate }}
   </p>
 
   <ion-list>
     <ion-item button *ngIf="pwaPromptCapable()" (click)="showPWAPrompt()">
       <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-label>This Device</ion-label>
+      <ion-label>{{ 'pages.downloadAndInstall.thisDevice' | translate }}</ion-label>
     </ion-item>
     <ion-item button (click)="toggleAndroid()">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label>Android Device</ion-label>
+      <ion-label>{{ 'pages.downloadAndInstall.android.title' | translate }}</ion-label>
       <ion-icon *ngIf="showAndroid" slot="end" name="caret-down"></ion-icon>
       <ion-icon *ngIf="!showAndroid" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showAndroid">
       <p class="instruction">
-        To install RecipeSage on Android:<br />
-        <b>1.</b> Open the Chrome browser<br />
-        <b>2.</b> Open the browser menu (the <ion-icon name="ellipsis-vertical"></ion-icon> icon)<br />
-        <b>3.</b> Click "Add to Home screen"<br />
-        This will install RecipeSage as a native application on your device.
+        {{ 'pages.downloadAndInstall.android.instructionHeader' | translate }}<br />
+        <b>1.</b> {{ 'pages.downloadAndInstall.android.step.1' | translate }}<br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.android.step.2' | translate }} <ion-icon name="ellipsis-vertical"></ion-icon><br />
+        <b>3.</b> {{ 'pages.downloadAndInstall.android.step.3' | translate }}<br />
+        {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
     <ion-item button (click)="toggleIOS()">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label>Apple Mobile Device</ion-label>
+      <ion-label>{{ 'pages.downloadAndInstall.ios.title' | translate }}</ion-label>
       <ion-icon *ngIf="showIOS" slot="end" name="caret-down"></ion-icon>
       <ion-icon *ngIf="!showIOS" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showIOS">
       <p class="instruction">
-        To install RecipeSage on Apple Mobile Devices (IOS):<br />
-        <b>1.</b> Open Safari<br />
-        <b>2.</b> Open the share menu (the <ion-icon name="share-outline" color="primary"></ion-icon> icon)<br />
-        <b>3.</b> Click "Add to Home Screen"<br />
-        This will install RecipeSage as a native application on your device.
+        {{ 'pages.downloadAndInstall.ios.instructionHeader' | translate }}<br />
+        <b>1.</b> {{ 'pages.downloadAndInstall.ios.step.1' | translate }}<br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.ios.step.2' | translate }} <ion-icon name="share-outline" color="primary"></ion-icon><br />
+        <b>3.</b> {{ 'pages.downloadAndInstall.ios.step.3' | translate }}<br />
+        {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
     <ion-item button (click)="toggleDesktop()">
       <ion-icon name="laptop" slot="start"></ion-icon>
-      <ion-label>Desktop or Laptop Devices</ion-label>
+      <ion-label>{{ 'pages.downloadAndInstall.desktop.title' | translate }}</ion-label>
       <ion-icon *ngIf="showDesktop" slot="end" name="caret-down"></ion-icon>
       <ion-icon *ngIf="!showDesktop" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showDesktop">
       <p class="instruction">
-        To install RecipeSage on desktop or laptop devices:<br />
-        <b>1.</b> Open Google Chrome browser<br />
-        <b>2.</b> Open the browser menu (the <ion-icon name="ellipsis-vertical"></ion-icon> icon)<br />
-        <b>3.</b> Click "Install RecipeSage..."<br />
-        This will install RecipeSage as a native application on your computer.
+        {{ 'pages.downloadAndInstall.desktop.instructionHeader' | translate }}<br />
+        <b>1.</b> {{ 'pages.downloadAndInstall.desktop.step.1' | translate }}<br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.desktop.step.2' | translate }} <ion-icon name="ellipsis-vertical"></ion-icon><br />
+        <b>3.</b> {{ 'pages.downloadAndInstall.desktop.step.3' | translate }}<br />
+        {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
   </ion-list>

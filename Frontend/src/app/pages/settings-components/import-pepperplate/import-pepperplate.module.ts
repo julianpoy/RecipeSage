@@ -6,11 +6,14 @@ import { IonicModule } from '@ionic/angular';
 
 import { ImportPepperplatePage } from './import-pepperplate.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     ImportPepperplatePage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,

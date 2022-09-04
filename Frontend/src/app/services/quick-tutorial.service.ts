@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 interface QuickTutorialBlurb {
   header: string;
-  subHeader?: string;
   message: string;
 }
 
@@ -23,37 +23,24 @@ type QuickTutorialBlurbs = {
 
 const quickTutorialBlurbs: QuickTutorialBlurbs = {
   [QuickTutorialOptions.MultipleRecipeSelection]: {
-    header: 'Multiple Recipe Selection',
-    message: `You're now in multiple recipe selection mode.<br /><br />
-              You can click as many recipes as you'd like to select,
-              then use the buttons that appear in the header to take bulk actions such as labelling or deleting.<br /><br />
-              You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.`
+    header: 'services.quickTutorial.multipleRecipeSelection.header',
+    message: 'services.quickTutorial.multipleRecipeSelection.message'
   },
   [QuickTutorialOptions.MultipleLabelSelection]: {
-    header: 'Multiple Label Selection',
-    message: `You're now in multiple label selection mode.<br /><br />
-              You can click as many labels as you'd like to select,
-              then use the buttons that appear in the header to take bulk actions.<br /><br />
-              You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.`
+    header: 'services.quickTutorial.multipleLabelSelection.header',
+    message: 'services.quickTutorial.multipleLabelSelection.message'
   },
   [QuickTutorialOptions.SplitPaneView]: {
-    header: 'Split Pane View',
-    message: `Split pane view is only visible on devices with large screens (laptops, large tablets, etc).<br /><br />
-              When split pane view is enabled, the side menu will always be visible.<br /><br />
-              This feature is useful for optimizing the experience on larger devices.`
+    header: 'services.quickTutorial.splitPaneView.header',
+    message: 'services.quickTutorial.splitPaneView.message'
   },
   [QuickTutorialOptions.ExperimentalOfflineCache]: {
-    header: 'Experimental Offline Cache',
-    message: `Experimental offline cache is <b>experimental</b>. RecipeSage normally caches recipes you access automatically, but this will now fetch <b>all</b> of your recipes in the background.<br /><br />
-    Your system may remove cached recipes automatically if it needs the storage, or when you do not use the app for long periods of time.<br /><br />
-    <b>Important note:</b> Filtering by label and searching will not work. This may work in future implementations, but not for this test implementation.`
+    header: 'services.quickTutorial.experimentalOfflineCache.header',
+    message: 'services.quickTutorial.experimentalOfflineCache.message'
   },
   [QuickTutorialOptions.PinnedRecipes]: {
-    header: 'Pinned Recipes',
-    message: `This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking.<br /><br />
-              Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with
-              the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until
-              you close the application.`
+    header: 'services.quickTutorial.pinnedRecipes.header',
+    message: 'services.quickTutorial.pinnedRecipes.message'
   }
 };
 
@@ -63,7 +50,10 @@ const TUTORIAL_LOCALSTORAGE_KEY = 'seenQuickTutorialOptions';
   providedIn: 'root'
 })
 export class QuickTutorialService {
-  constructor(private alertCtrl: AlertController) { }
+  constructor(
+    private alertCtrl: AlertController,
+    private translate: TranslateService
+  ) { }
 
   private fetchSeenTutorials(): any[] {
     try {
@@ -95,11 +85,14 @@ export class QuickTutorialService {
     if (seenTutorials.indexOf(quickTutorialKey) < 0) {
       const tutorial = quickTutorialBlurbs[quickTutorialKey];
 
+      const header = await this.translate.get(tutorial.header).toPromise();
+      const message = await this.translate.get(tutorial.message).toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const tutorialAlert = await this.alertCtrl.create({
-        header: tutorial.header,
-        subHeader: tutorial.subHeader,
-        message: tutorial.message,
-        buttons: ['Okay']
+        header,
+        message,
+        buttons: [okay]
       });
 
       await tutorialAlert.present();

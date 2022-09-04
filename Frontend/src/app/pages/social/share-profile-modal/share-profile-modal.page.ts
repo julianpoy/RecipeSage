@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ModalController, ToastController, AlertController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -12,9 +13,6 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 })
 export class ShareProfileModalPage {
 
-  hasCopyAPI: boolean = !!document.execCommand;
-  hasWebShareAPI: boolean = !!(navigator as any).share;
-
   @Input() handle;
   @Input() userId;
   @Input() profile;
@@ -23,6 +21,7 @@ export class ShareProfileModalPage {
 
   constructor(
     private navCtrl: NavController,
+    private translate: TranslateService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private utilService: UtilService,
@@ -58,52 +57,37 @@ export class ShareProfileModalPage {
     return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(`@${this.profile.handle}`)}`;
   }
 
-  webShare() {
-    if (this.hasWebShareAPI) {
-      (navigator as any).share({
-        title: `${this.profile.name}'s RecipeSage profile`,
-        text: `Click to view ${this.profile.name}'s public RecipeSage profile`,
-        url: this.getProfileUrl(),
-      }).then(() => this.cancel()).catch(() => {});
-    }
-  }
-
-  copyCodeToClipboard() {
-    const copyText = document.getElementById('codeBlockCopy') as any;
-
-    copyText.select();
-
-    document.execCommand('copy');
-  }
-
   openFacebook() {
     const win = window.open() as any;
     win.opener = null;
     win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.getProfileUrl())}`;
   }
 
-  openTwitter() {
-    const message = `${this.profile.name}'s RecipeSage profile`;
+  async openTwitter() {
+    const message = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
+
     const win = window.open() as any;
     win.opener = null;
     win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(this.getProfileUrl())}&text=${encodeURIComponent(message)}`;
   }
 
-  openPinterest() {
-    const message = encodeURIComponent(`${this.profile.name}'s RecipeSage profile`);
+  async openPinterest() {
+    const message = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
+
     const imageUrl = encodeURIComponent(this.profile.profileImages?.[0]?.location || '');
     const url = encodeURIComponent(this.getProfileUrl());
     const win = window.open() as any;
     win.opener = null;
-    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${message}`;
+    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(message)}`;
   }
 
-  openEmail() {
-    const subject = encodeURIComponent(`${this.profile.name}'s RecipeSage profile`);
-    const message = encodeURIComponent(`Click to view ${this.profile.name}'s public RecipeSage profile: \n`);
-    const url = encodeURIComponent(this.getProfileUrl());
+  async openEmail() {
+    const subject = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
+    const message = await this.translate.get('pages.shareProfileModal.shareBody', {name:this.profile.name}).toPromise();
+    const url = encodeURIComponent(` ${this.getProfileUrl()}`);
+
     const win = window.open() as any;
     win.opener = null;
-    win.location = `mailto:info@example.com?&subject=${subject}&body=${message}${url}`;
+    win.location = `mailto:info@example.com?&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}${url}`;
   }
 }

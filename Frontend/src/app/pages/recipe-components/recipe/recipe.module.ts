@@ -12,9 +12,9 @@ import { AddRecipeToShoppingListModalPageModule } from '../add-recipe-to-shoppin
 import { AddRecipeToMealPlanModalPageModule } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.module';
 import { PrintRecipeModalPageModule } from '../print-recipe-modal/print-recipe-modal.module';
 import { ShareModalPageModule } from '@/pages/share-modal/share-modal.module';
-import { AuthModalPageModule } from '@/pages/auth-modal/auth-modal.module';
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
+import { GlobalModule } from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -32,12 +32,12 @@ import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
       }
     ]),
     PipesModule,
+    GlobalModule,
     RecipeDetailsPopoverPageModule,
     AddRecipeToShoppingListModalPageModule,
     AddRecipeToMealPlanModalPageModule,
     PrintRecipeModalPageModule,
     ShareModalPageModule,
-    AuthModalPageModule,
     ImageViewerModule,
     ScaleRecipeModule,
   ],

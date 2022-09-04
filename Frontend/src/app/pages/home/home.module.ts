@@ -10,6 +10,8 @@ import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 import { HomePopoverPageModule } from '@/pages/home-popover/home-popover.module';
 import { NullStateModule } from '@/components/null-state/null-state.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { NullStateModule } from '@/components/null-state/null-state.module';
         component: HomePage
       }
     ]),
+    GlobalModule,
     LogoIconModule,
     NullStateModule,
     HomePopoverPageModule,

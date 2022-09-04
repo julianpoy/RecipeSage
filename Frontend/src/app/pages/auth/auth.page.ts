@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, ModalController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
@@ -17,7 +18,12 @@ import { CapabilitiesService } from '@/services/capabilities.service';
   styleUrls: ['auth.page.scss'],
   providers: [ UserService ]
 })
-export class AuthPage {
+export class AuthPage implements OnInit {
+  @Input() startWithRegister: boolean | null;
+
+  showLogin = false;
+  redirect: string;
+
   isSelfHost = IS_SELFHOST;
 
   name = '';
@@ -25,12 +31,10 @@ export class AuthPage {
   password = '';
   confirmPassword = '';
 
-  showLogin = true;
-
-  redirect: string;
-
   constructor(
     public events: EventService,
+    public translate: TranslateService,
+    public modalCtrl: ModalController,
     public navCtrl: NavController,
     public utilService: UtilService,
     public loadingService: LoadingService,
@@ -49,150 +53,120 @@ export class AuthPage {
     }
   }
 
-  toggleLogin() {
+  ngOnInit() {
+    if (this.startWithRegister !== null) this.showLogin = !this.startWithRegister;
+  }
+
+  async toggleLogin() {
+
     this.showLogin = !this.showLogin;
   }
 
-  async presentToast(msg) {
+  async presentToast(message: string) {
     (await this.toastCtrl.create({
-      message: msg,
+      message,
       duration: 6000
     })).present();
   }
 
-  auth() {
+  async auth() {
     if (!this.showLogin) this.name = (document.getElementById('name') as HTMLInputElement).value;
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     this.password = (document.getElementById('password') as HTMLInputElement).value;
     if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
 
+    const invalidEmail = await this.translate.get('pages.auth.errors.invalidEmail').toPromise();
+    const noName = await this.translate.get('pages.auth.errors.noName').toPromise();
+    const noPassword = await this.translate.get('pages.auth.errors.noPassword').toPromise();
+    const noEmail = await this.translate.get('pages.auth.errors.noEmail').toPromise();
+    const passwordLength = await this.translate.get('pages.auth.errors.passwordLength').toPromise();
+    const passwordMatch = await this.translate.get('pages.auth.errors.passwordMatch').toPromise();
+    const incorrectLogin = await this.translate.get('pages.auth.errors.incorrectLogin').toPromise();
+    const emailTaken = await this.translate.get('pages.auth.errors.emailTaken').toPromise();
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
-      this.presentToast('Please enter a valid email address.');
+      this.presentToast(invalidEmail);
       return;
     }
     if (!this.showLogin && this.name.length < 1) {
-      this.presentToast('Please enter a name (you can enter a nickname!)');
+      this.presentToast(noName);
       return;
     }
     if (this.password.length === 0) {
-      this.presentToast('Please enter a password.');
+      this.presentToast(noPassword);
       return;
     }
     if (!this.showLogin && this.password.length < 6) {
-      this.presentToast('Please enter a password at least 6 characters long.');
+      this.presentToast(passwordLength);
       return;
     }
     if (this.email.length === 0) {
-      this.presentToast('Please enter your email address.');
+      this.presentToast(noEmail);
+      return;
+    }
+    if (!this.showLogin && this.password !== this.confirmPassword) {
+      this.presentToast(passwordMatch);
       return;
     }
 
     const loading = this.loadingService.start();
 
-    if (this.showLogin) {
-      this.userService.login({
+    const response = this.showLogin ? (
+      await this.userService.login({
         email: this.email,
         password: this.password
-      }).then(response => {
-        loading.dismiss();
+      }, {
+        412: () => this.presentToast(incorrectLogin)
+      })
+    ) : (
+      await this.userService.register({
+        name: this.name,
+        email: this.email,
+        password: this.password
+      }, {
+        406: () => this.presentToast(emailTaken)
+      })
+    );
+    loading.dismiss();
+    if (!response.success) return;
 
-        localStorage.setItem('token', response.token);
-        this.capabilitiesService.updateCapabilities();
+    localStorage.setItem('token', response.data.token);
+    this.capabilitiesService.updateCapabilities();
 
-        if ('Notification' in window && (Notification as any).permission === 'granted') {
-          this.messagingService.requestNotifications();
-        }
-
-        this.events.publish('auth:login');
-        this.handleRedirect();
-      }).catch(err => {
-        loading.dismiss();
-        switch (err.response.status) {
-          case 0:
-            this.presentToast('It looks like you\'re offline right now.');
-            break;
-          case 412:
-            this.presentToast('It looks like that email or password isn\'t correct.');
-            break;
-          default:
-            this.presentToast(this.utilService.standardMessages.unexpectedError);
-            break;
-        }
-      });
-    } else {
-      if (this.password === this.confirmPassword) {
-        this.userService.register({
-          name: this.name,
-          email: this.email,
-          password: this.password
-        }).then(response => {
-          loading.dismiss();
-
-          localStorage.setItem('token', response.token);
-          this.capabilitiesService.updateCapabilities();
-
-          if ('Notification' in window && (Notification as any).permission === 'granted') {
-            this.messagingService.requestNotifications();
-          }
-
-          this.events.publish('auth:register');
-          this.handleRedirect();
-        }).catch(err => {
-          loading.dismiss();
-          switch (err.response.status) {
-            case 0:
-              this.presentToast('It looks like you\'re offline right now.');
-              break;
-            case 412:
-              this.presentToast('Please enter an email address.');
-              break;
-            case 406:
-              this.presentToast('An account with that email address already exists.');
-              break;
-            default:
-              this.presentToast(this.utilService.standardMessages.unexpectedError);
-              break;
-          }
-        });
-      } else {
-        loading.dismiss();
-        this.presentToast('The password and confirmation you entered do not match.');
-      }
+    if ('Notification' in window && (Notification as any).permission === 'granted') {
+      this.messagingService.requestNotifications();
     }
+
+    this.events.publish('auth');
+    this.close();
   }
 
-  forgotPassword() {
+  async forgotPassword() {
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
-      this.presentToast('Please enter your account email and try again');
+      const invalidEmail = await this.translate.get('pages.auth.errors.invalidEmail').toPromise();
+      this.presentToast(invalidEmail);
       return;
     }
 
     const loading = this.loadingService.start();
 
-    this.userService.forgot({
-      email: this.email
-    }).then(async response => {
-      loading.dismiss();
-
-      const successToast = await this.toastCtrl.create({
-        message: `If there is a RecipeSage account associated with that email address,
-                  you should receive a password reset link within the next few minutes.`,
-        duration: 7000
-      });
-      successToast.present();
-    }).catch(err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          this.presentToast('It looks like you\'re offline right now.');
-          break;
-        default:
-          this.presentToast(this.utilService.standardMessages.unexpectedError);
-          break;
-      }
+    const response = await this.userService.forgot({
+      email: this.email,
     });
+
+    loading.dismiss();
+
+    if (!response) return;
+
+    const message = await this.translate.get('pages.auth.forgot.toast').toPromise();
+
+    const successToast = await this.toastCtrl.create({
+      message,
+      duration: 7000
+    });
+    successToast.present();
   }
 
   showLegal(e) {
@@ -200,7 +174,12 @@ export class AuthPage {
     this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }
 
-  handleRedirect() {
-    this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
+  async close() {
+    const isInModal = await this.modalCtrl.getTop();
+    if (isInModal) {
+      await this.modalCtrl.dismiss();
+    } else {
+      this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
+    }
   }
 }

@@ -1,0 +1,1222 @@
+{
+  "====== Pages.Welcome ======": "",
+
+  "pages.app.oldBrowserAlert.header": "Unsupported Browser",
+  "pages.app.oldBrowserAlert.message": "It looks like you're using an old browser that isn't supported. Some functionality may not work or may be broken. Please switch to a modern browser such as Firefox for full functionality.",
+
+  "pages.app.nav.welcome": "Welcome",
+  "pages.app.nav.login": "Log In",
+  "pages.app.nav.register": "Create an Account",
+  "pages.app.nav.download": "Download and Install",
+  "pages.app.nav.contribute": "Contribute!",
+  "pages.app.nav.about": "About & Support",
+  "pages.app.nav.home": "My Recipes",
+  "pages.app.nav.labels": "Manage Labels",
+  "pages.app.nav.people": "People & Profile",
+  "pages.app.nav.messages": "Messages",
+  "pages.app.nav.inbox": "Recipe Inbox",
+  "pages.app.nav.newrecipe": "Create Recipe",
+  "pages.app.nav.shopping": "Shopping Lists",
+  "pages.app.nav.meals": "Meal Plans",
+  "pages.app.nav.settings": "Settings",
+
+  "====== Pages.Welcome ======": "",
+
+  "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
+  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.title": "All of your recipes in one place",
+  "pages.welcome.subtitle": "A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.registerButton": "Create an account",
+  "pages.welcome.loginButton": "Log In",
+  "pages.welcome.appDemoImageAlt": "My Recipes Preview",
+
+  "pages.welcome.description.welcome": "Welcome to RecipeSage!",
+  "pages.welcome.description.1": "RecipeSage is a free (donation based & open source) personal recipe keeper, meal planner, and shopping list manager for Web, IOS, and Android.",
+  "pages.welcome.description.2": "Quickly capture and save recipes from any website simply by entering the website URL. Sync your recipes, meal plans, and shopping lists between all of your devices. Share your recipes, shopping lists, and meal plans with family and friends.",
+
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features": "What can RecipeSage do?",
+  "pages.welcome.description.features.1.title": "Import from any URL:",
+  "pages.welcome.description.features.1.description": "Create a recipe simply by punching in a web URL",
+  "pages.welcome.description.features.2.title": "Powerful search:",
+  "pages.welcome.description.features.2.description": "Search every field within your recipes including misspellings and similar words",
+  "pages.welcome.description.features.3.title": "Labelling/categorization system:",
+  "pages.welcome.description.features.3.description": "Tag your recipes and filter by tags",
+  "pages.welcome.description.features.4.title": "Drag and drop meal planning:",
+  "pages.welcome.description.features.4.description": "Schedule your meals interactively, quickly and easily",
+  "pages.welcome.description.features.5.title": "Shopping lists:",
+  "pages.welcome.description.features.5.description": "Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined",
+  "pages.welcome.description.features.6.title": "Sharing:",
+  "pages.welcome.description.features.6.description": "Share your recipes, collaborate on meal plans and shopping lists with your family or friends",
+  "pages.welcome.description.features.7.title": "Import:",
+  "pages.welcome.description.features.7.description": "Supports Pepperplate, Living Cookbook, and Paprika",
+  "pages.welcome.description.features.8.title": "Export:",
+  "pages.welcome.description.features.8.description": "Back up your recipes in multiple formats for data portability",
+
+  "pages.welcome.description.cta": "Why RecipeSage?",
+  "pages.welcome.description.cta.1": "Free (donation based)",
+  "pages.welcome.description.cta.2": "Open source",
+  "pages.welcome.description.cta.3": "Easy to use",
+  "pages.welcome.description.cta.4": "Available on desktop and all mobile devices",
+  "pages.welcome.description.cta.5": "Import recipes from any URL",
+
+  "====== Pages.Auth ======": "",
+
+  "pages.auth.title.login": "Log In",
+  "pages.auth.title.register": "Create an Account",
+
+  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href='https://recipesage.com'>RecipeSage.com</a> or any of the accounts located on the main site.",
+
+  "pages.auth.welcome.login": "Welcome back!",
+  "pages.auth.welcome.login.sub": "Please login with your account details below.",
+
+  "pages.auth.welcome.register": "Welcome!",
+  "pages.auth.welcome.register.sub1": "We need a few details to create your account.",
+  "pages.auth.welcome.register.sub2": "After this, you'll be set up and ready to go.",
+
+  "pages.auth.input.name": "Full Name or Nickname",
+  "pages.auth.input.email": "Email",
+  "pages.auth.input.password": "Password",
+  "pages.auth.input.confirmPassword": "Confirm Password",
+
+  "pages.auth.selfhostWarning2": "Make sure you trust the site owner of this selfhost copy",
+
+  "pages.auth.button.login": "Log In",
+  "pages.auth.button.register": "Create Account",
+  "pages.auth.button.forgotPassword": "Forgot password",
+  "pages.auth.button.registerInstead": "Create an account instead",
+  "pages.auth.button.loginInstead": "Log in instead",
+
+  "pages.auth.error.invalidEmail": "Please enter a valid email address.",
+  "pages.auth.error.noName": "Please enter a name (you can enter a nickname!)",
+  "pages.auth.error.noPassword": "Please enter a password.",
+  "pages.auth.error.passwordLength": "Please enter a password at least 6 characters long.",
+  "pages.auth.error.noEmail": "Please enter your email address.",
+  "pages.auth.error.passwordMatch": "The password and confirmation you entered do not match.",
+  "pages.auth.error.incorrectLogin": "It looks like that email or password isn't correct.",
+  "pages.auth.error.emailTaken": "An account with that email address already exists.",
+
+  "pages.auth.forgot.toast": "If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.",
+
+  "====== Pages.Home ======": "",
+
+  "pages.home.title.selectionMode": "{{count}} Selected",
+  "pages.home.title.main": "My Recipes",
+  "pages.home.title.inbox": "Recipe Inbox",
+
+  "pages.home.title.sharedAll": "Shared Recipes",
+  "pages.home.title.sharedLabel": "Shared Label: {{label}}",
+  "pages.home.title.sharedAll.withProfile": "{{name}}'s Shared Recipes",
+  "pages.home.title.sharedLabel.withProfile": "{{name}}'s Shared Label: {{label}}",
+
+  "pages.home.search.placeholder": "Search",
+
+  "pages.home.recipe.source": "Source:",
+  "pages.home.recipe.from": "From:",
+  "pages.home.recipe.labels": "Labels:",
+  "pages.home.recipe.selected": "Selected",
+
+  "pages.home.errors.emptyCollection.title": "This user's collection is empty",
+  "pages.home.errors.emptyCollection.message": "This shared collection has no recipes in it.",
+
+  "pages.home.errors.noRecipes.title": "Welcome to RecipeSage!",
+  "pages.home.errors.noRecipes.message1": "This is where your recipes will appear.",
+  "pages.home.errors.noRecipes.message2": "It looks like you don't have any recipes yet.",
+  "pages.home.errors.noRecipes.message3": "Click the + button in the bottom right corner to add one!",
+  "pages.home.errors.noRecipes.message4": "You can also import recipes!",
+  "pages.home.errors.noRecipes.message5": "Use the side menu to go to settings -> import",
+  "pages.home.errors.noRecipes.message6": "You can install the clip tool extension on desktop browsers:",
+  "pages.home.errors.noRecipes.message7": "For detailed how-tos, visit the Tips Tricks & Tutorials page",
+
+  "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
+  "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
+
+
+  "pages.home.errors.noSearchResults.message1": "No search results.",
+  "pages.home.errors.noSearchResults.message2": "Search includes:",
+  "pages.home.errors.noSearchResults.message3": "Title, description, source, ingredients, instructions, and notes.",
+
+  "pages.home.addLabel.header": "Add Label to Selected Recipes",
+  "pages.home.addLabel.message": "Enter the name for the label",
+  "pages.home.addLabel.placeholder": "Label Name",
+
+  "pages.home.deleteSelected.header": "Confirm Delete",
+  "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible.",
+  "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible. The following recipes will be deleted: {{recipeNames}}",
+
+
+  "====== Pages.NotFound ======": "",
+
+  "pages.notfound.title": "Page Not Found",
+  "pages.notfound.error.title": "Page Not Found!",
+  "pages.notfound.error.message1" : "It looks like the page you are looking for doesn't exist.",
+  "pages.notfound.error.message2" : "Check to see if you typed the URL correctly.",
+  "pages.notfound.error.message3" : "If you're still having trouble, or if somewhere in the app took you here, please contact me.",
+  "pages.notfound.error.contact" : "Contact me",
+  "pages.notfound.error.goHome" : "Click here to go to your recipes",
+
+  "====== Pages.HomePopover ======": "",
+
+  "pages.homepopover.options": "Options",
+  "pages.homepopover.options.layout": "Layout",
+  "pages.homepopover.options.layout.tiles": "Tiles",
+  "pages.homepopover.options.layout.list": "List",
+  "pages.homepopover.options.showLabels": "Show Labels",
+  "pages.homepopover.options.showLabelToggles": "Show Label Toggles",
+  "pages.homepopover.options.showImages": "Show Images",
+  "pages.homepopover.options.showSource": "Show Source",
+  "pages.homepopover.options.showRecipeDescription": "Show Description",
+
+  "pages.homepopover.options.sortBy": "Sort by",
+  "pages.homepopover.options.sortBy.title": "Title",
+  "pages.homepopover.options.sortBy.createdNewest": "Created (newest first)",
+  "pages.homepopover.options.sortBy.createdOldest": "Created (oldest first)",
+  "pages.homepopover.options.sortBy.updatedNewest": "Updated (newest first)",
+  "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
+
+  "pages.homepopover.options.filterByLabel": "Filter by Label",
+  "pages.homepopover.options.matchAllLabels": "Match All Labels",
+  "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
+  "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
+
+  "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
+
+  "pages.homepopover.labelNull": "You don't have any labels. You can create labels on the recipe details page.",
+
+  "====== Pages.RecipeDetails ======": "",
+
+  "pages.recipeDetails.pageTitle": "Recipe Details",
+  "pages.recipeDetails.source": "Source",
+  "pages.recipeDetails.activeTime": "Active Time",
+  "pages.recipeDetails.totalTime": "Total Time",
+  "pages.recipeDetails.yield": "Yield",
+
+  "pages.recipeDetails.sentBy": "This recipe was sent to you by {{name}}",
+  "pages.recipeDetails.sentByAction": "Add this recipe to your recipes by clicking the button at the bottom of the page.",
+
+  "pages.recipeDetails.ingredients": "Ingredients",
+  "pages.recipeDetails.noIngredients": "No Ingredients",
+
+  "pages.recipeDetails.scaleStatus": "{{scale}}x scale (click to change)",
+
+  "pages.recipeDetails.instructions": "Instructions",
+  "pages.recipeDetails.noInstructions": "No Instructions",
+
+  "pages.recipeDetails.notes": "Notes",
+  "pages.recipeDetails.noNotes": "No Notes",
+
+  "pages.recipeDetails.labels": "Labels",
+  "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
+
+  "pages.recipeDetails.labels.clickToCreate": "Click to create",
+  "pages.recipeDetails.labels.alreadyAdded": "Already added",
+  "pages.recipeDetails.labels.clickToAdd": "Click to add",
+
+  "pages.recipeDetails.created": "Created",
+  "pages.recipeDetails.updated": "Last edited",
+  "pages.recipeDetails.saveToMyRecipes": "Save This Recipe to My Recipes",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.doesNotBelongToYou": "This recipe does not belong to you yet.",
+  "pages.recipeDetails.requiresAccountToSave": "Create an account or login to save this recipe to your collection.",
+  "pages.recipeDetails.registerOrLoginToSave": "Register/Login to Save This Recipe",
+
+  "pages.recipeDetails.edit": "Edit",
+  "pages.recipeDetails.delete": "Delete",
+  "pages.recipeDetails.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetails.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetails.share": "Share",
+  "pages.recipeDetails.print": "Print",
+  "pages.recipeDetails.makeACopy": "Make a Copy",
+
+  "pages.recipeDetails.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetails.unPinRecipe": "Unpin Recipe",
+
+  "pages.recipeDetails.delete.header": "Confirm Delete",
+  "pages.recipeDetails.delete.message": "This will permanently delete the recipe from your account. This action is irreversible.",
+
+  "pages.recipeDetails.enterLabelWarning": "Please enter a label and press enter to label this recipe.",
+
+  "pages.recipeDetails.deleteLabel.header": "Confirm Label Removal",
+  "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
+
+  "pages.recipeDetails.cloned": "The recipe has been saved to your account",
+
+  "====== Pages.RecipeDetailsPopover ======": "",
+
+  "pages.recipeDetailsPopover.options": "Options",
+  "pages.recipeDetailsPopover.keepScreenOn": "Keep Screen On",
+  "pages.recipeDetailsPopover.actions": "Actions",
+  "pages.recipeDetailsPopover.addToShoppingList": "Add to Shopping List",
+  "pages.recipeDetailsPopover.addToMealPlan": "Add to Meal Plan",
+  "pages.recipeDetailsPopover.share": "Share",
+  "pages.recipeDetailsPopover.print": "Print",
+
+  "pages.recipeDetailsPopover.pinRecipe": "Pin Recipe Open",
+  "pages.recipeDetailsPopover.unPinRecipe": "Unpin Recipe",
+
+  "pages.recipeDetailsPopover.edit": "Edit",
+  "pages.recipeDetailsPopover.makeACopy": "Make a Copy",
+  "pages.recipeDetailsPopover.dangerZone": "Danger Zone",
+  "pages.recipeDetailsPopover.delete": "Delete Recipe",
+
+  "====== Pages.ResettableSelectPopover ======": "",
+
+  "pages.rselectpopover.resetAll": "Reset All",
+  "pages.rselectpopover.done": "Done",
+
+  "====== Pages.About ======": "",
+
+  "pages.about.title": "About & Support",
+  "pages.about.links.details": "About Me & RecipeSage",
+  "pages.about.links.contact": "Contact",
+  "pages.about.links.contribute": "Contribute!",
+  "pages.about.links.tipsTricksTutorials": "Tips, tricks and tutorials",
+  "pages.about.links.releaseNotes": "Release Notes",
+  "pages.about.links.legal": "Legal, agreements and disclaimers",
+  "pages.about.emailMe": "Feel free to email me at",
+  "pages.about.socialTitle": "Social Media",
+
+  "====== Pages.Contact ======": "",
+
+  "pages.contact.title": "Contact Me",
+  "pages.contact.subtitle": "Contact Info",
+  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, please email me at",
+  "pages.contact.website": "Additional contact info is available on my personal website, or via the social media links below. My personal website is",
+  "pages.contact.socialTitle": "Social Media",
+
+  "====== Pages.Contribute ======": "",
+
+  "pages.contribute.title": "Contribute",
+  "pages.contribute.subtitle": "Contribute to RecipeSage",
+  "pages.contribute.mission": "My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.",
+  "pages.contribute.purpose": "However, as RecipeSage grows, hosting costs for servers and images begin to add up.",
+  "pages.contribute.monthly": "Monthly",
+  "pages.contribute.monthly.description": "You will unlock bonus features for the months that you are subscribed.",
+  "pages.contribute.oneTime": "One-Time",
+  "pages.contribute.oneTime.description": "You will unlock bonus features for one year.",
+  "pages.contribute.custom": "Custom",
+  "pages.contribute.action": "Contribute!",
+  "pages.contribute.tosActionTitle": "contributing",
+
+  "pages.contribute.bonus.title": "As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features for your account. You will be able to:",
+  "pages.contribute.bonus.feature.1": "Upload images in high-resolution",
+  "pages.contribute.bonus.feature.2": "Upload multiple images for each recipe",
+  "pages.contribute.bonus.enabled": "Enabled",
+
+  "pages.contribute.bonus.reason": "Bonus features features are accessible only to contributors because these particular features are costly for me to host.",
+
+  "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
+  "pages.contribute.cta.2": "Please consider contributing toward the ongoing maintenance of RecipeSage.",
+
+  "pages.contribute.minimum": "Unfortunately the minimum amount is ${{amount}} due to transaction fees - apologies",
+
+  "====== Pages.ContributeThankYou ======": "",
+
+  "pages.contributeThankYou.title": "Thank You!",
+  "pages.contributeThankYou.thanks": "Thank you for being a part of the RecipeSage family and helping to keep it alive!",
+  "pages.contributeThankYou.bonus": "Bonus features should be unlocked for your account shortly.",
+  "pages.contributeThankYou.questions": "Please feel free to contact me with any questions, concerns or comments.",
+
+  "====== Pages.ContributeCancel ======": "",
+
+  "pages.contributeCancel.title": "We need your help!",
+  "pages.contributeCancel.cta.1": "RecipeSage is donation based - every contribution helps!",
+  "pages.contributeCancel.cta.2": "Unfortunately, RecipeSage doesn't get many donations since it is a fairly small platform.",
+  "pages.contributeCancel.cta.3": "In order to keep things free while paying for server costs, we need your help.",
+  "pages.contributeCancel.cta.4": "Please reconsider - your contribution is truly appreciated!",
+  "pages.contributeCancel.contribute": "Contribute",
+
+  "====== Pages.DownloadAndInstall ======": "",
+
+  "pages.downloadAndInstall.title": "Download & Install",
+  "pages.downloadAndInstall.subtitle": "Click a platform for installation instructions",
+  "pages.downloadAndInstall.done": "This will install RecipeSage as a native application on your device.",
+
+  "pages.downloadAndInstall.thisDevice": "This Device",
+
+  "pages.downloadAndInstall.android.title": "Android Device",
+  "pages.downloadAndInstall.android.instructionHeader": "To install RecipeSage on Android:",
+  "pages.downloadAndInstall.android.step.1": "Open the Chrome browser",
+  "pages.downloadAndInstall.android.step.2": "Open the browser menu via a button in your browser that looks like this:",
+  "pages.downloadAndInstall.android.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.ios.title": "Apple Mobile Device",
+  "pages.downloadAndInstall.ios.instructionHeader": "To install RecipeSage on Apple Mobile Devices (IOS):",
+  "pages.downloadAndInstall.ios.step.1": "Open Safari",
+  "pages.downloadAndInstall.ios.step.2": "Open the share menu via a button in the bottom bar that looks like this:",
+  "pages.downloadAndInstall.ios.step.3": "Click \"Add to Home Screen\"",
+
+  "pages.downloadAndInstall.desktop.title": "Desktop or Laptop Devices",
+  "pages.downloadAndInstall.desktop.instructionHeader": "To install RecipeSage on desktop or laptop devices:",
+  "pages.downloadAndInstall.desktop.step.1": "Open Google Chrome browser",
+  "pages.downloadAndInstall.desktop.step.2": "Open the browser menu via the button in the top right corner that looks like this:",
+  "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
+
+  "====== Pages.LabelsPopover ======": "",
+
+  "pages.labelsPopover.title": "Options",
+  "pages.labelsPopover.options.showCreatedAt": "Show Created At",
+  "pages.labelsPopover.options.selectMultipleLabels": "Select Multiple Labels",
+  "pages.labelsPopover.options.unselectLabels": "Unselect All Labels",
+
+  "====== Pages.Labels ======": "",
+
+  "pages.labels.title": "My Labels - Manage",
+  "pages.labels.selectionModeTitle": "{{count}} Selected",
+  "pages.labels.subtitle": "You have {{count}} total labels. Click a label to view.",
+  "pages.labels.label.recipeCount": "{{count}} Recipes",
+  "pages.labels.label.createdAt": "Created {{dateString}}",
+  "pages.labels.label.selected": "Selected",
+
+  "pages.labels.nullState.1": "You don't have any labels yet.",
+  "pages.labels.nullState.2": "Labels can be created on the recipe details page.",
+  "pages.labels.nullState.3": "Labels only exist so long as they are assigned to at least one recipe.",
+
+  "pages.labels.modal.delete.header": "Confirm Delete",
+  "pages.labels.modal.delete.message": "This will permanently delete the selected labels from your account. This action is irreversible. The following labels will be deleted: {{labelTitles}}",
+
+  "====== Pages.ManageLabelModal ======": "",
+
+  "pages.manageLabelModal.title": "Manage Label: {{name}}",
+  "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
+  "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
+  "pages.manageLabelModal.warning": "Note: These actions are permanent",
+  "pages.manageLabelModal.rename": "Rename",
+  "pages.manageLabelModal.merge": "Merge With Another Label",
+  "pages.manageLabelModal.delete": "Delete",
+
+  "pages.manageLabelModal.renameConflict.header": "Error",
+  "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
+
+  "pages.manageLabelModal.rename.header": "Error",
+  "pages.manageLabelModal.rename.message": "Rename label: {{name}}",
+
+  "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
+
+  "pages.manageLabelModal.notFound.header": "Label not found",
+  "pages.manageLabelModal.notFound.subHeader": "The target label \"{{name}}\" was not found",
+  "pages.manageLabelModal.notFound.message": "You must enter the title for an existing label to merge into.",
+
+  "pages.manageLabelModal.selfMerge.header": "Cannot merge label to itself",
+  "pages.manageLabelModal.selfMerge.subHeader": "The source and target labels must be different labels",
+
+  "pages.manageLabelModal.mergeComplete.header": "Merge Complete!",
+  "pages.manageLabelModal.mergeComplete.subHeader": "Label \"{{sourceTitle}}\" has been merged into \"{{targetTitle}}\" successfully",
+  "pages.manageLabelModal.mergeComplete.message": "The label \"{{sourceTitle}}\" has been deleted - you'll find all it's recipes moved to \"{{targetTitle}}\".",
+
+  "pages.manageLabelModal.merge.header": "Merge label: {{title}}",
+  "pages.manageLabelModal.merge.subHeader": "What label would you like to merge \"{{title}}\" with?",
+  "pages.manageLabelModal.merge.message": "All recipes in \"{{title}}\" will be relabeled with the target label instead, and the label \"{{title}}\" will be removed.",
+  "pages.manageLabelModal.merge.placeholder": "Target label name",
+
+  "====== Pages.MealPlan ======": "",
+
+  "pages.mealPlan.title": "Meal Plan - {{name}}",
+
+  "pages.mealPlan.modal.emptyDays.header": "Empty day(s) selected",
+  "pages.mealPlan.modal.emptyDays.message": "The day(s) you've selected do not contain any meal plan items. You'll need to select at least one day with meal plan items.",
+
+  "pages.mealPlan.modal.copy.header": "Copy To",
+  "pages.mealPlan.modal.copy.message": "This will copy the meal items on the selected days to a series of days starting on the day you select. Please click the day you'd like to copy to.",
+
+  "pages.mealPlan.modal.move.header": "Move To",
+  "pages.mealPlan.modal.move.message": "This will move the meal items on the selected days to a series of days starting on the day you select. Please click the day you'd like to move to.",
+
+  "pages.mealPlan.modal.delete.header": "Delete Meal Plan Items",
+  "pages.mealPlan.modal.delete.message": "This will delete all items on {{daysList}}",
+
+  "pages.mealPlan.modal.noRecipes.header": "No Recipes",
+  "pages.mealPlan.modal.noRecipes.message": "The selected days contain no recipes.\nKeep in mind that only meal items that are recipes can be added to the shopping list.\nYou cannot add manually entered meal items to the shopping list from here.",
+
+  "pages.mealPlan.modal.copyConfirm.header": "Copy All Selected Items",
+  "pages.mealPlan.modal.copyConfirm.messageSingle": "This will copy the meal items on {{selectedDayList}} to {{destDay}}",
+  "pages.mealPlan.modal.copyConfirm.messageMultiple": "This will copy the meal items on {{selectedDayList}} to the days on and following {{destDay}}",
+  "pages.mealPlan.modal.copyConfirm.change": "Select Another Day",
+
+  "pages.mealPlan.modal.moveConfirm.header": "Move All Selected Items",
+  "pages.mealPlan.modal.moveConfirm.messageSingle": "This will move the meal items on {{selectedDayList}} to {{destDay}}",
+  "pages.mealPlan.modal.moveConfirm.messageMultiple": "This will move the meal items on {{selectedDayList}} to the days on and following {{destDay}}",
+  "pages.mealPlan.modal.moveConfirm.change": "Select Another Day",
+
+  "====== Pages.MealPlanBulkPinModal ======": "",
+
+  "pages.mealPlanBulkPinModal.title": "Pin Meal Items",
+  "pages.mealPlanBulkPinModal.instructions1": "Select the meal items that you'd like to pin open.",
+  "pages.mealPlanBulkPinModal.instructions2": "Note: You can only pin items that are linked to recipes.",
+  "pages.mealPlanBulkPinModal.selectAll": "Select All",
+  "pages.mealPlanBulkPinModal.deselectAll": "Deselect All",
+  "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(not linked to a recipe)",
+  "pages.mealPlanBulkPinModal.cancel": "Cancel",
+  "pages.mealPlanBulkPinModal.pin": "Pin",
+
+  "====== Pages.MealPlanItemDetailsModal ======": "",
+
+  "pages.mealPlanItemDetailsModal.title": "Meal Plan Item Details",
+  "pages.mealPlanItemDetailsModal.scheduled": "Scheduled for {{meal}} on {{date}}",
+  "pages.mealPlanItemDetailsModal.lastModified": "Last modified by {{name}} on {{date}}",
+  "pages.mealPlanItemDetailsModal.clickToOpen": "Click to open recipe",
+
+  "pages.mealPlanItemDetailsModal.actions.addToShoppingList": "Add this recipe to shopping list",
+  "pages.mealPlanItemDetailsModal.actions.pinRecipe": "Pin this recipe open",
+  "pages.mealPlanItemDetailsModal.actions.unpinRecipe": "Unpin this recipe",
+  "pages.mealPlanItemDetailsModal.actions.edit": "Edit this item",
+  "pages.mealPlanItemDetailsModal.actions.duplicate": "Duplicate this item",
+  "pages.mealPlanItemDetailsModal.actions.delete": "Delete this item",
+  "pages.mealPlanItemDetailsModal.actions.close": "Close",
+
+  "pages.mealPlanItemDetailsModal.delete.header": "Confirm Removal",
+  "pages.mealPlanItemDetailsModal.delete.message": "This will remove \"{{title}}\" from this meal plan.",
+
+  "====== Pages.MealPlanPopover ======": "",
+
+  "pages.mealPlanPopover.options.title": "Options",
+  "pages.mealPlanPopover.options.startWeekOn.title": "Start week on",
+  "pages.mealPlanPopover.options.startWeekOn.monday": "Monday",
+  "pages.mealPlanPopover.options.startWeekOn.sunday": "Sunday",
+
+
+  "pages.mealPlanPopover.actions.title": "Actions",
+  "pages.mealPlanPopover.actions.pinRecipesOpen": "Pin recipes open",
+  "pages.mealPlanPopover.actions.addToShoppingList": "Add selected to shopping list",
+  "pages.mealPlanPopover.actions.copyDays": "Copy selected day(s)",
+  "pages.mealPlanPopover.actions.moveDays": "Move selected day(s)",
+  "pages.mealPlanPopover.actions.deleteDays": "Delete selected day(s)",
+
+  "pages.mealPlanPopover.dangerZone.title": "Danger Zone",
+  "pages.mealPlanPopover.dangerZone.delete": "Delete meal plan",
+
+  "pages.mealPlanPopover.delete.header": "Confirm Delete",
+  "pages.mealPlanPopover.delete.message": "This will permanently remove this meal plan from your account. Note: If you're only a collaborator on this meal plan, it'll only be removed from your account. If you own this meal plan, it will be removed from all other collaborators accounts.",
+
+  "====== Pages.MealPlans ======": "",
+
+  "pages.mealPlans.title": "Meal Plans",
+  "pages.mealPlans.metadata.createdOn": "Created {{date}}",
+  "pages.mealPlans.metadata.collaborators": "In collaboration with:",
+  "pages.mealPlans.metadata.createdBy": "Created by {{name}}",
+  "pages.mealPlans.metadata.youOwn": "You own this meal plan",
+
+  "pages.mealPlans.noPlans": "You have no meal plans.",
+  "pages.mealPlans.toCreate": "To create a meal plan, press the plus button in the bottom corner.",
+
+  "====== Pages.NewMealPlanItemModal ======": "",
+
+  "pages.newMealPlanItemModal.title.update": "Update Meal Plan Item",
+  "pages.newMealPlanItemModal.title.new": "Add Meal Plan Item",
+  "pages.newMealPlanItemModal.inputType.recipe": "Choose Recipe",
+  "pages.newMealPlanItemModal.inputType.manual": "Manual Entry",
+  "pages.newMealPlanItemModal.itemTitle": "Item title",
+  "pages.newMealPlanItemModal.date": "Date",
+
+  "pages.newMealPlanItemModal.save": "Save Changes",
+  "pages.newMealPlanItemModal.create": "Add to Meal Plan",
+
+  "====== Pages.NewMealPlanModal ======": "",
+
+  "pages.newMealPlanModal.title": "New meal planner",
+  "pages.newMealPlanModal.input.title": "Title",
+  "pages.newMealPlanModal.createAndShare": "Create and Share",
+  "pages.newMealPlanModal.create": "Create",
+
+  "====== Pages.MessageThread ======": "",
+
+  "pages.messageThread.title": "Conversation with {{name}}",
+  "pages.messageThread.clickToOpen": "Click to open",
+  "pages.messageThread.recipeDeleted": "Recipe deleted",
+  "pages.messageThread.yourRecipeDeleted": "Your copy of this recipe no longer exists",
+  "pages.messageThread.recipeCopySent": "A copy of this recipe was sent",
+
+  "pages.messageThread.sending": "Sending...",
+  "pages.messageThread.sent": "Sent!",
+  "pages.messageThread.messagePlaceholder": "Message...",
+
+  "====== Pages.Messages ======": "",
+
+  "pages.messages.title": "Messages",
+  "pages.messages.history.you": "You",
+  "pages.messages.history.sentRecipe": "Sent a recipe",
+
+  "pages.messages.noMessages": "You have no message threads.",
+  "pages.messages.instructions": "To start a conversation with someone, press the plus button in the bottom corner.",
+
+  "pages.messages.warning": "Warning:",
+  "pages.messages.notificationsRequired": "Notifications must be enabled for messaging to work properly.",
+  "pages.messages.notificationsInstructions": "See how to re-enable notifications here",
+
+  "====== Pages.NewMessageModal ======": "",
+
+  "pages.newMessageModal.title": "New Message Thread",
+  "pages.newMessageModal.input.target": "Enter a RecipeSage user email or @handle",
+  "pages.newMessageModal.compose": "Compose a message",
+  "pages.newMessageModal.input.messagePlaceholder": "Hello! I'd like to chat on RecipeSage",
+  "pages.newMessageModal.send": "Send",
+
+  "pages.newMessageModal.defaultMessage": "Hello! I'd like to chat on RecipeSage",
+
+  "====== Pages.AddRecipeToMealPlanModal ======": "",
+
+  "pages.addRecipeToMealPlanModal.title": "Add Recipe To Meal Plan",
+  "pages.addRecipeToMealPlanModal.instructions1": "First, select the destination meal plan:",
+  "pages.addRecipeToMealPlanModal.loading": "Loading meal plans...",
+  "pages.addRecipeToMealPlanModal.selectDestination": "Select Meal Plan",
+  "pages.addRecipeToMealPlanModal.noMealPlans": "You have no meal plans.",
+  "pages.addRecipeToMealPlanModal.createMealPlan": "Create a Meal Plan",
+
+  "pages.addRecipeToMealPlanModal.add": "Add to Meal Plan",
+  "pages.addRecipeToMealPlanModal.selectMealPlan": "Select a meal plan",
+  "pages.addRecipeToMealPlanModal.selectMeal": "Select a meal",
+
+  "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Excellent! Now select the meal plan you just created.",
+
+  "====== Pages.AddRecipeToShoppingListModal ======": "",
+
+  "pages.addRecipeToShoppingListModal.title.singular": "Add Recipe To Shopping List",
+  "pages.addRecipeToShoppingListModal.title.plural": "Add Recipes To Shopping List",
+  "pages.addRecipeToShoppingListModal.selectDestination": "Select the destination shopping list:",
+  "pages.addRecipeToShoppingListModal.loading": "Loading shopping lists...",
+  "pages.addRecipeToShoppingListModal.destination": "Destination Shopping List",
+  "pages.addRecipeToShoppingListModal.noShoppingLists": "You have no shopping lists.",
+  "pages.addRecipeToShoppingListModal.createShoppingList": "Create a Shopping List",
+  "pages.addRecipeToShoppingListModal.add": "Add to List",
+
+  "pages.addRecipeToShoppingListModal.newListSuccess": "Excellent! Now select the shopping list you just created.",
+
+  "====== Pages.EditRecipe ======": "",
+
+  "pages.editRecipe.title.edit": "Edit Recipe",
+  "pages.editRecipe.title.new": "New Recipe",
+  "pages.editRecipe.autoclip": "Autofill fields from URL (beta)",
+
+  "pages.editRecipe.input.title": "Title",
+  "pages.editRecipe.input.description": "Description",
+  "pages.editRecipe.input.yield": "Yield",
+  "pages.editRecipe.input.activeTime": "Active Time",
+  "pages.editRecipe.input.totalTime": "Total Time",
+  "pages.editRecipe.input.source": "Source",
+  "pages.editRecipe.input.sourceUrl": "Source URL",
+  "pages.editRecipe.input.ingredients": "Ingredients",
+  "pages.editRecipe.input.instructions": "Instructions",
+  "pages.editRecipe.input.notes": "Notes",
+
+  "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
+  "pages.editRecipe.save": "Save",
+  "pages.editRecipe.create": "Create",
+
+  "pages.editRecipe.titleRequired": "Please provide a recipe title (the only required field).",
+
+  "pages.editRecipe.clip.header": "Autofill fields from URL",
+  "pages.editRecipe.clip.subHeader": "Enter a website URL to grab recipe data",
+  "pages.editRecipe.clip.message": "Note: This feature is in beta",
+  "pages.editRecipe.clip.placeholder": "Recipe URL",
+  "pages.editRecipe.clip.invalidUrl": "Error: You must provide a valid URL",
+  "pages.editRecipe.clip.loading": "Please wait...",
+  "pages.editRecipe.clip.failed": "Failed to autofill from that URL",
+
+  "pages.editRecipe.addImage.header": "Add Image by URL",
+  "pages.editRecipe.addImage.message": "Enter an image URL to be added to the recipe",
+  "pages.editRecipe.addImage.placeholder": "Image URL",
+  "pages.editRecipe.addImage.downloading": "Downloading image...",
+  "pages.editRecipe.addImage.invalidUrl": "Please enter a valid image URL",
+
+  "====== Pages.EditRecipePopover ======": "",
+
+  "pages.editRecipePopover.actions": "Actions",
+  "pages.editRecipePopover.addImage": "Add Image by URL",
+
+  "====== Pages.PrintRecipeModal ======": "",
+
+  "pages.printRecipeModal.title": "Select print layout",
+  "pages.printRecipeModal.print": "Print",
+
+  "pages.printRecipeModal.template.standard": "Standard",
+  "pages.printRecipeModal.template.standardNoImg": "Standard No Image",
+  "pages.printRecipeModal.template.halfSheetCols": "Half Sheet, Columns",
+  "pages.printRecipeModal.template.halfSheetCompactNoCols": "Half Sheet, Compact, No Columns",
+
+  "====== Pages.Account ======": "",
+
+  "pages.account.title": "Account & Credentials",
+
+  "pages.account.description": "Here you can update and change aspects about your account",
+  "pages.account.creds.title": "Credentials and Details",
+  "pages.account.creds.name": "Name/Nickname",
+  "pages.account.creds.name.save": "Save Name",
+  "pages.account.creds.email": "Email",
+  "pages.account.creds.email.save": "Save Email",
+  "pages.account.creds.password": "Password",
+  "pages.account.creds.password.confirm": "Confirm Password",
+  "pages.account.creds.password.save": "Save Password",
+  "pages.account.creds.instructions": "To change a field above, tap the field, edit it, and press the save button that appears.",
+
+  "pages.account.stats.title": "Stats",
+  "pages.account.stats.recipeCount": "Recipe Count",
+  "pages.account.stats.recipeImageCount": "Recipe Image Count",
+  "pages.account.stats.messageCount": "Total Message Count",
+  "pages.account.stats.createdAt": "Account Created",
+  "pages.account.stats.lastLogin": "Last Login",
+
+  "pages.account.bonus.title": "Bonus Feature Status",
+  "pages.account.bonus.description": "Contributors unlock certain features that are costly to host:",
+  "pages.account.bonus.highResImages": "High Resolution Images",
+  "pages.account.bonus.multipleImages": "Multiple Images Per Recipe",
+
+  "pages.account.bonus.enabled": "Enabled",
+  "pages.account.bonus.notEnabled": "Not Enabled",
+  "pages.account.bonus.subscriptionExpired": "Expired {{date}}",
+  "pages.account.bonus.subscriptionExpires": "Enabled until {{date}}",
+  "pages.account.bonus.subscriptionNeverExpires": "Never Expires",
+  "pages.account.bonus.automaticRenewal": "(this will update automatically if subscribed monthly)",
+
+  "pages.account.actions.title": "Actions",
+  "pages.account.actions.resetSearch": "Reset Search Index",
+  "pages.account.actions.resetSearch.description1": "Resetting your search index can help if you find that some recipes never appear in your search results at all.",
+  "pages.account.actions.resetSearch.description2": "Note: This has no effect on the data within your recipe collection.",
+
+  "pages.account.dangerZone.title": "Danger Zone!",
+  "pages.account.dangerZone.warning1": "Be careful with these actions - they are permanent.",
+  "pages.account.dangerZone.warning2": "You will be asked a to confirm any action you take here.",
+  "pages.account.dangerZone.deleteAllRecipes": "Delete All Recipes",
+  "pages.account.dangerZone.deleteAllRecipes.description": "Deleting all of your recipes can take several minutes and is a permenant action.",
+
+  "pages.account.nameRequired": "Name/nickname must not be blank.",
+  "pages.account.nameUpdated": "Profile name was updated.",
+  "pages.account.emailRequired": "Email must not be blank.",
+  "pages.account.emailConflict": "Sorry, an account with that email address already exists.",
+  "pages.account.emailInvalid": "Please enter a valid email address.",
+  "pages.account.emailUpdated": "Email address was updated.",
+
+  "pages.account.passwordMatch": "Passwords do not match.",
+  "pages.account.passwordLength": "Passwords must be 6 characters or longer.",
+  "pages.account.passwordUpdated.header": "Password Updated",
+  "pages.account.passwordUpdated.message": "Your password has been updated. You will need to log back in on any devices that use this account.",
+
+  "pages.account.reindexed": "Your recipes have been reindexed",
+
+  "pages.account.deleteAllRecipes.header": "Warning - You're about to delete all of your recipes!",
+  "pages.account.deleteAllRecipes.message": "This action is PERMANENT. All of your recipes and associated labels will be removed from the RecipeSage system.",
+  "pages.account.deleteAllRecipes.confirm": "Yes, continue",
+  "pages.account.deleteAllRecipes.success": "Your recipe data has been deleted.",
+
+  "====== Pages.Account ======": "",
+
+  "pages.export.title": "Export",
+  "pages.export.description1": "After selecting to export your data, a file will begin to download. You may have to press \"allow\".",
+  "pages.export.description2": "The exported file will contain all of your recipes in the selected format.",
+  "pages.export.description3": "Note: If you plan to re-import the data later, you'll need to select JSON-LD format.",
+  "pages.export.jsonld": "Export as JSON-LD (best)",
+  "pages.export.xml": "Export as XML",
+  "pages.export.txt": "Export as Plain Text",
+
+  "====== Pages.Import ======": "",
+
+  "pages.import.title": "Import",
+  "pages.import.description1": "RecipeSage supports importing from Pepperplate, Living Cookbook, and Paprika.",
+  "pages.import.description2": "Importing recipes will add all recipes from the file/account you've selected to your RecipeSage account.",
+  "pages.import.description3": "If you're having trouble with the import, please send me an email.",
+  "pages.import.jsonld": "Import from JSON-LD file",
+  "pages.import.pepperplate": "Import from Pepperplate",
+  "pages.import.livingCookbook": "Import Living Cookbook File",
+  "pages.import.paprika": "Import Paprika Recipes File",
+
+  "====== Pages.ImportJSONLD ======": "",
+
+  "pages.importJsonLD.title": "Import Recipes from JSON-LD File",
+  "pages.importJsonLD.description1": "This will import a JSON-LD (ends in .json) file into RecipeSage (this is one of the file formats exported by RecipeSage).",
+  "pages.importJsonLD.description2": "The import task can take several minutes",
+  "pages.importJsonLD.description3": "It depends on the format and size of your file",
+  "pages.importJsonLD.description4": "If you're having trouble with the import, send me an email with the file and I can import it manually.",
+  "pages.importJsonLD.description5": "If your file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importJsonLD.description6": "Please consider donating if your file contains a large number of recipes or images.",
+
+  "pages.importJsonLD.fileTypeWarning": "Warning! This filetype does not end in .json. It may not work!",
+  "pages.importJsonLD.fileTooLarge": "This file is too large to upload directly.",
+  "pages.importJsonLD.fileTooLarge.contact": "Please contact me to have your database imported manually.",
+
+  "pages.importJsonLD.upload": "Upload and Import",
+  "pages.importJsonLD.upload.ignoreWarning": "Upload and Import Anyway",
+  "pages.importJsonLD.loading": "Importing, please wait...",
+
+  "pages.importJsonLD.filePicker.file": "{{fileName}} Selected",
+  "pages.importJsonLD.filePicker.noFile": "Choose .json file",
+
+  "pages.importJsonLD.error": "Hmm, we had trouble extracting that file. Please make sure it is in JSON-LD format. If you're having trouble, please feel free to send me an email.",
+  "pages.importJsonLD.timeout": "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
+  "pages.importJsonLD.success": "Import was successful!",
+
+  "====== Pages.ImportLivingCookbook ======": "",
+
+  "pages.importLivingCookbook.title": "Import Recipes from Living Cookbook",
+  "pages.importLivingCookbook.description1": "This will import your Living Cookbook database into RecipeSage.",
+  "pages.importLivingCookbook.betaWarning": "Please note this feature is in beta.",
+  "pages.importLivingCookbook.description2": "All files must be in .lcb, .fdx or .fdxz format. Other formats will not work.",
+  "pages.importLivingCookbook.timeWarning": "The import task can take several minutes",
+  "pages.importLivingCookbook.timeWarning.description": "It depends on the format and size of your database file",
+  "pages.importLivingCookbook.contactMe": "If you're having trouble with the import, send me an email with the database file and I can import it manually.",
+  "pages.importLivingCookbook.sizeWarning": "If your database file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importLivingCookbook.donate": "Please consider donating if your database contains a large number of recipes or images.",
+
+  "pages.importLivingCookbook.step1": "1. Choose Import Options (if any):",
+  "pages.importLivingCookbook.step1.excludeImages": "Exclude recipe images (optional, not recommended)",
+  "pages.importLivingCookbook.step1.includeStock": "Include stock \"filler\" LCB recipes (optional, not recommended)",
+  "pages.importLivingCookbook.step1.includeTechniques": "Copy techniques to recipe notes (optional, not recommended)",
+
+  "pages.importLivingCookbook.step2": "2. Select Your Living Cookbook Database:",
+  "pages.importLivingCookbook.step2.fileTypeWarning": "Warning! This filetype does not end in .lcb, .fdx, or .fdxz. It may not work.",
+
+  "pages.importLivingCookbook.step2.sizeWarning": "This database is very large.",
+  "pages.importLivingCookbook.step2.sizeWarning.time": "It may take a very long time to upload depending on your internet connection.",
+  "pages.importLivingCookbook.step2.sizeWarning.contact": "If you're having trouble, please contact me to have your database imported manually.",
+
+  "pages.importLivingCookbook.step2.sizeError": "This file is too large to upload directly.",
+  "pages.importLivingCookbook.step2.sizeError.contact": "Please contact me to have your database imported manually.",
+
+  "pages.importLivingCookbook.step3": "3. Upload!",
+  "pages.importLivingCookbook.step3.upload": "Upload and Import",
+  "pages.importLivingCookbook.step3.upload.ignoreWarning": "Upload and Import Anyway",
+  "pages.importLivingCookbook.step3.loading": "Importing, please wait...",
+
+  "pages.importLivingCookbook.troubleshooting": "Click for Troubleshooting Help",
+  "pages.importLivingCookbook.troubleshooting.missing.1": "If you find that the import isn't importing all of your recipes:",
+  "pages.importLivingCookbook.troubleshooting.missing.2": "Try selecting the option above for \"Include stock 'filler' LCB recipes\" and try again.",
+  "pages.importLivingCookbook.troubleshooting.missing.3": "You might also try exporting your recipes from LivingCookbook as .FDX or .FDXZ format and uploading in that format instead.",
+
+  "pages.importLivingCookbook.troubleshooting.longTime.1": "If the import is taking a long time:",
+  "pages.importLivingCookbook.troubleshooting.longTime.2": "Depending on your internet speed, database size, and image content, the import may take a long time.",
+
+  "pages.importLivingCookbook.troubleshooting.tooLarge.1": "If your database is too large:",
+  "pages.importLivingCookbook.troubleshooting.tooLarge.2": "Please upload your database file to a service such as Google Drive and send me a link. I'll import it for you.",
+
+  "pages.importLivingCookbook.filePicker.file": "{{fileName}} Selected",
+  "pages.importLivingCookbook.filePicker.noFile": "Choose .lcb, .fdx, or .fdxz file",
+
+  "pages.importLivingCookbook.error": "Hmm, we had trouble extracting that file. Please make sure it is in .lcb format. If you're having trouble, please feel free to send me an email.",
+  "pages.importLivingCookbook.timeout": "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
+  "pages.importLivingCookbook.success": "Import was successful!",
+
+  "====== Pages.ImportPaprika ======": "",
+
+  "pages.importPaprika.title": "Import Recipes from Paprika File",
+
+  "pages.importPaprika.description1": "This will import your Paprika export file into RecipeSage. Please note this feature is in beta.",
+  "pages.importPaprika.description2": "All files must be in .paprikarecipes format (export as Paprika Recipe Format in Paprika settings). Other formats will not work.",
+  "pages.importPaprika.description3": "The import task can take several minutes",
+  "pages.importPaprika.description4": "It depends on the format and size of your file",
+  "pages.importPaprika.description5": "If you're having trouble with the import, send me an email with the file and I can import it manually.",
+  "pages.importPaprika.description6": "If your file is very large, you may have trouble importing it via this interface due to browser limitations.",
+  "pages.importPaprika.description7": "Please consider donating if your file contains a large number of recipes or images.",
+  "pages.importPaprika.description8": "Warning! This filetype does not end in .paprikarecipes",
+  "pages.importPaprika.description9": "It may not work.",
+
+  "pages.importPaprika.filePicker.noFile": "Choose .paprikarecipes file",
+  "pages.importPaprika.filePicker.file": "{{fileName}} Selected",
+
+  "pages.importPaprika.error": "Hmm, we had trouble extracting that file. Please make sure it is in Paprika Recipe Format directly from the app. If you're having trouble, please feel free to send me an email.",
+  "pages.importPaprika.timeout": "The import is taking a while (this can happen if your database is very large) - please check back in 5 minutes. If your recipes do not appear, please send me an email.",
+  "pages.importPaprika.success": "Import was successful!",
+
+  "====== Pages.ImportPepperplate ======": "",
+
+  "pages.importPepperplate.title": "Import Recipes from Pepperplate",
+  "pages.importPepperplate.description1": "The import task can take several minutes and depends on the availability of Pepperplate servers.",
+  "pages.importPepperplate.description2": "You will only see the imported recipes in your library once the full import task is complete.",
+  "pages.importPepperplate.description3": "If you have issues with the import process, feel free to reach out.",
+  "pages.importPepperplate.description4": "Note: If you have a very large recipe collection your browser may time out before the import is complete, resulting in an error.",
+  "pages.importPepperplate.description5": "To avoid creating duplicates, please check the \"My Recipes\" page before trying the import again.",
+  "pages.importPepperplate.description6": "If duplicates are created accidentally, you can use the \"delete all recipes\" button on the account page to start over.",
+
+  "pages.importPepperplate.description7": "Please enter the credentials associated with your Pepperplate account:",
+  "pages.importPepperplate.username": "Pepperplate Email/Username",
+  "pages.importPepperplate.password": "Pepperplate Password",
+
+  "pages.importPepperplate.start": "Start Import",
+  "pages.importPepperplate.loading": "Importing, please wait...",
+
+  "pages.importPepperplate.usernameRequired": "Please enter your pepperplate email/username.",
+  "pages.importPepperplate.passwordRequired": "Please enter your pepperplate password.",
+
+  "pages.importPepperplate.invalid.header": "Invalid Credentials",
+  "pages.importPepperplate.invalid.message": "Pepperplate rejected those credentials. Please try again.",
+
+  "pages.importPepperplate.timeout.header": "This is taking a little longer than expected",
+  "pages.importPepperplate.timeout.message": "This can happen when Pepperplate is under heavy load. The import is still in progress. If you don't see your recipes appear, feel free to email me.",
+
+  "pages.importPepperplate.error.message": "An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
+
+  "pages.importPepperplate.success": "Import complete!",
+
+  "====== Pages.Settings ======": "",
+
+  "pages.settings.title": "Settings",
+  "pages.settings.section1.title": "Data & Account",
+  "pages.settings.import": "Import Recipe Data",
+  "pages.settings.export": "Export Recipe Data",
+  "pages.settings.account": "Account Settings & Stats",
+  "pages.settings.update": "Check for Update",
+  "pages.settings.section2.title": "General Settings",
+  "pages.settings.splitPane": "Enable Split Pane View on Large Screens",
+  "pages.settings.cache": "Experimental: Cache all recipes offline",
+  "pages.settings.theme": "Theme",
+  "pages.settings.theme.default": "System Default",
+  "pages.settings.theme.light": "Light",
+  "pages.settings.theme.dark": "Dark",
+  "pages.settings.theme.black": "Black (OLED)",
+  "pages.settings.language": "Language",
+  "pages.settings.language.default": "Browser Default",
+  "pages.settings.reset": "Reset All Preferences",
+
+  "pages.settings.offline.loading": "Fetching all recipes, please wait...",
+  "pages.settings.offline.error": "There was an error while syncing. Please report this.",
+
+  "pages.settings.resetPrefs.header": "Reset Preferences Warning",
+  "pages.settings.resetPrefs.message": "Resetting your preferences will set all app preferences back to their default state. This includes preferences set via menus on the home page, meal plans page, shopping list page, etc. Note: This only affects this device.",
+
+  "pages.settings.oled.header": "Black (OLED) Warning",
+  "pages.settings.oled.message": "The black (OLED) theme may make it difficult to distinguish between elements and alerts. Shadows and other visual animations will also not be displayed.",
+
+  "pages.settings.update.header": "App will reload",
+  "pages.settings.update.subHeader": "The app will reload to check for an update.",
+
+  "====== Pages.Share ======": "",
+
+  "pages.share.title": "Share Recipe",
+  "pages.share.description": "When sharing, a copy of this recipe will be sent to the recipient. Your copy will not be affected.",
+  "pages.share.byAccount": "RecipeSage",
+  "pages.share.byLink": "Link",
+  "pages.share.byEmbed": "Embed",
+
+  "pages.share.byEmbed.image": "Show Title Image",
+  "pages.share.byEmbed.columns": "Disable Columns",
+  "pages.share.byEmbed.print": "Show Print Button",
+  "pages.share.byEmbed.sources": "Hide Sources",
+  "pages.share.byEmbed.notes": "Hide Notes",
+  "pages.share.byEmbed.height": "Height (not shown)",
+  "pages.share.byEmbed.width": "Width (not shown)",
+  "pages.share.byEmbed.jsonLD": "Enable JSON-LD for SEO",
+  "pages.share.byEmbed.copy": "Copy the code below and paste it into your website HTML",
+
+  "pages.share.byAccount.prompt": "Recipient's account email...",
+  "pages.share.byAccount.found": "RecipeSage user found: {{name}}. Press send to share recipe.",
+  "pages.share.byAccount.notfound": "No RecipeSage user found with that email address.",
+  "pages.share.byAccount.description": "Enter another user's email address to search",
+  "pages.share.byAccount.selectBelow": "or select a conversation below",
+  "pages.share.byAccount.searching": "Searcing for user...",
+  "pages.share.byAccount.conversations": "Existing Conversations",
+
+  "pages.share.send": "Send",
+  "pages.share.close": "Close",
+
+  "====== Pages.NewShoppingListItem ======": "",
+
+  "pages.newShoppingListItem.title": "Add item(s)",
+  "pages.newShoppingListItem.items": "Items",
+  "pages.newShoppingListItem.recipe": "Recipe",
+  "pages.newShoppingListItem.itemTitle": "Item title",
+  "pages.newShoppingListItem.add": "Add to List",
+
+  "====== Pages.NewShoppingList ======": "",
+
+  "pages.newShoppingList.title": "New shopping list",
+  "pages.newShoppingList.listTitle": "Title",
+  "pages.newShoppingList.create": "Create",
+  "pages.newShoppingList.share": "and Share",
+
+  "====== Pages.ShoppingList ======": "",
+
+  "pages.shoppingList.title": "Shopping List - {{title}}",
+  "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
+  "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
+  "pages.shoppingList.nullState.add": "Add the first item",
+  "pages.shoppingList.recipes": "Recipes in this list",
+
+  "pages.shoppingList.removed": "Removed {{itemCount}} item(s)",
+  "pages.shoppingList.removed.undo": "Undo",
+
+  "====== Pages.ShoppingListPopover ======": "",
+
+  "pages.shoppingListPopover.title": "Options",
+
+  "pages.shoppingListPopover.sortBy": "Sort by",
+  "pages.shoppingListPopover.sortBy.title": "Title",
+  "pages.shoppingListPopover.sortBy.createdDesc": "Created (newest first)",
+  "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
+
+  "pages.shoppingListPopover.groupCategories": "Group Items by Category",
+  "pages.shoppingListPopover.groupSimilar.": "Group Similar Items",
+  "pages.shoppingListPopover.showTitle": "Show Recipe Title",
+  "pages.shoppingListPopover.showAddedBy": "Show Added By",
+  "pages.shoppingListPopover.showAddedOn": "Show Added On",
+  "pages.shoppingListPopover.print": "Print",
+  "pages.shoppingListPopover.removeAll": "Remove all items",
+  "pages.shoppingListPopover.delete": "Delete list",
+
+  "pages.shoppingListPopover.removeAll.header": "Confirm Removal",
+  "pages.shoppingListPopover.removeAll.message": "This will permanently delete all items from this list. This action is irreversible.",
+
+  "pages.shoppingListPopover.deleteList.header": "Confirm Delete",
+  "pages.shoppingListPopover.deleteList.message": "This will permanently remove this shopping list from your account. Note: If you're only a collaborator on this list, it'll only be removed from your account. If you own this list, it will be removed from all other collaborators accounts.",
+
+  "====== Pages.ShoppingLists ======": "",
+
+  "pages.shoppingLists.title": "Shopping Lists",
+  "pages.shoppingLists.created": "Created {{date}}",
+  "pages.shoppingLists.collaboration": "In collaboration with:",
+  "pages.shoppingLists.createdBy": "Created by {{name}}",
+  "pages.shoppingLists.owner": "You own this list",
+  "pages.shoppingLists.nullState.1": "You have no shopping lists.",
+  "pages.shoppingLists.nullState.2": "To create a shopping list, press the plus button in the bottom corner.",
+
+  "====== Pages.AddFriendModal ======": "",
+
+  "pages.addFriendModal.title": "Find User",
+  "pages.addFriendModal.profileWarning": "Note: The desired user must have enabled their profile.",
+  "pages.addFriendModal.send": "Send Friend Request",
+  "pages.addFriendModal.open": "Open Profile",
+
+  "pages.addFriendModal.profileDisabled.header": "Profile is not enabled",
+  "pages.addFriendModal.profileDisabled.message": "This user has disabled their profile and is therefore private/inaccessible.",
+  "pages.addFriendModal.success": "Friend invite sent!",
+
+  "====== Pages.AddProfileItem ======": "",
+
+  "pages.addProfileItem.title": "Add Profile Item",
+  "pages.addProfileItem.prompt": "What Would You Like to Share?",
+  "pages.addProfileItem.recipe": "A Recipe",
+  "pages.addProfileItem.label": "A Label",
+  "pages.addProfileItem.allRecipes": "All of My Recipes",
+
+  "pages.addProfileItem.type": "Profile Item Type:",
+  "pages.addProfileItem.type.recipe": "Recipe",
+  "pages.addProfileItem.type.label": "Label",
+  "pages.addProfileItem.type.allRecipes": "All Recipes",
+
+  "pages.addProfileItem.change": "Click to change",
+  "pages.addProfileItem.select": "Select your",
+  "pages.addProfileItem.select.recipe": "recipe",
+  "pages.addProfileItem.select.label": "label",
+
+  "pages.addProfileItem.selectVisibility": "Who Should Be Able to See This?",
+  "pages.addProfileItem.selectVisibility.public": "Anyone (Public)",
+  "pages.addProfileItem.selectVisibility.friends": "My Friends Only",
+
+  "pages.addProfileItem.visibility": "Visibility:",
+  "pages.addProfileItem.visibility.public": "public",
+  "pages.addProfileItem.visibility.friends": "friends only",
+
+  "pages.addProfileItem.itemTitle": "Featured Title",
+  "pages.addProfileItem.tos": "By adding this item, you agree to the RecipeSage Sharing Policy",
+  "pages.addProfileItem.done": "Done",
+
+  "====== Pages.MyProfile ======": "",
+
+  "pages.myProfile.title": "Edit Profile",
+  "pages.myProfile.welcome": "Welcome to your profile!",
+  "pages.myProfile.setup1": "Before you get started, there are a few things that you'll need to set up.",
+  "pages.myProfile.setup.name": "First, choose the name or nickname to be shown on your profile.",
+  "pages.myProfile.name": "Name/Nickname",
+  "pages.myProfile.setup2": "Now, choose the handle for your profile, for example: @superchef",
+  "pages.myProfile.handle": "Unique @handle",
+  "pages.myProfile.handle.taken": "That handle is taken",
+  "pages.myProfile.handle.invalid": "Handle is invalid",
+  "pages.myProfile.handle.unique": "Note: Handle must be unique, and must not contain any special characters.",
+  "pages.myProfile.enable": "Enable Profile",
+  "pages.myProfile.share": "Share",
+  "pages.myProfile.view": "View Profile",
+  "pages.myProfile.pinned": "Pinned Recipes & Labels",
+  "pages.myProfile.add": "Add",
+  "pages.myProfile.nullState.1": "You have nothing on your profile yet.",
+  "pages.myProfile.nullState.2": "To add your first profile item, click the \"add\" button to the right.",
+  "pages.myProfile.save": "Save",
+
+  "pages.myProfile.notEnabled.header": "Profile Not Enabled",
+  "pages.myProfile.notEnabled.message": "You'll need to enable your profile to interact with sharing features, such as sending friend requests.",
+  "pages.myProfile.ignore": "Ignore",
+  "pages.myProfile.enable": "Enable",
+
+  "pages.myProfile.share.unsaved.header": "Unsaved Changes",
+  "pages.myProfile.share.unsaved.message": "You'll need to save your changes before you can share your profile.",
+
+  "pages.myProfile.share.unsaved.header": "Unsaved Changes",
+  "pages.myProfile.share.unsaved.message": "You'll need to save your changes before you can view what your profile looks like.",
+
+  "====== Pages.People ======": "",
+
+  "pages.people.title": "People",
+  "pages.people.selfhost.1": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with",
+  "pages.people.selfhost.2": "or any of the accounts located on the main site.",
+  "pages.people.nullState.1": "You haven't set up a profile.",
+  "pages.people.nullState.2": "Creating a profile allows you to share collections of recipes with friends and the public.",
+  "pages.people.create": "Create",
+  "pages.people.edit": "View/edit my profile",
+  "pages.people.friends": "Friends",
+  "pages.people.unfriend": "Unfriend",
+  "pages.people.invites": "Friend invites (incoming)",
+  "pages.people.accept": "Accept",
+  "pages.people.decline": "Decline",
+  "pages.people.sentInvites": "Pending (sent) friend requests",
+  "pages.people.cancel": "Cancel",
+  "pages.people.noFriends.1": "You don't have any friends added.",
+  "pages.people.noFriends.2": "Adding someone as a friend allows you to collaborate on recipes, meal plans, and shopping lists.",
+  "pages.people.noFriends.3": "To add someone, click the search icon.",
+
+  "pages.people.setup.header": "Profile Not Setup",
+  "pages.people.setup.message": "You'll need to setup your profile before you can go adding friends.",
+  "pages.people.setup.confirm": "Setup",
+
+  "====== Pages.Profile ======": "",
+
+  "pages.profile.title": "{{name}}'s Profile",
+  "pages.profile.pinned": "Pinned Recipes & Labels",
+  "pages.profile.nullState": "{{name}} hasn't added anything to their profile yet.",
+  "pages.profile.send": "Send Friend Request",
+  "pages.profile.cancel": "Cancel Friend Request",
+  "pages.profile.accept": "Accept Friend Request",
+  "pages.profile.decline": "Decline Friend Request",
+  "pages.profile.unfriend": "Unfriend",
+  "pages.profile.setup": "Setup Your Profile to Add Friend",
+  "pages.profile.login": "Log In/Register to Add Friend",
+
+  "pages.profile.disabled.header": "Profile is not enabled",
+  "pages.profile.disabled.message": "This user has disabled their profile and is therefore private/inaccessible.",
+
+  "pages.profile.inviteSent": "Friend invite sent!",
+  "pages.profile.inviteRemoved": "Friendship removed",
+
+  "pages.profile.setup.header": "Your profile isn't setup yet",
+  "pages.profile.setup.message": "To add this user as a friend, you need to setup your profile.",
+  "pages.profile.setup.confirm": "Setup",
+
+  "pages.profile.alreadyRequested": "It looks like you already have a friendship in progress. Please try again.",
+
+  "====== Pages.ShareProfileModal ======": "",
+
+  "pages.shareProfileModal.title": "Share {{name}}'s Profile",
+  "pages.shareProfileModal.close": "Close",
+
+  "pages.shareProfileModal.shareTitle": "{{name}}'s RecipeSage profile",
+  "pages.shareProfileModal.shareBody": "Click to view {{name}}'s public RecipeSage profile:",
+
+  "====== Components.CookingToolbar ======": "",
+
+  "components.cookingToolbar.clear": "Clear All Pinned Recipes?",
+
+  "====== Components.CopyWithWebshare ======": "",
+
+  "components.copyWithWebshare.instructions": "To share, copy the link below",
+  "components.copyWithWebshare.shareIcon": "or press the share icon",
+
+  "====== Components.MealCalendar ======": "",
+
+  "components.mealCalendar.recipes": "Recipes scheduled on this day",
+  "components.mealCalendar.noRecipes": "No recipes are currently scheduled on this day.",
+  "components.mealCalendar.meals": "Meals For This Day",
+  "components.mealCalendar.selectDay": "Select a day to see meals for that day.",
+  "components.mealCalendar.noMeals": "There are no meals scheduled for this day.",
+
+  "====== Components.MealCalendar ======": "",
+
+  "components.multiImageUpload.add": "Click to Add Image",
+  "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
+  "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
+
+
+  "====== Components.SelectCollaborators ======": "",
+
+  "components.selectCollaborators.added": "Already added",
+  "components.selectCollaborators.add": "Click to add",
+  "components.selectCollaborators.searching": "Searching...",
+  "components.selectCollaborators.notFound": "User not found",
+  "components.selectCollaborators.notFoundError": "Could not find user with that email address.",
+  "components.selectCollaborators.invalidEmail": "Please enter a valid email and press enter.",
+
+  "====== Components.SelectIngredients ======": "",
+
+  "components.selectIngredients.title": "Select the ingredients you'd like to add:",
+  "components.selectIngredients.toggleAll": "Select/Deselect All",
+  "components.selectIngredients.scale": "{{scale}}x scale (click to change)",
+  "components.selectIngredients.null": "This recipe has no ingredients.",
+
+  "====== Components.SelectLabel ======": "",
+
+  "components.selectLabel.change": "Click to change",
+  "components.selectLabel.select": "Click to select",
+  "components.selectLabel.null": "No labels called \"{{name}}\"",
+
+  "====== Components.SelectMeal ======": "",
+
+  "components.selectMeal.title": "Select Meal",
+
+  "====== Components.SelectRecipe ======": "",
+
+  "components.selectRecipe.change": "Click to change",
+  "components.selectRecipe.select": "Click to select",
+  "components.selectRecipe.searching": "Searching for \"{{name}}\"...",
+  "components.selectRecipe.null": "No results for \"{{searchText}}\"",
+
+  "====== Components.SelectUser ======": "",
+
+  "components.selectUser.change": "Click to change",
+  "components.selectUser.select": "Click to select",
+  "components.selectUser.searching": "Searching for \"{{name}}\"...",
+  "components.selectUser.null": "No results for \"{{searchText}}\"",
+
+  "====== Components.SelfhostWarning ======": "",
+
+  "components.selfhostWarning.1": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with",
+  "components.selfhostWarning.2": "or any of the accounts located on the main site.",
+
+  "====== Components.ShoppingListItem ======": "",
+
+  "components.shoppingListItem.recipe": "For recipe:",
+  "components.shoppingListItem.added": "Added",
+  "components.shoppingListItem.addedBy": "Added by",
+
+  "====== Components.TosClickwrap ======": "",
+
+  "components.tos.warning": "By continuing, you're agreeing to the RecipeSage",
+  "components.tos.title": "Terms of Service",
+
+  "====== Modals.ScaleRecipe ======": "",
+
+  "components.scaleRecipe.title": "Scale Recipe",
+  "components.scaleRecipe.change": "Adjust the scale of the recipe",
+  "components.scaleRecipe.click": "Click a button or enter a scale manually",
+  "components.scaleRecipe.manual": "Or, enter a number or fraction",
+  "components.scaleRecipe.cancel": "Cancel",
+  "components.scaleRecipe.apply": "Apply",
+
+  "====== Services.QuickTutorial ======": "",
+
+  "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
+  "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",
+  "services.quickTutorial.multipleLabelSelection.header": "Multiple Label Selection",
+  "services.quickTutorial.multipleLabelSelection.message": "You're now in multiple label selection mode. You can click as many labels as you'd like to select, then use the buttons that appear in the header to take bulk actions. You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.",
+  "services.quickTutorial.splitPaneView.header": "Split Pane View",
+  "services.quickTutorial.splitPaneView.message": "Split pane view is only visible on devices with large screens (laptops, large tablets, etc). When split pane view is enabled, the side menu will always be visible. This feature is useful for optimizing the experience on larger devices.",
+  "services.quickTutorial.experimentalOfflineCache.header": "Experimental Offline Cache",
+  "services.quickTutorial.experimentalOfflineCache.message": "Experimental offline cache is a test feature. RecipeSage normally caches recipes you access automatically, but this will now fetch all of your recipes in the background. Your system may remove cached recipes automatically if it needs the storage, or when you do not use the app for long periods of time. Important note: Filtering by label and searching will not work. This may work in future implementations, but not for this test implementation.",
+  "services.quickTutorial.pinnedRecipes.header": "Pinned Recipes",
+  "services.quickTutorial.pinnedRecipes.message": "This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking. Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until you close the application.",
+
+  "====== Services.Util ======": "",
+
+  "services.util.justNow": "just now",
+  "services.util.today": "today",
+
+  "====== Errors ======": "",
+
+  "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
+  "errors.unauthorized": "You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.",
+  "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
+
+  "====== Generic ======": "",
+
+  "generic.delete": "Delete",
+  "generic.cancel": "Cancel",
+  "generic.confirm": "Confirm",
+  "generic.close": "Close",
+  "generic.save": "Save",
+  "generic.okay": "Okay",
+
+
+  "trailing.comma.placeholder": ""
+}

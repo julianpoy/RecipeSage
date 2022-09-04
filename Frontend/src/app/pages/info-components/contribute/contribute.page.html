@@ -5,68 +5,68 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Contribute</ion-title>
+    <ion-title>{{ 'pages.contribute.title' | translate }}</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content class="ion-padding">
-  <p class="headline ion-text-center">Contribute to RecipeSage</p>
+  <p class="headline ion-text-center">{{ 'pages.contribute.subtitle' | translate }}</p>
 
   <div class="card">
     <logo-icon href="/#/about"></logo-icon>
 
     <p>
-      My goal is to keep RecipeSage open to anyone, without burdening the experience with ads.
+      {{ 'pages.contribute.mission' | translate }}
     </p>
 
     <p>
-      However, as RecipeSage grows, hosting costs for servers and images begin to add up.
+      {{ 'pages.contribute.purpose' | translate }}
     </p>
     <br />
 
     <div class="frequency-row">
-      <ion-button [fill]="frequency == 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
+      <ion-button [fill]="frequency === 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
         <span>
-          Monthly
+          {{ 'pages.contribute.monthly' | translate }}
         </span>
       </ion-button>
-      <ion-button [fill]="frequency == 'single' ? 'solid' : 'outline'" (click)="setFrequency('single')">
+      <ion-button [fill]="frequency === 'single' ? 'solid' : 'outline'" (click)="setFrequency('single')">
         <span>
-          One-Time
+          {{ 'pages.contribute.oneTime' | translate }}
         </span>
       </ion-button>
     </div>
 
-    <div class="amount-row" *ngIf="frequency == 'monthly'">
-      <ion-button [fill]="amount == 1 ? 'solid' : 'outline'" (click)="setAmount(1)">
+    <div class="amount-row" *ngIf="frequency === 'monthly'">
+      <ion-button [fill]="amount === 1 ? 'solid' : 'outline'" (click)="setAmount(1)">
         $1.00
       </ion-button>
-      <ion-button [fill]="amount == 5 ? 'solid' : 'outline'" (click)="setAmount(5)">
+      <ion-button [fill]="amount === 5 ? 'solid' : 'outline'" (click)="setAmount(5)">
         $5.00
       </ion-button>
-      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+      <ion-button [fill]="amount === 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
         $10.00
       </ion-button>
       <input
-        placeholder="Custom"
+        [placeholder]="'pages.contribute.custom' | translate"
         (focus)="focusCustom()"
         [(ngModel)]="customAmount" />
     </div>
 
-    <div class="amount-row" *ngIf="frequency == 'single'">
-      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+    <div class="amount-row" *ngIf="frequency === 'single'">
+      <ion-button [fill]="amount === 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
         $10.00
       </ion-button>
-      <ion-button [fill]="amount == 25 ? 'solid' : 'outline'" (click)="setAmount(25)">
+      <ion-button [fill]="amount === 25 ? 'solid' : 'outline'" (click)="setAmount(25)">
         $25.00
       </ion-button>
-      <ion-button [fill]="amount == 50 ? 'solid' : 'outline'" (click)="setAmount(50)">
+      <ion-button [fill]="amount === 50 ? 'solid' : 'outline'" (click)="setAmount(50)">
         $50.00
       </ion-button>
       <input
-        placeholder="Custom"
+        [placeholder]="'pages.contribute.custom' | translate"
         (focus)="focusCustom()"
         [(ngModel)]="customAmount" />
     </div>
@@ -74,47 +74,45 @@
     <div class="submit-row ion-text-center" *ngIf="frequency">
       <ion-button [disabled]="!validAmount()" (click)="contribute()">
         <span>
-          Contribute!
+          {{ 'pages.contribute.action' | translate }}
         </span>
         <ion-icon name="arrow-forward" slot="end"></ion-icon>
       </ion-button>
       <br /><br />
-      <tos-clickwrap-agreement actionTitle="contributing"></tos-clickwrap-agreement>
+      <tos-clickwrap-agreement [actionTitle]="'pages.contribute.tosActionTitle' | translate"></tos-clickwrap-agreement>
     </div>
 
     <br />
 
     <p>
-      As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features
-      for your account. You will be able to:
+      {{ 'pages.contribute.bonus.title' | translate }}
     </p>
 
     <div class="feature-list">
       <ul>
         <li>
-          Upload images in high-resolution
-          &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.highResImages" slot="end">Enabled</ion-badge><br />
+          {{ 'pages.contribute.bonus.feature.1' | translate }}
+          &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.highResImages" slot="end">{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge><br />
         </li>
         <li>
-          Upload multiple images for each recipe
-          &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.multipleImages" slot="end">Enabled</ion-badge>
+          {{ 'pages.contribute.bonus.feature.2' | translate }}
+          &nbsp;<ion-badge *ngIf="capabilitiesService.capabilities.multipleImages" slot="end">{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge>
         </li>
       </ul>
     </div>
 
     <p>
-      <i>Monthly: </i>You will unlock bonus features for the months that you are subscribed.<br />
-      <i>One-time: </i>You will unlock bonus features for one year.
+    <i>{{ 'pages.contribute.monthly' | translate }}: </i>{{ 'pages.contribute.monthly.description' | translate }}<br />
+    <i>{{ 'pages.contribute.oneTime' | translate }}: </i>{{ 'pages.contribute.oneTime.description' | translate }}
     </p>
     <p>
-      Bonus features features are accessible only to contributors because these particular features are costly for me to host.
+      {{ 'pages.contribute.bonus.reason' | translate }}
     </p>
     <p>
-      I originally created RecipeSage for my own family to host recipes we enjoy sharing.
-      I opened it to the public so that others could enjoy it too. <a href="/#/about/details">Read more about me & RecipeSage</a>
+      {{ 'pages.contribute.cta.1' | translate }}
     </p>
     <p>
-      Please consider contributing toward the ongoing maintenance of RecipeSage.
+      {{ 'pages.contribute.cta.2' | translate }}
     </p>
 
     <br />

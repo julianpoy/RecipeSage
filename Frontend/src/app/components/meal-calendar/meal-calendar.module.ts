@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { MealCalendarComponent } from './meal-calendar.component';
 import { CalendarItemModule } from './calendar-item/calendar-item.module';
 import { MealGroupModule } from './meal-group/meal-group.module';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { MealGroupModule } from './meal-group/meal-group.module';
     CommonModule,
     IonicModule,
     CalendarItemModule,
-    MealGroupModule
+    MealGroupModule,
+    GlobalModule
   ],
   exports: [
     MealCalendarComponent

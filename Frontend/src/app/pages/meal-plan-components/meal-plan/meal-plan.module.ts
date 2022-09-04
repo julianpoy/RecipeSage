@@ -11,11 +11,14 @@ import { MealPlanPopoverPageModule } from '@/pages/meal-plan-components/meal-pla
 import { MealPlanItemDetailsModalPageModule } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.module';
 import { MealPlanBulkPinModalPageModule } from '@/pages/meal-plan-components/meal-plan-bulk-pin-modal/module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     MealPlanPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

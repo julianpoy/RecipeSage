@@ -9,16 +9,54 @@ import { UserService } from './user.service';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
 import { EventService } from './event.service';
+import {ErrorHandlers} from './http-error-handler.service';
 
 export interface Message {
-  id: string;
-  from: any;
-  to: any;
-  body: string;
-  created_at: any;
-  updated_at: any;
-  read: boolean;
-  recipe: any;
+  id: string,
+  body: string,
+  createdAt: string,
+  updatedAt: string,
+  fromUserId: string,
+  toUserId: string,
+  recipeId: string | null,
+  originalRecipeId: string | null,
+
+  recipe: null | {
+    id: string,
+    title: string,
+    images: any[],
+  },
+  originalRecipe: null | {
+    id: string,
+    title: string,
+    images: any[],
+  },
+
+  fromUser: {
+    id: string,
+    name: string,
+    email: string,
+  },
+  toUser: {
+    id: string,
+    name: string,
+    email: string,
+  },
+  otherUser: {
+    id: string,
+    name: string,
+    email: string,
+  }
+}
+
+export interface MessageThread {
+  otherUser: {
+    id: string,
+    name: string,
+    email: string,
+  },
+  messageCount: number,
+  messages: Message[],
 }
 
 @Injectable({
@@ -78,47 +116,39 @@ export class MessagingService {
     return this.isNotificationsCapable() && ('Notification' in window) && ((Notification as any).permission === 'granted');
   }
 
-  fetch(from?) {
-    let url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
-    if (from) url += '&user=' + from;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetch(payload: {
+    user: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Message[]>(
+      `messages`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  threads(options?) {
-    options = options || {};
-
-    let url = this.utilService.getBase() + 'messages/threads/' + this.utilService.getTokenQuery();
-    if (!options.includeMessages) url += '&light=true';
-    if (options.messageLimit) url += '&limit=' + options.messageLimit;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  threads(payload?: {
+    limit?: number,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<MessageThread[]>(
+      `messages/threads`,
+      'GET',
+      payload || {},
+      errorHandlers
+    );
   }
 
-  create(data) {
-    const url = this.utilService.getBase() + 'messages/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
-  }
-
-  markAsRead(from?) {
-    let url = this.utilService.getBase() + 'messages/read/' + this.utilService.getTokenQuery();
-    if (from) url += '&from=' + from;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  create(payload: {
+    body: string,
+    to: string,
+    recipeId?: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `messages`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
   async requestNotifications() {
@@ -172,52 +202,39 @@ export class MessagingService {
     });
   }
 
-  public disableNotifications() {
+  public async disableNotifications() {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
     const token = this.fcmToken;
 
     this.unsubscribeOnTokenRefresh();
     this.unsubscribeOnTokenRefresh = () => {};
-    return this.userService.removeFCMToken(token).then(response => {
-      console.log('deleted FCM token', response);
-    }).catch(err => {
-      console.log('failed to delete FCM token', err);
-    });
+    await this.userService.removeFCMToken(token);
   }
 
-  private updateToken() {
+  private async updateToken() {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
-    return this.messaging.getToken().then(currentToken => {
-      console.log('current token', currentToken);
-      if (currentToken) {
-        this.fcmToken = currentToken;
-        console.log('saving FCM token', currentToken);
-        // we've got the token from Firebase, now let's store it in the database
-        return this.userService.saveFCMToken(currentToken).then(response => {
-          console.log('saved FCM token', response);
-        }).catch(err => {
-          console.log('failed to save FCM token', err);
-        });
-      } else {
-        console.log('No Instance ID token available. Request permission to generate one.');
-      }
-    }).catch(err => {
+    try {
+      const currentToken = await this.messaging.getToken();
+      if (!currentToken) return;
+
+      this.fcmToken = currentToken;
+
+      await this.userService.saveFCMToken({
+        fcmToken: currentToken
+      });
+    } catch(err) {
       console.log('Unable to get notification token. ', err);
-    });
+    }
   }
 
   private setupOnTokenRefresh() {
     if (!this.messaging || !this.isNotificationsCapable()) return;
 
-    this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(() => {
-      console.log('Token refreshed');
-      this.userService.removeFCMToken(this.fcmToken).then(response => {
-        this.updateToken();
-      }).catch(err => {
-        this.updateToken();
-      });
+    this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(async () => {
+      await this.userService.removeFCMToken(this.fcmToken);
+      this.updateToken();
     });
   }
 }

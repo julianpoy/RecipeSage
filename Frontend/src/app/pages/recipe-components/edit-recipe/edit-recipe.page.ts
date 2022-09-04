@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, ToastController, AlertController, PopoverController, LoadingController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { UtilService, RouteMap } from '@/services/util.service';
 import { RecipeService, Recipe } from '@/services/recipe.service';
@@ -31,6 +32,7 @@ export class EditRecipePage {
 
   constructor(
     public route: ActivatedRoute,
+    public translate: TranslateService,
     public navCtrl: NavController,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -54,38 +56,11 @@ export class EditRecipePage {
       this.recipeId = recipeId;
 
       const loading = this.loadingService.start();
-      this.recipeService.fetchById(this.recipeId).then(recipe => {
-        this.recipe = recipe;
-        this.images = recipe.images;
+      this.recipeService.fetchById(this.recipeId).then(response => {
         loading.dismiss();
-      }).catch(async err => {
-        loading.dismiss();
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.goToAuth();
-            break;
-          case 404:
-            const notFoundToast = await this.toastCtrl.create({
-              message: 'Recipe not found. Does this recipe URL exist?',
-              duration: 30000 // TODO: Should offer a dismiss button
-            });
-            notFoundToast.present();
-            break;
-          default:
-            const unexpectedErrorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
-            });
-            unexpectedErrorToast.present();
-            break;
-        }
+        if (!response.success) return;
+        this.recipe = response.data;
+        this.images = response.data.images;
       });
     }
 
@@ -122,8 +97,10 @@ export class EditRecipePage {
 
   async save() {
     if (!this.recipe.title || this.recipe.title.length === 0) {
+      const message = await this.translate.get('pages.editRecipe.titleRequired').toPromise();
+
       (await this.toastCtrl.create({
-        message: 'Please provide a recipe title (the only required field).',
+        message,
         duration: 6000
       })).present();
       return;
@@ -131,80 +108,18 @@ export class EditRecipePage {
 
     const loading = this.loadingService.start();
 
-    if (this.recipe.id) {
-      this.recipeService.update({
-        ...this.recipe,
-        imageIds: this.images.map(image => image.id)
-      }).then(response => {
-        this.markAsClean();
+    const method = this.recipe.id ? 'update' : 'create';
+    const response = await this.recipeService[method]({
+      ...this.recipe,
+      imageIds: this.images.map(image => image.id)
+    });
 
-        this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(this.recipe.id));
+    loading.dismiss();
+    if (!response.success) return;
 
-        loading.dismiss();
-      }).catch(async err => {
-        loading.dismiss();
-        switch (err.response.status) {
-          case 0:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            })).present();
-            break;
-          case 401:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unauthorized,
-              duration: 6000
-            })).present();
-            break;
-          default:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
-            })).present();
-            break;
-        }
-      });
-    } else {
-      this.recipeService.create({
-        ...this.recipe,
-        imageIds: this.images.map(image => image.id)
-      }).then(response => {
-        this.markAsClean();
+    this.markAsClean();
 
-        this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
-
-        loading.dismiss();
-      }).catch(async err => {
-        loading.dismiss();
-        console.log(err)
-        switch (err.response.status) {
-          case 0:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            })).present();
-            break;
-          case 401:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unauthorized,
-              duration: 6000
-            })).present();
-            break;
-          case 412:
-            (await this.toastCtrl.create({
-              message: 'Please provide a recipe title (the only required field).',
-              duration: 6000
-            })).present();
-            break;
-          default:
-            (await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 6000
-            })).present();
-            break;
-        }
-      });
-    }
+    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(this.recipe.id || response.data.id));
   }
 
   markAsDirty() {
@@ -230,31 +145,34 @@ export class EditRecipePage {
     return url.protocol.startsWith('http');
   }
 
-  async addImageByUrl(url: string) {
-    const image = await this.imageService.createFromUrl(url);
-    this.images.push(image);
-  }
-
   async clipFromUrl() {
+    const header = await this.translate.get('pages.editRecipe.clip.header').toPromise();
+    const subHeader = await this.translate.get('pages.editRecipe.clip.subHeader').toPromise();
+    const message = await this.translate.get('pages.editRecipe.clip.message').toPromise();
+    const placeholder = await this.translate.get('pages.editRecipe.clip.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+    const invalidUrl = await this.translate.get('pages.editRecipe.clip.invalidUrl').toPromise();
+
     const clipPrompt = await this.alertCtrl.create({
-      header: 'Autofill fields from URL',
-      subHeader: 'Enter a website URL to grab recipe data',
-      message: 'Note: This feature is in beta',
+      header,
+      subHeader,
+      message,
       inputs: [{
         name: 'url',
         type: 'text',
-        placeholder: 'Recipe URL'
+        placeholder
       }],
       buttons: [{
-        text: 'Cancel',
+        text: cancel,
         role: 'cancel',
       }, {
-        text: 'Ok',
+        text: okay,
         handler: async data => {
           const { url } = data;
           if (!url || !this.isValidHttpUrl(url)) {
             (await this.toastCtrl.create({
-              message: 'Error: You must provide a valid URL',
+              message: invalidUrl,
               duration: 5000
             })).present();
             return;
@@ -268,68 +186,65 @@ export class EditRecipePage {
   }
 
   async _clipFromUrl(url: string) {
+    const pleaseWait = await this.translate.get('pages.editRecipe.clip.loading').toPromise();
+    const failed = await this.translate.get('pages.editRecipe.clip.failed').toPromise();
+
     const loading = await this.loadingCtrl.create({
-      message: 'Please wait...'
+      message: pleaseWait,
     });
     await loading.present();
-    try {
-      const fields = await this.recipeService.clipFromUrl(url);
-      console.log(fields);
-
-      const autofillFields = ['title', 'description', 'source', 'yield', 'activeTime', 'totalTime', 'ingredients', 'instructions', 'notes'];
-      autofillFields.forEach(fieldName => fields[fieldName] ? this.recipe[fieldName] = fields[fieldName] : null);
-
-      this.recipe.url = url;
-
-      if (fields.imageURL?.trim()) {
-        try {
-          await this.addImageByUrl(fields.imageURL);
-        } catch(err) {
-          console.log('Error clipping image:', err);
-        }
+    const response = await this.recipeService.clipFromUrl({
+      url,
+    }, {
+      400: async () => {
+        (await this.toastCtrl.create({
+          message: failed,
+          duration: 5000
+        })).present();
       }
-    } catch(err) {
-      switch (err?.response?.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 400:
-          (await this.toastCtrl.create({
-            message: 'Failed to autofill from that URL',
-            duration: 5000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    }
+    });
+    if (!response.success) return;
+
+    const autofillFields = ['title', 'description', 'source', 'yield', 'activeTime', 'totalTime', 'ingredients', 'instructions', 'notes'];
+    autofillFields.forEach(fieldName => response.data[fieldName] ? this.recipe[fieldName] = response.data[fieldName] : null);
+
+    this.recipe.url = url;
+
+    const imageResponse = await this.imageService.createFromUrl({
+      imageURL: response.data.imageURL,
+    }, {
+      400: () => {},
+      415: () => {},
+      500: () => {}
+    });
+    if (imageResponse.success) this.images.push(imageResponse.data);
+
     loading.dismiss();
   }
 
   async addImageByUrlPrompt() {
+    const header = await this.translate.get('pages.editRecipe.addImage.header').toPromise();
+    const message = await this.translate.get('pages.editRecipe.addImage.message').toPromise();
+    const placeholder = await this.translate.get('pages.editRecipe.addImage.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const confirm = await this.translate.get('generic.confirm').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Add Image by URL',
-      message: 'Enter an image URL to be added to the recipe',
+      header,
+      message,
       inputs: [
         {
           name: 'imageUrl',
-          placeholder: 'Image URL'
+          placeholder
         },
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           handler: () => { }
         },
         {
-          text: 'Add',
+          text: confirm,
           handler: data => {
             this._addImageByUrlPrompt(data);
           }
@@ -346,19 +261,24 @@ export class EditRecipePage {
     const imageUrl = data.imageUrl.trim();
 
     if (this.isValidHttpUrl(imageUrl)) {
+      const downloading = await this.translate.get('pages.editRecipe.addImage.downloading').toPromise();
+
       const loading = await this.loadingCtrl.create({
-        message: 'Downloading image...'
+        message: downloading,
       });
       await loading.present();
 
-      try {
-        await this.addImageByUrl(imageUrl);
-      } catch(e){}
+      const response = await this.imageService.createFromUrl({
+        imageURL: imageUrl,
+      });
+      if (response.success) this.images.push(response.data);
 
       loading.dismiss();
     } else {
+      const invalidUrl = await this.translate.get('pages.editRecipe.addImage.invalidUrl').toPromise();
+
       const invalidUrlToast = await this.toastCtrl.create({
-        message: 'Please enter a valid image URL',
+        message: invalidUrl,
         duration: 5000
       });
       invalidUrlToast.present();

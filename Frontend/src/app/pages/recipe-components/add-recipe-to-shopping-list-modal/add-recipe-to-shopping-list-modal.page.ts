@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { LoadingService } from '@/services/loading.service';
@@ -27,6 +28,7 @@ export class AddRecipeToShoppingListModalPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public shoppingListService: ShoppingListService,
     public recipeService: RecipeService,
     public loadingService: LoadingService,
@@ -57,44 +59,19 @@ export class AddRecipeToShoppingListModalPage {
     localStorage.setItem('lastUsedShoppingListId', this.destinationShoppingList.id);
   }
 
-  loadLists() {
-    return new Promise((resolve, reject) => {
-      this.shoppingListService.fetch().then(response => {
-        this.shoppingLists = response;
+  async loadLists() {
+    const response = await this.shoppingListService.fetch();
+    if (!response.success) return;
 
-        this.selectLastUsedShoppingList();
+    this.shoppingLists = response.data;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
-    });
+    this.selectLastUsedShoppingList();
   }
 
   selectedIngredientsChange(recipeId, selectedIngredients) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
-    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat();
+    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat() as Ingredient[];
   }
 
   isFormValid() {
@@ -103,7 +80,7 @@ export class AddRecipeToShoppingListModalPage {
     return this.selectedIngredients && this.selectedIngredients.length > 0;
   }
 
-  save() {
+  async save() {
     const loading = this.loadingService.start();
 
     this.saveLastUsedShoppingList();
@@ -119,39 +96,18 @@ export class AddRecipeToShoppingListModalPage {
         }))
       ).flat();
 
-    this.shoppingListService.addItems({
-      id: this.destinationShoppingList.id,
+    const response = await this.shoppingListService.addItems(this.destinationShoppingList.id, {
       items,
-    }).then(response => {
-      loading.dismiss();
-
-      this.modalCtrl.dismiss();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss();
   }
 
   async createShoppingList() {
+    const message = await this.translate.get('pages.addRecipeToShoppingListModal.newListSuccess').toPromise();
+
     const modal = await this.modalCtrl.create({
       component: NewShoppingListModalPage
     });
@@ -165,7 +121,7 @@ export class AddRecipeToShoppingListModalPage {
           this.destinationShoppingList = this.shoppingLists[0];
         } else {
           (await this.toastCtrl.create({
-            message: 'Excellent! Now select the list you just created.',
+            message,
             duration: 6000
           })).present();
         }

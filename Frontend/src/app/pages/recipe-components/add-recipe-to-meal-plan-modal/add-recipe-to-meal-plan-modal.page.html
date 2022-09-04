@@ -1,6 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add Recipe To Meal Plan</ion-title>
+    <ion-title>
+      {{ 'pages.addRecipeToMealPlanModal.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -13,15 +15,17 @@
 <ion-content class="ion-padding">
 
   <p *ngIf="!destinationMealPlan">
-    First, select the destination meal plan:
+    {{ 'pages.addRecipeToMealPlanModal.instructions1' | translate }}
   </p>
 
   <p *ngIf="!mealPlans">
-    Loading meal plans...
+    {{ 'pages.addRecipeToMealPlanModal.loading' | translate }}
   </p>
 
   <ion-item *ngIf="mealPlans && mealPlans.length > 0">
-    <ion-label>Select Meal Plan</ion-label>
+    <ion-label>
+      {{ 'pages.addRecipeToMealPlanModal.selectDestination' | translate }}
+    </ion-label>
     <ion-select [(ngModel)]="selectedMealPlan" (ngModelChange)="loadMealPlan(selectedMealPlan.id)">
       <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan">{{ mealPlan.title }}</ion-select-option>
     </ion-select>
@@ -29,11 +33,11 @@
 
   <div *ngIf="mealPlans && mealPlans.length === 0" (click)="createMealPlan()">
     <p>
-      You have no meal plans.<br /><br />
+      {{ 'pages.addRecipeToMealPlanModal.noMealPlans' | translate }}<br /><br />
       <ion-button>
         <ion-icon name="calendar" slot="start"></ion-icon>
         <ion-label>
-          Create a Meal Plan
+          {{ 'pages.addRecipeToMealPlanModal.createMealPlan' | translate }}
         </ion-label>
       </ion-button>
     </p>
@@ -52,9 +56,9 @@
     <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
       <ion-icon name="calendar" slot="start"></ion-icon>
       <ion-label>
-        <span *ngIf="isFormValid()">Add to Meal Plan</span>
-        <span *ngIf="!destinationMealPlan">Select a meal plan</span>
-        <span *ngIf="destinationMealPlan && !meal">Select a meal</span>
+        <span *ngIf="isFormValid()">{{ 'pages.addRecipeToMealPlanModal.add' | translate }}</span>
+        <span *ngIf="!destinationMealPlan">{{ 'pages.addRecipeToMealPlanModal.selectMealPlan' | translate }}</span>
+        <span *ngIf="destinationMealPlan && !meal">{{ 'pages.addRecipeToMealPlanModal.selectMeal' | translate }}</span>
       </ion-label>
     </ion-button>
   </div>

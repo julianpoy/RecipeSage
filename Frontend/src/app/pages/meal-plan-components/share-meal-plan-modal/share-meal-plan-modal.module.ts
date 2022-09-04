@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 import { ShareMealPlanModalPage } from './share-meal-plan-modal.page';
+import {GlobalModule} from '@/global.module';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { ShareMealPlanModalPage } from './share-meal-plan-modal.page';
   imports: [
     CommonModule,
     IonicModule,
+    GlobalModule,
   ],
   entryComponents: [
     ShareMealPlanModalPage,

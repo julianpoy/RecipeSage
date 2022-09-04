@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>New meal planner</ion-title>
+    <ion-title>
+      {{ 'pages.newMealPlanModal.title' | translate }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -14,7 +16,9 @@
 
 <ion-content class="ion-padding">
   <ion-item>
-    <ion-label position="floating">Title</ion-label>
+    <ion-label position="floating">
+      {{ 'pages.newMealPlanModal.input.title' | translate }}
+    </ion-label>
     <ion-input [(ngModel)]="mealPlanTitle" type="text" value=""
       autocapitalize="on"
       autocomplete="on"
@@ -24,14 +28,17 @@
 
   <br /><br />
 
-  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
+  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!mealPlanTitle">
     <ion-icon name="list" slot="start"></ion-icon>
-    <ion-label>
-      Create<span *ngIf="selectedThreads.length > 0">&nbsp;and Share</span>
+    <ion-label *ngIf="selectedCollaboratorIds.length > 0">
+      {{ 'pages.newMealPlanModal.createAndShare' | translate }}
+    </ion-label>
+    <ion-label *ngIf="selectedCollaboratorIds.length === 0">
+      {{ 'pages.newMealPlanModal.create' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

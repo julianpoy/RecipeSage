@@ -6,7 +6,9 @@
 
     <ion-label>
       <h2>{{ selectedLabel.title }}</h2>
-      <p>Click to change</p>
+      <p>
+        {{ 'components.selectLabel.change' | translate }}
+      </p>
     </ion-label>
   </ion-item>
 
@@ -26,7 +28,9 @@
 
           <ion-label>
             <h2>{{ label.title }}</h2>
-            <p>Click to select</p>
+            <p>
+              {{ 'components.selectLabel.select' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -36,7 +40,9 @@
         *ngIf="results.length === 0 && searchText.length > 0">
         <ion-item class="suggestion-inner" button>
           <ion-label>
-            <h2>No labels called "{{ searchText }}"</h2>
+            <h2>
+              {{ 'components.selectLabel.null' | translate:{name:searchText} }}
+            </h2>
           </ion-label>
         </ion-item>
       </button>

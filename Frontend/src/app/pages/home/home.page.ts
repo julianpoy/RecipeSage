@@ -1,5 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
@@ -38,7 +39,6 @@ export class HomePage implements AfterViewInit {
   searchText = '';
 
   folder: string;
-  folderTitle: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -50,10 +50,13 @@ export class HomePage implements AfterViewInit {
 
   userId = null;
 
+  otherUserProfile;
+
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
     public events: EventService,
+    public translate: TranslateService,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
     public alertCtrl: AlertController,
@@ -67,24 +70,11 @@ export class HomePage implements AfterViewInit {
     public messagingService: MessagingService) {
 
     this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
-    switch (this.folder) {
-      case 'inbox':
-        this.folderTitle = 'Recipe Inbox';
-        break;
-      default:
-        this.folderTitle = 'My Recipes';
-        break;
-    }
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
-      if (this.selectedLabels.length) {
-        this.folderTitle = `Shared Label: ${this.selectedLabels[0]}`;
-      } else {
-        this.folderTitle = 'Shared Recipes';
-      }
       this.userService.getProfileByUserId(this.userId).then(profile => {
-        this.folderTitle = `${profile.name}'s ${this.folderTitle}`;
+        this.otherUserProfile = profile;
       });
     }
     this.setDefaultBackHref();
@@ -129,9 +119,10 @@ export class HomePage implements AfterViewInit {
 
   async setDefaultBackHref() {
     if (this.userId) {
-      const profile = await this.userService.getProfileByUserId(this.userId);
+      const response = await this.userService.getProfileByUserId(this.userId);
+      if (!response.success) return;
 
-      this.defaultBackHref = RouteMap.ProfilePage.getPath(`@${profile.handle}`);
+      this.defaultBackHref = RouteMap.ProfilePage.getPath(`@${response.data.handle}`);
     }
   }
 
@@ -161,7 +152,7 @@ export class HomePage implements AfterViewInit {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = this.labels.map(e => e.title);
 
-      this.selectedLabels.splice(0, this.selectedLabels.length, ...this.selectedLabels.filter(e => labelNames.indexOf(e) > -1));
+      this.selectedLabels.splice.call(null, ([0, this.selectedLabels.length] as any[]).concat(this.selectedLabels.filter(e => labelNames.indexOf(e) > -1)));
 
       return this.resetAndLoadRecipes();
     });
@@ -195,68 +186,29 @@ export class HomePage implements AfterViewInit {
     this.lastRecipeCount = 0;
   }
 
-  loadRecipes(offset, numToFetch) {
+  async loadRecipes(offset, numToFetch) {
     this.lastRecipeCount += numToFetch;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.fetch({
-        folder: this.folder,
-        userId: this.userId,
-        sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
-        offset,
-        count: numToFetch,
-        labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {})
-      }).then(response => {
-
-        this.totalRecipeCount = response.totalCount;
-
-        this.recipes = this.recipes.concat(response.data);
-
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          case 404:
-            const noAccessToast = await this.toastCtrl.create({
-              message: 'It seems like you don\'t have access to this resource',
-              duration: 5000
-            });
-            noAccessToast.present();
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    const response = await this.recipeService.fetch({
+      folder: this.folder,
+      userId: this.userId,
+      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      offset,
+      count: numToFetch,
+      labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+      labels: this.selectedLabels.join(',') || undefined,
     });
+    if (!response.success) return;
+
+    this.totalRecipeCount = response.data.totalCount;
+    this.recipes = this.recipes.concat(response.data.data);
   }
 
-  loadLabels() {
-    return new Promise((resolve, reject) => {
-      this.labelService.fetch().then(response => {
-        this.labels = response;
+  async loadLabels() {
+    const response = await this.labelService.fetch();
+    if (!response.success) return;
 
-        resolve();
-      }).catch(err => {
-        reject(err);
-      });
-    });
+    this.labels = response.data;
   }
 
   toggleLabel(labelTitle) {
@@ -308,7 +260,7 @@ export class HomePage implements AfterViewInit {
     this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath('new'));
   }
 
-  search(text) {
+  async search(text) {
     if (text.trim().length === 0) {
       this.searchText = '';
       this.resetAndLoadRecipes();
@@ -319,42 +271,16 @@ export class HomePage implements AfterViewInit {
 
     this.searchText = text;
 
-    return new Promise((resolve, reject) => {
-      this.recipeService.search(text, {
-        ...(this.selectedLabels.length > 0 ? { labels: this.selectedLabels } : {}),
-        userId: this.userId || undefined,
-      }).then(response => {
-        loading.dismiss();
-
-        this.resetRecipes();
-        this.recipes = response.data;
-
-        resolve();
-      }).catch(async err => {
-        loading.dismiss();
-
-        reject();
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    const response = await this.recipeService.search({
+      query: text,
+      labels: this.selectedLabels.join(',') || undefined,
+      userId: this.userId || undefined,
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.resetRecipes();
+    this.recipes = response.data.data;
   }
 
   trackByFn(index, item) {
@@ -376,50 +302,36 @@ export class HomePage implements AfterViewInit {
   }
 
   async addLabelToSelectedRecipes() {
+    const header = await this.translate.get('pages.home.addLabel.header').toPromise();
+    const message = await this.translate.get('pages.home.addLabel.message').toPromise();
+    const placeholder = await this.translate.get('pages.home.addLabel.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const save = await this.translate.get('generic.save').toPromise();
+
     const prompt = await this.alertCtrl.create({
-      header: 'Add Label to Selected Recipes',
-      message: 'Enter the name for the label',
+      header,
+      message,
       inputs: [
         {
           name: 'labelName',
-          placeholder: 'Label Name'
+          placeholder,
         },
       ],
       buttons: [
         {
-          text: 'Cancel'
+          text: cancel
         },
         {
-          text: 'Save',
-          handler: ({ labelName }) => {
+          text: save,
+          handler: async ({ labelName }) => {
             const loading = this.loadingService.start();
-            this.labelService.createBulk({
+            const response = await this.labelService.createBulk({
               recipeIds: this.selectedRecipeIds,
               title: labelName.toLowerCase()
-            }).then(() => {
-              this.resetAndLoadAll().then(() => {
-                loading.dismiss();
-              }, () => {
-                loading.dismiss();
-              });
-            }).catch(async err => {
-              switch (err.response.status) {
-                case 0:
-                  const offlineToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.offlinePushMessage,
-                    duration: 5000
-                  });
-                  offlineToast.present();
-                  break;
-                default:
-                  const errorToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.unexpectedError,
-                    duration: 30000
-                  });
-                  errorToast.present();
-                  break;
-              }
             });
+            if (!response.success) return loading.dismiss();
+            await this.resetAndLoadAll();
+            loading.dismiss();
           }
         }
       ]
@@ -428,50 +340,35 @@ export class HomePage implements AfterViewInit {
   }
 
   async deleteSelectedRecipes() {
-    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title)
-                                              .join('<br />');
+    const recipeNames = this.selectedRecipeIds.map(recipeId => this.recipes.filter(recipe => recipe.id === recipeId)[0].title).join(', ');
+
+    const header = await this.translate.get('pages.home.deleteSelected.header').toPromise();
+    const message = await this.translate.get('pages.home.deleteSelected.message', {recipeNames}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
 
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: `This will permanently delete the selected recipes from your account. This action is irreversible.<br /><br />
-                The following recipes will be deleted:<br />${recipeNames}`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
-          handler: () => {
+          handler: async () => {
             const loading = this.loadingService.start();
-            this.recipeService.removeBulk(this.selectedRecipeIds).then(() => {
-              this.clearSelectedRecipes();
-
-              this.resetAndLoadAll().then(() => {
-                loading.dismiss();
-              }, () => {
-                loading.dismiss();
-              });
-            }).catch(async err => {
-              switch (err.response.status) {
-                case 0:
-                  const offlineToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.offlinePushMessage,
-                    duration: 5000
-                  });
-                  offlineToast.present();
-                  break;
-                default:
-                  const errorToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.unexpectedError,
-                    duration: 30000
-                  });
-                  errorToast.present();
-                  break;
-              }
+            const response = await this.recipeService.deleteBulk({
+              recipeIds: this.selectedRecipeIds,
             });
+            if (!response.success) return loading.dismiss();
+            this.clearSelectedRecipes();
+
+            this.resetAndLoadAll();
+            loading.dismiss();
           }
         }
       ]

@@ -7,11 +7,14 @@ import { AddRecipeToShoppingListModalPage } from './add-recipe-to-shopping-list-
 import { SelectIngredientsModule } from '@/components/select-ingredients/select-ingredients.module';
 import { NewShoppingListModalPageModule } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AddRecipeToShoppingListModalPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,

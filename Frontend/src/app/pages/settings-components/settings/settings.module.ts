@@ -6,11 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SettingsPage } from './settings.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     SettingsPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { DownloadAndInstallPage } from './download-and-install.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     DownloadAndInstallPage,
@@ -18,6 +20,7 @@ import { DownloadAndInstallPage } from './download-and-install.page';
         component: DownloadAndInstallPage
       }
     ]),
+    GlobalModule,
   ],
 })
 export class DownloadAndInstallPageModule {}

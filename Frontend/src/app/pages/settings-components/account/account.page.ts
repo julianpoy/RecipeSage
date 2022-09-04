@@ -9,6 +9,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { RecipeService } from '@/services/recipe.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { getQueryParam } from '@/utils/queryParams';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'page-account',
@@ -33,6 +34,7 @@ export class AccountPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public utilService: UtilService,
@@ -53,39 +55,22 @@ export class AccountPage {
     ]).then(([account, stats]) => {
       loading.dismiss();
 
-      this.account = account;
+      if (!account.success || !stats.success) return;
+
+      this.account = account.data;
       this.account.password = '123456';
 
-      this.stats = stats;
-      this.stats.createdAt = this.utilService.formatDate(stats.createdAt, { now: true });
-      this.stats.lastLogin = stats.lastLogin ? this.utilService.formatDate(stats.lastLogin, { now: true }) : this.stats.createdAt;
+      this.stats = stats.data;
+      this.stats.createdAt = this.utilService.formatDate(stats.data.createdAt, { now: true });
+      this.stats.lastLogin = stats.data.lastLogin ? this.utilService.formatDate(stats.data.lastLogin, { now: true }) : this.stats.createdAt;
 
       Object.keys(this.capabilitiesService.capabilities).map(capabilityName => {
         this.capabilitySubscriptions[capabilityName] = {
           enabled: this.capabilitiesService.capabilities[capabilityName],
-          expires: this.getExpiryForCapability(capabilityName)
+          expired: this.getExpiryForCapability(capabilityName).expired,
+          expires: this.getExpiryForCapability(capabilityName).expires
         };
       });
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
     });
   }
 
@@ -108,17 +93,28 @@ export class AccountPage {
 
   getExpiryForCapability(capabilityName: string) {
     const subscription = this.getSubscriptionForCapability(capabilityName);
-    if (!subscription) return -1;
-    if (!subscription.expires) return false;
+    if (!subscription) return {
+      expired: null,
+      expires: null,
+    }
+    if (!subscription.expires) return {
+      expired: false,
+      expires: null,
+    }
 
     const expires = new Date(subscription.expires);
-    return `${new Date(subscription.expires) < new Date() ? 'Expired ' : 'Enabled until '}${dayjs(expires).format('YYYY-MM-DD')}`;
+    return {
+      expired: new Date(subscription.expires) < new Date(),
+      expires: dayjs(expires).format('YYYY-MM-DD')
+    }
   }
 
   async saveName() {
     if (!this.account.name || this.account.name.length === 0) {
+      const message = await this.translate.get('pages.account.nameRequired').toPromise();
+
       const errorToast = await this.toastCtrl.create({
-        message: 'Name/nickname must not be blank.',
+        message,
         duration: 5000
       });
       errorToast.present();
@@ -127,46 +123,30 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    this.userService.update({
+    const response = await this.userService.update({
       name: this.account.name
-    }).then(async response => {
-      loading.dismiss();
-
-      this.account.name = response.name;
-      this.nameChanged = false;
-
-      const tst = await this.toastCtrl.create({
-        message: 'Profile name was updated.',
-        duration: 5000
-      });
-      tst.present();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
     });
+
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.nameChanged = false;
+
+    const message = await this.translate.get('pages.account.nameUpdated').toPromise();
+
+    const tst = await this.toastCtrl.create({
+      message,
+      duration: 5000
+    });
+    tst.present();
   }
 
   async saveEmail() {
     if (!this.account.email || this.account.email.length === 0) {
+      const message = await this.translate.get('pages.account.emailRequired').toPromise();
+
       (await this.toastCtrl.create({
-        message: 'Email must not be blank.',
+        message,
         duration: 5000
       })).present();
       return;
@@ -174,63 +154,87 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    this.userService.update({
+    const response = await this.userService.update({
       email: this.account.email
-    }).then(async response => {
-      loading.dismiss();
+    }, {
+      406: async () => {
+        const message = await this.translate.get('pages.account.emailConflict').toPromise();
 
-      this.account.email = response.email;
-      this.emailChanged = false;
+        (await this.toastCtrl.create({
+          message,
+          duration: 5000
+        })).present();
+      },
+      412: async () => {
+        const message = await this.translate.get('pages.account.emailInvalid').toPromise();
+
+        (await this.toastCtrl.create({
+          message,
+          duration: 5000
+        })).present();
+      }
+    });
+
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.emailChanged = false;
+
+    const message = await this.translate.get('pages.account.emailUpdated').toPromise();
+
+    const tst = await this.toastCtrl.create({
+      message,
+      duration: 5000
+    });
+    tst.present();
+  }
+
+  async savePassword() {
+    if (this.account.password !== this.account.confirmPassword) {
+      const message = await this.translate.get('pages.account.passwordMatch').toPromise();
 
       const tst = await this.toastCtrl.create({
-        message: 'Email address was updated.',
+        message,
         duration: 5000
       });
       tst.present();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 406:
-          (await this.toastCtrl.create({
-            message: 'Sorry, an account with that email address already exists.',
-            duration: 5000
-          })).present();
-          break;
-        case 412:
-          (await this.toastCtrl.create({
-            message: 'Please enter a valid email address.',
-            duration: 5000
-          })).present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
-  }
+      return;
+    }
 
-  async _logout() {
+    if (this.account.password.length < 6) {
+      const message = await this.translate.get('pages.account.passwordLength').toPromise();
+
+      const tst = await this.toastCtrl.create({
+        message,
+        duration: 5000
+      });
+      tst.present();
+      return;
+    }
+
+    const loading = this.loadingService.start();
+
+    const response = await this.userService.update({
+      password: this.account.password
+    });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.account.password = '*'.repeat(this.account.password.length);
+    this.passwordChanged = false;
+
     localStorage.removeItem('token');
 
+    const header = await this.translate.get('pages.account.passwordUpdated.header').toPromise();
+    const message = await this.translate.get('pages.account.passwordUpdated.message').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Password Updated',
-      message: 'Your password has been updated. You will need to log back in on any devices that use this account.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Okay',
+          text: okay,
           handler: () => {
             this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
           }
@@ -240,56 +244,6 @@ export class AccountPage {
     alert.present();
   }
 
-  async savePassword() {
-    if (this.account.password !== this.account.confirmPassword) {
-      const tst = await this.toastCtrl.create({
-        message: 'Passwords do not match.',
-        duration: 5000
-      });
-      tst.present();
-      return;
-    }
-
-    const loading = this.loadingService.start();
-
-    this.userService.update({
-      password: this.account.password
-    }).then(response => {
-      loading.dismiss();
-
-      this.account.password = '*'.repeat(this.account.password.length);
-      this.passwordChanged = false;
-
-      this._logout();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 412:
-          (await this.toastCtrl.create({
-            message: 'Invalid password - Passwords must be 6 characters or longer.',
-            duration: 5000
-          })).present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
-  }
-
   async reindexRecipes() {
     const loading = this.loadingService.start();
 
@@ -297,8 +251,10 @@ export class AccountPage {
 
     loading.dismiss();
 
+    const message = await this.translate.get('pages.account.reindexed').toPromise();
+
     const toast = await this.toastCtrl.create({
-      message: 'Your recipes have been reindexed',
+      message,
       duration: 5000
     });
 
@@ -306,54 +262,35 @@ export class AccountPage {
   }
 
   async deleteAllRecipes() {
+    const header = await this.translate.get('pages.account.deleteAllRecipes.header').toPromise();
+    const message = await this.translate.get('pages.account.deleteAllRecipes.message').toPromise();
+    const confirm = await this.translate.get('pages.account.deleteAllRecipes.confirm').toPromise();
+    const success = await this.translate.get('pages.account.deleteAllRecipes.success').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Warning - You\'re about to delete all of your recipes!',
-      message: `This action is PERMANENT.<br /><br />
-                All of your recipes and associated labels will be removed from the RecipeSage system.`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Yes, continue',
+          text: confirm,
           cssClass: 'alertDanger',
-          handler: () => {
+          handler: async () => {
             const loading = this.loadingService.start();
 
-            this.recipeService.removeAll().then(async () => {
-              loading.dismiss();
+            const response = await this.recipeService.deleteAll();
 
-              (await this.toastCtrl.create({
-                message: 'Your recipe data has been deleted.',
-                duration: 5000
-              })).present();
-            }).catch(async err => {
-              loading.dismiss();
+            loading.dismiss();
+            if (!response.success) return;
 
-              switch (err.response.status) {
-                case 0:
-                  (await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.offlinePushMessage,
-                    duration: 5000
-                  })).present();
-                  break;
-                case 401:
-                  (await this.toastCtrl.create({
-                    message: 'It looks like your session has expired. Please login and try again.',
-                    duration: 5000
-                  })).present();
-                  this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-                  break;
-                default:
-                  const errorToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.unexpectedError,
-                    duration: 30000
-                  });
-                  errorToast.present();
-                  break;
-              }
-            });
+            (await this.toastCtrl.create({
+              message: success,
+              duration: 5000
+            })).present();
           }
         },
         {
-          text: 'Cancel',
+          text: cancel,
           handler: () => {}
         }
       ]

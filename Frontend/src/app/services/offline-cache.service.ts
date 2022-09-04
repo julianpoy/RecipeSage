@@ -77,11 +77,13 @@ export class OfflineCacheService {
       offset: 0
     });
 
+    if (!firstFetch.success) return;
+
     firstFetch.data.map(el => this.knownRecipeIds.add(el.id));
 
     await this.syncPause();
 
-    const pageCount = Math.ceil(firstFetch.totalCount / 50);
+    const pageCount = Math.ceil(firstFetch.data.totalCount / 50);
     for (let i = 1; i < pageCount; i++) {
       const page = await this.recipeService.fetch({
         folder: 'main',

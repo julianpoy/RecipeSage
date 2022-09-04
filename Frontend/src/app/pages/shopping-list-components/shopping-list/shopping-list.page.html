@@ -4,7 +4,9 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Shopping List - {{ list.title }}</ion-title>
+    <ion-title>
+      {{ 'pages.shoppingList.title' | translate:{title:list.title} }}
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -37,7 +39,7 @@
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-              (complete)="removeItems($event)"></shopping-list-group>
+              (markComplete)="removeItems($event)"></shopping-list-group>
           </div>
         </div>
       </div>
@@ -50,7 +52,7 @@
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-          (complete)="removeItems($event)"></shopping-list-group>
+          (markComplete)="removeItems($event)"></shopping-list-group>
       </div>
     </div>
     <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
@@ -88,13 +90,13 @@
       <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          There are no items in this shopping list.<br />
-          Use the menu in the upper right hand corner to enable or disable automatic grouping.
+          {{ 'pages.shoppingList.nullState.1' | translate }}<br />
+          {{ 'pages.shoppingList.nullState.2' | translate }}
           <br /><br />
           <ion-button (click)="newShoppingListItem()">
             <ion-icon name="add" slot="start"></ion-icon>
             <ion-label>
-              Add the first item
+              {{ 'pages.shoppingList.nullState.add' | translate }}
             </ion-label>
           </ion-button>
         </p>
@@ -106,7 +108,7 @@
 
   <ion-list *ngIf="recipeIds.length > 0">
     <ion-list-header>
-      Recipes in this list
+      {{ 'pages.shoppingList.recipes' | translate }}
     </ion-list-header>
     <ion-item *ngFor="let recipeId of recipeIds" button>
       <ion-icon class="delete-recipe" name="trash" slot="start" (click)="removeRecipe(recipeId)"></ion-icon>

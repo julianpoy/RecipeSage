@@ -4,7 +4,8 @@
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ recipe.id ? 'Edit Recipe' : 'New Recipe' }}</ion-title>
+    <ion-title *ngIf="recipe.id">{{ 'pages.editRecipe.title.edit' | translate }}</ion-title>
+    <ion-title *ngIf="!recipe.id">{{ 'pages.editRecipe.title.new' | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -22,12 +23,14 @@
   <div class="ion-padding">
     <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
       <ion-icon name="clipboard" slot="start"></ion-icon>
-      Autofill fields from URL (beta)
+      {{ 'pages.editRecipe.autoclip' | translate }}
     </ion-button>
     <br />
     <br />
     <ion-item>
-      <ion-label position="stacked">Title</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.title' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.title"
         (ngModelChange)="markAsDirty()"
@@ -39,7 +42,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Description</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.description' | translate }}
+      </ion-label>
       <ion-textarea
         [(ngModel)]="recipe.description"
         (ngModelChange)="markAsDirty()"
@@ -52,7 +57,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Yield</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.yield' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.yield"
         (ngModelChange)="markAsDirty()"
@@ -64,7 +71,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Active Time</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.activeTime' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.activeTime"
         (ngModelChange)="markAsDirty()"
@@ -76,7 +85,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Total Time</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.totalTime' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.totalTime"
         (ngModelChange)="markAsDirty()"
@@ -88,7 +99,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Source</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.source' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.source"
         (ngModelChange)="markAsDirty()"
@@ -100,7 +113,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Source URL</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.sourceUrl' | translate }}
+      </ion-label>
       <ion-input
         [(ngModel)]="recipe.url"
         (ngModelChange)="markAsDirty()"
@@ -112,7 +127,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Ingredients</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.ingredients' | translate }}
+      </ion-label>
       <ion-textarea
         [(ngModel)]="recipe.ingredients"
         (ngModelChange)="markAsDirty()"
@@ -125,7 +142,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Instructions</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.instructions' | translate }}
+      </ion-label>
       <ion-textarea
         [(ngModel)]="recipe.instructions"
         (ngModelChange)="markAsDirty()"
@@ -138,7 +157,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Notes</ion-label>
+      <ion-label position="stacked">
+        {{ 'pages.editRecipe.input.notes' | translate }}
+      </ion-label>
       <ion-textarea
         [(ngModel)]="recipe.notes"
         (ngModelChange)="markAsDirty()"
@@ -153,10 +174,18 @@
     <br />
 
     <ion-item *ngIf="!recipe.id" class="ion-text-wrap">
-      <p>You'll be able to add categories/labels after the recipe is created.</p>
+      <p>
+        {{ 'pages.editRecipe.labelNotice' | translate }}
+      </p>
     </ion-item>
     <div class="ion-padding">
-      <ion-button expand="block" (click)="save()">{{ recipe.id ? "Save" : "Create" }}</ion-button>
+      <ion-button *ngIf="recipe.id" expand="block" (click)="save()">
+        {{ 'pages.editRecipe.save' | translate }}
+      </ion-button>
+      <ion-button *ngIf="!recipe.id" expand="block" (click)="save()">
+        {{ 'pages.editRecipe.create' | translate }}
+        Create
+      </ion-button>
     </div>
   </div>
 </ion-content>

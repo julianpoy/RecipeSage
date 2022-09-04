@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
@@ -11,7 +12,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
 import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
-import { AuthModalPage } from '@/pages/auth-modal/auth-modal.page';
+import { AuthPage } from '@/pages/auth/auth.page';
 
 @Component({
   selector: 'page-profile',
@@ -29,6 +30,7 @@ export class ProfilePage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public route: ActivatedRoute,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -42,12 +44,16 @@ export class ProfilePage {
   }
 
   async profileDisabledError() {
+    const header = await this.translate.get('pages.profile.disabled.header').toPromise();
+    const message = await this.translate.get('pages.profile.disabled.message').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Profile is not enabled',
-      message: 'This user has disabled their profile and is therefore private/inaccessible.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Okay',
+          text: okay,
           handler: () => {
             this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
           }
@@ -100,13 +106,16 @@ export class ProfilePage {
     await this.userService.addFriend(this.profile.id);
     loading.dismiss();
 
+    const message = await this.translate.get('pages.profile.inviteSent').toPromise();
+    const close = await this.translate.get('generic.close').toPromise();
+
     const tst = await this.toastCtrl.create({
-      message: 'Friend invite sent!',
+      message,
       duration: 5000,
       buttons: [{
         side: 'end',
         role: 'cancel',
-        text: 'Dismiss',
+        text: close,
       }]
     });
     tst.present();
@@ -120,13 +129,16 @@ export class ProfilePage {
     await this.userService.deleteFriend(this.profile.id);
     loading.dismiss();
 
+    const message = await this.translate.get('pages.profile.inviteRemoved').toPromise();
+    const close = await this.translate.get('generic.close').toPromise();
+
     const tst = await this.toastCtrl.create({
-      message: 'Friendship removed',
+      message,
       duration: 5000,
       buttons: [{
         side: 'end',
         role: 'cancel',
-        text: 'Dismiss',
+        text: close,
       }]
     });
     tst.present();
@@ -163,13 +175,18 @@ export class ProfilePage {
   }
 
   async setupMyProfileAlert() {
+    const header = await this.translate.get('pages.profile.setup.header').toPromise();
+    const message = await this.translate.get('pages.profile.setup.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const setup = await this.translate.get('pages.profile.setup.confirm').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Your profile isn\'t setup yet',
-      message: 'To add this user as a friend, you need to setup your profile.',
+      header,
+      message,
       buttons: [{
-        text: 'Cancel',
+        text: cancel,
       }, {
-        text: 'Setup',
+        text: setup,
         handler: () => {
           this.setupMyProfile();
         }
@@ -186,7 +203,7 @@ export class ProfilePage {
 
   async auth() {
     const authModal = await this.modalCtrl.create({
-      component: AuthModalPage,
+      component: AuthPage,
       componentProps: {
         register: true
       }
@@ -200,8 +217,10 @@ export class ProfilePage {
     await this.load();
 
     if (this.profile?.incomingFriendship || this.profile?.outgoingFriendship) {
+      const message = await this.translate.get('pages.profile.alreadyRequested').toPromise();
+
       const tst = await this.toastCtrl.create({
-        message: 'It looks like you already have a friendship in progress. Please try again.',
+        message,
         duration: 3000,
       });
       await tst.present();

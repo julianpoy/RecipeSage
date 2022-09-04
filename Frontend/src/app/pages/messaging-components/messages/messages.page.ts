@@ -52,46 +52,17 @@ export class MessagesPage {
     });
   }
 
-  loadThreads() {
-    return new Promise((resolve, reject) => {
-      this.messagingService.threads({
-        includeMessages: true,
-        messageLimit: 1
-      }).then(response => {
-        this.threads = response.sort((a, b) => {
-          const aCreatedAt = new Date(a.messages[0].updatedAt);
-          const bCreatedAt = new Date(b.messages[0].updatedAt);
-          // Ascending (newest first)
-          return bCreatedAt.valueOf() - aCreatedAt.valueOf();
-        }).map(thread => {
-          thread.messages[0]._updatedAt = this.utilService.formatDate(thread.messages[0].updatedAt, { now: true });
-          return thread;
-        });
+  async loadThreads() {
+    const response = await this.messagingService.threads({
+      limit: 1
+    });
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    this.threads = response.data.sort((a, b) => {
+      const aCreatedAt = new Date(a.messages[0].updatedAt);
+      const bCreatedAt = new Date(b.messages[0].updatedAt);
+      // Ascending (newest first)
+      return bCreatedAt.valueOf() - aCreatedAt.valueOf();
     });
   }
 
@@ -112,5 +83,9 @@ export class MessagesPage {
 
   isNotificationsEnabled() {
     return this.messagingService.isNotificationsEnabled();
+  }
+
+  prettyDate(date) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }

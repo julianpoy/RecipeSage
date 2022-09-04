@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 export interface ErrorHandlers {
   [code: string]: () => any
@@ -11,21 +12,26 @@ export interface ErrorHandlers {
 export class HttpErrorHandlerService {
 
   defaultErrorHandlers = {
-    0: async () => (await this.toastCtrl.create({
-      message: `It looks like you\'re offline. While offline, we\'re only able to fetch data you\'ve previously accessed on this device.`,
-      duration: 5000
-    })).present(),
-    401: async () => (await this.toastCtrl.create({
-      message: `You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.`,
-      duration: 5000
-    })).present(),
-    500: async () => (await this.toastCtrl.create({
-      message: `An unexpected error occured. Please try again. If the problem continues to occur, please contact us.`,
-      duration: 5000
-    })).present(),
+    0: () => this.presentToast('errors.offline'),
+    401: () => this.presentToast('errors.unauthorized'),
+    500: () => this.presentToast('errors.unexpected'),
   };
 
-  constructor(private toastCtrl: ToastController) {}
+  constructor(
+    private toastCtrl: ToastController,
+    private translate: TranslateService,
+  ) {}
+
+  async presentToast(messageKey: string) {
+    const message = await this.translate.get(messageKey).toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000
+    });
+
+    toast.present();
+  }
 
   handleError(error, errorHandlers?: ErrorHandlers) {
     const statusCode = error?.response?.status;
@@ -35,6 +41,9 @@ export class HttpErrorHandlerService {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode]();
+    // Use provided catchall if passed
+    } else if (errorHandlers?.['*']) {
+      errorHandlers['*']();
     // Fallback to default
     } else if (this.defaultErrorHandlers[statusCode]) {
       this.defaultErrorHandlers[statusCode]();

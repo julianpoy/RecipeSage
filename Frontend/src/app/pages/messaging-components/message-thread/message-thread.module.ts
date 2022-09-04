@@ -6,11 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MessageThreadPage } from './message-thread.page';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     MessageThreadPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([

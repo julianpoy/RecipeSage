@@ -28,6 +28,12 @@ export interface ProfileImage {
   location: string,
 }
 
+export interface User {
+  id: string,
+  name: string,
+  email: string,
+}
+
 export interface UserProfile {
   id: string,
   name: string,
@@ -54,6 +60,12 @@ export interface HandleInfo {
   available: boolean,
 }
 
+export interface Capabilities {
+  highResImages: boolean,
+  multipleImages: boolean,
+  expandablePreviews: boolean,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -64,271 +76,213 @@ export class UserService {
     private httpErrorHandlerService: HttpErrorHandlerService,
   ) {}
 
-  register(data) {
-    const url = this.utilService.getBase() + 'users/register';
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  register(payload: {
+    name: string,
+    email: string,
+    password: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{ token: string }>(
+      'users/register',
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  login(data) {
-    const url = this.utilService.getBase() + 'users/login';
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  login(payload: {
+    email: string,
+    password: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{ token: string }>(
+      'users/login',
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  logout() {
-    const url = this.utilService.getBase() + 'users/logout' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data: {}
-    }).then(response => response.data);
+  logout(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/logout',
+      'POST',
+      {},
+      errorHandlers
+    );
   }
 
-  forgot(data) {
-    const url = this.utilService.getBase() + 'users/forgot';
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  forgot(payload: {
+    email: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/forgot',
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  update(data) {
-    const url = this.utilService.getBase() + 'users/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'put',
-      url,
-      data
-    }).then(response => response.data);
+  update(payload: {
+    name?: string,
+    email?: string,
+    password?: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/',
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  saveFCMToken(key) {
-    console.log('attempting save');
-    const data = {
-      fcmToken: key
-    };
-
-    const url = this.utilService.getBase() + 'users/fcm/token' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  saveFCMToken(payload: {
+    fcmToken: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/fcm/token',
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  removeFCMToken(key) {
-    console.log('attempting delete');
-    const url = this.utilService.getBase() + 'users/fcm/token' + this.utilService.getTokenQuery() + '&fcmToken=' + encodeURIComponent(key);
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => response.data);
+  removeFCMToken(payload: {
+    fcmToken: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/fcm/token',
+      'DELETE',
+      payload,
+      errorHandlers
+    );
   }
 
-  async getUserByEmail(email, errorHandlers?: ErrorHandlers): Promise<any> {
-    const url = this.utilService.getBase() + 'users/by-email' + this.utilService.getTokenQuery() + '&email=' + encodeURIComponent(email);
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err, errorHandlers);
-    }
+  getUserByEmail(payload: {
+    email: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<User>(
+      'users/by-email',
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  me() {
-    const url = this.utilService.getBase() + 'users/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  me(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<User>(
+      'users/',
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getMyProfile(errorHandlers?: ErrorHandlers): Promise<UserProfile> {
-    const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err, errorHandlers);
-    }
+  getMyProfile(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<UserProfile>(
+      'users/profile',
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getUserById(userId: string): Promise<any> {
-    const url = this.utilService.getBase() + 'users/' + userId + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+  getUserById(userId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<User>(
+      `users/${userId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async updateMyProfile(profile: Partial<EditUserProfile>): Promise<boolean> {
-    const url = this.utilService.getBase() + 'users/profile' + this.utilService.getTokenQuery();
-
-    try {
-      await this.httpService.request({
-        method: 'put',
-        url,
-        data: profile,
-      });
-
-      return true;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-
-      return false;
-    }
+  updateMyProfile(payload: Partial<EditUserProfile>, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      'users/profile',
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  async getProfileByUserId(userId: string, errorHandlers?: ErrorHandlers): Promise<UserProfile> {
-    const url = this.utilService.getBase() + 'users/profile/' + userId + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err, errorHandlers);
-    }
+  getProfileByUserId(userId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<UserProfile>(
+      `users/profile/${userId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getProfileByHandle(handle: string, errorHandlers?: ErrorHandlers): Promise<UserProfile> {
-    const url = this.utilService.getBase() + 'users/profile/by-handle/' + handle + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err, errorHandlers);
-    }
+  getProfileByHandle(handle: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<UserProfile>(
+      `users/profile/by-handle/${handle}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getHandleInfo(handle: string): Promise<HandleInfo> {
-    const url = this.utilService.getBase() + 'users/handle-info/' + handle + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+  getHandleInfo(handle: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<HandleInfo>(
+      `users/handle-info/${handle}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getMyFriends(errorHandlers?: ErrorHandlers) {
-    const url = this.utilService.getBase() + 'users/friends' + this.utilService.getTokenQuery();
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err, errorHandlers);
-    }
+  getMyFriends(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `users/friends`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async addFriend(friendId: string): Promise<boolean> {
-    const url = this.utilService.getBase() + 'users/friends/' + friendId + this.utilService.getTokenQuery();
-
-    try {
-      await this.httpService.request({
-        method: 'post',
-        url,
-      });
-
-      return true;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-
-      return false;
-    }
+  addFriend(friendId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `users/friends/${friendId}`,
+      'POST',
+      {},
+      errorHandlers
+    );
   }
 
-  async deleteFriend(friendId: string): Promise<boolean> {
-    const url = this.utilService.getBase() + 'users/friends/' + friendId + this.utilService.getTokenQuery();
-
-    try {
-      await this.httpService.request({
-        method: 'delete',
-        url,
-      });
-
-      return true;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-
-      return false;
-    }
+  deleteFriend(friendId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `users/friends/${friendId}`,
+      'DELETE',
+      {},
+      errorHandlers
+    );
   }
 
-  myStats() {
-    const url = this.utilService.getBase() + 'users/stats' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  myStats(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `users/stats`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  capabilities() {
-    const url = this.utilService.getBase() + 'users/capabilities' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  capabilities(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Capabilities>(
+      `users/capabilities`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  checkForUpdate(params) {
-    const url = this.utilService.getBase() + 'info/' + this.utilService.getTokenQuery() + '&version=' + encodeURIComponent(params.version);
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  checkForUpdate(payload: {
+    version: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      'info',
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 }

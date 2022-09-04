@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
+import { Recipe, RecipeService } from '@/services/recipe.service';
 import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
@@ -16,13 +16,13 @@ export class SelectRecipeComponent {
   searching = false;
   PAUSE_BEFORE_SEARCH = 500;
 
-  _selectedRecipe: any;
+  _selectedRecipe: Recipe;
   @Input()
   get selectedRecipe() {
     return this._selectedRecipe;
   }
 
-  set selectedRecipe(val) {
+  set selectedRecipe(val: Recipe) {
     this._selectedRecipe = val;
     this.selectedRecipeChange.emit(this._selectedRecipe);
   }
@@ -39,38 +39,18 @@ export class SelectRecipeComponent {
     public navCtrl: NavController
   ) {}
 
-  search(text: string) {
+  async search(text: string) {
     const loading = this.loadingService.start();
 
-    this.recipeService.search(text, {}).then(response => {
-      this.recipes = response.data;
-
-      loading.dismiss();
-      this.searching = false;
-    }).catch(async err => {
-      loading.dismiss();
-      this.searching = false;
-
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+    const response = await this.recipeService.search({
+      query: text
     });
+    loading.dismiss();
+    this.searching = false;
+
+    if (!response.success) return;
+
+    this.recipes = response.data.data;
   }
 
   onSearchInputChange(event) {
@@ -89,31 +69,12 @@ export class SelectRecipeComponent {
     }, this.PAUSE_BEFORE_SEARCH);
   }
 
-  selectRecipe(recipe) {
+  async selectRecipe(recipe: Recipe) {
     this.searchText = '';
 
-    this.recipeService.fetchById(recipe.id).then(response => {
-      this.selectedRecipe = response;
-    }).catch(async err => {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
+    const response = await this.recipeService.fetchById(recipe.id);
+    if (!response.success) return;
+
+    this.selectedRecipe = response.data;
   }
 }

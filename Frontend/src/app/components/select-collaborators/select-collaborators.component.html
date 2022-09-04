@@ -5,7 +5,7 @@
     </h6>
 
     <div class="labels">
-      <span class="label" *ngFor="let userId of selectedThreads">
+      <span class="label" *ngFor="let userId of selectedCollaboratorIds">
         <ion-icon class="delete-label" (click)="removeCollaborator(userId)" name="trash" slot="start"></ion-icon>
         {{ threadsByUserId[userId].name || threadsByUserId[userId].email }}
       </span>
@@ -25,21 +25,25 @@
     <div class="autocomplete" (focusout)='toggleAutocomplete(false, $event)' *ngIf="showAutocomplete">
       <button
         class="suggestion"
-        *ngIf="pendingThread && pendingThread.length > 0 && selectedThreads.indexOf(pendingCollaboratorId) > -1">
+        *ngIf="pendingThread && pendingThread.length > 0 && selectedCollaboratorIds.indexOf(pendingCollaboratorId) > -1">
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>Already added</p>
+            <p>
+              {{ 'components.selectCollaborators.added' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
       <button class="suggestion"
-        *ngFor="let thread of existingThreads | shoppingListCollaboratorFilter:pendingThread+selectedThreads.join()+pendingCollaboratorId:pendingThread:selectedThreads"
+        *ngFor="let thread of existingThreads | shoppingListCollaboratorFilter:pendingThread+selectedCollaboratorIds.join()+pendingCollaboratorId:pendingThread:selectedCollaboratorIds"
         (click)="addCollaborator(thread.id)">
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ threadsByUserId[thread.id].name || threadsByUserId[thread.id].email }}</h2>
-            <p>Click to add</p>
+            <p>
+              {{ 'components.selectCollaborators.add' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -48,7 +52,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>Searching...</p>
+            <p>
+              {{ 'components.selectCollaborators.searching' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>
@@ -57,7 +63,9 @@
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>{{ pendingThread }}</h2>
-            <p>User not found</p>
+            <p>
+              {{ 'components.selectCollaborators.notFound' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </button>

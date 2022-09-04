@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ToastController, AlertController, NavController, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
+
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -20,6 +22,7 @@ export class ShoppingListPopoverPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
     public loadingService: LoadingService,
@@ -51,17 +54,22 @@ export class ShoppingListPopoverPage {
   }
 
   async removeAllItems() {
+    const header = await this.translate.get('pages.shoppingListPopover.removeAll.header').toPromise();
+    const message = await this.translate.get('pages.shoppingListPopover.removeAll.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Removal',
-      message: 'This will permanently delete all shopping list items from this list.<br /><br />This action is irreversible.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._removeAllItems();
@@ -72,61 +80,40 @@ export class ShoppingListPopoverPage {
     alert.present();
   }
 
-  _removeAllItems() {
+  async _removeAllItems() {
     if (this.shoppingList.items.length === 0) return;
 
     const loading = this.loadingService.start();
 
-    const itemIds = this.shoppingList.items.map(el => {
-      return el.id;
+    const itemIds = this.shoppingList.items.map(el => el.id);
+
+    const response = await this.shoppingListService.deleteItems(this.shoppingListId, {
+      itemIds
     });
 
-    this.shoppingListService.remove({
-      id: this.shoppingListId,
-      items: itemIds
-    }).then(() => {
-      loading.dismiss();
+    loading.dismiss();
+    if (!response.success) return;
 
-      this.popoverCtrl.dismiss();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
+    this.popoverCtrl.dismiss();
   }
 
   async deleteList() {
+    const header = await this.translate.get('pages.shoppingListPopover.deleteList.header').toPromise();
+    const message = await this.translate.get('pages.shoppingListPopover.deleteList.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.del').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: `This will <b>permanently</b> remove this shopping list from your account.<br /><br />
-                <b>Note</b>: If you\'re only a collaborator on this list, it\'ll only be removed from your account.
-                If you own this list, it will be removed from all other collaborators accounts.`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteList();
@@ -137,38 +124,15 @@ export class ShoppingListPopoverPage {
     alert.present();
   }
 
-  _deleteList() {
+  async _deleteList() {
     const loading = this.loadingService.start();
 
-    this.shoppingListService.unlink({
-      id: this.shoppingListId
-    }).then(() => {
-      loading.dismiss();
+    const response = await this.shoppingListService.delete(this.shoppingListId);
+    loading.dismiss();
 
-      this.popoverCtrl.dismiss();
-      this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
-    });
+    if (!response.success) return;
+
+    this.popoverCtrl.dismiss();
+    this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
   }
 }

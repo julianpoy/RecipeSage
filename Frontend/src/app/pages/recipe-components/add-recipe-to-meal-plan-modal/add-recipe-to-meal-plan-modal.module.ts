@@ -8,11 +8,14 @@ import { MealCalendarModule } from '@/components/meal-calendar/meal-calendar.mod
 import { SelectMealModule } from '@/components/select-meal/select-meal.module';
 import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     AddRecipeToMealPlanModalPage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,

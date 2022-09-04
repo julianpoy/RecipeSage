@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { LabelService } from '@/services/label.service';
+import { Label, LabelService } from '@/services/label.service';
 import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
@@ -13,7 +13,7 @@ export class SelectLabelComponent {
 
   searchText = '';
 
-  _selectedLabel: any;
+  _selectedLabel: Label;
   @Input()
   get selectedLabel() {
     return this._selectedLabel;
@@ -26,8 +26,8 @@ export class SelectLabelComponent {
 
   @Output() selectedLabelChange = new EventEmitter();
 
-  labels: any = [];
-  results: any = [];
+  labels: Label[] = [];
+  results: Label[] = [];
 
   constructor(
     public loadingService: LoadingService,
@@ -41,12 +41,12 @@ export class SelectLabelComponent {
 
   async load() {
     const loading = this.loadingService.start();
-    const labels = await this.labelService.getMyLabels();
-    if (labels) {
-      this.labels = labels;
-      this.results = this.labels;
-    }
+    const response = await this.labelService.fetch();
     loading.dismiss();
+    if (!response.success) return;
+
+    this.labels = response.data;
+    this.results = this.labels;
   }
 
   onSearchInputChange(event) {
@@ -55,7 +55,7 @@ export class SelectLabelComponent {
     this.results = this.labels.filter(label => label.title.includes(this.searchText));
   }
 
-  selectLabel(label) {
+  selectLabel(label: Label) {
     this.selectedLabel = label;
     this.searchText = '';
     this.results = this.labels;

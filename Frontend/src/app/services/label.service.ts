@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
 import { EventService } from './event.service';
-import { HttpErrorHandlerService } from './http-error-handler.service';
+import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 
 export interface Label {
   id: string;
@@ -24,118 +24,81 @@ export class LabelService {
     public httpErrorHandlerService: HttpErrorHandlerService,
   ) {}
 
-  fetch(options: {
+  fetch(payload?: {
     title?: string
-  } = {}) {
-    const titleQuery = options.title ? `&title=${encodeURIComponent(options.title)}` : '';
-
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Label[]>(
+      `labels`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  async getMyLabels(
-    options: {
-      title?: string
-    } = {}
-  ) {
-    const titleQuery = options.title ? `&title=${encodeURIComponent(options.title)}` : '';
-
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery() + titleQuery;
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
-  }
-
-  create(data) {
+  create(payload: {
+    title: string,
+    recipeId: string,
+  }, errorHandlers?: ErrorHandlers) {
     return this.createBulk({
-      title: data.title,
-      recipeIds: [data.recipeId]
-    }).then(response => response.data);
+      title: payload.title,
+      recipeIds: [payload.recipeId]
+    }, errorHandlers);
   }
 
-  update(labelId: string, props: Partial<Label>) {
-    const url = this.utilService.getBase() + 'labels/' + labelId + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'put',
-      url,
-      data: props
-    }).then(response => {
-      this.events.publish('label:updated');
-
-      return response.data;
-    });
+  update(labelId: string, payload: {
+    title: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `labels/${labelId}`,
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  createBulk(data) {
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('label:created');
-
-      return response.data;
-    });
+  createBulk(payload: any, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Label>(
+      `labels`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
   // Removes label from a single associated recipe
-  removeFromRecipe(labelId: string, recipeId: string) {
-    if (!labelId || !recipeId) throw new Error(`Invalid recipeId or labelId`);
-
-    const url = this.utilService.getBase() + 'labels/' + this.utilService.getTokenQuery()
-                + '&labelId=' + labelId + '&recipeId=' + recipeId;
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => {
-      this.events.publish('label:deleted');
-
-      return response.data;
-    });
+  removeFromRecipe(payload: {
+    labelId: string,
+    recipeId: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `labels`,
+      'DELETE',
+      payload,
+      errorHandlers
+    );
   }
 
   // Deletes label and removes from all associated recipes
-  delete(labelIds: string[]) {
-    const url = this.utilService.getBase() + 'labels/delete-bulk' + this.utilService.getTokenQuery();
-
-    const data = {
-      labelIds
-    };
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('label:deleted');
-
-      return response.data;
-    });
+  delete(payload: {
+    labelIds: string[]
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `labels/delete-bulk`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  merge(sourceLabelId: string, targetLabelId: string) {
-    const url = this.utilService.getBase() + 'labels/merge' + this.utilService.getTokenQuery() +
-      `&sourceLabelId=${sourceLabelId}&targetLabelId=${targetLabelId}`;
-
-    return this.httpService.request({
-      method: 'post',
-      url
-    }).then(response => response.data);
+  merge(payload: {
+    sourceLabelId: string,
+    targetLabelId: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `labels/merge`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 }

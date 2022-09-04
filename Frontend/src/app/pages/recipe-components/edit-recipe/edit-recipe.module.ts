@@ -8,11 +8,14 @@ import { EditRecipePage } from './edit-recipe.page';
 import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
 import { EditRecipePopoverPageModule } from '../edit-recipe-popover/edit-recipe-popover.module';
 
+import { GlobalModule } from '@/global.module';
+
 @NgModule({
   declarations: [
     EditRecipePage,
   ],
   imports: [
+    GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,

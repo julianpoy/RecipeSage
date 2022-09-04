@@ -2,17 +2,17 @@
   <ion-label class="ion-text-wrap ion-no-margin">
     {{ title }}
     <p *ngIf="recipeTitle">
-      For recipe:
+      {{ 'components.shoppingListItem.recipe' | translate }}
       <span>{{ recipeTitle }}</span>
     </p>
     <p *ngIf="createdAt">
-      Added
+      {{ 'components.shoppingListItem.added' | translate }}
       <span>{{ formatItemCreationDate(createdAt) }}</span>
     </p>
     <p *ngIf="ownerName">
-      <span *ngIf="!createdAt">Added </span>by
+      {{ 'components.shoppingListItem.addedBy' | translate }}
       <span>{{ ownerName }}</span>
     </p>
   </ion-label>
-  <ion-checkbox slot="start" [(ngModel)]="completed" (ngModelChange)="complete.emit()"></ion-checkbox>
+  <ion-checkbox slot="start" [(ngModel)]="completed" (ngModelChange)="markComplete.emit()"></ion-checkbox>
 </ion-item>

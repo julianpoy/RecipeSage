@@ -2,6 +2,50 @@ import { Injectable } from '@angular/core';
 import { UtilService } from './util.service';
 import { HttpService } from './http.service';
 import { EventService } from './event.service';
+import {ErrorHandlers} from './http-error-handler.service';
+
+interface ShoppingListCollaborator {
+  id: string,
+  name: string,
+  email: string,
+}
+
+type ShoppingLists = {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  itemCount: string,
+  myUserId: string,
+  collaborators: ShoppingListCollaborator[],
+  owner: ShoppingListCollaborator,
+}[];
+
+interface ShoppingList {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  userId: string,
+  collaborators: ShoppingListCollaborator[],
+  owner: ShoppingListCollaborator,
+  items: ShoppingListItem[],
+}
+
+interface ShoppingListItem {
+  id: string,
+  title: string,
+  completed: boolean,
+  updatedAt: string,
+  createdAt: string,
+  owner: ShoppingListCollaborator,
+  recipe: null | {
+    id: string,
+    title: string,
+  },
+  groupTitle: string,
+  categoryTitle: string,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -10,80 +54,79 @@ export class ShoppingListService {
 
   constructor(public events: EventService, public utilService: UtilService, public httpService: HttpService) {}
 
-  fetch() {
-    const url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetch(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<ShoppingLists>(
+      `shoppingLists`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  fetchById(listId) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + listId + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetchById(listId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<ShoppingList>(
+      `shoppingLists/${listId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  create(data) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  create(payload: {
+    title: string,
+    collaborators: string[],
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<ShoppingList>(
+      `shoppingLists`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  addItems(data: {
-    id: string,
+  addItems(shoppingListId: string, payload: {
     items: {
       title: string,
       recipeId: string,
       reference: string
     }[]
-  }) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `shoppingLists/${shoppingListId}`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  update(data) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'put',
-      url,
-      data
-    }).then(response => response.data);
+  update(shoppingListId: string, payload: {
+    title: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `shoppingLists/${shoppingListId}`,
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  remove(data) {
-    const recipeQuery = data.recipeId ? '&recipeId=' + data.recipeId : '';
-
-    const url = `${this.utilService.getBase()}shoppingLists/${data.id}/items`
-              + `${this.utilService.getTokenQuery()}`
-              + `&items=${data.items.join(',')}${recipeQuery}`;
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => response.data);
+  deleteItems(shoppingListId: string, payload: {
+    itemIds: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `shoppingLists/${shoppingListId}/items`,
+      'DELETE',
+      payload,
+      errorHandlers
+    );
   }
 
-  unlink(data) {
-    const url = this.utilService.getBase() + 'shoppingLists/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => response.data);
+  delete(shoppingListId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `shoppingLists/${shoppingListId}`,
+      'DELETE',
+      {},
+      errorHandlers
+    );
   }
 }
