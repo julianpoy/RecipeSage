@@ -40,7 +40,7 @@
     "grip": "^1.5.0",
     "jsdom": "^16.5.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "multer-imager": "git+https://git@github.com/julianpoy/multer-imager.git",
