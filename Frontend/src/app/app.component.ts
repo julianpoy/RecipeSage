@@ -91,13 +91,16 @@ export class AppComponent {
   // Attached to pagechange so keep this light
   async checkBrowserCompatibility() {
     if (this.unsupportedBrowser && !this.seenOldBrowserWarning && this.utilService.isLoggedIn()) {
+      const header = await this.translate.get('pages.app.oldBrowserAlert.header').toPromise();
+      const message = await this.translate.get('pages.app.oldBrowserAlert.message').toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const oldBrowserAlert = await this.alertCtrl.create({
-        header: 'Unsupported Browser',
-        message: `It looks like you\'re using an old browser that isn\'t supported. Some functionality may not work or may be broken.
-                  <br /><br />Please switch to a modern browser such as Google Chrome or Firefox for full functionality.`,
+        header,
+        message,
         buttons: [
           {
-            text: 'Dismiss',
+            text: okay,
             handler: () => {
               this.seenOldBrowserWarning = true;
               localStorage.setItem('seenOldBrowserWarning', 'true');
@@ -180,35 +183,52 @@ export class AppComponent {
     this.isLoggedIn = this.utilService.isLoggedIn();
   }
 
-  updateNavList() {
-    this.navList = this.generateNavList();
+  async updateNavList() {
+    this.navList = await this.generateNavList();
   }
 
-  generateNavList() {
+  async generateNavList() {
     let pages = [];
 
+    const welcome = await this.translate.get('pages.app.nav.welcome').toPromise();
+    const login = await this.translate.get('pages.app.nav.login').toPromise();
+    const register = await this.translate.get('pages.app.nav.register').toPromise();
+    const download = await this.translate.get('pages.app.nav.download').toPromise();
+    const contribute = await this.translate.get('pages.app.nav.contribute').toPromise();
+    const about = await this.translate.get('pages.app.nav.about').toPromise();
+
+    const home = await this.translate.get('pages.app.nav.home').toPromise();
+    const labels = await this.translate.get('pages.app.nav.labels').toPromise();
+    const people = await this.translate.get('pages.app.nav.people').toPromise();
+    const messages = await this.translate.get('pages.app.nav.messages').toPromise();
+    const inbox = await this.translate.get('pages.app.nav.inbox').toPromise();
+    const newrecipe = await this.translate.get('pages.app.nav.newrecipe').toPromise();
+    const shopping = await this.translate.get('pages.app.nav.shopping').toPromise();
+    const meals = await this.translate.get('pages.app.nav.meals').toPromise();
+    const settings = await this.translate.get('pages.app.nav.settings').toPromise();
+
     const loggedOutPages = [
-      { id: 'welcome', title: 'Welcome', icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { id: 'login', title: 'Log In', icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { id: 'register', title: 'Create an Account', icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
-      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'welcome', title: welcome, icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
+      { id: 'login', title: login, icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
+      { id: 'register', title: register, icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
+      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     const loggedInPages = [
-      { id: 'home', title: 'My Recipes', icon: 'book', url: RouteMap.HomePage.getPath('main') },
-      { id: 'labels', title: 'Manage Labels', icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      { id: 'people', title: 'People & Profile', icon: 'people', url: RouteMap.PeoplePage.getPath() },
-      { id: 'messages', title: 'Messages', icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
-      { id: 'inbox', title: 'Recipe Inbox', icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { id: 'newrecipe', title: 'Create Recipe', icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
-      { id: 'shopping', title: 'Shopping Lists', icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
-      { id: 'meals', title: 'Meal Plans', icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
-      { id: 'download', title: 'Download and Install', icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: 'Contribute!', icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'settings', title: 'Settings', icon: 'settings', url: RouteMap.SettingsPage.getPath() },
-      { id: 'about', title: 'About & Support', icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
+      { id: 'home', title: home, icon: 'book', url: RouteMap.HomePage.getPath('main') },
+      { id: 'labels', title: labels, icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
+      { id: 'people', title: people, icon: 'people', url: RouteMap.PeoplePage.getPath() },
+      { id: 'messages', title: messages, icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
+      { id: 'inbox', title: inbox, icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
+      { id: 'newrecipe', title: newrecipe, icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
+      { id: 'shopping', title: shopping, icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
+      { id: 'meals', title: meals, icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
+      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
+      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
+      { id: 'settings', title: settings, icon: 'settings', url: RouteMap.SettingsPage.getPath() },
+      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
     ];
 
     if (this.utilService.isLoggedIn()) {

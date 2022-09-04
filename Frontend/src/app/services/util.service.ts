@@ -205,17 +205,18 @@ export class UtilService {
 
   getAppBrowserLang(): string {
     const navLang = window.navigator.language.toLowerCase();
-    if (SupportedLanguages[navLang]) return navLang;
+    if (Object.values(SupportedLanguages).some((el) => el === navLang)) return navLang;
 
     try {
       const locale = new (Intl as any).Locale([navLang]).maximize();
 
       const languageCode = `${locale.language}-${locale.region}`.toLowerCase();
 
-      if (!SupportedLanguages[languageCode]) throw new Error("Navigator language not supported");
+      if (!Object.values(SupportedLanguages).some((el) => el === languageCode)) throw new Error(`Navigator language not supported: ${languageCode}`);
 
       return languageCode;
     } catch(e) {
+      console.error(e);
       return SupportedLanguages.EN_US;
     }
   }

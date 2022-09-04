@@ -1,4 +1,27 @@
 {
+  "====== Pages.Welcome ======": "",
+
+  "pages.app.oldBrowserAlert.header": "Unsupported Browser",
+  "pages.app.oldBrowserAlert.message": "It looks like you're using an old browser that isn't supported. Some functionality may not work or may be broken. Please switch to a modern browser such as Firefox for full functionality.",
+
+  "pages.app.nav.welcome": "Welcome",
+  "pages.app.nav.login": "Log In",
+  "pages.app.nav.register": "Create an Account",
+  "pages.app.nav.download": "Download and Install",
+  "pages.app.nav.contribute": "Contribute!",
+  "pages.app.nav.about": "About & Support",
+  "pages.app.nav.home": "My Recipes",
+  "pages.app.nav.labels": "Manage Labels",
+  "pages.app.nav.people": "People & Profile",
+  "pages.app.nav.messages": "Messages",
+  "pages.app.nav.inbox": "Recipe Inbox",
+  "pages.app.nav.newrecipe": "Create Recipe",
+  "pages.app.nav.shopping": "Shopping Lists",
+  "pages.app.nav.meals": "Meal Plans",
+  "pages.app.nav.settings": "Settings",
+
+  "====== Pages.Welcome ======": "",
+
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
   "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",
