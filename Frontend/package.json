@@ -41,6 +41,7 @@
     "firebase": "^7.6.1",
     "fraction.js": "^4.2.0",
     "linkifyjs": "^3.0.5",
+    "ngx-ui-scroll": "^3.0.0",
     "ngx-virtual-scroller": "^4.0.3",
     "tslib": "^1.11.1",
     "zone.js": "0.11.4"

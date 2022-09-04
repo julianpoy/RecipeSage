@@ -1,3 +1,13 @@
+.homegrid {
+  display: grid;
+  grid-template-rows: 58px auto;
+  height: 100%;
+
+  .infinite-scrolling-container {
+    overflow-y: scroll;
+  }
+}
+
 .labelChips {
   display: flex;
   flex-wrap: wrap;
@@ -25,15 +35,14 @@
   }
 }
 
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 200px);
-  grid-gap: 20px;
-  padding-right: 20px;
+.recipe-group {
+  display: flex;
+  justify-content: space-around;
 
   ion-card {
-    width: 200px;
+    flex: 1 1 0;
     box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
+    max-width: 200px;
 
     &:hover {
       background-color: var(--ion-item-background-hover);
@@ -69,3 +78,4 @@
     }
   }
 }
+
