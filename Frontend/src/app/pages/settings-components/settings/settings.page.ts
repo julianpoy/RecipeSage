@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { RouteMap } from '@/services/util.service';
-import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { RouteMap, UtilService } from '@/services/util.service';
+import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
 import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { OfflineCacheService } from '@/services/offline-cache.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
+const LANGUAGE_LOCALSTORAGE_KEY = 'language';
 
 @Component({
   selector: 'page-settings',
@@ -27,12 +28,16 @@ export class SettingsPage {
 
   showSplitPaneOption = false;
 
+  language: SupportedLanguages | 'navigator' = this.preferences[GlobalPreferenceKey.Language] || 'navigator';
+  languageOptions = [];
+
   constructor(
     public navCtrl: NavController,
     public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
+    public utilService: UtilService,
     public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
     public featureFlagService: FeatureFlagService,
@@ -42,6 +47,14 @@ export class SettingsPage {
       this.showSplitPaneOption = screen.width >= 1200;
     } catch (e) {
       console.error('Could not get screen width', e);
+    }
+
+    try {
+      const locale = new (Intl as any).DisplayNames(window.navigator.languages, {type: 'language'});
+
+      this.languageOptions = Object.values(SupportedLanguages).map(code => [code, locale.of(code)]);
+    } catch(e) {
+      console.error("Intl not supported");
     }
   }
 
@@ -98,6 +111,14 @@ export class SettingsPage {
     });
 
     alert.present();
+  }
+
+  languageChanged() {
+    const newLang = this.language === 'navigator' ? null : this.language;
+    this.preferences[GlobalPreferenceKey.Language] = newLang;
+    this.preferencesService.save();
+
+    this.translate.use(newLang || this.utilService.getAppBrowserLang());
   }
 
   private applyAppTheme() {

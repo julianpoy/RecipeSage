@@ -837,6 +837,8 @@
   "pages.settings.theme.light": "Light",
   "pages.settings.theme.dark": "Dark",
   "pages.settings.theme.black": "Black (OLED)",
+  "pages.settings.language": "Language",
+  "pages.settings.language.default": "Browser Default",
   "pages.settings.reset": "Reset All Preferences",
 
   "pages.settings.offline.loading": "Fetching all recipes, please wait...",

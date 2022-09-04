@@ -21,6 +21,7 @@ import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.ser
 import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolbar.module';
 
 import { environment } from 'src/environments/environment';
+import {SupportedLanguages} from './services/preferences.service';
 
 const checkChunkLoadError = (error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
@@ -107,7 +108,7 @@ export class SentryErrorHandler extends ErrorHandler {
             useFactory: (createTranslateLoader),
             deps: [HttpClient]
         },
-        defaultLanguage: 'en'
+        defaultLanguage: SupportedLanguages.EN_US
     }),
     AppRoutingModule,
     LoadingBarModule,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import { API_BASE_URL } from 'src/environments/environment';
+import {SupportedLanguages} from './preferences.service';
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -196,13 +197,28 @@ export const RouteMap = {
 })
 export class UtilService {
 
-  lang = ((window.navigator as any).userLanguage || window.navigator.language);
-
   devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
 
   constructor(
     private translate: TranslateService,
   ) {}
+
+  getAppBrowserLang(): string {
+    const navLang = window.navigator.language.toLowerCase();
+    if (SupportedLanguages[navLang]) return navLang;
+
+    try {
+      const locale = new (Intl as any).Locale([navLang]).maximize();
+
+      const languageCode = `${locale.language}-${locale.region}`.toLowerCase();
+
+      if (!SupportedLanguages[languageCode]) throw new Error("Navigator language not supported");
+
+      return languageCode;
+    } catch(e) {
+      return SupportedLanguages.EN_US;
+    }
+  }
 
   getBase(): string {
     return (window as any).API_BASE_OVERRIDE || API_BASE_URL || this.devBase;
@@ -282,14 +298,14 @@ export class UtilService {
     }
 
     if (options.times && todayAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         hour: 'numeric',
         minute: 'numeric'
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         weekday: 'long',
         hour: 'numeric',
         minute: 'numeric'
@@ -297,19 +313,19 @@ export class UtilService {
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         weekday: 'long'
       });
     }
 
     if (!options.times) {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         month: 'numeric',
         day: 'numeric',
         year: 'numeric'
       });
     } else {
-      return toFormat.toLocaleString(this.lang, {
+      return toFormat.toLocaleString(window.navigator.language, {
         hour: 'numeric',
         minute: 'numeric',
         month: 'numeric',

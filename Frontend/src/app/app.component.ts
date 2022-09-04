@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 
 import { Platform, MenuController, ToastController, AlertController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -12,7 +13,7 @@ import { RecipeService } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { UserService } from '@/services/user.service';
-import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { VersionCheckService } from '@/services/versioncheck.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
@@ -43,6 +44,7 @@ export class AppComponent {
   preferenceKeys = GlobalPreferenceKey;
 
   constructor(
+    private translate: TranslateService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private router: Router,
@@ -64,6 +66,8 @@ export class AppComponent {
     private offlineCacheService: OfflineCacheService,
     public cookingToolbarService: CookingToolbarService,
   ) {
+    const language = this.preferencesService.preferences[GlobalPreferenceKey.Language];
+    this.translate.use(language || this.utilService.getAppBrowserLang());
 
     if (ENABLE_ANALYTICS) {
       this.initAnalytics();

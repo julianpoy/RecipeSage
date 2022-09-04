@@ -2,9 +2,16 @@ import { Injectable } from '@angular/core';
 
 const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
+export enum SupportedLanguages {
+  EN_US = 'en-us',
+  FR_FR = 'fr-fr',
+  ES_ES = 'es-es',
+};
+
 export enum GlobalPreferenceKey {
   EnableSplitPane = 'global.enableSplitPane',
-  EnableExperimentalOfflineCache = 'global.enableExperimentalOfflineCache'
+  EnableExperimentalOfflineCache = 'global.enableExperimentalOfflineCache',
+  Language = 'global.language'
 }
 
 export enum MyRecipesPreferenceKey {
@@ -44,6 +51,7 @@ export enum ShoppingListPreferenceKey {
 export interface AppPreferenceTypes {
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
   [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
+  [GlobalPreferenceKey.Language]: null | SupportedLanguages;
 
   [MyRecipesPreferenceKey.EnableLabelIntersection]: boolean;
   [MyRecipesPreferenceKey.ShowLabels]: boolean;
@@ -78,6 +86,7 @@ export class PreferencesService {
   preferences: AppPreferenceTypes = {
     [GlobalPreferenceKey.EnableSplitPane]: false,
     [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
+    [GlobalPreferenceKey.Language]: null,
 
     [MyRecipesPreferenceKey.EnableLabelIntersection]: false,
     [MyRecipesPreferenceKey.ShowLabels]: true,
@@ -106,70 +115,8 @@ export class PreferencesService {
   };
 
   constructor() {
-    if (!localStorage.getItem(PREFERENCE_LOCALSTORAGE_KEY)) {
-      this.loadOldPrefs();
-      this.load();
-      this.save();
-      this.clearOldPrefs();
-    } else {
-      this.load();
-      this.save();
-    }
-  }
-
-  // Compatibility for old preference style (individual keys)
-  private loadOldPrefs() {
-    try {
-      const oldPreferences = {};
-
-      oldPreferences[MyRecipesPreferenceKey.EnableLabelIntersection] = JSON.parse(localStorage.getItem('enableLabelIntersection'));
-      oldPreferences[MyRecipesPreferenceKey.ShowLabels] = JSON.parse(localStorage.getItem('showLabels'));
-      oldPreferences[MyRecipesPreferenceKey.ShowLabelChips] = JSON.parse(localStorage.getItem('showLabelChips'));
-      oldPreferences[MyRecipesPreferenceKey.ShowImages] = JSON.parse(localStorage.getItem('showImages'));
-      oldPreferences[MyRecipesPreferenceKey.ShowSource] = JSON.parse(localStorage.getItem('showSource'));
-      oldPreferences[MyRecipesPreferenceKey.ViewType] = JSON.parse(localStorage.getItem('myRecipes.viewType'));
-      oldPreferences[MyRecipesPreferenceKey.SortBy] = localStorage.getItem('sortBy');
-
-      oldPreferences[MealPlanPreferenceKey.ShowAddedBy] = JSON.parse(localStorage.getItem('mealPlan.showAddedBy'));
-      oldPreferences[MealPlanPreferenceKey.ShowAddedOn] = JSON.parse(localStorage.getItem('mealPlan.showAddedOn'));
-      oldPreferences[MealPlanPreferenceKey.StartOfWeek] = localStorage.getItem('mealPlan.startOfWeek');
-
-      oldPreferences[ShoppingListPreferenceKey.SortBy] = localStorage.getItem('shoppingList.sortBy');
-      oldPreferences[ShoppingListPreferenceKey.ShowAddedBy] = JSON.parse(localStorage.getItem('shoppingList.showAddedBy'));
-      oldPreferences[ShoppingListPreferenceKey.ShowAddedOn] = JSON.parse(localStorage.getItem('shoppingList.showAddedOn'));
-      oldPreferences[ShoppingListPreferenceKey.ShowRecipeTitle] = JSON.parse(localStorage.getItem('shoppingList.showRecipeTitle'));
-      oldPreferences[ShoppingListPreferenceKey.GroupSimilar] = JSON.parse(localStorage.getItem('shoppingList.groupSimilar'));
-
-      for (const key in oldPreferences) {
-        if (oldPreferences.hasOwnProperty(key)) {
-          if (oldPreferences[key] != null) {
-            this.preferences[key] = oldPreferences[key];
-          }
-        }
-      }
-    } catch (e) {}
-  }
-
-  private clearOldPrefs() {
-    try {
-      localStorage.removeItem('enableLabelIntersection');
-      localStorage.removeItem('showLabels');
-      localStorage.removeItem('showLabelChips');
-      localStorage.removeItem('showImages');
-      localStorage.removeItem('showSource');
-      localStorage.removeItem('myRecipes.viewType');
-      localStorage.removeItem('sortBy');
-
-      localStorage.removeItem('mealPlan.showAddedBy');
-      localStorage.removeItem('mealPlan.showAddedOn');
-      localStorage.removeItem('mealPlan.startOfWeek');
-
-      localStorage.removeItem('shoppingList.sortBy');
-      localStorage.removeItem('shoppingList.showAddedBy');
-      localStorage.removeItem('shoppingList.showAddedOn');
-      localStorage.removeItem('shoppingList.showRecipeTitle');
-      localStorage.removeItem('shoppingList.groupSimilar');
-    } catch (e) {}
+    this.load();
+    this.save();
   }
 
   save() {

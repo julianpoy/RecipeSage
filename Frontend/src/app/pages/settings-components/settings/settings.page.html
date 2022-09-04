@@ -77,6 +77,20 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item lines="inset">
+      <ion-icon name='brush' slot="start"></ion-icon>
+      <ion-label>
+        {{ 'pages.settings.language' | translate }}
+      </ion-label>
+      <ion-select [(ngModel)]="language" (ngModelChange)="languageChanged();">
+        <ion-select-option value="navigator">
+          {{ 'pages.settings.language.default' | translate }}
+        </ion-select-option>
+        <ion-select-option *ngFor="let languageOption of languageOptions" [value]="languageOption[0]">
+          {{ languageOption[1] }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>
       <ion-label>
