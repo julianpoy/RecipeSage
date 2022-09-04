@@ -101,7 +101,7 @@
       </ion-button>
     </ion-item>
 
-    <null-state *ngIf="friendships?.incomingRequests?.length == 0 && friendships?.outgoingRequests?.length == 0 && friendships?.friends?.length == 0">
+    <null-state *ngIf="friendships?.incomingRequests?.length === 0 && friendships?.outgoingRequests?.length === 0 && friendships?.friends?.length === 0">
       <ion-icon name="people" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>

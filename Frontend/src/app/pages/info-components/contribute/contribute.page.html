@@ -27,26 +27,26 @@
     <br />
 
     <div class="frequency-row">
-      <ion-button [fill]="frequency == 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
+      <ion-button [fill]="frequency === 'monthly' ? 'solid' : 'outline'" (click)="setFrequency('monthly')">
         <span>
           {{ 'pages.contribute.monthly' | translate }}
         </span>
       </ion-button>
-      <ion-button [fill]="frequency == 'single' ? 'solid' : 'outline'" (click)="setFrequency('single')">
+      <ion-button [fill]="frequency === 'single' ? 'solid' : 'outline'" (click)="setFrequency('single')">
         <span>
           {{ 'pages.contribute.oneTime' | translate }}
         </span>
       </ion-button>
     </div>
 
-    <div class="amount-row" *ngIf="frequency == 'monthly'">
-      <ion-button [fill]="amount == 1 ? 'solid' : 'outline'" (click)="setAmount(1)">
+    <div class="amount-row" *ngIf="frequency === 'monthly'">
+      <ion-button [fill]="amount === 1 ? 'solid' : 'outline'" (click)="setAmount(1)">
         $1.00
       </ion-button>
-      <ion-button [fill]="amount == 5 ? 'solid' : 'outline'" (click)="setAmount(5)">
+      <ion-button [fill]="amount === 5 ? 'solid' : 'outline'" (click)="setAmount(5)">
         $5.00
       </ion-button>
-      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+      <ion-button [fill]="amount === 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
         $10.00
       </ion-button>
       <input
@@ -55,14 +55,14 @@
         [(ngModel)]="customAmount" />
     </div>
 
-    <div class="amount-row" *ngIf="frequency == 'single'">
-      <ion-button [fill]="amount == 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
+    <div class="amount-row" *ngIf="frequency === 'single'">
+      <ion-button [fill]="amount === 10 ? 'solid' : 'outline'" (click)="setAmount(10)">
         $10.00
       </ion-button>
-      <ion-button [fill]="amount == 25 ? 'solid' : 'outline'" (click)="setAmount(25)">
+      <ion-button [fill]="amount === 25 ? 'solid' : 'outline'" (click)="setAmount(25)">
         $25.00
       </ion-button>
-      <ion-button [fill]="amount == 50 ? 'solid' : 'outline'" (click)="setAmount(50)">
+      <ion-button [fill]="amount === 50 ? 'solid' : 'outline'" (click)="setAmount(50)">
         $50.00
       </ion-button>
       <input

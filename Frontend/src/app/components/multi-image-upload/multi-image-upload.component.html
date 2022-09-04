@@ -8,7 +8,7 @@
         <img src="{{ image.location }}" />
       </div>
       <div class="image-subtext" *ngIf="images.length > 1">
-        <ion-icon name="caret-back" [ngClass]="{ 'hide-reorder': i == 0 }" (click)="reorderImage(image, -1)"></ion-icon>
+        <ion-icon name="caret-back" [ngClass]="{ 'hide-reorder': i === 0 }" (click)="reorderImage(image, -1)"></ion-icon>
         <span>
           {{ i + 1 }}
         </span>

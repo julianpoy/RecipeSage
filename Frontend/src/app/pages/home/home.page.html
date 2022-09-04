@@ -142,7 +142,7 @@
   </virtual-scroller>
 
   <ion-list *ngIf="!loading">
-    <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
+    <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
       <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
         <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
@@ -152,7 +152,7 @@
         </p>
       </ion-label>
     </null-state>
-    <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0 && selectedLabels.length === 0">
+    <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
       <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
       <ion-label virtualSlot="body">
         <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
@@ -180,7 +180,7 @@
         </p>
       </ion-label>
     </null-state>
-    <null-state *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount == 0">
+    <null-state *ngIf="folder === 'inbox' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0">
       <ion-icon name="mail-open" class="big-icon" virtualSlot="header"></ion-icon>
       <ion-label virtualSlot="body">
         <p>

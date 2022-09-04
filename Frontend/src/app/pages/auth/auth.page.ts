@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
@@ -18,7 +18,7 @@ import { CapabilitiesService } from '@/services/capabilities.service';
   styleUrls: ['auth.page.scss'],
   providers: [ UserService ]
 })
-export class AuthPage {
+export class AuthPage implements OnInit {
   @Input() startWithRegister: boolean | null;
 
   showLogin = false;

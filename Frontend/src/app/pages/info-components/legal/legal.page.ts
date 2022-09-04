@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IS_SELFHOST } from 'src/environments/environment';
@@ -10,7 +10,7 @@ import { RouteMap } from '@/services/util.service';
   templateUrl: 'legal.page.html',
   styleUrls: ['legal.page.scss']
 })
-export class LegalPage {
+export class LegalPage implements AfterViewInit {
   isSelfHost = IS_SELFHOST;
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 

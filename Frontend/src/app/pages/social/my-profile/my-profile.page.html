@@ -132,7 +132,7 @@
     <ion-list *ngIf="myProfile?.profileItems?.length" class="profile-items-list">
       <ion-reorder-group (ionItemReorder)="ionReorder($event)" disabled="false">
         <ng-container *ngFor="let item of myProfile?.profileItems; let idx = index">
-          <ion-item *ngIf="item.type == 'all-recipes'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'all-recipes'" button (click)="open(item)">
             <ion-icon class="item-icon" name="folder" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 
@@ -145,7 +145,7 @@
             <ion-reorder slot="end"></ion-reorder>
           </ion-item>
 
-          <ion-item *ngIf="item.type == 'recipe'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'recipe'" button (click)="open(item)">
             <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
               <img [src]="item.recipe.images[0].location">
             </ion-avatar>
@@ -160,7 +160,7 @@
             <ion-reorder slot="end"></ion-reorder>
           </ion-item>
 
-          <ion-item *ngIf="item.type == 'label'" button (click)="open(item)">
+          <ion-item *ngIf="item.type === 'label'" button (click)="open(item)">
             <ion-icon class="item-icon" name="pricetag" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 

@@ -39,7 +39,7 @@
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-              (complete)="removeItems($event)"></shopping-list-group>
+              (markComplete)="removeItems($event)"></shopping-list-group>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-          (complete)="removeItems($event)"></shopping-list-group>
+          (markComplete)="removeItems($event)"></shopping-list-group>
       </div>
     </div>
     <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
