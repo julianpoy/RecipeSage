@@ -98,37 +98,11 @@ export class ShareModalPage {
     this.recipeEmbedCode = embedCode;
   }
 
-  loadThreads() {
-    return new Promise((resolve, reject) => {
-      this.messagingService.threads().then(response => {
-        this.threads = response;
+  async loadThreads() {
+    const response = await this.messagingService.threads();
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlinePushMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.modalCtrl.dismiss();
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
-    });
+    this.threads = response.data;
   }
 
   selectRecipient(thread) {
@@ -145,11 +119,14 @@ export class ShareModalPage {
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
 
     this.autofillTimeout = setTimeout(async () => {
-      const user = await this.userService.getUserByEmail(this.recipientEmail.trim(), {
+      const response = await this.userService.getUserByEmail({
+        email: this.recipientEmail.trim(),
+      }, {
         404: () => {}
       });
 
-      if (user) {
+      if (response.success) {
+        const user = response.data;
         this.recipientName = user.name || user.email;
         this.recipientId = user.id;
       } else {
@@ -162,40 +139,19 @@ export class ShareModalPage {
     }, 500);
   }
 
-  send() {
+  async send() {
     const loading = this.loadingService.start();
 
-    this.messagingService.create({
+    const response = await this.messagingService.create({
       to: this.recipientId,
       body: '',
       recipeId: this.recipe.id
-    }).then(response => {
-      loading.dismiss();
-      this.modalCtrl.dismiss();
-      this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss();
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss();
+    this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
   }
 
   shareMethodChanged(event) {

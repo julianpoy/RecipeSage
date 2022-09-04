@@ -8,6 +8,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 
 import { NewMealPlanModalPage } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'page-add-recipe-to-meal-plan-modal',
@@ -30,6 +31,7 @@ export class AddRecipeToMealPlanModalPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public mealPlanService: MealPlanService,
     public recipeService: RecipeService,
     public loadingService: LoadingService,
@@ -61,70 +63,20 @@ export class AddRecipeToMealPlanModalPage {
     localStorage.setItem('lastUsedMealPlanId', this.selectedMealPlan.id);
   }
 
-  loadMealPlans() {
-    return new Promise((resolve, reject) => {
-      this.mealPlanService.fetch().then(response => {
-        this.mealPlans = response;
+  async loadMealPlans() {
+    const response = await this.mealPlanService.fetch();
+    if (!response.success) return;
 
-        this.selectLastUsedMealPlan();
+    this.mealPlans = response.data;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
-    });
+    this.selectLastUsedMealPlan();
   }
 
-  loadMealPlan(id) {
-    return new Promise((resolve, reject) => {
-      this.mealPlanService.fetchById(id).then(response => {
-        this.destinationMealPlan = response;
+  async loadMealPlan(id: string) {
+    const response = await this.mealPlanService.fetchById(id);
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
-    });
+    this.destinationMealPlan = response.data;
   }
 
   isFormValid() {
@@ -133,47 +85,25 @@ export class AddRecipeToMealPlanModalPage {
     return this.meal && this.meal.length > 0;
   }
 
-  save() {
+  async save() {
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
 
-    this.mealPlanService.addItem({
-      id: this.destinationMealPlan.id,
+    const response = await this.mealPlanService.addItem(this.destinationMealPlan.id, {
       title: this.recipe.title,
       recipeId: this.recipe.id,
       meal: this.meal,
-      scheduled: new Date(this.selectedDays[0])
-    }).then(response => {
-      loading.dismiss();
-
-      this.modalCtrl.dismiss();
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
+      scheduled: new Date(this.selectedDays[0]).toISOString()
     });
+    loading.dismiss();
+
+    if (response.success) this.modalCtrl.dismiss();
   }
 
   async createMealPlan() {
+    const message = await this.translate.get('pages.addRecipeToMealPlanModal.newMealPlanSuccess').toPromise();
+
     const modal = await this.modalCtrl.create({
       component: NewMealPlanModalPage
     });
@@ -188,7 +118,7 @@ export class AddRecipeToMealPlanModalPage {
           this.loadMealPlan(this.mealPlans[0].id);
         } else {
           (await this.toastCtrl.create({
-            message: 'Excellent! Now select the meal plan you just created.',
+            message,
             duration: 6000
           })).present();
         }

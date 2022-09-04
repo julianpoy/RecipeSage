@@ -3,6 +3,7 @@ import { NavController, ModalController, AlertController, ToastController } from
 import { Label, LabelService } from '@/services/label.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LoadingService } from '@/services/loading.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'page-manage-label-modal',
@@ -17,6 +18,7 @@ export class ManageLabelModalPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
@@ -31,71 +33,57 @@ export class ManageLabelModalPage {
   async _rename(newTitle: string) {
     const loading = this.loadingService.start();
 
-    this.labelService.update(this.label.id, {
+    const header = await this.translate.get('pages.manageLabelModal.renameConflict.header').toPromise();
+    const message = await this.translate.get('pages.manageLabelModal.renameConflict.message').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
+    const response = await this.labelService.update(this.label.id, {
       title: newTitle
-    }).then(response => {
-      loading.dismiss();
-
-      this.label.title = response.title;
-    }).catch(async err => {
-      loading.dismiss();
-
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        case 409:
-          const conflictAlert = await this.alertCtrl.create({
-            header: 'Error',
-            message: 'A label with that title already exists',
-            buttons: [
-              {
-                text: 'Dismiss',
-                handler: () => {}
-              }
-            ]
-          });
-
-          conflictAlert.present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
+    }, {
+      409: async () => {
+        (await this.alertCtrl.create({
+          header,
+          message,
+          buttons: [
+            {
+              text: okay,
+              handler: () => {}
+            }
+          ]
+        })).present();
       }
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.label.title = newTitle;
   }
 
   async rename() {
+    const header = await this.translate.get('pages.manageLabelModal.rename.header', {name: this.label.title}).toPromise();
+    const placeholder = await this.translate.get('pages.manageLabelModal.rename.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const renamePrompt = await this.alertCtrl.create({
-      header: `Rename label ${this.label.title}`,
+      header,
       inputs: [
         {
           name: 'title',
           type: 'text',
           id: 'title',
           value: this.label.title,
-          placeholder: 'New Label Title'
+          placeholder
         }
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           cssClass: 'secondary'
         },
         {
-          text: 'Ok',
+          text: okay,
           handler: response => {
             this._rename(response.title);
           }
@@ -109,46 +97,30 @@ export class ManageLabelModalPage {
   async _delete() {
     const loading = this.loadingService.start();
 
-    this.labelService.delete([this.label.id]).then(response => {
-      loading.dismiss();
-
-      this.modalCtrl.dismiss();
-    }).catch(async err => {
-      loading.dismiss();
-
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+    const response = await this.labelService.delete({
+      labelIds: [this.label.id]
     });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss();
   }
 
   async delete() {
+    const header = await this.translate.get('pages.manageLabelModal.delete.header', {name: this.label.title}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const deletePrompt = await this.alertCtrl.create({
-      header: `Delete label: ${this.label.title}`,
+      header,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           cssClass: 'secondary'
         },
         {
-          text: 'Confirm',
+          text: del,
           handler: response => {
             this._delete();
           }
@@ -162,102 +134,76 @@ export class ManageLabelModalPage {
   async _merge(targetTitle: string) {
     const loading = this.loadingService.start();
 
-    let labelsForTargetTitle;
-    try {
-      labelsForTargetTitle = await this.labelService.fetch({
-        title: targetTitle
-      });
-    } catch (err) {
-      loading.dismiss();
+    const labelResults = await this.labelService.fetch({
+      title: targetTitle
+    });
+    if (!labelResults.success) return;
 
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-      return; // Abort merge
-    }
+    const labelsForTargetTitle = labelResults.data;
 
-    if (!labelsForTargetTitle || labelsForTargetTitle.length === 0) {
+    if (labelsForTargetTitle.length === 0) {
+      const header = await this.translate.get('pages.manageLabelModal.notFound.header').toPromise();
+      const subHeader = await this.translate.get('pages.manageLabelModal.notFound.subHeader', {name: targetTitle}).toPromise();
+      const message = await this.translate.get('pages.manageLabelModal.notFound.message').toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const notFoundAlert = await this.alertCtrl.create({
-        header: `Label not found`,
-        subHeader: `The target label "${targetTitle}" was not found`,
-        message: `You must enter the title for an existing label to merge into.`,
+        header,
+        subHeader,
+        message,
         buttons: [{
-          text: 'Ok',
+          text: okay,
           role: 'cancel'
         }]
       });
 
       await notFoundAlert.present();
+      loading.dismiss();
+
       return;
     }
 
     const targetLabel = labelsForTargetTitle[0];
 
     if (targetLabel.id === this.label.id) {
+      const header = await this.translate.get('pages.manageLabelModal.selfMerge.header').toPromise();
+      const subHeader = await this.translate.get('pages.manageLabelModal.selfMerge.subHeader', {name: targetTitle}).toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const sameIdAlert = await this.alertCtrl.create({
-        header: `Cannot merge label to itself`,
-        subHeader: `The source and target labels must be different labels`,
+        header,
+        subHeader,
         buttons: [{
-          text: 'Ok',
+          text: okay,
           role: 'cancel'
         }]
       });
 
       await sameIdAlert.present();
-      return;
-    }
-
-    try {
-      await this.labelService.merge(this.label.id, targetLabel.id);
-    } catch (err) {
       loading.dismiss();
 
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlineFetchMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
       return;
     }
+
+    const mergeResponse = await this.labelService.merge({
+      sourceLabelId: this.label.id,
+      targetLabelId: targetLabel.id
+    });
+    if (!mergeResponse.success) return;
 
     loading.dismiss();
 
+    const header = await this.translate.get('pages.manageLabelModal.mergeComplete.header').toPromise();
+    const subHeader = await this.translate.get('pages.manageLabelModal.mergeComplete.subHeader', {sourceTitle: this.label.title, targetTitle: targetLabel.title}).toPromise();
+    const message = await this.translate.get('pages.manageLabelModal.mergeComplete.message', {sourceTitle: this.label.title, targetTitle: targetLabel.title}).toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const mergeCompleteAlert = await this.alertCtrl.create({
-      header: `Merge Complete!`,
-      subHeader: `Label "${this.label.title}" has been merged into "${targetLabel.title}" successfully`,
-      message: `The label "${this.label.title}" has been deleted - you'll find all it's recipes moved to "${targetLabel.title}".`,
+      header,
+      subHeader,
+      message,
       buttons: [{
-        text: 'Dismiss',
+        text: okay,
         role: 'cancel'
       }]
     });
@@ -268,32 +214,34 @@ export class ManageLabelModalPage {
   }
 
   async merge() {
+    const header = await this.translate.get('pages.manageLabelModal.merge.header', {title: this.label.title}).toPromise();
+    const subHeader = await this.translate.get('pages.manageLabelModal.merge.subHeader', {title: this.label.title}).toPromise();
+    const message = await this.translate.get('pages.manageLabelModal.merge.message', {title: this.label.title}).toPromise();
+    const placeholder = await this.translate.get('pages.manageLabelModal.merge.placeholder').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const confirm = await this.translate.get('generic.confirm').toPromise();
+
     const mergePrompt = await this.alertCtrl.create({
-      header: `Merge label: ${this.label.title}`,
-      subHeader: `What label would you like to merge "${this.label.title}" with?`,
-      message: `All recipes in "${this.label.title}" will be relabeled with the target label instead, and the label "${this.label.title}" will be removed.`,
-      inputs: [
-        {
-          name: 'title',
-          type: 'text',
-          id: 'title',
-          value: '',
-          placeholder: 'Target label name'
+      header,
+      subHeader,
+      message,
+      inputs: [{
+        name: 'title',
+        type: 'text',
+        id: 'title',
+        value: '',
+        placeholder
+      }],
+      buttons: [{
+        text: cancel,
+        role: 'cancel',
+        cssClass: 'secondary'
+      }, {
+        text: confirm,
+        handler: async response => {
+          this._merge(response.title);
         }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary'
-        },
-        {
-          text: 'Confirm',
-          handler: async response => {
-            this._merge(response.title);
-          }
-        }
-      ]
+      }]
     });
 
     await mergePrompt.present();

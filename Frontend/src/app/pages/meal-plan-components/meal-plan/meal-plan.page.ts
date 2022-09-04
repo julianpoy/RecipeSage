@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController, PopoverController, AlertController } from '@ionic/angular';
 import dayjs, { Dayjs } from 'dayjs';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
@@ -44,12 +45,11 @@ export class MealPlanPage {
 
   selectedDays: number[];
 
-  reference = 0;
-
   @ViewChild(MealCalendarComponent, { static: true }) mealPlanCalendar: MealCalendarComponent;
 
   constructor(
     public route: ActivatedRoute,
+    public translate: TranslateService,
     public navCtrl: NavController,
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
@@ -64,7 +64,7 @@ export class MealPlanPage {
     this.mealPlanId = this.route.snapshot.paramMap.get('mealPlanId');
 
     this.websocketService.register('mealPlan:itemsUpdated', payload => {
-      if (payload.mealPlanId === this.mealPlanId && payload.reference !== this.reference) {
+      if (payload.mealPlanId === this.mealPlanId) {
         this.loadMealPlan();
       }
     }, this);
@@ -89,84 +89,25 @@ export class MealPlanPage {
     });
   }
 
-  loadMealPlan() {
-    return new Promise((resolve, reject) => {
-      this.mealPlanService.fetchById(this.mealPlanId).then(response => {
-        this.mealPlan = response;
-
-        resolve();
-      }).catch(async err => {
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          case 404:
-            let errorToast = await this.toastCtrl.create({
-              message: 'Meal plan not found. Does this meal plan URL exist?',
-              duration: 30000,
-              // dismissOnPageChange: true
-            });
-            errorToast.present();
-
-            this.navCtrl.navigateRoot(RouteMap.MealPlansPage.getPath());
-            break;
-          default:
-            errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-
-        reject();
-      });
-    });
+  async loadMealPlan() {
+    const response = await this.mealPlanService.fetchById(this.mealPlanId)
+    if (!response.success) return;
+    this.mealPlan = response.data;
   }
 
-  _addItem(item) {
+  async _addItem(item) {
     const loading = this.loadingService.start();
 
-    this.mealPlanService.addItem({
-      id: this.mealPlanId,
+    await this.mealPlanService.addItem(this.mealPlanId, {
       title: item.title,
       recipeId: item.recipeId || null,
       meal: item.meal,
       scheduled: item.scheduled
-    }).then(response => {
-      this.reference = response.reference;
-
-      this.loadMealPlan().then(loading.dismiss);
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
     });
+
+    await this.loadMealPlan();
+
+    loading.dismiss();
   }
 
   async newMealPlanItem() {
@@ -216,7 +157,6 @@ export class MealPlanPage {
     modal.present();
 
     const { data } = await modal.onDidDismiss();
-    if (data?.reference) this.reference = data.reference;
     if (data?.refresh) this.loadWithProgress();
   }
 
@@ -240,19 +180,17 @@ export class MealPlanPage {
     const item = data.item;
 
     const loading = this.loadingService.start();
-    const response = await this.mealPlanService.updateMealPlanItems(this.mealPlanId, [{
-      id: mealItem.id,
-      title: item.title,
-      recipeId: item.recipeId,
-      scheduled: item.scheduled,
-      meal: item.meal
-    }]);
+    await this.mealPlanService.updateItems(this.mealPlanId, {
+      items: [{
+        id: mealItem.id,
+        title: item.title,
+        recipeId: item.recipeId,
+        scheduled: item.scheduled,
+        meal: item.meal
+      }]
+    });
     loading.dismiss();
-
-    if (response) {
-      this.reference = response.reference;
-      this.loadWithProgress();
-    }
+    this.loadWithProgress();
   }
 
   getItemsOnDay(unix: number) {
@@ -264,22 +202,18 @@ export class MealPlanPage {
     return this.selectedDays.map(unix => this.getItemsOnDay(unix).length).reduce((acc, el) => acc + el, 0);
   }
 
-  async emptyDaysSelectedAlert(attemptedAction: string, okCb?: () => any) {
+  async emptyDaysSelectedAlert() {
+    const header = await this.translate.get('pages.mealPlan.modal.emptyDays.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.emptyDays.message').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const emptyAlert = await this.alertCtrl.create({
-      header: 'Empty day(s) selected',
-      message: `The day(s) you\'ve selected do not contain any meal plan items. To ${attemptedAction}, you\'ll need to select at least one day with meal plan items.`,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Ok',
-          handler: () => {
-            if (okCb) okCb();
-          }
-        }
-      ]
+      header,
+      message,
+      buttons: [{
+        text: okay,
+        role: 'cancel'
+      }]
     });
     await emptyAlert.present();
   }
@@ -288,23 +222,28 @@ export class MealPlanPage {
     this.dayCopyInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      this.emptyDaysSelectedAlert('copy items');
+      this.emptyDaysSelectedAlert();
       return;
     }
 
+    const header = await this.translate.get('pages.mealPlan.modal.copy.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.copy.header').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const copyAlert = await this.alertCtrl.create({
-      header: 'Copy To',
-      message: 'This will copy the meal items on the selected days to a series of days starting on the day you select.<br /><br />Please click the day you\'d like to copy to.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel'
         },
         {
-          text: 'Ok',
+          text: okay,
           handler: () => {
             this.dayCopyInProgress = true;
-            this.selectedDaysInProgress = [...this.selectedDays];
+            this.selectedDaysInProgress = Array.from(this.selectedDays);
           }
         }
       ]
@@ -316,23 +255,28 @@ export class MealPlanPage {
     this.dayMoveInProgress = false;
 
     if (this.getSelectedMealItemCount() === 0) {
-      this.emptyDaysSelectedAlert('move items');
+      this.emptyDaysSelectedAlert();
       return;
     }
 
+    const header = await this.translate.get('pages.mealPlan.modal.move.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.move.header').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const moveAlert = await this.alertCtrl.create({
-      header: 'Move To',
-      message: 'This will move the meal items on the selected days to a series of days starting on the day you select.<br /><br />Please click the day you\'d like to move to.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel'
         },
         {
-          text: 'Ok',
+          text: okay,
           handler: () => {
             this.dayMoveInProgress = true;
-            this.selectedDaysInProgress = [...this.selectedDays];
+            this.selectedDaysInProgress = Array.from(this.selectedDays);
           }
         }
       ]
@@ -342,22 +286,27 @@ export class MealPlanPage {
 
   async bulkDelete() {
     if (this.getSelectedMealItemCount() === 0) {
-      this.emptyDaysSelectedAlert('delete items');
+      this.emptyDaysSelectedAlert();
       return;
     }
 
-    const selectedDayList = this.selectedDays.map(day => dayjs(day).format('MMM D')).join(', ');
+    const daysList = this.selectedDays.map(day => dayjs(day).format('MMM D')).join(', ');
+
+    const header = await this.translate.get('pages.mealPlan.modal.delete.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.delete.message', {daysList}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
 
     const deleteAlert = await this.alertCtrl.create({
-      header: 'Delete Meal Plan Items',
-      message: `This will delete all items on ${selectedDayList}`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel'
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
           handler: () => {
             this._deleteSelected();
@@ -370,7 +319,7 @@ export class MealPlanPage {
 
   async bulkPinRecipes() {
     if (this.getSelectedMealItemCount() === 0) {
-      this.emptyDaysSelectedAlert('pin recipes');
+      this.emptyDaysSelectedAlert();
       return;
     }
 
@@ -387,7 +336,7 @@ export class MealPlanPage {
 
   async bulkAddToShoppingList() {
     if (this.getSelectedMealItemCount() === 0) {
-      this.emptyDaysSelectedAlert('pin recipes');
+      this.emptyDaysSelectedAlert();
       return;
     }
 
@@ -395,11 +344,15 @@ export class MealPlanPage {
     const selectedRecipes = selectedItems.map(item => item.recipe).filter(e => e);
 
     if (selectedRecipes.length === 0) {
+      const header = await this.translate.get('pages.mealPlan.modal.noRecipes.header').toPromise();
+      const message = await this.translate.get('pages.mealPlan.modal.noRecipes.message').toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const noRecipesAlert = await this.alertCtrl.create({
-        header: 'No Recipes',
-        message: 'The selected days contain no recipes.\nKeep in mind that only meal items that are recipes can be added to the shopping list.\nYou cannot add manually entered meal items to the shopping list from here.',
+        header,
+        message,
         buttons: [{
-          text: 'Ok',
+          text: okay,
         }]
       });
       await noRecipesAlert.present();
@@ -423,22 +376,29 @@ export class MealPlanPage {
       const destDay = dayjs(day).format('MMM D');
 
       if (this.dayCopyInProgress) {
+        const header = await this.translate.get('pages.mealPlan.modal.copyConfirm.header').toPromise();
+        const messageSingle = await this.translate.get('pages.mealPlan.modal.copyConfirm.messageSingle', {selectedDayList, destDay}).toPromise();
+        const messageMultiple = await this.translate.get('pages.mealPlan.modal.copyConfirm.messageMultiple', {selectedDayList, destDay}).toPromise();
+        const change = await this.translate.get('pages.mealPlan.modal.copyConfirm.change').toPromise();
+        const cancel = await this.translate.get('generic.cancel').toPromise();
+        const okay = await this.translate.get('generic.okay').toPromise();
+
         const alert = await this.alertCtrl.create({
-          header: 'Copy To',
-          message: `This will copy the meal items on ${selectedDayList} to ${this.selectedDaysInProgress.length > 1 ? 'the days on and following ' : ''}${destDay}.`,
+          header,
+          message: selectedDayList.length > 1 ? messageMultiple : messageSingle,
           buttons: [
             {
-              text: 'Cancel Copy',
+              text: cancel,
               role: 'cancel',
               handler: () => {
                 this.dayCopyInProgress = false;
               }
             },
             {
-              text: 'Select Another Day'
+              text: change,
             },
             {
-              text: 'Ok',
+              text: okay,
               handler: async () => {
                 this.dayCopyInProgress = false;
                 this._copySelectedTo(day);
@@ -450,22 +410,29 @@ export class MealPlanPage {
       }
 
       if (this.dayMoveInProgress) {
+        const header = await this.translate.get('pages.mealPlan.modal.moveConfirm.header').toPromise();
+        const messageSingle = await this.translate.get('pages.mealPlan.modal.moveConfirm.messageSingle', {selectedDayList, destDay}).toPromise();
+        const messageMultiple = await this.translate.get('pages.mealPlan.modal.moveConfirm.messageMultiple', {selectedDayList, destDay}).toPromise();
+        const change = await this.translate.get('pages.mealPlan.modal.moveConfirm.change').toPromise();
+        const cancel = await this.translate.get('generic.cancel').toPromise();
+        const okay = await this.translate.get('generic.okay').toPromise();
+
         const alert = await this.alertCtrl.create({
-          header: 'Move All Selected Items',
-          message: `This will move the meal items on ${selectedDayList} to ${this.selectedDaysInProgress.length > 1 ? 'the days on and following ' : ''}${destDay}.`,
+          header,
+          message: selectedDayList.length > 1 ? messageMultiple : messageSingle,
           buttons: [
             {
-              text: 'Cancel Copy',
+              text: cancel,
               role: 'cancel',
               handler: () => {
                 this.dayMoveInProgress = false;
               }
             },
             {
-              text: 'Select Another Day'
+              text: change
             },
             {
-              text: 'Ok',
+              text: okay,
               handler: async () => {
                 this.dayMoveInProgress = false;
                 this._moveSelectedTo(day);
@@ -492,13 +459,11 @@ export class MealPlanPage {
     ).flat();
 
     const loading = this.loadingService.start();
-    const response = await this.mealPlanService.updateMealPlanItems(this.mealPlanId, updatedItems);
+    await this.mealPlanService.updateItems(this.mealPlanId, {
+      items: updatedItems
+    });
     loading.dismiss();
-
-    if (response) {
-      this.reference = response.reference;
-      this.loadWithProgress();
-    }
+    this.loadWithProgress();
   }
 
   async _copySelectedTo(day) {
@@ -514,26 +479,22 @@ export class MealPlanPage {
     ).flat();
 
     const loading = this.loadingService.start();
-    const response = await this.mealPlanService.addMealPlanItems(this.mealPlanId, newItems);
+    await this.mealPlanService.addItems(this.mealPlanId, {
+      items: newItems
+    });
     loading.dismiss();
-
-    if (response) {
-      this.reference = response.reference;
-      this.loadWithProgress();
-    }
+    this.loadWithProgress();
   }
 
   async _deleteSelected() {
     const itemIds = this.selectedDays.map(day => this.getItemsOnDay(day).map(item => item.id)).flat();
 
     const loading = this.loadingService.start();
-    const response = await this.mealPlanService.deleteMealPlanItems(this.mealPlanId, itemIds);
+    await this.mealPlanService.deleteItems(this.mealPlanId, {
+      itemIds,
+    });
     loading.dismiss();
-
-    if (response) {
-      this.reference = response.reference;
-      this.loadWithProgress();
-    }
+    this.loadWithProgress();
   }
 
   setMealsByDate(mealsByDate) {

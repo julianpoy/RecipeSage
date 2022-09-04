@@ -66,7 +66,14 @@
 
   <div class="ion-text-center ion-padding">
     <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" />
-    <ion-button fill="outline" (click)="filePicker()">{{ filePickerText() }}</ion-button>
+    <ion-button fill="outline" (click)="filePicker()">
+      <span *ngIf="imageFile">
+        {{ 'pages.importLivingCookbook.filePicker.file' | translate:{fileName:imageFile.name} }}
+      </span>
+      <span *ngIf="!imageFile">
+        {{ 'pages.importLivingCookbook.filePicker.noFile' | translate }}
+      </span>
+    </ion-button>
 
     <div class="ion-padding" *ngIf="showFileTypeWarning()">
       <p>

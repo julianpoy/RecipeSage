@@ -31,7 +31,7 @@
 
   <br /><br />
 
-  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
+  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">
@@ -39,7 +39,7 @@
     <ion-icon name="list" slot="start"></ion-icon>
     <ion-label>
       {{ 'pages.newShoppingList.create' | translate }}
-      <span *ngIf="selectedThreads.length > 0">
+      <span *ngIf="selectedCollaboratorIds.length > 0">
         {{ 'pages.newShoppingList.share' | translate }}
       </span>
     </ion-label>

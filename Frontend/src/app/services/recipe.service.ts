@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Label } from './label.service';
 
 import { HttpService } from './http.service';
-import { HttpErrorHandlerService } from './http-error-handler.service';
+import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 import { UtilService } from './util.service';
 import { EventService } from './event.service';
 import { Image } from './image.service';
@@ -68,186 +68,150 @@ export class RecipeService {
   private httpErrorHandlerService: HttpErrorHandlerService,
   public utilService: UtilService) {}
 
-  getExportURL(format) {
+  getExportURL(format: string) {
     return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
-  count(options) {
-    let url = this.utilService.getBase() + 'recipes/count' + this.utilService.getTokenQuery();
-    if (options.folder) url += '&folder=' + options.folder;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  count(payload: {
+    folder?: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{ count: number }>(
+      `recipes/count`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  fetch(options) {
-    let url = this.utilService.getBase() + 'recipes/by-page' + this.utilService.getTokenQuery();
-    if (options.folder)                              url += '&folder=' + options.folder;
-    if (options.userId)                              url += '&userId=' + options.userId;
-    if (options.sortBy)                              url += '&sort=' + options.sortBy;
-    if (options.offset)                              url += '&offset=' + options.offset;
-    if (options.count)                               url += '&count=' + options.count;
-    if (options.labels && options.labels.length > 0) url += '&labels=' + encodeURIComponent(options.labels.join(','));
-    if (options.labelIntersection)                   url += '&labelIntersection=true';
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetch(payload: {
+    folder?: string,
+    userId?: string,
+    sortBy?: string,
+    offset?: number,
+    count?: number,
+    labels?: string,
+    labelIntersection?: boolean,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `recipes/by-page`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  search(query: string, options?: { userId?: string, labels?: string[] }) {
-    let url = this.utilService.getBase() + 'recipes/search' + this.utilService.getTokenQuery();
-    if (options && options.labels && options.labels.length > 0) url += '&labels=' + options.labels.join(',');
-    if (options && options.userId) url += '&userId=' + options.userId;
-    url += '&query=' + query;
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  search(payload: {
+    query: string
+    userId?: string,
+    labels?: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `recipes/search`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  fetchById(recipeId: string) {
-    const url = this.utilService.getBase() + 'recipes/' + recipeId + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  fetchById(recipeId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Recipe>(
+      `recipes/${recipeId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  async getRecipeById(recipeId: string) {
-    const url = this.utilService.getBase() + `recipes/${recipeId}${this.utilService.getTokenQuery()}`;
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'get',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+  getRecipeById(recipeId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Recipe>(
+      `recipes/${recipeId}`,
+      'GET',
+      {},
+      errorHandlers
+    );
   }
 
-  create(data) {
-    const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
+  async create(payload: any, errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<Recipe>(
+      `recipes`,
+      'POST',
+      payload,
+      errorHandlers
+    );
 
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('recipe:created');
-      this.events.publish('recipe:generalUpdate');
+    this.events.publish('recipe:created');
+    this.events.publish('recipe:generalUpdate');
 
-      return response.data;
-    });
+    return response;
   }
 
-  share(data) {
-    if (!data.destinationUserEmail) throw new Error('DestinationUserEmail required for share operation');
-
-    const url = this.utilService.getBase() + 'recipes/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+  share(payload: {
+    destinationUserEmail: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `recipes`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  update(data) {
-    const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'put',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('recipe:updated');
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+  update(payload: any, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Recipe>(
+      `recipes/${payload.id}`,
+      'PUT',
+      payload,
+      errorHandlers
+    );
   }
 
-  removeBulk(recipes) {
-    const url = this.utilService.getBase() + 'recipes/delete-bulk' + this.utilService.getTokenQuery();
-    const data = {
-      recipeIds: recipes
-    };
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => {
-      this.events.publish('recipe:deleted');
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+  deleteBulk(payload: {
+    recipeIds: string[],
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `recipes/delete-bulk`,
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 
-  remove(data) {
-    const url = this.utilService.getBase() + 'recipes/' + data.id + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => {
-      this.events.publish('recipe:deleted');
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+  delete(recipeId: string, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `recipes/${recipeId}`,
+      'DELETE',
+      {},
+      errorHandlers
+    );
   }
 
-  removeAll() {
-    const url = this.utilService.getBase() + 'recipes/all' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'delete',
-      url
-    }).then(response => {
-      this.events.publish('recipe:deleted');
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+  deleteAll(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `recipes/all`,
+      'DELETE',
+      {},
+      errorHandlers
+    );
   }
 
-  async reindex() {
-    const url = this.utilService.getBase() + `recipes/reindex${this.utilService.getTokenQuery()}`;
-
-    try {
-      const { data } = await this.httpService.request({
-        method: 'post',
-        url
-      });
-
-      return data;
-    } catch(err) {
-      this.httpErrorHandlerService.handleError(err);
-    }
+  reindex(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `recipes/reindex`,
+      'POST',
+      {},
+      errorHandlers
+    );
   }
 
-  clipFromUrl(clipUrl: string) {
-    const url = this.utilService.getBase() + 'clip/' + this.utilService.getTokenQuery() + '&url=' + encodeURIComponent(clipUrl);
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  clipFromUrl(payload: {
+    url: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<any>(
+      `clip`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
   print(recipe, template) {
@@ -255,101 +219,74 @@ export class RecipeService {
                 + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
-  scrapePepperplate(data) {
-    const url = this.utilService.getBase()
-      + 'scrape/pepperplate'
-      + this.utilService.getTokenQuery()
-      + '&username=' + encodeURIComponent(data.username)
-      + '&password=' + encodeURIComponent(data.password);
-
-    return this.httpService.request({
-      method: 'get',
-      url
-    }).then(response => response.data);
+  scrapePepperplate(payload: {
+    username: string,
+    password: string,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Recipe>(
+      `scrape/pepperplate`,
+      'GET',
+      payload,
+      errorHandlers
+    );
   }
 
-  importFDXZ(fdxzFile, excludeImages?: boolean) {
+  importFDXZ(fdxzFile, payload: {
+    excludeImages?: boolean,
+  }, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append('fdxzdb', fdxzFile, fdxzFile.name);
 
-    const url = `${this.utilService.getBase()}import/fdxz${this.utilService.getTokenQuery()}`
-      + `${excludeImages ? '&excludeImages=true' : ''}`;
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
-    }).then(response => {
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+    return this.httpService.multipartRequestWithWrapper<void>(
+      'import/fdxz',
+      'POST',
+      formData,
+      payload,
+      errorHandlers
+    );
   }
 
-  importLCB(lcbFile, includeStockRecipes?: boolean, includeTechniques?: boolean, excludeImages?: boolean) {
+  importLCB(lcbFile, payload: {
+    includeStockRecipes?: boolean,
+    includeTechniques?: boolean,
+    excludeImages?: boolean,
+  }, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append('lcbdb', lcbFile, lcbFile.name);
 
-    const url = `${this.utilService.getBase()}import/livingcookbook${this.utilService.getTokenQuery()}`
-              + `${includeStockRecipes ? '&includeStockRecipes=true' : ''}`
-              + `${includeTechniques ? '&includeTechniques=true' : ''}`
-              + `${excludeImages ? '&excludeImages=true' : ''}`;
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
-    }).then(response => {
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+    return this.httpService.multipartRequestWithWrapper<void>(
+      'import/livingcookbook',
+      'POST',
+      formData,
+      payload,
+      errorHandlers
+    );
   }
 
-  importPaprika(paprikaFile) {
+  importPaprika(paprikaFile, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append('paprikadb', paprikaFile, paprikaFile.name);
 
-    const url = `${this.utilService.getBase()}data/import/paprika${this.utilService.getTokenQuery()}`;
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
-    }).then(response => {
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+    return this.httpService.multipartRequestWithWrapper<void>(
+      'data/import/paprika',
+      'POST',
+      formData,
+      {},
+      errorHandlers
+    );
   }
 
-  importJSONLD(jsonLDFile) {
+  importJSONLD(jsonLDFile, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append('jsonLD', jsonLDFile, jsonLDFile.name);
 
-    const url = `${this.utilService.getBase()}data/import/json-ld${this.utilService.getTokenQuery()}`;
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
-    }).then(response => {
-      this.events.publish('recipe:generalUpdate');
-
-      return response.data;
-    });
+    return this.httpService.multipartRequestWithWrapper<void>(
+      'data/import/json-ld',
+      'POST',
+      formData,
+      {},
+      errorHandlers
+    );
   }
 
   parseIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {

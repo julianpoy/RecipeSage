@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { HttpService } from './http.service';
 import { UtilService } from './util.service';
+import {ErrorHandlers} from './http-error-handler.service';
 
 export interface Image {
   id: string;
@@ -18,33 +19,27 @@ export class ImageService {
     private utilService: UtilService
   ) {}
 
-  create(file: File) {
+  create(file: File, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
 
-    const url = this.utilService.getBase() + 'images/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      data: formData
-    }).then(response => response.data);
+    return this.httpService.multipartRequestWithWrapper<Image>(
+      'images',
+      'POST',
+      formData,
+      {},
+      errorHandlers
+    );
   }
 
-  createFromUrl(imageURL: string) {
-    const data = {
-      imageURL
-    };
-
-    const url = this.utilService.getBase() + 'images/' + this.utilService.getTokenQuery();
-
-    return this.httpService.request({
-      method: 'post',
-      url,
-      data
-    }).then(response => response.data);
+  createFromUrl(payload: {
+    imageURL: string
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<Image>(
+      'images',
+      'POST',
+      payload,
+      errorHandlers
+    );
   }
 }

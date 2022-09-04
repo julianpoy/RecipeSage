@@ -43,10 +43,7 @@ export class MealPlansPage {
 
     this.initialLoadComplete = false;
 
-    this.loadPlans().then(() => {
-      loading.dismiss();
-      this.initialLoadComplete = true;
-    }, () => {
+    this.loadPlans().finally(() => {
       loading.dismiss();
       this.initialLoadComplete = true;
     });
@@ -60,37 +57,12 @@ export class MealPlansPage {
     });
   }
 
-  loadPlans() {
-    return new Promise((resolve, reject) => {
-      this.mealPlanService.fetch().then(response => {
-        this.mealPlans = response.sort((a, b) => {
-          return a.title.localeCompare(b.title);
-        });
+  async loadPlans() {
+    const response = await this.mealPlanService.fetch();
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        reject();
-
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          default:
-            const errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-      });
+    this.mealPlans = response.data.sort((a, b) => {
+      return a.title.localeCompare(b.title);
     });
   }
 
@@ -104,11 +76,11 @@ export class MealPlansPage {
     });
   }
 
-  openMealPlan(mealPlanId) {
+  openMealPlan(mealPlanId: string) {
     this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(mealPlanId));
   }
 
-  formatItemCreationDate(plainTextDate) {
+  formatItemCreationDate(plainTextDate: string) {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 }

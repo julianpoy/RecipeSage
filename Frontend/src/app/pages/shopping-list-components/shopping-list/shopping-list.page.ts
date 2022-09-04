@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '@/services/loading.service';
 import { ShoppingListService } from '@/services/shopping-list.service';
@@ -44,6 +45,7 @@ export class ShoppingListPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public loadingService: LoadingService,
     public shoppingListService: ShoppingListService,
     public websocketService: WebsocketService,
@@ -122,145 +124,63 @@ export class ShoppingListPage {
     this.groupsByCategoryTitle = groupsByCategoryTitle;
   }
 
-  loadList() {
-    return new Promise((resolve, reject) => {
-      this.shoppingListService.fetchById(this.shoppingListId).then(response => {
-        this.processList(response);
+  async loadList() {
+    const response = await this.shoppingListService.fetchById(this.shoppingListId);
+    if (!response.success) return;
 
-        resolve();
-      }).catch(async err => {
-        console.log(err);
-        switch (err.response.status) {
-          case 0:
-            const offlineToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.offlineFetchMessage,
-              duration: 5000
-            });
-            offlineToast.present();
-            break;
-          case 401:
-            this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-            break;
-          case 404:
-            let errorToast = await this.toastCtrl.create({
-              message: 'Shopping list not found. Does this shopping list URL exist?',
-              duration: 30000,
-              // dismissOnPageChange: true
-            });
-            errorToast.present();
-
-            this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
-            break;
-          default:
-            errorToast = await this.toastCtrl.create({
-              message: this.utilService.standardMessages.unexpectedError,
-              duration: 30000
-            });
-            errorToast.present();
-            break;
-        }
-
-        reject();
-      });
-    });
+    this.processList(response.data);
   }
 
   removeRecipe(recipeId) {
     this.removeItems(this.itemsByRecipeId[recipeId]);
   }
 
-  removeItems(items) {
+  async removeItems(items) {
     const loading = this.loadingService.start();
 
     const itemIds = items.map(el => {
       return el.id;
     });
 
-    this.shoppingListService.remove({
-      id: this.list.id,
-      items: itemIds
-    }).then(response => {
-      this.reference = response.reference || 0;
-
-      this.loadList().then(async () => {
-        loading.dismiss();
-        const toast = await this.toastCtrl.create({
-          message: 'Removed ' + items.length + ' item' + (items.length > 1 ? 's' : ''),
-          duration: 5000,
-          buttons: [{
-            text: 'Undo',
-            handler: () => {
-              this._addItems(items.map(el => {
-                return {
-                  title: el.title,
-                  id: el.shoppingListId,
-                  mealPlanItemId: (el.mealPlanItem || {}).id || null,
-                  recipeId: (el.recipe || {}).id || null
-                };
-              }));
-            }
-          }]
-        });
-        toast.present();
-      });
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
+    const response = await this.shoppingListService.deleteItems(this.list.id, {
+      itemIds
     });
+
+    await this.loadList();
+    loading.dismiss();
+
+    if (!response.success) return;
+
+    const message = await this.translate.get('pages.shoppingList.removed', {itemCount: items.length}).toPromise();
+    const undo = await this.translate.get('pages.shoppingList.removed.undo').toPromise();
+
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 5000,
+      buttons: [{
+        text: undo,
+        handler: () => {
+          this._addItems(items.map(el => ({
+            title: el.title,
+            id: el.shoppingListId,
+            mealPlanItemId: (el.mealPlanItem || {}).id || null,
+            recipeId: (el.recipe || {}).id || null
+          })));
+        }
+      }]
+    });
+    toast.present();
   }
 
-  _addItems(items) {
+  async _addItems(items) {
     const loading = this.loadingService.start();
 
-    this.shoppingListService.addItems({
-      id: this.list.id,
+    await this.shoppingListService.addItems(this.list.id, {
       items
-    }).then(response => {
-      this.reference = response.reference || 0;
-
-      this.loadList().then(loading.dismiss);
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unauthorized,
-            duration: 6000
-          })).present();
-          break;
-        default:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          })).present();
-          break;
-      }
     });
+
+    await this.loadList();
+    loading.dismiss();
   }
 
   async newShoppingListItem() {

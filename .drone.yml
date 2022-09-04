@@ -70,20 +70,20 @@ name: ci-frontend
 
 steps:
 - name: Install Dependencies
-  image: node:12
+  image: node:18
   commands:
   - cd /drone/src/Frontend && npm install
   - cd /drone/src/SharedUtils && npm install
 - name: Lint
-  image: node:12
+  image: node:18
   commands:
   - cd Frontend && npm run lint
 - name: Build
-  image: node:12
+  image: node:18
   commands:
   - cd Frontend && npm run dist
 - name: Tag
-  image: node:12
+  image: node:18
   commands:
   - mv Frontend/www www
   - sed -i "s/window.version = 'development';/window.version = '${DRONE_TAG}';/" www/index.html

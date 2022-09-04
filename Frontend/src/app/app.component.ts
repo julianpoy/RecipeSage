@@ -216,22 +216,24 @@ export class AppComponent {
     return pages;
   }
 
-  loadInboxCount() {
+  async loadInboxCount() {
     if (!localStorage.getItem('token')) return;
 
-    this.recipeService.count({ folder: 'inbox' }).then(response => {
-      this.inboxCount = response.count;
-    }, () => { });
+    const response = await this.recipeService.count({ folder: 'inbox' });
+    if (!response.success) return;
+
+    this.inboxCount = response.data.count;
   }
 
   async loadFriendRequestCount() {
     if (!localStorage.getItem('token')) return;
 
-    const friends = await this.userService.getMyFriends({
+    const response = await this.userService.getMyFriends({
       401: () => {}
     });
+    if (!response.success) return;
 
-    this.friendRequestCount = friends?.incomingRequests?.length || null;
+    this.friendRequestCount = response.data.incomingRequests?.length || null;
   }
 
   initializeApp() {
@@ -286,23 +288,10 @@ export class AppComponent {
   logout() {
     this.messagingService.disableNotifications();
 
-    this.userService.logout().then(() => {
-      this._logout();
-    }, async err => {
-      switch (err.response.status) {
-        case 0:
-        case 401:
-        case 404:
-          this._logout();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 6000
-          });
-          errorToast.present();
-          break;
-      }
+    this.userService.logout({
+      '*': () => {},
     });
+
+    this._logout();
   }
 }

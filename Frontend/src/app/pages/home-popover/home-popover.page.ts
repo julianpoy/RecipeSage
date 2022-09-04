@@ -1,5 +1,6 @@
 import { Component, ViewChild, Input } from '@angular/core';
 import { ToastController, ModalController, IonSelect, PopoverController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LabelService } from '@/services/label.service';
 import { UtilService } from '@/services/util.service';
@@ -28,6 +29,7 @@ export class HomePopoverPage {
   @Input() guestMode: boolean;
 
   constructor(
+    public translate: TranslateService,
     public popoverCtrl: PopoverController,
     public toastCtrl: ToastController,
     public utilService: UtilService,
@@ -61,6 +63,8 @@ export class HomePopoverPage {
   }
 
   async openLabelFilter() {
+    const nullMessage = await this.translate.get('pages.homepopover.labelNull').toPromise();
+
     const labelFilterPopover = await this.popoverCtrl.create({
       component: ResettableSelectPopoverPage,
       componentProps: {
@@ -69,12 +73,12 @@ export class HomePopoverPage {
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1
         })),
-        nullMessage: 'You don\'t have any labels. You can create labels on the recipe details page.'
+        nullMessage
       }
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      this.selectedLabels.splice.apply(null, ([0, this.selectedLabels.length] as any[]).concat(data.selectedLabels));
       setTimeout(() => {
         this.dismiss(true);
       })

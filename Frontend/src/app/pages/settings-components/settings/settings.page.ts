@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { RouteMap } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
@@ -28,6 +29,7 @@ export class SettingsPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
@@ -55,15 +57,18 @@ export class SettingsPage {
 
   async toggleOfflineCache() {
     if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
+      const message = await this.translate.get('pages.settings.offline.loading').toPromise();
+
       await this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.ExperimentalOfflineCache);
       const loading = await this.loadingCtrl.create({
-        message: 'Fetching all recipes, please wait...'
+        message
       });
       await loading.present();
       try {
         await this.offlineCacheService.fullSync();
       } catch(e) {
-        setTimeout(() => alert('There was an error while syncing. Please report this.'));
+        const error = await this.translate.get('pages.settings.offline.error').toPromise();
+        setTimeout(() => alert(error));
         throw e;
       }
       await loading.dismiss();
@@ -71,17 +76,20 @@ export class SettingsPage {
   }
 
   async resetPreferences() {
+    const header = await this.translate.get('pages.settings.resetPrefs.header').toPromise();
+    const message = await this.translate.get('pages.settings.resetPrefs.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Reset Preferences Warning',
-      message: `Resetting your preferences will set all app preferences back to their default state.<br /><br />
-                This includes preferences set via menus on the home page, meal plans page, shopping list page, etc.<br /><br />
-                <b>Note:</b> This only affects this device.`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel'
+          text: cancel
         },
         {
-          text: 'Reset',
+          text: del,
           handler: () => {
             localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
             this.preferencesService.resetToDefaults();
@@ -103,19 +111,23 @@ export class SettingsPage {
 
   async appThemeChanged() {
     if (this.appTheme === 'black') {
+      const header = await this.translate.get('pages.settings.oled.header').toPromise();
+      const message = await this.translate.get('pages.settings.oled.message').toPromise();
+      const cancel = await this.translate.get('generic.cancel').toPromise();
+      const okay = await this.translate.get('generic.okay').toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: 'Black (OLED) Warning',
-        message: `The black (OLED) theme may make it difficult to distinguish between elements and alerts.<br />
-                    Shadows and other visual animations will also not be displayed.`,
+        header,
+        message,
         buttons: [
           {
-            text: 'Cancel',
+            text: cancel,
             handler: () => {
               this.appTheme = 'default';
             }
           },
           {
-            text: 'Okay',
+            text: okay,
             handler: () => {
               this.applyAppTheme();
             }
@@ -141,17 +153,22 @@ export class SettingsPage {
   }
 
   async checkForUpdate() {
+    const header = await this.translate.get('pages.settings.update.header').toPromise();
+    const subHeader = await this.translate.get('pages.settings.update.subHeader').toPromise();
+    const cancel = await this.translate.get('pages.settings.update.cancel').toPromise();
+    const okay = await this.translate.get('pages.settings.update.okay').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'App will reload',
-      subHeader: 'The app will reload to check for an update.',
+      header,
+      subHeader,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           handler: () => {
           }
         },
         {
-          text: 'Continue',
+          text: okay,
           handler: () => {
             try {
               (window as any).forceSWUpdate().then(() => {

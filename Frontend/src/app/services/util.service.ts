@@ -199,14 +199,6 @@ export class UtilService {
 
   devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
 
-  standardMessages = {
-    offlineFetchMessage: `It looks like you\'re offline.
-                          While offline, we\'re only able to fetch data you\'ve previously accessed on this device.`,
-    offlinePushMessage: 'It looks like you\'re offline. While offline, all RecipeSage functions are read-only.',
-    unexpectedError: 'An unexpected error occured. Please try again.',
-    unauthorized: 'You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.'
-  };
-
   constructor() {}
 
   getBase(): string {

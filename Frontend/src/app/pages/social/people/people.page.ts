@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
@@ -24,6 +25,7 @@ export class PeoplePage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
@@ -47,46 +49,32 @@ export class PeoplePage {
       this.userService.getMyProfile()
     ]).then(([friendships, accountInfo, myProfile]) => {
       loading.dismiss();
+      if (!friendships.success || !accountInfo.success || !myProfile.success) return;
 
-      this.friendships = friendships;
-      this.accountInfo = accountInfo;
-      this.myProfile = myProfile;
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+      this.friendships = friendships.data;
+      this.accountInfo = accountInfo.data;
+      this.myProfile = myProfile.data;
     });
   }
 
   async findProfile() {
     if (!this.accountInfo?.enableProfile) {
+      const header = await this.translate.get('pages.people.setup.header').toPromise();
+      const message = await this.translate.get('pages.people.setup.message').toPromise();
+      const cancel = await this.translate.get('generic.cancel').toPromise();
+      const setup = await this.translate.get('pages.people.setup.confirm').toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: 'Profile Not Setup',
-        message: 'You\'ll need to setup your profile before you can go adding friends.',
+        header,
+        message,
         buttons: [
           {
-            text: 'Cancel',
+            text: cancel,
             role: 'cancel',
             handler: () => { }
           },
           {
-            text: 'Setup',
+            text: setup,
             handler: () => {
               this.editProfile();
             }

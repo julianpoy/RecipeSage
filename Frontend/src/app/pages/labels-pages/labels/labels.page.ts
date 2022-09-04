@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '@/services/loading.service';
 import { UtilService } from '@/services/util.service';
@@ -26,6 +27,7 @@ export class LabelsPage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public popoverCtrl: PopoverController,
     public loadingService: LoadingService,
     public alertCtrl: AlertController,
@@ -53,14 +55,15 @@ export class LabelsPage {
     });
   }
 
-  loadLabels() {
+  async loadLabels() {
     this.labels = [];
     this.loading = true;
 
-    return this.labelService.fetch().then(response => {
-      this.labels = response;
-      this.loading = false;
-    });
+    const response = await this.labelService.fetch();
+    this.loading = false;
+    if (!response.success) return;
+
+    this.labels = response.data;
   }
 
   async presentPopover(event) {
@@ -122,50 +125,37 @@ export class LabelsPage {
   }
 
   async deleteSelectedLabels() {
-    const labelTitles = this.selectedLabelIds.map(labelId => this.labels.filter(label => label.id === labelId)[0].title)
-                                              .join('<br />');
+    const labelTitles = this.selectedLabelIds.map(labelId => this.labels.filter(label => label.id === labelId)[0].title).join(', ');
+
+    const header = await this.translate.get('pages.labels.modal.delete.header').toPromise();
+    const message = await this.translate.get('pages.labels.modal.delete.message', {labelTitles}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
 
     const alert = await this.alertCtrl.create({
-      header: 'Confirm Delete',
-      message: `This will permanently delete the selected labels from your account. This action is irreversible.<br /><br />
-                The following labels will be deleted:<br />${labelTitles}`,
+      header,
+      message,
       buttons: [
         {
-          text: 'Cancel',
+          text: cancel,
           role: 'cancel',
           handler: () => { }
         },
         {
-          text: 'Delete',
+          text: del,
           cssClass: 'alertDanger',
-          handler: () => {
+          handler: async () => {
             const loading = this.loadingService.start();
-            this.labelService.delete(this.selectedLabelIds).then(() => {
-              this.clearSelectedLabels();
-
-              this.loadLabels().then(() => {
-                loading.dismiss();
-              }, () => {
-                loading.dismiss();
-              });
-            }).catch(async err => {
-              switch (err.response.status) {
-                case 0:
-                  const offlineToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.offlinePushMessage,
-                    duration: 5000
-                  });
-                  offlineToast.present();
-                  break;
-                default:
-                  const errorToast = await this.toastCtrl.create({
-                    message: this.utilService.standardMessages.unexpectedError,
-                    duration: 30000
-                  });
-                  errorToast.present();
-                  break;
-              }
+            const response = await this.labelService.delete({
+              labelIds: this.selectedLabelIds
             });
+            if (!response.success) return loading.dismiss();
+
+            this.clearSelectedLabels();
+
+            await this.loadLabels();
+
+            loading.dismiss();
           }
         }
       ]

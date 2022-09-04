@@ -16,7 +16,7 @@ export class NewShoppingListModalPage {
 
   listTitle = '';
 
-  selectedThreads: any = [];
+  selectedCollaboratorIds: string[] = [];
 
   constructor(
     public modalCtrl: ModalController,
@@ -30,44 +30,21 @@ export class NewShoppingListModalPage {
 
   }
 
-
-  save() {
+  async save() {
     const loading = this.loadingService.start();
 
-    this.shoppingListService.create({
+    const response = await this.shoppingListService.create({
       title: this.listTitle,
-      collaborators: this.selectedThreads
-    }).then(response => {
-      loading.dismiss();
-      this.modalCtrl.dismiss({
-        success: true
-      });
-      this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.id));
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 401:
-          this.modalCtrl.dismiss({
-            success: false
-          });
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
+      collaborators: this.selectedCollaboratorIds
     });
+
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss({
+      success: true
+    });
+    this.navCtrl.navigateRoot(RouteMap.ShoppingListPage.getPath(response.data.id));
   }
 
   cancel() {

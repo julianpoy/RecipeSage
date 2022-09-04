@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { isHandleValid } from '../../../../../../SharedUtils/src';
 
@@ -32,6 +33,7 @@ export class MyProfilePage {
 
   constructor(
     public navCtrl: NavController,
+    public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
@@ -47,44 +49,29 @@ export class MyProfilePage {
     });
   }
 
-  load() {
+  async load() {
     const loading = this.loadingService.start();
 
-    return Promise.all([
-      this.userService.me(),
-      this.userService.getMyProfile()
-    ]).then(([accountInfo, myProfile]) => {
-      loading.dismiss();
+    const [accountInfo, myProfile] = await Promise.all([
+      this.userService.me({
+        401: () => this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login))
+      }),
+      this.userService.getMyProfile({
+        401: () => this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login))
+      })
+    ]);
+    loading.dismiss();
 
-      this.accountInfo = accountInfo;
-      this.myProfile = myProfile;
+    if (!accountInfo.success || !myProfile.success) return;
 
-      this.requiresSetup = !this.myProfile.name || !this.myProfile.handle;
+    this.accountInfo = accountInfo.data;
+    this.myProfile = myProfile.data;
 
-      if (this.requiresSetup) {
-        this.updatedProfileFields.enableProfile = true;
-      }
-    }).catch(async err => {
-      loading.dismiss();
-      switch (err.response.status) {
-        case 0:
-          (await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          })).present();
-          break;
-        case 401:
-          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
-      }
-    });
+    this.requiresSetup = !this.myProfile.name || !this.myProfile.handle;
+
+    if (this.requiresSetup) {
+      this.updatedProfileFields.enableProfile = true;
+    }
   }
 
   async checkProfileEnabled() {
@@ -94,17 +81,22 @@ export class MyProfilePage {
       this.myProfile.name &&
       !this.myProfile.enableProfile
     ) {
+      const header = await this.translate.get('pages.myProfile.notEnabled.header').toPromise();
+      const message = await this.translate.get('pages.myProfile.notEnabled.message').toPromise();
+      const ignore = await this.translate.get('pages.myProfile.ignore').toPromise();
+      const enable = await this.translate.get('pages.myProfile.enable').toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: 'Profile Not Enabled',
-        message: 'You\'ll need to enable your profile to interact with sharing features, such as sending friend requests.',
+        header,
+        message,
         buttons: [
           {
-            text: 'Ignore',
+            text: ignore,
             role: 'cancel',
             handler: () => { }
           },
           {
-            text: 'Enable',
+            text: enable,
             handler: () => {
               this.updatedProfileFields.enableProfile = true
               this.myProfile.enableProfile = true;
@@ -124,8 +116,9 @@ export class MyProfilePage {
       this.isHandleAvailable = false;
       return;
     }
-    const handleInfo = await this.userService.getHandleInfo(handle);
-    this.isHandleAvailable = handleInfo?.available;
+    const response = await this.userService.getHandleInfo(handle);
+    if (!response.success) return;
+    this.isHandleAvailable = response.data.available;
   }
 
   handleInput() {
@@ -214,17 +207,22 @@ export class MyProfilePage {
 
   async shareProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
+      const header = await this.translate.get('pages.myProfile.share.unsaved.header').toPromise();
+      const message = await this.translate.get('pages.myProfile.share.unsaved.message').toPromise();
+      const cancel = await this.translate.get('generic.cancel').toPromise();
+      const save = await this.translate.get('generic.save').toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: 'Unsaved Changes',
-        message: 'You\'ll need to save your changes before you can share your profile.',
+        header,
+        message,
         buttons: [
           {
-            text: 'Cancel',
+            text: cancel,
             role: 'cancel',
             handler: () => { }
           },
           {
-            text: 'Save',
+            text: save,
             handler: async () => {
               await this.save();
               this.shareProfile();
@@ -250,17 +248,22 @@ export class MyProfilePage {
 
   async viewProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
+      const header = await this.translate.get('pages.myProfile.view.unsaved.header').toPromise();
+      const message = await this.translate.get('pages.myProfile.view.unsaved.message').toPromise();
+      const cancel = await this.translate.get('generic.cancel').toPromise();
+      const save = await this.translate.get('generic.save').toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: 'Unsaved Changes',
-        message: 'You\'ll need to save your changes before you can view what your profile looks like.',
+        header,
+        message,
         buttons: [
           {
-            text: 'Cancel',
+            text: cancel,
             role: 'cancel',
             handler: () => { }
           },
           {
-            text: 'Save',
+            text: save,
             handler: async () => {
               await this.save();
               this.viewProfile();

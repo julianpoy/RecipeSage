@@ -236,13 +236,16 @@ router.delete(
     }).catch(next);
   });
 
-// Delete items from a shopping list, either by recipeId or by a list of items
+// Delete items from a shopping list by a list of item ids
 router.delete(
   '/:shoppingListId/items',
   cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
+
+    // items for legacy, itemIds as replacement
+    const itemIds = (req.query.items || req.query.itemIds).split(',');
 
     ShoppingList.findOne({
       where: {
@@ -264,7 +267,7 @@ router.delete(
         return ShoppingListItem.destroy({
           where: {
             id: {
-              [Op.in]: req.query.items.split(',')
+              [Op.in]: itemIds
             }
           }
         }).then(function() {

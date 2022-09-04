@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ModalController, ToastController, AlertController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -16,6 +17,7 @@ export class AddFriendModalPage {
 
   constructor(
     private navCtrl: NavController,
+    private translate: TranslateService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private utilService: UtilService,
@@ -33,12 +35,16 @@ export class AddFriendModalPage {
   }
 
   async profileDisabledError() {
+    const header = await this.translate.get('pages.addFriendModal.profileDisabled.header').toPromise();
+    const message = await this.translate.get('pages.addFriendModal.profileDisabled.message').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
+
     const alert = await this.alertCtrl.create({
-      header: 'Profile is not enabled',
-      message: 'This user has disabled their profile and is therefore private/inaccessible.',
+      header,
+      message,
       buttons: [
         {
-          text: 'Okay',
+          text: okay,
           handler: () => {
             this.navCtrl.navigateRoot(RouteMap.PeoplePage.getPath());
           }
@@ -56,16 +62,19 @@ export class AddFriendModalPage {
     });
 
     loading.dismiss();
+    if (!profile.success) return;
 
-    if (profile) {
-      await this.userService.addFriend(this.recipientId);
-      this.modalCtrl.dismiss();
-      const tst = await this.toastCtrl.create({
-        message: 'Friend invite sent!',
-        duration: 5000
-      });
-      tst.present();
-    }
+    const friendRequest = await this.userService.addFriend(this.recipientId);
+    if (!friendRequest.success) return;
+
+    const message = await this.translate.get('pages.addFriendModal.success').toPromise();
+
+    this.modalCtrl.dismiss();
+    const tst = await this.toastCtrl.create({
+      message,
+      duration: 5000
+    });
+    tst.present();
   }
 
   async open() {
@@ -76,10 +85,9 @@ export class AddFriendModalPage {
     });
 
     loading.dismiss();
+    if (!profile.success) return;
 
-    if (profile) {
-      this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${profile.handle}`));
-      this.modalCtrl.dismiss();
-    }
+    this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${profile.data.handle}`));
+    this.modalCtrl.dismiss();
   }
 }

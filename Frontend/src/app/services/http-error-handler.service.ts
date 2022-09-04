@@ -41,6 +41,9 @@ export class HttpErrorHandlerService {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode]();
+    // Use provided catchall if passed
+    } else if (errorHandlers?.['*']) {
+      errorHandlers['*']();
     // Fallback to default
     } else if (this.defaultErrorHandlers[statusCode]) {
       this.defaultErrorHandlers[statusCode]();

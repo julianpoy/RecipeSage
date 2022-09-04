@@ -28,16 +28,16 @@
 
   <br /><br />
 
-  <select-collaborators [(selectedThreads)]="selectedThreads"></select-collaborators>
+  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!mealPlanTitle">
     <ion-icon name="list" slot="start"></ion-icon>
-    <ion-label *ngIf="selectedThreads.length > 0">
+    <ion-label *ngIf="selectedCollaboratorIds.length > 0">
       {{ 'pages.newMealPlanModal.createAndShare' | translate }}
     </ion-label>
-    <ion-label *ngIf="selectedThreads.length === 0">
+    <ion-label *ngIf="selectedCollaboratorIds.length === 0">
       {{ 'pages.newMealPlanModal.create' | translate }}
     </ion-label>
   </ion-button>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
@@ -22,6 +23,7 @@ export class ContributePage {
 
   constructor(
     public capabilitiesService: CapabilitiesService,
+    private translate: TranslateService,
     private utilService: UtilService,
     private paymentsService: PaymentsService,
     private toastCtrl: ToastController
@@ -63,39 +65,23 @@ export class ContributePage {
     const amount = this.amount ? this.amount : parseFloat(this.customAmount);
     const isRecurring = this.frequency === 'monthly';
 
-    const session = await this.paymentsService.generateCustomSession(
-      amount * 100,
+    const message = await this.translate.get('pages.mealPlan.modal.emptyDays.header', {amount:isRecurring ? 1 : 5}).toPromise();
+
+    const response = await this.paymentsService.generateCustomSession({
+      amount: amount * 100,
       isRecurring,
-      this.utilService.buildPublicRoutePath(RouteMap.ContributeThankYouPage.getPath()),
-      this.utilService.buildPublicRoutePath(RouteMap.ContributeCancelPage.getPath())
-    ).catch(async err => {
-      switch (err.response.status) {
-        case 0:
-          const offlineToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.offlinePushMessage,
-            duration: 5000
-          });
-          offlineToast.present();
-          break;
-        case 412:
-          const invalidAmount = await this.toastCtrl.create({
-            message: `Unfortunately the minimum amount is $${isRecurring ? 1 : 5} due to transaction fees - apologies`,
-            duration: 5000
-          });
-          invalidAmount.present();
-          break;
-        default:
-          const errorToast = await this.toastCtrl.create({
-            message: this.utilService.standardMessages.unexpectedError,
-            duration: 30000
-          });
-          errorToast.present();
-          break;
+      successUrl: this.utilService.buildPublicRoutePath(RouteMap.ContributeThankYouPage.getPath()),
+      cancelUrl: this.utilService.buildPublicRoutePath(RouteMap.ContributeCancelPage.getPath())
+    }, {
+      412: async () => {
+        (await this.toastCtrl.create({
+          message,
+          duration: 5000
+        })).present();
       }
     });
+    if (!response.success) return;
 
-    if (!session) return;
-
-    await this.paymentsService.launchStripeCheckout(session.id);
+    await this.paymentsService.launchStripeCheckout(response.data.id);
   }
 }

@@ -30,7 +30,7 @@
           <span *ngIf="thread.messages[0].recipe">{{ 'pages.messages.history.sentRecipe' | translate }}</span>
           <span *ngIf="!thread.messages[0].recipe">{{ thread.messages[0].body }}</span>
         </p>
-        <p>{{thread.messages[0]._updatedAt}}</p>
+        <p>{{prettyDate(thread.messages[0].updatedAt)}}</p>
       </ion-label>
     </ion-item>
     <null-state *ngIf="threads.length === 0 && !loading">

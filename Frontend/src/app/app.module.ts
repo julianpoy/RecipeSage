@@ -50,7 +50,7 @@ console.error = (...args) => {
     checkChunkLoadError(args[0]);
   } catch(e) {}
 
-  origConsoleError(...args);
+  origConsoleError.apply(console, args);
 }
 
 Sentry.init({

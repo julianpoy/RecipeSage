@@ -112,7 +112,7 @@ export class AuthPage {
 
     const loading = this.loadingService.start();
 
-    const token = this.showLogin ? (
+    const response = this.showLogin ? (
       await this.userService.login({
         email: this.email,
         password: this.password
@@ -128,12 +128,10 @@ export class AuthPage {
         406: () => this.presentToast(emailTaken)
       })
     );
-
     loading.dismiss();
+    if (!response.success) return;
 
-    if (!token) return;
-
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', response.data.token);
     this.capabilitiesService.updateCapabilities();
 
     if ('Notification' in window && (Notification as any).permission === 'granted') {

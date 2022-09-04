@@ -183,9 +183,12 @@
       <p *ngIf="!capabilitySubscriptions['highResImages']?.enabled">
           {{ 'pages.account.bonus.notEnabled' | translate }}
       </p>
-      <p *ngIf="capabilitySubscriptions['highResImages'] && capabilitySubscriptions['highResImages'].expires !== -1">
-        <span *ngIf="capabilitySubscriptions['highResImages'].expires">
-          {{ capabilitySubscriptions['highResImages'].expires }}
+      <p *ngIf="capabilitySubscriptions['highResImages'] && capabilitySubscriptions['highResImages'].expired !== null">
+        <span *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['highResImages'].expired">
+          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date: capabilitySubscriptions['highResImages'].expires} }}
+        </span>
+        <span *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['highResImages'].expired">
+          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date: capabilitySubscriptions['highResImages'].expires} }}
         </span>
         <span *ngIf="!capabilitySubscriptions['highResImages'].expires">
           {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
@@ -208,9 +211,12 @@
       <p *ngIf="!capabilitySubscriptions['multipleImages']?.enabled">
         {{ 'pages.account.bonus.notEnabled' | translate }}
       </p>
-      <p *ngIf="capabilitySubscriptions['multipleImages'] && capabilitySubscriptions['multipleImages'].expires !== -1">
-        <span *ngIf="capabilitySubscriptions['multipleImages'].expires">
-          {{ capabilitySubscriptions['multipleImages'].expires }}
+      <p *ngIf="capabilitySubscriptions['multipleImages'] && capabilitySubscriptions['multipleImages'].expired !== null">
+        <span *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].expired">
+          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date: capabilitySubscriptions['multipleImages'].expires} }}
+        </span>
+        <span *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].expired">
+          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date: capabilitySubscriptions['multipleImages'].expires} }}
         </span>
         <span *ngIf="!capabilitySubscriptions['multipleImages'].expires">
           {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
