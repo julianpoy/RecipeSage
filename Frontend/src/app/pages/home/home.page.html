@@ -93,7 +93,7 @@
                 </p>
               </ion-label>
             </ion-item>
-          <!--<ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>-->
+            <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@
       </ion-item>
     </div>
 
-    <ion-list *ngIf="!loading && false">
+    <div *ngIf="!loading">
       <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
@@ -194,7 +194,7 @@
           </p>
         </ion-label>
       </null-state>
-    </ion-list>
+    </div>
   </div>
 
   <ion-fab *ngIf="!userId && folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
