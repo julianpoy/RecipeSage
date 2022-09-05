@@ -114,7 +114,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.14
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
@@ -129,7 +129,7 @@ jobs:
       - checkout
       - aws-cli/setup
       - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.14
       - attach_workspace:
           at: .
       - run:
