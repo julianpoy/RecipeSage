@@ -1,8 +1,8 @@
 FROM rs-api-builder as builder
 
-RUN npx pkg@4.5.1 ./src/migrate.js --targets=node16-alpine-x64 --output migrate -c package.json
-RUN npx pkg@4.5.1 ./src/activate.js --targets=node16-alpine-x64 --output activate -c package.json
-RUN npx pkg@4.5.1 package.json --targets=node16-alpine-x64 --output www
+RUN npx pkg@5.8.0 ./src/migrate.js --targets=node16-alpine-x64 --output migrate -c package.json
+RUN npx pkg@5.8.0 ./src/activate.js --targets=node16-alpine-x64 --output activate -c package.json
+RUN npx pkg@5.8.0 package.json --targets=node16-alpine-x64 --output www
 
 FROM node:16-alpine
 
