@@ -86,7 +86,7 @@ export class RecipeService {
   fetch(payload: {
     folder?: string,
     userId?: string,
-    sortBy?: string,
+    sort?: string,
     offset?: number,
     count?: number,
     labels?: string,

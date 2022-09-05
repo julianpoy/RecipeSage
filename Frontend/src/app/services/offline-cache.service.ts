@@ -69,10 +69,10 @@ export class OfflineCacheService {
     }
   }
 
-  async updateRecipeList(folder, sortBy) {
+  async updateRecipeList(folder: string, sort: string) {
     const firstFetch = await this.recipeService.fetch({
       folder,
-      sortBy,
+      sort,
       count: 50,
       offset: 0
     });
@@ -87,7 +87,7 @@ export class OfflineCacheService {
     for (let i = 1; i < pageCount; i++) {
       const page = await this.recipeService.fetch({
         folder: 'main',
-        sortBy: '-title',
+        sort: '-title',
         count: 50,
         offset: i * 50
       });

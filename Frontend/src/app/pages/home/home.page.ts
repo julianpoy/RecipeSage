@@ -240,7 +240,7 @@ export class HomePage {
     const response = await this.recipeService.fetch({
       folder: this.folder,
       userId: this.userId,
-      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      sort: this.preferences[MyRecipesPreferenceKey.SortBy],
       offset,
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
