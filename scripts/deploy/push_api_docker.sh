@@ -3,6 +3,7 @@
 set -e
 
 if [ -z "$1" ]
+then
   echo "Invalid command. Usage: ./push_api_docker.sh v1.0.0"
   exit 1
 fi
@@ -12,8 +13,9 @@ docker build --build-arg VERSION=$1 -f Backend/selfhost.Dockerfile -t julianpoy/
 
 # Only push to latest tag if tag is a versioned tag
 if [[ $1 == v* ]]
-    docker push julianpoy/recipesage:api-latest
-    docker push julianpoy/recipesage-selfhost:api-latest
+then
+  docker push julianpoy/recipesage:api-latest
+  docker push julianpoy/recipesage-selfhost:api-latest
 fi
 
 docker image tag julianpoy/recipesage:api-latest julianpoy/recipesage:api-$1
