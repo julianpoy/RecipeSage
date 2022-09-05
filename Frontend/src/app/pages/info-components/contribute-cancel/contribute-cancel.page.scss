@@ -5,8 +5,8 @@
 .card {
   position: relative;
   box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
-  $padding: 20px;
-  padding: $padding;
+  --padding: 20px;
+  padding: var(--padding);
   margin-top: 50px;
 
   margin-left: auto;
@@ -16,9 +16,9 @@
   font-size: 14px;
 
   ::ng-deep .logo-icon {
-    $iconSize: 50px;
-    margin-top: - $padding - ($iconSize / 2);
-    margin-bottom: $iconSize / 2;
+    --iconSize: 50px;
+    margin-top: calc(calc(0 - var(--padding)) - calc(var(--padding) / 2));
+    margin-bottom: calc(var(--iconSize) / 2);
     text-align: center;
 
     .bg {
@@ -27,8 +27,8 @@
       background: #353b48;
       padding: 6px;
       bottom: middle;
-      width: $iconSize;
-      height: $iconSize;
+      width: var(--iconSize);
+      height: var(--iconSize);
     }
   }
 
