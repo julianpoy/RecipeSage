@@ -59,6 +59,7 @@ jobs:
           name: test-backend
           command: cd Backend && npm run test:ci
   build_test_frontend:
+    resource_class: large
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
@@ -98,7 +99,7 @@ jobs:
           root: Frontend
           paths:
             - www
-  build_push_backend:
+  push_backend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
@@ -111,7 +112,7 @@ jobs:
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: tag-and-push-api
-          command: ./scripts/deploy/push_api_docker.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_api_docker.sh ${CIRCLE_TAG:=stg}
   push_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
@@ -125,16 +126,16 @@ jobs:
           at: .
       - run:
           name: set-frontend-version
-          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
+          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: tag-and-push-static
-          command: ./scripts/deploy/push_static_docker.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_static_docker.sh ${CIRCLE_TAG:=stg}
       - run:
           name: sync-s3
-          command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_static_s3.sh ${CIRCLE_TAG:=stg}
 
 workflows:
   version: 2
@@ -153,14 +154,14 @@ workflows:
               only: /.*/
             branches:
               only: /.*/
-      - build_push_backend:
+      - push_backend:
           requires:
             - test_backend
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^master$/
       - push_frontend:
           requires:
             - build_test_frontend
@@ -168,5 +169,5 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^master$/
 
