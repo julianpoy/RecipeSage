@@ -419,4 +419,21 @@ export class HomePage {
     });
     alert.present();
   }
+
+  getCardClass(recipe: Recipe) {
+    return {
+      selected: this.selectedRecipeIds.includes(recipe.id),
+
+      // The following should be generic to all recipes listed for height consistency
+      showImage: this.preferences[this.preferenceKeys.ShowImages],
+      showDescription: this.preferences[this.preferenceKeys.ShowRecipeDescription],
+      showSource: this.preferences[this.preferenceKeys.ShowSource],
+      showFromUser: this.folder === 'inbox',
+      showLabels: this.preferences[this.preferenceKeys.ShowLabels],
+    }
+  }
+
+  getLabelList(recipe: Recipe) {
+    return recipe.labels.map(label => label.title).join(', ');
+  }
 }

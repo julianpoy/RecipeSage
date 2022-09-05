@@ -1,3 +1,5 @@
+@import 'src/theme/shared-variables.scss';
+
 .homegrid {
   display: grid;
   grid-template-rows: 58px auto;
@@ -35,25 +37,153 @@
   }
 }
 
+.recipe-item {
+  --padding: 8px;
+  --image-size: 80px;
+
+  @media only screen and (min-width: $desktop-breakpoint) {
+    --image-size: 200px;
+  }
+
+  display: grid;
+  grid-template-columns: var(--image-size) auto;
+  height: calc(var(--image-size) + calc(var(--padding) * 2));
+  overflow: hidden;
+  margin-left: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--ion-background-tint-color);
+  }
+
+  img {
+    width: var(--image-size);
+    height: var(--image-size);
+    margin-bottom: var(--padding);
+    margin-top: var(--padding);
+  }
+
+  .recipe-item-content {
+    margin-left: 16px;
+    padding-right: 16px;
+    border-bottom: 1px solid;
+    border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      font-size: 16px;
+      font-weight: normal;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      margin: 0;
+      color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+    }
+  }
+}
+
 .recipe-group {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 15px;
+  padding: 10px;
 
   .recipe-card {
+    --paragraph-line-height: 19px;
+    --content-padding-leeway: 22px;
+
+    // The following should be set to their initial value with all preferences OFF
+    --image-size: 0px;
+    --header-height: 36px;
+    --description-height: 0px;
+    --source-height: 0px;
+    --fromuser-height: 0px;
+    --labels-height: 0px;
+    // ===
+
+    --content-height: calc(var(--content-padding-leeway) + var(--header-height) + var(--description-height) + var(--source-height) + var(--fromuser-height) + var(--labels-height));
+
     position: relative;
     width: 200px;
+    height: calc(var(--image-size) + var(--content-height));
     box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
     cursor: pointer;
+    border-radius: 5px 5px 0px 0px;
+    overflow: hidden;
 
     &:hover {
       background-color: var(--ion-item-background-hover);
     }
 
+    &.showImage {
+      --image-size: 200px;
+    }
+    &.showDescription {
+      --description-height: var(--paragraph-line-height);
+    }
+    &.showSource {
+      --source-height: var(--paragraph-line-height);
+    }
+    &.showFromUser {
+      --fromuser-height: var(--paragraph-line-height);
+    }
+    &.showLabels {
+      --labels-height: var(--paragraph-line-height);
+    }
+
     img {
-      width: 200px;
-      height: 200px;
-      border-radius: 5px 5px 0px 0px;
+      width: var(--image-size);
+      height: var(--image-size);
+    }
+
+    .recipe-card-content {
+      padding: 5px;
+      padding-left: 12px;
+
+      h2 {
+        line-height: calc(var(--header-height) / 2);
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        font-size: 16px;
+        font-weight: normal;
+
+        //white-space: nowrap;
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      p {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        font-size: 14px;
+        margin: 0;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+      }
     }
 
     ion-badge {
