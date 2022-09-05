@@ -57,8 +57,7 @@ export class HomePage {
   tileColCount: number;
 
   datasource = new Datasource<Recipe>({
-    get: async (index, count) => {
-      const originalCount = count;
+    get: async (index: number, count: number) => {
       const isTiled = this.preferences[MyRecipesPreferenceKey.ViewType] === 'tiles';
       if (isTiled) {
         index = index * this.tileColCount;
@@ -175,14 +174,11 @@ export class HomePage {
     }
   }
 
-  fetchMoreRecipes(endIndex) {
+  async fetchMoreRecipes(endIndex: number) {
     if (this.searchText) return;
 
-    const shouldFetchMore = this.lastRecipeCount < endIndex + this.recipeFetchBuffer;
-
-    const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
-    if (shouldFetchMore && moreToScroll) {
-      return this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
+    while(this.lastRecipeCount <= this.totalRecipeCount && this.lastRecipeCount < endIndex + this.recipeFetchBuffer) {
+      await this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
     }
   }
 
@@ -238,7 +234,7 @@ export class HomePage {
     this.lastRecipeCount = 0;
   }
 
-  async loadRecipes(offset, numToFetch) {
+  async loadRecipes(offset: number, numToFetch: number) {
     this.lastRecipeCount += numToFetch;
 
     const response = await this.recipeService.fetch({
