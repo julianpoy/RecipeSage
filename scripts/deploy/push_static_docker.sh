@@ -3,6 +3,7 @@
 set -e
 
 if [ -z "$1" ]
+then
   echo "Invalid command. Usage: ./push_static_docker.sh v1.0.0"
   exit 1
 fi
@@ -12,6 +13,7 @@ docker build -f Frontend/selfhost.Dockerfile -t julianpoy/recipesage-selfhost:st
 
 # Only push to latest tag if tag is a versioned tag
 if [[ $1 == v* ]]
+then
   docker push julianpoy/recipesage:static-latest
   docker push julianpoy/recipesage-selfhost:static-latest
 fi
