@@ -2,6 +2,7 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { Datasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
@@ -15,12 +16,15 @@ import { LabelService, Label } from '@/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
+const TILE_WIDTH = 200;
+const TILE_PADD = 20;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage implements AfterViewInit {
+export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
   labels: Label[] = [];
@@ -45,12 +49,46 @@ export class HomePage implements AfterViewInit {
 
   reloadPending = true;
 
-  @ViewChild('contentContainer', { static: true }) contentContainer;
-  scrollElement;
-
   userId = null;
 
   otherUserProfile;
+
+
+  tileColCount: number;
+
+  datasource = new Datasource<Recipe>({
+    get: async (index: number, count: number) => {
+      const isTiled = this.preferences[MyRecipesPreferenceKey.ViewType] === 'tiles';
+      if (isTiled) {
+        index = index * this.tileColCount;
+        count = count * this.tileColCount;
+      }
+
+      await this.fetchMoreRecipes(index + count);
+
+      const recipes = this.recipes.slice(index, index + count);
+
+      if (isTiled) {
+        const recipeGroups = [];
+        const groupCount = recipes.length / this.tileColCount;
+
+        for (let i = 0; i < groupCount; i++) {
+          const recipeIdx = i * this.tileColCount;
+          recipeGroups.push(recipes.slice(recipeIdx, recipeIdx + this.tileColCount));
+        }
+
+        return recipeGroups;
+      }
+
+      return recipes;
+    },
+    settings: {
+      minIndex: 0,
+      startIndex: 0,
+      bufferSize: 25,
+      padding: 5,
+    }
+  });
 
   constructor(
     public navCtrl: NavController,
@@ -98,10 +136,10 @@ export class HomePage implements AfterViewInit {
         this.resetAndLoadRecipes();
       }
     }, this);
-  }
 
-  ngAfterViewInit() {
-    this.getScrollElement();
+    this.updateTileColCount();
+
+    window.addEventListener('resize', () => this.updateTileColCount());
   }
 
   ionViewWillEnter() {
@@ -126,14 +164,21 @@ export class HomePage implements AfterViewInit {
     }
   }
 
-  fetchMoreRecipes(event) {
+  updateTileColCount() {
+    const tileColCount = Math.floor(window.innerWidth / (TILE_WIDTH + TILE_PADD));
+
+    if (tileColCount !== this.tileColCount) {
+      this.tileColCount = tileColCount;
+
+      this.datasource.adapter.reset();
+    }
+  }
+
+  async fetchMoreRecipes(endIndex: number) {
     if (this.searchText) return;
 
-    const shouldFetchMore = this.lastRecipeCount < event.endIndex + this.recipeFetchBuffer;
-
-    const moreToScroll = this.lastRecipeCount <= this.totalRecipeCount;
-    if (shouldFetchMore && moreToScroll) {
-      this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
+    while(this.lastRecipeCount <= this.totalRecipeCount && this.lastRecipeCount < endIndex + this.recipeFetchBuffer) {
+      await this.loadRecipes(this.lastRecipeCount, this.fetchPerPage);
     }
   }
 
@@ -174,11 +219,14 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  _resetAndLoadRecipes() {
+  async _resetAndLoadRecipes() {
     if (this.searchText && this.searchText.trim().length > 0) {
-      return this.search(this.searchText);
+      await this.search(this.searchText);
+    } else {
+      await this.loadRecipes(0, this.fetchPerPage);
     }
-    return this.loadRecipes(0, this.fetchPerPage);
+
+    return this.datasource.adapter.reset();
   }
 
   resetRecipes() {
@@ -186,13 +234,13 @@ export class HomePage implements AfterViewInit {
     this.lastRecipeCount = 0;
   }
 
-  async loadRecipes(offset, numToFetch) {
+  async loadRecipes(offset: number, numToFetch: number) {
     this.lastRecipeCount += numToFetch;
 
     const response = await this.recipeService.fetch({
       folder: this.folder,
       userId: this.userId,
-      sortBy: this.preferences[MyRecipesPreferenceKey.SortBy],
+      sort: this.preferences[MyRecipesPreferenceKey.SortBy],
       offset,
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
@@ -250,10 +298,6 @@ export class HomePage implements AfterViewInit {
     });
 
     popover.present();
-  }
-
-  async getScrollElement() {
-    this.scrollElement = await this.contentContainer.getScrollElement();
   }
 
   newRecipe() {
