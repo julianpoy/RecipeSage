@@ -32,7 +32,7 @@ const checkChunkLoadError = (error) => {
 
     const shouldReload = confirm('There was a connection interruption while loading this page. Do you want to reload the application?');
     if (shouldReload) {
-      window.location.reload(true);
+      window.location.reload();
     }
   }
 
