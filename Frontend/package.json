@@ -33,7 +33,6 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@sentry/browser": "^7.12.1",
     "axios": "^0.27.2",
-    "blueimp-load-image": "^2.26.0",
     "core-js": "^3.25.0",
     "dayjs": "^1.11.5",
     "firebase": "^7.6.1",

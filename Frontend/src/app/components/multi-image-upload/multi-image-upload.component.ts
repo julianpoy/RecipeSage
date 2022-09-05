@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import loadImage from 'blueimp-load-image';
 import {TranslateService} from '@ngx-translate/core';
 
 import { UserService } from '@/services/user.service';
@@ -63,17 +62,13 @@ export class MultiImageUploadComponent {
 
     const loading = this.loadingService.start();
 
-    const MAX_FILE_SIZE_MB = 8;
+    const MAX_FILE_SIZE_MB = 30;
 
     try {
       await Promise.all(Array.from(files).map(async (file: any) => {
         const isOverMaxSize = file.size / 1024 / 1024 > MAX_FILE_SIZE_MB; // Image is larger than MAX_FILE_SIZE_MB
 
-        if (isOverMaxSize) {
-          // Image is too large, do some resizing before high quality server conversion
-          console.log(`Image is over ${MAX_FILE_SIZE_MB}MB. Converting locally`);
-          file = await this.convertImage(file);
-        }
+        if (isOverMaxSize) throw new Error("Image too large");
 
         const image = await this.imageService.create(file);
         this.images.push(image);
@@ -96,36 +91,6 @@ export class MultiImageUploadComponent {
     loading.dismiss();
 
     this.imageUpdate.emit(this.images);
-  }
-
-  convertImage(file) {
-    const LOCAL_CONVERSION_WIDTH = 2048;
-    const LOCAL_CONVERSION_HEIGHT = 2048;
-
-    return new Promise((resolve, reject) => {
-      const loadingImage = loadImage(
-        file,
-        (renderedCanvas, exif) => {
-          renderedCanvas.toBlob(myBlob => {
-            myBlob.name = file.name;
-            resolve(myBlob);
-
-            console.log('Local conversion complete');
-          }, 'image/jpeg', 1);
-        },
-        {
-          maxWidth: LOCAL_CONVERSION_WIDTH,
-          maxHeight: LOCAL_CONVERSION_HEIGHT,
-          crop: true,
-          canvas: true,
-          orientation: true
-        }
-      );
-
-      loadingImage.onerror = err => {
-        reject(err);
-      };
-    });
   }
 
   reorderImage(image, direction: number) {
