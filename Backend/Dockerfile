@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
@@ -31,13 +31,13 @@ RUN apk add --no-cache \
 # node-gyp
 RUN apk add --no-cache python3 make
 
-COPY Backend/package.json ./Backend/package.json
-COPY Backend/package-lock.json ./Backend/package-lock.json
 COPY SharedUtils/package.json ./SharedUtils/package.json
 COPY SharedUtils/package-lock.json ./SharedUtils/package-lock.json
-
-RUN cd Backend && npm install
 RUN cd SharedUtils && npm install
+
+COPY Backend/package.json ./Backend/package.json
+COPY Backend/package-lock.json ./Backend/package-lock.json
+RUN cd Backend && npm install
 
 COPY Backend Backend
 COPY SharedUtils SharedUtils

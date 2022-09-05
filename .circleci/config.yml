@@ -5,7 +5,7 @@ jobs:
   test_backend:
     working_directory: ~/recipesage
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:16.17
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -36,22 +36,26 @@ jobs:
           command: 'sudo npm install -g sequelize'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
+          keys:
+            - sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
+            - sharedutils-dependency-cache-v2-
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Backend -----------------
       - restore_cache:
-          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
+          keys:
+            - backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
+            - backend-dependency-cache-v2-
       - run:
           name: install-npm-backend
           command: 'cd Backend && npm install'
       - save_cache:
-          key: backend-dependency-cache-v2-{{ checksum "Backend/package.json" }}
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
           paths:
             - ./Backend/node_modules
       # -------------- Tests -----------------
@@ -59,9 +63,10 @@ jobs:
           name: test-backend
           command: cd Backend && npm run test:ci
   build_test_frontend:
+    resource_class: large
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:16.17
     steps:
       - checkout
       - run:
@@ -69,22 +74,26 @@ jobs:
           command: 'sudo npm install -g npm@latest'
       # -------------- Setup SharedUtils -----------------
       - restore_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
+          keys:
+            - sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
+            - sharedutils-dependency-cache-v2-
       - run:
           name: install-npm-sharedutils
           command: 'cd SharedUtils && npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package.json" }}
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
           paths:
             - ./SharedUtils/node_modules
       # -------------- Setup Frontend -----------------
       - restore_cache:
-          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
+          keys:
+            - frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
+            - frontend-dependency-cache-v2-
       - run:
           name: install-npm-frontend
           command: 'cd Frontend && npm install'
       - save_cache:
-          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package.json" }}
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
           paths:
             - ./Frontend/node_modules
       # -------------- Tests -----------------
@@ -98,43 +107,45 @@ jobs:
           root: Frontend
           paths:
             - www
-  build_push_backend:
+  push_backend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:16.17
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: tag-and-push-api
-          command: ./scripts/deploy/push_api_docker.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_api_docker.sh ${CIRCLE_TAG:=stg}
   push_frontend:
     working_directory: ~/recipesage # directory where steps will run
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:16.17
     steps:
       - checkout
       - aws-cli/setup
       - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.14
+          docker_layer_caching: true
       - attach_workspace:
           at: .
       - run:
           name: set-frontend-version
-          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG}';/" www/index.html
+          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: tag-and-push-static
-          command: ./scripts/deploy/push_static_docker.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_static_docker.sh ${CIRCLE_TAG:=stg}
       - run:
           name: sync-s3
-          command: ./scripts/deploy/push_static_s3.sh $CIRCLE_TAG
+          command: ./scripts/deploy/push_static_s3.sh ${CIRCLE_TAG:=stg}
 
 workflows:
   version: 2
@@ -153,14 +164,14 @@ workflows:
               only: /.*/
             branches:
               only: /.*/
-      - build_push_backend:
+      - push_backend:
           requires:
             - test_backend
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^master$/
       - push_frontend:
           requires:
             - build_test_frontend
@@ -168,5 +179,5 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              ignore: /.*/
+              only: /^master$/
 

@@ -36,6 +36,3 @@ aws s3 sync www-revhashed s3://chefbook-static/frontend/$TAG/ \
   --acl public-read \
   --cache-control "public, max-age=2592000, immutable"
 
-# Push to latest (STG)
-aws s3 sync s3://chefbook-static/frontend/$TAG/ s3://chefbook-static/frontend/latest
-
