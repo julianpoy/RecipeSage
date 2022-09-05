@@ -84,16 +84,19 @@ registerRoute(
 
 const RS_LOGO_URL = 'https://recipesage.com/assets/imgs/logo_green.png';
 
-importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
 firebase.initializeApp({
-  'messagingSenderId': '1064631313987'
+  appId: '1:1064631313987:android:b6ca7a14265a6a01',
+  apiKey: 'AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0',
+  projectId: 'chef-book',
+  messagingSenderId: '1064631313987'
 });
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(message) {
+messaging.onBackgroundMessage((message) => {
   console.log('Received background message ', message);
 
   var notificationTitle = {};
@@ -126,7 +129,7 @@ messaging.setBackgroundMessageHandler(function(message) {
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', (event) => {
   console.log('On notification click: ', event.notification);
   // Android doesn't close the notification when you click on it
   // See: http://crbug.com/463146
