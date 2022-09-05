@@ -1,5 +1,5 @@
-import firebase from 'firebase/app';
-import 'firebase/messaging';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, isSupported, Messaging, onMessage } from 'firebase/messaging';
 
 import { Injectable } from '@angular/core';
 
@@ -64,9 +64,8 @@ export interface MessageThread {
 })
 export class MessagingService {
 
-  private messaging: firebase.messaging.Messaging;
+  private messaging: Messaging;
   private fcmToken: any;
-  private unsubscribeOnTokenRefresh = () => { };
 
   constructor(
   public events: EventService,
@@ -77,7 +76,7 @@ export class MessagingService {
   public toastCtrl: ToastController) {
 
     const onSWRegsitration = () => {
-      if (!this.isNotificationsCapable()) return;
+      if (!isSupported()) return;
 
       console.log('Has service worker registration. Beginning setup.');
       const config = {
@@ -86,12 +85,11 @@ export class MessagingService {
         projectId: 'chef-book',
         messagingSenderId: '1064631313987'
       };
-      firebase.initializeApp(config);
+      const app = initializeApp(config);
 
-      this.messaging = firebase.messaging();
-      this.messaging.useServiceWorker((window as any).swRegistration);
+      this.messaging = getMessaging(app);
 
-      this.messaging.onMessage((message: any) => {
+      onMessage(this.messaging, (message) => {
         console.log('received foreground FCM: ', message);
         // TODO: REPLACE WITH GRIP (WS)
         switch (message.data.type) {
@@ -108,12 +106,12 @@ export class MessagingService {
     else (window as any).onSWRegistration = onSWRegsitration;
   }
 
-  isNotificationsCapable() {
-    return firebase.messaging.isSupported();
+  isNotificationsEnabled() {
+    return isSupported() && ('Notification' in window) && ((Notification as any).permission === 'granted');
   }
 
-  isNotificationsEnabled() {
-    return this.isNotificationsCapable() && ('Notification' in window) && ((Notification as any).permission === 'granted');
+  isNotificationsCapable() {
+    return isSupported();
   }
 
   fetch(payload: {
@@ -152,7 +150,7 @@ export class MessagingService {
   }
 
   async requestNotifications() {
-    if (!this.isNotificationsCapable()) return;
+    if (!isSupported()) return;
     if (!('Notification' in window)) return;
     if (!this.messaging || (Notification as any).permission === 'denied') return;
 
@@ -188,35 +186,31 @@ export class MessagingService {
   }
 
   // Grab token and setup FCM
-  private enableNotifications() {
-    if (!this.messaging || !this.isNotificationsCapable()) return;
+  private async enableNotifications() {
+    if (!this.messaging || !isSupported()) return;
 
     console.log('Requesting permission...');
-    return this.messaging.requestPermission().then(() => {
-      console.log('Permission granted');
-      // token might change - we need to listen for changes to it and update it
-      this.setupOnTokenRefresh();
-      return this.updateToken();
-    }).catch(err => {
-      console.log('Unable to get permission to notify. ', err);
-    });
+    const result = await Notification.requestPermission();
+
+    if (result === 'granted') this.updateToken();
+    return this.updateToken();
   }
 
   public async disableNotifications() {
-    if (!this.messaging || !this.isNotificationsCapable()) return;
+    if (!this.messaging || !isSupported()) return;
 
     const token = this.fcmToken;
 
-    this.unsubscribeOnTokenRefresh();
-    this.unsubscribeOnTokenRefresh = () => {};
     await this.userService.removeFCMToken(token);
   }
 
   private async updateToken() {
-    if (!this.messaging || !this.isNotificationsCapable()) return;
+    if (!this.messaging || !isSupported()) return;
 
     try {
-      const currentToken = await this.messaging.getToken();
+      const currentToken = await getToken(this.messaging, {
+        serviceWorkerRegistration: (window as any).swRegistration,
+      });
       if (!currentToken) return;
 
       this.fcmToken = currentToken;
@@ -227,14 +221,5 @@ export class MessagingService {
     } catch(err) {
       console.log('Unable to get notification token. ', err);
     }
-  }
-
-  private setupOnTokenRefresh() {
-    if (!this.messaging || !this.isNotificationsCapable()) return;
-
-    this.unsubscribeOnTokenRefresh = this.messaging.onTokenRefresh(async () => {
-      await this.userService.removeFCMToken(this.fcmToken);
-      this.updateToken();
-    });
   }
 }
