@@ -66,35 +66,35 @@
 
       <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
         <div class="recipe-group">
-          <ion-card *ngFor="let recipe of recipeGroup"
+          <div *ngFor="let recipe of recipeGroup"
+            class="recipe-card"
             [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
             (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
             button>
-            <ion-card-content>
-              <ion-thumbnail *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" size="200px">
-                <img [src]="recipe.images[0].location" />
-              </ion-thumbnail>
-              <div *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]" class="no-image">
-                <img src="/assets/imgs/logo_green.png" />
-              </div>
-              <ion-item lines="none">
-                <ion-label>
-                  <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
-                  <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
-                  <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">{{ 'pages.home.recipe.source' | translate }} {{ recipe.source || recipe.url }}</p>
+            <img
+              *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]"
+              [src]="recipe.images[0].location" />
+            <img
+              *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]"
+              class="no-image"
+              src="/assets/imgs/logo_green.png" />
+            <ion-item lines="none">
+              <ion-label>
+                <h2 class="ion-text-wrap">{{ recipe.title }}</h2>
+                <p class="ion-text-wrap" *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
+                <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]" class="ion-text-wrap">{{ 'pages.home.recipe.source' | translate }} {{ recipe.source || recipe.url }}</p>
 
-                  <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-                    <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
-                  </p>
+                <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+                  <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+                </p>
 
-                  <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
-                    {{ 'pages.home.recipe.labels' | translate }} <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
-                  </p>
-                </ion-label>
-              </ion-item>
-            </ion-card-content>
-            <ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>
-          </ion-card>
+                <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]" class="ion-text-wrap">
+                  {{ 'pages.home.recipe.labels' | translate }} <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>, </span></span>
+                </p>
+              </ion-label>
+            </ion-item>
+          <!--<ion-badge *ngIf="selectedRecipeIds.indexOf(recipe.id) > -1">{{ 'pages.home.recipe.selected' | translate }}</ion-badge>-->
+          </div>
         </div>
       </div>
     </div>

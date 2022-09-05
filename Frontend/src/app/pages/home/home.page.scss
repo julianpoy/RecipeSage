@@ -38,36 +38,21 @@
 .recipe-group {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 15px;
 
-  ion-card {
-    flex: 1 1 0;
+  .recipe-card {
+    position: relative;
+    width: 200px;
     box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
-    max-width: 200px;
 
     &:hover {
       background-color: var(--ion-item-background-hover);
     }
 
-    ion-card-content {
-      padding: 0;
-
-      .no-image {
-        display: flex;
-
-        img {
-          margin-top: 50px;
-          margin-bottom: 50px;
-          width: 100px;
-          height: 100px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-    }
-
-    ion-thumbnail {
+    img {
       width: 200px;
       height: 200px;
+      border-radius: 5px 5px 0px 0px;
     }
 
     ion-badge {
