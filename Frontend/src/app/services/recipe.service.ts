@@ -72,18 +72,19 @@ export class RecipeService {
     return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
-  count(payload: {
+  count(params: {
     folder?: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<{ count: number }>(
       `recipes/count`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
 
-  fetch(payload: {
+  fetch(params: {
     folder?: string,
     userId?: string,
     sort?: string,
@@ -95,12 +96,13 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<any>(
       `recipes/by-page`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
 
-  search(payload: {
+  search(params: {
     query: string
     userId?: string,
     labels?: string,
@@ -108,7 +110,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<any>(
       `recipes/search`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -117,7 +120,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -126,7 +130,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -136,6 +141,7 @@ export class RecipeService {
       `recipes`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
 
@@ -152,6 +158,7 @@ export class RecipeService {
       `recipes`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -161,6 +168,7 @@ export class RecipeService {
       `recipes/${payload.id}`,
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -172,6 +180,7 @@ export class RecipeService {
       `recipes/delete-bulk`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -180,7 +189,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<void>(
       `recipes/${recipeId}`,
       'DELETE',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -189,7 +199,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<void>(
       `recipes/all`,
       'DELETE',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -198,18 +209,20 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<void>(
       `recipes/reindex`,
       'POST',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
 
-  clipFromUrl(payload: {
+  clipFromUrl(params: {
     url: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<any>(
       `clip`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -219,14 +232,15 @@ export class RecipeService {
                 + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
   }
 
-  scrapePepperplate(payload: {
+  scrapePepperplate(params: {
     username: string,
     password: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Recipe>(
       `scrape/pepperplate`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -271,7 +285,7 @@ export class RecipeService {
       'data/import/paprika',
       'POST',
       formData,
-      {},
+      null,
       errorHandlers
     );
   }
@@ -284,7 +298,7 @@ export class RecipeService {
       'data/import/json-ld',
       'POST',
       formData,
-      {},
+      null,
       errorHandlers
     );
   }

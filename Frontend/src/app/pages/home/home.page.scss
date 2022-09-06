@@ -5,6 +5,10 @@
   grid-template-rows: 58px auto;
   height: 100%;
 
+  &.no-search {
+    grid-template-rows: auto;
+  }
+
   .infinite-scrolling-container {
     overflow-y: scroll;
   }

@@ -69,15 +69,19 @@ export class ProfilePage {
 
   async load() {
     const loading = this.loadingService.start();
-    this.profile = await this.userService.getProfileByHandle(this.handle, {
+    const profileResponse = await this.userService.getProfileByHandle(this.handle, {
       403: () => this.profileDisabledError()
     });
 
-    this.myProfile = await this.userService.getMyProfile({
+    const myProfileResponse = await this.userService.getMyProfile({
       401: () => {},
     });
 
     loading.dismiss();
+
+    if (!profileResponse.success || !myProfileResponse.success) return;
+    this.profile = profileResponse.data;
+    this.myProfile = myProfileResponse.data;
   }
 
   async openImageViewer() {

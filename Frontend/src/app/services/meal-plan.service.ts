@@ -65,7 +65,8 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<MealPlans>(
       'mealPlans',
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -74,7 +75,8 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<MealPlan>(
       `mealPlans/${mealPlanId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -87,6 +89,7 @@ export class MealPlanService {
       `mealPlans`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -101,6 +104,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -112,6 +116,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}`,
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -129,6 +134,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}/items/bulk`,
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -145,28 +151,31 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}/items/bulk`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
 
-  deleteItems(mealPlanId: string, payload: {
-    itemIds: string[]
+  deleteItems(mealPlanId: string, params: {
+    itemIds: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
       'DELETE',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
 
-  deleteItem(mealPlanId: string, payload: {
+  deleteItem(mealPlanId: string, params: {
     itemId: string
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items`,
       'DELETE',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -175,7 +184,8 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
       'DELETE',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }

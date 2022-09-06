@@ -388,9 +388,7 @@
   "pages.manageLabelModal.renameConflict.header": "Error",
   "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
 
-  "pages.manageLabelModal.rename.header": "Error",
-  "pages.manageLabelModal.rename.message": "Rename label: {{name}}",
-
+  "pages.manageLabelModal.rename.header": "Rename label: {{name}}",
   "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
 
   "pages.manageLabelModal.notFound.header": "Label not found",
@@ -1149,7 +1147,7 @@
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",
-  "components.selectRecipe.searching": "Searching for \"{{name}}\"...",
+  "components.selectRecipe.searching": "Searching for \"{{searchText}}\"...",
   "components.selectRecipe.null": "No results for \"{{searchText}}\"",
 
   "====== Components.SelectUser ======": "",

@@ -58,7 +58,8 @@ export class ShoppingListService {
     return this.httpService.requestWithWrapper<ShoppingLists>(
       `shoppingLists`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -67,7 +68,8 @@ export class ShoppingListService {
     return this.httpService.requestWithWrapper<ShoppingList>(
       `shoppingLists/${listId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -80,6 +82,7 @@ export class ShoppingListService {
       `shoppingLists`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -95,6 +98,7 @@ export class ShoppingListService {
       `shoppingLists/${shoppingListId}`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -106,17 +110,19 @@ export class ShoppingListService {
       `shoppingLists/${shoppingListId}`,
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
 
-  deleteItems(shoppingListId: string, payload: {
+  deleteItems(shoppingListId: string, params: {
     itemIds: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}/items`,
       'DELETE',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -125,7 +131,8 @@ export class ShoppingListService {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}`,
       'DELETE',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }

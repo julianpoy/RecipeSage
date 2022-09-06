@@ -85,6 +85,7 @@ export class UserService {
       'users/register',
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -97,6 +98,7 @@ export class UserService {
       'users/login',
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -106,6 +108,7 @@ export class UserService {
       'users/logout',
       'POST',
       {},
+      null,
       errorHandlers
     );
   }
@@ -117,6 +120,7 @@ export class UserService {
       'users/forgot',
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -130,6 +134,7 @@ export class UserService {
       'users/',
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -141,28 +146,31 @@ export class UserService {
       'users/fcm/token',
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
 
-  removeFCMToken(payload: {
+  removeFCMToken(params: {
     fcmToken: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       'users/fcm/token',
       'DELETE',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
 
-  getUserByEmail(payload: {
+  getUserByEmail(params: {
     email: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<User>(
       'users/by-email',
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -171,7 +179,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<User>(
       'users/',
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -180,7 +189,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       'users/profile',
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -189,7 +199,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<User>(
       `users/${userId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -199,6 +210,7 @@ export class UserService {
       'users/profile',
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -207,7 +219,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/${userId}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -216,7 +229,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/by-handle/${handle}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -225,7 +239,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<HandleInfo>(
       `users/handle-info/${handle}`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -234,7 +249,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/friends`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -243,7 +259,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/friends/${friendId}`,
       'POST',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -252,7 +269,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<void>(
       `users/friends/${friendId}`,
       'DELETE',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -261,7 +279,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/stats`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -270,7 +289,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<Capabilities>(
       `users/capabilities`,
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }
@@ -281,7 +301,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       'info',
       'GET',
-      {},
+      null,
+      null,
       errorHandlers
     );
   }

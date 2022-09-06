@@ -66,14 +66,15 @@ export class HttpService {
     path: string,
     method: string,
     payload?: any,
+    query?: { [key: string]: QueryVal },
     errorHandlers?: ErrorHandlers
   ) {
     return this._requestWithWrapper<ResponseType>(
       {},
       path,
       method,
-      !['GET', 'DELETE'].includes(method) ? payload : {},
-      ['GET', 'DELETE'].includes(method) ? payload : {},
+      payload || {},
+      query || {},
       errorHandlers,
     );
   }
@@ -93,8 +94,8 @@ export class HttpService {
       },
       path,
       method,
-      payload,
-      query,
+      payload || {},
+      query || {},
       errorHandlers,
     );
   }
@@ -103,8 +104,8 @@ export class HttpService {
     axiosOverrides: AxiosRequestConfig,
     path: string,
     method: string,
-    payload?: any,
-    query?: { [key: string]: QueryVal },
+    payload: any,
+    query: { [key: string]: QueryVal },
     errorHandlers?: ErrorHandlers
   ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
     let url = this.getBase() + path + this.utilService.getTokenQuery();

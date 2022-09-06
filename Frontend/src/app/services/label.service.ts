@@ -24,13 +24,14 @@ export class LabelService {
     public httpErrorHandlerService: HttpErrorHandlerService,
   ) {}
 
-  fetch(payload?: {
+  fetch(params?: {
     title?: string
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Label[]>(
       `labels`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -52,6 +53,7 @@ export class LabelService {
       `labels/${labelId}`,
       'PUT',
       payload,
+      null,
       errorHandlers
     );
   }
@@ -61,19 +63,21 @@ export class LabelService {
       `labels`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
 
   // Removes label from a single associated recipe
-  removeFromRecipe(payload: {
+  removeFromRecipe(params: {
     labelId: string,
     recipeId: string
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `labels`,
       'DELETE',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
@@ -86,18 +90,20 @@ export class LabelService {
       `labels/delete-bulk`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }
 
-  merge(payload: {
+  merge(params: {
     sourceLabelId: string,
     targetLabelId: string
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `labels/merge`,
       'POST',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
