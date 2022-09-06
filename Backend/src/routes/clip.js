@@ -154,35 +154,15 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send("Must provide a URL");
     }
 
-    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
-      clipRecipe(url),
-      clipRecipeJSDOM(url),
-    ]);
-
-    const recipeData = clipRecipeResult.value || {};
-    const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
-
-    const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
-    const diff = differentKeys.reduce((acc, key) => {
-      acc[key] = {
-        recipeData: recipeData[key],
-        recipeDataJSDOM: recipeDataJSDOM[key],
-      }
-      return acc;
-    }, {});
+    const recipeDataJSDOM = await clipRecipeJSDOM(url),
 
     Raven.captureMessage("Clip stats", {
       extra: {
-        diff: diff,
-        fieldDiffCount: differentKeys.length,
+        clippedData: recipeDataJSDOM,
       },
     });
 
-    if (Object.keys(recipeData).length) {
-      res.status(200).json(recipeData);
-    } else {
-      res.status(200).json(recipeDataJSDOM);
-    }
+    res.status(200).json(recipeDataJSDOM);
   } catch(e) {
     next(e);
   }
