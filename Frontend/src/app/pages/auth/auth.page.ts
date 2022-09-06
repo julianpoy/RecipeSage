@@ -18,7 +18,7 @@ import { CapabilitiesService } from '@/services/capabilities.service';
   styleUrls: ['auth.page.scss'],
   providers: [ UserService ]
 })
-export class AuthPage implements OnInit {
+export class AuthPage {
   @Input() startWithRegister: boolean | null;
 
   showLogin = false;
@@ -30,6 +30,8 @@ export class AuthPage implements OnInit {
   email = '';
   password = '';
   confirmPassword = '';
+
+  isInModal = false;
 
   constructor(
     public events: EventService,
@@ -46,6 +48,8 @@ export class AuthPage implements OnInit {
 
     if (this.route.snapshot.paramMap.get('authType') === AuthType.Register) {
       this.showLogin = false;
+    } else {
+      this.showLogin = true;
     }
 
     if (this.route.snapshot.paramMap.get('redirect')) {
@@ -53,12 +57,15 @@ export class AuthPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-    if (this.startWithRegister !== null) this.showLogin = !this.startWithRegister;
+  ionViewWillEnter() {
+    if (typeof this.startWithRegister === "boolean") this.showLogin = !this.startWithRegister;
+
+    this.modalCtrl.getTop().then((topModal) => {
+      this.isInModal = !!topModal;
+    });
   }
 
   async toggleLogin() {
-
     this.showLogin = !this.showLogin;
   }
 
@@ -70,11 +77,6 @@ export class AuthPage implements OnInit {
   }
 
   async auth() {
-    if (!this.showLogin) this.name = (document.getElementById('name') as HTMLInputElement).value;
-    this.email = (document.getElementById('email') as HTMLInputElement).value;
-    this.password = (document.getElementById('password') as HTMLInputElement).value;
-    if (!this.showLogin) this.confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement).value;
-
     const invalidEmail = await this.translate.get('pages.auth.errors.invalidEmail').toPromise();
     const noName = await this.translate.get('pages.auth.errors.noName').toPromise();
     const noPassword = await this.translate.get('pages.auth.errors.noPassword').toPromise();

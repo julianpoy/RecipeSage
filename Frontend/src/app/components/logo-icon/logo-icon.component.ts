@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
 export class LogoIconComponent {
 
   @Input() href: string;
+  @Input() noBg: string;
 
   constructor() {}
 }

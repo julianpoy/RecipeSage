@@ -11,4 +11,9 @@
     width: $iconSize;
     height: $iconSize;
   }
+
+  .noBg {
+    box-shadow: none;
+    background: transparent;
+  }
 }
