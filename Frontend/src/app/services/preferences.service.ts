@@ -4,8 +4,6 @@ const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
 export enum SupportedLanguages {
   EN_US = 'en-us',
-  FR_FR = 'fr-fr',
-  ES_ES = 'es-es',
 };
 
 export enum GlobalPreferenceKey {
