@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="nav">
-    <ion-buttons slot="start">
+    <ion-buttons *ngIf="!isInModal" slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
@@ -15,13 +15,13 @@
     <ion-list>
       <div class="auth-entry">
 
-        <br /><br />
+        <br />
 
         <div *ngIf="isSelfHost">
           {{ 'pages.auth.selfhostWarning' | translate }}
         </div>
 
-        <br /><br />
+        <logo-icon *ngIf="!isSelfHost" [noBg]="true"></logo-icon>
 
         <div class="welcome" *ngIf="showLogin">
           <h2>{{ 'pages.auth.welcome.login' | translate }}</h2>
@@ -39,27 +39,27 @@
         <div *ngIf="!showLogin">
           <label>
             {{ 'pages.auth.input.name' | translate }}<br />
-            <input id="name" type="text" />
+            <input [(ngModel)]="name" type="text" />
           </label>
           <br /><br />
         </div>
 
         <label>
           {{ 'pages.auth.input.email' | translate }}<br />
-          <input id="email" type="email" />
+          <input [(ngModel)]="email" type="email" />
         </label>
         <br /><br />
 
         <label>
           {{ 'pages.auth.input.password' | translate }}<br />
-          <input id="password" (keyup.enter)="showLogin && auth()" type="password" />
+          <input [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password" />
         </label>
         <br /><br />
 
         <div *ngIf="!showLogin">
           <label>
             {{ 'pages.auth.input.confirmPassword' | translate }}<br />
-            <input id="confirmPassword" (keyup.enter)="auth()" type="password" />
+            <input [(ngModel)]="confirmPassword" (keyup.enter)="auth()" type="password" />
           </label>
           <br /><br />
         </div>
