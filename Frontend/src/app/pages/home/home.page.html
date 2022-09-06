@@ -46,7 +46,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="homegrid">
+  <div class="homegrid" [ngClass]="{ 'no-search': folder !== 'main' }">
     <ion-searchbar
       *ngIf="folder === 'main'"
       placeholder="{{ 'pages.home.search.placeholder' | translate }}"

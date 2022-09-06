@@ -37,6 +37,7 @@ export class PaymentsService {
       `payments/stripe/custom-session`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }

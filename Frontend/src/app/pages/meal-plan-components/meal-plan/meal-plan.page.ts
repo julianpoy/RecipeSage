@@ -491,7 +491,7 @@ export class MealPlanPage {
 
     const loading = this.loadingService.start();
     await this.mealPlanService.deleteItems(this.mealPlanId, {
-      itemIds,
+      itemIds: itemIds.join(','),
     });
     loading.dismiss();
     this.loadWithProgress();

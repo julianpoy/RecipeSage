@@ -111,8 +111,9 @@ export class HomePage {
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
-      this.userService.getProfileByUserId(this.userId).then(profile => {
-        this.otherUserProfile = profile;
+      this.userService.getProfileByUserId(this.userId).then(profileResponse => {
+        if (!profileResponse.success) return;
+        this.otherUserProfile = profileResponse.data;
       });
     }
     this.setDefaultBackHref();

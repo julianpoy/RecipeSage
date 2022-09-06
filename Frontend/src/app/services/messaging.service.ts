@@ -114,24 +114,26 @@ export class MessagingService {
     return isSupported();
   }
 
-  fetch(payload: {
+  fetch(params: {
     user: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Message[]>(
       `messages`,
       'GET',
-      payload,
+      null,
+      params,
       errorHandlers
     );
   }
 
-  threads(payload?: {
+  threads(params?: {
     limit?: number,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MessageThread[]>(
       `messages/threads`,
       'GET',
-      payload || {},
+      null,
+      params,
       errorHandlers
     );
   }
@@ -145,6 +147,7 @@ export class MessagingService {
       `messages`,
       'POST',
       payload,
+      null,
       errorHandlers
     );
   }

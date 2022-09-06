@@ -146,7 +146,7 @@ export class MealPlanItemDetailsModalPage {
     const loading = this.loadingService.start();
 
     const response = await this.mealPlanService.deleteItems(this.mealPlanId, {
-      itemIds: [this.mealItem.id]
+      itemIds: this.mealItem.id
     });
     loading.dismiss();
     if (!response.success) return;
