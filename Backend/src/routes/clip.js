@@ -109,6 +109,10 @@ const clipRecipe = async clipUrl => {
   }
 };
 
+const replaceBrWithBreak = (html) => {
+  return html.replaceAll(new RegExp("<br( \/)?>", 'g'), '\n');
+}
+
 const clipRecipeJSDOM = async url => {
   const response = await fetch(url);
 
@@ -120,7 +124,8 @@ const clipRecipeJSDOM = async url => {
 
   Object.defineProperty(window.Element.prototype, 'innerText', {
     get() {
-      return sanitizeHtml(this.textContent, {
+      const html = replaceBrWithBreak(this.innerHTML);
+      return sanitizeHtml(html, {
         allowedTags: [], // remove all tags and return text content only
         allowedAttributes: {}, // remove all tags and return text content only
       });
@@ -178,11 +183,13 @@ router.get('/', async (req, res, next) => {
       },
     });
 
-    if (Object.keys(recipeData).length) {
-      res.status(200).json(recipeData);
-    } else {
-      res.status(200).json(recipeDataJSDOM);
-    }
+    // Merge results (browser overrides JSDOM due to accuracy)
+    const results = recipeDataJSDOM;
+    Object.entries(recipeData).forEach((entry) => {
+      if(entry[1]) results[entry[0]] = entry[1];
+    });
+
+    res.status(200).json(results);
   } catch(e) {
     next(e);
   }
