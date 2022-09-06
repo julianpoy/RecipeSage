@@ -109,6 +109,10 @@ const clipRecipe = async clipUrl => {
   }
 };
 
+const replaceBrWithBreak = (html) => {
+  return html.replaceAll(new RegExp("<br( \/)?>", 'g'), '\n');
+}
+
 const clipRecipeJSDOM = async url => {
   const response = await fetch(url);
 
@@ -120,7 +124,8 @@ const clipRecipeJSDOM = async url => {
 
   Object.defineProperty(window.Element.prototype, 'innerText', {
     get() {
-      return sanitizeHtml(this.textContent, {
+      const html = replaceBrWithBreak(this.innerHTML);
+      return sanitizeHtml(html, {
         allowedTags: [], // remove all tags and return text content only
         allowedAttributes: {}, // remove all tags and return text content only
       });
@@ -154,7 +159,7 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send("Must provide a URL");
     }
 
-    const recipeDataJSDOM = await clipRecipeJSDOM(url),
+    const recipeDataJSDOM = await clipRecipeJSDOM(url);
 
     Raven.captureMessage("Clip stats", {
       extra: {
