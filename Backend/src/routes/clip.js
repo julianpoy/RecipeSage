@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 const Raven = require('raven');
+const he = require('he');
 
 const puppeteer = require('puppeteer-core');
 
@@ -187,6 +188,11 @@ router.get('/', async (req, res, next) => {
     const results = recipeDataJSDOM;
     Object.entries(recipeData).forEach((entry) => {
       if(entry[1]) results[entry[0]] = entry[1];
+    });
+
+    // Decode all html entities from fields
+    Object.entries(results).forEach((entry) => {
+      results[entry[0]] = he.decode(entry[1]);
     });
 
     res.status(200).json(results);

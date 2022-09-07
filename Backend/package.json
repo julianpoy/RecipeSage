@@ -38,6 +38,7 @@
     "firebase-admin": "^8.6.0",
     "fs-extra": "^8.0.1",
     "grip": "^1.5.0",
+    "he": "^1.2.0",
     "jsdom": "^16.5.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
     "moment": "^2.29.4",
