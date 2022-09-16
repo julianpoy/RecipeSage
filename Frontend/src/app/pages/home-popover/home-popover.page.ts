@@ -78,7 +78,8 @@ export class HomePopoverPage {
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      this.selectedLabels.splice.apply(null, ([0, this.selectedLabels.length] as any[]).concat(data.selectedLabels));
+      this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+
       setTimeout(() => {
         this.dismiss(true);
       })
