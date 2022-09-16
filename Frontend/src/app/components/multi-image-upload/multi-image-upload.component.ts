@@ -3,7 +3,7 @@ import { ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import { UserService } from '@/services/user.service';
-import { ImageService } from '@/services/image.service';
+import { Image, ImageService } from '@/services/image.service';
 import { LoadingService } from '@/services/loading.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { UtilService, RouteMap } from '@/services/util.service';
@@ -16,12 +16,12 @@ import { UtilService, RouteMap } from '@/services/util.service';
 export class MultiImageUploadComponent {
   @Output() imageUpdate = new EventEmitter();
 
-  _images;
+  _images: Image[];
   @Input()
   get images() {
     return this._images || [];
   }
-  set images(val) {
+  set images(val: Image[]) {
     this._images = val;
   }
 
@@ -64,16 +64,22 @@ export class MultiImageUploadComponent {
 
     const MAX_FILE_SIZE_MB = 30;
 
-    try {
-      await Promise.all(Array.from(files).map(async (file: any) => {
-        const isOverMaxSize = file.size / 1024 / 1024 > MAX_FILE_SIZE_MB; // Image is larger than MAX_FILE_SIZE_MB
+    let someUploadFailed = false;
+    for (const file of files) {
+      const isOverMaxSize = file.size / 1024 / 1024 > MAX_FILE_SIZE_MB; // Image is larger than MAX_FILE_SIZE_MB
 
-        if (isOverMaxSize) throw new Error("Image too large");
+      if (isOverMaxSize) {
+        someUploadFailed = true;
+        continue;
+      }
 
-        const image = await this.imageService.create(file);
-        this.images.push(image);
-      }));
-    } catch (e) {
+      const response = await this.imageService.create(file, {
+        '*': () => someUploadFailed = true,
+      });
+      if (response.success) this.images.push(response.data);
+    }
+
+    if (someUploadFailed) {
       const message = await this.translate.get('components.multiImageUpload.imageError').toPromise();
       const close = await this.translate.get('generic.close').toPromise();
 
@@ -85,7 +91,6 @@ export class MultiImageUploadComponent {
         }]
       });
       imageUploadErrorToast.present();
-      console.error(e);
     }
 
     loading.dismiss();
@@ -93,7 +98,7 @@ export class MultiImageUploadComponent {
     this.imageUpdate.emit(this.images);
   }
 
-  reorderImage(image, direction: number) {
+  reorderImage(image: Image, direction: number) {
     const imgIdx = this.images.indexOf(image);
     let newImgIdx = imgIdx + direction;
     if (newImgIdx < 0) newImgIdx = 0;
@@ -105,7 +110,7 @@ export class MultiImageUploadComponent {
     this.imageUpdate.emit(this.images);
   }
 
-  removeImage(image) {
+  removeImage(image: Image) {
     const imgIdx = this.images.indexOf(image);
     this.images.splice(imgIdx, 1);
 

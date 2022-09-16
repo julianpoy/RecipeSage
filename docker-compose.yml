@@ -72,6 +72,8 @@ services:
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
+    env_file:
+      - ./.secrets.env
     volumes:
       - ./SharedUtils/src:/app/SharedUtils/src
       - ./SharedUtils/package.json:/app/SharedUtils/package.json
