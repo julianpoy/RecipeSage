@@ -176,8 +176,8 @@ export class SettingsPage {
   async checkForUpdate() {
     const header = await this.translate.get('pages.settings.update.header').toPromise();
     const subHeader = await this.translate.get('pages.settings.update.subHeader').toPromise();
-    const cancel = await this.translate.get('pages.settings.update.cancel').toPromise();
-    const okay = await this.translate.get('pages.settings.update.okay').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
