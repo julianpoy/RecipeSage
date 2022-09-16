@@ -326,6 +326,7 @@ export class HomePage {
 
     this.resetRecipes();
     this.recipes = response.data.data;
+    this.datasource.adapter.reset();
   }
 
   trackByFn(index, item) {
