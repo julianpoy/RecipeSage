@@ -8,16 +8,6 @@ then
     exit 1
 fi
 
-echo "==== PROD DEPLOYMENT ===="
-read -p "Do you want to continue to deploy to prod? REMINDER: SET KUBE CLUSTER [yN] " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Y]$  ]]
-then
-    echo "Continuing to deploy"
-else
-    exit 0
-fi
-
 export RELEASE_TAG="$2"
 
 if [ "$1" == "api" ] || [ "$1" == "all" ]
