@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ShareMealPlanModalPage } from './share-meal-plan-modal.page';
 import {GlobalModule} from '@/global.module';
+import {CopyWithWebshareModule} from '@/components/copy-with-webshare/copy-with-webshare.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import {GlobalModule} from '@/global.module';
     CommonModule,
     IonicModule,
     GlobalModule,
+    CopyWithWebshareModule,
   ],
   entryComponents: [
     ShareMealPlanModalPage,
