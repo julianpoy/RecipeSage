@@ -89,7 +89,6 @@ router.get(
     ]
   })
   .then(function(labels) {
-    labels = labels.map(label => { label = label.toJSON(); label.recipes = []; return label; })
     res.status(200).json(labels);
   })
   .catch(next);
@@ -151,7 +150,7 @@ router.post(
     });
 
     if (!sourceLabel) return res.status("404").send("Source label not found");
-    
+
     const targetLabel = await Label.findOne({
       where: {
         id: req.query.targetLabelId,
