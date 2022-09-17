@@ -1,25 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-var Raven = require('raven');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const Raven = require('raven');
+const ical = require('ical-generator');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Image = require('../models').Image;
-var Message = require('../models').Message;
-var Label = require('../models').Label;
-var MealPlan = require('../models').MealPlan;
-var MealPlanItem = require('../models').MealPlanItem;
-var ShoppingList = require('../models').ShoppingList;
-var ShoppingListItem = require('../models').ShoppingListItem;
+const Op = require("sequelize").Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Image = require('../models').Image;
+const Message = require('../models').Message;
+const Label = require('../models').Label;
+const MealPlan = require('../models').MealPlan;
+const MealPlanItem = require('../models').MealPlanItem;
+const ShoppingList = require('../models').ShoppingList;
+const ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
-var GripService = require('../services/grip');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
+const GripService = require('../services/grip');
 
 router.post(
   '/',
@@ -555,6 +556,51 @@ router.get(
     });
 
     res.status(200).json(mealPlanSummary);
+  } catch (e) {
+    next(e);
+  }
+});
+
+// Get ical for meal plan
+router.get(
+  '/:mealPlanId/ical',
+  cors(),
+  async (req, res, next) => {
+
+  try {
+    const mealPlan = await MealPlan.findOne({
+      where: {
+        id: req.params.mealPlanId
+      },
+      include: [{
+        model: MealPlanItem,
+        as: 'items',
+        attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
+        include: [{
+          model: Recipe,
+          as: 'recipe',
+          attributes: ['id', 'title', 'ingredients'],
+        }]
+      }]
+    });
+
+    if (!mealPlan) {
+      return res.status(404).send("Meal plan not found");
+    }
+
+    const icalEvents = mealPlan.items.map(item => ({
+      start: new Date(item.scheduled),
+      allDay: true,
+      summary: item.recipe?.title || item.title,
+      url: `https://recipesage.com/#/meal-planners/${mealPlan.id}`,
+    }));
+
+    const mealPlanICal = ical({
+      name: `RecipeSage ${mealPlan.title}`,
+      events: icalEvents,
+    });
+
+    mealPlanICal.serve(res);
   } catch (e) {
     next(e);
   }

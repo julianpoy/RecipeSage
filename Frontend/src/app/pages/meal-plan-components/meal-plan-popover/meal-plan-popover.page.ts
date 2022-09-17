@@ -6,6 +6,7 @@ import { LoadingService } from '@/services/loading.service';
 import { MealPlanService } from '@/services/meal-plan.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
+import {ShareMealPlanModalPage} from '../share-meal-plan-modal/share-meal-plan-modal.page';
 
 @Component({
   selector: 'page-meal-plan-popover',
@@ -22,6 +23,7 @@ export class MealPlanPopoverPage {
 
   constructor(
     public popoverCtrl: PopoverController,
+    public modalCtrl: ModalController,
     public translate: TranslateService,
     public navCtrl: NavController,
     public utilService: UtilService,
@@ -42,6 +44,18 @@ export class MealPlanPopoverPage {
 
   dismiss() {
     this.popoverCtrl.dismiss();
+  }
+
+  async share() {
+    const modal = await this.modalCtrl.create({
+      component: ShareMealPlanModalPage,
+      componentProps: {
+        mealPlanId: this.mealPlanId,
+      },
+    });
+
+    modal.present();
+    this.dismiss();
   }
 
   bulkAddToShoppingList() {

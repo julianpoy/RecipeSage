@@ -474,8 +474,9 @@
 
 
   "pages.mealPlanPopover.actions.title": "Actions",
+  "pages.mealPlanPopover.actions.share": "Share",
   "pages.mealPlanPopover.actions.pinRecipesOpen": "Pin recipes open",
-  "pages.mealPlanPopover.actions.addToShoppingList": "Add selected to shopping list",
+  "pages.mealPlanPopover.actions.addToShoppingList": "Add to shopping list",
   "pages.mealPlanPopover.actions.copyDays": "Copy selected day(s)",
   "pages.mealPlanPopover.actions.moveDays": "Move selected day(s)",
   "pages.mealPlanPopover.actions.deleteDays": "Delete selected day(s)",
@@ -515,6 +516,11 @@
   "pages.newMealPlanModal.input.title": "Title",
   "pages.newMealPlanModal.createAndShare": "Create and Share",
   "pages.newMealPlanModal.create": "Create",
+
+  "====== Pages.ShareMealPlanModal ======": "",
+
+  "pages.shareMealPlanModal.title": "Share Meal Plan",
+  "pages.shareMealPlanModal.description": "The iCal/ICS link below can be used in almost any calendar program to sync your meal plan outside of RecipeSage",
 
   "====== Pages.MessageThread ======": "",
 
