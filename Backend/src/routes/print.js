@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
-const Raven = require('raven');
 const sanitizeHtml = require('sanitize-html');
 
 // DB

@@ -1,24 +1,12 @@
+require('./services/sentry-init.js');
+const Sentry = require('@sentry/node');
+
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var fs = require('fs');
-var Raven = require('raven');
-const pug = require('pug');
-
-var RS_VERSION = process.env.VERSION || JSON.parse(fs.readFileSync(path.join(__dirname, '/../package.json'))).version;
-
-var testMode = process.env.NODE_ENV === 'test';
-var verboseMode = process.env.VERBOSE === 'true';
-
-var devMode = process.env.NODE_ENV === 'development';
-
-Raven.config(process.env.SENTRY_DSN, {
-  environment: process.env.NODE_ENV,
-  release: RS_VERSION
-}).install();
 
 // Routes
 var index = require('./routes/index');
@@ -34,10 +22,10 @@ var images = require('./routes/images');
 var clip = require('./routes/clip');
 var data = require('./routes/data');
 var proxy = require('./routes/proxy');
+
 var ws = require('./routes/ws');
 
 var app = express();
-if (!devMode) app.use(Raven.requestHandler());
 
 var corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost'];
 var corsOptions = {
@@ -58,7 +46,7 @@ app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-if (!testMode) app.use(logger('dev'));
+if (process.env.NODE_ENV !== 'test') app.use(logger('dev'));
 app.use(bodyParser.json({
   limit: '250MB',
   verify: (req, res, buf) => {
@@ -87,8 +75,6 @@ app.use('/proxy', proxy);
 app.use('/data', data);
 app.use('/ws', ws);
 
-if (!devMode && !testMode) app.use(Raven.errorHandler());
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -101,14 +87,9 @@ let logError = err => {
   let isExpectedError = err.status < 500 || err > 599;
   if (isExpectedError) return;
 
-  let enableErrorLogging = !testMode || verboseMode;
-  if (enableErrorLogging) {
-    if (devMode) {
-      console.error(err);
-    } else {
-      Raven.captureException(err);
-    }
-  }
+  console.error(err);
+
+  Sentry.captureException(err);
 }
 
 // error handler
@@ -118,7 +99,7 @@ app.use(function(err, req, res, next) {
 
   if (!err.status) err.status = 500;
 
-  res.locals.error = devMode ? err : {};
+  res.locals.error = process.env.NODE_ENV === 'production' ? {} : err;
 
   logError(err);
 

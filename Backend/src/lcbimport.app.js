@@ -1,9 +1,11 @@
+require('./services/sentry-init.js');
+const Sentry = require('@sentry/node');
+
 let fs = require('fs-extra');
 let mdb = require('mdb');
 let extract = require('extract-zip');
 let sqlite3 = require('sqlite3');
 const performance = require('perf_hooks').performance;
-var Raven = require('raven');
 const { exec, spawn } = require('child_process');
 
 var Op = require("sequelize").Op;
@@ -18,8 +20,6 @@ var Image = require('./models').Image;
 
 var UtilService = require('./services/util');
 
-var RS_VERSION = JSON.parse(fs.readFileSync('./package.json')).version;
-
 let runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
@@ -29,24 +29,26 @@ let runConfig = {
   multipleImages: process.argv.indexOf('--multipleImages') > -1
 }
 
-Raven.config(process.env.SENTRY_DSN, {
-  environment: process.env.NODE_ENV,
-  release: RS_VERSION
-}).install();
+const logError = e => {
+  console.error(e);
 
-let logError = async err => {
-  console.error(err);
-  if (process.env.NODE_ENV !== 'development') {
-    await new Promise(resolve => {
-      Raven.captureException(err, {
-        extra: {
-          runConfig,
-          user: runConfig.userId
-        },
-        user: runConfig.userId
-      }, resolve);
-    });
-  }
+  Sentry.withScope(scope => {
+    scope.setExtra('runConfig', runConfig);
+    scope.setExtra('user', runConfig.userId);
+    Sentry.captureException(e);
+  });
+}
+
+const cleanup = () {
+  fs.removeSync(zipPath);
+  fs.removeSync(extractPath);
+}
+
+const exit = (status) => {
+  Sentry.close(2000);
+
+  cleanup();
+  process.exit(status);
 }
 
 let tablesNeeded = [
@@ -144,9 +146,15 @@ async function main() {
 
     if (potentialDbPaths.length > 1) {
       console.log("More than one lcbdb path - ", potentialDbPaths)
-      Raven.captureMessage("More than one lcbdb path - ", potentialDbPaths);
+      Sentry.withScope(scope => {
+        scope.setExtra('paths', potentialDbPaths);
+        Sentry.captureMessage('More than one lcbdb path');
+      });
     } else {
-      Raven.captureMessage("LCB DB Path - ", dbPath)
+      Sentry.withScope(scope => {
+        scope.setExtra('path', dbPath);
+        Sentry.captureMessage('LCB DB Path');
+      });
     }
 
     metrics.tExtracted = performance.now();
@@ -480,34 +488,19 @@ async function main() {
       tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
     }
 
-    await new Promise(resolve => {
-      Raven.captureMessage('LCB Metrics', {
-        extra: {
-          runConfig,
-          metrics,
-          user: runConfig.userId
-        },
-        user: runConfig.userId,
-        level: 'info'
-      }, resolve);
+    Sentry.withScope(scope => {
+      scope.setExtra('runConfig', runConfig);
+      scope.setExtra('metrics', metrics);
+      scope.setExtra('user', runConfig.userId);
+      Sentry.captureMessage('FDX(Z) Complete');
     });
 
-    cleanup()
-
-    process.exit(0);
+    exit(0);
   } catch (e) {
-    cleanup();
-
     console.log("Couldn't handle lcb upload 2", e)
-    await logError(e);
+    logError(e);
 
-    try {
-      if (e && e.status) {
-        process.exit(e.status);
-      } else process.exit(1);
-    } catch (e) {
-      process.exit(1);
-    }
+    exit(e?.status || 1);
   }
 }
 

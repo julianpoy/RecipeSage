@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
-var Raven = require('raven');
+var Sentry = require('@sentry/node');
 
 // DB
 var Op = require("sequelize").Op;
@@ -735,7 +735,7 @@ https://www.instagram.com/recipesageofficial/
 https://twitter.com/RecipeSageO`;
 
     UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
-      Raven.captureException(err);
+      Sentry.captureException(err);
     });
   } catch(err) {
     next(err);

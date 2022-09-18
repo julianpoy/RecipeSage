@@ -1,6 +1,6 @@
 var crypto = require('crypto'),
   moment = require('moment'),
-  Raven = require('raven');
+  Sentry = require('@sentry/node');
 
 var Sequelize = require('sequelize');
 var Session = require('../models').Session;
@@ -55,7 +55,7 @@ function extendSession(session) {
         msg: "Error reading database when extending user token!",
         err: err
       }
-      Raven.captureException(payload);
+      Sentry.captureException(payload);
     });
   }
 }
@@ -74,7 +74,7 @@ function removeOldSessions() {
         msg: "Error removing old sessions!",
         err: err
       }
-      Raven.captureException(payload);
+      Sentry.captureException(payload);
     }
   });
 }

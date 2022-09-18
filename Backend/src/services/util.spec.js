@@ -4,7 +4,6 @@ let {
 
 let sinon = require('sinon');
 let aws = require('aws-sdk');
-let request = require('request');
 let path = require('path');
 
 let {
@@ -28,7 +27,6 @@ let {
   validateEmail,
   sanitizeEmail,
   sendmail,
-  fetchImage,
   sendBufferToS3,
   formatS3ImageResponse,
   sendURLToS3,
@@ -270,9 +268,7 @@ describe('utils', () => {
       contentBody = randomString(20)
       convertedBuffer = randomString(20)
 
-      fetchImageStub = sinon.stub(UtilService, 'fetchImage').returns(Promise.resolve({
-        body: contentBody
-      }))
+      fetchImageStub = sinon.stub(UtilService, 'fetchImage').returns(Promise.resolve(contentBody))
 
       convertImageStub = sinon.stub(UtilService, 'convertImage').returns(Promise.resolve(convertedBuffer))
 
@@ -417,33 +413,6 @@ describe('utils', () => {
 
       expect(files).to.be.an("array")
       expect(files).to.have.length(0)
-    })
-  })
-
-  describe('fetchImage', () => {
-    let requestGetStub
-
-    before(() => {
-      requestGetStub = sinon.stub(request, 'get').callsFake((opts, cb) => {
-        cb();
-      })
-    })
-
-    after(() => {
-      requestGetStub.restore();
-    })
-
-    it('calls request.get', () => {
-      let url = randomString(20)
-
-      return fetchImage(url).then(img => {
-
-        sinon.assert.calledOnce(requestGetStub)
-        let opts = requestGetStub.getCalls()[0].args[0]
-
-        expect(opts.url).to.equal(url)
-        expect(opts.encoding).to.equal(null)
-      })
     })
   })
 

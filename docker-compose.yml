@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: ./Backend/Dockerfile
-    command: npx nodemon --watch ../SharedUtils --watch . src/bin/www
+    command: npx nodemon --watch ../SharedUtils --watch . src/bin/www.js
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -61,6 +61,7 @@ services:
       - POSTGRES_LOGGING=true
       - GCM_KEYPAIR
       - SENTRY_DSN
+      - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
       - ELASTIC_ENABLE=true

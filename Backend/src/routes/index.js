@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
-var Raven = require('raven');
+const Sentry = require('@sentry/node');
 let multer = require('multer');
 let fs = require('fs-extra');
 let extract = require('extract-zip');
@@ -9,6 +9,7 @@ const { spawn } = require('child_process');
 const performance = require('perf_hooks').performance;
 const semver = require('semver');
 let path = require('path');
+const fetch = require('node-fetch');
 
 // DB
 var Op = require("sequelize").Op;
@@ -46,7 +47,6 @@ router.get('/versioncheck', (req, res, next) => {
   });
 });
 
-const request = require('request-promise-native');
 const xmljs = require('xml-js');
 
 router.get(
@@ -70,15 +70,12 @@ router.get(
   }
 
   try {
-    Raven.captureMessage('Starting import from PP API', {
-      level: 'info'
-    });
+    Sentry.captureMessage('Starting import from PP API');
 
     const username = escapeXml(req.query.username.trim());
     const password = escapeXml(req.query.password);
 
-    let response = await request({
-      url: "http://www.pepperplate.com/services/syncmanager5.asmx",
+    const authResponse = await fetch("http://www.pepperplate.com/services/syncmanager5.asmx", {
       method: "POST",
       headers: {
         "content-type": "text/xml",
@@ -96,20 +93,21 @@ router.get(
       `
     });
 
-    if (response.indexOf("<Status>UnknownEmail</Status>") > -1) {
+    const authResponseText = await authResponse.text();
+
+    if (authResponseText.indexOf("<Status>UnknownEmail</Status>") > -1) {
       return res.status(406).send("Incorrect username");
-    } else if (response.indexOf("<Status>IncorrectPassword</Status>") > -1) {
+    } else if (authResponseText.indexOf("<Status>IncorrectPassword</Status>") > -1) {
       return res.status(406).send("Incorrect password");
     }
 
-    const userToken = response.match(/<Token>(.*)<\/Token>/)[1];
+    const userToken = authResponseText.match(/<Token>(.*)<\/Token>/)[1];
 
     let recipes = [];
 
     let syncToken;
     while (true) {
-      let response = await request({
-        url: "http://www.pepperplate.com/services/syncmanager5.asmx",
+      const syncResponse = await fetch("http://www.pepperplate.com/services/syncmanager5.asmx", {
         method: "POST",
         headers: {
           "content-type": "text/xml",
@@ -128,9 +126,11 @@ router.get(
         `
       });
 
+      const syncResponseText = await syncResponse.text();
+
       console.log("repeat")
 
-      const recipeJson = JSON.parse(xmljs.xml2json(response, { compact: true, spaces: 4 }));
+      const recipeJson = JSON.parse(xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 }));
 
       syncToken = recipeJson["soap:Envelope"]["soap:Body"]["RetrieveRecipesResponse"]["RetrieveRecipesResult"]["SynchronizationToken"]._text;
 
@@ -289,16 +289,13 @@ router.get(
       });
     });
 
-    Raven.captureMessage('Imported from PP API', {
-      level: 'info'
-    });
+    Sentry.captureMessage('Imported from PP API');
 
     res.status(200).json({
       msg: "Import complete"
     });
   } catch(e) {
     next(e);
-    Raven.captureException(e);
   }
 });
 
@@ -428,7 +425,7 @@ router.post(
       console.log(req.file.path)
     }
 
-    Raven.captureMessage("Starting Paprika Import");
+    Sentry.captureMessage("Starting Paprika Import");
 
     let metrics = {
       t0: performance.now(),
@@ -552,12 +549,10 @@ router.post(
         tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
       }
 
-      Raven.captureMessage('Paprika Metrics', {
-        extra: {
-          metrics
-        },
-        user: res.locals.session.toJSON(),
-        level: 'info'
+      Sentry.withScope(scope => {
+        scope.setExtra('user', res.locals.session.toJSON());
+        scope.setExtra('metrics', metrics);
+        Sentry.captureMessage('Paprika Metrics');
       });
 
       res.status(201).json({});

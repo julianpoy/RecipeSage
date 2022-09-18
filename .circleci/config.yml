@@ -11,7 +11,7 @@ jobs:
           RS_TEST_DB_PASSWORD: admin
           RS_TEST_DB_DATABASE: chefbook_test
           NODE_ENV: test
-          VERBOSE: true
+          SENTRY_SAMPLE_RATE: 0
           POSTGRES_DB: chefbook_test
           POSTGRES_USER: chefbook
           POSTGRES_PASSWORD: admin

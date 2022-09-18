@@ -2,12 +2,11 @@ var aws = require('aws-sdk');
 var multer = require('multer');
 var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
-var request = require('request');
-var Raven = require('raven');
 let fs = require('fs-extra');
 let sharp = require('sharp');
 let path = require('path');
 let zlib = require('zlib');
+const fetch = require('node-fetch');
 
 // Service
 var FirebaseService = require('./firebase');
@@ -64,19 +63,12 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
 }
 
-exports.fetchImage = url => {
-  return new Promise((resolve, reject) => {
-    request.get({
-      url: url,
-      encoding: null
-    }, (err, res, body) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({ res, body });
-      }
-    });
-  })
+exports.fetchImage = async url => {
+  const response = await fetch(url, {
+    method: 'GET',
+  });
+
+  return response.buffer();
 }
 
 const S3_DEFAULT_ACL = 'public-read';
@@ -154,14 +146,14 @@ exports.convertImage = (imageBuf, highResConversion) => {
           reject(e);
         });
     } catch (e) {
-      reject();
+      reject(e);
     }
   })
 }
 
 exports.sendURLToS3 = (url, highResConversion)  => {
-  return exports.fetchImage(url).then(({ res, body }) => {
-    return exports.convertImage(body, highResConversion).then(convertedBuffer => {
+  return exports.fetchImage(url).then((buffer) => {
+    return exports.convertImage(buffer, highResConversion).then(convertedBuffer => {
       return exports.sendBufferToS3(convertedBuffer).then(result => {
         return exports.formatS3ImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.s3Response.ETag);
       });

@@ -2,7 +2,7 @@ let {
   expect
 } = require('chai');
 
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 var Op = require("sequelize").Op;
 var SQ = require('./models').sequelize;
@@ -52,7 +52,7 @@ module.exports.syncDB = async () => {
 
 module.exports.setup = async () => {
   await migrate();
-  return require('./bin/www');
+  return require('./bin/www.js');
 }
 
 module.exports.cleanup = async (server) => {

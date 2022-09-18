@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var Raven = require('raven');
-
 // DB
 var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
@@ -28,6 +26,7 @@ router.post('/',
       try {
         file = await UtilService.sendURLToS3(req.body.imageURL, encodeInHighRes);
       } catch (e) {
+        console.log(e);
         e.status = 415;
         throw e;
       }
