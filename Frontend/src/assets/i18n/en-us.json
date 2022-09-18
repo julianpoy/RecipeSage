@@ -329,7 +329,7 @@
   "====== Pages.DownloadAndInstall ======": "",
 
   "pages.downloadAndInstall.title": "Download & Install",
-  "pages.downloadAndInstall.subtitle": "Click a platform for installation instructions",
+  "pages.downloadAndInstall.subtitle": "RecipeSage Application",
   "pages.downloadAndInstall.done": "This will install RecipeSage as a native application on your device.",
 
   "pages.downloadAndInstall.thisDevice": "This Device",
@@ -351,6 +351,13 @@
   "pages.downloadAndInstall.desktop.step.1": "Open Google Chrome browser",
   "pages.downloadAndInstall.desktop.step.2": "Open the browser menu via the button in the top right corner that looks like this:",
   "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
+
+  "pages.downloadAndInstall.other": "Other RecipeSage Software",
+  "pages.downloadAndInstall.bookmark": "Recipe auto-clip bookmark",
+  "pages.downloadAndInstall.bookmark.instructions": "Drag this link to your bookmarks bar. Click the bookmark to import the current site you're on.",
+  "pages.downloadAndInstall.bookmark.description": "Automatically grabs recipe content from webpages",
+  "pages.downloadAndInstall.extension": "RecipeSage Clip Tool browser extension",
+  "pages.downloadAndInstall.extension.description": "Automatically grabs recipe content from webpages. The bookmark above is recommended instead of this extension for most users.",
 
   "====== Pages.LabelsPopover ======": "",
 

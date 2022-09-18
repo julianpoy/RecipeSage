@@ -21,11 +21,9 @@
       <ion-icon name="cloud-download" slot="start"></ion-icon>
       <ion-label>{{ 'pages.downloadAndInstall.thisDevice' | translate }}</ion-label>
     </ion-item>
-    <ion-item button (click)="toggleAndroid()">
+    <ion-item button (click)="toggleAndroid()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
       <ion-label>{{ 'pages.downloadAndInstall.android.title' | translate }}</ion-label>
-      <ion-icon *ngIf="showAndroid" slot="end" name="caret-down"></ion-icon>
-      <ion-icon *ngIf="!showAndroid" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showAndroid">
       <p class="instruction">
@@ -36,11 +34,9 @@
         {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
-    <ion-item button (click)="toggleIOS()">
+    <ion-item button (click)="toggleIOS()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
       <ion-label>{{ 'pages.downloadAndInstall.ios.title' | translate }}</ion-label>
-      <ion-icon *ngIf="showIOS" slot="end" name="caret-down"></ion-icon>
-      <ion-icon *ngIf="!showIOS" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showIOS">
       <p class="instruction">
@@ -51,11 +47,9 @@
         {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
-    <ion-item button (click)="toggleDesktop()">
+    <ion-item button (click)="toggleDesktop()" detail="true">
       <ion-icon name="laptop" slot="start"></ion-icon>
       <ion-label>{{ 'pages.downloadAndInstall.desktop.title' | translate }}</ion-label>
-      <ion-icon *ngIf="showDesktop" slot="end" name="caret-down"></ion-icon>
-      <ion-icon *ngIf="!showDesktop" slot="end" name="caret-up"></ion-icon>
     </ion-item>
     <ion-item *ngIf="showDesktop">
       <p class="instruction">
@@ -64,6 +58,53 @@
         <b>2.</b> {{ 'pages.downloadAndInstall.desktop.step.2' | translate }} <ion-icon name="ellipsis-vertical"></ion-icon><br />
         <b>3.</b> {{ 'pages.downloadAndInstall.desktop.step.3' | translate }}<br />
         {{ 'pages.downloadAndInstall.done' | translate }}
+      </p>
+    </ion-item>
+  </ion-list>
+
+  <br />
+  <br />
+
+  <p>
+    {{ 'pages.downloadAndInstall.other' | translate }}
+  </p>
+
+  <ion-list>
+    <ion-item>
+      <p>
+        {{ 'pages.downloadAndInstall.bookmark' | translate }}
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.downloadAndInstall.bookmark.description' | translate }}
+          </p>
+        </ion-label>
+        <a
+          href="javascript:(function(){location.href='https://recipesage.com/#/edit-recipe/new?autofill-url='+encodeURIComponent(location.href);})();"
+          (click)="$event.preventDefault()"
+          title="Autoclip to RecipeSage"
+        >
+          {{ 'pages.downloadAndInstall.bookmark.instructions' | translate }}
+        </a>
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        {{ 'pages.downloadAndInstall.extension' | translate }}
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.downloadAndInstall.extension.description' | translate }}
+          </p>
+        </ion-label>
+        <a
+          href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/"
+          target="_blank"
+        >Firefox</a>
+        <br />
+        <a
+          href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo"
+          target="_blank"
+        >Chrome</a>
       </p>
     </ion-item>
   </ion-list>
