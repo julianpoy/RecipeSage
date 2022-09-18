@@ -2,7 +2,6 @@ var aws = require('aws-sdk');
 var multer = require('multer');
 var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
-var request = require('request');
 var Raven = require('raven');
 let fs = require('fs-extra');
 let sharp = require('sharp');

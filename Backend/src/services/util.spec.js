@@ -4,7 +4,6 @@ let {
 
 let sinon = require('sinon');
 let aws = require('aws-sdk');
-let request = require('request');
 let path = require('path');
 
 let {
