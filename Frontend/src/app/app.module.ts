@@ -20,7 +20,7 @@ import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.ser
 
 import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolbar.module';
 
-import { environment } from 'src/environments/environment';
+import { environment, SENTRY_SAMPLE_RATE } from 'src/environments/environment';
 import {SupportedLanguages} from './services/preferences.service';
 
 const checkChunkLoadError = (error) => {
@@ -58,6 +58,7 @@ Sentry.init({
   release: (window as any).version,
   environment: environment.production ? 'production' : 'dev',
   dsn: 'https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200',
+  tracesSampleRate: SENTRY_SAMPLE_RATE,
   beforeSend(event, hint) {
     const error = hint.originalException;
     if (checkChunkLoadError(error)) return null;
