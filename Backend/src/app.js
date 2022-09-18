@@ -99,7 +99,7 @@ app.use(function(err, req, res, next) {
 
   if (!err.status) err.status = 500;
 
-  res.locals.error = devMode ? err : {};
+  res.locals.error = process.env.NODE_ENV === 'production' ? {} : err;
 
   logError(err);
 
