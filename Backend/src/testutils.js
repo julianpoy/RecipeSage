@@ -2,7 +2,7 @@ let {
   expect
 } = require('chai');
 
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 var Op = require("sequelize").Op;
 var SQ = require('./models').sequelize;
