@@ -1,6 +1,6 @@
 let UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
-let Raven = require('raven');
+let Sentry = require('@sentry/node');
 let SQ = require("sequelize");
 let Op = SQ.Op;
 
@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
               throw e;
             }
           }).catch(e => {
-            Raven.captureException(e);
+            Sentry.captureException(e);
           });
         });
       },
@@ -110,7 +110,7 @@ module.exports = (sequelize, DataTypes) => {
                 throw e;
               }
             }).catch(e => {
-              Raven.captureException(e);
+              Sentry.captureException(e);
             });
           });
         });
@@ -118,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
       afterUpdate: (recipe, options) => {
         afterCommitIfTransaction(options, () => {
           ElasticService.indexRecipes([recipe]).catch(e => {
-            Raven.captureException(e);
+            Sentry.captureException(e);
           });
         });
       },
@@ -129,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
         }).then(recipes => {
           afterCommitIfTransaction(options, () => {
             ElasticService.indexRecipes(recipes).catch(e => {
-              Raven.captureException(e);
+              Sentry.captureException(e);
             });
           });
         });
@@ -137,14 +137,14 @@ module.exports = (sequelize, DataTypes) => {
       afterCreate: (recipe, options) => {
         afterCommitIfTransaction(options, () => {
           ElasticService.indexRecipes([recipe]).catch(e => {
-            Raven.captureException(e);
+            Sentry.captureException(e);
           });
         })
       },
       afterBulkCreate: (recipes, options) => {
         afterCommitIfTransaction(options, () => {
           ElasticService.indexRecipes(recipes).catch(e => {
-            Raven.captureException(e);
+            Sentry.captureException(e);
           });
         });
       }

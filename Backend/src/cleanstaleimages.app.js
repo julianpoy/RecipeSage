@@ -1,4 +1,5 @@
-const Raven = require('raven');
+require('./services/sentry-init.js');
+const Sentry = require('@sentry/node');
 
 const UtilService = require('./services/util');
 
@@ -49,7 +50,7 @@ const cleanupStaleImages = async () => {
     process.exit(0);
   } catch (e) {
     console.error(e);
-    Raven.captureException(e);
+    Sentry.captureException(e);
 
     process.exit(1);
   }

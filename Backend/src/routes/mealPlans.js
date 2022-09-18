@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const Raven = require('raven');
 const ical = require('ical-generator');
 
 // DB

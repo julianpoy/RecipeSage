@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
-const Raven = require('raven');
+const Sentry = require('@sentry/node');
 const he = require('he');
 
 const puppeteer = require('puppeteer-core');
@@ -16,7 +16,7 @@ const disconnectPuppeteer = (browser) => {
   try {
     browser.disconnect();
   } catch(e) {
-    Raven.captureException(e);
+    Sentry.captureException(e);
   }
 };
 
@@ -65,11 +65,12 @@ const clipRecipe = async clipUrl => {
       });
     } catch(err) {
       err.status = 400;
-      Raven.captureException(err, {
-        extra: {
-          clipUrl
-        },
+
+      Sentry.withScope(scope => {
+        scope.setExtra('clipUrl', clipUrl);
+        Sentry.captureException(err);
       });
+
       throw err;
     }
 
@@ -93,11 +94,10 @@ const clipRecipe = async clipUrl => {
       });
     }, INTERCEPT_PLACEHOLDER_URL);
 
-    Raven.captureMessage("Clip success", {
-      extra: {
-        recipeData,
-        clipUrl
-      },
+    Sentry.withScope(scope => {
+      scope.setExtra('recipeData', recipeData);
+      scope.setExtra('clipUrl', clipUrl);
+      Sentry.captureMessage("Clip success");
     });
 
     disconnectPuppeteer(browser);
@@ -177,11 +177,10 @@ router.get('/', async (req, res, next) => {
       return acc;
     }, {});
 
-    Raven.captureMessage("Clip stats", {
-      extra: {
-        diff: diff,
-        fieldDiffCount: differentKeys.length,
-      },
+    Sentry.withScope(scope => {
+      scope.setExtra('diff', diff);
+      scope.setExtra('fieldDiffCount', differentKeys.length);
+      Sentry.captureMessage("Clip stats");
     });
 
     // Merge results (browser overrides JSDOM due to accuracy)

@@ -1,5 +1,5 @@
 var admin = require("firebase-admin");
-var Raven = require('raven');
+var Sentry = require('@sentry/node');
 
 // DB
 var FCMToken = require('../models').FCMToken;
@@ -39,7 +39,7 @@ exports.sendMessage = (token, payload) => {
         }
       });
     } else {
-      Raven.captureException(err);
+      Sentry.captureException(err);
     }
 
     return Promise.resolve();

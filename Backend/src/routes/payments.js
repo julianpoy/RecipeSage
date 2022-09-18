@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var Raven = require('raven');
 const moment = require('moment');
 
 // DB

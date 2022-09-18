@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cors = require('cors');
-var Raven = require('raven');
+const Sentry = require('@sentry/node');
 let multer = require('multer');
 let fs = require('fs-extra');
 let extract = require('extract-zip');
@@ -70,9 +70,7 @@ router.get(
   }
 
   try {
-    Raven.captureMessage('Starting import from PP API', {
-      level: 'info'
-    });
+    Sentry.captureMessage('Starting import from PP API');
 
     const username = escapeXml(req.query.username.trim());
     const password = escapeXml(req.query.password);
@@ -291,16 +289,13 @@ router.get(
       });
     });
 
-    Raven.captureMessage('Imported from PP API', {
-      level: 'info'
-    });
+    Sentry.captureMessage('Imported from PP API');
 
     res.status(200).json({
       msg: "Import complete"
     });
   } catch(e) {
     next(e);
-    Raven.captureException(e);
   }
 });
 
@@ -430,7 +425,7 @@ router.post(
       console.log(req.file.path)
     }
 
-    Raven.captureMessage("Starting Paprika Import");
+    Sentry.captureMessage("Starting Paprika Import");
 
     let metrics = {
       t0: performance.now(),
@@ -554,12 +549,10 @@ router.post(
         tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
       }
 
-      Raven.captureMessage('Paprika Metrics', {
-        extra: {
-          metrics
-        },
-        user: res.locals.session.toJSON(),
-        level: 'info'
+      Sentry.withScope(scope => {
+        scope.setExtra('user', res.locals.session.toJSON());
+        scope.setExtra('metrics', metrics);
+        Sentry.captureMessage('Paprika Metrics');
       });
 
       res.status(201).json({});

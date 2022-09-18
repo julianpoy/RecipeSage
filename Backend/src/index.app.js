@@ -1,6 +1,8 @@
+require('./services/sentry-init.js');
+const Sentry = require('@sentry/node');
+
 let ElasticService = require('./services/elastic');
 let cron = require('node-cron');
-let Raven = require('raven');
 let SQ = require("sequelize");
 let Op = SQ.Op;
 
@@ -52,7 +54,7 @@ const runIndexOp = async () => {
     );
   } catch(e) {
     clearInterval(runInterval);
-    Raven.captureException(e);
+    Sentry.captureException(e);
     console.log("Error while indexing", e);
     process.exit(1);
   }

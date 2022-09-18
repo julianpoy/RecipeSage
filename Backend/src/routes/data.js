@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Raven = require('raven');
+const Sentry = require('@sentry/node');
 const pLimit = require('p-limit');
 const xmljs = require("xml-js");
 const multer = require('multer');
@@ -320,7 +320,7 @@ router.post(
         throw badFormatError;
       }
 
-      Raven.captureMessage('Paprika Import Started');
+      Sentry.captureMessage('Paprika Import Started');
 
       zipPath = req.file.path;
       extractPath = zipPath + '-extract';
