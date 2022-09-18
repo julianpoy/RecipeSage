@@ -61,6 +61,7 @@ services:
       - POSTGRES_LOGGING=true
       - GCM_KEYPAIR
       - SENTRY_DSN
+      - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
       - ELASTIC_ENABLE=true
