@@ -19,7 +19,7 @@ spec:
         ports:
         - containerPort: 3000
         command: ["node"]
-        args: ["src/bin/www"]
+        args: ["src/bin/www.js"]
         resources:
           requests:
             cpu: 250m

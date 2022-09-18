@@ -52,7 +52,7 @@ module.exports.syncDB = async () => {
 
 module.exports.setup = async () => {
   await migrate();
-  return require('./bin/www');
+  return require('./bin/www.js');
 }
 
 module.exports.cleanup = async (server) => {
