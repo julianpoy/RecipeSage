@@ -44,8 +44,6 @@ services:
       dockerfile: ./Backend/Dockerfile
     command: npx nodemon --watch ../SharedUtils --watch . src/bin/www.js
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
       - AWS_PUBLIC_ASSET_LOCATION=https://chefbook-dev.s3.us-west-2.amazonaws.com/
@@ -68,8 +66,6 @@ services:
       - ELASTIC_IDX_PREFIX=rs_dev_
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
-      - STRIPE_SK
-      - STRIPE_WEBHOOK_SECRET
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
