@@ -12,8 +12,11 @@
     <ion-title *ngIf="!userId && selectionMode">
       {{ 'pages.home.title.selectionMode' | translate:{count: selectedRecipeIds.length} }}
     </ion-title>
-    <ion-title *ngIf="!userId && !selectionMode">
-      {{ 'pages.home.title.' + folder | translate }}
+    <ion-title *ngIf="!userId && !selectionMode && folder === 'main'">
+      {{ 'pages.home.title.main' | translate }}
+    </ion-title>
+    <ion-title *ngIf="!userId && !selectionMode && folder === 'inbox'">
+      {{ 'pages.home.title.inbox' | translate }}
     </ion-title>
     <ion-title *ngIf="userId && otherUserProfile && this.selectedLabels.length">
       {{ 'pages.home.title.sharedLabel.withProfile' | translate:{name: otherUserProfile.name, label: selectedLabels[0]} }}

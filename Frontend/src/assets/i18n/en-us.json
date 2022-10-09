@@ -952,7 +952,7 @@
   "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
 
   "pages.shoppingListPopover.groupCategories": "Group Items by Category",
-  "pages.shoppingListPopover.groupSimilar.": "Group Similar Items",
+  "pages.shoppingListPopover.groupSimilar": "Group Similar Items",
   "pages.shoppingListPopover.showTitle": "Show Recipe Title",
   "pages.shoppingListPopover.showAddedBy": "Show Added By",
   "pages.shoppingListPopover.showAddedOn": "Show Added On",
@@ -1052,8 +1052,6 @@
   "====== Pages.People ======": "",
 
   "pages.people.title": "People",
-  "pages.people.selfhost.1": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with",
-  "pages.people.selfhost.2": "or any of the accounts located on the main site.",
   "pages.people.nullState.1": "You haven't set up a profile.",
   "pages.people.nullState.2": "Creating a profile allows you to share collections of recipes with friends and the public.",
   "pages.people.create": "Create",
@@ -1216,7 +1214,6 @@
   "====== Errors ======": "",
 
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unauthorized": "You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.",
   "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
 
   "====== Generic ======": "",
@@ -1229,5 +1226,5 @@
   "generic.okay": "Okay",
 
 
-  "trailing.comma.placeholder": ""
+  "====== Trailing Comma Placeholder ======": ""
 }
