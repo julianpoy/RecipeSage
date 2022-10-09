@@ -23,7 +23,7 @@
   "====== Pages.Welcome ======": "",
 
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
-  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of RecipeSage.com, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",
   "pages.welcome.subtitle": "A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
   "pages.welcome.registerButton": "Create an account",
@@ -65,7 +65,7 @@
   "pages.auth.title.login": "Log In",
   "pages.auth.title.register": "Create an Account",
 
-  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href='https://recipesage.com'>RecipeSage.com</a> or any of the accounts located on the main site.",
+  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with RecipeSage.com or any of the accounts located on the main site.",
 
   "pages.auth.welcome.login": "Welcome back!",
   "pages.auth.welcome.login.sub": "Please login with your account details below.",
