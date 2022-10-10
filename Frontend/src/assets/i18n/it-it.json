@@ -872,6 +872,7 @@
   "pages.settings.theme.dark": "Scuro",
   "pages.settings.theme.black": "Nero (OLED)",
   "pages.settings.language": "Lingua",
+  "pages.settings.language.contribute": "Contattami per contribuire con una lingua",
   "pages.settings.language.default": "Default del Browser",
   "pages.settings.reset": "Ripristina Preferenze",
 
