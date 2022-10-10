@@ -352,6 +352,13 @@
   "pages.downloadAndInstall.desktop.step.2": "Apri il menu del browser, il pulsante si trova nell’angolo in alto a destra ed è simile a questo:",
   "pages.downloadAndInstall.desktop.step.3": "Clicca \"Installa RecipeSage...\"",
 
+  "pages.downloadAndInstall.other": "Altro software RecipeSage",
+  "pages.downloadAndInstall.bookmark": "Segnalibro di importazione automatica della ricetta",
+  "pages.downloadAndInstall.bookmark.instructions": "Trascina questo link nella barra dei preferiti. Fai clic sul segnalibro per importare il sito in cui ti trovi.",
+  "pages.downloadAndInstall.bookmark.description": "Cattura automaticamente il contenuto delle ricette dalle pagine web",
+  "pages.downloadAndInstall.extension": "Estensione del browser RecipeSage Clip Tool",
+  "pages.downloadAndInstall.extension.description": "Acquisisce automaticamente il contenuto delle ricette dalle pagine web. Il segnalibro sopra è consigliato al posto di questa estensione per la maggior parte degli utenti.",
+
   "====== Pages.LabelsPopover ======": "",
 
   "pages.labelsPopover.title": "Opzioni",
@@ -474,6 +481,7 @@
 
 
   "pages.mealPlanPopover.actions.title": "Azione",
+  "pages.mealPlanPopover.actions.share": "Condividere",
   "pages.mealPlanPopover.actions.pinRecipesOpen": "Apri ricette",
   "pages.mealPlanPopover.actions.addToShoppingList": "Aggiungi selezione alla lista della spesa",
   "pages.mealPlanPopover.actions.copyDays": "Copia giorno\\i selezionati",
@@ -515,6 +523,11 @@
   "pages.newMealPlanModal.input.title": "Titolo",
   "pages.newMealPlanModal.createAndShare": "Crea e Condividi",
   "pages.newMealPlanModal.create": "Crea",
+
+  "====== Pages.ShareMealPlanModal ======": "",
+
+  "pages.shareMealPlanModal.title": "Condividi piano alimentare",
+  "pages.shareMealPlanModal.description": "Il collegamento iCal/ICS di seguito può essere utilizzato in quasi tutti i programmi di calendario per sincronizzare il piano alimentare al di fuori di RecipeSage",
 
   "====== Pages.MessageThread ======": "",
 
@@ -939,7 +952,7 @@
   "pages.shoppingListPopover.sortBy.createdAsc": "Creata (dal meno recente)",
 
   "pages.shoppingListPopover.groupCategories": "Raggruppa gli Articoli per Categoria",
-  "pages.shoppingListPopover.groupSimilar.": "Raggruppa Articoli Simili",
+  "pages.shoppingListPopover.groupSimilar": "Raggruppa Articoli Simili",
   "pages.shoppingListPopover.showTitle": "Mostra Titolo Ricetta",
   "pages.shoppingListPopover.showAddedBy": "Mostra Aggiunto Da",
   "pages.shoppingListPopover.showAddedOn": "Mostra aggiunto Il",
@@ -1039,8 +1052,6 @@
   "====== Pages.People ======": "",
 
   "pages.people.title": "Persone",
-  "pages.people.selfhost.1": "Nota: questa è una versione self-hosted di RecipeSage e non è quindi associata a",
-  "pages.people.selfhost.2": "o uno qualsiasi degli account presenti sul sito principale.",
   "pages.people.nullState.1": "Non hai creato un profilo.",
   "pages.people.nullState.2": "La creazione di un profilo consente di condividere raccolte di ricette con gli amici e con il pubblico.",
   "pages.people.create": "Crea",
@@ -1203,7 +1214,6 @@
   "====== Errors ======": "",
 
   "errors.offline": "Sembra che tu sia offline. Quando sei offline, siamo in grado di recuperare solo i dati a cui hai acceduto in precedenza su questo dispositivo.",
-  "errors.unauthorized": "Non sei autorizzato a eseguire questa azione! Se pensi che si tratti di un errore, ti preghiamo di effettuare il logout e il login utilizzando il menu laterale.",
   "errors.unexpected": "Si è verificato un errore imprevisto. Riprova. Se il problema continua a verificarsi, contattami.",
 
   "====== Generic ======": "",
@@ -1216,5 +1226,5 @@
   "generic.okay": "Okay",
 
 
-  "trailing.comma.placeholder": ""
+  "====== Trailing Comma Placeholder ======": ""
 }
