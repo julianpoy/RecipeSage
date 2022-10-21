@@ -118,11 +118,8 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    events.subscribe('recipe:created', () => this.reloadPending = true);
-    events.subscribe('recipe:modified', () => this.reloadPending = true);
-    events.subscribe('recipe:deleted', () => this.reloadPending = true);
-    events.subscribe('label:created', () => this.reloadPending = true);
-    events.subscribe('label:deleted', () => this.reloadPending = true);
+    events.subscribe('recipe:update', () => this.reloadPending = true);
+    events.subscribe('label:update', () => this.reloadPending = true);
     events.subscribe('import:pepperplate:complete', () => {
       const loading = this.loadingService.start();
       this.resetAndLoadAll().then(() => {
