@@ -42,6 +42,7 @@
     "grip": "^1.5.0",
     "he": "^1.2.0",
     "ical-generator": "^3.5.1",
+    "joi": "^17.6.4",
     "jsdom": "^20.0.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
     "moment": "^2.29.4",
