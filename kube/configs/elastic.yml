@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
       - name: rs-elastic-chown
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
         command: ["chown", "-v", "elasticsearch:elasticsearch", "/usr/share/elasticsearch/data"]
         resources:
           requests:
@@ -29,7 +29,7 @@ spec:
           mountPath: /usr/share/elasticsearch/data
       containers:
       - name: rs-elastic
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
         env:
         - name: discovery.type
           value: single-node

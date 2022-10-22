@@ -79,10 +79,11 @@ services:
       - ./Backend/package.json:/app/Backend/package.json
       - ./Backend/package-lock.json:/app/Backend/package-lock.json
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_dev
+      - xpack.security.enabled=false
     ports:
       - 9200:9200
   pushpin:
