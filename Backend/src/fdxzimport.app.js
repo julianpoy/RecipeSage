@@ -294,12 +294,6 @@ async function main() {
       });
     }))
 
-    Sentry.withScope(scope => {
-      scope.setExtra('runConfig', runConfig);
-      scope.setExtra('user', runConfig.userId);
-      Sentry.captureMessage('FDX(Z) Complete');
-    });
-
     exit(0);
   } catch (e) {
     console.log("Couldn't handle lcb upload 2", e)

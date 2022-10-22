@@ -102,7 +102,7 @@ services:
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
   browserless:
-    image: browserless/chrome:1.43.0-chrome-stable
+    image: browserless/chrome:1.53.0-chrome-stable
     environment:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10
