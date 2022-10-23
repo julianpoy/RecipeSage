@@ -956,12 +956,12 @@
   "pages.shoppingListPopover.sortBy.createdDesc": "Creata (dal più recente)",
   "pages.shoppingListPopover.sortBy.createdAsc": "Creata (dal meno recente)",
 
-  "pages.shoppingListPopover.preferDelete": "Elimina al termine",
   "pages.shoppingListPopover.groupCategories": "Raggruppa gli Articoli per Categoria",
   "pages.shoppingListPopover.groupSimilar": "Raggruppa Articoli Simili",
   "pages.shoppingListPopover.showTitle": "Mostra Titolo Ricetta",
   "pages.shoppingListPopover.showAddedBy": "Mostra Aggiunto Da",
   "pages.shoppingListPopover.showAddedOn": "Mostra aggiunto Il",
+  "pages.shoppingListPopover.preferDelete": "Elimina al termine",
   "pages.shoppingListPopover.print": "Stampa",
   "pages.shoppingListPopover.removeAll": "Rimuovi tutti gli articoli",
   "pages.shoppingListPopover.delete": "Elimina lista",

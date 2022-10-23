@@ -21,13 +21,6 @@
   </ion-item>
 
   <ion-item lines="full">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.PreferDelete]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.preferDelete' | translate }}
-    </ion-label>
-  </ion-item>
-
-  <ion-item lines="full">
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.GroupCategories]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       {{ 'pages.shoppingListPopover.groupCategories' | translate }}
@@ -59,6 +52,13 @@
     <ion-toggle [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
     <ion-label>
       {{ 'pages.shoppingListPopover.showAddedOn' | translate }}
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.PreferDelete]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
+    <ion-label>
+      {{ 'pages.shoppingListPopover.preferDelete' | translate }}
     </ion-label>
   </ion-item>
 

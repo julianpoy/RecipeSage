@@ -956,12 +956,12 @@
   "pages.shoppingListPopover.sortBy.createdDesc": "Created (newest first)",
   "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
 
-  "pages.shoppingListPopover.preferDelete": "Delete Upon Completion",
   "pages.shoppingListPopover.groupCategories": "Group Items by Category",
   "pages.shoppingListPopover.groupSimilar": "Group Similar Items",
   "pages.shoppingListPopover.showTitle": "Show Recipe Title",
   "pages.shoppingListPopover.showAddedBy": "Show Added By",
   "pages.shoppingListPopover.showAddedOn": "Show Added On",
+  "pages.shoppingListPopover.preferDelete": "Delete Upon Completion",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
