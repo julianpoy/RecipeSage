@@ -39,7 +39,7 @@
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-              (complete)="completeItems($event, true)"></shopping-list-group>
+              (onCompleteToggle)="completeItems($event, true)"></shopping-list-group>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-          (complete)="completeItems($event, true)"></shopping-list-group>
+          (onCompleteToggle)="completeItems($event, true)"></shopping-list-group>
       </div>
     </div>
     <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
@@ -72,7 +72,7 @@
               [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
               [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
               [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-              (complete)="completeItems([item], true)"></shopping-list-item>
+              (onCompleteToggle)="completeItems([item], true)"></shopping-list-item>
           </div>
         </div>
       </div>
@@ -85,7 +85,7 @@
           [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
           [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
           [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-          (complete)="completeItems([item], true)"></shopping-list-item>
+          (onCompleteToggle)="completeItems([item], true)"></shopping-list-item>
       </div>
     </div>
     <null-state *ngIf="items.length === 0 && initialLoadComplete">
@@ -143,7 +143,7 @@
       [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
       [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
       [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-      (complete)="completeItems([item], false)"></shopping-list-item>
+      (onCompleteToggle)="completeItems([item], false)"></shopping-list-item>
   </ion-list>
 
   <br />
