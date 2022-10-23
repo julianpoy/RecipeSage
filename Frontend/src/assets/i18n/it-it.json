@@ -939,6 +939,10 @@
   "pages.shoppingList.nullState.2": "Utilizza il menu in alto a destra per attivare o disattivare il raggruppamento automatico.",
   "pages.shoppingList.nullState.add": "Aggiungi il primo articolo",
   "pages.shoppingList.recipes": "Ricette in questa lista",
+  "pages.shoppingList.completed": "Articoli completati",
+
+  "pages.shoppingList.removeMultiple.header": "Conferma Rimozione",
+  "pages.shoppingList.removeMultiple.message": "Questo eliminerà definitivamente questi elementi da questo elenco.",
 
   "pages.shoppingList.removed": "Rimuovi {{itemCount}} articolo\\i",
   "pages.shoppingList.removed.undo": "Annulla",
@@ -952,6 +956,7 @@
   "pages.shoppingListPopover.sortBy.createdDesc": "Creata (dal più recente)",
   "pages.shoppingListPopover.sortBy.createdAsc": "Creata (dal meno recente)",
 
+  "pages.shoppingListPopover.preferDelete": "Elimina al termine",
   "pages.shoppingListPopover.groupCategories": "Raggruppa gli Articoli per Categoria",
   "pages.shoppingListPopover.groupSimilar": "Raggruppa Articoli Simili",
   "pages.shoppingListPopover.showTitle": "Mostra Titolo Ricetta",

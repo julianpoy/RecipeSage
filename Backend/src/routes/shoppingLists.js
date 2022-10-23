@@ -153,7 +153,7 @@ router.post(
           return ShoppingListItem.bulkCreate(req.body.items.map((item) => {
             return {
               title: item.title,
-              completed: false,
+              completed: item.completed || false,
               userId: res.locals.session.userId,
               shoppingListId: shoppingList.id,
               recipeId: item.recipeId || null,
@@ -401,12 +401,12 @@ router.put(
     params: joi.object({
       shoppingListId: joi.string().required().uuid(),
     }),
+    query: joi.object({
+      itemIds: joi.string().required()
+    }),
     body: joi.object({
-      itemIds: joi.array().required().min(1).unique().items(joi.string().uuid()),
-      data: joi.object({
-        title: joi.string().min(1),
-        completed: joi.boolean(),
-      }).required().min(1),
+      title: joi.string().min(1),
+      completed: joi.boolean(),
     }),
   })),
   MiddlewareService.validateSession(['user']),
@@ -434,34 +434,34 @@ router.put(
       if (!shoppingList) res.status(404).send('Shoppinglist does not exist or you do not have access');
 
       await ShoppingListItem.update({
-        ...req.body.data
+        ...req.body
       }, {
         where: {
           id: {
-            [Op.in]: req.body.itemIds,
+            [Op.in]: req.query.itemIds.split(','),
           }
         }
       });
 
-      const nonce = Date.now();
+      const reference = Date.now();
 
-      const deletedItemBroadcast = {
+      const broadcast = {
         shoppingListId: shoppingList.id,
         updatedBy: {
           id: res.locals.user.id,
           name: res.locals.user.name,
           email: res.locals.user.email
         },
-        nonce
+        reference
       };
 
-      GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', deletedItemBroadcast);
+      GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', broadcast);
       for (var i = 0; i < shoppingList.collaborators.length; i++) {
-        GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', deletedItemBroadcast);
+        GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', broadcast);
       }
 
       res.status(200).json({
-        nonce
+        reference
       });
     } catch(e) {
       next(e);

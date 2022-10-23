@@ -939,6 +939,10 @@
   "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
   "pages.shoppingList.nullState.add": "Add the first item",
   "pages.shoppingList.recipes": "Recipes in this list",
+  "pages.shoppingList.completed": "Completed Items",
+
+  "pages.shoppingList.removeMultiple.header": "Confirm Removal",
+  "pages.shoppingList.removeMultiple.message": "This will permanently delete these items from this list.",
 
   "pages.shoppingList.removed": "Removed {{itemCount}} item(s)",
   "pages.shoppingList.removed.undo": "Undo",
@@ -952,6 +956,7 @@
   "pages.shoppingListPopover.sortBy.createdDesc": "Created (newest first)",
   "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
 
+  "pages.shoppingListPopover.preferDelete": "Delete Upon Completion",
   "pages.shoppingListPopover.groupCategories": "Group Items by Category",
   "pages.shoppingListPopover.groupSimilar": "Group Similar Items",
   "pages.shoppingListPopover.showTitle": "Show Recipe Title",

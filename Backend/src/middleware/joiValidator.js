@@ -4,6 +4,8 @@ const joiValidator = (joiSchema) => {
       body: req.body,
       query: req.query,
       params: req.params,
+    }, {
+      allowUnknown: true,
     });
 
     if (error) {

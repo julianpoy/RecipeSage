@@ -8,15 +8,19 @@ import { UtilService } from '@/services/util.service';
   styleUrls: ['./shopping-list-item.component.scss']
 })
 export class ShoppingListItemComponent {
-  completed = false;
-  @Input() title;
-  @Input() recipeTitle;
-  @Input() createdAt;
-  @Input() ownerName;
-  @Output() markComplete = new EventEmitter<null>();
+  @Input() title: string;
+  @Input() completed: boolean;
+  @Input() recipeTitle: string;
+  @Input() createdAt: string;
+  @Input() ownerName: string;
+  @Output() complete = new EventEmitter<null>();
   constructor(private utilService: UtilService) {}
 
-  formatItemCreationDate(plainTextDate) {
+  onComplete() {
+    this.complete.emit();
+  }
+
+  formatItemCreationDate(plainTextDate: string) {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 }
