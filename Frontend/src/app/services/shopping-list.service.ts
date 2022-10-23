@@ -115,14 +115,29 @@ export class ShoppingListService {
     );
   }
 
-  deleteItems(shoppingListId: string, params: {
+  updateItems(shoppingListId: string, query: {
+    itemIds: string,
+  }, payload: {
+    title?: string,
+    completed?: boolean,
+  }, errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{ reference: number }>(
+      `shoppingLists/${shoppingListId}/items`,
+      'PUT',
+      payload,
+      query,
+      errorHandlers
+    );
+  }
+
+  deleteItems(shoppingListId: string, query: {
     itemIds: string,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}/items`,
       'DELETE',
       null,
-      params,
+      query,
       errorHandlers
     );
   }
