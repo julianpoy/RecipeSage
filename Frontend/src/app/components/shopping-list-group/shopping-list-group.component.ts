@@ -13,7 +13,7 @@ export class ShoppingListGroupComponent {
   @Input() showRecipeTitle: boolean;
   @Input() showAddedOn: boolean;
   @Input() showAddedBy: boolean;
-  @Output() onCompleteToggle = new EventEmitter<any>();
+  @Output() completeToggle = new EventEmitter<any>();
 
   constructor() {
     if (!this.categoryTitle) this.categoryTitle = '';

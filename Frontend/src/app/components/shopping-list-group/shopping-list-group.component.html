@@ -5,7 +5,7 @@
   [recipeTitle]="showRecipeTitle && group.items[0].recipe?.title"
   [createdAt]="showAddedOn && group.items[0].createdAt"
   [ownerName]="showAddedBy && group.items[0].owner?.name"
-  (onCompleteToggle)="onCompleteToggle.emit(group.items)"></shopping-list-item>
+  (completeToggle)="completeToggle.emit(group.items)"></shopping-list-item>
 <div *ngIf="group.items.length > 1">
   <ion-grid class="ion-no-padding">
     <ion-row class="ion-align-items-center">
@@ -14,7 +14,7 @@
           <ion-label class="ion-text-wrap ion-no-margin">
             {{ group.title }}
           </ion-label>
-          <ion-checkbox slot="start" [(ngModel)]="group.items[0].completed" (ngModelChange)="onCompleteToggle.emit(group.items)"></ion-checkbox>
+          <ion-checkbox slot="start" [(ngModel)]="group.items[0].completed" (ngModelChange)="completeToggle.emit(group.items)"></ion-checkbox>
         </ion-item>
       </ion-col>
       <ion-col size="auto">
@@ -33,7 +33,7 @@
           [recipeTitle]="showRecipeTitle && item.recipe?.title"
           [createdAt]="showAddedOn && item.createdAt"
           [ownerName]="showAddedBy && item.owner?.name"
-          (onCompleteToggle)="onCompleteToggle.emit([item])"></shopping-list-item>
+          (completeToggle)="completeToggle.emit([item])"></shopping-list-item>
       </ion-col>
     </ion-row>
   </ion-grid>

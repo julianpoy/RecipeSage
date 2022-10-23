@@ -13,11 +13,11 @@ export class ShoppingListItemComponent {
   @Input() recipeTitle: string;
   @Input() createdAt: string;
   @Input() ownerName: string;
-  @Output() onCompleteToggle = new EventEmitter<null>();
+  @Output() completeToggle = new EventEmitter<null>();
   constructor(private utilService: UtilService) {}
 
   onComplete() {
-    this.onCompleteToggle.emit();
+    this.completeToggle.emit();
   }
 
   formatItemCreationDate(plainTextDate: string) {
