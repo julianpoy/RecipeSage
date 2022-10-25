@@ -81,7 +81,7 @@ export class ImportJSONLDPage {
       },
       504: async () => {
         setTimeout(async () => {
-          const message = await this.translate.get('pages.importJsonLD.error').toPromise();
+          const message = await this.translate.get('pages.importJsonLD.timeout').toPromise();
           const close = await this.translate.get('generic.close').toPromise();
 
           (await this.toastCtrl.create({

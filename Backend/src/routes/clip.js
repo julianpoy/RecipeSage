@@ -94,12 +94,6 @@ const clipRecipe = async clipUrl => {
       });
     }, INTERCEPT_PLACEHOLDER_URL);
 
-    Sentry.withScope(scope => {
-      scope.setExtra('recipeData', recipeData);
-      scope.setExtra('clipUrl', clipUrl);
-      Sentry.captureMessage("Clip success");
-    });
-
     disconnectPuppeteer(browser);
 
     return recipeData;
@@ -176,12 +170,6 @@ router.get('/', async (req, res, next) => {
       }
       return acc;
     }, {});
-
-    Sentry.withScope(scope => {
-      scope.setExtra('diff', diff);
-      scope.setExtra('fieldDiffCount', differentKeys.length);
-      Sentry.captureMessage("Clip stats");
-    });
 
     // Merge results (browser overrides JSDOM due to accuracy)
     const results = recipeDataJSDOM;

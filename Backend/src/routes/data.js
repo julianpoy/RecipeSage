@@ -320,8 +320,6 @@ router.post(
         throw badFormatError;
       }
 
-      Sentry.captureMessage('Paprika Import Started');
-
       zipPath = req.file.path;
       extractPath = zipPath + '-extract';
 

@@ -55,6 +55,7 @@ export class SettingsPage {
       this.languageOptions = Object.values(SupportedLanguages).map(code => [code, locale.of(code)]);
     } catch(e) {
       console.error("Intl not supported");
+      this.languageOptions = Object.values(SupportedLanguages).map(code => [code, code]);
     }
   }
 

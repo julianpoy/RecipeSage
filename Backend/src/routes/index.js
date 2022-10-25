@@ -70,8 +70,6 @@ router.get(
   }
 
   try {
-    Sentry.captureMessage('Starting import from PP API');
-
     const username = escapeXml(req.query.username.trim());
     const password = escapeXml(req.query.password);
 
@@ -289,8 +287,6 @@ router.get(
       });
     });
 
-    Sentry.captureMessage('Imported from PP API');
-
     res.status(200).json({
       msg: "Import complete"
     });
@@ -425,8 +421,6 @@ router.post(
       console.log(req.file.path)
     }
 
-    Sentry.captureMessage("Starting Paprika Import");
-
     let metrics = {
       t0: performance.now(),
       tExtracted: null,
@@ -548,12 +542,6 @@ router.post(
         tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
         tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
       }
-
-      Sentry.withScope(scope => {
-        scope.setExtra('user', res.locals.session.toJSON());
-        scope.setExtra('metrics', metrics);
-        Sentry.captureMessage('Paprika Metrics');
-      });
 
       res.status(201).json({});
     }).catch(err => {

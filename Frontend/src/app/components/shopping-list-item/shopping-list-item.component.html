@@ -14,5 +14,5 @@
       <span>{{ ownerName }}</span>
     </p>
   </ion-label>
-  <ion-checkbox slot="start" [(ngModel)]="completed" (ngModelChange)="markComplete.emit()"></ion-checkbox>
+  <ion-checkbox slot="start" [checked]="completed" (ionChange)="onComplete()"></ion-checkbox>
 </ion-item>

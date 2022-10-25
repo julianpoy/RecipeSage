@@ -78,9 +78,12 @@
       </ion-select>
     </ion-item>
     <ion-item lines="inset">
-      <ion-icon name='brush' slot="start"></ion-icon>
+      <ion-icon name='language-outline' slot="start"></ion-icon>
       <ion-label>
         {{ 'pages.settings.language' | translate }}
+        <p>
+          {{ 'pages.settings.language.contribute' | translate }}
+        </p>
       </ion-label>
       <ion-select [(ngModel)]="language" (ngModelChange)="languageChanged();">
         <ion-select-option value="navigator">

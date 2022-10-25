@@ -227,7 +227,7 @@ export class MealPlanPage {
     }
 
     const header = await this.translate.get('pages.mealPlan.modal.copy.header').toPromise();
-    const message = await this.translate.get('pages.mealPlan.modal.copy.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.copy.message').toPromise();
     const cancel = await this.translate.get('generic.cancel').toPromise();
     const okay = await this.translate.get('generic.okay').toPromise();
 
@@ -260,7 +260,7 @@ export class MealPlanPage {
     }
 
     const header = await this.translate.get('pages.mealPlan.modal.move.header').toPromise();
-    const message = await this.translate.get('pages.mealPlan.modal.move.header').toPromise();
+    const message = await this.translate.get('pages.mealPlan.modal.move.message').toPromise();
     const cancel = await this.translate.get('generic.cancel').toPromise();
     const okay = await this.translate.get('generic.okay').toPromise();
 
