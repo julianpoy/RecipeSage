@@ -27,10 +27,10 @@ let {
   validateEmail,
   sanitizeEmail,
   sendmail,
-  sendBufferToS3,
-  formatS3ImageResponse,
-  sendURLToS3,
-  sendFileToS3,
+  sendBufferToStorage,
+  formatImageResponse,
+  sendURLToStorage,
+  sendFileToStorage,
   dispatchImportNotification,
   dispatchMessageNotification,
   findFilesByRegex
@@ -190,7 +190,7 @@ describe('utils', () => {
     })
   })
 
-  describe('sendBufferToS3', () => {
+  describe('sendBufferToStorage', () => {
     // let s3PutObjectStub, s3PutObjectPromiseStub, fakeBody, result, etag
 
     // before(async () => {
@@ -206,7 +206,7 @@ describe('utils', () => {
 
     //   fakeBody = randomString(20)
 
-    //   result = await sendBufferToS3(fakeBody)
+    //   result = await sendBufferToStorage(fakeBody)
     // })
 
     // after(() => {
@@ -227,13 +227,13 @@ describe('utils', () => {
     // })
   })
 
-  describe('formatS3ImageResponse', () => {
+  describe('formatImageResponse', () => {
     it('returns formatted image object', () => {
       let key = "s3key"
       let mimetype = "mimetype/mimetype"
       let size = 200000
       let etag = randomString(20)
-      let img = formatS3ImageResponse(key, mimetype, size, etag)
+      let img = formatImageResponse(key, mimetype, size, etag)
 
       expect(img.fieldname).to.equal("image")
       expect(img.originalname).to.equal("recipe-sage-img.jpg")
@@ -245,19 +245,19 @@ describe('utils', () => {
       expect(img.metadata.fieldName).to.equal("image")
 
       expect(img.location).to.be.an.string
+      
       expect(img.location).to.contain("https://")
-      expect(img.location).to.contain(".s3.")
-      expect(img.location).to.contain(".amazonaws.com/" + key)
+
 
       expect(img.etag).to.equal(etag)
     })
   })
 
-  describe('sendURLToS3', () => {
+  describe('sendURLToStorage', () => {
     let fetchImageStub,
       convertImageStub,
-      sendBufferToS3Stub,
-      formatS3ImageResponseStub,
+      sendBufferToStorageStub,
+      formatImageResponseStub,
       etag,
       key,
       contentBody,
@@ -275,10 +275,8 @@ describe('utils', () => {
       etag = randomString(20)
       key = randomString(20)
 
-      sendBufferToS3Stub = sinon.stub(UtilService, 'sendBufferToS3').returns(Promise.resolve({
-        s3Response: {
-          ETag: etag
-        },
+      sendBufferToStorageStub = sinon.stub(UtilService, 'sendBufferToStorage').returns(Promise.resolve({
+        ETag: etag,
         key
       }))
 
@@ -297,39 +295,39 @@ describe('utils', () => {
         etag
       }
 
-      formatS3ImageResponseStub = sinon.stub(UtilService, 'formatS3ImageResponse').returns(Promise.resolve(formattedS3Response))
+      formatImageResponseStub = sinon.stub(UtilService, 'formatImageResponse').returns(Promise.resolve(formattedS3Response))
     })
 
     after(() => {
       fetchImageStub.restore();
       convertImageStub.restore();
-      sendBufferToS3Stub.restore();
-      formatS3ImageResponseStub.restore();
+      sendBufferToStorageStub.restore();
+      formatImageResponseStub.restore();
     })
 
     it('copies url to s3 bucket', () => {
       let fakeURL = randomString(20)
-      return sendURLToS3(fakeURL).then(result => {
+      return sendURLToStorage(fakeURL).then(result => {
         sinon.assert.calledOnce(fetchImageStub)
         sinon.assert.calledWith(fetchImageStub, fakeURL)
 
         sinon.assert.calledOnce(convertImageStub)
         sinon.assert.calledWith(convertImageStub, contentBody)
 
-        sinon.assert.calledOnce(sendBufferToS3Stub)
-        sinon.assert.calledWith(sendBufferToS3Stub, convertedBuffer)
+        sinon.assert.calledOnce(sendBufferToStorageStub)
+        sinon.assert.calledWith(sendBufferToStorageStub, convertedBuffer)
 
-        sinon.assert.calledOnce(formatS3ImageResponseStub)
-        sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/jpeg', 20, etag)
+        sinon.assert.calledOnce(formatImageResponseStub)
+        sinon.assert.calledWith(formatImageResponseStub, key, 'image/jpeg', 20, etag)
 
         expect(result).to.equal(formattedS3Response)
       })
     })
   })
 
-  describe('sendFileToS3', () => {
-    let sendBufferToS3Stub,
-      formatS3ImageResponseStub,
+  describe('sendFileToStorage', () => {
+    let sendBufferToStorageStub,
+      formatImageResponseStub,
       convertImageStub,
       etag,
       key,
@@ -348,10 +346,8 @@ describe('utils', () => {
 
       convertImageStub = sinon.stub(UtilService, 'convertImage').returns(Promise.resolve(convertedBody))
 
-      sendBufferToS3Stub = sinon.stub(UtilService, 'sendBufferToS3').returns(Promise.resolve({
-        s3Response: {
-          ETag: etag
-        },
+      sendBufferToStorageStub = sinon.stub(UtilService, 'sendBufferToStorage').returns(Promise.resolve({
+        ETag: etag,
         key
       }))
 
@@ -370,26 +366,26 @@ describe('utils', () => {
         etag
       }
 
-      formatS3ImageResponseStub = sinon.stub(UtilService, 'formatS3ImageResponse').returns(Promise.resolve(formattedS3Response))
+      formatImageResponseStub = sinon.stub(UtilService, 'formatImageResponse').returns(Promise.resolve(formattedS3Response))
 
       let exampleFilePath = path.join(__dirname, "../test/exampleFiles/img1.png")
-      result = await sendFileToS3(exampleFilePath)
+      result = await sendFileToStorage(exampleFilePath)
     })
 
     after(() => {
       convertImageStub.restore();
-      sendBufferToS3Stub.restore();
-      formatS3ImageResponseStub.restore();
+      sendBufferToStorageStub.restore();
+      formatImageResponseStub.restore();
     })
 
     it('copies url to s3 bucket', () => {
       sinon.assert.calledOnce(convertImageStub)
 
-      sinon.assert.calledOnce(sendBufferToS3Stub)
+      sinon.assert.calledOnce(sendBufferToStorageStub)
 
-      sinon.assert.calledOnce(formatS3ImageResponseStub)
+      sinon.assert.calledOnce(formatImageResponseStub)
       // 4324 is magic num of our test file size
-      sinon.assert.calledWith(formatS3ImageResponseStub, key, 'image/jpeg', 4324, etag)
+      sinon.assert.calledWith(formatImageResponseStub, key, 'image/jpeg', 4324, etag)
 
       expect(result).to.equal(formattedS3Response)
     })

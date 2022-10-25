@@ -319,7 +319,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
+              return UtilService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images = lcbRecipe.images || [];
                 lcbRecipe.images.push(image);
               }).catch(() => { })

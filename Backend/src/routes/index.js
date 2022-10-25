@@ -253,7 +253,7 @@ router.get(
 
       await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
         if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
-          return UtilService.sendURLToS3(pepperRecipe.ImageUrl._text).then(image => {
+          return UtilService.sendURLToStorage(pepperRecipe.ImageUrl._text).then(image => {
             pepperRecipe.image = image;
           }).catch(() => {});
         }
@@ -462,7 +462,7 @@ router.post(
                   let recipeData = JSON.parse(data.toString());
 
                   let imageP = recipeData.photo_data ?
-                    UtilService.sendFileToS3(Buffer.from(recipeData.photo_data, "base64"), true) : Promise.resolve();
+                    UtilService.sendFileToStorage(Buffer.from(recipeData.photo_data, "base64"), true) : Promise.resolve();
 
                   return imageP.then(image => {
                     let notes = [

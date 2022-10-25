@@ -50,7 +50,7 @@ const legacyImageHandler = async (req, res, next) => {
     if (req.body.imageURL) {
       let uploadedFile;
       try {
-        uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
+        uploadedFile = await UtilService.sendURLToStorage(req.body.imageURL, highResConversion);
       } catch (e) {
         e.status = 415;
         throw e;

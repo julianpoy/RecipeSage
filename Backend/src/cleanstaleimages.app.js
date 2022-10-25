@@ -37,7 +37,7 @@ const cleanupStaleImages = async () => {
 
     if (staleImages.length === 0) return process.exit(0);
 
-    await UtilService.deleteS3Objects(staleImages.map(image => image.key));
+    await UtilService.deleteStorageObjects(staleImages.map(image => image.key));
 
     await Image.destroy({
       where: {

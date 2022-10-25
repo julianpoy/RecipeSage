@@ -1,7 +1,6 @@
 var aws = require('aws-sdk');
 var multer = require('multer');
-var multerImager = require('multer-imager');
-var multerS3 = require('multer-s3');
+
 let fs = require('fs-extra');
 let sharp = require('sharp');
 let path = require('path');
@@ -12,20 +11,10 @@ const fetch = require('node-fetch');
 var FirebaseService = require('./firebase');
 var GripService = require('./grip');
 
-const s3Config = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  subregion: process.env.AWS_REGION,
-  region: process.env.AWS_REGION,
-};
+var storage = (process.env.AWS_ACCESS_KEY_ID) ? require('./s3-storage') : require('./firebase-storage') ;
 
-if (process.env.AWS_ENDPOINT) s3Config.endpoint = process.env.AWS_ENDPOINT; // Needed for minio
-if (process.env.AWS_S3_FORCE_PATH_STYLE !== null) s3Config.s3ForcePathStyle = process.env.AWS_S3_FORCE_PATH_STYLE; // Needed for minio
-if (process.env.AWS_S3_SIGNATURE_VERSION) s3Config.signatureVersion = process.env.AWS_S3_SIGNATURE_VERSION; // Needed for minio
 
-const s3 = new aws.S3(s3Config);
-
-exports.generateS3Location = key => process.env.AWS_S3_PUBLIC_PATH ? process.env.AWS_S3_PUBLIC_PATH + key : 'https://' + process.env.AWS_BUCKET + '.s3.' + process.env.AWS_REGION + '.amazonaws.com/' + key;
+exports.generateStorageLocation = storage.generateStorageLocation;
 
 exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
@@ -71,9 +60,6 @@ exports.fetchImage = async url => {
   return response.buffer();
 }
 
-const S3_DEFAULT_ACL = 'public-read';
-const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
-
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
 const HIGH_RES_IMG_CONVERSION_QUALITY = 55;
@@ -82,42 +68,9 @@ const LOW_RES_IMG_CONVERSION_WIDTH = 200;
 const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
 const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
-exports.sendBufferToS3 = buffer => {
-  let key = new Date().getTime().toString();
-  let bucket = process.env.AWS_BUCKET;
+exports.sendBufferToStorage = storage.sendBufferToStorage;
 
-  return s3.putObject({
-    Bucket: bucket,
-    Key: key,
-    ACL: S3_DEFAULT_ACL,
-    CacheControl: S3_DEFAULT_CACHECONTROL,
-    Body: buffer // buffer
-  }).promise().then(s3Response => {
-    return {
-      s3Response,
-      key,
-      acl: S3_DEFAULT_ACL,
-      bucket
-    }
-  })
-}
-
-exports.formatS3ImageResponse = (key, mimetype, size, etag) => {
-  return {
-    fieldname: "image",
-    originalname: 'recipe-sage-img.jpg',
-    mimetype,
-    size,
-    bucket: process.env.AWS_BUCKET,
-    key,
-    acl: S3_DEFAULT_ACL,
-    metadata: {
-      fieldName: "image"
-    },
-    location: exports.generateS3Location(key),
-    etag
-  }
-}
+exports.formatImageResponse = storage.formatImageResponse;
 
 exports.convertImage = (imageBuf, highResConversion) => {
   const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
@@ -151,26 +104,26 @@ exports.convertImage = (imageBuf, highResConversion) => {
   })
 }
 
-exports.sendURLToS3 = (url, highResConversion)  => {
+exports.sendURLToStorage = (url, highResConversion)  => {
   return exports.fetchImage(url).then((buffer) => {
     return exports.convertImage(buffer, highResConversion).then(convertedBuffer => {
-      return exports.sendBufferToS3(convertedBuffer).then(result => {
-        return exports.formatS3ImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.s3Response.ETag);
+      return exports.sendBufferToStorage(convertedBuffer).then(result => {
+        return exports.formatImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.ETag);
       });
     });
   })
 }
 
-exports.sendFileToS3 = (file, isBuffer, highResConversion) => {
+exports.sendFileToStorage = (file, isBuffer, highResConversion) => {
   let p = isBuffer ? Promise.resolve(file) : fs.readFile(file);
 
   return p.then(buf => {
     return exports.convertImage(buf, highResConversion);
   }).then(stream => {
-    return exports.sendBufferToS3(stream);
+    return exports.sendBufferToStorage(stream);
   }).then(result => {
     var stats = isBuffer ? { size: file.length } : fs.statSync(file);
-    return exports.formatS3ImageResponse(result.key, 'image/jpeg', stats["size"], result.s3Response.ETag)
+    return exports.formatImageResponse(result.key, 'image/jpeg', stats["size"], result.ETag)
   })
 }
 
@@ -181,50 +134,7 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
 
   await new Promise((resolve, reject) => {
     multer({
-      storage: multerImager({
-        dirname: '/',
-        bucket: process.env.AWS_BUCKET,
-        ...s3Config,
-        filename: (req, file, cb) => {  // [Optional]: define filename (default: random)
-          cb(null, Date.now())                // i.e. with a timestamp
-        },                                    //
-        gm: {                                 // [Optional]: define graphicsmagick options
-          width,                         // doc: http://aheckmann.github.io/gm/docs.html#resize
-          // height: 200,
-          options: '',
-          format: 'jpg',                      // Default: jpg - Unused by our processor
-          process: (gm, options, inputStream, outputStream) => {
-            let pipeline = sharp()
-            pipeline.rotate() // Rotates based on EXIF data
-              .resize(width, height, {
-                fit: highResConversion ? 'inside' : 'cover',
-              })
-              .jpeg({
-                quality,
-                // chromaSubsampling: '4:4:4' // Enable this option to prevent color loss at low quality - increases image size
-              })
-              .on('error', function(e) {
-                console.error('Sharp Error: ' + e);
-                reject(e);
-              })
-              .pipe(outputStream)
-              .on('error', function(e) {
-                console.error('Sharp Error: ' + e);
-                reject(e);
-              });
-
-            inputStream.pipe(pipeline);
-          }
-        },
-        s3 : {                                // [Optional]: define s3 options
-          ACL: S3_DEFAULT_ACL,
-          CacheControl: S3_DEFAULT_CACHECONTROL,
-          Metadata: {
-            'acl': S3_DEFAULT_ACL,
-            'cache-control': S3_DEFAULT_CACHECONTROL
-          }
-        }
-      }),
+      storage: storage.multerStorage(width,height,quality,highResConversion),
       limits: {
         fileSize: 8 * 1024 * 1024 // 8MB
       }
@@ -238,31 +148,9 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
   })
 };
 
-exports.deleteS3Object = key => {
-  return new Promise((resolve, reject) => {
-    s3.deleteObject({
-      Bucket: process.env.AWS_BUCKET,
-      Key: key
-    }, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
-    });
-  });
-}
+exports.deleteStorageObject = storage.deleteStorageObject;
 
-exports.deleteS3Objects = keys => {
-  return new Promise((resolve, reject) => {
-    s3.deleteObjects({
-      Bucket: process.env.AWS_BUCKET,
-      Delete: {
-        Objects: keys.map(key => ({ Key: key }))
-      }
-    }, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
-    });
-  });
-}
+exports.deleteStorageObjects = storage.deleteStorageObjects;
 
 exports.dispatchImportNotification = (user, status, reason) => {
   var event;

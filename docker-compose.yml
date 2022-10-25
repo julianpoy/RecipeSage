@@ -48,6 +48,7 @@ services:
       - AWS_SECRET_ACCESS_KEY
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
+      - FIRESTORE_BUCKET=
       - AWS_PUBLIC_ASSET_LOCATION=https://chefbook-dev.s3.us-west-2.amazonaws.com/
       - NODE_ENV=development
       - VERBOSE=false

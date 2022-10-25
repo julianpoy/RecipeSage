@@ -237,8 +237,8 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
           .filter((_, idx) => idx < MAX_IMAGES)
           .map(image => limit(() =>
             imagesAsBuffer ?
-              UtilService.sendFileToS3(image, true, highResConversion) :
-              UtilService.sendURLToS3(image, highResConversion)
+              UtilService.sendFileToStorage(image, true, highResConversion) :
+              UtilService.sendURLToStorage(image, highResConversion)
           ))
       );
     }));
