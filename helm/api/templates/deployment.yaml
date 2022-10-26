@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-api
+  labels:
+    app: rs-api
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: rs-api
+  template:
+    metadata:
+      labels:
+        app: rs-api
+    spec:
+      containers:
+        - name: rs-api
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:api-{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          command: ["node"]
+          args: ["src/bin/www.js"]
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+          envFrom:
+          - secretRef:
+              name: rs-api-env
+          env:
+          - name: BROWSERLESS_HOST
+            value: "rs-browserless"
+          - name: BROWSERLESS_PORT
+            value: "3000"
+          - name: INGREDIENT_INSTRUCTION_CLASSIFIER_URL
+            value: http://rs-ingredient-instruction-classifier:3000/
+          volumeMounts:
+          - name: firebase-credentials
+            mountPath: /app/Backend/src/config/firebase-credentials.json
+            subPath: firebase-credentials.json
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: firebase-credentials
+          configMap:
+            name: firebase-credentials
+      terminationGracePeriodSeconds: 900
+

@@ -1,0 +1,35 @@
+{{- if .Values.runMigrations }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rs-api-migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: rs-api-migrate
+        image: "{{ .Values.image.repository }}:api-{{ .Values.image.tag | default .Chart.AppVersion }}"
+        command: ["npx"]
+        args: ["sequelize", "db:migrate"]
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 1G
+        envFrom:
+        - secretRef:
+            name: rs-api-env
+        volumeMounts:
+        - name: firebase-credentials
+          mountPath: /app/Backend/src/config/firebase-credentials.json
+          subPath: firebase-credentials.json
+      volumes:
+        - name: firebase-credentials
+          configMap:
+            name: firebase-credentials
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: myregistrykey
+{{- end }}

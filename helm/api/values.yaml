@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: julianpoy/recipesage
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources:
+ limits:
+   cpu: 1
+   memory: 512Mi
+ requests:
+   cpu: 150m
+   memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 60
+

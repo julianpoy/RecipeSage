@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rs-index-recipes
+spec:
+  schedule: "0 6 * * 2"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: rs-index-recipes
+            image: "{{ .Values.image.repository }}:api-{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["node"]
+            args: ["src/index.app.js"]
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                cpu: 100m
+                memory: 1G
+            envFrom:
+            - secretRef:
+                name: rs-api-env
+            volumeMounts:
+            - name: firebase-credentials
+              mountPath: /app/Backend/src/config/firebase-credentials.json
+              subPath: firebase-credentials.json
+          volumes:
+            - name: firebase-credentials
+              configMap:
+                name: firebase-credentials
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: myregistrykey
+
