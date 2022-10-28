@@ -1,24 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const joi = require('joi');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Message = require('../models').Message;
-var Label = require('../models').Label;
-var MealPlanItem = require('../models').MealPlanItem;
-var ShoppingList = require('../models').ShoppingList;
-var ShoppingListItem = require('../models').ShoppingListItem;
+const Op = require("sequelize").Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Message = require('../models').Message;
+const Label = require('../models').Label;
+const MealPlanItem = require('../models').MealPlanItem;
+const ShoppingList = require('../models').ShoppingList;
+const ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
-var GripService = require('../services/grip');
-var SharedUtils = require('../../../SharedUtils/src');
-var ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
+const GripService = require('../services/grip');
+const SharedUtils = require('../../../SharedUtils/src');
+const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
+const {joiValidator} = require('../middleware/joiValidator');
 
 router.post(
   '/',
@@ -151,7 +153,7 @@ router.post(
           return ShoppingListItem.bulkCreate(req.body.items.map((item) => {
             return {
               title: item.title,
-              completed: false,
+              completed: item.completed || false,
               userId: res.locals.session.userId,
               shoppingListId: shoppingList.id,
               recipeId: item.recipeId || null,
@@ -391,5 +393,80 @@ router.get(
 //     }
 //   }).catch(next);
 // });
+
+// Update items from a shopping list by a list of item ids
+router.put(
+  '/:shoppingListId/items',
+  joiValidator(joi.object({
+    params: joi.object({
+      shoppingListId: joi.string().required().uuid(),
+    }),
+    query: joi.object({
+      itemIds: joi.string().required()
+    }),
+    body: joi.object({
+      title: joi.string().min(1),
+      completed: joi.boolean(),
+    }),
+  })),
+  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateUser,
+  async (req, res, next) => {
+
+    try {
+      const shoppingList = await ShoppingList.findOne({
+        where: {
+          id: req.params.shoppingListId,
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
+        include: [
+          {
+            model: User,
+            as: 'collaborators',
+            attributes: ['id']
+          }
+        ]
+      });
+
+      if (!shoppingList) res.status(404).send('Shoppinglist does not exist or you do not have access');
+
+      await ShoppingListItem.update({
+        ...req.body
+      }, {
+        where: {
+          id: {
+            [Op.in]: req.query.itemIds.split(','),
+          }
+        }
+      });
+
+      const reference = Date.now();
+
+      const broadcast = {
+        shoppingListId: shoppingList.id,
+        updatedBy: {
+          id: res.locals.user.id,
+          name: res.locals.user.name,
+          email: res.locals.user.email
+        },
+        reference
+      };
+
+      GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', broadcast);
+      for (var i = 0; i < shoppingList.collaborators.length; i++) {
+        GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', broadcast);
+      }
+
+      res.status(200).json({
+        reference
+      });
+    } catch(e) {
+      next(e);
+    }
+  }
+);
 
 module.exports = router;

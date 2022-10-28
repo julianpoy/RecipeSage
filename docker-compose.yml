@@ -44,10 +44,9 @@ services:
       dockerfile: ./Backend/Dockerfile
     command: npx nodemon --watch ../SharedUtils --watch . src/bin/www.js
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
+      - FIRESTORE_BUCKET=
       - AWS_PUBLIC_ASSET_LOCATION=https://chefbook-dev.s3.us-west-2.amazonaws.com/
       - NODE_ENV=development
       - VERBOSE=false
@@ -68,8 +67,6 @@ services:
       - ELASTIC_IDX_PREFIX=rs_dev_
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
-      - STRIPE_SK
-      - STRIPE_WEBHOOK_SECRET
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
@@ -83,10 +80,11 @@ services:
       - ./Backend/package.json:/app/Backend/package.json
       - ./Backend/package-lock.json:/app/Backend/package-lock.json
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_dev
+      - xpack.security.enabled=false
     ports:
       - 9200:9200
   pushpin:
@@ -105,7 +103,7 @@ services:
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
   browserless:
-    image: browserless/chrome:1.43.0-chrome-stable
+    image: browserless/chrome:1.53.0-chrome-stable
     environment:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10

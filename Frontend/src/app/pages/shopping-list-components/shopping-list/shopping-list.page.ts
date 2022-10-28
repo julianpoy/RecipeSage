@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import { NavController, ToastController, ModalController, PopoverController, AlertController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import { LoadingService } from '@/services/loading.service';
@@ -26,6 +26,7 @@ export class ShoppingListPage {
   list: any = { items: [], collaborators: [] };
 
   items: any[] = [];
+  completedItems: any[] = [];
   groupTitles: string[] = [];
   categoryTitles: string[] = [];
   categoryTitleCollapsed = {};
@@ -53,6 +54,7 @@ export class ShoppingListPage {
     public preferencesService: PreferencesService,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
+    public alertCtrl: AlertController,
     public popoverCtrl: PopoverController,
     public route: ActivatedRoute) {
 
@@ -60,6 +62,7 @@ export class ShoppingListPage {
 
     this.websocketService.register('shoppingList:itemsUpdated', payload => {
       if (payload.shoppingListId === this.shoppingListId && payload.reference !== this.reference) {
+        this.reference = payload.reference;
         this.loadList();
       }
     }, this);
@@ -90,7 +93,8 @@ export class ShoppingListPage {
   processList(list?) {
     if (list) this.list = list;
 
-    const items = this.list.items;
+    const items = this.list.items.filter((item) => !item.completed);
+    const completedItems = this.list.items.filter((item) => item.completed);
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -114,7 +118,7 @@ export class ShoppingListPage {
       itemsByGroupTitle,
       itemsByCategoryTitle,
       groupsByCategoryTitle,
-    } = getShoppingListItemGroupings(items, this.preferencesService[ShoppingListPreferenceKey.SortBy]);
+    } = getShoppingListItemGroupings(items, this.preferences[ShoppingListPreferenceKey.SortBy]);
 
     this.items = sortedItems;
     this.groupTitles = groupTitles;
@@ -122,6 +126,12 @@ export class ShoppingListPage {
     this.itemsByGroupTitle = itemsByGroupTitle;
     this.itemsByCategoryTitle = itemsByCategoryTitle;
     this.groupsByCategoryTitle = groupsByCategoryTitle;
+
+    const {
+      items: sortedCompletedItems,
+    } = getShoppingListItemGroupings(completedItems, this.preferences[ShoppingListPreferenceKey.SortBy]);
+
+    this.completedItems = sortedCompletedItems;
   }
 
   async loadList() {
@@ -131,8 +141,60 @@ export class ShoppingListPage {
     this.processList(response.data);
   }
 
+  async completeItems(items, completed: boolean) {
+    if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
+      return this.removeItems(items);
+    }
+
+    const loading = this.loadingService.start();
+
+    const itemIds = items.map(el => {
+      return el.id;
+    }).join(',');
+
+    const response = await this.shoppingListService.updateItems(this.list.id, {
+      itemIds
+    }, {
+      completed,
+    });
+
+    if (response.success && this.reference !== response.data.reference) {
+      this.reference = response.data.reference;
+      await this.loadList();
+    }
+
+    loading.dismiss();
+  }
+
   removeRecipe(recipeId) {
     this.removeItems(this.itemsByRecipeId[recipeId]);
+  }
+
+  async removeItemsConfirm(items) {
+    const header = await this.translate.get('pages.shoppingList.removeMultiple.header').toPromise();
+    const message = await this.translate.get('pages.shoppingList.removeMultiple.message').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+          role: 'cancel',
+          handler: () => { }
+        },
+        {
+          text: del,
+          cssClass: 'alertDanger',
+          handler: () => {
+            this.removeItems(items);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   async removeItems(items) {
@@ -162,6 +224,7 @@ export class ShoppingListPage {
         handler: () => {
           this._addItems(items.map(el => ({
             title: el.title,
+            completed: el.completed,
             id: el.shoppingListId,
             mealPlanItemId: (el.mealPlanItem || {}).id || null,
             recipeId: (el.recipe || {}).id || null

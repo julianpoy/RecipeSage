@@ -23,7 +23,7 @@
   "====== Pages.Welcome ======": "",
 
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
-  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of <a href='https://recipesage.com'>RecipeSage</a>, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
+  "pages.welcome.selfhostSubtitle": "An unofficial selfhosted version of RecipeSage.com, a free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
   "pages.welcome.title": "All of your recipes in one place",
   "pages.welcome.subtitle": "A free recipe keeper, meal planner, and shopping list organizer for Web, IOS, and Android",
   "pages.welcome.registerButton": "Create an account",
@@ -65,7 +65,7 @@
   "pages.auth.title.login": "Log In",
   "pages.auth.title.register": "Create an Account",
 
-  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with <a href='https://recipesage.com'>RecipeSage.com</a> or any of the accounts located on the main site.",
+  "pages.auth.selfhostWarning": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with RecipeSage.com or any of the accounts located on the main site.",
 
   "pages.auth.welcome.login": "Welcome back!",
   "pages.auth.welcome.login.sub": "Please login with your account details below.",
@@ -872,6 +872,7 @@
   "pages.settings.theme.dark": "Dark",
   "pages.settings.theme.black": "Black (OLED)",
   "pages.settings.language": "Language",
+  "pages.settings.language.contribute": "Contact me to contribute a language",
   "pages.settings.language.default": "Browser Default",
   "pages.settings.reset": "Reset All Preferences",
 
@@ -938,6 +939,10 @@
   "pages.shoppingList.nullState.2": "Use the menu in the upper right hand corner to enable or disable automatic grouping.",
   "pages.shoppingList.nullState.add": "Add the first item",
   "pages.shoppingList.recipes": "Recipes in this list",
+  "pages.shoppingList.completed": "Completed Items",
+
+  "pages.shoppingList.removeMultiple.header": "Confirm Removal",
+  "pages.shoppingList.removeMultiple.message": "This will permanently delete these items from this list.",
 
   "pages.shoppingList.removed": "Removed {{itemCount}} item(s)",
   "pages.shoppingList.removed.undo": "Undo",
@@ -952,10 +957,11 @@
   "pages.shoppingListPopover.sortBy.createdAsc": "Created (oldest first)",
 
   "pages.shoppingListPopover.groupCategories": "Group Items by Category",
-  "pages.shoppingListPopover.groupSimilar.": "Group Similar Items",
+  "pages.shoppingListPopover.groupSimilar": "Group Similar Items",
   "pages.shoppingListPopover.showTitle": "Show Recipe Title",
   "pages.shoppingListPopover.showAddedBy": "Show Added By",
   "pages.shoppingListPopover.showAddedOn": "Show Added On",
+  "pages.shoppingListPopover.preferDelete": "Delete Upon Completion",
   "pages.shoppingListPopover.print": "Print",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
@@ -1052,8 +1058,6 @@
   "====== Pages.People ======": "",
 
   "pages.people.title": "People",
-  "pages.people.selfhost.1": "Note: This is a selfhosted version of RecipeSage and is therefore not associated with",
-  "pages.people.selfhost.2": "or any of the accounts located on the main site.",
   "pages.people.nullState.1": "You haven't set up a profile.",
   "pages.people.nullState.2": "Creating a profile allows you to share collections of recipes with friends and the public.",
   "pages.people.create": "Create",
@@ -1216,7 +1220,6 @@
   "====== Errors ======": "",
 
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unauthorized": "You are not authorized for this action! If you believe this is in error, please log out and log in using the side menu.",
   "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
 
   "====== Generic ======": "",
@@ -1229,5 +1232,5 @@
   "generic.okay": "Okay",
 
 
-  "trailing.comma.placeholder": ""
+  "====== Trailing Comma Placeholder ======": ""
 }

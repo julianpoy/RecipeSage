@@ -50,7 +50,7 @@ const legacyImageHandler = async (req, res, next) => {
     if (req.body.imageURL) {
       let uploadedFile;
       try {
-        uploadedFile = await UtilService.sendURLToS3(req.body.imageURL, highResConversion);
+        uploadedFile = await UtilService.sendURLToStorage(req.body.imageURL, highResConversion);
       } catch (e) {
         e.status = 415;
         throw e;
@@ -485,7 +485,7 @@ router.get(
       }
 
       ElasticService.searchRecipes(userId, req.query.query).then(results => {
-        let searchHits = results.body.hits.hits;
+        let searchHits = results.hits.hits;
 
         let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
           acc[hit._id] = hit;

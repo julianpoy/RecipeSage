@@ -100,6 +100,9 @@ jobs:
       - run: # lint frontend
           name: lint-frontend
           command: cd Frontend && npm run lint
+      - run: # ngx-translate-lint frontend
+          name: ngx-translate-lint-frontend
+          command: cd Frontend && npm run ngx-translate-lint
       - run: # build frontend
           name: build-frontend
           command: cd Frontend && npm run dist

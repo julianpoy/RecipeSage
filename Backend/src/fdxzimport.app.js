@@ -216,7 +216,7 @@ async function main() {
 
             return Promise.all(lcbRecipe.imageRefs.map(imageRef => {
               if (imageRef._text) {
-                return UtilService.sendFileToS3(Buffer.from(imageRef._text, 'base64'), true).then(image => {
+                return UtilService.sendFileToStorage(Buffer.from(imageRef._text, 'base64'), true).then(image => {
                   lcbRecipe.images.push(image);
                 }).catch(() => { })
               }
@@ -228,7 +228,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return UtilService.sendFileToS3(possibleImageFiles[0]).then((image) => {
+              return UtilService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images.push(image);
               }).catch(() => { })
             }));
@@ -293,12 +293,6 @@ async function main() {
         transaction: t
       });
     }))
-
-    Sentry.withScope(scope => {
-      scope.setExtra('runConfig', runConfig);
-      scope.setExtra('user', runConfig.userId);
-      Sentry.captureMessage('FDX(Z) Complete');
-    });
 
     exit(0);
   } catch (e) {

@@ -55,17 +55,24 @@
     </ion-label>
   </ion-item>
 
+  <ion-item lines="full">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.PreferDelete]" (ngModelChange)="savePreferences()" slot="start"></ion-toggle>
+    <ion-label>
+      {{ 'pages.shoppingListPopover.preferDelete' | translate }}
+    </ion-label>
+  </ion-item>
+
   <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
     <ion-icon name='print' slot="start"></ion-icon>
     {{ 'pages.shoppingListPopover.print' | translate }}
   </ion-button>
 
-  <ion-button (click)="removeAllItems()" expand="block" size="small" class="ion-margin">
+  <ion-button (click)="removeAllItems()" color="danger" expand="block" size="small" class="ion-margin">
     <ion-icon name='remove-circle' slot="start"></ion-icon>
     {{ 'pages.shoppingListPopover.removeAll' | translate }}
   </ion-button>
 
-  <ion-button (click)="deleteList()" expand="block" size="small" class="ion-margin">
+  <ion-button (click)="deleteList()" color="danger" expand="block" size="small" class="ion-margin">
     <ion-icon name='trash' slot="start"></ion-icon>
     {{ 'pages.shoppingListPopover.delete' | translate }}
   </ion-button>

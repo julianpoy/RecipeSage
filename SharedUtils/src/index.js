@@ -202,31 +202,34 @@ function parseInstructions(instructions) {
   var headerRegexp = /^\[.*\]$/;
 
   let stepCount = 1;
-  return instructions.split(/\r?\n/).map(instruction => {
-    let line = instruction.trim();
-    var headerMatches = line.match(headerRegexp);
+  return instructions
+    .split(/\r?\n/)
+    .filter(instruction => instruction.trim().length)
+    .map(instruction => {
+      let line = instruction.trim();
+      var headerMatches = line.match(headerRegexp);
 
-    if (headerMatches && headerMatches.length > 0) {
-      var header = headerMatches[0];
-      var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+      if (headerMatches && headerMatches.length > 0) {
+        var header = headerMatches[0];
+        var headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
-      stepCount = 1;
+        stepCount = 1;
 
-      return {
-        content: headerContent,
-        isHeader: true,
-        count: 0,
-        complete: false
+        return {
+          content: headerContent,
+          isHeader: true,
+          count: 0,
+          complete: false
+        }
+      } else {
+        return {
+          content: line,
+          isHeader: false,
+          count: stepCount++,
+          complete: false
+        }
       }
-    } else {
-      return {
-        content: line,
-        isHeader: false,
-        count: stepCount++,
-        complete: false
-      }
-    }
-  });
+    });
 }
 
 function parseNotes(notes) {

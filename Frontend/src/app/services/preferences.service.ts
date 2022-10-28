@@ -4,6 +4,7 @@ const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
 
 export enum SupportedLanguages {
   EN_US = 'en-us',
+  IT_IT = 'it-it',
 };
 
 export enum GlobalPreferenceKey {
@@ -42,6 +43,7 @@ export enum ShoppingListPreferenceKey {
   ShowAddedBy = 'ShoppingList.showAddedBy',
   ShowAddedOn = 'ShoppingList.showAddedOn',
   ShowRecipeTitle = 'ShoppingList.showRecipeTitle',
+  PreferDelete = 'ShoppingList.preferDelete',
   GroupSimilar = 'ShoppingList.groupSimilar',
   GroupCategories = 'ShoppingList.groupCategories'
 }
@@ -72,6 +74,7 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.ShowAddedBy]: boolean;
   [ShoppingListPreferenceKey.ShowAddedOn]: boolean;
   [ShoppingListPreferenceKey.ShowRecipeTitle]: boolean;
+  [ShoppingListPreferenceKey.PreferDelete]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
   [ShoppingListPreferenceKey.GroupCategories]: boolean;
 }
@@ -108,6 +111,7 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
+    [ShoppingListPreferenceKey.PreferDelete]: false,
     [ShoppingListPreferenceKey.GroupSimilar]: true,
     [ShoppingListPreferenceKey.GroupCategories]: true
   };

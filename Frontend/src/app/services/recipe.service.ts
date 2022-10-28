@@ -145,8 +145,7 @@ export class RecipeService {
       errorHandlers
     );
 
-    this.events.publish('recipe:created');
-    this.events.publish('recipe:generalUpdate');
+    this.events.publish('recipe:update');
 
     return response;
   }
@@ -163,56 +162,76 @@ export class RecipeService {
     );
   }
 
-  update(payload: any, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<Recipe>(
+  async update(payload: any, errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes/${payload.id}`,
       'PUT',
       payload,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
-  deleteBulk(payload: {
+  async deleteBulk(payload: {
     recipeIds: string[],
   }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
+    const response = await this.httpService.requestWithWrapper<void>(
       `recipes/delete-bulk`,
       'POST',
       payload,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
-  delete(recipeId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
+  async delete(recipeId: string, errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<void>(
       `recipes/${recipeId}`,
       'DELETE',
       null,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
-  deleteAll(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
+  async deleteAll(errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<void>(
       `recipes/all`,
       'DELETE',
       null,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
-  reindex(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
+  async reindex(errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<void>(
       `recipes/reindex`,
       'POST',
       null,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
   clipFromUrl(params: {

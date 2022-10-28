@@ -192,6 +192,13 @@ export const RouteMap = {
   }
 };
 
+// This can be used for fallback when a non-localized language is requested
+// and we only have localized versions
+const defaultLocality = {
+  'en': 'en-us',
+  'it': 'it-it',
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -204,21 +211,25 @@ export class UtilService {
   ) {}
 
   getAppBrowserLang(): string {
+    const isSupported = (lang: string) => {
+      return Object.values(SupportedLanguages).some((el) => el === lang);
+    };
+
+    // Navigator language can be in the form 'en', or 'en-us' for any given language
     const navLang = window.navigator.language.toLowerCase();
-    if (Object.values(SupportedLanguages).some((el) => el === navLang)) return navLang;
+    const navLangNoRegion = navLang.split('-')[0];
+    const defaultLocalized = defaultLocality[navLangNoRegion];
 
-    try {
-      const locale = new (Intl as any).Locale([navLang]).maximize();
+    // We always prefer to return the exact language the navigator requested if we have it
+    if (isSupported(navLang)) return navLang;
 
-      const languageCode = `${locale.language}-${locale.region}`.toLowerCase();
+    // Look for a language with no locality ('en')
+    if (isSupported(navLangNoRegion)) return navLangNoRegion;
 
-      if (!Object.values(SupportedLanguages).some((el) => el === languageCode)) throw new Error(`Navigator language not supported: ${languageCode}`);
+    // Look for a language with a locality we have a 'default locality' mapping for as a last resort
+    if (isSupported(defaultLocalized)) return defaultLocalized;
 
-      return languageCode;
-    } catch(e) {
-      console.error(e);
-      return SupportedLanguages.EN_US;
-    }
+    return SupportedLanguages.EN_US;
   }
 
   getBase(): string {
