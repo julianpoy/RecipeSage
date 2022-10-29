@@ -17,6 +17,7 @@ var Recipe_Image = require('./models').Recipe_Image;
 var Image = require('./models').Image;
 
 var UtilService = require('./services/util');
+const StorageService = require('./services/storage');
 
 let runConfig = {
   path: process.argv[2],
@@ -216,7 +217,7 @@ async function main() {
 
             return Promise.all(lcbRecipe.imageRefs.map(imageRef => {
               if (imageRef._text) {
-                return UtilService.sendFileToStorage(Buffer.from(imageRef._text, 'base64'), true).then(image => {
+                return StorageService.sendFileToStorage(Buffer.from(imageRef._text, 'base64'), true).then(image => {
                   lcbRecipe.images.push(image);
                 }).catch(() => { })
               }
@@ -228,7 +229,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return UtilService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
+              return StorageService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images.push(image);
               }).catch(() => { })
             }));

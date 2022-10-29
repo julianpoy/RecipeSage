@@ -8,7 +8,7 @@ var Image = require('../models').Image;
 
 // Service
 var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const StorageService = require('../services/storage');
 let SubscriptionsService = require('../services/subscriptions');
 
 router.post('/',
@@ -24,7 +24,7 @@ router.post('/',
     let file;
     if (req.body.imageURL) {
       try {
-        file = await UtilService.sendURLToStorage(req.body.imageURL, encodeInHighRes);
+        file = await StorageService.sendURLToStorage(req.body.imageURL, encodeInHighRes);
       } catch (e) {
         console.log(e);
         e.status = 415;
@@ -32,7 +32,7 @@ router.post('/',
       }
     } else {
       try {
-        await UtilService.upload('image', req, res, encodeInHighRes);
+        await StorageService.upload('image', req, res, encodeInHighRes);
         file = req.file;
       } catch (e) {
         e.status = 415;
@@ -45,7 +45,7 @@ router.post('/',
     }
     const image = await Image.create({
       userId: res.locals.session.userId,
-      location: UtilService.generateStorageLocation(file.key),
+      location: StorageService.generateStorageLocation(file.key),
       key: file.key,
       json: file
     });

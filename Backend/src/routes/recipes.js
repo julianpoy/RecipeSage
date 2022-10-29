@@ -19,6 +19,7 @@ var ProfileItem = require('../models').ProfileItem;
 // Service
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+const StorageService = require('../services/storage');
 let ElasticService = require('../services/elastic');
 let SubscriptionsService = require('../services/subscriptions');
 const SharedUtils = require('../../../SharedUtils/src');
@@ -32,7 +33,7 @@ const legacyImageHandler = async (req, res, next) => {
       SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
     );
 
-    await UtilService.upload('image', req, res);
+    await StorageService.upload('image', req, res);
     if (req.file) {
       const uploadedFile = req.file;
       const newImage = await Image.create({
@@ -50,7 +51,7 @@ const legacyImageHandler = async (req, res, next) => {
     if (req.body.imageURL) {
       let uploadedFile;
       try {
-        uploadedFile = await UtilService.sendURLToStorage(req.body.imageURL, highResConversion);
+        uploadedFile = await StorageService.sendURLToStorage(req.body.imageURL, highResConversion);
       } catch (e) {
         e.status = 415;
         throw e;
