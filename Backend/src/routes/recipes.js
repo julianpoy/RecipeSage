@@ -486,7 +486,7 @@ router.get(
       }
 
       ElasticService.searchRecipes(userId, req.query.query).then(results => {
-        let searchHits = results.body.hits.hits;
+        let searchHits = results.hits.hits;
 
         let searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
           acc[hit._id] = hit;

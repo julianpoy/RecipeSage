@@ -151,11 +151,6 @@ async function main() {
         scope.setExtra('paths', potentialDbPaths);
         Sentry.captureMessage('More than one lcbdb path');
       });
-    } else {
-      Sentry.withScope(scope => {
-        scope.setExtra('path', dbPath);
-        Sentry.captureMessage('LCB DB Path');
-      });
     }
 
     metrics.tExtracted = performance.now();
@@ -488,13 +483,6 @@ async function main() {
       tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
       tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
     }
-
-    Sentry.withScope(scope => {
-      scope.setExtra('runConfig', runConfig);
-      scope.setExtra('metrics', metrics);
-      scope.setExtra('user', runConfig.userId);
-      Sentry.captureMessage('FDX(Z) Complete');
-    });
 
     exit(0);
   } catch (e) {

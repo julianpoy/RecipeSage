@@ -65,7 +65,7 @@ export class ContributePage {
     const amount = this.amount ? this.amount : parseFloat(this.customAmount);
     const isRecurring = this.frequency === 'monthly';
 
-    const message = await this.translate.get('pages.mealPlan.modal.emptyDays.header', {amount:isRecurring ? 1 : 5}).toPromise();
+    const message = await this.translate.get('pages.contribute.minimum', {amount:isRecurring ? 1 : 5}).toPromise();
 
     const response = await this.paymentsService.generateCustomSession({
       amount: amount * 100,

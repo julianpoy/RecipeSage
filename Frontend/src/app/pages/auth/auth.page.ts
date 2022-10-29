@@ -77,14 +77,14 @@ export class AuthPage {
   }
 
   async auth() {
-    const invalidEmail = await this.translate.get('pages.auth.errors.invalidEmail').toPromise();
-    const noName = await this.translate.get('pages.auth.errors.noName').toPromise();
-    const noPassword = await this.translate.get('pages.auth.errors.noPassword').toPromise();
-    const noEmail = await this.translate.get('pages.auth.errors.noEmail').toPromise();
-    const passwordLength = await this.translate.get('pages.auth.errors.passwordLength').toPromise();
-    const passwordMatch = await this.translate.get('pages.auth.errors.passwordMatch').toPromise();
-    const incorrectLogin = await this.translate.get('pages.auth.errors.incorrectLogin').toPromise();
-    const emailTaken = await this.translate.get('pages.auth.errors.emailTaken').toPromise();
+    const invalidEmail = await this.translate.get('pages.auth.error.invalidEmail').toPromise();
+    const noName = await this.translate.get('pages.auth.error.noName').toPromise();
+    const noPassword = await this.translate.get('pages.auth.error.noPassword').toPromise();
+    const noEmail = await this.translate.get('pages.auth.error.noEmail').toPromise();
+    const passwordLength = await this.translate.get('pages.auth.error.passwordLength').toPromise();
+    const passwordMatch = await this.translate.get('pages.auth.error.passwordMatch').toPromise();
+    const incorrectLogin = await this.translate.get('pages.auth.error.incorrectLogin').toPromise();
+    const emailTaken = await this.translate.get('pages.auth.error.emailTaken').toPromise();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
@@ -147,7 +147,7 @@ export class AuthPage {
   async forgotPassword() {
     this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
-      const invalidEmail = await this.translate.get('pages.auth.errors.invalidEmail').toPromise();
+      const invalidEmail = await this.translate.get('pages.auth.error.invalidEmail').toPromise();
       this.presentToast(invalidEmail);
       return;
     }
