@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: rs-index-recipes
+  name: {{ include "api.name" . }}-index-recipes
 spec:
   schedule: "0 6 * * 2"
   jobTemplate:

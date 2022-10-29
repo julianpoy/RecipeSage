@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-pushpin
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-pushpin
+  ports:
+    - name: ws-connector
+      protocol: TCP
+      port: 7999
+      targetPort: 7999
+    - name: broadcast-connector
+      protocol: TCP
+      port: 5561
+      targetPort: 5561

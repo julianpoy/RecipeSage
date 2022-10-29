@@ -65,7 +65,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: rs-api
+            name: rs-api-beta
             port:
               number: 3000
   - host: grip.recipesage.com

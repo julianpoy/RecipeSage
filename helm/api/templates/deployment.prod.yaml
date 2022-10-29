@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rs-api
+  name: {{ include "api.name" . }}
   labels:
-    app: rs-api
+    {{- include "api.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: rs-api
+      {{- include "api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: rs-api
+        {{- include "api.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: rs-api
+        - name: {{ include "api.name" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:api-{{ .Values.image.tag | default .Chart.AppVersion }}"

@@ -1,9 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "api.fullname" . }}
-  labels:
-    {{- include "api.labels" . | nindent 4 }}
+  name: {{ include "api.name" . }}
 spec:
   type: ClusterIP
   ports:
@@ -12,4 +10,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "api.selectorLabels" . | nindent 4 }}
+    name: {{ include "api.name" . }}

@@ -1,3 +1,5 @@
+runMigrations: false
+
 replicaCount: 1
 
 image:

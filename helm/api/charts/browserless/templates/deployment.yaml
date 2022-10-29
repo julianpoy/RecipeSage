@@ -46,35 +46,3 @@ spec:
           limits:
             cpu: 1.2
             memory: 700Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rs-browserless
-spec:
-  type: ClusterIP
-  selector:
-    app: rs-browserless
-  ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: rs-browserless
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: rs-browserless
-  minReplicas: 1
-  maxReplicas: 2
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageValue: 400m
