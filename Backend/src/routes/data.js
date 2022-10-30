@@ -11,6 +11,7 @@ const path = require('path');
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
+const StorageService = require('../services/storage');
 const JSONLDService = require('../services/json-ld');
 
 const {
@@ -237,8 +238,8 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
           .filter((_, idx) => idx < MAX_IMAGES)
           .map(image => limit(() =>
             imagesAsBuffer ?
-              UtilService.sendFileToS3(image, true, highResConversion) :
-              UtilService.sendURLToS3(image, highResConversion)
+              StorageService.sendFileToStorage(image, true, highResConversion) :
+              StorageService.sendURLToStorage(image, highResConversion)
           ))
       );
     }));
