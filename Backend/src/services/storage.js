@@ -2,11 +2,14 @@
 var multer = require('multer');
 let fs = require('fs-extra');
 const UtilService = require('./util');
-const s3_storage = require('./s3-storage');
-const firebase_storage = require('./firebase-storage');
+const s3Storage = require('./s3-storage');
+const firebaseStorage = require('./firebase-storage');
 
-const storage = getStorage();
-
+const storageMethods = {
+  'FIREBASE': firebaseStorage,
+  'S3': s3Storage,
+};
+const storage = storageMethods[process.env.STORAGE_TYPE || 'S3'];
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -17,14 +20,10 @@ const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
 const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 exports.generateStorageLocation = storage.generateStorageLocation;
-
-
-
 exports.sendBufferToStorage = storage.sendBufferToStorage;
-
 exports.formatImageResponse = storage.formatImageResponse;
-
-
+exports.deleteStorageObject = storage.deleteStorageObject;
+exports.deleteStorageObjects = storage.deleteStorageObjects;
 
 exports.sendURLToStorage = (url, highResConversion) => {
   return UtilService.fetchImage(url).then((buffer) => {
@@ -70,20 +69,3 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
   })
 };
 
-exports.deleteStorageObject = storage.deleteStorageObject;
-
-exports.deleteStorageObjects = storage.deleteStorageObjects;
-
-
-function getStorage() {
-  const storageKey = process.env.STORAGE_TYPE;
-  switch (storageKey) {
-    case "FIREBASE":
-      return firebase_storage;
-    case "S3":
-      return s3_storage
-
-    default:
-      return s3_storage;
-  }
-}

@@ -3,8 +3,6 @@ var multerImager = require('multer-imager');
 var multerS3 = require('multer-s3');
 let sharp = require('sharp');
 
-
-
 const s3Config = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,

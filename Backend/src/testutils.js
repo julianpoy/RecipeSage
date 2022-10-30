@@ -1,4 +1,4 @@
-let {
+const {
   expect
 } = require('chai');
 
