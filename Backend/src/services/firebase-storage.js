@@ -1,19 +1,18 @@
+const sharp = require('sharp');
 
-var sharp = require('sharp');
-
-var admin = require("firebase-admin");
-
-
+const { admin } = require('./firebase-admin');
 
 const BUCKET = process.env.FIRESTORE_BUCKET || "sage-recipe-images"
-const PUBLIC_PATH = process.env.FIRESTORE_PUBLIC_PATH
 const S3_DEFAULT_ACL = 'public-read';
-const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
 
-const bucket = admin.storage().bucket(BUCKET);
+let bucket;
+try {
+    bucket = admin.storage().bucket(BUCKET);
+} catch(e) {
+    console.error(e);
+}
 
 exports.generateStorageLocation = key => `https://www.googleapis.com/download/storage/v1/b/${BUCKET}/o/${key}?alt=media`
-
 
 exports.sendBufferToStorage = buffer => {
     let key = new Date().getTime().toString();
@@ -25,10 +24,8 @@ exports.sendBufferToStorage = buffer => {
                 acl: S3_DEFAULT_ACL,
                 bucket
             }
-        })
-
-
-    })
+        });
+    });
 }
 
 exports.formatImageResponse = (key, mimetype, size, etag) => {
@@ -106,11 +103,6 @@ exports.multerStorage = (width, height, quality, highResConversion) =>
         }, width: width, height: 200
     })
 
-function getDestination(req, file, cb) {
-    cb(null, '/dev/null')
-}
-
-
 function CustomMulterFirebaseStorage(opts = { destination, bucket, firebaseStorage, path, public, fileName, process, width, height }) {
     this.path = opts.path;
     this.firebaseStorage = opts.firebaseStorage;
@@ -123,7 +115,7 @@ function CustomMulterFirebaseStorage(opts = { destination, bucket, firebaseStora
 
 }
 CustomMulterFirebaseStorage.prototype._handleFile = function _handleFile(req, file, cb) {
-    
+
     var self = this;
     const fileKey = `${self.path}${self.fileName}.jpeg`
     const outStream = self.firebaseStorage.file(fileKey).createWriteStream({metadata: {
@@ -141,7 +133,4 @@ CustomMulterFirebaseStorage.prototype._handleFile = function _handleFile(req, fi
             location: exports.generateStorageLocation(fileKey)
         });
     });
-
-
-
 }
