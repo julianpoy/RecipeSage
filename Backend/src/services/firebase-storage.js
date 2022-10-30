@@ -9,7 +9,9 @@ let bucket;
 try {
     bucket = admin.storage().bucket(BUCKET);
 } catch(e) {
-    console.error(e);
+    if (process.env.NODE_ENV !== 'test') {
+        console.error(e);
+    }
 }
 
 exports.generateStorageLocation = key => `https://www.googleapis.com/download/storage/v1/b/${BUCKET}/o/${key}?alt=media`

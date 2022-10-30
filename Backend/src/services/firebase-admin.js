@@ -8,7 +8,9 @@ try {
     databaseURL: "https://chef-book.firebaseio.com"
   });
 } catch(e) {
-  console.log("Error while initializing firebase for notifications");
+  if (process.env.NODE_ENV !== 'test') {
+    console.error("Error while initializing firebase for notifications");
+  }
 }
 
 module.exports = {
