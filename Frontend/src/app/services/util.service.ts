@@ -204,8 +204,6 @@ const defaultLocality = {
 })
 export class UtilService {
 
-  devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
-
   constructor(
     private translate: TranslateService,
   ) {}
@@ -233,7 +231,11 @@ export class UtilService {
   }
 
   getBase(): string {
-    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || this.devBase;
+    if (window.location.hostname === 'beta.recipesage.com') return 'https://api.beta.recipesage.com/';
+
+    const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
+
+    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
   }
 
   removeToken() {

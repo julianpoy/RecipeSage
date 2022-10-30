@@ -4,7 +4,7 @@ set -e
 
 if [ -z "$1" ] || [ -z "$2" ]
 then
-    echo "Invalid command. Usage: ./deploy_tag.sh api|static|static-beta|all 1.0.0"
+    echo "Invalid command. Usage: ./deploy_tag.sh api|api-beta|static|static-beta|all 1.0.0"
     exit 1
 fi
 
@@ -13,6 +13,11 @@ export RELEASE_TAG="$2"
 if [ "$1" == "api" ] || [ "$1" == "all" ]
 then
     envsubst < kube/configs/api.yml | kubectl apply -f -
+fi
+
+if [ "$1" == "api-beta" ] || [ "$1" == "all" ]
+then
+    envsubst < kube/configs/api-beta.yml | kubectl apply -f -
 fi
 
 if [ "$1" == "all" ]
