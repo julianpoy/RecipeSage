@@ -90,10 +90,10 @@ let logError = err => {
   console.error(err);
 
   Sentry.captureException(err);
-}
+};
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
 

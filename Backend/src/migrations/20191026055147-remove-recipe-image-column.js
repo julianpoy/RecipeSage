@@ -3,7 +3,7 @@
 const UUID = require('uuid');
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     var sequelize = queryInterface.sequelize;
 
     return sequelize.transaction(async transaction => {

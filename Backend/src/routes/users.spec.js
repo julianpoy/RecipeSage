@@ -15,15 +15,12 @@ let {
 } = require('../testutils');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
 var User = require('../models').User;
-var FCMToken = require('../models').FCMToken;
 var Session = require('../models').Session;
 
 describe('users', () => {
   var server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
@@ -31,7 +28,7 @@ describe('users', () => {
     await syncDB();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 
@@ -53,7 +50,7 @@ describe('users', () => {
               token: body.token
             }
           }).then(session => {
-            expect(session).not.to.be.null
+            expect(session).not.to.be.null;
 
             return User.findOne({
               where: {
@@ -62,8 +59,8 @@ describe('users', () => {
                 name: payload.name
               }
             }).then(user => {
-              expect(user).not.to.be.null
-            })
+              expect(user).not.to.be.null;
+            });
           })
         );
     });
@@ -112,7 +109,7 @@ describe('users', () => {
 
   describe('login', () => {
     it('success', async () => {
-      let user = await createUser()
+      let user = await createUser();
 
       let payload = {
         email: user.email,
@@ -130,13 +127,13 @@ describe('users', () => {
               token: body.token
             }
           }).then(session => {
-            expect(session).not.to.be.null
+            expect(session).not.to.be.null;
           })
         );
     });
 
     it('rejects incorrect email', async () => {
-      await createUser()
+      await createUser();
 
       let payload = {
         email: 'incorrect@gmail.com',
@@ -150,7 +147,7 @@ describe('users', () => {
     });
 
     it('rejects incorrect password', async () => {
-      let user = await createUser()
+      let user = await createUser();
 
       let payload = {
         email: user.email,
@@ -166,7 +163,7 @@ describe('users', () => {
 
   describe('update', () => {
     it('success', async () => {
-      let user = await createUser()
+      let user = await createUser();
 
       let payload = {
         email: user.email,
@@ -184,13 +181,13 @@ describe('users', () => {
               token: body.token
             }
           }).then(session => {
-            expect(session).not.to.be.null
+            expect(session).not.to.be.null;
           })
         );
     });
 
     it('rejects incorrect email', async () => {
-      await createUser()
+      await createUser();
 
       let payload = {
         email: 'incorrect@gmail.com',
@@ -204,7 +201,7 @@ describe('users', () => {
     });
 
     it('rejects incorrect password', async () => {
-      let user = await createUser()
+      let user = await createUser();
 
       let payload = {
         email: user.email,

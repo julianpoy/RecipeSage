@@ -1,47 +1,43 @@
 var express = require('express');
 var router = express.Router();
-const moment = require('moment');
 
 // DB
-var Op = require("sequelize").Op;
 var SQ = require('../models').sequelize;
-var User = require('../models').User;
 var StripePayment = require('../models').StripePayment;
 
 // Service
 var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
 var StripeService = require('../services/stripe');
 var SubscriptionService = require('../services/subscriptions');
 
 router.post('/stripe/custom-session',
   MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
-  try {
-    const { isRecurring, amount, successUrl, cancelUrl } = req.body;
+    try {
+      const { isRecurring, amount, successUrl, cancelUrl } = req.body;
 
-    if (isRecurring && amount < 100) return res.status(412).send("Minimum is $1 due to transaction fees, sorry!");
-    if (!isRecurring && amount < 500) return res.status(412).send("Minimum is $5 due to transaction fees, sorry!");
+      if (isRecurring && amount < 100) return res.status(412).send('Minimum is $1 due to transaction fees, sorry!');
+      if (!isRecurring && amount < 500) return res.status(412).send('Minimum is $5 due to transaction fees, sorry!');
 
-    let stripeCustomerId;
-    if (res.locals.session) {
-      stripeCustomerId = await StripeService.createOrRetrieveCustomerId(res.locals.session.userId);
+      let stripeCustomerId;
+      if (res.locals.session) {
+        stripeCustomerId = await StripeService.createOrRetrieveCustomerId(res.locals.session.userId);
+      }
+
+      const stripeSession = await StripeService.createPYOSession(isRecurring, {
+        stripeCustomerId,
+        amount,
+        successUrl,
+        cancelUrl
+      });
+
+      res.status(200).json({
+        id: stripeSession.id
+      });
+    } catch(e) {
+      next(e);
     }
-
-    const stripeSession = await StripeService.createPYOSession(isRecurring, {
-      stripeCustomerId,
-      amount,
-      successUrl,
-      cancelUrl
-    });
-
-    res.status(200).json({
-      id: stripeSession.id
-    });
-  } catch(e) {
-    next(e);
-  }
-});
+  });
 
 router.post('/stripe/webhooks', async (req, res, next) => {
   try {
@@ -52,7 +48,7 @@ router.post('/stripe/webhooks', async (req, res, next) => {
     try {
       event = StripeService.validateEvent(req.rawBody, stripeSignature);
     } catch (err) {
-      console.log("stripe webhook validation error", err);
+      console.log('stripe webhook validation error', err);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
@@ -61,7 +57,7 @@ router.post('/stripe/webhooks', async (req, res, next) => {
       const session = event.data.object;
 
       // Allow invoice payment_succeeded to handle subscription payments
-      if (session.mode !== "subscription") {
+      if (session.mode !== 'subscription') {
         const user = await StripeService.findCheckoutUser(session.customer, session.customer_email);
 
         const amountPaid = session.display_items.map(item => item.amount).reduce((a, b) => a + b);
@@ -117,6 +113,6 @@ router.post('/stripe/webhooks', async (req, res, next) => {
   } catch(e) {
     next(e);
   }
-})
+});
 
 module.exports = router;

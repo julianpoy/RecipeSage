@@ -2,8 +2,7 @@ require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
 let ElasticService = require('./services/elastic');
-let cron = require('node-cron');
-let SQ = require("sequelize");
+let SQ = require('sequelize');
 let Op = SQ.Op;
 
 var Recipe = require('./models').Recipe;
@@ -34,10 +33,9 @@ const runIndexOp = async () => {
 
     if (!recipes || recipes.length === 0) {
       clearInterval(runInterval);
-      console.log("Index complete!");
+      console.log('Index complete!');
       process.exit(0);
-      return;
-    };
+    }
 
     await ElasticService.indexRecipes(recipes);
 
@@ -55,7 +53,7 @@ const runIndexOp = async () => {
   } catch(e) {
     clearInterval(runInterval);
     Sentry.captureException(e);
-    console.log("Error while indexing", e);
+    console.log('Error while indexing', e);
     process.exit(1);
   }
 };
@@ -63,14 +61,7 @@ const runIndexOp = async () => {
 runInterval = setInterval(runIndexOp, BATCH_INTERVAL);
 
 process.on('SIGTERM', () => {
-  console.log("RECEIVED SIGTERM - STOPPING JOB");
-  server.close(() => {
-    clearInterval(runInterval);
-    console.log("JOB STOPPED - RESTING");
-    setTimeout(() => {
-      console.log("EXITING");
-      process.exit(0);
-    }, 15 * 1000);
-  });
+  console.log('RECEIVED SIGTERM - STOPPING JOB');
+  process.exit(0);
 });
 

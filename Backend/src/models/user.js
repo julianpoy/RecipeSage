@@ -128,12 +128,12 @@ module.exports = (sequelize, DataTypes) => {
 
   User.validateHashedPassword = function (password, hash, salt, version) {
     switch (version) {
-      case 1:
-      case '1':
-        return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
-      case 2:
-      case '2':
-        return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
+    case 1:
+    case '1':
+      return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512');
+    case 2:
+    case '2':
+      return hash == crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
     }
 
     return false;
@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.login = function (email, password, transaction) {
     // Setup error
-    var e = new Error("Credentials are not valid!");
+    var e = new Error('Credentials are not valid!');
     e.status = 412;
 
     return User.findOne({
@@ -162,7 +162,7 @@ module.exports = (sequelize, DataTypes) => {
         });
       }
     });
-  }
+  };
 
   User.prototype.updatePassword = function (password, transaction) {
     let data = User.generateHashedPassword(password);
@@ -172,7 +172,7 @@ module.exports = (sequelize, DataTypes) => {
     this.passwordVersion = data.version;
 
     return this.save({ transaction });
-  }
+  };
 
   User.prototype.validatePassword = function (password, transaction) {
     return new Promise(resolve => {

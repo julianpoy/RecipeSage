@@ -32,11 +32,11 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
     Message: { /* required */
       Body: { /* required */
         Html: {
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
           Data: html
         },
         Text: {
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
           Data: plain
         }
       },
@@ -54,7 +54,7 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
 
   // Create the promise and SES service object
   return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
-}
+};
 
 exports.fetchImage = async url => {
   const response = await fetch(url, {
@@ -62,7 +62,7 @@ exports.fetchImage = async url => {
   });
 
   return response.buffer();
-}
+};
 
 exports.convertImage = (imageBuf, highResConversion) => {
   const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
@@ -82,7 +82,7 @@ exports.convertImage = (imageBuf, highResConversion) => {
           console.error('Sharp Error: ' + e);
           reject(e);
         })
-        .toBuffer((err, buffer, info) => {
+        .toBuffer((err, buffer) => {
           if (err) reject(err);
           resolve(buffer);
         })
@@ -93,8 +93,8 @@ exports.convertImage = (imageBuf, highResConversion) => {
     } catch (e) {
       reject(e);
     }
-  })
-}
+  });
+};
 
 exports.dispatchImportNotification = (user, status, reason) => {
   var event;
@@ -108,14 +108,14 @@ exports.dispatchImportNotification = (user, status, reason) => {
     return;
   }
 
-  let type = "import:pepperplate:" + event
+  let type = 'import:pepperplate:' + event;
 
   var message = {
     type,
     reason: reason || 'status'
-  }
+  };
 
-  let sendQueues = []
+  let sendQueues = [];
   if (user.fcmTokens) {
     sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message));
   }
@@ -123,7 +123,7 @@ exports.dispatchImportNotification = (user, status, reason) => {
   sendQueues.push(GripService.broadcast(user.id, type, message));
 
   return Promise.all(sendQueues);
-}
+};
 
 exports.sortUserProfileImages = user => {
   if (user.toJSON) user = user.toJSON();
@@ -133,7 +133,7 @@ exports.sortUserProfileImages = user => {
   }
 
   return user;
-}
+};
 
 exports.sortRecipeImages = recipe => {
   if (recipe.toJSON) recipe = recipe.toJSON();
@@ -143,7 +143,7 @@ exports.sortRecipeImages = recipe => {
   }
 
   return recipe;
-}
+};
 
 exports.dispatchMessageNotification = (user, fullMessage) => {
   var message = {
@@ -167,7 +167,7 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   let sendQueues = [];
   if (user.fcmTokens) {
     var notification = {
-      type: "messages:new",
+      type: 'messages:new',
       message: JSON.stringify(message)
     };
 
@@ -177,7 +177,7 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
 
   return Promise.all(sendQueues);
-}
+};
 
 exports.findFilesByRegex = (searchPath, regex) => {
   if (!fs.existsSync(searchPath)) {
@@ -188,13 +188,13 @@ exports.findFilesByRegex = (searchPath, regex) => {
     let newPath = path.join(searchPath, subPath);
 
     if (newPath.match(regex)) {
-      return [newPath, ...acc]
+      return [newPath, ...acc];
     }
 
-    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...exports.findFilesByRegex(newPath, regex)]
+    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...exports.findFilesByRegex(newPath, regex)];
 
-    return acc
-  }, [])
+    return acc;
+  }, []);
 };
 
 exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
@@ -210,9 +210,9 @@ exports.gunzip = buf => {
     zlib.gunzip(buf, (err, result) => {
       if (err) reject(err);
       resolve(result);
-    })
-  })
-}
+    });
+  });
+};
 
 // CBs are an array of promises to be executed by chunkSize
 // Waits until previous is done before executing next chunk
@@ -226,14 +226,14 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 
   await chunks.reduce((acc, chunk) => {
     return acc.then(() => {
-      return Promise.all(chunk.map(cb => cb()))
-    })
-  }, Promise.resolve())
-}
+      return Promise.all(chunk.map(cb => cb()));
+    });
+  }, Promise.resolve());
+};
 
 exports.cleanLabelTitle = labelTitle => {
   return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
-}
+};
 
-exports.capitalizeEachWord = input => input.split(" ").map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(" ");
+exports.capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
 

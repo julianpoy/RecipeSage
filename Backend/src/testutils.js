@@ -4,11 +4,8 @@ const {
 
 const { v4: uuid } = require('uuid');
 
-var Op = require("sequelize").Op;
-var SQ = require('./models').sequelize;
 var ModelNames = require('./models').modelNames;
 var User = require('./models').User;
-var FCMToken = require('./models').FCMToken;
 var Session = require('./models').Session;
 var Recipe = require('./models').Recipe;
 var Label = require('./models').Label;
@@ -24,7 +21,7 @@ let migrate = async (down) => {
     const migrate = exec(
       command,
       { env: process.env },
-      (err, stdout, stderr) => {
+      (err, stdout) => {
         if (err) {
           console.error(stdout);
           reject(err);
@@ -37,8 +34,8 @@ let migrate = async (down) => {
     // Forward stdout+stderr to this process
     // migrate.stdout.pipe(process.stdout);
     migrate.stderr.pipe(process.stderr);
-  })
-}
+  });
+};
 
 module.exports.syncDB = async () => {
   await Promise.all(ModelNames.map(async modelName => {
@@ -48,17 +45,17 @@ module.exports.syncDB = async () => {
       hooks: false
     });
   }));
-}
+};
 
 module.exports.setup = async () => {
   await migrate();
   return require('./bin/www.js');
-}
+};
 
 module.exports.cleanup = async (server) => {
   await migrate(true);
-  await new Promise(r => server.close(() => { r() }));
-}
+  await new Promise(r => server.close(() => { r(); }));
+};
 
 function randomString(len) {
   let chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -71,7 +68,7 @@ function randomString(len) {
 module.exports.randomString = randomString;
 
 function randomEmail() {
-  return `${randomString(20)}@gmail.com`
+  return `${randomString(20)}@gmail.com`;
 }
 module.exports.randomEmail = randomEmail;
 
@@ -83,7 +80,7 @@ module.exports.createUser = () => {
     passwordSalt: 'dM4YXu5N5XY4c0LXnf30vtshh7dgsBYZ/5pZockgcJofPkWhMOplVAoWKhyqODZhO3mSUBqMqo3kXC2+7fOMt1NFB0Q1iRcJ4zaqAqdTenyjXu7rJ8WpgR1qnTcnpP8g/frQ+sk8Kcv49OC84R3v+FD8RrGm0rz8dDt7m7c/+Rw=',
     passwordVersion: 2
   });
-}
+};
 
 module.exports.createSession = userId => {
   var today = new Date();
@@ -96,7 +93,7 @@ module.exports.createSession = userId => {
     type: 'user',
     expires: tomorrow
   });
-}
+};
 
 module.exports.createRecipe = (userId, folder, fromUserId) => {
   return Recipe.create({
@@ -113,8 +110,8 @@ module.exports.createRecipe = (userId, folder, fromUserId) => {
     ingredients: randomString(20),
     instructions: randomString(20),
     folder: folder || 'main'
-  })
-}
+  });
+};
 
 module.exports.createLabel = userId => {
   return Label.findOrCreate({
@@ -125,13 +122,13 @@ module.exports.createLabel = userId => {
   }).then(function (labels) {
     return labels[0];
   });
-}
+};
 
 module.exports.associateLabel = (labelId, recipeId) => {
   return Label.findByPk(labelId).then(label => {
     return label.addRecipe(recipeId);
-  })
-}
+  });
+};
 
 module.exports.createMessage = (fromUserId, toUserId, recipeId, originalRecipeId) => {
   return Message.create({
@@ -140,29 +137,29 @@ module.exports.createMessage = (fromUserId, toUserId, recipeId, originalRecipeId
     recipeId,
     originalRecipeId,
     body: recipeId ? '' : randomString(40)
-  })
-}
+  });
+};
 
 // Validates that fields match but we are not sending any additional private data
 module.exports.secureUserMatch = (userHash, user) => {
-  expect(userHash.id).to.equal(user.id)
-  expect(userHash.name).to.equal(user.name)
-  expect(userHash.email).to.equal(user.email)
+  expect(userHash.id).to.equal(user.id);
+  expect(userHash.name).to.equal(user.name);
+  expect(userHash.email).to.equal(user.email);
 
-  expect(Object.keys(userHash).length).to.equal(3)
-}
+  expect(Object.keys(userHash).length).to.equal(3);
+};
 
 // Validates that fields match but we are not sending any additional private data
 module.exports.secureRecipeMatch = (recipeHash, recipe) => {
-  expect(recipeHash.id).to.equal(recipe.id)
-  expect(recipeHash.title).to.equal(recipe.title)
+  expect(recipeHash.id).to.equal(recipe.id);
+  expect(recipeHash.title).to.equal(recipe.title);
 
-  let allowedFieldCount = 2
-  if (recipeHash.images) allowedFieldCount++
+  let allowedFieldCount = 2;
+  if (recipeHash.images) allowedFieldCount++;
 
-  expect(Object.keys(recipeHash).length).to.equal(allowedFieldCount)
-}
+  expect(Object.keys(recipeHash).length).to.equal(allowedFieldCount);
+};
 
 module.exports.randomUuid = () => {
   return uuid();
-}
+};

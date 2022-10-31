@@ -1,8 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
 var User = require('../models').User;
 
 exports.createOrRetrieveCustomerId = async userId => {
@@ -20,7 +18,7 @@ exports.createOrRetrieveCustomerId = async userId => {
   );
 
   return stripeCustomer.id;
-}
+};
 
 exports.findCheckoutUser = async (customerId, customerEmail) => {
   let user = await User.findOne({
@@ -38,13 +36,13 @@ exports.findCheckoutUser = async (customerId, customerEmail) => {
   }
 
   return user;
-}
+};
 
 exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, successUrl, cancelUrl }) => {
   let checkoutData;
 
   if (isRecurring) {
-    const productId = `pyo-monthly`;
+    const productId = 'pyo-monthly';
 
     let product;
 
@@ -53,8 +51,8 @@ exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, succe
     } catch (e) {
       product = await stripe.products.create({
         id: productId,
-        name: "RecipeSage Monthly Membership - Choose Your Own Price",
-        type: "service"
+        name: 'RecipeSage Monthly Membership - Choose Your Own Price',
+        type: 'service'
       });
     }
 
@@ -68,9 +66,9 @@ exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, succe
       plan = await stripe.plans.create({
         id: planId,
         amount: amount,
-        interval: "month",
+        interval: 'month',
         product: product.id,
-        currency: "usd",
+        currency: 'usd',
       });
     }
 

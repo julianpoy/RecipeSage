@@ -8,7 +8,6 @@ let {
   cleanup,
   syncDB,
   randomString,
-  randomEmail,
   createUser,
   createSession,
   createRecipe,
@@ -18,17 +17,13 @@ let {
 } = require('../testutils');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var FCMToken = require('../models').FCMToken;
-var Session = require('../models').Session;
+var Op = require('sequelize').Op;
 var Recipe = require('../models').Recipe;
 var Label = require('../models').Label;
 
 describe('recipes', () => {
   var server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
@@ -36,7 +31,7 @@ describe('recipes', () => {
     await syncDB();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 
@@ -70,11 +65,11 @@ describe('recipes', () => {
               [Op.and]: [payload, { id: body.id, userId: user.id }]
             }
           }).then(recipe => {
-            expect(recipe).not.to.be.null
+            expect(recipe).not.to.be.null;
           }).then(() => {
             Recipe.count().then(count => {
-              expect(count).to.equal(1)
-            })
+              expect(count).to.equal(1);
+            });
           })
         );
     });
@@ -99,11 +94,11 @@ describe('recipes', () => {
               [Op.and]: [payload, { id: body.id, userId: user.id }]
             }
           }).then(recipe => {
-            expect(recipe).not.to.be.null
+            expect(recipe).not.to.be.null;
           }).then(() => {
             Recipe.count().then(count => {
-              expect(count).to.equal(1)
-            })
+              expect(count).to.equal(1);
+            });
           })
         );
     });
@@ -132,7 +127,7 @@ describe('recipes', () => {
         .expect(412)
         .then(() =>
           Recipe.count().then(count => {
-            expect(count).to.equal(0)
+            expect(count).to.equal(0);
           })
         );
     });
@@ -162,7 +157,7 @@ describe('recipes', () => {
         .expect(412)
         .then(() =>
           Recipe.count().then(count => {
-            expect(count).to.equal(0)
+            expect(count).to.equal(0);
           })
         );
     });
@@ -188,7 +183,7 @@ describe('recipes', () => {
         .expect(401)
         .then(() =>
           Recipe.count().then(count => {
-            expect(count).to.equal(0)
+            expect(count).to.equal(0);
           })
         );
     });
@@ -211,9 +206,9 @@ describe('recipes', () => {
         .query({ token: session.token })
         .expect(200)
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id)
-          expect(body.title).to.equal(recipe.title)
-          expect(body.labels.length).to.equal(1)
+          expect(body.id).to.equal(recipe.id);
+          expect(body.title).to.equal(recipe.title);
+          expect(body.labels.length).to.equal(1);
         });
     });
 
@@ -247,19 +242,16 @@ describe('recipes', () => {
         .query({ token: session.token })
         .expect(200)
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id)
-          expect(body.title).to.equal(recipe.title)
-          expect(body.labels).to.be.an('array').that.is.empty
-          expect(body.labels.length).to.equal(0)
-          expect(body.isOwner).to.equal(false)
+          expect(body.id).to.equal(recipe.id);
+          expect(body.title).to.equal(recipe.title);
+          expect(body.labels).to.be.an('array').that.is.empty;
+          expect(body.labels.length).to.equal(0);
+          expect(body.isOwner).to.equal(false);
         });
     });
 
     it('returns recipe with no token', async () => {
-      let user1 = await createUser();
       let user2 = await createUser();
-
-      let session = await createSession(user1.id);
 
       let recipe = await createRecipe(user2.id);
 
@@ -271,18 +263,16 @@ describe('recipes', () => {
         .get(`/recipes/${recipe.id}`)
         .expect(200)
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id)
-          expect(body.title).to.equal(recipe.title)
-          expect(body.labels).to.be.an('array').that.is.empty
-          expect(body.labels.length).to.equal(0)
-          expect(body.isOwner).to.equal(false)
+          expect(body.id).to.equal(recipe.id);
+          expect(body.title).to.equal(recipe.title);
+          expect(body.labels).to.be.an('array').that.is.empty;
+          expect(body.labels.length).to.equal(0);
+          expect(body.isOwner).to.equal(false);
         });
     });
 
     it('denies invalid session', async () => {
       let user = await createUser();
-
-      let session = await createSession(user.id);
 
       let recipe = await createRecipe(user.id);
 
@@ -291,7 +281,7 @@ describe('recipes', () => {
         .query({ token: 'invalid' })
         .expect(401);
     });
-  })
+  });
 
   describe('update', () => {
     it('updates recipe', async () => {
@@ -313,14 +303,14 @@ describe('recipes', () => {
         ingredients: `new-${randomString(20)}`,
         instructions: `new-${randomString(20)}`,
         folder: `new-${randomString(20)}`,
-      }
+      };
 
       return request(server)
         .put(`/recipes/${recipe.id}`)
         .send(payload)
         .query({ token: session.token })
         .expect(200)
-        .then(({ body }) =>
+        .then(() =>
           Recipe.findByPk(recipe.id).then(updatedRecipe => {
             expect(updatedRecipe.title).to.equal(payload.title);
             expect(updatedRecipe.description).to.equal(payload.description);
@@ -342,14 +332,12 @@ describe('recipes', () => {
 
       let session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
-
       return request(server)
         .put(`/recipes/${randomUuid()}`)
         .send({})
         .query({ token: session.token })
         .expect(404);
-    })
+    });
 
     it('rejects request if recipe does not belong to user', async () => {
       let user1 = await createUser();
@@ -364,12 +352,10 @@ describe('recipes', () => {
         .send({})
         .query({ token: session.token })
         .expect(404);
-    })
+    });
 
     it('requires valid session', async () => {
       let user = await createUser();
-
-      let session = await createSession(user.id);
 
       let recipe = await createRecipe(user.id);
 
@@ -378,8 +364,8 @@ describe('recipes', () => {
         .send({})
         .query({ token: 'invalid' })
         .expect(401);
-    })
-  })
+    });
+  });
 
   describe('delete all', () => {
     it('deletes all recipes and labels', async () => {
@@ -397,7 +383,7 @@ describe('recipes', () => {
       await associateLabel(label2.id, recipe2.id);
 
       await request(server)
-        .delete(`/recipes/all`)
+        .delete('/recipes/all')
         .query({ token: session.token })
         .expect(200)
         .then(async () => {
@@ -406,18 +392,18 @@ describe('recipes', () => {
               userId: user.id
             }
           }).then(async recipes => {
-            expect(recipes).to.have.lengthOf(0)
+            expect(recipes).to.have.lengthOf(0);
 
             await Label.findAll({
               where: {
                 userId: user.id
               }
             }).then(labels => {
-              expect(labels).to.have.lengthOf(0)
-            })
-          })
+              expect(labels).to.have.lengthOf(0);
+            });
+          });
         });
-    })
+    });
 
     it('does not remove recipes or labels belonging to another user', async () => {
       let user1 = await createUser();
@@ -432,7 +418,7 @@ describe('recipes', () => {
       await associateLabel(label.id, recipe.id);
 
       await request(server)
-        .delete(`/recipes/all`)
+        .delete('/recipes/all')
         .query({ token: session.token })
         .then(async () => {
           await Recipe.findAll({
@@ -440,32 +426,26 @@ describe('recipes', () => {
               userId: user2.id
             }
           }).then(async recipes => {
-            expect(recipes).to.have.lengthOf(1)
+            expect(recipes).to.have.lengthOf(1);
 
             await Label.findAll({
               where: {
                 userId: user2.id
               }
             }).then(labels => {
-              expect(labels).to.have.lengthOf(1)
-            })
-          })
+              expect(labels).to.have.lengthOf(1);
+            });
+          });
         });
     });
 
     it('requires valid session', async () => {
-      let user = await createUser();
-
-      let session = await createSession(user.id);
-
-      let recipe = await createRecipe(user.id);
-
       return request(server)
-        .delete(`/recipes/all`)
+        .delete('/recipes/all')
         .query({ token: 'invalid' })
         .expect(401);
     });
-  })
+  });
 
   describe('delete', () => {
     it('deletes recipe', async () => {
@@ -479,12 +459,12 @@ describe('recipes', () => {
         .delete(`/recipes/${recipe.id}`)
         .query({ token: session.token })
         .expect(200)
-        .then(({ body }) => {
+        .then(() => {
           Recipe.findByPk(recipe.id).then(recipe => {
-            expect(recipe).to.be.null
-          })
+            expect(recipe).to.be.null;
+          });
         });
-    })
+    });
 
     it('removes labels with only one association', async () => {
       let user = await createUser();
@@ -503,7 +483,7 @@ describe('recipes', () => {
         .delete(`/recipes/${recipe.id}`)
         .query({ token: session.token })
         .expect(200)
-        .then(({ body }) =>
+        .then(() =>
           Promise.all([
             Recipe.findByPk(recipe.id).then(deletedRecipe =>
               expect(deletedRecipe).to.be.null
@@ -535,7 +515,7 @@ describe('recipes', () => {
         .delete(`/recipes/${recipe1.id}`)
         .query({ token: session.token })
         .expect(200)
-        .then(({ body }) =>
+        .then(() =>
           Promise.all([
             Recipe.findByPk(recipe1.id).then(deletedRecipe1 =>
               expect(deletedRecipe1).to.be.null
@@ -567,8 +547,6 @@ describe('recipes', () => {
     it('requires valid session', async () => {
       let user = await createUser();
 
-      let session = await createSession(user.id);
-
       let recipe = await createRecipe(user.id);
 
       return request(server)
@@ -576,5 +554,5 @@ describe('recipes', () => {
         .query({ token: 'invalid' })
         .expect(401);
     });
-  })
+  });
 });

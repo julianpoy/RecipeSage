@@ -29,6 +29,6 @@ const umzug = new Umzug({
 
 (async () => {
   // Checks migrations and run them if they are not already applied
-  await umzug.up()
-  console.log('All migrations performed successfully')
+  await umzug.up();
+  console.log('All migrations performed successfully');
 })();

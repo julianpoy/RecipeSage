@@ -6,13 +6,13 @@ var FCMToken = require('../models').FCMToken;
 
 let invalidFcmTokenErrors = [
   'messaging/registration-token-not-registered'
-]
+];
 
 exports.sendMessages = (tokens, payload) => {
   return Promise.all(tokens.map(token =>
     exports.sendMessage(token, payload)
-  ))
-}
+  ));
+};
 
 exports.sendMessage = (token, payload) => {
   var message = {
@@ -33,4 +33,4 @@ exports.sendMessage = (token, payload) => {
 
     return Promise.resolve();
   });
-}
+};

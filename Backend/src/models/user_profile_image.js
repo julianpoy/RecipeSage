@@ -9,6 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     order: DataTypes.INTEGER
   }, {});
-  User_Profile_Image.associate = function(models) {};
+  User_Profile_Image.associate = function() {};
   return User_Profile_Image;
 };

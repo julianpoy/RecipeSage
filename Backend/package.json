@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www.js",
     "mocha": "PORT=2999 NODE_ENV=test mocha --timeout 10000 --exit --",
+    "lint": "eslint .",
     "test": "npm run test:all",
     "test:ci": "npm run test:all",
     "test:all": "npm run test:routes && npm run test:services && npm run test:models",
@@ -69,6 +70,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.6",
+    "eslint": "^8.26.0",
     "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.5.1",

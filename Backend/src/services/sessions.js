@@ -13,14 +13,14 @@ var SESSION_GRACE_PERIOD = 30; // Should always be more than SET_GRACE_WHEN
 //Checks if a token exists, and returns the corrosponding userId
 exports.validateSession = function(token, type) {
   var query;
-  if(typeof type == "string"){
+  if(typeof type == 'string'){
     query = {
       type: type
-    }
+    };
   } else {
     query = {
       type: { [Op.in]: type }
-    }
+    };
   }
   query.token = token;
   query.expires = { [Op.gte]: Date.now() };
@@ -29,32 +29,32 @@ exports.validateSession = function(token, type) {
     where: query,
     attributes: ['id', 'userId', 'token', 'type', 'expires']
   })
-  .then(function(session) {
-    if (!session) {
-      let e = new Error('Session is not valid!');
-      e.status = 401;
-      throw e;
-    }
+    .then(function(session) {
+      if (!session) {
+        let e = new Error('Session is not valid!');
+        e.status = 401;
+        throw e;
+      }
 
-    extendSession(session);
+      extendSession(session);
 
-    return Promise.resolve(session);
-  });
+      return Promise.resolve(session);
+    });
 };
 
 function extendSession(session) {
   // Extend the session expiry if necessary
-  if (moment(session.expires).subtract(SET_GRACE_WHEN, "days").isBefore(moment())) {
+  if (moment(session.expires).subtract(SET_GRACE_WHEN, 'days').isBefore(moment())) {
     var updateCmd = {
       // updatedAt: Date.now(),
-      expires: moment().add(SESSION_GRACE_PERIOD, "days")
-    }
+      expires: moment().add(SESSION_GRACE_PERIOD, 'days')
+    };
 
     session.update(updateCmd).catch(function (err) {
       var payload = {
-        msg: "Error reading database when extending user token!",
+        msg: 'Error reading database when extending user token!',
         err: err
-      }
+      };
       Sentry.captureException(payload);
     });
   }
@@ -64,16 +64,16 @@ function removeOldSessions() {
   // Clean out all old sessions
   var removeOld = {
     expires: { [Op.lt]: Date.now() }
-  }
+  };
 
   return Session.destroy({
     where: removeOld
   }).catch(function (err) {
     if (err) {
       var payload = {
-        msg: "Error removing old sessions!",
+        msg: 'Error removing old sessions!',
         err: err
-      }
+      };
       Sentry.captureException(payload);
     }
   });
@@ -89,7 +89,7 @@ exports.generateSession = function(userId, type, transaction) {
     userId,
     type,
     token,
-    expires: moment().add(SESSION_VALIDITY_LENGTH, "days")
+    expires: moment().add(SESSION_VALIDITY_LENGTH, 'days')
   }, {
     transaction: transaction
   });

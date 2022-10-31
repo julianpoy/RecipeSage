@@ -4,21 +4,17 @@ const cors = require('cors');
 const joi = require('joi');
 
 // DB
-const Op = require("sequelize").Op;
+const Op = require('sequelize').Op;
 const SQ = require('../models').sequelize;
 const User = require('../models').User;
 const Recipe = require('../models').Recipe;
-const Message = require('../models').Message;
-const Label = require('../models').Label;
 const MealPlanItem = require('../models').MealPlanItem;
 const ShoppingList = require('../models').ShoppingList;
 const ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
 const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
 const GripService = require('../services/grip');
-const SharedUtils = require('../../../SharedUtils/src');
 const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 const {joiValidator} = require('../middleware/joiValidator');
 
@@ -29,35 +25,35 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-  SQ.transaction(function (t) {
-    return ShoppingList.create({
-      title: req.body.title,
-      userId: res.locals.session.userId
-    }, {
-      transaction: t
-    }).then(function(shoppingList) {
-      return shoppingList.addCollaborators(
-        req.body.collaborators || [],
-        {
-          transaction: t
-        }
-      ).then(() => {
-        for (var i = 0; i < (req.body.collaborators || []).length; i++) {
-          GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
-            shoppingListId: shoppingList.id,
-            from: {
-              id: res.locals.user.id,
-              name: res.locals.user.name,
-              email: res.locals.user.email
-            }
-          });
-        }
+    SQ.transaction(function (t) {
+      return ShoppingList.create({
+        title: req.body.title,
+        userId: res.locals.session.userId
+      }, {
+        transaction: t
+      }).then(function(shoppingList) {
+        return shoppingList.addCollaborators(
+          req.body.collaborators || [],
+          {
+            transaction: t
+          }
+        ).then(() => {
+          for (var i = 0; i < (req.body.collaborators || []).length; i++) {
+            GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
+              shoppingListId: shoppingList.id,
+              from: {
+                id: res.locals.user.id,
+                name: res.locals.user.name,
+                email: res.locals.user.email
+              }
+            });
+          }
 
-        res.status(200).json(shoppingList);
+          res.status(200).json(shoppingList);
+        });
       });
-    });
-  }).catch(next);
-});
+    }).catch(next);
+  });
 
 router.get(
   '/',
@@ -147,7 +143,7 @@ router.post(
       ]
     }).then(function(shoppingList) {
       if (!shoppingList) {
-        res.status(404).send("Shopping list with that ID not found or you do not have access!");
+        res.status(404).send('Shopping list with that ID not found or you do not have access!');
       } else {
         return SQ.transaction(function(t) {
           return ShoppingListItem.bulkCreate(req.body.items.map((item) => {
@@ -158,7 +154,7 @@ router.post(
               shoppingListId: shoppingList.id,
               recipeId: item.recipeId || null,
               mealPlanItemId: item.mealPlanItemId || null
-            }
+            };
           }), { transaction: t }).then(function() {
             let reference = Date.now();
 
@@ -211,7 +207,7 @@ router.delete(
       ]
     }).then(function(shoppingList) {
       if (!shoppingList) {
-        res.status(404).send("Shopping list not found or not visible to you!");
+        res.status(404).send('Shopping list not found or not visible to you!');
       } else {
         if (shoppingList.userId === res.locals.session.userId) {
           return shoppingList.destroy().then(function () {
@@ -323,7 +319,7 @@ router.get(
       });
 
       if (!shoppingList) {
-        return res.status(404).send("Recipe with that ID not found!");
+        return res.status(404).send('Recipe with that ID not found!');
       }
 
       const shoppingListSummary = await ShoppingList.findOne({
@@ -366,7 +362,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-});
+  });
 
 // Update a shopping list meta info (NOT INCLUDING ITEMS)
 // router.put(

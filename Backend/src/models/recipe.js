@@ -1,7 +1,6 @@
-let UtilService = require('../services/util');
 let ElasticService = require('../services/elastic');
 let Sentry = require('@sentry/node');
-let SQ = require("sequelize");
+let SQ = require('sequelize');
 let Op = SQ.Op;
 
 'use strict';
@@ -139,7 +138,7 @@ module.exports = (sequelize, DataTypes) => {
           ElasticService.indexRecipes([recipe]).catch(e => {
             Sentry.captureException(e);
           });
-        })
+        });
       },
       afterBulkCreate: (recipes, options) => {
         afterCommitIfTransaction(options, () => {
@@ -222,25 +221,25 @@ module.exports = (sequelize, DataTypes) => {
         return Recipe._findTitle(userId, recipeId, basename, transaction, ctr + 1);
       }
 
-      return adjustedTitle
+      return adjustedTitle;
     });
-  }
+  };
 
   Recipe.findTitle = function(userId, recipeId, basename, transaction) {
     return Recipe._findTitle(userId, recipeId, basename, transaction, 1);
-  }
+  };
 
   Recipe.share = function(recipeId, recipientId, transaction) {
     return Recipe.findByPk(recipeId, { transaction }).then(recipe => {
       if (!recipe) {
-        var e = new Error("Could not find recipe to share");
+        var e = new Error('Could not find recipe to share');
         e.status = 404;
         throw e;
       } else {
         return recipe.share(recipientId, transaction);
       }
     });
-  }
+  };
 
   Recipe.prototype.share = async function(recipientId, transaction) {
     const adjustedTitle = await Recipe.findTitle(recipientId, null, this.title, transaction);
@@ -283,7 +282,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     return recipe;
-  }
+  };
 
   return Recipe;
 };

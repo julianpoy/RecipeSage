@@ -20,4 +20,4 @@ exports.broadcast = function(channel, type, data) {
   };
 
   expressGrip.publish(channel, new grip.WebSocketMessageFormat(JSON.stringify(body)));
-}
+};

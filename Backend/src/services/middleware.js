@@ -10,14 +10,14 @@ exports.validateSession = function(types, optional) {
       // Throw unauthorized without pinging DB
       let e = new Error('Session is not valid!');
       e.status = 401;
-      return next(e)
+      return next(e);
     }
 
     SessionService.validateSession(req.query.token, types).then(session => {
       res.locals.session = session;
       next();
     }).catch(next);
-  }
+  };
 };
 
 // Requires validateSession
@@ -29,7 +29,7 @@ exports.validateUser = function(req, res, next) {
     attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt', 'lastLogin']
   }).then(user => {
     if (!user) {
-      res.status(404).send("Your user was not found");
+      res.status(404).send('Your user was not found');
     } else {
       res.locals.user = user;
       next();

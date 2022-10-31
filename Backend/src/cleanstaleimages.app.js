@@ -3,7 +3,7 @@ const Sentry = require('@sentry/node');
 
 const StorageService = require('./services/storage');
 
-var Op = require("sequelize").Op;
+var Op = require('sequelize').Op;
 var SQ = require('./models').sequelize;
 var Image = require('./models').Image;
 var Recipe_Image = require('./models').Recipe_Image;
