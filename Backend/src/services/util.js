@@ -1,5 +1,4 @@
 var aws = require('aws-sdk');
-var multer = require('multer');
 
 let fs = require('fs-extra');
 let sharp = require('sharp');
@@ -11,10 +10,15 @@ const fetch = require('node-fetch');
 var FirebaseService = require('./firebase');
 var GripService = require('./grip');
 
-var storage = (process.env.AWS_ACCESS_KEY_ID) ? require('./s3-storage') : require('./firebase-storage') ;
 
 
-exports.generateStorageLocation = storage.generateStorageLocation;
+const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
+const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
+const HIGH_RES_IMG_CONVERSION_QUALITY = 55;
+
+const LOW_RES_IMG_CONVERSION_WIDTH = 200;
+const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
+const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
@@ -60,18 +64,6 @@ exports.fetchImage = async url => {
   return response.buffer();
 }
 
-const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
-const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
-const HIGH_RES_IMG_CONVERSION_QUALITY = 55;
-
-const LOW_RES_IMG_CONVERSION_WIDTH = 200;
-const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
-const LOW_RES_IMG_CONVERSION_QUALITY = 55;
-
-exports.sendBufferToStorage = storage.sendBufferToStorage;
-
-exports.formatImageResponse = storage.formatImageResponse;
-
 exports.convertImage = (imageBuf, highResConversion) => {
   const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
   const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
@@ -86,7 +78,7 @@ exports.convertImage = (imageBuf, highResConversion) => {
           quality,
           // chromaSubsampling: '4:4:4'
         })
-        .on('error', function(e) {
+        .on('error', function (e) {
           console.error('Sharp Error: ' + e);
           reject(e);
         })
@@ -94,7 +86,7 @@ exports.convertImage = (imageBuf, highResConversion) => {
           if (err) reject(err);
           resolve(buffer);
         })
-        .on('error', function(e) {
+        .on('error', function (e) {
           console.error('Sharp Error: ' + e);
           reject(e);
         });
@@ -103,54 +95,6 @@ exports.convertImage = (imageBuf, highResConversion) => {
     }
   })
 }
-
-exports.sendURLToStorage = (url, highResConversion)  => {
-  return exports.fetchImage(url).then((buffer) => {
-    return exports.convertImage(buffer, highResConversion).then(convertedBuffer => {
-      return exports.sendBufferToStorage(convertedBuffer).then(result => {
-        return exports.formatImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.ETag);
-      });
-    });
-  })
-}
-
-exports.sendFileToStorage = (file, isBuffer, highResConversion) => {
-  let p = isBuffer ? Promise.resolve(file) : fs.readFile(file);
-
-  return p.then(buf => {
-    return exports.convertImage(buf, highResConversion);
-  }).then(stream => {
-    return exports.sendBufferToStorage(stream);
-  }).then(result => {
-    var stats = isBuffer ? { size: file.length } : fs.statSync(file);
-    return exports.formatImageResponse(result.key, 'image/jpeg', stats["size"], result.ETag)
-  })
-}
-
-exports.upload = async (fieldName, req, res, highResConversion) => {
-  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
-
-  await new Promise((resolve, reject) => {
-    multer({
-      storage: storage.multerStorage(width,height,quality,highResConversion),
-      limits: {
-        fileSize: 8 * 1024 * 1024 // 8MB
-      }
-    }).single(fieldName)(req, res, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  })
-};
-
-exports.deleteStorageObject = storage.deleteStorageObject;
-
-exports.deleteStorageObjects = storage.deleteStorageObjects;
 
 exports.dispatchImportNotification = (user, status, reason) => {
   var event;

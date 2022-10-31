@@ -24,6 +24,7 @@ var Recipe_Image = require('../models').Recipe_Image;
 
 var MiddlewareService = require('../services/middleware');
 var UtilService = require('../services/util');
+const StorageService = require('../services/storage');
 var SubscriptionsService = require('../services/subscriptions');
 const jobTrackerService = require('../services/job-tracker');
 
@@ -251,7 +252,7 @@ router.get(
 
       await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
         if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
-          return UtilService.sendURLToStorage(pepperRecipe.ImageUrl._text).then(image => {
+          return StorageService.sendURLToStorage(pepperRecipe.ImageUrl._text).then(image => {
             pepperRecipe.image = image;
           }).catch(() => {});
         }
@@ -456,7 +457,7 @@ router.post(
                   let recipeData = JSON.parse(data.toString());
 
                   let imageP = recipeData.photo_data ?
-                    UtilService.sendFileToStorage(Buffer.from(recipeData.photo_data, "base64"), true) : Promise.resolve();
+                  StorageService.sendFileToStorage(Buffer.from(recipeData.photo_data, "base64"), true) : Promise.resolve();
 
                   return imageP.then(image => {
                     let notes = [

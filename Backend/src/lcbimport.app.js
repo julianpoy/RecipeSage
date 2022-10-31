@@ -19,6 +19,7 @@ var Recipe_Image = require('./models').Recipe_Image;
 var Image = require('./models').Image;
 
 var UtilService = require('./services/util');
+const StorageService = require('./services/storage');
 
 let runConfig = {
   path: process.argv[2],
@@ -314,7 +315,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return UtilService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
+              return StorageService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images = lcbRecipe.images || [];
                 lcbRecipe.images.push(image);
               }).catch(() => { })

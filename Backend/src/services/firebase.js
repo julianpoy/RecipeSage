@@ -1,19 +1,8 @@
-var admin = require("firebase-admin");
+const { admin } = require('./firebase-admin');
 var Sentry = require('@sentry/node');
 
 // DB
 var FCMToken = require('../models').FCMToken;
-
-try {
-  var serviceAccount = require("../config/firebase-credentials.json");
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://chef-book.firebaseio.com"
-  });
-} catch(e) {
-  console.log("Error while initializing firebase for notifications");
-}
 
 let invalidFcmTokenErrors = [
   'messaging/registration-token-not-registered'
