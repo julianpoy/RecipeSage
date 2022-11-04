@@ -189,4 +189,8 @@ export class MealPlanService {
       errorHandlers
     );
   }
+
+  getICalUrl(mealPlanId: string) {
+    return `${this.httpService.getBase()}/mealPlans/${mealPlanId}/ical`;
+  }
 }
