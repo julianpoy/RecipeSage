@@ -30,6 +30,7 @@ export class SettingsPage {
 
   language: SupportedLanguages | 'navigator' = this.preferences[GlobalPreferenceKey.Language] || 'navigator';
   languageOptions = [];
+  languageSelectInterfaceOptions = {};
 
   constructor(
     public navCtrl: NavController,
@@ -57,6 +58,12 @@ export class SettingsPage {
       console.error("Intl not supported");
       this.languageOptions = Object.values(SupportedLanguages).map(code => [code, code]);
     }
+
+    (async () => {
+      this.languageSelectInterfaceOptions = {
+        header: await this.translate.get('pages.settings.language').toPromise(),
+      };
+    })();
   }
 
   savePreferences() {
