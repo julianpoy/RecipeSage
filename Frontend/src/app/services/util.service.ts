@@ -352,4 +352,12 @@ export class UtilService {
   buildPublicRoutePath(hashlessRoutePath: string) {
     return `${window.location.origin}/#/${hashlessRoutePath}`;
   }
+
+  truncate(str: String, maxLength: number) {
+    const ellipsis = '...';
+    const trueMaxLength = maxLength - ellipsis.length;
+
+    if (str.length <= trueMaxLength) return str;
+    return `${str.substring(0, trueMaxLength)}${ellipsis}`;
+  }
 }
