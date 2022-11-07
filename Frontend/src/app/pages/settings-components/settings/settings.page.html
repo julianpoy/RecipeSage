@@ -85,7 +85,7 @@
           {{ 'pages.settings.language.contribute' | translate }}
         </p>
       </ion-label>
-      <ion-select [(ngModel)]="language" (ngModelChange)="languageChanged();">
+      <ion-select [interfaceOptions]="languageSelectInterfaceOptions" [(ngModel)]="language" (ngModelChange)="languageChanged();">
         <ion-select-option value="navigator">
           {{ 'pages.settings.language.default' | translate }}
         </ion-select-option>

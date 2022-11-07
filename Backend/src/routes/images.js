@@ -41,7 +41,7 @@ router.post('/',
     }
 
     if (!file) {
-      return res.status(400);
+      return res.status(400).send('Must specify either "image" or "imageURL"');
     }
     const image = await Image.create({
       userId: res.locals.session.userId,

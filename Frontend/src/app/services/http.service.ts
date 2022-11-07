@@ -43,8 +43,6 @@ export class HttpService {
 
   axiosClient: AxiosInstance;
 
-  devBase: string = localStorage.getItem('base') || `${window.location.protocol}//${window.location.hostname}/api/`;
-
   constructor(
     private httpErrorHandlerService: HttpErrorHandlerService,
     private utilService: UtilService,
@@ -59,7 +57,11 @@ export class HttpService {
   }
 
   getBase(): string {
-    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || this.devBase;
+    if (window.location.hostname === 'beta.recipesage.com') return 'https://api.beta.recipesage.com/';
+
+    const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
+
+    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
   }
 
   requestWithWrapper<ResponseType>(

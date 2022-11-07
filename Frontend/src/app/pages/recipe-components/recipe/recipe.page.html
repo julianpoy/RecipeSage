@@ -34,7 +34,7 @@
             <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
-                <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || recipe.url }}</a>
+                <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || utilService.truncate(recipe.url.trim(), 40) }}</a>
                 <span *ngIf='!recipe.url?.trim()'>{{ recipe.source?.trim() }}</span>
               </p>
             </ion-col>
