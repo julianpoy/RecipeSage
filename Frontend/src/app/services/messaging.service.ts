@@ -208,7 +208,6 @@ export class MessagingService {
     console.log('Requesting permission...');
     const result = await Notification.requestPermission();
 
-    if (result === 'granted') this.updateToken();
     return this.updateToken();
   }
 
