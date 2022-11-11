@@ -121,7 +121,7 @@
   "pages.home.errors.noRecipes.title": "Willkommen bei RecipeSage!",
   "pages.home.errors.noRecipes.message1": "Hier werden deine Rezepte angezeigt.",
   "pages.home.errors.noRecipes.message2": "Es sieht so aus, als hättest du noch keine Rezepte.",
-  "pages.home.errors.noRecipes.message3": "Klicke auf die Schaltfläche "+" in der unteren rechten Ecke, um ein Rezept hinzuzufügen!",
+  "pages.home.errors.noRecipes.message3": "Klicke auf die Schaltfläche \"+\" in der unteren rechten Ecke, um ein Rezept hinzuzufügen!",
   "pages.home.errors.noRecipes.message4": "Du kannst Rezepte auch importieren!",
   "pages.home.errors.noRecipes.message5": "Verwende das Seitenmenü, um zu Einstellungen -> Importieren zu gelangen.",
   "pages.home.errors.noRecipes.message6": "Du kannst die Clip-Tool-Erweiterung auf Desktop-Browsern installieren:",
@@ -850,7 +850,7 @@
   "pages.importPepperplate.timeout.header": "Das dauert etwas länger als erwartet",
   "pages.importPepperplate.timeout.message": "Dies kann passieren, wenn Pepperplate stark belastet ist. Der Import ist noch im Gange. Wenn deine Rezepte nicht angezeigt werden, kannst du mir gerne eine E-Mail schicken.",
 
-  "pages.importPepperplate.error.message": "Es ist ein Fehler aufgetreten - Bitte überprüfe deine Seite "Meine Rezepte", bevor du einen neuen Import startest, um Duplikate zu vermeiden.",
+  "pages.importPepperplate.error.message": "Es ist ein Fehler aufgetreten - Bitte überprüfe deine Seite \"Meine Rezepte\", bevor du einen neuen Import startest, um Duplikate zu vermeiden.",
 
   "pages.importPepperplate.success": "Import abgeschlossen!",
 
