@@ -85,7 +85,7 @@ export interface AppPreferenceTypes {
 export class PreferencesService {
   // Preference defaults - user preferences loaded locally will override
   preferences: AppPreferenceTypes = {
-    [GlobalPreferenceKey.EnableSplitPane]: false,
+    [GlobalPreferenceKey.EnableSplitPane]: true,
     [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
     [GlobalPreferenceKey.Language]: null,
 
