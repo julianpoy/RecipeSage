@@ -67,6 +67,9 @@ export class MessagingService {
   private messaging: Messaging;
   private fcmToken: any;
 
+  private _isFCMSupported: boolean;
+  private isFCMSupportedPromise: Promise<boolean>;
+
   constructor(
   public events: EventService,
   public utilService: UtilService,
@@ -75,9 +78,11 @@ export class MessagingService {
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
 
+    this.updateFCMSupported();
+
     const onSWRegsitration = async () => {
-      const isFirebaseSupported = await isSupported();
-      if (!isFirebaseSupported) return;
+      const isFCMSupported = await this.isFCMSupportedPromise;
+      if (!isFCMSupported) return;
 
       console.log('Has service worker registration. Beginning setup.');
       const config = {
@@ -107,12 +112,17 @@ export class MessagingService {
     else (window as any).onSWRegistration = onSWRegsitration;
   }
 
+  async updateFCMSupported() {
+    this.isFCMSupportedPromise = isSupported();
+    this._isFCMSupported = await this.isFCMSupportedPromise;
+  }
+
   isNotificationsEnabled() {
-    return isSupported() && ('Notification' in window) && ((Notification as any).permission === 'granted');
+    return this._isFCMSupported && ('Notification' in window) && ((Notification as any).permission === 'granted');
   }
 
   isNotificationsCapable() {
-    return isSupported();
+    return this._isFCMSupported;
   }
 
   fetch(params: {
@@ -154,7 +164,8 @@ export class MessagingService {
   }
 
   async requestNotifications() {
-    if (!isSupported()) return;
+    const isFCMSupported = await this.isFCMSupportedPromise;
+    if (!isFCMSupported) return;
     if (!('Notification' in window)) return;
     if (!this.messaging || (Notification as any).permission === 'denied') return;
 
@@ -191,8 +202,8 @@ export class MessagingService {
 
   // Grab token and setup FCM
   private async enableNotifications() {
-    const isFirebaseSupported = await isSupported();
-    if (!this.messaging || !isFirebaseSupported) return;
+    const isFCMSupported = await this.isFCMSupportedPromise;
+    if (!this.messaging || !isFCMSupported) return;
 
     console.log('Requesting permission...');
     const result = await Notification.requestPermission();
@@ -202,8 +213,8 @@ export class MessagingService {
   }
 
   public async disableNotifications() {
-    const isFirebaseSupported = await isSupported();
-    if (!this.messaging || !isFirebaseSupported) return;
+    const isFCMSupported = await this.isFCMSupportedPromise;
+    if (!this.messaging || !isFCMSupported) return;
 
     const token = this.fcmToken;
 
@@ -211,8 +222,8 @@ export class MessagingService {
   }
 
   private async updateToken() {
-    const isFirebaseSupported = await isSupported();
-    if (!this.messaging || !isFirebaseSupported) return;
+    const isFCMSupported = await this.isFCMSupportedPromise;
+    if (!this.messaging || !isFCMSupported) return;
 
     try {
       const currentToken = await getToken(this.messaging, {
