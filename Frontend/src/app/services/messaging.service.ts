@@ -75,8 +75,9 @@ export class MessagingService {
   public alertCtrl: AlertController,
   public toastCtrl: ToastController) {
 
-    const onSWRegsitration = () => {
-      if (!isSupported()) return;
+    const onSWRegsitration = async () => {
+      const isFirebaseSupported = await isSupported();
+      if (!isFirebaseSupported) return;
 
       console.log('Has service worker registration. Beginning setup.');
       const config = {
@@ -190,7 +191,8 @@ export class MessagingService {
 
   // Grab token and setup FCM
   private async enableNotifications() {
-    if (!this.messaging || !isSupported()) return;
+    const isFirebaseSupported = await isSupported();
+    if (!this.messaging || !isFirebaseSupported) return;
 
     console.log('Requesting permission...');
     const result = await Notification.requestPermission();
@@ -200,7 +202,8 @@ export class MessagingService {
   }
 
   public async disableNotifications() {
-    if (!this.messaging || !isSupported()) return;
+    const isFirebaseSupported = await isSupported();
+    if (!this.messaging || !isFirebaseSupported) return;
 
     const token = this.fcmToken;
 
@@ -208,7 +211,8 @@ export class MessagingService {
   }
 
   private async updateToken() {
-    if (!this.messaging || !isSupported()) return;
+    const isFirebaseSupported = await isSupported();
+    if (!this.messaging || !isFirebaseSupported) return;
 
     try {
       const currentToken = await getToken(this.messaging, {
