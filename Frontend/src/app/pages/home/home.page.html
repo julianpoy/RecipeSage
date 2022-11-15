@@ -128,7 +128,7 @@
       </div>
 
       <div *uiScroll="let recipe of datasource" class="recipe-item"
-        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1 }"
+        [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1, 'no-image': !preferences[preferenceKeys.ShowImages] }"
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
         button>
         <img *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" [src]="recipe.images[0].location" />
@@ -136,6 +136,7 @@
           *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]"
           class="no-image"
           src="/assets/imgs/logo_green.png" />
+        <div *ngIf="!preferences[preferenceKeys.ShowImages]"></div>
 
         <div class="recipe-item-content">
           <h2>{{ recipe.title }}</h2>
