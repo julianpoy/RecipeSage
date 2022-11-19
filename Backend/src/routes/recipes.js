@@ -298,51 +298,63 @@ router.get(
         }
       }
 
-      let labelFilterMap = labelFilter.reduce((acc, e, idx) => {
+      const unlabeledOnly = labelFilter.includes('unlabeled');
+      if (unlabeledOnly) labelFilter.splice(0);
+      const labelFilterMap = labelFilter.reduce((acc, e, idx) => {
         acc[`labelFilter${idx}`] = e;
         return acc;
       }, {});
 
-      let recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
-      let labelAttributes = ['id', 'title'];
-      let imageAttributes = ['id', 'location'];
-      let recipeImageAttributes = ['id', 'order'];
-      let fromUserAttributes = ['name', 'email'];
+      const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
+      const labelAttributes = ['id', 'title'];
+      const imageAttributes = ['id', 'location'];
+      const recipeImageAttributes = ['id', 'order'];
+      const fromUserAttributes = ['name', 'email'];
 
-      let recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
-      let labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
-      let imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
-      let recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
-      let fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
+      const recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
+      const labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
+      const imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
+      const recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
+      const fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
       let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
       if (folder === 'inbox') fields += `, ${fromUserSelect}`;
 
-      let countQuery = labelFilter.length > 0 ?
+      const labelFilterClause = `"Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') })`;
+      const labelIntersectionClause = req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : '';
+      const unlabeledClause = unlabeledOnly ? 'AND "Label".id IS NULL' : '';
+      const unlabeledJoin = unlabeledOnly ? `
+        LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = "Recipe".id
+        LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
+      `: '';
+
+      const countQuery = labelFilter.length > 0 ?
         `SELECT "Recipe".id
         FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
         WHERE "Recipe_Label"."labelId" = "Label".id
-        AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+        AND ${labelFilterClause}
         AND "Recipe".id = "Recipe_Label"."recipeId"
         AND "Recipe"."userId" = $userId
         AND "Recipe"."folder" = $folder
         GROUP BY "Recipe".id
-        ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}`
+        ${labelIntersectionClause}`
         :
         `SELECT count("Recipe".id)
         FROM "Recipes" AS "Recipe"
+        ${unlabeledJoin}
         WHERE "Recipe"."userId" = $userId
-        AND "Recipe"."folder" = $folder`;
+        AND "Recipe"."folder" = $folder
+        ${unlabeledClause}`;
 
-      let fetchQuery = labelFilter.length > 0 ?
+      const fetchQuery = labelFilter.length > 0 ?
         `SELECT ${fields} from (SELECT "Recipe".id
         FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
         WHERE "Recipe_Label"."labelId" = "Label".id
-        AND ("Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') }))
+        AND ${labelFilterClause}
         AND "Recipe".id = "Recipe_Label"."recipeId"
         AND "Recipe"."userId" = $userId
         AND "Recipe"."folder" = $folder
         GROUP BY "Recipe".id
-        ${req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : ''}
+        ${labelIntersectionClause}
         ORDER BY ${sort}
         LIMIT $limit
         OFFSET $offset) AS pag
@@ -356,8 +368,10 @@ router.get(
         :
         `SELECT ${fields} FROM (SELECT "Recipe".id
         FROM "Recipes" AS "Recipe"
+        ${unlabeledJoin}
         WHERE "Recipe"."userId" = $userId
         AND "Recipe"."folder" = $folder
+        ${unlabeledClause}
         GROUP BY "Recipe".id
         ORDER BY ${sort}
         LIMIT $limit
@@ -370,7 +384,7 @@ router.get(
         ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
         ORDER BY ${sort}`;
 
-      let countQueryOptions = {
+      const countQueryOptions = {
         type: SQ.QueryTypes.SELECT,
         bind: {
           userId,
@@ -379,7 +393,7 @@ router.get(
         }
       }
 
-      let fetchQueryOptions = {
+      const fetchQueryOptions = {
         type: SQ.QueryTypes.SELECT,
         hasJoin: true,
         bind: {
