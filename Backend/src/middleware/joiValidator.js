@@ -14,7 +14,7 @@ const joiValidator = (joiSchema) => {
 
     next();
   };
-}
+};
 
 module.exports = {
   joiValidator,

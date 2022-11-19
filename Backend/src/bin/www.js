@@ -5,13 +5,10 @@
  */
 
 const app = require('../app');
-const constants = require('constants');
 const debug = require('debug')('chefbook-backend:server');
-const fs = require("fs");
 const jobTracker = require('../services/job-tracker.js');
 
 const protocol = require('http');
-const serverOptions = {}
 
 /**
  * Get port from environment and store in Express.
@@ -39,7 +36,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -63,22 +60,22 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  const bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
+  case 'EACCES':
+    console.error(bind + ' requires elevated privileges');
+    process.exit(1);
+    break;
+  case 'EADDRINUSE':
+    console.error(bind + ' is already in use');
+    process.exit(1);
+    break;
+  default:
+    throw error;
   }
 }
 
@@ -87,28 +84,28 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  const addr = server.address();
+  const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
 
 const exit = () => {
-  console.log("EXITING");
+  console.log('EXITING');
   process.exit(0);
 };
 
 const attemptExit = () => {
   const jobsWaiting = jobTracker.getRunningJobs().length;
-  console.log("Jobs waiting: ", jobsWaiting);
+  console.log('Jobs waiting: ', jobsWaiting);
   if (jobsWaiting === 0) exit();
 };
 
 process.on('SIGTERM', () => {
-  console.log("RECEIVED SIGTERM - CLOSING SERVER");
+  console.log('RECEIVED SIGTERM - CLOSING SERVER');
   server.close(() => {
-    console.log("SERVER CLOSED - RESTING");
+    console.log('SERVER CLOSED - RESTING');
 
     setInterval(attemptExit, 5 * 1000); // Job check interval
     setTimeout(exit, 300 * 1000); // Max job wait

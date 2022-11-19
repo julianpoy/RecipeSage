@@ -15,7 +15,7 @@ const umzug = new Umzug({
         name,
         up: async () => migration.up(context, Sequelize),
         down: async () => migration.down(context, Sequelize),
-      }
+      };
     },
   },
   context: sequelize.getQueryInterface(),
@@ -25,6 +25,6 @@ const umzug = new Umzug({
 
 (async () => {
   // Checks migrations and run them if they are not already applied
-  await umzug.up()
-  console.log('All migrations performed successfully')
+  await umzug.up();
+  console.log('All migrations performed successfully');
 })();

@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-      tableName: 'ShoppingList_Collaborators'
-    });
-  ShoppingListCollaborator.associate = function (models) { };
+    tableName: 'ShoppingList_Collaborators'
+  });
+  ShoppingListCollaborator.associate = function () { };
   return ShoppingListCollaborator;
 };

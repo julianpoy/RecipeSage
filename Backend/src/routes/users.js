@@ -1,30 +1,31 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-var Sentry = require('@sentry/node');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const Sentry = require('@sentry/node');
+const moment = require('moment');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var User_Profile_Image = require('../models').User_Profile_Image;
-var FCMToken = require('../models').FCMToken;
-var Session = require('../models').Session;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
-var Image = require('../models').Image;
-var Message = require('../models').Message;
-var Friendship = require('../models').Friendship;
-var ProfileItem = require('../models').ProfileItem;
+const Op = require('sequelize').Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const User_Profile_Image = require('../models').User_Profile_Image;
+const FCMToken = require('../models').FCMToken;
+const Session = require('../models').Session;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
+const Image = require('../models').Image;
+const Message = require('../models').Message;
+const Friendship = require('../models').Friendship;
+const ProfileItem = require('../models').ProfileItem;
 
 // Service
-var SessionService = require('../services/sessions');
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
-var SubscriptionService = require('../services/subscriptions');
+const SessionService = require('../services/sessions');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
+const SubscriptionService = require('../services/subscriptions');
 
 // SharedUtils
-var SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('../../../SharedUtils/src');
 
 router.get(
   '/',
@@ -79,7 +80,7 @@ router.put(
       const userId = res.locals.session.userId;
 
       if (req.body.handle !== undefined && !SharedUtils.isHandleValid(req.body.handle)) {
-        const badHandleError = new Error("Handle must only contain A-z 0-9 _ .");
+        const badHandleError = new Error('Handle must only contain A-z 0-9 _ .');
         badHandleError.status = 400;
         throw badHandleError;
       }
@@ -108,14 +109,14 @@ router.put(
           const profileItems = req.body.profileItems.map((profileItem, idx) => {
             const { title, type, recipeId, labelId, visibility } = profileItem;
 
-            if (!["public", "friends-only"].includes(visibility)) {
-              const invalidVisibilityError = new Error("Invalid visibility type");
+            if (!['public', 'friends-only'].includes(visibility)) {
+              const invalidVisibilityError = new Error('Invalid visibility type');
               invalidVisibilityError.status = 400;
               throw invalidVisibilityError;
             }
 
-            if (!["all-recipes", "label", "recipe"].includes(type)) {
-              const invalidTypeError = new Error("Invalid profile item type");
+            if (!['all-recipes', 'label', 'recipe'].includes(type)) {
+              const invalidTypeError = new Error('Invalid profile item type');
               invalidTypeError.status = 400;
               throw invalidTypeError;
             }
@@ -179,7 +180,7 @@ router.put(
         }
       });
 
-      res.status(200).send("Updated");
+      res.status(200).send('Updated');
     } catch (err) {
       next(err);
     }
@@ -234,7 +235,7 @@ router.get(
       next(err);
     }
   }
-)
+);
 
 const getUserProfile = async (req, res, next) => {
   try {
@@ -246,7 +247,7 @@ const getUserProfile = async (req, res, next) => {
         }
       });
       if (!user) {
-        const profileUserNotFoundError = new Error("User with that handle not found");
+        const profileUserNotFoundError = new Error('User with that handle not found');
         profileUserNotFoundError.status = 404;
         throw profileUserNotFoundError;
       }
@@ -264,13 +265,13 @@ const getUserProfile = async (req, res, next) => {
     });
 
     if (!profileUser) {
-      const profileUserNotFoundError = new Error("User with that id not found");
+      const profileUserNotFoundError = new Error('User with that id not found');
       profileUserNotFoundError.status = 404;
       throw profileUserNotFoundError;
     }
 
     if (!profileUser.enableProfile) {
-      const profileNotEnabledError = new Error("User does not have an active profile");
+      const profileNotEnabledError = new Error('User does not have an active profile');
       profileNotEnabledError.status = 403;
       throw profileNotEnabledError;
     }
@@ -305,7 +306,7 @@ const getUserProfile = async (req, res, next) => {
     const profileItems = await ProfileItem.findAll({
       where: {
         userId: profileUserId,
-        ...(incomingFriendship ? {} : { visibility: "public" })
+        ...(incomingFriendship ? {} : { visibility: 'public' })
       },
       include: [{
         model: Recipe,
@@ -335,7 +336,7 @@ const getUserProfile = async (req, res, next) => {
   } catch(err) {
     next(err);
   }
-}
+};
 
 router.get(
   '/profile/by-handle/:handle',
@@ -441,7 +442,7 @@ router.post('/friends/:userId',
       const profileUserId = req.params.userId;
 
       if (profileUserId === res.locals.session.userId) {
-        const selfFriendshipError = new Error("You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though...");
+        const selfFriendshipError = new Error('You can\'t create a friendship with yourself. I understand if you\'re friends with yourself in real life, though...');
         selfFriendshipError.status = 400;
         throw selfFriendshipError;
       }
@@ -463,7 +464,7 @@ router.post('/friends/:userId',
         });
       });
 
-      res.status(201).send("Created");
+      res.status(201).send('Created');
     } catch(err) {
       next(err);
     }
@@ -492,7 +493,7 @@ router.delete('/friends/:userId',
         });
       });
 
-      res.status(200).send("Friendship removed");
+      res.status(200).send('Friendship removed');
     } catch(err) {
       next(err);
     }
@@ -549,45 +550,45 @@ router.get(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
-  const userId = res.locals.session.userId;
+    const userId = res.locals.session.userId;
 
-  Promise.all([
-    Recipe.count({
-      where: {
-        userId
-      }
-    }),
-    Recipe.count({
-      where: {
-        userId
-      },
-      include: [{
-        model: Image,
-        as: "images",
-        required: true
-      }]
-    }),
-    Message.count({
-      where: {
-        [Op.or]: [{
-          toUserId: userId
-        }, {
-          fromUserId: userId
+    Promise.all([
+      Recipe.count({
+        where: {
+          userId
+        }
+      }),
+      Recipe.count({
+        where: {
+          userId
+        },
+        include: [{
+          model: Image,
+          as: 'images',
+          required: true
         }]
-      }
-    })
-  ]).then(results => {
-    const [recipeCount, recipeImageCount, messageCount] = results;
+      }),
+      Message.count({
+        where: {
+          [Op.or]: [{
+            toUserId: userId
+          }, {
+            fromUserId: userId
+          }]
+        }
+      })
+    ]).then(results => {
+      const [recipeCount, recipeImageCount, messageCount] = results;
 
-    res.status(200).json({
-      recipeCount,
-      recipeImageCount,
-      messageCount,
-      createdAt: res.locals.user.createdAt,
-      lastLogin: res.locals.user.lastLogin
-    });
-  }).catch(next);
-});
+      res.status(200).json({
+        recipeCount,
+        recipeImageCount,
+        messageCount,
+        createdAt: res.locals.user.createdAt,
+        lastLogin: res.locals.user.lastLogin
+      });
+    }).catch(next);
+  });
 
 /* Get public user listing by email */
 router.get(
@@ -595,23 +596,23 @@ router.get(
   cors(),
   function(req, res, next) {
 
-  User.findOne({
-    where: {
-      email: UtilService.sanitizeEmail(req.query.email)
-    },
-    attributes: ['id', 'name', 'email']
-  })
-  .then(function(user) {
-    if (!user) {
-      res.status(404).json({
-        msg: "No user with that email!"
-      });
-    } else {
-      res.status(200).json(user);
-    }
-  })
-  .catch(next);
-});
+    User.findOne({
+      where: {
+        email: UtilService.sanitizeEmail(req.query.email)
+      },
+      attributes: ['id', 'name', 'email']
+    })
+      .then(function(user) {
+        if (!user) {
+          res.status(404).json({
+            msg: 'No user with that email!'
+          });
+        } else {
+          res.status(200).json(user);
+        }
+      })
+      .catch(next);
+  });
 
 /* Log in user */
 router.post(
@@ -619,24 +620,24 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  SQ.transaction(transaction => {
-    return User.login(req.body.email, req.body.password, transaction).then(user => {
-      // Update lastLogin
-      user.lastLogin = Date.now();
+    SQ.transaction(transaction => {
+      return User.login(req.body.email, req.body.password, transaction).then(user => {
+        // Update lastLogin
+        user.lastLogin = Date.now();
 
-      return Promise.all([
-        user.save({ transaction }),
-        SessionService.generateSession(user.id, 'user', transaction)
-      ]).then(([user, { token }]) => {
-        return token;
+        return Promise.all([
+          user.save({ transaction }),
+          SessionService.generateSession(user.id, 'user', transaction)
+        ]).then(([, { token }]) => {
+          return token;
+        });
       });
-    });
-  }).then(token => {
-    res.status(200).json({
-      token
-    });
-  }).catch(next);
-});
+    }).then(token => {
+      res.status(200).json({
+        token
+      });
+    }).catch(next);
+  });
 
 /* Register as a user */
 router.post(
@@ -644,60 +645,60 @@ router.post(
   cors(),
   async (req, res, next) => {
 
-  try {
-    if (process.env.DISABLE_REGISTRATION) throw new Error('Registration is disabled');
+    try {
+      if (process.env.DISABLE_REGISTRATION) throw new Error('Registration is disabled');
 
-    let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+      let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
-    const token = await SQ.transaction(async transaction => {
-      if (!UtilService.validateEmail(sanitizedEmail)) {
-        let e = new Error('Email is not valid!');
-        e.status = 412;
-        throw e;
-      }
+      const token = await SQ.transaction(async transaction => {
+        if (!UtilService.validateEmail(sanitizedEmail)) {
+          let e = new Error('Email is not valid!');
+          e.status = 412;
+          throw e;
+        }
 
-      if (!UtilService.validatePassword(req.body.password)) {
-        let e = new Error('Password is not valid!');
-        e.status = 411;
-        throw e;
-      }
+        if (!UtilService.validatePassword(req.body.password)) {
+          let e = new Error('Password is not valid!');
+          e.status = 411;
+          throw e;
+        }
 
-      const user = await User.findOne({
-        where: {
-          email: sanitizedEmail
-        },
-        attributes: ['id'],
-        transaction
+        const user = await User.findOne({
+          where: {
+            email: sanitizedEmail
+          },
+          attributes: ['id'],
+          transaction
+        });
+
+        if (user) {
+          let e = new Error('Account with that email address already exists!');
+          e.status = 406;
+          throw e;
+        }
+
+        let hashedPasswordData = User.generateHashedPassword(req.body.password);
+
+        const newUser = await User.create({
+          name: (req.body.name || sanitizedEmail).trim(),
+          email: sanitizedEmail,
+          passwordHash: hashedPasswordData.hash,
+          passwordSalt: hashedPasswordData.salt,
+          passwordVersion: hashedPasswordData.version
+        }, {
+          transaction
+        });
+
+        const session = await SessionService.generateSession(newUser.id, 'user', transaction);
+
+        return session.token;
       });
 
-      if (user) {
-        let e = new Error("Account with that email address already exists!");
-        e.status = 406;
-        throw e;
-      }
-
-      let hashedPasswordData = User.generateHashedPassword(req.body.password);
-
-      const newUser = await User.create({
-        name: (req.body.name || sanitizedEmail).trim(),
-        email: sanitizedEmail,
-        passwordHash: hashedPasswordData.hash,
-        passwordSalt: hashedPasswordData.salt,
-        passwordVersion: hashedPasswordData.version
-      }, {
-        transaction
+      res.status(200).json({
+        token
       });
 
-      const session = await SessionService.generateSession(newUser.id, 'user', transaction);
-
-      return session.token;
-    });
-
-    res.status(200).json({
-      token
-    });
-
-    var html = `Welcome to RecipeSage!<br />
+      const html = `Welcome to RecipeSage!<br />
 
     <br /><br />Thanks for joining our community of recipe collectors!
     <br /><br />
@@ -716,7 +717,7 @@ router.post(
     Instagram: <a href="https://www.instagram.com/recipesageofficial/">https://www.instagram.com/recipesageofficial/</a><br />
     Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>`;
 
-    var plain = `Welcome to RecipeSage!
+      const plain = `Welcome to RecipeSage!
 
 
 Thanks for joining our community of recipe collectors!
@@ -734,13 +735,13 @@ https://www.facebook.com/recipesageofficial/
 https://www.instagram.com/recipesageofficial/
 https://twitter.com/RecipeSageO`;
 
-    UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
-      Sentry.captureException(err);
-    });
-  } catch(err) {
-    next(err);
-  }
-});
+      UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
+        Sentry.captureException(err);
+      });
+    } catch(err) {
+      next(err);
+    }
+  });
 
 /* Forgot password */
 router.post(
@@ -748,30 +749,30 @@ router.post(
   cors(),
   function(req, res, next) {
 
-  let standardStatus = 200;
-  let standardResponse = {
-    msg: ""
-  }
+    let standardStatus = 200;
+    let standardResponse = {
+      msg: ''
+    };
 
-  let origin;
-  if (process.env.NODE_ENV === 'production') {
-    origin = 'https://recipesage.com';
-  } else {
-    // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
-    origin = req.get('origin');
-  }
-
-  User.findOne({
-    where: {
-      email: UtilService.sanitizeEmail(req.body.email)
-    }
-  }).then(function(user) {
-    if (!user) {
-      res.status(standardStatus).json(standardResponse);
+    let origin;
+    if (process.env.NODE_ENV === 'production') {
+      origin = 'https://recipesage.com';
     } else {
-      return SessionService.generateSession(user.id, 'user').then(({ token }) => {
-        var link = origin + '/#/settings/account?token=' + token;
-        var html = `Hello,
+      // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
+      origin = req.get('origin');
+    }
+
+    User.findOne({
+      where: {
+        email: UtilService.sanitizeEmail(req.body.email)
+      }
+    }).then(function(user) {
+      if (!user) {
+        res.status(standardStatus).json(standardResponse);
+      } else {
+        return SessionService.generateSession(user.id, 'user').then(({ token }) => {
+          const link = origin + '/#/settings/account?token=' + token;
+          const html = `Hello,
 
         <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
         <br /><br />If you did not request a password reset, please disregard this email.
@@ -785,7 +786,7 @@ router.post(
         <br />Julian P.
         <br />RecipeSage`;
 
-        var plain = `Hello,
+          const plain = `Hello,
 
 Someone recently requested a password reset link for the RecipeSage account associated with this email address.
 If you did not request a password reset, please disregard this email.
@@ -796,13 +797,13 @@ Thank you,
 Julian P.
 RecipeSage`;
 
-        return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
-          res.status(standardStatus).json(standardResponse);
+          return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
+            res.status(standardStatus).json(standardResponse);
+          });
         });
-      });
-    }
-  }).catch(next);
-});
+      }
+    }).catch(next);
+  });
 
 /* Update user */
 router.put(
@@ -812,96 +813,96 @@ router.put(
   MiddlewareService.validateUser,
   function(req, res, next) {
 
-  return SQ.transaction(t => {
-    let updates = {};
+    return SQ.transaction(t => {
+      let updates = {};
 
-    return Promise.all([
-      // Password update stage
-      Promise.resolve().then(() => {
-        if (!req.body.password) return;
+      return Promise.all([
+        // Password update stage
+        Promise.resolve().then(() => {
+          if (!req.body.password) return;
 
-        if (!UtilService.validatePassword(req.body.password)) {
-          var e = new Error("Password is not valid!");
-          e.status = 412;
-          throw e;
-        }
-
-        let hashedPasswordData = User.generateHashedPassword(req.body.password);
-
-        updates.passwordHash = hashedPasswordData.hash;
-        updates.passwordSalt = hashedPasswordData.salt;
-        updates.passwordVersion = hashedPasswordData.version;
-
-        return Promise.all([
-          FCMToken.destroy({
-            where: {
-              userId: res.locals.session.userId
-            },
-            transaction: t
-          }),
-          Session.destroy({
-            where: {
-              userId: res.locals.session.userId
-            },
-            transaction: t
-          })
-        ])
-      }),
-      // Email update stage
-      Promise.resolve().then(() => {
-        if (!req.body.email) return;
-
-        let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
-
-        if (!UtilService.validateEmail(sanitizedEmail)) {
-          var e = new Error("Email is not valid!");
-          e.status = 412;
-          throw e;
-        }
-
-        return User.findOne({
-          where: {
-            id: { [Op.ne]: res.locals.session.userId },
-            email: sanitizedEmail
-          },
-          attributes: ['id'],
-          transaction: t
-        }).then(user => {
-          if (user) {
-            var e = new Error("Account with that email address already exists!");
-            e.status = 406;
+          if (!UtilService.validatePassword(req.body.password)) {
+            const e = new Error('Password is not valid!');
+            e.status = 412;
             throw e;
           }
 
-          updates.email = sanitizedEmail;
-        });
-      }),
-      // Other info update stage
-      Promise.resolve().then(() => {
-        if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
-      })
-    ]).then(() => {
-      return User.update(updates, {
-        where: {
-          id: res.locals.session.userId
-        },
-        returning: true,
-        transaction: t
-      })
-      .then(([numUpdated, [updatedUser]]) => {
-        const { id, name, email, createdAt, updatedAt } = updatedUser;
+          let hashedPasswordData = User.generateHashedPassword(req.body.password);
 
-        res.status(200).json({
-          id,
-          name,
-          email,
-          createdAt,
-          updatedAt
-        });
+          updates.passwordHash = hashedPasswordData.hash;
+          updates.passwordSalt = hashedPasswordData.salt;
+          updates.passwordVersion = hashedPasswordData.version;
+
+          return Promise.all([
+            FCMToken.destroy({
+              where: {
+                userId: res.locals.session.userId
+              },
+              transaction: t
+            }),
+            Session.destroy({
+              where: {
+                userId: res.locals.session.userId
+              },
+              transaction: t
+            })
+          ]);
+        }),
+        // Email update stage
+        Promise.resolve().then(() => {
+          if (!req.body.email) return;
+
+          let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+
+          if (!UtilService.validateEmail(sanitizedEmail)) {
+            const e = new Error('Email is not valid!');
+            e.status = 412;
+            throw e;
+          }
+
+          return User.findOne({
+            where: {
+              id: { [Op.ne]: res.locals.session.userId },
+              email: sanitizedEmail
+            },
+            attributes: ['id'],
+            transaction: t
+          }).then(user => {
+            if (user) {
+              const e = new Error('Account with that email address already exists!');
+              e.status = 406;
+              throw e;
+            }
+
+            updates.email = sanitizedEmail;
+          });
+        }),
+        // Other info update stage
+        Promise.resolve().then(() => {
+          if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
+        })
+      ]).then(() => {
+        return User.update(updates, {
+          where: {
+            id: res.locals.session.userId
+          },
+          returning: true,
+          transaction: t
+        })
+          .then(([, [updatedUser]]) => {
+            const { id, name, email, createdAt, updatedAt } = updatedUser;
+
+            res.status(200).json({
+              id,
+              name,
+              email,
+              createdAt,
+              updatedAt
+            });
+          });
       });
-    });
-  }).catch(next);
-});
+    }).catch(next);
+  });
 
 router.post(
   '/logout',
@@ -920,9 +921,9 @@ router.get(
   '/sessioncheck',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
-  res.status(200).send('Ok');
-});
+  function(req, res) {
+    res.status(200).send('Ok');
+  });
 
 router.post(
   '/fcm/token',
@@ -930,33 +931,33 @@ router.post(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  if (!req.body.fcmToken) {
-    res.status(412).send('fcmToken required');
-    return;
-  }
-
-  FCMToken.destroy({
-    where: {
-      token: req.body.fcmToken,
-      userId: { [Op.ne]: res.locals.session.userId }
+    if (!req.body.fcmToken) {
+      res.status(412).send('fcmToken required');
+      return;
     }
-  })
-  .then(function() {
-    return FCMToken.findOrCreate({
+
+    FCMToken.destroy({
       where: {
-        token: req.body.fcmToken
-      },
-      defaults: {
-        userId: res.locals.session.userId,
-        token: req.body.fcmToken
+        token: req.body.fcmToken,
+        userId: { [Op.ne]: res.locals.session.userId }
       }
     })
-    .then(function(token) {
-      res.status(200).send(token);
-    });
-  })
-  .catch(next);
-});
+      .then(function() {
+        return FCMToken.findOrCreate({
+          where: {
+            token: req.body.fcmToken
+          },
+          defaults: {
+            userId: res.locals.session.userId,
+            token: req.body.fcmToken
+          }
+        })
+          .then(function(token) {
+            res.status(200).send(token);
+          });
+      })
+      .catch(next);
+  });
 
 router.delete(
   '/fcm/token',
@@ -964,20 +965,20 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
-  if (!req.query.fcmToken) {
-    res.status(412).send('fcmToken required');
-    return;
-  }
-
-  FCMToken.destroy({
-    where: {
-      token: req.query.fcmToken,
-      userId: res.locals.session.userId
+    if (!req.query.fcmToken) {
+      res.status(412).send('fcmToken required');
+      return;
     }
-  }).then(() => {
-    res.status(200).send("ok");
-  }).catch(next);
-});
+
+    FCMToken.destroy({
+      where: {
+        token: req.query.fcmToken,
+        userId: res.locals.session.userId
+      }
+    }).then(() => {
+      res.status(200).send('ok');
+    }).catch(next);
+  });
 
 /* Get public user listing by id */
 router.get(
@@ -987,7 +988,7 @@ router.get(
     try {
       const user = await User.findByPk(req.params.userId, {
         attributes: ['id', 'name', 'handle']
-      })
+      });
 
       if (!user) {
         const notFoundErr = new Error('User not found');

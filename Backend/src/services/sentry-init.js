@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const Sentry = require("@sentry/node");
+const Sentry = require('@sentry/node');
 
 // Importing @sentry/tracing patches the global hub for tracing to work.
-const SentryTracing = require("@sentry/tracing");
+require('@sentry/tracing');
 
 const RS_VERSION = process.env.VERSION || JSON.parse(fs.readFileSync(path.join(__dirname, '/../../package.json'))).version;
 

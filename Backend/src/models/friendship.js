@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     return outgoingFriendship && incomingFriendship;
-  }
+  };
 
   return Friendship;
 };

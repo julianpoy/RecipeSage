@@ -1,15 +1,15 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.addConstraint('Users', {
-      type: "UNIQUE",
+      type: 'UNIQUE',
       name: 'Users_email_uk',
       fields: ['email']
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.removeConstraint('Users', 'Users_email_uk');
   }
 };

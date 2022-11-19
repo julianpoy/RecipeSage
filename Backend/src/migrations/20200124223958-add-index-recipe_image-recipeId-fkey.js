@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.addIndex('Recipe_Images', ['recipeId']);
   },
-  
-  down: (queryInterface, Sequelize) => {
+
+  down: (queryInterface) => {
     return queryInterface.removeIndex('Recipe_Images', ['recipeId']);
   }
 };

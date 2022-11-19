@@ -4,13 +4,11 @@ const cors = require('cors');
 const ical = require('ical-generator');
 
 // DB
-const Op = require("sequelize").Op;
+const Op = require('sequelize').Op;
 const SQ = require('../models').sequelize;
 const User = require('../models').User;
 const Recipe = require('../models').Recipe;
 const Image = require('../models').Image;
-const Message = require('../models').Message;
-const Label = require('../models').Label;
 const MealPlan = require('../models').MealPlan;
 const MealPlanItem = require('../models').MealPlanItem;
 const ShoppingList = require('../models').ShoppingList;
@@ -18,7 +16,6 @@ const ShoppingListItem = require('../models').ShoppingListItem;
 
 // Service
 const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
 const GripService = require('../services/grip');
 
 router.post(
@@ -28,35 +25,35 @@ router.post(
   MiddlewareService.validateUser,
   function (req, res, next) {
 
-  SQ.transaction((t) => {
-    return MealPlan.create({
-      title: req.body.title,
-      userId: res.locals.session.userId
-    }, {
-      transaction: t
-    }).then(function(mealPlan) {
-      return mealPlan.addCollaborators(
-        req.body.collaborators || [],
-        {
-          transaction: t
-        }
-      ).then(() => {
-        for (var i = 0; i < (req.body.collaborators || []).length; i++) {
-          GripService.broadcast(req.body.collaborators[i], 'mealPlan:received', {
-            mealPlanId: mealPlan.id,
-            from: {
-              id: res.locals.user.id,
-              name: res.locals.user.name,
-              email: res.locals.user.email
-            }
-          });
-        }
+    SQ.transaction((t) => {
+      return MealPlan.create({
+        title: req.body.title,
+        userId: res.locals.session.userId
+      }, {
+        transaction: t
+      }).then(function(mealPlan) {
+        return mealPlan.addCollaborators(
+          req.body.collaborators || [],
+          {
+            transaction: t
+          }
+        ).then(() => {
+          for (let i = 0; i < (req.body.collaborators || []).length; i++) {
+            GripService.broadcast(req.body.collaborators[i], 'mealPlan:received', {
+              mealPlanId: mealPlan.id,
+              from: {
+                id: res.locals.user.id,
+                name: res.locals.user.name,
+                email: res.locals.user.email
+              }
+            });
+          }
 
-        res.status(200).json(mealPlan);
-      })
-    });
-  }).catch(next);
-});
+          res.status(200).json(mealPlan);
+        });
+      });
+    }).catch(next);
+  });
 
 router.get(
   '/',
@@ -146,7 +143,7 @@ router.post(
       ]
     }).then(function (mealPlan) {
       if (!mealPlan) {
-        res.status(404).send("Meal plan with that ID not found or you do not have access!");
+        res.status(404).send('Meal plan with that ID not found or you do not have access!');
       } else {
         return MealPlanItem.create({
           title: req.body.title,
@@ -158,7 +155,7 @@ router.post(
         }).then(function() {
           let reference = Date.now();
 
-          var broadcastPayload = {
+          const broadcastPayload = {
             mealPlanId: mealPlan.id,
             updatedBy: {
               id: res.locals.user.id,
@@ -169,7 +166,7 @@ router.post(
           };
 
           GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', broadcastPayload);
-          for (var i = 0; i < mealPlan.collaborators.length; i++) {
+          for (let i = 0; i < mealPlan.collaborators.length; i++) {
             GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', broadcastPayload);
           }
 
@@ -206,11 +203,11 @@ router.delete(
       ]
     }).then(function (mealPlan) {
       if (!mealPlan) {
-        res.status(404).send("Meal plan not found or not visible to you!");
+        res.status(404).send('Meal plan not found or not visible to you!');
       } else {
         if (mealPlan.userId === res.locals.session.userId) {
           return mealPlan.destroy().then(() => {
-            for (var i = 0; i < (mealPlan.collaborators || []).length; i++) {
+            for (let i = 0; i < (mealPlan.collaborators || []).length; i++) {
               GripService.broadcast(mealPlan.collaborators[i], 'mealPlan:removed', {
                 mealPlanId: mealPlan.id,
                 updatedBy: {
@@ -265,7 +262,7 @@ router.delete(
         }).then(function () {
           let reference = Date.now();
 
-          var deletedItemBroadcast = {
+          const deletedItemBroadcast = {
             mealPlanId: mealPlan.id,
             updatedBy: {
               id: res.locals.user.id,
@@ -276,7 +273,7 @@ router.delete(
           };
 
           GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', deletedItemBroadcast);
-          for (var i = 0; i < mealPlan.collaborators.length; i++) {
+          for (let i = 0; i < mealPlan.collaborators.length; i++) {
             GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', deletedItemBroadcast);
           }
 
@@ -338,7 +335,7 @@ router.put(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -349,7 +346,7 @@ router.put(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
@@ -401,7 +398,7 @@ router.post(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -412,7 +409,7 @@ router.post(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
@@ -451,7 +448,7 @@ router.delete(
       if (!mealPlan) return res.status(404).send('Meal plan does not exist or you do not have access');
 
       const mealPlanItemIds = req.query.itemIds.split(',');
-      if (!mealPlanItemIds || mealPlanItemIds.length === 0) return res.status(400).send("Must provide itemIds");
+      if (!mealPlanItemIds || mealPlanItemIds.length === 0) return res.status(400).send('Must provide itemIds');
 
       await MealPlanItem.destroy({
         where: {
@@ -463,7 +460,7 @@ router.delete(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -474,7 +471,7 @@ router.delete(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
@@ -492,73 +489,73 @@ router.get(
   MiddlewareService.validateUser,
   async (req, res, next) => {
 
-  try {
-    const mealPlan = await MealPlan.findOne({
-      where: {
-        id: req.params.mealPlanId,
-        [Op.or]: [
-          { userId: res.locals.session.userId },
-          { '$collaborators.id$': res.locals.session.userId }
-        ]
-      },
-      include: [{
-        model: User,
-        as: 'collaborators',
-        attributes: ['id']
-      }]
-    });
-
-    if (!mealPlan) {
-      return res.status(404).send("Meal plan with that ID not found or you do not have access!");
-    }
-
-    const mealPlanSummary = await MealPlan.findOne({
-      where: {
-        id: mealPlan.id
-      },
-      include: [{
-        model: User,
-        as: 'collaborators',
-        attributes: ['id', 'name', 'email']
-      }, {
-        model: User,
-        as: 'owner',
-        attributes: ['id', 'name', 'email']
-      }, {
-        model: MealPlanItem,
-        as: 'items',
-        attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
+    try {
+      const mealPlan = await MealPlan.findOne({
+        where: {
+          id: req.params.mealPlanId,
+          [Op.or]: [
+            { userId: res.locals.session.userId },
+            { '$collaborators.id$': res.locals.session.userId }
+          ]
+        },
         include: [{
+          model: User,
+          as: 'collaborators',
+          attributes: ['id']
+        }]
+      });
+
+      if (!mealPlan) {
+        return res.status(404).send('Meal plan with that ID not found or you do not have access!');
+      }
+
+      const mealPlanSummary = await MealPlan.findOne({
+        where: {
+          id: mealPlan.id
+        },
+        include: [{
+          model: User,
+          as: 'collaborators',
+          attributes: ['id', 'name', 'email']
+        }, {
           model: User,
           as: 'owner',
           attributes: ['id', 'name', 'email']
         }, {
-          model: ShoppingListItem,
-          as: 'shoppingListItems',
-          attributes: ['id', 'title'],
+          model: MealPlanItem,
+          as: 'items',
+          attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
           include: [{
-            model: ShoppingList,
-            as: 'shoppingList',
-            attributes: ['id', 'title']
-          }]
-        }, {
-          model: Recipe,
-          as: 'recipe',
-          attributes: ['id', 'title', 'ingredients'],
-          include: [{
-            model: Image,
-            as: 'images',
-            attributes: ['id', 'location']
+            model: User,
+            as: 'owner',
+            attributes: ['id', 'name', 'email']
+          }, {
+            model: ShoppingListItem,
+            as: 'shoppingListItems',
+            attributes: ['id', 'title'],
+            include: [{
+              model: ShoppingList,
+              as: 'shoppingList',
+              attributes: ['id', 'title']
+            }]
+          }, {
+            model: Recipe,
+            as: 'recipe',
+            attributes: ['id', 'title', 'ingredients'],
+            include: [{
+              model: Image,
+              as: 'images',
+              attributes: ['id', 'location']
+            }]
           }]
         }]
-      }]
-    });
+      });
 
-    res.status(200).json(mealPlanSummary);
-  } catch (e) {
-    next(e);
-  }
-});
+      res.status(200).json(mealPlanSummary);
+    } catch (e) {
+      next(e);
+    }
+  });
 
 // Get ical for meal plan
 router.get(
@@ -566,44 +563,44 @@ router.get(
   cors(),
   async (req, res, next) => {
 
-  try {
-    const mealPlan = await MealPlan.findOne({
-      where: {
-        id: req.params.mealPlanId
-      },
-      include: [{
-        model: MealPlanItem,
-        as: 'items',
-        attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
+    try {
+      const mealPlan = await MealPlan.findOne({
+        where: {
+          id: req.params.mealPlanId
+        },
         include: [{
-          model: Recipe,
-          as: 'recipe',
-          attributes: ['id', 'title', 'ingredients'],
+          model: MealPlanItem,
+          as: 'items',
+          attributes: ['id', 'title', 'scheduled', 'meal', 'createdAt', 'updatedAt'],
+          include: [{
+            model: Recipe,
+            as: 'recipe',
+            attributes: ['id', 'title', 'ingredients'],
+          }]
         }]
-      }]
-    });
+      });
 
-    if (!mealPlan) {
-      return res.status(404).send("Meal plan not found");
+      if (!mealPlan) {
+        return res.status(404).send('Meal plan not found');
+      }
+
+      const icalEvents = mealPlan.items.map(item => ({
+        start: new Date(item.scheduled),
+        allDay: true,
+        summary: item.recipe?.title || item.title,
+        url: `https://recipesage.com/#/meal-planners/${mealPlan.id}`,
+      }));
+
+      const mealPlanICal = ical({
+        name: `RecipeSage ${mealPlan.title}`,
+        events: icalEvents,
+      });
+
+      mealPlanICal.serve(res);
+    } catch (e) {
+      next(e);
     }
-
-    const icalEvents = mealPlan.items.map(item => ({
-      start: new Date(item.scheduled),
-      allDay: true,
-      summary: item.recipe?.title || item.title,
-      url: `https://recipesage.com/#/meal-planners/${mealPlan.id}`,
-    }));
-
-    const mealPlanICal = ical({
-      name: `RecipeSage ${mealPlan.title}`,
-      events: icalEvents,
-    });
-
-    mealPlanICal.serve(res);
-  } catch (e) {
-    next(e);
-  }
-});
+  });
 
 // Update a meal plan meta info (NOT INCLUDING ITEMS)
 // router.put(

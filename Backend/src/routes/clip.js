@@ -6,10 +6,10 @@ const he = require('he');
 
 const puppeteer = require('puppeteer-core');
 
-const jsdom = require("jsdom");
+const jsdom = require('jsdom');
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
-const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
 const sanitizeHtml = require('sanitize-html');
 
 const disconnectPuppeteer = (browser) => {
@@ -50,8 +50,8 @@ const clipRecipe = async clipUrl => {
             body: text
           });
         } catch(e) {
-          console.log("Error while classifying", e);
-          request.abort();
+          console.log('Error while classifying', e);
+          interceptedRequest.abort();
         }
       } else {
         interceptedRequest.continue();
@@ -60,7 +60,7 @@ const clipRecipe = async clipUrl => {
 
     try {
       await page.goto(clipUrl, {
-        waitUntil: "networkidle2",
+        waitUntil: 'networkidle2',
         timeout: 25000
       });
     } catch(err) {
@@ -89,6 +89,7 @@ const clipRecipe = async clipUrl => {
 
     await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
     const recipeData = await page.evaluate((interceptUrl) => {
+      // eslint-disable-next-line no-undef
       return window.RecipeClipper.clipRecipe({
         mlClassifyEndpoint: interceptUrl,
       });
@@ -105,8 +106,8 @@ const clipRecipe = async clipUrl => {
 };
 
 const replaceBrWithBreak = (html) => {
-  return html.replaceAll(new RegExp("<br( \/)?>", 'g'), '\n');
-}
+  return html.replaceAll(new RegExp(/<br( \/)?>/, 'g'), '\n');
+};
 
 const clipRecipeJSDOM = async url => {
   const response = await fetch(url);
@@ -135,23 +136,11 @@ const clipRecipeJSDOM = async url => {
   });
 };
 
-const objDiffKeys = (obj1, obj2) => {
-  obj1 = obj1 || {};
-  obj2 = obj2 || {};
-
-  const keys = [...new Set([
-    ...Object.keys(obj1),
-    ...Object.keys(obj2),
-  ])];
-
-  return keys.filter(key => obj1[key] !== obj2[key]);
-}
-
 router.get('/', async (req, res, next) => {
   try {
-    const url = (req.query.url || "").trim();
+    const url = (req.query.url || '').trim();
     if (!url) {
-      return res.status(400).send("Must provide a URL");
+      return res.status(400).send('Must provide a URL');
     }
 
     const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
@@ -161,15 +150,6 @@ router.get('/', async (req, res, next) => {
 
     const recipeData = clipRecipeResult.value || {};
     const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
-
-    const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
-    const diff = differentKeys.reduce((acc, key) => {
-      acc[key] = {
-        recipeData: recipeData[key],
-        recipeDataJSDOM: recipeDataJSDOM[key],
-      }
-      return acc;
-    }, {});
 
     // Merge results (browser overrides JSDOM due to accuracy)
     const results = recipeDataJSDOM;

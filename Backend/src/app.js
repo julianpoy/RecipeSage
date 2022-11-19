@@ -1,34 +1,34 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cors = require('cors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // Routes
-var index = require('./routes/index');
-var users = require('./routes/users');
-var recipes = require('./routes/recipes');
-var labels = require('./routes/labels');
-var messages = require('./routes/messages');
-var shoppingLists = require('./routes/shoppingLists');
-var mealPlans = require('./routes/mealPlans');
-var print = require('./routes/print');
-var payments = require('./routes/payments');
-var images = require('./routes/images');
-var clip = require('./routes/clip');
-var data = require('./routes/data');
-var proxy = require('./routes/proxy');
+const index = require('./routes/index');
+const users = require('./routes/users');
+const recipes = require('./routes/recipes');
+const labels = require('./routes/labels');
+const messages = require('./routes/messages');
+const shoppingLists = require('./routes/shoppingLists');
+const mealPlans = require('./routes/mealPlans');
+const print = require('./routes/print');
+const payments = require('./routes/payments');
+const images = require('./routes/images');
+const clip = require('./routes/clip');
+const data = require('./routes/data');
+const proxy = require('./routes/proxy');
 
-var ws = require('./routes/ws');
+const ws = require('./routes/ws');
 
-var app = express();
+const app = express();
 
-var corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost'];
-var corsOptions = {
+const corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost'];
+const corsOptions = {
   origin: (origin, callback) => {
     if (corsWhitelist.indexOf(origin) !== -1) {
       callback(null, true); // Enable CORS for whitelisted domains
@@ -50,7 +50,7 @@ if (process.env.NODE_ENV !== 'test') app.use(logger('dev'));
 app.use(bodyParser.json({
   limit: '250MB',
   verify: (req, res, buf) => {
-    var url = req.originalUrl;
+    const url = req.originalUrl;
     if (url.startsWith('/payments/stripe/webhooks')) {
       req.rawBody = buf.toString();
     }
@@ -77,7 +77,7 @@ app.use('/ws', ws);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -90,10 +90,10 @@ let logError = err => {
   console.error(err);
 
   Sentry.captureException(err);
-}
+};
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
 

@@ -10,6 +10,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'Recipe_Labels'
   });
-  RecipeLabel.associate = function (models) {};
+  RecipeLabel.associate = function () {};
   return RecipeLabel;
 };

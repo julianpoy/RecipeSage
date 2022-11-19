@@ -24,7 +24,7 @@
 // describe('firebase', () => {
 //   let firebaseStub
 
-//   before(() => {
+//   beforeAll(() => {
 //     firebaseStub = sinon.stub()
 
 //     Object.defineProperty(admin, 'messaging', { get: () => firebaseStub });
@@ -34,7 +34,7 @@
 //     describe('success', () => {
 //       let fcmSendStub, fcmSendMessageStub
 
-//       before(async () => {
+//       beforeAll(async () => {
 //         fcmSendStub = sinon.stub().returns(Promise.resolve())
 
 //         firebaseStub.reset()
@@ -51,7 +51,7 @@
 //         await sendMessage(token, payload)
 //       })
 
-//       after(() => {
+//       afterAll(() => {
 //         fcmSendMessageStub.restore()
 //       })
 
@@ -77,7 +77,7 @@
 //     describe('failure due to invalid token', () => {
 //       let fcmSendStub, fcmSendMessageStub, fcmToken
 
-//       before(async () => {
+//       beforeAll(async () => {
 //         fcmSendStub = sinon.stub().returns(Promise.reject({
 //           errorInfo: {
 //             code: 'messaging/registration-token-not-registered'
@@ -96,7 +96,7 @@
 //         await sendMessage(fcmToken, {})
 //       })
 
-//       after(() => {
+//       afterAll(() => {
 //         fcmSendMessageStub.restore()
 //       })
 
@@ -117,7 +117,7 @@
 //     describe('general failure', () => {
 //       let fcmSendStub, fcmSendMessageStub
 
-//       before(async () => {
+//       beforeAll(async () => {
 //         fcmSendStub = sinon.stub().returns(Promise.reject({
 //           errorInfo: {
 //             code: 'messaging/internal-error'
@@ -134,7 +134,7 @@
 //         await sendMessage("token1", {})
 //       })
 
-//       after(() => {
+//       afterAll(() => {
 //         fcmSendMessageStub.restore()
 //       })
 
@@ -154,14 +154,14 @@
 
 //   describe('sendMessages', () => {
 //     let sendMessageStub
-//     before(() => {
+//     beforeAll(() => {
 //       sendMessageStub = sinon.stub(FirebaseService, 'sendMessage')
 //     })
 
 //     describe('success', async () => {
 //       let tokens, payload
 
-//       before(async () => {
+//       beforeAll(async () => {
 //         sendMessageStub.reset()
 //         sendMessageStub.returns(Promise.resolve())
 
@@ -190,7 +190,7 @@
 //     describe('failure', async () => {
 //       let tokens, payload, rejected
 
-//       before(async () => {
+//       beforeAll(async () => {
 //         sendMessageStub.reset()
 //         sendMessageStub.returns(Promise.reject())
 

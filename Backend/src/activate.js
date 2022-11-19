@@ -1,6 +1,3 @@
-const Sequelize = require('sequelize');
-const path = require('path');
-
 const User = require('./models').User;
 
 const subscriptionService = require('./services/subscriptions');
@@ -8,7 +5,10 @@ const subscriptionService = require('./services/subscriptions');
 const email = process.argv[2];
 const subName = process.argv[3];
 
-if (!email) return console.log("You must provide an email address as the first argument");
+if (!email) {
+  console.error('You must provide an email address as the first argument');
+  process.exit(1);
+}
 
 const run = async () => {
   const user = await User.findOne({
@@ -17,16 +17,16 @@ const run = async () => {
     }
   });
 
-  if (!user) return console.log("No user found with that email address");
+  if (!user) return console.log('No user found with that email address');
 
-  await subscriptionService.extend(user.id, subName || "forever");
+  await subscriptionService.extend(user.id, subName || 'forever');
 
-  console.log("\n");
-  console.log("Thanks for activating RecipeSage's bonus features");
-  console.log("Please consider contributing to RecipeSage's development & maintenance: https://recipesage.com/#/contribute");
-  console.log("");
-  console.log("- Julian");
-  console.log("");
+  console.log('\n');
+  console.log('Thanks for activating RecipeSage\'s bonus features');
+  console.log('Please consider contributing to RecipeSage\'s development & maintenance: https://recipesage.com/#/contribute');
+  console.log('');
+  console.log('- Julian');
+  console.log('');
 };
 
 run()
