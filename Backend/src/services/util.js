@@ -232,7 +232,11 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 };
 
 exports.cleanLabelTitle = labelTitle => {
-  return (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
+  const cleanedTitle = (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
+
+  if (cleanedTitle === 'unlabeled') return 'un-labeled';
+
+  return cleanedTitle;
 };
 
 exports.capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');

@@ -65,14 +65,23 @@ export class HomePopoverPage {
   async openLabelFilter() {
     const nullMessage = await this.translate.get('pages.homepopover.labelNull').toPromise();
 
+    const options = this.labels.map(label => ({
+      title: `${label.title} (${label.recipeCount})`,
+      value: label.title,
+      selected: this.selectedLabels.indexOf(label.title) > -1
+    }));
+
+    const unlabeledTitle = await this.translate.get('pages.homepopover.unlabeled').toPromise();
+    options.unshift({
+      title: unlabeledTitle,
+      value: 'unlabeled',
+      selected: this.selectedLabels.indexOf('unlabeled') > -1
+    });
+
     const labelFilterPopover = await this.popoverCtrl.create({
       component: ResettableSelectPopoverPage,
       componentProps: {
-        options: this.labels.map(label => ({
-          title: `${label.title} (${label.recipeCount})`,
-          value: label.title,
-          selected: this.selectedLabels.indexOf(label.title) > -1
-        })),
+        options,
         nullMessage
       }
     });
