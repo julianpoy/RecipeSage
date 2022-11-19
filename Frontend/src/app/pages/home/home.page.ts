@@ -13,7 +13,7 @@ import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
-import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
 const TILE_WIDTH = 200;
@@ -163,7 +163,10 @@ export class HomePage {
   }
 
   updateTileColCount() {
-    const tileColCount = Math.floor(window.innerWidth / (TILE_WIDTH + TILE_PADD));
+    const isSidebarEnabled = this.preferences[GlobalPreferenceKey.EnableSplitPane];
+    const sidebarWidth = isSidebarEnabled ? 300 : 0;
+    const homePageWidth = window.innerWidth - sidebarWidth;
+    const tileColCount = Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD));
 
     if (tileColCount !== this.tileColCount) {
       this.tileColCount = tileColCount;

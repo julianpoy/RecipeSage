@@ -1,3 +1,4 @@
+import {MealPlanService} from '@/services/meal-plan.service';
 import {UtilService} from '@/services/util.service';
 import { Component, Input } from '@angular/core';
 import {ModalController} from '@ionic/angular';
@@ -15,10 +16,11 @@ export class ShareMealPlanModalPage {
   constructor(
     private modalCtrl: ModalController,
     private utilService: UtilService,
+    private mealPlanService: MealPlanService,
   ) {}
 
   ionViewWillEnter() {
-    this.icalURL = `${this.utilService.getBase()}${this.mealPlanId}/ical`;
+    this.icalURL = this.mealPlanService.getICalUrl(this.mealPlanId);
   }
 
   close() {

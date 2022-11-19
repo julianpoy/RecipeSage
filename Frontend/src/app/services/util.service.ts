@@ -23,15 +23,6 @@ export enum AuthType {
   Register = 'register'
 }
 
-export enum TutorialType {
-  MyRecipes = 'my-recipes',
-  EditRecipes = 'edit-recipes',
-  RecipeDetails = 'recipe-details',
-  PeopleProfile = 'people-profile',
-  BrowserExtension = 'browser-extension',
-  GeneralFAQ = 'faq',
-}
-
 export interface HomePageFilters {
   userId?: string,
   selectedLabels?: string[],
@@ -89,18 +80,6 @@ export const RouteMap = {
   ContributeThankYouPage: {
     getPath() { return `/contribute/thankyou`; },
     path: 'contribute/thankyou',
-  },
-  ReleaseNotesPage: {
-    getPath() { return `/release-notes`; },
-    path: 'release-notes',
-  },
-  TipsTricksTutorialsPage: {
-    getPath() { return `/tips-tricks-tutorials`; },
-    path: 'tips-tricks-tutorials',
-  },
-  TutorialPage: {
-    getPath(tutorialType: TutorialType) { return `/tips-tricks-tutorials/${tutorialType}`; },
-    path: 'tips-tricks-tutorials/:tutorialType',
   },
   WelcomePage: {
     getPath() { return `/welcome`; },
@@ -351,5 +330,13 @@ export class UtilService {
 
   buildPublicRoutePath(hashlessRoutePath: string) {
     return `${window.location.origin}/#/${hashlessRoutePath}`;
+  }
+
+  truncate(str: String, maxLength: number) {
+    const ellipsis = '...';
+    const trueMaxLength = maxLength - ellipsis.length;
+
+    if (str.length <= trueMaxLength) return str;
+    return `${str.substring(0, trueMaxLength)}${ellipsis}`;
   }
 }

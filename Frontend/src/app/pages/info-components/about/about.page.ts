@@ -25,11 +25,11 @@ export class AboutPage {
   }
 
   goToReleaseNotes() {
-    this.navCtrl.navigateForward(RouteMap.ReleaseNotesPage.getPath());
+    window.open('https://docs.recipesage.com/docs/release-notes');
   }
 
-  goToTipsTricksTutorials() {
-    this.navCtrl.navigateForward(RouteMap.TipsTricksTutorialsPage.getPath());
+  goToUserGuide() {
+    window.open('https://docs.recipesage.com');
   }
 
   goToLegal() {
