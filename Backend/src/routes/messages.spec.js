@@ -28,7 +28,7 @@ var Message = require('../models').Message;
 
 describe('messages', () => {
   var server;
-  beforeAll(async () => {
+  before(async () => {
     server = await setup();
   });
 
@@ -36,13 +36,13 @@ describe('messages', () => {
     await syncDB();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await cleanup(server);
   });
 
   describe('create', () => {
     let dispatchStub;
-    beforeAll(() => {
+    before(() => {
       dispatchStub = sinon.stub(UtilService, 'dispatchMessageNotification');
     });
 
@@ -50,7 +50,7 @@ describe('messages', () => {
       dispatchStub.reset();
     });
 
-    afterAll(() => {
+    after(() => {
       dispatchStub.restore();
     });
 
@@ -240,7 +240,7 @@ describe('messages', () => {
       let user1, user2, user3;
       let body, message1, message2, message3, recipeOrig, recipeNew;
 
-      beforeAll(async () => {
+      before(async () => {
         user1 = await createUser();
         user2 = await createUser();
         user3 = await createUser();
@@ -320,7 +320,7 @@ describe('messages', () => {
     describe('success with light query', () => {
       let user1, user2, user3, body;
 
-      beforeAll(async () => {
+      before(async () => {
         user1 = await createUser();
         user2 = await createUser();
         user3 = await createUser();
@@ -394,7 +394,7 @@ describe('messages', () => {
       let user1, user2, user3;
       let body, message2, recipeOrig, recipeNew;
 
-      beforeAll(async () => {
+      before(async () => {
         user1 = await createUser();
         user2 = await createUser();
         user3 = await createUser();

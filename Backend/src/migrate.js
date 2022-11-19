@@ -15,7 +15,7 @@ const umzug = new Umzug({
         name,
         up: async () => migration.up(context, Sequelize),
         down: async () => migration.down(context, Sequelize),
-      }
+      };
     },
   },
   context: sequelize.getQueryInterface(),

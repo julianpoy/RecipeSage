@@ -23,7 +23,7 @@ var Label = require('../models').Label;
 
 describe('recipes', () => {
   var server;
-  beforeAll(async () => {
+  before(async () => {
     server = await setup();
   });
 
@@ -31,7 +31,7 @@ describe('recipes', () => {
     await syncDB();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await cleanup(server);
   });
 

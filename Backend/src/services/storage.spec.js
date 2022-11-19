@@ -53,7 +53,7 @@ describe('sendURLToStorage', () => {
     convertedBuffer,
     formattedS3Response;
 
-  beforeAll(() => {
+  before(() => {
     contentBody = randomString(20);
     convertedBuffer = randomString(20);
 
@@ -87,7 +87,7 @@ describe('sendURLToStorage', () => {
     formatImageResponseStub = sinon.stub(StorageService, 'formatImageResponse').returns(Promise.resolve(formattedS3Response));
   });
 
-  afterAll(() => {
+  after(() => {
     fetchImageStub.restore();
     convertImageStub.restore();
     sendBufferToStorageStub.restore();
@@ -125,7 +125,7 @@ describe('sendFileToStorage', () => {
     formattedS3Response,
     result;
 
-  beforeAll(async () => {
+  before(async () => {
     contentLength = randomString(20);
 
     // We are not mocking fs calls here due to an issue with fs and sinon
@@ -162,7 +162,7 @@ describe('sendFileToStorage', () => {
     result = await sendFileToStorage(exampleFilePath);
   });
 
-  afterAll(() => {
+  after(() => {
     convertImageStub.restore();
     sendBufferToStorageStub.restore();
     formatImageResponseStub.restore();
@@ -184,7 +184,7 @@ describe('sendFileToStorage', () => {
 describe('sendBufferToStorage', () => {
   // let s3PutObjectStub, s3PutObjectPromiseStub, fakeBody, result, etag
 
-  // beforeAll(async () => {
+  // before(async () => {
   //   etag = randomString(20)
 
   //   s3PutObjectPromiseStub = sinon.stub().returns(Promise.resolve({
@@ -200,7 +200,7 @@ describe('sendBufferToStorage', () => {
   //   result = await sendBufferToStorage(fakeBody)
   // })
 
-  // afterAll(() => {
+  // after(() => {
   //   s3PutObjectStub.restore()
   // })
 
