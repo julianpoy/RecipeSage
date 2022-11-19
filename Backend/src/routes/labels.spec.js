@@ -1,14 +1,13 @@
-let request = require('supertest');
-let {
+const request = require('supertest');
+const {
   expect
 } = require('chai');
 
-let {
+const {
   setup,
   cleanup,
   syncDB,
   randomString,
-  randomEmail,
   createUser,
   createSession,
   createRecipe,
@@ -18,16 +17,11 @@ let {
 } = require('../testutils');
 
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var FCMToken = require('../models').FCMToken;
-var Session = require('../models').Session;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
 
 describe('labels', () => {
-  var server;
+  let server;
   before(async () => {
     server = await setup();
   });
@@ -66,10 +60,10 @@ describe('labels', () => {
               attributes: ['id']
             }]
           }).then(label => {
-            expect(label).not.to.be.null
-            expect(label.title).to.equal(payload.title)
-            expect(label.recipes.length).to.equal(1)
-            expect(label.recipes[0].id).to.equal(payload.recipeId)
+            expect(label).not.to.be.null;
+            expect(label.title).to.equal(payload.title);
+            expect(label.recipes.length).to.equal(1);
+            expect(label.recipes[0].id).to.equal(payload.recipeId);
           })
         );
     });
@@ -98,8 +92,6 @@ describe('labels', () => {
 
       let session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
-
       let payload = {
         title: randomString(20)
       };
@@ -109,14 +101,12 @@ describe('labels', () => {
         .query({ token: session.token })
         .send(payload)
         .expect(412);
-    })
+    });
 
     it('rejects if recipeId is empty', async () => {
       let user = await createUser();
 
       let session = await createSession(user.id);
-
-      let recipe = await createRecipe(user.id);
 
       let payload = {
         title: randomString(20),
@@ -128,14 +118,12 @@ describe('labels', () => {
         .query({ token: session.token })
         .send(payload)
         .expect(412);
-    })
+    });
 
     it('rejects if recipeId is invalid', async () => {
       let user = await createUser();
 
       let session = await createSession(user.id);
-
-      let recipe = await createRecipe(user.id);
 
       let payload = {
         title: randomString(20),
@@ -150,14 +138,12 @@ describe('labels', () => {
         .then(() => {
           Label.count().then(count =>
             expect(count).to.equal(0)
-          )
+          );
         });
-    })
+    });
 
     it('requires valid session', async () => {
       let user = await createUser();
-
-      let session = await createSession(user.id);
 
       let recipe = await createRecipe(user.id);
 
@@ -167,7 +153,7 @@ describe('labels', () => {
       };
 
       return request(server)
-        .post(`/labels`)
+        .post('/labels')
         .query({ token: 'invalid' })
         .send(payload)
         .expect(401);
@@ -176,16 +162,16 @@ describe('labels', () => {
 
   describe('get listing', () => {
     describe('succeeds with valid data', () => {
-      let user1
-      let recipe1
-      let label1
-      let session
+      let user1;
+      let recipe1;
+      let label1;
+      let session;
 
-      let user2
-      let recipe2
-      let label2
+      let user2;
+      let recipe2;
+      let label2;
 
-      let responseBody
+      let responseBody;
 
       before(async () => {
         user1 = await createUser();
@@ -204,31 +190,31 @@ describe('labels', () => {
           .query({ token: session.token })
           .expect(200)
           .then(({ body }) => {
-            return body
+            return body;
           });
-      })
+      });
 
       it('responds with an array', () => {
-        expect(responseBody).to.be.an('array')
-      })
+        expect(responseBody).to.be.an('array');
+      });
 
       it('responds with user\'s labels', () => {
-        expect(responseBody[0].id).to.equal(label1.id)
-        expect(responseBody[0].title).to.equal(label1.title)
-      })
+        expect(responseBody[0].id).to.equal(label1.id);
+        expect(responseBody[0].title).to.equal(label1.title);
+      });
 
       it('does not contain other user\'s labels', () => {
-        expect(responseBody.length).to.equal(1)
-      })
+        expect(responseBody.length).to.equal(1);
+      });
 
       it('responds with associated recipes', () => {
-        expect(responseBody[0].recipeCount).to.equal('1')
-      })
-    })
+        expect(responseBody[0].recipeCount).to.equal('1');
+      });
+    });
 
     it('requires valid session', async () => {
       return request(server)
-        .get(`/labels`)
+        .get('/labels')
         .query({ token: 'invalid' })
         .expect(401);
     });
@@ -258,7 +244,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(200)
-        .then(({ body }) => {
+        .then(() => {
           Label.findByPk(label.id, {
             include: [{
               model: Recipe,
@@ -267,11 +253,11 @@ describe('labels', () => {
             }]
           }).then(label => {
             // Has removed the recipe
-            expect(label.recipes.length).to.equal(1)
-            expect(label.recipes[0].id).to.equal(recipe2.id)
-          })
+            expect(label.recipes.length).to.equal(1);
+            expect(label.recipes[0].id).to.equal(recipe2.id);
+          });
         });
-    })
+    });
 
     it('succeeds when label has only one recipe', async () => {
       let user = await createUser();
@@ -294,13 +280,13 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(200)
-        .then(({ body }) => {
+        .then(() => {
           // Removes the label as well
           Label.findByPk(label.id).then(label =>
             expect(label).to.be.null
-          )
+          );
         });
-    })
+    });
 
     it('rejects if user does not own recipe', async () => {
       let user1 = await createUser();
@@ -324,7 +310,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(404);
-    })
+    });
 
     it('rejects if recipe does not exist', async () => {
       let user = await createUser();
@@ -347,7 +333,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(404);
-    })
+    });
 
     it('rejects if label does not exist', async () => {
       let user = await createUser();
@@ -370,7 +356,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(404);
-    })
+    });
 
     it('rejects if recipeid is falsy', async () => {
       let user = await createUser();
@@ -393,7 +379,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(412);
-    })
+    });
 
     it('rejects if labelid is falsy', async () => {
       let user = await createUser();
@@ -416,7 +402,7 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(412);
-    })
+    });
 
     it('requires valid session', async () => {
       let user = await createUser();
@@ -426,8 +412,6 @@ describe('labels', () => {
       let label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
-      let session = await createSession(user.id);
 
       let payload = {
         token: 'invalid',
@@ -439,6 +423,6 @@ describe('labels', () => {
         .delete('/labels')
         .query(payload)
         .expect(401);
-    })
-  })
+    });
+  });
 });

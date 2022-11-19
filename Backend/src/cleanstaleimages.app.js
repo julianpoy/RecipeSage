@@ -3,14 +3,14 @@ const Sentry = require('@sentry/node');
 
 const StorageService = require('./services/storage');
 
-var Op = require("sequelize").Op;
-var SQ = require('./models').sequelize;
-var Image = require('./models').Image;
-var Recipe_Image = require('./models').Recipe_Image;
+const Op = require('sequelize').Op;
+const SQ = require('./models').sequelize;
+const Image = require('./models').Image;
+const Recipe_Image = require('./models').Recipe_Image;
 
 const cleanupStaleImages = async () => {
   try {
-    let lt = new Date();
+    const lt = new Date();
     lt.setDate(lt.getDate() - 7); // Only remove images older than 7 days
 
     const staleImages = await Image.findAll({

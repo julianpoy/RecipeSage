@@ -59,6 +59,9 @@ jobs:
           paths:
             - ./Backend/node_modules
       # -------------- Tests -----------------
+      - run: # lint backend
+          name: lint-backend
+          command: cd Backend && npm run lint
       - run: # run backend tests
           name: test-backend
           command: cd Backend && npm run test:ci

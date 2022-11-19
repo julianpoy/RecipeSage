@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Sentry = require('@sentry/node');
 const pLimit = require('p-limit');
-const xmljs = require("xml-js");
+const xmljs = require('xml-js');
 const multer = require('multer');
 const fs = require('fs-extra');
 const extract = require('extract-zip');
@@ -108,7 +107,7 @@ router.get('/export/txt',
 
       let data = '==== Recipes ====\n\n';
 
-      for (var i = 0; i < exportData.recipes.length; i++) {
+      for (let i = 0; i < exportData.recipes.length; i++) {
         let recipe = exportData.recipes[i];
 
         recipe.labels = recipe.labels.map(label => label.title).join(', ');
@@ -117,12 +116,9 @@ router.get('/export/txt',
 
         delete recipe.fromUser;
 
-        for (var key in recipe) {
-          if (recipe.hasOwnProperty(key)) {
-            data += key + ': ';
-            data += recipe[key] + '\r\n';
-          }
-
+        for (const key in recipe) {
+          data += key + ': ';
+          data += recipe[key] + '\r\n';
         }
         data += '\r\n';
       }
@@ -174,7 +170,7 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
   );
 
   if (recipesToImport.length > MAX_IMPORT_LIMIT) {
-    throw new Error("Too many recipes to import in one batch");
+    throw new Error('Too many recipes to import in one batch');
   }
 
   return sequelize.transaction(async transaction => {
@@ -206,8 +202,8 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
         labelTitle = UtilService.cleanLabelTitle(labelTitle);
         labelMap[labelTitle] = labelMap[labelTitle] || [];
         labelMap[labelTitle].push(recipe.id);
-      })
-    })
+      });
+    });
 
     await Promise.all(Object.keys(labelMap).map(labelTitle => {
       return Label.findOrCreate({
@@ -221,11 +217,11 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
           return {
             labelId: labels[0].id,
             recipeId
-          }
+          };
         }), {
           ignoreDuplicates: true,
           transaction
-        })
+        });
       });
     }));
 
@@ -252,7 +248,7 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
       order: imageIdx
     }))).flat().filter(e => e);
 
-    console.log(pendingImages)
+    console.log(pendingImages);
 
     const savedImages = await Image.bulkCreate(pendingImages.map(p => ({
       userId,
@@ -272,7 +268,7 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
       transaction
     });
   });
-}
+};
 
 router.post('/import/json-ld',
   MiddlewareService.validateSession(['user']),
@@ -286,13 +282,13 @@ router.post('/import/json-ld',
 
       if (!jsonLD && req.file) jsonLD = JSON.parse(req.file.buffer.toString());
 
-      if (!jsonLD) return res.status(400).send("No data. Only Recipe types are supported at this time.");
+      if (!jsonLD) return res.status(400).send('No data. Only Recipe types are supported at this time.');
 
       if (!jsonLD.length && jsonLD['@type'] === 'Recipe') jsonLD = [jsonLD];
 
       jsonLD = jsonLD.filter(el => el['@type'] === 'Recipe');
 
-      if (!jsonLD.length) return res.status(400).send("Only supports JSON-LD or array of JSON-LD with type 'Recipe'");
+      if (!jsonLD.length) return res.status(400).send('Only supports JSON-LD or array of JSON-LD with type \'Recipe\'');
 
       const recipesToImport = jsonLD
         .map(ld => JSONLDService.jsonLDToRecipe(ld));
@@ -316,7 +312,7 @@ router.post(
     let zipPath, extractPath;
     try {
       if (!req.file) {
-        const badFormatError = new Error("Request must include multipart file under paprikadb field");
+        const badFormatError = new Error('Request must include multipart file under paprikadb field');
         badFormatError.status = 400;
         throw badFormatError;
       }
@@ -331,7 +327,7 @@ router.post(
             reject(err);
           }
           else resolve();
-        })
+        });
       });
 
       const fileNames = await fs.readdir(extractPath);
@@ -359,10 +355,10 @@ router.post(
 
         const labels = (recipeData.categories || [])
           .map(e => UtilService.cleanLabelTitle(e))
-          .filter(e => e)
+          .filter(e => e);
 
         // Supports only the first image at the moment
-        const images = recipeData.photo_data ? [Buffer.from(recipeData.photo_data, "base64")] : [];
+        const images = recipeData.photo_data ? [Buffer.from(recipeData.photo_data, 'base64')] : [];
 
         recipes.push({
           title: recipeData.name,
@@ -388,14 +384,14 @@ router.post(
 
       await importStandardizedRecipes(res.locals.session.userId, recipes, true);
 
-      res.status(201).send("Import complete");
+      res.status(201).send('Import complete');
     } catch(err) {
       await fs.remove(zipPath);
       await fs.remove(extractPath);
       next(err);
     }
   }
-)
+);
 
 module.exports = router;
 

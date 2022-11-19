@@ -10,6 +10,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'MealPlan_Collaborators'
   });
-  MealPlanCollaborator.associate = function (models) {};
+  MealPlanCollaborator.associate = function () {};
   return MealPlanCollaborator;
 };

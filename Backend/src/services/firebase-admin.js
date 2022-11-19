@@ -1,15 +1,15 @@
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 
 try {
-  const serviceAccount = require("../config/firebase-credentials.json");
+  const serviceAccount = require('../config/firebase-credentials.json');
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://chef-book.firebaseio.com"
+    databaseURL: 'https://chef-book.firebaseio.com'
   });
 } catch(e) {
   if (process.env.NODE_ENV !== 'test') {
-    console.error("Error while initializing firebase for notifications");
+    console.error('Error while initializing firebase for notifications');
   }
 }
 
