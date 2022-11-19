@@ -1,21 +1,21 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-let fs = require('fs-extra');
-let mdb = require('mdb');
-let extract = require('extract-zip');
-let sqlite3 = require('sqlite3');
+const fs = require('fs-extra');
+const mdb = require('mdb');
+const extract = require('extract-zip');
+const sqlite3 = require('sqlite3');
 const performance = require('perf_hooks').performance;
 const { exec, spawn } = require('child_process');
 
-var SQ = require('./models').sequelize;
-var Recipe = require('./models').Recipe;
-var Label = require('./models').Label;
-var Recipe_Label = require('./models').Recipe_Label;
-var Recipe_Image = require('./models').Recipe_Image;
-var Image = require('./models').Image;
+const SQ = require('./models').sequelize;
+const Recipe = require('./models').Recipe;
+const Label = require('./models').Label;
+const Recipe_Label = require('./models').Recipe_Label;
+const Recipe_Image = require('./models').Recipe_Image;
+const Image = require('./models').Image;
 
-var UtilService = require('./services/util');
+const UtilService = require('./services/util');
 const StorageService = require('./services/storage');
 
 let runConfig = {
@@ -300,7 +300,7 @@ async function main() {
           return lcbRecipe;
         }).filter(e => e.imageFileNames.length > 0);
 
-      var i, chunkedRecipesWithImages = [], chunk = 50;
+      let i, chunkedRecipesWithImages = [], chunk = 50;
       for (i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }

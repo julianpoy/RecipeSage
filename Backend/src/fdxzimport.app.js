@@ -1,21 +1,21 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-let fs = require('fs-extra');
-let extract = require('extract-zip');
+const fs = require('fs-extra');
+const extract = require('extract-zip');
 const xmljs = require('xml-js');
 
-var SQ = require('./models').sequelize;
-var Recipe = require('./models').Recipe;
-var Label = require('./models').Label;
-var Recipe_Label = require('./models').Recipe_Label;
-var Recipe_Image = require('./models').Recipe_Image;
-var Image = require('./models').Image;
+const SQ = require('./models').sequelize;
+const Recipe = require('./models').Recipe;
+const Label = require('./models').Label;
+const Recipe_Label = require('./models').Recipe_Label;
+const Recipe_Image = require('./models').Recipe_Image;
+const Image = require('./models').Image;
 
-var UtilService = require('./services/util');
+const UtilService = require('./services/util');
 const StorageService = require('./services/storage');
 
-let runConfig = {
+const runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
   excludeImages: process.argv.indexOf('--excludeImages') > -1,
@@ -44,8 +44,8 @@ const exit = (status) => {
   process.exit(status);
 };
 
-let zipPath = runConfig.path;
-let extractPath = zipPath + '-extract';
+const zipPath = runConfig.path;
+const extractPath = zipPath + '-extract';
 let xmlPath;
 
 // Convert input to array if necessary
@@ -197,7 +197,7 @@ async function main() {
           return pendingRecipe;
         }).filter(e => e.imageRefs.length > 0);
 
-      var i, chunkedRecipesWithImages = [], chunk = 50;
+      let i, chunkedRecipesWithImages = [], chunk = 50;
       for (i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }

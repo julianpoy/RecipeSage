@@ -117,16 +117,15 @@ function CustomMulterFirebaseStorage(opts) {
   this.resizeOptProcess = opts.process;
 }
 CustomMulterFirebaseStorage.prototype._handleFile = function _handleFile(req, file, cb) {
-  var self = this;
-  const fileKey = `${self.path}${self.fileName}.jpeg`;
-  const outStream = self.firebaseStorage.file(fileKey).createWriteStream({metadata: {
+  const fileKey = `${this.path}${this.fileName}.jpeg`;
+  const outStream = this.firebaseStorage.file(fileKey).createWriteStream({metadata: {
     contentType: 'image/jpeg'
   }});
   this.resizeOptProcess(this.width, this.height, file.stream, outStream);
   outStream.on('error', cb);
-  outStream.on('finish', async function () {
-    if (self.isPublic) {
-      self.firebaseStorage.file(fileKey).makePublic();
+  outStream.on('finish', async () => {
+    if (this.isPublic) {
+      this.firebaseStorage.file(fileKey).makePublic();
     }
     cb(null, {
       size: outStream.bytesWritten,

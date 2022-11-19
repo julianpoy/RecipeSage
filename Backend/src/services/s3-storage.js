@@ -1,6 +1,6 @@
-var aws = require('aws-sdk');
-var multerImager = require('multer-imager');
-let sharp = require('sharp');
+const aws = require('aws-sdk');
+const multerImager = require('multer-imager');
+const sharp = require('sharp');
 
 const s3Config = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -23,8 +23,8 @@ const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
 
 
 exports.sendBufferToStorage = buffer => {
-  let key = new Date().getTime().toString();
-  let bucket = process.env.AWS_BUCKET;
+  const key = new Date().getTime().toString();
+  const bucket = process.env.AWS_BUCKET;
 
   return s3.putObject({
     Bucket: bucket,
@@ -100,7 +100,7 @@ exports.multerStorage = (width, height, quality, highResConversion, resolve, rej
     options: '',
     format: 'jpg',                      // Default: jpg - Unused by our processor
     process: (gm, options, inputStream, outputStream) => {
-      let pipeline = sharp();
+      const pipeline = sharp();
       pipeline.rotate() // Rotates based on EXIF data
         .resize(width, height, {
           fit: highResConversion ? 'inside' : 'cover',

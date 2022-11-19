@@ -1,17 +1,17 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
 
 // DB
-var Op = require('sequelize').Op;
-var SQ = require('../models').sequelize;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
-var Recipe_Label = require('../models').Recipe_Label;
+const Op = require('sequelize').Op;
+const SQ = require('../models').sequelize;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
+const Recipe_Label = require('../models').Recipe_Label;
 
 // Services
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
 
 //Add a label to a recipeId or recipeIds
 router.post(
@@ -252,7 +252,7 @@ router.put(
   function(req, res, next) {
 
     if (typeof req.body.title === 'string' && UtilService.cleanLabelTitle(req.body.title).length === 0) {
-      var e = new Error('Label title must be longer than 0.');
+      const e = new Error('Label title must be longer than 0.');
       e.status = 400;
       return next(e);
     }

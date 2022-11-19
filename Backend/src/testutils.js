@@ -4,12 +4,12 @@ const {
 
 const { v4: uuid } = require('uuid');
 
-var ModelNames = require('./models').modelNames;
-var User = require('./models').User;
-var Session = require('./models').Session;
-var Recipe = require('./models').Recipe;
-var Label = require('./models').Label;
-var Message = require('./models').Message;
+const ModelNames = require('./models').modelNames;
+const User = require('./models').User;
+const Session = require('./models').Session;
+const Recipe = require('./models').Recipe;
+const Label = require('./models').Label;
+const Message = require('./models').Message;
 
 const { exec } = require('child_process');
 
@@ -61,7 +61,7 @@ function randomString(len) {
   let chars = 'abcdefghijklmnopqrstuvwxyz';
 
   let str = [];
-  for (var i = 0; i < len; i++) str.push(chars.charAt(Math.floor(Math.random() * (chars.length-1))));
+  for (let i = 0; i < len; i++) str.push(chars.charAt(Math.floor(Math.random() * (chars.length-1))));
 
   return str.join('');
 }
@@ -83,8 +83,8 @@ module.exports.createUser = () => {
 };
 
 module.exports.createSession = userId => {
-  var today = new Date();
-  var tomorrow = new Date();
+  const today = new Date();
+  const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
 
   return Session.create({

@@ -107,7 +107,7 @@ router.get('/export/txt',
 
       let data = '==== Recipes ====\n\n';
 
-      for (var i = 0; i < exportData.recipes.length; i++) {
+      for (let i = 0; i < exportData.recipes.length; i++) {
         let recipe = exportData.recipes[i];
 
         recipe.labels = recipe.labels.map(label => label.title).join(', ');
@@ -116,7 +116,7 @@ router.get('/export/txt',
 
         delete recipe.fromUser;
 
-        for (var key in recipe) {
+        for (const key in recipe) {
           data += key + ': ';
           data += recipe[key] + '\r\n';
         }

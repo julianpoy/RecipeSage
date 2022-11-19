@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // DB
-var Image = require('../models').Image;
+const Image = require('../models').Image;
 
 // Service
-var MiddlewareService = require('../services/middleware');
+const MiddlewareService = require('../services/middleware');
 const StorageService = require('../services/storage');
-let SubscriptionsService = require('../services/subscriptions');
+const SubscriptionsService = require('../services/subscriptions');
 
 router.post('/',
   MiddlewareService.validateSession(['user']),

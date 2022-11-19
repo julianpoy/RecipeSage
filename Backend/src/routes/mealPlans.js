@@ -38,7 +38,7 @@ router.post(
             transaction: t
           }
         ).then(() => {
-          for (var i = 0; i < (req.body.collaborators || []).length; i++) {
+          for (let i = 0; i < (req.body.collaborators || []).length; i++) {
             GripService.broadcast(req.body.collaborators[i], 'mealPlan:received', {
               mealPlanId: mealPlan.id,
               from: {
@@ -155,7 +155,7 @@ router.post(
         }).then(function() {
           let reference = Date.now();
 
-          var broadcastPayload = {
+          const broadcastPayload = {
             mealPlanId: mealPlan.id,
             updatedBy: {
               id: res.locals.user.id,
@@ -166,7 +166,7 @@ router.post(
           };
 
           GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', broadcastPayload);
-          for (var i = 0; i < mealPlan.collaborators.length; i++) {
+          for (let i = 0; i < mealPlan.collaborators.length; i++) {
             GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', broadcastPayload);
           }
 
@@ -207,7 +207,7 @@ router.delete(
       } else {
         if (mealPlan.userId === res.locals.session.userId) {
           return mealPlan.destroy().then(() => {
-            for (var i = 0; i < (mealPlan.collaborators || []).length; i++) {
+            for (let i = 0; i < (mealPlan.collaborators || []).length; i++) {
               GripService.broadcast(mealPlan.collaborators[i], 'mealPlan:removed', {
                 mealPlanId: mealPlan.id,
                 updatedBy: {
@@ -262,7 +262,7 @@ router.delete(
         }).then(function () {
           let reference = Date.now();
 
-          var deletedItemBroadcast = {
+          const deletedItemBroadcast = {
             mealPlanId: mealPlan.id,
             updatedBy: {
               id: res.locals.user.id,
@@ -273,7 +273,7 @@ router.delete(
           };
 
           GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', deletedItemBroadcast);
-          for (var i = 0; i < mealPlan.collaborators.length; i++) {
+          for (let i = 0; i < mealPlan.collaborators.length; i++) {
             GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', deletedItemBroadcast);
           }
 
@@ -335,7 +335,7 @@ router.put(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -346,7 +346,7 @@ router.put(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
@@ -398,7 +398,7 @@ router.post(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -409,7 +409,7 @@ router.post(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 
@@ -460,7 +460,7 @@ router.delete(
 
       let reference = Date.now();
 
-      var updateBroadcast = {
+      const updateBroadcast = {
         mealPlanId: mealPlan.id,
         updatedBy: {
           id: res.locals.user.id,
@@ -471,7 +471,7 @@ router.delete(
       };
 
       GripService.broadcast(mealPlan.userId, 'mealPlan:itemsUpdated', updateBroadcast);
-      for (var i = 0; i < mealPlan.collaborators.length; i++) {
+      for (let i = 0; i < mealPlan.collaborators.length; i++) {
         GripService.broadcast(mealPlan.collaborators[i].id, 'mealPlan:itemsUpdated', updateBroadcast);
       }
 

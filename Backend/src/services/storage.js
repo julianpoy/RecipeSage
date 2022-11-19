@@ -1,6 +1,5 @@
-
-var multer = require('multer');
-let fs = require('fs-extra');
+const multer = require('multer');
+const fs = require('fs-extra');
 const UtilService = require('./util');
 const s3Storage = require('./s3-storage');
 const firebaseStorage = require('./firebase-storage');
@@ -43,7 +42,7 @@ exports.sendFileToStorage = (file, isBuffer, highResConversion) => {
   }).then(stream => {
     return exports.sendBufferToStorage(stream);
   }).then(result => {
-    var stats = isBuffer ? { size: file.length } : fs.statSync(file);
+    const stats = isBuffer ? { size: file.length } : fs.statSync(file);
     return exports.formatImageResponse(result.key, 'image/jpeg', stats['size'], result.ETag);
   });
 };

@@ -1,8 +1,8 @@
 const { admin } = require('./firebase-admin');
-var Sentry = require('@sentry/node');
+const Sentry = require('@sentry/node');
 
 // DB
-var FCMToken = require('../models').FCMToken;
+const FCMToken = require('../models').FCMToken;
 
 let invalidFcmTokenErrors = [
   'messaging/registration-token-not-registered'
@@ -15,7 +15,7 @@ exports.sendMessages = (tokens, payload) => {
 };
 
 exports.sendMessage = (token, payload) => {
-  var message = {
+  const message = {
     data: payload,
     token
   };

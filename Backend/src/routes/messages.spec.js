@@ -1,11 +1,11 @@
-let request = require('supertest');
-let {
+const request = require('supertest');
+const {
   expect
 } = require('chai');
 
-let sinon = require('sinon');
+const sinon = require('sinon');
 
-let {
+const {
   setup,
   cleanup,
   syncDB,
@@ -19,15 +19,15 @@ let {
   randomUuid
 } = require('../testutils');
 
-var UtilService = require('../services/util');
+const UtilService = require('../services/util');
 
 // DB
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Message = require('../models').Message;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Message = require('../models').Message;
 
 describe('messages', () => {
-  var server;
+  let server;
   before(async () => {
     server = await setup();
   });

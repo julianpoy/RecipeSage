@@ -39,7 +39,7 @@ exports.getCategoryTitle = itemTitle => {
 exports.groupShoppingListItems = items => {
   // Ingredient grouping into map by ingredientName
   const itemGrouper = {};
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const itemTitle = item.title.toLowerCase();
 

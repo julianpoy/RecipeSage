@@ -1,10 +1,10 @@
-let {
+const {
   expect
 } = require('chai');
 
-let sinon = require('sinon');
+const sinon = require('sinon');
 
-let {
+const {
   setup,
   cleanup,
   syncDB,
@@ -14,8 +14,8 @@ let {
 } = require('../testutils');
 
 // DB
-var SQ = require('../models').sequelize;
-var Recipe = require('../models').Recipe;
+const SQ = require('../models').sequelize;
+const Recipe = require('../models').Recipe;
 
 describe('recipe', () => {
   let server;

@@ -1,5 +1,5 @@
-var grip = require('grip');
-var expressGrip = require('express-grip');
+const grip = require('grip');
+const expressGrip = require('express-grip');
 
 expressGrip.configure({
   gripProxies: [
@@ -14,7 +14,7 @@ expressGrip.configure({
 exports.expressGrip = expressGrip;
 
 exports.broadcast = function(channel, type, data) {
-  var body = {
+  const body = {
     type: type,
     data: data || {}
   };

@@ -1,19 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
 
 // DB
-var Op = require('sequelize').Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Message = require('../models').Message;
-var FCMToken = require('../models').FCMToken;
-var Image = require('../models').Image;
+const Op = require('sequelize').Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Message = require('../models').Message;
+const FCMToken = require('../models').FCMToken;
+const Image = require('../models').Image;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
 
 router.post(
   '/',
@@ -159,8 +159,8 @@ router.get(
       ]
     })
       .then(function(messages) {
-        var conversationsByUser = messages.reduce(function(acc, el) {
-          var otherUser;
+        const conversationsByUser = messages.reduce(function(acc, el) {
+          let otherUser;
           if (el.toUser.id === res.locals.session.userId) {
             otherUser = el.fromUser;
           } else {
@@ -186,8 +186,8 @@ router.get(
           return acc;
         }, {});
 
-        var conversations = [];
-        for (var userId in conversationsByUser) {
+        const conversations = [];
+        for (const userId in conversationsByUser) {
           let conversation = conversationsByUser[userId];
 
           if (req.query.limit && conversation.messageCount > req.query.limit) {
@@ -212,7 +212,7 @@ router.get(
       return;
     }
 
-    var messageLimit = req.query.messageLimit ? parseInt(req.query.messageLimit, 10) : 100;
+    const messageLimit = req.query.messageLimit ? parseInt(req.query.messageLimit, 10) : 100;
 
     Message.findAll({
       where: {

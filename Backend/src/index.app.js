@@ -1,11 +1,11 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-let ElasticService = require('./services/elastic');
-let SQ = require('sequelize');
-let Op = SQ.Op;
+const ElasticService = require('./services/elastic');
+const SQ = require('sequelize');
+const Op = SQ.Op;
 
-var Recipe = require('./models').Recipe;
+const Recipe = require('./models').Recipe;
 
 const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || 250);
 const BATCH_INTERVAL = parseInt(process.env.BATCH_INTERVAL || 1) * 1000;

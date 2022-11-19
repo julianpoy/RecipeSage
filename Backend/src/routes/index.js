@@ -1,27 +1,27 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-let multer = require('multer');
-let fs = require('fs-extra');
-let extract = require('extract-zip');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const multer = require('multer');
+const fs = require('fs-extra');
+const extract = require('extract-zip');
 const { spawn } = require('child_process');
 const performance = require('perf_hooks').performance;
 const semver = require('semver');
-let path = require('path');
+const path = require('path');
 const fetch = require('node-fetch');
 
 // DB
-var SQ = require('../models').sequelize;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
-var Recipe_Label = require('../models').Recipe_Label;
-var Image = require('../models').Image;
-var Recipe_Image = require('../models').Recipe_Image;
+const SQ = require('../models').sequelize;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
+const Recipe_Label = require('../models').Recipe_Label;
+const Image = require('../models').Image;
+const Recipe_Image = require('../models').Recipe_Image;
 
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
 const StorageService = require('../services/storage');
-var SubscriptionsService = require('../services/subscriptions');
+const SubscriptionsService = require('../services/subscriptions');
 const jobTrackerService = require('../services/job-tracker');
 
 /* GET home page. */
@@ -52,7 +52,7 @@ router.get(
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
-    var XML_CHAR_MAP = {
+    const XML_CHAR_MAP = {
       '<': '&lt;',
       '>': '&gt;',
       '&': '&amp;',

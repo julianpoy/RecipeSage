@@ -1,7 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // DB
-var User = require('../models').User;
+const User = require('../models').User;
 
 exports.createOrRetrieveCustomerId = async userId => {
   const user = await User.findByPk(userId);

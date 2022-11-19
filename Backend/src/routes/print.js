@@ -110,7 +110,7 @@ router.get('/:recipeId',
 
     if (!req.query.version) return res.status(400).send('Missing parameter: version');
 
-    var modifiers = {
+    const modifiers = {
       version: req.query.version,
       halfsheet: !!req.query.halfsheet,
       twocolIngr: !!req.query.twocolIngr,

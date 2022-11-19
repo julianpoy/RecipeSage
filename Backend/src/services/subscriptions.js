@@ -1,8 +1,8 @@
 const moment = require('moment');
 
 // DB
-var Op = require('sequelize').Op;
-var UserSubscription = require('../models').UserSubscription;
+const Op = require('sequelize').Op;
+const UserSubscription = require('../models').UserSubscription;
 
 const CAPABILITY_GRACE_PERIOD = 7;
 

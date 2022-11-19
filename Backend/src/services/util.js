@@ -1,14 +1,14 @@
-var aws = require('aws-sdk');
+const aws = require('aws-sdk');
 
-let fs = require('fs-extra');
-let sharp = require('sharp');
-let path = require('path');
-let zlib = require('zlib');
+const fs = require('fs-extra');
+const sharp = require('sharp');
+const path = require('path');
+const zlib = require('zlib');
 const fetch = require('node-fetch');
 
 // Service
-var FirebaseService = require('./firebase');
-var GripService = require('./grip');
+const FirebaseService = require('./firebase');
+const GripService = require('./grip');
 
 
 
@@ -24,7 +24,7 @@ exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
   ccAddresses = ccAddresses || [];
 
   // Create sendEmail params
-  var params = {
+  const params = {
     Destination: { /* required */
       CcAddresses: ccAddresses,
       ToAddresses: toAddresses
@@ -97,7 +97,7 @@ exports.convertImage = (imageBuf, highResConversion) => {
 };
 
 exports.dispatchImportNotification = (user, status, reason) => {
-  var event;
+  let event;
   if (status === 0) {
     event = 'complete';
   } else if (status === 1) {
@@ -110,7 +110,7 @@ exports.dispatchImportNotification = (user, status, reason) => {
 
   let type = 'import:pepperplate:' + event;
 
-  var message = {
+  const message = {
     type,
     reason: reason || 'status'
   };
@@ -146,7 +146,7 @@ exports.sortRecipeImages = recipe => {
 };
 
 exports.dispatchMessageNotification = (user, fullMessage) => {
-  var message = {
+  const message = {
     id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
     otherUser: fullMessage.otherUser,
@@ -166,7 +166,7 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
 
   let sendQueues = [];
   if (user.fcmTokens) {
-    var notification = {
+    const notification = {
       type: 'messages:new',
       message: JSON.stringify(message)
     };

@@ -1,4 +1,4 @@
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 'use strict';
 
@@ -116,8 +116,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.generateHashedPassword = function (password) {
-    var salt = crypto.randomBytes(128).toString('base64');
-    var hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
+    const salt = crypto.randomBytes(128).toString('base64');
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('base64');
 
     return {
       hash: hash,
@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.login = function (email, password, transaction) {
     // Setup error
-    var e = new Error('Credentials are not valid!');
+    const e = new Error('Credentials are not valid!');
     e.status = 412;
 
     return User.findOne({

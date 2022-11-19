@@ -1,31 +1,31 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-var Sentry = require('@sentry/node');
-var moment = require('moment');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const Sentry = require('@sentry/node');
+const moment = require('moment');
 
 // DB
-var Op = require('sequelize').Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var User_Profile_Image = require('../models').User_Profile_Image;
-var FCMToken = require('../models').FCMToken;
-var Session = require('../models').Session;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
-var Image = require('../models').Image;
-var Message = require('../models').Message;
-var Friendship = require('../models').Friendship;
-var ProfileItem = require('../models').ProfileItem;
+const Op = require('sequelize').Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const User_Profile_Image = require('../models').User_Profile_Image;
+const FCMToken = require('../models').FCMToken;
+const Session = require('../models').Session;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
+const Image = require('../models').Image;
+const Message = require('../models').Message;
+const Friendship = require('../models').Friendship;
+const ProfileItem = require('../models').ProfileItem;
 
 // Service
-var SessionService = require('../services/sessions');
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
-var SubscriptionService = require('../services/subscriptions');
+const SessionService = require('../services/sessions');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
+const SubscriptionService = require('../services/subscriptions');
 
 // SharedUtils
-var SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('../../../SharedUtils/src');
 
 router.get(
   '/',
@@ -698,7 +698,7 @@ router.post(
         token
       });
 
-      var html = `Welcome to RecipeSage!<br />
+      const html = `Welcome to RecipeSage!<br />
 
     <br /><br />Thanks for joining our community of recipe collectors!
     <br /><br />
@@ -717,7 +717,7 @@ router.post(
     Instagram: <a href="https://www.instagram.com/recipesageofficial/">https://www.instagram.com/recipesageofficial/</a><br />
     Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>`;
 
-      var plain = `Welcome to RecipeSage!
+      const plain = `Welcome to RecipeSage!
 
 
 Thanks for joining our community of recipe collectors!
@@ -771,8 +771,8 @@ router.post(
         res.status(standardStatus).json(standardResponse);
       } else {
         return SessionService.generateSession(user.id, 'user').then(({ token }) => {
-          var link = origin + '/#/settings/account?token=' + token;
-          var html = `Hello,
+          const link = origin + '/#/settings/account?token=' + token;
+          const html = `Hello,
 
         <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
         <br /><br />If you did not request a password reset, please disregard this email.
@@ -786,7 +786,7 @@ router.post(
         <br />Julian P.
         <br />RecipeSage`;
 
-          var plain = `Hello,
+          const plain = `Hello,
 
 Someone recently requested a password reset link for the RecipeSage account associated with this email address.
 If you did not request a password reset, please disregard this email.
@@ -822,7 +822,7 @@ router.put(
           if (!req.body.password) return;
 
           if (!UtilService.validatePassword(req.body.password)) {
-            var e = new Error('Password is not valid!');
+            const e = new Error('Password is not valid!');
             e.status = 412;
             throw e;
           }
@@ -855,7 +855,7 @@ router.put(
           let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
           if (!UtilService.validateEmail(sanitizedEmail)) {
-            var e = new Error('Email is not valid!');
+            const e = new Error('Email is not valid!');
             e.status = 412;
             throw e;
           }
@@ -869,7 +869,7 @@ router.put(
             transaction: t
           }).then(user => {
             if (user) {
-              var e = new Error('Account with that email address already exists!');
+              const e = new Error('Account with that email address already exists!');
               e.status = 406;
               throw e;
             }

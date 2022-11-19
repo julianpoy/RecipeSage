@@ -38,7 +38,7 @@ router.post(
             transaction: t
           }
         ).then(() => {
-          for (var i = 0; i < (req.body.collaborators || []).length; i++) {
+          for (let i = 0; i < (req.body.collaborators || []).length; i++) {
             GripService.broadcast(req.body.collaborators[i], 'shoppingList:received', {
               shoppingListId: shoppingList.id,
               from: {
@@ -158,7 +158,7 @@ router.post(
           }), { transaction: t }).then(function() {
             let reference = Date.now();
 
-            var broadcastPayload = {
+            const broadcastPayload = {
               shoppingListId: shoppingList.id,
               updatedBy: {
                 id: res.locals.user.id,
@@ -169,7 +169,7 @@ router.post(
             };
 
             GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', broadcastPayload);
-            for (var i = 0; i < shoppingList.collaborators.length; i++) {
+            for (let i = 0; i < shoppingList.collaborators.length; i++) {
               GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', broadcastPayload);
             }
 
@@ -211,7 +211,7 @@ router.delete(
       } else {
         if (shoppingList.userId === res.locals.session.userId) {
           return shoppingList.destroy().then(function () {
-            for (var i = 0; i < (shoppingList.collaborators || []).length; i++) {
+            for (let i = 0; i < (shoppingList.collaborators || []).length; i++) {
               GripService.broadcast(shoppingList.collaborators[i], 'shoppingList:removed', {
                 shoppingListId: shoppingList.id,
                 updatedBy: {
@@ -270,7 +270,7 @@ router.delete(
         }).then(function() {
           let reference = Date.now();
 
-          var deletedItemBroadcast = {
+          const deletedItemBroadcast = {
             shoppingListId: shoppingList.id,
             updatedBy: {
               id: res.locals.user.id,
@@ -281,7 +281,7 @@ router.delete(
           };
 
           GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', deletedItemBroadcast);
-          for (var i = 0; i < shoppingList.collaborators.length; i++) {
+          for (let i = 0; i < shoppingList.collaborators.length; i++) {
             GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', deletedItemBroadcast);
           }
 
@@ -452,7 +452,7 @@ router.put(
       };
 
       GripService.broadcast(shoppingList.userId, 'shoppingList:itemsUpdated', broadcast);
-      for (var i = 0; i < shoppingList.collaborators.length; i++) {
+      for (let i = 0; i < shoppingList.collaborators.length; i++) {
         GripService.broadcast(shoppingList.collaborators[i].id, 'shoppingList:itemsUpdated', broadcast);
       }
 

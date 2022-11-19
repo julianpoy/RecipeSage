@@ -1,14 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 // DB
-var SQ = require('../models').sequelize;
-var StripePayment = require('../models').StripePayment;
+const SQ = require('../models').sequelize;
+const StripePayment = require('../models').StripePayment;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var StripeService = require('../services/stripe');
-var SubscriptionService = require('../services/subscriptions');
+const MiddlewareService = require('../services/middleware');
+const StripeService = require('../services/stripe');
+const SubscriptionService = require('../services/subscriptions');
 
 router.post('/stripe/custom-session',
   MiddlewareService.validateSession(['user'], true),

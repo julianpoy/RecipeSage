@@ -1,5 +1,5 @@
-var SessionService = require('../services/sessions');
-var User = require('../models').User;
+const SessionService = require('../services/sessions');
+const User = require('../models').User;
 
 exports.validateSession = function(types, optional) {
   return function(req, res, next) {

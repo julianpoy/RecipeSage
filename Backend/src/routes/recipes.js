@@ -1,27 +1,27 @@
-var express = require('express');
-var router = express.Router();
-var cors = require('cors');
-var xmljs = require('xml-js');
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const xmljs = require('xml-js');
 const moment = require('moment');
 
 // DB
-var Op = require('sequelize').Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
-var Recipe_Label = require('../models').Recipe_Label;
-var Image = require('../models').Image;
-var Recipe_Image = require('../models').Recipe_Image;
-var Friendship = require('../models').Friendship;
-var ProfileItem = require('../models').ProfileItem;
+const Op = require('sequelize').Op;
+const SQ = require('../models').sequelize;
+const User = require('../models').User;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
+const Recipe_Label = require('../models').Recipe_Label;
+const Image = require('../models').Image;
+const Recipe_Image = require('../models').Recipe_Image;
+const Friendship = require('../models').Friendship;
+const ProfileItem = require('../models').ProfileItem;
 
 // Service
-var MiddlewareService = require('../services/middleware');
-var UtilService = require('../services/util');
+const MiddlewareService = require('../services/middleware');
+const UtilService = require('../services/util');
 const StorageService = require('../services/storage');
-let ElasticService = require('../services/elastic');
-let SubscriptionsService = require('../services/subscriptions');
+const ElasticService = require('../services/elastic');
+const SubscriptionsService = require('../services/subscriptions');
 const JSONLDService = require('../services/json-ld');
 
 // TODO: Remove this. Legacy frontend compat
@@ -195,7 +195,7 @@ router.post(
 
       return recipe;
     }).then(recipe => {
-      var serializedRecipe = recipe.toJSON();
+      const serializedRecipe = recipe.toJSON();
       serializedRecipe.labels = [];
       res.status(201).json(serializedRecipe);
     }).catch(next);
@@ -586,8 +586,8 @@ router.get(
     }).then(function(recipes) {
       let recipes_j = recipes.map(e => e.toJSON());
 
-      var data;
-      var mimetype;
+      let data;
+      let mimetype;
 
       switch (req.query.format) {
       case 'json':
@@ -601,7 +601,7 @@ router.get(
       case 'txt':
         data = '';
 
-        for (var i = 0; i < recipes_j.length; i++) {
+        for (let i = 0; i < recipes_j.length; i++) {
           let recipe = recipes_j[i];
 
           recipe.labels = recipe.labels.map(label => label.title).join(', ');
@@ -610,7 +610,7 @@ router.get(
 
           delete recipe.fromUser;
 
-          for (var key in recipe) {
+          for (const key in recipe) {
             data += key + ': ';
             data += recipe[key] + '\r\n';
           }

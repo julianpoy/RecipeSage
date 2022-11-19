@@ -1,7 +1,7 @@
-let ElasticService = require('../services/elastic');
-let Sentry = require('@sentry/node');
-let SQ = require('sequelize');
-let Op = SQ.Op;
+const ElasticService = require('../services/elastic');
+const Sentry = require('@sentry/node');
+const SQ = require('sequelize');
+const Op = SQ.Op;
 
 'use strict';
 
@@ -203,7 +203,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Recipe._findTitle = function(userId, recipeId, basename, transaction, ctr) {
-    var adjustedTitle;
+    let adjustedTitle;
     if (ctr == 1) {
       adjustedTitle = basename;
     } else {
@@ -232,7 +232,7 @@ module.exports = (sequelize, DataTypes) => {
   Recipe.share = function(recipeId, recipientId, transaction) {
     return Recipe.findByPk(recipeId, { transaction }).then(recipe => {
       if (!recipe) {
-        var e = new Error('Could not find recipe to share');
+        const e = new Error('Could not find recipe to share');
         e.status = 404;
         throw e;
       } else {

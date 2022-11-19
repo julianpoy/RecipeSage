@@ -1,9 +1,9 @@
-let request = require('supertest');
-let {
+const request = require('supertest');
+const {
   expect
 } = require('chai');
 
-let {
+const {
   setup,
   cleanup,
   syncDB,
@@ -15,11 +15,11 @@ let {
 } = require('../testutils');
 
 // DB
-var User = require('../models').User;
-var Session = require('../models').Session;
+const User = require('../models').User;
+const Session = require('../models').Session;
 
 describe('users', () => {
-  var server;
+  let server;
   before(async () => {
     server = await setup();
   });

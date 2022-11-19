@@ -1,9 +1,9 @@
-let request = require('supertest');
-let {
+const request = require('supertest');
+const {
   expect
 } = require('chai');
 
-let {
+const {
   setup,
   cleanup,
   syncDB,
@@ -17,12 +17,12 @@ let {
 } = require('../testutils');
 
 // DB
-var Op = require('sequelize').Op;
-var Recipe = require('../models').Recipe;
-var Label = require('../models').Label;
+const Op = require('sequelize').Op;
+const Recipe = require('../models').Recipe;
+const Label = require('../models').Label;
 
 describe('recipes', () => {
-  var server;
+  let server;
   before(async () => {
     server = await setup();
   });
