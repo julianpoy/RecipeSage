@@ -11,13 +11,20 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
-    "target": "es5",
+    "target": "es6",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
+      "es2022",
+      "es2021",
+      "es2020",
       "es2019",
       "es2018",
+      "es2017",
+      "es2016",
+      "es2015",
+      "es5",
       "dom"
     ],
     "paths": {
