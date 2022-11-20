@@ -145,7 +145,6 @@ export class AuthPage {
   }
 
   async forgotPassword() {
-    this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
       const invalidEmail = await this.translate.get('pages.auth.error.invalidEmail').toPromise();
       this.presentToast(invalidEmail);

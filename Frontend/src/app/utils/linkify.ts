@@ -1,4 +1,4 @@
-import * as LinkifyStr from 'linkifyjs/string';
+import LinkifyStr from 'linkify-string';
 
 export const linkifyStr = (str: string) => {
   return LinkifyStr(str, {
