@@ -4,14 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www.js",
-    "mocha": "PORT=2999 NODE_ENV=test mocha --timeout 10000 --exit --",
+    "test": "PORT=2999 NODE_ENV=test jest --runInBand ./src/**/*.spec.js",
     "lint": "eslint .",
-    "test": "npm run test:all",
-    "test:ci": "npm run test:all",
-    "test:all": "npm run test:routes && npm run test:services && npm run test:models",
-    "test:routes": "npm run mocha \"./src/routes/**/*.spec.js\"",
-    "test:services": "npm run mocha \"./src/services/**/*.spec.js\"",
-    "test:models": "npm run mocha \"./src/models/**/*.spec.js\""
+    "test:ci": "npm run test"
   },
   "bin": "src/bin/www.js",
   "pkg": {
@@ -71,7 +66,7 @@
   "devDependencies": {
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
-    "mocha": "^10.1.0",
+    "jest": "^29.3.1",
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.5.1",
     "sinon": "^14.0.1",

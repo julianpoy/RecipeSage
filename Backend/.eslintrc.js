@@ -9,7 +9,7 @@ module.exports = {
       '**/*.spec.js',
     ],
     'env': {
-      'mocha': true
+      'jest': true
     }
   }],
   'parserOptions': {

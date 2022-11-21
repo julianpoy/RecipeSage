@@ -20,7 +20,7 @@ const Session = require('../models').Session;
 
 describe('users', () => {
   let server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
@@ -28,7 +28,7 @@ describe('users', () => {
     await syncDB();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 

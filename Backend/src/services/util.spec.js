@@ -29,11 +29,11 @@ let GripService = require('../services/grip');
 
 describe('utils', () => {
   let server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 
@@ -100,7 +100,7 @@ describe('utils', () => {
   describe('sendmail', () => {
     let sesStub, sesSendEmailStub;
 
-    before(() => {
+    beforeAll(() => {
       // sinon.stub(aws, 'S3')
       sesSendEmailStub = sinon.stub().returns({
         promise: () => Promise.resolve({
@@ -113,7 +113,7 @@ describe('utils', () => {
       });
     });
 
-    after(() => {
+    afterAll(() => {
       sesStub.restore();
     });
 
@@ -259,7 +259,7 @@ describe('utils', () => {
   describe('dispatchMessageNotification', () => {
     let userId, fcmTokens, message, fcmSendMessagesStub, gripBroadcastStub;
 
-    before(async () => {
+    beforeAll(async () => {
       userId = '15';
       fcmTokens = [{
         id: 'a',
@@ -295,7 +295,7 @@ describe('utils', () => {
       await dispatchMessageNotification({ id: userId, fcmTokens }, message);
     });
 
-    after(() => {
+    afterAll(() => {
       fcmSendMessagesStub.restore();
       gripBroadcastStub.restore();
     });
