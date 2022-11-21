@@ -22,7 +22,7 @@ const Label = require('../models').Label;
 
 describe('labels', () => {
   let server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
@@ -30,7 +30,7 @@ describe('labels', () => {
     await syncDB();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 
@@ -173,7 +173,7 @@ describe('labels', () => {
 
       let responseBody;
 
-      before(async () => {
+      beforeAll(async () => {
         user1 = await createUser();
         recipe1 = await createRecipe(user1.id);
         label1 = await createLabel(user1.id);

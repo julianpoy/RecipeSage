@@ -19,22 +19,22 @@ const Recipe = require('../models').Recipe;
 
 describe('recipe', () => {
   let server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 
   describe('findTitle', () => {
     let _findTitleStub;
 
-    before(() => {
+    beforeAll(() => {
       _findTitleStub = sinon.stub(Recipe, '_findTitle').returns(Promise.resolve());
     });
 
-    after(() => {
+    afterAll(() => {
       _findTitleStub.restore();
     });
 
@@ -115,12 +115,12 @@ describe('recipe', () => {
   describe('model.share', () => {
     let _shareStub;
 
-    before(async () => {
+    beforeAll(async () => {
       await syncDB();
       _shareStub = sinon.stub(Recipe.prototype, 'share').returns(Promise.resolve());
     });
 
-    after(() => {
+    afterAll(() => {
       _shareStub.restore();
     });
 
@@ -145,18 +145,18 @@ describe('recipe', () => {
 
   describe('instance.share', () => {
     let findTitleStub;
-    before(async () => {
+    beforeAll(async () => {
       await syncDB();
       findTitleStub = sinon.stub(Recipe, 'findTitle').callsFake((a, b, title) => Promise.resolve(title));
     });
 
-    after(() => {
+    afterAll(() => {
       findTitleStub.restore();
     });
 
     describe('shares recipe to recipient', () => {
       let user1, user2, recipe, sharedRecipe;
-      before(async () => {
+      beforeAll(async () => {
         user1 = await createUser();
         user2 = await createUser();
 

@@ -23,7 +23,7 @@ const Label = require('../models').Label;
 
 describe('recipes', () => {
   let server;
-  before(async () => {
+  beforeAll(async () => {
     server = await setup();
   });
 
@@ -31,7 +31,7 @@ describe('recipes', () => {
     await syncDB();
   });
 
-  after(async () => {
+  afterAll(async () => {
     await cleanup(server);
   });
 

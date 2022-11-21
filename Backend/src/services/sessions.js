@@ -78,7 +78,7 @@ function removeOldSessions() {
     }
   });
 }
-setInterval(removeOldSessions, 1 * 60 * 60 * 1000); // Every X hours
+if (process.env.NODE_ENV !== 'test') setInterval(removeOldSessions, 1 * 60 * 60 * 1000); // Every X hours
 
 // Creates a token and returns the token if successful
 exports.generateSession = function(userId, type, transaction) {
