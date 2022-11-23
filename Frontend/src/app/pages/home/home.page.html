@@ -50,13 +50,20 @@
 
 <ion-content>
   <div class="homegrid" [ngClass]="{ 'no-search': folder !== 'main' }">
-    <ion-searchbar
-      *ngIf="folder === 'main'"
-      placeholder="{{ 'pages.home.search.placeholder' | translate }}"
-      (ionClear)="search('')"
-      (keydown.enter)="search($event.target.value); $event.target.blur()"
-      enterkeyhint="search"
-    ></ion-searchbar>
+    <div class="search-container">
+      <ion-searchbar
+        *ngIf="folder === 'main'"
+        placeholder="{{ 'pages.home.search.placeholder' | translate }}"
+        enterkeyhint="search"
+        inputmode="search"
+        type="search"
+        (ionClear)="search('')"
+        (keydown.enter)="search($event.target.value); $event.target.blur()"
+      ></ion-searchbar>
+      <ion-button fill="clear" size="small">
+        Filter
+      </ion-button>
+    </div>
 
     <div class="infinite-scrolling-container" *ngIf="preferences[preferenceKeys.ViewType] === 'tiles' && recipes?.length">
       <div class="labelChips" *ngIf="getShouldShowLabelChips()">
