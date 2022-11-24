@@ -152,6 +152,8 @@ export class RecipePage {
   }
 
   async loadLabels() {
+    if (!this.isLoggedIn) return;
+
     const response = await this.labelService.fetch();
     if (!response.success) return;
 
@@ -445,16 +447,18 @@ export class RecipePage {
     });
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response.success) return false;
 
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.data.id));
+
+    return true;
   }
 
   async goToAuth(cb?: () => any) {
     const authModal = await this.modalCtrl.create({
       component: AuthPage,
       componentProps: {
-        register: !this.isLoggedIn
+        startWithRegister: !this.isLoggedIn
       }
     });
     authModal.onDidDismiss().then(() => {
@@ -466,7 +470,9 @@ export class RecipePage {
 
   authAndClone() {
     this.goToAuth(() => {
-      this.cloneRecipe().then(async () => {
+      this.cloneRecipe().then(async (success) => {
+        if (!success) return;
+
         const message = await this.translate.get('pages.recipeDetails.cloned').toPromise();
         (await this.toastCtrl.create({
           message,
