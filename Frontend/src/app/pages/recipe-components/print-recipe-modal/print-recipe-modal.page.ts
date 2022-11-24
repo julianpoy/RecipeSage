@@ -33,12 +33,6 @@ export class PrintRecipeModalPage {
     public sanitizer: DomSanitizer,
     public utilService: UtilService,
     public recipeService: RecipeService) {
-    setTimeout(() => {
-      for (const template of this.templates) {
-        template.modifiers.scale = this.scale;
-        template.url = this.utilService.generateRecipeTemplateURL(this.recipe.id, template.modifiers);
-      }
-    });
   }
 
   async ionViewWillEnter() {
@@ -97,6 +91,11 @@ export class PrintRecipeModalPage {
       description: halfSheetCompactNoCols,
       orientation: 'landscape'
     }];
+
+    for (const template of this.templates) {
+      template.modifiers.scale = this.scale;
+      template.url = this.utilService.generateRecipeTemplateURL(this.recipe.id, template.modifiers);
+    }
   }
 
   print() {
