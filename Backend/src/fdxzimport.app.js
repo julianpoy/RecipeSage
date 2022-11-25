@@ -66,23 +66,19 @@ function fetchDeepProp(base, propName) {
 
 async function main() {
   try {
-    await (new Promise((resolve, reject) => {
-      extract(zipPath, { dir: extractPath }, function (err) {
-        if (err) {
-          if (err.message === 'end of central directory record signature not found') {
-            // Was not compressed - likely just FDX instead of FDXZ
-            xmlPath = zipPath;
-            resolve();
-          } else {
-            reject(err);
-          }
-        } else {
-          // Was compressed, therefore was likely FDXZ
-          xmlPath = extractPath + '/Data.xml';
-          resolve();
-        }
-      });
-    }));
+    try {
+      await extract(zipPath, { dir: extractPath });
+
+      // Was compressed, therefore was likely FDXZ
+      xmlPath = extractPath + '/Data.xml';
+    } catch(e) {
+      if (e.message === 'end of central directory record signature not found') {
+        // Was not compressed - likely just FDX instead of FDXZ
+        xmlPath = zipPath;
+      } else {
+        throw e;
+      }
+    }
 
     let xml;
     let data;
