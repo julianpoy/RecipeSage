@@ -114,6 +114,7 @@ jobs:
           paths:
             - www
   push_backend:
+    resource_class: large
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
@@ -129,6 +130,7 @@ jobs:
           name: tag-and-push-api
           command: ./scripts/deploy/push_api_docker.sh ${CIRCLE_TAG:=stg}
   push_frontend:
+    resource_class: large
     working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
