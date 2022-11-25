@@ -124,15 +124,7 @@ const cleanup = () => {
 
 async function main() {
   try {
-    await (new Promise((resolve, reject) => {
-      extract(zipPath, { dir: extractPath }, function (err) {
-        if (err) {
-          if (err.message === 'end of central directory record signature not found') err.status = 3;
-          reject(err);
-        }
-        else resolve();
-      });
-    }));
+    await extract(zipPath, { dir: extractPath });
 
     fs.unlinkSync(zipPath);
 
@@ -484,6 +476,7 @@ async function main() {
 
     exit(0);
   } catch (e) {
+    if (e.message === 'end of central directory record signature not found') e.status = 3;
     console.log('Couldn\'t handle lcb upload 2', e);
     logError(e);
 

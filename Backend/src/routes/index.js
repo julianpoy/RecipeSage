@@ -438,15 +438,7 @@ router.post(
     let zipPath = req.file.path;
     let extractPath = zipPath + '-extract';
 
-    new Promise((resolve, reject) => {
-      extract(zipPath, { dir: extractPath }, err => {
-        if (err) {
-          if (err.message === 'end of central directory record signature not found') err.status = 406;
-          reject(err);
-        }
-        else resolve(extractPath);
-      });
-    }).then(extractPath => {
+    extract(zipPath, { dir: extractPath }).then(() => {
       metrics.tExtracted = performance.now();
 
       let labelMap = {};
@@ -551,6 +543,7 @@ router.post(
 
       res.status(201).json({});
     }).catch(err => {
+      if (err.message === 'end of central directory record signature not found') err.status = 406;
       fs.removeSync(zipPath);
       fs.removeSync(extractPath);
       next(err);

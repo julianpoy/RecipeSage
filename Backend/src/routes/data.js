@@ -320,15 +320,7 @@ router.post(
       zipPath = req.file.path;
       extractPath = zipPath + '-extract';
 
-      await new Promise((resolve, reject) => {
-        extract(zipPath, { dir: extractPath }, err => {
-          if (err) {
-            if (err.message === 'end of central directory record signature not found') err.status = 406;
-            reject(err);
-          }
-          else resolve();
-        });
-      });
+      await extract(zipPath, { dir: extractPath });
 
       const fileNames = await fs.readdir(extractPath);
 
@@ -386,6 +378,7 @@ router.post(
 
       res.status(201).send('Import complete');
     } catch(err) {
+      if (err.message === 'end of central directory record signature not found') err.status = 406;
       await fs.remove(zipPath);
       await fs.remove(extractPath);
       next(err);
