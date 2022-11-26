@@ -3,6 +3,7 @@ orbs:
   aws-cli: circleci/aws-cli@1.0.0
 jobs:
   test_backend:
+    resource_class: large
     working_directory: ~/recipesage
     docker:
       - image: cimg/node:16.17
