@@ -319,7 +319,7 @@ router.get(
       if (folder === 'inbox') fields += `, ${fromUserSelect}`;
 
       const labelFilterClause = `"Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') })`;
-      const labelIntersectionClause = req.query.labelIntersection ? `HAVING count("Label") = ${labelFilter.length}` : '';
+      const labelIntersectionClause = req.query.labelIntersection === 'true' ? `HAVING count("Label") = ${labelFilter.length}` : '';
       const unlabeledClause = unlabeledOnly ? 'AND "Label".id IS NULL' : '';
       const unlabeledJoin = unlabeledOnly ? `
         LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = "Recipe".id

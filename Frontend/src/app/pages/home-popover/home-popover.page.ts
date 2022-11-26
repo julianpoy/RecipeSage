@@ -87,7 +87,13 @@ export class HomePopoverPage {
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      const unlabeledOnly = data.selectedLabels?.includes('unlabeled');
+
+      if (unlabeledOnly) {
+        this.selectedLabels.splice(0, this.selectedLabels.length, 'unlabeled');
+      } else {
+        this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      }
 
       setTimeout(() => {
         this.dismiss(true);

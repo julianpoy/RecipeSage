@@ -214,6 +214,14 @@
           </p>
         </ion-label>
       </null-state>
+      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && selectedLabels.length !== 0">
+        <ion-icon name="funnel" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            {{ 'pages.home.errors.noResultsLabelFilter' | translate }}
+          </p>
+        </ion-label>
+      </null-state>
     </div>
   </div>
 

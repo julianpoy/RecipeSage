@@ -131,6 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
   "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
 
+  "pages.home.errors.noResultsLabelFilter": "No recipes matching the current label filter",
 
   "pages.home.errors.noSearchResults.message1": "No search results.",
   "pages.home.errors.noSearchResults.message2": "Search includes:",
@@ -182,6 +183,7 @@
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
   "pages.homepopover.labelNull": "You don't have any labels. You can create labels on the recipe details page.",
+  "pages.homepopover.unlabeled": "Unlabeled Only",
 
   "====== Pages.RecipeDetails ======": "",
 
