@@ -131,6 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "La tua inbox delle ricette è vuota.",
   "pages.home.errors.inboxEmpty.message2": "Quando qualcuno ti invia una ricetta, la troverai qui!",
 
+  "pages.home.errors.noResultsLabelFilter": "Nessuna ricetta corrispondente al filtro etichette corrente",
 
   "pages.home.errors.noSearchResults.message1": "Nessun risultato di ricerca.",
   "pages.home.errors.noSearchResults.message2": "La ricerca include:",
@@ -182,6 +183,7 @@
   "pages.homepopover.warning.optionsHidden": "Attenzione: dato che questa è una raccolta condivisa, alcune opzioni sono nascoste",
 
   "pages.homepopover.labelNull": "Non hai ancora creato nessuna etichetta. Puoi crearne una dai dettagli di una ricetta.",
+  "pages.homepopover.unlabeled": "Solo senza etichetta",
 
   "====== Pages.RecipeDetails ======": "",
 

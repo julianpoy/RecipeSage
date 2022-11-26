@@ -130,6 +130,7 @@
   "pages.home.errors.inboxEmpty.message1": "Dein Posteingang für Rezepte ist leer.",
   "pages.home.errors.inboxEmpty.message2": "Wenn dir jemand ein Rezept schickt, wird es hier angezeigt!",
 
+  "pages.home.errors.noResultsLabelFilter": "Keine Rezepte, die dem aktuellen Etikettenfilter entsprechen",
 
   "pages.home.errors.noSearchResults.message1": "Keine Suchergebnisse.",
   "pages.home.errors.noSearchResults.message2": "Die Suche beinhaltet:",
@@ -181,6 +182,7 @@
   "pages.homepopover.warning.optionsHidden": "Hinweis: Einige Optionen sind ausgeblendet, da es sich um eine geteilte Sammlung handelt.",
 
   "pages.homepopover.labelNull": "Du hast keine Label. Du kannst Label auf der Seite mit den Rezeptdetails erstellen.",
+  "pages.homepopover.unlabeled": "Nur nicht beschriftet",
 
   "====== Pages.RecipeDetails ======": "",
 
