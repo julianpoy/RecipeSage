@@ -1173,7 +1173,7 @@
   "components.selectUser.change": "Zum Ändern klicken",
   "components.selectUser.select": "Zum Auswählen klicken",
   "components.selectUser.searching": "Suchen nach \"{{name}}\"...",
-  "components.selectUser.null": "Keine Treffer für \"{{searchText}}\"",
+  "components.selectUser.null": "Keine Treffer für \"{{name}}\"",
 
   "====== Components.SelfhostWarning ======": "",
 

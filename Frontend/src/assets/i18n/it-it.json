@@ -1174,7 +1174,7 @@
   "components.selectUser.change": "Clicca per modificare",
   "components.selectUser.select": "Clicca per selezionare",
   "components.selectUser.searching": "Cercando \"{{name}}\"...",
-  "components.selectUser.null": "Impossibile trovare \"{{searchText}}\"",
+  "components.selectUser.null": "Impossibile trovare \"{{name}}\"",
 
   "====== Components.SelfhostWarning ======": "",
 

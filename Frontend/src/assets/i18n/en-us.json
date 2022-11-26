@@ -1174,7 +1174,7 @@
   "components.selectUser.change": "Click to change",
   "components.selectUser.select": "Click to select",
   "components.selectUser.searching": "Searching for \"{{name}}\"...",
-  "components.selectUser.null": "No results for \"{{searchText}}\"",
+  "components.selectUser.null": "No results for \"{{name}}\"",
 
   "====== Components.SelfhostWarning ======": "",
 
