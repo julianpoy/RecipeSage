@@ -72,7 +72,8 @@ export class HomePopoverPage {
     }));
 
     const unlabeledTitle = await this.translate.get('pages.homepopover.unlabeled').toPromise();
-    options.unshift({
+    // Do not add unlabeled option if no labels are present
+    if (options.length) options.unshift({
       title: unlabeledTitle,
       value: 'unlabeled',
       selected: this.selectedLabels.indexOf('unlabeled') > -1
