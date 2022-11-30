@@ -16,13 +16,17 @@ export class CopyWithWebshareComponent {
 
   constructor() {}
 
-  webShare() {
+  async webShare() {
     if (this.hasWebShareAPI) {
-      (navigator as any).share({
-        title: this.webshareTitle,
-        text: this.webshareText,
-        url: this.webshareURL,
-      });
+      try {
+        (navigator as any).share({
+          title: this.webshareTitle,
+          text: this.webshareText,
+          url: this.webshareURL,
+        });
+      } catch(e) {
+        // Ignore webshare errors
+      }
     }
   }
 
