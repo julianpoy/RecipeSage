@@ -20,6 +20,14 @@ self.addEventListener('install', async (event) => {
     caches.open('base-asset-cache')
       .then((cache) => cache.addAll(networkFirstPrecacheUrls))
   );
+
+  const languagePrecacheUrls = [
+    "/assets/i18n/en-us.json"
+  ];
+  event.waitUntil(
+    caches.open('language-cache')
+      .then((cache) => cache.addAll(languagePrecacheUrls))
+  );
 });
 
 // Index should be cached networkFirst - this way, users will always get the newest application version
@@ -31,6 +39,20 @@ registerRoute(
     plugins: [
       new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
+      }),
+    ]
+  })
+);
+
+// Language files should always come from network first since they change frequently
+const MAX_LANGUAGE_AGE = 60; // Days
+registerRoute(
+  /\/assets\/i18n\/.*/,
+  new NetworkFirst({
+    cacheName: 'language-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
       }),
     ]
   })
