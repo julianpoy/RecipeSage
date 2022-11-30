@@ -1,5 +1,6 @@
 {
   "name": "RecipeSage",
+  "description": "An open source personal recipe keeper, meal planner, and shopping list organizer",
   "short_name": "RecipeSage",
   "start_url": "index.html",
   "display": "standalone",
@@ -15,6 +16,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icon/android-chrome-512x512.png?v=xQzbJxx3oP",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable any"
     }
   ],
   "shortcuts": [
@@ -22,19 +29,34 @@
       "name": "Create a Recipe",
       "short_name": "Create Recipe",
       "description": "Add a new recipe to your RecipeSage account",
-      "url": "/#/edit-recipe/new?utm_source=homescreen"
+      "url": "/#/edit-recipe/new?utm_source=homescreen",
+      "icons": [
+        {
+          "src": "assets/icon/android-chrome-192x192.png?v=xQzbJxx3oP"
+        }
+      ]
     },
     {
       "name": "My Shopping Lists",
       "short_name": "Shopping Lists",
       "description": "Open your shopping lists",
-      "url": "/#/shopping-lists?utm_source=homescreen"
+      "url": "/#/shopping-lists?utm_source=homescreen",
+      "icons": [
+        {
+          "src": "assets/icon/android-chrome-192x192.png?v=xQzbJxx3oP"
+        }
+      ]
     },
     {
       "name": "My Meal Plans",
       "short_name": "Meal Plans",
       "description": "Open your meal plans",
-      "url": "/#/meal-planners?utm_source=homescreen"
+      "url": "/#/meal-planners?utm_source=homescreen",
+      "icons": [
+        {
+          "src": "assets/icon/android-chrome-192x192.png?v=xQzbJxx3oP"
+        }
+      ]
     }
   ],
   "share_target": {
@@ -48,5 +70,11 @@
   },
   "background_color": "#353b48",
   "theme_color": "#353b48",
-  "gcm_sender_id": "103953800507"
+  "gcm_sender_id": "103953800507",
+  "categories": [
+    "books",
+    "food",
+    "productivity",
+    "shopping"
+  ]
 }
