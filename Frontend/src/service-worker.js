@@ -36,6 +36,20 @@ registerRoute(
   })
 );
 
+// Language files should always come from network first since they change frequently
+const MAX_LANGUAGE_AGE = 60; // Days
+registerRoute(
+  /\/assets\/i18n\/.*/,
+  new NetworkFirst({
+    cacheName: 'language-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
+      }),
+    ]
+  })
+);
+
 // Icons should be served cache first - they almost never change, and serving an old version is accepable
 const MAX_SVG_ICON_AGE = 60; // Days
 registerRoute(
