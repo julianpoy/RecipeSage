@@ -4,7 +4,6 @@ module.exports = {
     // "assets/fonts/roboto*.woff2",
     // "assets/**/*.{png,jpg}",
     //"svg/*.svg",
-    "assets/i18n/en-us.json",
     "*.css",
     "*.js",
     // "index.html",

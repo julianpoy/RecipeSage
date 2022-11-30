@@ -20,6 +20,14 @@ self.addEventListener('install', async (event) => {
     caches.open('base-asset-cache')
       .then((cache) => cache.addAll(networkFirstPrecacheUrls))
   );
+
+  const languagePrecacheUrls = [
+    "/assets/i18n/en-us.json"
+  ];
+  event.waitUntil(
+    caches.open('language-cache')
+      .then((cache) => cache.addAll(languagePrecacheUrls))
+  );
 });
 
 // Index should be cached networkFirst - this way, users will always get the newest application version
