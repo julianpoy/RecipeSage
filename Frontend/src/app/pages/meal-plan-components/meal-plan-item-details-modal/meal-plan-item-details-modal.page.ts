@@ -162,11 +162,11 @@ export class MealPlanItemDetailsModalPage {
     const response = await this.recipeService.getRecipeById(this.mealItem.recipe.id);
     loading.dismiss();
 
-    if (response) {
+    if (response.success) {
       const addRecipeToShoppingListModal = await this.modalCtrl.create({
         component: AddRecipeToShoppingListModalPage,
         componentProps: {
-          recipes: [response]
+          recipes: [response.data]
         }
       });
       addRecipeToShoppingListModal.present();
