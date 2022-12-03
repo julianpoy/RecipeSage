@@ -3,7 +3,6 @@ const router = express.Router();
 const cors = require('cors');
 const Sentry = require('@sentry/node');
 const moment = require('moment');
-const dedent = require('ts-dedent');
 
 // DB
 const Op = require('sequelize').Op;
@@ -24,6 +23,8 @@ const SessionService = require('../services/sessions');
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const SubscriptionService = require('../services/subscriptions');
+const { sendWelcome } = require('../emails/welcome');
+const { sendPasswordReset } = require('../emails/passwordReset');
 
 // SharedUtils
 const SharedUtils = require('../../../SharedUtils/src');
@@ -699,48 +700,7 @@ router.post(
         token
       });
 
-      const html = dedent`
-        Welcome to RecipeSage!<br />
-
-        <br /><br />Thanks for joining our community of recipe collectors!
-        <br /><br />
-
-        Please feel free to contact me if you have questions, concerns or comments at <a href="mailto:julian@recipesage.com?subject=RecipeSage%20Support">julian@recipesage.com</a>.
-
-        <br />
-
-        <br /><br />Best,
-        <br />Julian Poyourow
-        <br />Developer of RecipeSage - <a href="https://recipesage.com">https://recipesage.com</a>
-        <br /><br />
-        <b>Social:</b><br />
-        Discord: <a href="https://discord.gg/yCfzBft">https://discord.gg/yCfzBft</a><br />
-        Facebook: <a href="https://www.facebook.com/recipesageofficial/">https://www.facebook.com/recipesageofficial/</a><br />
-        Instagram: <a href="https://www.instagram.com/recipesageofficial/">https://www.instagram.com/recipesageofficial/</a><br />
-        Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>
-      `;
-
-      const plain = dedent`
-        Welcome to RecipeSage!
-
-
-        Thanks for joining our community of recipe collectors!
-
-        Please feel free to contact me if you have questions, concerns or comments at julian@recipesage.com.
-
-
-        Best,
-        Julian Poyourow
-        Developer of RecipeSage - https://recipesage.com
-
-        Social:
-        https://discord.gg/yCfzBft
-        https://www.facebook.com/recipesageofficial/
-        https://www.instagram.com/recipesageofficial/
-        https://twitter.com/RecipeSageO
-      `;
-
-      UtilService.sendmail([sanitizedEmail], [], 'Welcome to RecipeSage!', html, plain).catch(err => {
+      sendWelcome([sanitizedEmail], []).catch(err => {
         Sentry.captureException(err);
       });
     } catch(err) {
@@ -752,66 +712,41 @@ router.post(
 router.post(
   '/forgot',
   cors(),
-  function(req, res, next) {
+  async (req, res, next) => {
+    try {
+      let standardStatus = 200;
+      let standardResponse = {
+        msg: ''
+      };
 
-    let standardStatus = 200;
-    let standardResponse = {
-      msg: ''
-    };
-
-    let origin;
-    if (process.env.NODE_ENV === 'production') {
-      origin = 'https://recipesage.com';
-    } else {
-      // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
-      origin = req.get('origin');
-    }
-
-    User.findOne({
-      where: {
-        email: UtilService.sanitizeEmail(req.body.email)
+      let origin;
+      if (process.env.NODE_ENV === 'production') {
+        origin = 'https://recipesage.com';
+      } else {
+        // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
+        origin = req.get('origin');
       }
-    }).then(function(user) {
+
+      const user = await User.findOne({
+        where: {
+          email: UtilService.sanitizeEmail(req.body.email)
+        }
+      });
+
       if (!user) {
         res.status(standardStatus).json(standardResponse);
-      } else {
-        return SessionService.generateSession(user.id, 'user').then(({ token }) => {
-          const link = origin + '/#/settings/account?token=' + token;
-          const html = dedent`
-            Hello,
-
-            <br /><br />Someone recently requested a password reset link for the RecipeSage account associated with this email address.
-            <br /><br />If you did not request a password reset, please disregard this email.
-
-            <br /><br /><a href="` + link + `">Click here to reset your password</a>
-            <br />or paste this url into your browser: ` + link + `
-
-            <br />
-
-            <br /><br />Thank you,
-            <br />Julian P.
-            <br />RecipeSage
-          `;
-
-          const plain = dedent`
-            Hello,
-
-            Someone recently requested a password reset link for the RecipeSage account associated with this email address.
-            If you did not request a password reset, please disregard this email.
-
-            To reset your password, paste this url into your browser: ` + link + `
-
-            Thank you,
-            Julian P.
-            RecipeSage
-          `;
-
-          return UtilService.sendmail([user.email], [], 'RecipeSage Password Reset', html, plain).then(() => {
-            res.status(standardStatus).json(standardResponse);
-          });
-        });
       }
-    }).catch(next);
+
+      const session = await SessionService.generateSession(user.id, 'user');
+
+      const link = `${origin}/#/settings/account?token=${session.token}`;
+
+      await sendPasswordReset([user.email], [], { resetLink: link });
+
+      res.status(standardStatus).json(standardResponse);
+    } catch(e) {
+      next(e);
+    }
   });
 
 /* Update user */
