@@ -3,7 +3,7 @@ const { dedent } = require('ts-dedent');
 const UtilService = require('../services/util');
 const { signatureHtml, signaturePlain } = require('./util/signature');
 
-const sendWelcome = async (to, ccTo, args) => {
+const sendWelcome = async (to, ccTo) => {
   const subject = 'Welcome to RecipeSage!';
 
   const html = dedent`
