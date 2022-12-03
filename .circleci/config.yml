@@ -128,8 +128,23 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: tag-and-push-api
-          command: ./scripts/deploy/push_api_docker.sh ${CIRCLE_TAG:=stg}
+          name: api-hosted.sh
+          command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
+  push_backend_selfhost:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: cimg/node:16.17
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: docker-login
+          command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: api-selfhost.sh
+          command: ./scripts/build/api-selfhost.sh ${CIRCLE_TAG:=stg}
   push_frontend:
     resource_class: large
     working_directory: ~/recipesage # directory where steps will run
@@ -147,14 +162,24 @@ jobs:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
       - run:
+          name: webapp-hosted.sh
+          command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
+  push_frontend_selfhost:
+    working_directory: ~/recipesage # directory where steps will run
+    docker:
+      - image: cimg/node:16.17
+    steps:
+      - checkout
+      - aws-cli/setup
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
-          name: tag-and-push-static
-          command: ./scripts/deploy/push_static_docker.sh ${CIRCLE_TAG:=stg}
-      - run:
-          name: sync-s3
-          command: ./scripts/deploy/push_static_s3.sh ${CIRCLE_TAG:=stg}
+          name: webapp-selfhost.sh
+          command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}
 
 workflows:
   version: 2
@@ -181,7 +206,23 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
               ignore: /.*/
+      - push_backend_selfhost:
+          requires:
+            - test_backend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
       - push_frontend:
+          requires:
+            - build_test_frontend
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*.*/
+            branches:
+              ignore: /.*/
+      - push_frontend_selfhost:
           requires:
             - build_test_frontend
           filters:
