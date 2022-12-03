@@ -3,6 +3,7 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const Sentry = require('@sentry/node');
 const he = require('he');
+const { dedent } = require('ts-dedent');
 
 const puppeteer = require('puppeteer-core');
 
@@ -74,7 +75,7 @@ const clipRecipe = async clipUrl => {
       throw err;
     }
 
-    await page.evaluate(`() => {
+    await page.evaluate(dedent`() => {
       try {
         // Force lazyload for content listening to scroll
         window.scrollTo(0, document.body.scrollHeight);
