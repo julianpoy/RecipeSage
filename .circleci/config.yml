@@ -205,7 +205,7 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              only: /^master$/
+              ignore: /.*/
       - push_backend_selfhost:
           requires:
             - test_backend
@@ -213,7 +213,7 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              only: /^master$/
+              ignore: /.*/
       - push_frontend:
           requires:
             - build_test_frontend
@@ -221,7 +221,7 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              only: /^master$/
+              ignore: /.*/
       - push_frontend_selfhost:
           requires:
             - build_test_frontend
@@ -229,5 +229,5 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
-              only: /^master$/
+              ignore: /.*/
 
