@@ -79,7 +79,7 @@ if (window[extensionContainerId]) {
       let currentSnip = {
         url: window.location.href
       };
-      if (preferences.disableAutoSnip) currentSnip = { ...currentSnip, ...autoSnipResults }
+      if (!preferences.disableAutoSnip) currentSnip = { ...currentSnip, ...autoSnipResults }
       let isDirty = false;
       let imageURLInput;
 
