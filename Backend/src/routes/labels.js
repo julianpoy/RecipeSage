@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 
 // DB
 const Op = require('sequelize').Op;
@@ -16,7 +15,6 @@ const UtilService = require('../services/util');
 //Add a label to a recipeId or recipeIds
 router.post(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -62,7 +60,6 @@ router.post(
 //Get all of a user's labels
 router.get(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -96,7 +93,6 @@ router.get(
 //Get recipes associated with specific label
 router.get(
   '/:labelId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -122,7 +118,6 @@ router.get(
 //Combine two labels
 router.post(
   '/merge',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -194,7 +189,6 @@ router.post(
 //Delete a label from a recipe
 router.delete(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
@@ -247,7 +241,6 @@ router.delete(
 // Update label for all associated recipes
 router.put(
   '/:id',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -297,7 +290,6 @@ router.put(
 // Delete labels from all associated recipes
 router.post(
   '/delete-bulk',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const Sentry = require('@sentry/node');
 const moment = require('moment');
 
@@ -31,7 +30,6 @@ const SharedUtils = require('../../../SharedUtils/src');
 
 router.get(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
     try {
@@ -525,7 +523,6 @@ router.get(
 
 router.get(
   '/capabilities',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
@@ -548,7 +545,6 @@ router.get(
 
 router.get(
   '/stats',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
@@ -595,7 +591,6 @@ router.get(
 /* Get public user listing by email */
 router.get(
   '/by-email',
-  cors(),
   function(req, res, next) {
 
     User.findOne({
@@ -619,7 +614,6 @@ router.get(
 /* Log in user */
 router.post(
   '/login',
-  cors(),
   function(req, res, next) {
 
     SQ.transaction(transaction => {
@@ -644,7 +638,6 @@ router.post(
 /* Register as a user */
 router.post(
   '/register',
-  cors(),
   async (req, res, next) => {
 
     try {
@@ -711,7 +704,6 @@ router.post(
 /* Forgot password */
 router.post(
   '/forgot',
-  cors(),
   async (req, res, next) => {
     try {
       let standardStatus = 200;
@@ -752,7 +744,6 @@ router.post(
 /* Update user */
 router.put(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function(req, res, next) {
@@ -850,7 +841,6 @@ router.put(
 
 router.post(
   '/logout',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function (req, res, next) {
     SessionService.deleteSession(res.locals.session.token).then(() => {
@@ -863,7 +853,6 @@ router.post(
 /* Check if a session token is valid */
 router.get(
   '/sessioncheck',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res) {
     res.status(200).send('Ok');
@@ -871,7 +860,6 @@ router.get(
 
 router.post(
   '/fcm/token',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -905,7 +893,6 @@ router.post(
 
 router.delete(
   '/fcm/token',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -927,7 +914,6 @@ router.delete(
 /* Get public user listing by id */
 router.get(
   '/:userId',
-  cors(),
   async (req, res, next) => {
     try {
       const user = await User.findByPk(req.params.userId, {

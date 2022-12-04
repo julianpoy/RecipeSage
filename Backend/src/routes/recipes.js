@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const xmljs = require('xml-js');
 const moment = require('moment');
 
@@ -92,7 +91,6 @@ const applyLegacyImageField = recipe => {
 //Create a new recipe
 router.post(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   legacyImageHandler,
   async (req, res, next) => {
@@ -204,7 +202,6 @@ router.post(
 // Count a user's recipes
 router.get(
   '/count',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -223,7 +220,6 @@ router.get(
 //Get all of a user's recipes (paginated)
 router.get(
   '/by-page',
-  cors(),
   MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
     try {
@@ -446,7 +442,6 @@ router.get(
 
 router.get(
   '/search',
-  cors(),
   MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
     try {
@@ -554,7 +549,6 @@ router.get(
 
 router.get(
   '/export',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -649,7 +643,6 @@ router.get(
 //Get a single recipe
 router.get(
   '/:recipeId',
-  cors(),
   MiddlewareService.validateSession(['user'], true),
   function(req, res, next) {
 
@@ -699,7 +692,6 @@ router.get(
 
 router.get(
   '/:recipeId/json-ld',
-  cors(),
   MiddlewareService.validateSession(['user'], true),
   async (req, res, next) => {
     try {
@@ -738,7 +730,6 @@ router.get(
 //Update a recipe
 router.put(
   '/:id',
-  cors(),
   MiddlewareService.validateSession(['user']),
   legacyImageHandler,
   async (req, res, next) => {
@@ -827,7 +818,6 @@ router.put(
 
 router.delete(
   '/all',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -854,7 +844,6 @@ router.delete(
 
 router.post(
   '/delete-bulk',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
     SQ.transaction(t => {
@@ -916,7 +905,6 @@ router.post(
 
 router.delete(
   '/:id',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 

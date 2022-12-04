@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const ical = require('ical-generator');
 
 // DB
@@ -20,7 +19,6 @@ const GripService = require('../services/grip');
 
 router.post(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -57,7 +55,6 @@ router.post(
 
 router.get(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
@@ -121,7 +118,6 @@ router.get(
 // Add items to a meal plan
 router.post(
   '/:mealPlanId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -181,7 +177,6 @@ router.post(
 // Delete meal plan from account
 router.delete(
   '/:mealPlanId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -232,7 +227,6 @@ router.delete(
 // Delete items from a meal plan, either by recipeId or by itemId
 router.delete(
   '/:mealPlanId/items',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -290,7 +284,6 @@ router.delete(
 // Update items from a meal plan in bulk
 router.put(
   '/:mealPlanId/items/bulk',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
@@ -359,7 +352,6 @@ router.put(
 // Update items from a meal plan in bulk
 router.post(
   '/:mealPlanId/items/bulk',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
@@ -421,7 +413,6 @@ router.post(
 
 router.delete(
   '/:mealPlanId/items/bulk',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
@@ -484,7 +475,6 @@ router.delete(
 //Get a single meal plan
 router.get(
   '/:mealPlanId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   async (req, res, next) => {
@@ -560,7 +550,6 @@ router.get(
 // Get ical for meal plan
 router.get(
   '/:mealPlanId/ical',
-  cors(),
   async (req, res, next) => {
 
     try {
@@ -605,7 +594,6 @@ router.get(
 // Update a meal plan meta info (NOT INCLUDING ITEMS)
 // router.put(
 //   '/:mealPlanId',
-//   cors(),
 //   MiddlewareService.validateSession(['user']),
 //   MiddlewareService.validateUser,
 //   function(req, res) {

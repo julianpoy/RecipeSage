@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const joi = require('joi');
 
 // DB
@@ -20,7 +19,6 @@ const {joiValidator} = require('../middleware/joiValidator');
 
 router.post(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -57,7 +55,6 @@ router.post(
 
 router.get(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
@@ -121,7 +118,6 @@ router.get(
 // Add items to a shopping list
 router.post(
   '/:shoppingListId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -185,7 +181,6 @@ router.post(
 // Delete shopping list from account
 router.delete(
   '/:shoppingListId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -236,7 +231,6 @@ router.delete(
 // Delete items from a shopping list by a list of item ids
 router.delete(
   '/:shoppingListId/items',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   function (req, res, next) {
@@ -298,7 +292,6 @@ router.delete(
 //Get a single shopping list
 router.get(
   '/:shoppingListId',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
@@ -367,7 +360,6 @@ router.get(
 // Update a shopping list meta info (NOT INCLUDING ITEMS)
 // router.put(
 //   '/:shoppingListId',
-//   cors(),
 //   MiddlewareService.validateSession(['user']),
 //   function(req, res, next) {
 

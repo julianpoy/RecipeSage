@@ -27,15 +27,14 @@ const ws = require('./routes/ws');
 
 const app = express();
 
-const corsWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost'];
+const corsWhitelist = [
+  'https://recipesage.com',
+  /https:\/\/.*\.recipesage.com$/,
+  'https://localhost', // Cordova
+  'capacitor://localhost' // Capacitor
+];
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (corsWhitelist.indexOf(origin) !== -1) {
-      callback(null, true); // Enable CORS for whitelisted domains
-    } else {
-      callback(null, { origin: false }); // Disable CORS, domain not on whitelist
-    }
-  }
+  origin: process.env.NODE_ENV === 'selfhost' || corsWhitelist,
 };
 
 app.options('*', cors(corsOptions));

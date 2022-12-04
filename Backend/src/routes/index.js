@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs-extra');
 const extract = require('extract-zip');
@@ -48,7 +47,6 @@ const xmljs = require('xml-js');
 
 router.get(
   '/scrape/pepperplate',
-  cors(),
   MiddlewareService.validateSession(['user']),
   async (req, res, next) => {
 
@@ -297,7 +295,6 @@ router.get(
 
 router.post(
   '/import/livingcookbook',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   multer({
@@ -358,7 +355,6 @@ router.post(
 
 router.post(
   '/import/fdxz',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   multer({
@@ -414,7 +410,6 @@ router.post(
 
 router.post(
   '/import/paprika',
-  cors(),
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   multer({

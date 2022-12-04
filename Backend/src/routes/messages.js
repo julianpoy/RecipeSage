@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 
 // DB
 const Op = require('sequelize').Op;
@@ -17,7 +16,6 @@ const UtilService = require('../services/util');
 
 router.post(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -120,7 +118,6 @@ router.post(
 //Get all of a user's threads
 router.get(
   '/threads',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
@@ -203,7 +200,6 @@ router.get(
 
 router.get(
   '/',
-  cors(),
   MiddlewareService.validateSession(['user']),
   function(req, res, next) {
 
