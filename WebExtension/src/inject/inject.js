@@ -14,13 +14,9 @@ if (window[extensionContainerId]) {
 
   console.log("Loading RecipeSage Browser Extension");
 
-  const fetchToken = () => {
-    return new Promise(resolve => {
-      chrome.storage.local.get(['token'], (result) => {
-        resolve(result.token);
-      });
-    });
-  }
+  const bgScriptPort = chrome.extension.connect({
+    name: "Inject BG Comm Port"
+  });
 
   let shadowRootContainer = document.createElement('div')
   shadowRootContainer.id = extensionContainerId;
@@ -54,12 +50,10 @@ if (window[extensionContainerId]) {
       autoSnipPending.innerText = "Grabbing Recipe Content...";
       autoSnipPendingContainer.appendChild(autoSnipPending);
 
-      autoSnipPromise = fetchToken().then(token => {
-        window.RC_ML_CLASSIFY_ENDPOINT = "https://api.recipesage.com/proxy/ingredient-instruction-classifier?token=" + token;
-
-        return RecipeClipper.clipRecipe().catch((err) => {
-          alert("Error while attempting to automatically clip recipe from page");
-        });
+      autoSnipPromise = RecipeClipper.clipRecipe({
+        mlDisable: true,
+      }).catch((err) => {
+        alert("Error while attempting to automatically clip recipe from page");
       });
     }
 
@@ -70,7 +64,7 @@ if (window[extensionContainerId]) {
         setTimeout(() => {
           // Timeout so that overlay doesn't flash in the case of instant (local only) autosnip
           shadowRoot.removeChild(autoSnipPendingContainer);
-        }, 250);
+        }, 500);
       }
 
       let snippersByField = {};
@@ -369,68 +363,59 @@ if (window[extensionContainerId]) {
       }
 
       let submit = () => {
-        fetchToken().then(token => {
-          return fetch(`https://api.recipesage.com/recipes?token=${token}`, {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(currentSnip)
-          }).then(response => {
-            if (response.ok) {
-              response.json().then(data => {
-                hide();
+        const nonce = Math.random();
+        bgScriptPort.postMessage(JSON.stringify({
+          type: 'save',
+          currentSnip,
+          nonce,
+        }));
+
+        bgScriptPort.onMessage.addListener((msg) => {
+          const parsed = JSON.parse(msg);
+          if (parsed.type !== 'saveResult' || parsed.nonce !== nonce) return;
+
+          switch (parsed.status) {
+            case 200:
+            case 201:
+              hide();
+              displayAlert(
+                `Recipe Saved!`,
+                `Click to open`,
+                4000,
+                `https://recipesage.com/#/recipe/${parsed.data.id}`
+              );
+              break;
+            case 401:
+              chrome.storage.local.set({ token: null }, () => {
                 displayAlert(
-                  `Recipe Saved!`,
-                  `Click to open`,
-                  4000,
-                  `https://recipesage.com/#/recipe/${data.id}`
+                  'Please Login',
+                  `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
+                  4000
                 );
               });
-            } else {
-              switch (response.status) {
-                case 401:
-                  chrome.storage.local.set({ token: null }, () => {
-                    displayAlert(
-                      'Please Login',
-                      `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
-                      4000
-                    );
-                  });
-                  break;
-                case 412:
-                  displayAlert(
-                    `Could Not Save Recipe`,
-                    `A recipe title is required.`,
-                    4000
-                  );
-                  break;
-                case 415:
-                  displayAlert(
-                    `Could Not Save Recipe`,
-                    `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
-                    6000
-                  );
-                  break;
-                default:
-                  displayAlert(
-                    'Could Not Save Recipe',
-                    'An error occurred while saving the recipe. Please try again.',
-                    4000
-                  );
-                  break;
-              }
-            }
-          }).catch(e => {
-            displayAlert(
-              'Could Not Save Recipe',
-              'An error occurred while saving the recipe. Please try again.',
-              4000
-            );
-            console.error(e);
-          });
+              break;
+            case 412:
+              displayAlert(
+                `Could Not Save Recipe`,
+                `A recipe title is required.`,
+                4000
+              );
+              break;
+            case 415:
+              displayAlert(
+                `Could Not Save Recipe`,
+                `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
+                6000
+              );
+              break;
+            default:
+              displayAlert(
+                'Could Not Save Recipe',
+                'An error occurred while saving the recipe. Please try again.',
+                4000
+              );
+              break;
+          }
         });
       }
 

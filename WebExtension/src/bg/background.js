@@ -36,6 +36,35 @@ chrome.contextMenus.create({
   }
 });
 
+chrome.extension.onConnect.addListener((port) => {
+  console.log("Connected to injected script");
+
+  port.onMessage.addListener((msg) => {
+    const parsed = JSON.parse(msg);
+
+    if (parsed.type === 'save') {
+      chrome.storage.local.get(['token'], result => {
+        token = result.token;
+
+        fetch(`https://api.recipesage.com/recipes?token=${token}`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(parsed.currentSnip)
+        }).then(async (response) => {
+          port.postMessage(JSON.stringify({
+            type: 'saveResult',
+            status: response.status,
+            data: response.ok && await response.json(),
+            nonce: parsed.nonce,
+          }));
+        });
+      });
+    }
+  });
+})
+
 // Extend the current token if it exists
 let renewToken = () => {
   chrome.storage.local.get(['token'], result => {

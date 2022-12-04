@@ -29,9 +29,10 @@ const app = express();
 
 const corsWhitelist = [
   'https://recipesage.com',
-  /https:\/\/.*\.recipesage.com$/,
+  /^https:\/\/.*\.recipesage.com$/,
   'https://localhost', // Cordova
-  'capacitor://localhost' // Capacitor
+  'capacitor://localhost', // Capacitor
+  /chrome-extension:\/\/.*/, // RS WebExtension
 ];
 const corsOptions = {
   origin: process.env.NODE_ENV === 'selfhost' || corsWhitelist,

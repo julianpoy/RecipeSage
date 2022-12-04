@@ -4,8 +4,10 @@
 }
 
 .rs-autoSnipPendingContainer {
+  font-family: Arial,Helvetica,sans-serif;
+
   z-index: 99999999999999999999999999 !important;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -15,13 +17,13 @@
   align-items: center;
   justify-content: center;
 
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.6);
 }
 
 .rs-autoSnipPendingContainer .autoSnipPending {
-  padding: 20px;
-  background-color: #00a8ff;
-  color: white;
+  padding: 30px;
+  background-color: white;
+  color: black;
   border-radius: 3px;
   text-align: center;
   font-size: 16px;
