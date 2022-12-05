@@ -3,7 +3,9 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const Sentry = require('@sentry/node');
 const he = require('he');
+const url = require('url');
 const { dedent } = require('ts-dedent');
+const HttpsProxyAgent = require('https-proxy-agent');
 
 const puppeteer = require('puppeteer-core');
 
@@ -24,11 +26,25 @@ const disconnectPuppeteer = (browser) => {
 const clipRecipe = async clipUrl => {
   let browser;
   try {
+    let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
+
+    if (process.env.CLIP_PROXY_URL) {
+      const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
+      browserWSEndpoint += `&--proxy-server="https=${proxyUrl.host}"`;
+    }
+
     browser = await puppeteer.connect({
-      browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`
+      browserWSEndpoint,
     });
 
     const page = await browser.newPage();
+
+    if (process.env.CLIP_PROXY_USERNAME && process.env.CLIP_PROXY_PASSWORD) {
+      await page.authenticate({
+        username: process.env.CLIP_PROXY_USERNAME,
+        password: process.env.CLIP_PROXY_PASSWORD,
+      });
+    }
 
     await page.setBypassCSP(true);
 
@@ -110,8 +126,23 @@ const replaceBrWithBreak = (html) => {
   return html.replaceAll(new RegExp(/<br( \/)?>/, 'g'), '\n');
 };
 
-const clipRecipeJSDOM = async url => {
-  const response = await fetch(url);
+const clipRecipeJSDOM = async clipUrl => {
+  const opts = {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0',
+    },
+  };
+
+  if (process.env.CLIP_PROXY_URL) {
+    const proxyUrl = url.parse(`http://${process.env.CLIP_PROXY_HOST}`);
+    if (process.env.CLIP_PROXY_PASSWORD && process.env.CLIP_PROXY_PASSWORD) {
+      proxyUrl.auth = `${process.env.CLIP_PROXY_USERNAME}:${process.env.CLIP_PROXY_PASSWORD}`;
+    }
+
+    opts.agent = new HttpsProxyAgent(proxyUrl);
+  }
+
+  const response = await fetch(clipUrl, opts);
 
   const document = await response.text();
 
@@ -144,13 +175,22 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send('Must provide a URL');
     }
 
-    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
-      clipRecipe(url),
-      clipRecipeJSDOM(url),
+    const clipRecipePromise = clipRecipe(url).catch((e) => {
+      console.log(e);
+      Sentry.captureException(e);
+    });
+    const clipRecipeJSDOMPromise = clipRecipeJSDOM(url).catch((e) => {
+      console.log(e);
+      Sentry.captureException(e);
+    });
+
+    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.all([
+      clipRecipePromise,
+      clipRecipeJSDOMPromise
     ]);
 
-    const recipeData = clipRecipeResult.value || {};
-    const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
+    const recipeData = clipRecipeResult || {};
+    const recipeDataJSDOM = clipRecipeJSDOMResult || {};
 
     // Merge results (browser overrides JSDOM due to accuracy)
     const results = recipeDataJSDOM;
