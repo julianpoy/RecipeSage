@@ -30,6 +30,7 @@ const clipRecipe = async clipUrl => {
 
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
+      console.log(proxyUrl);
       browserWSEndpoint += `&--proxy-server="https=${proxyUrl.host}"`;
     }
 
@@ -78,7 +79,7 @@ const clipRecipe = async clipUrl => {
     try {
       await page.goto(clipUrl, {
         waitUntil: 'networkidle2',
-        timeout: 25000
+        timeout: 20000
       });
     } catch(err) {
       err.status = 400;
@@ -175,28 +176,31 @@ router.get('/', async (req, res, next) => {
       return res.status(400).send('Must provide a URL');
     }
 
-    const clipRecipePromise = clipRecipe(url).catch((e) => {
-      console.log(e);
-      Sentry.captureException(e);
-    });
-    const clipRecipeJSDOMPromise = clipRecipeJSDOM(url).catch((e) => {
+    const recipeDataBrowser = await clipRecipe(url).catch((e) => {
       console.log(e);
       Sentry.captureException(e);
     });
 
-    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.all([
-      clipRecipePromise,
-      clipRecipeJSDOMPromise
-    ]);
+    let results = recipeDataBrowser;
+    if (
+      !recipeDataBrowser ||
+      !recipeDataBrowser.ingredients ||
+      !recipeDataBrowser.instructions
+    ) {
+      const recipeDataJSDOM = await clipRecipeJSDOM(url).catch((e) => {
+        console.log(e);
+        Sentry.captureException(e);
+      });
 
-    const recipeData = clipRecipeResult || {};
-    const recipeDataJSDOM = clipRecipeJSDOMResult || {};
+      if (recipeDataJSDOM) {
+        results = recipeDataJSDOM;
 
-    // Merge results (browser overrides JSDOM due to accuracy)
-    const results = recipeDataJSDOM;
-    Object.entries(recipeData).forEach((entry) => {
-      if(entry[1]) results[entry[0]] = entry[1];
-    });
+        // Merge results (browser overrides JSDOM due to accuracy)
+        Object.entries(recipeDataBrowser || {}).forEach((entry) => {
+          if(entry[1]) results[entry[0]] = entry[1];
+        });
+      }
+    }
 
     // Decode all html entities from fields
     Object.entries(results).forEach((entry) => {
