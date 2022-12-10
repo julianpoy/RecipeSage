@@ -33,10 +33,9 @@ const SharedUtils = require('../../../SharedUtils/src');
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
 const {
   BadRequest,
-  Unauthorized,
+  Forbidden,
   NotFound,
   PreconditionFailed,
-  InternalServerError
 } = require('../utils/errors');
 
 
@@ -191,7 +190,7 @@ router.put(
 router.get(
   '/profile',
   MiddlewareService.validateSession(['user']),
-  wrapRequestWithErrorHandler(async (req, res, next) => {
+  wrapRequestWithErrorHandler(async (req, res) => {
     let user = await User.findByPk(res.locals.session.userId, {
       include: [{
         model: Image,
@@ -233,7 +232,7 @@ router.get(
     });
   }));
 
-const getUserProfile = wrapRequestWithErrorHandler(async (req, res, next) => {
+const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
   let profileUserId;
   if (req.params.handle) {
     const user = await User.findOne({
@@ -694,194 +693,177 @@ router.put(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async (transaction) => {
-      let updates = {};
+    const updatedUser = await SQ.transaction(async (transaction) => {
+      const updates = {};
 
-      return Promise.all([
-        // Password update stage
-        Promise.resolve().then(() => {
-          if (!req.body.password) return;
+      if (req.body.password) {
+        if (!UtilService.validatePassword(req.body.password)) {
+          throw PreconditionFailed('Password is not valid!');
+        }
 
-          if (!UtilService.validatePassword(req.body.password)) {
-            const e = new Error('Password is not valid!');
-            e.status = 412;
-            throw e;
-          }
+        const hashedPasswordData = User.generateHashedPassword(req.body.password);
 
-          let hashedPasswordData = User.generateHashedPassword(req.body.password);
+        updates.passwordHash = hashedPasswordData.hash;
+        updates.passwordSalt = hashedPasswordData.salt;
+        updates.passwordVersion = hashedPasswordData.version;
 
-          updates.passwordHash = hashedPasswordData.hash;
-          updates.passwordSalt = hashedPasswordData.salt;
-          updates.passwordVersion = hashedPasswordData.version;
-
-          return Promise.all([
-            FCMToken.destroy({
-              where: {
-                userId: res.locals.session.userId
-              },
-              transaction: t
-            }),
-            Session.destroy({
-              where: {
-                userId: res.locals.session.userId
-              },
-              transaction: t
-            })
-          ]);
-        }),
-        // Email update stage
-        Promise.resolve().then(() => {
-          if (!req.body.email) return;
-
-          let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
-
-          if (!UtilService.validateEmail(sanitizedEmail)) {
-            const e = new Error('Email is not valid!');
-            e.status = 412;
-            throw e;
-          }
-
-          return User.findOne({
-            where: {
-              id: { [Op.ne]: res.locals.session.userId },
-              email: sanitizedEmail
-            },
-            attributes: ['id'],
-            transaction: t
-          }).then(user => {
-            if (user) {
-              const e = new Error('Account with that email address already exists!');
-              e.status = 406;
-              throw e;
-            }
-
-            updates.email = sanitizedEmail;
-          });
-        }),
-        // Other info update stage
-        Promise.resolve().then(() => {
-          if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) updates.name = req.body.name;
-        })
-      ]).then(() => {
-        return User.update(updates, {
+        await FCMToken.destroy({
           where: {
-            id: res.locals.session.userId
+            userId: res.locals.session.userId
           },
-          returning: true,
-          transaction: t
-        })
-          .then(([, [updatedUser]]) => {
-            const { id, name, email, createdAt, updatedAt } = updatedUser;
+          transaction,
+        });
 
-            res.status(200).json({
-              id,
-              name,
-              email,
-              createdAt,
-              updatedAt
-            });
-          });
+        await Session.destroy({
+          where: {
+            userId: res.locals.session.userId
+          },
+          transaction,
+        });
+      }
+
+      if (req.body.email) {
+        let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
+
+        if (!UtilService.validateEmail(sanitizedEmail)) {
+          throw PreconditionFailed('Email is not valid!');
+        }
+
+        const existingUserWithEmail = await User.findOne({
+          where: {
+            id: { [Op.ne]: res.locals.session.userId },
+            email: sanitizedEmail
+          },
+          attributes: ['id'],
+          transaction,
+        });
+
+        if (existingUserWithEmail) {
+          const e = new Error('Account with that email address already exists!');
+          e.status = 406;
+          throw e;
+        }
+
+        updates.email = sanitizedEmail;
+      }
+
+      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) {
+        updates.name = req.body.name;
+      }
+
+      const updatedUser = await User.update(updates, {
+        where: {
+          id: res.locals.session.userId
+        },
+        returning: true,
+        transaction,
       });
-    }).catch(next);
-  });
+
+      return updatedUser;
+    });
+
+    const { id, name, email, createdAt, updatedAt } = updatedUser;
+
+    res.status(200).json({
+      id,
+      name,
+      email,
+      createdAt,
+      updatedAt
+    });
+  }));
 
 router.post(
   '/logout',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function (req, res, next) {
-    SessionService.deleteSession(res.locals.session.token).then(() => {
-      res.status(200).json({
-        msg: 'Session invalidated. User is now logged out.'
-      });
-    }).catch(next);
-  });
+  wrapRequestWithErrorHandler(async (req, res) => {
+    await SessionService.deleteSession(res.locals.session.token);
+
+    res.status(200).json({
+      msg: 'Session invalidated. User is now logged out.'
+    });
+  }));
 
 /* Check if a session token is valid */
 router.get(
   '/sessioncheck',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res) {
+  wrapRequestWithErrorHandler(async (req, res) => {
     res.status(200).send('Ok');
-  });
+  }));
 
 router.post(
   '/fcm/token',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.body.fcmToken) {
-      res.status(412).send('fcmToken required');
-      return;
+      throw PreconditionFailed('fcmToken required');
     }
 
-    FCMToken.destroy({
-      where: {
-        token: req.body.fcmToken,
-        userId: { [Op.ne]: res.locals.session.userId }
-      }
-    })
-      .then(function() {
-        return FCMToken.findOrCreate({
-          where: {
-            token: req.body.fcmToken
-          },
-          defaults: {
-            userId: res.locals.session.userId,
-            token: req.body.fcmToken
-          }
-        })
-          .then(function(token) {
-            res.status(200).send(token);
-          });
-      })
-      .catch(next);
-  });
+    const token = await SQ.transaction(async (transaction) => {
+      await FCMToken.destroy({
+        where: {
+          token: req.body.fcmToken,
+          userId: { [Op.ne]: res.locals.session.userId }
+        },
+        transaction
+      });
+
+      const token = await FCMToken.findOrCreate({
+        where: {
+          token: req.body.fcmToken
+        },
+        defaults: {
+          userId: res.locals.session.userId,
+          token: req.body.fcmToken
+        },
+        transaction
+      });
+
+      return token;
+    });
+
+    res.status(200).send(token);
+  }));
 
 router.delete(
   '/fcm/token',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.query.fcmToken) {
-      res.status(412).send('fcmToken required');
-      return;
+      throw PreconditionFailed('fcmToken required');
     }
 
-    FCMToken.destroy({
+    await FCMToken.destroy({
       where: {
         token: req.query.fcmToken,
         userId: res.locals.session.userId
       }
-    }).then(() => {
-      res.status(200).send('ok');
-    }).catch(next);
-  });
+    });
+
+    res.status(200).send('ok');
+  }));
 
 /* Get public user listing by id */
 router.get(
   '/:userId',
   cors(),
-  async (req, res, next) => {
-    try {
-      const user = await User.findByPk(req.params.userId, {
-        attributes: ['id', 'name', 'handle']
-      });
+  wrapRequestWithErrorHandler(async (req, res) => {
+    const user = await User.findByPk(req.params.userId, {
+      attributes: ['id', 'name', 'handle']
+    });
 
-      if (!user) {
-        const notFoundErr = new Error('User not found');
-        notFoundErr.status = 404;
-        throw notFoundErr;
-      }
-
-      res.status(200).json(user);
-    } catch(err) {
-      next(err);
+    if (!user) {
+      throw NotFound('User not found');
     }
-  }
-);
+
+    res.status(200).json(user);
+  }));
 
 module.exports = router;
