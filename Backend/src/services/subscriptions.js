@@ -88,7 +88,7 @@ exports.userHasCapability = async (userId, capability) => {
   return capabilities.indexOf(capability) > -1;
 };
 
-exports.extend = async (userId, subscriptionName, t) => {
+exports.extend = async (userId, subscriptionName, transaction) => {
   const renewalLength = SUBSCRIPTION_MODELS[subscriptionName].expiresIn;
 
   const existingSubscription = await UserSubscription.findOne({
@@ -96,7 +96,7 @@ exports.extend = async (userId, subscriptionName, t) => {
       userId,
       name: subscriptionName
     },
-    transaction: t
+    transaction,
   });
   if (existingSubscription) {
     const expires = moment(existingSubscription.expires || undefined).add(renewalLength, 'days');
@@ -105,7 +105,7 @@ exports.extend = async (userId, subscriptionName, t) => {
       { expires },
       {
         where: { id: existingSubscription.id },
-        transaction: t
+        transaction,
       }
     );
   } else {
@@ -116,7 +116,7 @@ exports.extend = async (userId, subscriptionName, t) => {
       name: subscriptionName,
       expires
     }, {
-      transaction: t
+      transaction,
     });
   }
 };

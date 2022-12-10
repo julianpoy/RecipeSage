@@ -13,65 +13,66 @@ const Recipe_Label = require('../models').Recipe_Label;
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 
+// Util
+const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
+const { BadRequest, NotFound, Conflict, PreconditionFailed } = require('../utils/errors');
+
+
 //Add a label to a recipeId or recipeIds
 router.post(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     const title = UtilService.cleanLabelTitle(req.body.title || '');
 
     if (!title || title.length === 0) {
-      const e = new Error('Label title must be provided.');
-      e.status = 412;
-      return next(e);
+      throw PreconditionFailed('Label title must be provided.');
     }
 
     if ((!req.body.recipeId || req.body.recipeId.length === 0) && (!req.body.recipeIds || req.body.recipeIds.length === 0)) {
-      const e = new Error('RecipeId or recipeIds must be provided.');
-      e.status = 412;
-      return next(e);
+      throw PreconditionFailed('RecipeId or recipeIds must be provided.');
     }
 
-    let recipeIds = req.body.recipeId ? [req.body.recipeId] : req.body.recipeIds;
+    const recipeIds = req.body.recipeId ? [req.body.recipeId] : req.body.recipeIds;
 
-    SQ.transaction(t => {
-      return Label.findOrCreate({
+    const label = await SQ.transaction(async (transaction) => {
+      const [label] = await Label.findOrCreate({
         where: {
           userId: res.locals.session.userId,
           title
         },
-        transaction: t
-      }).then(([label]) => {
-        return Recipe_Label.bulkCreate(recipeIds.map(recipeId => ({
-          recipeId,
-          labelId: label.id
-        })), {
-          ignoreDuplicates: true,
-          transaction: t
-        }).then(() => {
-          return label;
-        });
+        transaction,
       });
-    }).then(label => {
-      res.status(201).send(label);
-    }).catch(next);
-  });
+
+      await Recipe_Label.bulkCreate(recipeIds.map(recipeId => ({
+        recipeId,
+        labelId: label.id
+      })), {
+        ignoreDuplicates: true,
+        transaction,
+      });
+
+      return label;
+    });
+
+    res.status(201).send(label);
+  }));
 
 //Get all of a user's labels
 router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     const addlOptions = {};
     if (req.query.title) {
       addlOptions.title = req.query.title;
     }
 
-    Label.findAll({
+    const labels = await Label.findAll({
       where: {
         userId: res.locals.session.userId,
         ...addlOptions
@@ -86,21 +87,19 @@ router.get(
       order: [
         ['title', 'ASC']
       ]
-    })
-      .then(function(labels) {
-        res.status(200).json(labels);
-      })
-      .catch(next);
-  });
+    });
+
+    res.status(200).json(labels);
+  }));
 
 //Get recipes associated with specific label
 router.get(
   '/:labelId',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
-    Label.findOne({
+    const label = await Label.findOne({
       where: {
         id: req.query.labelId,
         userId: res.locals.session.userId
@@ -112,29 +111,27 @@ router.get(
       }],
       attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
       group: ['Label.id']
-    })
-      .then(label => {
-        res.status(200).json(label);
-      })
-      .catch(next);
-  });
+    });
+
+    res.status(200).json(label);
+  }));
 
 //Combine two labels
 router.post(
   '/merge',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.query.sourceLabelId || !req.query.targetLabelId) {
-      return res.status(400).send('Must pass sourceLabelId and targetLabelId');
+      throw BadRequest('Must pass sourceLabelId and targetLabelId');
     }
 
     if (req.query.sourceLabelId === req.query.targetLabelId) {
-      return res.status(400).send('Source label id cannot match destination label id');
+      throw BadRequest('Source label id cannot match destination label id');
     }
 
-    return SQ.transaction(async transaction => {
+    await SQ.transaction(async transaction => {
       const sourceLabel = await Label.findOne({
         where: {
           id: req.query.sourceLabelId,
@@ -148,7 +145,9 @@ router.post(
         transaction
       });
 
-      if (!sourceLabel) return res.status('404').send('Source label not found');
+      if (!sourceLabel) {
+        throw NotFound('Source label not found');
+      }
 
       const targetLabel = await Label.findOne({
         where: {
@@ -163,7 +162,9 @@ router.post(
         transaction
       });
 
-      if (!targetLabel) return res.status('404').send('Target label not found');
+      if (!targetLabel) {
+        throw NotFound('Target label not found');
+      }
 
       const sourceLabelRecipeIds = sourceLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId);
       const targetLabelRecipeIds = targetLabel.recipe_labels.map(recipeLabel => recipeLabel.recipeId);
@@ -186,135 +187,120 @@ router.post(
         },
         transaction
       });
-    }).then(() => {
-      res.status(200).send('ok');
-    }).catch(next);
-  });
+    });
+
+    res.status(200).send('ok');
+  }));
 
 //Delete a label from a recipe
 router.delete(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  async (req, res, next) => {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.query.recipeId || !req.query.labelId) {
-      return res.status(412).json({
-        msg: 'RecipeId and LabelId are required!'
-      });
+      throw PreconditionFailed('RecipeId and LabelId are required!');
     }
 
-    try {
-      await SQ.transaction(async transaction => {
-        const label = await Label.findOne({
-          where: {
-            id: req.query.labelId,
-            userId: res.locals.session.userId
-          },
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }],
-          transaction
-        });
-
-        if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
-          const e = new Error('Label does not exist!');
-          e.status = 404;
-          throw e;
-        }
-
-        await label.removeRecipe(req.query.recipeId, {
-          transaction
-        });
-
-        if (label.recipes.length === 1) {
-          await label.destroy({transaction});
-
-          return {}; // Label was deleted;
-        } else {
-          return label;
-        }
-      }).then(label => {
-        res.status(200).json(label);
+    await SQ.transaction(async transaction => {
+      const label = await Label.findOne({
+        where: {
+          id: req.query.labelId,
+          userId: res.locals.session.userId
+        },
+        include: [{
+          model: Recipe,
+          as: 'recipes',
+          attributes: ['id']
+        }],
+        transaction
       });
-    } catch(e) {
-      next(e);
-    }
-  });
+
+      if (!label || !label.recipes.some(r => r.id == req.query.recipeId)) {
+        throw NotFound('Label does not exist!');
+      }
+
+      await label.removeRecipe(req.query.recipeId, {
+        transaction
+      });
+
+      if (label.recipes.length === 1) {
+        await label.destroy({transaction});
+
+        return {}; // Label was deleted;
+      } else {
+        return label;
+      }
+    }).then(label => {
+      res.status(200).json(label);
+    });
+  }));
 
 // Update label for all associated recipes
 router.put(
   '/:id',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (typeof req.body.title === 'string' && UtilService.cleanLabelTitle(req.body.title).length === 0) {
-      const e = new Error('Label title must be longer than 0.');
-      e.status = 400;
-      return next(e);
+      throw BadRequest('Label title must be longer than 0.');
     }
 
-    SQ.transaction(t => {
-      return Label.findOne({
+    const label = await SQ.transaction(async (transaction) => {
+      const label = await Label.findOne({
         where: {
           id: req.params.id,
           userId: res.locals.session.userId
-        }
-      }).then(label => {
-        if (!label) {
-          res.status(404).json({
-            msg: 'Label with that ID does not exist!'
-          });
-        } else {
-          if (typeof req.body.title === 'string') label.title = UtilService.cleanLabelTitle(req.body.title);
-
-          return Label.findAll({
-            where: {
-              id: { [Op.ne]: label.id },
-              title: req.body.title,
-              userId: res.locals.session.userId
-            },
-            transaction: t
-          }).then(labels => {
-            if (labels && labels.length > 0) {
-              res.status(409).json({
-                msg: 'Label with that title already exists!'
-              });
-            } else {
-              return label.save({ transaction: t }).then(label => {
-                res.status(200).json(label);
-              });
-            }
-          });
-        }
+        },
+        transaction
       });
-    }).catch(next);
-  });
+
+      if (!label) {
+        throw NotFound('Label with that ID does not exist!');
+      }
+
+      if (typeof req.body.title === 'string') label.title = UtilService.cleanLabelTitle(req.body.title);
+
+      const labels = await Label.findAll({
+        where: {
+          id: { [Op.ne]: label.id },
+          title: req.body.title,
+          userId: res.locals.session.userId
+        },
+        transaction,
+      });
+
+      if (labels && labels.length > 0) {
+        throw Conflict('Label with that title already exists!');
+      }
+
+      return await label.save({ transaction });
+    });
+
+    res.status(200).json(label);
+  }));
 
 // Delete labels from all associated recipes
 router.post(
   '/delete-bulk',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.body.labelIds || !req.body.labelIds.length) {
-      return res.status(412).json({
-        msg: 'LabelIds are required!'
-      });
+      throw PreconditionFailed('LabelIds are required!');
     }
 
-    Label.destroy({
+    await Label.destroy({
       where: {
         id: { [Op.in]: req.body.labelIds },
         userId: res.locals.session.userId
       }
-    }).then(() => {
-      res.status(200).send('ok');
-    }).catch(next);
-  });
+    });
+
+    res.status(200).send('ok');
+  }));
 
 module.exports = router;
