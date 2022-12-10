@@ -15,19 +15,21 @@ const Image = require('../models').Image;
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 
+// Util
+const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
+const { BadRequest, NotFound, PreconditionFailed } = require('../utils/errors');
+
 router.post(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.body.recipeId && !req.body.body) {
-      let e = new Error('recipeId or body is required');
-      e.status = 412;
-      throw e;
+      throw PreconditionFailed('recipeId or body is required');
     }
 
-    SQ.transaction(async transaction => {
+    const message = await SQ.transaction(async transaction => {
       const recipient = await User.findByPk(req.body.to, {
         include: [
           {
@@ -40,7 +42,7 @@ router.post(
       });
 
       if (!recipient) {
-        return res.status(404).send('Could not find user under that ID.');
+        throw NotFound('Could not find user under that ID.');
       }
 
       let sharedRecipeId;
@@ -112,19 +114,19 @@ router.post(
       // For sender
       m.otherUser = m.toUser;
       return m;
-    }).then(message => {
-      res.status(201).json(message);
-    }).catch(next);
-  });
+    });
+
+    res.status(201).json(message);
+  }));
 
 //Get all of a user's threads
 router.get(
   '/threads',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
-    Message.findAll({
+    const messages = await Message.findAll({
       where: {
         [Op.or]: [{
           toUserId: res.locals.session.userId
@@ -157,64 +159,62 @@ router.get(
       order: [
         ['createdAt', 'ASC']
       ]
-    })
-      .then(function(messages) {
-        const conversationsByUser = messages.reduce(function(acc, el) {
-          let otherUser;
-          if (el.toUser.id === res.locals.session.userId) {
-            otherUser = el.fromUser;
-          } else {
-            otherUser = el.toUser;
-          }
+    });
 
-          el.otherUser = otherUser;
+    const conversationsByUser = messages.reduce(function(acc, el) {
+      let otherUser;
+      if (el.toUser.id === res.locals.session.userId) {
+        otherUser = el.fromUser;
+      } else {
+        otherUser = el.toUser;
+      }
 
-          if (!acc[otherUser.id]) {
-            acc[otherUser.id] = {
-              otherUser: otherUser,
-              messageCount: 0
-            };
+      el.otherUser = otherUser;
 
-            // Do not fill messages for light requests
-            if (!req.query.light) acc[otherUser.id].messages = [];
-          }
+      if (!acc[otherUser.id]) {
+        acc[otherUser.id] = {
+          otherUser: otherUser,
+          messageCount: 0
+        };
 
-          // Do not fill messages for light requests
-          if (!req.query.light) acc[otherUser.id].messages.push(el);
-          acc[otherUser.id].messageCount += 1;
+        // Do not fill messages for light requests
+        if (!req.query.light) acc[otherUser.id].messages = [];
+      }
 
-          return acc;
-        }, {});
+      // Do not fill messages for light requests
+      if (!req.query.light) acc[otherUser.id].messages.push(el);
+      acc[otherUser.id].messageCount += 1;
 
-        const conversations = [];
-        for (const userId in conversationsByUser) {
-          let conversation = conversationsByUser[userId];
+      return acc;
+    }, {});
 
-          if (req.query.limit && conversation.messageCount > req.query.limit) {
-            conversation.messages.splice(0, conversation.messages.length - req.query.limit);
-          }
+    const conversations = [];
+    for (const userId in conversationsByUser) {
+      let conversation = conversationsByUser[userId];
 
-          conversations.push(conversation);
-        }
+      if (req.query.limit && conversation.messageCount > req.query.limit) {
+        conversation.messages.splice(0, conversation.messages.length - req.query.limit);
+      }
 
-        res.status(200).json(conversations);
-      }).catch(next);
-  });
+      conversations.push(conversation);
+    }
+
+    res.status(200).json(conversations);
+  }));
 
 router.get(
   '/',
   cors(),
   MiddlewareService.validateSession(['user']),
-  function(req, res, next) {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.query.user) {
-      res.status(400).send('User parameter required.');
-      return;
+      throw BadRequest('User parameter required.');
     }
 
     const messageLimit = req.query.messageLimit ? parseInt(req.query.messageLimit, 10) : 100;
 
-    Message.findAll({
+    const messages = await Message.findAll({
       where: {
         [Op.or]: [{
           fromUserId: req.query.user,
@@ -260,21 +260,19 @@ router.get(
         ['createdAt', 'DESC']
       ],
       limit: messageLimit
-    })
-      .then(function(messages) {
-        res.status(200).json(messages.map(function(message) {
-          let m = message.toJSON();
+    });
 
-          if (m.toUser.id === res.locals.session.userId) {
-            m.otherUser = m.fromUser;
-          } else {
-            m.otherUser = m.toUser;
-          }
+    res.status(200).json(messages.map(function(message) {
+      let m = message.toJSON();
 
-          return m;
-        }).reverse());
-      })
-      .catch(next);
-  });
+      if (m.toUser.id === res.locals.session.userId) {
+        m.otherUser = m.fromUser;
+      } else {
+        m.otherUser = m.toUser;
+      }
+
+      return m;
+    }).reverse());
+  }));
 
 module.exports = router;
