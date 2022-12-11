@@ -216,7 +216,7 @@ router.delete(
         });
       }
     } else {
-      await MealPlan.removeCollaborator(res.locals.session.userId);
+      await mealPlan.removeCollaborator(res.locals.session.userId);
     }
 
     res.status(200).json({});
