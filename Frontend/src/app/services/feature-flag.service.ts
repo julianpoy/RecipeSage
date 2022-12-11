@@ -1,31 +1,35 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
-export enum GlobalFeatureFlagKeys {
-  EnableExperimentalOfflineCache = 'enableExperimentalOfflineCache'
+export enum FeatureFlagKeys {
+  EnableExperimentalOfflineCache = 'enableExperimentalOfflineCache',
+  EnableContribution = 'enableContribution',
+  EnableInstallInstructions = 'enableInstallInstructions'
 }
 
 export interface FeatureFlagTypes {
-  [GlobalFeatureFlagKeys.EnableExperimentalOfflineCache]: boolean;
+  [FeatureFlagKeys.EnableExperimentalOfflineCache]: boolean;
+  [FeatureFlagKeys.EnableContribution]: boolean;
+  [FeatureFlagKeys.EnableInstallInstructions]: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeatureFlagService {
-  // TODO: This should come from tenant-specific API endpoint
-  betaFlags = {
-    [GlobalFeatureFlagKeys.EnableExperimentalOfflineCache]: true,
-  }
-
   flags = {
-    [GlobalFeatureFlagKeys.EnableExperimentalOfflineCache]: false,
+    [FeatureFlagKeys.EnableExperimentalOfflineCache]: this.isHost('beta.recipesage.com') || !environment.production,
+    [FeatureFlagKeys.EnableContribution]: !this.isHost(['ios.recipesage.com', 'android.recipesage.com']),
+    [FeatureFlagKeys.EnableInstallInstructions]: !this.isHost(['windows.recipesage.com', 'ios.recipesage.com', 'android.recipesage.com']),
   }
 
-  constructor() {
-    // TODO: Remove this, replace with tenant specific API endpoint
-    if (['beta.recipesage.com'].includes(window.location.hostname) || !environment.production) {
-      Object.assign(this.flags, this.betaFlags);
+  constructor() {}
+
+  private isHost(host: string | string[]) {
+    if (typeof host === 'object') {
+      return host.includes(window.location.hostname);
     }
+
+    return window.location.hostname === host;
   }
 }
