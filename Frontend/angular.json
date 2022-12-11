@@ -93,6 +93,29 @@
                 }
               ]
             },
+            "playwright": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.playwright.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "ci": {
               "progress": false
             }
@@ -106,6 +129,9 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "playwright": {
+              "browserTarget": "app:build:playwright"
             },
             "ci": {
               "progress": false

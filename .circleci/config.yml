@@ -59,6 +59,82 @@ jobs:
           key: backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
           paths:
             - ./Backend/node_modules
+      # -------------- Setup Frontend -----------------
+      - restore_cache:
+          keys:
+            - frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
+            - frontend-dependency-cache-v2-
+      - run:
+          name: install-npm-frontend
+          command: 'cd Frontend && npm install'
+      - save_cache:
+          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
+          paths:
+            - ./Frontend/node_modules
+      # -------------- Tests -----------------
+      - run: # run migrations
+          name: migrate
+          command: cd Backend && npx sequelize db:migrate
+      - run: # run playwright
+          name: test-playwright
+          command: cd playwright && npm run test
+  test_backend:
+    resource_class: large
+    working_directory: ~/recipesage
+    docker:
+      - image: cimg/node:16.17
+        environment:
+          RS_TEST_DB_USERNAME: chefbook
+          RS_TEST_DB_PASSWORD: admin
+          RS_TEST_DB_DATABASE: chefbook_test
+          NODE_ENV: test
+          SENTRY_SAMPLE_RATE: 0
+          POSTGRES_DB: chefbook_test
+          POSTGRES_USER: chefbook
+          POSTGRES_PASSWORD: admin
+          POSTGRES_PORT: 5432
+          POSTGRES_HOST: localhost
+          POSTGRES_SSL: false
+          POSTGRES_LOGGING: false
+          GRIP_URL: http://localhost:5561/
+          GRIP_KEY: changeme
+      - image: postgres:9.6.9
+        environment:
+          POSTGRES_USER: chefbook
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: chefbook_test
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+      - run:
+          name: install-deps
+          command: 'sudo npm install -g sequelize'
+      # -------------- Setup SharedUtils -----------------
+      - restore_cache:
+          keys:
+            - sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
+            - sharedutils-dependency-cache-v2-
+      - run:
+          name: install-npm-sharedutils
+          command: 'cd SharedUtils && npm install'
+      - save_cache:
+          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
+          paths:
+            - ./SharedUtils/node_modules
+      # -------------- Setup Backend -----------------
+      - restore_cache:
+          keys:
+            - backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
+            - backend-dependency-cache-v2-
+      - run:
+          name: install-npm-backend
+          command: 'cd Backend && npm install'
+      - save_cache:
+          key: backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
+          paths:
+            - ./Backend/node_modules
       # -------------- Tests -----------------
       - run: # lint backend
           name: lint-backend

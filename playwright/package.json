@@ -1,0 +1,26 @@
+{
+  "name": "recipesage-playwright",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julianpoy/recipesage.git"
+  },
+  "author": "Julian Poyourow",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/julianpoy/recipesage/issues"
+  },
+  "homepage": "https://github.com/julianpoy/recipesage#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.28.1",
+    "@types/node": "^18.11.13"
+  }
+}
