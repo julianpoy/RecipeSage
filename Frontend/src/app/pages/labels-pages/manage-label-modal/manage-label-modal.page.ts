@@ -154,6 +154,7 @@ export class ManageLabelModalPage {
 
     const deletePrompt = await this.alertCtrl.create({
       header,
+      message,
       buttons: [
         {
           text: cancel,

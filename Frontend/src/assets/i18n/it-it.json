@@ -393,12 +393,15 @@
   "pages.manageLabelModal.rename": "Rinomina",
   "pages.manageLabelModal.merge": "Unisci a un’altra etichetta",
   "pages.manageLabelModal.delete": "Elimina",
+  "pages.manageLabelModal.deleteWithRecipes": "Eliminare insieme alle Ricette",
 
   "pages.manageLabelModal.renameConflict.header": "Errore",
   "pages.manageLabelModal.renameConflict.message": "Un’etichetta con questo nome esiste già",
 
   "pages.manageLabelModal.rename.header": "Rinomina etichetta: {{name}}",
   "pages.manageLabelModal.delete.header": "Elimina etichetta: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Eliminare l'etichetta \"{{name}}\", comprese le ricette",
+  "pages.manageLabelModal.deleteWithRecipes.message": "Questo eliminerà l'etichetta \"{{name}}\", insieme a tutte le ricette a cui è associata questa etichetta.",
 
   "pages.manageLabelModal.notFound.header": "Etichetta non trovata",
   "pages.manageLabelModal.notFound.subHeader": "L’etichetta \"{{name}}\" non esiste",
