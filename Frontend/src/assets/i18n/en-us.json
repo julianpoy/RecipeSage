@@ -856,7 +856,7 @@
   "pages.importPepperplate.timeout.header": "This is taking a little longer than expected",
   "pages.importPepperplate.timeout.message": "This can happen when Pepperplate is under heavy load. The import is still in progress. If you don't see your recipes appear, feel free to email me.",
 
-  "pages.importPepperplate.error.message": "An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
+  "pages.importPepperplate.error.message": "An error occurred - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
 
   "pages.importPepperplate.success": "Import complete!",
 
@@ -1225,7 +1225,7 @@
   "====== Errors ======": "",
 
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
+  "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
 
   "====== Generic ======": "",
 
