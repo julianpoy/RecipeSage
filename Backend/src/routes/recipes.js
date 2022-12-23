@@ -851,12 +851,11 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
         labelId: {
           [Op.in]: labelIds,
         },
-        userId,
       },
       transaction,
     });
 
-    recipeIds = recipeLabels.map(recipeLabel => recipeLabel.recipeId);
+    recipeIds = [...new Set(recipeLabels.map(recipeLabel => recipeLabel.recipeId))];
   }
 
   const recipes = await Recipe.findAll({
@@ -923,7 +922,7 @@ router.post(
   wrapRequestWithErrorHandler(async (req, res) => {
     await SQ.transaction(async (transaction) => {
       await deleteRecipes(res.locals.session.userId, {
-        recipeIds: req.params.recipeIds,
+        labelIds: req.body.labelIds,
       }, transaction);
     });
 
