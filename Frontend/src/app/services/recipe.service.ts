@@ -176,6 +176,22 @@ export class RecipeService {
     return response;
   }
 
+  async deleteByLabelIds(payload: {
+    labelIds: string[],
+  }, errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<void>(
+      `recipes/delete-by-labelIds`,
+      'POST',
+      payload,
+      null,
+      errorHandlers
+    );
+
+    this.events.publish('recipe:update');
+
+    return response;
+  }
+
   async deleteBulk(payload: {
     recipeIds: string[],
   }, errorHandlers?: ErrorHandlers) {

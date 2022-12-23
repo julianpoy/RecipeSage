@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const joi = require('joi');
+const Joi = require('joi');
 
 // DB
 const Op = require('sequelize').Op;
@@ -384,16 +384,16 @@ router.get(
 // Update items from a shopping list by a list of item ids
 router.put(
   '/:shoppingListId/items',
-  joiValidator(joi.object({
-    params: joi.object({
-      shoppingListId: joi.string().required().uuid(),
+  joiValidator(Joi.object({
+    params: Joi.object({
+      shoppingListId: Joi.string().required().uuid(),
     }),
-    query: joi.object({
-      itemIds: joi.string().required()
+    query: Joi.object({
+      itemIds: Joi.string().required()
     }),
-    body: joi.object({
-      title: joi.string().min(1),
-      completed: joi.boolean(),
+    body: Joi.object({
+      title: Joi.string().min(1),
+      completed: Joi.boolean(),
     }),
   })),
   MiddlewareService.validateSession(['user']),

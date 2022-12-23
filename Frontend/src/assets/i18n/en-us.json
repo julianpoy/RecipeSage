@@ -393,12 +393,15 @@
   "pages.manageLabelModal.rename": "Rename",
   "pages.manageLabelModal.merge": "Merge With Another Label",
   "pages.manageLabelModal.delete": "Delete",
+  "pages.manageLabelModal.deleteWithRecipes": "Delete Including Recipes",
 
   "pages.manageLabelModal.renameConflict.header": "Error",
   "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
 
   "pages.manageLabelModal.rename.header": "Rename label: {{name}}",
   "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Delete label \"{{name}}\" including recipes",
+  "pages.manageLabelModal.deleteWithRecipes.message": "This will delete the label {{name}}, along with any recipes that have this label attached to them.",
 
   "pages.manageLabelModal.notFound.header": "Label not found",
   "pages.manageLabelModal.notFound.subHeader": "The target label \"{{name}}\" was not found",
