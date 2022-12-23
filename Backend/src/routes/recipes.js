@@ -877,6 +877,8 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
     transaction,
   });
 
+  if (recipes.length === 0) throw NotFound('No recipes found.');
+
   const nonDeletionRecipesByLabelId = {};
   recipes
     .reduce((acc, recipe) => acc.concat(recipe.labels), [])
