@@ -862,16 +862,13 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
   const recipes = await Recipe.findAll({
     where: {
       id: { [Op.in]: recipeIds },
-      userId: userId
+      userId,
     },
     attributes: ['id'],
     include: [{
       model: Label,
       as: 'labels',
       attributes: ['id'],
-      where: {
-        id: labelIds,
-      },
       include: [{
         model: Recipe,
         as: 'recipes',
