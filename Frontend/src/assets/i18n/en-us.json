@@ -390,6 +390,7 @@
   "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
   "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
   "pages.manageLabelModal.warning": "Note: These actions are permanent",
+  "pages.manageLabelModal.view": "View All Recipes",
   "pages.manageLabelModal.rename": "Rename",
   "pages.manageLabelModal.merge": "Merge With Another Label",
   "pages.manageLabelModal.delete": "Delete",
