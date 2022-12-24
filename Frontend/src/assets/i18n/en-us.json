@@ -275,15 +275,14 @@
   "pages.about.links.userGuide": "User Guide (Tutorials)",
   "pages.about.links.releaseNotes": "Release Notes",
   "pages.about.links.legal": "Legal, agreements and disclaimers",
-  "pages.about.emailMe": "Feel free to email me at",
   "pages.about.socialTitle": "Social Media",
 
   "====== Pages.Contact ======": "",
 
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
-  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, please email me at",
-  "pages.contact.website": "Additional contact info is available on my personal website, or via the social media links below. My personal website is",
+  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide before emailing:",
+  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, you can email me at",
   "pages.contact.socialTitle": "Social Media",
 
   "====== Pages.Contribute ======": "",
