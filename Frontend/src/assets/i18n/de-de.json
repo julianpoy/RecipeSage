@@ -274,15 +274,14 @@
   "pages.about.links.userGuide": "Tipps, Tricks und Anleitungen",
   "pages.about.links.releaseNotes": "Hinweise zur Veröffentlichung",
   "pages.about.links.legal": "Rechtliches, Klauseln und Haftungsausschlüsse",
-  "pages.about.emailMe": "Sie können mir gerne eine E-Mail schicken an",
   "pages.about.socialTitle": "Social Media",
 
   "====== Pages.Contact ======": "",
 
   "pages.contact.title": "Kontakt",
   "pages.contact.subtitle": "Kontakt Info",
+  "pages.contact.pleaseUserGuide": "Bei Fragen lesen Sie bitte das Benutzerhandbuch, bevor Sie eine E-Mail senden:",
   "pages.contact.emailMe": "Bei Problemen, Fehlern oder Funktionsvorschlägen sende mir bitte eine E-Mail an",
-  "pages.contact.website": "Weitere Kontaktinformationen findest du auf meiner persönlichen Website oder über die unten stehenden Links zu den sozialen Medien. Meine persönliche Website lautet",
   "pages.contact.socialTitle": "Social Media",
 
   "====== Pages.Contribute ======": "",
