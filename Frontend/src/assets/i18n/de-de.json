@@ -389,6 +389,7 @@
   "pages.manageLabelModal.recipeCount": "{{count}} Rezepte mit diesem Label",
   "pages.manageLabelModal.createdAt": "Erstmals erstellt: {{dateString}}",
   "pages.manageLabelModal.warning": "Hinweis: Diese Aktionen sind dauerhaft",
+  "pages.manageLabelModal.view": "Alle Rezepte anzeigen",
   "pages.manageLabelModal.rename": "Umbenennen",
   "pages.manageLabelModal.merge": "Mit einem anderen Label fusionieren",
   "pages.manageLabelModal.delete": "Löschen",

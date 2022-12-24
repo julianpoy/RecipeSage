@@ -62,6 +62,21 @@ export class ManageLabelModalPage {
     this.label.title = newTitle;
   }
 
+  async view() {
+    await this.modalCtrl.dismiss();
+
+    this.navCtrl.navigateForward(
+      RouteMap.HomePage.getPath('main', {
+        selectedLabels: [this.label.title],
+      }),
+      {
+        state: {
+          showBack: true,
+        }
+      }
+    );
+  }
+
   async rename() {
     const header = await this.translate.get('pages.manageLabelModal.rename.header', {name: this.label.title}).toPromise();
     const placeholder = await this.translate.get('pages.manageLabelModal.rename.placeholder').toPromise();

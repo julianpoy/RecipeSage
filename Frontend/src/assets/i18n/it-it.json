@@ -390,6 +390,7 @@
   "pages.manageLabelModal.recipeCount": "Aggiunta a {{count}} ricette",
   "pages.manageLabelModal.createdAt": "Creazione: {{dateString}}",
   "pages.manageLabelModal.warning": "Attenzione: queste azioni sono irreversibili",
+  "pages.manageLabelModal.view": "Visualizza tutte le ricette",
   "pages.manageLabelModal.rename": "Rinomina",
   "pages.manageLabelModal.merge": "Unisci a un’altra etichetta",
   "pages.manageLabelModal.delete": "Elimina",

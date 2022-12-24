@@ -35,6 +35,11 @@
 </ion-content>
 
 <ion-footer class="ion-padding">
+  <ion-button expand="full" (click)="view()">
+    <ion-icon name="folder-open" slot="start"></ion-icon>
+    <ion-label>{{ 'pages.manageLabelModal.view' | translate }}</ion-label>
+  </ion-button>
+
   <ion-button expand="full" (click)="rename()">
     <ion-icon name="create" slot="start"></ion-icon>
     <ion-label>{{ 'pages.manageLabelModal.rename' | translate }}</ion-label>
