@@ -33,6 +33,8 @@ const {
   PreconditionFailed,
   InternalServerError
 } = require('../utils/errors');
+const {joiValidator} = require('../middleware/joiValidator');
+const Joi = require('joi');
 
 
 // TODO: Remove this. Legacy frontend compat
@@ -834,118 +836,137 @@ router.delete(
     res.status(200).send({});
   }));
 
-router.post(
-  '/delete-bulk',
-  cors(),
-  MiddlewareService.validateSession(['user']),
-  wrapRequestWithErrorHandler(async (req, res) => {
+const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
+  if (!recipeIds && !labelIds) {
+    throw new Error('Must pass recipeIds or labelIds');
+  }
 
-    await SQ.transaction(async (transaction) => {
-      const recipes = await Recipe.findAll({
-        where: {
-          id: { [Op.in]: req.body.recipeIds },
-          userId: res.locals.session.userId
+  if (recipeIds && labelIds) {
+    throw new Error('Must pass only recipeIds or labelIds');
+  }
+
+  if (!recipeIds) {
+    const recipeLabels = await Recipe_Label.findAll({
+      where: {
+        labelId: {
+          [Op.in]: labelIds,
         },
-        attributes: ['id'],
-        include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id'],
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }]
-        }],
-        transaction,
-      });
+      },
+      transaction,
+    });
 
-      const nonDeletionRecipesByLabelId = {};
-      recipes
-        .reduce((acc, recipe) => acc.concat(recipe.labels), [])
-        .map(label => {
-          label.recipes.map(labelRecipe => {
-            nonDeletionRecipesByLabelId[label.id] = nonDeletionRecipesByLabelId[label.id] || [];
-            if (req.body.recipeIds.indexOf(labelRecipe.id) === -1)
-              nonDeletionRecipesByLabelId[label.id].push(labelRecipe);
-          });
-        });
+    recipeIds = [...new Set(recipeLabels.map(recipeLabel => recipeLabel.recipeId))];
+  }
 
-      // Any label with zero existing recipes after deletion
-      const labelIdsToRemove = Object.entries(nonDeletionRecipesByLabelId)
-        .filter(([, labelRecipes]) => labelRecipes.length === 0)
-        .map(([id]) => id);
+  const recipes = await Recipe.findAll({
+    where: {
+      id: { [Op.in]: recipeIds },
+      userId,
+    },
+    attributes: ['id'],
+    include: [{
+      model: Label,
+      as: 'labels',
+      attributes: ['id'],
+      include: [{
+        model: Recipe,
+        as: 'recipes',
+        attributes: ['id']
+      }]
+    }],
+    transaction,
+  });
 
-      await Recipe.destroy({
-        where: {
-          id: { [Op.in]: req.body.recipeIds },
-          userId: res.locals.session.userId
-        },
-        transaction,
-      });
+  if (recipes.length === 0) throw NotFound('No recipes found.');
 
-      await Label.destroy({
-        where: {
-          id: { [Op.in]: labelIdsToRemove },
-          userId: res.locals.session.userId
-        },
-        transaction,
+  const nonDeletionRecipesByLabelId = {};
+  recipes
+    .reduce((acc, recipe) => acc.concat(recipe.labels), [])
+    .map(label => {
+      label.recipes.map(labelRecipe => {
+        nonDeletionRecipesByLabelId[label.id] = nonDeletionRecipesByLabelId[label.id] || [];
+        if (recipeIds.indexOf(labelRecipe.id) === -1)
+          nonDeletionRecipesByLabelId[label.id].push(labelRecipe);
       });
     });
 
-    res.status(200).json({});
+  // Any label with zero existing recipes after deletion
+  const labelIdsToRemove = Object.entries(nonDeletionRecipesByLabelId)
+    .filter(([, labelRecipes]) => labelRecipes.length === 0)
+    .map(([id]) => id);
+
+  await Recipe.destroy({
+    where: {
+      id: { [Op.in]: recipeIds },
+      userId
+    },
+    transaction,
+  });
+
+  await Label.destroy({
+    where: {
+      id: { [Op.in]: labelIdsToRemove },
+      userId
+    },
+    transaction,
+  });
+};
+
+router.post(
+  '/delete-by-labelIds',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      labelIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
+    }),
+  })),
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        labelIds: req.body.labelIds,
+      }, transaction);
+    });
+
+    res.sendStatus(200);
+  }));
+
+router.post(
+  '/delete-bulk',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      recipeIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
+    }),
+  })),
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        recipeIds: req.body.recipeIds,
+      }, transaction);
+    });
+
+    res.sendStatus(200);
   }));
 
 router.delete(
   '/:id',
+  joiValidator(Joi.object({
+    params: Joi.object({
+      id: Joi.string().uuid().required(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const recipe = await SQ.transaction(async (transaction) => {
-      const recipe = await Recipe.findOne({
-        where: {
-          id: req.params.id,
-          userId: res.locals.session.userId
-        },
-        attributes: ['id'],
-        include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id'],
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }]
-        }],
-        transaction,
-      });
-
-      if (!recipe) {
-        throw NotFound('Recipe with specified ID does not exist!');
-      }
-
-      await recipe.destroy({ transaction });
-
-      // Get an array of labelIds which have only this recipe associated
-      const labelIds = recipe.labels.reduce(function(acc, label) {
-        if (label.recipes.length <= 1) {
-          acc.push(label.id);
-        }
-        return acc;
-      }, []);
-
-      await Label.destroy({
-        where: {
-          id: { [Op.in]: labelIds }
-        },
-        transaction,
-      });
-
-      return recipe;
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        recipeIds: [req.params.id],
+      }, transaction);
     });
 
-    res.status(200).json(recipe);
+    res.sendStatus(200);
   }));
 
 router.post(

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
-import { RecipeService, Ingredient } from '@/services/recipe.service';
+import { RecipeService, ParsedIngredient } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
 import { UtilService } from '@/services/util.service';
 
@@ -16,7 +16,7 @@ export class NewShoppingListItemModalPage {
   itemFields: any = [{}];
 
   selectedRecipe: any;
-  selectedIngredients: Ingredient[];
+  selectedIngredients: ParsedIngredient[];
 
   constructor(
     public modalCtrl: ModalController,

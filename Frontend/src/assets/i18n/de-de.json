@@ -274,15 +274,14 @@
   "pages.about.links.userGuide": "Tipps, Tricks und Anleitungen",
   "pages.about.links.releaseNotes": "Hinweise zur Veröffentlichung",
   "pages.about.links.legal": "Rechtliches, Klauseln und Haftungsausschlüsse",
-  "pages.about.emailMe": "Sie können mir gerne eine E-Mail schicken an",
   "pages.about.socialTitle": "Social Media",
 
   "====== Pages.Contact ======": "",
 
   "pages.contact.title": "Kontakt",
   "pages.contact.subtitle": "Kontakt Info",
+  "pages.contact.pleaseUserGuide": "Bei Fragen lesen Sie bitte das Benutzerhandbuch, bevor Sie eine E-Mail senden:",
   "pages.contact.emailMe": "Bei Problemen, Fehlern oder Funktionsvorschlägen sende mir bitte eine E-Mail an",
-  "pages.contact.website": "Weitere Kontaktinformationen findest du auf meiner persönlichen Website oder über die unten stehenden Links zu den sozialen Medien. Meine persönliche Website lautet",
   "pages.contact.socialTitle": "Social Media",
 
   "====== Pages.Contribute ======": "",
@@ -389,15 +388,19 @@
   "pages.manageLabelModal.recipeCount": "{{count}} Rezepte mit diesem Label",
   "pages.manageLabelModal.createdAt": "Erstmals erstellt: {{dateString}}",
   "pages.manageLabelModal.warning": "Hinweis: Diese Aktionen sind dauerhaft",
+  "pages.manageLabelModal.view": "Alle Rezepte anzeigen",
   "pages.manageLabelModal.rename": "Umbenennen",
   "pages.manageLabelModal.merge": "Mit einem anderen Label fusionieren",
   "pages.manageLabelModal.delete": "Löschen",
+  "pages.manageLabelModal.deleteWithRecipes": "Löschen inklusive Rezepte",
 
   "pages.manageLabelModal.renameConflict.header": "Fehler",
   "pages.manageLabelModal.renameConflict.message": "Ein Label mit diesem Namen existiert bereits",
 
   "pages.manageLabelModal.rename.header": "Label umbenennen: {{name}}",
   "pages.manageLabelModal.delete.header": "Label löschen: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Löschen des Etiketts \"{{name}}\" einschließlich der Rezepte",
+  "pages.manageLabelModal.deleteWithRecipes.message": "Dadurch wird das Etikett \"{{name}}\" gelöscht, zusammen mit allen Rezepten, die mit diesem Etikett versehen sind.",
 
   "pages.manageLabelModal.notFound.header": "Label nicht gefunden",
   "pages.manageLabelModal.notFound.subHeader": "Das Ziellabel \"{{name}}\" wurde nicht gefunden",
@@ -1221,7 +1224,7 @@
   "====== Errors ======": "",
 
   "errors.offline": "Es sieht so aus, als ob du offline bist. Wenn du offline bist, können wir nur die Daten abrufen, auf die du zuvor auf diesem Gerät zugegriffen hast.",
-  "errors.unexpected": "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es erneut. Wenn das Problem weiterhin auftritt, kontaktiere uns bitte.",
+  "errors.unexpected": "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es erneut. Wenn das Problem weiterhin auftritt, kontaktiere Sie mich bitte.",
 
   "====== Generic ======": "",
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
+const Joi = require('joi');
 
 // DB
 const Op = require('sequelize').Op;
@@ -12,11 +13,11 @@ const Recipe_Label = require('../models').Recipe_Label;
 // Services
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
+const {joiValidator} = require('../middleware/joiValidator');
 
 // Util
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
 const { BadRequest, NotFound, Conflict, PreconditionFailed } = require('../utils/errors');
-
 
 //Add a label to a recipeId or recipeIds
 router.post(
@@ -285,14 +286,14 @@ router.put(
 // Delete labels from all associated recipes
 router.post(
   '/delete-bulk',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      labelIds: Joi.array().items(Joi.string()).min(1).required(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-
-    if (!req.body.labelIds || !req.body.labelIds.length) {
-      throw PreconditionFailed('LabelIds are required!');
-    }
-
     await Label.destroy({
       where: {
         id: { [Op.in]: req.body.labelIds },
@@ -300,7 +301,7 @@ router.post(
       }
     });
 
-    res.status(200).send('ok');
+    res.sendStatus(200);
   }));
 
 module.exports = router;
