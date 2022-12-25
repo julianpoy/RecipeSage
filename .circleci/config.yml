@@ -107,6 +107,9 @@ jobs:
       - run: # ngx-translate-lint frontend
           name: ngx-translate-lint-frontend
           command: cd Frontend && npm run ngx-translate-lint
+      - run: # typecheck frontend
+          name: typecheck-frontend
+          command: cd Frontend && npx tsc --noemit
       - run: # build frontend
           name: build-frontend
           command: cd Frontend && npm run dist

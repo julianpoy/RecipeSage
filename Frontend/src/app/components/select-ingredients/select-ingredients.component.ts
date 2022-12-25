@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { RecipeService, Ingredient } from '../../services/recipe.service';
+import { RecipeService, ParsedIngredient } from '../../services/recipe.service';
 
 import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
 
@@ -13,7 +13,7 @@ export class SelectIngredientsComponent {
 
   allSelected = true;
   ingredientBinders: { [index: number]: boolean } = {};
-  scaledIngredients: Ingredient[] = [];
+  scaledIngredients: ParsedIngredient[] = [];
   scale = 1;
 
   _ingredients: string;
@@ -31,7 +31,7 @@ export class SelectIngredientsComponent {
     this.applyScale(true);
   }
 
-  selectedIngredients: Ingredient[];
+  selectedIngredients: ParsedIngredient[];
 
   @Output() selectedIngredientsChange = new EventEmitter();
 
