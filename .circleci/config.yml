@@ -271,6 +271,13 @@ workflows:
               only: /.*/
             branches:
               only: /.*/
+      - test_playwright:
+          context: "RS API Env Vars"
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
       - build_test_frontend:
           filters:
             tags:
