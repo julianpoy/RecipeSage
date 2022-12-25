@@ -7,6 +7,7 @@
     "ng": "ng",
     "ngx-translate-lint": "npx @julianpoy/ngx-translate-lint --config ./ngx-translate-lint.config.json",
     "start": "ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload",
+    "start:ci": "npx ng run app:serve:playwright --port=8100 --host 0.0.0.0 --disable-host-check --no-live-reload",
     "dist": "shx rm -rf www/* && ionic build --prod && workbox injectManifest",
     "build": "ionic build",
     "build:prod": "ionic build --prod",

@@ -10,7 +10,7 @@ const config: PlaywrightTestConfig = {
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'cd ../Frontend && npm run start -- --configuration=playwright',
+      command: 'cd ../Frontend && npm run start:ci',
       port: 8100,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
