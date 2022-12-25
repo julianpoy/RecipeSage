@@ -21,6 +21,7 @@
   "homepage": "https://github.com/julianpoy/recipesage#readme",
   "devDependencies": {
     "@playwright/test": "^1.28.1",
-    "@types/node": "^18.11.13"
+    "@types/node": "^18.11.13",
+    "tslib": "^2.4.1"
   }
 }

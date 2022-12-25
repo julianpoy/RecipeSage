@@ -644,6 +644,8 @@ router.post(
       token
     });
 
+    if (process.env.NODE_ENV !== 'production') return;
+
     sendWelcome([sanitizedEmail], []).catch(err => {
       Sentry.captureException(err);
     });

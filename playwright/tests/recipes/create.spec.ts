@@ -1,12 +1,23 @@
-import { test, expect } from '@playwright/test';
+import {RecipeFactory} from '@/factories/recipe';
+import { expect } from '@playwright/test';
+import { test } from '@/fixtures';
 
-test('homepage has Playwright in title and get started link linking to the intro page', async ({ page }) => {
-  await page.goto('/list/main');
+test('create a recipe', async ({ page }) => {
+  await RecipeFactory(page);
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/RecipeSage - The Personal Recipe Keeper/);
-
-  // Expects the URL to contain intro.
-  await expect(page).toHaveURL(/.*intro/);
+  if (process.env.ENABLE_IMAGES) {
+    await expect(page.locator('multi-image-upload img')).toBeVisible();
+  }
+  await expect(page.getByRole('heading').filter({ hasText: 'Test recipe' })).toBeVisible();
+  await expect(page.getByRole('paragraph').filter({ hasText: 'Source: Test source' })).toBeVisible();
+  await expect(page.getByRole('paragraph').filter({ hasText: 'Active Time: Test active time' }).locator('b')).toBeVisible();
+  await expect(page.getByRole('paragraph').filter({ hasText: 'Total Time: Test total time' }).locator('b')).toBeVisible();
+  await expect(page.getByRole('paragraph').filter({ hasText: 'Yield: Test yield' }).locator('b')).toBeVisible();
+  await expect(page.getByText('Test description')).toBeVisible();
+  await expect(page.getByText('Test ingredient 1')).toBeVisible();
+  await expect(page.getByText('Test ingredient 2')).toBeVisible();
+  await expect(page.getByText('Test instruction 1')).toBeVisible();
+  await expect(page.getByText('Test instruction 2')).toBeVisible();
+  await expect(page.getByText('Test notes')).toBeVisible();
 });
 

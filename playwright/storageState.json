@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:8100",
+      "localStorage": [
+        {
+          "name": "preferences",
+          "value": "{\"global.enableSplitPane\":false,\"global.enableExperimentalOfflineCache\":false,\"global.language\":null,\"myRecipes.enableLabelIntersection\":false,\"myRecipes.showLabels\":true,\"myRecipes.showLabelChips\":false,\"myRecipes.showImages\":true,\"myRecipes.showSource\":false,\"myRecipes.showRecipeDescription\":true,\"myRecipes.viewType\":\"tiles\",\"myRecipes.sortBy\":\"-title\",\"recipeDetails.enableWakeLock\":true,\"manageLabels.showCreatedAt\":true,\"MealPlan.showAddedBy\":false,\"MealPlan.showAddedOn\":false,\"MealPlan.startOfWeek\":\"monday\",\"ShoppingList.sortBy\":\"-createdAt\",\"ShoppingList.showAddedBy\":false,\"ShoppingList.showAddedOn\":false,\"ShoppingList.showRecipeTitle\":true,\"ShoppingList.preferDelete\":false,\"ShoppingList.groupSimilar\":true,\"ShoppingList.groupCategories\":true}"
+        },
+        {
+          "name": "token",
+          "value": "786c67e6c5798dac2759a089f6fa802e1659dc8683cbf8a97599096245a12da90708d60972df4bfc7d1951c90a9c95c0"
+        }
+      ]
+    }
+  ]
+}

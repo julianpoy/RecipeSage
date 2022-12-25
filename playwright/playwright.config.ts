@@ -17,7 +17,11 @@ const config: PlaywrightTestConfig = {
     }
   ],
   use: {
-    baseURL: 'http://localhost:8100/#/',
+    baseURL: process.env.WEBUI_URL,
+    storageState: 'storageState.json',
+    launchOptions: {
+      slowMo: parseInt(process.env.SLOWMO || '0'),
+    }
   },
 };
 export default config;
