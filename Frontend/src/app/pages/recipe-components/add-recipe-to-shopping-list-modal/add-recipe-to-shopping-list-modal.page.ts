@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { ShoppingListService } from '@/services/shopping-list.service';
 import { LoadingService } from '@/services/loading.service';
-import { RecipeService, Ingredient } from '@/services/recipe.service';
+import { RecipeService, ParsedIngredient } from '@/services/recipe.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
 
@@ -18,7 +18,7 @@ export class AddRecipeToShoppingListModalPage {
   @Input() recipes: any[];
   @Input() scale: any = 1;
   selectedIngredientsByRecipe = {};
-  selectedIngredients: Ingredient[] = [];
+  selectedIngredients: ParsedIngredient[] = [];
 
   shoppingLists: any;
 
@@ -71,7 +71,7 @@ export class AddRecipeToShoppingListModalPage {
   selectedIngredientsChange(recipeId, selectedIngredients) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
-    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat() as Ingredient[];
+    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat() as ParsedIngredient[];
   }
 
   isFormValid() {
@@ -89,7 +89,7 @@ export class AddRecipeToShoppingListModalPage {
 
     const items = Object.entries(this.selectedIngredientsByRecipe)
       .map(([recipeId, ingredients]) =>
-        (ingredients as Ingredient[]).map(ingredient => ({
+        (ingredients as ParsedIngredient[]).map(ingredient => ({
           title: ingredient.content,
           recipeId,
           reference,
