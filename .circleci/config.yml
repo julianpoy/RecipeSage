@@ -85,7 +85,7 @@ jobs:
           command: cd Backend && npx sequelize db:migrate
       - run: # run playwright
           name: test-playwright
-          command: cd playwright && npm run test
+          command: cd playwright && npm run test -- --timeout 60000
   test_backend:
     resource_class: large
     working_directory: ~/recipesage
