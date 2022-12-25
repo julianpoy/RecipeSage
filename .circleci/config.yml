@@ -72,6 +72,12 @@ jobs:
           paths:
             - ./Frontend/node_modules
       # -------------- Tests -----------------
+      - run:
+          name: install-npm-playwright
+          command: cd playwright && npm install
+      - run:
+          name: setup-playwright
+          command: cd playwright && bash ./setup.sh
       - run: # run migrations
           name: migrate
           command: cd Backend && npx sequelize db:migrate
