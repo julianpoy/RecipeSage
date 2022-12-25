@@ -22,6 +22,8 @@ jobs:
           POSTGRES_LOGGING: false
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
+          WEBUI_URL: http://localhost:8100/#/
+          API_URL: http://localhost:3000/
       - image: postgres:9.6.9
         environment:
           POSTGRES_USER: chefbook
