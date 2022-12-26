@@ -1,21 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
 // DB
-var Op = require("sequelize").Op;
-var SQ = require('../models').sequelize;
-var User = require('../models').User;
-var Image = require('../models').Image;
+const Image = require('../models').Image;
 
 // Service
-var MiddlewareService = require('../services/middleware');
+const MiddlewareService = require('../services/middleware');
 const StorageService = require('../services/storage');
-let SubscriptionsService = require('../services/subscriptions');
+const SubscriptionsService = require('../services/subscriptions');
+
+// Util
+const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
+const { BadRequest, NotFound } = require('../utils/errors');
 
 router.post('/',
   MiddlewareService.validateSession(['user']),
-  async (req, res, next) => {
+  wrapRequestWithErrorHandler(async (req, res) => {
 
-  try {
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
       SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
@@ -41,8 +42,9 @@ router.post('/',
     }
 
     if (!file) {
-      return res.status(400).send('Must specify either "image" or "imageURL"');
+      throw BadRequest('Must specify either "image" or "imageURL"');
     }
+
     const image = await Image.create({
       userId: res.locals.session.userId,
       location: StorageService.generateStorageLocation(file.key),
@@ -51,20 +53,18 @@ router.post('/',
     });
 
     res.status(200).send(image);
-  } catch (e) {
-    next(e);
-  }
-});
+  }));
 
 router.get(
   '/link/:imageId',
-  async () => {
+  wrapRequestWithErrorHandler(async (req, res) => {
     const image = await Image.findByPk(req.params.imageId);
+
     if (!image) {
-      return res.status(404).send("Not Found");
+      throw NotFound('Image with that id not found');
     }
+
     return res.redirect(image.location);
-  }
-);
+  }));
 
 module.exports = router;

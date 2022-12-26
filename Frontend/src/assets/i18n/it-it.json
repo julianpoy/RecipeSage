@@ -131,6 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "La tua inbox delle ricette è vuota.",
   "pages.home.errors.inboxEmpty.message2": "Quando qualcuno ti invia una ricetta, la troverai qui!",
 
+  "pages.home.errors.noResultsLabelFilter": "Nessuna ricetta corrispondente al filtro etichette corrente",
 
   "pages.home.errors.noSearchResults.message1": "Nessun risultato di ricerca.",
   "pages.home.errors.noSearchResults.message2": "La ricerca include:",
@@ -182,6 +183,7 @@
   "pages.homepopover.warning.optionsHidden": "Attenzione: dato che questa è una raccolta condivisa, alcune opzioni sono nascoste",
 
   "pages.homepopover.labelNull": "Non hai ancora creato nessuna etichetta. Puoi crearne una dai dettagli di una ricetta.",
+  "pages.homepopover.unlabeled": "Solo senza etichetta",
 
   "====== Pages.RecipeDetails ======": "",
 
@@ -270,18 +272,17 @@
   "pages.about.links.details": "Lo Sviluppatore e RecipeSage",
   "pages.about.links.contact": "Contatti",
   "pages.about.links.contribute": "Contibuisci!",
-  "pages.about.links.tipsTricksTutorials": "Consigli e Tutorial",
+  "pages.about.links.userGuide": "Consigli e Tutorial",
   "pages.about.links.releaseNotes": "Release Notes",
   "pages.about.links.legal": "Note legali, accordi e dichiarazioni",
-  "pages.about.emailMe": "Contattami all’indirizzo",
   "pages.about.socialTitle": "Social Media",
 
   "====== Pages.Contact ======": "",
 
   "pages.contact.title": "Contattami",
   "pages.contact.subtitle": "Contatti",
+  "pages.contact.pleaseUserGuide": "Per qualsiasi domanda, consultare il manuale d'uso prima di inviare un'e-mail:",
   "pages.contact.emailMe": "Per qualsiasi problema, bug o suggerimenti sulle funzionalità, inviami un'e-mail all'indirizzo",
-  "pages.contact.website": "Ulteriori informazioni di contatto sono disponibili sul mio sito web personale o tramite i link dei social media qui sotto. Il mio sito web personale è",
   "pages.contact.socialTitle": "Social Media",
 
   "====== Pages.Contribute ======": "",
@@ -388,15 +389,19 @@
   "pages.manageLabelModal.recipeCount": "Aggiunta a {{count}} ricette",
   "pages.manageLabelModal.createdAt": "Creazione: {{dateString}}",
   "pages.manageLabelModal.warning": "Attenzione: queste azioni sono irreversibili",
+  "pages.manageLabelModal.view": "Visualizza tutte le ricette",
   "pages.manageLabelModal.rename": "Rinomina",
   "pages.manageLabelModal.merge": "Unisci a un’altra etichetta",
   "pages.manageLabelModal.delete": "Elimina",
+  "pages.manageLabelModal.deleteWithRecipes": "Eliminare insieme alle Ricette",
 
   "pages.manageLabelModal.renameConflict.header": "Errore",
   "pages.manageLabelModal.renameConflict.message": "Un’etichetta con questo nome esiste già",
 
   "pages.manageLabelModal.rename.header": "Rinomina etichetta: {{name}}",
   "pages.manageLabelModal.delete.header": "Elimina etichetta: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Eliminare l'etichetta \"{{name}}\", comprese le ricette",
+  "pages.manageLabelModal.deleteWithRecipes.message": "Questo eliminerà l'etichetta \"{{name}}\", insieme a tutte le ricette a cui è associata questa etichetta.",
 
   "pages.manageLabelModal.notFound.header": "Etichetta non trovata",
   "pages.manageLabelModal.notFound.subHeader": "L’etichetta \"{{name}}\" non esiste",
@@ -1172,7 +1177,7 @@
   "components.selectUser.change": "Clicca per modificare",
   "components.selectUser.select": "Clicca per selezionare",
   "components.selectUser.searching": "Cercando \"{{name}}\"...",
-  "components.selectUser.null": "Impossibile trovare \"{{searchText}}\"",
+  "components.selectUser.null": "Impossibile trovare \"{{name}}\"",
 
   "====== Components.SelfhostWarning ======": "",
 

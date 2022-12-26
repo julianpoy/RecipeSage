@@ -23,7 +23,7 @@ const init = async () => {
             properties: {
               title: {
                 type: 'text',
-                analyzer: "english", // Enable stemming
+                analyzer: 'english', // Enable stemming
                 fields: {
                   keyword: {
                     type: 'keyword',
@@ -37,7 +37,7 @@ const init = async () => {
       });
     }
 
-    console.log("Elastic initialized");
+    console.log('Elastic initialized');
   } catch (e) {
     setTimeout(init, 100);
   }
@@ -113,8 +113,8 @@ const deleteRecipesByUser = userId => {
         bool: {
           filter: {
             query_string: {
-              fields: ["userId"],
-              analyzer: "standard",
+              fields: ['userId'],
+              analyzer: 'standard',
               query: userId,
             },
           },
@@ -125,7 +125,7 @@ const deleteRecipesByUser = userId => {
 };
 
 const searchRecipes = (userId, queryString) => {
-  if (!ENABLE) throw new Error("ElasticSearch not enabled");
+  if (!ENABLE) throw new Error('ElasticSearch not enabled');
 
   return client.search({
     index: getFullIndexName('recipes'),
@@ -134,22 +134,22 @@ const searchRecipes = (userId, queryString) => {
         bool: {
           filter: {
             query_string: {
-              fields: ["userId"],
-              analyzer: "standard",
+              fields: ['userId'],
+              analyzer: 'standard',
               query: userId
             }
           },
           must: {
             multi_match: {
               query: queryString,
-              fuzziness: "AUTO",
+              fuzziness: 'AUTO',
               fields: [
-                "title^1.5",
-                "source^1.2",
-                "description^1.2",
-                "ingredients",
-                "instructions",
-                "notes"
+                'title^1.5',
+                'source^1.2',
+                'description^1.2',
+                'ingredients',
+                'instructions',
+                'notes'
               ]
             }
           }

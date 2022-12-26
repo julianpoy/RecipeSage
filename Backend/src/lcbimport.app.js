@@ -1,24 +1,21 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-let fs = require('fs-extra');
-let mdb = require('mdb');
-let extract = require('extract-zip');
-let sqlite3 = require('sqlite3');
+const fs = require('fs-extra');
+const mdb = require('mdb');
+const extract = require('extract-zip');
+const sqlite3 = require('sqlite3');
 const performance = require('perf_hooks').performance;
 const { exec, spawn } = require('child_process');
 
-var Op = require("sequelize").Op;
-var SQ = require('./models').sequelize;
-var User = require('./models').User;
-var Recipe = require('./models').Recipe;
-var FCMToken = require('./models').FCMToken;
-var Label = require('./models').Label;
-var Recipe_Label = require('./models').Recipe_Label;
-var Recipe_Image = require('./models').Recipe_Image;
-var Image = require('./models').Image;
+const SQ = require('./models').sequelize;
+const Recipe = require('./models').Recipe;
+const Label = require('./models').Label;
+const Recipe_Label = require('./models').Recipe_Label;
+const Recipe_Image = require('./models').Recipe_Image;
+const Image = require('./models').Image;
 
-var UtilService = require('./services/util');
+const UtilService = require('./services/util');
 const StorageService = require('./services/storage');
 
 let runConfig = {
@@ -28,7 +25,7 @@ let runConfig = {
   excludeImages: process.argv.indexOf('--excludeImages') > -1,
   includeTechniques: process.argv.indexOf('--includeTechniques') > -1,
   multipleImages: process.argv.indexOf('--multipleImages') > -1
-}
+};
 
 const logError = e => {
   console.error(e);
@@ -38,33 +35,28 @@ const logError = e => {
     scope.setExtra('user', runConfig.userId);
     Sentry.captureException(e);
   });
-}
-
-const cleanup = () {
-  fs.removeSync(zipPath);
-  fs.removeSync(extractPath);
-}
+};
 
 const exit = (status) => {
   Sentry.close(2000);
 
   cleanup();
   process.exit(status);
-}
+};
 
 let tablesNeeded = [
-  "t_cookbook",
+  't_cookbook',
   // "t_cookbookchapter",
   // "t_cookbookchapterassocation",
   // "t_attachment", //2x unused
-  "t_authornote", // seems to be a cross between description (short) and notes (long) - sometimes very long (multiple entries per recipe, divided paragraph)
+  't_authornote', // seems to be a cross between description (short) and notes (long) - sometimes very long (multiple entries per recipe, divided paragraph)
   // "t_cookbook_x", // unused from this db afaik
   // "t_favorite_x", //2x unused
   // "t_favoritefolder", //2x unused
   // "t_glossaryitem",
   // "t_groceryaisle",
   // "t_grocerylistitemrecipe",
-  "t_image", // Holds filenames for all images
+  't_image', // Holds filenames for all images
   // "t_ingredient",
   // "t_ingredientattachment",
   // "t_ingredientautocomplete",
@@ -77,24 +69,24 @@ let tablesNeeded = [
   // "t_menu", // Holds menu info - has some "types" info that might be useful for labelling
   // "t_menu_x", // unused
   // "t_menuimage",
-  "t_recipe",
+  't_recipe',
   // "t_recipe_x", //2x unused
   // "t_recipeattachment", // 2x unused
-  "t_recipeimage", // bidirectional relation table between recipe and image
-  "t_recipeingredient",
+  't_recipeimage', // bidirectional relation table between recipe and image
+  't_recipeingredient',
   // "t_recipemeasure",
-  "t_recipeprocedure",
+  't_recipeprocedure',
   // "t_recipereview",
-  "t_technique",
-  "t_recipetechnique",
-  "t_recipetip",
+  't_technique',
+  't_recipetechnique',
+  't_recipetip',
   // "t_recipetype", // seems to store category names, but no discernable relationship to recipe table - better to use recipetypes field in recipe itself (comma separated)
   // "t_recipetype_x", //2x unused
   // "t_grocerylistitem",
   // "t_ingredient_x", //2x unused
   // "t_ingredientmeasure", //not entirely clear - looks like a relationship table between ingredients and measurements
   // "t_recipemedia" //2x unused (or barely used)
-]
+];
 
 let sqliteDB;
 let lcbDB;
@@ -116,37 +108,31 @@ let metrics = {
   tRecipesProcessed: null,
   tRecipesSaved: null,
   tLabelsSaved: null
-}
+};
 
-function cleanup() {
+const cleanup = () => {
   try {
     sqliteDB.close();
-  } catch (e) { }
+  } catch (e) {
+    // Do nothing
+  }
   fs.removeSync(sqlitePath);
   fs.removeSync(zipPath);
   fs.removeSync(extractPath);
   fs.removeSync(dbPath);
-}
+};
 
 async function main() {
   try {
-    await (new Promise((resolve, reject) => {
-      extract(zipPath, { dir: extractPath }, function (err) {
-        if (err) {
-          if (err.message === 'end of central directory record signature not found') err.status = 3;
-          reject(err)
-        }
-        else resolve();
-      })
-    }))
+    await extract(zipPath, { dir: extractPath });
 
-    fs.unlinkSync(zipPath)
+    fs.unlinkSync(zipPath);
 
-    let potentialDbPaths = await (UtilService.findFilesByRegex(extractPath, /\.mdb/i))
-    if (potentialDbPaths.length == 0) throw new Error("No lcb db paths!");
+    let potentialDbPaths = await (UtilService.findFilesByRegex(extractPath, /\.mdb/i));
+    if (potentialDbPaths.length == 0) throw new Error('No lcb db paths!');
 
     if (potentialDbPaths.length > 1) {
-      console.log("More than one lcbdb path - ", potentialDbPaths)
+      console.log('More than one lcbdb path - ', potentialDbPaths);
       Sentry.withScope(scope => {
         scope.setExtra('paths', potentialDbPaths);
         Sentry.captureMessage('More than one lcbdb path');
@@ -156,11 +142,11 @@ async function main() {
     metrics.tExtracted = performance.now();
 
     await (new Promise((resolve, reject) => {
-      let mv = spawn(`mv`, [potentialDbPaths[0], dbPath])
+      let mv = spawn('mv', [potentialDbPaths[0], dbPath]);
       mv.on('close', (code) => {
-        code === 0 ? resolve() : reject("Move");
+        code === 0 ? resolve() : reject('Move');
       });
-    }))
+    }));
 
     // Load mdb
     lcbDB = mdb(dbPath);
@@ -168,10 +154,10 @@ async function main() {
     // Load lcb schema
     await (new Promise((resolve, reject) => {
       exec(`mdb-schema ${dbPath} sqlite | sqlite3 ${sqlitePath}`, (err, stdout, stderr) => {
-        console.log(err, stderr)
+        console.log(err, stderr);
         err ? reject(err) : resolve();
       });
-    }))
+    }));
 
     // Load table list
     await (new Promise((resolve, reject) => {
@@ -179,11 +165,11 @@ async function main() {
         if (err) {
           reject(err);
         }
-        lcbTables = tables.filter(table => tablesNeeded.indexOf(table) !== -1)
+        lcbTables = tables.filter(table => tablesNeeded.indexOf(table) !== -1);
 
-        resolve()
-      })
-    }))
+        resolve();
+      });
+    }));
 
     for (let i = 0; i < lcbTables.length; i++) {
       let table = lcbTables[i];
@@ -192,34 +178,34 @@ async function main() {
         let cmd = `{ echo 'BEGIN;'; mdb-export -I sqlite ${dbPath} ${table}; echo 'COMMIT;'; } | sqlite3 ${sqlitePath}`;
         console.log(cmd);
         exec(cmd, (err, stdout, stderr) => {
-          console.log(err, stderr, table)
+          console.log(err, stderr, table);
           err ? reject() : resolve();
         });
-      }))
+      }));
     }
 
     metrics.tExported = performance.now();
 
     await (new Promise((resolve, reject) => {
       sqliteDB = new sqlite3.Database(sqlitePath, (err) => {
-        if (err) reject(err)
-        else resolve()
-      })
+        if (err) reject(err);
+        else resolve();
+      });
     }));
 
     metrics.tSqliteStored = performance.now();
 
     await (Promise.all(lcbTables.map(tableName => {
       return new Promise(resolve => {
-        sqliteDB.all("SELECT * FROM " + tableName, [], (err, results) => {
+        sqliteDB.all('SELECT * FROM ' + tableName, [], (err, results) => {
           if (err) throw err;
 
           tableMap[tableName] = results;
 
           resolve();
-        })
-      })
-    })))
+        });
+      });
+    })));
 
     metrics.tSqliteFetched = performance.now();
     // return await fs.writeFile('output', JSON.stringify(tableMap))
@@ -229,7 +215,7 @@ async function main() {
     let pendingRecipes = [];
 
     tableMap.t_recipe = (tableMap.t_recipe || [])
-      .filter(lcbRecipe => !!lcbRecipe.recipeid && (runConfig.includeStockRecipes || !!lcbRecipe.modifieddate))
+      .filter(lcbRecipe => !!lcbRecipe.recipeid && (runConfig.includeStockRecipes || !!lcbRecipe.modifieddate));
 
     let lcbImagesById = (tableMap.t_image || []).reduce((acc, image) => {
       acc[image.imageid] = image;
@@ -242,10 +228,12 @@ async function main() {
         acc[recipeImage.recipeid].push({
           filename: lcbImagesById[recipeImage.imageid].filename,
           imageindex: parseInt(recipeImage.imageindex, 10)
-        })
-      } catch (e) { }
+        });
+      } catch (e) {
+        // Do nothing
+      }
       return acc;
-    }, {})
+    }, {});
 
     let lcbTechniquesById = (tableMap.t_technique || []).reduce((acc, technique) => {
       acc[technique.techniqueid] = technique;
@@ -256,12 +244,14 @@ async function main() {
       try {
         acc[lcbRecipeTechnique.recipeid] = acc[lcbRecipeTechnique.recipeid] || [];
         acc[lcbRecipeTechnique.recipeid].push(lcbTechniquesById[lcbRecipeTechnique.techniqueid]);
-      } catch (e) { }
+      } catch (e) {
+        // Do nothing
+      }
       return acc;
     }, {});
 
     let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce((acc, lcbIngredient) => {
-      acc[lcbIngredient.recipeid] = acc[lcbIngredient.recipeid] || []
+      acc[lcbIngredient.recipeid] = acc[lcbIngredient.recipeid] || [];
       acc[lcbIngredient.recipeid].push(lcbIngredient);
       return acc;
     }, {});
@@ -302,7 +292,7 @@ async function main() {
           return lcbRecipe;
         }).filter(e => e.imageFileNames.length > 0);
 
-      var i, chunkedRecipesWithImages = [], chunk = 50;
+      let i, chunkedRecipesWithImages = [], chunk = 50;
       for (i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }
@@ -311,18 +301,18 @@ async function main() {
         return acc.then(() => {
           return Promise.all(lcbRecipeChunk.map(async lcbRecipe => {
             await Promise.all(lcbRecipe.imageFileNames.map(imageFileName => {
-              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${imageFileName})$`, 'i'))
+              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${imageFileName})$`, 'i'));
 
               if (possibleImageFiles.length == 0) return;
 
               return StorageService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images = lcbRecipe.images || [];
                 lcbRecipe.images.push(image);
-              }).catch(() => { })
+              }).catch(() => { });
             }));
-          }))
-        })
-      }, Promise.resolve())
+          }));
+        });
+      }, Promise.resolve());
 
       metrics.tImagesUploaded = performance.now();
 
@@ -334,45 +324,45 @@ async function main() {
           .filter(lcbIngredient => lcbIngredient)
           .sort((a, b) => a.ingredientindex > b.ingredientindex)
           .map(lcbIngredient => `${lcbIngredient.quantitytext || ''} ${lcbIngredient.unittext || ''} ${lcbIngredient.ingredienttext || ''}`)
-          .join("\r\n")
+          .join('\r\n');
 
         let instructions = (lcbInstructionsByRecipeId[lcbRecipe.recipeid] || [])
           .filter(lcbProcedure => lcbProcedure && lcbProcedure.proceduretext)
           .sort((a, b) => a.procedureindex > b.procedureindex)
           .map(lcbProcedure => lcbProcedure.proceduretext)
-          .join("\r\n")
+          .join('\r\n');
 
         let recipeTips = (lcbTipsByRecipeId[lcbRecipe.recipeid] || [])
           .filter(lcbTip => lcbTip && lcbTip.tiptext)
           .sort((a, b) => a.tipindex > b.tipindex)
-          .map(lcbTip => lcbTip.tiptext)
+          .map(lcbTip => lcbTip.tiptext);
 
         let authorNotes = (lcbAuthorNotesByRecipeId[lcbRecipe.recipeid] || [])
           .filter(lcbAuthorNote => lcbAuthorNote && lcbAuthorNote.authornotetext)
           .sort((a, b) => a.authornoteindex > b.authornoteindex)
-          .map(lcbAuthorNote => lcbAuthorNote.authornotetext)
+          .map(lcbAuthorNote => lcbAuthorNote.authornotetext);
 
         let techniqueNotes = (lcbTechniquesByRecipeId[lcbRecipe.recipeid] || [])
           .filter(lcbTechnique => lcbTechnique && lcbTechnique.comments)
-          .map(lcbTechnique => `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`)
+          .map(lcbTechnique => `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`);
 
         if (!runConfig.includeTechniques) techniqueNotes = [];
 
-        let description = ''
+        let description = '';
 
-        let notes = []
+        let notes = [];
 
         // Add comments to notes
-        if (lcbRecipe.comments) notes.push(lcbRecipe.comments)
+        if (lcbRecipe.comments) notes.push(lcbRecipe.comments);
 
         // Add "author notes" to description or notes depending on length
-        if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0]
-        else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
+        if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0];
+        else if (authorNotes.length > 0) notes = [...notes, ...authorNotes];
 
         // Add recipeTips and join with double return
-        notes = [...notes, ...recipeTips, ...techniqueNotes].join('\r\n\r\n')
+        notes = [...notes, ...recipeTips, ...techniqueNotes].join('\r\n\r\n');
 
-        let totalTime = (lcbRecipe.readyintime || '').toString().trim()
+        let totalTime = (lcbRecipe.readyintime || '').toString().trim();
         if (lcbRecipe.cookingtime) {
           totalTime += ` (${lcbRecipe.cookingtime.toString().trim()} cooking time)`;
         }
@@ -384,7 +374,7 @@ async function main() {
             ...(lcbCookbooksById[lcbRecipe.cookbookid] || []).map(el => el.name.trim().toLowerCase())
           ])
         ].filter(el => el && el.length > 0)
-         .map(el => UtilService.cleanLabelTitle(el));
+          .map(el => UtilService.cleanLabelTitle(el));
 
         return pendingRecipes.push({
           model: {
@@ -404,7 +394,7 @@ async function main() {
           },
           lcbRecipeLabels,
           images
-        })
+        });
       }));
 
       metrics.tRecipesProcessed = performance.now();
@@ -412,7 +402,7 @@ async function main() {
       let recipes = await Recipe.bulkCreate(pendingRecipes.map(el => el.model), {
         returning: true,
         transaction: t
-      })
+      });
 
       const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
@@ -426,8 +416,8 @@ async function main() {
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
-        })
-      })
+        });
+      });
 
       const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
         userId: runConfig.userId,
@@ -461,16 +451,16 @@ async function main() {
             return {
               labelId: labels[0].id,
               recipeId
-            }
+            };
           }), {
             ignoreDuplicates: true,
             transaction: t
-          })
+          });
         });
-      }))
+      }));
 
       metrics.tLabelsSaved = performance.now();
-    }))
+    }));
 
     metrics.performance = {
       tExtract: Math.floor(metrics.tExtracted - metrics.t0),
@@ -482,11 +472,12 @@ async function main() {
       tRecipesProcess: Math.floor(metrics.tRecipesProcessed - metrics.tImagesUploaded),
       tRecipesSave: Math.floor(metrics.tRecipesSaved - metrics.tRecipesProcessed),
       tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved)
-    }
+    };
 
     exit(0);
   } catch (e) {
-    console.log("Couldn't handle lcb upload 2", e)
+    if (e.message === 'end of central directory record signature not found') e.status = 3;
+    console.log('Couldn\'t handle lcb upload 2', e);
     logError(e);
 
     exit(e?.status || 1);

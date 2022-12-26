@@ -4,6 +4,7 @@ import { Label, LabelService } from '@/services/label.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LoadingService } from '@/services/loading.service';
 import {TranslateService} from '@ngx-translate/core';
+import {RecipeService} from '@/services/recipe.service';
 
 @Component({
   selector: 'page-manage-label-modal',
@@ -24,7 +25,9 @@ export class ManageLabelModalPage {
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public utilService: UtilService,
-    public labelService: LabelService) {
+    public labelService: LabelService,
+    public recipeService: RecipeService
+  ) {
     setTimeout(() => {
       this.createdAt = utilService.formatDate(this.label.createdAt);
     });
@@ -57,6 +60,21 @@ export class ManageLabelModalPage {
     if (!response.success) return;
 
     this.label.title = newTitle;
+  }
+
+  async view() {
+    await this.modalCtrl.dismiss();
+
+    this.navCtrl.navigateForward(
+      RouteMap.HomePage.getPath('main', {
+        selectedLabels: [this.label.title],
+      }),
+      {
+        state: {
+          showBack: true,
+        }
+      }
+    );
   }
 
   async rename() {
@@ -98,7 +116,19 @@ export class ManageLabelModalPage {
     const loading = this.loadingService.start();
 
     const response = await this.labelService.delete({
-      labelIds: [this.label.id]
+      labelIds: [this.label.id],
+    });
+    loading.dismiss();
+    if (!response.success) return;
+
+    this.modalCtrl.dismiss();
+  }
+
+  async _deleteWithRecipes() {
+    const loading = this.loadingService.start();
+
+    const response = await this.recipeService.deleteByLabelIds({
+      labelIds: [this.label.id],
     });
     loading.dismiss();
     if (!response.success) return;
@@ -123,6 +153,33 @@ export class ManageLabelModalPage {
           text: del,
           handler: response => {
             this._delete();
+          }
+        }
+      ]
+    });
+
+    await deletePrompt.present();
+  }
+
+  async deleteWithRecipes() {
+    const header = await this.translate.get('pages.manageLabelModal.deleteWithRecipes.header', {name: this.label.title}).toPromise();
+    const message = await this.translate.get('pages.manageLabelModal.deleteWithRecipes.message', {name: this.label.title}).toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
+    const deletePrompt = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: del,
+          handler: response => {
+            this._deleteWithRecipes();
           }
         }
       ]

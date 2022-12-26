@@ -8,7 +8,7 @@ TAG=$1
 
 if [ -z "$TAG" ]
 then
-  echo "Invalid command. Usage: ./push_static_s3.sh v1.0.0"
+  echo "Invalid command. Usage: ./webapp-hosted.sh v1.0.0"
   exit 1
 fi
 

@@ -8,29 +8,29 @@ const itemCategories = require('../constants/itemCategories.json');
 const itemTitles = Object.keys(itemCategories).sort((a, b) => b.length - a.length);
 
 const formattedCategoryTitles = {
-  "produce": "Produce",
-  "dairy": "Dairy",
-  "meat": "Meats",
-  "bakery": "Baked Goods",
-  "grocery": "Grocery Items",
-  "liquor": "Liquor",
-  "seafood": "Seafood",
-  "nonfood": "Non-Food and Household",
-  "deli": "Deli"
+  'produce': 'Produce',
+  'dairy': 'Dairy',
+  'meat': 'Meats',
+  'bakery': 'Baked Goods',
+  'grocery': 'Grocery Items',
+  'liquor': 'Liquor',
+  'seafood': 'Seafood',
+  'nonfood': 'Non-Food and Household',
+  'deli': 'Deli'
 };
 
 exports.getCategoryTitle = itemTitle => {
   itemTitle = itemTitle.toLowerCase();
-  if (itemTitle.includes("canned") || itemTitle.includes(" can ") || itemTitle.includes(" cans ")) return "Canned";
-  if (itemTitle.includes("frozen")) return "Frozen";
+  if (itemTitle.includes('canned') || itemTitle.includes(' can ') || itemTitle.includes(' cans ')) return 'Canned';
+  if (itemTitle.includes('frozen')) return 'Frozen';
 
   const itemTitleMatch = itemTitles.find(potentialMatch => {
-    const potentialChunks = potentialMatch.charAt(0) === '*' ? [potentialMatch.substring(1)] : potentialMatch.split(" "); // Matchers beginning with * should be matched whole
+    const potentialChunks = potentialMatch.charAt(0) === '*' ? [potentialMatch.substring(1)] : potentialMatch.split(' '); // Matchers beginning with * should be matched whole
     const diffChunks = potentialChunks.filter(token => !itemTitle.includes(token)); // Filter by any chunks that _do not_ match our itemTitle
 
     return diffChunks.length === 0;
   });
-  if (!itemTitleMatch) return "Uncategorized";
+  if (!itemTitleMatch) return 'Uncategorized';
 
   const category = itemCategories[itemTitleMatch];
   return formattedCategoryTitles[category] || UtilService.capitalizeEachWord(category);
@@ -39,7 +39,7 @@ exports.getCategoryTitle = itemTitle => {
 exports.groupShoppingListItems = items => {
   // Ingredient grouping into map by ingredientName
   const itemGrouper = {};
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const itemTitle = item.title.toLowerCase();
 
@@ -71,11 +71,11 @@ exports.groupShoppingListItems = items => {
       const combinedUz = flatMeasurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
-          unitSpacer: " ",
+          unitSpacer: ' ',
           unit: Unitz.OutputUnit.LONG
         });
 
-        title = combinedMeasurements + " " + ingredientName;
+        title = combinedMeasurements + ' ' + ingredientName;
       }
     }
 
@@ -89,4 +89,4 @@ exports.groupShoppingListItems = items => {
   }
 
   return result;
-}
+};

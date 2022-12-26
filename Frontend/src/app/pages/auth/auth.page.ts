@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ToastController, ModalController } from '@ionic/angular';
+import { NavController, ToastController, AlertController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
@@ -42,6 +42,7 @@ export class AuthPage {
     public loadingService: LoadingService,
     public messagingService: MessagingService,
     public capabilitiesService: CapabilitiesService,
+    public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
     public userService: UserService) {
@@ -145,10 +146,19 @@ export class AuthPage {
   }
 
   async forgotPassword() {
-    this.email = (document.getElementById('email') as HTMLInputElement).value;
     if (!this.email) {
       const invalidEmail = await this.translate.get('pages.auth.error.invalidEmail').toPromise();
-      this.presentToast(invalidEmail);
+      const okay = await this.translate.get('generic.okay').toPromise();
+
+      const invalidEmailAlert = await this.alertCtrl.create({
+        message: invalidEmail,
+        buttons: [
+          {
+            text: okay,
+          }
+        ]
+      });
+      invalidEmailAlert.present();
       return;
     }
 
@@ -163,12 +173,17 @@ export class AuthPage {
     if (!response) return;
 
     const message = await this.translate.get('pages.auth.forgot.toast').toPromise();
+    const okay = await this.translate.get('generic.okay').toPromise();
 
-    const successToast = await this.toastCtrl.create({
+    const successAlert = await this.alertCtrl.create({
       message,
-      duration: 7000
+      buttons: [
+        {
+          text: okay,
+        }
+      ]
     });
-    successToast.present();
+    successAlert.present();
   }
 
   showLegal(e) {

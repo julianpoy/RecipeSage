@@ -3,8 +3,8 @@
 const UUID = require('uuid');
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    var sequelize = queryInterface.sequelize;
+  up: (queryInterface) => {
+    const sequelize = queryInterface.sequelize;
 
     return sequelize.transaction(async transaction => {
       const [recipes] = await sequelize.query('SELECT id, "userId", image FROM "Recipes" WHERE image IS NOT NULL', {
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    var sequelize = queryInterface.sequelize;
+    const sequelize = queryInterface.sequelize;
 
     return sequelize.transaction(async transaction => {
       await queryInterface.addColumn('Recipes', 'image', {

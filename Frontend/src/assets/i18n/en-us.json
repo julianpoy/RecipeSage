@@ -131,6 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
   "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
 
+  "pages.home.errors.noResultsLabelFilter": "No recipes matching the current label filter",
 
   "pages.home.errors.noSearchResults.message1": "No search results.",
   "pages.home.errors.noSearchResults.message2": "Search includes:",
@@ -182,6 +183,7 @@
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
   "pages.homepopover.labelNull": "You don't have any labels. You can create labels on the recipe details page.",
+  "pages.homepopover.unlabeled": "Unlabeled Only",
 
   "====== Pages.RecipeDetails ======": "",
 
@@ -270,18 +272,17 @@
   "pages.about.links.details": "About Me & RecipeSage",
   "pages.about.links.contact": "Contact",
   "pages.about.links.contribute": "Contribute!",
-  "pages.about.links.tipsTricksTutorials": "Tips, tricks and tutorials",
+  "pages.about.links.userGuide": "User Guide (Tutorials)",
   "pages.about.links.releaseNotes": "Release Notes",
   "pages.about.links.legal": "Legal, agreements and disclaimers",
-  "pages.about.emailMe": "Feel free to email me at",
   "pages.about.socialTitle": "Social Media",
 
   "====== Pages.Contact ======": "",
 
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
-  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, please email me at",
-  "pages.contact.website": "Additional contact info is available on my personal website, or via the social media links below. My personal website is",
+  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide before emailing:",
+  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, you can email me at",
   "pages.contact.socialTitle": "Social Media",
 
   "====== Pages.Contribute ======": "",
@@ -388,15 +389,19 @@
   "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
   "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
   "pages.manageLabelModal.warning": "Note: These actions are permanent",
+  "pages.manageLabelModal.view": "View All Recipes",
   "pages.manageLabelModal.rename": "Rename",
   "pages.manageLabelModal.merge": "Merge With Another Label",
   "pages.manageLabelModal.delete": "Delete",
+  "pages.manageLabelModal.deleteWithRecipes": "Delete Including Recipes",
 
   "pages.manageLabelModal.renameConflict.header": "Error",
   "pages.manageLabelModal.renameConflict.message": "A label with that title already exists",
 
   "pages.manageLabelModal.rename.header": "Rename label: {{name}}",
   "pages.manageLabelModal.delete.header": "Delete label: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Delete label \"{{name}}\" including recipes",
+  "pages.manageLabelModal.deleteWithRecipes.message": "This will delete the label {{name}}, along with any recipes that have this label attached to them.",
 
   "pages.manageLabelModal.notFound.header": "Label not found",
   "pages.manageLabelModal.notFound.subHeader": "The target label \"{{name}}\" was not found",
@@ -851,7 +856,7 @@
   "pages.importPepperplate.timeout.header": "This is taking a little longer than expected",
   "pages.importPepperplate.timeout.message": "This can happen when Pepperplate is under heavy load. The import is still in progress. If you don't see your recipes appear, feel free to email me.",
 
-  "pages.importPepperplate.error.message": "An error occured - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
+  "pages.importPepperplate.error.message": "An error occurred - Please check your My Recipes page before starting a new import to avoid creating duplicates.",
 
   "pages.importPepperplate.success": "Import complete!",
 
@@ -1172,7 +1177,7 @@
   "components.selectUser.change": "Click to change",
   "components.selectUser.select": "Click to select",
   "components.selectUser.searching": "Searching for \"{{name}}\"...",
-  "components.selectUser.null": "No results for \"{{searchText}}\"",
+  "components.selectUser.null": "No results for \"{{name}}\"",
 
   "====== Components.SelfhostWarning ======": "",
 
@@ -1220,7 +1225,7 @@
   "====== Errors ======": "",
 
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unexpected": "An unexpected error occured. Please try again. If the problem continues to occur, please contact us.",
+  "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
 
   "====== Generic ======": "",
 

@@ -1,7 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, PopoverController, NavParams } from '@ionic/angular';
 import { Datasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe } from '@/services/recipe.service';
@@ -13,7 +13,7 @@ import { EventService } from '@/services/event.service';
 import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 
 import { LabelService, Label } from '@/services/label.service';
-import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
 
 const TILE_WIDTH = 200;
@@ -26,6 +26,7 @@ const TILE_PADD = 20;
 })
 export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
+  showBack: boolean = false;
 
   labels: Label[] = [];
   selectedLabels: string[] = [];
@@ -93,6 +94,7 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
+    public router: Router,
     public events: EventService,
     public translate: TranslateService,
     public popoverCtrl: PopoverController,
@@ -107,10 +109,13 @@ export class HomePage {
     public websocketService: WebsocketService,
     public messagingService: MessagingService) {
 
+    this.showBack = !!this.router.getCurrentNavigation().extras.state?.showBack;
+
     this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
+      this.showBack = true;
       this.userService.getProfileByUserId(this.userId).then(profileResponse => {
         if (!profileResponse.success) return;
         this.otherUserProfile = profileResponse.data;
@@ -163,7 +168,10 @@ export class HomePage {
   }
 
   updateTileColCount() {
-    const tileColCount = Math.floor(window.innerWidth / (TILE_WIDTH + TILE_PADD));
+    const isSidebarEnabled = this.preferences[GlobalPreferenceKey.EnableSplitPane];
+    const sidebarWidth = isSidebarEnabled ? 300 : 0;
+    const homePageWidth = window.innerWidth - sidebarWidth;
+    const tileColCount = Math.floor(homePageWidth / (TILE_WIDTH + TILE_PADD));
 
     if (tileColCount !== this.tileColCount) {
       this.tileColCount = tileColCount;
@@ -193,9 +201,9 @@ export class HomePage {
     }
 
     return this.resetAndLoadLabels().then(() => {
-      const labelNames = this.labels.map(e => e.title);
+      const labelNames = new Set(this.labels.map(e => e.title));
 
-      this.selectedLabels.splice.call(null, ([0, this.selectedLabels.length] as any[]).concat(this.selectedLabels.filter(e => labelNames.indexOf(e) > -1)));
+      this.selectedLabels = this.selectedLabels.filter(e => labelNames.has(e));
 
       return this.resetAndLoadRecipes();
     });

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface) => {
     return queryInterface.sequelize.transaction(async transaction => {
       await queryInterface.sequelize.query(`
         UPDATE "Labels" SET title = regexp_replace(
@@ -22,8 +22,8 @@ module.exports = {
       });
     });
   },
-  
-  down: (queryInterface, Sequelize) => {
+
+  down: () => {
     return Promise.resolve();
   }
 };

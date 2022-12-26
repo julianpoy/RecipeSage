@@ -4,7 +4,7 @@ import { NavController, AlertController, ToastController, ModalController, Popov
 import {TranslateService} from '@ngx-translate/core';
 
 import { linkifyStr } from '@/utils/linkify';
-import { RecipeService, Recipe, Instruction, Ingredient, Note } from '@/services/recipe.service';
+import { RecipeService, Recipe, ParsedInstruction, ParsedIngredient, ParsedNote, RecipeFolderName } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
@@ -39,9 +39,9 @@ export class RecipePage {
 
   recipe: Recipe;
   recipeId: string;
-  ingredients: Ingredient[];
-  instructions: Instruction[];
-  notes: Note[];
+  ingredients: ParsedIngredient[];
+  instructions: ParsedInstruction[];
+  notes: ParsedNote[];
 
   scale = 1;
 
@@ -152,6 +152,8 @@ export class RecipePage {
   }
 
   async loadLabels() {
+    if (!this.isLoggedIn) return;
+
     const response = await this.labelService.fetch();
     if (!response.success) return;
 
@@ -214,13 +216,13 @@ export class RecipePage {
     }
   }
 
-  instructionClicked(event, instruction: Instruction, idx: number) {
+  instructionClicked(event, instruction: ParsedInstruction, idx: number) {
     if (instruction.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
   }
 
-  ingredientClicked(event, ingredient: Instruction, idx: number) {
+  ingredientClicked(event, ingredient: ParsedInstruction, idx: number) {
     if (ingredient.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
@@ -343,7 +345,7 @@ export class RecipePage {
     shareModal.present();
   }
 
-  async moveToFolder(folderName: string) {
+  async moveToFolder(folderName: RecipeFolderName) {
     const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;
@@ -445,16 +447,18 @@ export class RecipePage {
     });
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response.success) return false;
 
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.data.id));
+
+    return true;
   }
 
   async goToAuth(cb?: () => any) {
     const authModal = await this.modalCtrl.create({
       component: AuthPage,
       componentProps: {
-        register: !this.isLoggedIn
+        startWithRegister: !this.isLoggedIn
       }
     });
     authModal.onDidDismiss().then(() => {
@@ -466,7 +470,9 @@ export class RecipePage {
 
   authAndClone() {
     this.goToAuth(() => {
-      this.cloneRecipe().then(async () => {
+      this.cloneRecipe().then(async (success) => {
+        if (!success) return;
+
         const message = await this.translate.get('pages.recipeDetails.cloned').toPromise();
         (await this.toastCtrl.create({
           message,

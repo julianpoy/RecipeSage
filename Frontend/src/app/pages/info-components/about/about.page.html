@@ -17,6 +17,10 @@
       <ion-icon name="person" slot="start"></ion-icon>
       {{ 'pages.about.links.details' | translate }}
     </ion-item>
+    <ion-item button (click)="goToUserGuide()">
+      <ion-icon name="help" slot="start"></ion-icon>
+      {{ 'pages.about.links.userGuide' | translate }}
+    </ion-item>
     <ion-item button (click)="goToContact()">
       <ion-icon name="send" slot="start"></ion-icon>
       {{ 'pages.about.links.contact' | translate }}
@@ -24,10 +28,6 @@
     <ion-item button (click)="goToContribute()">
       <ion-icon name="heart" slot="start"></ion-icon>
       {{ 'pages.about.links.contribute' | translate }}
-    </ion-item>
-    <ion-item button (click)="goToTipsTricksTutorials()">
-      <ion-icon name="help" slot="start"></ion-icon>
-      {{ 'pages.about.links.tipsTricksTutorials' | translate }}
     </ion-item>
     <ion-item button (click)="goToReleaseNotes()">
       <ion-icon name="archive" slot="start"></ion-icon>
@@ -38,9 +38,6 @@
       {{ 'pages.about.links.legal' | translate }}
     </ion-item>
   </ion-list>
-
-  <p>{{ 'pages.about.emailMe' | translate }} <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a>.</p>
-
 
   <br />
   <p><b>{{ 'pages.about.socialTitle' | translate }}</b></p>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-import { RouteMap, AuthType } from './services/util.service';
+import { RouteMap } from './services/util.service';
 import { DefaultPageGuardService } from './services/default-page-guard.service';
 import { UnsavedChangesGuardService } from './services/unsaved-changes-guard.service';
 
@@ -60,21 +60,6 @@ const routes: Routes = [
   {
     path: RouteMap.ContributeThankYouPage.path,
     loadChildren: () => import('@/pages/info-components/contribute-thankyou/contribute-thankyou.module').then(module => module.ContributeThankYouPageModule),
-    canDeactivate: [UnsavedChangesGuardService]
-  },
-  {
-    path: RouteMap.ReleaseNotesPage.path,
-    loadChildren: () => import('@/pages/info-components/release-notes/release-notes.module').then(module => module.ReleaseNotesPageModule),
-    canDeactivate: [UnsavedChangesGuardService]
-  },
-  {
-    path: RouteMap.TipsTricksTutorialsPage.path,
-    loadChildren: () => import('@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module').then(module => module.TipsTricksTutorialsPageModule),
-    canDeactivate: [UnsavedChangesGuardService]
-  },
-  {
-    path: RouteMap.TutorialPage.path,
-    loadChildren: () => import('@/pages/info-components/tips-tricks-tutorials/tips-tricks-tutorials.module').then(module => module.TipsTricksTutorialsPageModule),
     canDeactivate: [UnsavedChangesGuardService]
   },
   {

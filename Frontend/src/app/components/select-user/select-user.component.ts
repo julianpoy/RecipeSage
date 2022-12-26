@@ -57,7 +57,7 @@ export class SelectUserComponent {
     }, PAUSE_BEFORE_SEARCH);
   }
 
-  async search(input) {
+  async search(input: string) {
     input = input || '';
     const loading = this.loadingService.start();
 
@@ -65,22 +65,24 @@ export class SelectUserComponent {
 
     const handle = input.startsWith('@') ? input.substring(1) : input;
     if (isHandleValid(handle)) {
-      const profile = await this.userService.getProfileByHandle(handle, {
+      const profileResponse = await this.userService.getProfileByHandle(handle, {
         403: () => {},
         404: () => {}
       });
-      if (profile) {
+      if (profileResponse.success && profileResponse.data) {
         // TODO: Currently this pushes a profile rather than the direct user info
         // This should be cleaned up - preferrably with some typing
-        results.push(profile);
+        results.push(profileResponse.data);
       }
     }
 
-    const user = await this.userService.getUserByEmail(input, {
+    const userResponse = await this.userService.getUserByEmail({
+      email: input
+    }, {
       404: () => {}
     });
 
-    if (user) results.push(user);
+    if (userResponse.success && userResponse.data) results.push(userResponse.data);
 
     this.results = results;
 

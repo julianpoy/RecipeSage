@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     return queryInterface.sequelize.transaction(async transaction => {
       // Delete all duplicate label->recipe relationships
       await queryInterface.sequelize.query(`
@@ -18,7 +18,7 @@ module.exports = {
       });
 
       await queryInterface.addConstraint('Recipe_Labels', {
-        type: "UNIQUE",
+        type: 'UNIQUE',
         name: 'Recipe_Labels_labelId_recipeId_uk',
         fields: ['labelId', 'recipeId'],
         transaction
@@ -26,7 +26,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.removeConstraint('Recipe_Labels', 'Recipe_Labels_labelId_recipeId_uk');
   }
 };

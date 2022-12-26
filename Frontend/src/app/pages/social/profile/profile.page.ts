@@ -79,9 +79,8 @@ export class ProfilePage {
 
     loading.dismiss();
 
-    if (!profileResponse.success || !myProfileResponse.success) return;
-    this.profile = profileResponse.data;
-    this.myProfile = myProfileResponse.data;
+    if (profileResponse.success) this.profile = profileResponse.data;
+    if (myProfileResponse.success) this.myProfile = myProfileResponse.data;
   }
 
   async openImageViewer() {

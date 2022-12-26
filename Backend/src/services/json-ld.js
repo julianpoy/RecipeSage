@@ -1,32 +1,33 @@
 const SharedUtils = require('../../../SharedUtils/src');
 
 const recipeToJSONLD = (recipe) => ({
-  "@context": "http://schema.org",
-  "@type": "Recipe",
+  '@context': 'http://schema.org',
+  '@type': 'Recipe',
   datePublished: (new Date(recipe.createdAt)).toISOString(),
   description: recipe.description,
   image: (recipe.images || []).map(image => image.location),
   name: recipe.title,
   prepTime: convertToISO8601Time(recipe.activeTime) || recipe.activeTime,
   recipeIngredient: SharedUtils.parseIngredients(recipe.ingredients, 1, false)
-                               .map(el => el.isHeader ? `[${el.content}]` : el.content),
+    .map(el => el.isHeader ? `[${el.content}]` : el.content),
   recipeInstructions: SharedUtils.parseInstructions(recipe.instructions)
-                                 .map(el => ({
-                                    "@type": el.isHeader ? "HowToSection" : "HowToStep",
-                                    text: el.isHeader ? `[${el.content}]` : el.content,
-                                  })),
+    .map(el => ({
+      '@type': el.isHeader ? 'HowToSection' : 'HowToStep',
+      text: el.isHeader ? `[${el.content}]` : el.content,
+    })),
   recipeYield: recipe.yield,
   totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
   recipeCategory: (recipe.labels || []).map(label => label.title),
   creditText: recipe.source,
   isBasedOn: recipe.url,
   comment: [{
-    "@type": "Comment",
+    '@type': 'Comment',
     name: 'Author Notes',
     text: recipe.notes,
   }],
 });
 
+// eslint-disable-next-line no-unused-vars
 const getImageSrcFromSchema = (jsonLD) => {
   const { images } = jsonLD;
   if (!images) return '';
@@ -118,7 +119,7 @@ const convertToISO8601Time = (time) => {
 };
 
 const convertFromISO8601Time = (time) => {
-  return time.replace("PT","").replace("H"," Hour(s) ").replace("M"," Minute(s) ").replace("S"," Seconds(s) ");
+  return time.replace('PT','').replace('H',' Hour(s) ').replace('M',' Minute(s) ').replace('S',' Seconds(s) ');
 };
 
 const getActiveTimeFromSchema = (jsonLD) => {

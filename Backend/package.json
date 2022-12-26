@@ -4,13 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www.js",
-    "mocha": "PORT=2999 NODE_ENV=test mocha --timeout 10000 --exit --",
-    "test": "npm run test:all",
-    "test:ci": "npm run test:all",
-    "test:all": "npm run test:routes && npm run test:services && npm run test:models",
-    "test:routes": "npm run mocha \"./src/routes/**/*.spec.js\"",
-    "test:services": "npm run mocha \"./src/services/**/*.spec.js\"",
-    "test:models": "npm run mocha \"./src/models/**/*.spec.js\""
+    "test": "PORT=2999 NODE_ENV=test jest --runInBand ./src/**/*.spec.js",
+    "lint": "eslint .",
+    "test:ci": "npm run test"
   },
   "bin": "src/bin/www.js",
   "pkg": {
@@ -41,6 +37,7 @@
     "fs-extra": "^10.1.0",
     "grip": "^1.5.0",
     "he": "^1.2.0",
+    "https-proxy-agent": "^5.0.1",
     "ical-generator": "^3.6.0",
     "joi": "^17.6.4",
     "jsdom": "^20.0.1",
@@ -63,13 +60,15 @@
     "sharp": "^0.31.1",
     "sqlite3": "^5.1.2",
     "stripe": "^10.15.0",
+    "ts-dedent": "^2.2.0",
     "umzug": "^3.2.1",
     "uuid": "^9.0.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "chai": "^4.3.6",
-    "mocha": "^10.1.0",
+    "eslint": "^8.26.0",
+    "jest": "^29.3.1",
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.5.1",
     "sinon": "^14.0.1",

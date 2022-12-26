@@ -1,6 +1,5 @@
-
-var multer = require('multer');
-let fs = require('fs-extra');
+const multer = require('multer');
+const fs = require('fs-extra');
 const UtilService = require('./util');
 const s3Storage = require('./s3-storage');
 const firebaseStorage = require('./firebase-storage');
@@ -29,11 +28,11 @@ exports.sendURLToStorage = (url, highResConversion) => {
   return UtilService.fetchImage(url).then((buffer) => {
     return UtilService.convertImage(buffer, highResConversion).then(convertedBuffer => {
       return exports.sendBufferToStorage(convertedBuffer).then(result => {
-        return exports.formatImageResponse(result.key, "image/jpeg", Buffer.byteLength(convertedBuffer), result.ETag);
+        return exports.formatImageResponse(result.key, 'image/jpeg', Buffer.byteLength(convertedBuffer), result.ETag);
       });
     });
-  })
-}
+  });
+};
 
 exports.sendFileToStorage = (file, isBuffer, highResConversion) => {
   let p = isBuffer ? Promise.resolve(file) : fs.readFile(file);
@@ -43,10 +42,10 @@ exports.sendFileToStorage = (file, isBuffer, highResConversion) => {
   }).then(stream => {
     return exports.sendBufferToStorage(stream);
   }).then(result => {
-    var stats = isBuffer ? { size: file.length } : fs.statSync(file);
-    return exports.formatImageResponse(result.key, 'image/jpeg', stats["size"], result.ETag)
-  })
-}
+    const stats = isBuffer ? { size: file.length } : fs.statSync(file);
+    return exports.formatImageResponse(result.key, 'image/jpeg', stats['size'], result.ETag);
+  });
+};
 
 exports.upload = async (fieldName, req, res, highResConversion) => {
   const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
@@ -55,7 +54,7 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
 
   await new Promise((resolve, reject) => {
     multer({
-      storage: storage.multerStorage(width, height, quality, highResConversion),
+      storage: storage.multerStorage(width, height, quality, highResConversion, resolve, reject),
       limits: {
         fileSize: 8 * 1024 * 1024 // 8MB
       }
@@ -66,6 +65,6 @@ exports.upload = async (fieldName, req, res, highResConversion) => {
         resolve();
       }
     });
-  })
+  });
 };
 

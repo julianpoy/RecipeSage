@@ -28,11 +28,15 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-sequelize.authenticate().then(() => {
-  console.log('Database connection established');
-}).catch((error) => {
-  console.error('Unable to connect to the database:', error);
-});
+const authPromise = sequelize.authenticate();
+
+if (process.env.NODE_ENV !== 'test') {
+  authPromise.then(() => {
+    console.log('Database connection established');
+  }).catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });
+}
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

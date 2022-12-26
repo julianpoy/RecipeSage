@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var MiddlewareService = require('../services/middleware');
-var GripService = require('../services/grip');
+const MiddlewareService = require('../services/middleware');
+const GripService = require('../services/grip');
 
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 
@@ -15,7 +15,7 @@ router.all(
       return;
     }
 
-    var ws = GripService.expressGrip.getWsContext(res);
+    const ws = GripService.expressGrip.getWsContext(res);
 
     // If this is a new connection, accept it and subscribe it to a channel
     if (ws.isOpening()) {
@@ -25,7 +25,7 @@ router.all(
     }
 
     while (ws.canRecv()) {
-      var message;
+      let message;
 
       try {
         message = ws.recv();

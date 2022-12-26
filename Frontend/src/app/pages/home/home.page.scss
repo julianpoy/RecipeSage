@@ -45,10 +45,6 @@
   --padding: 8px;
   --image-size: 80px;
 
-  @media only screen and (min-width: $desktop-breakpoint) {
-    --image-size: 200px;
-  }
-
   display: grid;
   grid-template-columns: var(--image-size) auto;
   height: calc(var(--image-size) + calc(var(--padding) * 2));
@@ -60,11 +56,21 @@
     background-color: var(--ion-background-tint-color);
   }
 
+  &.no-image {
+    --image-size: 80px;
+    grid-template-columns: 0 auto;
+  }
+
+  @media only screen and (min-width: $desktop-breakpoint) {
+    --image-size: 200px;
+  }
+
   img {
     width: var(--image-size);
     height: var(--image-size);
     margin-bottom: var(--padding);
     margin-top: var(--padding);
+    object-fit: cover;
   }
 
   .recipe-item-content {
@@ -152,6 +158,7 @@
     img {
       width: var(--image-size);
       height: var(--image-size);
+      object-fit: cover;
     }
 
     .recipe-card-content {

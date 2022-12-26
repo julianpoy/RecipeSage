@@ -3,13 +3,16 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const Sentry = require('@sentry/node');
 const he = require('he');
+const url = require('url');
+const { dedent } = require('ts-dedent');
+const HttpsProxyAgent = require('https-proxy-agent');
 
 const puppeteer = require('puppeteer-core');
 
-const jsdom = require("jsdom");
+const jsdom = require('jsdom');
 const RecipeClipper = require('@julianpoy/recipe-clipper');
 
-const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
 const sanitizeHtml = require('sanitize-html');
 
 const disconnectPuppeteer = (browser) => {
@@ -23,11 +26,26 @@ const disconnectPuppeteer = (browser) => {
 const clipRecipe = async clipUrl => {
   let browser;
   try {
+    let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
+
+    if (process.env.CLIP_PROXY_URL) {
+      const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
+      console.log(proxyUrl);
+      browserWSEndpoint += `&--proxy-server="https=${proxyUrl.host}"`;
+    }
+
     browser = await puppeteer.connect({
-      browserWSEndpoint: `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`
+      browserWSEndpoint,
     });
 
     const page = await browser.newPage();
+
+    if (process.env.CLIP_PROXY_USERNAME && process.env.CLIP_PROXY_PASSWORD) {
+      await page.authenticate({
+        username: process.env.CLIP_PROXY_USERNAME,
+        password: process.env.CLIP_PROXY_PASSWORD,
+      });
+    }
 
     await page.setBypassCSP(true);
 
@@ -50,8 +68,8 @@ const clipRecipe = async clipUrl => {
             body: text
           });
         } catch(e) {
-          console.log("Error while classifying", e);
-          request.abort();
+          console.log('Error while classifying', e);
+          interceptedRequest.abort();
         }
       } else {
         interceptedRequest.continue();
@@ -60,8 +78,8 @@ const clipRecipe = async clipUrl => {
 
     try {
       await page.goto(clipUrl, {
-        waitUntil: "networkidle2",
-        timeout: 25000
+        waitUntil: 'networkidle2',
+        timeout: 20000
       });
     } catch(err) {
       err.status = 400;
@@ -74,7 +92,7 @@ const clipRecipe = async clipUrl => {
       throw err;
     }
 
-    await page.evaluate(`() => {
+    await page.evaluate(dedent`() => {
       try {
         // Force lazyload for content listening to scroll
         window.scrollTo(0, document.body.scrollHeight);
@@ -89,6 +107,7 @@ const clipRecipe = async clipUrl => {
 
     await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
     const recipeData = await page.evaluate((interceptUrl) => {
+      // eslint-disable-next-line no-undef
       return window.RecipeClipper.clipRecipe({
         mlClassifyEndpoint: interceptUrl,
       });
@@ -105,11 +124,26 @@ const clipRecipe = async clipUrl => {
 };
 
 const replaceBrWithBreak = (html) => {
-  return html.replaceAll(new RegExp("<br( \/)?>", 'g'), '\n');
-}
+  return html.replaceAll(new RegExp(/<br( \/)?>/, 'g'), '\n');
+};
 
-const clipRecipeJSDOM = async url => {
-  const response = await fetch(url);
+const clipRecipeJSDOM = async clipUrl => {
+  const opts = {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0',
+    },
+  };
+
+  if (process.env.CLIP_PROXY_URL) {
+    const proxyUrl = url.parse(`http://${process.env.CLIP_PROXY_HOST}`);
+    if (process.env.CLIP_PROXY_PASSWORD && process.env.CLIP_PROXY_PASSWORD) {
+      proxyUrl.auth = `${process.env.CLIP_PROXY_USERNAME}:${process.env.CLIP_PROXY_PASSWORD}`;
+    }
+
+    opts.agent = new HttpsProxyAgent(proxyUrl);
+  }
+
+  const response = await fetch(clipUrl, opts);
 
   const document = await response.text();
 
@@ -135,47 +169,38 @@ const clipRecipeJSDOM = async url => {
   });
 };
 
-const objDiffKeys = (obj1, obj2) => {
-  obj1 = obj1 || {};
-  obj2 = obj2 || {};
-
-  const keys = [...new Set([
-    ...Object.keys(obj1),
-    ...Object.keys(obj2),
-  ])];
-
-  return keys.filter(key => obj1[key] !== obj2[key]);
-}
-
 router.get('/', async (req, res, next) => {
   try {
-    const url = (req.query.url || "").trim();
+    const url = (req.query.url || '').trim();
     if (!url) {
-      return res.status(400).send("Must provide a URL");
+      return res.status(400).send('Must provide a URL');
     }
 
-    const [clipRecipeResult, clipRecipeJSDOMResult] = await Promise.allSettled([
-      clipRecipe(url),
-      clipRecipeJSDOM(url),
-    ]);
-
-    const recipeData = clipRecipeResult.value || {};
-    const recipeDataJSDOM = clipRecipeJSDOMResult.value || {};
-
-    const differentKeys = objDiffKeys(recipeData, recipeDataJSDOM);
-    const diff = differentKeys.reduce((acc, key) => {
-      acc[key] = {
-        recipeData: recipeData[key],
-        recipeDataJSDOM: recipeDataJSDOM[key],
-      }
-      return acc;
-    }, {});
-
-    // Merge results (browser overrides JSDOM due to accuracy)
-    const results = recipeDataJSDOM;
-    Object.entries(recipeData).forEach((entry) => {
-      if(entry[1]) results[entry[0]] = entry[1];
+    const recipeDataBrowser = await clipRecipe(url).catch((e) => {
+      console.log(e);
+      Sentry.captureException(e);
     });
+
+    let results = recipeDataBrowser;
+    if (
+      !recipeDataBrowser ||
+      !recipeDataBrowser.ingredients ||
+      !recipeDataBrowser.instructions
+    ) {
+      const recipeDataJSDOM = await clipRecipeJSDOM(url).catch((e) => {
+        console.log(e);
+        Sentry.captureException(e);
+      });
+
+      if (recipeDataJSDOM) {
+        results = recipeDataJSDOM;
+
+        // Merge results (browser overrides JSDOM due to accuracy)
+        Object.entries(recipeDataBrowser || {}).forEach((entry) => {
+          if(entry[1]) results[entry[0]] = entry[1];
+        });
+      }
+    }
 
     // Decode all html entities from fields
     Object.entries(results).forEach((entry) => {

@@ -65,20 +65,36 @@ export class HomePopoverPage {
   async openLabelFilter() {
     const nullMessage = await this.translate.get('pages.homepopover.labelNull').toPromise();
 
+    const options = this.labels.map(label => ({
+      title: `${label.title} (${label.recipeCount})`,
+      value: label.title,
+      selected: this.selectedLabels.indexOf(label.title) > -1
+    }));
+
+    const unlabeledTitle = await this.translate.get('pages.homepopover.unlabeled').toPromise();
+    // Do not add unlabeled option if no labels are present
+    if (options.length) options.unshift({
+      title: unlabeledTitle,
+      value: 'unlabeled',
+      selected: this.selectedLabels.indexOf('unlabeled') > -1
+    });
+
     const labelFilterPopover = await this.popoverCtrl.create({
       component: ResettableSelectPopoverPage,
       componentProps: {
-        options: this.labels.map(label => ({
-          title: `${label.title} (${label.recipeCount})`,
-          value: label.title,
-          selected: this.selectedLabels.indexOf(label.title) > -1
-        })),
+        options,
         nullMessage
       }
     });
     labelFilterPopover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      const unlabeledOnly = data.selectedLabels?.includes('unlabeled');
+
+      if (unlabeledOnly) {
+        this.selectedLabels.splice(0, this.selectedLabels.length, 'unlabeled');
+      } else {
+        this.selectedLabels.splice(0, this.selectedLabels.length, ...data.selectedLabels);
+      }
 
       setTimeout(() => {
         this.dismiss(true);

@@ -1,30 +1,26 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-let fs = require('fs-extra');
-let mdb = require('mdb');
-let extract = require('extract-zip');
+const fs = require('fs-extra');
+const extract = require('extract-zip');
 const xmljs = require('xml-js');
 
-var Op = require("sequelize").Op;
-var SQ = require('./models').sequelize;
-var User = require('./models').User;
-var Recipe = require('./models').Recipe;
-var FCMToken = require('./models').FCMToken;
-var Label = require('./models').Label;
-var Recipe_Label = require('./models').Recipe_Label;
-var Recipe_Image = require('./models').Recipe_Image;
-var Image = require('./models').Image;
+const SQ = require('./models').sequelize;
+const Recipe = require('./models').Recipe;
+const Label = require('./models').Label;
+const Recipe_Label = require('./models').Recipe_Label;
+const Recipe_Image = require('./models').Recipe_Image;
+const Image = require('./models').Image;
 
-var UtilService = require('./services/util');
+const UtilService = require('./services/util');
 const StorageService = require('./services/storage');
 
-let runConfig = {
+const runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
   excludeImages: process.argv.indexOf('--excludeImages') > -1,
   multipleImages: process.argv.indexOf('--multipleImages') > -1,
-}
+};
 
 const logError = e => {
   console.error(e);
@@ -34,23 +30,22 @@ const logError = e => {
     scope.setExtra('user', runConfig.userId);
     Sentry.captureException(e);
   });
-}
+};
 
-const cleanup = () {
+const cleanup = () => {
   fs.removeSync(zipPath);
   fs.removeSync(extractPath);
-}
+};
 
 const exit = (status) => {
   Sentry.close(2000);
 
   cleanup();
   process.exit(status);
-}
+};
 
-let isCompressed = true; // FDXZ vs FDX
-let zipPath = runConfig.path;
-let extractPath = zipPath + '-extract';
+const zipPath = runConfig.path;
+const extractPath = zipPath + '-extract';
 let xmlPath;
 
 // Convert input to array if necessary
@@ -71,37 +66,34 @@ function fetchDeepProp(base, propName) {
 
 async function main() {
   try {
-    await (new Promise((resolve, reject) => {
-      extract(zipPath, { dir: extractPath }, function (err) {
-        if (err) {
-          if (err.message === 'end of central directory record signature not found') {
-            isCompressed = false;
-            xmlPath = zipPath;
-            resolve();
-          } else {
-            reject(err);
-          }
-        } else {
-          xmlPath = extractPath + '/Data.xml';
-          resolve();
-        }
-      });
-    }));
+    try {
+      await extract(zipPath, { dir: extractPath });
+
+      // Was compressed, therefore was likely FDXZ
+      xmlPath = extractPath + '/Data.xml';
+    } catch(e) {
+      if (e.message === 'end of central directory record signature not found') {
+        // Was not compressed - likely just FDX instead of FDXZ
+        xmlPath = zipPath;
+      } else {
+        throw e;
+      }
+    }
 
     let xml;
     let data;
     try {
-      xml = fs.readFileSync(xmlPath, "utf8");
+      xml = fs.readFileSync(xmlPath, 'utf8');
       data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
     } catch (err) {
-      if (err.message.toLowerCase().includes("invalid attribute name")) {
+      if (err.message.toLowerCase().includes('invalid attribute name')) {
         try {
           xml = xml.replace(/<RecipeNutrition.*\/>/g, '');
           data = JSON.parse(xmljs.xml2json(xml, { compact: true, spaces: 4 }));
         } catch (err) {
           fs.mkdirSync('/tmp/chefbook-fail-dump', { recursive: true });
           fs.copyFileSync(xmlPath, `/tmp/chefbook-fail-dump/fdxz-fail-${Math.floor(Math.random() * 10 ** 10)}.xml`);
-          err.devmsg = "tried to replace RecipeNutrition, but failed";
+          err.devmsg = 'tried to replace RecipeNutrition, but failed';
           err.status = 3; // Unrecognized file, could not parse
           throw err;
         }
@@ -125,42 +117,42 @@ async function main() {
       }, {});
 
     const pendingRecipes = fetchDeepProp(fdxData, 'Recipe').map(recipe => {
-      let description = ''
-      let notes = []
+      let description = '';
+      let notes = [];
 
       // Add comments to notes
-      if (recipe._attributes.Comments) notes.push(recipe._attributes.Comments)
+      if (recipe._attributes.Comments) notes.push(recipe._attributes.Comments);
 
       let recipeTips = fetchDeepProp(recipe, 'RecipeTip')
-          .filter(lcbTip => lcbTip && lcbTip._text)
-          .map(lcbTip => lcbTip._text)
+        .filter(lcbTip => lcbTip && lcbTip._text)
+        .map(lcbTip => lcbTip._text);
 
       const authorNotes = fetchDeepProp(recipe, 'RecipeAuthorNote').map(authorNote => authorNote._text);
 
       // Add "author notes" to description or notes depending on length
-      if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0]
-      else if (authorNotes.length > 0) notes = [...notes, ...authorNotes]
+      if (authorNotes.length == 1 && authorNotes[0].length <= 150) description = authorNotes[0];
+      else if (authorNotes.length > 0) notes = [...notes, ...authorNotes];
 
       // Add recipeTips and join with double return
-      notes = [...notes, ...recipeTips].join('\r\n\r\n')
+      notes = [...notes, ...recipeTips].join('\r\n\r\n');
 
-      let totalTime = (recipe._attributes.ReadyInTime || '').toString().trim()
+      let totalTime = (recipe._attributes.ReadyInTime || '').toString().trim();
       if (recipe._attributes.CookingTime) {
         totalTime += ` (${(recipe._attributes.CookingTime || '').toString().trim()} cooking time)`;
       }
       totalTime = totalTime.trim();
 
       let ingredients = fetchDeepProp(recipe, 'RecipeIngredient')
-          .map(lcbIngredient => lcbIngredient._attributes)
-          .filter(lcbIngredient => lcbIngredient)
-          .map(lcbIngredient => `${lcbIngredient.Quantity || ''} ${lcbIngredient.Unit || ''} ${lcbIngredient.Ingredient || ''}`)
-          .join("\r\n")
+        .map(lcbIngredient => lcbIngredient._attributes)
+        .filter(lcbIngredient => lcbIngredient)
+        .map(lcbIngredient => `${lcbIngredient.Quantity || ''} ${lcbIngredient.Unit || ''} ${lcbIngredient.Ingredient || ''}`)
+        .join('\r\n');
 
       let instructions = fetchDeepProp(recipe, 'RecipeProcedure')
         .map(lcbInstruction => lcbInstruction.ProcedureText._text)
-        .join("\r\n")
+        .join('\r\n');
 
-      let yield = recipe._attributes.Servings && recipe._attributes.Servings.length > 0 ? `${recipe._attributes.Servings} servings` : null;
+      let rYield = recipe._attributes.Servings && recipe._attributes.Servings.length > 0 ? `${recipe._attributes.Servings} servings` : null;
 
       let lcbRecipeLabels = [
         ...new Set([
@@ -168,14 +160,14 @@ async function main() {
           ...[lcbCookbookNamesById[recipe.CookbookID] || ''].map(el => el.trim().toLowerCase())
         ])
       ].filter(el => el && el.length > 0)
-       .map(el => UtilService.cleanLabelTitle(el));
+        .map(el => UtilService.cleanLabelTitle(el));
 
       return {
         model: {
           userId: runConfig.userId,
           title: recipe._attributes.Name,
           description,
-          yield,
+          yield: rYield,
           activeTime: recipe._attributes.PreparationTime,
           totalTime,
           source: recipe._attributes.Source,
@@ -191,8 +183,8 @@ async function main() {
         original: recipe,
         lcbRecipeLabels,
         images: []
-      }
-    })
+      };
+    });
 
     await (SQ.transaction(async t => {
       let recipesWithImages = runConfig.excludeImages ?
@@ -201,7 +193,7 @@ async function main() {
           return pendingRecipe;
         }).filter(e => e.imageRefs.length > 0);
 
-      var i, chunkedRecipesWithImages = [], chunk = 50;
+      let i, chunkedRecipesWithImages = [], chunk = 50;
       for (i = 0; i < recipesWithImages.length; i += chunk) {
         chunkedRecipesWithImages.push(recipesWithImages.slice(i, i + chunk));
       }
@@ -219,28 +211,28 @@ async function main() {
               if (imageRef._text) {
                 return StorageService.sendFileToStorage(Buffer.from(imageRef._text, 'base64'), true).then(image => {
                   lcbRecipe.images.push(image);
-                }).catch(() => { })
+                }).catch(() => { });
               }
 
               // let possibleFileNameRegex = imageFileNames.join('|')
               let possibleFileNameRegex = imageRef._attributes.FileName;
 
-              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'))
+              let possibleImageFiles = UtilService.findFilesByRegex(extractPath, new RegExp(`(${possibleFileNameRegex})$`, 'i'));
 
               if (possibleImageFiles.length == 0) return;
 
               return StorageService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
                 lcbRecipe.images.push(image);
-              }).catch(() => { })
+              }).catch(() => { });
             }));
-          }))
-        })
-      }, Promise.resolve())
+          }));
+        });
+      }, Promise.resolve());
 
       let recipes = await Recipe.bulkCreate(pendingRecipes.map(el => el.model), {
         returning: true,
         transaction: t
-      })
+      });
 
       const pendingRecipeImages = [];
       recipes.map((recipe, idx) => {
@@ -253,8 +245,8 @@ async function main() {
         pendingRecipes[idx].lcbRecipeLabels.map(lcbLabelName => {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
-        })
-      })
+        });
+      });
 
       await Promise.all(Object.keys(labelMap).map(lcbLabelName => {
         return Label.findOrCreate({
@@ -268,13 +260,13 @@ async function main() {
             return {
               labelId: labels[0].id,
               recipeId
-            }
+            };
           }), {
             ignoreDuplicates: true,
             transaction: t
-          })
+          });
         });
-      }))
+      }));
 
       const savedImages = await Image.bulkCreate(pendingRecipeImages.map(p => ({
         userId: runConfig.userId,
@@ -293,11 +285,11 @@ async function main() {
       })), {
         transaction: t
       });
-    }))
+    }));
 
     exit(0);
   } catch (e) {
-    console.log("Couldn't handle lcb upload 2", e)
+    console.log('Couldn\'t handle lcb upload 2', e);
     logError(e);
 
     exit(e?.status || 1);
