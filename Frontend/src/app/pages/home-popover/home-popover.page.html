@@ -60,7 +60,10 @@
 
   <ion-item lines="full" *ngIf="!guestMode" class="cursor-pointer" (click)="openRatingFilter()" button detail="false">
     <ion-label>{{ 'pages.homepopover.options.filterByRating' | translate }}</ion-label>
-    <ion-badge *ngIf="rating > 0" slot="end">{{ratingFilter}}{{rating}}</ion-badge>
+    <ion-badge *ngIf="ratingFilter?.length" slot="end">
+      {{ratingFilter.length}}
+      <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+    </ion-badge>
     <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
   </ion-item>
 
