@@ -10,7 +10,14 @@ export class RatingFilterPopoverComponent {
 
   possibleRatings: number[] = [1,2,3,4,5];
 
-  @Input() ratingFilter: (number|null)[];
+  _ratingFilter: (number|null)[] = [];
+  @Input()
+  set ratingFilter(filter: (number|null)[]) {
+    this._ratingFilter = [...filter];
+  }
+  get ratingFilter() {
+    return this._ratingFilter;
+  }
 
   constructor(private popoverCtrl: PopoverController) {}
 
