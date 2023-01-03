@@ -189,6 +189,7 @@
   "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "Dettagli Ricetta",
+  "pages.recipeDetails.rating": "Valutazione",
   "pages.recipeDetails.source": "Fonte",
   "pages.recipeDetails.activeTime": "Tempo di Preparazione",
   "pages.recipeDetails.totalTime": "Tempo Totale",
@@ -614,6 +615,7 @@
   "pages.editRecipe.input.ingredients": "Ingredienti",
   "pages.editRecipe.input.instructions": "Procedimento",
   "pages.editRecipe.input.notes": "Note",
+  "pages.editRecipe.input.rating": "Valutazione",
 
   "pages.editRecipe.labelNotice": "Potrai aggiungere categorie/etichette dopo la creazione della ricetta.",
   "pages.editRecipe.save": "Salva",

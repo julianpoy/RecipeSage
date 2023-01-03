@@ -44,7 +44,7 @@ const parseRatingFilter = (ratingFilter) => {
   return ratingFilter
     ?.split(',')
     ?.filter(el => el !== 'null')
-    ?.map(el => parseInt(el, 10))
+    ?.map(el => parseInt(el, 10));
 };
 
 // TODO: Remove this. Legacy frontend compat
@@ -584,7 +584,7 @@ router.get(
 
       ratingClause.rating = {
         [Op.or]: choices
-      }
+      };
     }
 
     const recipes = await Recipe.findAll({
