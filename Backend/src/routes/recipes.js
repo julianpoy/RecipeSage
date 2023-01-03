@@ -117,7 +117,7 @@ router.post(
   '/',
   joiValidator(Joi.object({
     body: Joi.object({
-      title: Joi.string().optional(), // TODO: change to required once frontend no longer needs PreconditionFailed
+      title: Joi.string().allow('').optional(), // TODO: change to required once frontend no longer needs PreconditionFailed
       description: Joi.string().allow('').optional(),
       yield: Joi.string().allow('').optional(),
       activeTime: Joi.string().allow('').optional(),
