@@ -4,5 +4,9 @@
 
   > ion-icon {
     margin-right: 2px;
+
+    &.pointer {
+      cursor: pointer;
+    }
   }
 }

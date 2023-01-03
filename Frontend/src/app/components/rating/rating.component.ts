@@ -19,6 +19,8 @@ export class RatingComponent {
     return this._rating;
   }
 
+  @Input() enableEdit: boolean = false;
+
   ratingVisual = new Array<string>(5).fill('star-outline');
 
   constructor() {}
@@ -30,6 +32,8 @@ export class RatingComponent {
   }
 
   setRating(rating: number) {
+    if (!this.enableEdit) return;
+
     if (rating === this.rating) rating = 0;
 
     this.ratingChanged.emit(rating);

@@ -131,7 +131,7 @@
         <div class="rating-title">
           {{ 'pages.editRecipe.input.rating' | translate }}
         </div>
-        <rating [rating]="recipe.rating" (ratingChanged)="recipe.rating = $event"></rating>
+        <rating [rating]="recipe.rating" (ratingChanged)="recipe.rating = $event" [enableEdit]="true"></rating>
       </div>
     </div>
 
