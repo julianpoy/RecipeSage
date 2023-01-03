@@ -130,7 +130,7 @@
   "pages.home.errors.inboxEmpty.message1": "Dein Posteingang für Rezepte ist leer.",
   "pages.home.errors.inboxEmpty.message2": "Wenn dir jemand ein Rezept schickt, wird es hier angezeigt!",
 
-  "pages.home.errors.noResultsLabelFilter": "Keine Rezepte, die dem aktuellen Etikettenfilter entsprechen",
+  "pages.home.errors.noResultsFilters": "Keine Rezepte mit den aktuellen Filtern",
 
   "pages.home.errors.noSearchResults.message1": "Keine Suchergebnisse.",
   "pages.home.errors.noSearchResults.message2": "Die Suche beinhaltet:",
@@ -174,6 +174,7 @@
   "pages.homepopover.options.sortBy.updatedNewest": "Aktualisiert (neueste zuerst)",
   "pages.homepopover.options.sortBy.updatedOldest": "Aktualisiert (älteste zuerst)",
 
+  "pages.homepopover.options.filterByRating": "Nach Bewertung filtern",
   "pages.homepopover.options.filterByLabel": "Nach Label filtern",
   "pages.homepopover.options.matchAllLabels": "Alle Label zuordnen",
   "pages.homepopover.options.unselectAllRecipes": "Alle Rezepte abwählen",
@@ -1193,6 +1194,14 @@
 
   "components.tos.warning": "Wenn du fortfährst, erklärst du dich mit den RecipeSage",
   "components.tos.title": "Nutzungsbedingungen einverstanden",
+
+  "====== Components.RatingFilter ======": "",
+
+  "components.ratingFilter.title": "Filtern nach Bewertung",
+
+  "components.ratingFilter.unrated": "Keine Bewertung",
+
+  "components.ratingFilter.reset": "Alle abwählen",
 
   "====== Modals.ScaleRecipe ======": "",
 

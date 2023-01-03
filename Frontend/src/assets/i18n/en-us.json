@@ -131,7 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "Your recipe inbox is empty.",
   "pages.home.errors.inboxEmpty.message2": "When someone sends you a recipe, it will show up here!",
 
-  "pages.home.errors.noResultsLabelFilter": "No recipes matching the current label filter",
+  "pages.home.errors.noResultsFilters": "No recipes matching the current filters",
 
   "pages.home.errors.noSearchResults.message1": "No search results.",
   "pages.home.errors.noSearchResults.message2": "Search includes:",
@@ -175,6 +175,7 @@
   "pages.homepopover.options.sortBy.updatedNewest": "Updated (newest first)",
   "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
 
+  "pages.homepopover.options.filterByRating": "Filter by Rating",
   "pages.homepopover.options.filterByLabel": "Filter by Label",
   "pages.homepopover.options.matchAllLabels": "Match All Labels",
   "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
@@ -188,6 +189,7 @@
   "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "Recipe Details",
+  "pages.recipeDetails.rating": "Rating",
   "pages.recipeDetails.source": "Source",
   "pages.recipeDetails.activeTime": "Active Time",
   "pages.recipeDetails.totalTime": "Total Time",
@@ -613,6 +615,7 @@
   "pages.editRecipe.input.ingredients": "Ingredients",
   "pages.editRecipe.input.instructions": "Instructions",
   "pages.editRecipe.input.notes": "Notes",
+  "pages.editRecipe.input.rating": "Rating",
 
   "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
   "pages.editRecipe.save": "Save",
@@ -1194,6 +1197,14 @@
 
   "components.tos.warning": "By continuing, you're agreeing to the RecipeSage",
   "components.tos.title": "Terms of Service",
+
+  "====== Components.RatingFilter ======": "",
+
+  "components.ratingFilter.title": "Filter by Rating",
+
+  "components.ratingFilter.unrated": "Unrated",
+
+  "components.ratingFilter.reset": "Reset",
 
   "====== Modals.ScaleRecipe ======": "",
 
