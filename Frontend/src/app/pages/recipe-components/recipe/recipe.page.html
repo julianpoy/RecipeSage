@@ -29,8 +29,14 @@
       <ion-label>
         <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
 
-        <ion-grid class="meta metacontainer-desktop" showWhen="core" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
+        <ion-grid class="meta metacontainer-desktop" showWhen="core" *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
           <ion-row class="ion-justify-content-start">
+            <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
+              <p>
+                <b>{{ 'pages.recipeDetails.rating' | translate }}:</b>
+                <rating [rating]="recipe.rating"></rating>
+              </p>
+            </ion-col>
             <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
@@ -53,9 +59,15 @@
       </ion-label>
     </ion-item>
 
-    <div class="metacontainer-mobile ion-padding-start ion-padding-end" *ngIf="recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
+    <div class="metacontainer-mobile ion-padding-start ion-padding-end" *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
       <ion-grid class="meta">
         <ion-row class="ion-justify-content-start">
+          <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
+            <p>
+              <b>{{ 'pages.recipeDetails.rating' | translate }}:</b>
+              <rating [rating]="recipe.rating"></rating>
+            </p>
+          </ion-col>
           <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
             <p>
               <b>{{ 'pages.recipeDetails.source' | translate }}: </b>

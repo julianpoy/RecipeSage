@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { EditRecipePage } from './edit-recipe.page';
 import { MultiImageUploadModule } from '../../../components/multi-image-upload/multi-image-upload.module';
+import {RatingModule} from '@/components/rating/rating.module';
 import { EditRecipePopoverPageModule } from '../edit-recipe-popover/edit-recipe-popover.module';
 
 import { GlobalModule } from '@/global.module';
@@ -28,6 +29,7 @@ import { GlobalModule } from '@/global.module';
     ]),
     MultiImageUploadModule,
     EditRecipePopoverPageModule,
+    RatingModule,
   ],
 })
 export class EditRecipePageModule {}

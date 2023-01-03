@@ -15,6 +15,7 @@ import { ShareModalPageModule } from '@/pages/share-modal/share-modal.module';
 import { ImageViewerModule } from '@/modals/image-viewer/image-viewer.module';
 import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
 import { GlobalModule } from '@/global.module';
+import {RatingModule} from '@/components/rating/rating.module';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { GlobalModule } from '@/global.module';
     ShareModalPageModule,
     ImageViewerModule,
     ScaleRecipeModule,
+    RatingModule,
   ],
 })
 export class RecipePageModule {}

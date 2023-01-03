@@ -1,0 +1,12 @@
+.rating-stars {
+  display: inline-flex;
+  vertical-align: middle;
+
+  > ion-icon {
+    margin-right: 2px;
+
+    &.pointer {
+      cursor: pointer;
+    }
+  }
+}
