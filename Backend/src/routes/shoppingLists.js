@@ -44,6 +44,8 @@ router.post(
           }
         );
       }
+
+      return shoppingList;
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
