@@ -42,6 +42,8 @@ router.post(
           transaction,
         }
       );
+
+      return mealPlan;
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {

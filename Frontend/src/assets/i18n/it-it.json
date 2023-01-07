@@ -131,7 +131,7 @@
   "pages.home.errors.inboxEmpty.message1": "La tua inbox delle ricette è vuota.",
   "pages.home.errors.inboxEmpty.message2": "Quando qualcuno ti invia una ricetta, la troverai qui!",
 
-  "pages.home.errors.noResultsLabelFilter": "Nessuna ricetta corrispondente al filtro etichette corrente",
+  "pages.home.errors.noResultsFilters": "Nessuna ricetta corrispondente ai filtri attuali",
 
   "pages.home.errors.noSearchResults.message1": "Nessun risultato di ricerca.",
   "pages.home.errors.noSearchResults.message2": "La ricerca include:",
@@ -175,6 +175,7 @@
   "pages.homepopover.options.sortBy.updatedNewest": "Aggiornamento (dalla più recente)",
   "pages.homepopover.options.sortBy.updatedOldest": "Aggiornamento (dalla meno recente)",
 
+  "pages.homepopover.options.filterByRating": "Filtra per valutazione",
   "pages.homepopover.options.filterByLabel": "Filtra per Etichetta",
   "pages.homepopover.options.matchAllLabels": "Cerca per Etichetta",
   "pages.homepopover.options.unselectAllRecipes": "Deseleziona Tutte le Ricette",
@@ -188,6 +189,7 @@
   "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "Dettagli Ricetta",
+  "pages.recipeDetails.rating": "Valutazione",
   "pages.recipeDetails.source": "Fonte",
   "pages.recipeDetails.activeTime": "Tempo di Preparazione",
   "pages.recipeDetails.totalTime": "Tempo Totale",
@@ -613,6 +615,7 @@
   "pages.editRecipe.input.ingredients": "Ingredienti",
   "pages.editRecipe.input.instructions": "Procedimento",
   "pages.editRecipe.input.notes": "Note",
+  "pages.editRecipe.input.rating": "Valutazione",
 
   "pages.editRecipe.labelNotice": "Potrai aggiungere categorie/etichette dopo la creazione della ricetta.",
   "pages.editRecipe.save": "Salva",
@@ -1194,6 +1197,14 @@
 
   "components.tos.warning": "Proseguendo, si accetta l'informativa di RecipeSage",
   "components.tos.title": "Sulla Privacy",
+
+  "====== Components.RatingFilter ======": "",
+
+  "components.ratingFilter.title": "Filtra per valutazione",
+
+  "components.ratingFilter.unrated": "Senza valutazione",
+
+  "components.ratingFilter.reset": "Deselezionare tutti",
 
   "====== Modals.ScaleRecipe ======": "",
 

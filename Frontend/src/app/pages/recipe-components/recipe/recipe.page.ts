@@ -51,6 +51,8 @@ export class RecipePage {
   pendingLabel = '';
   showAutocomplete = false;
 
+  ratingVisual = new Array<string>(5).fill('star-outline');
+
   isLoggedIn: boolean;
 
   constructor(
@@ -149,6 +151,8 @@ export class RecipePage {
     this.applyScale();
 
     this.selectedLabels = this.recipe.labels.map(label => label.title);
+
+    this.updateRatingVisual();
   }
 
   async loadLabels() {
@@ -166,6 +170,12 @@ export class RecipePage {
     }
 
     this.existingLabels.sort((a, b) => a.localeCompare(b));
+  }
+
+  updateRatingVisual() {
+    this.ratingVisual = new Array<string>(5)
+      .fill('star', 0, this.recipe.rating)
+      .fill('star-outline', this.recipe.rating, 5);
   }
 
   async presentPopover(event) {

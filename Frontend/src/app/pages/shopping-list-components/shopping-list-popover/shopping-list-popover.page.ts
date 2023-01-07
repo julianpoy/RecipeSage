@@ -101,7 +101,7 @@ export class ShoppingListPopoverPage {
     const header = await this.translate.get('pages.shoppingListPopover.deleteList.header').toPromise();
     const message = await this.translate.get('pages.shoppingListPopover.deleteList.message').toPromise();
     const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.del').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
