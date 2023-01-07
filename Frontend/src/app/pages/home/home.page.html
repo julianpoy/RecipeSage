@@ -157,7 +157,7 @@
     </div>
 
     <div *ngIf="!loading">
-      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && rating === null">
+      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
@@ -167,7 +167,7 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && rating === null">
+      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
@@ -214,7 +214,7 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && (selectedLabels.length !== 0 || rating !== null)">
+      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && (selectedLabels.length !== 0 || ratingFilter.length)">
         <ion-icon name="funnel" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">
           <p>
