@@ -165,6 +165,9 @@ jobs:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
       - run:
+          name: set-service-worker-version
+          command: sed -i "s/APP_VERSION = 'development';/APP_VERSION = '${CIRCLE_TAG:=stg}';/" www/service-worker.js
+      - run:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
