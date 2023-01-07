@@ -192,7 +192,6 @@ workflows:
   build_and_test:
     jobs:
       - test_backend:
-          context: "RS API Env Vars"
           filters:
             tags:
               only: /.*/
