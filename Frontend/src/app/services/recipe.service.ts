@@ -11,8 +11,9 @@ import { Image } from './image.service';
 
 import { parseIngredients, parseInstructions, parseNotes } from '../../../../SharedUtils/src';
 
-export interface Recipe {
-  id: string;
+export type RecipeFolderName = 'main' | 'inbox';
+
+export interface BaseRecipe {
   title: string;
   description: string;
   yield: string;
@@ -23,35 +24,37 @@ export interface Recipe {
   notes: string;
   ingredients: string;
   instructions: string;
+  rating: number;
+}
+
+export interface Recipe extends BaseRecipe {
+  id: string;
   labels: Label[];
-  labels_flatlist: string;
   images: Image[];
-  imageFile: any;
-  imageURL: string;
-  destinationUserEmail: string;
-  fromUser: any;
-  folder: string;
-  score: number;
-  isOwner: boolean | null;
+  image: Image;
+  fromUser?: any;
+  fromUserId: string | null;
+  folder: RecipeFolderName;
+  isOwner?: boolean;
   updatedAt: string;
   createdAt: string;
 }
 
-export interface Ingredient {
+export interface ParsedIngredient {
   content: string;
   originalContent: string;
   isHeader: boolean;
   complete: boolean;
 }
 
-export interface Instruction {
+export interface ParsedInstruction {
   content: string;
   isHeader: boolean;
   complete: boolean;
   count: number;
 }
 
-export interface Note {
+export interface ParsedNote {
   content: string;
   isHeader: boolean;
 }
@@ -85,15 +88,19 @@ export class RecipeService {
   }
 
   fetch(params: {
-    folder?: string,
+    folder?: RecipeFolderName,
     userId?: string,
     sort?: string,
     offset?: number,
     count?: number,
     labels?: string,
     labelIntersection?: boolean,
+    ratingFilter?: string,
   }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
+    return this.httpService.requestWithWrapper<{
+      data: Recipe[],
+      totalCount: number
+    }>(
       `recipes/by-page`,
       'GET',
       null,
@@ -106,8 +113,12 @@ export class RecipeService {
     query: string
     userId?: string,
     labels?: string,
+    rating?: number,
+    ratingFilter?: string,
   }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
+    return this.httpService.requestWithWrapper<{
+      data: Recipe[]
+    }>(
       `recipes/search`,
       'GET',
       null,
@@ -136,7 +147,11 @@ export class RecipeService {
     );
   }
 
-  async create(payload: any, errorHandlers?: ErrorHandlers) {
+  async create(payload: Partial<BaseRecipe> & {
+    title: string,
+    labels?: string[],
+    imageIds?: string[]
+  }, errorHandlers?: ErrorHandlers) {
     const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes`,
       'POST',
@@ -150,22 +165,28 @@ export class RecipeService {
     return response;
   }
 
-  share(payload: {
-    destinationUserEmail: string,
+  async update(payload: Partial<BaseRecipe> & {
+    id: string,
   }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      `recipes`,
-      'POST',
+    const response = await this.httpService.requestWithWrapper<Recipe>(
+      `recipes/${payload.id}`,
+      'PUT',
       payload,
       null,
       errorHandlers
     );
+
+    this.events.publish('recipe:update');
+
+    return response;
   }
 
-  async update(payload: any, errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<Recipe>(
-      `recipes/${payload.id}`,
-      'PUT',
+  async deleteByLabelIds(payload: {
+    labelIds: string[],
+  }, errorHandlers?: ErrorHandlers) {
+    const response = await this.httpService.requestWithWrapper<void>(
+      `recipes/delete-by-labelIds`,
+      'POST',
       payload,
       null,
       errorHandlers
@@ -322,15 +343,15 @@ export class RecipeService {
     );
   }
 
-  parseIngredients(ingredients: string, scale: number, boldify?: boolean): Ingredient[] {
+  parseIngredients(ingredients: string, scale: number, boldify?: boolean): ParsedIngredient[] {
     return parseIngredients(ingredients, scale, boldify);
   }
 
-  parseInstructions(instructions: string): Instruction[] {
+  parseInstructions(instructions: string): ParsedInstruction[] {
     return parseInstructions(instructions);
   }
 
-  parseNotes(notes: string): Note[] {
+  parseNotes(notes: string): ParsedNote[] {
     return parseNotes(notes);
   }
 }

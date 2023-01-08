@@ -42,6 +42,8 @@ router.post(
           transaction,
         }
       );
+
+      return mealPlan;
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
@@ -216,7 +218,7 @@ router.delete(
         });
       }
     } else {
-      await MealPlan.removeCollaborator(res.locals.session.userId);
+      await mealPlan.removeCollaborator(res.locals.session.userId);
     }
 
     res.status(200).json({});

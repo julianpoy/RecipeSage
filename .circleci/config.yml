@@ -107,6 +107,9 @@ jobs:
       - run: # ngx-translate-lint frontend
           name: ngx-translate-lint-frontend
           command: cd Frontend && npm run ngx-translate-lint
+      - run: # typecheck frontend
+          name: typecheck-frontend
+          command: cd Frontend && npx tsc --noemit
       - run: # build frontend
           name: build-frontend
           command: cd Frontend && npm run dist
@@ -162,6 +165,9 @@ jobs:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
       - run:
+          name: set-service-worker-version
+          command: sed -i "s/APP_VERSION = 'development';/APP_VERSION = '${CIRCLE_TAG:=stg}';/" www/service-worker.js
+      - run:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
@@ -186,7 +192,6 @@ workflows:
   build_and_test:
     jobs:
       - test_backend:
-          context: "RS API Env Vars"
           filters:
             tags:
               only: /.*/

@@ -33,7 +33,19 @@ const {
   PreconditionFailed,
   InternalServerError
 } = require('../utils/errors');
+const {joiValidator} = require('../middleware/joiValidator');
+const Joi = require('joi');
 
+const VALID_RECIPE_FOLDERS = ['main', 'inbox'];
+const VALID_RATING_FILTERS = /^(\d|null)(,(\d|null))*$/;
+const VALID_RECIPE_SORT = ['-title', 'createdAt', '-createdAt', 'updatedAt', '-updatedAt'];
+
+const parseRatingFilter = (ratingFilter) => {
+  return ratingFilter
+    ?.split(',')
+    ?.filter(el => el !== 'null')
+    ?.map(el => parseInt(el, 10));
+};
 
 // TODO: Remove this. Legacy frontend compat
 const legacyImageHandler = async (req, res, next) => {
@@ -103,6 +115,23 @@ const applyLegacyImageField = recipe => {
 //Create a new recipe
 router.post(
   '/',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      title: Joi.string().allow('').optional(), // TODO: change to required once frontend no longer needs PreconditionFailed
+      description: Joi.string().allow('').optional(),
+      yield: Joi.string().allow('').optional(),
+      activeTime: Joi.string().allow('').optional(),
+      totalTime: Joi.string().allow('').optional(),
+      source: Joi.string().allow('').optional(),
+      url: Joi.string().allow('').optional(),
+      notes: Joi.string().allow('').optional(),
+      ingredients: Joi.string().allow('').optional(),
+      instructions: Joi.string().allow('').optional(),
+      rating: Joi.number().min(1).max(5).allow(null).optional(),
+      labels: Joi.array().items(Joi.string()).optional(),
+      imageIds: Joi.array().items(Joi.string().uuid()).optional(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user']),
   legacyImageHandler,
@@ -111,9 +140,6 @@ router.post(
     if (!req.body.title || req.body.title.length === 0) {
       throw PreconditionFailed('Recipe title must be provided.');
     }
-
-    // If sending to another user, folder should be inbox. Otherwise, main.
-    const folder = req.body.destinationUserEmail ? 'inbox' : 'main';
 
     const recipe = await SQ.transaction(async transaction => {
       const adjustedTitle = await Recipe.findTitle(res.locals.session.userId, null, req.body.title, transaction);
@@ -130,7 +156,8 @@ router.post(
         notes: req.body.notes || '',
         ingredients: req.body.ingredients || '',
         instructions: req.body.instructions || '',
-        folder: folder
+        rating: req.body.rating || null,
+        folder: 'main'
       }, {
         transaction
       });
@@ -170,7 +197,7 @@ router.post(
         });
       }
 
-      if (req.body.labels && req.body.labels.length > 0 && !req.body.destinationUserEmail) {
+      if (req.body.labels?.length) {
         const sanitizedLabelTitles = req.body.labels.map(title => UtilService.cleanLabelTitle(title || '')).filter(el => el.trim());
         const labelTitles = [...new Set(sanitizedLabelTitles)]; // Dedupe
 
@@ -234,6 +261,18 @@ router.get(
 //Get all of a user's recipes (paginated)
 router.get(
   '/by-page',
+  joiValidator(Joi.object({
+    query: Joi.object({
+      sort: Joi.string().valid(...VALID_RECIPE_SORT).optional(),
+      userId: Joi.string().uuid().optional(),
+      folder: Joi.string().valid(...VALID_RECIPE_FOLDERS).optional(),
+      labels: Joi.string().optional(),
+      labelIntersection: Joi.boolean().optional(),
+      ratingFilter: Joi.string().regex(VALID_RATING_FILTERS).optional(),
+      count: Joi.number().optional(),
+      offset: Joi.number().optional(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user'], true),
   wrapRequestWithErrorHandler(async (req, res) => {
@@ -249,6 +288,7 @@ router.get(
     // Only check for shared items if we're browsing another user's recipes
     if (req.query.userId && myUserId !== req.query.userId) {
       const user = await User.findByPk(req.query.userId);
+      if (!user) throw NotFound('User with that ID not found');
 
       userId = user.id;
 
@@ -309,12 +349,14 @@ router.get(
       return acc;
     }, {});
 
-    const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'fromUserId', 'createdAt', 'updatedAt'];
+    // Fields
+    const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'rating', 'fromUserId', 'createdAt', 'updatedAt'];
     const labelAttributes = ['id', 'title'];
     const imageAttributes = ['id', 'location'];
     const recipeImageAttributes = ['id', 'order'];
     const fromUserAttributes = ['name', 'email'];
 
+    // Building fields
     const recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
     const labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
     const imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
@@ -323,6 +365,7 @@ router.get(
     let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
     if (folder === 'inbox') fields += `, ${fromUserSelect}`;
 
+    // Labeling
     const labelFilterClause = `"Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') })`;
     const labelIntersectionClause = req.query.labelIntersection === 'true' ? `HAVING count("Label") = ${labelFilter.length}` : '';
     const unlabeledClause = unlabeledOnly ? 'AND "Label".id IS NULL' : '';
@@ -330,6 +373,16 @@ router.get(
       LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = "Recipe".id
       LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
     `: '';
+
+    // Rating
+    let ratingClause = '';
+    const ratingFilter = parseRatingFilter(req.query.ratingFilter);
+    if (ratingFilter) {
+      const includeNull = req.query.ratingFilter.includes('null');
+      const nullClause = 'OR "Recipe"."rating" IS NULL';
+      // Must use ANY rather than IN due to https://github.com/sequelize/sequelize/issues/8140
+      ratingClause = `AND ("Recipe"."rating" = ANY($ratingFilter) ${includeNull ? nullClause : ''})`;
+    }
 
     const countQuery = labelFilter.length > 0 ?
       `SELECT "Recipe".id
@@ -339,6 +392,7 @@ router.get(
       AND "Recipe".id = "Recipe_Label"."recipeId"
       AND "Recipe"."userId" = $userId
       AND "Recipe"."folder" = $folder
+      ${ratingClause}
       GROUP BY "Recipe".id
       ${labelIntersectionClause}`
       :
@@ -347,6 +401,7 @@ router.get(
       ${unlabeledJoin}
       WHERE "Recipe"."userId" = $userId
       AND "Recipe"."folder" = $folder
+      ${ratingClause}
       ${unlabeledClause}`;
 
     const fetchQuery = labelFilter.length > 0 ?
@@ -357,6 +412,7 @@ router.get(
       AND "Recipe".id = "Recipe_Label"."recipeId"
       AND "Recipe"."userId" = $userId
       AND "Recipe"."folder" = $folder
+      ${ratingClause}
       GROUP BY "Recipe".id
       ${labelIntersectionClause}
       ORDER BY ${sort}
@@ -375,6 +431,7 @@ router.get(
       ${unlabeledJoin}
       WHERE "Recipe"."userId" = $userId
       AND "Recipe"."folder" = $folder
+      ${ratingClause}
       ${unlabeledClause}
       GROUP BY "Recipe".id
       ORDER BY ${sort}
@@ -393,7 +450,8 @@ router.get(
       bind: {
         userId,
         folder,
-        ...labelFilterMap
+        ...labelFilterMap,
+        ratingFilter,
       }
     };
 
@@ -405,7 +463,8 @@ router.get(
         folder,
         limit: Math.min(parseInt(req.query.count) || 100, 500),
         offset: req.query.offset || 0,
-        ...labelFilterMap
+        ...labelFilterMap,
+        ratingFilter,
       },
       model: Recipe,
       include: [{
@@ -447,6 +506,14 @@ router.get(
 
 router.get(
   '/search',
+  joiValidator(Joi.object({
+    query: Joi.object({
+      query: Joi.string().min(1).max(1000).required(),
+      userId: Joi.string().uuid().optional(),
+      labels: Joi.string().optional(),
+      ratingFilter: Joi.string().regex(VALID_RATING_FILTERS).optional(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user'], true),
   wrapRequestWithErrorHandler(async (req, res) => {
@@ -500,10 +567,23 @@ router.get(
       return acc;
     }, {});
 
-    const labelFilter = {};
+    const labelClause = {};
     if (req.query.labels) {
-      labelFilter.where = {
+      labelClause.where = {
         title: labels
+      };
+    }
+
+    // Rating
+    const ratingClause = {};
+    const ratingFilter = parseRatingFilter(req.query.ratingFilter);
+    if (ratingFilter) {
+      const includeNull = req.query.ratingFilter.includes('null');
+      const choices = [ratingFilter];
+      if (includeNull) choices.push(null);
+
+      ratingClause.rating = {
+        [Op.or]: choices
       };
     }
 
@@ -511,7 +591,8 @@ router.get(
       where: {
         id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
         userId,
-        folder: 'main'
+        folder: 'main',
+        ...ratingClause,
       },
       include: [{
         model: Label,
@@ -521,7 +602,7 @@ router.get(
         model: Label,
         as: 'label_filter',
         attributes: [],
-        ...labelFilter
+        ...labelClause
       }, {
         model: Image,
         as: 'images',
@@ -564,6 +645,7 @@ router.get(
         'notes',
         'ingredients',
         'instructions',
+        'rating',
         'folder',
         'createdAt',
         'updatedAt',
@@ -722,6 +804,23 @@ router.get(
 //Update a recipe
 router.put(
   '/:id',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      title: Joi.string().optional(),
+      description: Joi.string().allow('').optional(),
+      yield: Joi.string().allow('').optional(),
+      activeTime: Joi.string().allow('').optional(),
+      totalTime: Joi.string().allow('').optional(),
+      source: Joi.string().allow('').optional(),
+      url: Joi.string().allow('').optional(),
+      notes: Joi.string().allow('').optional(),
+      ingredients: Joi.string().allow('').optional(),
+      instructions: Joi.string().allow('').optional(),
+      rating: Joi.number().min(1).max(5).allow(null).optional(),
+      folder: Joi.string().valid(...VALID_RECIPE_FOLDERS).optional(),
+      imageIds: Joi.array().items(Joi.string().uuid()).optional(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user']),
   legacyImageHandler,
@@ -749,6 +848,7 @@ router.put(
       if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
       if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
       if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+      if (typeof req.body.rating === 'number' || req.body.rating === null) recipe.rating = req.body.rating;
       if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
 
       const adjustedTitle = await Recipe.findTitle(res.locals.session.userId, recipe.id, req.body.title || recipe.title, transaction);
@@ -834,118 +934,137 @@ router.delete(
     res.status(200).send({});
   }));
 
-router.post(
-  '/delete-bulk',
-  cors(),
-  MiddlewareService.validateSession(['user']),
-  wrapRequestWithErrorHandler(async (req, res) => {
+const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
+  if (!recipeIds && !labelIds) {
+    throw new Error('Must pass recipeIds or labelIds');
+  }
 
-    await SQ.transaction(async (transaction) => {
-      const recipes = await Recipe.findAll({
-        where: {
-          id: { [Op.in]: req.body.recipeIds },
-          userId: res.locals.session.userId
+  if (recipeIds && labelIds) {
+    throw new Error('Must pass only recipeIds or labelIds');
+  }
+
+  if (!recipeIds) {
+    const recipeLabels = await Recipe_Label.findAll({
+      where: {
+        labelId: {
+          [Op.in]: labelIds,
         },
-        attributes: ['id'],
-        include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id'],
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }]
-        }],
-        transaction,
-      });
+      },
+      transaction,
+    });
 
-      const nonDeletionRecipesByLabelId = {};
-      recipes
-        .reduce((acc, recipe) => acc.concat(recipe.labels), [])
-        .map(label => {
-          label.recipes.map(labelRecipe => {
-            nonDeletionRecipesByLabelId[label.id] = nonDeletionRecipesByLabelId[label.id] || [];
-            if (req.body.recipeIds.indexOf(labelRecipe.id) === -1)
-              nonDeletionRecipesByLabelId[label.id].push(labelRecipe);
-          });
-        });
+    recipeIds = [...new Set(recipeLabels.map(recipeLabel => recipeLabel.recipeId))];
+  }
 
-      // Any label with zero existing recipes after deletion
-      const labelIdsToRemove = Object.entries(nonDeletionRecipesByLabelId)
-        .filter(([, labelRecipes]) => labelRecipes.length === 0)
-        .map(([id]) => id);
+  const recipes = await Recipe.findAll({
+    where: {
+      id: { [Op.in]: recipeIds },
+      userId,
+    },
+    attributes: ['id'],
+    include: [{
+      model: Label,
+      as: 'labels',
+      attributes: ['id'],
+      include: [{
+        model: Recipe,
+        as: 'recipes',
+        attributes: ['id']
+      }]
+    }],
+    transaction,
+  });
 
-      await Recipe.destroy({
-        where: {
-          id: { [Op.in]: req.body.recipeIds },
-          userId: res.locals.session.userId
-        },
-        transaction,
-      });
+  if (recipes.length === 0) throw NotFound('No recipes found.');
 
-      await Label.destroy({
-        where: {
-          id: { [Op.in]: labelIdsToRemove },
-          userId: res.locals.session.userId
-        },
-        transaction,
+  const nonDeletionRecipesByLabelId = {};
+  recipes
+    .reduce((acc, recipe) => acc.concat(recipe.labels), [])
+    .map(label => {
+      label.recipes.map(labelRecipe => {
+        nonDeletionRecipesByLabelId[label.id] = nonDeletionRecipesByLabelId[label.id] || [];
+        if (recipeIds.indexOf(labelRecipe.id) === -1)
+          nonDeletionRecipesByLabelId[label.id].push(labelRecipe);
       });
     });
 
-    res.status(200).json({});
+  // Any label with zero existing recipes after deletion
+  const labelIdsToRemove = Object.entries(nonDeletionRecipesByLabelId)
+    .filter(([, labelRecipes]) => labelRecipes.length === 0)
+    .map(([id]) => id);
+
+  await Recipe.destroy({
+    where: {
+      id: { [Op.in]: recipeIds },
+      userId
+    },
+    transaction,
+  });
+
+  await Label.destroy({
+    where: {
+      id: { [Op.in]: labelIdsToRemove },
+      userId
+    },
+    transaction,
+  });
+};
+
+router.post(
+  '/delete-by-labelIds',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      labelIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
+    }),
+  })),
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        labelIds: req.body.labelIds,
+      }, transaction);
+    });
+
+    res.sendStatus(200);
+  }));
+
+router.post(
+  '/delete-bulk',
+  joiValidator(Joi.object({
+    body: Joi.object({
+      recipeIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
+    }),
+  })),
+  cors(),
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        recipeIds: req.body.recipeIds,
+      }, transaction);
+    });
+
+    res.sendStatus(200);
   }));
 
 router.delete(
   '/:id',
+  joiValidator(Joi.object({
+    params: Joi.object({
+      id: Joi.string().uuid().required(),
+    }),
+  })),
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const recipe = await SQ.transaction(async (transaction) => {
-      const recipe = await Recipe.findOne({
-        where: {
-          id: req.params.id,
-          userId: res.locals.session.userId
-        },
-        attributes: ['id'],
-        include: [{
-          model: Label,
-          as: 'labels',
-          attributes: ['id'],
-          include: [{
-            model: Recipe,
-            as: 'recipes',
-            attributes: ['id']
-          }]
-        }],
-        transaction,
-      });
-
-      if (!recipe) {
-        throw NotFound('Recipe with specified ID does not exist!');
-      }
-
-      await recipe.destroy({ transaction });
-
-      // Get an array of labelIds which have only this recipe associated
-      const labelIds = recipe.labels.reduce(function(acc, label) {
-        if (label.recipes.length <= 1) {
-          acc.push(label.id);
-        }
-        return acc;
-      }, []);
-
-      await Label.destroy({
-        where: {
-          id: { [Op.in]: labelIds }
-        },
-        transaction,
-      });
-
-      return recipe;
+    await SQ.transaction(async (transaction) => {
+      await deleteRecipes(res.locals.session.userId, {
+        recipeIds: [req.params.id],
+      }, transaction);
     });
 
-    res.status(200).json(recipe);
+    res.sendStatus(200);
   }));
 
 router.post(

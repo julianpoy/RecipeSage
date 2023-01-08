@@ -1,0 +1,9 @@
+<span class="rating-stars">
+  <ion-icon
+    [name]="star"
+    (click)="setRating(i+1)"
+    *ngFor="let star of ratingVisual; index as i"
+    [ngClass]="{ pointer: enableEdit }"
+  ></ion-icon>
+</span>
+

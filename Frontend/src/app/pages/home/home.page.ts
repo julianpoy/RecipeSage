@@ -1,10 +1,10 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import { NavController, AlertController, ToastController, PopoverController } from '@ionic/angular';
+import { NavController, AlertController, ToastController, PopoverController, NavParams } from '@ionic/angular';
 import { Datasource } from 'ngx-ui-scroll';
 
-import { RecipeService, Recipe } from '@/services/recipe.service';
+import { RecipeService, Recipe, RecipeFolderName } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -26,6 +26,7 @@ const TILE_PADD = 20;
 })
 export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
+  showBack: boolean = false;
 
   labels: Label[] = [];
   selectedLabels: string[] = [];
@@ -42,7 +43,7 @@ export class HomePage {
 
   searchText = '';
 
-  folder: string;
+  folder: RecipeFolderName;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -53,6 +54,7 @@ export class HomePage {
 
   otherUserProfile;
 
+  ratingFilter: (number|null)[] = [];
 
   tileColCount: number;
 
@@ -93,6 +95,7 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public route: ActivatedRoute,
+    public router: Router,
     public events: EventService,
     public translate: TranslateService,
     public popoverCtrl: PopoverController,
@@ -107,10 +110,13 @@ export class HomePage {
     public websocketService: WebsocketService,
     public messagingService: MessagingService) {
 
-    this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
+    this.showBack = !!this.router.getCurrentNavigation().extras.state?.showBack;
+
+    this.folder = this.route.snapshot.paramMap.get('folder') as RecipeFolderName || 'main';
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
+      this.showBack = true;
       this.userService.getProfileByUserId(this.userId).then(profileResponse => {
         if (!profileResponse.success) return;
         this.otherUserProfile = profileResponse.data;
@@ -196,9 +202,9 @@ export class HomePage {
     }
 
     return this.resetAndLoadLabels().then(() => {
-      const labelNames = this.labels.map(e => e.title);
+      const labelNames = new Set(this.labels.map(e => e.title));
 
-      this.selectedLabels.splice.call(null, ([0, this.selectedLabels.length] as any[]).concat(this.selectedLabels.filter(e => labelNames.indexOf(e) > -1)));
+      this.selectedLabels = this.selectedLabels.filter(e => labelNames.has(e));
 
       return this.resetAndLoadRecipes();
     });
@@ -246,6 +252,7 @@ export class HomePage {
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       labels: this.selectedLabels.join(',') || undefined,
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
     });
     if (!response.success) return;
 
@@ -282,20 +289,24 @@ export class HomePage {
         guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
-        selectionMode: this.selectionMode
+        selectionMode: this.selectionMode,
+        ratingFilter: this.ratingFilter,
       },
       event
     });
 
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      if (data.refreshSearch) this.resetAndLoadRecipes();
+
+      this.ratingFilter = data.ratingFilter;
+
       if (typeof data.selectionMode === 'boolean') {
         this.selectionMode = data.selectionMode;
         if (!this.selectionMode) {
           this.clearSelectedRecipes();
         }
       }
+      if (data.refreshSearch) this.resetAndLoadRecipes();
     });
 
     popover.present();
@@ -320,6 +331,7 @@ export class HomePage {
       query: text,
       labels: this.selectedLabels.join(',') || undefined,
       userId: this.userId || undefined,
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
     });
     loading.dismiss();
     if (!response.success) return;

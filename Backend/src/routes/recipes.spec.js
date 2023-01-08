@@ -51,7 +51,8 @@ describe('recipes', () => {
         url: randomString(20),
         notes: randomString(20),
         ingredients: randomString(20),
-        instructions: randomString(20)
+        instructions: randomString(20),
+        rating: 3,
       };
 
       return request(server)
@@ -117,7 +118,8 @@ describe('recipes', () => {
         url: randomString(20),
         notes: randomString(20),
         ingredients: randomString(20),
-        instructions: randomString(20)
+        instructions: randomString(20),
+        rating: 3,
       };
 
       return request(server)
@@ -147,7 +149,8 @@ describe('recipes', () => {
         url: randomString(20),
         notes: randomString(20),
         ingredients: randomString(20),
-        instructions: randomString(20)
+        instructions: randomString(20),
+        rating: 3,
       };
 
       return request(server)
@@ -173,7 +176,8 @@ describe('recipes', () => {
         url: randomString(20),
         notes: randomString(20),
         ingredients: randomString(20),
-        instructions: randomString(20)
+        instructions: randomString(20),
+        rating: 3,
       };
 
       return request(server)
@@ -302,7 +306,8 @@ describe('recipes', () => {
         notes: `new-${randomString(20)}`,
         ingredients: `new-${randomString(20)}`,
         instructions: `new-${randomString(20)}`,
-        folder: `new-${randomString(20)}`,
+        rating: 3,
+        folder: 'main',
       };
 
       return request(server)

@@ -68,7 +68,10 @@ Sentry.init({
 });
 
 export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  const prefix = './assets/i18n/';
+  const suffix = `.json?version=${(window as any).version}`;
+
+  return new TranslateHttpLoader(http, prefix, suffix);
 }
 
 @Injectable()

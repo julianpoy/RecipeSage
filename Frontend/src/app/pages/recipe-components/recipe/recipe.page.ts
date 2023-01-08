@@ -4,7 +4,7 @@ import { NavController, AlertController, ToastController, ModalController, Popov
 import {TranslateService} from '@ngx-translate/core';
 
 import { linkifyStr } from '@/utils/linkify';
-import { RecipeService, Recipe, Instruction, Ingredient, Note } from '@/services/recipe.service';
+import { RecipeService, Recipe, ParsedInstruction, ParsedIngredient, ParsedNote, RecipeFolderName } from '@/services/recipe.service';
 import { LabelService } from '@/services/label.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { LoadingService } from '@/services/loading.service';
@@ -39,9 +39,9 @@ export class RecipePage {
 
   recipe: Recipe;
   recipeId: string;
-  ingredients: Ingredient[];
-  instructions: Instruction[];
-  notes: Note[];
+  ingredients: ParsedIngredient[];
+  instructions: ParsedInstruction[];
+  notes: ParsedNote[];
 
   scale = 1;
 
@@ -50,6 +50,8 @@ export class RecipePage {
   selectedLabels: string[] = [];
   pendingLabel = '';
   showAutocomplete = false;
+
+  ratingVisual = new Array<string>(5).fill('star-outline');
 
   isLoggedIn: boolean;
 
@@ -149,6 +151,8 @@ export class RecipePage {
     this.applyScale();
 
     this.selectedLabels = this.recipe.labels.map(label => label.title);
+
+    this.updateRatingVisual();
   }
 
   async loadLabels() {
@@ -166,6 +170,12 @@ export class RecipePage {
     }
 
     this.existingLabels.sort((a, b) => a.localeCompare(b));
+  }
+
+  updateRatingVisual() {
+    this.ratingVisual = new Array<string>(5)
+      .fill('star', 0, this.recipe.rating)
+      .fill('star-outline', this.recipe.rating, 5);
   }
 
   async presentPopover(event) {
@@ -216,13 +226,13 @@ export class RecipePage {
     }
   }
 
-  instructionClicked(event, instruction: Instruction, idx: number) {
+  instructionClicked(event, instruction: ParsedInstruction, idx: number) {
     if (instruction.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
   }
 
-  ingredientClicked(event, ingredient: Instruction, idx: number) {
+  ingredientClicked(event, ingredient: ParsedInstruction, idx: number) {
     if (ingredient.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
@@ -345,7 +355,7 @@ export class RecipePage {
     shareModal.present();
   }
 
-  async moveToFolder(folderName: string) {
+  async moveToFolder(folderName: RecipeFolderName) {
     const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;

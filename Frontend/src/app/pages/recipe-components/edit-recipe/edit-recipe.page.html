@@ -20,7 +20,7 @@
 <ion-content>
   <multi-image-upload [images]="images" (onImageAdded)="markAsDirty();"></multi-image-upload>
 
-  <div class="ion-padding">
+  <div class="ion-padding edit-contents-container">
     <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
       <ion-icon name="clipboard" slot="start"></ion-icon>
       {{ 'pages.editRecipe.autoclip' | translate }}
@@ -56,75 +56,84 @@
         spellcheck="true"></ion-textarea>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.yield' | translate }}
-      </ion-label>
-      <ion-input
-        [(ngModel)]="recipe.yield"
-        (ngModelChange)="markAsDirty()"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-input>
-    </ion-item>
+    <div class="miniflex">
+      <ion-item>
+        <ion-label position="stacked">
+          {{ 'pages.editRecipe.input.yield' | translate }}
+        </ion-label>
+        <ion-input
+          [(ngModel)]="recipe.yield"
+          (ngModelChange)="markAsDirty()"
+          type="text"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.activeTime' | translate }}
-      </ion-label>
-      <ion-input
-        [(ngModel)]="recipe.activeTime"
-        (ngModelChange)="markAsDirty()"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">
+          {{ 'pages.editRecipe.input.activeTime' | translate }}
+        </ion-label>
+        <ion-input
+          [(ngModel)]="recipe.activeTime"
+          (ngModelChange)="markAsDirty()"
+          type="text"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.totalTime' | translate }}
-      </ion-label>
-      <ion-input
-        [(ngModel)]="recipe.totalTime"
-        (ngModelChange)="markAsDirty()"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">
+          {{ 'pages.editRecipe.input.totalTime' | translate }}
+        </ion-label>
+        <ion-input
+          [(ngModel)]="recipe.totalTime"
+          (ngModelChange)="markAsDirty()"
+          type="text"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.source' | translate }}
-      </ion-label>
-      <ion-input
-        [(ngModel)]="recipe.source"
-        (ngModelChange)="markAsDirty()"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">
+          {{ 'pages.editRecipe.input.source' | translate }}
+        </ion-label>
+        <ion-input
+          [(ngModel)]="recipe.source"
+          (ngModelChange)="markAsDirty()"
+          type="text"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.sourceUrl' | translate }}
-      </ion-label>
-      <ion-input
-        [(ngModel)]="recipe.url"
-        (ngModelChange)="markAsDirty()"
-        type="url"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="stacked">
+          {{ 'pages.editRecipe.input.sourceUrl' | translate }}
+        </ion-label>
+        <ion-input
+          [(ngModel)]="recipe.url"
+          (ngModelChange)="markAsDirty()"
+          type="url"
+          value=""
+          autocapitalize="on"
+          autocorrect="on"
+          spellcheck="true"></ion-input>
+      </ion-item>
+
+      <div class="rating">
+        <div class="rating-title">
+          {{ 'pages.editRecipe.input.rating' | translate }}
+        </div>
+        <rating [rating]="recipe.rating" (ratingChanged)="recipe.rating = $event" [enableEdit]="true"></rating>
+      </div>
+    </div>
 
     <ion-item>
       <ion-label position="stacked">

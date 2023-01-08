@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
-      <ion-menu-button *ngIf="!selectionMode && !userId"></ion-menu-button>
-      <ion-back-button *ngIf="!selectionMode && userId" [defaultHref]="defaultBackHref"></ion-back-button>
+      <ion-menu-button *ngIf="!selectionMode && !showBack"></ion-menu-button>
+      <ion-back-button *ngIf="!selectionMode && showBack" [defaultHref]="defaultBackHref"></ion-back-button>
 
       <ion-button *ngIf="selectionMode" (click)="clearSelectedRecipes()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -157,7 +157,7 @@
     </div>
 
     <div *ngIf="!loading">
-      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
+      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
@@ -167,7 +167,7 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
+      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
@@ -214,11 +214,11 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && selectedLabels.length !== 0">
+      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && (selectedLabels.length !== 0 || ratingFilter.length)">
         <ion-icon name="funnel" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">
           <p>
-            {{ 'pages.home.errors.noResultsLabelFilter' | translate }}
+            {{ 'pages.home.errors.noResultsFilters' | translate }}
           </p>
         </ion-label>
       </null-state>
