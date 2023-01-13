@@ -1215,6 +1215,10 @@
   "components.scaleRecipe.cancel": "Cancel",
   "components.scaleRecipe.apply": "Apply",
 
+  "====== Modals.SelectRecipe ======": "",
+
+  "components.selectRecipe.title": "Select Recipe",
+
   "====== Services.QuickTutorial ======": "",
 
   "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",

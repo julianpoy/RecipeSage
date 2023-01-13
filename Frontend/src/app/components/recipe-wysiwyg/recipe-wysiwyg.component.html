@@ -15,15 +15,20 @@
         Link
       </ion-button>
     </div>
-    <ion-textarea
-      #textarea
-      [(ngModel)]="content"
-      (ngModelChange)="contentChange.emit(content)"
-      auto-grow="true"
-      type="text"
-      value=""
-      autocapitalize="on"
-      autocorrect="on"
-      spellcheck="true"></ion-textarea>
+    <div
+      style="width: 100%; min-height: 56px; padding: 8px 0px;"
+      contenteditable
+      (input)="onInput($event)"
+      >{{ content }}</div>
+    <!--<ion-textarea-->
+      <!--#textarea-->
+      <!--[(ngModel)]="content"-->
+      <!--(ngModelChange)="contentChange.emit(content)"-->
+      <!--auto-grow="true"-->
+      <!--type="text"-->
+      <!--value=""-->
+      <!--autocapitalize="on"-->
+      <!--autocorrect="on"-->
+      <!--spellcheck="true"></ion-textarea>-->
   </ion-item>
 </div>

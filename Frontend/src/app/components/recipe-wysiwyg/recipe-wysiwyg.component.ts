@@ -8,6 +8,8 @@ import { LoadingService } from '@/services/loading.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { UtilService, RouteMap } from '@/services/util.service';
 import {SelectRecipeComponent} from '../select-recipe/select-recipe.component';
+import {SelectRecipeModalComponent} from '@/modals/select-recipe/select-recipe-modal.component';
+import {Recipe} from '@/services/recipe.service';
 
 @Component({
   selector: 'recipe-wysiwyg',
@@ -31,6 +33,10 @@ export class RecipeWysiwygComponent {
     private translate: TranslateService,
     public capabilitiesService: CapabilitiesService,
   ) {}
+
+  onInput(html: string) {
+    console.log(html);
+  }
 
   indexOfPreviousLinebreak(input: string, currentIdx: number) {
     const regex = /\n/g;
@@ -152,17 +158,15 @@ export class RecipeWysiwygComponent {
     event.preventDefault();
 
     const input = await this.textarea.getInputElement();
-    const { selectionStart, selectionEnd, value } = input;
-    const selectedText = value.substring(selectionStart, selectionEnd);
-
-    const header = await this.translate.get('components.recipeWysiwyg.recipe.header').toPromise();
-    const okay = await this.translate.get('generic.okay').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
 
     const alert = await this.modalCtrl.create({
-      component: SelectRecipeComponent,
+      component: SelectRecipeModalComponent,
     });
     await alert.present();
+
+    const { data } = await alert.onDidDismiss();
+
+    if (data?.recipe) this._actionRecipe(input, data.recipe);
   }
 
 }

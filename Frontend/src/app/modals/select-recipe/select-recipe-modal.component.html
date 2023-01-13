@@ -1,14 +1,18 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="dismiss()">
+      <ion-button (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-title>
+      {{ 'components.selectRecipe.title' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+  <br />
   <select-recipe [selectedRecipe]="selectedRecipe" (selectedRecipeChange)="recipe = $event"></select-recipe>
 </ion-content>
 
