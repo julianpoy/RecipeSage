@@ -1,0 +1,29 @@
+<div>
+  <ion-item>
+    <ion-label position="stacked">
+      {{ 'pages.editRecipe.input.notes' | translate }}
+    </ion-label>
+
+    <div class="controls">
+      <ion-button fill="clear" size="small" (mousedown)="actionHeader($event)">
+        H1
+      </ion-button>
+      <ion-button fill="clear" size="small" (click)="actionRecipe($event)">
+        Recipe
+      </ion-button>
+      <ion-button fill="clear" size="small" (click)="actionLink($event)">
+        Link
+      </ion-button>
+    </div>
+    <ion-textarea
+      #textarea
+      [(ngModel)]="content"
+      (ngModelChange)="contentChange.emit(content)"
+      auto-grow="true"
+      type="text"
+      value=""
+      autocapitalize="on"
+      autocorrect="on"
+      spellcheck="true"></ion-textarea>
+  </ion-item>
+</div>

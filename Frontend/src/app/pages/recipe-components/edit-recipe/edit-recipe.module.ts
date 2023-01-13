@@ -10,6 +10,7 @@ import {RatingModule} from '@/components/rating/rating.module';
 import { EditRecipePopoverPageModule } from '../edit-recipe-popover/edit-recipe-popover.module';
 
 import { GlobalModule } from '@/global.module';
+import {RecipeWysiwygModule} from '@/components/recipe-wysiwyg/recipe-wysiwyg.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { GlobalModule } from '@/global.module';
     MultiImageUploadModule,
     EditRecipePopoverPageModule,
     RatingModule,
+    RecipeWysiwygModule
   ],
 })
 export class EditRecipePageModule {}

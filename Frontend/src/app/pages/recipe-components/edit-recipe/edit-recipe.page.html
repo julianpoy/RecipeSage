@@ -165,20 +165,11 @@
         spellcheck="true"></ion-textarea>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.notes' | translate }}
-      </ion-label>
-      <ion-textarea
-        [(ngModel)]="recipe.notes"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-textarea>
-    </ion-item>
+    <recipe-wysiwyg
+      [content]="recipe.notes"
+      (contentChange)="recipe.notes = $event;"
+    >
+    </recipe-wysiwyg>
 
     <br />
 
