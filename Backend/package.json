@@ -40,7 +40,7 @@
     "https-proxy-agent": "^5.0.1",
     "ical-generator": "^3.6.0",
     "joi": "^17.6.4",
-    "jsdom": "^20.0.1",
+    "jsdom": "^21.0.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
