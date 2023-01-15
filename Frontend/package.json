@@ -61,7 +61,7 @@
     "@capacitor/cli": "^4.5.0",
     "@ionic/angular-toolkit": "7.0.0",
     "@ionic/cli": "6.20.4",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "5.43.0",
     "eslint": "^8.28.0",
