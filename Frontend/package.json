@@ -60,7 +60,7 @@
     "@angular/language-service": "14.2.8",
     "@capacitor/cli": "^4.5.0",
     "@ionic/angular-toolkit": "7.0.0",
-    "@ionic/cli": "6.20.4",
+    "@ionic/cli": "6.20.8",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "5.43.0",
