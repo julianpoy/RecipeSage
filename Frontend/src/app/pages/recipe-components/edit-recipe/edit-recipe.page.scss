@@ -16,11 +16,13 @@
     flex: 1 1 30%;
     margin-left: 10px;
     margin-right: 10px;
-    min-width: 145px;
+    min-width: 260px;
   }
 }
 
 .rating {
+  padding-top: 8px;
+  padding-bottom: 8px;
   font-size: 12px;
 
   .rating-title {
