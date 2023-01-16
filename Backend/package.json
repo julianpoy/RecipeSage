@@ -66,7 +66,7 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "eslint": "^8.26.0",
     "jest": "^29.3.1",
     "nodemon": "^2.0.20",
