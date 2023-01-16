@@ -36,7 +36,7 @@
     "axios": "^1.2.2",
     "core-js": "^3.27.1",
     "dayjs": "^1.11.6",
-    "firebase": "^9.14.0",
+    "firebase": "^9.15.0",
     "fraction.js": "^4.2.0",
     "linkify-string": "^4.0.2",
     "linkifyjs": "^4.0.2",
