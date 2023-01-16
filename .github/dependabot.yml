@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/Frontend"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/Backend"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/SharedUtils"
+    schedule:
+      interval: "daily"
