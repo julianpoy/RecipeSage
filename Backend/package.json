@@ -54,7 +54,7 @@
     "pg-hstore": "^2.3.4",
     "pug": "^3.0.2",
     "puppeteer-core": "^19.1.0",
-    "sanitize-html": "^2.7.2",
+    "sanitize-html": "^2.8.1",
     "semver": "^7.3.8",
     "sequelize": "^6.25.3",
     "sharp": "^0.31.1",
