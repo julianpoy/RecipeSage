@@ -24,7 +24,7 @@
     "@elastic/elasticsearch": "~8.4.0",
     "@julianpoy/recipe-clipper": "^2.3.0",
     "@sentry/node": "^7.30.0",
-    "@sentry/tracing": "^7.30.0",
+    "@sentry/tracing": "^7.31.0",
     "aws-sdk": "^2.1238.0",
     "body-parser": "~1.20.1",
     "cookie-parser": "^1.4.6",
