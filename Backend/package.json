@@ -72,6 +72,6 @@
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.5.1",
     "sinon": "^14.0.1",
-    "supertest": "^6.3.0"
+    "supertest": "^6.3.3"
   }
 }
