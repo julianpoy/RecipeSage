@@ -9,7 +9,7 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "fraction.js": "^4.0.12",
+    "fraction.js": "^4.2.0",
     "unitz-ts": "^1.0.1"
   }
 }
