@@ -23,7 +23,7 @@
     "@angular/platform-browser": "15.1.0",
     "@angular/platform-browser-dynamic": "15.1.0",
     "@angular/router": "15.1.0",
-    "@capacitor/core": "^4.6.1",
+    "@capacitor/core": "^4.6.2",
     "@capacitor/ios": "^4.6.2",
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/splash-screen": "^5.36.0",
