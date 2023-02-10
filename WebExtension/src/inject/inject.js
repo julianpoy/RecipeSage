@@ -198,7 +198,7 @@ if (window[extensionContainerId]) {
 
         let tipText = document.createElement('a');
         tipText.innerText = "Open Tutorial";
-        tipText.href = "https://recipesage.com/#/tips-tricks-tutorials";
+        tipText.href = "https://docs.recipesage.com";
         tipText.target = "_blank";
         tipContainer.appendChild(tipText);
 
