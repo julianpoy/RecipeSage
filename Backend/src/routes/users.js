@@ -866,4 +866,19 @@ router.get(
     res.status(200).json(user);
   }));
 
+router.delete(
+  '/',
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+
+    await User.destroy({
+      where: {
+        token: req.query.fcmToken,
+        userId: res.locals.session.userId
+      }
+    });
+
+    res.status(200).send('ok');
+  }));
+
 module.exports = router;

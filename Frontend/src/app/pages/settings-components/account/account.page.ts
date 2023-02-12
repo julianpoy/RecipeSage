@@ -261,6 +261,41 @@ export class AccountPage {
     toast.present();
   }
 
+  async deleteAccount() {
+    const header = await this.translate.get('pages.account.deleteAccount.header').toPromise();
+    const message = await this.translate.get('pages.account.deleteAccount.message').toPromise();
+    const confirm = await this.translate.get('generic.delete').toPromise();
+    const cancel = await this.translate.get('generic.cancel').toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: confirm,
+          cssClass: 'alertDanger',
+          handler: async () => {
+            const loading = this.loadingService.start();
+
+            const response = await this.userService.delete();
+
+            loading.dismiss();
+            if (!response.success) return;
+
+            this.utilService.removeToken();
+
+            this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
+          }
+        },
+        {
+          text: cancel,
+          handler: () => {}
+        }
+      ]
+    });
+    alert.present();
+  }
+
   async deleteAllRecipes() {
     const header = await this.translate.get('pages.account.deleteAllRecipes.header').toPromise();
     const message = await this.translate.get('pages.account.deleteAllRecipes.message').toPromise();
