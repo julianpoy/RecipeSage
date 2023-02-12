@@ -134,15 +134,16 @@
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let instruction of instructions; index as instructionIdx" class="instruction ion-text-wrap">
-              <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
-              <span
-                *ngIf="!instruction.isHeader"
-                (click)="instructionClicked($event, instruction, instructionIdx)"
-                [ngClass]="{ complete: getInstructionComplete(instructionIdx) }">
-                <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
-              </span>
-            </p>
+            <!--<p *ngFor="let instruction of instructions; index as instructionIdx" class="instruction ion-text-wrap">-->
+              <!--<span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>-->
+              <!--<span-->
+                <!--*ngIf="!instruction.isHeader"-->
+                <!--(click)="instructionClicked($event, instruction, instructionIdx)"-->
+                <!--[ngClass]="{ complete: getInstructionComplete(instructionIdx) }">-->
+                <!--<b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>-->
+              <!--</span>-->
+            <!--</p>-->
+            <p class="completableItemContainer" (click)="instructionsAreaClick($event)" [innerHtml]="recipe.instructionsHtml"></p>
             <p *ngIf="!instructions || instructions.length === 0">{{ 'pages.recipeDetails.noInstructions' | translate }}</p>
           </ion-label>
         </ion-item>

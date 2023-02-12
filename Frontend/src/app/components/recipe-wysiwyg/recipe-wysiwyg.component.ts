@@ -1,6 +1,17 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { AlertController, IonTextarea, ModalController, ToastController } from '@ionic/angular';
+import { AlertButton, AlertController, AlertInput, IonTextarea, ModalController, ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
+import { Editor } from '@tiptap/core';
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import HardBreak from '@tiptap/extension-hard-break'
+import Bold from '@tiptap/extension-bold'
+import Italic from '@tiptap/extension-italic'
+import OrderedList from '@tiptap/extension-ordered-list'
+import ListItem from '@tiptap/extension-list-item'
+import Link from '@tiptap/extension-link'
+import TurndownService from 'turndown';
 
 import { UserService } from '@/services/user.service';
 import { Image, ImageService } from '@/services/image.service';
@@ -10,6 +21,9 @@ import { UtilService, RouteMap } from '@/services/util.service';
 import {SelectRecipeComponent} from '../select-recipe/select-recipe.component';
 import {SelectRecipeModalComponent} from '@/modals/select-recipe/select-recipe-modal.component';
 import {Recipe} from '@/services/recipe.service';
+import {marked} from 'marked';
+import History from '@tiptap/extension-history';
+import TiptapImage from '@tiptap/extension-image';
 
 @Component({
   selector: 'recipe-wysiwyg',
@@ -17,11 +31,36 @@ import {Recipe} from '@/services/recipe.service';
   styleUrls: ['./recipe-wysiwyg.component.scss']
 })
 export class RecipeWysiwygComponent {
-
   @ViewChild('textarea') textarea: IonTextarea;
+  @ViewChild('editor') editorEl: HTMLDivElement;
+
+  editor = new Editor({
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      HardBreak,
+      Link.configure({
+        openOnClick: false,
+      }),
+      Bold,
+      Italic,
+      OrderedList,
+      ListItem,
+      History,
+      TiptapImage.configure({
+        inline: true,
+      })
+    ],
+  });
+  tiptapHtml: string = "";
 
   @Output() contentChange = new EventEmitter();
-  @Input() content: string;
+  @Input()
+  set content(value: string) {
+    if (this.tiptapHtml) return;
+    this.tiptapHtml = value;
+  }
 
   constructor(
     private utilService: UtilService,
@@ -33,6 +72,14 @@ export class RecipeWysiwygComponent {
     private translate: TranslateService,
     public capabilitiesService: CapabilitiesService,
   ) {}
+
+  editorChange() {
+    console.log(this.editor.view.dom.innerText);
+    this.contentChange.emit({
+      html: this.tiptapHtml,
+      text: this.editor.view.dom.innerText,
+    });
+  }
 
   onInput(html: string) {
     console.log(html);
@@ -59,105 +106,91 @@ export class RecipeWysiwygComponent {
     return idx || input.length;
   }
 
-  async actionHeader(event) {
+  actionItalic(event: MouseEvent) {
     event.preventDefault();
 
-    const input = await this.textarea.getInputElement();
-
-    const { selectionStart, selectionEnd, value } = input;
-
-    const previousLinebreakIdx = this.indexOfPreviousLinebreak(value, selectionStart);
-    const nextLinebreakIdx = this.indexOfNextLinebreak(value, selectionStart);
-
-    const charAtStart = value.charAt(previousLinebreakIdx);
-    const charAtEnd = value.charAt(nextLinebreakIdx - 1);
-
-    let newCursorPos = selectionStart;
-    let working = value;
-    if (charAtStart === '[' && charAtEnd === ']') {
-      working = working.slice(0, nextLinebreakIdx - 1) + working.slice(nextLinebreakIdx);
-      working = working.slice(0, previousLinebreakIdx) + working.slice(previousLinebreakIdx + 1);
-      newCursorPos = newCursorPos - 1;
-    } else {
-      if (charAtEnd !== ']') {
-        working = working.slice(0, nextLinebreakIdx) + ']' + working.slice(nextLinebreakIdx);
-      }
-      if (charAtStart !== '[') {
-        working = working.slice(0, previousLinebreakIdx) + '[' + working.slice(previousLinebreakIdx);
-        newCursorPos = newCursorPos + 1;
-      }
-    }
-
-    this.content = working;
-    this.contentChange.emit(this.content);
-
-    // Must occur after Angular/Ionic render cycle
-    setTimeout(() => {
-      input.selectionStart = newCursorPos;
-      input.selectionEnd = newCursorPos;
-    });
+    this.editor.commands.toggleItalic();
   }
 
-  async _actionLink(input: HTMLTextAreaElement, title: string, link: string) {
-    const { selectionStart, selectionEnd, value } = input;
-
-    const mdLink = `[${title}](${link})`;
-
-    this.content = value.substring(0, selectionStart) + mdLink + value.substring(selectionEnd);
-  }
-
-  async actionLink(event) {
+  actionBold(event: MouseEvent) {
     event.preventDefault();
 
-    const input = await this.textarea.getInputElement();
-    const { selectionStart, selectionEnd, value } = input;
-    const selectedText = value.substring(selectionStart, selectionEnd);
+    this.editor.chain().focus().toggleBold().run();
+  }
+
+  async _actionLink(href: string, title?: string) {
+    this.editor
+      .chain()
+      .focus()
+      .extendMarkRange('link')
+      .setLink({
+        href,
+        target: '_blank'
+      })
+      .command(({ tr }) => {
+         if (title) tr.insertText(title);
+         return true;
+      })
+      .run()
+  }
+
+  async actionLink(event: MouseEvent) {
+    event.preventDefault();
 
     const header = await this.translate.get('components.recipeWysiwyg.link.header').toPromise();
     const textPlaceholder = await this.translate.get('components.recipeWysiwyg.link.text').toPromise();
     const linkPlaceholder = await this.translate.get('components.recipeWysiwyg.link.link').toPromise();
     const okay = await this.translate.get('generic.okay').toPromise();
     const cancel = await this.translate.get('generic.cancel').toPromise();
+    const del = await this.translate.get('generic.delete').toPromise();
+
+    const buttons: AlertButton[] = [
+      {
+        text: cancel,
+        role: 'cancel',
+      },
+      {
+        text: okay,
+        handler: (data) => this._actionLink(data.link, data.title),
+      }
+    ];
+
+    if (this.editor.isActive('link')) {
+      buttons.unshift({
+        text: del,
+        handler: () => this.editor.commands.unsetLink(),
+      });
+    }
+
+    const inputs: AlertInput[] = [
+      {
+        name: 'link',
+        placeholder: linkPlaceholder,
+        value: this.editor.getAttributes('link').href || ''
+      },
+    ];
+
+    if (!this.editor.isActive('link') && this.editor.view.state.selection.empty) {
+      inputs.unshift({
+        name: 'title',
+        placeholder: textPlaceholder,
+      });
+    }
 
     const alert = await this.alertCtrl.create({
       header,
-      inputs: [
-        {
-          name: 'title',
-          placeholder: textPlaceholder,
-          value: selectedText,
-        },
-        {
-          name: 'link',
-          placeholder: linkPlaceholder,
-        },
-      ],
-      buttons: [
-        {
-          text: cancel,
-          role: 'cancel',
-        },
-        {
-          text: okay,
-          handler: (data) => this._actionLink(input, data.title, data.link),
-        }
-      ]
+      inputs,
+      buttons
     });
     await alert.present();
   }
 
-  async _actionRecipe(input: HTMLTextAreaElement, recipe: Recipe) {
-    const { selectionStart, selectionEnd, value } = input;
-
-    const mdLink = `[${recipe.title}](#recipe:${recipe.id})`;
-
-    this.content = value.substring(0, selectionStart) + mdLink + value.substring(selectionEnd);
+  async _actionRecipe(recipe: Recipe) {
+    console.log("adding recipe", recipe);
   }
 
-  async actionRecipe(event) {
+  async actionRecipe(event: MouseEvent) {
     event.preventDefault();
-
-    const input = await this.textarea.getInputElement();
 
     const alert = await this.modalCtrl.create({
       component: SelectRecipeModalComponent,
@@ -166,7 +199,7 @@ export class RecipeWysiwygComponent {
 
     const { data } = await alert.onDidDismiss();
 
-    if (data?.recipe) this._actionRecipe(input, data.recipe);
+    if (data?.recipe) this._actionRecipe(data.recipe);
   }
 
 }

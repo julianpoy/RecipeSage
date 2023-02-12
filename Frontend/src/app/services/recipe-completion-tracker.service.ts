@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 
+interface ScaleMap {
+  [key: string]: number
+}
+
+interface CompletionMap {
+  [key: string]: string[]
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeCompletionTrackerService {
-  scaleByRecipeId = {};
-  ingredientCompletionByRecipeId = {};
-  instructionCompletionByRecipeId = {};
+  scaleByRecipeId: ScaleMap = {};
+  ingredientCompletionByRecipeId: CompletionMap = {};
+  instructionCompletionByRecipeId: CompletionMap = {};
 
   constructor() {}
 
@@ -18,25 +26,37 @@ export class RecipeCompletionTrackerService {
     return this.scaleByRecipeId[recipeId] || 1;
   }
 
-  toggleIngredientComplete(recipeId: string, idx: number) {
+  toggleIngredientComplete(recipeId: string, identifier: string) {
     this.ingredientCompletionByRecipeId[recipeId] = this.ingredientCompletionByRecipeId[recipeId] || [];
     const arr = this.ingredientCompletionByRecipeId[recipeId];
 
-    arr.includes(idx) ? arr.splice(arr.indexOf(idx), 1) : arr.push(idx);
+    arr.includes(identifier) ? arr.splice(arr.indexOf(identifier), 1) : arr.push(identifier);
   }
 
-  toggleInstructionComplete(recipeId: string, idx: number) {
+  toggleInstructionComplete(recipeId: string, identifier: string) {
     this.instructionCompletionByRecipeId[recipeId] = this.instructionCompletionByRecipeId[recipeId] || [];
     const arr = this.instructionCompletionByRecipeId[recipeId];
 
-    arr.includes(idx) ? arr.splice(arr.indexOf(idx), 1) : arr.push(idx);
+    arr.includes(identifier) ? arr.splice(arr.indexOf(identifier), 1) : arr.push(identifier);
   }
 
-  getInstructionComplete(recipeId: string, idx: number) {
-    return this.instructionCompletionByRecipeId[recipeId]?.includes(idx) || false;
+  getInstructionComplete(recipeId: string, identifier: string) {
+    return this.instructionCompletionByRecipeId[recipeId]?.includes(identifier) || false;
   }
 
-  getIngredientComplete(recipeId: string, idx: number) {
-    return this.ingredientCompletionByRecipeId[recipeId]?.includes(idx) || false;
+  getCompletedInstructions(recipeId: string) {
+    return [
+      ...(this.instructionCompletionByRecipeId[recipeId] || [])
+    ];
+  }
+
+  getIngredientComplete(recipeId: string, identifier: string) {
+    return this.ingredientCompletionByRecipeId[recipeId]?.includes(identifier) || false;
+  }
+
+  getCompletedIngredients(recipeId: string) {
+    return [
+      ...(this.instructionCompletionByRecipeId[recipeId] || [])
+    ];
   }
 }

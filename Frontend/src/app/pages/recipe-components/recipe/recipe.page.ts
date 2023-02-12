@@ -229,21 +229,21 @@ export class RecipePage {
   instructionClicked(event, instruction: ParsedInstruction, idx: number) {
     if (instruction.isHeader) return;
 
-    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx);
+    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, idx.toString());
   }
 
   ingredientClicked(event, ingredient: ParsedInstruction, idx: number) {
     if (ingredient.isHeader) return;
 
-    this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx);
+    this.recipeCompletionTrackerService.toggleIngredientComplete(this.recipeId, idx.toString());
   }
 
   getInstructionComplete(idx: number) {
-    return this.recipeCompletionTrackerService.getInstructionComplete(this.recipeId, idx);
+    return this.recipeCompletionTrackerService.getInstructionComplete(this.recipeId, idx.toString());
   }
 
   getIngredientComplete(idx: number) {
-    return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx);
+    return this.recipeCompletionTrackerService.getIngredientComplete(this.recipeId, idx.toString());
   }
 
   async changeScale() {
@@ -528,5 +528,42 @@ export class RecipePage {
   releaseWakeLock() {
     if (this.wakeLockRequest) this.wakeLockRequest.release();
     this.wakeLockRequest = null;
+  }
+
+  buildRootlessXpath(element: HTMLElement) {
+    const container = element.closest('.completableItemContainer');
+    if (!container || element === container) return '';
+
+    const idx = Array.from(element.parentElement.children).indexOf(element);
+
+    return `${this.buildRootlessXpath(element.parentElement)}/${element.tagName}[${idx + 1}]`;
+  }
+
+  instructionsAreaClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const closestLI = target.closest('li');
+    const isLIWithinContainer = !!closestLI?.closest('.completableItemContainer');
+
+    if (!closestLI || !isLIWithinContainer) return;
+
+    const xPath = `/${this.buildRootlessXpath(closestLI)}`;
+
+    this.recipeCompletionTrackerService.toggleInstructionComplete(this.recipeId, xPath);
+
+    this.renderCompletedInstructions();
+  }
+
+  renderCompletedInstructions() {
+    const container = document.querySelectorAll('.instructions .completableItemContainer')[0];
+
+    container.querySelectorAll('*').forEach((element) => element.classList.remove('completed'));
+
+    const completedIngredients = this.recipeCompletionTrackerService.getCompletedIngredients(this.recipeId);
+
+    completedIngredients.forEach((xPath) => {
+      const el = document.evaluate(xPath, container, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      const htmlEl = el as HTMLElement;
+      htmlEl.classList.add('completed');
+    });
   }
 }

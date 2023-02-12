@@ -112,6 +112,29 @@ const applyLegacyImageField = recipe => {
   return recipe;
 };
 
+const applyHtmlFields = recipe => {
+  if (recipe.toJSON) recipe = recipe.toJSON();
+
+  if (recipe.notes && !recipe.notesHtml) {
+    recipe.notesHtml = recipe.notes.replaceAll('\n', '<br />');
+  }
+
+  if (recipe.ingredients && !recipe.ingredientsHtml) {
+    recipe.ingredientsHtml = recipe.ingredients.replaceAll('\n', '<br />');
+  }
+
+  if (recipe.instructions && !recipe.instructionsHtml) {
+    const ingredientsOl = recipe.instructions
+      .split('\n')
+      .map((instruction) => `<li>${instruction}</li>`)
+      .join('');
+
+    recipe.instructionsHtml = `<ol>${ingredientsOl}</ol>`;
+  }
+
+  return recipe;
+};
+
 //Create a new recipe
 router.post(
   '/',
@@ -125,8 +148,11 @@ router.post(
       source: Joi.string().allow('').optional(),
       url: Joi.string().allow('').optional(),
       notes: Joi.string().allow('').optional(),
+      notesHtml: Joi.string().allow('').optional(),
       ingredients: Joi.string().allow('').optional(),
+      ingredientsHtml: Joi.string().allow('').optional(),
       instructions: Joi.string().allow('').optional(),
+      instructionsHtml: Joi.string().allow('').optional(),
       rating: Joi.number().min(1).max(5).allow(null).optional(),
       labels: Joi.array().items(Joi.string()).optional(),
       imageIds: Joi.array().items(Joi.string().uuid()).optional(),
@@ -154,8 +180,11 @@ router.post(
         source: req.body.source || '',
         url: req.body.url || '',
         notes: req.body.notes || '',
+        notesHtml: req.body.notesHtml || '',
         ingredients: req.body.ingredients || '',
+        ingredientsHtml: req.body.ingredientsHtml || '',
         instructions: req.body.instructions || '',
+        instructionsHtml: req.body.instructionsHtml || '',
         rating: req.body.rating || null,
         folder: 'main'
       }, {
@@ -643,8 +672,11 @@ router.get(
         'source',
         'url',
         'notes',
+        'notesHtml',
         'ingredients',
+        'ingredientsHtml',
         'instructions',
+        'instructionsHtml',
         'rating',
         'folder',
         'createdAt',
@@ -758,6 +790,8 @@ router.get(
 
     recipe = applyLegacyImageField(recipe);
 
+    recipe = applyHtmlFields(recipe);
+
     recipe.isOwner = res.locals.session ? res.locals.session.userId == recipe.userId : false;
 
     // There should be no fromUser after recipes have been moved out of the inbox
@@ -814,8 +848,11 @@ router.put(
       source: Joi.string().allow('').optional(),
       url: Joi.string().allow('').optional(),
       notes: Joi.string().allow('').optional(),
+      notesHtml: Joi.string().allow('').optional(),
       ingredients: Joi.string().allow('').optional(),
+      ingredientsHtml: Joi.string().allow('').optional(),
       instructions: Joi.string().allow('').optional(),
+      instructionsHtml: Joi.string().allow('').optional(),
       rating: Joi.number().min(1).max(5).allow(null).optional(),
       folder: Joi.string().valid(...VALID_RECIPE_FOLDERS).optional(),
       imageIds: Joi.array().items(Joi.string().uuid()).optional(),
@@ -846,8 +883,11 @@ router.put(
       if (typeof req.body.source === 'string') recipe.source = req.body.source;
       if (typeof req.body.url === 'string') recipe.url = req.body.url;
       if (typeof req.body.notes === 'string') recipe.notes = req.body.notes;
+      if (typeof req.body.notesHtml === 'string') recipe.notesHtml = req.body.notesHtml;
       if (typeof req.body.ingredients === 'string') recipe.ingredients = req.body.ingredients;
+      if (typeof req.body.ingredientsHtml === 'string') recipe.ingredientsHtml = req.body.ingredientsHtml;
       if (typeof req.body.instructions === 'string') recipe.instructions = req.body.instructions;
+      if (typeof req.body.instructionsHtml === 'string') recipe.instructionsHtml = req.body.instructionsHtml;
       if (typeof req.body.rating === 'number' || req.body.rating === null) recipe.rating = req.body.rating;
       if (typeof req.body.folder === 'string') recipe.folder = req.body.folder;
 

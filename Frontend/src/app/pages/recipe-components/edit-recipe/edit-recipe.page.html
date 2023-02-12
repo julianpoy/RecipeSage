@@ -135,39 +135,24 @@
       </div>
     </div>
 
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.ingredients' | translate }}
-      </ion-label>
-      <ion-textarea
-        [(ngModel)]="recipe.ingredients"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-textarea>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.instructions' | translate }}
-      </ion-label>
-      <ion-textarea
-        [(ngModel)]="recipe.instructions"
-        (ngModelChange)="markAsDirty()"
-        auto-grow="true"
-        type="text"
-        value=""
-        autocapitalize="on"
-        autocorrect="on"
-        spellcheck="true"></ion-textarea>
-    </ion-item>
-
+    === Ingredients ===
     <recipe-wysiwyg
-      [content]="recipe.notes"
-      (contentChange)="recipe.notes = $event;"
+      [content]="recipe.ingredientsHtml"
+      (contentChange)="recipe.ingredientsHtml = $event.html; recipe.ingredients = $event.text;"
+    >
+    </recipe-wysiwyg>
+
+    === Instructions ===
+    <recipe-wysiwyg
+      [content]="recipe.instructionsHtml"
+      (contentChange)="recipe.instructionsHtml = $event.html; recipe.instructions = $event.text;"
+    >
+    </recipe-wysiwyg>
+
+    === Notes ===
+    <recipe-wysiwyg
+      [content]="recipe.notesHtml"
+      (contentChange)="recipe.notesHtml = $event.html; recipe.notes = $event.text;"
     >
     </recipe-wysiwyg>
 

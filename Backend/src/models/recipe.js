@@ -66,12 +66,27 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: '',
       allowNull: false
     },
+    notesHtml: {
+      type: DataTypes.TEXT,
+      defaultValue: '',
+      allowNull: false
+    },
     ingredients: {
       type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false
     },
+    ingredientsHtml: {
+      type: DataTypes.TEXT,
+      defaultValue: '',
+      allowNull: false
+    },
     instructions: {
+      type: DataTypes.TEXT,
+      defaultValue: '',
+      allowNull: false
+    },
+    instructionsHtml: {
       type: DataTypes.TEXT,
       defaultValue: '',
       allowNull: false

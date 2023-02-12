@@ -129,8 +129,11 @@ export class EditRecipePage {
       source: this.recipe.source,
       url: this.recipe.url,
       notes: this.recipe.notes,
+      notesHtml: this.recipe.notesHtml,
       ingredients: this.recipe.ingredients,
+      ingredientsHtml: this.recipe.ingredientsHtml,
       instructions: this.recipe.instructions,
+      instructionsHtml: this.recipe.instructionsHtml,
       rating: this.recipe.rating,
       imageIds: this.images.map(image => image.id)
     });

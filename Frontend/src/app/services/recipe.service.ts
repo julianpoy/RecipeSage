@@ -22,8 +22,11 @@ export interface BaseRecipe {
   source: string;
   url: string;
   notes: string;
+  notesHtml: string;
   ingredients: string;
+  ingredientsHtml: string;
   instructions: string;
+  instructionsHtml: string;
   rating: number;
 }
 
