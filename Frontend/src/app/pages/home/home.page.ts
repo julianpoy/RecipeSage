@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import { NavController, AlertController, ToastController, PopoverController, NavParams } from '@ionic/angular';
 import { Datasource } from 'ngx-ui-scroll';
 
-import { RecipeService, Recipe } from '@/services/recipe.service';
+import { RecipeService, Recipe, RecipeFolderName } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
 import { UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
@@ -43,7 +43,7 @@ export class HomePage {
 
   searchText = '';
 
-  folder: string;
+  folder: RecipeFolderName;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
@@ -54,6 +54,7 @@ export class HomePage {
 
   otherUserProfile;
 
+  ratingFilter: (number|null)[] = [];
 
   tileColCount: number;
 
@@ -111,7 +112,7 @@ export class HomePage {
 
     this.showBack = !!this.router.getCurrentNavigation().extras.state?.showBack;
 
-    this.folder = this.route.snapshot.paramMap.get('folder') || 'main';
+    this.folder = this.route.snapshot.paramMap.get('folder') as RecipeFolderName || 'main';
     this.selectedLabels = (this.route.snapshot.queryParamMap.get('labels') || '').split(',').filter(e => e);
     this.userId = this.route.snapshot.queryParamMap.get('userId') || null;
     if (this.userId) {
@@ -251,6 +252,7 @@ export class HomePage {
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       labels: this.selectedLabels.join(',') || undefined,
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
     });
     if (!response.success) return;
 
@@ -287,20 +289,24 @@ export class HomePage {
         guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
-        selectionMode: this.selectionMode
+        selectionMode: this.selectionMode,
+        ratingFilter: this.ratingFilter,
       },
       event
     });
 
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      if (data.refreshSearch) this.resetAndLoadRecipes();
+
+      this.ratingFilter = data.ratingFilter;
+
       if (typeof data.selectionMode === 'boolean') {
         this.selectionMode = data.selectionMode;
         if (!this.selectionMode) {
           this.clearSelectedRecipes();
         }
       }
+      if (data.refreshSearch) this.resetAndLoadRecipes();
     });
 
     popover.present();
@@ -325,6 +331,7 @@ export class HomePage {
       query: text,
       labels: this.selectedLabels.join(',') || undefined,
       userId: this.userId || undefined,
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
     });
     loading.dismiss();
     if (!response.success) return;

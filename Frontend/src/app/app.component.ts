@@ -19,6 +19,14 @@ import { VersionCheckService } from '@/services/versioncheck.service';
 import { CookingToolbarService } from '@/services/cooking-toolbar.service';
 import { EventService } from '@/services/event.service';
 import { OfflineCacheService } from '@/services/offline-cache.service';
+import {FeatureFlagKeys, FeatureFlagService} from './services/feature-flag.service';
+
+interface NavPage {
+  id: string,
+  title: string,
+  icon: string,
+  url: string
+}
 
 @Component({
   selector: 'app-root',
@@ -61,6 +69,7 @@ export class AppComponent {
     private websocketService: WebsocketService,
     private userService: UserService,
     private preferencesService: PreferencesService,
+    private featureFlagService: FeatureFlagService,
     private capabilitiesService: CapabilitiesService,
     private versionCheckService: VersionCheckService,
     private offlineCacheService: OfflineCacheService,
@@ -188,8 +197,6 @@ export class AppComponent {
   }
 
   async generateNavList() {
-    let pages = [];
-
     const welcome = await this.translate.get('pages.app.nav.welcome').toPromise();
     const login = await this.translate.get('pages.app.nav.login').toPromise();
     const register = await this.translate.get('pages.app.nav.register').toPromise();
@@ -207,37 +214,37 @@ export class AppComponent {
     const meals = await this.translate.get('pages.app.nav.meals').toPromise();
     const settings = await this.translate.get('pages.app.nav.settings').toPromise();
 
+    const enableInstallInstructions = this.featureFlagService.flags[FeatureFlagKeys.EnableInstallInstructions];
+    const enableContribution = this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
     const loggedOutPages = [
-      { id: 'welcome', title: welcome, icon: 'sunny', url: RouteMap.WelcomePage.getPath() },
-      { id: 'login', title: login, icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) },
-      { id: 'register', title: register, icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) },
-      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
-    ];
+      [true, { id: 'welcome', title: welcome, icon: 'sunny', url: RouteMap.WelcomePage.getPath() }],
+      [true, { id: 'login', title: login, icon: 'log-in', url: RouteMap.AuthPage.getPath(AuthType.Login) }],
+      [true, { id: 'register', title: register, icon: 'leaf', url: RouteMap.AuthPage.getPath(AuthType.Register) }],
+      [enableInstallInstructions, { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() }],
+      [enableContribution, { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() }],
+      [true, { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }]
+    ] as [boolean, NavPage][];
 
     const loggedInPages = [
-      { id: 'home', title: home, icon: 'book', url: RouteMap.HomePage.getPath('main') },
-      { id: 'labels', title: labels, icon: 'pricetag', url: RouteMap.LabelsPage.getPath() },
-      { id: 'people', title: people, icon: 'people', url: RouteMap.PeoplePage.getPath() },
-      { id: 'messages', title: messages, icon: 'chatbox', url: RouteMap.MessagesPage.getPath() },
-      { id: 'inbox', title: inbox, icon: 'mail', url: RouteMap.HomePage.getPath('inbox') },
-      { id: 'newrecipe', title: newrecipe, icon: 'add', url: RouteMap.EditRecipePage.getPath('new') },
-      { id: 'shopping', title: shopping, icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() },
-      { id: 'meals', title: meals, icon: 'calendar', url: RouteMap.MealPlansPage.getPath() },
-      { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() },
-      { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() },
-      { id: 'settings', title: settings, icon: 'settings', url: RouteMap.SettingsPage.getPath() },
-      { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }
-    ];
+      [true, { id: 'home', title: home, icon: 'book', url: RouteMap.HomePage.getPath('main') }],
+      [true, { id: 'labels', title: labels, icon: 'pricetag', url: RouteMap.LabelsPage.getPath() }],
+      [true, { id: 'people', title: people, icon: 'people', url: RouteMap.PeoplePage.getPath() }],
+      [true, { id: 'messages', title: messages, icon: 'chatbox', url: RouteMap.MessagesPage.getPath() }],
+      [true, { id: 'inbox', title: inbox, icon: 'mail', url: RouteMap.HomePage.getPath('inbox') }],
+      [true, { id: 'newrecipe', title: newrecipe, icon: 'add', url: RouteMap.EditRecipePage.getPath('new') }],
+      [true, { id: 'shopping', title: shopping, icon: 'cart', url: RouteMap.ShoppingListsPage.getPath() }],
+      [true, { id: 'meals', title: meals, icon: 'calendar', url: RouteMap.MealPlansPage.getPath() }],
+      [enableInstallInstructions, { id: 'download', title: download, icon: 'cloud-download', url: RouteMap.DownloadAndInstallPage.getPath() }],
+      [enableContribution, { id: 'contribute', title: contribute, icon: 'heart', url: RouteMap.ContributePage.getPath() }],
+      [true, { id: 'settings', title: settings, icon: 'settings', url: RouteMap.SettingsPage.getPath() }],
+      [true, { id: 'about', title: about, icon: 'help-buoy', url: RouteMap.AboutPage.getPath() }]
+    ] as [boolean, NavPage][];
 
-    if (this.utilService.isLoggedIn()) {
-      pages = pages.concat(loggedInPages);
-    } else {
-      pages = pages.concat(loggedOutPages);
-    }
+    const pages = this.utilService.isLoggedIn() ? loggedInPages : loggedOutPages;
 
-    return pages;
+    return pages
+      .filter(page => page[0])
+      .map(page => page[1]);
   }
 
   async loadInboxCount() {

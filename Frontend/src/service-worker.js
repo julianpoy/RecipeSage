@@ -1,5 +1,7 @@
 'use strict';
 
+const APP_VERSION = 'development';
+
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
 const { precaching, routing, strategies, expiration } = workbox;
@@ -11,22 +13,28 @@ const { ExpirationPlugin } = expiration;
 
 precacheAndRoute(self.__WB_MANIFEST || []);
 
+const BASE_CACHE_NAME = 'base-asset-cache';
+const LANG_CACHE_NAME = 'language-cache';
+
 self.addEventListener('install', async (event) => {
   const networkFirstPrecacheUrls = [
     "/",
     "/index.html"
   ];
   event.waitUntil(
-    caches.open('base-asset-cache')
+    caches.open(BASE_CACHE_NAME)
       .then((cache) => cache.addAll(networkFirstPrecacheUrls))
   );
 
   const languagePrecacheUrls = [
-    "/assets/i18n/en-us.json"
+    `/assets/i18n/en-us.json?version=${APP_VERSION}`
   ];
   event.waitUntil(
-    caches.open('language-cache')
-      .then((cache) => cache.addAll(languagePrecacheUrls))
+    caches.delete(LANG_CACHE_NAME).then(() =>
+      caches.open(LANG_CACHE_NAME).then((cache) =>
+        cache.addAll(languagePrecacheUrls)
+      )
+    )
   );
 });
 
@@ -35,7 +43,7 @@ const MAX_OFFILE_APP_AGE = 30; // Days
 registerRoute(
   /\/index\.html/,
   new NetworkFirst({
-    cacheName: 'base-asset-cache',
+    cacheName: BASE_CACHE_NAME,
     plugins: [
       new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
@@ -45,11 +53,11 @@ registerRoute(
 );
 
 // Language files should always come from network first since they change frequently
-const MAX_LANGUAGE_AGE = 60; // Days
+const MAX_LANGUAGE_AGE = 30; // Days
 registerRoute(
   /\/assets\/i18n\/.*/,
   new NetworkFirst({
-    cacheName: 'language-cache',
+    cacheName: LANG_CACHE_NAME,
     plugins: [
       new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,

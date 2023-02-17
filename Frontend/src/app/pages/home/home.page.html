@@ -157,7 +157,7 @@
     </div>
 
     <div *ngIf="!loading">
-      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
+      <null-state *ngIf="userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
@@ -167,7 +167,7 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0">
+      <null-state *ngIf="!userId && folder === 'main' && (!recipes || recipes.length === 0) && searchText.length === 0 && totalRecipeCount === 0 && selectedLabels.length === 0 && !ratingFilter.length">
         <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
         <ion-label virtualSlot="body">
           <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
@@ -191,7 +191,7 @@
 
             <br /><br />
 
-            <a href="/#/tips-tricks-tutorials">{{ 'pages.home.errors.noRecipes.message7' | translate }}</a>
+            <a href="https://docs.recipesage.com">{{ 'pages.home.errors.noRecipes.message7' | translate }}</a>
           </p>
         </ion-label>
       </null-state>
@@ -214,11 +214,11 @@
           </p>
         </ion-label>
       </null-state>
-      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && selectedLabels.length !== 0">
+      <null-state *ngIf="recipes && recipes.length === 0 && searchText.length === 0 && (selectedLabels.length !== 0 || ratingFilter.length)">
         <ion-icon name="funnel" class="big-icon" virtualSlot="header"></ion-icon>
         <ion-label virtualSlot="body">
           <p>
-            {{ 'pages.home.errors.noResultsLabelFilter' | translate }}
+            {{ 'pages.home.errors.noResultsFilters' | translate }}
           </p>
         </ion-label>
       </null-state>

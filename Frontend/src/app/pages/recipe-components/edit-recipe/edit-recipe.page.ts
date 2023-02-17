@@ -5,11 +5,11 @@ import { NavController, ToastController, AlertController, PopoverController, Loa
 import {TranslateService} from '@ngx-translate/core';
 
 import { UtilService, RouteMap } from '@/services/util.service';
-import { RecipeService, Recipe } from '@/services/recipe.service';
+import { RecipeService, Recipe, BaseRecipe } from '@/services/recipe.service';
 import { LoadingService } from '@/services/loading.service';
 import { UnsavedChangesService } from '@/services/unsaved-changes.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
-import { ImageService } from '@/services/image.service';
+import { Image, ImageService } from '@/services/image.service';
 import { getQueryParam } from '@/utils/queryParams';
 
 import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
@@ -25,10 +25,20 @@ export class EditRecipePage {
   defaultBackHref: string;
 
   recipeId: string;
-  recipe: Recipe = {} as Recipe;
+  recipe: Partial<BaseRecipe> & { id?: string } = {
+    title: '',
+    description: '',
+    yield: '',
+    activeTime: '',
+    totalTime: '',
+    source: '',
+    url: '',
+    notes: '',
+    ingredients: '',
+    instructions: '',
+  };
 
-  imageBlobURL: any;
-  images: any[] = [];
+  images: Image[] = [];
 
   constructor(
     public route: ActivatedRoute,
@@ -86,8 +96,8 @@ export class EditRecipePage {
     this._clipFromUrl(this.findLastUrlInString(source));
   }
 
-  findLastUrlInString(s) {
-    if (typeof s !== 'string' ) return;
+  findLastUrlInString(s: unknown) {
+    if (typeof s !== 'string') return;
 
     // Robust URL finding regex from https://www.regextester.com/93652
     // TODO: Replace this with a lib
@@ -110,7 +120,18 @@ export class EditRecipePage {
 
     const method = this.recipe.id ? 'update' : 'create';
     const response = await this.recipeService[method]({
-      ...this.recipe,
+      id: this.recipe.id,
+      title: this.recipe.title,
+      description: this.recipe.description,
+      yield: this.recipe.yield,
+      activeTime: this.recipe.activeTime,
+      totalTime: this.recipe.totalTime,
+      source: this.recipe.source,
+      url: this.recipe.url,
+      notes: this.recipe.notes,
+      ingredients: this.recipe.ingredients,
+      instructions: this.recipe.instructions,
+      rating: this.recipe.rating,
       imageIds: this.images.map(image => image.id)
     });
 
@@ -131,7 +152,7 @@ export class EditRecipePage {
   }
 
   isValidHttpUrl(input: string) {
-    let url;
+    let url: URL;
 
     // Fallback for browsers without URL constructor
     if (!URL) return true;
@@ -246,7 +267,7 @@ export class EditRecipePage {
         {
           text: confirm,
           handler: data => {
-            this._addImageByUrlPrompt(data);
+            if (data.imageUrl) this._addImageByUrlPrompt(data.imageUrl);
           }
         }
       ]
@@ -255,10 +276,9 @@ export class EditRecipePage {
     await alert.present();
   }
 
-  async _addImageByUrlPrompt(data) {
-    if (!data.imageUrl?.trim()) return;
-
-    const imageUrl = data.imageUrl.trim();
+  async _addImageByUrlPrompt(imageUrl: string) {
+    imageUrl = imageUrl.trim();
+    if (!imageUrl) return;
 
     if (this.isValidHttpUrl(imageUrl)) {
       const downloading = await this.translate.get('pages.editRecipe.addImage.downloading').toPromise();
@@ -285,7 +305,7 @@ export class EditRecipePage {
     }
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event) {
     const canAddImages = this.images.length < 10 && (this.images.length === 0 || this.capabilitiesService.capabilities.multipleImages);
 
     const popover = await this.popoverCtrl.create({

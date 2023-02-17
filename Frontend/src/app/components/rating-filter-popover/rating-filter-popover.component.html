@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ 'components.ratingFilter.title' | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="ratingFilter">
+    <ion-item lines="none">
+      <ion-checkbox slot="start" [checked]="ratingFilter?.includes(null)" (ionChange)="toggle(null)"></ion-checkbox>
+      <ion-label>
+        {{ 'components.ratingFilter.unrated' | translate }}
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" *ngFor="let possibleRating of possibleRatings">
+      <ion-checkbox slot="start" [checked]="ratingFilter?.includes(possibleRating)" (ionChange)="toggle(possibleRating, $event)"></ion-checkbox>
+
+      <ion-label>
+        <rating [rating]="possibleRating"></rating>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="close()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ 'generic.okay' | translate }}
+    </ion-label>
+  </ion-button>
+  <ion-button (click)="reset()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ 'components.ratingFilter.reset' | translate }}
+    </ion-label>
+  </ion-button>
+</ion-footer>

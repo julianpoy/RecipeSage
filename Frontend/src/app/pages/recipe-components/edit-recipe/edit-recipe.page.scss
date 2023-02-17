@@ -1,1 +1,37 @@
+.edit-contents-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.miniflex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin-left: -10px;
+  margin-right: -10px;
+
+  > * {
+    flex: 1 1 30%;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 260px;
+  }
+}
+
+.rating {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+
+  .rating-title {
+    margin-left: 16px;
+    margin-bottom: 3px;
+  }
+
+  rating {
+    margin-left: 16px;
+    font-size: 22px;
+  }
+}

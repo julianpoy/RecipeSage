@@ -7,6 +7,7 @@ import { UtilService } from '@/services/util.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
 import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/resettable-select-popover.page';
+import {RatingFilterPopoverComponent} from '@/components/rating-filter-popover/rating-filter-popover.component';
 
 @Component({
   selector: 'page-home-popover',
@@ -19,6 +20,8 @@ export class HomePopoverPage {
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
+
+  @Input() ratingFilter: (number|null)[];
 
   @Input() labels: any;
 
@@ -58,7 +61,8 @@ export class HomePopoverPage {
 
   dismiss(refreshSearch?: boolean) {
     this.popoverCtrl.dismiss({
-      refreshSearch
+      refreshSearch,
+      ratingFilter: this.ratingFilter
     });
   }
 
@@ -101,5 +105,26 @@ export class HomePopoverPage {
       })
     });
     labelFilterPopover.present();
+  }
+
+  async openRatingFilter() {
+    const ratingFilterPopover = await this.popoverCtrl.create({
+      component: RatingFilterPopoverComponent,
+      componentProps: {
+        ratingFilter: this.ratingFilter,
+      }
+    });
+
+    await ratingFilterPopover.present();
+
+    const { data } = await ratingFilterPopover.onDidDismiss();
+    if (!data) return;
+
+    this.ratingFilter = data.ratingFilter;
+    console.log("isafter", this.ratingFilter.join(','));
+
+    setTimeout(() => {
+      this.dismiss(true);
+    });
   }
 }

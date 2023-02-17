@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: '',
       allowNull: false
     },
+    rating: {
+      type: DataTypes.NUMBER,
+      defaultValue: null,
+      allowNull: true
+    },
     yield: {
       type: DataTypes.TEXT,
       defaultValue: '',

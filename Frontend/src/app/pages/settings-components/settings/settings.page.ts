@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { RouteMap, UtilService } from '@/services/util.service';
 import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
-import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
+import { FeatureFlagService, FeatureFlagKeys } from '@/services/feature-flag.service';
 import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
 import { CapabilitiesService } from '@/services/capabilities.service';
 import { OfflineCacheService } from '@/services/offline-cache.service';
@@ -24,7 +24,7 @@ export class SettingsPage {
   preferenceKeys = GlobalPreferenceKey;
 
   featureFlags = this.featureFlagService.flags;
-  featureFlagKeys = GlobalFeatureFlagKeys;
+  featureFlagKeys = FeatureFlagKeys;
 
   showSplitPaneOption = false;
 

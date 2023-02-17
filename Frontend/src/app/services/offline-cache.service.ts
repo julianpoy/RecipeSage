@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 
 import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
-import { FeatureFlagService, GlobalFeatureFlagKeys } from '@/services/feature-flag.service';
-import { RecipeService } from '@/services/recipe.service';
+import { FeatureFlagService, FeatureFlagKeys } from '@/services/feature-flag.service';
+import { RecipeFolderName, RecipeService } from '@/services/recipe.service';
 import { EventService } from '@/services/event.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OfflineCacheService {
-  knownRecipeIds = new Set();
+  knownRecipeIds = new Set<string>();
   constructor(
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
     private recipeService: RecipeService,
     private events: EventService
   ) {
-    const ffEnabled = this.featureFlagService.flags[GlobalFeatureFlagKeys.EnableExperimentalOfflineCache];
+    const ffEnabled = this.featureFlagService.flags[FeatureFlagKeys.EnableExperimentalOfflineCache];
     const preferenceEnabled = this.preferencesService.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache];
 
     if (ffEnabled && preferenceEnabled) {
@@ -52,7 +52,7 @@ export class OfflineCacheService {
     }
   }
 
-  async updateRecipe(recipeId) {
+  async updateRecipe(recipeId: string) {
     await this.recipeService.fetchById(recipeId);
   }
 
@@ -69,7 +69,7 @@ export class OfflineCacheService {
     }
   }
 
-  async updateRecipeList(folder: string, sort: string) {
+  async updateRecipeList(folder: RecipeFolderName, sort: string) {
     const firstFetch = await this.recipeService.fetch({
       folder,
       sort,
@@ -79,7 +79,7 @@ export class OfflineCacheService {
 
     if (!firstFetch.success) return;
 
-    firstFetch.data.map(el => this.knownRecipeIds.add(el.id));
+    firstFetch.data.data.map(el => this.knownRecipeIds.add(el.id));
 
     await this.syncPause();
 
@@ -92,7 +92,7 @@ export class OfflineCacheService {
         offset: i * 50
       });
 
-      page.data.map(el => this.knownRecipeIds.add(el.id));
+      page.data.data.map(el => this.knownRecipeIds.add(el.id));
 
       await this.syncPause();
     }
