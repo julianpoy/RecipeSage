@@ -37,6 +37,7 @@ const {
   NotFound,
   PreconditionFailed,
 } = require('../utils/errors');
+const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
 
 
 router.get(
@@ -864,6 +865,34 @@ router.get(
     }
 
     res.status(200).json(user);
+  }));
+
+router.delete(
+  '/',
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    const userId = res.locals.session.userId;
+
+    await SQ.transaction(async (transaction) => {
+      await Recipe.destroy({
+        where: {
+          userId,
+        },
+        transaction,
+      });
+
+      await deleteHangingImagesForUser(userId, transaction)
+        .catch((e) => Sentry.captureException(e));
+
+      await User.destroy({
+        where: {
+          id: userId,
+        },
+        transaction
+      });
+    });
+
+    res.status(200).send('ok');
   }));
 
 module.exports = router;

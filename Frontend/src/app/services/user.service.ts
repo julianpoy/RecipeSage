@@ -295,6 +295,16 @@ export class UserService {
     );
   }
 
+  delete(errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<void>(
+      `users/`,
+      'DELETE',
+      null,
+      null,
+      errorHandlers
+    );
+  }
+
   checkForUpdate(payload: {
     version: string,
   }, errorHandlers?: ErrorHandlers) {

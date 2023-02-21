@@ -694,7 +694,8 @@
   "pages.account.dangerZone.warning1": "Vorsicht bei diesen Aktionen - sie sind dauerhaft.",
   "pages.account.dangerZone.warning2": "Du wirst aufgefordert, jede Aktion, die du hier machst, zu bestätigen.",
   "pages.account.dangerZone.deleteAllRecipes": "Alle Rezepte löschen",
-  "pages.account.dangerZone.deleteAllRecipes.description": "Das Löschen aller Rezepte kann einige Minuten dauern und ist ein dauerhafter Vorgang.",
+  "pages.account.dangerZone.deleteAccount": "Konto und alle Daten löschen",
+  "pages.account.dangerZone.description": "Diese Aktionen sind nicht rückgängig zu machen und können mehrere Minuten in Anspruch nehmen.",
 
   "pages.account.nameRequired": "Name/Spitzame darf nicht leer sein.",
   "pages.account.nameUpdated": "Der Profilname wurde aktualisiert.",
@@ -714,6 +715,9 @@
   "pages.account.deleteAllRecipes.message": "Diese Aktion ist PERMANENT. Alle deine Rezepte und die dazugehörigen Label werden aus dem RecipeSage-System entfernt.",
   "pages.account.deleteAllRecipes.confirm": "Ja, fortfahren",
   "pages.account.deleteAllRecipes.success": "Deine Rezeptdaten wurden gelöscht.",
+
+  "pages.account.deleteAccount.header": "Konto und alle Daten löschen",
+  "pages.account.deleteAccount.message": "Dies ist IRREVERSIBEL und wird alle Ihre Daten aus RecipeSage vollständig entfernen. Dies kann mehrere Minuten dauern.",
 
   "====== Pages.Account ======": "",
 

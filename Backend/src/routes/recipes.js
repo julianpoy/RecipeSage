@@ -35,6 +35,7 @@ const {
 } = require('../utils/errors');
 const {joiValidator} = require('../middleware/joiValidator');
 const Joi = require('joi');
+const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
 
 const VALID_RECIPE_FOLDERS = ['main', 'inbox'];
 const VALID_RATING_FILTERS = /^(\d|null)(,(\d|null))*$/;
@@ -912,23 +913,29 @@ router.delete(
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
+    const { userId } = res.locals.session;
 
     await SQ.transaction(async (transaction) => {
       await Recipe.destroy({
         where: {
-          userId: res.locals.session.userId
+          userId,
         },
         transaction,
       });
 
       await Label.destroy({
         where: {
-          userId: res.locals.session.userId
+          userId,
         },
         transaction,
       });
 
-      await ElasticService.deleteRecipesByUser(res.locals.session.userId);
+      await ElasticService.deleteRecipesByUser(userId);
+
+      // TODO: Remove this when we have a way of mocking
+      if (process.env.NODE_ENV !== 'test') {
+        await deleteHangingImagesForUser(userId, transaction);
+      }
     });
 
     res.status(200).send({});
