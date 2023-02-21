@@ -272,10 +272,16 @@
     {{ 'pages.account.dangerZone.deleteAllRecipes' | translate }}
   </ion-button>
 
+  <br />
+
+  <ion-button color="danger" (click)="deleteAccount()" class="ion-margin-start ion-margin-top">
+    {{ 'pages.account.dangerZone.deleteAccount' | translate }}
+  </ion-button>
+
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
       <p>
-        {{ 'pages.account.dangerZone.deleteAllRecipes.description' | translate }}
+        {{ 'pages.account.dangerZone.description' | translate }}
       </p>
     </ion-label>
   </ion-item>

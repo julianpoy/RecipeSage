@@ -1,6 +1,7 @@
 const aws = require('aws-sdk');
 const multerImager = require('multer-imager');
 const sharp = require('sharp');
+const crypto = require('crypto');
 
 const s3Config = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -21,9 +22,19 @@ exports.generateStorageLocation = key => process.env.AWS_S3_PUBLIC_PATH ? proces
 const S3_DEFAULT_ACL = 'public-read';
 const S3_DEFAULT_CACHECONTROL = 'public,max-age=31536000,immutable'; // 365 Days
 
+/**
+  This limit is set/enforced by S3 on bulk delete operations
+  https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObjects-property
+*/
+const DELETE_STORAGE_OBJECTS_LIMIT = 1000;
 
 exports.sendBufferToStorage = buffer => {
-  const key = new Date().getTime().toString();
+  const RAND_LEN = 14; // Number of digits to add as random to end of key
+  const RAND_MIN = 10 ** (RAND_LEN - 1);
+  const RAND_MAX = (RAND_MIN * 10) - 1;
+  const rand = crypto.randomInt(RAND_MIN, RAND_MAX); // Generate RAND_LEN number of digits for end of key
+
+  const key = `${new Date().getTime().toString()}-${rand}`;
   const bucket = process.env.AWS_BUCKET;
 
   return s3.putObject({
@@ -62,29 +73,34 @@ exports.formatImageResponse = (key, mimetype, size, etag) => {
 
 
 exports.deleteStorageObject = key => {
-  return new Promise((resolve, reject) => {
-    s3.deleteObject({
-      Bucket: process.env.AWS_BUCKET,
-      Key: key
-    }, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
-    });
-  });
+  return s3.deleteObject({
+    Bucket: process.env.AWS_BUCKET,
+    Key: key
+  }).promise();
+};
+
+const paginate = (objects, limit) => {
+  const mut = [...objects];
+
+  const out = [];
+  while (mut.length > 0) {
+    out.push(mut.splice(0, limit));
+  }
+
+  return out;
 };
 
 exports.deleteStorageObjects = keys => {
-  return new Promise((resolve, reject) => {
-    s3.deleteObjects({
+  const paginatedKeys = paginate(keys, DELETE_STORAGE_OBJECTS_LIMIT);
+
+  return Promise.all(paginatedKeys.map((keyPage) => {
+    return s3.deleteObjects({
       Bucket: process.env.AWS_BUCKET,
       Delete: {
-        Objects: keys.map(key => ({ Key: key }))
+        Objects: keyPage.map(key => ({ Key: key }))
       }
-    }, (err, data) => {
-      if (err) reject(err);
-      else resolve(data);
-    });
-  });
+    }).promise();
+  }));
 };
 
 exports.multerStorage = (width, height, quality, highResConversion, resolve, reject)=> multerImager({

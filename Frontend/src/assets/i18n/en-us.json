@@ -695,7 +695,8 @@
   "pages.account.dangerZone.warning1": "Be careful with these actions - they are permanent.",
   "pages.account.dangerZone.warning2": "You will be asked a to confirm any action you take here.",
   "pages.account.dangerZone.deleteAllRecipes": "Delete All Recipes",
-  "pages.account.dangerZone.deleteAllRecipes.description": "Deleting all of your recipes can take several minutes and is a permenant action.",
+  "pages.account.dangerZone.deleteAccount": "Delete Account & All Data",
+  "pages.account.dangerZone.description": "These actions are irreversible and may take several minutes to complete.",
 
   "pages.account.nameRequired": "Name/nickname must not be blank.",
   "pages.account.nameUpdated": "Profile name was updated.",
@@ -715,6 +716,9 @@
   "pages.account.deleteAllRecipes.message": "This action is PERMANENT. All of your recipes and associated labels will be removed from the RecipeSage system.",
   "pages.account.deleteAllRecipes.confirm": "Yes, continue",
   "pages.account.deleteAllRecipes.success": "Your recipe data has been deleted.",
+
+  "pages.account.deleteAccount.header": "Delete Account & All Data",
+  "pages.account.deleteAccount.message": "This is IRREVERSIBLE and will completely remove all of your data from RecipeSage. This may take several minutes.",
 
   "====== Pages.Account ======": "",
 

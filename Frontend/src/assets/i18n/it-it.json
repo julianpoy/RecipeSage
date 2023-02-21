@@ -695,7 +695,8 @@
   "pages.account.dangerZone.warning1": "Attenzione: queste opzioni sono irreversibili.",
   "pages.account.dangerZone.warning2": "Verrà chiesto di confermare qualsiasi opzione selezionata.",
   "pages.account.dangerZone.deleteAllRecipes": "Elimina Tutte le Ricette",
-  "pages.account.dangerZone.deleteAllRecipes.description": "L'eliminazione di tutte le ricette può richiedere alcuni minuti ed è permanente.",
+  "pages.account.dangerZone.deleteAccount": "Cancellare l'account e tutti i dati",
+  "pages.account.dangerZone.description": "Queste azioni sono irreversibili e possono richiedere alcuni minuti per essere completate.",
 
   "pages.account.nameRequired": "Il campo nome/nickname non può essere vuoto.",
   "pages.account.nameUpdated": "Nome del profilo aggiornato.",
@@ -715,6 +716,9 @@
   "pages.account.deleteAllRecipes.message": "Quest’azione è IRREVERSIBILE. Tutte le tue ricette ed etichette associate saranno eliminate da RecipeSage.",
   "pages.account.deleteAllRecipes.confirm": "Sì, continua",
   "pages.account.deleteAllRecipes.success": "I tuoi dati sono stati eliminati.",
+
+  "pages.account.deleteAccount.header": "Cancellare l'account e tutti i dati",
+  "pages.account.deleteAccount.message": "Questa operazione è IRREVERSIBILE e rimuoverà completamente tutti i dati da RecipeSage. L'operazione potrebbe richiedere diversi minuti.",
 
   "====== Pages.Account ======": "",
 
