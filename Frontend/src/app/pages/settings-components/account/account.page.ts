@@ -272,6 +272,10 @@ export class AccountPage {
       message,
       buttons: [
         {
+          text: cancel,
+          handler: () => {}
+        },
+        {
           text: confirm,
           cssClass: 'alertDanger',
           handler: async () => {
@@ -287,10 +291,6 @@ export class AccountPage {
             this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
           }
         },
-        {
-          text: cancel,
-          handler: () => {}
-        }
       ]
     });
     alert.present();
@@ -308,6 +308,10 @@ export class AccountPage {
       message,
       buttons: [
         {
+          text: cancel,
+          handler: () => {}
+        },
+        {
           text: confirm,
           cssClass: 'alertDanger',
           handler: async () => {
@@ -324,10 +328,6 @@ export class AccountPage {
             })).present();
           }
         },
-        {
-          text: cancel,
-          handler: () => {}
-        }
       ]
     });
     alert.present();

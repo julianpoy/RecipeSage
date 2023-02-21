@@ -227,7 +227,7 @@ export class UserService {
 
   getProfileByHandle(handle: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<UserProfile>(
-      `users/profile/by-handle/${handle}`,
+      `users/profile/by-handle/${encodeURIComponent(handle)}`,
       'GET',
       null,
       null,
@@ -237,7 +237,7 @@ export class UserService {
 
   getHandleInfo(handle: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<HandleInfo>(
-      `users/handle-info/${handle}`,
+      `users/handle-info/${encodeURIComponent(handle)}`,
       'GET',
       null,
       null,

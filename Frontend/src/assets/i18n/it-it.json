@@ -918,14 +918,6 @@
   "pages.share.byEmbed.jsonLD": "Abilita JSON-LD per il SEO",
   "pages.share.byEmbed.copy": "Copia il codice qui sotto e incollalo nel codice HTML del tuo sito web.",
 
-  "pages.share.byAccount.prompt": "E-mail destinatario...",
-  "pages.share.byAccount.found": "Utente RecipeSage trovato: {{name}}. Premi Invio per condividere la ricetta.",
-  "pages.share.byAccount.notfound": "Nessun utente RecipeSage trovato.",
-  "pages.share.byAccount.description": "Inserisci un altro indirizzo e-mail per cercare un utente",
-  "pages.share.byAccount.selectBelow": "o seleziona una conversazione",
-  "pages.share.byAccount.searching": "Ricerca utente...",
-  "pages.share.byAccount.conversations": "Conversazioni esistenti",
-
   "pages.share.send": "Invia",
   "pages.share.close": "Chiudi",
 

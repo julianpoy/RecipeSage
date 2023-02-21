@@ -17,7 +17,7 @@
   <div class="dropdownSelect" *ngIf="!selectedUser">
     <ion-searchbar
       (ionChange)='onSearchInputChange($event)'
-      placeholder="Type to search for user..."
+      placeholder="{{ 'components.selectUser.placeholder' | translate }}"
       autocomplete="off"
       #userInputField
       debounce="0"

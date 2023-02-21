@@ -908,6 +908,8 @@
   "pages.share.byLink": "Link",
   "pages.share.byEmbed": "Embed",
 
+  "pages.share.byAccount.description": "Recipient must have a RecipeSage account. If you'd like to share with a non-RecipeSage user, use the link sharing option.",
+
   "pages.share.byEmbed.image": "Show Title Image",
   "pages.share.byEmbed.columns": "Disable Columns",
   "pages.share.byEmbed.print": "Show Print Button",
@@ -917,14 +919,6 @@
   "pages.share.byEmbed.width": "Width (not shown)",
   "pages.share.byEmbed.jsonLD": "Enable JSON-LD for SEO",
   "pages.share.byEmbed.copy": "Copy the code below and paste it into your website HTML",
-
-  "pages.share.byAccount.prompt": "Recipient's account email...",
-  "pages.share.byAccount.found": "RecipeSage user found: {{name}}. Press send to share recipe.",
-  "pages.share.byAccount.notfound": "No RecipeSage user found with that email address.",
-  "pages.share.byAccount.description": "Enter another user's email address to search",
-  "pages.share.byAccount.selectBelow": "or select a conversation below",
-  "pages.share.byAccount.searching": "Searcing for user...",
-  "pages.share.byAccount.conversations": "Existing Conversations",
 
   "pages.share.send": "Send",
   "pages.share.close": "Close",
@@ -1181,10 +1175,16 @@
 
   "====== Components.SelectUser ======": "",
 
+  "components.selectUser.placeholder": "Search by account email or handle",
   "components.selectUser.change": "Click to change",
   "components.selectUser.select": "Click to select",
   "components.selectUser.searching": "Searching for \"{{name}}\"...",
   "components.selectUser.null": "No results for \"{{name}}\"",
+
+  "====== Components.SelectKnownUser ======": "",
+
+  "components.selectKnownUser.friends": "Friends",
+  "components.selectKnownUser.conversations": "Message Threads",
 
   "====== Components.SelfhostWarning ======": "",
 
