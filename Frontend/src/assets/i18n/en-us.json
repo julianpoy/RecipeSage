@@ -1175,7 +1175,7 @@
 
   "====== Components.SelectUser ======": "",
 
-  "components.selectUser.placeholder": "Search by account email or handle",
+  "components.selectUser.placeholder": "Search by email or handle",
   "components.selectUser.change": "Click to change",
   "components.selectUser.select": "Click to select",
   "components.selectUser.searching": "Searching for \"{{name}}\"...",

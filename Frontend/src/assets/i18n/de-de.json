@@ -907,6 +907,8 @@
   "pages.share.byLink": "Link",
   "pages.share.byEmbed": "Einbetten",
 
+  "pages.share.byAccount.description": "Der Empfänger muss ein RecipeSage-Konto haben. Für einen Nicht-RecipeSage-Benutzer verwenden Sie die Link-Option.",
+
   "pages.share.byEmbed.image": "Titelbild anzeigen",
   "pages.share.byEmbed.columns": "Spalten deaktivieren",
   "pages.share.byEmbed.print": "Drucken anzeigen",
@@ -1172,10 +1174,16 @@
 
   "====== Components.SelectUser ======": "",
 
+  "components.selectUser.placeholder": "Suche nach E-Mail oder Handle",
   "components.selectUser.change": "Zum Ändern klicken",
   "components.selectUser.select": "Zum Auswählen klicken",
   "components.selectUser.searching": "Suchen nach \"{{name}}\"...",
   "components.selectUser.null": "Keine Treffer für \"{{name}}\"",
+
+  "====== Components.SelectKnownUser ======": "",
+
+  "components.selectKnownUser.friends": "Freunde",
+  "components.selectKnownUser.conversations": "Nachrichten-Threads",
 
   "====== Components.SelfhostWarning ======": "",
 
