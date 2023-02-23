@@ -17,15 +17,11 @@ export class ShareModalPage {
 
   @Input() recipe: Recipe;
 
-  selectedThread: any;
-  recipientEmail = '';
-  recipientName = '';
-  recipientId = '';
-  searchingForRecipient = false;
+  selectedUser: any;
+  recipientId: any;
 
   threads: any = [];
 
-  autofillTimeout: any;
   shareMethod = 'account';
 
   recipeURL: string;
@@ -105,38 +101,15 @@ export class ShareModalPage {
     this.threads = response.data;
   }
 
-  selectRecipient(thread) {
-    if (!thread) return;
-    this.recipientId = thread.otherUser.id;
-    console.log(this.recipientId);
-    this.recipientName = '';
-    this.recipientEmail = '';
-  }
+  selectUser(user) {
+    if (!user) {
+      this.selectedUser = null;
+      this.recipientId = null;
+      return;
+    }
 
-  autofillUserName() {
-    this.searchingForRecipient = true;
-
-    if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
-
-    this.autofillTimeout = setTimeout(async () => {
-      const response = await this.userService.getUserByEmail({
-        email: this.recipientEmail.trim(),
-      }, {
-        404: () => {}
-      });
-
-      if (response.success) {
-        const user = response.data;
-        this.recipientName = user.name || user.email;
-        this.recipientId = user.id;
-      } else {
-        this.recipientName = '';
-        this.recipientId = '';
-      }
-
-      this.selectedThread = null;
-      this.searchingForRecipient = false;
-    }, 500);
+    this.selectedUser = user;
+    this.recipientId = user.id;
   }
 
   async send() {

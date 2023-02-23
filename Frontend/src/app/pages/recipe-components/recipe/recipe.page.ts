@@ -428,6 +428,7 @@ export class RecipePage {
         },
         {
           text: del,
+          cssClass: 'alertDanger',
           handler: () => {
             this._deleteLabel(label);
           }

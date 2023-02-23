@@ -155,51 +155,19 @@
           <textarea id="codeBlockCopy" type="text" class="invisible" [ngModel]="recipeEmbedCode"></textarea>
         </div>
 
-        <div *ngSwitchCase="'account'">
-          <div class="ion-padding">
-            <ion-item>
-              <ion-label position="floating">
-                {{ 'pages.share.byAccount.prompt' | translate }}
-              </ion-label>
-              <ion-input
-                [(ngModel)]="recipientEmail"
-                (ngModelChange)='autofillUserName()'
-                type="email"></ion-input>
-            </ion-item>
+        <div *ngSwitchCase="'account'" class="ion-padding">
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap">
+              <p>
+                {{ 'pages.share.byAccount.description' | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
 
-            <p *ngIf="recipientEmail.length > 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">
-              <span *ngIf="recipientName">
-                {{ 'pages.share.byAccount.found' | translate:{name: recipientName} }}
-              </span>
-              <span *ngIf="!recipientName">
-                {{ 'pages.share.byAccount.notfound' | translate }}
-              </span>
-            </p>
-            <p *ngIf="recipientEmail.length === 0 && !searchingForRecipient" class="ion-padding-left ion-padding-bottom">
-              {{ 'pages.share.byAccount.description' | translate }}
-              <span *ngIf="threads.length > 0">
-                {{ 'pages.share.byAccount.selectBelow' | translate }}
-              </span>
-            </p>
-            <p *ngIf="searchingForRecipient" class="ion-padding-left ion-padding-bottom">
-              {{ 'pages.share.byAccount.searching' | translate }}
-            </p>
-          </div>
-
-          <ion-list *ngIf="threads.length > 0">
-            <ion-radio-group [(ngModel)]="selectedThread" (ionChange)="selectRecipient($event.detail.value)">
-              <ion-list-header style="margin-bottom: 0;" lines="none">
-                {{ 'pages.share.byAccount.conversations' | translate }}
-              </ion-list-header>
-
-              <ion-item *ngFor="let thread of threads">
-                <ion-label>
-                  {{ thread.otherUser.name || thread.otherUser.email }} <span *ngIf="thread.otherUser.name">({{ thread.otherUser.email }})</span>
-                </ion-label>
-                <ion-radio [value]="thread"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
-          </ion-list>
+          <select-user-knownuser
+            [selectedUser]="selectedUser"
+            (selectedUserChange)="selectUser($event)"
+          ></select-user-knownuser>
         </div>
       </div>
   </ion-list>

@@ -27,11 +27,20 @@ export class SelectUserComponent {
   }
 
   @Output() selectedUserChange = new EventEmitter();
+  @Output() searchInputChange = new EventEmitter();
 
   results = [];
   searchTimeout;
-  searchText = '';
   searching = false;
+
+  _searchText: string = '';
+  get searchText() {
+    return this._searchText;
+  }
+  set searchText(val: string) {
+    this._searchText = val;
+    this.searchInputChange.emit(val);
+  }
 
   constructor(
     private utilService: UtilService,
@@ -64,16 +73,14 @@ export class SelectUserComponent {
     const results = [];
 
     const handle = input.startsWith('@') ? input.substring(1) : input;
-    if (isHandleValid(handle)) {
-      const profileResponse = await this.userService.getProfileByHandle(handle, {
-        403: () => {},
-        404: () => {}
-      });
-      if (profileResponse.success && profileResponse.data) {
-        // TODO: Currently this pushes a profile rather than the direct user info
-        // This should be cleaned up - preferrably with some typing
-        results.push(profileResponse.data);
-      }
+    const profileResponse = await this.userService.getProfileByHandle(handle, {
+      403: () => {},
+      404: () => {}
+    });
+    if (profileResponse.success && profileResponse.data) {
+      // TODO: Currently this pushes a profile rather than the direct user info
+      // This should be cleaned up - preferrably with some typing
+      results.push(profileResponse.data);
     }
 
     const userResponse = await this.userService.getUserByEmail({

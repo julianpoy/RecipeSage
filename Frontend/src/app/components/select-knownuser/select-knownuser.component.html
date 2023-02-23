@@ -1,0 +1,37 @@
+<div>
+  <ion-list *ngIf="friendships.length > 0">
+    <ion-radio-group
+      [value]="_radioFriendship"
+      (ionChange)="selectFriendship($event.detail.value)"
+    >
+      <ion-list-header style="margin-bottom: 0;" lines="none">
+        {{ 'components.selectKnownUser.friends' | translate }}
+      </ion-list-header>
+
+      <ion-item *ngFor="let friendship of friendships">
+        <ion-label>
+          {{ friendship.otherUser.name }} (@{{ friendship.otherUser.handle }})
+        </ion-label>
+        <ion-radio [value]="friendship"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-list *ngIf="threads.length > 0">
+    <ion-radio-group
+      [value]="_radioThread"
+      (ionChange)="selectThread($event.detail.value)"
+    >
+      <ion-list-header style="margin-bottom: 0;" lines="none">
+        {{ 'components.selectKnownUser.conversations' | translate }}
+      </ion-list-header>
+
+      <ion-item *ngFor="let thread of threads">
+        <ion-label>
+          {{ thread.otherUser.name }} ({{ thread.otherUser.email }})
+        </ion-label>
+        <ion-radio [value]="thread"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+</div>

@@ -907,6 +907,8 @@
   "pages.share.byLink": "Link",
   "pages.share.byEmbed": "Einbetten",
 
+  "pages.share.byAccount.description": "Der Empfänger muss ein RecipeSage-Konto haben. Für einen Nicht-RecipeSage-Benutzer verwenden Sie die Link-Option.",
+
   "pages.share.byEmbed.image": "Titelbild anzeigen",
   "pages.share.byEmbed.columns": "Spalten deaktivieren",
   "pages.share.byEmbed.print": "Drucken anzeigen",
@@ -916,14 +918,6 @@
   "pages.share.byEmbed.width": "Breite (nicht dargestellt)",
   "pages.share.byEmbed.jsonLD": "JSON-LD für SEO aktivieren",
   "pages.share.byEmbed.copy": "Kopiere den folgenden Code und füge ihn in den HTML-Code deiner Website ein",
-
-  "pages.share.byAccount.prompt": "E-Mail des Empfängers...",
-  "pages.share.byAccount.found": "RecipeSage-User gefunden: {{name}}. Zum Teilen des Rezepts auf Senden drücken.",
-  "pages.share.byAccount.notfound": "Es wurde kein RecipeSage-User mit dieser E-Mail-Adresse gefunden.",
-  "pages.share.byAccount.description": "Gib die E-Mail-Adresse eines anderen Users für die Suche ein",
-  "pages.share.byAccount.selectBelow": "oder wähle unten eine Konversation aus",
-  "pages.share.byAccount.searching": "Suche nach User...",
-  "pages.share.byAccount.conversations": "Bestehende Konversationen",
 
   "pages.share.send": "Senden",
   "pages.share.close": "Schließen",
@@ -1180,10 +1174,16 @@
 
   "====== Components.SelectUser ======": "",
 
+  "components.selectUser.placeholder": "Suche nach E-Mail oder Handle",
   "components.selectUser.change": "Zum Ändern klicken",
   "components.selectUser.select": "Zum Auswählen klicken",
   "components.selectUser.searching": "Suchen nach \"{{name}}\"...",
   "components.selectUser.null": "Keine Treffer für \"{{name}}\"",
+
+  "====== Components.SelectKnownUser ======": "",
+
+  "components.selectKnownUser.friends": "Freunde",
+  "components.selectKnownUser.conversations": "Nachrichten-Threads",
 
   "====== Components.SelfhostWarning ======": "",
 
