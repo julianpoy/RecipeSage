@@ -56,7 +56,10 @@ export class SelectUserComponent {
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
-    if (!this.searchText.trim()) return;
+    if (
+      !this.searchText.trim()
+      || this.searchText.trim() === '@'
+    ) return;
 
     this.searching = true;
 
