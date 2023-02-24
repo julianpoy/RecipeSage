@@ -9,8 +9,21 @@
       </ion-list-header>
 
       <ion-item *ngFor="let friendship of friendships">
+        <ion-avatar slot="start">
+          <img
+            *ngIf="!friendship.otherUser.profileImages?.length"
+            src="assets/avatar.svg"
+          >
+          <img
+            *ngIf="friendship.otherUser.profileImages?.length"
+            [src]="friendship.otherUser.profileImages[0].location"
+          >
+        </ion-avatar>
         <ion-label>
-          {{ friendship.otherUser.name }} (@{{ friendship.otherUser.handle }})
+          <h2>{{ friendship.otherUser.name }}</h2>
+          <p>
+            @{{ friendship.otherUser.handle }}
+          </p>
         </ion-label>
         <ion-radio [value]="friendship"></ion-radio>
       </ion-item>
@@ -28,7 +41,8 @@
 
       <ion-item *ngFor="let thread of threads">
         <ion-label>
-          {{ thread.otherUser.name }} ({{ thread.otherUser.email }})
+          <h2>{{ thread.otherUser.name }}</h2>
+          <p>{{ thread.otherUser.email }}</p>
         </ion-label>
         <ion-radio [value]="thread"></ion-radio>
       </ion-item>
