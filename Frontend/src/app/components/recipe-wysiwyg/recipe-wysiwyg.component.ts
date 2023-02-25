@@ -25,6 +25,10 @@ import {marked} from 'marked';
 import History from '@tiptap/extension-history';
 import TiptapImage from '@tiptap/extension-image';
 
+const CustomDocument = Document.extend({
+  content: 'orderedList block*',
+});
+
 @Component({
   selector: 'recipe-wysiwyg',
   templateUrl: 'recipe-wysiwyg.component.html',
@@ -36,7 +40,7 @@ export class RecipeWysiwygComponent {
 
   editor = new Editor({
     extensions: [
-      Document,
+      CustomDocument,
       Paragraph,
       Text,
       HardBreak,
