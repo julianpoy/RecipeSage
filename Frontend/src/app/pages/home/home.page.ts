@@ -6,7 +6,7 @@ import { Datasource } from 'ngx-ui-scroll';
 
 import { RecipeService, Recipe, RecipeFolderName } from '@/services/recipe.service';
 import { MessagingService } from '@/services/messaging.service';
-import { UserService } from '@/services/user.service';
+import { UserProfile, UserService } from '@/services/user.service';
 import { LoadingService } from '@/services/loading.service';
 import { WebsocketService } from '@/services/websocket.service';
 import { EventService } from '@/services/event.service';
@@ -52,7 +52,11 @@ export class HomePage {
 
   userId = null;
 
-  otherUserProfile;
+  myProfile: UserProfile;
+  friendsById: {
+    [key: string]: UserProfile
+  };
+  otherUserProfile: UserProfile;
 
   ratingFilter: (number|null)[] = [];
 
@@ -157,6 +161,9 @@ export class HomePage {
         loading.dismiss();
       });
     }
+
+    this.fetchMyProfile();
+    this.fetchFriends();
   }
 
   async setDefaultBackHref() {
@@ -265,6 +272,23 @@ export class HomePage {
     if (!response.success) return;
 
     this.labels = response.data;
+  }
+
+  async fetchMyProfile() {
+    const response = await this.userService.getMyProfile();
+    if (!response.success) return;
+
+    this.myProfile = response.data;
+  }
+
+  async fetchFriends() {
+    const response = await this.userService.getMyFriends();
+    if (!response.success) return;
+
+    this.friendsById = response.data.friends.reduce((acc, friendEntry) => {
+      acc[friendEntry.otherUser.id] = friendEntry.otherUser;
+      return acc;
+    }, {});
   }
 
   toggleLabel(labelTitle) {
@@ -449,5 +473,14 @@ export class HomePage {
 
   getLabelList(recipe: Recipe) {
     return recipe.labels.map(label => label.title).join(', ');
+  }
+
+  getShouldShowLabelChips() {
+    return (
+      this.labels.length
+      && !this.userId
+      && this.preferences[this.preferenceKeys.ShowLabelChips]
+      && this.folder === 'main'
+    );
   }
 }

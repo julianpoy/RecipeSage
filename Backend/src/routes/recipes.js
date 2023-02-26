@@ -36,6 +36,7 @@ const {
 const {joiValidator} = require('../middleware/joiValidator');
 const Joi = require('joi');
 const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
+const {getFriendships} = require('../utils/getFriendships');
 
 const VALID_RECIPE_FOLDERS = ['main', 'inbox'];
 const VALID_RATING_FILTERS = /^(\d|null)(,(\d|null))*$/;
@@ -351,7 +352,7 @@ router.get(
     }, {});
 
     // Fields
-    const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'rating', 'fromUserId', 'createdAt', 'updatedAt'];
+    const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'rating', 'userId', 'fromUserId', 'createdAt', 'updatedAt'];
     const labelAttributes = ['id', 'title'];
     const imageAttributes = ['id', 'location'];
     const recipeImageAttributes = ['id', 'order'];
@@ -505,6 +506,38 @@ router.get(
     });
   }));
 
+// TODO: Move to util
+const getRecipesForUser = ({
+  userId,
+  recipeIds,
+  ratingClause,
+  labelClause,
+}) => {
+  return Recipe.findAll({
+    where: {
+      id: recipeIds,
+      userId,
+      folder: 'main',
+      ...(ratingClause || {}),
+    },
+    include: [{
+      model: Label,
+      as: 'labels',
+      attributes: ['id', 'title']
+    }, {
+      model: Label,
+      as: 'label_filter',
+      attributes: [],
+      ...(labelClause || {})
+    }, {
+      model: Image,
+      as: 'images',
+      attributes: ['id', 'location']
+    }],
+    limit: 200
+  });
+};
+
 router.get(
   '/search',
   joiValidator(Joi.object({
@@ -560,13 +593,22 @@ router.get(
       }
     }
 
-    const results = await ElasticService.searchRecipes(userId, req.query.query);
+    const friendships = await getFriendships(myUserId);
+
+    const searchUserIds = [userId];
+    if (req.query.includeFriends || true) {
+      searchUserIds.push(...friendships.friends.map(friend => friend.otherUser.id));
+      console.log(searchUserIds);
+    }
+
+    const results = await ElasticService.searchRecipes(searchUserIds, req.query.query);
     const searchHits = results.hits.hits;
 
     const searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
       acc[hit._id] = hit;
       return acc;
     }, {});
+    const searchHitsRecipeIds = Object.keys(searchHitsByRecipeId);
 
     const labelClause = {};
     if (req.query.labels) {
@@ -588,29 +630,56 @@ router.get(
       };
     }
 
-    const recipes = await Recipe.findAll({
-      where: {
-        id: { [Op.in]: Object.keys(searchHitsByRecipeId) },
-        userId,
-        folder: 'main',
-        ...ratingClause,
-      },
-      include: [{
-        model: Label,
-        as: 'labels',
-        attributes: ['id', 'title']
-      }, {
-        model: Label,
-        as: 'label_filter',
-        attributes: [],
-        ...labelClause
-      }, {
-        model: Image,
-        as: 'images',
-        attributes: ['id', 'location']
-      }],
-      limit: 200
-    });
+    const recipes = [];
+    for (const searchUserId of searchUserIds) {
+      const userIsSelf = searchUserId === myUserId;
+
+      const profileItems = await ProfileItem.findAll({
+        where: {
+          userId: searchUserId,
+        }
+      });
+      const isSharingAll = profileItems.find((profileItem) => profileItem.type === 'all-recipes');
+
+      if (userIsSelf || isSharingAll) {
+        const recipesForUser = await getRecipesForUser({
+          userId: searchUserId,
+          recipeIds: searchHitsRecipeIds,
+          ratingClause,
+          labelClause,
+        });
+        recipes.push(...recipesForUser);
+        continue;
+      }
+
+      const sharedLabelIds = profileItems
+        .filter((profileItem) => profileItem.type === 'label')
+        .map((profileItem) => profileItem.labelId);
+
+      const sharedRecipeLabels = await Recipe_Label.findAll({
+        where: {
+          labelId: sharedLabelIds,
+          recipeId: searchHitsRecipeIds
+        },
+      });
+
+      const recipeProfileItems = profileItems
+        .filter((profileItem) => profileItem.type === 'recipe')
+        .filter((profileItem) => !!searchHitsByRecipeId[profileItem.recipeId]);
+
+      const recipeIds = [
+        ...sharedRecipeLabels.map((recipeLabel) => recipeLabel.recipeId),
+        ...recipeProfileItems.map((recipeLabel) => recipeLabel.recipeId)
+      ];
+
+      const recipesForUser = await getRecipesForUser({
+        userId: searchUserId,
+        recipeIds,
+        ratingClause,
+        labelClause,
+      });
+      recipes.push(...recipesForUser);
+    }
 
     const serializedRecipes = recipes
       .map(UtilService.sortRecipeImages)
