@@ -298,7 +298,7 @@ export class HomePage {
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
 
-      this.ratingFilter = data.ratingFilter;
+      if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
 
       if (typeof data.selectionMode === 'boolean') {
         this.selectionMode = data.selectionMode;
