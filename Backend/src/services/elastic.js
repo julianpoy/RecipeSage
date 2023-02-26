@@ -124,21 +124,19 @@ const deleteRecipesByUser = userId => {
   });
 };
 
-const searchRecipes = (userId, queryString) => {
+const searchRecipes = async (userIds, queryString) => {
   if (!ENABLE) throw new Error('ElasticSearch not enabled');
 
-  return client.search({
+  const results = await client.search({
     index: getFullIndexName('recipes'),
     body: {
       query: {
         bool: {
-          filter: {
-            query_string: {
-              fields: ['userId'],
-              analyzer: 'standard',
-              query: userId
+          should: userIds.map((userId) => ({
+            term: {
+              userId,
             }
-          },
+          })),
           must: {
             multi_match: {
               query: queryString,
@@ -156,8 +154,11 @@ const searchRecipes = (userId, queryString) => {
         }
       }
     },
-    size: 100
+    size: Math.min(userIds.length * 100, 500)
   });
+  //console.log(results.hits.hits);
+
+  return results;
 };
 
 module.exports = {

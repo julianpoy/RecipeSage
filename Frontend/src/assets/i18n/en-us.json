@@ -115,6 +115,7 @@
   "pages.home.recipe.from": "From:",
   "pages.home.recipe.labels": "Labels:",
   "pages.home.recipe.selected": "Selected",
+  "pages.home.recipe.fromSharedCollection": "Friend's Recipe",
 
   "pages.home.errors.emptyCollection.title": "This user's collection is empty",
   "pages.home.errors.emptyCollection.message": "This shared collection has no recipes in it.",
