@@ -2,13 +2,13 @@ import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
-import { Observable, from } from 'rxjs';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import * as Sentry from '@sentry/browser';
@@ -22,7 +22,6 @@ import { CookingToolbarModule } from './components/cooking-toolbar/cooking-toolb
 
 import { environment, SENTRY_SAMPLE_RATE } from 'src/environments/environment';
 import {SupportedLanguages} from './services/preferences.service';
-import { HttpService } from './services/http.service';
 
 const checkChunkLoadError = (error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
@@ -68,26 +67,11 @@ Sentry.init({
   }
 });
 
-class CustomLoader implements TranslateLoader {
-  constructor(
-    private httpService: HttpService
-  ) {}
+export function createTranslateLoader(http: HttpClient) {
+  const prefix = '/assets/i18n/';
+  const suffix = `.json?version=${(window as any).version}`;
 
-  getTranslation(lang: string): Observable<any> {
-    const prefix = '/assets/i18n/';
-    const suffix = `.json?version=${(window as any).version}`;
-
-    return from(this.httpService.request({
-      url: prefix + lang + suffix,
-      method: 'GET'
-    }).then((response) => {
-      return response.data;
-    }));
-  }
-}
-
-export function createTranslateLoader(http: HttpService) {
-  return new CustomLoader(http);
+  return new TranslateHttpLoader(http, prefix, suffix);
 }
 
 @Injectable()
@@ -126,7 +110,7 @@ export class SentryErrorHandler extends ErrorHandler {
         loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpService]
+            deps: [HttpClient]
         },
         defaultLanguage: SupportedLanguages.EN_US
     }),
