@@ -73,6 +73,10 @@ router.get(
       addlOptions.title = req.query.title;
     }
 
+    if (req.query.userId) {
+
+    }
+
     const labels = await Label.findAll({
       where: {
         userId: res.locals.session.userId,

@@ -60,8 +60,8 @@
         (ionClear)="search('')"
         (keydown.enter)="search($event.target.value); $event.target.blur()"
       ></ion-searchbar>
-      <ion-button fill="clear" size="small">
-        Filter
+      <ion-button fill="clear" size="small" (click)="showSearchFilter($event)">
+        {{ 'pages.home.search.filter' | translate }}
       </ion-button>
     </div>
 

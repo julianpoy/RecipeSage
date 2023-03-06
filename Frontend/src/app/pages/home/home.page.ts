@@ -15,6 +15,7 @@ import { UtilService, RouteMap, AuthType } from '@/services/util.service';
 import { LabelService, Label } from '@/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '@/services/preferences.service';
 import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
+import { HomeSearchFilterPopoverPage } from '@/pages/home-search-popover/home-search-filter-popover.page';
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -59,6 +60,7 @@ export class HomePage {
   otherUserProfile: UserProfile;
 
   ratingFilter: (number|null)[] = [];
+  includeFriends: boolean = this.preferences[MyRecipesPreferenceKey.IncludeFriends];
 
   tileColCount: number;
 
@@ -482,5 +484,28 @@ export class HomePage {
       && this.preferences[this.preferenceKeys.ShowLabelChips]
       && this.folder === 'main'
     );
+  }
+
+  async showSearchFilter(event) {
+    const modal = await this.popoverCtrl.create({
+      event,
+      component: HomeSearchFilterPopoverPage,
+      componentProps: {
+        labels: this.labels,
+        selectedLabels: this.selectedLabels,
+        ratingFilter: this.ratingFilter,
+        includeFriends: this.includeFriends,
+      }
+    });
+
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+
+    if (!data) return;
+
+    if (data.selectedLabels) this.selectedLabels = data.selectedLabels;
+    if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
+    if (typeof data.includeFriends === 'boolean') this.includeFriends = this.preferences[this.preferenceKeys.IncludeFriends];
+    if (data.refreshSearch) this.resetAndLoadRecipes();
   }
 }

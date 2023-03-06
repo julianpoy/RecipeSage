@@ -1,0 +1,43 @@
+<ion-list no-border>
+  <ion-list-header>
+    {{ 'pages.homeSearchFilterPopover.title' | translate }}
+  </ion-list-header>
+
+  <ion-item lines="full" *ngIf="!guestMode" class="cursor-pointer" (click)="openRatingFilter()" button detail="false">
+    <ion-label>{{ 'pages.homeSearchFilterPopover.filterByRating' | translate }}</ion-label>
+    <ion-badge *ngIf="ratingFilter?.length" slot="end">
+      {{ratingFilter.length}}
+      <ion-icon name="funnel" style="vertical-align: bottom"></ion-icon>
+    </ion-badge>
+    <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="full" *ngIf="!guestMode" class="cursor-pointer" (click)="openLabelFilter()" button detail="false">
+    <ion-label>{{ 'pages.homeSearchFilterPopover.filterByLabel' | translate }}</ion-label>
+    <ion-badge *ngIf="selectedLabels.length > 0" slot="end">{{selectedLabels.length}}</ion-badge>
+    <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="full" *ngIf="!guestMode">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]" (ngModelChange)="savePreferences(true);" slot="start"></ion-toggle>
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.homeSearchFilterPopover.matchAllLabels' | translate }}
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="full" *ngIf="!guestMode">
+    <ion-toggle [(ngModel)]="preferences[preferenceKeys.IncludeFriends]" (ngModelChange)="savePreferences(true);" slot="start"></ion-toggle>
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}
+      <p>
+        {{ 'pages.homeSearchFilterPopover.includeFriends.description' | translate }}
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" *ngIf="guestMode">
+    <p>
+      {{ 'pages.homeSearchFilterPopover.optionsHidden' | translate }}
+    </p>
+  </ion-item>
+</ion-list>

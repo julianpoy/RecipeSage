@@ -110,6 +110,7 @@
   "pages.home.title.sharedLabel.withProfile": "{{name}}'s Shared Label: {{label}}",
 
   "pages.home.search.placeholder": "Search",
+  "pages.home.search.filter": "Filter",
 
   "pages.home.recipe.source": "Source:",
   "pages.home.recipe.from": "From:",
@@ -146,6 +147,19 @@
   "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible.",
   "pages.home.deleteSelected.message": "This will permanently delete the selected recipes from your account. This action is irreversible. The following recipes will be deleted: {{recipeNames}}",
 
+  "====== Pages.HomeSearchFilterPopover ======": "",
+
+  "pages.homeSearchFilterPopover.title": "Search Filters",
+
+  "pages.homeSearchFilterPopover.filterByRating": "Filter by Rating",
+  "pages.homeSearchFilterPopover.filterByLabel": "Filter by Label",
+  "pages.homeSearchFilterPopover.matchAllLabels": "Match All Labels",
+  "pages.homeSearchFilterPopover.unselectAllRecipes": "Unselect All Recipes",
+  "pages.homeSearchFilterPopover.selectMultipleRecipes": "Select Multiple Recipes",
+  "pages.homeSearchFilterPopover.includeFriends": "Include Friends Recipes",
+  "pages.homeSearchFilterPopover.includeFriends.description": "Only applies to searches with no filters",
+
+  "pages.homeSearchFilterPopover.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 
   "====== Pages.NotFound ======": "",
 
