@@ -930,8 +930,6 @@ router.delete(
         transaction,
       });
 
-      await ElasticService.deleteRecipesByUser(userId);
-
       // TODO: Remove this when we have a way of mocking
       if (process.env.NODE_ENV !== 'test') {
         await deleteHangingImagesForUser(userId, transaction);
@@ -1078,17 +1076,7 @@ router.post(
   '/reindex',
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const recipes = await Recipe.findAll({
-      where: {
-        userId: res.locals.session.userId,
-      }
-    });
-
-    await ElasticService.deleteRecipesByUser(res.locals.session.userId);
-
-    await ElasticService.indexRecipes(recipes);
-
-    res.status(200).send({});
+    res.status(400).send('No longer supported');
   }));
 
 module.exports = router;
