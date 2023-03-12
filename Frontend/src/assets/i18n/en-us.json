@@ -686,11 +686,6 @@
   "pages.account.bonus.subscriptionNeverExpires": "Never Expires",
   "pages.account.bonus.automaticRenewal": "(this will update automatically if subscribed monthly)",
 
-  "pages.account.actions.title": "Actions",
-  "pages.account.actions.resetSearch": "Reset Search Index",
-  "pages.account.actions.resetSearch.description1": "Resetting your search index can help if you find that some recipes never appear in your search results at all.",
-  "pages.account.actions.resetSearch.description2": "Note: This has no effect on the data within your recipe collection.",
-
   "pages.account.dangerZone.title": "Danger Zone!",
   "pages.account.dangerZone.warning1": "Be careful with these actions - they are permanent.",
   "pages.account.dangerZone.warning2": "You will be asked a to confirm any action you take here.",
@@ -709,8 +704,6 @@
   "pages.account.passwordLength": "Passwords must be 6 characters or longer.",
   "pages.account.passwordUpdated.header": "Password Updated",
   "pages.account.passwordUpdated.message": "Your password has been updated. You will need to log back in on any devices that use this account.",
-
-  "pages.account.reindexed": "Your recipes have been reindexed",
 
   "pages.account.deleteAllRecipes.header": "Warning - You're about to delete all of your recipes!",
   "pages.account.deleteAllRecipes.message": "This action is PERMANENT. All of your recipes and associated labels will be removed from the RecipeSage system.",

@@ -1072,11 +1072,4 @@ router.delete(
     res.sendStatus(200);
   }));
 
-router.post(
-  '/reindex',
-  MiddlewareService.validateSession(['user']),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    res.status(400).send('No longer supported');
-  }));
-
 module.exports = router;

@@ -685,11 +685,6 @@
   "pages.account.bonus.subscriptionNeverExpires": "Läuft nie ab",
   "pages.account.bonus.automaticRenewal": "(wird automatisch aktualisiert, wenn du es monatlich abonnierst)",
 
-  "pages.account.actions.title": "Aktionen",
-  "pages.account.actions.resetSearch": "Suchindex zurücksetzen",
-  "pages.account.actions.resetSearch.description1": "Das Zurücksetzen des Suchindexes kann helfen, wenn du feststellst, dass einige Rezepte überhaupt nicht in deinen Suchergebnissen erscheinen.",
-  "pages.account.actions.resetSearch.description2": "Hinweis: Dies hat keine Auswirkungen auf die Daten in deiner Rezeptsammlung.",
-
   "pages.account.dangerZone.title": "Gefahrenzone!",
   "pages.account.dangerZone.warning1": "Vorsicht bei diesen Aktionen - sie sind dauerhaft.",
   "pages.account.dangerZone.warning2": "Du wirst aufgefordert, jede Aktion, die du hier machst, zu bestätigen.",
@@ -708,8 +703,6 @@
   "pages.account.passwordLength": "Passwörter müssen mindestens 6 Zeichen lang sein.",
   "pages.account.passwordUpdated.header": "Passwort aktualisiert",
   "pages.account.passwordUpdated.message": "Dein Passwort wurde aktualisiert. Du musst dich auf allen Geräten, die dieses Konto verwenden, erneut anmelden.",
-
-  "pages.account.reindexed": "Deine Rezepte wurden neu indiziert",
 
   "pages.account.deleteAllRecipes.header": "Warnung - Du bist dabei, alle deine Rezepte zu löschen!",
   "pages.account.deleteAllRecipes.message": "Diese Aktion ist PERMANENT. Alle deine Rezepte und die dazugehörigen Label werden aus dem RecipeSage-System entfernt.",

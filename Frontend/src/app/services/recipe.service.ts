@@ -241,20 +241,6 @@ export class RecipeService {
     return response;
   }
 
-  async reindex(errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `recipes/reindex`,
-      'POST',
-      null,
-      null,
-      errorHandlers
-    );
-
-    this.events.publish('recipe:update');
-
-    return response;
-  }
-
   clipFromUrl(params: {
     url: string,
   }, errorHandlers?: ErrorHandlers) {
