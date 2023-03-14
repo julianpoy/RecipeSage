@@ -1,17 +1,7 @@
-const ElasticService = require('../services/elastic');
-const Sentry = require('@sentry/node');
 const SQ = require('sequelize');
 const Op = SQ.Op;
 
 'use strict';
-
-function afterCommitIfTransaction(options, cb) {
-  if (options && options.transaction && options.transaction.afterCommit) {
-    options.transaction.afterCommit(cb);
-  } else {
-    cb();
-  }
-}
 
 module.exports = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
@@ -84,74 +74,6 @@ module.exports = (sequelize, DataTypes) => {
     indexedAt: {
       type: DataTypes.DATE,
       defaultValue: SQ.NOW
-    }
-  }, {
-    hooks: {
-      beforeDestroy: (recipe, options) => {
-        afterCommitIfTransaction(options, () => {
-          ElasticService.deleteRecipes([recipe.id]).catch(e => {
-            if (e.status != 404) {
-              e = new Error(e);
-              e.status = 500;
-              throw e;
-            }
-          }).catch(e => {
-            Sentry.captureException(e);
-          });
-        });
-      },
-      beforeBulkDestroy: (options) => {
-        return Recipe.findAll({
-          where: options.where,
-          attributes: ['id'],
-          transaction: options.transaction
-        }).then(recipes => {
-          afterCommitIfTransaction(options, () => {
-            ElasticService.deleteRecipes(recipes).catch(e => {
-              if (e.status != 404) {
-                e = new Error(e);
-                e.status = 500;
-                throw e;
-              }
-            }).catch(e => {
-              Sentry.captureException(e);
-            });
-          });
-        });
-      },
-      afterUpdate: (recipe, options) => {
-        afterCommitIfTransaction(options, () => {
-          ElasticService.indexRecipes([recipe]).catch(e => {
-            Sentry.captureException(e);
-          });
-        });
-      },
-      afterBulkUpdate: options => {
-        return Recipe.findAll({
-          where: options.where,
-          transaction: options.transaction
-        }).then(recipes => {
-          afterCommitIfTransaction(options, () => {
-            ElasticService.indexRecipes(recipes).catch(e => {
-              Sentry.captureException(e);
-            });
-          });
-        });
-      },
-      afterCreate: (recipe, options) => {
-        afterCommitIfTransaction(options, () => {
-          ElasticService.indexRecipes([recipe]).catch(e => {
-            Sentry.captureException(e);
-          });
-        });
-      },
-      afterBulkCreate: (recipes, options) => {
-        afterCommitIfTransaction(options, () => {
-          ElasticService.indexRecipes(recipes).catch(e => {
-            Sentry.captureException(e);
-          });
-        });
-      }
     }
   });
   Recipe.associate = function(models) {
