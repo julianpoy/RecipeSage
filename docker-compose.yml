@@ -85,7 +85,7 @@ services:
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_dev
-      - ES_JAVA_OPTS="-Xms1500m -Xmx1500m"
+      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
       - xpack.security.enabled=false
     ports:
       - 9200:9200
