@@ -85,9 +85,14 @@ services:
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_dev
+      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
       - xpack.security.enabled=false
     ports:
       - 9200:9200
+  kibana:
+    image: kibana:8.4.3
+    ports:
+      - 5601:5601
   pushpin:
     image: fanout/pushpin:1.27.0
     environment:
@@ -97,6 +102,10 @@ services:
       - "5560-5563:5560-5563"
   postgres:
     image: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
     ports:
       - 5432:5432
     environment:
@@ -118,4 +127,28 @@ services:
       - FUNCTION_ENABLE_INCOGNITO_MODE=true
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
+  pgsync_redis:
+    image: redis
+  pgsync:
+    image: julianpoy/pgsync:2.5.0
+    volumes:
+      - ./pgsync.schema.json:/schema.json
+    environment:
+      - PG_DATABASE=recipesage_dev
+      - PG_USER=recipesage_dev
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_PASSWORD=recipesage_dev
+      - LOG_LEVEL=INFO
+      - ELASTICSEARCH_PORT=9200
+      - ELASTICSEARCH_SCHEME=http
+      - ELASTICSEARCH_HOST=elasticsearch
+      - REDIS_HOST=pgsync_redis
+      - REDIS_PORT=6379
+      - ELASTICSEARCH=true
+      - OPENSEARCH=false
+    depends_on:
+      - postgres
+      - pgsync_redis
+      - elasticsearch
 

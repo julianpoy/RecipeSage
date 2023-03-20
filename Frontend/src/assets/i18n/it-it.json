@@ -686,11 +686,6 @@
   "pages.account.bonus.subscriptionNeverExpires": "Nessuna Scadenza",
   "pages.account.bonus.automaticRenewal": "(si aggiornerà automaticamente se l'abbonamento è mensile)",
 
-  "pages.account.actions.title": "Azioni",
-  "pages.account.actions.resetSearch": "Resetta Indice di Ricerca",
-  "pages.account.actions.resetSearch.description1": "Resettare l'indice di ricerca può essere d'aiuto se alcune ricette non compaiono mai nei risultati della ricerca.",
-  "pages.account.actions.resetSearch.description2": "Nota: Non ha alcun effetto sui dati della raccolta di ricette.",
-
   "pages.account.dangerZone.title": "Danger Zone!",
   "pages.account.dangerZone.warning1": "Attenzione: queste opzioni sono irreversibili.",
   "pages.account.dangerZone.warning2": "Verrà chiesto di confermare qualsiasi opzione selezionata.",
@@ -709,8 +704,6 @@
   "pages.account.passwordLength": "La password deve avere almeno 6 caratteri.",
   "pages.account.passwordUpdated.header": "Password Aggiornata",
   "pages.account.passwordUpdated.message": "La tua password è stata aggiornata. Sarà necessario rifare l’accesso su tutti i dispositivi su cui usi questo profilo.",
-
-  "pages.account.reindexed": "Le tue ricette sono state reindicizzate",
 
   "pages.account.deleteAllRecipes.header": "Attenzione - Stai per cancellare tutte le tue ricette!",
   "pages.account.deleteAllRecipes.message": "Quest’azione è IRREVERSIBILE. Tutte le tue ricette ed etichette associate saranno eliminate da RecipeSage.",

@@ -244,23 +244,6 @@ export class AccountPage {
     alert.present();
   }
 
-  async reindexRecipes() {
-    const loading = this.loadingService.start();
-
-    await this.recipeService.reindex();
-
-    loading.dismiss();
-
-    const message = await this.translate.get('pages.account.reindexed').toPromise();
-
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 5000
-    });
-
-    toast.present();
-  }
-
   async deleteAccount() {
     const header = await this.translate.get('pages.account.deleteAccount.header').toPromise();
     const message = await this.translate.get('pages.account.deleteAccount.message').toPromise();
