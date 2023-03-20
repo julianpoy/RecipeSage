@@ -1,0 +1,15 @@
+{
+  "name": "recipesage",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nrwl/js": "15.8.7",
+    "@nrwl/nx-cloud": "latest",
+    "@nrwl/workspace": "15.8.7",
+    "nx": "15.8.7",
+    "prettier": "^2.6.2"
+  }
+}
