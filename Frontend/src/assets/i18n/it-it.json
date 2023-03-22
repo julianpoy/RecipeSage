@@ -110,11 +110,13 @@
   "pages.home.title.sharedLabel.withProfile": "{{name}} ha condiviso l'etichetta: {{label}}",
 
   "pages.home.search.placeholder": "Cerca",
+  "pages.home.search.filter": "Filtro",
 
   "pages.home.recipe.source": "Fonte:",
   "pages.home.recipe.from": "Da:",
   "pages.home.recipe.labels": "Etichette:",
   "pages.home.recipe.selected": "Selezionata",
+  "pages.home.recipe.fromSharedCollection": "Ricetta di un amico",
 
   "pages.home.errors.emptyCollection.title": "La raccolta di questo utente è vuota",
   "pages.home.errors.emptyCollection.message": "Questa raccolta condivisa non contiene nessuna ricetta.",
@@ -145,6 +147,17 @@
   "pages.home.deleteSelected.message": "In questo modo cancellerai definitivamente le ricette selezionate dalla tua raccolta. Questa azione è irreversibile.",
   "pages.home.deleteSelected.message": "In questo modo cancellerai definitivamente le ricette selezionate dalla tua raccolta. Questa azione è irreversibile. Le seguenti ricette verranno cancellate: {{recipeNames}}",
 
+  "====== Pages.HomeSearchFilterPopover ======": "",
+
+  "pages.homeSearchFilterPopover.title": "Filtri di ricerca",
+
+  "pages.homeSearchFilterPopover.filterByRating": "Filtrare per valutazione",
+  "pages.homeSearchFilterPopover.filterByLabel": "Filtrare per etichetta",
+  "pages.homeSearchFilterPopover.matchAllLabels": "Abbinare tutte le etichette",
+  "pages.homeSearchFilterPopover.includeFriends": "Includere le ricette degli amici",
+  "pages.homeSearchFilterPopover.includeFriends.description": "Si applica solo alle ricerche senza filtri",
+
+  "pages.homeSearchFilterPopover.optionsHidden": "Nota: alcune opzioni sono nascoste, poiché si tratta di una raccolta condivisa.",
 
   "====== Pages.NotFound ======": "",
 

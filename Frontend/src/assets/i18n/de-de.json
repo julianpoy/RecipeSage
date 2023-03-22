@@ -109,11 +109,13 @@
   "pages.home.title.sharedLabel.withProfile": "{{name}}'s geteiltes Label: {{label}}",
 
   "pages.home.search.placeholder": "Suche",
+  "pages.home.search.filter": "Filter",
 
   "pages.home.recipe.source": "Quelle:",
   "pages.home.recipe.from": "Von:",
   "pages.home.recipe.labels": "Label:",
   "pages.home.recipe.selected": "Ausgewählt",
+  "pages.home.recipe.fromSharedCollection": "Rezept eines Freundes",
 
   "pages.home.errors.emptyCollection.title": "Die Sammlung dieses Users ist leer",
   "pages.home.errors.emptyCollection.message": "Diese gemeinsame Sammlung enthält keine Rezepte.",
@@ -144,6 +146,17 @@
   "pages.home.deleteSelected.message": "Dadurch werden die ausgewählten Rezepte dauerhaft aus deinem Konto gelöscht. Diese Aktion ist nicht mehr revidierbar.",
   "pages.home.deleteSelected.message": "Dadurch werden die ausgewählten Rezepte dauerhaft aus deinem Konto gelöscht. Diese Aktion ist nicht mehr revidierbar. Die folgenden Rezepte werden gelöscht: {{recipeNames}}",
 
+  "====== Pages.HomeSearchFilterPopover ======": "",
+
+  "pages.homeSearchFilterPopover.title": "Filter suchen",
+
+  "pages.homeSearchFilterPopover.filterByRating": "Nach Bewertung filtern",
+  "pages.homeSearchFilterPopover.filterByLabel": "Nach Label filtern",
+  "pages.homeSearchFilterPopover.matchAllLabels": "Alle Etiketten anpassen",
+  "pages.homeSearchFilterPopover.includeFriends": "Rezepte von Freunden einbeziehen",
+  "pages.homeSearchFilterPopover.includeFriends.description": "Gilt nur für Suchen ohne Filter",
+
+  "pages.homeSearchFilterPopover.optionsHidden": "Hinweis: Einige Optionen sind ausgeblendet, da es sich um eine gemeinsame Sammlung handelt.",
 
   "====== Pages.NotFound ======": "",
 

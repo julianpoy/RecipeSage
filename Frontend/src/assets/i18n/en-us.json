@@ -154,8 +154,6 @@
   "pages.homeSearchFilterPopover.filterByRating": "Filter by Rating",
   "pages.homeSearchFilterPopover.filterByLabel": "Filter by Label",
   "pages.homeSearchFilterPopover.matchAllLabels": "Match All Labels",
-  "pages.homeSearchFilterPopover.unselectAllRecipes": "Unselect All Recipes",
-  "pages.homeSearchFilterPopover.selectMultipleRecipes": "Select Multiple Recipes",
   "pages.homeSearchFilterPopover.includeFriends": "Include Friends Recipes",
   "pages.homeSearchFilterPopover.includeFriends.description": "Only applies to searches with no filters",
 
