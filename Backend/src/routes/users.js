@@ -25,6 +25,7 @@ const UtilService = require('../services/util');
 const SubscriptionService = require('../services/subscriptions');
 const { sendWelcome } = require('../emails/welcome');
 const { sendPasswordReset } = require('../emails/passwordReset');
+const { getFriendships } = require('../utils/getFriendships');
 
 // SharedUtils
 const SharedUtils = require('../../../SharedUtils/src');
@@ -341,77 +342,7 @@ router.get('/friends',
   wrapRequestWithErrorHandler(async (req, res) => {
     const myUserId = res.locals.session.userId;
 
-    const outgoingFriendships = await Friendship.findAll({
-      where: {
-        userId: myUserId
-      },
-      include: [{
-        model: User,
-        as: 'friend',
-        attributes: ['id', 'name', 'handle', 'enableProfile'],
-        include: [{
-          model: Image,
-          as: 'profileImages',
-          attributes: ['id', 'location']
-        }]
-      }]
-    });
-
-    const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce((acc, outgoingFriendship) => (
-      { ...acc, [outgoingFriendship.friendId]: outgoingFriendship }
-    ), {});
-
-    const incomingFriendships = await Friendship.findAll({
-      where: {
-        friendId: res.locals.session.userId
-      },
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['id', 'name', 'handle', 'enableProfile'],
-        include: [{
-          model: Image,
-          as: 'profileImages',
-          attributes: ['id', 'location']
-        }]
-      }]
-    });
-
-    const incomingFriendshipsByOtherUserId = incomingFriendships.reduce((acc, incomingFriendship) => (
-      { ...acc, [incomingFriendship.userId]: incomingFriendship }
-    ), {});
-
-    const friendshipSummary = [...outgoingFriendships, ...incomingFriendships].reduce((acc, friendship) => {
-      const friendId = friendship.userId === myUserId ? friendship.friendId : friendship.userId;
-
-      if (outgoingFriendshipsByOtherUserId[friendId] && incomingFriendshipsByOtherUserId[friendId]) {
-        // Friendship both ways. They are friends!
-        if (!acc.friends.find(friendship => friendship.friendId === friendId)) { // Remove dupes
-          acc.friends.push({
-            friendId,
-            otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
-          });
-        }
-      } else if (outgoingFriendshipsByOtherUserId[friendId]) {
-        // We're requesting them as a friend!
-        acc.outgoingRequests.push({
-          friendId,
-          otherUser: outgoingFriendshipsByOtherUserId[friendId].friend
-        });
-      } else if (incomingFriendshipsByOtherUserId[friendId]) {
-        // They're requesting us as a friend!
-        acc.incomingRequests.push({
-          friendId,
-          otherUser: incomingFriendshipsByOtherUserId[friendId].user
-        });
-      }
-
-      return acc;
-    }, {
-      outgoingRequests: [],
-      incomingRequests: [],
-      friends: []
-    });
+    const friendshipSummary = await getFriendships(myUserId);
 
     res.status(200).json(friendshipSummary);
   }));

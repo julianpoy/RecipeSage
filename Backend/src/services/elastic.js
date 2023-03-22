@@ -10,7 +10,7 @@ if (ENABLE) {
   });
 }
 
-const searchRecipes = async (userId, queryString) => {
+const searchRecipes = async (userIds, queryString) => {
   if (!ENABLE) throw new Error('ElasticSearch not enabled');
 
   return client.search({
@@ -18,13 +18,11 @@ const searchRecipes = async (userId, queryString) => {
     body: {
       query: {
         bool: {
-          filter: {
-            query_string: {
-              fields: ['userId'],
-              analyzer: 'standard',
-              query: userId
+          should: userIds.map((userId) => ({
+            term: {
+              userId,
             }
-          },
+          })),
           must: {
             multi_match: {
               query: queryString,
@@ -44,7 +42,7 @@ const searchRecipes = async (userId, queryString) => {
         }
       }
     },
-    size: 500
+    size: Math.min(userIds.length * 500, 1000)
   });
 };
 

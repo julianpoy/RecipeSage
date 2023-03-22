@@ -8,6 +8,7 @@ import { UiScrollModule } from 'ngx-ui-scroll';
 import { HomePage } from './home.page';
 import { LogoIconModule } from '@/components/logo-icon/logo-icon.module';
 import { HomePopoverPageModule } from '@/pages/home-popover/home-popover.module';
+import { HomeSearchFilterPopoverModule } from '@/pages/home-search-popover/home-search-filter-popover.module';
 import { NullStateModule } from '@/components/null-state/null-state.module';
 
 import { GlobalModule } from '@/global.module';
@@ -26,6 +27,7 @@ import { GlobalModule } from '@/global.module';
     LogoIconModule,
     NullStateModule,
     HomePopoverPageModule,
+    HomeSearchFilterPopoverModule,
     UiScrollModule,
   ],
   declarations: [HomePage]
