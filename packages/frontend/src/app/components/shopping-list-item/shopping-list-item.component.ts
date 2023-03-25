@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { UtilService } from '@/services/util.service';
+import { UtilService } from '~/services/util.service';
 
 @Component({
   selector: 'shopping-list-item',

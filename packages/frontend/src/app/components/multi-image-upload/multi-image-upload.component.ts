@@ -2,11 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { UserService } from '@/services/user.service';
-import { Image, ImageService } from '@/services/image.service';
-import { LoadingService } from '@/services/loading.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UserService } from '~/services/user.service';
+import { Image, ImageService } from '~/services/image.service';
+import { LoadingService } from '~/services/loading.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'multi-image-upload',

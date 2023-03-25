@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { MealGroupComponent } from './meal-group.component';
 import { CalendarItemModule } from '../calendar-item/calendar-item.module';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

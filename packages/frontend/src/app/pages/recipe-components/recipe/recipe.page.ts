@@ -3,25 +3,25 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { linkifyStr } from '@/utils/linkify';
-import { RecipeService, Recipe, ParsedInstruction, ParsedIngredient, ParsedNote, RecipeFolderName } from '@/services/recipe.service';
-import { LabelService } from '@/services/label.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { WakeLockService } from '@/services/wakelock.service';
-import { PreferencesService, RecipeDetailsPreferenceKey } from '@/services/preferences.service';
-import { RecipeCompletionTrackerService } from '@/services/recipe-completion-tracker.service';
+import { linkifyStr } from '~/utils/linkify';
+import { RecipeService, Recipe, ParsedInstruction, ParsedIngredient, ParsedNote, RecipeFolderName } from '~/services/recipe.service';
+import { LabelService } from '~/services/label.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap } from '~/services/util.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { WakeLockService } from '~/services/wakelock.service';
+import { PreferencesService, RecipeDetailsPreferenceKey } from '~/services/preferences.service';
+import { RecipeCompletionTrackerService } from '~/services/recipe-completion-tracker.service';
 
 import { AddRecipeToShoppingListModalPage } from '../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 import { AddRecipeToMealPlanModalPage } from '../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page';
 import { PrintRecipeModalPage } from '../print-recipe-modal/print-recipe-modal.page';
 import { RecipeDetailsPopoverPage } from '../recipe-details-popover/recipe-details-popover.page';
-import { ShareModalPage } from '@/pages/share-modal/share-modal.page';
-import { AuthPage } from '@/pages/auth/auth.page';
-import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
-import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
+import { ShareModalPage } from '~/pages/share-modal/share-modal.page';
+import { AuthPage } from '~/pages/auth/auth.page';
+import { ImageViewerComponent } from '~/modals/image-viewer/image-viewer.component';
+import { ScaleRecipeComponent } from '~/modals/scale-recipe/scale-recipe.component';
 
 @Component({
   selector: 'page-recipe',

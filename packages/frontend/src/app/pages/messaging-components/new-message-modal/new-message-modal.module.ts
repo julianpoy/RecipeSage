@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NewMessageModalPage } from './new-message-modal.page';
-import { SelectUserModule } from '@/components/select-user/select-user.module';
+import { SelectUserModule } from '~/components/select-user/select-user.module';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

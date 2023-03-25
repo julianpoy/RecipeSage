@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { MealPlanPopoverPage } from './meal-plan-popover.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

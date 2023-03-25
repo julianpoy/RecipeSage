@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { RecipeService } from '@/services/recipe.service';
-import { RouteMap } from '@/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'page-export',

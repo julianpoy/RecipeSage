@@ -4,11 +4,11 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AddRecipeToMealPlanModalPage } from './add-recipe-to-meal-plan-modal.page';
-import { MealCalendarModule } from '@/components/meal-calendar/meal-calendar.module';
-import { SelectMealModule } from '@/components/select-meal/select-meal.module';
-import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
+import { MealCalendarModule } from '~/components/meal-calendar/meal-calendar.module';
+import { SelectMealModule } from '~/components/select-meal/select-meal.module';
+import { NewMealPlanModalPageModule } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

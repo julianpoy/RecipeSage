@@ -4,10 +4,10 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { MealPlansPage } from './meal-plans.page';
-import { NewMealPlanModalPageModule } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
-import { NullStateModule } from '@/components/null-state/null-state.module';
+import { NewMealPlanModalPageModule } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.module';
+import { NullStateModule } from '~/components/null-state/null-state.module';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { RouteMap } from '@/services/util.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
+import { RouteMap } from '~/services/util.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
 
 @Component({
   selector: 'page-contribute-thankyou',

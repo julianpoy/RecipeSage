@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController, NavController } from '@ionic/angular';
 
-import { LoadingService } from '@/services/loading.service';
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { MessagingService } from '@/services/messaging.service';
-import { UserService } from '@/services/user.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { LoadingService } from '~/services/loading.service';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { MessagingService } from '~/services/messaging.service';
+import { UserService } from '~/services/user.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 @Component({
   selector: 'page-new-shopping-list-modal',

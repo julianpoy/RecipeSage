@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ShoppingListPopoverPage } from './shopping-list-popover.page';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

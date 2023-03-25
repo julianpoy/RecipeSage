@@ -2,12 +2,12 @@ import { Component, ViewChild, Input } from '@angular/core';
 import { ToastController, ModalController, IonSelect, PopoverController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LabelService } from '@/services/label.service';
-import { UtilService } from '@/services/util.service';
-import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
-import { PreferencesService, MyRecipesPreferenceKey } from '@/services/preferences.service';
-import { ResettableSelectPopoverPage } from '@/pages/resettable-select-popover/resettable-select-popover.page';
-import {RatingFilterPopoverComponent} from '@/components/rating-filter-popover/rating-filter-popover.component';
+import { LabelService } from '~/services/label.service';
+import { UtilService } from '~/services/util.service';
+import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
+import { PreferencesService, MyRecipesPreferenceKey } from '~/services/preferences.service';
+import { ResettableSelectPopoverPage } from '~/pages/resettable-select-popover/resettable-select-popover.page';
+import {RatingFilterPopoverComponent} from '~/components/rating-filter-popover/rating-filter-popover.component';
 
 @Component({
   selector: 'page-home-popover',

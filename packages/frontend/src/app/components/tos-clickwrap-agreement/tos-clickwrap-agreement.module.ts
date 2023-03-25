@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TosClickwrapAgreementComponent } from './tos-clickwrap-agreement.component';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

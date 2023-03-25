@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
-import { RouteMap, AuthType } from '@/services/util.service';
+import { RouteMap, AuthType } from '~/services/util.service';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 

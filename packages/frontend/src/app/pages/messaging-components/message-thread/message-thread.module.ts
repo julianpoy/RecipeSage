@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MessageThreadPage } from './message-thread.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

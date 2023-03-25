@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 import {SelectUserKnownUserComponent} from './select-user-knownuser.component';
 import {SelectUserModule} from '../select-user/select-user.module';
 import {SelectKnownUserModule} from '../select-knownuser/select-knownuser.module';

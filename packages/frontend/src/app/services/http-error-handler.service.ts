@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import {AuthPage} from '@/pages/auth/auth.page';
+import {AuthPage} from '~/pages/auth/auth.page';
 
 export interface ErrorHandlers {
   [code: string]: () => any

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 
-import { LoadingService } from '@/services/loading.service';
-import { MessagingService } from '@/services/messaging.service';
-import { MealPlanService } from '@/services/meal-plan.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { LoadingService } from '~/services/loading.service';
+import { MessagingService } from '~/services/messaging.service';
+import { MealPlanService } from '~/services/meal-plan.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 @Component({
   selector: 'page-new-meal-plan-modal',

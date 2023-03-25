@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 import { NewShoppingListModalPage } from '../new-shopping-list-modal/new-shopping-list-modal.page';
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
-import { RouteMap } from '@/services/util.service';
+import { RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'page-not-found',

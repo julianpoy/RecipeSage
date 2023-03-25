@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
+import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
 
 export interface PinnedRecipe {
   imageUrl?: string

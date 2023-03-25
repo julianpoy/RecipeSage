@@ -4,10 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ShareModalPage } from './share-modal.page';
-import { RecipePreviewModule } from '@/components/recipe-preview/recipe-preview.module';
-import {GlobalModule} from '@/global.module';
-import {CopyWithWebshareModule} from '@/components/copy-with-webshare/copy-with-webshare.module';
-import {SelectUserKnownUserModule} from '@/components/select-user-knownuser/select-user-knownuser.module';
+import { RecipePreviewModule } from '~/components/recipe-preview/recipe-preview.module';
+import {GlobalModule} from '~/global.module';
+import {CopyWithWebshareModule} from '~/components/copy-with-webshare/copy-with-webshare.module';
+import {SelectUserKnownUserModule} from '~/components/select-user-knownuser/select-user-knownuser.module';
 
 @NgModule({
   declarations: [

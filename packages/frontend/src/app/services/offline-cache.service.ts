@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { PreferencesService, GlobalPreferenceKey } from '@/services/preferences.service';
-import { FeatureFlagService, FeatureFlagKeys } from '@/services/feature-flag.service';
-import { RecipeFolderName, RecipeService } from '@/services/recipe.service';
-import { EventService } from '@/services/event.service';
+import { PreferencesService, GlobalPreferenceKey } from '~/services/preferences.service';
+import { FeatureFlagService, FeatureFlagKeys } from '~/services/feature-flag.service';
+import { RecipeFolderName, RecipeService } from '~/services/recipe.service';
+import { EventService } from '~/services/event.service';
 
 @Injectable({
   providedIn: 'root'

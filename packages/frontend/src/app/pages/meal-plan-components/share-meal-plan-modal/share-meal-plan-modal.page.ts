@@ -1,5 +1,5 @@
-import {MealPlanService} from '@/services/meal-plan.service';
-import {UtilService} from '@/services/util.service';
+import {MealPlanService} from '~/services/meal-plan.service';
+import {UtilService} from '~/services/util.service';
 import { Component, Input } from '@angular/core';
 import {ModalController} from '@ionic/angular';
 

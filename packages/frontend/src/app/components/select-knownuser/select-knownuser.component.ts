@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
-import {MessageThread, MessagingService} from '@/services/messaging.service';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap } from '~/services/util.service';
+import {MessageThread, MessagingService} from '~/services/messaging.service';
 
 @Component({
   selector: 'select-knownuser',

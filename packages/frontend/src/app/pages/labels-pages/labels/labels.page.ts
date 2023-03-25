@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { NavController, AlertController, ToastController, PopoverController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService } from '~/services/util.service';
 
-import { LabelService, Label } from '@/services/label.service';
-import { LabelsPopoverPage } from '@/pages/labels-pages/labels-popover/labels-popover.page';
-import { ManageLabelModalPage } from '@/pages/labels-pages/manage-label-modal/manage-label-modal.page';
-import { PreferencesService, ManageLabelsPreferenceKey } from '@/services/preferences.service';
+import { LabelService, Label } from '~/services/label.service';
+import { LabelsPopoverPage } from '~/pages/labels-pages/labels-popover/labels-popover.page';
+import { ManageLabelModalPage } from '~/pages/labels-pages/manage-label-modal/manage-label-modal.page';
+import { PreferencesService, ManageLabelsPreferenceKey } from '~/services/preferences.service';
 
 @Component({
   selector: 'page-labels',

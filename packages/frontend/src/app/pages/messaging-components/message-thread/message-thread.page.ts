@@ -2,12 +2,12 @@ import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 
-import { linkifyStr } from '@/utils/linkify';
-import { MessagingService } from '@/services/messaging.service';
-import { LoadingService } from '@/services/loading.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { EventService } from '@/services/event.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { linkifyStr } from '~/utils/linkify';
+import { MessagingService } from '~/services/messaging.service';
+import { LoadingService } from '~/services/loading.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { EventService } from '~/services/event.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({

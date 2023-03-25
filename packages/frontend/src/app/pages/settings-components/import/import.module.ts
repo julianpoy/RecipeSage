@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { ImportPage } from './import.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

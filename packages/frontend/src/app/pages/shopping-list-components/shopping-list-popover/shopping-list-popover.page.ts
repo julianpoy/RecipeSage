@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 import { ToastController, AlertController, NavController, PopoverController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { UtilService, RouteMap } from '@/services/util.service';
-import { PreferencesService, ShoppingListPreferenceKey } from '@/services/preferences.service';
+import { LoadingService } from '~/services/loading.service';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { UtilService, RouteMap } from '~/services/util.service';
+import { PreferencesService, ShoppingListPreferenceKey } from '~/services/preferences.service';
 
 @Component({
   selector: 'page-shopping-list-popover',

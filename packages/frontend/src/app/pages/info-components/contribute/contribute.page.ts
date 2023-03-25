@@ -4,9 +4,9 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
-import { UtilService, RouteMap } from '@/services/util.service';
-import { PaymentsService } from '@/services/payments.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
+import { UtilService, RouteMap } from '~/services/util.service';
+import { PaymentsService } from '~/services/payments.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
 
 @Component({
   selector: 'page-contribute',

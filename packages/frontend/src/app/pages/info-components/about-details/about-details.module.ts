@@ -4,8 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { AboutDetailsPage } from './about-details.page';
-import { SocialLinksModule } from '@/components/social-links/social-links.module';
-import {GlobalModule} from '@/global.module';
+import { SocialLinksModule } from '~/components/social-links/social-links.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

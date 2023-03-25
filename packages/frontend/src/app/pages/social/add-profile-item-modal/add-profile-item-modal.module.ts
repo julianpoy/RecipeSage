@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddProfileItemModalPage } from './add-profile-item-modal.page';
 import { SelectRecipeModule } from '../../../components/select-recipe/select-recipe.module';
 import { SelectLabelModule } from '../../../components/select-label/module';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

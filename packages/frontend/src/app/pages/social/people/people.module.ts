@@ -5,9 +5,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PeoplePage } from './people.page';
-import { NullStateModule } from '@/components/null-state/null-state.module';
+import { NullStateModule } from '~/components/null-state/null-state.module';
 import { AddFriendModalPageModule } from '../add-friend-modal/add-friend-modal.module';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

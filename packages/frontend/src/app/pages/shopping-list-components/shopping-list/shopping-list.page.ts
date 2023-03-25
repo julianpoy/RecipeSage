@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController, ToastController, ModalController, PopoverController, AlertController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { PreferencesService, ShoppingListPreferenceKey } from '@/services/preferences.service';
+import { LoadingService } from '~/services/loading.service';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { PreferencesService, ShoppingListPreferenceKey } from '~/services/preferences.service';
 import { getShoppingListItemGroupings } from '@recipesage/util';
 
 import { NewShoppingListItemModalPage } from '../new-shopping-list-item-modal/new-shopping-list-item-modal.page';

@@ -2,11 +2,11 @@ import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { LoadingService } from '@/services/loading.service';
-import { RecipeService, ParsedIngredient } from '@/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { NewShoppingListModalPage } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { LoadingService } from '~/services/loading.service';
+import { RecipeService, ParsedIngredient } from '~/services/recipe.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { NewShoppingListModalPage } from '~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
 
 @Component({
   selector: 'page-add-recipe-to-shopping-list-modal',

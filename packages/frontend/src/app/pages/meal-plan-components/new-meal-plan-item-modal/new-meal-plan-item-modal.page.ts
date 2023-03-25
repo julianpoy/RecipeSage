@@ -1,8 +1,8 @@
 import { Input, Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
-import { RecipeService } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService } from '~/services/util.service';
 
 @Component({
   selector: 'page-new-meal-plan-item-modal',

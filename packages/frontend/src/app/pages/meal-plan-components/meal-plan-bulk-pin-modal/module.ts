@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { MealPlanBulkPinModalPage } from './index';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

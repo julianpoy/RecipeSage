@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { Recipe, RecipeService } from '@/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { Recipe, RecipeService } from '~/services/recipe.service';
 import { ToastController, NavController } from '@ionic/angular';
 
 @Component({

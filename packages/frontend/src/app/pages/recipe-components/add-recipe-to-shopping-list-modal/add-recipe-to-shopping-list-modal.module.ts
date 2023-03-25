@@ -4,10 +4,10 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AddRecipeToShoppingListModalPage } from './add-recipe-to-shopping-list-modal.page';
-import { SelectIngredientsModule } from '@/components/select-ingredients/select-ingredients.module';
-import { NewShoppingListModalPageModule } from '@/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.module';
+import { SelectIngredientsModule } from '~/components/select-ingredients/select-ingredients.module';
+import { NewShoppingListModalPageModule } from '~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.module';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

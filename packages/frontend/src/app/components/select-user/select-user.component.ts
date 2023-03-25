@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
 

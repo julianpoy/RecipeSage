@@ -19,7 +19,7 @@ COPY SharedUtils SharedUtils
 
 WORKDIR /app/Frontend
 
-RUN npm run dist
+RUN npm run build:prod
 
 RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" www/index.html
 

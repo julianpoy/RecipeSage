@@ -4,19 +4,19 @@ import { NavController, ToastController, ModalController, PopoverController, Ale
 import dayjs, { Dayjs } from 'dayjs';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { MealPlanService } from '@/services/meal-plan.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { ShoppingListService } from '@/services/shopping-list.service';
-import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
+import { LoadingService } from '~/services/loading.service';
+import { MealPlanService } from '~/services/meal-plan.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { ShoppingListService } from '~/services/shopping-list.service';
+import { PreferencesService, MealPlanPreferenceKey } from '~/services/preferences.service';
 
-import { MealCalendarComponent } from '@/components/meal-calendar/meal-calendar.component';
+import { MealCalendarComponent } from '~/components/meal-calendar/meal-calendar.component';
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
-import { MealPlanPopoverPage } from '@/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
-import { MealPlanItemDetailsModalPage } from '@/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
-import { MealPlanBulkPinModalPage } from '@/pages/meal-plan-components/meal-plan-bulk-pin-modal';
-import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
+import { MealPlanPopoverPage } from '~/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page';
+import { MealPlanItemDetailsModalPage } from '~/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page';
+import { MealPlanBulkPinModalPage } from '~/pages/meal-plan-components/meal-plan-bulk-pin-modal';
+import { AddRecipeToShoppingListModalPage } from '~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 
 @Component({
   selector: 'page-meal-plan',

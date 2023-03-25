@@ -4,18 +4,18 @@ import {TranslateService} from '@ngx-translate/core';
 import { NavController, AlertController, ToastController, PopoverController, NavParams } from '@ionic/angular';
 import { Datasource } from 'ngx-ui-scroll';
 
-import { RecipeService, Recipe, RecipeFolderName } from '@/services/recipe.service';
-import { MessagingService } from '@/services/messaging.service';
-import { UserProfile, UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { EventService } from '@/services/event.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { RecipeService, Recipe, RecipeFolderName } from '~/services/recipe.service';
+import { MessagingService } from '~/services/messaging.service';
+import { UserProfile, UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { EventService } from '~/services/event.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
-import { LabelService, Label } from '@/services/label.service';
-import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '@/services/preferences.service';
-import { HomePopoverPage } from '@/pages/home-popover/home-popover.page';
-import { HomeSearchFilterPopoverPage } from '@/pages/home-search-popover/home-search-filter-popover.page';
+import { LabelService, Label } from '~/services/label.service';
+import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '~/services/preferences.service';
+import { HomePopoverPage } from '~/pages/home-popover/home-popover.page';
+import { HomeSearchFilterPopoverPage } from '~/pages/home-search-popover/home-search-filter-popover.page';
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;

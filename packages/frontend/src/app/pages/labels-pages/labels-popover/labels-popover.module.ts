@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { LabelsPopoverPage } from './labels-popover.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

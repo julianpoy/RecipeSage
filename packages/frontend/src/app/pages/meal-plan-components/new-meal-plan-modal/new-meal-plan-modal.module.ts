@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NewMealPlanModalPage } from './new-meal-plan-modal.page';
-import { SelectCollaboratorsModule } from '@/components/select-collaborators/select-collaborators.module';
+import { SelectCollaboratorsModule } from '~/components/select-collaborators/select-collaborators.module';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

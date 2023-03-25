@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ImportLivingcookbookPage } from './import-livingcookbook.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

@@ -2,12 +2,12 @@ import { Component, Input } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { LoadingService } from '@/services/loading.service';
-import { RecipeService } from '@/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { MealPlanService } from '@/services/meal-plan.service';
+import { LoadingService } from '~/services/loading.service';
+import { RecipeService } from '~/services/recipe.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { MealPlanService } from '~/services/meal-plan.service';
 
-import { NewMealPlanModalPage } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
+import { NewMealPlanModalPage } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({

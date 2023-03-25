@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { RouteMap, UtilService } from '@/services/util.service';
-import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
-import { FeatureFlagService, FeatureFlagKeys } from '@/services/feature-flag.service';
-import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { OfflineCacheService } from '@/services/offline-cache.service';
+import { RouteMap, UtilService } from '~/services/util.service';
+import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '~/services/preferences.service';
+import { FeatureFlagService, FeatureFlagKeys } from '~/services/feature-flag.service';
+import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { OfflineCacheService } from '~/services/offline-cache.service';
 
 const APP_THEME_LOCALSTORAGE_KEY = 'theme';
 const LANGUAGE_LOCALSTORAGE_KEY = 'language';

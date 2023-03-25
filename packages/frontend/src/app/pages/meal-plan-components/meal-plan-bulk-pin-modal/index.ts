@@ -1,10 +1,10 @@
 import { Input, Component } from '@angular/core';
 import { NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
-import { MealPlanService } from '@/services/meal-plan.service';
-import { RecipeService } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { MealPlanService } from '~/services/meal-plan.service';
+import { RecipeService } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'page-meal-plan-bulk-pin-modal',

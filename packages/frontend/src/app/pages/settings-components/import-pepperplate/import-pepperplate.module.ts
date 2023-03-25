@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ImportPepperplatePage } from './import-pepperplate.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { RecipeService, ParsedIngredient } from '../../services/recipe.service';
 
-import { ScaleRecipeComponent } from '@/modals/scale-recipe/scale-recipe.component';
+import { ScaleRecipeComponent } from '~/modals/scale-recipe/scale-recipe.component';
 
 @Component({
   selector: 'select-ingredients',

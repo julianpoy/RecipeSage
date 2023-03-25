@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import dayjs, { Dayjs } from 'dayjs';
 
 import { UtilService } from '../../services/util.service';
-import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, MealPlanPreferenceKey } from '~/services/preferences.service';
 
 @Component({
   selector: 'meal-calendar',

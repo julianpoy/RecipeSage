@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { RatingFilterPopoverComponent } from './rating-filter-popover.component';
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 import {RatingModule} from '../rating/rating.module';
 
 @NgModule({

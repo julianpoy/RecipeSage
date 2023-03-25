@@ -4,10 +4,10 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
 import { AddFriendModalPage } from '../add-friend-modal/add-friend-modal.page';
 
 @Component({

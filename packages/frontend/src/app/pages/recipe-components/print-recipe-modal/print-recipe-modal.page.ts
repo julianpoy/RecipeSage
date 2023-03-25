@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { RecipeService, Recipe } from '@/services/recipe.service';
+import { RecipeService, Recipe } from '~/services/recipe.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { UtilService, RecipeTemplateModifiers } from '@/services/util.service';
+import { UtilService, RecipeTemplateModifiers } from '~/services/util.service';
 
 export interface PrintOption {
   modifiers: RecipeTemplateModifiers;

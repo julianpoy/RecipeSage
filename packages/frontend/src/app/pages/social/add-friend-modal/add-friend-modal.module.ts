@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AddFriendModalPage } from './add-friend-modal.page';
-import { SelectUserModule } from '@/components/select-user/select-user.module';
-import {GlobalModule} from '@/global.module';
+import { SelectUserModule } from '~/components/select-user/select-user.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

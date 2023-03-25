@@ -4,13 +4,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, ToastController, AlertController, PopoverController, LoadingController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { UtilService, RouteMap } from '@/services/util.service';
-import { RecipeService, Recipe, BaseRecipe } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { UnsavedChangesService } from '@/services/unsaved-changes.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { Image, ImageService } from '@/services/image.service';
-import { getQueryParam } from '@/utils/queryParams';
+import { UtilService, RouteMap } from '~/services/util.service';
+import { RecipeService, Recipe, BaseRecipe } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { UnsavedChangesService } from '~/services/unsaved-changes.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { Image, ImageService } from '~/services/image.service';
+import { getQueryParam } from '~/utils/queryParams';
 
 import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
 

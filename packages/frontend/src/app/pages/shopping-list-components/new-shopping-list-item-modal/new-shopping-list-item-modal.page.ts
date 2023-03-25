@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
-import { RecipeService, ParsedIngredient } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService } from '@/services/util.service';
+import { RecipeService, ParsedIngredient } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService } from '~/services/util.service';
 
 @Component({
   selector: 'page-new-shopping-list-item-modal',

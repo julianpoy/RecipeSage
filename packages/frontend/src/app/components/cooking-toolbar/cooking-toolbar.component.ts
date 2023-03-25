@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { RouteMap } from '@/services/util.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
+import { RouteMap } from '~/services/util.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
 
 @Component({
   selector: 'cooking-toolbar',

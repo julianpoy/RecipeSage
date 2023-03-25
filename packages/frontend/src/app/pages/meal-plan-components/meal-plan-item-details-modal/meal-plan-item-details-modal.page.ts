@@ -2,14 +2,14 @@ import { Input, Component } from '@angular/core';
 import { NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { MealPlanItem, MealPlanService } from '@/services/meal-plan.service';
-import { RecipeService } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { MealPlanItem, MealPlanService } from '~/services/meal-plan.service';
+import { RecipeService } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 
 import { NewMealPlanItemModalPage } from '../new-meal-plan-item-modal/new-meal-plan-item-modal.page';
-import { AddRecipeToShoppingListModalPage } from '@/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
+import { AddRecipeToShoppingListModalPage } from '~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page';
 
 import dayjs, { Dayjs } from 'dayjs';
 

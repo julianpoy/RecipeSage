@@ -5,14 +5,14 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
-import { ImageViewerComponent } from '@/modals/image-viewer/image-viewer.component';
-import { NewMessageModalPage } from '@/pages/messaging-components/new-message-modal/new-message-modal.page';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { ImageViewerComponent } from '~/modals/image-viewer/image-viewer.component';
+import { NewMessageModalPage } from '~/pages/messaging-components/new-message-modal/new-message-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
-import { AuthPage } from '@/pages/auth/auth.page';
+import { AuthPage } from '~/pages/auth/auth.page';
 
 @Component({
   selector: 'page-profile',

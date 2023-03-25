@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { DownloadAndInstallPage } from './download-and-install.page';
 
-import { GlobalModule } from '@/global.module';
+import { GlobalModule } from '~/global.module';
 
 @NgModule({
   declarations: [

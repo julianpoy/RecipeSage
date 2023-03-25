@@ -4,8 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SelectIngredientsComponent } from './select-ingredients.component';
-import { ScaleRecipeModule } from '@/modals/scale-recipe/scale-recipe.module';
-import {GlobalModule} from '@/global.module';
+import { ScaleRecipeModule } from '~/modals/scale-recipe/scale-recipe.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

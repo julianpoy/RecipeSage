@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { PreferencesService, RecipeDetailsPreferenceKey } from '@/services/preferences.service';
+import { PreferencesService, RecipeDetailsPreferenceKey } from '~/services/preferences.service';
 
 @Component({
   selector: 'page-edit-recipe-popover',

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "start": "webpack --watch",
-    "build": "rm -rf dist; webpack && cd dist && zip rs-we.zip ./* ./**/*"
+    "build": "rm -rf dist; webpack",
+    "package": "npm run build && cd dist && zip rs-we.zip ./* ./**/*"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",

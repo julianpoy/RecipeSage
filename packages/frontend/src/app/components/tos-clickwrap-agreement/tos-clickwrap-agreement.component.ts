@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { RouteMap } from '@/services/util.service';
+import { RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'tos-clickwrap-agreement',

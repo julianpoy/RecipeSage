@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 @Component({
   selector: 'page-add-profile-item-modal',

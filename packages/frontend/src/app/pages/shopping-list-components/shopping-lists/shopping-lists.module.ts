@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { ShoppingListsPage } from './shopping-lists.page';
 import { NewShoppingListModalPageModule } from '../new-shopping-list-modal/new-shopping-list-modal.module';
-import { NullStateModule } from '@/components/null-state/null-state.module';
-import {GlobalModule} from '@/global.module';
+import { NullStateModule } from '~/components/null-state/null-state.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

@@ -7,12 +7,12 @@ import { isHandleValid } from '@recipesage/util';
 import { AddProfileItemModalPage } from '../add-profile-item-modal/add-profile-item-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
 
-import { UserService, UserProfile } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
-import { ImageService } from '@/services/image.service';
-import { UnsavedChangesService } from '@/services/unsaved-changes.service';
+import { UserService, UserProfile } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { ImageService } from '~/services/image.service';
+import { UnsavedChangesService } from '~/services/unsaved-changes.service';
 
 @Component({
   selector: 'page-my-profile',

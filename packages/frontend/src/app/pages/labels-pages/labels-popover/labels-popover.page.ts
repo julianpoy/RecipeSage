@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 
-import { UtilService } from '@/services/util.service';
-import { QuickTutorialService, QuickTutorialOptions } from '@/services/quick-tutorial.service';
-import { PreferencesService, ManageLabelsPreferenceKey } from '@/services/preferences.service';
+import { UtilService } from '~/services/util.service';
+import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
+import { PreferencesService, ManageLabelsPreferenceKey } from '~/services/preferences.service';
 
 @Component({
   selector: 'page-labels-popover',

@@ -5,12 +5,12 @@ import {TranslateService} from '@ngx-translate/core';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
-import { EventService } from '@/services/event.service';
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { MessagingService } from '@/services/messaging.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
+import { EventService } from '~/services/event.service';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { MessagingService } from '~/services/messaging.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
 
 @Component({
   selector: 'page-auth',

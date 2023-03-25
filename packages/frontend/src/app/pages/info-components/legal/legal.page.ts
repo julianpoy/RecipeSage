@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IS_SELFHOST } from 'src/environments/environment';
 
-import { RouteMap } from '@/services/util.service';
+import { RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'page-legal',

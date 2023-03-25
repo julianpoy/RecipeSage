@@ -3,12 +3,12 @@ import { ToastController, AlertController, NavController } from '@ionic/angular'
 
 import dayjs, { Dayjs } from 'dayjs';
 
-import { UserService } from '@/services/user.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { getQueryParam } from '@/utils/queryParams';
+import { UserService } from '~/services/user.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { getQueryParam } from '~/utils/queryParams';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({

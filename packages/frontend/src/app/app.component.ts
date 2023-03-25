@@ -8,17 +8,17 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from '../environments/environment';
 
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { RecipeService } from '@/services/recipe.service';
-import { MessagingService } from '@/services/messaging.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { UserService } from '@/services/user.service';
-import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '@/services/preferences.service';
-import { CapabilitiesService } from '@/services/capabilities.service';
-import { VersionCheckService } from '@/services/versioncheck.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
-import { EventService } from '@/services/event.service';
-import { OfflineCacheService } from '@/services/offline-cache.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { MessagingService } from '~/services/messaging.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { UserService } from '~/services/user.service';
+import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '~/services/preferences.service';
+import { CapabilitiesService } from '~/services/capabilities.service';
+import { VersionCheckService } from '~/services/versioncheck.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
+import { EventService } from '~/services/event.service';
+import { OfflineCacheService } from '~/services/offline-cache.service';
 import {FeatureFlagKeys, FeatureFlagService} from './services/feature-flag.service';
 
 interface NavPage {

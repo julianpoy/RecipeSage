@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { RecipeService } from '@/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { LoadingService } from '~/services/loading.service';
+import { RecipeService } from '~/services/recipe.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 @Component({
   selector: 'page-import-paprika',

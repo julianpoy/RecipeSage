@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { PreferencesService, RecipeDetailsPreferenceKey } from '@/services/preferences.service';
-import { WakeLockService } from '@/services/wakelock.service';
-import { CookingToolbarService } from '@/services/cooking-toolbar.service';
+import { PreferencesService, RecipeDetailsPreferenceKey } from '~/services/preferences.service';
+import { WakeLockService } from '~/services/wakelock.service';
+import { CookingToolbarService } from '~/services/cooking-toolbar.service';
 
 @Component({
   selector: 'page-recipe-details-popover',

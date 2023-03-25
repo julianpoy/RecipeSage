@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PipesModule } from '@/pipes/pipes.module';
+import { PipesModule } from '~/pipes/pipes.module';
 import { SelectCollaboratorsComponent } from './select-collaborators.component';
-import {GlobalModule} from '@/global.module';
+import {GlobalModule} from '~/global.module';
 
 @NgModule({
   declarations: [

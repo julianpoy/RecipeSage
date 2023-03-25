@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { NavController, ModalController, AlertController, ToastController } from '@ionic/angular';
-import { Label, LabelService } from '@/services/label.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { LoadingService } from '@/services/loading.service';
+import { Label, LabelService } from '~/services/label.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { LoadingService } from '~/services/loading.service';
 import {TranslateService} from '@ngx-translate/core';
-import {RecipeService} from '@/services/recipe.service';
+import {RecipeService} from '~/services/recipe.service';
 
 @Component({
   selector: 'page-manage-label-modal',

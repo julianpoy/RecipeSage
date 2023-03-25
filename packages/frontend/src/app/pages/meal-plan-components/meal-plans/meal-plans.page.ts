@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 
-import { MealPlanService } from '@/services/meal-plan.service';
-import { WebsocketService } from '@/services/websocket.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
-import { NewMealPlanModalPage } from '@/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
+import { MealPlanService } from '~/services/meal-plan.service';
+import { WebsocketService } from '~/services/websocket.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { NewMealPlanModalPage } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
 
 @Component({
   selector: 'page-meal-plans',

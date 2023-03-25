@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, AlertController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { RecipeService } from '@/services/recipe.service';
-import { LoadingService } from '@/services/loading.service';
-import { UtilService, RouteMap } from '@/services/util.service';
+import { RecipeService } from '~/services/recipe.service';
+import { LoadingService } from '~/services/loading.service';
+import { UtilService, RouteMap } from '~/services/util.service';
 
 @Component({
   selector: 'page-import-pepperplate',

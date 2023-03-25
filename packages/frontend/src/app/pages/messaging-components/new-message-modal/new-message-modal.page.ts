@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { UserService } from '@/services/user.service';
-import { MessagingService } from '@/services/messaging.service';
-import { UtilService, RouteMap, AuthType } from '@/services/util.service';
+import { UserService } from '~/services/user.service';
+import { MessagingService } from '~/services/messaging.service';
+import { UtilService, RouteMap, AuthType } from '~/services/util.service';
 
 @Component({
   selector: 'page-new-message-modal',

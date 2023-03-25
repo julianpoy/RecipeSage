@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NavController, ToastController, ModalController, AlertController, PopoverController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { LoadingService } from '@/services/loading.service';
-import { MealPlanService } from '@/services/meal-plan.service';
-import { UtilService, RouteMap } from '@/services/util.service';
-import { PreferencesService, MealPlanPreferenceKey } from '@/services/preferences.service';
+import { LoadingService } from '~/services/loading.service';
+import { MealPlanService } from '~/services/meal-plan.service';
+import { UtilService, RouteMap } from '~/services/util.service';
+import { PreferencesService, MealPlanPreferenceKey } from '~/services/preferences.service';
 import {ShareMealPlanModalPage} from '../share-meal-plan-modal/share-meal-plan-modal.page';
 
 @Component({

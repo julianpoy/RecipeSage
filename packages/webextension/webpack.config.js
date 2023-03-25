@@ -3,14 +3,17 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/inject/inject.js',
+  mode: 'production',
   output: {
     filename: 'inject/inject.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new CopyPlugin([
-      { from: 'src', to: './' },
-    ]),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src', to: './' },
+      ],
+    }),
   ],
 };
 
