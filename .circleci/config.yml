@@ -37,9 +37,9 @@ jobs:
           name: install-deps
           command: 'npm install'
       - save_cache:
-          key: backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./Backend/node_modules
+            - ./node_modules
       - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
