@@ -1,5 +1,5 @@
 {
-  "name": "recipesage-shared-utils",
+  "name": "util",
   "version": "1.0.0",
   "description": "Shared utilities for RecipeSage",
   "main": "index.js",
