@@ -1,14 +1,10 @@
 {
-  "name": "webextension",
+  "name": "@recipesage/webextension",
   "version": "0.0.0",
-  "description": "",
-  "main": "",
   "scripts": {
     "start": "webpack --watch",
     "build": "rm -rf dist; webpack && cd dist && zip rs-we.zip ./* ./**/*"
   },
-  "author": "Julian Poyourow",
-  "license": "",
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "webpack": "^5.76.0",

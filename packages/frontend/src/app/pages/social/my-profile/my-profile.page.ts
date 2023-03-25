@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { isHandleValid } from '../../../../../../SharedUtils/src';
+import { isHandleValid } from '@recipesage/util';
 
 import { AddProfileItemModalPage } from '../add-profile-item-modal/add-profile-item-modal.page';
 import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';

@@ -1,13 +1,7 @@
 {
-  "name": "util",
-  "version": "1.0.0",
-  "description": "Shared utilities for RecipeSage",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "UNLICENSED",
+  "name": "@recipesage/util",
+  "version": "0.0.0",
+  "main": "src/index.js",
   "dependencies": {
     "fraction.js": "^4.0.12",
     "unitz-ts": "^1.0.1"
