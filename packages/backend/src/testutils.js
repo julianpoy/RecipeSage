@@ -15,8 +15,8 @@ const { exec } = require('child_process');
 
 let migrate = async (down) => {
   await new Promise((resolve, reject) => {
-    let command = './node_modules/.bin/sequelize db:migrate';
-    if (down) command = './node_modules/.bin/sequelize db:migrate:undo:all';
+    let command = 'npx sequelize-cli db:migrate';
+    if (down) command = 'npx sequelize-cli db:migrate:undo:all';
 
     const migrate = exec(
       command,
