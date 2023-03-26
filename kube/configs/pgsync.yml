@@ -65,6 +65,16 @@ spec:
           value: true
         - name: OPENSEARCH
           value: false
+        - name: ELASTICSEARCH_CHUNK_SIZE
+          value: 1000
+        - name: ELASTICSEARCH_THREAD_COUNT
+          value: 1
+        - name: ELASTICSEARCH_QUEUE_SIZE
+          value: 1
+        - name: ELASTICSEARCH_MAX_RETRIES
+          value: 14
+        - name: QUERY_CHUNK_SIZE
+          value: 4000
         volumeMounts:
         - name: pgsync-schema
           mountPath: /schema.json

@@ -34,7 +34,7 @@ spec:
         - name: discovery.type
           value: single-node
         - name: ES_JAVA_OPTS
-          value: -Xms1500m -Xmx1500m
+          value: -Xms2000m -Xmx2000m
         - name: ELASTIC_PASSWORD
           valueFrom:
             secretKeyRef:
