@@ -6,11 +6,11 @@ const { program } = require('commander');
 let config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
 
 program
-  .arguments('<direction> [count]')
+  .arguments('[direction] [count]')
   .parse(process.argv);
 
 const options = {
-  direction: program.args.at(0),
+  direction: program.args.at(0) || 'up',
   count: program.args.at(1),
 };
 
