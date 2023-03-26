@@ -15,10 +15,10 @@ services:
     - "443:443"
     command: nginx -g 'daemon off;'
     depends_on:
-      - webapp
-      - express
+      - frontend
+      - backend
       - pushpin
-  webapp:
+  frontend:
     ports:
       - "8100:8100"
     build:
@@ -27,7 +27,7 @@ services:
     volumes:
       - ./packages/frontend/src:/app/packages/frontend/src
       - ./packages/util/src:/app/packages/util/src
-  express:
+  backend:
     ports:
       - "3000:3000"
     depends_on:
@@ -88,7 +88,7 @@ services:
   pushpin:
     image: fanout/pushpin:1.27.0
     environment:
-      - target=express:3000
+      - target=backend:3000
     ports:
       - "7999:7999"
       - "5560-5563:5560-5563"

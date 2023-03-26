@@ -27,4 +27,5 @@ const umzug = new Umzug({
   // Checks migrations and run them if they are not already applied
   await umzug.up();
   console.log('All migrations performed successfully');
+  process.exit(0);
 })();
