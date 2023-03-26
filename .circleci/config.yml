@@ -42,6 +42,9 @@ jobs:
       - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
+      - run:
+          name: tmp
+          command: ls packages/frontend
       - persist_to_workspace:
           root: packages/frontend
           paths:

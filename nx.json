@@ -14,5 +14,16 @@
         "accessToken": "ZTY4MjMxYjctYWQ4NC00OTYxLTgwYWItNjg5YmIzODdiNTE1fHJlYWQtd3JpdGU="
       }
     }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/www"
+      ]
+    }
   }
 }
