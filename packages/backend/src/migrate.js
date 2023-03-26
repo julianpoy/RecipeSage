@@ -1,8 +1,18 @@
 const Sequelize = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
 const path = require('path');
+const { program } = require('commander');
 
 let config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
+
+program
+  .arguments('<direction> [count]')
+  .parse(process.argv);
+
+const options = {
+  direction: program.args.at(0),
+  count: program.args.at(1),
+};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
@@ -24,8 +34,16 @@ const umzug = new Umzug({
 });
 
 (async () => {
-  // Checks migrations and run them if they are not already applied
-  await umzug.up();
+  if (options.direction === 'up') {
+    await umzug.up({
+      step: options.count || undefined,
+    });
+  } else {
+    await umzug.down({
+      step: options.count || undefined,
+      to: options.count ? undefined : 0,
+    });
+  }
   console.log('All migrations performed successfully');
   process.exit(0);
 })();
