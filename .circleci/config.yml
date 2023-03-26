@@ -4,7 +4,6 @@ orbs:
 jobs:
   build_and_test:
     resource_class: large
-    working_directory: ~/recipesage
     docker:
       - image: cimg/node:16.17
         environment:
@@ -49,7 +48,6 @@ jobs:
             - www
   push_backend:
     resource_class: large
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -64,7 +62,6 @@ jobs:
           name: api-hosted.sh
           command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
   push_backend_selfhost:
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -80,7 +77,6 @@ jobs:
           command: ./scripts/build/api-selfhost.sh ${CIRCLE_TAG:=stg}
   push_frontend:
     resource_class: large
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -101,7 +97,6 @@ jobs:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
