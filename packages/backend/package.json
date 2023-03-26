@@ -22,6 +22,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "~8.4.0",
     "@julianpoy/recipe-clipper": "^2.3.0",
+    "@recipesage/util": "*",
     "@sentry/node": "^7.33.0",
     "@sentry/tracing": "^7.36.0",
     "aws-sdk": "^2.1238.0",
@@ -60,6 +61,7 @@
     "sqlite3": "^5.1.5",
     "stripe": "^11.9.1",
     "ts-dedent": "^2.2.0",
+    "tsx": "^3.12.6",
     "umzug": "^3.2.1",
     "uuid": "^9.0.0",
     "xml-js": "^1.6.11"

@@ -16,8 +16,7 @@ const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
 
-// SharedUtils
-const SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('@recipesage/util');
 
 // Util
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');

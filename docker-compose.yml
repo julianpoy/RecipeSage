@@ -23,14 +23,10 @@ services:
       - "8100:8100"
     build:
       context: .
-      dockerfile: ./Frontend/Dockerfile
+      dockerfile: ./packages/frontend/Dockerfile
     volumes:
-      - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
-      - ./Frontend/src:/app/Frontend/src
-      - ./Frontend/package.json:/app/Frontend/package.json
-      - ./Frontend/package-lock.json:/app/Frontend/package-lock.json
+      - ./packages/frontend/src:/app/packages/frontend/src
+      - ./packages/util/src:/app/packages/util/src
   express:
     ports:
       - "3000:3000"
@@ -41,8 +37,8 @@ services:
       - browserless
     build:
       context: .
-      dockerfile: ./Backend/Dockerfile
-    command: npx nodemon --watch ../SharedUtils --watch . src/bin/www.js
+      dockerfile: ./packages/backend/Dockerfile
+    command: npx --yes tsx watch packages/backend/src/bin/www.js
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
@@ -74,12 +70,8 @@ services:
     env_file:
       - ./.secrets.env
     volumes:
-      - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
-      - ./Backend/src:/app/Backend/src
-      - ./Backend/package.json:/app/Backend/package.json
-      - ./Backend/package-lock.json:/app/Backend/package-lock.json
+      - ./packages/backend/src:/app/packages/backend/src
+      - ./packages/util/src:/app/packages/util/src
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:

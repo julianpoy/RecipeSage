@@ -6,27 +6,16 @@ WORKDIR /app
 
 RUN apk add --no-cache git
 
-COPY SharedUtils/package.json ./SharedUtils/package.json
-COPY SharedUtils/package-lock.json ./SharedUtils/package-lock.json
-RUN cd SharedUtils && npm install
+COPY . .
+RUN npm install
 
-COPY Frontend/package.json ./Frontend/package.json
-COPY Frontend/package-lock.json ./Frontend/package-lock.json
-RUN cd Frontend && npm install
+RUN npx nx build:selfhost @recipesage/frontend
 
-COPY Frontend Frontend
-COPY SharedUtils SharedUtils
-
-WORKDIR /app/Frontend
-
-RUN npm run build:selfhost
-RUN npm run workbox
-
-RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" www/index.html
+RUN sed -i "s/window.version = 'development';/window.version = '$VERSION';/" packages/frontend/www/index.html
 
 
 FROM nginx
 
-COPY --from=builder /app/Frontend/www /usr/share/nginx/html
+COPY --from=builder /app/packages/frontend/www /usr/share/nginx/html
 
 EXPOSE 80

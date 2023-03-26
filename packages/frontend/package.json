@@ -26,6 +26,7 @@
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
+    "@recipesage/util": "*",
     "@sentry/browser": "^7.38.0",
     "axios": "^1.3.3",
     "core-js": "^3.28.0",
@@ -36,7 +37,6 @@
     "linkifyjs": "^4.1.0",
     "ngx-ui-scroll": "^3.0.1",
     "tslib": "^2.5.0",
-    "@recipesage/util": "*",
     "zone.js": "0.12.0"
   },
   "devDependencies": {

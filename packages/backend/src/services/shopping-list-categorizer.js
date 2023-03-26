@@ -1,5 +1,5 @@
 const UtilService = require('./util');
-const SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('@recipesage/util');
 const Unitz = SharedUtils.unitUtils.Unitz;
 
 const ingredientsList = require('../constants/ingredients.json');

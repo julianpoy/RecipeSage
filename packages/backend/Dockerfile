@@ -31,19 +31,10 @@ RUN apk add --no-cache \
 # node-gyp
 RUN apk add --no-cache python3 make
 
-COPY SharedUtils/package.json ./SharedUtils/package.json
-COPY SharedUtils/package-lock.json ./SharedUtils/package-lock.json
-RUN cd SharedUtils && npm install
-
-COPY Backend/package.json ./Backend/package.json
-COPY Backend/package-lock.json ./Backend/package-lock.json
-RUN cd Backend && npm install
-
-COPY Backend Backend
-COPY SharedUtils SharedUtils
+COPY . .
+RUN npm install
 
 # Include version build arg within the container env
 ARG VERSION
 ENV VERSION=$VERSION
 
-WORKDIR /app/Backend

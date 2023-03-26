@@ -1,4 +1,4 @@
-const SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('@recipesage/util');
 
 const recipeToJSONLD = (recipe) => ({
   '@context': 'http://schema.org',

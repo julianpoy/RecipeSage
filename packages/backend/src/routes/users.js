@@ -27,8 +27,7 @@ const { sendWelcome } = require('../emails/welcome');
 const { sendPasswordReset } = require('../emails/passwordReset');
 const { getFriendships } = require('../utils/getFriendships');
 
-// SharedUtils
-const SharedUtils = require('../../../SharedUtils/src');
+const SharedUtils = require('@recipesage/util');
 
 // Util
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
