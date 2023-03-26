@@ -72,5 +72,5 @@ Setting-up your development environment.
 Your development environment can be setup with a few easy steps.
 1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
 2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
-3. Run the migrations scripts; `docker-compose exec express npx sequelize-cli db:migrate`
+3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
 4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣 

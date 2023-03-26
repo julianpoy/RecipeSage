@@ -2,9 +2,8 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
 jobs:
-  test_backend:
+  build_and_test:
     resource_class: large
-    working_directory: ~/recipesage
     docker:
       - image: cimg/node:16.17
         environment:
@@ -29,97 +28,29 @@ jobs:
           POSTGRES_DB: chefbook_test
     steps:
       - checkout
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "package-lock.json" }}
+            - dependency-cache-
       - run:
           name: install-deps
-          command: 'sudo npm install -g sequelize'
-      # -------------- Setup SharedUtils -----------------
-      - restore_cache:
-          keys:
-            - sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
-            - sharedutils-dependency-cache-v2-
-      - run:
-          name: install-npm-sharedutils
-          command: 'cd SharedUtils && npm install'
+          command: 'npm install'
       - save_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./SharedUtils/node_modules
-      # -------------- Setup Backend -----------------
-      - restore_cache:
-          keys:
-            - backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
-            - backend-dependency-cache-v2-
+            - ./node_modules
       - run:
-          name: install-npm-backend
-          command: 'cd Backend && npm install'
-      - save_cache:
-          key: backend-dependency-cache-v2-{{ checksum "Backend/package-lock.json" }}
-          paths:
-            - ./Backend/node_modules
-      # -------------- Tests -----------------
-      - run: # lint backend
-          name: lint-backend
-          command: cd Backend && npm run lint
-      - run: # run backend tests
-          name: test-backend
-          command: cd Backend && npm run test:ci
-  build_test_frontend:
-    resource_class: large
-    working_directory: ~/recipesage # directory where steps will run
-    docker:
-      - image: cimg/node:16.17
-    steps:
-      - checkout
+          name: lint, typecheck, test, build
+          command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
       - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
-      # -------------- Setup SharedUtils -----------------
-      - restore_cache:
-          keys:
-            - sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
-            - sharedutils-dependency-cache-v2-
-      - run:
-          name: install-npm-sharedutils
-          command: 'cd SharedUtils && npm install'
-      - save_cache:
-          key: sharedutils-dependency-cache-v2-{{ checksum "SharedUtils/package-lock.json" }}
-          paths:
-            - ./SharedUtils/node_modules
-      # -------------- Setup Frontend -----------------
-      - restore_cache:
-          keys:
-            - frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
-            - frontend-dependency-cache-v2-
-      - run:
-          name: install-npm-frontend
-          command: 'cd Frontend && npm install'
-      - save_cache:
-          key: frontend-dependency-cache-v2-{{ checksum "Frontend/package-lock.json" }}
-          paths:
-            - ./Frontend/node_modules
-      # -------------- Tests -----------------
-      - run: # lint frontend
-          name: lint-frontend
-          command: cd Frontend && npm run lint
-      - run: # ngx-translate-lint frontend
-          name: ngx-translate-lint-frontend
-          command: cd Frontend && npm run ngx-translate-lint
-      - run: # typecheck frontend
-          name: typecheck-frontend
-          command: cd Frontend && npx tsc --noemit
-      - run: # build frontend
-          name: build-frontend
-          command: cd Frontend && npm run dist
+          name: tmp
+          command: ls packages/frontend
       - persist_to_workspace:
-          root: Frontend
+          root: packages/frontend
           paths:
             - www
   push_backend:
     resource_class: large
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -134,7 +65,6 @@ jobs:
           name: api-hosted.sh
           command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
   push_backend_selfhost:
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -150,7 +80,6 @@ jobs:
           command: ./scripts/build/api-selfhost.sh ${CIRCLE_TAG:=stg}
   push_frontend:
     resource_class: large
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -171,7 +100,6 @@ jobs:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
-    working_directory: ~/recipesage # directory where steps will run
     docker:
       - image: cimg/node:16.17
     steps:
@@ -191,13 +119,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_backend:
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              only: /.*/
-      - build_test_frontend:
+      - build_and_test:
           filters:
             tags:
               only: /.*/
@@ -205,7 +127,7 @@ workflows:
               only: /.*/
       - push_backend:
           requires:
-            - test_backend
+            - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
@@ -213,7 +135,7 @@ workflows:
               ignore: /.*/
       - push_backend_selfhost:
           requires:
-            - test_backend
+            - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
@@ -221,7 +143,7 @@ workflows:
               ignore: /.*/
       - push_frontend:
           requires:
-            - build_test_frontend
+            - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
@@ -229,7 +151,7 @@ workflows:
               ignore: /.*/
       - push_frontend_selfhost:
           requires:
-            - build_test_frontend
+            - build_and_test
           filters:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*.*/
