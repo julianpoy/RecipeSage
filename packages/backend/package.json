@@ -43,6 +43,7 @@
     "joi": "^17.7.0",
     "jsdom": "^21.1.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
+    "meilisearch": "^0.31.1",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "multer": "v1.4.5-lts.1",

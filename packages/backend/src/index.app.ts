@@ -1,16 +1,23 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import './services/sentry-init';
+import * as Sentry from '@sentry/node';
+import { program } from 'commander';
 
-const ElasticService = require('./services/elastic');
-const SQ = require('sequelize');
+import { indexRecipes } from './services/search';
+import SQ from 'sequelize';
 const Op = SQ.Op;
 
-const Recipe = require('./models').Recipe;
+import * as Models from './models';
+const Recipe = Models.Recipe;
 
-const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || 250);
-const BATCH_INTERVAL = parseInt(process.env.BATCH_INTERVAL || 1) * 1000;
-
-let runInterval;
+program
+  .option('-b, --batch-size [size]', 'Batch size', '1000')
+  .option('-i, --batch-interval [interval]', 'Batch interval in seconds', '1')
+  .parse(process.argv);
+const opts = program.opts();
+const options = {
+  batchSize: parseInt(opts.batchSize, 10),
+  batchInterval: parseInt(opts.batchInterval, 10)
+};
 
 const runIndexOp = async () => {
   try {
@@ -28,7 +35,7 @@ const runIndexOp = async () => {
           { indexedAt: { [Op.lt]: lt } }
         ]
       },
-      limit: BATCH_SIZE
+      limit: options.batchSize,
     });
 
     if (!recipes || recipes.length === 0) {
@@ -37,9 +44,9 @@ const runIndexOp = async () => {
       process.exit(0);
     }
 
-    await ElasticService.indexRecipes(recipes);
+    await indexRecipes(recipes);
 
-    let ids = recipes.map(r => r.id);
+    let ids = recipes.map((r) => r.id);
     await Recipe.update(
       { indexedAt: new Date() },
       {
@@ -58,7 +65,7 @@ const runIndexOp = async () => {
   }
 };
 
-runInterval = setInterval(runIndexOp, BATCH_INTERVAL);
+const runInterval = setInterval(runIndexOp, options.batchInterval * 1000);
 
 process.on('SIGTERM', () => {
   console.log('RECEIVED SIGTERM - STOPPING JOB');
