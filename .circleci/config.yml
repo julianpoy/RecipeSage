@@ -19,6 +19,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_SSL: false
           POSTGRES_LOGGING: false
+          SEARCH_PROVIDER: none
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
       - image: postgres:9.6.9

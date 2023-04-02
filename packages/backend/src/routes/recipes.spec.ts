@@ -1,9 +1,9 @@
-const request = require('supertest');
-const {
-  expect
-} = require('chai');
+import * as request from 'supertest';
+import { expect } from 'chai';
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 
-const {
+import {
   setup,
   cleanup,
   syncDB,
@@ -14,12 +14,11 @@ const {
   createLabel,
   associateLabel,
   randomUuid
-} = require('../testutils');
+} from '../testutils';
 
 // DB
-const Op = require('sequelize').Op;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
+import * as Models from '../models';
+const { Recipe, Label } = Models;
 
 describe('recipes', () => {
   let server;

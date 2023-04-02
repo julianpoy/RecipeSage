@@ -1,5 +1,6 @@
-import Meilisearch from './meilisearch';
-import ElasticSearch from './elasticsearch';
+import * as Meilisearch from './meilisearch';
+import * as ElasticSearch from './elasticsearch';
+import * as Stub from './stub';
 
 export interface SearchProvider {
   indexRecipes: (recipes: any[]) => Promise<any>;
@@ -12,9 +13,12 @@ const searchProviders: {
 } = {
   meilisearch: Meilisearch,
   elasticsearch: ElasticSearch,
+  none: Stub,
 };
 
-if (!process.env.SEARCH_PROVIDER) throw new Error('SEARCH_PROVIDER not set');
+if (!process.env.SEARCH_PROVIDER) throw new Error(
+  'SEARCH_PROVIDER not set. Can be set to "elasticsearch", "meilisearch", or "none".'
+);
 const searchProvider = searchProviders[process.env.SEARCH_PROVIDER];
 
 export const indexRecipes = searchProvider.indexRecipes;

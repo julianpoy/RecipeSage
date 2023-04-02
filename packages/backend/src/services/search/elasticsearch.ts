@@ -42,7 +42,7 @@ async function init() {
   }
 };
 
-const indexRecipes = async (recipes: any[]) => {
+export const indexRecipes = async (recipes: any[]) => {
   const actions = recipes.reduce((acc, recipe) => {
     if (recipe.toJSON) recipe = recipe.toJSON();
 
@@ -75,7 +75,7 @@ const indexRecipes = async (recipes: any[]) => {
   });
 };
 
-const deleteRecipes = async (recipeIds: string[]) => {
+export const deleteRecipes = async (recipeIds: string[]) => {
   const actions = recipeIds.map(recipeId => ({
     delete: {
       _index: 'recipes',
@@ -90,7 +90,7 @@ const deleteRecipes = async (recipeIds: string[]) => {
   });
 };
 
-const searchRecipes = async (userIds: string[], queryString: string) => {
+export const searchRecipes = async (userIds: string[], queryString: string) => {
   const results = await client.search({
     index: 'recipes',
     body: {

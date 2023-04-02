@@ -60,7 +60,7 @@ services:
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
-      - SEARCH_PROVIDER=meilisearch
+      - SEARCH_PROVIDER=elasticsearch
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
       - MEILI_HOST=http://meilisearch:7700

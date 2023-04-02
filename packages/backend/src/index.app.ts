@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import { program } from 'commander';
 
 import { indexRecipes } from './services/search';
-import SQ from 'sequelize';
+import * as SQ from 'sequelize';
 const Op = SQ.Op;
 
 import * as Models from './models';
@@ -16,7 +16,7 @@ program
 const opts = program.opts();
 const options = {
   batchSize: parseInt(opts.batchSize, 10),
-  batchInterval: parseInt(opts.batchInterval, 10)
+  batchInterval: parseFloat(opts.batchInterval)
 };
 
 const runIndexOp = async () => {
