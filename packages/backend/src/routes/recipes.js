@@ -20,7 +20,7 @@ const ProfileItem = require('../models').ProfileItem;
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const StorageService = require('../services/storage');
-const ElasticService = require('../services/elastic');
+const SearchService = require('../services/search');
 const SubscriptionsService = require('../services/subscriptions');
 const JSONLDService = require('../services/json-ld');
 
@@ -232,6 +232,8 @@ router.post(
           transaction
         });
       }
+
+      await SearchService.indexRecipes([recipe]);
 
       return recipe;
     });
@@ -601,14 +603,13 @@ router.get(
       console.log(searchUserIds);
     }
 
-    const results = await ElasticService.searchRecipes(searchUserIds, req.query.query);
-    const searchHits = results.hits.hits;
+    const results = await SearchService.searchRecipes(searchUserIds, req.query.query);
 
-    const searchHitsByRecipeId = searchHits.reduce((acc, hit) => {
-      acc[hit._id] = hit;
+    const searchResultsSortOrder = results.reduce((acc, result, idx) => {
+      acc[result.id] = idx + 1;
       return acc;
     }, {});
-    const searchHitsRecipeIds = Object.keys(searchHitsByRecipeId);
+    const searchResultsRecipeIds = Object.keys(searchResultsSortOrder);
 
     const labelClause = {};
     if (req.query.labels) {
@@ -644,7 +645,7 @@ router.get(
       if (userIsSelf || isSharingAll) {
         const recipesForUser = await getRecipesForUser({
           userId: searchUserId,
-          recipeIds: searchHitsRecipeIds,
+          recipeIds: searchResultsRecipeIds,
           ratingClause,
           labelClause,
         });
@@ -659,13 +660,13 @@ router.get(
       const sharedRecipeLabels = await Recipe_Label.findAll({
         where: {
           labelId: sharedLabelIds,
-          recipeId: searchHitsRecipeIds
+          recipeId: searchResultsRecipeIds
         },
       });
 
       const recipeProfileItems = profileItems
         .filter((profileItem) => profileItem.type === 'recipe')
-        .filter((profileItem) => !!searchHitsByRecipeId[profileItem.recipeId]);
+        .filter((profileItem) => !!searchResultsSortOrder[profileItem.recipeId]);
 
       const recipeIds = [
         ...sharedRecipeLabels.map((recipeLabel) => recipeLabel.recipeId),
@@ -685,7 +686,7 @@ router.get(
       .map(UtilService.sortRecipeImages)
       .map(applyLegacyImageField)
       .sort((a, b) => {
-        return searchHitsByRecipeId[b.id]._score - searchHitsByRecipeId[a.id]._score;
+        return searchResultsSortOrder[b.id] - searchResultsSortOrder[a.id];
       });
 
     res.status(200).send({
@@ -985,6 +986,15 @@ router.delete(
     const { userId } = res.locals.session;
 
     await SQ.transaction(async (transaction) => {
+      const recipes = await Recipe.findAll({
+        where: {
+          userId,
+        },
+        attributes: ['id'],
+        transaction,
+      });
+      const recipeIds = recipes.map((recipe) => recipe.id);
+
       await Recipe.destroy({
         where: {
           userId,
@@ -1001,6 +1011,8 @@ router.delete(
 
       // TODO: Remove this when we have a way of mocking
       if (process.env.NODE_ENV !== 'test') {
+        await SearchService.deleteRecipes(recipeIds);
+
         await deleteHangingImagesForUser(userId, transaction);
       }
     });
@@ -1082,6 +1094,8 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
     },
     transaction,
   });
+
+  await SearchService.deleteRecipes(recipeIds);
 };
 
 router.post(

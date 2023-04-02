@@ -1,11 +1,8 @@
-const request = require('supertest');
-const {
-  expect
-} = require('chai');
+import * as request from 'supertest';
+import { expect } from 'chai';
+import * as sinon from 'sinon';
 
-const sinon = require('sinon');
-
-const {
+import {
   setup,
   cleanup,
   syncDB,
@@ -17,14 +14,13 @@ const {
   secureUserMatch,
   secureRecipeMatch,
   randomUuid
-} = require('../testutils');
+} from '../testutils';
 
-const UtilService = require('../services/util');
+import * as UtilService from '../../src/services/util';
 
 // DB
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Message = require('../models').Message;
+import * as Models from '../models';
+const { Recipe, Message, User } = Models;
 
 describe('messages', () => {
   let server;

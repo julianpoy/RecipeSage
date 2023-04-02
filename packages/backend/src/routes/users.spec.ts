@@ -1,9 +1,7 @@
-const request = require('supertest');
-const {
-  expect
-} = require('chai');
+import * as request from 'supertest';
+import { expect } from 'chai';
 
-const {
+import {
   setup,
   cleanup,
   syncDB,
@@ -12,11 +10,11 @@ const {
   createUser,
   createSession,
   secureUserMatch
-} = require('../testutils');
+} from '../testutils';
 
 // DB
-const User = require('../models').User;
-const Session = require('../models').Session;
+import * as Models from '../models';
+const { User, Session } = Models;
 
 describe('users', () => {
   let server;

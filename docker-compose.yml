@@ -60,10 +60,11 @@ services:
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
-      - ELASTIC_ENABLE=true
-      - ELASTIC_IDX_PREFIX=rs_dev_
+      - SEARCH_PROVIDER=elasticsearch
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_API_KEY=recipesage_dev
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
@@ -81,6 +82,10 @@ services:
       - xpack.security.enabled=false
     ports:
       - 9200:9200
+  meilisearch:
+    image: getmeili/meilisearch:v1.0
+    environment:
+      - MEILI_MASTER_KEY=recipesage_dev
   kibana:
     image: kibana:8.4.3
     ports:
@@ -119,28 +124,4 @@ services:
       - FUNCTION_ENABLE_INCOGNITO_MODE=true
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
-  pgsync_redis:
-    image: redis
-  pgsync:
-    image: julianpoy/pgsync:2.5.0
-    volumes:
-      - ./pgsync.schema.json:/schema.json
-    environment:
-      - PG_DATABASE=recipesage_dev
-      - PG_USER=recipesage_dev
-      - PG_HOST=postgres
-      - PG_PORT=5432
-      - PG_PASSWORD=recipesage_dev
-      - LOG_LEVEL=INFO
-      - ELASTICSEARCH_PORT=9200
-      - ELASTICSEARCH_SCHEME=http
-      - ELASTICSEARCH_HOST=elasticsearch
-      - REDIS_HOST=pgsync_redis
-      - REDIS_PORT=6379
-      - ELASTICSEARCH=true
-      - OPENSEARCH=false
-    depends_on:
-      - postgres
-      - pgsync_redis
-      - elasticsearch
 
