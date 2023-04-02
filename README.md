@@ -1,4 +1,4 @@
-<a href="https://recipesage.com"><img align="left" width="100" height="100" src="Frontend/src/assets/imgs/logo_green.png"></img></a>
+<a href="https://recipesage.com"><img align="left" width="100" height="100" src="packages/frontend/src/assets/imgs/logo_green.png"></img></a>
 
 # RecipeSage - A Collaborative Recipe Keeper, Meal Planner, and Shopping List Organizer
 
