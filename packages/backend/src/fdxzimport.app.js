@@ -13,7 +13,7 @@ const Recipe_Image = require('./models').Recipe_Image;
 const Image = require('./models').Image;
 
 const UtilService = require('./services/util');
-const { writeImageBuffer } = require('./services/storage/image');
+const { writeImageBuffer, writeImageFile } = require('./services/storage/image');
 const { ObjectTypes } = require('./services/storage/shared');
 
 const runConfig = {
@@ -222,7 +222,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, possibleImageFiles[0], false).then((image) => {
+              return writeImageFile(ObjectTypes.RECIPE_IMAGE, possibleImageFiles[0], false).then((image) => {
                 lcbRecipe.images.push(image);
               }).catch(() => { });
             }));
