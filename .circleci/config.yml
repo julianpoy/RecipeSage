@@ -20,6 +20,8 @@ jobs:
           POSTGRES_SSL: false
           POSTGRES_LOGGING: false
           SEARCH_PROVIDER: none
+          STORAGE_TYPE: filesystem
+          FILESYSTEM_STORAGE_PATH: ~/project/rsdata
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
       - image: postgres:9.6.9
