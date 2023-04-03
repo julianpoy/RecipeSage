@@ -73,7 +73,11 @@ export const writeBuffer = async (
 export const deleteObject = async (
   key: string,
 ): Promise<void> => {
-  await fs.unlink(key);
+  try {
+    await fs.unlink(key);
+  } catch(e) {
+    console.warn(e);
+  }
 };
 
 // Delete multiple files from the filesystem

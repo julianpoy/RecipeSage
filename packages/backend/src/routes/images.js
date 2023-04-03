@@ -24,8 +24,8 @@ router.post('/',
     }
   }).single('image'),
   wrapRequestWithErrorHandler(async (req, res) => {
-    if (!req.body.imageUrl && !req.file) {
-      throw BadRequest('Must specify either "image" or "imageURL"');
+    if (!req.file) {
+      throw BadRequest('Must specify multipart field "image"');
     }
 
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
@@ -34,21 +34,11 @@ router.post('/',
     );
 
     let file;
-    if (req.body.imageURL) {
-      try {
-        file = await writeImageURL(ObjectTypes.RECIPE_IMAGE, req.body.imageURL, encodeInHighRes);
-      } catch (e) {
-        console.log(e);
-        e.status = 415;
-        throw e;
-      }
-    } else {
-      try {
-        file = await writeImageBuffer(ObjectTypes.RECIPE_IMAGE, req.file.buffer, encodeInHighRes);
-      } catch (e) {
-        e.status = 415;
-        throw e;
-      }
+    try {
+      file = await writeImageBuffer(ObjectTypes.RECIPE_IMAGE, req.file.buffer, encodeInHighRes);
+    } catch (e) {
+      e.status = 415;
+      throw e;
     }
 
     const image = await Image.create({

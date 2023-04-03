@@ -1,7 +1,7 @@
 require('./services/sentry-init.js');
 const Sentry = require('@sentry/node');
 
-const StorageService = require('./services/storage');
+const { deleteObjects } = require('./services/storage');
 
 const Op = require('sequelize').Op;
 const SQ = require('./models').sequelize;
@@ -37,7 +37,7 @@ const cleanupStaleImages = async () => {
 
     if (staleImages.length === 0) return process.exit(0);
 
-    await StorageService.deleteStorageObjects(staleImages.map(image => image.key));
+    await deleteObjects(staleImages.map(image => image.key));
 
     await Image.destroy({
       where: {
