@@ -10,7 +10,7 @@ const path = require('path');
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
-const { writeImageFile } = require('../services/storage/image');
+const { writeImageFile, writeImageURL } = require('../services/storage/image');
 const { ObjectTypes } = require('../services/storage/shared');
 const JSONLDService = require('../services/json-ld');
 

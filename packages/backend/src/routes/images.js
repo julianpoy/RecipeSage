@@ -7,7 +7,7 @@ const Image = require('../models').Image;
 
 // Service
 const MiddlewareService = require('../services/middleware');
-const { writeImageBuffer, writeImageURL } = require('../services/storage/image');
+const { writeImageBuffer } = require('../services/storage/image');
 const SubscriptionsService = require('../services/subscriptions');
 const {ObjectTypes} = require('../services/storage/shared');
 
