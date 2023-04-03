@@ -19,7 +19,6 @@ const ProfileItem = require('../models').ProfileItem;
 // Service
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
-const StorageService = require('../services/storage');
 const SearchService = require('../services/search');
 const SubscriptionsService = require('../services/subscriptions');
 const JSONLDService = require('../services/json-ld');
