@@ -1,4 +1,4 @@
-import {StorageObjectRecord} from "./";
+import {StorageObjectRecord} from './';
 import {ObjectTypes} from './shared';
 import crypto from 'crypto';
 import { getStorage } from 'firebase-admin/storage';

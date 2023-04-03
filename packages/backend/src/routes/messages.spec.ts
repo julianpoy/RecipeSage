@@ -51,12 +51,12 @@ describe('messages', () => {
     });
 
     it('succeeds with standard text message', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let payload = {
+      const payload = {
         to: user2.id,
         body: randomString(40)
       };
@@ -97,14 +97,14 @@ describe('messages', () => {
     });
 
     it('succeeds with recipe message', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let recipe = await createRecipe(user1.id);
+      const recipe = await createRecipe(user1.id);
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let payload = {
+      const payload = {
         to: user2.id,
         recipeId: recipe.id
       };
@@ -162,11 +162,11 @@ describe('messages', () => {
     });
 
     it('rejects if other user does not exist with simple message', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         to: randomUuid(),
         body: randomString(40)
       };
@@ -179,13 +179,13 @@ describe('messages', () => {
     });
 
     it('rejects if other user does not exist with recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         to: randomUuid(),
         recipeId: recipe.id
       };
@@ -198,12 +198,12 @@ describe('messages', () => {
     });
 
     it('rejects if message and recipeId are falsy', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let payload = {
+      const payload = {
         to: user2.id,
         body: ''
       };
@@ -216,9 +216,9 @@ describe('messages', () => {
     });
 
     it('requires valid token', async () => {
-      let user2 = await createUser();
+      const user2 = await createUser();
 
-      let payload = {
+      const payload = {
         to: user2.id,
         body: randomString(40)
       };
@@ -248,9 +248,9 @@ describe('messages', () => {
         recipeNew = await createRecipe(user3.id);
         message3 = await createMessage(user1.id, user3.id, recipeNew.id, recipeOrig.id);
 
-        let session = await createSession(user1.id);
+        const session = await createSession(user1.id);
 
-        let payload = {
+        const payload = {
           token: session.token
         };
 
@@ -325,9 +325,9 @@ describe('messages', () => {
         await createMessage(user1.id, user2.id);
         await createMessage(user1.id, user3.id);
 
-        let session = await createSession(user1.id);
+        const session = await createSession(user1.id);
 
-        let payload = {
+        const payload = {
           token: session.token,
           light: true
         };
@@ -361,11 +361,11 @@ describe('messages', () => {
     });
 
     it('returns empty array when no messages exist', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token
       };
 
@@ -406,9 +406,9 @@ describe('messages', () => {
         // Unrelated message
         await createMessage(user1.id, user3.id);
 
-        let session = await createSession(user1.id);
+        const session = await createSession(user1.id);
 
-        let payload = {
+        const payload = {
           token: session.token,
           user: user2.id
         };
@@ -456,12 +456,12 @@ describe('messages', () => {
     });
 
     it('returns empty array when no messages exist', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         user: user2.id
       };
@@ -476,11 +476,11 @@ describe('messages', () => {
     });
 
     it('handles an invalid userId', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         user: randomUuid()
       };
@@ -495,11 +495,11 @@ describe('messages', () => {
     });
 
     it('handles a null userId', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token
       };
 

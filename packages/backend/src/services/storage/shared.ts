@@ -9,5 +9,5 @@ export const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 export enum ObjectTypes {
   RECIPE_IMAGE = 'recipeImage',
   PROFILE_IMAGE = 'profileImage',
-};
+}
 

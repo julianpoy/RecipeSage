@@ -1,6 +1,6 @@
 import {StorageObjectRecord, StorageProvider} from './';
 import {ObjectTypes} from './shared';
-import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, PutObjectRequest, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import crypto from 'crypto';
 
 // Must begin and end with a /

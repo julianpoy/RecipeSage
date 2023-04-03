@@ -1,7 +1,7 @@
-import {ObjectTypes, StorageObjectRecord, writeBuffer} from "./index";
-import * as UtilService from '../util';
+import {StorageObjectRecord, writeBuffer} from './index';
+import {ObjectTypes} from './shared';
 import * as fs from 'fs/promises';
-import {transformImageBuffer} from "../file-transformer";
+import {transformImageBuffer} from '../file-transformer';
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -13,6 +13,7 @@ const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 
 
 const fetchImage = async (url: string) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore - native fetch is not defined in NodeJS yet
   const response = await fetch(url, {
     method: 'GET',

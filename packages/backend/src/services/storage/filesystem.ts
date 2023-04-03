@@ -1,5 +1,5 @@
-import {StorageObjectRecord} from "./index";
-import {ObjectTypes} from "./shared";
+import {StorageObjectRecord} from './index';
+import {ObjectTypes} from './shared';
 import * as fs from 'fs/promises';
 import * as crypto from 'crypto';
 import { join, dirname } from 'path';

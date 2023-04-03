@@ -1,8 +1,9 @@
+import { Readable, Writable } from 'stream';
 import sharp from 'sharp';
 
 export const transformImageStream = async (
-  inputStream: NodeJS.ReadableStream,
-  outputStream: NodeJS.WritableStream,
+  inputStream: Readable,
+  outputStream: Writable,
   width: number,
   height: number,
   quality: number,
