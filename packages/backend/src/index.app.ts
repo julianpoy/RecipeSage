@@ -46,7 +46,7 @@ const runIndexOp = async () => {
 
     await indexRecipes(recipes);
 
-    let ids = recipes.map((r) => r.id);
+    const ids = recipes.map((r) => r.id);
     await Recipe.update(
       { indexedAt: new Date() },
       {

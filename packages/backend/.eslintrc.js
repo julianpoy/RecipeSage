@@ -4,14 +4,6 @@ module.exports = {
     'node': true
   },
   'extends': 'eslint:recommended',
-  'overrides': [{
-    'files': [
-      '**/*.spec.js',
-    ],
-    'env': {
-      'jest': true
-    }
-  }],
   'parserOptions': {
     'ecmaVersion': 'latest',
     'sourceType': 'module'
@@ -34,5 +26,34 @@ module.exports = {
       'always'
     ],
     'no-var': 'error'
-  }
+  },
+  'overrides': [
+    {
+      'files': [
+        '**/*.spec.js',
+        '**/*.spec.ts',
+      ],
+      'env': {
+        'jest': true
+      }
+    },
+    {
+      'files': [
+        '*.ts'
+      ],
+      'parserOptions': {
+        'project': [
+          'tsconfig.json',
+        ],
+        'createDefaultProgram': true
+      },
+      extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      'rules': {
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      }
+    }
+  ]
 };

@@ -32,7 +32,7 @@ describe('users', () => {
 
   describe('register', () => {
     it('success', async () => {
-      let payload = {
+      const payload = {
         name: randomString(20),
         email: randomEmail(),
         password: '123456'
@@ -64,7 +64,7 @@ describe('users', () => {
     });
 
     it('rejects invalid email', async () => {
-      let payload = {
+      const payload = {
         name: randomString(20),
         email: 'invalid',
         password: '123456'
@@ -77,7 +77,7 @@ describe('users', () => {
     });
 
     it('rejects short password', async () => {
-      let payload = {
+      const payload = {
         name: randomString(20),
         email: randomEmail(),
         password: 'short'
@@ -90,9 +90,9 @@ describe('users', () => {
     });
 
     it('rejects if email already registered', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let payload = {
+      const payload = {
         name: randomString(20),
         email: user.email,
         password: '123456'
@@ -107,9 +107,9 @@ describe('users', () => {
 
   describe('login', () => {
     it('success', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let payload = {
+      const payload = {
         email: user.email,
         password: '123456'
       };
@@ -133,7 +133,7 @@ describe('users', () => {
     it('rejects incorrect email', async () => {
       await createUser();
 
-      let payload = {
+      const payload = {
         email: 'incorrect@gmail.com',
         password: '123456'
       };
@@ -145,9 +145,9 @@ describe('users', () => {
     });
 
     it('rejects incorrect password', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let payload = {
+      const payload = {
         email: user.email,
         password: 'incorrect'
       };
@@ -161,9 +161,9 @@ describe('users', () => {
 
   describe('update', () => {
     it('success', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let payload = {
+      const payload = {
         email: user.email,
         password: '123456'
       };
@@ -187,7 +187,7 @@ describe('users', () => {
     it('rejects incorrect email', async () => {
       await createUser();
 
-      let payload = {
+      const payload = {
         email: 'incorrect@gmail.com',
         password: '123456'
       };
@@ -199,9 +199,9 @@ describe('users', () => {
     });
 
     it('rejects incorrect password', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let payload = {
+      const payload = {
         email: user.email,
         password: 'incorrect'
       };
@@ -215,7 +215,7 @@ describe('users', () => {
 
   describe('get user by-email', () => {
     it('returns user info', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
       return request(server)
         .get('/users/by-email')
@@ -227,7 +227,7 @@ describe('users', () => {
     });
 
     it('rejects non-existent email', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
       return request(server)
         .get('/users/by-email')
@@ -238,9 +238,9 @@ describe('users', () => {
 
   describe('user self', () => {
     it('returns user info', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
       return request(server)
         .get('/users/')
@@ -258,9 +258,9 @@ describe('users', () => {
 
   describe('sessioncheck', () => {
     it('accepts valid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
       return request(server)
         .get('/users/sessioncheck')

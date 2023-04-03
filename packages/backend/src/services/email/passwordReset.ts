@@ -1,9 +1,16 @@
-const { dedent } = require('ts-dedent');
+import { dedent } from 'ts-dedent';
+import { signatureHtml, signaturePlain } from './util/signature';
+import { sendMail } from './util/sendMail';
 
-const UtilService = require('../services/util');
-const { signatureHtml, signaturePlain } = require('./util/signature');
+interface PasswordResetEmailArgs {
+  resetLink: string;
+}
 
-const sendPasswordReset = async (to, ccTo, args) => {
+export const sendPasswordReset = async (
+  to: string[],
+  ccTo: string[],
+  args: PasswordResetEmailArgs
+) => {
   const subject = 'RecipeSage Password Reset';
 
   const html = dedent`
@@ -31,10 +38,6 @@ const sendPasswordReset = async (to, ccTo, args) => {
     ${signaturePlain}
   `;
 
-  await UtilService.sendmail(to, ccTo, subject, html, plain);
-};
-
-module.exports = {
-  sendPasswordReset,
+  await sendMail(to, ccTo, subject, html, plain);
 };
 

@@ -3,21 +3,18 @@ let {
 } = require('chai');
 
 let sinon = require('sinon');
-let aws = require('aws-sdk');
 let path = require('path');
 
 let {
   setup,
   cleanup,
   randomString,
-  randomEmail,
 } = require('../testutils');
 
 let {
   validatePassword,
   validateEmail,
   sanitizeEmail,
-  sendmail,
 
   dispatchImportNotification,
   dispatchMessageNotification,
@@ -96,79 +93,6 @@ describe('utils', () => {
       expect(sanitizeEmail('tEsT@test.Com')).to.equal('test@test.com');
     });
   });
-
-  describe('sendmail', () => {
-    let sesStub, sesSendEmailStub;
-
-    beforeAll(() => {
-      // sinon.stub(aws, 'S3')
-      sesSendEmailStub = sinon.stub().returns({
-        promise: () => Promise.resolve({
-          messageId: randomString(20)
-        })
-      });
-
-      sesStub = sinon.stub(aws, 'SES').returns({
-        sendEmail: sesSendEmailStub
-      });
-    });
-
-    afterAll(() => {
-      sesStub.restore();
-    });
-
-    it('sends and email', () => {
-      let toAddresses = [randomEmail(), randomEmail()];
-      let ccAddresses = [randomEmail(), randomEmail()];
-
-      let subject = randomString(20);
-      let html = randomString(20);
-      let plain = randomString(20);
-
-      return sendmail(toAddresses, ccAddresses, subject, html, plain).then(() => {
-        sinon.assert.calledOnce(sesStub);
-        sinon.assert.calledOnce(sesSendEmailStub);
-        let {
-          Destination: {
-            CcAddresses,
-            ToAddresses
-          },
-          Message: {
-            Body: {
-              Html,
-              Text
-            },
-            Subject
-          },
-          Source,
-          ReplyToAddresses
-        } = sesSendEmailStub.getCalls()[0].args[0];
-
-        // expect(CcAddresses).to.have.length(2)
-        expect(CcAddresses).to.equal(ccAddresses);
-
-        // expect(ToAddresses).to.have.length(2)
-        expect(ToAddresses).to.equal(toAddresses);
-
-        expect(Html.Charset).to.equal('UTF-8');
-        expect(Html.Data).to.equal(html);
-
-        expect(Text.Charset).to.equal('UTF-8');
-        expect(Text.Data).to.equal(plain);
-
-        expect(Subject.Charset).to.equal('UTF-8');
-        expect(Subject.Data).to.equal(subject);
-
-        expect(Source).to.equal('"RecipeSage" <noreply@recipesage.com>');
-
-        expect(ReplyToAddresses).to.have.length(1);
-        expect(ReplyToAddresses).to.contain('julian@recipesage.com');
-      });
-    });
-  });
-
-
-
 
   describe('findFilesByRegex', () => {
     it('returns an array of file paths for test image img1.png', () => {

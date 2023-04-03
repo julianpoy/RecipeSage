@@ -10,7 +10,8 @@ const path = require('path');
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
-const StorageService = require('../services/storage');
+const { writeImageFile, writeImageURL } = require('../services/storage/image');
+const { ObjectTypes } = require('../services/storage/shared');
 const JSONLDService = require('../services/json-ld');
 
 const {
@@ -234,8 +235,8 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
           .filter((_, idx) => idx < MAX_IMAGES)
           .map(image => limit(() =>
             imagesAsBuffer ?
-              StorageService.sendFileToStorage(image, true, highResConversion) :
-              StorageService.sendURLToStorage(image, highResConversion)
+              writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion) :
+              writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion)
           ))
       );
     }));

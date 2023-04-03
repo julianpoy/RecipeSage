@@ -9,6 +9,7 @@ const performance = require('perf_hooks').performance;
 const semver = require('semver');
 const path = require('path');
 const fetch = require('node-fetch');
+const xmljs = require('xml-js');
 
 // DB
 const SQ = require('../models').sequelize;
@@ -20,11 +21,11 @@ const Recipe_Image = require('../models').Recipe_Image;
 
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
-const StorageService = require('../services/storage');
+const { writeImageURL, writeImageBuffer } = require('../services/storage/image');
+const { ObjectTypes } = require('../services/storage/shared');
 const SubscriptionsService = require('../services/subscriptions');
 const jobTrackerService = require('../services/job-tracker');
 
-/* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { version: process.env.VERSION });
 });
@@ -43,8 +44,6 @@ router.get('/versioncheck', (req, res) => {
     supported
   });
 });
-
-const xmljs = require('xml-js');
 
 router.get(
   '/scrape/pepperplate',
@@ -251,7 +250,7 @@ router.get(
 
         await UtilService.executeInChunks(recipes.map(pepperRecipe => () => {
           if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
-            return StorageService.sendURLToStorage(pepperRecipe.ImageUrl._text).then(image => {
+            return writeImageURL(ObjectTypes.RECIPE_IMAGE, pepperRecipe.ImageUrl._text, false).then(image => {
               pepperRecipe.image = image;
             }).catch(() => {});
           }
@@ -454,7 +453,7 @@ router.post(
                   let recipeData = JSON.parse(data.toString());
 
                   let imageP = recipeData.photo_data ?
-                    StorageService.sendFileToStorage(Buffer.from(recipeData.photo_data, 'base64'), true) : Promise.resolve();
+                    writeImageBuffer(ObjectTypes.RECIPE_IMAGE, Buffer.from(recipeData.photo_data, 'base64'), true) : Promise.resolve();
 
                   return imageP.then(image => {
                     let notes = [

@@ -40,7 +40,7 @@ async function init() {
       }
     });
   }
-};
+}
 
 export const indexRecipes = async (recipes: any[]) => {
   const actions = recipes.reduce((acc, recipe) => {

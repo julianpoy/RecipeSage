@@ -1,9 +1,10 @@
-const SQ = require('../../models').sequelize;
-const Op = require('../../models').Op;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 const Image = require('../../models').Image;
 const Recipe_Image = require('../../models').Recipe_Image;
 
-const {deleteStorageObjects} = require('../../services/storage');
+const { deleteObjects } = require('../../services/storage');
 
 const deleteHangingImagesForUser = async (userId, transaction) => {
   const userImages = await Image.findAll({
@@ -12,8 +13,8 @@ const deleteHangingImagesForUser = async (userId, transaction) => {
         {
           userId,
         },
-        SQ.where(
-          SQ.col('Recipe_Images.id'),
+        Sequelize.where(
+          Sequelize.col('Recipe_Images.id'),
           'IS',
           null
         )
@@ -28,7 +29,7 @@ const deleteHangingImagesForUser = async (userId, transaction) => {
     transaction,
   });
 
-  await deleteStorageObjects(
+  await deleteObjects(
     userImages.map(image => image.key)
   );
 };

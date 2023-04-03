@@ -34,13 +34,13 @@ describe('labels', () => {
 
   describe('create', () => {
     it('succeeds with valid data', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20),
         recipeId: recipe.id
       };
@@ -67,13 +67,13 @@ describe('labels', () => {
     });
 
     it('rejects if no title is present', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let payload = {
+      const payload = {
         title: '',
         recipeId: recipe.id
       };
@@ -86,11 +86,11 @@ describe('labels', () => {
     });
 
     it('rejects if no recipeId is present', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20)
       };
 
@@ -102,11 +102,11 @@ describe('labels', () => {
     });
 
     it('rejects if recipeId is empty', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20),
         recipeId: ''
       };
@@ -119,11 +119,11 @@ describe('labels', () => {
     });
 
     it('rejects if recipeId is invalid', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20),
         recipeId: 'invalid'
       };
@@ -141,11 +141,11 @@ describe('labels', () => {
     });
 
     it('requires valid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20),
         recipeId: recipe.id
       };
@@ -220,19 +220,19 @@ describe('labels', () => {
 
   describe('delete', () => {
     it('succeeds when label has more than one recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe1 = await createRecipe(user.id);
-      let recipe2 = await createRecipe(user.id);
+      const recipe1 = await createRecipe(user.id);
+      const recipe2 = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe1.id);
       await associateLabel(label.id, recipe2.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: label.id,
         recipeId: recipe1.id
@@ -258,17 +258,17 @@ describe('labels', () => {
     });
 
     it('succeeds when label has only one recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: label.id,
         recipeId: recipe.id
@@ -287,18 +287,18 @@ describe('labels', () => {
     });
 
     it('rejects if user does not own recipe', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
-      let label = await createLabel(user2.id);
+      const label = await createLabel(user2.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: label.id,
         recipeId: recipe.id
@@ -311,17 +311,17 @@ describe('labels', () => {
     });
 
     it('rejects if recipe does not exist', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: label.id,
         recipeId: 'invalid'
@@ -334,17 +334,17 @@ describe('labels', () => {
     });
 
     it('rejects if label does not exist', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: randomUuid(),
         recipeId: recipe.id
@@ -357,17 +357,17 @@ describe('labels', () => {
     });
 
     it('rejects if recipeid is falsy', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: label.id,
         recipeId: ''
@@ -380,17 +380,17 @@ describe('labels', () => {
     });
 
     it('rejects if labelid is falsy', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         token: session.token,
         labelId: '',
         recipeId: recipe.id
@@ -403,15 +403,15 @@ describe('labels', () => {
     });
 
     it('requires valid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
-      let payload = {
+      const payload = {
         token: 'invalid',
         labelId: label.id,
         recipeId: recipe.id

@@ -1,14 +1,14 @@
-import {SearchProvider} from "./index";
+import {SearchProvider} from './index';
 
-export const indexRecipes = async (recipes: any[]) => {
+export const indexRecipes = async () => {
   return Promise.resolve();
 };
 
-export const deleteRecipes = async (recipeIds: string[]) => {
+export const deleteRecipes = async () => {
   return Promise.resolve();
 };
 
-export const searchRecipes = async (userIds: string[], queryString: string) => {
+export const searchRecipes = async () => {
   return Promise.resolve([]);
 };
 

@@ -36,11 +36,11 @@ describe('recipes', () => {
 
   describe('create', () => {
     it('succeeds for personal recipe with valid payload, no image', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20),
         description: randomString(20),
         yield: randomString(20),
@@ -75,11 +75,11 @@ describe('recipes', () => {
     });
 
     it('allows null fields', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: randomString(20)
       };
 
@@ -104,11 +104,11 @@ describe('recipes', () => {
     });
 
     it('rejects if no title is present', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         description: randomString(20),
         yield: randomString(20),
         activeTime: randomString(20),
@@ -134,11 +134,11 @@ describe('recipes', () => {
     });
 
     it('rejects if title is an empty string', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let payload = {
+      const payload = {
         title: '',
         description: randomString(20),
         yield: randomString(20),
@@ -165,7 +165,7 @@ describe('recipes', () => {
     });
 
     it('rejects invalid token', async () => {
-      let payload = {
+      const payload = {
         title: randomString(20),
         description: randomString(20),
         yield: randomString(20),
@@ -194,13 +194,13 @@ describe('recipes', () => {
 
   describe('get single', () => {
     it('returns recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
 
@@ -216,9 +216,9 @@ describe('recipes', () => {
     });
 
     it('rejects invalid recipeId', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
       await createRecipe(user.id);
 
@@ -229,14 +229,14 @@ describe('recipes', () => {
     });
 
     it('returns recipes belonging to another user', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
-      let label = await createLabel(user2.id);
+      const label = await createLabel(user2.id);
 
       await associateLabel(label.id, recipe.id);
 
@@ -254,11 +254,11 @@ describe('recipes', () => {
     });
 
     it('returns recipe with no token', async () => {
-      let user2 = await createUser();
+      const user2 = await createUser();
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
-      let label = await createLabel(user2.id);
+      const label = await createLabel(user2.id);
 
       await associateLabel(label.id, recipe.id);
 
@@ -275,9 +275,9 @@ describe('recipes', () => {
     });
 
     it('denies invalid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
       return request(server)
         .get(`/recipes/${recipe.id}`)
@@ -288,13 +288,13 @@ describe('recipes', () => {
 
   describe('update', () => {
     it('updates recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let payload = {
+      const payload = {
         title: `new-${randomString(20)}`,
         description: `new-${randomString(20)}`,
         yield: `new-${randomString(20)}`,
@@ -332,9 +332,9 @@ describe('recipes', () => {
     });
 
     it('rejects invalid recipeId', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
       return request(server)
         .put(`/recipes/${randomUuid()}`)
@@ -344,12 +344,12 @@ describe('recipes', () => {
     });
 
     it('rejects request if recipe does not belong to user', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
       return request(server)
         .put(`/recipes/${recipe.id}`)
@@ -359,9 +359,9 @@ describe('recipes', () => {
     });
 
     it('requires valid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
       return request(server)
         .put(`/recipes/${recipe.id}`)
@@ -373,15 +373,15 @@ describe('recipes', () => {
 
   describe('delete all', () => {
     it('deletes all recipes and labels', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe1 = await createRecipe(user.id);
-      let recipe2 = await createRecipe(user.id);
+      const recipe1 = await createRecipe(user.id);
+      const recipe2 = await createRecipe(user.id);
 
-      let label1 = await createLabel(user.id);
-      let label2 = await createLabel(user.id);
+      const label1 = await createLabel(user.id);
+      const label2 = await createLabel(user.id);
 
       await associateLabel(label1.id, recipe1.id);
       await associateLabel(label2.id, recipe2.id);
@@ -410,14 +410,14 @@ describe('recipes', () => {
     });
 
     it('does not remove recipes or labels belonging to another user', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
-      let label = await createLabel(user2.id);
+      const label = await createLabel(user2.id);
 
       await associateLabel(label.id, recipe.id);
 
@@ -453,11 +453,11 @@ describe('recipes', () => {
 
   describe('delete', () => {
     it('deletes recipe', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
       return request(server)
         .delete(`/recipes/${recipe.id}`)
@@ -471,14 +471,14 @@ describe('recipes', () => {
     });
 
     it('removes labels with only one association', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
-      let label1 = await createLabel(user.id);
-      let label2 = await createLabel(user.id);
+      const label1 = await createLabel(user.id);
+      const label2 = await createLabel(user.id);
 
       await associateLabel(label1.id, recipe.id);
       await associateLabel(label2.id, recipe.id);
@@ -503,14 +503,14 @@ describe('recipes', () => {
     });
 
     it('does not remove labels with other associated recipes', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let session = await createSession(user.id);
+      const session = await createSession(user.id);
 
-      let recipe1 = await createRecipe(user.id);
-      let recipe2 = await createRecipe(user.id);
+      const recipe1 = await createRecipe(user.id);
+      const recipe2 = await createRecipe(user.id);
 
-      let label = await createLabel(user.id);
+      const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe1.id);
       await associateLabel(label.id, recipe2.id);
@@ -535,12 +535,12 @@ describe('recipes', () => {
     });
 
     it('rejects the request if user does not own recipe', async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
+      const user1 = await createUser();
+      const user2 = await createUser();
 
-      let session = await createSession(user1.id);
+      const session = await createSession(user1.id);
 
-      let recipe = await createRecipe(user2.id);
+      const recipe = await createRecipe(user2.id);
 
       return request(server)
         .delete(`/recipes/${recipe.id}`)
@@ -549,9 +549,9 @@ describe('recipes', () => {
     });
 
     it('requires valid session', async () => {
-      let user = await createUser();
+      const user = await createUser();
 
-      let recipe = await createRecipe(user.id);
+      const recipe = await createRecipe(user.id);
 
       return request(server)
         .delete(`/recipes/${recipe.id}`)

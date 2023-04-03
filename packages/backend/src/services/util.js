@@ -1,10 +1,6 @@
-const aws = require('aws-sdk');
-
 const fs = require('fs-extra');
-const sharp = require('sharp');
 const path = require('path');
 const zlib = require('zlib');
-const fetch = require('node-fetch');
 
 // Service
 const FirebaseService = require('./firebase');
@@ -12,89 +8,15 @@ const GripService = require('./grip');
 
 
 
-const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
-const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
-const HIGH_RES_IMG_CONVERSION_QUALITY = 55;
 
-const LOW_RES_IMG_CONVERSION_WIDTH = 200;
-const LOW_RES_IMG_CONVERSION_HEIGHT = 200;
-const LOW_RES_IMG_CONVERSION_QUALITY = 55;
+/**
+ * DO NOT ADD ANYTHING TO THIS FILE
+ * ALL ADDITIONS SHOULD EXIST IN SEPARATE TS FILES
+ */
 
-exports.sendmail = (toAddresses, ccAddresses, subject, html, plain) => {
-  ccAddresses = ccAddresses || [];
 
-  // Create sendEmail params
-  const params = {
-    Destination: { /* required */
-      CcAddresses: ccAddresses,
-      ToAddresses: toAddresses
-    },
-    Message: { /* required */
-      Body: { /* required */
-        Html: {
-          Charset: 'UTF-8',
-          Data: html
-        },
-        Text: {
-          Charset: 'UTF-8',
-          Data: plain
-        }
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject
-      }
-    },
-    Source: '"RecipeSage" <noreply@recipesage.com>', /* required */
-    ReplyToAddresses: [
-      'julian@recipesage.com',
-      /* more items */
-    ],
-  };
 
-  // Create the promise and SES service object
-  return new aws.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
-};
 
-exports.fetchImage = async url => {
-  const response = await fetch(url, {
-    method: 'GET',
-  });
-
-  return response.buffer();
-};
-
-exports.convertImage = (imageBuf, highResConversion) => {
-  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
-
-  return new Promise((resolve, reject) => {
-    try {
-      sharp(imageBuf)
-        .rotate() // Rotates based on EXIF data
-        .resize(width, height) // Uses object-fit: cover by default
-        .jpeg({
-          quality,
-          // chromaSubsampling: '4:4:4'
-        })
-        .on('error', function (e) {
-          console.error('Sharp Error: ' + e);
-          reject(e);
-        })
-        .toBuffer((err, buffer) => {
-          if (err) reject(err);
-          resolve(buffer);
-        })
-        .on('error', function (e) {
-          console.error('Sharp Error: ' + e);
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 
 exports.dispatchImportNotification = (user, status, reason) => {
   let event;

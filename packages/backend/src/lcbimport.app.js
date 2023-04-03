@@ -16,7 +16,8 @@ const Recipe_Image = require('./models').Recipe_Image;
 const Image = require('./models').Image;
 
 const UtilService = require('./services/util');
-const StorageService = require('./services/storage');
+const { writeImageFile } = require('./services/storage/image');
+const {ObjectTypes} = require('./services/storage/shared');
 
 let runConfig = {
   path: process.argv[2],
@@ -305,7 +306,7 @@ async function main() {
 
               if (possibleImageFiles.length == 0) return;
 
-              return StorageService.sendFileToStorage(possibleImageFiles[0]).then((image) => {
+              return writeImageFile(ObjectTypes.RECIPE_IMAGE, possibleImageFiles[0], false).then((image) => {
                 lcbRecipe.images = lcbRecipe.images || [];
                 lcbRecipe.images.push(image);
               }).catch(() => { });
