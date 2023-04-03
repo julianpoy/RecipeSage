@@ -49,56 +49,6 @@ const parseRatingFilter = (ratingFilter) => {
     ?.map(el => parseInt(el, 10));
 };
 
-// TODO: Remove this. Legacy frontend compat
-const legacyImageHandler = async (req, res, next) => {
-  try {
-    const highResConversion = await SubscriptionsService.userHasCapability(
-      res.locals.session.userId,
-      SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
-    );
-
-    await StorageService.upload('image', req, res);
-    if (req.file) {
-      const uploadedFile = req.file;
-      const newImage = await Image.create({
-        userId: res.locals.session.userId,
-        location: uploadedFile.location,
-        key: uploadedFile.key,
-        json: uploadedFile
-      });
-
-      const imageIds = req.body.imageIds || [];
-      imageIds.unshift(newImage.id);
-      req.body.imageIds = imageIds;
-    }
-
-    if (req.body.imageURL) {
-      let uploadedFile;
-      try {
-        uploadedFile = await StorageService.sendURLToStorage(req.body.imageURL, highResConversion);
-      } catch (e) {
-        e.status = 415;
-        throw e;
-      }
-
-      const newImage = await Image.create({
-        userId: res.locals.session.userId,
-        location: uploadedFile.location,
-        key: uploadedFile.key,
-        json: uploadedFile
-      });
-
-      const imageIds = req.body.imageIds || [];
-      imageIds.unshift(newImage.id);
-      req.body.imageIds = imageIds;
-    }
-
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
-
 const applyLegacyImageField = recipe => {
   if (recipe.toJSON) recipe = recipe.toJSON();
 
@@ -136,7 +86,6 @@ router.post(
   })),
   cors(),
   MiddlewareService.validateSession(['user']),
-  legacyImageHandler,
   wrapRequestWithErrorHandler(async (req, res) => {
 
     if (!req.body.title || req.body.title.length === 0) {
@@ -894,7 +843,6 @@ router.put(
   })),
   cors(),
   MiddlewareService.validateSession(['user']),
-  legacyImageHandler,
   wrapRequestWithErrorHandler(async (req, res) => {
 
     const updatedRecipe = await SQ.transaction(async transaction => {

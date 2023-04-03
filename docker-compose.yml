@@ -43,8 +43,7 @@ services:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
       - FIRESTORE_BUCKET=
-      - STORAGE_TYPE=S3 #POSSIBLE VALUES: S3, FIREBASE
-      - AWS_PUBLIC_ASSET_LOCATION=https://chefbook-dev.s3.us-west-2.amazonaws.com/
+      - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
       - NODE_ENV=development
       - VERBOSE=false
       - VERSION=development

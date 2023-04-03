@@ -23,8 +23,8 @@ const SessionService = require('../services/sessions');
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const SubscriptionService = require('../services/subscriptions');
-const { sendWelcome } = require('../emails/welcome');
-const { sendPasswordReset } = require('../emails/passwordReset');
+const { sendWelcome } = require('../services/email/welcome');
+const { sendPasswordReset } = require('../services/email/passwordReset');
 const { getFriendships } = require('../utils/getFriendships');
 
 const SharedUtils = require('@recipesage/util');

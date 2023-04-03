@@ -20,12 +20,13 @@
     ]
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.304.0",
+    "@aws-sdk/client-ses": "^3.303.0",
     "@elastic/elasticsearch": "~8.4.0",
     "@julianpoy/recipe-clipper": "^2.3.0",
     "@recipesage/util": "*",
     "@sentry/node": "^7.33.0",
     "@sentry/tracing": "^7.36.0",
-    "aws-sdk": "^2.1238.0",
     "body-parser": "~1.20.1",
     "commander": "^10.0.0",
     "cookie-parser": "^1.4.6",
@@ -72,6 +73,8 @@
     "@babel/preset-env": "^7.20.2",
     "@types/chai": "^4.3.4",
     "@types/jest": "^29.5.0",
+    "@types/multer": "^1.4.7",
+    "@types/sharp": "^0.31.1",
     "@types/sinon": "^10.0.13",
     "@types/supertest": "^2.0.12",
     "chai": "^4.3.7",

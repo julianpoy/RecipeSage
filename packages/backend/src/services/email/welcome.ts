@@ -1,9 +1,8 @@
-const { dedent } = require('ts-dedent');
+import { dedent } from 'ts-dedent';
+import { signatureHtml, signaturePlain } from './util/signature';
+import { sendMail } from './util/sendMail';
 
-const UtilService = require('../services/util');
-const { signatureHtml, signaturePlain } = require('./util/signature');
-
-const sendWelcome = async (to, ccTo) => {
+export const sendWelcome = async (to: string[], ccTo: string[]) => {
   const subject = 'Welcome to RecipeSage!';
 
   const html = dedent`
@@ -37,10 +36,6 @@ const sendWelcome = async (to, ccTo) => {
     ${signaturePlain}
   `;
 
-  await UtilService.sendmail(to, ccTo, subject, html, plain);
-};
-
-module.exports = {
-  sendWelcome,
+  await sendMail(to, ccTo, subject, html, plain);
 };
 

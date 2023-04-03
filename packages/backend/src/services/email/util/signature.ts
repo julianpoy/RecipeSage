@@ -1,6 +1,6 @@
-const { dedent } = require('ts-dedent');
+import { dedent } from 'ts-dedent';
 
-const signatureHtml = dedent`
+export const signatureHtml = dedent`
   <br /><br />Best,
   <br />Julian Poyourow
   <br />Developer of RecipeSage - <a href="https://recipesage.com">https://recipesage.com</a>
@@ -12,7 +12,7 @@ const signatureHtml = dedent`
   Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>
 `;
 
-const signaturePlain = dedent`
+export const signaturePlain = dedent`
   Best,
   Julian Poyourow
   Developer of RecipeSage - https://recipesage.com
@@ -23,9 +23,4 @@ const signaturePlain = dedent`
   https://www.instagram.com/recipesageofficial/
   https://twitter.com/RecipeSageO
 `;
-
-module.exports = {
-  signatureHtml,
-  signaturePlain,
-};
 
