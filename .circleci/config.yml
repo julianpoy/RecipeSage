@@ -1,6 +1,20 @@
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.0.0
+commands:
+  install-dependencies:
+    steps:
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "package-lock.json" }}
+            - dependency-cache-
+      - run:
+          name: install-deps
+          command: 'npm install'
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
 jobs:
   build_and_test:
     resource_class: large
@@ -31,27 +45,13 @@ jobs:
           POSTGRES_DB: chefbook_test
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - dependency-cache-{{ checksum "package-lock.json" }}
-            - dependency-cache-
-      - run:
-          name: install-deps
-          command: 'npm install'
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
+      - install-dependencies
       - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
       - run:
           name: tmp
           command: ls packages/frontend
-      - persist_to_workspace:
-          root: packages/frontend
-          paths:
-            - www
   push_backend:
     resource_class: large
     docker:
@@ -91,8 +91,13 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
-      - attach_workspace:
-          at: .
+      - install-dependencies
+      - run:
+          name: build-frontend
+          command: npx nx build @recipesage/frontend
+      - run:
+          name: move-frontend-build
+          command: mv packages/frontend/www ./www
       - run:
           name: set-frontend-version
           command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
