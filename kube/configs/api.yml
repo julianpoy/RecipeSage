@@ -37,6 +37,10 @@ spec:
           value: "3000"
         - name: INGREDIENT_INSTRUCTION_CLASSIFIER_URL
           value: http://rs-ingredient-instruction-classifier:3000/
+        - name: SEARCH_PROVIDER
+          value: elasticsearch
+        - name: STORAGE_TYPE
+          value: s3
         volumeMounts:
         - name: firebase-credentials
           mountPath: /app/Backend/src/config/firebase-credentials.json
