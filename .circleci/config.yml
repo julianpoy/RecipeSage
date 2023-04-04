@@ -19,7 +19,7 @@ jobs:
   build_and_test:
     resource_class: large
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:18.15
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -55,7 +55,7 @@ jobs:
   push_backend:
     resource_class: large
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:18.15
     steps:
       - checkout
       - setup_remote_docker:
@@ -69,7 +69,7 @@ jobs:
           command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
   push_backend_selfhost:
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:18.15
     steps:
       - checkout
       - setup_remote_docker:
@@ -84,7 +84,7 @@ jobs:
   push_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:18.15
     steps:
       - checkout
       - aws-cli/setup
@@ -109,7 +109,7 @@ jobs:
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:18.15
     steps:
       - checkout
       - aws-cli/setup

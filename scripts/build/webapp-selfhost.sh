@@ -8,7 +8,7 @@ then
   exit 1
 fi
 
-docker build -f Frontend/selfhost.Dockerfile -t julianpoy/recipesage-selfhost:static-latest --build-arg VERSION=$1 .
+docker build --build-arg VERSION=$1 -f packages/frontend/selfhost.Dockerfile -t julianpoy/recipesage-selfhost:static-latest .
 
 # Only push to latest tag if tag is a versioned tag
 if [[ $1 == v* ]]
