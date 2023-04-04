@@ -31,6 +31,8 @@ RUN apk add --no-cache \
 # node-gyp
 RUN apk add --no-cache python3 make
 
+RUN npm install -g tsx
+
 COPY . .
 RUN npm install
 

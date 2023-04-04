@@ -18,8 +18,8 @@ spec:
         image: julianpoy/recipesage:api-$RELEASE_TAG
         ports:
         - containerPort: 3000
-        command: ["node"]
-        args: ["src/bin/www.js"]
+        command: ["tsx"]
+        args: ["packages/backend/src/bin/www"]
         resources:
           requests:
             cpu: 250m
