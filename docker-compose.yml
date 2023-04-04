@@ -38,7 +38,7 @@ services:
     build:
       context: .
       dockerfile: ./packages/backend/Dockerfile
-    command: npx --yes tsx watch packages/backend/src/bin/www.js
+    command: tsx watch packages/backend/src/bin/www
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev

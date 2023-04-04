@@ -2,7 +2,7 @@
   "name": "@recipesage/backend",
   "version": "0.0.0",
   "scripts": {
-    "start": "npx tsx ./bin/www.js",
+    "start": "tsx ./bin/www",
     "test": "PORT=2999 NODE_ENV=test jest --runInBand ./src/**/*.spec.js ./src/**/*.spec.ts",
     "lint": "eslint .",
     "test:ci": "npm run test"
