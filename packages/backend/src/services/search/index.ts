@@ -3,9 +3,9 @@ import * as ElasticSearch from './elasticsearch';
 import * as Stub from './stub';
 
 export interface SearchProvider {
-  indexRecipes: (recipes: any[]) => Promise<any>;
-  deleteRecipes: (recipeIds: string[]) => Promise<any>;
-  searchRecipes: (userIds: string[], queryString: string) => Promise<any[]>;
+  indexRecipes: (recipes: any[]) => Promise<void>;
+  deleteRecipes: (recipeIds: string[]) => Promise<void>;
+  searchRecipes: (userIds: string[], queryString: string) => Promise<string[]>;
 }
 
 const searchProviders: {

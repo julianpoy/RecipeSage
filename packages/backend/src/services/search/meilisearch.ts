@@ -79,7 +79,7 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
     attributesToRetrieve: ['id'],
   });
 
-  return results.hits;
+  return results.hits.map((hit) => hit.id satisfies string);
 };
 
 export default {

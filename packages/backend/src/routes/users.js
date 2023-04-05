@@ -38,6 +38,7 @@ const {
   PreconditionFailed,
 } = require('../utils/errors');
 const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
+const {indexRecipes} = require('../services/search');
 
 
 router.get(
@@ -509,6 +510,17 @@ router.post(
       await user.save({ transaction });
 
       const session = await SessionService.generateSession(user.id, 'user', transaction);
+
+      if (process.env.NODE_ENV === 'selfhost') {
+        const recipes = await Recipe.findAll({
+          where: {
+            userId: user.id
+          },
+          transaction,
+        });
+
+        indexRecipes(recipes);
+      }
 
       return session.token;
     });
