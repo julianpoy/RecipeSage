@@ -1,4 +1,5 @@
 import { Client } from '@elastic/elasticsearch';
+import dedent from 'ts-dedent';
 import {SearchProvider} from './';
 
 let client: Client;
@@ -34,6 +35,9 @@ async function init() {
                   ignore_above: 256
                 }
               }
+            },
+            userId: {
+              type: 'keyword',
             }
           }
         }
@@ -55,14 +59,20 @@ export const indexRecipes = async (recipes: any[]) => {
       }
     };
 
+    const fullText = dedent`
+      ${title}
+      ${source}
+      ${description}
+      ${ingredients}
+      ${instructions}
+      ${notes}
+    `;
+
     const document = {
       userId,
       title,
-      source,
-      description,
       ingredients,
-      instructions,
-      notes
+      fullText,
     };
 
     return [...acc, action, document];
@@ -96,27 +106,21 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
     body: {
       query: {
         bool: {
-          should: userIds.map((userId) => ({
-            term: {
-              userId,
-            }
-          })),
+          should: [], // Present only because of TypeScript. Not actually necessary for query.
           must: {
-            multi_match: {
-              query: queryString,
-              fuzziness: 'AUTO',
-              fields: [
-                'title^1.5',
-                'source^1.2',
-                'description^1.2',
-                'ingredients',
-                'instructions',
-                'notes'
-              ],
-              type: 'most_fields',
-              operator: 'and'
+            match_bool_prefix: {
+              fullText: {
+                query: queryString,
+                fuzziness: 'AUTO',
+                operator: 'and'
+              }
+            },
+          },
+          filter: {
+            terms: {
+              userId: userIds
             }
-          }
+          },
         }
       }
     },
@@ -125,7 +129,7 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
 
   return results.hits.hits
     .sort((a, b) => b._score - a._score)
-    .map((hit) => hit as any);
+    .map((hit) => hit._id);
 };
 
 export default {

@@ -38,7 +38,7 @@ services:
     build:
       context: .
       dockerfile: ./packages/backend/Dockerfile
-    command: tsx watch packages/backend/src/bin/www
+    command: ./scripts/watchandrun.sh 'tsx packages/backend/src/bin/www'
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev

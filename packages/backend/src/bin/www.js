@@ -103,6 +103,10 @@ const attemptExit = () => {
 };
 
 process.on('SIGTERM', () => {
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(0);
+  }
+
   console.log('RECEIVED SIGTERM - CLOSING SERVER');
   server.close(() => {
     console.log('SERVER CLOSED - RESTING');

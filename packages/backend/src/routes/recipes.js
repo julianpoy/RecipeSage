@@ -551,13 +551,12 @@ router.get(
       console.log(searchUserIds);
     }
 
-    const results = await SearchService.searchRecipes(searchUserIds, req.query.query);
+    const recipeIds = await SearchService.searchRecipes(searchUserIds, req.query.query);
 
-    const searchResultsSortOrder = results.reduce((acc, result, idx) => {
-      acc[result.id] = idx + 1;
+    const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
+      acc[recipeId] = idx + 1;
       return acc;
     }, {});
-    const searchResultsRecipeIds = Object.keys(searchResultsSortOrder);
 
     const labelClause = {};
     if (req.query.labels) {
@@ -593,7 +592,7 @@ router.get(
       if (userIsSelf || isSharingAll) {
         const recipesForUser = await getRecipesForUser({
           userId: searchUserId,
-          recipeIds: searchResultsRecipeIds,
+          recipeIds,
           ratingClause,
           labelClause,
         });
@@ -608,22 +607,22 @@ router.get(
       const sharedRecipeLabels = await Recipe_Label.findAll({
         where: {
           labelId: sharedLabelIds,
-          recipeId: searchResultsRecipeIds
+          recipeId: recipeIds
         },
       });
 
       const recipeProfileItems = profileItems
         .filter((profileItem) => profileItem.type === 'recipe')
-        .filter((profileItem) => !!searchResultsSortOrder[profileItem.recipeId]);
+        .filter((profileItem) => !!recipeIdsMap[profileItem.recipeId]);
 
-      const recipeIds = [
+      const sharedRecipeIds = [
         ...sharedRecipeLabels.map((recipeLabel) => recipeLabel.recipeId),
         ...recipeProfileItems.map((recipeLabel) => recipeLabel.recipeId)
       ];
 
       const recipesForUser = await getRecipesForUser({
         userId: searchUserId,
-        recipeIds,
+        recipeIds: sharedRecipeIds,
         ratingClause,
         labelClause,
       });
@@ -634,7 +633,7 @@ router.get(
       .map(UtilService.sortRecipeImages)
       .map(applyLegacyImageField)
       .sort((a, b) => {
-        return searchResultsSortOrder[b.id] - searchResultsSortOrder[a.id];
+        return recipeIdsMap[b.id] - recipeIdsMap[a.id];
       });
 
     res.status(200).send({
