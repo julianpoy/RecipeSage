@@ -31,6 +31,8 @@ RUN apk add --no-cache \
 # node-gyp
 RUN apk add --no-cache python3 make
 
+RUN apk add --no-cache inotify-tools
+
 RUN npm install -g tsx
 
 COPY . .
