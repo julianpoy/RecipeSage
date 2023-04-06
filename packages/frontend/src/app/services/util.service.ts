@@ -176,6 +176,7 @@ export const RouteMap = {
 const defaultLocality = {
   'en': 'en-us',
   'it': 'it-it',
+  'de': 'de-de',
 };
 
 @Injectable({
