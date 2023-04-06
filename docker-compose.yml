@@ -8,11 +8,8 @@ services:
     image: nginx
     volumes:
     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    - ./nginx/ssl.crt:/tmp/ssl.crt
-    - ./nginx/ssl.key:/tmp/ssl.key
     ports:
     - "80:80"
-    - "443:443"
     command: nginx -g 'daemon off;'
     depends_on:
       - frontend
