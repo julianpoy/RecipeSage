@@ -21,6 +21,10 @@ services:
     build:
       context: .
       dockerfile: ./packages/frontend/Dockerfile
+    command: sh -c "
+        npx --yes http-server /app/packages/frontend/www --port 8100 --silent &
+        npx nx build:watch @recipesage/frontend
+      "
     volumes:
       - ./packages/frontend/src:/app/packages/frontend/src
       - ./packages/util/src:/app/packages/util/src

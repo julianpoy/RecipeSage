@@ -9,6 +9,5 @@ RUN npm install
 
 EXPOSE 8100
 
-WORKDIR /app/packages/frontend
+RUN mkdir -p /app/packages/frontend/www
 
-CMD npx nx start @recipesage/frontend

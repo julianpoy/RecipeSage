@@ -7,6 +7,7 @@
     "start": "ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload",
     "build": "ionic build --prod && workbox injectManifest",
     "build:selfhost": "ionic build --configuration=selfhost && workbox injectManifest",
+    "build:watch": "ionic build --watch",
     "test": "",
     "lint": "ng lint"
   },
