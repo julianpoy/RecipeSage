@@ -60,7 +60,9 @@ export class AuthPage {
 
   ionViewWillEnter() {
     if (typeof this.startWithRegister === "boolean") this.showLogin = !this.startWithRegister;
+  }
 
+  ionViewDidEnter() {
     this.modalCtrl.getTop().then((topModal) => {
       this.isInModal = !!topModal;
     });
@@ -198,5 +200,13 @@ export class AuthPage {
     } else {
       this.navCtrl.navigateRoot(this.redirect || RouteMap.HomePage.getPath('main'));
     }
+  }
+
+  logout() {
+    this.utilService.removeToken();
+
+    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
+
+    this.modalCtrl.dismiss();
   }
 }
