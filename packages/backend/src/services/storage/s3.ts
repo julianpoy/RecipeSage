@@ -12,7 +12,7 @@ const ObjectTypesToSubpath = {
 const AWS_BUCKET = process.env.AWS_BUCKET || '';
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || '';
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '';
-const AWS_REGION = process.env.AWS_REGION || '';
+const AWS_REGION = process.env.AWS_REGION || 'us-west-2';
 
 if (
   process.env.STORAGE_TYPE === 's3' && (
