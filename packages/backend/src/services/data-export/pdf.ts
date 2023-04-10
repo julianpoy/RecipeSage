@@ -155,11 +155,6 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
     });
   }
 
-  schema.push({
-    text: '',
-    pageBreak: 'after'
-  });
-
   return schema;
 };
 
@@ -175,8 +170,17 @@ export const exportToPDF = async (recipes: any[], writeStream: Writable, options
   };
 
   const content = [];
-  for (const recipe of recipes) {
+  for (let i = 0; i < recipes.length; i++) {
+    const recipe = recipes[i];
+
     content.push(await recipeToSchema(recipe, options));
+
+    if (i !== recipes.length - 1) {
+      content.push({
+        text: '',
+        pageBreak: 'after',
+      });
+    }
   }
 
   const docDefinition = {
