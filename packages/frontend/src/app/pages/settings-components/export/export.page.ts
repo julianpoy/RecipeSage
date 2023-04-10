@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { RecipeService } from '~/services/recipe.service';
+import { RecipeService, ExportFormat } from '~/services/recipe.service';
 import { RouteMap } from '~/services/util.service';
 
 @Component({
@@ -13,24 +13,28 @@ export class ExportPage {
 
   constructor(public recipeService: RecipeService) {}
 
-  getExportURL(format) {
+  getExportURL(format: ExportFormat) {
     return this.recipeService.getExportURL(format);
   }
 
-  export(format) {
+  export(format: ExportFormat) {
     const exportUrl = this.getExportURL(format);
     window.open(exportUrl);
   }
 
   exportAsJSONLD() {
-    this.export('json-ld');
+    this.export(ExportFormat.JSONLD);
   }
 
   exportAsXML() {
-    this.export('xml');
+    this.export(ExportFormat.XML);
   }
 
   exportAsTXT() {
-    this.export('txt');
+    this.export(ExportFormat.TXT);
+  }
+
+  exportAsPDF() {
+    this.export(ExportFormat.PDF);
   }
 }

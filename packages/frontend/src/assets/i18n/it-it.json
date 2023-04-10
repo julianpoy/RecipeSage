@@ -735,6 +735,7 @@
   "pages.export.jsonld": "Esporta come JSON-LD (consigliato)",
   "pages.export.xml": "Esporta come XML",
   "pages.export.txt": "Esporta come Testo",
+  "pages.export.pdf": "Esporta come PDF",
 
   "====== Pages.Import ======": "",
 

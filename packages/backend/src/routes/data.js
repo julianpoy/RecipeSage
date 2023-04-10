@@ -12,7 +12,9 @@ const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
 const { writeImageFile, writeImageURL } = require('../services/storage/image');
 const { ObjectTypes } = require('../services/storage/shared');
+const { exportToPDF } = require('../services/data-export/pdf');
 const JSONLDService = require('../services/json-ld');
+const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
 
 const {
   Recipe,
@@ -134,6 +136,18 @@ router.get('/export/txt',
       next(e);
     }
   }
+);
+
+router.get('/export/pdf',
+  MiddlewareService.validateSession(['user']),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    const recipes = await getRecipeDataForExport(res.locals.session.userId);
+
+    await exportToPDF(recipes, res, {
+      includeImages: req.query.includeImages === 'true',
+      includeImageUrls: req.query.includeImageUrls !== 'false'
+    });
+  })
 );
 
 router.get('/export/json-ld',
