@@ -59,6 +59,13 @@ export interface ParsedNote {
   isHeader: boolean;
 }
 
+export enum ExportFormat {
+  XML = 'xml',
+  PDF = 'pdf',
+  TXT = 'txt',
+  JSONLD = 'json-ld',
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,7 +78,7 @@ export class RecipeService {
   private httpErrorHandlerService: HttpErrorHandlerService,
   public utilService: UtilService) {}
 
-  getExportURL(format: string) {
+  getExportURL(format: ExportFormat) {
     return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
