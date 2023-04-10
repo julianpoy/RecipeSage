@@ -19,7 +19,7 @@ const parsedToSchema = (parsedItems: any[], includeMargin) => {
     bold: item.isHeader,
     margin: includeMargin ? [0, 0, 0, 5] : []
   }));
-}
+};
 
 const recipeToSchema = async (recipe, options?: ExportOptions) => {
   const schema = [];
