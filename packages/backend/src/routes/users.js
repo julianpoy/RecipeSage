@@ -511,7 +511,7 @@ router.post(
 
       const session = await SessionService.generateSession(user.id, 'user', transaction);
 
-      if (process.env.NODE_ENV === 'selfhost') {
+      if (process.env.NODE_ENV === 'selfhost' || process.env.NODE_ENV === 'development') {
         const recipes = await Recipe.findAll({
           where: {
             userId: user.id
@@ -519,7 +519,10 @@ router.post(
           transaction,
         });
 
-        indexRecipes(recipes);
+        indexRecipes(recipes).catch((e) => {
+          console.error(e);
+          Sentry.captureException(e);
+        });
       }
 
       return session.token;
