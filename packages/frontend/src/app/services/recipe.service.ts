@@ -122,6 +122,7 @@ export class RecipeService {
     labels?: string,
     rating?: number,
     ratingFilter?: string,
+    includeFriends?: boolean,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[]

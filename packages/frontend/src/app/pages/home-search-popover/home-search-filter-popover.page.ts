@@ -108,7 +108,6 @@ export class HomeSearchFilterPopoverPage {
     if (!data) return;
 
     this.ratingFilter = data.ratingFilter;
-    console.log("isafter", this.ratingFilter.join(','));
 
     setTimeout(() => {
       this.dismiss(true);

@@ -546,7 +546,7 @@ router.get(
     const friendships = await getFriendships(myUserId);
 
     const searchUserIds = [userId];
-    if (req.query.includeFriends) {
+    if (req.query.includeFriends === 'true') {
       searchUserIds.push(...friendships.friends.map(friend => friend.otherUser.id));
       console.log(searchUserIds);
     }

@@ -60,7 +60,6 @@ export class HomePage {
   otherUserProfile: UserProfile;
 
   ratingFilter: (number|null)[] = [];
-  includeFriends: boolean = this.preferences[MyRecipesPreferenceKey.IncludeFriends];
 
   tileColCount: number;
 
@@ -261,7 +260,7 @@ export class HomePage {
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       labels: this.selectedLabels.join(',') || undefined,
-      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined
     });
     if (!response.success) return;
 
@@ -313,18 +312,13 @@ export class HomePage {
       component: HomePopoverPage,
       componentProps: {
         guestMode: !!this.userId,
-        labels: this.labels,
-        selectedLabels: this.selectedLabels,
         selectionMode: this.selectionMode,
-        ratingFilter: this.ratingFilter,
       },
       event
     });
 
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-
-      if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
 
       if (typeof data.selectionMode === 'boolean') {
         this.selectionMode = data.selectionMode;
@@ -358,6 +352,7 @@ export class HomePage {
       labels: this.selectedLabels.join(',') || undefined,
       userId: this.userId || undefined,
       ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
+      includeFriends: this.preferences[this.preferenceKeys.IncludeFriends],
     });
     loading.dismiss();
     if (!response.success) return;
@@ -491,10 +486,10 @@ export class HomePage {
       event,
       component: HomeSearchFilterPopoverPage,
       componentProps: {
+        guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
         ratingFilter: this.ratingFilter,
-        includeFriends: this.includeFriends,
       }
     });
 
@@ -505,7 +500,6 @@ export class HomePage {
 
     if (data.selectedLabels) this.selectedLabels = data.selectedLabels;
     if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
-    if (typeof data.includeFriends === 'boolean') this.includeFriends = this.preferences[this.preferenceKeys.IncludeFriends];
     if (data.refreshSearch) this.resetAndLoadRecipes();
   }
 }
