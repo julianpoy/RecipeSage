@@ -50,8 +50,13 @@
 ion-badge {
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 10px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+
+  // When in "list" mode
+  .recipe-item & {
+    top: 20px;
+  }
 
   &:nth-of-type(2) {
     top: 35px;
