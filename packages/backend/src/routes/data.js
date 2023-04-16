@@ -6,6 +6,7 @@ const multer = require('multer');
 const fs = require('fs-extra');
 const extract = require('extract-zip');
 const path = require('path');
+const fetch = require('node-fetch');
 
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
@@ -70,6 +71,42 @@ const getRecipeDataForExport = async userId => {
 
   recipeData.forEach(recipe => recipe.labels.forEach(label => delete label.Recipe_Label));
   recipeData.forEach(recipe => recipe.images.forEach(image => delete image.Recipe_Image));
+
+  if (process.env.NODE_ENV === 'selfhost') {
+    for (const recipe of recipeData) {
+      const recipeImages = [];
+      for (const image of recipe.images) {
+        const { location } = image;
+        if (location.startsWith('http://') || location.startsWith('https://')) {
+          recipeImages.push(image);
+          continue;
+        }
+
+        if (location.startsWith('/minio/')) {
+          const path = process.env.AWS_ENDPOINT + location.replace('/minio/', '');
+          const data = await fetch(path);
+          const buffer = await data.buffer();
+          const base64 = buffer.toString('base64');
+
+          image.location = `data:image/png;base64,${base64}`;
+          recipeImages.push(image);
+          continue;
+        }
+
+        if (location.startsWith('/')) {
+          const data = fs.readFileSync(location);
+          const base64 = data.toString('base64');
+
+          image.location = `data:image/png;base64,${base64}`;
+          recipeImages.push(image);
+          continue;
+        }
+
+        throw new Error('Unrecognized URL format: ' + image.location);
+      }
+      recipe.images = recipeImages;
+    }
+  }
 
   return recipeData;
 };
