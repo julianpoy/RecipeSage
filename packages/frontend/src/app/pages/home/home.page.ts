@@ -260,7 +260,8 @@ export class HomePage {
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       labels: this.selectedLabels.join(',') || undefined,
-      ratingFilter: this.ratingFilter.map(String).join(',') || undefined
+      ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
+      includeFriends: this.preferences[this.preferenceKeys.IncludeFriends],
     });
     if (!response.success) return;
 
