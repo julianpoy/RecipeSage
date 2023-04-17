@@ -287,7 +287,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
           .map(image => limit(() => {
             if (typeof image === 'object') return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
             if (image.startsWith('http:') || image.startsWith('https:')) return writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
-            return writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion)
+            return writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
           }))
       );
     }));
