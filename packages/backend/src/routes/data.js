@@ -10,7 +10,7 @@ const path = require('path');
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
-const { writeImageFile, writeImageURL } = require('../services/storage/image');
+const { writeImageFile, writeImageURL, writeImageBuffer } = require('../services/storage/image');
 const { ObjectTypes } = require('../services/storage/shared');
 const { exportToPDF } = require('../services/data-export/pdf');
 const JSONLDService = require('../services/json-ld');
@@ -173,7 +173,7 @@ router.get('/export/json-ld',
 const CONCURRENT_IMAGE_IMPORTS = 2;
 const MAX_IMAGES = 10;
 const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
-const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer) => {
+const importStandardizedRecipes = async (userId, recipesToImport) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
     SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
@@ -247,11 +247,11 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
         el.images
           .filter((_, idx) => idx === 0 || canUploadMultipleImages)
           .filter((_, idx) => idx < MAX_IMAGES)
-          .map(image => limit(() =>
-            imagesAsBuffer ?
-              writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion) :
-              writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion)
-          ))
+          .map(image => limit(() => {
+            if (typeof image === 'object') return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
+            if (image.startsWith('http:') || image.startsWith('https:')) return writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
+            return writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion)
+          }))
       );
     }));
 
@@ -389,7 +389,7 @@ router.post(
       await fs.remove(zipPath);
       await fs.remove(extractPath);
 
-      await importStandardizedRecipes(res.locals.session.userId, recipes, true);
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
 
       res.status(201).send('Import complete');
     } catch(err) {

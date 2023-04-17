@@ -43,6 +43,9 @@ const getImageSrcFromSchema = (jsonLD) => {
       const url = new URL(imageSrc);
 
       if (url.protocol === 'http:' || url.protocol === 'https:') return imageSrc;
+      if (url.protocol === 'data:' && url.href.startsWith('data:image/png;base64,')) {
+        return Buffer.from(url.href.replace('data:image/png;base64,', ''), 'base64');
+      }
     } catch (_) {
       // Do nothing
     }
