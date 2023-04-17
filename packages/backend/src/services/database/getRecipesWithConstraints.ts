@@ -112,7 +112,7 @@ export const getRecipesWithConstraints = async (args: {
     folder,
   };
 
-  const having = labels && labelIntersection ? { having: SQ.literal(`COUNT("labels"."id") = ${labels.length}`) } : {};
+  const having = labels && labelIntersection ? { having: SQ.literal(`COUNT("labels"."id") = ${SQ.escape(labels.length)}`) } : {};
 
   const totalCount = await Recipe.count({
     where,
