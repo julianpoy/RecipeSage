@@ -43,6 +43,9 @@ const getImageSrcFromSchema = (jsonLD) => {
       const url = new URL(imageSrc);
 
       if (url.protocol === 'http:' || url.protocol === 'https:') return imageSrc;
+      if (url.protocol === 'data:' && url.href.startsWith('data:image/png;base64,')) {
+        return Buffer.from(url.href.replace('data:image/png;base64,', ''), 'base64');
+      }
     } catch (_) {
       // Do nothing
     }
@@ -63,19 +66,22 @@ const getImageSRCsFromSchema = (jsonLD) => {
   else if (typeof images[0] === 'string') imageSRCs = images;
   else if (images[0] && typeof images[0].url === 'string') imageSRCs = images.map(image => image.url);
 
-  imageSRCs.filter(src => {
-    try {
-      const url = new URL(src);
+  return imageSRCs
+    .map(src => {
+      try {
+        const url = new URL(src);
 
-      if (url.protocol === 'http:' || url.protocol === 'https:') return true;
-    } catch (_) {
-      // Do nothing
-    }
+        if (url.protocol === 'http:' || url.protocol === 'https:') return src;
+        if (url.protocol === 'data:' && url.href.startsWith('data:image/png;base64,')) {
+          return Buffer.from(url.href.replace('data:image/png;base64,', ''), 'base64');
+        }
+      } catch (_) {
+        // Do nothing
+      }
 
-    return false;
-  });
-
-  return imageSRCs;
+      return null;
+    })
+    .filter(src => src);
 };
 
 const getTitleFromSchema = (jsonLD) => {

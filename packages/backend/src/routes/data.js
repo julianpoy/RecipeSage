@@ -6,11 +6,12 @@ const multer = require('multer');
 const fs = require('fs-extra');
 const extract = require('extract-zip');
 const path = require('path');
+const fetch = require('node-fetch');
 
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
 const UtilService = require('../services/util');
-const { writeImageFile, writeImageURL } = require('../services/storage/image');
+const { writeImageFile, writeImageURL, writeImageBuffer } = require('../services/storage/image');
 const { ObjectTypes } = require('../services/storage/shared');
 const { exportToPDF } = require('../services/data-export/pdf');
 const JSONLDService = require('../services/json-ld');
@@ -70,6 +71,42 @@ const getRecipeDataForExport = async userId => {
 
   recipeData.forEach(recipe => recipe.labels.forEach(label => delete label.Recipe_Label));
   recipeData.forEach(recipe => recipe.images.forEach(image => delete image.Recipe_Image));
+
+  if (process.env.NODE_ENV === 'selfhost') {
+    for (const recipe of recipeData) {
+      const recipeImages = [];
+      for (const image of recipe.images) {
+        const { location } = image;
+        if (location.startsWith('http://') || location.startsWith('https://')) {
+          recipeImages.push(image);
+          continue;
+        }
+
+        if (location.startsWith('/minio/')) {
+          const path = process.env.AWS_ENDPOINT + location.replace('/minio/', '');
+          const data = await fetch(path);
+          const buffer = await data.buffer();
+          const base64 = buffer.toString('base64');
+
+          image.location = `data:image/png;base64,${base64}`;
+          recipeImages.push(image);
+          continue;
+        }
+
+        if (location.startsWith('/')) {
+          const data = fs.readFileSync(location);
+          const base64 = data.toString('base64');
+
+          image.location = `data:image/png;base64,${base64}`;
+          recipeImages.push(image);
+          continue;
+        }
+
+        throw new Error('Unrecognized URL format: ' + image.location);
+      }
+      recipe.images = recipeImages;
+    }
+  }
 
   return recipeData;
 };
@@ -173,7 +210,7 @@ router.get('/export/json-ld',
 const CONCURRENT_IMAGE_IMPORTS = 2;
 const MAX_IMAGES = 10;
 const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kill the server for extremely large imports
-const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer) => {
+const importStandardizedRecipes = async (userId, recipesToImport) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
     SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
@@ -247,11 +284,11 @@ const importStandardizedRecipes = async (userId, recipesToImport, imagesAsBuffer
         el.images
           .filter((_, idx) => idx === 0 || canUploadMultipleImages)
           .filter((_, idx) => idx < MAX_IMAGES)
-          .map(image => limit(() =>
-            imagesAsBuffer ?
-              writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion) :
-              writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion)
-          ))
+          .map(image => limit(() => {
+            if (typeof image === 'object') return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
+            if (image.startsWith('http:') || image.startsWith('https:')) return writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
+            return writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
+          }))
       );
     }));
 
@@ -389,7 +426,7 @@ router.post(
       await fs.remove(zipPath);
       await fs.remove(extractPath);
 
-      await importStandardizedRecipes(res.locals.session.userId, recipes, true);
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
 
       res.status(201).send('Import complete');
     } catch(err) {
