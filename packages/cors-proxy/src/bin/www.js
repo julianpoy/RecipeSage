@@ -6,7 +6,7 @@ const port = normalizePort(process.env.PORT || 3100);
 cors_proxy.createServer({
   originWhitelist: ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost', 'http://localhost'],
   requireHeader: ['origin'],
-  handleInitialRequest: function(req, res, location) {
+  handleInitialRequest: function(req) {
     // Discard request if not an image url
     // Return True = request ignored, Return False = request fulfilled
     return !req.url.includes('.png') && !req.url.includes('.jpeg') && !req.url.includes('.jpg') && !req.url.includes('.webp');

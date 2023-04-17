@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponseHeaders, RawAxiosResponseHeaders} from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig, RawAxiosResponseHeaders} from 'axios';
 
 import { API_BASE_URL, CORS_PROXY_BASE_URL } from 'src/environments/environment';
 import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';

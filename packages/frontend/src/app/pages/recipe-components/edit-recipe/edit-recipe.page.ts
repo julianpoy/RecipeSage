@@ -5,7 +5,7 @@ import { NavController, ToastController, AlertController, PopoverController, Loa
 import {TranslateService} from '@ngx-translate/core';
 
 import { UtilService, RouteMap } from '~/services/util.service';
-import { RecipeService, Recipe, BaseRecipe } from '~/services/recipe.service';
+import { RecipeService, BaseRecipe } from '~/services/recipe.service';
 import { LoadingService } from '~/services/loading.service';
 import { UnsavedChangesService } from '~/services/unsaved-changes.service';
 import { CapabilitiesService } from '~/services/capabilities.service';
