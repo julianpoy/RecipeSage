@@ -11,8 +11,11 @@ import { UnsavedChangesService } from '~/services/unsaved-changes.service';
 import { CapabilitiesService } from '~/services/capabilities.service';
 import { Image, ImageService } from '~/services/image.service';
 import { getQueryParam } from '~/utils/queryParams';
+import { HttpResponse } from '~/services/http.service';
 
 import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
+
+import { Buffer } from 'buffer';
 
 @Component({
   selector: 'page-edit-recipe',
@@ -238,7 +241,12 @@ export class EditRecipePage {
       415: () => {},
       500: () => {}
     });
-    if (imageResponse.success) this.images.push(imageResponse.data);
+    if (imageResponse.success) {
+      this.images.push(<Image>{
+        id: response.data.imageURL,
+        location: await this._getImageDataUrl(imageResponse as HttpResponse<Blob>)
+      });
+    }
 
     loading.dismiss();
   }
@@ -291,7 +299,12 @@ export class EditRecipePage {
       const response = await this.imageService.createFromUrl({
         imageURL: imageUrl,
       });
-      if (response.success) this.images.push(response.data);
+      if (response.success) {
+        this.images.push(<Image>{
+          id: imageUrl,
+          location: await this._getImageDataUrl(response as HttpResponse<Blob>)
+        });
+      }
 
       loading.dismiss();
     } else {
@@ -318,5 +331,10 @@ export class EditRecipePage {
     });
 
     await popover.present();
+  }
+
+
+  async _getImageDataUrl(imageResponse: HttpResponse<any>) {
+    return "data:" + imageResponse.headers["Content-Type"] + ';base64,' + Buffer.from(imageResponse.data).toString('base64');
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponseHeaders, RawAxiosResponseHeaders} from 'axios';
 
-import { API_BASE_URL } from 'src/environments/environment';
+import { API_BASE_URL, CORS_PROXY_BASE_URL } from 'src/environments/environment';
 import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 import {UtilService} from './util.service';
 
@@ -9,6 +9,7 @@ export interface HttpResponse<ResponseType> {
   success: boolean;
   status: number;
   data: ResponseType;
+  headers: RawAxiosResponseHeaders;
 }
 
 type QueryVal = string | boolean | number;
@@ -111,6 +112,7 @@ export class HttpService {
     errorHandlers?: ErrorHandlers
   ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
     let url = this.getBase() + path + this.utilService.getTokenQuery();
+    if (path.includes("cors-proxy/")) url = CORS_PROXY_BASE_URL + path.replace('cors-proxy/', '');
 
     if (query) {
       const params = Object.entries(query)
@@ -127,6 +129,7 @@ export class HttpService {
         method,
         url,
         data: payload,
+        responseType: path.includes("cors-proxy/") ? 'arraybuffer' : 'json',
         ...axiosOverrides,
       });
 
@@ -141,18 +144,20 @@ export class HttpService {
 
   async request<ResponseType>(requestConfig: AxiosRequestConfig) {
     try {
-      const { status, data } = await this.axiosClient.request<ResponseType>(requestConfig);
+      const { status, headers, data } = await this.axiosClient.request<ResponseType>(requestConfig);
 
       return {
         success: true,
         status,
+        headers,
         data
       };
     } catch(err) {
       const response = {
         success: false,
         status: err.response ? err.response.status : 0, // 0 For no network
-        data: err.response ? err.response.data : null
+        data: err.response ? err.response.data : null,
+        headers: err.response ? err.headers : {},
       };
 
       const httpError = new HttpError<ResponseType>(err.message, response);
