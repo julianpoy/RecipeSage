@@ -1,13 +1,15 @@
-import dedent from "ts-dedent";
+import * as SQ from 'sequelize';
+const Op = SQ.Op;
 
-const Op = require('sequelize').Op;
-const SQ = require('../../models').sequelize;
-const User = require('../../models').User;
-const Label = require('../../models').Label;
-const Recipe = require('../../models').Recipe;
-const ProfileItem = require('../../models').ProfileItem;
-const Image = require('../../models').Image;
-const {getFriendships} = require('../../utils/getFriendships');
+import * as Models from '../../models';
+const {
+  User,
+  Label,
+  Recipe,
+  ProfileItem,
+  Image,
+} = Models;
+import { getFriendships } from '../../utils/getFriendships';
 
 export const getRecipesWithConstraints = async (args: {
   userId: string,
@@ -182,6 +184,6 @@ export const getRecipesWithConstraints = async (args: {
   return {
     data: recipes,
     totalCount,
-  }
+  };
 };
 

@@ -188,9 +188,6 @@
   "pages.homepopover.options.sortBy.updatedNewest": "Aggiornamento (dalla più recente)",
   "pages.homepopover.options.sortBy.updatedOldest": "Aggiornamento (dalla meno recente)",
 
-  "pages.homepopover.options.filterByRating": "Filtra per valutazione",
-  "pages.homepopover.options.filterByLabel": "Filtra per Etichetta",
-  "pages.homepopover.options.matchAllLabels": "Cerca per Etichetta",
   "pages.homepopover.options.unselectAllRecipes": "Deseleziona Tutte le Ricette",
   "pages.homepopover.options.selectMultipleRecipes": "Seleziona Ricette Multiple",
 
