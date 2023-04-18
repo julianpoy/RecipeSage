@@ -129,7 +129,7 @@ export class HttpService {
         method,
         url,
         data: payload,
-        responseType: path.includes("cors-proxy/") ? 'arraybuffer' : 'json',
+        responseType: path.includes("cors-proxy/") ? 'blob' : 'json',
         ...axiosOverrides,
       });
 

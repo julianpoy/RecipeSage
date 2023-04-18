@@ -11,11 +11,8 @@ import { UnsavedChangesService } from '~/services/unsaved-changes.service';
 import { CapabilitiesService } from '~/services/capabilities.service';
 import { Image, ImageService } from '~/services/image.service';
 import { getQueryParam } from '~/utils/queryParams';
-import { HttpResponse } from '~/services/http.service';
 
 import { EditRecipePopoverPage } from '../edit-recipe-popover/edit-recipe-popover.page';
-
-import { Buffer } from 'buffer';
 
 @Component({
   selector: 'page-edit-recipe',
@@ -234,19 +231,7 @@ export class EditRecipePage {
 
     this.recipe.url = url;
 
-    const imageResponse = await this.imageService.createFromUrl({
-      imageURL: response.data.imageURL,
-    }, {
-      400: () => {},
-      415: () => {},
-      500: () => {}
-    });
-    if (imageResponse.success) {
-      this.images.push(<Image>{
-        id: response.data.imageURL,
-        location: await this._getImageDataUrl(imageResponse as HttpResponse<ArrayBuffer>)
-      });
-    }
+    this._fetchAndUploadImage(response.data.imageURL);
 
     loading.dismiss();
   }
@@ -296,15 +281,7 @@ export class EditRecipePage {
       });
       await loading.present();
 
-      const response = await this.imageService.createFromUrl({
-        imageURL: imageUrl,
-      });
-      if (response.success) {
-        this.images.push(<Image>{
-          id: imageUrl,
-          location: await this._getImageDataUrl(response as HttpResponse<ArrayBuffer>)
-        });
-      }
+      await this._fetchAndUploadImage(imageUrl);
 
       loading.dismiss();
     } else {
@@ -333,8 +310,35 @@ export class EditRecipePage {
     await popover.present();
   }
 
-
-  async _getImageDataUrl(imageResponse: HttpResponse<ArrayBuffer>) {
-    return "data:" + imageResponse.headers["Content-Type"] + ';base64,' + Buffer.from(imageResponse.data).toString('base64');
+  async _fetchAndUploadImage(imageURL: string) {
+    const imageResponse = await this.imageService.createFromUrl({
+      imageURL: imageURL,
+    }, {
+      '*': () => { this._showImageErrorToast() }
+    });
+    if (imageResponse.success) {
+      const imageFile = new File([imageResponse.data], 'temp-image')
+      const uploadImageResponse = await this.imageService.create(imageFile, {
+        '*': () => { this._showImageErrorToast() }
+      });
+      if (uploadImageResponse.success) this.images.push(uploadImageResponse.data);
+    } else {
+      await this._showImageErrorToast();
+    }
   }
+
+  async _showImageErrorToast() {
+    const message = await this.translate.get('components.multiImageUpload.imageError').toPromise();
+    const close = await this.translate.get('generic.close').toPromise();
+
+    const imageUploadErrorToast = await this.toastCtrl.create({
+      message,
+      buttons: [{
+        text: close,
+        role: 'cancel'
+      }]
+    });
+    imageUploadErrorToast.present();
+  }
+
 }
