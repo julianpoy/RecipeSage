@@ -72,8 +72,6 @@ services:
   cors-proxy:
     ports:
       - "3100:3100"
-    depends_on:
-      - postgres
     build:
       context: .
       dockerfile: ./packages/cors-proxy/Dockerfile

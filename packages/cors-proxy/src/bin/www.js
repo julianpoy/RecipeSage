@@ -3,8 +3,13 @@ const cors_proxy = require('cors-anywhere');
 
 const host = process.env.HOST || '0.0.0.0';
 const port = normalizePort(process.env.PORT || 3100);
+
+let originWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost', 'http://localhost'];
+if (process.env.ORIGIN_WHITELIST) {
+  originWhitelist.push(...process.env.ORIGIN_WHITELIST.split(','));
+}
 cors_proxy.createServer({
-  originWhitelist: ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost', 'http://localhost'],
+  originWhitelist: originWhitelist,
   requireHeader: ['origin'],
   handleInitialRequest: function(req) {
     // Discard request if not an image url
