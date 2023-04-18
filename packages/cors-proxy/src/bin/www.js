@@ -9,7 +9,7 @@ cors_proxy.createServer({
   handleInitialRequest: function(req) {
     // Discard request if not an image url
     // Return True = request ignored, Return False = request fulfilled
-    return !req.url.includes('.png') && !req.url.includes('.jpeg') && !req.url.includes('.jpg') && !req.url.includes('.webp');
+    return req.method !== 'GET' && !req.url.includes('.png') && !req.url.includes('.jpeg') && !req.url.includes('.jpg') && !req.url.includes('.webp');
   }
 }).listen(port, host, function() {
   console.log('Running CORS Anywhere on ' + host + ':' + port);
