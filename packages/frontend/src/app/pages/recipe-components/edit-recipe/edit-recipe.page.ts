@@ -231,7 +231,7 @@ export class EditRecipePage {
 
     this.recipe.url = url;
 
-    this._fetchAndUploadImage(response.data.imageURL);
+    await this._fetchAndUploadImage(response.data.imageURL);
 
     loading.dismiss();
   }
