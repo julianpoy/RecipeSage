@@ -5,7 +5,7 @@ import { NavController, ToastController, AlertController, PopoverController, Loa
 import {TranslateService} from '@ngx-translate/core';
 
 import { UtilService, RouteMap } from '~/services/util.service';
-import { RecipeService, Recipe, BaseRecipe } from '~/services/recipe.service';
+import { RecipeService, BaseRecipe } from '~/services/recipe.service';
 import { LoadingService } from '~/services/loading.service';
 import { UnsavedChangesService } from '~/services/unsaved-changes.service';
 import { CapabilitiesService } from '~/services/capabilities.service';
@@ -231,14 +231,7 @@ export class EditRecipePage {
 
     this.recipe.url = url;
 
-    const imageResponse = await this.imageService.createFromUrl({
-      imageURL: response.data.imageURL,
-    }, {
-      400: () => {},
-      415: () => {},
-      500: () => {}
-    });
-    if (imageResponse.success) this.images.push(imageResponse.data);
+    await this._fetchAndUploadImage(response.data.imageURL);
 
     loading.dismiss();
   }
@@ -288,10 +281,7 @@ export class EditRecipePage {
       });
       await loading.present();
 
-      const response = await this.imageService.createFromUrl({
-        imageURL: imageUrl,
-      });
-      if (response.success) this.images.push(response.data);
+      await this._fetchAndUploadImage(imageUrl);
 
       loading.dismiss();
     } else {
@@ -319,4 +309,36 @@ export class EditRecipePage {
 
     await popover.present();
   }
+
+  async _fetchAndUploadImage(imageURL: string) {
+    const imageResponse = await this.imageService.createFromUrl({
+      imageURL: imageURL,
+    }, {
+      '*': () => { this._showImageErrorToast() }
+    });
+    if (imageResponse.success) {
+      const imageFile = new File([imageResponse.data], 'temp-image')
+      const uploadImageResponse = await this.imageService.create(imageFile, {
+        '*': () => { this._showImageErrorToast() }
+      });
+      if (uploadImageResponse.success) this.images.push(uploadImageResponse.data);
+    } else {
+      await this._showImageErrorToast();
+    }
+  }
+
+  async _showImageErrorToast() {
+    const message = await this.translate.get('components.multiImageUpload.imageError').toPromise();
+    const close = await this.translate.get('generic.close').toPromise();
+
+    const imageUploadErrorToast = await this.toastCtrl.create({
+      message,
+      buttons: [{
+        text: close,
+        role: 'cancel'
+      }]
+    });
+    imageUploadErrorToast.present();
+  }
+
 }

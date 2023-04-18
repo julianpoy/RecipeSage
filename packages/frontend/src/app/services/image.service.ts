@@ -35,10 +35,10 @@ export class ImageService {
   createFromUrl(payload: {
     imageURL: string
   }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<Image>(
-      'images',
-      'POST',
-      payload,
+    return this.httpService.requestWithWrapper<Blob>(
+      `cors-proxy/${payload.imageURL}`,
+      'GET',
+      null,
       null,
       errorHandlers
     );
