@@ -244,7 +244,7 @@ export class EditRecipePage {
     if (imageResponse.success) {
       this.images.push(<Image>{
         id: response.data.imageURL,
-        location: await this._getImageDataUrl(imageResponse as HttpResponse<Blob>)
+        location: await this._getImageDataUrl(imageResponse as HttpResponse<ArrayBuffer>)
       });
     }
 
@@ -302,7 +302,7 @@ export class EditRecipePage {
       if (response.success) {
         this.images.push(<Image>{
           id: imageUrl,
-          location: await this._getImageDataUrl(response as HttpResponse<Blob>)
+          location: await this._getImageDataUrl(response as HttpResponse<ArrayBuffer>)
         });
       }
 
@@ -334,7 +334,7 @@ export class EditRecipePage {
   }
 
 
-  async _getImageDataUrl(imageResponse: HttpResponse<any>) {
+  async _getImageDataUrl(imageResponse: HttpResponse<ArrayBuffer>) {
     return "data:" + imageResponse.headers["Content-Type"] + ';base64,' + Buffer.from(imageResponse.data).toString('base64');
   }
 }
