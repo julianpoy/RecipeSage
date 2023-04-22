@@ -1,24 +1,43 @@
-#!/usr/bin/env node
+require('@recipesage/backend/src/services/sentry-init.js');
 const cors_proxy = require('cors-anywhere');
 
 const host = process.env.HOST || '0.0.0.0';
 const port = normalizePort(process.env.PORT || 3100);
 
-let originWhitelist = ['https://www.recipesage.com', 'https://recipesage.com', 'https://beta.recipesage.com', 'https://api.recipesage.com', 'https://localhost', 'capacitor://localhost', 'http://localhost'];
+let originWhitelist = [
+  'https://www.recipesage.com',
+  'https://recipesage.com',
+  'https://beta.recipesage.com',
+  'https://api.recipesage.com',
+  'https://localhost',
+  'capacitor://localhost',
+  'http://localhost',
+];
 if (process.env.ORIGIN_WHITELIST) {
   originWhitelist.push(...process.env.ORIGIN_WHITELIST.split(','));
 }
-cors_proxy.createServer({
-  originWhitelist: originWhitelist,
-  requireHeader: ['origin'],
-  handleInitialRequest: function(req) {
-    // Discard request if not an image url
-    // Return True = request ignored, Return False = request fulfilled
-    return req.method !== 'GET' && !req.url.includes('.png') && !req.url.includes('.jpeg') && !req.url.includes('.jpg') && !req.url.includes('.webp');
-  }
-}).listen(port, host, function() {
-  console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
+
+cors_proxy
+  .createServer({
+    originWhitelist: originWhitelist,
+    handleInitialRequest: function(req) {
+      console.log(req.url);
+
+      // Discard request if not an image url
+      // Return True = request ignored, Return False = request fulfilled
+      return (
+        req.method !== 'GET'
+        && !req.url.includes('.png')
+        && !req.url.includes('.jpeg')
+        && !req.url.includes('.jpg')
+        && !req.url.includes('.webp')
+      );
+    },
+    removeHeaders: ['cookie', 'cookie2']
+  })
+  .listen(port, host, function() {
+    console.log('Running CORS Anywhere on ' + host + ':' + port);
+  });
 
 /**
  * Normalize a port into a number, string, or false.

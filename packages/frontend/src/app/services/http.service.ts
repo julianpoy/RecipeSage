@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import axios, {AxiosInstance, AxiosRequestConfig, RawAxiosResponseHeaders} from 'axios';
 
-import { API_BASE_URL, CORS_PROXY_BASE_URL } from 'src/environments/environment';
+import { API_BASE_URL } from 'src/environments/environment';
 import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 import {UtilService} from './util.service';
 
 export interface HttpResponse<ResponseType> {
+  // 'ok' is the successor to 'success' since 'success' is present in HttpError as well and cannot be used for type narrowing
+  ok: boolean;
   success: boolean;
   status: number;
   data: ResponseType;
@@ -112,7 +114,6 @@ export class HttpService {
     errorHandlers?: ErrorHandlers
   ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
     let url = this.getBase() + path + this.utilService.getTokenQuery();
-    if (path.includes("cors-proxy/")) url = CORS_PROXY_BASE_URL + path.replace('cors-proxy/', '');
 
     if (query) {
       const params = Object.entries(query)
@@ -124,14 +125,20 @@ export class HttpService {
       url += `&${params}`;
     }
 
+    return this.requestWithErrorHandlers({
+      method,
+      url,
+      data: payload,
+      ...axiosOverrides,
+    }, errorHandlers);
+  }
+
+  async requestWithErrorHandlers<ResponseType>(
+    requestConfig: AxiosRequestConfig,
+    errorHandlers: ErrorHandlers
+  ) {
     try {
-      const response = await this.request<ResponseType>({
-        method,
-        url,
-        data: payload,
-        responseType: path.includes("cors-proxy/") ? 'blob' : 'json',
-        ...axiosOverrides,
-      });
+      const response = await this.request<ResponseType>(requestConfig);
 
       return response;
     } catch(err) {
@@ -147,6 +154,7 @@ export class HttpService {
       const { status, headers, data } = await this.axiosClient.request<ResponseType>(requestConfig);
 
       return {
+        ok: true,
         success: true,
         status,
         headers,
@@ -154,10 +162,11 @@ export class HttpService {
       };
     } catch(err) {
       const response = {
+        ok: false,
         success: false,
         status: err.response ? err.response.status : 0, // 0 For no network
         data: err.response ? err.response.data : null,
-        headers: err.response ? err.headers : {},
+        headers: err.headers || null,
       };
 
       const httpError = new HttpError<ResponseType>(err.message, response);

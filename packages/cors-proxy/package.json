@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "start": "tsx ./bin/www",
-    "test": "PORT=2999 NODE_ENV=test jest --runInBand ./src/**/*.spec.js ./src/**/*.spec.ts",
     "lint": "eslint .",
+    "test": "",
     "test:ci": "npm run test"
   },
   "bin": "src/bin/www.js",

@@ -13,7 +13,7 @@ export const ENABLE_ANALYTICS = false;
 export const STRIPE_PK = 'pk_test_eBbi3a7mWEH73JQPB965gDB800buCgF4Gd';
 
 export const API_BASE_URL = null;
-export const CORS_PROXY_BASE_URL = "http://localhost:3100/";
+export const CORS_PROXY_BASE_URL = '/cors-proxy/';
 export const GRIP_WS_URL = null;
 
 export const SENTRY_SAMPLE_RATE = 0;

@@ -28,6 +28,10 @@ const clipRecipe = async clipUrl => {
   try {
     let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
 
+    if (process.env.BROWSERLESS_TOKEN) {
+      browserWSEndpoint += `&token=${process.env.BROWSERLESS_TOKEN}`;
+    }
+
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
       console.log(proxyUrl);
@@ -135,7 +139,7 @@ const clipRecipeJSDOM = async clipUrl => {
   };
 
   if (process.env.CLIP_PROXY_URL) {
-    const proxyUrl = url.parse(`http://${process.env.CLIP_PROXY_HOST}`);
+    const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
     if (process.env.CLIP_PROXY_PASSWORD && process.env.CLIP_PROXY_PASSWORD) {
       proxyUrl.auth = `${process.env.CLIP_PROXY_USERNAME}:${process.env.CLIP_PROXY_PASSWORD}`;
     }
