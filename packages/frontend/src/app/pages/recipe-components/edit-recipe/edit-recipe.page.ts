@@ -232,7 +232,7 @@ export class EditRecipePage {
     this.recipe.url = url;
 
     const imageResponse = await this.imageService.createFromUrl({
-      imageURL: response.data.imageURL,
+      url: response.data.imageURL,
     }, {
       400: () => {},
       415: () => {},
@@ -289,7 +289,7 @@ export class EditRecipePage {
       await loading.present();
 
       const response = await this.imageService.createFromUrl({
-        imageURL: imageUrl,
+        url: imageUrl,
       });
       if (response.success) this.images.push(response.data);
 

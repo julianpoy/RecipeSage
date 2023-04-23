@@ -39,6 +39,11 @@ spec:
           value: "true"
         - name: FUNCTION_ENABLE_INCOGNITO_MODE
           value: "true"
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: rs-api-env
+              key: BROWSERLESS_TOKEN
         resources:
           requests:
             cpu: 200m

@@ -5,7 +5,6 @@ const Sentry = require('@sentry/node');
 const he = require('he');
 const url = require('url');
 const { dedent } = require('ts-dedent');
-const HttpsProxyAgent = require('https-proxy-agent');
 
 const puppeteer = require('puppeteer-core');
 
@@ -14,6 +13,7 @@ const RecipeClipper = require('@julianpoy/recipe-clipper');
 
 const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
 const sanitizeHtml = require('sanitize-html');
+const {fetchURL} = require('../services/fetch');
 
 const disconnectPuppeteer = (browser) => {
   try {
@@ -27,6 +27,10 @@ const clipRecipe = async clipUrl => {
   let browser;
   try {
     let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
+
+    if (process.env.BROWSERLESS_TOKEN) {
+      browserWSEndpoint += `&token=${process.env.BROWSERLESS_TOKEN}`;
+    }
 
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
@@ -128,22 +132,7 @@ const replaceBrWithBreak = (html) => {
 };
 
 const clipRecipeJSDOM = async clipUrl => {
-  const opts = {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0',
-    },
-  };
-
-  if (process.env.CLIP_PROXY_URL) {
-    const proxyUrl = url.parse(`http://${process.env.CLIP_PROXY_HOST}`);
-    if (process.env.CLIP_PROXY_PASSWORD && process.env.CLIP_PROXY_PASSWORD) {
-      proxyUrl.auth = `${process.env.CLIP_PROXY_USERNAME}:${process.env.CLIP_PROXY_PASSWORD}`;
-    }
-
-    opts.agent = new HttpsProxyAgent(proxyUrl);
-  }
-
-  const response = await fetch(clipUrl, opts);
+  const response = await fetchURL(clipUrl);
 
   const document = await response.text();
 

@@ -63,6 +63,7 @@ services:
       - MEILI_API_KEY=recipesage_dev
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
+      - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     env_file:
       - ./.secrets.env
@@ -118,6 +119,7 @@ services:
       - PREBOOT_CHROME=true
       - KEEP_ALIVE=true
       - FUNCTION_ENABLE_INCOGNITO_MODE=true
+      - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
 

@@ -33,10 +33,10 @@ export class ImageService {
   }
 
   createFromUrl(payload: {
-    imageURL: string
+    url: string
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Image>(
-      'images',
+      'images/url',
       'POST',
       payload,
       null,

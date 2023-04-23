@@ -6,7 +6,8 @@ import {
   parseNotes
 } from '@recipesage/util';
 import sanitizeHtml from 'sanitize-html';
-import { fetchURLAsBuffer } from '../fetch';
+import { fetchURL } from '../fetch';
+import fs from 'fs';
 
 export interface ExportOptions {
   includeImages?: boolean,
@@ -68,7 +69,13 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
 
   const imageUrl = recipe.images[0]?.location;
   if (imageUrl && options?.includeImages) {
-    const buffer = await fetchURLAsBuffer(imageUrl);
+    let buffer: Buffer;
+    if (process.env.NODE_ENV === 'selfhost' && imageUrl.startsWith('/')) {
+      buffer = await fs.promises.readFile(imageUrl);
+    } else {
+      const response = await fetchURL(imageUrl);
+      buffer = await response.buffer();
+    }
 
     schema.push({
       columns: [
