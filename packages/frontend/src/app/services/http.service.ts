@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import axios, {AxiosInstance, AxiosRequestConfig, RawAxiosResponseHeaders} from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { API_BASE_URL } from 'src/environments/environment';
 import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 import {UtilService} from './util.service';
 
 export interface HttpResponse<ResponseType> {
-  // 'ok' is the successor to 'success' since 'success' is present in HttpError as well and cannot be used for type narrowing
-  ok: boolean;
   success: boolean;
   status: number;
   data: ResponseType;
-  headers: RawAxiosResponseHeaders;
 }
 
 type QueryVal = string | boolean | number;
@@ -125,20 +122,13 @@ export class HttpService {
       url += `&${params}`;
     }
 
-    return this.requestWithErrorHandlers({
-      method,
-      url,
-      data: payload,
-      ...axiosOverrides,
-    }, errorHandlers);
-  }
-
-  async requestWithErrorHandlers<ResponseType>(
-    requestConfig: AxiosRequestConfig,
-    errorHandlers: ErrorHandlers
-  ) {
     try {
-      const response = await this.request<ResponseType>(requestConfig);
+      const response = await this.request<ResponseType>({
+        method,
+        url,
+        data: payload,
+        ...axiosOverrides,
+      });
 
       return response;
     } catch(err) {
@@ -151,22 +141,18 @@ export class HttpService {
 
   async request<ResponseType>(requestConfig: AxiosRequestConfig) {
     try {
-      const { status, headers, data } = await this.axiosClient.request<ResponseType>(requestConfig);
+      const { status, data } = await this.axiosClient.request<ResponseType>(requestConfig);
 
       return {
-        ok: true,
         success: true,
         status,
-        headers,
         data
       };
     } catch(err) {
       const response = {
-        ok: false,
         success: false,
         status: err.response ? err.response.status : 0, // 0 For no network
-        data: err.response ? err.response.data : null,
-        headers: err.headers || null,
+        data: err.response ? err.response.data : null
       };
 
       const httpError = new HttpError<ResponseType>(err.message, response);

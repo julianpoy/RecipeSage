@@ -6,7 +6,6 @@ const multer = require('multer');
 const fs = require('fs-extra');
 const extract = require('extract-zip');
 const path = require('path');
-const fetch = require('node-fetch');
 
 const MiddlewareService = require('../services/middleware');
 const SubscriptionsService = require('../services/subscriptions');
@@ -16,6 +15,7 @@ const { ObjectTypes } = require('../services/storage/shared');
 const { exportToPDF } = require('../services/data-export/pdf');
 const JSONLDService = require('../services/json-ld');
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
+const {fetchURL} = require('../services/fetch');
 
 const {
   Recipe,
@@ -84,7 +84,7 @@ const getRecipeDataForExport = async userId => {
 
         if (location.startsWith('/minio/')) {
           const path = process.env.AWS_ENDPOINT + location.replace('/minio/', '');
-          const data = await fetch(path);
+          const data = await fetchURL(path);
           const buffer = await data.buffer();
           const base64 = buffer.toString('base64');
 

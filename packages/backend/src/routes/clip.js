@@ -14,6 +14,7 @@ const RecipeClipper = require('@julianpoy/recipe-clipper');
 
 const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
 const sanitizeHtml = require('sanitize-html');
+const {fetchURL} = require('../services/fetch');
 
 const disconnectPuppeteer = (browser) => {
   try {
@@ -132,22 +133,7 @@ const replaceBrWithBreak = (html) => {
 };
 
 const clipRecipeJSDOM = async clipUrl => {
-  const opts = {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:107.0) Gecko/20100101 Firefox/107.0',
-    },
-  };
-
-  if (process.env.CLIP_PROXY_URL) {
-    const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
-    if (process.env.CLIP_PROXY_PASSWORD && process.env.CLIP_PROXY_PASSWORD) {
-      proxyUrl.auth = `${process.env.CLIP_PROXY_USERNAME}:${process.env.CLIP_PROXY_PASSWORD}`;
-    }
-
-    opts.agent = new HttpsProxyAgent(proxyUrl);
-  }
-
-  const response = await fetch(clipUrl, opts);
+  const response = await fetchURL(clipUrl);
 
   const document = await response.text();
 

@@ -232,13 +232,13 @@ export class EditRecipePage {
     this.recipe.url = url;
 
     const imageResponse = await this.imageService.createFromUrl({
-      imageURL: response.data.imageURL,
+      url: response.data.imageURL,
     }, {
       400: () => {},
       415: () => {},
       500: () => {}
     });
-    if ('ok' in response) this.images.push(response.data);
+    if (imageResponse.success) this.images.push(imageResponse.data);
 
     loading.dismiss();
   }
@@ -289,9 +289,9 @@ export class EditRecipePage {
       await loading.present();
 
       const response = await this.imageService.createFromUrl({
-        imageURL: imageUrl,
+        url: imageUrl,
       });
-      if ('ok' in response) this.images.push(response.data);
+      if (response.success) this.images.push(response.data);
 
       loading.dismiss();
     } else {

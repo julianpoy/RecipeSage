@@ -70,17 +70,6 @@ services:
     volumes:
       - ./packages/backend/src:/app/packages/backend/src
       - ./packages/util/src:/app/packages/util/src
-  cors-proxy:
-    ports:
-      - "3100:3100"
-    build:
-      context: .
-      dockerfile: ./packages/cors-proxy/Dockerfile
-    command: ./scripts/watchandrun.sh 'tsx packages/cors-proxy/src/bin/www'
-    volumes:
-      - ./packages/cors-proxy/src:/app/packages/cors-proxy/src
-    environment:
-      - CORSANYWHERE_RATELIMIT="5 1"
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
