@@ -5,7 +5,6 @@ const Sentry = require('@sentry/node');
 const he = require('he');
 const url = require('url');
 const { dedent } = require('ts-dedent');
-const HttpsProxyAgent = require('https-proxy-agent');
 
 const puppeteer = require('puppeteer-core');
 

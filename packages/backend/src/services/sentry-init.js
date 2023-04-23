@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const Sentry = require('@sentry/node');
 
 // Importing @sentry/tracing patches the global hub for tracing to work.
