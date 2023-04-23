@@ -2,7 +2,7 @@ import {StorageObjectRecord, writeBuffer} from './index';
 import {ObjectTypes} from './shared';
 import * as fs from 'fs/promises';
 import {transformImageBuffer} from '../file-transformer';
-import {fetchURLAsBuffer} from '../fetch';
+import {fetchURL} from '../fetch';
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -17,7 +17,8 @@ export const writeImageURL = async (
   url: string,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const buffer = await fetchURLAsBuffer(url);
+  const response = await fetchURL(url);
+  const buffer = await response.buffer();
 
   return writeImageBuffer(objectType, buffer, highResConversion);
 };
