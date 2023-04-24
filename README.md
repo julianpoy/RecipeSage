@@ -74,3 +74,5 @@ Your development environment can be setup with a few easy steps.
 2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
 3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
 4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣 
+
+Backend API tests can be run via `docker-compose exec backend npx nx test @recipesage/backend`
