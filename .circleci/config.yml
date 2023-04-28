@@ -68,6 +68,7 @@ jobs:
           name: api-hosted.sh
           command: ./scripts/build/api-hosted.sh ${CIRCLE_TAG:=stg}
   push_backend_selfhost:
+    resource_class: large
     docker:
       - image: cimg/node:18.15
     steps:
@@ -111,6 +112,7 @@ jobs:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
   push_frontend_selfhost:
+    resource_class: large
     docker:
       - image: cimg/node:18.15
     steps:
