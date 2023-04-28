@@ -3,7 +3,7 @@ FROM julianpoy/node-with-mdbtools:18-0.7.1
 WORKDIR /app
 
 # node-gyp
-RUN apk add --no-cache python3 make
+RUN apk add --no-cache python3 make clang build-base
 
 RUN apk add --no-cache inotify-tools
 

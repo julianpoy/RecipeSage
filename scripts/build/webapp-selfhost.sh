@@ -10,7 +10,7 @@ fi
 
 docker buildx build . \
   --push \
-  --platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+  --platform linux/arm64/v8,linux/amd64 \
   -f packages/frontend/selfhost.Dockerfile \
   --build-arg VERSION=$1 \
   -t julianpoy/recipesage-selfhost:static-latest \
