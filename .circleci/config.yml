@@ -130,7 +130,7 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: npx nx build @recipesage/frontend
+          command: npx nx build:selfhost @recipesage/frontend
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
