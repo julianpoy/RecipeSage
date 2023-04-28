@@ -8,18 +8,11 @@ then
   exit 1
 fi
 
-docker build --build-arg VERSION=$1 -f packages/frontend/selfhost.Dockerfile -t julianpoy/recipesage-selfhost:static-latest .
-
-# Only push to latest tag if tag is a versioned tag
-if [[ $1 == v* ]]
-then
-  docker push julianpoy/recipesage-selfhost:static-latest
-fi
-
-docker image tag julianpoy/recipesage-selfhost:static-latest julianpoy/recipesage-selfhost:static-$1
-docker push julianpoy/recipesage-selfhost:static-$1
-
-docker rmi julianpoy/recipesage-selfhost:static-$1
-
-docker rmi julianpoy/recipesage-selfhost:static-latest
+docker buildx build . \
+  --push \
+  --platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+  -f packages/frontend/selfhost.Dockerfile \
+  --build-arg VERSION=$1 \
+  -t julianpoy/recipesage-selfhost:static-latest \
+  -t julianpoy/recipesage-selfhost:static-$1
 

@@ -79,6 +79,9 @@ jobs:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
       - run:
+          name: setup buildx
+          command: ./scripts/circleci_buildx.sh
+      - run:
           name: api-selfhost.sh
           command: ./scripts/build/api-selfhost.sh ${CIRCLE_TAG:=stg}
   push_frontend:
@@ -119,6 +122,9 @@ jobs:
       - run:
           name: docker-login
           command: echo "$DOCKER_PAT" | docker login --username $DOCKER_USER --password-stdin
+      - run:
+          name: setup buildx
+          command: ./scripts/circleci_buildx.sh
       - run:
           name: webapp-selfhost.sh
           command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}
