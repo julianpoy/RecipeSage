@@ -127,6 +127,19 @@ jobs:
       - run:
           name: setup buildx
           command: ./scripts/circleci_buildx.sh
+      - install-dependencies
+      - run:
+          name: build-frontend
+          command: npx nx build @recipesage/frontend
+      - run:
+          name: move-frontend-build
+          command: mv packages/frontend/www ./www
+      - run:
+          name: set-frontend-version
+          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
+      - run:
+          name: set-service-worker-version
+          command: sed -i "s/APP_VERSION = 'development';/APP_VERSION = '${CIRCLE_TAG:=stg}';/" www/service-worker.js
       - run:
           name: webapp-selfhost.sh
           command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}
