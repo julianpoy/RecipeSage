@@ -3,7 +3,7 @@
     {{ 'pages.homeSearchFilterPopover.title' | translate }}
   </ion-list-header>
 
-  <ion-item lines="full" *ngIf="!guestMode" class="cursor-pointer" (click)="openRatingFilter()" button detail="false">
+  <ion-item lines="full" class="cursor-pointer" (click)="openRatingFilter()" button detail="false">
     <ion-label>{{ 'pages.homeSearchFilterPopover.filterByRating' | translate }}</ion-label>
     <ion-badge *ngIf="ratingFilter?.length" slot="end">
       {{ratingFilter.length}}

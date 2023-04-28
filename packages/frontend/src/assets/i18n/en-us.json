@@ -188,9 +188,6 @@
   "pages.homepopover.options.sortBy.updatedNewest": "Updated (newest first)",
   "pages.homepopover.options.sortBy.updatedOldest": "Updated (oldest first)",
 
-  "pages.homepopover.options.filterByRating": "Filter by Rating",
-  "pages.homepopover.options.filterByLabel": "Filter by Label",
-  "pages.homepopover.options.matchAllLabels": "Match All Labels",
   "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
   "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
 

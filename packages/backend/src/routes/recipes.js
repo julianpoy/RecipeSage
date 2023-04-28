@@ -22,6 +22,7 @@ const UtilService = require('../services/util');
 const SearchService = require('../services/search');
 const SubscriptionsService = require('../services/subscriptions');
 const JSONLDService = require('../services/json-ld');
+const { getRecipesWithConstraints } = require('../services/database/getRecipesWithConstraints');
 
 // Util
 const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
@@ -232,228 +233,60 @@ router.get(
       throw Unauthorized('You must be logged in to request this resource');
     }
 
-    const myUserId = res.locals.session ? res.locals.session.userId : null;
-    let userId = myUserId;
+    const offset = req.query.offset || 0;
+    const limit = Math.min(parseInt(req.query.count) || 100, 500);
     const folder = req.query.folder || 'main';
-    const labelFilter = req.query.labels ? req.query.labels.split(',') : [];
 
-    // Only check for shared items if we're browsing another user's recipes
-    if (req.query.userId && myUserId !== req.query.userId) {
-      const user = await User.findByPk(req.query.userId);
-      if (!user) throw NotFound('User with that ID not found');
-
-      userId = user.id;
-
-      let userIsFriend = false;
-      if (res.locals.session) userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
-
-      let labelId;
-      if (labelFilter.length > 1) {
-        throw BadRequest('Can view maximum 1 label at a time from another user\'s profile');
-      } else if (labelFilter.length > 0) {
-        const label = await Label.findOne({
-          where: {
-            title: labelFilter[0],
-            userId
-          }
-        });
-        labelId = label.id;
-      }
-
-      const profileItem = await ProfileItem.findOne({
-        where: {
-          userId,
-          ...(userIsFriend ? {} : { visibility: 'public' }),
-          ...(labelId ? { type: 'label', labelId } : { type: 'all-recipes' })
-        }
-      });
-
-      if (!profileItem) {
-        throw NotFound('Profile item not found or not visible');
-      }
-    }
-
-    let sort = '"Recipe"."title" ASC';
+    let sortBy = ['title', 'ASC'];
     if (req.query.sort) {
       switch(req.query.sort){
-      case '-title':
-        sort = '"Recipe"."title" ASC';
+      case '-title': // TODO: This seems to be backwards...
+        sortBy = ['title', 'ASC'];
         break;
       case 'createdAt':
-        sort = '"Recipe"."createdAt" ASC';
+        sortBy = ['createdAt', 'ASC'];
         break;
       case '-createdAt':
-        sort = '"Recipe"."createdAt" DESC';
+        sortBy = ['createdAt', 'DESC'];
         break;
       case 'updatedAt':
-        sort = '"Recipe"."updatedAt" ASC';
+        sortBy = ['updatedAt', 'ASC'];
         break;
       case '-updatedAt':
-        sort = '"Recipe"."updatedAt" DESC';
+        sortBy = ['updatedAt', 'DESC'];
         break;
       }
     }
 
-    const unlabeledOnly = labelFilter.includes('unlabeled');
-    if (unlabeledOnly) labelFilter.splice(0);
-    const labelFilterMap = labelFilter.reduce((acc, e, idx) => {
-      acc[`labelFilter${idx}`] = e;
-      return acc;
-    }, {});
-
-    // Fields
-    const recipeAttributes = ['id', 'title', 'description', 'source', 'url', 'folder', 'rating', 'userId', 'fromUserId', 'createdAt', 'updatedAt'];
-    const labelAttributes = ['id', 'title'];
-    const imageAttributes = ['id', 'location'];
-    const recipeImageAttributes = ['id', 'order'];
-    const fromUserAttributes = ['name', 'email'];
-
-    // Building fields
-    const recipeSelect = recipeAttributes.map(el => `"Recipe"."${el}" AS "${el}"`).join(', ');
-    const labelSelect = labelAttributes.map(el => `"Label"."${el}" AS "labels.${el}"`).join(', ');
-    const imageSelect = imageAttributes.map(el => `"Image"."${el}" AS "images.${el}"`).join(', ');
-    const recipeImageSelect = recipeImageAttributes.map(el => `"Recipe_Image"."${el}" AS "images.Recipe_Image.${el}"`).join(', ');
-    const fromUserSelect = fromUserAttributes.map(el => `"FromUser"."${el}" AS "fromUser.${el}"`).join(', ');
-    let fields = `${recipeSelect}, ${labelSelect}, ${imageSelect}, ${recipeImageSelect}`;
-    if (folder === 'inbox') fields += `, ${fromUserSelect}`;
-
-    // Labeling
-    const labelFilterClause = `"Label".title IN (${ Object.keys(labelFilterMap).map(e => `$${e}`).join(',') })`;
-    const labelIntersectionClause = req.query.labelIntersection === 'true' ? `HAVING count("Label") = ${labelFilter.length}` : '';
-    const unlabeledClause = unlabeledOnly ? 'AND "Label".id IS NULL' : '';
-    const unlabeledJoin = unlabeledOnly ? `
-      LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = "Recipe".id
-      LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
-    `: '';
-
-    // Rating
-    let ratingClause = '';
-    const ratingFilter = parseRatingFilter(req.query.ratingFilter);
-    if (ratingFilter) {
+    let ratings;
+    if (req.query.ratingFilter) {
+      // TODO: Simplify parseRatingFilter to be used direct here rather than this block
+      const ratingFilter = parseRatingFilter(req.query.ratingFilter);
       const includeNull = req.query.ratingFilter.includes('null');
-      const nullClause = 'OR "Recipe"."rating" IS NULL';
-      // Must use ANY rather than IN due to https://github.com/sequelize/sequelize/issues/8140
-      ratingClause = `AND ("Recipe"."rating" = ANY($ratingFilter) ${includeNull ? nullClause : ''})`;
+      const choices = [...ratingFilter];
+      if (includeNull) choices.push(null);
     }
 
-    const countQuery = labelFilter.length > 0 ?
-      `SELECT "Recipe".id
-      FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
-      WHERE "Recipe_Label"."labelId" = "Label".id
-      AND ${labelFilterClause}
-      AND "Recipe".id = "Recipe_Label"."recipeId"
-      AND "Recipe"."userId" = $userId
-      AND "Recipe"."folder" = $folder
-      ${ratingClause}
-      GROUP BY "Recipe".id
-      ${labelIntersectionClause}`
-      :
-      `SELECT count("Recipe".id)
-      FROM "Recipes" AS "Recipe"
-      ${unlabeledJoin}
-      WHERE "Recipe"."userId" = $userId
-      AND "Recipe"."folder" = $folder
-      ${ratingClause}
-      ${unlabeledClause}`;
+    const labels = req.query.labels?.split(',');
+    const labelIntersection = req.query.labelIntersection === 'true';
 
-    const fetchQuery = labelFilter.length > 0 ?
-      `SELECT ${fields} from (SELECT "Recipe".id
-      FROM "Recipe_Labels" "Recipe_Label", "Recipes" "Recipe", "Labels" "Label"
-      WHERE "Recipe_Label"."labelId" = "Label".id
-      AND ${labelFilterClause}
-      AND "Recipe".id = "Recipe_Label"."recipeId"
-      AND "Recipe"."userId" = $userId
-      AND "Recipe"."folder" = $folder
-      ${ratingClause}
-      GROUP BY "Recipe".id
-      ${labelIntersectionClause}
-      ORDER BY ${sort}
-      LIMIT $limit
-      OFFSET $offset) AS pag
-      INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
-      INNER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
-      INNER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
-      LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
-      LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-      ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
-      ORDER BY ${sort}`
-      :
-      `SELECT ${fields} FROM (SELECT "Recipe".id
-      FROM "Recipes" AS "Recipe"
-      ${unlabeledJoin}
-      WHERE "Recipe"."userId" = $userId
-      AND "Recipe"."folder" = $folder
-      ${ratingClause}
-      ${unlabeledClause}
-      GROUP BY "Recipe".id
-      ORDER BY ${sort}
-      LIMIT $limit
-      OFFSET $offset) AS pag
-      INNER JOIN "Recipes" AS "Recipe" ON "Recipe".id = pag.id
-      LEFT OUTER JOIN "Recipe_Labels" AS "Recipe_Label" ON "Recipe_Label"."recipeId" = pag.id
-      LEFT OUTER JOIN "Labels" AS "Label" ON "Label".id = "Recipe_Label"."labelId"
-      LEFT OUTER JOIN "Recipe_Images" AS "Recipe_Image" ON "Recipe_Image"."recipeId" = pag.id
-      LEFT OUTER JOIN "Images" AS "Image" ON "Image".id = "Recipe_Image"."imageId"
-      ${folder === 'inbox' ? 'LEFT OUTER JOIN "Users" AS "FromUser" ON "FromUser".id = "Recipe"."fromUserId"' : ''}
-      ORDER BY ${sort}`;
-
-    const countQueryOptions = {
-      type: SQ.QueryTypes.SELECT,
-      bind: {
-        userId,
-        folder,
-        ...labelFilterMap,
-        ratingFilter,
-      }
-    };
-
-    const fetchQueryOptions = {
-      type: SQ.QueryTypes.SELECT,
-      hasJoin: true,
-      bind: {
-        userId,
-        folder,
-        limit: Math.min(parseInt(req.query.count) || 100, 500),
-        offset: req.query.offset || 0,
-        ...labelFilterMap,
-        ratingFilter,
-      },
-      model: Recipe,
-      include: [{
-        model: Label,
-        as: 'labels'
-      }, {
-        model: Image,
-        as: 'images'
-      }]
-    };
-
-    if (folder === 'inbox') fetchQueryOptions.include.push({
-      model: User,
-      as: 'fromUser',
-      attributes: fromUserAttributes
+    const recipes = await getRecipesWithConstraints({
+      userId: res.locals.session.userId,
+      userIds: [res.locals.session.userId],
+      folder,
+      sortBy,
+      limit,
+      offset,
+      ratings,
+      labels,
+      labelIntersection,
     });
 
-    Recipe._validateIncludedElements(fetchQueryOptions);
-
-    const [countResult, recipes] = await Promise.all([
-      SQ.query(countQuery, countQueryOptions),
-      SQ.query(fetchQuery, fetchQueryOptions)
-    ]);
-
-    let totalCount = countResult.length;
-    if (countResult && countResult[0] && (countResult[0].count || countResult[0].count == 0)) {
-      totalCount = parseInt(countResult[0].count, 10);
-    }
-
-    const serializedRecipes = recipes
+    recipes.data = recipes.data
       .map(UtilService.sortRecipeImages)
       .map(applyLegacyImageField);
 
-    res.status(200).json({
-      data: serializedRecipes,
-      totalCount
-    });
+    res.status(200).send(recipes);
   }));
 
 // TODO: Move to util
@@ -546,9 +379,8 @@ router.get(
     const friendships = await getFriendships(myUserId);
 
     const searchUserIds = [userId];
-    if (req.query.includeFriends) {
+    if (req.query.includeFriends === 'true') {
       searchUserIds.push(...friendships.friends.map(friend => friend.otherUser.id));
-      console.log(searchUserIds);
     }
 
     const recipeIds = await SearchService.searchRecipes(searchUserIds, req.query.query);

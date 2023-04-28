@@ -103,6 +103,7 @@ export class RecipeService {
     labels?: string,
     labelIntersection?: boolean,
     ratingFilter?: string,
+    includeFriends?: boolean,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[],
@@ -122,6 +123,7 @@ export class RecipeService {
     labels?: string,
     rating?: number,
     ratingFilter?: string,
+    includeFriends?: boolean,
   }, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[]

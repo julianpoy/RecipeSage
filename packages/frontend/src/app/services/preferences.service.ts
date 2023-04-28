@@ -62,7 +62,7 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowSource]: boolean;
   [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
-  [MyRecipesPreferenceKey.SortBy]: '-title' | '- createdAt' | 'createdAt' | '- updatedAt' | 'updatedAt';
+  [MyRecipesPreferenceKey.SortBy]: '-title' | '-createdAt' | 'createdAt' | '-updatedAt' | 'updatedAt';
   [MyRecipesPreferenceKey.IncludeFriends]: boolean;
 
   [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
