@@ -1,4 +1,4 @@
-<a href="https://recipesage.com"><img align="left" width="100" height="100" src="Frontend/src/assets/imgs/logo_green.png"></img></a>
+<a href="https://recipesage.com"><img align="left" width="100" height="100" src="packages/frontend/src/assets/imgs/logo_green.png"></img></a>
 
 # RecipeSage - A Collaborative Recipe Keeper, Meal Planner, and Shopping List Organizer
 
@@ -72,5 +72,7 @@ Setting-up your development environment.
 Your development environment can be setup with a few easy steps.
 1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
 2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
-3. Run the migrations scripts; `docker-compose exec express npx sequelize-cli db:migrate`
+3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
 4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣 
+
+Backend API tests can be run via `docker-compose exec backend npx nx test @recipesage/backend`

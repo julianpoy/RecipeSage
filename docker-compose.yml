@@ -8,30 +8,23 @@ services:
     image: nginx
     volumes:
     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    - ./nginx/ssl.crt:/tmp/ssl.crt
-    - ./nginx/ssl.key:/tmp/ssl.key
     ports:
     - "80:80"
-    - "443:443"
     command: nginx -g 'daemon off;'
     depends_on:
-      - webapp
-      - express
+      - frontend
+      - backend
       - pushpin
-  webapp:
+  frontend:
     ports:
       - "8100:8100"
     build:
       context: .
-      dockerfile: ./Frontend/Dockerfile
+      dockerfile: ./packages/frontend/Dockerfile
     volumes:
-      - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
-      - ./Frontend/src:/app/Frontend/src
-      - ./Frontend/package.json:/app/Frontend/package.json
-      - ./Frontend/package-lock.json:/app/Frontend/package-lock.json
-  express:
+      - ./packages/frontend/src:/app/packages/frontend/src
+      - ./packages/util/src:/app/packages/util/src
+  backend:
     ports:
       - "3000:3000"
     depends_on:
@@ -41,14 +34,13 @@ services:
       - browserless
     build:
       context: .
-      dockerfile: ./Backend/Dockerfile
-    command: npx nodemon --watch ../SharedUtils --watch . src/bin/www.js
+      dockerfile: ./packages/backend/Dockerfile
+    command: ./scripts/watchandrun.sh 'tsx packages/backend/src/bin/www'
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
       - FIRESTORE_BUCKET=
-      - STORAGE_TYPE=S3 #POSSIBLE VALUES: S3, FIREBASE
-      - AWS_PUBLIC_ASSET_LOCATION=https://chefbook-dev.s3.us-west-2.amazonaws.com/
+      - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
       - NODE_ENV=development
       - VERBOSE=false
       - VERSION=development
@@ -64,39 +56,50 @@ services:
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
-      - ELASTIC_ENABLE=true
-      - ELASTIC_IDX_PREFIX=rs_dev_
+      - SEARCH_PROVIDER=elasticsearch
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_API_KEY=recipesage_dev
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
+      - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     env_file:
       - ./.secrets.env
     volumes:
-      - ./SharedUtils/src:/app/SharedUtils/src
-      - ./SharedUtils/package.json:/app/SharedUtils/package.json
-      - ./SharedUtils/package-lock.json:/app/SharedUtils/package-lock.json
-      - ./Backend/src:/app/Backend/src
-      - ./Backend/package.json:/app/Backend/package.json
-      - ./Backend/package-lock.json:/app/Backend/package-lock.json
+      - ./packages/backend/src:/app/packages/backend/src
+      - ./packages/util/src:/app/packages/util/src
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_dev
+      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
       - xpack.security.enabled=false
     ports:
       - 9200:9200
+  meilisearch:
+    image: getmeili/meilisearch:v1.0
+    environment:
+      - MEILI_MASTER_KEY=recipesage_dev
+  kibana:
+    image: kibana:8.4.3
+    ports:
+      - 5601:5601
   pushpin:
     image: fanout/pushpin:1.27.0
     environment:
-      - target=express:3000
+      - target=backend:3000
     ports:
       - "7999:7999"
       - "5560-5563:5560-5563"
   postgres:
     image: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
     ports:
       - 5432:5432
     environment:
@@ -116,6 +119,7 @@ services:
       - PREBOOT_CHROME=true
       - KEEP_ALIVE=true
       - FUNCTION_ENABLE_INCOGNITO_MODE=true
+      - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
 
