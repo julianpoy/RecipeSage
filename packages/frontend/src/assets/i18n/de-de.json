@@ -153,8 +153,11 @@
   "pages.homeSearchFilterPopover.filterByRating": "Nach Bewertung filtern",
   "pages.homeSearchFilterPopover.filterByLabel": "Nach Label filtern",
   "pages.homeSearchFilterPopover.matchAllLabels": "Alle Etiketten anpassen",
-  "pages.homeSearchFilterPopover.includeFriends": "Rezepte von Freunden einbeziehen",
-  "pages.homeSearchFilterPopover.includeFriends.description": "Gilt nur für Suchen ohne Filter",
+  "pages.homeSearchFilterPopover.includeFriends": "Freunde anzeigen Rezepte",
+  "pages.homeSearchFilterPopover.includeFriends.yes": "Immer",
+  "pages.homeSearchFilterPopover.includeFriends.search": "Nur in den Suchergebnissen",
+  "pages.homeSearchFilterPopover.includeFriends.browse": "Wenn keine Suche im Gange ist",
+  "pages.homeSearchFilterPopover.includeFriends.no": "Niemals",
 
   "pages.homeSearchFilterPopover.optionsHidden": "Hinweis: Einige Optionen sind ausgeblendet, da es sich um eine gemeinsame Sammlung handelt.",
 

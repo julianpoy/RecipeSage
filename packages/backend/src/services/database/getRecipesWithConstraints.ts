@@ -12,7 +12,7 @@ const {
 import { getFriendships } from '../../utils/getFriendships';
 
 export const getRecipesWithConstraints = async (args: {
-  userId: string,
+  userId?: string,
   userIds: string[],
   folder: string,
   sortBy: [string, string],
@@ -38,8 +38,11 @@ export const getRecipesWithConstraints = async (args: {
     ratings,
   } = args;
 
-  const friendships = await getFriendships(contextUserId);
-  const friends = friendships.friends.reduce((acc, friend) => (acc[friend.otherUser.id] = friend, acc), {});
+  let friends = [];
+  if (contextUserId) {
+    const friendships = await getFriendships(contextUserId);
+    friends = friendships.friends.reduce((acc, friend) => (acc[friend.otherUser.id] = friend, acc), {});
+  }
 
   const friendUserIds = userIds.filter((userId) => friends[userId] && userId !== contextUserId);
   const nonFriendUserIds = userIds.filter((userId) => !friends[userId] && userId !== contextUserId);
@@ -57,13 +60,13 @@ export const getRecipesWithConstraints = async (args: {
 
   const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
     acc[profileItem.userId] ??= [];
-    acc[profileItem.userId] = profileItem;
+    acc[profileItem.userId].push(profileItem);
     return acc;
   }, {});
 
   const queryFilters: any[] = [];
   for (const userId of userIds) {
-    const isContextUser = userId === contextUserId;
+    const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
 
     const isSharingAll = profileItemsForUser.find((profileItem) => profileItem.type === 'all-recipes');
@@ -110,7 +113,7 @@ export const getRecipesWithConstraints = async (args: {
     [Op.or]: sqQueryFilters,
     ...(labels ? { ['$labels.title$']: labels } : {}),
     ...(ratings ? { rating: ratings } : {}),
-    ...(filterByRecipeIds ? { recipeId: filterByRecipeIds } : {}),
+    ...(filterByRecipeIds ? { id: filterByRecipeIds } : {}),
     folder,
   };
 

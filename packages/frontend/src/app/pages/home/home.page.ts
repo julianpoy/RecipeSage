@@ -252,16 +252,21 @@ export class HomePage {
   async loadRecipes(offset: number, numToFetch: number) {
     this.lastRecipeCount += numToFetch;
 
+    const includeFriends = !this.userId && (
+      this.preferences[MyRecipesPreferenceKey.IncludeFriends] === 'yes'
+      || this.preferences[MyRecipesPreferenceKey.IncludeFriends] === 'browse'
+    );
+
     const response = await this.recipeService.fetch({
       folder: this.folder,
-      userId: this.userId,
       sort: this.preferences[MyRecipesPreferenceKey.SortBy],
       offset,
       count: numToFetch,
       labelIntersection: this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
       labels: this.selectedLabels.join(',') || undefined,
       ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
-      includeFriends: this.preferences[this.preferenceKeys.IncludeFriends],
+      userId: this.userId || undefined,
+      includeFriends
     });
     if (!response.success) return;
 
@@ -348,12 +353,17 @@ export class HomePage {
 
     this.searchText = text;
 
+    const includeFriends = !this.userId && (
+      this.preferences[MyRecipesPreferenceKey.IncludeFriends] === 'yes'
+      || this.preferences[MyRecipesPreferenceKey.IncludeFriends] === 'search'
+    );
+
     const response = await this.recipeService.search({
       query: text,
       labels: this.selectedLabels.join(',') || undefined,
       userId: this.userId || undefined,
       ratingFilter: this.ratingFilter.map(String).join(',') || undefined,
-      includeFriends: this.preferences[this.preferenceKeys.IncludeFriends],
+      includeFriends
     });
     loading.dismiss();
     if (!response.success) return;
