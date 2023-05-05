@@ -154,8 +154,11 @@
   "pages.homeSearchFilterPopover.filterByRating": "Filter by Rating",
   "pages.homeSearchFilterPopover.filterByLabel": "Filter by Label",
   "pages.homeSearchFilterPopover.matchAllLabels": "Match All Labels",
-  "pages.homeSearchFilterPopover.includeFriends": "Include Friends Recipes",
-  "pages.homeSearchFilterPopover.includeFriends.description": "Only applies to searches with no filters",
+  "pages.homeSearchFilterPopover.includeFriends": "Show Friends Recipes",
+  "pages.homeSearchFilterPopover.includeFriends.yes": "Always",
+  "pages.homeSearchFilterPopover.includeFriends.search": "Only in search results",
+  "pages.homeSearchFilterPopover.includeFriends.browse": "Only when not searching",
+  "pages.homeSearchFilterPopover.includeFriends.no": "Never",
 
   "pages.homeSearchFilterPopover.optionsHidden": "Note: some options are hidden, since this is a shared collection",
 

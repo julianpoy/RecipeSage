@@ -63,7 +63,7 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
   [MyRecipesPreferenceKey.SortBy]: '-title' | '-createdAt' | 'createdAt' | '-updatedAt' | 'updatedAt';
-  [MyRecipesPreferenceKey.IncludeFriends]: boolean;
+  [MyRecipesPreferenceKey.IncludeFriends]: 'yes' | 'no' | 'search' | 'browse';
 
   [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
 
@@ -101,7 +101,7 @@ export class PreferencesService {
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
     [MyRecipesPreferenceKey.SortBy]: '-title',
-    [MyRecipesPreferenceKey.IncludeFriends]: false,
+    [MyRecipesPreferenceKey.IncludeFriends]: 'no',
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
 

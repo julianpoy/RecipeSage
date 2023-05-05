@@ -106,9 +106,17 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
     body: {
       query: {
         bool: {
-          should: [], // Present only because of TypeScript. Not actually necessary for query.
+          should: [
+            {
+              match_phrase_prefix: { // Increase score of items with titles that match the entire phrase exactly
+                title: {
+                  query: queryString,
+                }
+              }
+            }
+          ],
           must: {
-            match_bool_prefix: {
+            match_bool_prefix: { // Items must contain all terms that were searched for
               fullText: {
                 query: queryString,
                 fuzziness: 'AUTO',

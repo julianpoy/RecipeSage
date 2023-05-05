@@ -26,13 +26,18 @@
   </ion-item>
 
   <ion-item lines="full" *ngIf="!guestMode">
-    <ion-toggle [(ngModel)]="preferences[preferenceKeys.IncludeFriends]" (ngModelChange)="savePreferences(true);" slot="start"></ion-toggle>
-    <ion-label class="ion-text-wrap">
+    <ion-label>
       {{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}
-      <p>
-        {{ 'pages.homeSearchFilterPopover.includeFriends.description' | translate }}
-      </p>
     </ion-label>
+    <ion-select
+      [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
+      (ngModelChange)="savePreferences(true);"
+    >
+      <ion-select-option value="yes" >{{ 'pages.homeSearchFilterPopover.includeFriends.yes' | translate }}</ion-select-option>
+      <ion-select-option value="search">{{ 'pages.homeSearchFilterPopover.includeFriends.search' | translate }}</ion-select-option>
+      <ion-select-option value="browse">{{ 'pages.homeSearchFilterPopover.includeFriends.browse' | translate }}</ion-select-option>
+      <ion-select-option value="no">{{ 'pages.homeSearchFilterPopover.includeFriends.no' | translate }}</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <ion-item lines="none" *ngIf="guestMode">

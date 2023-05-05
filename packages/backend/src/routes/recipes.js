@@ -45,8 +45,7 @@ const VALID_RECIPE_SORT = ['-title', 'createdAt', '-createdAt', 'updatedAt', '-u
 const parseRatingFilter = (ratingFilter) => {
   return ratingFilter
     ?.split(',')
-    ?.filter(el => el !== 'null')
-    ?.map(el => parseInt(el, 10));
+    .map(el => el === 'null' ? null : parseInt(el, 10));
 };
 
 const applyLegacyImageField = recipe => {
@@ -218,6 +217,7 @@ router.get(
     query: Joi.object({
       sort: Joi.string().valid(...VALID_RECIPE_SORT).optional(),
       userId: Joi.string().uuid().optional(),
+      includeFriends: Joi.boolean().optional(),
       folder: Joi.string().valid(...VALID_RECIPE_FOLDERS).optional(),
       labels: Joi.string().optional(),
       labelIntersection: Joi.boolean().optional(),
@@ -258,21 +258,23 @@ router.get(
       }
     }
 
-    let ratings;
-    if (req.query.ratingFilter) {
-      // TODO: Simplify parseRatingFilter to be used direct here rather than this block
-      const ratingFilter = parseRatingFilter(req.query.ratingFilter);
-      const includeNull = req.query.ratingFilter.includes('null');
-      const choices = [...ratingFilter];
-      if (includeNull) choices.push(null);
-    }
+    const ratings = parseRatingFilter(req.query.ratingFilter);
 
     const labels = req.query.labels?.split(',');
     const labelIntersection = req.query.labelIntersection === 'true';
 
+    const userIds = [];
+    if (res.locals.session?.userId && !req.query.userId) userIds.push(res.locals.session.userId);
+    if (req.query.userId) userIds.push(req.query.userId);
+    if (res.locals.session?.userId && req.query.includeFriends === 'true') {
+      const friendships = await getFriendships(res.locals.session.userId);
+
+      userIds.push(...friendships.friends.map(friend => friend.otherUser.id));
+    }
+
     const recipes = await getRecipesWithConstraints({
       userId: res.locals.session.userId,
-      userIds: [res.locals.session.userId],
+      userIds,
       folder,
       sortBy,
       limit,
@@ -289,38 +291,6 @@ router.get(
     res.status(200).send(recipes);
   }));
 
-// TODO: Move to util
-const getRecipesForUser = ({
-  userId,
-  recipeIds,
-  ratingClause,
-  labelClause,
-}) => {
-  return Recipe.findAll({
-    where: {
-      id: recipeIds,
-      userId,
-      folder: 'main',
-      ...(ratingClause || {}),
-    },
-    include: [{
-      model: Label,
-      as: 'labels',
-      attributes: ['id', 'title']
-    }, {
-      model: Label,
-      as: 'label_filter',
-      attributes: [],
-      ...(labelClause || {})
-    }, {
-      model: Image,
-      as: 'images',
-      attributes: ['id', 'location']
-    }],
-    limit: 200
-  });
-};
-
 router.get(
   '/search',
   joiValidator(Joi.object({
@@ -328,7 +298,9 @@ router.get(
       query: Joi.string().min(1).max(1000).required(),
       userId: Joi.string().uuid().optional(),
       labels: Joi.string().optional(),
+      labelIntersection: Joi.boolean().optional(),
       ratingFilter: Joi.string().regex(VALID_RATING_FILTERS).optional(),
+      includeFriends: Joi.boolean().optional(),
     }),
   })),
   cors(),
@@ -338,139 +310,48 @@ router.get(
       throw BadRequest('You must be logged in to request this resource');
     }
 
-    const myUserId = res.locals.session ? res.locals.session.userId : null;
-    let userId = myUserId;
-    const labels = req.query.labels ? req.query.labels.split(',') : [];
+    const labels = req.query.labels?.split(',');
+    const labelIntersection = req.query.labelIntersection === 'true';
+    const ratings = parseRatingFilter(req.query.ratingFilter);
 
-    // Only check for shared items if we're browsing another user's recipes
-    if (req.query.userId && myUserId !== req.query.userId) {
-      const user = await User.findByPk(req.query.userId);
-      userId = user.id;
+    const userIds = [];
+    if (res.locals.session?.userId && !req.query.userId) userIds.push(res.locals.session.userId);
+    if (req.query.userId) userIds.push(req.query.userId);
+    if (res.locals.session?.userId && req.query.includeFriends === 'true') {
+      const friendships = await getFriendships(res.locals.session.userId);
 
-      let userIsFriend = false;
-      if (res.locals.session) userIsFriend = await Friendship.areUsersFriends(res.locals.session.userId, userId);
-
-      let labelId;
-      if (labels.length > 1) {
-        throw BadRequest('Can view maximum 1 label at a time from another user\'s profile');
-      } else if (labels.length > 0) {
-        const label = await Label.findOne({
-          where: {
-            title: labels[0],
-            userId
-          }
-        });
-        labelId = label.id;
-      }
-
-      const profileItem = await ProfileItem.findOne({
-        where: {
-          userId,
-          ...(userIsFriend ? {} : { visibility: 'public' }),
-          ...(labelId ? { type: 'label', labelId } : { type: 'all-recipes' })
-        }
-      });
-
-      if (!profileItem) {
-        throw NotFound('Profile item not found or not visible');
-      }
+      userIds.push(...friendships.friends.map(friend => friend.otherUser.id));
     }
 
-    const friendships = await getFriendships(myUserId);
-
-    const searchUserIds = [userId];
-    if (req.query.includeFriends === 'true') {
-      searchUserIds.push(...friendships.friends.map(friend => friend.otherUser.id));
-    }
-
-    const recipeIds = await SearchService.searchRecipes(searchUserIds, req.query.query);
+    console.log(userIds);
+    const recipeIds = await SearchService.searchRecipes(userIds, req.query.query);
 
     const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
       acc[recipeId] = idx + 1;
       return acc;
     }, {});
 
-    const labelClause = {};
-    if (req.query.labels) {
-      labelClause.where = {
-        title: labels
-      };
-    }
+    const recipes = await getRecipesWithConstraints({
+      userId: res.locals.session?.userId || undefined,
+      userIds,
+      folder: 'main', // We only allow searching main folder for now
+      sortBy: ['title', 'ASC'], // Doesn't really matter
+      limit: 200,
+      offset: 0,
+      ratings,
+      labels,
+      labelIntersection,
+      recipeIds,
+    });
 
-    // Rating
-    const ratingClause = {};
-    const ratingFilter = parseRatingFilter(req.query.ratingFilter);
-    if (ratingFilter) {
-      const includeNull = req.query.ratingFilter.includes('null');
-      const choices = [ratingFilter];
-      if (includeNull) choices.push(null);
-
-      ratingClause.rating = {
-        [Op.or]: choices
-      };
-    }
-
-    const recipes = [];
-    for (const searchUserId of searchUserIds) {
-      const userIsSelf = searchUserId === myUserId;
-
-      const profileItems = await ProfileItem.findAll({
-        where: {
-          userId: searchUserId,
-        }
-      });
-      const isSharingAll = profileItems.find((profileItem) => profileItem.type === 'all-recipes');
-
-      if (userIsSelf || isSharingAll) {
-        const recipesForUser = await getRecipesForUser({
-          userId: searchUserId,
-          recipeIds,
-          ratingClause,
-          labelClause,
-        });
-        recipes.push(...recipesForUser);
-        continue;
-      }
-
-      const sharedLabelIds = profileItems
-        .filter((profileItem) => profileItem.type === 'label')
-        .map((profileItem) => profileItem.labelId);
-
-      const sharedRecipeLabels = await Recipe_Label.findAll({
-        where: {
-          labelId: sharedLabelIds,
-          recipeId: recipeIds
-        },
-      });
-
-      const recipeProfileItems = profileItems
-        .filter((profileItem) => profileItem.type === 'recipe')
-        .filter((profileItem) => !!recipeIdsMap[profileItem.recipeId]);
-
-      const sharedRecipeIds = [
-        ...sharedRecipeLabels.map((recipeLabel) => recipeLabel.recipeId),
-        ...recipeProfileItems.map((recipeLabel) => recipeLabel.recipeId)
-      ];
-
-      const recipesForUser = await getRecipesForUser({
-        userId: searchUserId,
-        recipeIds: sharedRecipeIds,
-        ratingClause,
-        labelClause,
-      });
-      recipes.push(...recipesForUser);
-    }
-
-    const serializedRecipes = recipes
+    recipes.data = recipes.data
       .map(UtilService.sortRecipeImages)
       .map(applyLegacyImageField)
       .sort((a, b) => {
-        return recipeIdsMap[b.id] - recipeIdsMap[a.id];
+        return recipeIdsMap[a.id] - recipeIdsMap[b.id];
       });
 
-    res.status(200).send({
-      data: serializedRecipes
-    });
+    res.status(200).send(recipes);
   }));
 
 router.get(

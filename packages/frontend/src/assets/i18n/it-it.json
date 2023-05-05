@@ -154,8 +154,11 @@
   "pages.homeSearchFilterPopover.filterByRating": "Filtrare per valutazione",
   "pages.homeSearchFilterPopover.filterByLabel": "Filtrare per etichetta",
   "pages.homeSearchFilterPopover.matchAllLabels": "Abbinare tutte le etichette",
-  "pages.homeSearchFilterPopover.includeFriends": "Includere le ricette degli amici",
-  "pages.homeSearchFilterPopover.includeFriends.description": "Si applica solo alle ricerche senza filtri",
+  "pages.homeSearchFilterPopover.includeFriends": "Mostra amici",
+  "pages.homeSearchFilterPopover.includeFriends.yes": "Sempre",
+  "pages.homeSearchFilterPopover.includeFriends.search": "Solo nei risultati di ricerca",
+  "pages.homeSearchFilterPopover.includeFriends.browse": "Quando non si effettua la ricerca",
+  "pages.homeSearchFilterPopover.includeFriends.no": "Mai",
 
   "pages.homeSearchFilterPopover.optionsHidden": "Nota: alcune opzioni sono nascoste, poiché si tratta di una raccolta condivisa.",
 
