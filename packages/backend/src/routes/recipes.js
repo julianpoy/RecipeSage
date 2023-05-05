@@ -13,8 +13,6 @@ const Label = require('../models').Label;
 const Recipe_Label = require('../models').Recipe_Label;
 const Image = require('../models').Image;
 const Recipe_Image = require('../models').Recipe_Image;
-const Friendship = require('../models').Friendship;
-const ProfileItem = require('../models').ProfileItem;
 
 // Service
 const MiddlewareService = require('../services/middleware');
