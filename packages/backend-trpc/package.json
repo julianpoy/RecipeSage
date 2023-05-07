@@ -1,0 +1,15 @@
+{
+  "name": "@recipesage/backend-trpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trpc/server": "^10.25.0",
+    "zod": "^3.21.4"
+  }
+}

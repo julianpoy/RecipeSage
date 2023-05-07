@@ -16,6 +16,7 @@ import { LabelService, Label } from '~/services/label.service';
 import { PreferencesService, MyRecipesPreferenceKey, GlobalPreferenceKey } from '~/services/preferences.service';
 import { HomePopoverPage } from '~/pages/home-popover/home-popover.page';
 import { HomeSearchFilterPopoverPage } from '~/pages/home-search-popover/home-search-filter-popover.page';
+import {TRPCService} from '~/services/trpc.service';
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -113,7 +114,9 @@ export class HomePage {
     public utilService: UtilService,
     public preferencesService: PreferencesService,
     public websocketService: WebsocketService,
-    public messagingService: MessagingService) {
+    public messagingService: MessagingService,
+    public trpcService: TRPCService,
+  ) {
 
     this.showBack = !!this.router.getCurrentNavigation().extras.state?.showBack;
 
@@ -165,6 +168,12 @@ export class HomePage {
 
     this.fetchMyProfile();
     this.fetchFriends();
+
+    this.trpcService.trpc.getRecipes.query({
+      example: "testval"
+    }).then((val) => {
+      console.log(val);
+    });
   }
 
   async setDefaultBackHref() {

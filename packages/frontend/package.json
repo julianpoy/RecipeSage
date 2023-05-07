@@ -28,6 +28,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@recipesage/util": "*",
     "@sentry/browser": "^7.38.0",
+    "@trpc/client": "^10.25.0",
     "axios": "^1.3.3",
     "core-js": "^3.28.0",
     "dayjs": "^1.11.7",
