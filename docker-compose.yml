@@ -90,13 +90,7 @@ services:
       - NODE_ENV=development
       - VERBOSE=false
       - VERSION=development
-      - POSTGRES_DB=recipesage_dev
-      - POSTGRES_USER=recipesage_dev
-      - POSTGRES_PASSWORD=recipesage_dev
-      - POSTGRES_PORT=5432
-      - POSTGRES_HOST=postgres
-      - POSTGRES_SSL=false
-      - POSTGRES_LOGGING=true
+      - DATABASE_URL=postgresql://recipesage_dev:recipesage_dev@postgres:5432/recipesage_dev?schema=public
       - GCM_KEYPAIR
       - SENTRY_DSN
       - SENTRY_SAMPLE_RATE=0
@@ -115,6 +109,7 @@ services:
       - ./.secrets.env
     volumes:
       - ./packages/backend-trpc/src:/app/packages/backend-trpc/src
+      - ./packages/backend-trpc/prisma:/app/packages/backend-trpc/prisma
       - ./packages/util/src:/app/packages/util/src
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3

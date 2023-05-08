@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.13.0",
     "@trpc/server": "^10.25.0",
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "prisma": "^4.13.0"
   }
 }

@@ -154,7 +154,7 @@ export class HomePage {
     window.addEventListener('resize', () => this.updateTileColCount());
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
@@ -168,6 +168,10 @@ export class HomePage {
 
     this.fetchMyProfile();
     this.fetchFriends();
+
+    const result = await this.trpcService.trpc.getRecipes.query({
+      example: '',
+    });
 
     this.trpcService.trpc.getRecipes.query({
       example: "testval"
