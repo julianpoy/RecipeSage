@@ -1,9 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compileOnSave": false,
   "compilerOptions": {
     "strict": false,
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "moduleResolution": "node",
     "lib": [
@@ -17,9 +15,6 @@
       "es2015",
       "es5",
       "dom"
-    ],
-    "paths": {
-      "~/*": ["src/app/*"]
-    }
+    ]
   }
 }

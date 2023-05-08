@@ -1,5 +1,5 @@
 {
-  "name": "@recipesage/backend-trpc",
+  "name": "@recipesage/prisma",
   "version": "0.0.0",
   "type": "commonjs"
 }

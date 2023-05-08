@@ -1,5 +1,8 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
     "strict": true,
     "sourceMap": true,
     "declaration": false,
@@ -16,6 +19,12 @@
     ],
     "lib": [
       "esnext"
-    ]
-  }
+    ],
+    "paths": {
+      "@recipesage/prisma": ["packages/prisma/src/index.ts"],
+      "~/*": ["packages/frontend/src/app/*"]
+    }
+  },
+  "exclude": ["node_modules"]
 }
+

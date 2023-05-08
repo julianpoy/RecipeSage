@@ -8,9 +8,15 @@
     "@nrwl/nx-cloud": "latest",
     "nx": "15.8.9",
     "prettier": "^2.6.2",
+    "prisma": "^4.13.0",
     "typescript": "^4.9.5"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@prisma/client": "^4.13.0",
+    "@trpc/server": "^10.25.0",
+    "zod": "^3.21.4"
+  }
 }

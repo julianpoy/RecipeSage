@@ -25,5 +25,9 @@
         "{projectRoot}/www"
       ]
     }
+  },
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "backend-trpc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/backend-trpc/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend-trpc",
+        "command": "tsc"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend-trpc",
+        "command": "tsc --noEmit"
+      }
+    }
+  }
+}
