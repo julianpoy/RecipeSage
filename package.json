@@ -130,5 +130,8 @@
     "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1",
     "workbox-cli": "^6.5.4"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
