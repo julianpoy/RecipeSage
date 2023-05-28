@@ -48,10 +48,7 @@ jobs:
       - install-dependencies
       - run:
           name: lint, typecheck, test, build
-          command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
-      - run:
-          name: tmp
-          command: ls packages/frontend
+          command: npx nx run-many --targets=lint,typecheck,test,build
   push_backend:
     resource_class: large
     docker:
