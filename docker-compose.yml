@@ -70,47 +70,6 @@ services:
     volumes:
       - ./packages/backend/src:/app/packages/backend/src
       - ./packages/util/src:/app/packages/util/src
-  backend-trpc:
-    ports:
-      - 3001:3001
-    depends_on:
-      - postgres
-      - elasticsearch
-      - pushpin
-      - browserless
-    build:
-      context: .
-      dockerfile: ./packages/backend-trpc/Dockerfile
-    command: ./scripts/watchandrun.sh 'tsx packages/backend-trpc/src/index.ts'
-    environment:
-      - AWS_REGION=us-west-2
-      - AWS_BUCKET=chefbook-dev
-      - FIRESTORE_BUCKET=
-      - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
-      - NODE_ENV=development
-      - VERBOSE=false
-      - VERSION=development
-      - DATABASE_URL=postgresql://recipesage_dev:recipesage_dev@postgres:5432/recipesage_dev?schema=public
-      - GCM_KEYPAIR
-      - SENTRY_DSN
-      - SENTRY_SAMPLE_RATE=0
-      - GRIP_URL=http://pushpin:5561/
-      - GRIP_KEY=changeme
-      - SEARCH_PROVIDER=elasticsearch
-      - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
-      - ELASTIC_PASSWORD=recipesage_dev
-      - MEILI_HOST=http://meilisearch:7700
-      - MEILI_API_KEY=recipesage_dev
-      - BROWSERLESS_HOST=browserless
-      - BROWSERLESS_PORT=3000
-      - BROWSERLESS_TOKEN=recipesage_dev
-      - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
-    env_file:
-      - ./.secrets.env
-    volumes:
-      - ./packages/backend-trpc/src:/app/packages/backend-trpc/src
-      - ./packages/backend-trpc/prisma:/app/packages/backend-trpc/prisma
-      - ./packages/util/src:/app/packages/util/src
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:

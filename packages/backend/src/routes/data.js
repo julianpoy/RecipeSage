@@ -94,7 +94,7 @@ const getRecipeDataForExport = async userId => {
         }
 
         if (location.startsWith('/')) {
-          const data = fs.readFileSync(location);
+          const data = fs.readFileSync(location.replace('/api/images/filesystem', process.env.FILESYSTEM_STORAGE_PATH));
           const base64 = data.toString('base64');
 
           image.location = `data:image/png;base64,${base64}`;
