@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IS_SELFHOST } from 'src/environments/environment';
+import { IS_SELFHOST } from '@recipesage/frontend/environments/environment';
 
 import { RouteMap } from '~/services/util.service';
 

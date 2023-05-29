@@ -1,4 +1,5 @@
 module.exports = {
+  'root': true,
   'env': {
     'es2021': true,
     'node': true
@@ -55,5 +56,6 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
       }
     }
-  ]
+  ],
+  'ignorePatterns': ['dist']
 };

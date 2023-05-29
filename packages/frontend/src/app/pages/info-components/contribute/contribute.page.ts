@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { IS_SELFHOST } from 'src/environments/environment';
+import { IS_SELFHOST } from '@recipesage/frontend/environments/environment';
 
 import { UtilService, RouteMap } from '~/services/util.service';
 import { PaymentsService } from '~/services/payments.service';

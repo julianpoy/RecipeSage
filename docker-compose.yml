@@ -20,10 +20,10 @@ services:
       - "8100:8100"
     build:
       context: .
-      dockerfile: ./packages/frontend/Dockerfile
+      dockerfile: ./Dockerfile
+    command: npx nx start @recipesage/frontend
     volumes:
-      - ./packages/frontend/src:/app/packages/frontend/src
-      - ./packages/util/src:/app/packages/util/src
+      - ./packages:/app/packages
   backend:
     ports:
       - "3000:3000"
@@ -34,8 +34,9 @@ services:
       - browserless
     build:
       context: .
-      dockerfile: ./packages/backend/Dockerfile
-    command: ./scripts/watchandrun.sh 'tsx packages/backend/src/bin/www'
+      dockerfile: ./Dockerfile
+    # command: ./scripts/watchandrun.sh 'tsx packages/backend/src/bin/www'
+    command: tail -f /dev/null
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
@@ -68,8 +69,7 @@ services:
     env_file:
       - ./.secrets.env
     volumes:
-      - ./packages/backend/src:/app/packages/backend/src
-      - ./packages/util/src:/app/packages/util/src
+      - ./packages:/app/packages
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:

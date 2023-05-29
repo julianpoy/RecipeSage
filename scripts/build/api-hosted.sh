@@ -8,7 +8,7 @@ then
   exit 1
 fi
 
-docker build --build-arg VERSION=$1 -f packages/backend/Dockerfile -t julianpoy/recipesage:api-latest .
+docker build --build-arg VERSION=$1 -f Dockerfile -t julianpoy/recipesage:api-latest .
 
 # Only push to latest tag if tag is a versioned tag
 if [[ $1 == v* ]]

@@ -8,7 +8,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/prisma",
-        "command": "tsc"
+        "command": "prisma generate --schema=./src/prisma/schema.prisma && tsc"
       }
     },
     "typecheck": {
@@ -16,6 +16,13 @@
       "options": {
         "cwd": "packages/prisma",
         "command": "tsc --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/prisma",
+        "command": "eslint ."
       }
     }
   }

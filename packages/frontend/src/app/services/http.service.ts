@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { API_BASE_URL } from 'src/environments/environment';
+import { API_BASE_URL } from '@recipesage/frontend/environments/environment';
 import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
 import {UtilService} from './util.service';
 

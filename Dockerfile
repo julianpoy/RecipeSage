@@ -9,8 +9,14 @@ RUN apk add --no-cache inotify-tools
 
 RUN npm install -g tsx
 
-COPY . .
+COPY package-lock.json package-lock.json
+COPY package.json package.json
 RUN npm install
+
+COPY tsconfig.base.json tsconfig.base.json
+COPY nx.json nx.json
+COPY packages packages
+COPY scripts scripts
 
 # Include version build arg within the container env
 ARG VERSION

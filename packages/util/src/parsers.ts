@@ -1,27 +1,3 @@
-const fractionjs = require('fraction.js');
-const unitUtils = require('./units.js');
-const getShoppingListItemGroupings = require('./get-shopping-list-item-groupings.js');
-
-// If a handle matches this regexp, it is invalid
-const EVIL_HANDLE_REGEXP = /[^A-Za-z0-9_.]/;
-
-// Handles may not contain these words
-const HANDLE_DENYLIST = [
-  "recipesage",
-  "admin",
-];
-
-const isHandleValid = handle => {
-  if (!handle) return false;
-  if (handle.match(EVIL_HANDLE_REGEXP)) return false;
-
-  for (var i = 0; i < HANDLE_DENYLIST.length; i++) {
-    if (handle.toLowerCase().indexOf(HANDLE_DENYLIST[i]) > -1) return false;
-  }
-
-  return true;
-};
-
 const fractionMatchers = { // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, ' 1/2'], // ½  \u00BD;
   8531: [/ ?\u2153/g, ' 1/3'], // ⅓  \u2153;
@@ -45,7 +21,7 @@ const fractionMatchers = { // Regex & replacement value by charcode
 
 const fractionMatchRegexp = new RegExp(Object.keys(fractionMatchers).map(e => fractionMatchers[e]).map(matcher => matcher[0].source).join('|'), 'g');
 
-const replaceFractionsInText = rawText => {
+const replaceFractionsInText = (rawText: string): string => {
   return rawText.replace(fractionMatchRegexp, match => {
     const matcher = fractionMatchers[match.trim().charCodeAt(0)];
     return matcher ? matcher[1] : match; // Fallback on original value if not found
@@ -69,23 +45,26 @@ const fillerWordsRegexp = /(cubed|peeled|minced|grated|heaped|chopped|about|(sli
 
 const notesRegexp = /\(.*?\)/;
 
-function stripNotes(ingredient) {
+const stripNotes = (ingredient: string): string => {
   return ingredient.replace(new RegExp(notesRegexp, 'g'), '').trim();
 }
 
-function getMeasurementsForIngredient(ingredient) {
+export const getMeasurementsForIngredient = (ingredient: string): string[] => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
-  return strippedIngredient.split(multipartQuantifierRegexp).map(ingredientPart => {
-    const measurementMatch = stripNotes(ingredientPart)
-      .match(new RegExp(measurementQuantityRegExp.source, 'i'));
+  return strippedIngredient
+    .split(multipartQuantifierRegexp)
+    .map(ingredientPart => {
+      const measurementMatch = stripNotes(ingredientPart)
+        .match(new RegExp(measurementQuantityRegExp.source, 'i'));
 
-    if (measurementMatch) return measurementMatch[0].trim();
-    return null;
-  }).filter(measurement => measurement);
+      if (measurementMatch) return measurementMatch[0].trim();
+      return null;
+    })
+    .filter((measurement): measurement is string => !!measurement);
 }
 
-function getTitleForIngredient(ingredient) {
+export const getTitleForIngredient = (ingredient: string): string => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
   const ingredientPartDelimiters = strippedIngredient.match(new RegExp(multipartQuantifierRegexp, 'ig'));
@@ -99,11 +78,7 @@ function getTitleForIngredient(ingredient) {
     .trim();
 }
 
-function isHeader(input) {
-  return line.match(headerRegexp);
-}
-
-function stripIngredient(ingredient) {
+export const stripIngredient = (ingredient: string): string => {
   const trimmed = replaceFractionsInText(ingredient).trim()
     .replace(new RegExp(`^(${measurementRegexp.source})`), '').trim()
     .replace(new RegExp(`^(${quantityRegexp.source})`, 'i'), '').trim()
@@ -116,17 +91,22 @@ function stripIngredient(ingredient) {
   }
 }
 
-function parseIngredients(ingredients, scale, boldify) {
+export const parseIngredients = (ingredients: string, scale: number, boldify?: boolean): {
+  content: string,
+  originalContent: string,
+  complete: boolean,
+  isHeader: boolean
+}[] => {
   if (!ingredients) return [];
 
   ingredients = replaceFractionsInText(ingredients);
 
-  let lines = ingredients.match(/[^\r\n]+/g).map(match => ({
+  let lines = ingredients.match(/[^\r\n]+/g)?.map(match => ({
     content: match,
     originalContent: match,
     complete: false,
     isHeader: false
-  }));
+  })) || [];
 
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].content.trim(); // Trim only spaces (no newlines)
@@ -167,7 +147,7 @@ function parseIngredients(ingredients, scale, boldify) {
             else measurementParts[j] = scaledMeasurement;
           }
 
-          let updatedMeasurement;
+          let updatedMeasurement: string;
           if (measurementPartDelimiters) {
             updatedMeasurement = measurementParts.reduce((acc, measurementPart, idx) => acc + measurementPart + (measurementPartDelimiters[idx] || ""), "");
           } else {
@@ -195,7 +175,12 @@ function parseIngredients(ingredients, scale, boldify) {
   return lines;
 }
 
-function parseInstructions(instructions) {
+export const parseInstructions = (instructions: string): {
+  content: string,
+  isHeader: boolean,
+  count: number,
+  complete: boolean
+}[] => {
   instructions = replaceFractionsInText(instructions);
 
   // Starts with [, anything inbetween, ends with ]
@@ -232,7 +217,10 @@ function parseInstructions(instructions) {
     });
 }
 
-function parseNotes(notes) {
+export const parseNotes = (notes: string): {
+  content: string,
+  isHeader: boolean,
+}[] => {
   // Starts with [, anything inbetween, ends with ]
   var headerRegexp = /^\[.*\]$/;
 
@@ -257,14 +245,3 @@ function parseNotes(notes) {
   });
 }
 
-module.exports = {
-  parseIngredients,
-  parseInstructions,
-  parseNotes,
-  stripIngredient,
-  getMeasurementsForIngredient,
-  getTitleForIngredient,
-  unitUtils,
-  isHandleValid,
-  getShoppingListItemGroupings,
-}
