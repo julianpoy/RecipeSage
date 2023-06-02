@@ -6,8 +6,9 @@ import { indexRecipes } from './services/search';
 import * as SQ from 'sequelize';
 const Op = SQ.Op;
 
-import * as Models from './models';
-const Recipe = Models.Recipe;
+import {
+  Recipe
+} from './models';
 
 program
   .option('-b, --batch-size [size]', 'Batch size', '1000')

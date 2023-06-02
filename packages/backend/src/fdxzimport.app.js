@@ -1,20 +1,22 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import './services/sentry-init.js';
+import Sentry from '@sentry/node';
 
-const fs = require('fs-extra');
-const extract = require('extract-zip');
-const xmljs = require('xml-js');
+import fs from 'fs-extra';
+import extract from 'extract-zip';
+import xmljs from 'xml-js';
 
-const SQ = require('./models').sequelize;
-const Recipe = require('./models').Recipe;
-const Label = require('./models').Label;
-const Recipe_Label = require('./models').Recipe_Label;
-const Recipe_Image = require('./models').Recipe_Image;
-const Image = require('./models').Image;
+import {
+  sequelize,
+  Recipe,
+  Label,
+  Recipe_Label,
+  Recipe_Image,
+  Image
+} from './models/index.js';
 
-const UtilService = require('./services/util');
-const { writeImageBuffer, writeImageFile } = require('./services/storage/image');
-const { ObjectTypes } = require('./services/storage/shared');
+import UtilService from './services/util.js';
+import { writeImageBuffer, writeImageFile } from './services/storage/image';
+import { ObjectTypes } from './services/storage/shared.js';
 
 const runConfig = {
   path: process.argv[2],
@@ -187,7 +189,7 @@ async function main() {
       };
     });
 
-    await (SQ.transaction(async t => {
+    await (sequelize.transaction(async t => {
       let recipesWithImages = runConfig.excludeImages ?
         [] : pendingRecipes.map(pendingRecipe => {
           pendingRecipe.imageRefs = fetchDeepProp(pendingRecipe.original, 'RecipeImage');
@@ -298,3 +300,4 @@ async function main() {
 }
 
 main();
+

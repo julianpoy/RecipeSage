@@ -1,8 +1,8 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-const MiddlewareService = require('../services/middleware');
+import * as MiddlewareService from '../services/middleware.js';
 
 router.post(
   '/ingredient-instruction-classifier',
@@ -26,5 +26,5 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;
 

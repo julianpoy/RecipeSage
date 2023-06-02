@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { UtilService } from './util.service';
 
-import { STRIPE_PK } from '@recipesage/frontend/environments/environment';
+import { STRIPE_PK } from '@recipesage/frontend/src/environments/environment';
 import {ErrorHandlers} from './http-error-handler.service';
 
 @Injectable({

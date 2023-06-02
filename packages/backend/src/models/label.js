@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const LabelInit = (sequelize, DataTypes) => {
   const Label = sequelize.define('Label', {
     id: {
       type: DataTypes.UUID,

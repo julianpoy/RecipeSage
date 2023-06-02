@@ -17,7 +17,7 @@ import {
 } from '../testutils';
 
 // DB
-import * as Models from '../models';
+import Models from '../models';
 const { Recipe, Label } = Models;
 
 describe('recipes', () => {

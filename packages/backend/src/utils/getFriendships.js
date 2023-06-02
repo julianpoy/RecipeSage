@@ -1,8 +1,10 @@
-const Friendship = require('../models').Friendship;
-const User = require('../models').User;
-const Image = require('../models').Image;
+import {
+  Friendship,
+  User,
+  Image
+} from '../models/index.js';
 
-const getFriendships = async (userId) => {
+export const getFriendships = async (userId) => {
   const outgoingFriendships = await Friendship.findAll({
     where: {
       userId,
@@ -76,9 +78,5 @@ const getFriendships = async (userId) => {
   });
 
   return friendshipSummary;
-};
-
-module.exports = {
-  getFriendships,
 };
 

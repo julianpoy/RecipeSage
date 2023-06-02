@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
 try {
   const serviceAccount = require('../config/firebase-credentials.json');
@@ -13,6 +13,7 @@ try {
   }
 }
 
-module.exports = {
+export default {
   admin,
 };
+

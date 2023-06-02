@@ -1,9 +1,9 @@
-const Sequelize = require('sequelize');
-const { Umzug, SequelizeStorage } = require('umzug');
-const path = require('path');
-const { program } = require('commander');
+import Sequelize from 'sequelize';
+import { Umzug, SequelizeStorage } from 'umzug';
+import * as path from 'path';
+import { program } from 'commander';
 
-let config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
+const config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
 
 program
   .arguments('[direction] [count]')
@@ -47,3 +47,4 @@ const umzug = new Umzug({
   console.log('All migrations performed successfully');
   process.exit(0);
 })();
+

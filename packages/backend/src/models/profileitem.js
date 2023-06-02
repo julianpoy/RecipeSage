@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const ProfileItemInit = (sequelize, DataTypes) => {
   const ProfileItem = sequelize.define('ProfileItem', {
     id: {
       type: DataTypes.UUID,

@@ -1,17 +1,17 @@
-let {
+import {
   expect
-} = require('chai');
+} from 'chai';
 
-let sinon = require('sinon');
-let path = require('path');
+import sinon from 'sinon';
+import * as path from 'path';
 
-let {
+import {
   setup,
   cleanup,
   randomString,
-} = require('../testutils');
+} from '../testutils.js';
 
-let {
+import {
   validatePassword,
   validateEmail,
   sanitizeEmail,
@@ -19,10 +19,10 @@ let {
   dispatchImportNotification,
   dispatchMessageNotification,
   findFilesByRegex
-} = require('../services/util');
+} from '../services/util.js';
 
-let FirebaseService = require('../services/firebase');
-let GripService = require('../services/grip');
+import FirebaseService from '../services/firebase.js';
+import GripService from '../services/grip.js';
 
 describe('utils', () => {
   let server;

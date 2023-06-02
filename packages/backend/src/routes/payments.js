@@ -1,19 +1,21 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const Sentry = require('@sentry/node');
+import Sentry from '@sentry/node';
 
 // DB
-const SQ = require('../models').sequelize;
-const StripePayment = require('../models').StripePayment;
+import {
+  sequelize,
+  StripePayment
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const StripeService = require('../services/stripe');
-const SubscriptionService = require('../services/subscriptions');
+import * as MiddlewareService from '../services/middleware.js';
+import StripeService from '../services/stripe.js';
+import SubscriptionService from '../services/subscriptions.js';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest, PreconditionFailed, InternalServerError } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { BadRequest, PreconditionFailed, InternalServerError } from '../utils/errors.js';
 
 router.post(
   '/stripe/custom-session',
@@ -78,7 +80,7 @@ router.post(
 
         const amountPaid = session.display_items.map(item => item.amount).reduce((a, b) => a + b);
 
-        await SQ.transaction(async (transaction) => {
+        await sequelize.transaction(async (transaction) => {
           await StripePayment.create({
             userId: user ? user.id : null,
             amountPaid,
@@ -103,7 +105,7 @@ router.post(
 
       const user = await StripeService.findCheckoutUser(invoice.customer, invoice.customer_email);
 
-      await SQ.transaction(async (transaction) => {
+      await sequelize.transaction(async (transaction) => {
         await StripePayment.create({
           userId: user ? user.id : null,
           amountPaid: invoice.amount_paid,
@@ -128,4 +130,5 @@ router.post(
     res.status(200).json({ received: true });
   }));
 
-module.exports = router;
+export default router;
+

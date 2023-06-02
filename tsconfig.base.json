@@ -11,6 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "importHelpers": true,
     "target": "es6",
     "typeRoots": [
@@ -23,7 +24,7 @@
       "@recipesage/prisma": ["packages/prisma/src/index.ts"],
       "@recipesage/util": ["packages/util/src/index.ts"],
       "@recipesage/trpc": ["packages/trpc/src/index.ts"],
-      "@recipesage/frontend/*": ["packages/frontend/src/*"],
+      "@recipesage/frontend/*": ["packages/frontend/*"],
       "~/*": ["packages/frontend/src/app/*"]
     }
   },

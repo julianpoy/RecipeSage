@@ -1,23 +1,25 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
+import * as cors from 'cors';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Message = require('../models').Message;
-const FCMToken = require('../models').FCMToken;
-const Image = require('../models').Image;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  User,
+  Recipe,
+  Message,
+  FCMToken,
+  Image
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
+import * as MiddlewareService from '../services/middleware.js';
+import UtilService from '../services/util.js';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest, NotFound, PreconditionFailed } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { BadRequest, NotFound, PreconditionFailed } from '../utils/errors.js';
 
 router.post(
   '/',
@@ -29,7 +31,7 @@ router.post(
       throw PreconditionFailed('recipeId or body is required');
     }
 
-    const message = await SQ.transaction(async transaction => {
+    const message = await sequelize.transaction(async transaction => {
       const recipient = await User.findByPk(req.body.to, {
         include: [
           {
@@ -275,4 +277,5 @@ router.get(
     }).reverse());
   }));
 
-module.exports = router;
+export default router;
+

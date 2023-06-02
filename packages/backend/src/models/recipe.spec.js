@@ -1,21 +1,16 @@
-const {
-  expect
-} = require('chai');
+import { expect } from 'chai';
+import sinon from 'sinon';
 
-const sinon = require('sinon');
-
-const {
+import {
   setup,
   cleanup,
   syncDB,
   randomString,
   createUser,
   createRecipe,
-} = require('../testutils');
+} from '../testutils';
 
-// DB
-const SQ = require('../models').sequelize;
-const Recipe = require('../models').Recipe;
+import { sequelize, Recipe } from '../models';
 
 describe('recipe', () => {
   let server;
@@ -68,7 +63,7 @@ describe('recipe', () => {
 
       let recipe = await createRecipe(user.id);
 
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         return Recipe.findTitle(user.id, recipe.id, recipe.title, t).then(adjustedTitle => {
           expect(adjustedTitle).to.equal(recipe.title);
         });
@@ -81,7 +76,7 @@ describe('recipe', () => {
       let recipe1 = await createRecipe(user.id);
       let recipe2 = await createRecipe(user.id);
 
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         return Recipe.findTitle(user.id, recipe1.id, recipe2.title, t).then(adjustedTitle => {
           expect(adjustedTitle).to.equal(recipe2.title + ' (2)');
         });
@@ -91,7 +86,7 @@ describe('recipe', () => {
     it('returns initial name when no conflicts arise with no recipeId', async () => {
       let user = await createUser();
 
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         let desiredTitle = randomString(20);
         return Recipe.findTitle(user.id, null, desiredTitle, t).then(adjustedTitle => {
           expect(adjustedTitle).to.equal(desiredTitle);
@@ -104,7 +99,7 @@ describe('recipe', () => {
 
       let recipe1 = await createRecipe(user.id);
 
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         return Recipe.findTitle(user.id, null, recipe1.title, t).then(adjustedTitle => {
           expect(adjustedTitle).to.equal(recipe1.title + ' (2)');
         });
@@ -129,7 +124,7 @@ describe('recipe', () => {
       let user2 = await createUser();
       let recipe = await createRecipe(user1.id);
 
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         return Recipe.share(recipe.id, user2.id, t).then(() => {
 
           sinon.assert.calledOnce(_shareStub);
@@ -162,7 +157,7 @@ describe('recipe', () => {
 
         recipe = await createRecipe(user1.id);
 
-        await SQ.transaction(async t => {
+        await sequelize.transaction(async t => {
           sharedRecipe = await recipe.share(user2.id, t);
         });
       });

@@ -1,17 +1,18 @@
-const crypto = require('crypto');
-const moment = require('moment');
-const Sentry = require('@sentry/node');
+import crypto from 'crypto';
+import moment from 'moment';
+import Sentry from '@sentry/node';
 
-const Sequelize = require('sequelize');
-const Session = require('../models').Session;
-const Op = Sequelize.Op;
+import { Op } from 'sequelize';
+import {
+  Session
+} from '../models/index.js';
 
 const SESSION_VALIDITY_LENGTH = 30; // Initial session validity time
 const SET_GRACE_WHEN = 29; // Set token expiry equal to grace period if session will expire in X days
 const SESSION_GRACE_PERIOD = 30; // Should always be more than SET_GRACE_WHEN
 
 //Checks if a token exists, and returns the corrosponding userId
-exports.validateSession = function(token, type) {
+export const validateSession = function(token, type) {
   let query;
   if(typeof type == 'string'){
     query = {
@@ -81,7 +82,7 @@ function removeOldSessions() {
 if (process.env.NODE_ENV !== 'test') setInterval(removeOldSessions, 1 * 60 * 60 * 1000); // Every X hours
 
 // Creates a token and returns the token if successful
-exports.generateSession = function(userId, type, transaction) {
+export const generateSession = function(userId, type, transaction) {
   // Create a random token
   const token = crypto.randomBytes(48).toString('hex');
   // New session!
@@ -95,10 +96,11 @@ exports.generateSession = function(userId, type, transaction) {
   });
 };
 
-exports.deleteSession = function(token) {
+export const deleteSession = function(token) {
   return Session.destroy({
     where: {
       token: token
     }
   });
 };
+

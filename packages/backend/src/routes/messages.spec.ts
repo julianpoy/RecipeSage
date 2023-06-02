@@ -16,10 +16,10 @@ import {
   randomUuid
 } from '../testutils';
 
-import * as UtilService from '../../src/services/util';
+import UtilService from '../../src/services/util';
 
 // DB
-import * as Models from '../models';
+import Models from '../models';
 const { Recipe, Message, User } = Models;
 
 describe('messages', () => {

@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const UserSubscriptionInit = (sequelize, DataTypes) => {
   const UserSubscription = sequelize.define('UserSubscription', {
     id: {
       type: DataTypes.UUID,

@@ -1,4 +1,4 @@
-const joiValidator = (joiSchema) => {
+export const joiValidator = (joiSchema) => {
   return (req, res, next) => {
     const { error } = joiSchema.validate({
       body: req.body,
@@ -16,6 +16,3 @@ const joiValidator = (joiSchema) => {
   };
 };
 
-module.exports = {
-  joiValidator,
-};

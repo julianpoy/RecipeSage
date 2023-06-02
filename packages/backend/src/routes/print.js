@@ -1,26 +1,28 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const sanitizeHtml = require('sanitize-html');
+import sanitizeHtml from 'sanitize-html';
 
 // DB
-const Op = require('sequelize').Op;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Image = require('../models').Image;
-const Label = require('../models').Label;
-const ShoppingList = require('../models').ShoppingList;
-const ShoppingListItem = require('../models').ShoppingListItem;
+import { Op } from 'sequelize';
+import {
+  User,
+  Recipe,
+  Image,
+  Label,
+  ShoppingList,
+  ShoppingListItem
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
+import * as MiddlewareService from '../services/middleware.js';
+import UtilService from '../services/util.js';
+import ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
 
-const SharedUtils = require('@recipesage/util');
+import * as SharedUtils from '@recipesage/util';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { BadRequest } from '../utils/errors.js';
 
 router.get(
   '/',
@@ -192,4 +194,5 @@ router.get('/:recipeId',
     });
   });
 
-module.exports = router;
+export default router;
+

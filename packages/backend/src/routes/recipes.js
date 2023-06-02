@@ -1,40 +1,42 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const xmljs = require('xml-js');
-const moment = require('moment');
+import * as cors from 'cors';
+import xmljs from 'xml-js';
+import moment from 'moment';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
-const Recipe_Label = require('../models').Recipe_Label;
-const Image = require('../models').Image;
-const Recipe_Image = require('../models').Recipe_Image;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  User,
+  Recipe,
+  Label,
+  Recipe_Label,
+  Image,
+  Recipe_Image
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const SearchService = require('../services/search');
-const SubscriptionsService = require('../services/subscriptions');
-const JSONLDService = require('../services/json-ld');
-const { getRecipesWithConstraints } = require('../services/database/getRecipesWithConstraints');
+import * as MiddlewareService from '../services/middleware.js';
+import UtilService from '../services/util.js';
+import SearchService from '../services/search/index.ts';
+import SubscriptionsService from '../services/subscriptions.js';
+import JSONLDService from '../services/json-ld.js';
+import { getRecipesWithConstraints } from '../services/database/getRecipesWithConstraints';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const {
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import {
   BadRequest,
   Unauthorized,
   NotFound,
   PreconditionFailed,
   InternalServerError
-} = require('../utils/errors');
-const {joiValidator} = require('../middleware/joiValidator');
-const Joi = require('joi');
-const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
-const {getFriendships} = require('../utils/getFriendships');
+} from '../utils/errors.js';
+import { joiValidator } from '../middleware/joiValidator.js';
+import * as Joi from 'joi';
+import { deleteHangingImagesForUser } from '../utils/data/deleteHangingImages.js';
+import { getFriendships } from '../utils/getFriendships.js';
 
 const VALID_RECIPE_FOLDERS = ['main', 'inbox'];
 const VALID_RATING_FILTERS = /^(\d|null)(,(\d|null))*$/;
@@ -89,7 +91,7 @@ router.post(
       throw PreconditionFailed('Recipe title must be provided.');
     }
 
-    const recipe = await SQ.transaction(async transaction => {
+    const recipe = await sequelize.transaction(async transaction => {
       const adjustedTitle = await Recipe.findTitle(res.locals.session.userId, null, req.body.title, transaction);
 
       const recipe = await Recipe.create({
@@ -554,7 +556,7 @@ router.put(
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
 
-    const updatedRecipe = await SQ.transaction(async transaction => {
+    const updatedRecipe = await sequelize.transaction(async transaction => {
       const recipe = await Recipe.findOne({
         where: {
           id: req.params.id,
@@ -642,7 +644,7 @@ router.delete(
   wrapRequestWithErrorHandler(async (req, res) => {
     const { userId } = res.locals.session;
 
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       const recipes = await Recipe.findAll({
         where: {
           userId,
@@ -765,7 +767,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       await deleteRecipes(res.locals.session.userId, {
         labelIds: req.body.labelIds,
       }, transaction);
@@ -784,7 +786,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       await deleteRecipes(res.locals.session.userId, {
         recipeIds: req.body.recipeIds,
       }, transaction);
@@ -803,7 +805,7 @@ router.delete(
   cors(),
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       await deleteRecipes(res.locals.session.userId, {
         recipeIds: [req.params.id],
       }, transaction);
@@ -812,4 +814,5 @@ router.delete(
     res.sendStatus(200);
   }));
 
-module.exports = router;
+export default router;
+

@@ -1,19 +1,19 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const fetch = require('node-fetch');
-const Sentry = require('@sentry/node');
-const he = require('he');
-const url = require('url');
-const { dedent } = require('ts-dedent');
+import fetch from 'node-fetch';
+import Sentry from '@sentry/node';
+import he from 'he';
+import url from 'url';
+import { dedent } from 'ts-dedent';
 
-const puppeteer = require('puppeteer-core');
+import puppeteer from 'puppeteer-core';
 
-const jsdom = require('jsdom');
-const RecipeClipper = require('@julianpoy/recipe-clipper');
+import jsdom from 'jsdom';
+import RecipeClipper from '@julianpoy/recipe-clipper';
 
 const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
-const sanitizeHtml = require('sanitize-html');
-const {fetchURL} = require('../services/fetch');
+import sanitizeHtml from 'sanitize-html';
+import { fetchURL } from '../services/fetch';
 
 const disconnectPuppeteer = (browser) => {
   try {
@@ -202,5 +202,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;
+
 

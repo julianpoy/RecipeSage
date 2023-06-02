@@ -1,4 +1,4 @@
-const wrapRequestWithErrorHandler = (handler) => {
+export const wrapRequestWithErrorHandler = (handler) => {
   return async (req, res, next) => {
     try {
       await handler(req, res, next);
@@ -6,9 +6,5 @@ const wrapRequestWithErrorHandler = (handler) => {
       next(e);
     }
   };
-};
-
-module.exports = {
-  wrapRequestWithErrorHandler,
 };
 

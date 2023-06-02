@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('chefbook-backend:server');
-const jobTracker = require('../services/job-tracker.js');
-
-const protocol = require('http');
+import app from '../app.js';
+import Debug from 'debug';
+const debug = Debug('chefbook-backend:server');
+import { jobTracker } from '../services/job-tracker.js';
+import * as protocol from 'http';
 
 /**
  * Get port from environment and store in Express.
@@ -21,7 +21,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = protocol.createServer(app);
+export const server = protocol.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -116,4 +116,3 @@ process.on('SIGTERM', () => {
   });
 });
 
-module.exports = server;

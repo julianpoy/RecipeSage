@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const RecipeLabelInit = (sequelize, DataTypes) => {
   const RecipeLabel = sequelize.define('Recipe_Label', {
     id: {
       type: DataTypes.UUID,

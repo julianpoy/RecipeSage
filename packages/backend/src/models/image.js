@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const ImageInit = (sequelize, DataTypes) => {
   const Image = sequelize.define('Image', {
     id: {
       type: DataTypes.UUID,
@@ -61,3 +60,4 @@ module.exports = (sequelize, DataTypes) => {
   };
   return Image;
 };
+

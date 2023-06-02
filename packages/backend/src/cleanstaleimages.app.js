@@ -1,12 +1,14 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import './services/sentry-init.js';
+import Sentry from '@sentry/node';
 
-const { deleteObjects } = require('./services/storage');
+import { deleteObjects } from './services/storage';
 
-const Op = require('sequelize').Op;
-const SQ = require('./models').sequelize;
-const Image = require('./models').Image;
-const Recipe_Image = require('./models').Recipe_Image;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  Image,
+  Recipe_Image
+} from './models/index.js';
 
 const cleanupStaleImages = async () => {
   try {
@@ -21,8 +23,8 @@ const cleanupStaleImages = async () => {
       }],
       where: {
         [Op.and]: [
-          SQ.where(
-            SQ.col('Recipe_Images.id'),
+          sequelize.where(
+            sequelize.col('Recipe_Images.id'),
             'IS',
             null
           ),
@@ -57,3 +59,4 @@ const cleanupStaleImages = async () => {
 };
 
 cleanupStaleImages();
+

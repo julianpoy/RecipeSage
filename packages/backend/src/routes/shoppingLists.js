@@ -1,26 +1,28 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const Joi = require('joi');
+import * as cors from 'cors';
+import * as Joi from 'joi';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const MealPlanItem = require('../models').MealPlanItem;
-const ShoppingList = require('../models').ShoppingList;
-const ShoppingListItem = require('../models').ShoppingListItem;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  User,
+  Recipe,
+  MealPlanItem,
+  ShoppingList,
+  ShoppingListItem
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const GripService = require('../services/grip');
-const ShoppingListCategorizerService = require('../services/shopping-list-categorizer.js');
-const {joiValidator} = require('../middleware/joiValidator');
+import * as MiddlewareService from '../services/middleware.js';
+import GripService from '../services/grip.js';
+import ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
+import { joiValidator } from '../middleware/joiValidator.js';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { NotFound } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { NotFound } from '../utils/errors.js';
 
 router.post(
   '/',
@@ -28,7 +30,7 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const shoppingList = await SQ.transaction(async (transaction) => {
+    const shoppingList = await sequelize.transaction(async (transaction) => {
       const shoppingList = await ShoppingList.create({
         title: req.body.title,
         userId: res.locals.session.userId
@@ -104,7 +106,7 @@ router.get(
           attributes: []
         }
       ],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [sequelize.fn('COUNT', sequelize.col('items.id')), 'itemCount']],
       group: ['ShoppingList.id', 'collaborators.id', 'collaborators->ShoppingList_Collaborator.id', 'owner.id'],
       order: [
         ['updatedAt', 'DESC']
@@ -455,4 +457,5 @@ router.put(
     });
   }));
 
-module.exports = router;
+export default router;
+

@@ -1,29 +1,29 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import './services/sentry-init.js';
+import Sentry from '@sentry/node';
 
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+import * as express from 'express';
+import * as path from 'path';
+import * as logger from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 
 // Routes
-const index = require('./routes/index');
-const users = require('./routes/users');
-const recipes = require('./routes/recipes');
-const labels = require('./routes/labels');
-const messages = require('./routes/messages');
-const shoppingLists = require('./routes/shoppingLists');
-const mealPlans = require('./routes/mealPlans');
-const print = require('./routes/print');
-const payments = require('./routes/payments');
-const images = require('./routes/images');
-const clip = require('./routes/clip');
-const data = require('./routes/data');
-const proxy = require('./routes/proxy');
+import index from './routes/index.js';
+import users from './routes/users.js';
+import recipes from './routes/recipes.js';
+import labels from './routes/labels.js';
+import messages from './routes/messages.js';
+import shoppingLists from './routes/shoppingLists.js';
+import mealPlans from './routes/mealPlans.js';
+import print from './routes/print.js';
+import payments from './routes/payments.js';
+import images from './routes/images.js';
+import clip from './routes/clip.js';
+import data from './routes/data.js';
+import proxy from './routes/proxy.js';
 
-const ws = require('./routes/ws');
+import ws from './routes/ws.js';
 
 const app = express();
 
@@ -108,4 +108,5 @@ app.use(function(err, req, res) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;
+

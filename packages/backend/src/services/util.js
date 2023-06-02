@@ -1,10 +1,10 @@
-const fs = require('fs-extra');
-const path = require('path');
-const zlib = require('zlib');
+import fs from 'fs-extra';
+import * as path from 'path';
+import zlib from 'zlib';
 
 // Service
-const FirebaseService = require('./firebase');
-const GripService = require('./grip');
+import FirebaseService from './firebase.js';
+import GripService from './grip.js';
 
 
 
@@ -18,7 +18,7 @@ const GripService = require('./grip');
 
 
 
-exports.dispatchImportNotification = (user, status, reason) => {
+export const dispatchImportNotification = (user, status, reason) => {
   let event;
   if (status === 0) {
     event = 'complete';
@@ -47,7 +47,7 @@ exports.dispatchImportNotification = (user, status, reason) => {
   return Promise.all(sendQueues);
 };
 
-exports.sortUserProfileImages = user => {
+export const sortUserProfileImages = user => {
   if (user.toJSON) user = user.toJSON();
 
   if (user.profileImages && user.profileImages.length > 0) {
@@ -57,7 +57,7 @@ exports.sortUserProfileImages = user => {
   return user;
 };
 
-exports.sortRecipeImages = recipe => {
+export const sortRecipeImages = recipe => {
   if (recipe.toJSON) recipe = recipe.toJSON();
 
   if (recipe.images && recipe.images.length > 0) {
@@ -67,7 +67,7 @@ exports.sortRecipeImages = recipe => {
   return recipe;
 };
 
-exports.dispatchMessageNotification = (user, fullMessage) => {
+export const dispatchMessageNotification = (user, fullMessage) => {
   const message = {
     id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
@@ -101,7 +101,7 @@ exports.dispatchMessageNotification = (user, fullMessage) => {
   return Promise.all(sendQueues);
 };
 
-exports.findFilesByRegex = (searchPath, regex) => {
+export const findFilesByRegex = (searchPath, regex) => {
   if (!fs.existsSync(searchPath)) {
     return [];
   }
@@ -113,21 +113,21 @@ exports.findFilesByRegex = (searchPath, regex) => {
       return [newPath, ...acc];
     }
 
-    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...exports.findFilesByRegex(newPath, regex)];
+    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...findFilesByRegex(newPath, regex)];
 
     return acc;
   }, []);
 };
 
-exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
+export const sanitizeEmail = email => (email || '').trim().toLowerCase();
 
 // Very liberal email regex. Don't want to reject valid user emails.
 let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-exports.validateEmail = email => emailRegex.test(email);
+export const validateEmail = email => emailRegex.test(email);
 
-exports.validatePassword = password => typeof password === 'string' && password.length >= 6;
+export const validatePassword = password => typeof password === 'string' && password.length >= 6;
 
-exports.gunzip = buf => {
+export const gunzip = buf => {
   return new Promise((resolve, reject) => {
     zlib.gunzip(buf, (err, result) => {
       if (err) reject(err);
@@ -138,7 +138,7 @@ exports.gunzip = buf => {
 
 // CBs are an array of promises to be executed by chunkSize
 // Waits until previous is done before executing next chunk
-exports.executeInChunks = async (cbs, chunkSize) => {
+export const executeInChunks = async (cbs, chunkSize) => {
   if (chunkSize < 1) return Promise.resolve();
 
   let chunks = [];
@@ -153,7 +153,7 @@ exports.executeInChunks = async (cbs, chunkSize) => {
   }, Promise.resolve());
 };
 
-exports.cleanLabelTitle = labelTitle => {
+export const cleanLabelTitle = labelTitle => {
   const cleanedTitle = (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
 
   if (cleanedTitle === 'unlabeled') return 'un-labeled';
@@ -161,5 +161,5 @@ exports.cleanLabelTitle = labelTitle => {
   return cleanedTitle;
 };
 
-exports.capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+export const capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
 

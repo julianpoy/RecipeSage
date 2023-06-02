@@ -1,9 +1,6 @@
-const SQ = require('sequelize');
-const Op = SQ.Op;
+import Sequelize, { Op } from 'sequelize';
 
-'use strict';
-
-module.exports = (sequelize, DataTypes) => {
+export const RecipeInit = (sequelize, DataTypes) => {
   const Recipe = sequelize.define('Recipe', {
     id: {
       type: DataTypes.UUID,
@@ -73,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     indexedAt: {
       type: DataTypes.DATE,
-      defaultValue: SQ.NOW
+      defaultValue: Sequelize.NOW
     }
   });
   Recipe.associate = function(models) {

@@ -1,23 +1,25 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import './services/sentry-init.js';
+import Sentry from '@sentry/node';
 
-const fs = require('fs-extra');
-const mdb = require('mdb');
-const extract = require('extract-zip');
-const sqlite3 = require('sqlite3');
-const performance = require('perf_hooks').performance;
-const { exec, spawn } = require('child_process');
+import fs from 'fs-extra';
+import mdb from 'mdb';
+import extract from 'extract-zip';
+import sqlite3 from 'sqlite3';
+import performance from 'perf_hooks';
+import { exec, spawn } from 'child_process';
 
-const SQ = require('./models').sequelize;
-const Recipe = require('./models').Recipe;
-const Label = require('./models').Label;
-const Recipe_Label = require('./models').Recipe_Label;
-const Recipe_Image = require('./models').Recipe_Image;
-const Image = require('./models').Image;
+import {
+  sequelize,
+  Recipe,
+  Label,
+  Recipe_Label,
+  Recipe_Image,
+  Image
+} from './models/index.js';
 
-const UtilService = require('./services/util');
-const { writeImageFile } = require('./services/storage/image');
-const {ObjectTypes} = require('./services/storage/shared');
+import UtilService from './services/util.js';
+import { writeImageFile } from './services/storage/image';
+import { ObjectTypes } from './services/storage/shared.js';
 
 let runConfig = {
   path: process.argv[2],
@@ -283,7 +285,7 @@ async function main() {
 
     metrics.tRecipeDataAssembled = performance.now();
 
-    await (SQ.transaction(async t => {
+    await (sequelize.transaction(async t => {
       let recipesWithImages = runConfig.excludeImages ?
         [] : tableMap.t_recipe.map(lcbRecipe => {
           lcbRecipe.imageFileNames = (lcbImagesByRecipeId[lcbRecipe.recipeid] || [])

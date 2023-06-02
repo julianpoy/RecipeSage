@@ -1,5 +1,5 @@
 {
   "name": "@recipesage/util",
   "version": "0.0.0",
-  "main": "src/index.js"
+  "main": "src/index.ts"
 }

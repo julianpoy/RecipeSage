@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const StripePaymentInit = (sequelize, DataTypes) => {
   const StripePayment = sequelize.define('StripePayment', {
     id: {
       type: DataTypes.UUID,

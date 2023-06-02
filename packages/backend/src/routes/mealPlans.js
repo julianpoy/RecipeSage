@@ -1,26 +1,28 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const ical = require('ical-generator');
+import * as cors from 'cors';
+import ical from 'ical-generator';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Image = require('../models').Image;
-const MealPlan = require('../models').MealPlan;
-const MealPlanItem = require('../models').MealPlanItem;
-const ShoppingList = require('../models').ShoppingList;
-const ShoppingListItem = require('../models').ShoppingListItem;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  User,
+  Recipe,
+  Image,
+  MealPlan,
+  MealPlanItem,
+  ShoppingList,
+  ShoppingListItem
+} from '../models/index.js';
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const GripService = require('../services/grip');
+import * as MiddlewareService from '../services/middleware.js';
+import GripService from '../services/grip.js';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { NotFound, BadRequest } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { NotFound, BadRequest } from '../utils/errors.js';
 
 router.post(
   '/',
@@ -28,7 +30,7 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const mealPlan = await SQ.transaction(async (transaction) => {
+    const mealPlan = await sequelize.transaction(async (transaction) => {
       const mealPlan = await MealPlan.create({
         title: req.body.title,
         userId: res.locals.session.userId
@@ -101,7 +103,7 @@ router.get(
           attributes: []
         }
       ],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('items.id')), 'itemCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [sequelize.fn('COUNT', sequelize.col('items.id')), 'itemCount']],
       group: ['MealPlan.id', 'collaborators.id', 'collaborators->MealPlan_Collaborator.id', 'owner.id'],
       order: [
         ['updatedAt', 'DESC']
@@ -288,7 +290,7 @@ router.put(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const mealPlan = await SQ.transaction(async transaction => {
+    const mealPlan = await sequelize.transaction(async transaction => {
       const mealPlan = await MealPlan.findOne({
         where: {
           id: req.params.mealPlanId,
@@ -358,7 +360,7 @@ router.post(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const mealPlan = await SQ.transaction(async transaction => {
+    const mealPlan = await sequelize.transaction(async transaction => {
       const mealPlan = await MealPlan.findOne({
         where: {
           id: req.params.mealPlanId,
@@ -423,7 +425,7 @@ router.delete(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const mealPlan = await SQ.transaction(async transaction => {
+    const mealPlan = await sequelize.transaction(async transaction => {
       const mealPlan = await MealPlan.findOne({
         where: {
           id: req.params.mealPlanId,
@@ -632,4 +634,5 @@ router.get(
 //   });
 // });
 
-module.exports = router;
+export default router;
+

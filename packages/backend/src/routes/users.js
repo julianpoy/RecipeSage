@@ -1,45 +1,46 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const Sentry = require('@sentry/node');
-const moment = require('moment');
+import * as cors from 'cors';
+import Sentry from '@sentry/node';
+import moment from 'moment';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const User_Profile_Image = require('../models').User_Profile_Image;
-const FCMToken = require('../models').FCMToken;
-const Session = require('../models').Session;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
-const Image = require('../models').Image;
-const Message = require('../models').Message;
-const Friendship = require('../models').Friendship;
-const ProfileItem = require('../models').ProfileItem;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  User,
+  User_Profile_Image,
+  FCMToken,
+  Session,
+  Recipe,
+  Label,
+  Image,
+  Message,
+  Friendship,
+  ProfileItem
+} from '../models/index.js';
 
 // Service
-const SessionService = require('../services/sessions');
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const SubscriptionService = require('../services/subscriptions');
-const { sendWelcome } = require('../services/email/welcome');
-const { sendPasswordReset } = require('../services/email/passwordReset');
-const { getFriendships } = require('../utils/getFriendships');
+import SessionService from '../services/sessions.js';
+import * as MiddlewareService from '../services/middleware.js';
+import UtilService from '../services/util.js';
+import SubscriptionService from '../services/subscriptions.js';
+import { sendWelcome } from '../services/email/welcome.ts';
+import { sendPasswordReset } from '../services/email/passwordReset.ts';
+import { getFriendships } from '../utils/getFriendships.js';
 
-const SharedUtils = require('@recipesage/util');
+import * as SharedUtils from '@recipesage/util';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const {
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import {
   BadRequest,
   Forbidden,
   NotFound,
   PreconditionFailed,
-} = require('../utils/errors');
-const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
-const {indexRecipes} = require('../services/search');
-
+} from '../utils/errors.js';
+import { deleteHangingImagesForUser } from '../utils/data/deleteHangingImages.js';
+import { indexRecipes } from '../services/search/index.ts';
 
 router.get(
   '/',
@@ -91,7 +92,7 @@ router.put(
       throw BadRequest('Handle must only contain A-z 0-9 _ .');
     }
 
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async transaction => {
       await User.update({
         ...(req.body.name !== undefined ? { name: req.body.name } : {}),
         ...(req.body.handle !== undefined ? { handle: req.body.handle.toLowerCase() } : {}),
@@ -356,7 +357,7 @@ router.post('/friends/:userId',
       throw BadRequest('You can\'t create a friendship with yourself. I understand if you\'re friends with yourself in real life, though...');
     }
 
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async transaction => {
       await Friendship.destroy({
         where: {
           userId: res.locals.session.userId,
@@ -379,7 +380,7 @@ router.post('/friends/:userId',
 router.delete('/friends/:userId',
   MiddlewareService.validateSession(['user']),
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async transaction => {
       await Friendship.destroy({
         where: {
           userId: res.locals.session.userId,
@@ -502,7 +503,7 @@ router.post(
   '/login',
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const token = await SQ.transaction(async (transaction) => {
+    const token = await sequelize.transaction(async (transaction) => {
       const user = await User.login(req.body.email, req.body.password, transaction);
 
       // Update lastLogin
@@ -542,7 +543,7 @@ router.post(
 
     let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
-    const token = await SQ.transaction(async transaction => {
+    const token = await sequelize.transaction(async transaction => {
       if (!UtilService.validateEmail(sanitizedEmail)) {
         let e = new Error('Email is not valid!');
         e.status = 412;
@@ -639,7 +640,7 @@ router.put(
   MiddlewareService.validateSession(['user']),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const updatedUser = await SQ.transaction(async (transaction) => {
+    const updatedUser = await sequelize.transaction(async (transaction) => {
       const updates = {};
 
       if (req.body.password) {
@@ -750,7 +751,7 @@ router.post(
       throw PreconditionFailed('fcmToken required');
     }
 
-    const token = await SQ.transaction(async (transaction) => {
+    const token = await sequelize.transaction(async (transaction) => {
       await FCMToken.destroy({
         where: {
           token: req.body.fcmToken,
@@ -818,7 +819,7 @@ router.delete(
   wrapRequestWithErrorHandler(async (req, res) => {
     const userId = res.locals.session.userId;
 
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       await Recipe.destroy({
         where: {
           userId,
@@ -840,4 +841,5 @@ router.delete(
     res.status(200).send('ok');
   }));
 
-module.exports = router;
+export default router;
+

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastController, AlertController, NavController, ModalController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 
-import { IS_SELFHOST } from '@recipesage/frontend/environments/environment';
+import { IS_SELFHOST } from '@recipesage/frontend/src/environments/environment';
 
 import { UserService } from '~/services/user.service';
 import { LoadingService } from '~/services/loading.service';

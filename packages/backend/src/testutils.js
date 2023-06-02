@@ -1,17 +1,17 @@
-const {
-  expect
-} = require('chai');
+import { expect } from 'chai';
 
-const { v4: uuid } = require('uuid');
+import { v4 as uuid } from 'uuid';
 
-const ModelNames = require('./models').modelNames;
-const User = require('./models').User;
-const Session = require('./models').Session;
-const Recipe = require('./models').Recipe;
-const Label = require('./models').Label;
-const Message = require('./models').Message;
+import {
+  modelNames,
+  User,
+  Session,
+  Recipe,
+  Label,
+  Message
+} from './models/index.js';
 
-const { exec } = require('child_process');
+import { exec } from 'child_process';
 
 let migrate = async (down) => {
   await new Promise((resolve, reject) => {
@@ -37,8 +37,8 @@ let migrate = async (down) => {
   });
 };
 
-module.exports.syncDB = async () => {
-  await Promise.all(ModelNames.map(async modelName => {
+export const syncDB = async () => {
+  await Promise.all(modelNames.map(async modelName => {
     await require('./models')[modelName].destroy({
       truncate: true,
       cascade: true,
@@ -47,17 +47,17 @@ module.exports.syncDB = async () => {
   }));
 };
 
-module.exports.setup = async () => {
+export const setup = async () => {
   await migrate();
   return require('./bin/www.js');
 };
 
-module.exports.cleanup = async (server) => {
+export const cleanup = async (server) => {
   await migrate(true);
   await new Promise(r => server.close(() => { r(); }));
 };
 
-function randomString(len) {
+export function randomString(len) {
   let chars = 'abcdefghijklmnopqrstuvwxyz';
 
   let str = [];
@@ -65,14 +65,12 @@ function randomString(len) {
 
   return str.join('');
 }
-module.exports.randomString = randomString;
 
-function randomEmail() {
+export function randomEmail() {
   return `${randomString(20)}@gmail.com`;
 }
-module.exports.randomEmail = randomEmail;
 
-module.exports.createUser = () => {
+export const createUser = () => {
   return User.create({
     name: `${randomString(10)} ${randomString(10)}`,
     email: randomEmail(),
@@ -82,7 +80,7 @@ module.exports.createUser = () => {
   });
 };
 
-module.exports.createSession = userId => {
+export const createSession = userId => {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
@@ -95,7 +93,7 @@ module.exports.createSession = userId => {
   });
 };
 
-module.exports.createRecipe = (userId, folder, fromUserId) => {
+export const createRecipe = (userId, folder, fromUserId) => {
   return Recipe.create({
     userId,
     fromUserId: fromUserId,
@@ -113,7 +111,7 @@ module.exports.createRecipe = (userId, folder, fromUserId) => {
   });
 };
 
-module.exports.createLabel = userId => {
+export const createLabel = userId => {
   return Label.findOrCreate({
     where: {
       userId: userId,
@@ -124,13 +122,13 @@ module.exports.createLabel = userId => {
   });
 };
 
-module.exports.associateLabel = (labelId, recipeId) => {
+export const associateLabel = (labelId, recipeId) => {
   return Label.findByPk(labelId).then(label => {
     return label.addRecipe(recipeId);
   });
 };
 
-module.exports.createMessage = (fromUserId, toUserId, recipeId, originalRecipeId) => {
+export const createMessage = (fromUserId, toUserId, recipeId, originalRecipeId) => {
   return Message.create({
     fromUserId,
     toUserId,
@@ -141,7 +139,7 @@ module.exports.createMessage = (fromUserId, toUserId, recipeId, originalRecipeId
 };
 
 // Validates that fields match but we are not sending any additional private data
-module.exports.secureUserMatch = (userHash, user) => {
+export const secureUserMatch = (userHash, user) => {
   expect(userHash.id).to.equal(user.id);
   expect(userHash.name).to.equal(user.name);
   expect(userHash.email).to.equal(user.email);
@@ -150,7 +148,7 @@ module.exports.secureUserMatch = (userHash, user) => {
 };
 
 // Validates that fields match but we are not sending any additional private data
-module.exports.secureRecipeMatch = (recipeHash, recipe) => {
+export const secureRecipeMatch = (recipeHash, recipe) => {
   expect(recipeHash.id).to.equal(recipe.id);
   expect(recipeHash.title).to.equal(recipe.title);
 
@@ -160,6 +158,6 @@ module.exports.secureRecipeMatch = (recipeHash, recipe) => {
   expect(Object.keys(recipeHash).length).to.equal(allowedFieldCount);
 };
 
-module.exports.randomUuid = () => {
+export const randomUuid = () => {
   return uuid();
 };

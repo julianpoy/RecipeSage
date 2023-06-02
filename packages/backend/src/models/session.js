@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const SessionInit = (sequelize, DataTypes) => {
   const Session = sequelize.define('Session', {
     id: {
       type: DataTypes.UUID,

@@ -1,4 +1,4 @@
-import { Classes, Class, Core, System, Plurality } from 'unitz-ts';
+import { uz, Classes, Class, Core, System, Plurality } from 'unitz-ts';
 
 Classes.addDefaults();
 
@@ -31,4 +31,6 @@ Core.getGroup('tablespoon').addUnits({
 });
 
 export const unitNames: string[] = [].concat.apply([], Object.keys(Core.classMap).map(className => Object.keys(Core.classMap[className].groupMap)));
+
+export const parseUnit = uz;
 

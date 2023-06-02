@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const UserProfileImageInit = (sequelize, DataTypes) => {
   const User_Profile_Image = sequelize.define('User_Profile_Image', {
     id: {
       type: DataTypes.UUID,

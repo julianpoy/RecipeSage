@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const ShoppingListCollaboratorInit = (sequelize, DataTypes) => {
   const ShoppingListCollaborator = sequelize.define('ShoppingList_Collaborator', {
     id: {
       type: DataTypes.UUID,

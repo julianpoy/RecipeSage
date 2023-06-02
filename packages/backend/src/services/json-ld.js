@@ -1,6 +1,6 @@
-const SharedUtils = require('@recipesage/util');
+import * as SharedUtils from '@recipesage/util';
 
-const recipeToJSONLD = (recipe) => ({
+export const recipeToJSONLD = (recipe) => ({
   '@context': 'http://schema.org',
   '@type': 'Recipe',
   datePublished: (new Date(recipe.createdAt)).toISOString(),
@@ -190,7 +190,7 @@ const getAuthorNotesComment = jsonLD => {
   if (comment) return comment.text;
 };
 
-const jsonLDToRecipe = (jsonLD) => ({
+export const jsonLDToRecipe = (jsonLD) => ({
   title: getTitleFromSchema(jsonLD),
   description: getDescriptionFromSchema(jsonLD),
   yield: getYieldFromSchema(jsonLD),
@@ -206,7 +206,3 @@ const jsonLDToRecipe = (jsonLD) => ({
   images: getImageSRCsFromSchema(jsonLD),
 });
 
-module.exports = {
-  recipeToJSONLD,
-  jsonLDToRecipe,
-};

@@ -1,30 +1,32 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const multer = require('multer');
-const fs = require('fs-extra');
-const extract = require('extract-zip');
-const { spawn } = require('child_process');
-const performance = require('perf_hooks').performance;
-const semver = require('semver');
-const path = require('path');
-const fetch = require('node-fetch');
-const xmljs = require('xml-js');
+import * as cors from 'cors';
+import * as multer from 'multer';
+import fs from 'fs-extra';
+import extract from 'extract-zip';
+import { spawn } from 'child_process';
+import { performance } from 'perf_hooks';
+import semver from 'semver';
+import * as path from 'path';
+import fetch from 'node-fetch';
+import xmljs from 'xml-js';
 
 // DB
-const SQ = require('../models').sequelize;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
-const Recipe_Label = require('../models').Recipe_Label;
-const Image = require('../models').Image;
-const Recipe_Image = require('../models').Recipe_Image;
+import {
+  sequelize,
+  Recipe,
+  Label,
+  Recipe_Label,
+  Image,
+  Recipe_Image
+} from '../models/index.js';
 
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const { writeImageURL, writeImageBuffer } = require('../services/storage/image');
-const { ObjectTypes } = require('../services/storage/shared');
-const SubscriptionsService = require('../services/subscriptions');
-const jobTrackerService = require('../services/job-tracker');
+import { validateSession, validateUser } from '../services/middleware.js';
+import * as UtilService from '../services/util.js';
+import { writeImageURL, writeImageBuffer } from '../services/storage/image.ts';
+import { ObjectTypes } from '../services/storage/shared.ts';
+import SubscriptionsService from '../services/subscriptions.js';
+import jobTrackerService from '../services/job-tracker.js';
 
 router.get('/', function(req, res) {
   res.render('index', { version: process.env.VERSION });
@@ -48,7 +50,7 @@ router.get('/versioncheck', (req, res) => {
 router.get(
   '/scrape/pepperplate',
   cors(),
-  MiddlewareService.validateSession(['user']),
+  validateSession(['user']),
   async (req, res, next) => {
 
     const XML_CHAR_MAP = {
@@ -154,7 +156,7 @@ router.get(
         return [item];
       };
 
-      await SQ.transaction(async transaction => {
+      await sequelize.transaction(async transaction => {
         const savedRecipes = await Recipe.bulkCreate(recipes.map(pepperRecipe => {
           const ingredientGroups = objToArr((pepperRecipe.Ingredients || {}).IngredientSyncGroup);
 
@@ -297,8 +299,8 @@ router.get(
 router.post(
   '/import/livingcookbook',
   cors(),
-  MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
+  validateSession(['user']),
+  validateUser,
   multer({
     dest: '/tmp/chefbook-lcb-import/',
   }).single('lcbdb'),
@@ -358,8 +360,8 @@ router.post(
 router.post(
   '/import/fdxz',
   cors(),
-  MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
+  validateSession(['user']),
+  validateUser,
   multer({
     dest: '/tmp/chefbook-fdxz-import/',
   }).single('fdxzdb'),
@@ -414,8 +416,8 @@ router.post(
 router.post(
   '/import/paprika',
   cors(),
-  MiddlewareService.validateSession(['user']),
-  MiddlewareService.validateUser,
+  validateSession(['user']),
+  validateUser,
   multer({
     dest: '/tmp/paprika-import/',
   }).single('paprikadb'),
@@ -442,7 +444,7 @@ router.post(
 
       let labelMap = {};
       let pendingRecipes = [];
-      return SQ.transaction(t => {
+      return sequelize.transaction(t => {
         return fs.readdir(extractPath).then(fileNames => {
           return fileNames.reduce((acc, fileName) => {
             return acc.then(() => {
@@ -554,4 +556,5 @@ router.get('/embed/recipe/:recipeId', (req, res) => {
   res.redirect(302, `/api/print/${req.params.recipeId}${req._parsedUrl.search}`);
 });
 
-module.exports = router;
+export default router;
+

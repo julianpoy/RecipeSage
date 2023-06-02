@@ -1,3 +1,13 @@
+if (
+  !process.env.POSTGRES_USER ||
+  !process.env.POSTGRES_PASSWORD ||
+  !process.env.POSTGRES_DB ||
+  !process.env.POSTGRES_HOST ||
+  !process.env.POSTGRES_PORT
+) {
+  throw new Error('Must provide POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_HOST, POSTGRES_PORT');
+}
+
 const config = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
@@ -15,7 +25,7 @@ const config = {
   logging: process.env.POSTGRES_LOGGING == 'true' && console.log
 };
 
-module.exports = {
+export default {
   development: config,
   selfhost: config,
   test: config,

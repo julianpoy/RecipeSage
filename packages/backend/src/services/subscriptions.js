@@ -1,17 +1,18 @@
-const moment = require('moment');
+import moment from 'moment';
 
 // DB
-const Op = require('sequelize').Op;
-const UserSubscription = require('../models').UserSubscription;
+import { Op } from 'sequelize';
+import {
+  UserSubscription
+} from '../models/index.js';
 
 const CAPABILITY_GRACE_PERIOD = 7;
 
-const CAPABILITIES = {
+export const CAPABILITIES = {
   HIGH_RES_IMAGES: 'highResImages',
   MULTIPLE_IMAGES: 'multipleImages',
   EXPANDABLE_PREVIEWS: 'expandablePreviews'
 };
-exports.CAPABILITIES = CAPABILITIES;
 
 const SUBSCRIPTION_MODELS = {
   'pyo-monthly': {
@@ -43,13 +44,13 @@ const SUBSCRIPTION_MODELS = {
   }
 };
 
-exports.modelsForCapability = capability => {
+export const modelsForCapability = capability => {
   return Object.keys(SUBSCRIPTION_MODELS)
     .map(modelName => SUBSCRIPTION_MODELS[modelName])
     .filter(model => model.capabilities.indexOf(capability) > -1);
 };
 
-exports.subscriptionsForUser = async (userId, includeExpired) => {
+export const subscriptionsForUser = async (userId, includeExpired) => {
   // Allow users to continue to access expired features for grace period
   const mustBeValidUntil = includeExpired ? moment(new Date('1980')) : moment().subtract(CAPABILITY_GRACE_PERIOD, 'days');
 
@@ -67,15 +68,15 @@ exports.subscriptionsForUser = async (userId, includeExpired) => {
   });
 };
 
-exports.capabilitiesForSubscription = subscriptionName => {
+export const capabilitiesForSubscription = subscriptionName => {
   return SUBSCRIPTION_MODELS[subscriptionName].capabilities;
 };
 
-exports.capabilitiesForUser = async userId => {
-  const activeSubscriptions = await exports.subscriptionsForUser(userId);
+export const capabilitiesForUser = async userId => {
+  const activeSubscriptions = await subscriptionsForUser(userId);
 
   return activeSubscriptions.reduce((acc, activeSubscription) => {
-    const capabilities = exports.capabilitiesForSubscription(activeSubscription.name);
+    const capabilities = capabilitiesForSubscription(activeSubscription.name);
     return [
       ...acc,
       ...capabilities
@@ -83,12 +84,12 @@ exports.capabilitiesForUser = async userId => {
   }, []);
 };
 
-exports.userHasCapability = async (userId, capability) => {
-  const capabilities = await exports.capabilitiesForUser(userId);
+export const userHasCapability = async (userId, capability) => {
+  const capabilities = await capabilitiesForUser(userId);
   return capabilities.indexOf(capability) > -1;
 };
 
-exports.extend = async (userId, subscriptionName, transaction) => {
+export const extend = async (userId, subscriptionName, transaction) => {
   const renewalLength = SUBSCRIPTION_MODELS[subscriptionName].expiresIn;
 
   const existingSubscription = await UserSubscription.findOne({

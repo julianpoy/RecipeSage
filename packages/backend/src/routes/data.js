@@ -1,23 +1,23 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const pLimit = require('p-limit');
-const xmljs = require('xml-js');
-const multer = require('multer');
-const fs = require('fs-extra');
-const extract = require('extract-zip');
-const path = require('path');
+import pLimit from 'p-limit';
+import xmljs from 'xml-js';
+import * as multer from 'multer';
+import fs from 'fs-extra';
+import extract from 'extract-zip';
+import * as path from 'path';
 
-const MiddlewareService = require('../services/middleware');
-const SubscriptionsService = require('../services/subscriptions');
-const UtilService = require('../services/util');
-const { writeImageFile, writeImageURL, writeImageBuffer } = require('../services/storage/image');
-const { ObjectTypes } = require('../services/storage/shared');
-const { exportToPDF } = require('../services/data-export/pdf');
-const JSONLDService = require('../services/json-ld');
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const {fetchURL} = require('../services/fetch');
+import * as MiddlewareService from '../services/middleware.js';
+import SubscriptionsService from '../services/subscriptions.js';
+import UtilService from '../services/util.js';
+import { writeImageFile, writeImageURL, writeImageBuffer } from '../services/storage/image';
+import { ObjectTypes } from '../services/storage/shared.ts';
+import { exportToPDF } from '../services/data-export/pdf';
+import JSONLDService from '../services/json-ld.js';
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { fetchURL } from '../services/fetch';
 
-const {
+import {
   Recipe,
   User,
   Label,
@@ -25,7 +25,7 @@ const {
   Image,
   Recipe_Image,
   sequelize,
-} = require('../models');
+} from '../models/index.js';
 
 const getRecipeDataForExport = async userId => {
   const results = await Recipe.findAll({
@@ -438,5 +438,6 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;
+
 

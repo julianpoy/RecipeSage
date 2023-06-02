@@ -1,3 +1,7 @@
+import Fraction from 'fraction.js';
+import fractionjs from 'fraction.js';
+import { unitNames } from './units';
+
 const fractionMatchers = { // Regex & replacement value by charcode
   189: [/ ?\u00BD/g, ' 1/2'], // ½  \u00BD;
   8531: [/ ?\u2153/g, ' 1/3'], // ⅓  \u2153;
@@ -37,7 +41,7 @@ const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
-const quantityRegexp = new RegExp(`(${unitUtils.unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)?( |$)`);
+const quantityRegexp = new RegExp(`(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)?( |$)`);
 
 const measurementQuantityRegExp = new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`); // Should always be used with 'i' flag
 
@@ -136,15 +140,16 @@ export const parseIngredients = (ingredients: string, scale: number, boldify?: b
 
           for (var j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
-            var scaledMeasurement = fractionjs(measurementParts[j].trim()).mul(scale);
+            const frac = new fractionjs(measurementParts[j].trim()).mul(scale);
+            let scaledMeasurement = frac.toString();
 
             // Preserve original fraction format if entered
             if (measurementParts[j].indexOf('/') > -1) {
-              scaledMeasurement = scaledMeasurement.toFraction(true);
+              scaledMeasurement = frac.toFraction(true);
             }
 
             if (boldify) measurementParts[j] = '<b class="ingredientMeasurement">' + scaledMeasurement + '</b>';
-            else measurementParts[j] = scaledMeasurement;
+            else measurementParts[j] = scaledMeasurement.toString();
           }
 
           let updatedMeasurement: string;

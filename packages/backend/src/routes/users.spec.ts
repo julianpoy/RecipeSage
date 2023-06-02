@@ -13,7 +13,7 @@ import {
 } from '../testutils';
 
 // DB
-import * as Models from '../models';
+import Models from '../models';
 const { User, Session } = Models;
 
 describe('users', () => {

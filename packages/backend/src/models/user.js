@@ -1,8 +1,6 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-'use strict';
-
-module.exports = (sequelize, DataTypes) => {
+export const UserInit = (sequelize, DataTypes) => {
   let currentPasswordVersion = 2;
 
   const User = sequelize.define('User', {

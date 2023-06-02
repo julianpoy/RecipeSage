@@ -1,7 +1,6 @@
 import { ShoppingListItem } from "@prisma/client";
 
-// Sort must be one of 'createdAt', '-createdAt', '-title'
-const itemSort = (a, b, sortBy) => {
+const itemSort = (a, b, sortBy: 'createdAt' | '-createdAt' | '-title') => {
   switch (sortBy) {
     case 'createdAt':
       const dateComp = (new Date(a.createdAt).getTime()) - (new Date(b.createdAt).getTime());
@@ -25,14 +24,16 @@ const itemSort = (a, b, sortBy) => {
   }
 };
 
-// TODO: Implement item type instead of any
-const groupAndSort = (items: any[], keyName: string, sortBy: string) => {
+/**
+ * Will group all items by by similar keyName and sort
+ */
+const groupAndSort = <T>(items: T[], keyName: keyof T, sortBy: 'createdAt' | '-createdAt' | '-title'): { [key: string]: T[] } => {
   const itemsGroupedByKey = items.reduce((acc, item) => {
     const key = item[keyName] as string;
     acc[key] = acc[key] || [];
     acc[key].push(item);
     return acc;
-  }, {} as);
+  }, {} as { [key: string]: T[] });
 
   const entries = Object.entries(itemsGroupedByKey);
 
@@ -41,35 +42,44 @@ const groupAndSort = (items: any[], keyName: string, sortBy: string) => {
       return itemSort(a, b, sortBy);
     });
     return acc;
-  }, {});
+  }, {} as { [key: string]: T[] });
 
   return groupedAndSorted;
+}
+
+type GroupableShoppingListItem = ShoppingListItem & {
+  categoryTitle: string,
+  groupTitle: string,
+}
+
+// This whole thing needs to be redone
+interface GroupableShoppingListItemsByGroupAndCategory {
+  [key: string]: {
+    title: string, items: ShoppingListItem[]
+  }[]
 }
 
 // items must be an array of objects with the properties groupTitle, categoryTitle, createdAt, and title
 // sortBy must be one of 'createdAt', '-createdAt', '-title'
 // Result will be items grouped by group/category/groupcategory
-// TODO: Implement item type instead of any
-export const getShoppingListItemGroupings = (items: any, sortBy: string): {
-  items: any[],
+export const getShoppingListItemGroupings = (items: GroupableShoppingListItem[], sortBy: 'createdAt' | '-createdAt' | '-title'): {
+  items: GroupableShoppingListItem[],
   groupTitles: string[],
   categoryTitles: string[],
-  itemsByGroupTitle: any,
-  itemsByCategoryTitle: any,
-  groupsByCategoryTitle: any,
+  itemsByGroupTitle: { [key: string]: GroupableShoppingListItem[] },
+  itemsByCategoryTitle: { [key: string]: GroupableShoppingListItem[] },
+  groupsByCategoryTitle: GroupableShoppingListItemsByGroupAndCategory,
 } => {
   const sortedItems = items.sort((a, b) => {
     return itemSort(a, b, sortBy);
   });
 
-  // TODO: Implement item type instead of Set<any>
-  const groupTitles = Array.from(new Set<any>(items.map(item => item.groupTitle))).sort((a, b) => {
+  const groupTitles = Array.from(new Set<string>(items.map(item => item.groupTitle))).sort((a, b) => {
     // Sort groups by title (always)
     return a.localeCompare(b);
   });
 
-  // TODO: Implement item type instead of Set<any>
-  const categoryTitles = Array.from(new Set<any>(items.map(item => item.categoryTitle))).sort((a, b) => {
+  const categoryTitles = Array.from(new Set<string>(items.map(item => item.categoryTitle))).sort((a, b) => {
     // Sort categories by title (always)
     return a.localeCompare(b);
   });
@@ -90,7 +100,7 @@ export const getShoppingListItemGroupings = (items: any, sortBy: string): {
     }
     grouping.items.push(item);
     return acc;
-  }, {});
+  }, {} as GroupableShoppingListItemsByGroupAndCategory);
 
   return {
     items: sortedItems,
@@ -101,3 +111,4 @@ export const getShoppingListItemGroupings = (items: any, sortBy: string): {
     groupsByCategoryTitle,
   }
 };
+

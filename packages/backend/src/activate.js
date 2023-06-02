@@ -1,6 +1,8 @@
-const User = require('./models').User;
+import {
+  User
+} from './models/index.js';
 
-const subscriptionService = require('./services/subscriptions');
+import subscriptionService from './services/subscriptions.js';
 
 const email = process.argv[2];
 const subName = process.argv[3];
@@ -32,3 +34,4 @@ const run = async () => {
 run()
   .then(() => process.exit(0))
   .catch(err => console.error(err));
+

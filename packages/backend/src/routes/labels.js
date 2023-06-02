@@ -1,23 +1,25 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
-const cors = require('cors');
-const Joi = require('joi');
+import * as cors from 'cors';
+import * as Joi from 'joi';
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
-const Recipe_Label = require('../models').Recipe_Label;
+import { Op } from 'sequelize';
+import {
+  sequelize,
+  Recipe,
+  Label,
+  Recipe_Label
+} from '../models/index.js';
 
 // Services
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const {joiValidator} = require('../middleware/joiValidator');
+import * as MiddlewareService from '../services/middleware.js';
+import UtilService from '../services/util.js';
+import { joiValidator } from '../middleware/joiValidator.js';
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest, NotFound, Conflict, PreconditionFailed } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
+import { BadRequest, NotFound, Conflict, PreconditionFailed } from '../utils/errors.js';
 
 //Add a label to a recipeId or recipeIds
 router.post(
@@ -38,7 +40,7 @@ router.post(
 
     const recipeIds = req.body.recipeId ? [req.body.recipeId] : req.body.recipeIds;
 
-    const label = await SQ.transaction(async (transaction) => {
+    const label = await sequelize.transaction(async (transaction) => {
       const [label] = await Label.findOrCreate({
         where: {
           userId: res.locals.session.userId,
@@ -83,7 +85,7 @@ router.get(
         as: 'recipe_labels',
         attributes: [],
       }],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [sequelize.fn('COUNT', sequelize.col('recipe_labels.id')), 'recipeCount']],
       group: ['Label.id'],
       order: [
         ['title', 'ASC']
@@ -110,7 +112,7 @@ router.get(
         as: 'recipe_labels',
         attributes: [],
       }],
-      attributes: ['id', 'title', 'createdAt', 'updatedAt', [SQ.fn('COUNT', SQ.col('recipe_labels.id')), 'recipeCount']],
+      attributes: ['id', 'title', 'createdAt', 'updatedAt', [sequelize.fn('COUNT', sequelize.col('recipe_labels.id')), 'recipeCount']],
       group: ['Label.id']
     });
 
@@ -132,7 +134,7 @@ router.post(
       throw BadRequest('Source label id cannot match destination label id');
     }
 
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async transaction => {
       const sourceLabel = await Label.findOne({
         where: {
           id: req.query.sourceLabelId,
@@ -204,7 +206,7 @@ router.delete(
       throw PreconditionFailed('RecipeId and LabelId are required!');
     }
 
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async transaction => {
       const label = await Label.findOne({
         where: {
           id: req.query.labelId,
@@ -249,7 +251,7 @@ router.put(
       throw BadRequest('Label title must be longer than 0.');
     }
 
-    const label = await SQ.transaction(async (transaction) => {
+    const label = await sequelize.transaction(async (transaction) => {
       const label = await Label.findOne({
         where: {
           id: req.params.id,
@@ -304,4 +306,5 @@ router.post(
     res.sendStatus(200);
   }));
 
-module.exports = router;
+export default router;
+

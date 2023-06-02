@@ -1,7 +1,7 @@
-const Sentry = require('@sentry/node');
+import * as Sentry from '@sentry/node';
 
 // Importing @sentry/tracing patches the global hub for tracing to work.
-require('@sentry/tracing');
+import '@sentry/tracing';
 
 const RS_VERSION = process.env.VERSION || 'VERSION-missing';
 
@@ -13,3 +13,4 @@ Sentry.init({
   environment: process.env.NODE_ENV,
   release: RS_VERSION
 });
+

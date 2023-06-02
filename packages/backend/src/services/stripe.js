@@ -1,9 +1,12 @@
-const stripe = require('stripe')(process.env.STRIPE_SK);
+import stripeInit from 'stripe';
+const stripe = stripeInit(process.env.STRIPE_SK);
 
 // DB
-const User = require('../models').User;
+import {
+  User
+} from '../models/index.js';
 
-exports.createOrRetrieveCustomerId = async userId => {
+export const createOrRetrieveCustomerId = async userId => {
   const user = await User.findByPk(userId);
 
   if (user.stripeCustomerId) return user.stripeCustomerId;
@@ -20,7 +23,7 @@ exports.createOrRetrieveCustomerId = async userId => {
   return stripeCustomer.id;
 };
 
-exports.findCheckoutUser = async (customerId, customerEmail) => {
+export const findCheckoutUser = async (customerId, customerEmail) => {
   let user = await User.findOne({
     where: {
       stripeCustomerId: customerId
@@ -38,7 +41,7 @@ exports.findCheckoutUser = async (customerId, customerEmail) => {
   return user;
 };
 
-exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, successUrl, cancelUrl }) => {
+export const createPYOSession = async (isRecurring, { amount, stripeCustomerId, successUrl, cancelUrl }) => {
   let checkoutData;
 
   if (isRecurring) {
@@ -100,6 +103,6 @@ exports.createPYOSession = async (isRecurring, { amount, stripeCustomerId, succe
   });
 };
 
-exports.validateEvent = (rawRequestBody, stripeSignature) => {
+export const validateEvent = (rawRequestBody, stripeSignature) => {
   return stripe.webhooks.constructEvent(rawRequestBody, stripeSignature, process.env.STRIPE_WEBHOOK_SECRET);
 };

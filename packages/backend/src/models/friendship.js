@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const FriendshipInit = (sequelize, DataTypes) => {
   const Friendship = sequelize.define('Friendship', {
     id: {
       type: DataTypes.UUID,
@@ -48,3 +47,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return Friendship;
 };
+

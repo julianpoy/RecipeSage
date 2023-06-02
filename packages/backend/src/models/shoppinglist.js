@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const ShoppingListInit = (sequelize, DataTypes) => {
   const ShoppingList = sequelize.define('ShoppingList', {
     id: {
       type: DataTypes.UUID,

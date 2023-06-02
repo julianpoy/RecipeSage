@@ -1,7 +1,9 @@
-const SessionService = require('../services/sessions');
-const User = require('../models').User;
+import SessionService from '../services/sessions.js';
+import {
+  User
+} from '../models/index.js';
 
-exports.validateSession = function(types, optional) {
+export const validateSession = function(types, optional) {
   return function(req, res, next) {
     if (!req.query.token) {
       // Permit no token if optional
@@ -21,7 +23,7 @@ exports.validateSession = function(types, optional) {
 };
 
 // Requires validateSession
-exports.validateUser = function(req, res, next) {
+export const validateUser = function(req, res, next) {
   User.findOne({
     where: {
       id: res.locals.session.userId
@@ -38,3 +40,4 @@ exports.validateUser = function(req, res, next) {
     res.status(500).json(err);
   });
 };
+

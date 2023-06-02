@@ -1,8 +1,8 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
 
-const MiddlewareService = require('../services/middleware');
-const GripService = require('../services/grip');
+import * as MiddlewareService from '../services/middleware.js';
+import GripService from '../services/grip.js';
 
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 
@@ -50,4 +50,5 @@ router.all(
 // Add the post-handler middleware to the back of the stack
 router.use(GripService.expressGrip.postHandlerGripMiddleware);
 
-module.exports = router;
+export default router;
+

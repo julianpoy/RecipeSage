@@ -1,9 +1,11 @@
-const UtilService = require('./util');
-const SharedUtils = require('@recipesage/util');
-const Unitz = SharedUtils.unitUtils.Unitz;
+import * as fs from 'fs';
+import * as path from 'path';
 
-const ingredientsList = require('../constants/ingredients.json');
-const itemCategories = require('../constants/itemCategories.json');
+import UtilService from './util';
+import { parseUnit, getTitleForIngredient, getMeasurementsForIngredient } from '@recipesage/util';
+
+const ingredientsList = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../constants/ingredients.json'), 'utf-8'));
+const itemCategories = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../constants/itemCategories.json'), 'utf-8'));
 
 const itemTitles = Object.keys(itemCategories).sort((a, b) => b.length - a.length);
 
@@ -19,7 +21,7 @@ const formattedCategoryTitles = {
   'deli': 'Deli'
 };
 
-exports.getCategoryTitle = itemTitle => {
+export const getCategoryTitle = itemTitle => {
   itemTitle = itemTitle.toLowerCase();
   if (itemTitle.includes('canned') || itemTitle.includes(' can ') || itemTitle.includes(' cans ')) return 'Canned';
   if (itemTitle.includes('frozen')) return 'Frozen';
@@ -36,7 +38,7 @@ exports.getCategoryTitle = itemTitle => {
   return formattedCategoryTitles[category] || UtilService.capitalizeEachWord(category);
 };
 
-exports.groupShoppingListItems = items => {
+export const groupShoppingListItems = items => {
   // Ingredient grouping into map by ingredientName
   const itemGrouper = {};
   for (let i = 0; i < items.length; i++) {
@@ -54,7 +56,7 @@ exports.groupShoppingListItems = items => {
     });
 
     if (!foundIngredientGroup) {
-      const strippedIngredientTitle = SharedUtils.getTitleForIngredient(itemTitle);
+      const strippedIngredientTitle = getTitleForIngredient(itemTitle);
       itemGrouper[strippedIngredientTitle] = itemGrouper[strippedIngredientTitle] || [];
       itemGrouper[strippedIngredientTitle].push(item);
     }
@@ -63,12 +65,12 @@ exports.groupShoppingListItems = items => {
   // Load map of groups by ingredientName into array of objects
   const result = [];
   for (let [ingredientName, items] of Object.entries(itemGrouper)) {
-    const measurements = items.map(item => SharedUtils.getMeasurementsForIngredient(item.title));
+    const measurements = items.map(item => getMeasurementsForIngredient(item.title));
     let title = ingredientName;
 
     if (!measurements.find(measurementSet => !measurementSet.length)) {
       const flatMeasurements = measurements.reduce((acc, val) => acc.concat(val), []); // Flatten (equiv to .flat)
-      const combinedUz = flatMeasurements.reduce((acc, measurement) => acc ? acc.add(measurement) : Unitz.uz(measurement), null);
+      const combinedUz = flatMeasurements.reduce((acc, measurement) => acc ? acc.add(measurement) : parseUnit(measurement), null);
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
           unitSpacer: ' ',

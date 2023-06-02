@@ -1,5 +1,4 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
+export const FCMTokenInit = (sequelize, DataTypes) => {
   const FCMToken = sequelize.define('FCMToken', {
     id: {
       type: DataTypes.UUID,
@@ -23,3 +22,4 @@ module.exports = (sequelize, DataTypes) => {
   };
   return FCMToken;
 };
+
