@@ -1,6 +1,6 @@
-import {Prisma} from ".prisma/client";
-import { prisma, Friendship, User, ProfileItem } from "@recipesage/prisma";
-import {getFriendships} from "./getFriendships";
+import { Prisma, User, ProfileItem } from ".prisma/client";
+import { prisma } from "@recipesage/prisma";
+import { getFriendships } from "./getFriendships";
 
 export const getRecipesWithConstraints = async (args: {
   tx?: Prisma.TransactionClient,
@@ -10,7 +10,6 @@ export const getRecipesWithConstraints = async (args: {
   orderBy: Prisma.RecipeOrderByWithRelationInput,
   offset: number,
   limit: number,
-  transaction?: any,
   recipeIds?: string[],
   labels?: string[],
   labelIntersection?: boolean,
@@ -24,7 +23,6 @@ export const getRecipesWithConstraints = async (args: {
     orderBy,
     offset,
     limit,
-    transaction,
     recipeIds: filterByRecipeIds,
     labels,
     labelIntersection,

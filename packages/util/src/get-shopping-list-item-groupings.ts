@@ -1,4 +1,4 @@
-import { ShoppingListItem } from "@prisma/client";
+import { ShoppingListItem } from '.prisma/client';
 
 const itemSort = (a, b, sortBy: 'createdAt' | '-createdAt' | '-title') => {
   switch (sortBy) {

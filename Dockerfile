@@ -18,6 +18,9 @@ COPY nx.json nx.json
 COPY packages packages
 COPY scripts scripts
 
+# Prisma must be regenerated since schema is not present during install stage
+RUN npx prisma generate
+
 # Include version build arg within the container env
 ARG VERSION
 ENV VERSION=$VERSION
