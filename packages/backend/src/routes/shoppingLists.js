@@ -16,8 +16,8 @@ import {
 
 // Service
 import * as MiddlewareService from '../services/middleware.js';
-import GripService from '../services/grip.js';
-import ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
+import * as GripService from '../services/grip.js';
+import * as ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
 import { joiValidator } from '../middleware/joiValidator.js';
 
 // Util

@@ -1,5 +1,5 @@
 import './services/sentry-init.js';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 import fs from 'fs-extra';
 import mdb from 'mdb';
@@ -17,7 +17,7 @@ import {
   Image
 } from './models/index.js';
 
-import UtilService from './services/util.js';
+import * as UtilService from './services/util.js';
 import { writeImageFile } from './services/storage/image';
 import { ObjectTypes } from './services/storage/shared.js';
 

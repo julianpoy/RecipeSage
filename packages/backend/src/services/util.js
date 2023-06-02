@@ -3,8 +3,8 @@ import * as path from 'path';
 import zlib from 'zlib';
 
 // Service
-import FirebaseService from './firebase.js';
-import GripService from './grip.js';
+import * as FirebaseService from './firebase.js';
+import * as GripService from './grip.js';
 
 
 

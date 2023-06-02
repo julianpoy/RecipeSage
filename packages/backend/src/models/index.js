@@ -45,9 +45,9 @@ db.modelNames.push(MealPlan.name);
 db[MealPlan.name] = MealPlan;
 
 import { MealPlanCollaboratorInit } from './mealPlan_collaborator.js';
-export const MealPlanCollaborator = MealPlanCollaboratorInit(sequelize, DataTypes);
-db.modelNames.push(MealPlanCollaborator.name);
-db[MealPlanCollaborator.name] = MealPlanCollaborator;
+export const MealPlan_Collaborator = MealPlanCollaboratorInit(sequelize, DataTypes);
+db.modelNames.push(MealPlan_Collaborator.name);
+db[MealPlan_Collaborator.name] = MealPlan_Collaborator;
 
 import { MealPlanItemInit } from './mealplanitem.js';
 export const MealPlanItem = MealPlanItemInit(sequelize, DataTypes);
@@ -70,14 +70,14 @@ db.modelNames.push(Recipe.name);
 db[Recipe.name] = Recipe;
 
 import { RecipeImageInit } from './recipe_image.js';
-export const RecipeImage = RecipeImageInit(sequelize, DataTypes);
-db.modelNames.push(RecipeImage.name);
-db[RecipeImage.name] = RecipeImage;
+export const Recipe_Image = RecipeImageInit(sequelize, DataTypes);
+db.modelNames.push(Recipe_Image.name);
+db[Recipe_Image.name] = Recipe_Image;
 
 import { RecipeLabelInit } from './recipe_label.js';
-export const RecipeLabel = RecipeLabelInit(sequelize, DataTypes);
-db.modelNames.push(RecipeLabel.name);
-db[RecipeLabel.name] = RecipeLabel;
+export const Recipe_Label = RecipeLabelInit(sequelize, DataTypes);
+db.modelNames.push(Recipe_Label.name);
+db[Recipe_Label.name] = Recipe_Label;
 
 import { SessionInit } from './session.js';
 export const Session = SessionInit(sequelize, DataTypes);
@@ -90,9 +90,9 @@ db.modelNames.push(ShoppingList.name);
 db[ShoppingList.name] = ShoppingList;
 
 import { ShoppingListCollaboratorInit } from './shoppingList_collaborator.js';
-export const ShoppingListCollaborator = ShoppingListCollaboratorInit(sequelize, DataTypes);
-db.modelNames.push(ShoppingListCollaborator.name);
-db[ShoppingListCollaborator.name] = ShoppingListCollaborator;
+export const ShoppingList_Collaborator = ShoppingListCollaboratorInit(sequelize, DataTypes);
+db.modelNames.push(ShoppingList_Collaborator.name);
+db[ShoppingList_Collaborator.name] = ShoppingList_Collaborator;
 
 import { ShoppingListItemInit } from './shoppinglistitem.js';
 export const ShoppingListItem = ShoppingListItemInit(sequelize, DataTypes);
@@ -110,9 +110,9 @@ db.modelNames.push(User.name);
 db[User.name] = User;
 
 import { UserProfileImageInit } from './user_profile_image.js';
-export const UserProfileImage = UserProfileImageInit(sequelize, DataTypes);
-db.modelNames.push(UserProfileImage.name);
-db[UserProfileImage.name] = UserProfileImage;
+export const User_Profile_Image = UserProfileImageInit(sequelize, DataTypes);
+db.modelNames.push(User_Profile_Image.name);
+db[User_Profile_Image.name] = User_Profile_Image;
 
 import { UserSubscriptionInit } from './userSubscription.js';
 export const UserSubscription = UserSubscriptionInit(sequelize, DataTypes);
@@ -124,24 +124,29 @@ Friendship.associate(db);
 Image.associate(db);
 Label.associate(db);
 MealPlan.associate(db);
-MealPlanCollaborator.associate(db);
+MealPlan_Collaborator.associate(db);
 MealPlanItem.associate(db);
 Message.associate(db);
 ProfileItem.associate(db);
 Recipe.associate(db);
-RecipeImage.associate(db);
-RecipeLabel.associate(db);
+Recipe_Image.associate(db);
+Recipe_Label.associate(db);
 Session.associate(db);
 ShoppingList.associate(db);
-ShoppingListCollaborator.associate(db);
+ShoppingList_Collaborator.associate(db);
 ShoppingListItem.associate(db);
 StripePayment.associate(db);
 User.associate(db);
-UserProfileImage.associate(db);
+User_Profile_Image.associate(db);
 UserSubscription.associate(db);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+export {
+  sequelize,
+  Sequelize
+};
 
 export default db;
 

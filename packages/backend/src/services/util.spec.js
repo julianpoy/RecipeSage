@@ -21,8 +21,8 @@ import {
   findFilesByRegex
 } from '../services/util.js';
 
-import FirebaseService from '../services/firebase.js';
-import GripService from '../services/grip.js';
+import * as FirebaseService from '../services/firebase.js';
+import * as GripService from '../services/grip.js';
 
 describe('utils', () => {
   let server;

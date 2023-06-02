@@ -14,7 +14,7 @@ import {
 
 // Services
 import * as MiddlewareService from '../services/middleware.js';
-import UtilService from '../services/util.js';
+import * as UtilService from '../services/util.js';
 import { joiValidator } from '../middleware/joiValidator.js';
 
 // Util

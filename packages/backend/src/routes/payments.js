@@ -1,6 +1,6 @@
 import * as express from 'express';
 const router = express.Router();
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 // DB
 import {
@@ -10,8 +10,8 @@ import {
 
 // Service
 import * as MiddlewareService from '../services/middleware.js';
-import StripeService from '../services/stripe.js';
-import SubscriptionService from '../services/subscriptions.js';
+import * as StripeService from '../services/stripe.js';
+import * as SubscriptionService from '../services/subscriptions.js';
 
 // Util
 import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';

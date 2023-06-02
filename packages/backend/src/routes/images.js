@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as multer from 'multer';
 const router = express.Router();
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 import * as Joi from 'joi';
 
 // DB
@@ -10,7 +10,7 @@ import { Image } from '../models/index.js';
 // Service
 import * as MiddlewareService from '../services/middleware.js';
 import { writeImageBuffer, writeImageURL } from '../services/storage/image';
-import SubscriptionsService from '../services/subscriptions.js';
+import * as SubscriptionsService from '../services/subscriptions.js';
 import { ObjectTypes } from '../services/storage/shared.ts';
 
 // Util

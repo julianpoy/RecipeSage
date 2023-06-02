@@ -1,5 +1,5 @@
 import { admin } from './firebase-admin';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 // DB
 import {

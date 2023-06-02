@@ -28,6 +28,10 @@
       "~/*": ["packages/frontend/src/app/*"]
     }
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "swc": true,
+    "require": ["tsconfig-paths/register"]
+  }
 }
 

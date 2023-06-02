@@ -1,4 +1,4 @@
-import SessionService from '../services/sessions.js';
+import * as SessionService from '../services/sessions.js';
 import {
   User
 } from '../models/index.js';

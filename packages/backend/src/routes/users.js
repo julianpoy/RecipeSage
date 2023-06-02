@@ -1,8 +1,8 @@
 import * as express from 'express';
 const router = express.Router();
 import * as cors from 'cors';
-import Sentry from '@sentry/node';
-import moment from 'moment';
+import * as Sentry from '@sentry/node';
+import * as moment from 'moment';
 
 // DB
 import { Op } from 'sequelize';
@@ -18,13 +18,13 @@ import {
   Message,
   Friendship,
   ProfileItem
-} from '../models/index.js';
+} from '../models';
 
 // Service
-import SessionService from '../services/sessions.js';
+import * as SessionService from '../services/sessions.js';
 import * as MiddlewareService from '../services/middleware.js';
-import UtilService from '../services/util.js';
-import SubscriptionService from '../services/subscriptions.js';
+import * as UtilService from '../services/util.js';
+import * as SubscriptionService from '../services/subscriptions.js';
 import { sendWelcome } from '../services/email/welcome.ts';
 import { sendPasswordReset } from '../services/email/passwordReset.ts';
 import { getFriendships } from '../utils/getFriendships.js';
@@ -513,6 +513,7 @@ router.post(
       const session = await SessionService.generateSession(user.id, 'user', transaction);
 
       if (process.env.NODE_ENV === 'selfhost' || process.env.NODE_ENV === 'development') {
+        console.log(user.id, transaction);
         const recipes = await Recipe.findAll({
           where: {
             userId: user.id

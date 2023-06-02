@@ -1,5 +1,5 @@
 import './services/sentry-init.js';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 import * as express from 'express';
 import * as path from 'path';

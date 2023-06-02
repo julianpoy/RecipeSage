@@ -18,7 +18,7 @@ import {
 
 // Service
 import * as MiddlewareService from '../services/middleware.js';
-import GripService from '../services/grip.js';
+import * as GripService from '../services/grip.js';
 
 // Util
 import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';

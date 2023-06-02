@@ -77,6 +77,7 @@
     "sqlite3": "^5.1.5",
     "stripe": "^11.9.1",
     "ts-dedent": "^2.2.0",
+    "tsconfig-paths": "^4.2.0",
     "tslib": "^2.5.0",
     "tsx": "^3.12.6",
     "umzug": "^3.2.1",
@@ -144,9 +145,6 @@
     "webpack-cli": "^5.0.1",
     "workbox-cli": "^6.5.4"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "prisma": {
     "schema": "packages/prisma/src/prisma/schema.prisma"
   }

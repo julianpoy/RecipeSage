@@ -15,8 +15,8 @@ import {
 
 // Service
 import * as MiddlewareService from '../services/middleware.js';
-import UtilService from '../services/util.js';
-import ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
+import * as UtilService from '../services/util.js';
+import * as ShoppingListCategorizerService from '../services/shopping-list-categorizer.js';
 
 import * as SharedUtils from '@recipesage/util';
 

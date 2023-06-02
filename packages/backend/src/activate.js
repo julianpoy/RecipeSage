@@ -2,7 +2,7 @@ import {
   User
 } from './models/index.js';
 
-import subscriptionService from './services/subscriptions.js';
+import * as SubscriptionService from './services/subscriptions.js';
 
 const email = process.argv[2];
 const subName = process.argv[3];
@@ -21,7 +21,7 @@ const run = async () => {
 
   if (!user) return console.log('No user found with that email address');
 
-  await subscriptionService.extend(user.id, subName || 'forever');
+  await SubscriptionService.extend(user.id, subName || 'forever');
 
   console.log('\n');
   console.log('Thanks for activating RecipeSage\'s bonus features');

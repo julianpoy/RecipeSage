@@ -2,7 +2,7 @@ import * as express from 'express';
 const router = express.Router();
 
 import * as MiddlewareService from '../services/middleware.js';
-import GripService from '../services/grip.js';
+import * as GripService from '../services/grip.js';
 
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 

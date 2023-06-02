@@ -15,7 +15,7 @@ import {
 
 // Service
 import * as MiddlewareService from '../services/middleware.js';
-import UtilService from '../services/util.js';
+import * as UtilService from '../services/util.js';
 
 // Util
 import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';

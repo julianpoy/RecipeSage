@@ -8,12 +8,12 @@ import extract from 'extract-zip';
 import * as path from 'path';
 
 import * as MiddlewareService from '../services/middleware.js';
-import SubscriptionsService from '../services/subscriptions.js';
-import UtilService from '../services/util.js';
+import * as SubscriptionsService from '../services/subscriptions.js';
+import * as UtilService from '../services/util.js';
 import { writeImageFile, writeImageURL, writeImageBuffer } from '../services/storage/image';
 import { ObjectTypes } from '../services/storage/shared.ts';
 import { exportToPDF } from '../services/data-export/pdf';
-import JSONLDService from '../services/json-ld.js';
+import * as JSONLDService from '../services/json-ld.js';
 import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
 import { fetchURL } from '../services/fetch';
 

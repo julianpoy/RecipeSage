@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import extract from 'extract-zip';
 import { spawn } from 'child_process';
 import { performance } from 'perf_hooks';
-import semver from 'semver';
+import * as semver from 'semver';
 import * as path from 'path';
 import fetch from 'node-fetch';
 import xmljs from 'xml-js';
@@ -25,8 +25,8 @@ import { validateSession, validateUser } from '../services/middleware.js';
 import * as UtilService from '../services/util.js';
 import { writeImageURL, writeImageBuffer } from '../services/storage/image.ts';
 import { ObjectTypes } from '../services/storage/shared.ts';
-import SubscriptionsService from '../services/subscriptions.js';
-import jobTrackerService from '../services/job-tracker.js';
+import * as SubscriptionsService from '../services/subscriptions.js';
+import * as JobTrackerService from '../services/job-tracker.js';
 
 router.get('/', function(req, res) {
   res.render('index', { version: process.env.VERSION });
@@ -325,7 +325,7 @@ router.post(
     const job = {
       complete: false
     };
-    jobTrackerService.addJob(job);
+    JobTrackerService.addJob(job);
 
     let lcbImportJob = spawn('node', ['src/lcbimport.app.js', req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.stderr.on('data', (data) => {
@@ -384,7 +384,7 @@ router.post(
     const job = {
       complete: false
     };
-    jobTrackerService.addJob(job);
+    JobTrackerService.addJob(job);
 
     let lcbImportJob = spawn('node', ['src/fdxzimport.app.js', req.file.path, res.locals.session.userId, ...optionalFlags]);
     lcbImportJob.on('close', (code) => {

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import UtilService from './util';
+import * as UtilService from './util';
 import { parseUnit, getTitleForIngredient, getMeasurementsForIngredient } from '@recipesage/util';
 
 const ingredientsList = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../constants/ingredients.json'), 'utf-8'));
