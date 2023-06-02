@@ -1,182 +1,163 @@
-// import {Prisma} from ".prisma/client";
-// import { prisma } from "./db";
+import {Prisma} from ".prisma/client";
+import { prisma, Friendship, User, ProfileItem } from "@recipesage/prisma";
+import {getFriendships} from "./getFriendships";
 
-// export const getRecipesWithConstraints = async (args: {
-//   userId?: string,
-//   userIds: string[],
-//   folder: string,
-//   sortBy: [string, string],
-//   offset: number,
-//   limit: number,
-//   transaction?: any,
-//   recipeIds?: string[],
-//   labels?: string[],
-//   labelIntersection?: boolean,
-//   ratings?: string[]
-// }) => {
-//   const {
-//     userId: contextUserId,
-//     userIds,
-//     folder,
-//     sortBy,
-//     offset,
-//     limit,
-//     transaction,
-//     recipeIds: filterByRecipeIds,
-//     labels,
-//     labelIntersection,
-//     ratings,
-//   } = args;
+export const getRecipesWithConstraints = async (args: {
+  tx?: Prisma.TransactionClient,
+  userId?: string,
+  userIds: string[],
+  folder: string,
+  orderBy: Prisma.RecipeOrderByWithRelationInput,
+  offset: number,
+  limit: number,
+  transaction?: any,
+  recipeIds?: string[],
+  labels?: string[],
+  labelIntersection?: boolean,
+  ratings?: number[]
+}) => {
+  const {
+    tx = prisma,
+    userId: contextUserId,
+    userIds,
+    folder,
+    orderBy,
+    offset,
+    limit,
+    transaction,
+    recipeIds: filterByRecipeIds,
+    labels,
+    labelIntersection,
+    ratings,
+  } = args;
 
-//   let friends: Prisma.FriendshipsSelect[] = [];
-//   if (contextUserId) {
-//     const friendships = await getFriendships(contextUserId);
-//     friends = friendships.friends.reduce((acc, friend) => (acc[friend.otherUser.id] = friend, acc), {});
-//   }
+  let friends: { [key: string]: User } = {};
+  if (contextUserId) {
+    const friendships = await getFriendships(contextUserId);
+    friends = friendships.friends.reduce((acc, friend) => (acc[friend.id] = friend, acc), {} as typeof friends);
+  }
 
-//   const friendUserIds = userIds.filter((userId) => friends[userId] && userId !== contextUserId);
-//   const nonFriendUserIds = userIds.filter((userId) => !friends[userId] && userId !== contextUserId);
+  const friendUserIds = userIds.filter((userId) => friends[userId] && userId !== contextUserId);
+  const nonFriendUserIds = userIds.filter((userId) => !friends[userId] && userId !== contextUserId);
 
-//   const profileItems = await ProfileItem.findAll({
-//     where: {
-//       [Op.or]: [{
-//         userId: friendUserIds,
-//       }, {
-//         userId: nonFriendUserIds,
-//         visibility: 'public',
-//       }]
-//     }
-//   });
+  const profileItems = await tx.profileItem.findMany({
+    where: {
+      OR: [{
+        userId: {
+          in: friendUserIds,
+        }
+      }, {
+        userId: {
+          in: nonFriendUserIds,
+        },
+        visibility: 'public'
+      }]
+    }
+  });
 
-//   const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
-//     acc[profileItem.userId] ??= [];
-//     acc[profileItem.userId].push(profileItem);
-//     return acc;
-//   }, {});
+  const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
+    acc[profileItem.userId] ??= [];
+    acc[profileItem.userId].push(profileItem);
+    return acc;
+  }, {} as { [key: string]: ProfileItem[] });
 
-//   const queryFilters: any[] = [];
-//   for (const userId of userIds) {
-//     const isContextUser = contextUserId && userId === contextUserId;
-//     const profileItemsForUser = profileItemsByUserId[userId] || [];
+  const queryFilters: Prisma.RecipeWhereInput[] = [];
+  for (const userId of userIds) {
+    const isContextUser = contextUserId && userId === contextUserId;
+    const profileItemsForUser = profileItemsByUserId[userId] || [];
 
-//     const isSharingAll = profileItemsForUser.find((profileItem) => profileItem.type === 'all-recipes');
+    const isSharingAll = profileItemsForUser.find((profileItem) => profileItem.type === 'all-recipes');
 
-//     if (isContextUser || isSharingAll) {
-//       queryFilters.push({
-//         userId,
-//       });
-//     }
+    if (isContextUser || isSharingAll) {
+      queryFilters.push({
+        userId,
+      });
+    }
 
-//     profileItemsForUser
-//       .filter((profileItem) => profileItem.type === 'label')
-//       .map((profileItem) => profileItem.labelId)
-//       .forEach((labelId) => {
-//         queryFilters.push({
-//           userId,
-//           labelId,
-//         });
-//       });
+    profileItemsForUser
+      .filter((profileItem) => profileItem.type === 'label')
+      .map((profileItem) => profileItem.labelId)
+      .filter((labelId): labelId is string => !!labelId)
+      .forEach((labelId) => {
+        queryFilters.push({
+          userId,
+          recipeLabels: {
+            some: {
+              label: {
+                id: labelId
+              }
+            }
+          }
+        });
+      });
 
-//     profileItemsForUser
-//       .filter((profileItem) => profileItem.type === 'recipe')
-//       .map((profileItem) => profileItem.recipeId)
-//       .forEach((recipeId) => {
-//         queryFilters.push({
-//           userId,
-//           recipeId,
-//         });
-//       });
-//   }
+    profileItemsForUser
+      .filter((profileItem) => profileItem.type === 'recipe')
+      .map((profileItem) => profileItem.recipeId)
+      .filter((recipeId): recipeId is string => !!recipeId)
+      .forEach((recipeId) => {
+        queryFilters.push({
+          userId,
+          id: recipeId
+        });
+      });
+  }
 
-//   const sqQueryFilters = queryFilters.map((queryFilter) => {
-//     const filter = {
-//       userId: queryFilter.userId,
-//     } as { [key: string]: string };
+  if (!queryFilters.length) return {
+    data: [],
+    totalCount: 0
+  };
 
-//     if (queryFilter.labelId) filter['$labels.id$'] = queryFilter.labelId;
-//     if (queryFilter.recipeId) filter.id = queryFilter.recipeId;
+  const where = {
+    OR: queryFilters,
+    ...(ratings ? { rating: { in: ratings } } : {}),
+    ...(filterByRecipeIds ? { id: { in: filterByRecipeIds } } : {}),
+    folder
+  } as Prisma.RecipeWhereInput;
 
-//     return filter;
-//   });
+  if (labels && labelIntersection) {
+    where.AND = labels.map(label => ({
+      recipeLabels: {
+        some: {
+          label: {
+            title: label
+          }
+        }
+      }
+    } as Prisma.RecipeWhereInput));
+  }
 
-//   const where = {
-//     [Op.or]: sqQueryFilters,
-//     ...(labels ? { ['$labels.title$']: labels } : {}),
-//     ...(ratings ? { rating: ratings } : {}),
-//     ...(filterByRecipeIds ? { id: filterByRecipeIds } : {}),
-//     folder,
-//   };
+  if (labels && !labelIntersection) {
+    where.recipeLabels = {
+      some: {
+        label: {
+          title: {
+            in: labels
+          }
+        }
+      }
+    }
+  }
 
-//   const having = labels && labelIntersection ? { having: SQ.literal(`COUNT("labels"."id") = ${SQ.escape(labels.length)}`) } : {};
+  const totalCount = await tx.recipe.findMany({
+    where,
+  });
 
-//   const totalCount = await Recipe.count({
-//     where,
-//     include: [{
-//       attributes: [],
-//       model: Label,
-//       as: 'labels',
-//       through: {
-//         attributes: [],
-//       }
-//     }],
-//     ...having,
-//     distinct: true,
-//     transaction,
-//   });
+  const recipes = await tx.recipe.findMany({
+    where,
+    include: {
+      labels: true,
+      images: true,
+      fromUser: true
+    },
+    orderBy,
+    skip: offset,
+    take: limit,
+  });
 
-//   const recipesWithIdsOnly = await Recipe.findAll({
-//     where,
-//     attributes: ['id'],
-//     include: [{
-//       attributes: [],
-//       model: Label,
-//       as: 'labels',
-//       through: {
-//         attributes: [],
-//       }
-//     }],
-//     group: '"Recipe".id',
-//     limit,
-//     offset,
-//     transaction,
-//     subQuery: false,
-//     order: [sortBy],
-//     ...having,
-//     // raw: true, // Perf - do not construct sequelize model
-//   });
-
-//   const recipeIds = recipesWithIdsOnly.map((recipe) => recipe.id);
-
-//   const recipes = await Recipe.findAll({
-//     where: {
-//       id: recipeIds,
-//     },
-//     include: [{
-//       model: Label,
-//       as: 'labels',
-//       attributes: ['id', 'title'],
-//       through: {
-//         attributes: []
-//       }
-//     }, {
-//       model: Image,
-//       as: 'images',
-//       attributes: ['id', 'location'],
-//       through: {
-//         attributes: ['id', 'order']
-//       }
-//     }, {
-//       model: User,
-//       as: 'fromUser',
-//       attributes: ['name', 'email']
-//     }],
-//     order: [sortBy],
-//     transaction,
-//   });
-
-//   return {
-//     data: recipes,
-//     totalCount,
-//   };
-// };
+  return {
+    data: recipes,
+    totalCount,
+  };
+};
 
