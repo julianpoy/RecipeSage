@@ -1,6 +1,6 @@
-'use strict';
 
-module.exports = {
+
+export default {
   up: (queryInterface) => {
     return queryInterface.addIndex('Recipe_Labels', ['labelId']);
   },

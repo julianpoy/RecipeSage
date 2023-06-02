@@ -1,6 +1,6 @@
-'use strict';
 
-module.exports = {
+
+export default {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn(
       'Users',

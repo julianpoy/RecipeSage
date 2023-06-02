@@ -3,7 +3,8 @@ import { Umzug, SequelizeStorage } from 'umzug';
 import * as path from 'path';
 import { program } from 'commander';
 
-const config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
+import configOptions from './config/sequelize-config.js';
+const config = configOptions[process.env.NODE_ENV];
 
 program
   .arguments('[direction] [count]')
@@ -20,11 +21,10 @@ const umzug = new Umzug({
   migrations: {
     glob: path.join(__dirname, 'migrations/*.js'),
     resolve: ({ name, path, context }) => {
-      const migration = require(path);
       return {
         name,
-        up: async () => migration.up(context, Sequelize),
-        down: async () => migration.down(context, Sequelize),
+        up: async () => (await import(path)).default.up(context, Sequelize),
+        down: async () => (await import(path)).default.down(context, Sequelize),
       };
     },
   },

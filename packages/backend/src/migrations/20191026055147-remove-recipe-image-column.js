@@ -1,8 +1,8 @@
-'use strict';
+
 
 const UUID = require('uuid');
 
-module.exports = {
+export default {
   up: (queryInterface) => {
     const sequelize = queryInterface.sequelize;
 
