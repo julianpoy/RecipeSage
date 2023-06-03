@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
       // Delete all duplicate label->recipe relationships

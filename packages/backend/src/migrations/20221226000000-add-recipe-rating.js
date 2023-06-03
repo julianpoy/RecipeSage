@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn("Recipes", "rating", {
       type: Sequelize.INTEGER,

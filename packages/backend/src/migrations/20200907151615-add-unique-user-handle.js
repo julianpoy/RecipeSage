@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   up: (queryInterface) => {
     return queryInterface.addConstraint("Users", {
       type: "UNIQUE",
