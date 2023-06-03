@@ -12,6 +12,8 @@ export const RecipeImageInit = (sequelize, DataTypes) => {
     },
     {}
   );
-
+  Recipe_Image.associate = () => {
+    // No associations
+  };
   return Recipe_Image;
 };

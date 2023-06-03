@@ -12,6 +12,8 @@ export const UserProfileImageInit = (sequelize, DataTypes) => {
     },
     {}
   );
-
+  User_Profile_Image.associate = () => {
+    // No associations
+  };
   return User_Profile_Image;
 };

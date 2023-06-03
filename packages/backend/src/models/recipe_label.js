@@ -13,6 +13,8 @@ export const RecipeLabelInit = (sequelize, DataTypes) => {
       tableName: "Recipe_Labels",
     }
   );
-
+  RecipeLabel.associate = () => {
+    // No associations
+  };
   return RecipeLabel;
 };
