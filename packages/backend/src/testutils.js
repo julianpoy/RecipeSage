@@ -39,7 +39,9 @@ let migrate = async (down) => {
 export const syncDB = async () => {
   await Promise.all(
     modelNames.map(async (modelName) => {
-      await require("./models")[modelName].destroy({
+      await (
+        await import("./models")
+      )[modelName].destroy({
         truncate: true,
         cascade: true,
         hooks: false,

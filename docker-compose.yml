@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: npx nx start @recipesage/frontend
+    command: npx nx start frontend
     volumes:
       - ./packages:/app/packages
   backend:

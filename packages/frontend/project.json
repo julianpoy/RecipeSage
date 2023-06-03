@@ -15,21 +15,21 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload"
+        "command": "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ionic build --prod && workbox injectManifest"
+        "command": "ng build --configuration=production && workbox injectManifest"
       }
     },
     "build:selfhost": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ionic build --configuration=selfhost && workbox injectManifest"
+        "command": "ng build --configuration=selfhost && workbox injectManifest"
       }
     },
     "lint": {

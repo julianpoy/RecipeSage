@@ -156,6 +156,8 @@ UserSubscription.associate(db);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+export const modelNames = db.modelNames;
+
 export { sequelize, Sequelize };
 
 export default db;
