@@ -134,6 +134,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.0",
     "jest": "^29.4.1",
+    "lint-staged": "^13.2.2",
     "nodemon": "^2.0.20",
     "nx": "^16.2.2",
     "nx-cloud": "^16.0.5",
@@ -152,5 +153,8 @@
   },
   "prisma": {
     "schema": "packages/prisma/src/prisma/schema.prisma"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }
