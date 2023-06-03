@@ -1,6 +1,6 @@
 import { expect } from "chai";
-
 import { v4 as uuid } from "uuid";
+import * as path from "path";
 
 import {
   modelNames,
@@ -13,11 +13,13 @@ import {
 
 import { exec } from "child_process";
 
+const baseDir = path.join(__dirname, "../");
+
 let migrate = async (down) => {
   await new Promise((resolve, reject) => {
-    let command = `cd ${__dirname} && npx sequelize-cli db:migrate`;
+    let command = `cd ${baseDir} && npx sequelize-cli db:migrate`;
     if (down)
-      command = `cd ${__dirname} && npx sequelize-cli db:migrate:undo:all`;
+      command = `cd ${baseDir} && npx sequelize-cli db:migrate:undo:all`;
 
     const migrate = exec(command, { env: process.env }, (err, stdout) => {
       if (err) {
