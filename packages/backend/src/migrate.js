@@ -3,8 +3,8 @@ import { Umzug, SequelizeStorage } from "umzug";
 import * as path from "path";
 import { program } from "commander";
 
-import configOptions from "./config/sequelize-config.js";
-const config = configOptions[process.env.NODE_ENV];
+import * as sequelizeConfig from "./config/sequelize-config.js";
+const config = sequelizeConfig[process.env.NODE_ENV];
 
 program.arguments("[direction] [count]").parse(process.argv);
 

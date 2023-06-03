@@ -30,7 +30,8 @@ const config = {
   logging: process.env.POSTGRES_LOGGING == "true" && console.log,
 };
 
-export default {
+// Must be commonjs for sequelize-cli
+module.exports = {
   development: config,
   selfhost: config,
   test: config,

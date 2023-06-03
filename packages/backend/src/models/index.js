@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import sequelizeConfig from "../config/sequelize-config.js";
+import * as sequelizeConfig from "../config/sequelize-config.js";
 
 const config = sequelizeConfig[process.env.NODE_ENV];
 
