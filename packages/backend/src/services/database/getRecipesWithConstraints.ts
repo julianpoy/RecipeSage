@@ -1,6 +1,13 @@
 import { Transaction, Op } from "sequelize";
 
-import { sequelize, User, Label, Recipe, ProfileItem, Image } from "../../models";
+import {
+  sequelize,
+  User,
+  Label,
+  Recipe,
+  ProfileItem,
+  Image,
+} from "../../models";
 import { getFriendships } from "../../utils/getFriendships";
 
 export const getRecipesWithConstraints = async (args: {
@@ -66,7 +73,11 @@ export const getRecipesWithConstraints = async (args: {
     return acc;
   }, {});
 
-  const queryFilters: { userId: string, labelId?: string, recipeId?: string }[] = [];
+  const queryFilters: {
+    userId: string;
+    labelId?: string;
+    recipeId?: string;
+  }[] = [];
   for (const userId of userIds) {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];

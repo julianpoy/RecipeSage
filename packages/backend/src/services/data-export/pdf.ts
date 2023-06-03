@@ -16,10 +16,13 @@ export interface ExportOptions {
   includeImageUrls?: boolean;
 }
 
-const parsedToSchema = (parsedItems: { content: string, isHeader: boolean }[], includeMargin: boolean): {
-  text: string,
-  bold: boolean,
-  margin: Margins | undefined
+const parsedToSchema = (
+  parsedItems: { content: string; isHeader: boolean }[],
+  includeMargin: boolean
+): {
+  text: string;
+  bold: boolean;
+  margin: Margins | undefined;
 }[] => {
   return parsedItems.map((item) => ({
     text: item.content,
@@ -28,13 +31,16 @@ const parsedToSchema = (parsedItems: { content: string, isHeader: boolean }[], i
   }));
 };
 
-const recipeToSchema = async (recipe: Recipe & { images: Image[] }, options?: ExportOptions): Promise<Content> => {
+const recipeToSchema = async (
+  recipe: Recipe & { images: Image[] },
+  options?: ExportOptions
+): Promise<Content> => {
   const schema: Content[] = [];
 
   const headerContent: Content[] = [];
 
   headerContent.push({
-    text: recipe.title || '',
+    text: recipe.title || "",
     fontSize: 16,
   });
 
@@ -48,18 +54,21 @@ const recipeToSchema = async (recipe: Recipe & { images: Image[] }, options?: Ex
     if (recipe.totalTime) tagline.push(["Total time:", recipe.totalTime]);
     if (recipe.yield) tagline.push(["Yield:", recipe.yield]);
 
-    const taglineSchema = tagline.reduce((acc: Content[], item: Content): Content[] => {
-      return [
-        ...acc,
-        {
-          text: item[0] + " ",
-          bold: true,
-        },
-        {
-          text: item[1] + "  ",
-        },
-      ];
-    }, [] as Content[]);
+    const taglineSchema = tagline.reduce(
+      (acc: Content[], item: Content): Content[] => {
+        return [
+          ...acc,
+          {
+            text: item[0] + " ",
+            bold: true,
+          },
+          {
+            text: item[1] + "  ",
+          },
+        ];
+      },
+      [] as Content[]
+    );
 
     headerContent.push({
       text: taglineSchema,
@@ -104,14 +113,14 @@ const recipeToSchema = async (recipe: Recipe & { images: Image[] }, options?: Ex
   }
 
   const parsedInstructions = parseInstructions(
-    sanitizeHtml(recipe.instructions || '')
+    sanitizeHtml(recipe.instructions || "")
   );
   const parsedIngredients = parseIngredients(
-    sanitizeHtml(recipe.ingredients || ''),
+    sanitizeHtml(recipe.ingredients || ""),
     1,
     false
   );
-  const parsedNotes = parseNotes(sanitizeHtml(recipe.notes || ''));
+  const parsedNotes = parseNotes(sanitizeHtml(recipe.notes || ""));
   if (recipe.ingredients && recipe.instructions) {
     schema.push({
       columns: [

@@ -12,7 +12,7 @@ export const getRecipes = publicProcedure
     const recipes = await prisma.recipe.findMany({
       where: {
         title: input.example,
-      }
+      },
     });
 
     return recipes[0];
