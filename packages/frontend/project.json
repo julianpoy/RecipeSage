@@ -1,0 +1,47 @@
+{
+  "name": "frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/frontend/src",
+  "projectType": "application",
+  "targets": {
+    "ng": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ng"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ionic serve --no-open --host 0.0.0.0 --disableHostCheck --no-livereload -- --host 0.0.0.0 --disable-host-check --no-live-reload"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ionic build --prod && workbox injectManifest"
+      }
+    },
+    "build:selfhost": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ionic build --configuration=selfhost && workbox injectManifest"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "commands": [
+          "ng lint",
+          "npx --yes @julianpoy/ngx-translate-lint --config ./ngx-translate-lint.config.json"
+        ]
+      }
+    }
+  }
+}
+

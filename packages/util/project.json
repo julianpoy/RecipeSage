@@ -1,20 +1,13 @@
 {
-  "name": "prisma",
+  "name": "util",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/prisma/src",
+  "sourceRoot": "packages/frontend/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "packages/prisma",
-        "command": "prisma generate --schema=./src/prisma/schema.prisma && tsc"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/prisma",
+        "cwd": "packages/util",
         "command": "tsc --noEmit"
       }
     },
@@ -22,9 +15,10 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/prisma/**/*.ts"],
+        "lintFilePatterns": ["packages/util/**/*.ts"],
         "maxWarnings": 0
       }
     }
   }
 }
+

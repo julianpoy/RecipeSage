@@ -1,9 +1,0 @@
-{
-  "name": "@recipesage/webextension",
-  "version": "0.0.0",
-  "scripts": {
-    "start": "webpack --watch",
-    "build": "rm -rf dist; webpack",
-    "package": "npm run build && cd dist && zip rs-we.zip ./* ./**/*"
-  }
-}

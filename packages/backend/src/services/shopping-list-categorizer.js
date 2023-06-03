@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { OutputUnit } from 'unitz-ts';
 
 import * as UtilService from './util';
 import { parseUnit, getTitleForIngredient, getMeasurementsForIngredient } from '@recipesage/util';
@@ -74,7 +75,7 @@ export const groupShoppingListItems = items => {
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({
           unitSpacer: ' ',
-          unit: Unitz.OutputUnit.LONG
+          unit: OutputUnit.LONG
         });
 
         title = combinedMeasurements + ' ' + ingredientName;

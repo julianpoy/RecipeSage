@@ -8,6 +8,6 @@ export const UserProfileImageInit = (sequelize, DataTypes) => {
     },
     order: DataTypes.INTEGER
   }, {});
-  User_Profile_Image.associate = function() {};
+
   return User_Profile_Image;
 };

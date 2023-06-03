@@ -9,6 +9,6 @@ export const MealPlanCollaboratorInit = (sequelize, DataTypes) => {
   }, {
     tableName: 'MealPlan_Collaborators'
   });
-  MealPlanCollaborator.associate = function () {};
+
   return MealPlanCollaborator;
 };

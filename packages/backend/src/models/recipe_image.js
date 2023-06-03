@@ -8,6 +8,6 @@ export const RecipeImageInit = (sequelize, DataTypes) => {
     },
     order: DataTypes.INTEGER
   }, {});
-  Recipe_Image.associate = function() {};
+
   return Recipe_Image;
 };

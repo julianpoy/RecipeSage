@@ -311,7 +311,9 @@ async function main() {
               return writeImageFile(ObjectTypes.RECIPE_IMAGE, possibleImageFiles[0], false).then((image) => {
                 lcbRecipe.images = lcbRecipe.images || [];
                 lcbRecipe.images.push(image);
-              }).catch(() => { });
+              }).catch(() => {
+                // Do nothing
+              });
             }));
           }));
         });

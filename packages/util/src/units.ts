@@ -30,7 +30,7 @@ Core.getGroup('tablespoon').addUnits({
   'tbs': Plurality.SINGULAR
 });
 
-export const unitNames: string[] = [].concat.apply([], Object.keys(Core.classMap).map(className => Object.keys(Core.classMap[className].groupMap)));
+export const unitNames: string[] = Object.keys(Core.classMap).map(className => Object.keys(Core.classMap[className].groupMap)).flat();
 
 export const parseUnit = uz;
 

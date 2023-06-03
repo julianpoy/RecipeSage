@@ -1,0 +1,34 @@
+{
+  "name": "backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/backend/src",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend",
+        "command": "ts-node --swc src/bin/www"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend",
+        "command": "PORT=2999 NODE_ENV=test jest --runInBand ./src/**/*.spec.js ./src/**/*.spec.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/backend/**/*.ts",
+          "packages/backend/**/*.js"
+        ],
+        "maxWarnings": 0
+      }
+    }
+  }
+}
+

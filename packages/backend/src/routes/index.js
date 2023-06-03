@@ -254,7 +254,9 @@ router.get(
           if (pepperRecipe.ImageUrl && pepperRecipe.ImageUrl._text) {
             return writeImageURL(ObjectTypes.RECIPE_IMAGE, pepperRecipe.ImageUrl._text, false).then(image => {
               pepperRecipe.image = image;
-            }).catch(() => {});
+            }).catch(() => {
+              // Do nothing
+            });
           }
         }), PEPPERPLATE_IMG_CHUNK_SIZE);
 

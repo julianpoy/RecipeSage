@@ -1,26 +1,29 @@
-import { ShoppingListItem } from '.prisma/client';
+import { ShoppingListItem } from '@prisma/client';
 
 const itemSort = (a, b, sortBy: 'createdAt' | '-createdAt' | '-title') => {
   switch (sortBy) {
-    case 'createdAt':
+    case 'createdAt': {
       const dateComp = (new Date(a.createdAt).getTime()) - (new Date(b.createdAt).getTime());
       if (dateComp === 0) {
         return a.title.localeCompare(b.title);
       }
       return dateComp;
-    case '-createdAt':
+    }
+    case '-createdAt': {
       const reverseDateComp = (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime());
       if (reverseDateComp === 0) {
         return a.title.localeCompare(b.title);
       }
       return reverseDateComp;
+    }
     case '-title':
-    default:
+    default: {
       const localeComp = a.title.localeCompare(b.title);
       if (localeComp === 0) {
         return (new Date(a.createdAt).getTime()) - (new Date(b.createdAt).getTime());
       }
       return localeComp;
+    }
   }
 };
 

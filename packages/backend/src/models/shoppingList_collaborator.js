@@ -9,6 +9,6 @@ export const ShoppingListCollaboratorInit = (sequelize, DataTypes) => {
   }, {
     tableName: 'ShoppingList_Collaborators'
   });
-  ShoppingListCollaborator.associate = function () { };
+
   return ShoppingListCollaborator;
 };

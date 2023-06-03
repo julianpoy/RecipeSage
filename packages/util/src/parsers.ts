@@ -1,4 +1,3 @@
-import Fraction from 'fraction.js';
 import fractionjs from 'fraction.js';
 import { unitNames } from './units';
 
@@ -33,15 +32,15 @@ const replaceFractionsInText = (rawText: string): string => {
 }
 
 // Starts with [, anything inbetween, ends with ]
-var headerRegexp = /^\[.*\]$/;
+const headerRegexp = /^\[.*\]$/;
 
 const multipartQuantifierRegexp = / \+ | plus /;
 
-const measurementRegexp = /((\d+ )?\d+([\/\.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([\/\.]\d+)?)|((\d+ )?\d+[\/\.]\d+)|\d+/;
+const measurementRegexp = /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
-const quantityRegexp = new RegExp(`(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\.)?( |$)`);
+const quantityRegexp = new RegExp(`(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, '\\$&')})s?(\\.)?( |$)`);
 
 const measurementQuantityRegExp = new RegExp(`^(${measurementRegexp.source}) *(${quantityRegexp.source})?`); // Should always be used with 'i' flag
 
@@ -105,25 +104,25 @@ export const parseIngredients = (ingredients: string, scale: number, boldify?: b
 
   ingredients = replaceFractionsInText(ingredients);
 
-  let lines = ingredients.match(/[^\r\n]+/g)?.map(match => ({
+  const lines = ingredients.match(/[^\r\n]+/g)?.map(match => ({
     content: match,
     originalContent: match,
     complete: false,
     isHeader: false
   })) || [];
 
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].content.trim(); // Trim only spaces (no newlines)
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].content.trim(); // Trim only spaces (no newlines)
 
-    var headerMatches = line.match(headerRegexp);
+    const headerMatches = line.match(headerRegexp);
 
     const ingredientPartDelimiters = line.match(new RegExp(multipartQuantifierRegexp, 'g')); // Multipart measurements (1 cup + 1 tablespoon)
     const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
-    var measurementMatches = ingredientParts.map(linePart => linePart.match(measurementRegexp));
+    const measurementMatches = ingredientParts.map(linePart => linePart.match(measurementRegexp));
 
     if (headerMatches && headerMatches.length > 0) {
-      var header = headerMatches[0];
-      var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+      const header = headerMatches[0];
+      let headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
       if (boldify) headerContent = `<b class="sectionHeader">${headerContent}</b>`;
       lines[i].content = headerContent;
@@ -133,12 +132,12 @@ export const parseIngredients = (ingredients: string, scale: number, boldify?: b
         if (!el) return ingredientParts[idx];
 
         try {
-          var measurement = el[0];
+          const measurement = el[0];
 
           const measurementPartDelimiters = measurement.match(/(-)|( to )|( - )/g);
           const measurementParts = measurement.split(/-|to/);
 
-          for (var j = 0; j < measurementParts.length; j++) {
+          for (let j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
             const frac = new fractionjs(measurementParts[j].trim()).mul(scale);
             let scaledMeasurement = frac.toString();
@@ -189,19 +188,19 @@ export const parseInstructions = (instructions: string): {
   instructions = replaceFractionsInText(instructions);
 
   // Starts with [, anything inbetween, ends with ]
-  var headerRegexp = /^\[.*\]$/;
+  const headerRegexp = /^\[.*\]$/;
 
   let stepCount = 1;
   return instructions
     .split(/\r?\n/)
     .filter(instruction => instruction.trim().length)
     .map(instruction => {
-      let line = instruction.trim();
-      var headerMatches = line.match(headerRegexp);
+      const line = instruction.trim();
+      const headerMatches = line.match(headerRegexp);
 
       if (headerMatches && headerMatches.length > 0) {
-        var header = headerMatches[0];
-        var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+        const header = headerMatches[0];
+        const headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
         stepCount = 1;
 
@@ -227,15 +226,15 @@ export const parseNotes = (notes: string): {
   isHeader: boolean,
 }[] => {
   // Starts with [, anything inbetween, ends with ]
-  var headerRegexp = /^\[.*\]$/;
+  const headerRegexp = /^\[.*\]$/;
 
   return notes.split(/\r?\n/).map(note => {
-    let line = note.trim();
-    var headerMatches = line.match(headerRegexp);
+    const line = note.trim();
+    const headerMatches = line.match(headerRegexp);
 
     if (headerMatches && headerMatches.length > 0) {
-      var header = headerMatches[0];
-      var headerContent = header.substring(1, header.length - 1); // Chop off brackets
+      const header = headerMatches[0];
+      const headerContent = header.substring(1, header.length - 1); // Chop off brackets
 
       return {
         content: headerContent,

@@ -9,6 +9,6 @@ export const RecipeLabelInit = (sequelize, DataTypes) => {
   }, {
     tableName: 'Recipe_Labels'
   });
-  RecipeLabel.associate = function () {};
+
   return RecipeLabel;
 };

@@ -214,7 +214,9 @@ async function main() {
               if (imageRef._text) {
                 return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, Buffer.from(imageRef._text, 'base64'), false).then(image => {
                   lcbRecipe.images.push(image);
-                }).catch(() => { });
+                }).catch(() => {
+                  // Do nothing
+                });
               }
 
               // let possibleFileNameRegex = imageFileNames.join('|')
@@ -226,7 +228,9 @@ async function main() {
 
               return writeImageFile(ObjectTypes.RECIPE_IMAGE, possibleImageFiles[0], false).then((image) => {
                 lcbRecipe.images.push(image);
-              }).catch(() => { });
+              }).catch(() => {
+                // Do nothing
+              });
             }));
           }));
         });

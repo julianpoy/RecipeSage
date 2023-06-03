@@ -29,5 +29,8 @@
   "workspaceLayout": {
     "appsDir": "packages",
     "libsDir": "packages"
+  },
+  "affected": {
+    "defaultBase": "master"
   }
 }
