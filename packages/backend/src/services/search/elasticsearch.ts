@@ -47,7 +47,7 @@ async function init() {
   }
 }
 
-export const indexRecipes = async (recipes: any[]) => {
+export const indexRecipes = async (recipes) => {
   const actions = recipes.reduce((acc, recipe) => {
     if (recipe.toJSON) recipe = recipe.toJSON();
 
@@ -147,7 +147,7 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
   });
 
   return results.hits.hits
-    .sort((a, b) => b._score - a._score)
+    .sort((a, b) => a._score && b._score ? b._score - a._score : 0)
     .map((hit) => hit._id);
 };
 

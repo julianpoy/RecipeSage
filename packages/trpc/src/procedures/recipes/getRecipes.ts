@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "../../trpc";
+import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
 
@@ -9,7 +9,11 @@ export const getRecipes = publicProcedure
     })
   )
   .query(async ({ input }) => {
-    const recipes = await prisma.recipe.findMany({});
+    const recipes = await prisma.recipe.findMany({
+      where: {
+        title: input.example,
+      }
+    });
 
     return recipes[0];
   });

@@ -1,4 +1,5 @@
-import { prisma, User } from "@recipesage/prisma";
+import { User } from "@prisma/client";
+import { prisma } from "@recipesage/prisma";
 
 export const getFriendships = async (userId: string) => {
   const outgoingFriendships = await prisma.friendship.findMany({

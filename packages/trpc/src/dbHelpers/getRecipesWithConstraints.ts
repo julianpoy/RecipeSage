@@ -160,9 +160,9 @@ export const getRecipesWithConstraints = async (args: {
   const recipes = await tx.recipe.findMany({
     where,
     include: {
-      labels: true,
-      images: true,
-      fromUser: true,
+      // labels: true,
+      // images: true,
+      // fromUser: true,
     },
     orderBy,
     skip: offset,

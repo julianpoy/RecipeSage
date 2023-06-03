@@ -44,7 +44,7 @@ async function init() {
     ]);
 }
 
-export const indexRecipes = async (recipes: any[]) => {
+export const indexRecipes = async (recipes) => {
   const indexableRecipes = recipes.map((recipe) => ({
     id: recipe.id,
     userId: recipe.userId,

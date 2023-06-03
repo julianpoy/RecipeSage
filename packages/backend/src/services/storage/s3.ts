@@ -57,7 +57,7 @@ const generateStorageLocation = (key: string) => {
 const paginate = <T>(objects: T[], limit: number): T[][] => {
   const mut = [...objects];
 
-  const out = [];
+  const out: T[][] = [];
   while (mut.length > 0) {
     out.push(mut.splice(0, limit));
   }

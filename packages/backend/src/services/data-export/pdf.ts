@@ -8,41 +8,47 @@ import {
 import sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../fetch";
 import fs from "fs";
+import { Image, Recipe } from "@prisma/client";
+import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 
 export interface ExportOptions {
   includeImages?: boolean;
   includeImageUrls?: boolean;
 }
 
-const parsedToSchema = (parsedItems: any[], includeMargin) => {
+const parsedToSchema = (parsedItems: { content: string, isHeader: boolean }[], includeMargin: boolean): {
+  text: string,
+  bold: boolean,
+  margin: Margins | undefined
+}[] => {
   return parsedItems.map((item) => ({
     text: item.content,
     bold: item.isHeader,
-    margin: includeMargin ? [0, 0, 0, 5] : [],
+    margin: includeMargin ? [0, 0, 0, 5] : undefined,
   }));
 };
 
-const recipeToSchema = async (recipe, options?: ExportOptions) => {
-  const schema = [];
+const recipeToSchema = async (recipe: Recipe & { images: Image[] }, options?: ExportOptions): Promise<Content> => {
+  const schema: Content[] = [];
 
-  const headerContent = [];
+  const headerContent: Content[] = [];
 
   headerContent.push({
-    text: recipe.title,
+    text: recipe.title || '',
     fontSize: 16,
   });
 
   const showTagLine =
     recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield;
   if (showTagLine) {
-    const tagline = [];
+    const tagline: Content[] = [];
 
     if (recipe.source) tagline.push(["Source:", recipe.source]);
     if (recipe.activeTime) tagline.push(["Active time:", recipe.activeTime]);
     if (recipe.totalTime) tagline.push(["Total time:", recipe.totalTime]);
     if (recipe.yield) tagline.push(["Yield:", recipe.yield]);
 
-    const taglineSchema = tagline.reduce((acc, item) => {
+    const taglineSchema = tagline.reduce((acc: Content[], item: Content): Content[] => {
       return [
         ...acc,
         {
@@ -53,7 +59,7 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
           text: item[1] + "  ",
         },
       ];
-    }, []);
+    }, [] as Content[]);
 
     headerContent.push({
       text: taglineSchema,
@@ -98,14 +104,14 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
   }
 
   const parsedInstructions = parseInstructions(
-    sanitizeHtml(recipe.instructions)
+    sanitizeHtml(recipe.instructions || '')
   );
   const parsedIngredients = parseIngredients(
-    sanitizeHtml(recipe.ingredients),
+    sanitizeHtml(recipe.ingredients || ''),
     1,
     false
   );
-  const parsedNotes = parseNotes(sanitizeHtml(recipe.notes));
+  const parsedNotes = parseNotes(sanitizeHtml(recipe.notes || ''));
   if (recipe.ingredients && recipe.instructions) {
     schema.push({
       columns: [
@@ -132,7 +138,7 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
   if (recipe.notes) {
     const header = {
       text: "Notes:",
-      margin: [0, 10, 0, 5], // left top right bottom
+      margin: [0, 10, 0, 5] satisfies Margins, // left top right bottom
       bold: true,
     };
     schema.push(header);
@@ -174,10 +180,10 @@ const recipeToSchema = async (recipe, options?: ExportOptions) => {
 
 // TODO: Support multi language
 export const exportToPDF = async (
-  recipes: any[],
+  recipes: (Recipe & { images: Image[] })[],
   writeStream: Writable,
   options?: ExportOptions
-) => {
+): Promise<void> => {
   const fonts = {
     Helvetica: {
       normal: "Helvetica",
@@ -187,7 +193,7 @@ export const exportToPDF = async (
     },
   };
 
-  const content = [];
+  const content: Content[] = [];
   for (let i = 0; i < recipes.length; i++) {
     const recipe = recipes[i];
 
@@ -201,7 +207,7 @@ export const exportToPDF = async (
     }
   }
 
-  const docDefinition = {
+  const docDefinition: TDocumentDefinitions = {
     content,
     defaultStyle: {
       font: "Helvetica",

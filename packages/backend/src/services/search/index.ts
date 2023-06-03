@@ -3,7 +3,7 @@ import * as ElasticSearch from "./elasticsearch";
 import * as Stub from "./stub";
 
 export interface SearchProvider {
-  indexRecipes: (recipes: any[]) => Promise<void>;
+  indexRecipes: (recipes) => Promise<void>;
   deleteRecipes: (recipeIds: string[]) => Promise<void>;
   searchRecipes: (userIds: string[], queryString: string) => Promise<string[]>;
 }

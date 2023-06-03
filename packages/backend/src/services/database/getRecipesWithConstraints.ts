@@ -1,8 +1,6 @@
-import * as SQ from "sequelize";
-const Op = SQ.Op;
+import { Transaction, Op } from "sequelize";
 
-import * as Models from "../../models";
-const { User, Label, Recipe, ProfileItem, Image } = Models;
+import { sequelize, User, Label, Recipe, ProfileItem, Image } from "../../models";
 import { getFriendships } from "../../utils/getFriendships";
 
 export const getRecipesWithConstraints = async (args: {
@@ -12,7 +10,7 @@ export const getRecipesWithConstraints = async (args: {
   sortBy: [string, string];
   offset: number;
   limit: number;
-  transaction?: any;
+  transaction?: Transaction;
   recipeIds?: string[];
   labels?: string[];
   labelIntersection?: boolean;
@@ -68,7 +66,7 @@ export const getRecipesWithConstraints = async (args: {
     return acc;
   }, {});
 
-  const queryFilters: any[] = [];
+  const queryFilters: { userId: string, labelId?: string, recipeId?: string }[] = [];
   for (const userId of userIds) {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
@@ -126,8 +124,8 @@ export const getRecipesWithConstraints = async (args: {
   const having =
     labels && labelIntersection
       ? {
-          having: SQ.literal(
-            `COUNT("labels"."id") = ${SQ.escape(labels.length)}`
+          having: sequelize.literal(
+            `COUNT("labels"."id") = ${sequelize.escape(labels.length)}`
           ),
         }
       : {};

@@ -11,6 +11,13 @@
         "command": "ts-node --swc src/bin/www"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend",
+        "command": "tsc --noEmit"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
