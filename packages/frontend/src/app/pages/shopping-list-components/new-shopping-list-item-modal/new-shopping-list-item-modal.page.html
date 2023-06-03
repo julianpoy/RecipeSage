@@ -1,9 +1,6 @@
 <ion-header>
-
   <ion-toolbar>
-    <ion-title>
-      {{ 'pages.newShoppingListItem.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.newShoppingListItem.title' | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -11,9 +8,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <div>
@@ -28,7 +23,6 @@
   </div>
 
   <div [ngSwitch]="inputType">
-
     <div *ngSwitchCase="'items'">
       <ion-item *ngFor="let item of itemFields">
         <ion-label position="floating">
@@ -41,7 +35,8 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
     </div>
 
@@ -52,17 +47,15 @@
       <select-ingredients
         *ngIf="selectedRecipe"
         [ingredients]="selectedRecipe.ingredients"
-        (selectedIngredientsChange)="selectedIngredients = $event"></select-ingredients>
+        (selectedIngredientsChange)="selectedIngredients = $event"
+      ></select-ingredients>
     </div>
   </div>
-
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
     <ion-icon name="list" slot="start"></ion-icon>
-    <ion-label>
-      {{ 'pages.newShoppingListItem.add' | translate }}
-    </ion-label>
+    <ion-label> {{ 'pages.newShoppingListItem.add' | translate }} </ion-label>
   </ion-button>
 </ion-footer>

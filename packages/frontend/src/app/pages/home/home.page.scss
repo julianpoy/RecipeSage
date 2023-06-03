@@ -1,4 +1,4 @@
-@import 'src/theme/shared-variables.scss';
+@import "src/theme/shared-variables.scss";
 
 .homegrid {
   display: grid;
@@ -36,7 +36,10 @@
     transition: box-shadow 0.1s ease-in-out;
 
     &:hover {
-      background-color: var(--ion-item-background-hover,rgba(var(--ion-text-color-rgb,0,0,0),0.04)); // Pulled from ion-item button hover
+      background-color: var(
+        --ion-item-background-hover,
+        rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04)
+      ); // Pulled from ion-item button hover
     }
 
     &.selected {
@@ -51,7 +54,7 @@ ion-badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 
   // When in "list" mode
   .recipe-item & {
@@ -100,7 +103,10 @@ ion-badge {
     margin-left: 16px;
     padding-right: 16px;
     border-bottom: 1px solid;
-    border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    border-color: var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -125,7 +131,7 @@ ion-badge {
       text-overflow: ellipsis;
       font-size: 14px;
       margin: 0;
-      color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+      color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
     }
   }
 }
@@ -148,12 +154,16 @@ ion-badge {
     --labels-height: 0px;
     // ===
 
-    --content-height: calc(var(--content-padding-leeway) + var(--header-height) + var(--description-height) + var(--source-height) + var(--fromuser-height) + var(--labels-height));
+    --content-height: calc(
+      var(--content-padding-leeway) + var(--header-height) +
+        var(--description-height) + var(--source-height) +
+        var(--fromuser-height) + var(--labels-height)
+    );
 
     position: relative;
     width: 200px;
     height: calc(var(--image-size) + var(--content-height));
-    box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     border-radius: 5px 5px 0px 0px;
     overflow: hidden;
@@ -216,9 +226,8 @@ ion-badge {
         margin: 0;
         margin-top: 2px;
         margin-bottom: 2px;
-        color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
       }
     }
   }
 }
-

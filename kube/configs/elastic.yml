@@ -14,53 +14,59 @@ spec:
         app: rs-elastic
     spec:
       initContainers:
-      - name: rs-elastic-chown
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
-        command: ["chown", "-v", "elasticsearch:elasticsearch", "/usr/share/elasticsearch/data"]
-        resources:
-          requests:
-            cpu: 0.1
-            memory: 100Mi
-          limits:
-            cpu: 0.1
-            memory: 500Mi
-        volumeMounts:
-        - name: data
-          mountPath: /usr/share/elasticsearch/data
+        - name: rs-elastic-chown
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+          command:
+            [
+              "chown",
+              "-v",
+              "elasticsearch:elasticsearch",
+              "/usr/share/elasticsearch/data",
+            ]
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 100Mi
+            limits:
+              cpu: 0.1
+              memory: 500Mi
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/elasticsearch/data
       containers:
-      - name: rs-elastic
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
-        env:
-        - name: discovery.type
-          value: single-node
-        - name: ES_JAVA_OPTS
-          value: -Xms1500m -Xmx1500m
-        - name: ELASTIC_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rs-elastic-env
-              key: ELASTIC_PASSWORD
-        ports:
-          - containerPort: 9200
-            name: http
-            protocol: TCP
-        resources:
-          requests:
-            cpu: 0.5
-            memory: 2Gi
-          limits:
-            cpu: 1.5
-            memory: 3Gi
-        volumeMounts:
-        # - name: config
-        #   mountPath: /usr/share/elasticsearch/elasticsearch.yml
-        #   subPath: elasticsearch.yml
-        - name: data
-          mountPath: /usr/share/elasticsearch/data
+        - name: rs-elastic
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: ES_JAVA_OPTS
+              value: -Xms1500m -Xmx1500m
+            - name: ELASTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rs-elastic-env
+                  key: ELASTIC_PASSWORD
+          ports:
+            - containerPort: 9200
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 2Gi
+            limits:
+              cpu: 1.5
+              memory: 3Gi
+          volumeMounts:
+            # - name: config
+            #   mountPath: /usr/share/elasticsearch/elasticsearch.yml
+            #   subPath: elasticsearch.yml
+            - name: data
+              mountPath: /usr/share/elasticsearch/data
       volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: elasticsearch-data
+        - name: data
+          persistentVolumeClaim:
+            claimName: elasticsearch-data
 ---
 apiVersion: v1
 kind: Service
@@ -81,7 +87,7 @@ metadata:
   name: elasticsearch-data
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi

@@ -1,4 +1,4 @@
-import {SearchProvider} from './index';
+import { SearchProvider } from "./index";
 
 export const indexRecipes = async () => {
   return Promise.resolve();
@@ -15,6 +15,5 @@ export const searchRecipes = async () => {
 export default {
   indexRecipes,
   deleteRecipes,
-  searchRecipes
+  searchRecipes,
 } as SearchProvider;
-

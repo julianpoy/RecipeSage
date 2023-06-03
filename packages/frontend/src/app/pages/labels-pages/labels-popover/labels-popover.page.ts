@@ -1,17 +1,22 @@
-import { Component, Input } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { Component, Input } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 
-import { UtilService } from '~/services/util.service';
-import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
-import { PreferencesService, ManageLabelsPreferenceKey } from '~/services/preferences.service';
+import { UtilService } from "~/services/util.service";
+import {
+  QuickTutorialService,
+  QuickTutorialOptions,
+} from "~/services/quick-tutorial.service";
+import {
+  PreferencesService,
+  ManageLabelsPreferenceKey,
+} from "~/services/preferences.service";
 
 @Component({
-  selector: 'page-labels-popover',
-  templateUrl: 'labels-popover.page.html',
-  styleUrls: ['labels-popover.page.scss']
+  selector: "page-labels-popover",
+  templateUrl: "labels-popover.page.html",
+  styleUrls: ["labels-popover.page.scss"],
 })
 export class LabelsPopoverPage {
-
   preferences = this.preferencesService.preferences;
   preferenceKeys = ManageLabelsPreferenceKey;
 
@@ -23,18 +28,19 @@ export class LabelsPopoverPage {
     public popoverCtrl: PopoverController,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
-    public quickTutorialService: QuickTutorialService) {
-
-  }
+    public quickTutorialService: QuickTutorialService
+  ) {}
 
   toggleSelectionMode() {
     const enteringSelectionMode = !this.selectionMode;
     if (enteringSelectionMode) {
-      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.MultipleLabelSelection);
+      this.quickTutorialService.triggerQuickTutorial(
+        QuickTutorialOptions.MultipleLabelSelection
+      );
     }
 
     this.popoverCtrl.dismiss({
-      selectionMode: enteringSelectionMode
+      selectionMode: enteringSelectionMode,
     });
   }
 

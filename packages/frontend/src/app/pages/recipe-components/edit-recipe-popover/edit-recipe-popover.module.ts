@@ -1,25 +1,21 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { EditRecipePopoverPage } from './edit-recipe-popover.page';
+import { EditRecipePopoverPage } from "./edit-recipe-popover.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    EditRecipePopoverPage,
-  ],
+  declarations: [EditRecipePopoverPage],
   imports: [
     GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  entryComponents: [
-    EditRecipePopoverPage
-  ]
+  entryComponents: [EditRecipePopoverPage],
 })
 export class EditRecipePopoverPageModule {}

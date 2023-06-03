@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
-  selector: 'copy-with-webshare',
-  templateUrl: 'copy-with-webshare.component.html',
-  styleUrls: ['./copy-with-webshare.component.scss']
+  selector: "copy-with-webshare",
+  templateUrl: "copy-with-webshare.component.html",
+  styleUrls: ["./copy-with-webshare.component.scss"],
 })
 export class CopyWithWebshareComponent {
   @Input() webshareTitle: string;
@@ -24,17 +24,19 @@ export class CopyWithWebshareComponent {
           text: this.webshareText,
           url: this.webshareURL,
         });
-      } catch(e) {
+      } catch (e) {
         // Ignore webshare errors
       }
     }
   }
 
   clipboard() {
-    const copyText = document.getElementById('codeBlockCopy') as HTMLTextAreaElement;
+    const copyText = document.getElementById(
+      "codeBlockCopy"
+    ) as HTMLTextAreaElement;
 
     copyText.select();
 
-    document.execCommand('copy');
+    document.execCommand("copy");
   }
 }

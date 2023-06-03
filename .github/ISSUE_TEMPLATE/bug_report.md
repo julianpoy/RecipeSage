@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Existing functionality that isn't working as expected
-title: ''
+title: ""
 labels: bug
 assignees: julianpoy
-
 ---
 
 **Describe the bug**
@@ -15,6 +14,7 @@ A quick description of where the bug is (Meal Plan Page, Shopping List Page, Web
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -27,13 +27,15 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
+
+- OS: [e.g. iOS]
+- Browser [e.g. chrome, safari]
 
 **Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
+
+- Device: [e.g. iPhone6]
+- OS: [e.g. iOS8.1]
+- Browser [e.g. stock browser, safari]
 
 **Additional context**
 Add any other context about the problem here.

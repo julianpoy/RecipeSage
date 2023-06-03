@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { UtilService } from '~/services/util.service';
+import { UtilService } from "~/services/util.service";
 
 @Component({
-  selector: 'shopping-list-item',
-  templateUrl: 'shopping-list-item.component.html',
-  styleUrls: ['./shopping-list-item.component.scss']
+  selector: "shopping-list-item",
+  templateUrl: "shopping-list-item.component.html",
+  styleUrls: ["./shopping-list-item.component.scss"],
 })
 export class ShoppingListItemComponent {
   @Input() title: string;

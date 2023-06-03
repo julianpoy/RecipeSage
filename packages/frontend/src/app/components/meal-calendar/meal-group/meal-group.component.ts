@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
-  selector: 'meal-group',
-  templateUrl: 'meal-group.component.html',
-  styleUrls: ['./meal-group.component.scss']
+  selector: "meal-group",
+  templateUrl: "meal-group.component.html",
+  styleUrls: ["./meal-group.component.scss"],
 })
 export class MealGroupComponent {
   @Input() mealItems;
@@ -16,7 +16,7 @@ export class MealGroupComponent {
 
   dragStart(event, mealItem) {
     mealItem.dragging = true;
-    event.dataTransfer.setData('text', mealItem.id); // Must set 'text' prop for Android dragndrop, otherwise evt will be cancelled
+    event.dataTransfer.setData("text", mealItem.id); // Must set 'text' prop for Android dragndrop, otherwise evt will be cancelled
   }
 
   dragEnd(event, mealItem) {

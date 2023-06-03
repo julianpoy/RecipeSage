@@ -10,17 +10,19 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title *ngIf="showLogin">{{ 'pages.auth.title.login' | translate }}</ion-title>
-    <ion-title *ngIf="!showLogin">{{ 'pages.auth.title.register' | translate }}</ion-title>
+    <ion-title *ngIf="showLogin"
+      >{{ 'pages.auth.title.login' | translate }}</ion-title
+    >
+    <ion-title *ngIf="!showLogin"
+      >{{ 'pages.auth.title.register' | translate }}</ion-title
+    >
   </ion-toolbar>
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <div class="auth-container">
     <ion-list>
       <div class="auth-entry">
-
         <br />
 
         <div *ngIf="isSelfHost">
@@ -36,7 +38,8 @@
 
         <div class="welcome" *ngIf="!showLogin">
           <h2>{{ 'pages.auth.welcome.register' | translate }}</h2>
-          <span>{{ 'pages.auth.welcome.register.sub1' | translate }}</span><br />
+          <span>{{ 'pages.auth.welcome.register.sub1' | translate }}</span
+          ><br />
           <span>{{ 'pages.auth.welcome.register.sub2' | translate }}</span>
         </div>
 
@@ -58,36 +61,63 @@
 
         <label>
           {{ 'pages.auth.input.password' | translate }}<br />
-          <input [(ngModel)]="password" (keyup.enter)="showLogin && auth()" type="password" />
+          <input
+            [(ngModel)]="password"
+            (keyup.enter)="showLogin && auth()"
+            type="password"
+          />
         </label>
         <br /><br />
 
         <div *ngIf="!showLogin">
           <label>
             {{ 'pages.auth.input.confirmPassword' | translate }}<br />
-            <input [(ngModel)]="confirmPassword" (keyup.enter)="auth()" type="password" />
+            <input
+              [(ngModel)]="confirmPassword"
+              (keyup.enter)="auth()"
+              type="password"
+            />
           </label>
           <br /><br />
         </div>
       </div>
 
-      <tos-clickwrap-agreement *ngIf="!isSelfHost" [actionTitle]="showLogin ? 'logging in' : 'creating an account'"></tos-clickwrap-agreement>
+      <tos-clickwrap-agreement
+        *ngIf="!isSelfHost"
+        [actionTitle]="showLogin ? 'logging in' : 'creating an account'"
+      ></tos-clickwrap-agreement>
 
-      <div *ngIf="isSelfHost">{{ 'pages.auth.selfhostWarning2' | translate }}</div>
+      <div *ngIf="isSelfHost">
+        {{ 'pages.auth.selfhostWarning2' | translate }}
+      </div>
 
       <div class="ion-padding">
-      	<ion-button *ngIf="showLogin" expand="block" (click)="auth()">{{ 'pages.auth.button.login' | translate }}</ion-button>
-        <ion-button *ngIf="!showLogin" expand="block" (click)="auth()">{{ 'pages.auth.button.register' | translate }}</ion-button>
-  		</div>
+        <ion-button *ngIf="showLogin" expand="block" (click)="auth()"
+          >{{ 'pages.auth.button.login' | translate }}</ion-button
+        >
+        <ion-button *ngIf="!showLogin" expand="block" (click)="auth()"
+          >{{ 'pages.auth.button.register' | translate }}</ion-button
+        >
+      </div>
 
       <div>
-        <ion-button fill="clear" expand="block" *ngIf="showLogin" (click)="forgotPassword()">{{ 'pages.auth.button.forgotPassword' | translate }}</ion-button>
+        <ion-button
+          fill="clear"
+          expand="block"
+          *ngIf="showLogin"
+          (click)="forgotPassword()"
+          >{{ 'pages.auth.button.forgotPassword' | translate }}</ion-button
+        >
       </div>
 
       <div>
         <ion-button fill="clear" expand="block" (click)="toggleLogin()">
-          <span *ngIf="showLogin">{{ 'pages.auth.button.registerInstead' | translate }}</span>
-          <span *ngIf="!showLogin">{{ 'pages.auth.button.loginInstead' | translate }}</span>
+          <span *ngIf="showLogin"
+            >{{ 'pages.auth.button.registerInstead' | translate }}</span
+          >
+          <span *ngIf="!showLogin"
+            >{{ 'pages.auth.button.loginInstead' | translate }}</span
+          >
         </ion-button>
       </div>
     </ion-list>

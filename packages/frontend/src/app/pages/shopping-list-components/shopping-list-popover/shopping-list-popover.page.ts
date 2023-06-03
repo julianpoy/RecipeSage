@@ -1,19 +1,26 @@
-import { Component, Input } from '@angular/core';
-import { ToastController, AlertController, NavController, PopoverController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, Input } from "@angular/core";
+import {
+  ToastController,
+  AlertController,
+  NavController,
+  PopoverController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { ShoppingListService } from '~/services/shopping-list.service';
-import { UtilService, RouteMap } from '~/services/util.service';
-import { PreferencesService, ShoppingListPreferenceKey } from '~/services/preferences.service';
+import { LoadingService } from "~/services/loading.service";
+import { ShoppingListService } from "~/services/shopping-list.service";
+import { UtilService, RouteMap } from "~/services/util.service";
+import {
+  PreferencesService,
+  ShoppingListPreferenceKey,
+} from "~/services/preferences.service";
 
 @Component({
-  selector: 'page-shopping-list-popover',
-  templateUrl: 'shopping-list-popover.page.html',
-  styleUrls: ['shopping-list-popover.page.scss']
+  selector: "page-shopping-list-popover",
+  templateUrl: "shopping-list-popover.page.html",
+  styleUrls: ["shopping-list-popover.page.scss"],
 })
 export class ShoppingListPopoverPage {
-
   @Input() shoppingListId: any;
   @Input() shoppingList: any;
 
@@ -43,21 +50,25 @@ export class ShoppingListPopoverPage {
   }
 
   print() {
-    window.open(this.utilService.generatePrintShoppingListURL(
-      this.shoppingListId,
-      {
+    window.open(
+      this.utilService.generatePrintShoppingListURL(this.shoppingListId, {
         groupSimilar: this.preferences[ShoppingListPreferenceKey.GroupSimilar],
-        groupCategories: this.preferences[ShoppingListPreferenceKey.GroupCategories],
+        groupCategories:
+          this.preferences[ShoppingListPreferenceKey.GroupCategories],
         sortBy: this.preferencesService[ShoppingListPreferenceKey.SortBy],
-      },
-    ));
+      })
+    );
   }
 
   async removeAllItems() {
-    const header = await this.translate.get('pages.shoppingListPopover.removeAll.header').toPromise();
-    const message = await this.translate.get('pages.shoppingListPopover.removeAll.message').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.delete').toPromise();
+    const header = await this.translate
+      .get("pages.shoppingListPopover.removeAll.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.shoppingListPopover.removeAll.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -65,17 +76,17 @@ export class ShoppingListPopoverPage {
       buttons: [
         {
           text: cancel,
-          role: 'cancel',
-          handler: () => { }
+          role: "cancel",
+          handler: () => {},
         },
         {
           text: del,
-          cssClass: 'alertDanger',
+          cssClass: "alertDanger",
           handler: () => {
             this._removeAllItems();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     alert.present();
   }
@@ -85,11 +96,14 @@ export class ShoppingListPopoverPage {
 
     const loading = this.loadingService.start();
 
-    const itemIds = this.shoppingList.items.map(el => el.id);
+    const itemIds = this.shoppingList.items.map((el) => el.id);
 
-    const response = await this.shoppingListService.deleteItems(this.shoppingListId, {
-      itemIds
-    });
+    const response = await this.shoppingListService.deleteItems(
+      this.shoppingListId,
+      {
+        itemIds,
+      }
+    );
 
     loading.dismiss();
     if (!response.success) return;
@@ -98,10 +112,14 @@ export class ShoppingListPopoverPage {
   }
 
   async deleteList() {
-    const header = await this.translate.get('pages.shoppingListPopover.deleteList.header').toPromise();
-    const message = await this.translate.get('pages.shoppingListPopover.deleteList.message').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.delete').toPromise();
+    const header = await this.translate
+      .get("pages.shoppingListPopover.deleteList.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.shoppingListPopover.deleteList.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -109,17 +127,17 @@ export class ShoppingListPopoverPage {
       buttons: [
         {
           text: cancel,
-          role: 'cancel',
-          handler: () => { }
+          role: "cancel",
+          handler: () => {},
         },
         {
           text: del,
-          cssClass: 'alertDanger',
+          cssClass: "alertDanger",
           handler: () => {
             this._deleteList();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     alert.present();
   }

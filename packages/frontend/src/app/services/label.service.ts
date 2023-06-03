@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
-import { UtilService } from './util.service';
-import { HttpService } from './http.service';
-import { EventService } from './event.service';
-import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
+import { Injectable } from "@angular/core";
+import { UtilService } from "./util.service";
+import { HttpService } from "./http.service";
+import { EventService } from "./event.service";
+import {
+  HttpErrorHandlerService,
+  ErrorHandlers,
+} from "./http-error-handler.service";
 
 export interface Label {
   id: string;
@@ -13,55 +16,67 @@ export interface Label {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class LabelService {
-
   constructor(
     public events: EventService,
     public utilService: UtilService,
     public httpService: HttpService,
-    public httpErrorHandlerService: HttpErrorHandlerService,
+    public httpErrorHandlerService: HttpErrorHandlerService
   ) {}
 
-  fetch(params?: {
-    title?: string
-  }, errorHandlers?: ErrorHandlers) {
+  fetch(
+    params?: {
+      title?: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<Label[]>(
       `labels`,
-      'GET',
+      "GET",
       null,
       params,
       errorHandlers
     );
   }
 
-  async create(payload: {
-    title: string,
-    recipeId: string,
-  }, errorHandlers?: ErrorHandlers) {
-    const response = await this.createBulk({
-      title: payload.title,
-      recipeIds: [payload.recipeId]
-    }, errorHandlers);
+  async create(
+    payload: {
+      title: string;
+      recipeId: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
+    const response = await this.createBulk(
+      {
+        title: payload.title,
+        recipeIds: [payload.recipeId],
+      },
+      errorHandlers
+    );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }
 
-  async update(labelId: string, payload: {
-    title: string,
-  }, errorHandlers?: ErrorHandlers) {
+  async update(
+    labelId: string,
+    payload: {
+      title: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels/${labelId}`,
-      'PUT',
+      "PUT",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }
@@ -69,65 +84,74 @@ export class LabelService {
   async createBulk(payload: any, errorHandlers?: ErrorHandlers) {
     const response = await this.httpService.requestWithWrapper<Label>(
       `labels`,
-      'POST',
+      "POST",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }
 
   // Removes label from a single associated recipe
-  async removeFromRecipe(params: {
-    labelId: string,
-    recipeId: string
-  }, errorHandlers?: ErrorHandlers) {
+  async removeFromRecipe(
+    params: {
+      labelId: string;
+      recipeId: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels`,
-      'DELETE',
+      "DELETE",
       null,
       params,
       errorHandlers
     );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }
 
   // Deletes label and removes from all associated recipes
-  async delete(payload: {
-    labelIds: string[]
-  }, errorHandlers?: ErrorHandlers) {
+  async delete(
+    payload: {
+      labelIds: string[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels/delete-bulk`,
-      'POST',
+      "POST",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }
 
-  async merge(params: {
-    sourceLabelId: string,
-    targetLabelId: string
-  }, errorHandlers?: ErrorHandlers) {
+  async merge(
+    params: {
+      sourceLabelId: string;
+      targetLabelId: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels/merge`,
-      'POST',
+      "POST",
       null,
       params,
       errorHandlers
     );
 
-    this.events.publish('label:update');
+    this.events.publish("label:update");
 
     return response;
   }

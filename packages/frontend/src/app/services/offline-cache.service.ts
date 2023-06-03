@@ -1,12 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { PreferencesService, GlobalPreferenceKey } from '~/services/preferences.service';
-import { FeatureFlagService, FeatureFlagKeys } from '~/services/feature-flag.service';
-import { RecipeFolderName, RecipeService } from '~/services/recipe.service';
-import { EventService } from '~/services/event.service';
+import {
+  PreferencesService,
+  GlobalPreferenceKey,
+} from "~/services/preferences.service";
+import {
+  FeatureFlagService,
+  FeatureFlagKeys,
+} from "~/services/feature-flag.service";
+import { RecipeFolderName, RecipeService } from "~/services/recipe.service";
+import { EventService } from "~/services/event.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class OfflineCacheService {
   knownRecipeIds = new Set<string>();
@@ -16,19 +22,25 @@ export class OfflineCacheService {
     private recipeService: RecipeService,
     private events: EventService
   ) {
-    const ffEnabled = this.featureFlagService.flags[FeatureFlagKeys.EnableExperimentalOfflineCache];
-    const preferenceEnabled = this.preferencesService.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache];
+    const ffEnabled =
+      this.featureFlagService.flags[
+        FeatureFlagKeys.EnableExperimentalOfflineCache
+      ];
+    const preferenceEnabled =
+      this.preferencesService.preferences[
+        GlobalPreferenceKey.EnableExperimentalOfflineCache
+      ];
 
     if (ffEnabled && preferenceEnabled) {
-      this.events.subscribe('recipe:created', () => {
+      this.events.subscribe("recipe:created", () => {
         this.updateAllRecipeLists();
       });
 
-      this.events.subscribe('recipe:updated', () => {
+      this.events.subscribe("recipe:updated", () => {
         this.updateAllRecipeLists();
       });
 
-      this.events.subscribe('recipe:deleted', () => {
+      this.events.subscribe("recipe:deleted", () => {
         this.updateAllRecipeLists();
       });
     }
@@ -40,7 +52,7 @@ export class OfflineCacheService {
   }
 
   async syncPause() {
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
   }
 
   async updateAllRecipes() {
@@ -58,14 +70,14 @@ export class OfflineCacheService {
 
   async updateAllRecipeLists() {
     const sorts = [
-      '-title',
-      '-createdAt',
-      'createdAt',
-      '-updatedAt',
-      'updatedAt'
+      "-title",
+      "-createdAt",
+      "createdAt",
+      "-updatedAt",
+      "updatedAt",
     ];
     for (const sort of sorts) {
-      await this.updateRecipeList('main', sort);
+      await this.updateRecipeList("main", sort);
     }
   }
 
@@ -74,25 +86,25 @@ export class OfflineCacheService {
       folder,
       sort,
       count: 50,
-      offset: 0
+      offset: 0,
     });
 
     if (!firstFetch.success) return;
 
-    firstFetch.data.data.map(el => this.knownRecipeIds.add(el.id));
+    firstFetch.data.data.map((el) => this.knownRecipeIds.add(el.id));
 
     await this.syncPause();
 
     const pageCount = Math.ceil(firstFetch.data.totalCount / 50);
     for (let i = 1; i < pageCount; i++) {
       const page = await this.recipeService.fetch({
-        folder: 'main',
-        sort: '-title',
+        folder: "main",
+        sort: "-title",
         count: 50,
-        offset: i * 50
+        offset: i * 50,
       });
 
-      page.data.data.map(el => this.knownRecipeIds.add(el.id));
+      page.data.data.map((el) => this.knownRecipeIds.add(el.id));
 
       await this.syncPause();
     }

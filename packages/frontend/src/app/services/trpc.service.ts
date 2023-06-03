@@ -1,15 +1,15 @@
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from '@recipesage/trpc';
-import { Injectable } from '@angular/core';
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import type { AppRouter } from "@recipesage/trpc";
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class TRPCService {
   public trpc = createTRPCProxyClient<AppRouter>({
     links: [
       httpBatchLink({
-        url: '/trpc',
+        url: "/trpc",
         maxURLLength: 2083,
       }),
     ],
@@ -18,4 +18,3 @@ export class TRPCService {
 
   constructor() {}
 }
-

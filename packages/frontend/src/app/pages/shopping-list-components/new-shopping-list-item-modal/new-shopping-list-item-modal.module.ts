@@ -1,18 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { NewShoppingListItemModalPage } from './new-shopping-list-item-modal.page';
+import { NewShoppingListItemModalPage } from "./new-shopping-list-item-modal.page";
 
-import { SelectRecipeModule } from '~/components/select-recipe/select-recipe.module';
-import { SelectIngredientsModule } from '~/components/select-ingredients/select-ingredients.module';
-import {GlobalModule} from '~/global.module';
+import { SelectRecipeModule } from "~/components/select-recipe/select-recipe.module";
+import { SelectIngredientsModule } from "~/components/select-ingredients/select-ingredients.module";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    NewShoppingListItemModalPage,
-  ],
+  declarations: [NewShoppingListItemModalPage],
   imports: [
     CommonModule,
     IonicModule,
@@ -20,10 +18,8 @@ import {GlobalModule} from '~/global.module';
     ReactiveFormsModule,
     SelectRecipeModule,
     SelectIngredientsModule,
-    GlobalModule
+    GlobalModule,
   ],
-  entryComponents: [
-    NewShoppingListItemModalPage,
-  ],
+  entryComponents: [NewShoppingListItemModalPage],
 })
 export class NewShoppingListItemModalPageModule {}

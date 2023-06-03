@@ -1,32 +1,38 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-const LAST_USED_MEAL_VAR = 'lastUsedMeal';
+const LAST_USED_MEAL_VAR = "lastUsedMeal";
 
 @Component({
-  selector: 'select-meal',
-  templateUrl: 'select-meal.component.html',
-  styleUrls: ['./select-meal.component.scss']
+  selector: "select-meal",
+  templateUrl: "select-meal.component.html",
+  styleUrls: ["./select-meal.component.scss"],
 })
 export class SelectMealComponent {
-  @Input() meal = '';
+  @Input() meal = "";
   @Output() mealChange = new EventEmitter();
 
-  mealOptions = [{
-    title: 'Breakfast',
-    key: 'breakfast',
-  }, {
-    title: 'Lunch',
-    key: 'lunch',
-  }, {
-    title: 'Dinner',
-    key: 'dinner',
-  }, {
-    title: 'Snack',
-    key: 'snacks',
-  }, {
-    title: 'Other',
-    key: 'other',
-  }];
+  mealOptions = [
+    {
+      title: "Breakfast",
+      key: "breakfast",
+    },
+    {
+      title: "Lunch",
+      key: "lunch",
+    },
+    {
+      title: "Dinner",
+      key: "dinner",
+    },
+    {
+      title: "Snack",
+      key: "snacks",
+    },
+    {
+      title: "Other",
+      key: "other",
+    },
+  ];
 
   constructor() {
     // Wait until after props are set
@@ -39,7 +45,9 @@ export class SelectMealComponent {
 
   selectLastUsedMeal() {
     const lastUsedMeal = localStorage.getItem(LAST_USED_MEAL_VAR);
-    const mealExists = this.mealOptions.find(option => option.key === lastUsedMeal);
+    const mealExists = this.mealOptions.find(
+      (option) => option.key === lastUsedMeal
+    );
 
     if (mealExists) {
       this.meal = lastUsedMeal;

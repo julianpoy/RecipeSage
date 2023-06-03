@@ -2,7 +2,9 @@
   "name": "recipesage",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky install"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "15.1.5",
@@ -130,7 +132,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "jest": "^29.4.1",
     "nodemon": "^2.0.20",
     "nx": "^16.2.2",
@@ -150,10 +152,5 @@
   },
   "prisma": {
     "schema": "packages/prisma/src/prisma/schema.prisma"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "nx affected -t lint"
-    }
   }
 }

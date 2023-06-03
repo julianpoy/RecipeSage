@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { Injectable } from "@angular/core";
+import { environment } from "../../environments/environment";
 
 export enum FeatureFlagKeys {
-  EnableExperimentalOfflineCache = 'enableExperimentalOfflineCache',
-  EnableContribution = 'enableContribution',
-  EnableInstallInstructions = 'enableInstallInstructions'
+  EnableExperimentalOfflineCache = "enableExperimentalOfflineCache",
+  EnableContribution = "enableContribution",
+  EnableInstallInstructions = "enableInstallInstructions",
 }
 
 export interface FeatureFlagTypes {
@@ -14,19 +14,27 @@ export interface FeatureFlagTypes {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FeatureFlagService {
   flags = {
-    [FeatureFlagKeys.EnableExperimentalOfflineCache]: this.isHost('beta.recipesage.com') || !environment.production,
-    [FeatureFlagKeys.EnableContribution]: !this.isHost(['ios.recipesage.com', 'android.recipesage.com']),
-    [FeatureFlagKeys.EnableInstallInstructions]: !this.isHost(['windows.recipesage.com', 'ios.recipesage.com', 'android.recipesage.com']),
-  }
+    [FeatureFlagKeys.EnableExperimentalOfflineCache]:
+      this.isHost("beta.recipesage.com") || !environment.production,
+    [FeatureFlagKeys.EnableContribution]: !this.isHost([
+      "ios.recipesage.com",
+      "android.recipesage.com",
+    ]),
+    [FeatureFlagKeys.EnableInstallInstructions]: !this.isHost([
+      "windows.recipesage.com",
+      "ios.recipesage.com",
+      "android.recipesage.com",
+    ]),
+  };
 
   constructor() {}
 
   private isHost(host: string | string[]) {
-    if (typeof host === 'object') {
+    if (typeof host === "object") {
       return host.includes(window.location.hostname);
     }
 

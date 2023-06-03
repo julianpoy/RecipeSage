@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { LoadingBarService } from '@ngx-loading-bar/core';
+import { LoadingBarService } from "@ngx-loading-bar/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class LoadingService {
-
   REQUEST_COMPLETE_DELAY = 150;
 
   constructor(private loadingBar: LoadingBarService) {}
@@ -19,7 +18,7 @@ export class LoadingService {
         setTimeout(() => {
           this.loadingBar.complete();
         }, this.REQUEST_COMPLETE_DELAY);
-      }
+      },
     };
   }
 }

@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController, ModalController, AlertController, PopoverController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import {
+  NavController,
+  ToastController,
+  ModalController,
+  AlertController,
+  PopoverController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { MealPlanService } from '~/services/meal-plan.service';
-import { UtilService, RouteMap } from '~/services/util.service';
-import { PreferencesService, MealPlanPreferenceKey } from '~/services/preferences.service';
-import {ShareMealPlanModalPage} from '../share-meal-plan-modal/share-meal-plan-modal.page';
+import { LoadingService } from "~/services/loading.service";
+import { MealPlanService } from "~/services/meal-plan.service";
+import { UtilService, RouteMap } from "~/services/util.service";
+import {
+  PreferencesService,
+  MealPlanPreferenceKey,
+} from "~/services/preferences.service";
+import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
 
 @Component({
-  selector: 'page-meal-plan-popover',
-  templateUrl: 'meal-plan-popover.page.html',
-  styleUrls: ['meal-plan-popover.page.scss']
+  selector: "page-meal-plan-popover",
+  templateUrl: "meal-plan-popover.page.html",
+  styleUrls: ["meal-plan-popover.page.scss"],
 })
 export class MealPlanPopoverPage {
-
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
 
@@ -38,7 +46,7 @@ export class MealPlanPopoverPage {
     this.preferencesService.save();
 
     this.popoverCtrl.dismiss({
-      reload: true
+      reload: true,
     });
   }
 
@@ -60,39 +68,43 @@ export class MealPlanPopoverPage {
 
   bulkAddToShoppingList() {
     this.popoverCtrl.dismiss({
-      bulkAddToShoppingList: true
+      bulkAddToShoppingList: true,
     });
   }
 
   pinRecipes() {
     this.popoverCtrl.dismiss({
-      pinRecipes: true
+      pinRecipes: true,
     });
   }
 
   copySelected() {
     this.popoverCtrl.dismiss({
-      copy: true
+      copy: true,
     });
   }
 
   moveSelected() {
     this.popoverCtrl.dismiss({
-      move: true
+      move: true,
     });
   }
 
   deleteSelected() {
     this.popoverCtrl.dismiss({
-      delete: true
+      delete: true,
     });
   }
 
   async deleteMealPlan() {
-    const header = await this.translate.get('pages.mealPlanPopover.delete.header').toPromise();
-    const message = await this.translate.get('pages.mealPlanPopover.delete.message').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.delete').toPromise();
+    const header = await this.translate
+      .get("pages.mealPlanPopover.delete.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.mealPlanPopover.delete.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -100,17 +112,17 @@ export class MealPlanPopoverPage {
       buttons: [
         {
           text: cancel,
-          role: 'cancel',
-          handler: () => { }
+          role: "cancel",
+          handler: () => {},
         },
         {
           text: del,
-          cssClass: 'alertDanger',
+          cssClass: "alertDanger",
           handler: () => {
             this._deleteMealPlan();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     alert.present();
   }

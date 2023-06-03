@@ -1,11 +1,13 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>{{ 'pages.recipeDetails.pageTitle' | translate }}: {{ recipe.title }}</ion-title>
+    <ion-title
+      >{{ 'pages.recipeDetails.pageTitle' | translate }}: {{ recipe.title
+      }}</ion-title
+    >
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -15,21 +17,29 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-card class="ion-no-margin">
     <ion-item lines="none">
-      <ion-thumbnail class="ion-margin-top" *ngIf="recipe.images && recipe.images.length > 0" slot="start" (click)="openImageViewer()">
-        <img src="{{ recipe.images[0].location }}">
+      <ion-thumbnail
+        class="ion-margin-top"
+        *ngIf="recipe.images && recipe.images.length > 0"
+        slot="start"
+        (click)="openImageViewer()"
+      >
+        <img src="{{ recipe.images[0].location }}" />
       </ion-thumbnail>
 
       <ion-label>
         <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
 
-        <ion-grid class="meta metacontainer-desktop" showWhen="core" *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
+        <ion-grid
+          class="meta metacontainer-desktop"
+          showWhen="core"
+          *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
+        >
           <ion-row class="ion-justify-content-start">
             <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
               <p>
@@ -37,21 +47,51 @@
                 <rating [rating]="recipe.rating"></rating>
               </p>
             </ion-col>
-            <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
+            <ion-col
+              *ngIf="recipe.source || recipe.url"
+              class="ion-no-padding"
+              size="auto"
+            >
               <p class="ion-text-wrap">
                 <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
-                <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || utilService.truncate(recipe.url.trim(), 40) }}</a>
-                <span *ngIf='!recipe.url?.trim()'>{{ recipe.source?.trim() }}</span>
+                <a
+                  *ngIf="recipe.url?.trim()"
+                  href="{{ recipe.url ? recipe.url : '' }}"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  >{{ recipe.source?.trim() ||
+                  utilService.truncate(recipe.url.trim(), 40) }}</a
+                >
+                <span *ngIf="!recipe.url?.trim()"
+                  >{{ recipe.source?.trim() }}</span
+                >
               </p>
             </ion-col>
-            <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{ recipe.activeTime }}</p>
+            <ion-col
+              *ngIf="recipe.activeTime"
+              class="ion-no-padding"
+              size="auto"
+            >
+              <p class="ion-text-wrap">
+                <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{
+                recipe.activeTime }}
+              </p>
             </ion-col>
-            <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{ recipe.totalTime }}</p>
+            <ion-col
+              *ngIf="recipe.totalTime"
+              class="ion-no-padding"
+              size="auto"
+            >
+              <p class="ion-text-wrap">
+                <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{
+                recipe.totalTime }}
+              </p>
             </ion-col>
             <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
-              <p class="ion-text-wrap"><b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{ recipe.yield }}</p>
+              <p class="ion-text-wrap">
+                <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{
+                recipe.yield }}
+              </p>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -59,7 +99,10 @@
       </ion-label>
     </ion-item>
 
-    <div class="metacontainer-mobile ion-padding-start ion-padding-end" *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield">
+    <div
+      class="metacontainer-mobile ion-padding-start ion-padding-end"
+      *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
+    >
       <ion-grid class="meta">
         <ion-row class="ion-justify-content-start">
           <ion-col *ngIf="recipe.rating" class="ion-no-padding" size="auto">
@@ -68,26 +111,41 @@
               <rating [rating]="recipe.rating"></rating>
             </p>
           </ion-col>
-          <ion-col *ngIf="recipe.source || recipe.url" class="ion-no-padding" size="auto">
+          <ion-col
+            *ngIf="recipe.source || recipe.url"
+            class="ion-no-padding"
+            size="auto"
+          >
             <p>
               <b>{{ 'pages.recipeDetails.source' | translate }}: </b>
-              <a *ngIf='recipe.url?.trim()' href="{{ recipe.url ? recipe.url : '' }}" target="_blank" rel="noreferrer noopener">{{ recipe.source?.trim() || recipe.url }}</a>
-              <span *ngIf='!recipe.url?.trim()'>{{ recipe.source?.trim() }}</span>
+              <a
+                *ngIf="recipe.url?.trim()"
+                href="{{ recipe.url ? recipe.url : '' }}"
+                target="_blank"
+                rel="noreferrer noopener"
+                >{{ recipe.source?.trim() || recipe.url }}</a
+              >
+              <span *ngIf="!recipe.url?.trim()"
+                >{{ recipe.source?.trim() }}</span
+              >
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.activeTime" class="ion-no-padding" size="auto">
             <p>
-              <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{ recipe.activeTime }}
+              <b>{{ 'pages.recipeDetails.activeTime' | translate }}: </b>{{
+              recipe.activeTime }}
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.totalTime" class="ion-no-padding" size="auto">
             <p>
-              <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{ recipe.totalTime }}
+              <b>{{ 'pages.recipeDetails.totalTime' | translate }}: </b>{{
+              recipe.totalTime }}
             </p>
           </ion-col>
           <ion-col *ngIf="recipe.yield" class="ion-no-padding" size="auto">
             <p>
-              <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{ recipe.yield }}
+              <b>{{ 'pages.recipeDetails.yield' | translate }}: </b>{{
+              recipe.yield }}
             </p>
           </ion-col>
         </ion-row>
@@ -96,12 +154,17 @@
 
     <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
       <p class="ion-text-wrap">
-        <b>{{ 'pages.recipeDetails.sentBy' | translate:{name: recipe.fromUser.name} }}</b><br />
+        <b
+          >{{ 'pages.recipeDetails.sentBy' | translate:{name:
+          recipe.fromUser.name} }}</b
+        ><br />
         {{ 'pages.recipeDetails.sentByAction' | translate }}<br /><br />
       </p>
     </ion-item>
 
-    <br *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)" />
+    <br
+      *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)"
+    />
 
     <div class="ingredientsInstructionsGrid">
       <div class="ingredientsCol">
@@ -113,14 +176,21 @@
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let ingredient of ingredients; index as ingredientIdx"
+            <p
+              *ngFor="let ingredient of ingredients; index as ingredientIdx"
               [innerHTML]="ingredient.content"
               class="ingredient ion-text-wrap"
               [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
-              (click)="ingredientClicked($event, ingredient, ingredientIdx)"></p>
-            <p *ngIf="!ingredients || ingredients.length === 0">{{ 'pages.recipeDetails.noIngredients' | translate }}</p>
+              (click)="ingredientClicked($event, ingredient, ingredientIdx)"
+            ></p>
+            <p *ngIf="!ingredients || ingredients.length === 0">
+              {{ 'pages.recipeDetails.noIngredients' | translate }}
+            </p>
             <p>
-            <a class="scale" (click)="changeScale()">{{ 'pages.recipeDetails.scaleStatus' | translate:{scale:scale} }}</a>
+              <a class="scale" (click)="changeScale()"
+                >{{ 'pages.recipeDetails.scaleStatus' | translate:{scale:scale}
+                }}</a
+              >
             </p>
           </ion-label>
         </ion-item>
@@ -134,16 +204,28 @@
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
           <ion-label>
-            <p *ngFor="let instruction of instructions; index as instructionIdx" class="instruction ion-text-wrap">
-              <span *ngIf="instruction.isHeader"><b class="sectionHeader">{{instruction.content}}</b></span>
+            <p
+              *ngFor="let instruction of instructions; index as instructionIdx"
+              class="instruction ion-text-wrap"
+            >
+              <span *ngIf="instruction.isHeader"
+                ><b class="sectionHeader">{{instruction.content}}</b></span
+              >
               <span
                 *ngIf="!instruction.isHeader"
                 (click)="instructionClicked($event, instruction, instructionIdx)"
-                [ngClass]="{ complete: getInstructionComplete(instructionIdx) }">
-                <b>{{instruction.count}} &nbsp;</b> <span class="instructionContent" [innerHTML]="instruction.content"></span>
+                [ngClass]="{ complete: getInstructionComplete(instructionIdx) }"
+              >
+                <b>{{instruction.count}} &nbsp;</b>
+                <span
+                  class="instructionContent"
+                  [innerHTML]="instruction.content"
+                ></span>
               </span>
             </p>
-            <p *ngIf="!instructions || instructions.length === 0">{{ 'pages.recipeDetails.noInstructions' | translate }}</p>
+            <p *ngIf="!instructions || instructions.length === 0">
+              {{ 'pages.recipeDetails.noInstructions' | translate }}
+            </p>
           </ion-label>
         </ion-item>
       </div>
@@ -158,17 +240,24 @@
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
         <ion-label>
-          <p *ngFor="let note of notes; index as noteIdx"
+          <p
+            *ngFor="let note of notes; index as noteIdx"
             [innerHTML]="note.content"
             [ngClass]="{ header: note.isHeader }"
             class="ion-text-wrap"
           ></p>
-          <p *ngIf="!notes || notes.length === 0">{{ 'pages.recipeDetails.noNotes' | translate }}</p>
+          <p *ngIf="!notes || notes.length === 0">
+            {{ 'pages.recipeDetails.noNotes' | translate }}
+          </p>
         </ion-label>
       </ion-item>
     </div>
 
-    <ion-item *ngIf="recipe.folder !== 'inbox'" class="labels ion-text-wrap ion-margin-top" lines="none">
+    <ion-item
+      *ngIf="recipe.folder !== 'inbox'"
+      class="labels ion-text-wrap ion-margin-top"
+      lines="none"
+    >
       <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
       <ion-label>
         <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
@@ -181,8 +270,10 @@
       </p>
     </ion-item>
 
-    <div class="dropdownSelect ion-margin-start ion-margin-end" *ngIf="recipe.folder !== 'inbox' && recipe.isOwner">
-
+    <div
+      class="dropdownSelect ion-margin-start ion-margin-end"
+      *ngIf="recipe.folder !== 'inbox' && recipe.isOwner"
+    >
       <div class="labels">
         <span class="label" *ngFor="let label of selectedLabels">
           <button>
@@ -198,18 +289,20 @@
       </div>
 
       <input
-        [(ngModel)]='pendingLabel'
-        (click)='toggleAutocomplete(true); $event.stopPropagation();'
+        [(ngModel)]="pendingLabel"
+        (click)="toggleAutocomplete(true); $event.stopPropagation();"
         (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
         placeholder="Create or select label"
         autocomplete="off"
         #labelInputField
-        id="labelInputField" />
+        id="labelInputField"
+      />
       <div class="autocomplete" *ngIf="showAutocomplete">
         <button
           class="suggestion"
           *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
-          (click)="addLabel(pendingLabel)">
+          (click)="addLabel(pendingLabel)"
+        >
           <ion-item class="suggestion-inner" button>
             <ion-label>
               {{ pendingLabel }}
@@ -221,7 +314,8 @@
         </button>
         <button
           class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1">
+          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1"
+        >
           <ion-item class="suggestion-inner" button>
             <ion-label>
               {{ pendingLabel }}
@@ -232,7 +326,8 @@
         <button
           class="suggestion"
           *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
-          (click)="addLabel(label)">
+          (click)="addLabel(label)"
+        >
           <ion-item class="suggestion-inner" button>
             <ion-label>
               {{ label }}
@@ -249,8 +344,10 @@
       <ion-label>
         <p>
           <i>
-            {{ 'pages.recipeDetails.created' | translate }} {{ prettyDateTime(recipe.createdAt) }}<br />
-            {{ 'pages.recipeDetails.updated' | translate }} {{ prettyDateTime(recipe.updatedAt) }}
+            {{ 'pages.recipeDetails.created' | translate }} {{
+            prettyDateTime(recipe.createdAt) }}<br />
+            {{ 'pages.recipeDetails.updated' | translate }} {{
+            prettyDateTime(recipe.updatedAt) }}
           </i>
         </p>
       </ion-label>
@@ -260,22 +357,25 @@
       <ion-grid>
         <ion-row>
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
-          	<ion-button expand="block" (click)="moveToFolder('main')">
-          	  <ion-icon name="cloud-download" slot="start"></ion-icon>
+            <ion-button expand="block" (click)="moveToFolder('main')">
+              <ion-icon name="cloud-download" slot="start"></ion-icon>
               {{ 'pages.recipeDetails.saveToMyRecipes' | translate }}
-          	</ion-button>
+            </ion-button>
           </ion-col>
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
-          	<ion-button color="danger" expand="block" (click)="deleteRecipe()">
-        	    <ion-icon name="trash" slot="start"></ion-icon>
+            <ion-button color="danger" expand="block" (click)="deleteRecipe()">
+              <ion-icon name="trash" slot="start"></ion-icon>
               {{ 'pages.recipeDetails.delete' | translate }}
-        	  </ion-button>
+            </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
     </div>
 
-    <div *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn" class="ion-padding">
+    <div
+      *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn"
+      class="ion-padding"
+    >
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -289,7 +389,10 @@
       </ion-button>
     </div>
 
-    <div *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn" class="ion-padding">
+    <div
+      *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn"
+      class="ion-padding"
+    >
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -317,7 +420,11 @@
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
-        <ion-button (click)="addRecipeToShoppingList()" fill="clear" size="small">
+        <ion-button
+          (click)="addRecipeToShoppingList()"
+          fill="clear"
+          size="small"
+        >
           <ion-icon name="list" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.addToShoppingList' | translate }}
         </ion-button>
@@ -347,7 +454,11 @@
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center">
-        <ion-button (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()" fill="clear" size="small">
+        <ion-button
+          (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()"
+          fill="clear"
+          size="small"
+        >
           <ion-icon name="pin" slot="start"></ion-icon>
           <span *ngIf="!cookingToolbarService.isPinned(recipeId)">
             {{ 'pages.recipeDetails.pinRecipe' | translate }}
@@ -358,6 +469,5 @@
         </ion-button>
       </ion-col>
     </ion-row>
-
   </ion-card>
 </ion-content>

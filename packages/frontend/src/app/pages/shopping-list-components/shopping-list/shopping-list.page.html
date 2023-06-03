@@ -21,17 +21,33 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
-    <div *ngIf="preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
-      <div *ngFor="let categoryTitle of categoryTitles" class="category-container">
-        <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
+    <div
+      *ngIf="preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]"
+    >
+      <div
+        *ngFor="let categoryTitle of categoryTitles"
+        class="category-container"
+      >
+        <ion-list-header
+          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
+        >
           <ion-title class="ion-no-padding">
             {{ categoryTitle }}
-            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="caret-down"></ion-icon>
-            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="caret-up"></ion-icon>
+            <ion-icon
+              *ngIf="!categoryTitleCollapsed[categoryTitle]"
+              name="caret-down"
+            ></ion-icon>
+            <ion-icon
+              *ngIf="categoryTitleCollapsed[categoryTitle]"
+              name="caret-up"
+            ></ion-icon>
           </ion-title>
         </ion-list-header>
         <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-          <div *ngFor="let group of groupsByCategoryTitle[categoryTitle]" class="shopping-list-item">
+          <div
+            *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
+            class="shopping-list-item"
+          >
             <shopping-list-group
               [group]="group"
               [categoryTitle]="categoryTitle"
@@ -39,12 +55,15 @@
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
               [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-              (completeToggle)="completeItems($event, true)"></shopping-list-group>
+              (completeToggle)="completeItems($event, true)"
+            ></shopping-list-group>
           </div>
         </div>
       </div>
     </div>
-    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]">
+    <div
+      *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]"
+    >
       <div *ngFor="let groupTitle of groupTitles" class="shopping-list-item">
         <shopping-list-group
           [group]="{ title: groupTitle, items: itemsByGroupTitle[groupTitle] }"
@@ -52,32 +71,52 @@
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
           [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
-          (completeToggle)="completeItems($event, true)"></shopping-list-group>
+          (completeToggle)="completeItems($event, true)"
+        ></shopping-list-group>
       </div>
     </div>
-    <div *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
-      <div *ngFor="let categoryTitle of categoryTitles" class="category-container">
-        <ion-list-header (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]">
+    <div
+      *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
+    >
+      <div
+        *ngFor="let categoryTitle of categoryTitles"
+        class="category-container"
+      >
+        <ion-list-header
+          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
+        >
           <ion-title class="ion-no-padding">
             {{ categoryTitle }}
-            <ion-icon *ngIf="!categoryTitleCollapsed[categoryTitle]" name="caret-down"></ion-icon>
-            <ion-icon *ngIf="categoryTitleCollapsed[categoryTitle]" name="caret-up"></ion-icon>
+            <ion-icon
+              *ngIf="!categoryTitleCollapsed[categoryTitle]"
+              name="caret-down"
+            ></ion-icon>
+            <ion-icon
+              *ngIf="categoryTitleCollapsed[categoryTitle]"
+              name="caret-up"
+            ></ion-icon>
           </ion-title>
         </ion-list-header>
         <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-          <div *ngFor="let item of itemsByCategoryTitle[categoryTitle]" class="shopping-list-item">
+          <div
+            *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
+            class="shopping-list-item"
+          >
             <shopping-list-item
               [title]="item.title"
               [completed]="item.completed"
               [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
               [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
               [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-              (completeToggle)="completeItems([item], true)"></shopping-list-item>
+              (completeToggle)="completeItems([item], true)"
+            ></shopping-list-item>
           </div>
         </div>
       </div>
     </div>
-    <div *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]">
+    <div
+      *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
+    >
       <div *ngFor="let item of items" class="shopping-list-item">
         <shopping-list-item
           [title]="item.title"
@@ -85,7 +124,8 @@
           [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
           [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
           [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-          (completeToggle)="completeItems([item], true)"></shopping-list-item>
+          (completeToggle)="completeItems([item], true)"
+        ></shopping-list-item>
       </div>
     </div>
     <null-state *ngIf="items.length === 0 && initialLoadComplete">
@@ -110,12 +150,15 @@
 
   <ion-list *ngIf="recipeIds.length > 0">
     <ion-item-divider>
-      <ion-label>
-        {{ 'pages.shoppingList.recipes' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.shoppingList.recipes' | translate }} </ion-label>
     </ion-item-divider>
     <ion-item *ngFor="let recipeId of recipeIds" button>
-      <ion-icon class="delete-recipe" name="trash" slot="start" (click)="removeRecipe(recipeId)"></ion-icon>
+      <ion-icon
+        class="delete-recipe"
+        name="trash"
+        slot="start"
+        (click)="removeRecipe(recipeId)"
+      ></ion-icon>
       <ion-label (click)="openRecipe(itemsByRecipeId[recipeId][0].recipe.id)">
         {{ itemsByRecipeId[recipeId][0].recipe.title }}
       </ion-label>
@@ -126,13 +169,23 @@
 
   <ion-list *ngIf="completedItems.length > 0">
     <ion-item>
-      <ion-label>
-        {{ 'pages.shoppingList.completed' | translate }}
-      </ion-label>
-      <ion-button color="primary" slot="end" size="small" alt="Restore All" (click)="completeItems(completedItems, false)">
+      <ion-label> {{ 'pages.shoppingList.completed' | translate }} </ion-label>
+      <ion-button
+        color="primary"
+        slot="end"
+        size="small"
+        alt="Restore All"
+        (click)="completeItems(completedItems, false)"
+      >
         <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button color="danger" slot="end" size="small" alt="Delete All" (click)="removeItemsConfirm(completedItems)">
+      <ion-button
+        color="danger"
+        slot="end"
+        size="small"
+        alt="Delete All"
+        (click)="removeItemsConfirm(completedItems)"
+      >
         <ion-icon name="trash" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-item>
@@ -143,7 +196,8 @@
       [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
       [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
       [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
-      (completeToggle)="completeItems([item], false)"></shopping-list-item>
+      (completeToggle)="completeItems([item], false)"
+    ></shopping-list-item>
   </ion-list>
 
   <br />

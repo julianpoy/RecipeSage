@@ -1,14 +1,14 @@
-import * as express from 'express';
+import * as express from "express";
 const router = express.Router();
 
-import * as MiddlewareService from '../services/middleware.js';
-import * as GripService from '../services/grip.js';
+import * as MiddlewareService from "../services/middleware.js";
+import * as GripService from "../services/grip.js";
 
 router.use(GripService.expressGrip.preHandlerGripMiddleware);
 
 router.all(
-  '/',
-  MiddlewareService.validateSession(['user']),
+  "/",
+  MiddlewareService.validateSession(["user"]),
   function (req, res, next) {
     // Reject non-WebSocket requests
     if (!GripService.expressGrip.verifyIsWebSocket(res, next)) {
@@ -20,7 +20,7 @@ router.all(
     // If this is a new connection, accept it and subscribe it to a channel
     if (ws.isOpening()) {
       ws.accept();
-      ws.subscribe('all');
+      ws.subscribe("all");
       ws.subscribe(res.locals.session.userId);
     }
 
@@ -29,8 +29,8 @@ router.all(
 
       try {
         message = ws.recv();
-      } catch(e) {
-        if (e.message != 'Client disconnected unexpectedly.') throw e;
+      } catch (e) {
+        if (e.message != "Client disconnected unexpectedly.") throw e;
       }
 
       // If return value is null then connection is closed
@@ -45,10 +45,10 @@ router.all(
 
     // next() must be called for the post-handler middleware to execute
     next();
-  });
+  }
+);
 
 // Add the post-handler middleware to the back of the stack
 router.use(GripService.expressGrip.postHandlerGripMiddleware);
 
 export default router;
-

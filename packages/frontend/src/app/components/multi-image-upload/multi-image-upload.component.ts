@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { ToastController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from '~/services/user.service';
-import { Image, ImageService } from '~/services/image.service';
-import { LoadingService } from '~/services/loading.service';
-import { CapabilitiesService } from '~/services/capabilities.service';
-import { UtilService, RouteMap } from '~/services/util.service';
+import { UserService } from "~/services/user.service";
+import { Image, ImageService } from "~/services/image.service";
+import { LoadingService } from "~/services/loading.service";
+import { CapabilitiesService } from "~/services/capabilities.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'multi-image-upload',
-  templateUrl: 'multi-image-upload.component.html',
-  styleUrls: ['./multi-image-upload.component.scss']
+  selector: "multi-image-upload",
+  templateUrl: "multi-image-upload.component.html",
+  styleUrls: ["./multi-image-upload.component.scss"],
 })
 export class MultiImageUploadComponent {
   @Output() imageUpdate = new EventEmitter();
@@ -32,11 +32,11 @@ export class MultiImageUploadComponent {
     private imageService: ImageService,
     private loadingService: LoadingService,
     private translate: TranslateService,
-    public capabilitiesService: CapabilitiesService,
+    public capabilitiesService: CapabilitiesService
   ) {}
 
   filePicker() {
-    document.getElementById('filePicker').click();
+    document.getElementById("filePicker").click();
   }
 
   async addImage(event) {
@@ -46,15 +46,19 @@ export class MultiImageUploadComponent {
     }
 
     if (this.images.length + files.length > 10) {
-      const message = await this.translate.get('components.multiImageUpload.imageLimit').toPromise();
-      const close = await this.translate.get('generic.close').toPromise();
+      const message = await this.translate
+        .get("components.multiImageUpload.imageLimit")
+        .toPromise();
+      const close = await this.translate.get("generic.close").toPromise();
 
       const imageUploadTooManyToast = await this.toastCtrl.create({
         message,
-        buttons: [{
-          text: close,
-          role: 'cancel'
-        }]
+        buttons: [
+          {
+            text: close,
+            role: "cancel",
+          },
+        ],
       });
       imageUploadTooManyToast.present();
       return;
@@ -74,21 +78,25 @@ export class MultiImageUploadComponent {
       }
 
       const response = await this.imageService.create(file, {
-        '*': () => someUploadFailed = true,
+        "*": () => (someUploadFailed = true),
       });
       if (response.success) this.images.push(response.data);
     }
 
     if (someUploadFailed) {
-      const message = await this.translate.get('components.multiImageUpload.imageError').toPromise();
-      const close = await this.translate.get('generic.close').toPromise();
+      const message = await this.translate
+        .get("components.multiImageUpload.imageError")
+        .toPromise();
+      const close = await this.translate.get("generic.close").toPromise();
 
       const imageUploadErrorToast = await this.toastCtrl.create({
         message,
-        buttons: [{
-          text: close,
-          role: 'cancel'
-        }]
+        buttons: [
+          {
+            text: close,
+            role: "cancel",
+          },
+        ],
       });
       imageUploadErrorToast.present();
     }

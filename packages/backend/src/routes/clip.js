@@ -1,29 +1,29 @@
-import * as express from 'express';
+import * as express from "express";
 const router = express.Router();
-import fetch from 'node-fetch';
-import * as Sentry from '@sentry/node';
-import he from 'he';
-import url from 'url';
-import { dedent } from 'ts-dedent';
+import fetch from "node-fetch";
+import * as Sentry from "@sentry/node";
+import he from "he";
+import url from "url";
+import { dedent } from "ts-dedent";
 
-import puppeteer from 'puppeteer-core';
+import puppeteer from "puppeteer-core";
 
-import jsdom from 'jsdom';
-import RecipeClipper from '@julianpoy/recipe-clipper';
+import jsdom from "jsdom";
+import RecipeClipper from "@julianpoy/recipe-clipper";
 
-const INTERCEPT_PLACEHOLDER_URL = 'https://example.com/intercept-me';
-import sanitizeHtml from 'sanitize-html';
-import { fetchURL } from '../services/fetch';
+const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
+import sanitizeHtml from "sanitize-html";
+import { fetchURL } from "../services/fetch";
 
 const disconnectPuppeteer = (browser) => {
   try {
     browser.disconnect();
-  } catch(e) {
+  } catch (e) {
     Sentry.captureException(e);
   }
 };
 
-const clipRecipe = async clipUrl => {
+const clipRecipe = async (clipUrl) => {
   let browser;
   try {
     let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
@@ -54,25 +54,28 @@ const clipRecipe = async clipUrl => {
     await page.setBypassCSP(true);
 
     await page.setRequestInterception(true);
-    page.on('request', async interceptedRequest => {
+    page.on("request", async (interceptedRequest) => {
       if (interceptedRequest.url() === INTERCEPT_PLACEHOLDER_URL) {
         try {
-          const response = await fetch(process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: interceptedRequest.postData(),
-          });
+          const response = await fetch(
+            process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: interceptedRequest.postData(),
+            }
+          );
 
           const text = await response.text();
 
           interceptedRequest.respond({
-            content: 'application/json',
-            body: text
+            content: "application/json",
+            body: text,
           });
-        } catch(e) {
-          console.log('Error while classifying', e);
+        } catch (e) {
+          console.log("Error while classifying", e);
           interceptedRequest.abort();
         }
       } else {
@@ -82,14 +85,14 @@ const clipRecipe = async clipUrl => {
 
     try {
       await page.goto(clipUrl, {
-        waitUntil: 'networkidle2',
-        timeout: 20000
+        waitUntil: "networkidle2",
+        timeout: 20000,
       });
-    } catch(err) {
+    } catch (err) {
       err.status = 400;
 
-      Sentry.withScope(scope => {
-        scope.setExtra('clipUrl', clipUrl);
+      Sentry.withScope((scope) => {
+        scope.setExtra("clipUrl", clipUrl);
         Sentry.captureException(err);
       });
 
@@ -109,7 +112,9 @@ const clipRecipe = async clipUrl => {
       } catch(e) {}
     }`);
 
-    await page.addScriptTag({ path: './node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js' });
+    await page.addScriptTag({
+      path: "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
+    });
     const recipeData = await page.evaluate((interceptUrl) => {
       // eslint-disable-next-line no-undef
       return window.RecipeClipper.clipRecipe({
@@ -128,10 +133,10 @@ const clipRecipe = async clipUrl => {
 };
 
 const replaceBrWithBreak = (html) => {
-  return html.replaceAll(new RegExp(/<br( \/)?>/, 'g'), '\n');
+  return html.replaceAll(new RegExp(/<br( \/)?>/, "g"), "\n");
 };
 
-const clipRecipeJSDOM = async clipUrl => {
+const clipRecipeJSDOM = async (clipUrl) => {
   const response = await fetchURL(clipUrl);
 
   const document = await response.text();
@@ -140,14 +145,14 @@ const clipRecipeJSDOM = async clipUrl => {
 
   const { window } = dom;
 
-  Object.defineProperty(window.Element.prototype, 'innerText', {
+  Object.defineProperty(window.Element.prototype, "innerText", {
     get() {
       const html = replaceBrWithBreak(this.innerHTML);
       return sanitizeHtml(html, {
         allowedTags: [], // remove all tags and return text content only
         allowedAttributes: {}, // remove all tags and return text content only
       });
-    }
+    },
   });
 
   window.fetch = fetch;
@@ -158,11 +163,11 @@ const clipRecipeJSDOM = async clipUrl => {
   });
 };
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const url = (req.query.url || '').trim();
+    const url = (req.query.url || "").trim();
     if (!url) {
-      return res.status(400).send('Must provide a URL');
+      return res.status(400).send("Must provide a URL");
     }
 
     const recipeDataBrowser = await clipRecipe(url).catch((e) => {
@@ -186,7 +191,7 @@ router.get('/', async (req, res, next) => {
 
         // Merge results (browser overrides JSDOM due to accuracy)
         Object.entries(recipeDataBrowser || {}).forEach((entry) => {
-          if(entry[1]) results[entry[0]] = entry[1];
+          if (entry[1]) results[entry[0]] = entry[1];
         });
       }
     }
@@ -197,11 +202,9 @@ router.get('/', async (req, res, next) => {
     });
 
     res.status(200).json(results);
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 });
 
 export default router;
-
-

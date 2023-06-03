@@ -1,71 +1,69 @@
-
-
 export default {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('ShoppingListItems', {
+    return queryInterface.createTable("ShoppingListItems", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4,
       },
       userId: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'Users',
-          key: 'id',
+          model: "Users",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       shoppingListId: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'ShoppingLists',
-          key: 'id',
+          model: "ShoppingLists",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       mealPlanItemId: {
         allowNull: true,
         type: Sequelize.UUID,
         references: {
-          model: 'MealPlanItems',
-          key: 'id',
+          model: "MealPlanItems",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       recipeId: {
         allowNull: true,
         type: Sequelize.UUID,
         references: {
-          model: 'Recipes',
-          key: 'id',
+          model: "Recipes",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       title: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       completed: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface) => {
-    return queryInterface.dropTable('ShoppingListItems');
-  }
+    return queryInterface.dropTable("ShoppingListItems");
+  },
 };

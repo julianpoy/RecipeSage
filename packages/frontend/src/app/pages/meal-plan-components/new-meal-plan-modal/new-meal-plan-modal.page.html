@@ -1,9 +1,6 @@
 <ion-header>
-
   <ion-toolbar>
-    <ion-title>
-      {{ 'pages.newMealPlanModal.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.newMealPlanModal.title' | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -11,7 +8,6 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content class="ion-padding">
@@ -19,16 +15,22 @@
     <ion-label position="floating">
       {{ 'pages.newMealPlanModal.input.title' | translate }}
     </ion-label>
-    <ion-input [(ngModel)]="mealPlanTitle" type="text" value=""
+    <ion-input
+      [(ngModel)]="mealPlanTitle"
+      type="text"
+      value=""
       autocapitalize="on"
       autocomplete="on"
       autocorrect="on"
-      spellcheck="true"></ion-input>
+      spellcheck="true"
+    ></ion-input>
   </ion-item>
 
   <br /><br />
 
-  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
+  <select-collaborators
+    [(selectedCollaboratorIds)]="selectedCollaboratorIds"
+  ></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">

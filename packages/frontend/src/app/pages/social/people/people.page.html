@@ -4,9 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ 'pages.people.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.people.title' | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -41,18 +39,13 @@
 
   <ion-item *ngIf="accountInfo?.enableProfile" button (click)="editProfile()">
     <ion-avatar slot="start">
-      <img
-        *ngIf="!myProfile?.profileImages?.length"
-        src="assets/avatar.svg"
-      >
+      <img *ngIf="!myProfile?.profileImages?.length" src="assets/avatar.svg" />
       <img
         *ngIf="myProfile?.profileImages?.length"
         [src]="myProfile.profileImages[0].location"
-      >
+      />
     </ion-avatar>
-    <ion-label>
-      {{ 'pages.people.edit' | translate }}
-    </ion-label>
+    <ion-label> {{ 'pages.people.edit' | translate }} </ion-label>
   </ion-item>
 
   <br />
@@ -61,9 +54,7 @@
 
   <ion-list *ngIf="accountInfo?.enableProfile">
     <ion-item-divider *ngIf="friendships?.friends?.length > 0">
-      <ion-label>
-        {{ 'pages.people.friends' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.people.friends' | translate }} </ion-label>
     </ion-item-divider>
     <ion-item
       *ngFor="let friendship of friendships?.friends"
@@ -74,11 +65,11 @@
         <img
           *ngIf="!friendship.otherUser.profileImages?.length"
           src="assets/avatar.svg"
-        >
+        />
         <img
           *ngIf="friendship.otherUser.profileImages?.length"
           [src]="friendship.otherUser.profileImages[0].location"
-        >
+        />
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button
@@ -91,9 +82,7 @@
     </ion-item>
 
     <ion-item-divider *ngIf="friendships?.incomingRequests?.length > 0">
-      <ion-label>
-        {{ 'pages.people.invites' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.people.invites' | translate }} </ion-label>
     </ion-item-divider>
     <ion-item
       *ngFor="let friendship of friendships?.incomingRequests"
@@ -104,11 +93,11 @@
         <img
           *ngIf="!friendship.otherUser.profileImages?.length"
           src="assets/avatar.svg"
-        >
+        />
         <img
           *ngIf="friendship.otherUser.profileImages?.length"
           [src]="friendship.otherUser.profileImages[0].location"
-        >
+        />
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button
@@ -127,9 +116,7 @@
     </ion-item>
 
     <ion-item-divider *ngIf="friendships?.outgoingRequests?.length > 0">
-      <ion-label>
-        {{ 'pages.people.sentInvites' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.people.sentInvites' | translate }} </ion-label>
     </ion-item-divider>
     <ion-item
       *ngFor="let friendship of friendships?.outgoingRequests"
@@ -140,11 +127,11 @@
         <img
           *ngIf="!friendship.otherUser.profileImages?.length"
           src="assets/avatar.svg"
-        >
+        />
         <img
           *ngIf="friendship.otherUser.profileImages?.length"
           [src]="friendship.otherUser.profileImages[0].location"
-        >
+        />
       </ion-avatar>
       <ion-label>{{friendship.otherUser.name}}</ion-label>
       <ion-button

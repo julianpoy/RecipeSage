@@ -1,27 +1,54 @@
 <div>
-  <input id="filePicker" [multiple]="capabilitiesService.capabilities.multipleImages" type="file" (change)="addImage($event)" style="display: none;" accept="image/*" />
+  <input
+    id="filePicker"
+    [multiple]="capabilitiesService.capabilities.multipleImages"
+    type="file"
+    (change)="addImage($event)"
+    style="display: none"
+    accept="image/*"
+  />
 
   <div class="image-carousel">
     <div class="recipe-image" *ngFor="let image of images; let i = index">
       <div class="image-frame">
-        <ion-icon name="remove-circle" class="remove-image" (click)="removeImage(image)" color="danger"></ion-icon>
+        <ion-icon
+          name="remove-circle"
+          class="remove-image"
+          (click)="removeImage(image)"
+          color="danger"
+        ></ion-icon>
         <img src="{{ image.location }}" />
       </div>
       <div class="image-subtext" *ngIf="images.length > 1">
-        <ion-icon name="caret-back" [ngClass]="{ 'hide-reorder': i === 0 }" (click)="reorderImage(image, -1)"></ion-icon>
+        <ion-icon
+          name="caret-back"
+          [ngClass]="{ 'hide-reorder': i === 0 }"
+          (click)="reorderImage(image, -1)"
+        ></ion-icon>
         <span>
           {{ i + 1 }}
         </span>
-        <ion-icon name="caret-forward" [ngClass]="{ 'hide-reorder': i >= (images.length - 1) }" (click)="reorderImage(image, 1)"></ion-icon>
+        <ion-icon
+          name="caret-forward"
+          [ngClass]="{ 'hide-reorder': i >= images.length - 1 }"
+          (click)="reorderImage(image, 1)"
+        ></ion-icon>
       </div>
     </div>
 
-    <div class="recipe-image" (click)="filePicker()" *ngIf="images.length < 10 && (images.length === 0 || capabilitiesService.capabilities.multipleImages)">
+    <div
+      class="recipe-image"
+      (click)="filePicker()"
+      *ngIf="
+        images.length < 10 &&
+        (images.length === 0 || capabilitiesService.capabilities.multipleImages)
+      "
+    >
       <div class="image-frame">
         <span>
           +
           <br />
-          {{ 'components.multiImageUpload.add' | translate }}
+          {{ "components.multiImageUpload.add" | translate }}
         </span>
       </div>
     </div>

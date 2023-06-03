@@ -1,8 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      {{ 'pages.newMessageModal.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.newMessageModal.title' | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -10,16 +8,16 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content class="ion-padding">
-  <select-user (selectedUserChange)="onSelectedUserChange($event)" [selectedUser]="recipientInfo"></select-user>
+  <select-user
+    (selectedUserChange)="onSelectedUserChange($event)"
+    [selectedUser]="recipientInfo"
+  ></select-user>
   <ion-item *ngIf="!recipientId">
     <ion-label>
-      <p>
-        {{ 'pages.newMessageModal.input.target' | translate }}
-      </p>
+      <p>{{ 'pages.newMessageModal.input.target' | translate }}</p>
     </ion-label>
   </ion-item>
 
@@ -29,15 +27,16 @@
     <ion-label position="floating">
       {{ 'pages.newMessageModal.compose' | translate }}
     </ion-label>
-    <ion-textarea [(ngModel)]="message" placeholder="{{ 'pages.newMessageModal.input.messagePlaceholder' | translate }}"></ion-textarea>
+    <ion-textarea
+      [(ngModel)]="message"
+      placeholder="{{ 'pages.newMessageModal.input.messagePlaceholder' | translate }}"
+    ></ion-textarea>
   </ion-item>
 </ion-content>
 
 <ion-footer class="ion-padding">
   <ion-button expand="block" (click)="send()" [disabled]="!recipientId">
     <ion-icon name="send" slot="start"></ion-icon>
-    <ion-label>
-      {{ 'pages.newMessageModal.send' | translate }}
-    </ion-label>
+    <ion-label> {{ 'pages.newMessageModal.send' | translate }} </ion-label>
   </ion-button>
 </ion-footer>

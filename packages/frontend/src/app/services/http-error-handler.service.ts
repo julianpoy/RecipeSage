@@ -1,29 +1,28 @@
-import { Injectable } from '@angular/core';
-import { ToastController, ModalController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Injectable } from "@angular/core";
+import { ToastController, ModalController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import {AuthPage} from '~/pages/auth/auth.page';
+import { AuthPage } from "~/pages/auth/auth.page";
 
 export interface ErrorHandlers {
-  [code: string]: () => any
+  [code: string]: () => any;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class HttpErrorHandlerService {
-
   isAuthOpen: boolean = false; // Track auth modal so we don't open multiple stacks
   defaultErrorHandlers = {
-    0: () => this.presentToast('errors.offline'),
+    0: () => this.presentToast("errors.offline"),
     401: () => this.promptForAuth(),
-    500: () => this.presentToast('errors.unexpected'),
+    500: () => this.presentToast("errors.unexpected"),
   };
 
   constructor(
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {}
 
   async promptForAuth() {
@@ -49,7 +48,7 @@ export class HttpErrorHandlerService {
 
     const toast = await this.toastCtrl.create({
       message,
-      duration: 5000
+      duration: 5000,
     });
 
     toast.present();
@@ -63,13 +62,13 @@ export class HttpErrorHandlerService {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode]();
-    // Use provided catchall if passed
-    } else if (errorHandlers?.['*']) {
-      errorHandlers['*']();
-    // Fallback to default
+      // Use provided catchall if passed
+    } else if (errorHandlers?.["*"]) {
+      errorHandlers["*"]();
+      // Fallback to default
     } else if (this.defaultErrorHandlers[statusCode]) {
       this.defaultErrorHandlers[statusCode]();
-    // All other errors use 500 by default for generic (unexpected) error
+      // All other errors use 500 by default for generic (unexpected) error
     } else {
       this.defaultErrorHandlers[500]();
     }

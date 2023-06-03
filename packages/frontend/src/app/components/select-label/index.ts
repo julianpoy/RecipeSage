@@ -1,17 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { Label, LabelService } from '~/services/label.service';
-import { ToastController, NavController } from '@ionic/angular';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { Label, LabelService } from "~/services/label.service";
+import { ToastController, NavController } from "@ionic/angular";
 
 @Component({
-  selector: 'select-label',
-  templateUrl: 'index.html',
-  styleUrls: ['./index.scss']
+  selector: "select-label",
+  templateUrl: "index.html",
+  styleUrls: ["./index.scss"],
 })
 export class SelectLabelComponent {
-
-  searchText = '';
+  searchText = "";
 
   _selectedLabel: Label;
   @Input()
@@ -50,14 +49,16 @@ export class SelectLabelComponent {
   }
 
   onSearchInputChange(event) {
-    this.searchText = event.detail.value || '';
+    this.searchText = event.detail.value || "";
 
-    this.results = this.labels.filter(label => label.title.includes(this.searchText));
+    this.results = this.labels.filter((label) =>
+      label.title.includes(this.searchText)
+    );
   }
 
   selectLabel(label: Label) {
     this.selectedLabel = label;
-    this.searchText = '';
+    this.searchText = "";
     this.results = this.labels;
   }
 }

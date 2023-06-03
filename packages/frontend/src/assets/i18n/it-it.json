@@ -166,11 +166,11 @@
 
   "pages.notfound.title": "Pagina Inesistente",
   "pages.notfound.error.title": "Pagina Inesistente!",
-  "pages.notfound.error.message1" : "Sembra che la pagina che stai cercando non esista.",
-  "pages.notfound.error.message2" : "Controlla di aver scritto correttamente l’URL.",
-  "pages.notfound.error.message3" : "Se continui ad avere problemi, o se sei arrivato a questa pagina da un link sull’app, contattami.",
-  "pages.notfound.error.contact" : "Contattami",
-  "pages.notfound.error.goHome" : "Clicca qui per tornare alla tua raccolta",
+  "pages.notfound.error.message1": "Sembra che la pagina che stai cercando non esista.",
+  "pages.notfound.error.message2": "Controlla di aver scritto correttamente l’URL.",
+  "pages.notfound.error.message3": "Se continui ad avere problemi, o se sei arrivato a questa pagina da un link sull’app, contattami.",
+  "pages.notfound.error.contact": "Contattami",
+  "pages.notfound.error.goHome": "Clicca qui per tornare alla tua raccolta",
 
   "====== Pages.HomePopover ======": "",
 
@@ -498,7 +498,6 @@
   "pages.mealPlanPopover.options.startWeekOn.title": "Inizion della Settimana",
   "pages.mealPlanPopover.options.startWeekOn.monday": "Lunedì",
   "pages.mealPlanPopover.options.startWeekOn.sunday": "Domenica",
-
 
   "pages.mealPlanPopover.actions.title": "Azione",
   "pages.mealPlanPopover.actions.share": "Condividere",
@@ -1146,7 +1145,6 @@
   "components.multiImageUpload.imageLimit": "Puoi allegare fino a 10 immagini",
   "components.multiImageUpload.imageError": "Si è verificato un errore nell'elaborazione di una o più immagini selezionate.",
 
-
   "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "Già aggiunto",
@@ -1257,7 +1255,6 @@
   "generic.close": "Chiudi",
   "generic.save": "Salva",
   "generic.okay": "Okay",
-
 
   "====== Trailing Comma Placeholder ======": ""
 }

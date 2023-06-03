@@ -1,53 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-const PREFERENCE_LOCALSTORAGE_KEY = 'preferences';
+const PREFERENCE_LOCALSTORAGE_KEY = "preferences";
 
 export enum SupportedLanguages {
-  EN_US = 'en-us',
-  IT_IT = 'it-it',
-  DE_DE = 'de-de',
-};
+  EN_US = "en-us",
+  IT_IT = "it-it",
+  DE_DE = "de-de",
+}
 
 export enum GlobalPreferenceKey {
-  EnableSplitPane = 'global.enableSplitPane',
-  EnableExperimentalOfflineCache = 'global.enableExperimentalOfflineCache',
-  Language = 'global.language'
+  EnableSplitPane = "global.enableSplitPane",
+  EnableExperimentalOfflineCache = "global.enableExperimentalOfflineCache",
+  Language = "global.language",
 }
 
 export enum MyRecipesPreferenceKey {
-  EnableLabelIntersection = 'myRecipes.enableLabelIntersection',
-  ShowLabels = 'myRecipes.showLabels',
-  ShowLabelChips = 'myRecipes.showLabelChips',
-  ShowImages = 'myRecipes.showImages',
-  ShowSource = 'myRecipes.showSource',
-  ShowRecipeDescription = 'myRecipes.showRecipeDescription',
-  ViewType = 'myRecipes.viewType',
-  SortBy = 'myRecipes.sortBy',
-  IncludeFriends = 'myRecipes.includeFriends',
+  EnableLabelIntersection = "myRecipes.enableLabelIntersection",
+  ShowLabels = "myRecipes.showLabels",
+  ShowLabelChips = "myRecipes.showLabelChips",
+  ShowImages = "myRecipes.showImages",
+  ShowSource = "myRecipes.showSource",
+  ShowRecipeDescription = "myRecipes.showRecipeDescription",
+  ViewType = "myRecipes.viewType",
+  SortBy = "myRecipes.sortBy",
+  IncludeFriends = "myRecipes.includeFriends",
 }
 
 export enum RecipeDetailsPreferenceKey {
-  EnableWakeLock = 'recipeDetails.enableWakeLock',
+  EnableWakeLock = "recipeDetails.enableWakeLock",
 }
 
 export enum ManageLabelsPreferenceKey {
-  ShowCreatedAt = 'manageLabels.showCreatedAt'
+  ShowCreatedAt = "manageLabels.showCreatedAt",
 }
 
 export enum MealPlanPreferenceKey {
-  ShowAddedBy = 'MealPlan.showAddedBy',
-  ShowAddedOn = 'MealPlan.showAddedOn',
-  StartOfWeek = 'MealPlan.startOfWeek'
+  ShowAddedBy = "MealPlan.showAddedBy",
+  ShowAddedOn = "MealPlan.showAddedOn",
+  StartOfWeek = "MealPlan.startOfWeek",
 }
 
 export enum ShoppingListPreferenceKey {
-  SortBy = 'ShoppingList.sortBy',
-  ShowAddedBy = 'ShoppingList.showAddedBy',
-  ShowAddedOn = 'ShoppingList.showAddedOn',
-  ShowRecipeTitle = 'ShoppingList.showRecipeTitle',
-  PreferDelete = 'ShoppingList.preferDelete',
-  GroupSimilar = 'ShoppingList.groupSimilar',
-  GroupCategories = 'ShoppingList.groupCategories'
+  SortBy = "ShoppingList.sortBy",
+  ShowAddedBy = "ShoppingList.showAddedBy",
+  ShowAddedOn = "ShoppingList.showAddedOn",
+  ShowRecipeTitle = "ShoppingList.showRecipeTitle",
+  PreferDelete = "ShoppingList.preferDelete",
+  GroupSimilar = "ShoppingList.groupSimilar",
+  GroupCategories = "ShoppingList.groupCategories",
 }
 
 export interface AppPreferenceTypes {
@@ -61,9 +61,14 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowImages]: boolean;
   [MyRecipesPreferenceKey.ShowSource]: boolean;
   [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
-  [MyRecipesPreferenceKey.ViewType]: 'tiles' | 'list';
-  [MyRecipesPreferenceKey.SortBy]: '-title' | '-createdAt' | 'createdAt' | '-updatedAt' | 'updatedAt';
-  [MyRecipesPreferenceKey.IncludeFriends]: 'yes' | 'no' | 'search' | 'browse';
+  [MyRecipesPreferenceKey.ViewType]: "tiles" | "list";
+  [MyRecipesPreferenceKey.SortBy]:
+    | "-title"
+    | "-createdAt"
+    | "createdAt"
+    | "-updatedAt"
+    | "updatedAt";
+  [MyRecipesPreferenceKey.IncludeFriends]: "yes" | "no" | "search" | "browse";
 
   [RecipeDetailsPreferenceKey.EnableWakeLock]: boolean;
 
@@ -71,9 +76,9 @@ export interface AppPreferenceTypes {
 
   [MealPlanPreferenceKey.ShowAddedBy]: boolean;
   [MealPlanPreferenceKey.ShowAddedOn]: boolean;
-  [MealPlanPreferenceKey.StartOfWeek]: 'monday' | 'sunday';
+  [MealPlanPreferenceKey.StartOfWeek]: "monday" | "sunday";
 
-  [ShoppingListPreferenceKey.SortBy]: 'createdAt' | '-createdAt' | '-title';
+  [ShoppingListPreferenceKey.SortBy]: "createdAt" | "-createdAt" | "-title";
   [ShoppingListPreferenceKey.ShowAddedBy]: boolean;
   [ShoppingListPreferenceKey.ShowAddedOn]: boolean;
   [ShoppingListPreferenceKey.ShowRecipeTitle]: boolean;
@@ -83,7 +88,7 @@ export interface AppPreferenceTypes {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PreferencesService {
   // Preference defaults - user preferences loaded locally will override
@@ -99,9 +104,10 @@ export class PreferencesService {
     [MyRecipesPreferenceKey.ShowSource]: false,
     [MyRecipesPreferenceKey.ShowRecipeDescription]: true,
     // Show list by default on small screens
-    [MyRecipesPreferenceKey.ViewType]: Math.min(window.innerWidth, window.innerHeight) < 440 ? 'list' : 'tiles',
-    [MyRecipesPreferenceKey.SortBy]: '-title',
-    [MyRecipesPreferenceKey.IncludeFriends]: 'no',
+    [MyRecipesPreferenceKey.ViewType]:
+      Math.min(window.innerWidth, window.innerHeight) < 440 ? "list" : "tiles",
+    [MyRecipesPreferenceKey.SortBy]: "-title",
+    [MyRecipesPreferenceKey.IncludeFriends]: "no",
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
 
@@ -109,15 +115,15 @@ export class PreferencesService {
 
     [MealPlanPreferenceKey.ShowAddedBy]: false,
     [MealPlanPreferenceKey.ShowAddedOn]: false,
-    [MealPlanPreferenceKey.StartOfWeek]: 'monday',
+    [MealPlanPreferenceKey.StartOfWeek]: "monday",
 
-    [ShoppingListPreferenceKey.SortBy]: '-createdAt',
+    [ShoppingListPreferenceKey.SortBy]: "-createdAt",
     [ShoppingListPreferenceKey.ShowAddedBy]: false,
     [ShoppingListPreferenceKey.ShowAddedOn]: false,
     [ShoppingListPreferenceKey.ShowRecipeTitle]: true,
     [ShoppingListPreferenceKey.PreferDelete]: false,
     [ShoppingListPreferenceKey.GroupSimilar]: true,
-    [ShoppingListPreferenceKey.GroupCategories]: true
+    [ShoppingListPreferenceKey.GroupCategories]: true,
   };
 
   constructor() {
@@ -129,7 +135,7 @@ export class PreferencesService {
     try {
       const serialized = JSON.stringify(this.preferences);
       localStorage.setItem(PREFERENCE_LOCALSTORAGE_KEY, serialized);
-    } catch (e) { }
+    } catch (e) {}
   }
 
   private load() {
@@ -138,13 +144,13 @@ export class PreferencesService {
       const savedPreferences = JSON.parse(serialized) || {};
 
       Object.assign(this.preferences, savedPreferences);
-    } catch (e) { }
+    } catch (e) {}
   }
 
   resetToDefaults() {
     try {
       localStorage.removeItem(PREFERENCE_LOCALSTORAGE_KEY);
       window.location.reload();
-    } catch (e) { }
+    } catch (e) {}
   }
 }

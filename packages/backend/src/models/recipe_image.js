@@ -1,13 +1,17 @@
 export const RecipeImageInit = (sequelize, DataTypes) => {
-  const Recipe_Image = sequelize.define('Recipe_Image', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false
+  const Recipe_Image = sequelize.define(
+    "Recipe_Image",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      order: DataTypes.INTEGER,
     },
-    order: DataTypes.INTEGER
-  }, {});
+    {}
+  );
 
   return Recipe_Image;
 };

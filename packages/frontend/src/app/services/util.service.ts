@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import { API_BASE_URL } from '@recipesage/frontend/src/environments/environment';
-import {SupportedLanguages} from './preferences.service';
+import { Injectable } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
+import { API_BASE_URL } from "@recipesage/frontend/src/environments/environment";
+import { SupportedLanguages } from "./preferences.service";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -19,13 +19,13 @@ export interface RecipeTemplateModifiers {
 
 // TODO: Create more types for various page getPath methods
 export enum AuthType {
-  Login = 'login',
-  Register = 'register'
+  Login = "login",
+  Register = "register",
 }
 
 export interface HomePageFilters {
-  userId?: string,
-  selectedLabels?: string[],
+  userId?: string;
+  selectedLabels?: string[];
 }
 
 export const RouteMap = {
@@ -36,157 +36,220 @@ export const RouteMap = {
       const params = [];
       if (filters?.userId) params.push(`userId=${filters.userId}`);
       if (filters?.selectedLabels) {
-        params.push(`labels=${filters.selectedLabels.map(labelName => encodeURIComponent(labelName)).join(',')}`);
+        params.push(
+          `labels=${filters.selectedLabels
+            .map((labelName) => encodeURIComponent(labelName))
+            .join(",")}`
+        );
       }
 
-      if (params.length > 0) url += `?${params.join('&')}`;
+      if (params.length > 0) url += `?${params.join("&")}`;
 
       return url;
     },
-    path: 'list/:folder',
+    path: "list/:folder",
   },
   LabelsPage: {
-    getPath() { return `labels`; },
-    path: 'labels',
+    getPath() {
+      return `labels`;
+    },
+    path: "labels",
   },
   AboutPage: {
-    getPath() { return `/about`; },
-    path: 'about',
+    getPath() {
+      return `/about`;
+    },
+    path: "about",
   },
   AboutDetailsPage: {
-    getPath() { return `/about/details`; },
-    path: 'about/details',
+    getPath() {
+      return `/about/details`;
+    },
+    path: "about/details",
   },
   DownloadAndInstallPage: {
-    getPath() { return `/install`; },
-    path: 'install',
+    getPath() {
+      return `/install`;
+    },
+    path: "install",
   },
   ContactPage: {
-    getPath() { return `/about/contact`; },
-    path: 'about/contact',
+    getPath() {
+      return `/about/contact`;
+    },
+    path: "about/contact",
   },
   LegalPage: {
-    getPath() { return `/legal`; },
-    path: 'legal',
+    getPath() {
+      return `/legal`;
+    },
+    path: "legal",
   },
   ContributePage: {
-    getPath() { return `/contribute`; },
-    path: 'contribute',
+    getPath() {
+      return `/contribute`;
+    },
+    path: "contribute",
   },
   ContributeCancelPage: {
-    getPath() { return `/contribute/cancel`; },
-    path: 'contribute/cancel',
+    getPath() {
+      return `/contribute/cancel`;
+    },
+    path: "contribute/cancel",
   },
   ContributeThankYouPage: {
-    getPath() { return `/contribute/thankyou`; },
-    path: 'contribute/thankyou',
+    getPath() {
+      return `/contribute/thankyou`;
+    },
+    path: "contribute/thankyou",
   },
   WelcomePage: {
-    getPath() { return `/welcome`; },
-    path: 'welcome',
+    getPath() {
+      return `/welcome`;
+    },
+    path: "welcome",
   },
   AuthPage: {
-    getPath(authType: AuthType) { return `/auth/${authType}`; },
-    path: 'auth/:authType',
+    getPath(authType: AuthType) {
+      return `/auth/${authType}`;
+    },
+    path: "auth/:authType",
   },
   MealPlansPage: {
-    getPath() { return `/meal-planners`; },
-    path: 'meal-planners',
+    getPath() {
+      return `/meal-planners`;
+    },
+    path: "meal-planners",
   },
   MealPlanPage: {
-    getPath(mealPlanId: string) { return `/meal-planners/${mealPlanId}`; },
-    path: 'meal-planners/:mealPlanId',
+    getPath(mealPlanId: string) {
+      return `/meal-planners/${mealPlanId}`;
+    },
+    path: "meal-planners/:mealPlanId",
   },
   MessagesPage: {
-    getPath() { return `/messages`; },
-    path: 'messages',
+    getPath() {
+      return `/messages`;
+    },
+    path: "messages",
   },
   MessageThreadPage: {
-    getPath(otherUserId: string) { return `/messages/${otherUserId}`; },
-    path: 'messages/:otherUserId',
+    getPath(otherUserId: string) {
+      return `/messages/${otherUserId}`;
+    },
+    path: "messages/:otherUserId",
   },
   EditRecipePage: {
-    getPath(recipeId: string) { return `/edit-recipe/${recipeId}`; },
-    path: 'edit-recipe/:recipeId',
+    getPath(recipeId: string) {
+      return `/edit-recipe/${recipeId}`;
+    },
+    path: "edit-recipe/:recipeId",
   },
   RecipePage: {
-    getPath(recipeId: string) { return `/recipe/${recipeId}`; },
-    path: 'recipe/:recipeId',
+    getPath(recipeId: string) {
+      return `/recipe/${recipeId}`;
+    },
+    path: "recipe/:recipeId",
   },
   SettingsPage: {
-    getPath() { return `/settings`; },
-    path: 'settings',
+    getPath() {
+      return `/settings`;
+    },
+    path: "settings",
   },
   AccountPage: {
-    getPath() { return `/settings/account`; },
-    path: 'settings/account',
+    getPath() {
+      return `/settings/account`;
+    },
+    path: "settings/account",
   },
   MyProfilePage: {
-    getPath() { return `people/my-profile`; },
-    path: 'people/my-profile',
+    getPath() {
+      return `people/my-profile`;
+    },
+    path: "people/my-profile",
   },
   ProfilePage: {
-    getPath(handle: string) { return `people/${handle}`; },
-    path: 'people/:handle',
+    getPath(handle: string) {
+      return `people/${handle}`;
+    },
+    path: "people/:handle",
   },
   PeoplePage: {
-    getPath() { return `people`; },
-    path: 'people',
+    getPath() {
+      return `people`;
+    },
+    path: "people",
   },
   SocialPage: {
-    getPath() { return `people`; },
-    path: 'people',
+    getPath() {
+      return `people`;
+    },
+    path: "people",
   },
   ExportPage: {
-    getPath() { return `/settings/export`; },
-    path: 'settings/export',
+    getPath() {
+      return `/settings/export`;
+    },
+    path: "settings/export",
   },
   ImportPage: {
-    getPath() { return `/settings/import`; },
-    path: 'settings/import',
+    getPath() {
+      return `/settings/import`;
+    },
+    path: "settings/import",
   },
   ImportLivingcookbookPage: {
-    getPath() { return `/settings/import/livingcookbook`; },
-    path: 'settings/import/livingcookbook',
+    getPath() {
+      return `/settings/import/livingcookbook`;
+    },
+    path: "settings/import/livingcookbook",
   },
   ImportPaprikaPage: {
-    getPath() { return `/settings/import/paprika`; },
-    path: 'settings/import/paprika',
+    getPath() {
+      return `/settings/import/paprika`;
+    },
+    path: "settings/import/paprika",
   },
   ImportJSONLDPage: {
-    getPath() { return `/settings/import/json-ld`; },
-    path: 'settings/import/json-ld',
+    getPath() {
+      return `/settings/import/json-ld`;
+    },
+    path: "settings/import/json-ld",
   },
   ImportPepperplatePage: {
-    getPath() { return `/settings/import/pepperplate`; },
-    path: 'settings/import/pepperplate',
+    getPath() {
+      return `/settings/import/pepperplate`;
+    },
+    path: "settings/import/pepperplate",
   },
   ShoppingListsPage: {
-    getPath() { return `/shopping-lists`; },
-    path: 'shopping-lists',
+    getPath() {
+      return `/shopping-lists`;
+    },
+    path: "shopping-lists",
   },
   ShoppingListPage: {
-    getPath(shoppingListId: string) { return `/shopping-lists/${shoppingListId}`; },
-    path: 'shopping-lists/:shoppingListId',
-  }
+    getPath(shoppingListId: string) {
+      return `/shopping-lists/${shoppingListId}`;
+    },
+    path: "shopping-lists/:shoppingListId",
+  },
 };
 
 // This can be used for fallback when a non-localized language is requested
 // and we only have localized versions
 const defaultLocality = {
-  'en': 'en-us',
-  'it': 'it-it',
-  'de': 'de-de',
+  en: "en-us",
+  it: "it-it",
+  de: "de-de",
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UtilService {
-
-  constructor(
-    private translate: TranslateService,
-  ) {}
+  constructor(private translate: TranslateService) {}
 
   getAppBrowserLang(): string {
     const isSupported = (lang: string) => {
@@ -195,7 +258,7 @@ export class UtilService {
 
     // Navigator language can be in the form 'en', or 'en-us' for any given language
     const navLang = window.navigator.language.toLowerCase();
-    const navLangNoRegion = navLang.split('-')[0];
+    const navLangNoRegion = navLang.split("-")[0];
     const defaultLocalized = defaultLocality[navLangNoRegion];
 
     // We always prefer to return the exact language the navigator requested if we have it
@@ -211,7 +274,8 @@ export class UtilService {
   }
 
   getBase(): string {
-    if (window.location.hostname === 'beta.recipesage.com') return 'https://api.beta.recipesage.com/';
+    if (window.location.hostname === "beta.recipesage.com")
+      return "https://api.beta.recipesage.com/";
 
     const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
 
@@ -219,15 +283,15 @@ export class UtilService {
   }
 
   removeToken() {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   }
 
   setToken(token: string) {
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
   }
 
   getToken(): string {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   }
 
   isLoggedIn(): boolean {
@@ -239,33 +303,44 @@ export class UtilService {
     return `?false=false`;
   }
 
-  generatePrintShoppingListURL(shoppingListId: string, options?: {
-    groupSimilar?: boolean,
-    groupCategories?: boolean,
-    sortBy?: string,
-  }) {
-    let query = `${this.getTokenQuery()}&version=${(window as any).version}&print=true`;
+  generatePrintShoppingListURL(
+    shoppingListId: string,
+    options?: {
+      groupSimilar?: boolean;
+      groupCategories?: boolean;
+      sortBy?: string;
+    }
+  ) {
+    let query = `${this.getTokenQuery()}&version=${
+      (window as any).version
+    }&print=true`;
 
-    if (options?.groupSimilar)    query += '&groupSimilar=true';
-    if (options?.groupCategories) query += '&groupCategories=true';
-    if (options?.sortBy)          query += `&sortBy=${options.sortBy}`;
+    if (options?.groupSimilar) query += "&groupSimilar=true";
+    if (options?.groupCategories) query += "&groupCategories=true";
+    if (options?.sortBy) query += `&sortBy=${options.sortBy}`;
 
     return `${this.getBase()}print/shoppingList/${shoppingListId}${query}`;
   }
 
-  generateRecipeTemplateURL(recipeId: string, modifiers: RecipeTemplateModifiers): string {
+  generateRecipeTemplateURL(
+    recipeId: string,
+    modifiers: RecipeTemplateModifiers
+  ): string {
     modifiers = { version: (window as any).version, ...modifiers };
     const modifierQuery = Object.keys(modifiers)
-      .filter(modifierKey => modifiers[modifierKey])
-      .map(modifierKey => `${modifierKey}=${modifiers[modifierKey]}`)
-      .join('&');
+      .filter((modifierKey) => modifiers[modifierKey])
+      .map((modifierKey) => `${modifierKey}=${modifiers[modifierKey]}`)
+      .join("&");
 
     const url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;
 
     return url;
   }
 
-  formatDate(date: string | number | Date, options?: { now?: boolean, times?: boolean }): string {
+  formatDate(
+    date: string | number | Date,
+    options?: { now?: boolean; times?: boolean }
+  ): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
@@ -282,49 +357,49 @@ export class UtilService {
     const toFormat = new Date(date);
 
     if (options.now && aFewMomentsAgoAfter < toFormat) {
-      const justNow = this.translate.instant('services.util.justNow');
+      const justNow = this.translate.instant("services.util.justNow");
       if (justNow) return justNow;
     }
 
     if (!options.times && todayAfter < toFormat) {
-      const today = this.translate.instant('services.util.today');
+      const today = this.translate.instant("services.util.today");
       if (today) return today;
     }
 
     if (options.times && todayAfter < toFormat) {
       return toFormat.toLocaleString(window.navigator.language, {
-        hour: 'numeric',
-        minute: 'numeric'
+        hour: "numeric",
+        minute: "numeric",
       });
     }
 
     if (options.times && thisWeekAfter < toFormat) {
       return toFormat.toLocaleString(window.navigator.language, {
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
       });
     }
 
     if (!options.times && thisWeekAfter < toFormat) {
       return toFormat.toLocaleString(window.navigator.language, {
-        weekday: 'long'
+        weekday: "long",
       });
     }
 
     if (!options.times) {
       return toFormat.toLocaleString(window.navigator.language, {
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric'
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
       });
     } else {
       return toFormat.toLocaleString(window.navigator.language, {
-        hour: 'numeric',
-        minute: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric'
+        hour: "numeric",
+        minute: "numeric",
+        month: "numeric",
+        day: "numeric",
+        year: "numeric",
       });
     }
   }
@@ -334,7 +409,7 @@ export class UtilService {
   }
 
   truncate(str: String, maxLength: number) {
-    const ellipsis = '...';
+    const ellipsis = "...";
     const trueMaxLength = maxLength - ellipsis.length;
 
     if (str.length <= trueMaxLength) return str;

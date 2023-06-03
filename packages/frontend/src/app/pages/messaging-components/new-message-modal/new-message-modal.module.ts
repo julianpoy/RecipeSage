@@ -1,17 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { NewMessageModalPage } from './new-message-modal.page';
-import { SelectUserModule } from '~/components/select-user/select-user.module';
+import { NewMessageModalPage } from "./new-message-modal.page";
+import { SelectUserModule } from "~/components/select-user/select-user.module";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    NewMessageModalPage,
-  ],
+  declarations: [NewMessageModalPage],
   imports: [
     GlobalModule,
     CommonModule,
@@ -20,8 +18,6 @@ import { GlobalModule } from '~/global.module';
     ReactiveFormsModule,
     SelectUserModule,
   ],
-  entryComponents: [
-    NewMessageModalPage,
-  ],
+  entryComponents: [NewMessageModalPage],
 })
 export class NewMessageModalPageModule {}

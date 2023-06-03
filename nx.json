@@ -3,25 +3,15 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "{projectRoot}/dist",
-        "{projectRoot}/www"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/www"]
     }
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "test",
-          "lint",
-          "typecheck"
-        ],
+        "cacheableOperations": ["build", "test", "lint", "typecheck"],
         "accessToken": "YmZkMGUwNWUtYjliMi00NjYxLThjYzUtYWNkNTc0YTI0ZmExfHJlYWQtd3JpdGU="
       }
     }

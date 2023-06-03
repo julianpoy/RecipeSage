@@ -17,17 +17,16 @@ jobs:
       id-token: write
       contents: read
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Install doctl
-      uses: digitalocean/action-doctl@v2
-      with:
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-    - name: Save DigitalOcean kubeconfig
-      run: doctl kubernetes cluster kubeconfig save 43e06009-6d1b-40cb-abbc-38736cc6746c
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save 43e06009-6d1b-40cb-abbc-38736cc6746c
 
-    - name: Deploy
-      run: ./scripts/deploy/deploy_tag.sh api ${{ inputs.tag }}
-
+      - name: Deploy
+        run: ./scripts/deploy/deploy_tag.sh api ${{ inputs.tag }}

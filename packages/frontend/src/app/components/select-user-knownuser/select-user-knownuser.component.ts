@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
-  selector: 'select-user-knownuser',
-  templateUrl: 'select-user-knownuser.component.html',
-  styleUrls: ['./select-user-knownuser.component.scss']
+  selector: "select-user-knownuser",
+  templateUrl: "select-user-knownuser.component.html",
+  styleUrls: ["./select-user-knownuser.component.scss"],
 })
 export class SelectUserKnownUserComponent {
   manualSelect: boolean = false;
@@ -24,7 +24,10 @@ export class SelectUserKnownUserComponent {
     if (this._userSelectState && this._userSelectState.id !== val?.id) {
       this._userSelectState = null;
     }
-    if (this._knownUserSelectState && this._knownUserSelectState.id !== val?.id) {
+    if (
+      this._knownUserSelectState &&
+      this._knownUserSelectState.id !== val?.id
+    ) {
       this._knownUserSelectState = null;
     }
   }

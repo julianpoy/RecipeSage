@@ -1,4 +1,4 @@
-@import 'src/theme/shared-variables.scss';
+@import "src/theme/shared-variables.scss";
 
 @media only screen and (max-width: $desktop-breakpoint) {
   .metacontainer-desktop {
@@ -13,7 +13,7 @@
 }
 
 ion-thumbnail {
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
   cursor: pointer;
 }
 

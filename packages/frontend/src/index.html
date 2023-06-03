@@ -1,134 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>RecipeSage - The Personal Recipe Keeper</title>
 
-<head>
-  <meta charset="utf-8" />
-  <title>RecipeSage - The Personal Recipe Keeper</title>
+    <base href="/" />
 
-  <base href="/" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="msapplication-config" content="assets/icon/browserconfig.xml" />
 
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="msapplication-tap-highlight" content="no" />
-  <meta name="msapplication-config" content="assets/icon/browserconfig.xml">
+    <meta
+      name="Description"
+      content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly."
+    />
 
-  <meta name="Description" content="Create, store, share and browse your recipes online. Free, easy to use and mobile friendly.">
+    <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/icon/favicon-16x16.png"
+    />
 
-  <!--<link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">-->
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/icon/favicon-16x16.png">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/icon/apple-touch-icon.png"
+    />
+    <link
+      rel="mask-icon"
+      href="assets/icon/safari-pinned-tab.svg"
+      color="#353b48"
+    />
+    <link rel="shortcut icon" href="assets/icon/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#353b48" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon/apple-touch-icon.png">
-  <link rel="mask-icon" href="assets/icon/safari-pinned-tab.svg" color="#353b48">
-  <link rel="shortcut icon" href="assets/icon/favicon.ico">
-  <meta name="msapplication-TileColor" content="#353b48">
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#353b48" />
+    <meta name="color-scheme" content="light dark" />
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#353b48">
-  <meta name="color-scheme" content="light dark" />
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-  <!-- add to homescreen for ios -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-  <script>
-    if (window.location.search) {
-      if (window.location.hash && window.location.hash.includes('#/')) {
-        window.location.href = window.location.href.replace(window.location.search, '') + window.location.search;
-      }
-    }
-  </script>
-
-  <script>
-    window.addEventListener('beforeinstallprompt', (e) => {
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      window.deferredInstallPrompt = e;
-    });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js', {
-        updateViaCache: 'none'
-      }).then(registration => {
-        window.swRegistration = registration;
-        if (window.onSWRegistration) window.onSWRegistration.call(null);
-      }).catch(err => console.error('Error', err));
-
-      navigator.serviceWorker.addEventListener('controllerchange', function() {
-        // Recovery if we have a SW in a frozen state
-        if (!window.appLoaded) {
-          setTimeout(function () {
-            if (!window.appLoaded) {
-              window.location.reload(true);
-            }
-          }, 2000);
+    <script>
+      if (window.location.search) {
+        if (window.location.hash && window.location.hash.includes("#/")) {
+          window.location.href =
+            window.location.href.replace(window.location.search, "") +
+            window.location.search;
         }
+      }
+    </script>
+
+    <script>
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        window.deferredInstallPrompt = e;
       });
 
-      window.forceSWUpdate = function() {
-        return navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          Promise.all(registrations.map(function(registration) {
-            registration.unregister();
-          })).then(function() {
-            return navigator.serviceWorker.register('service-worker.js', {
-              updateViaCache: 'none'
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js", {
+            updateViaCache: "none",
+          })
+          .then((registration) => {
+            window.swRegistration = registration;
+            if (window.onSWRegistration) window.onSWRegistration.call(null);
+          })
+          .catch((err) => console.error("Error", err));
+
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          function () {
+            // Recovery if we have a SW in a frozen state
+            if (!window.appLoaded) {
+              setTimeout(function () {
+                if (!window.appLoaded) {
+                  window.location.reload(true);
+                }
+              }, 2000);
+            }
+          }
+        );
+
+        window.forceSWUpdate = function () {
+          return navigator.serviceWorker
+            .getRegistrations()
+            .then(function (registrations) {
+              Promise.all(
+                registrations.map(function (registration) {
+                  registration.unregister();
+                })
+              ).then(function () {
+                return navigator.serviceWorker.register("service-worker.js", {
+                  updateViaCache: "none",
+                });
+              });
             });
-          });
-        });
+        };
       }
-    }
-  </script>
+    </script>
 
-  <script>
-    if (!HTMLCanvasElement.prototype.toBlob) {
-      Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-        value: function (callback, type, quality) {
-          var canvas = this;
-          setTimeout(function() {
-
-            var binStr = atob( canvas.toDataURL(type, quality).split(',')[1] ),
+    <script>
+      if (!HTMLCanvasElement.prototype.toBlob) {
+        Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
+          value: function (callback, type, quality) {
+            var canvas = this;
+            setTimeout(function () {
+              var binStr = atob(canvas.toDataURL(type, quality).split(",")[1]),
                 len = binStr.length,
                 arr = new Uint8Array(len);
 
-            for (var i = 0; i < len; i++ ) {
-              arr[i] = binStr.charCodeAt(i);
-            }
+              for (var i = 0; i < len; i++) {
+                arr[i] = binStr.charCodeAt(i);
+              }
 
-            callback( new Blob( [arr], {type: type || 'image/png'} ) );
+              callback(new Blob([arr], { type: type || "image/png" }));
+            });
+          },
+        });
+      }
+    </script>
 
-          });
-        }
-      });
-    }
-  </script>
+    <script>
+      window.version = "development";
+    </script>
+  </head>
 
-  <script>
-    window.version = 'development';
-  </script>
-</head>
+  <body>
+    <noscript>
+      <h1>You don't have javascript enabled.</h1>
+      <p>This application requires javascript.</p>
+    </noscript>
 
-<body>
-  <noscript>
-    <h1>You don't have javascript enabled.</h1>
-    <p>This application requires javascript.</p>
-  </noscript>
+    <app-root></app-root>
 
-  <app-root></app-root>
-
-  <script>
-    const storedTheme = localStorage.getItem('theme');
-    switch(storedTheme) {
-      case 'black':
-      case 'dark':
-      case 'light':
-        document.body.className += 'theme-' + storedTheme;
-        break;
-      default:
-        document.body.className += 'theme-default';
-        break;
-    }
-  </script>
-</body>
-
+    <script>
+      const storedTheme = localStorage.getItem("theme");
+      switch (storedTheme) {
+        case "black":
+        case "dark":
+        case "light":
+          document.body.className += "theme-" + storedTheme;
+          break;
+        default:
+          document.body.className += "theme-default";
+          break;
+      }
+    </script>
+  </body>
 </html>

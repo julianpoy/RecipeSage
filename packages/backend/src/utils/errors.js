@@ -13,4 +13,3 @@ export const PreconditionFailed = (message) => constructError(message, 412);
 export const UnsupportedMediaType = (message) => constructError(message, 415);
 // 5xx
 export const InternalServerError = (message) => constructError(message, 500);
-

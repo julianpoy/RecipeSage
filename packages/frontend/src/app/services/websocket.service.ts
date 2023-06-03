@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { UtilService } from './util.service';
-import { GRIP_WS_URL } from '@recipesage/frontend/src/environments/environment';
+import { Injectable } from "@angular/core";
+import { UtilService } from "./util.service";
+import { GRIP_WS_URL } from "@recipesage/frontend/src/environments/environment";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class WebsocketService {
-
   connection: any;
   reconnectTimeout: any;
 
@@ -16,7 +15,7 @@ export class WebsocketService {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
-    window.addEventListener('beforeunload', e => {
+    window.addEventListener("beforeunload", (e) => {
       try {
         this.connection.onclose = () => {};
         this.connection.close();
@@ -35,7 +34,7 @@ export class WebsocketService {
 
     this.listeners[eventName].push({
       cb,
-      ctx
+      ctx,
     });
   }
 
@@ -48,26 +47,30 @@ export class WebsocketService {
   private connect() {
     if (!this.utilService.isLoggedIn()) return this.queueReconnect();
 
-    let prot = 'ws';
-    if ((window.location.href as any).indexOf('https') > -1) prot = 'wss';
+    let prot = "ws";
+    if ((window.location.href as any).indexOf("https") > -1) prot = "wss";
 
-    const connBaseUrl = GRIP_WS_URL || prot + '://' + window.location.hostname + '/grip/ws';
+    const connBaseUrl =
+      GRIP_WS_URL || prot + "://" + window.location.hostname + "/grip/ws";
 
-    this.connection = new WebSocket(connBaseUrl + this.utilService.getTokenQuery());
+    this.connection = new WebSocket(
+      connBaseUrl + this.utilService.getTokenQuery()
+    );
 
     this.connection.onopen = () => {
       this.handleMessage({
-        type: 'connected',
-        data: null
+        type: "connected",
+        data: null,
       });
     };
 
-    this.connection.onmessage = payload => {
+    this.connection.onmessage = (payload) => {
       this.handleMessage(JSON.parse(payload.data));
     };
 
     this.connection.onerror = () => {
-      if (this.connection.readyState === WebSocket.OPEN) this.connection.close();
+      if (this.connection.readyState === WebSocket.OPEN)
+        this.connection.close();
       this.queueReconnect();
     };
 

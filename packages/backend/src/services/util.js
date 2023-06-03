@@ -1,45 +1,43 @@
-import fs from 'fs-extra';
-import * as path from 'path';
-import zlib from 'zlib';
+import fs from "fs-extra";
+import * as path from "path";
+import zlib from "zlib";
 
 // Service
-import * as FirebaseService from './firebase.js';
-import * as GripService from './grip.js';
-
-
-
+import * as FirebaseService from "./firebase.js";
+import * as GripService from "./grip.js";
 
 /**
  * DO NOT ADD ANYTHING TO THIS FILE
  * ALL ADDITIONS SHOULD EXIST IN SEPARATE TS FILES
  */
 
-
-
-
-
 export const dispatchImportNotification = (user, status, reason) => {
   let event;
   if (status === 0) {
-    event = 'complete';
+    event = "complete";
   } else if (status === 1) {
-    event = 'failed';
+    event = "failed";
   } else if (status === 2) {
-    event = 'working';
+    event = "working";
   } else {
     return;
   }
 
-  let type = 'import:pepperplate:' + event;
+  let type = "import:pepperplate:" + event;
 
   const message = {
     type,
-    reason: reason || 'status'
+    reason: reason || "status",
   };
 
   let sendQueues = [];
   if (user.fcmTokens) {
-    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message));
+    sendQueues.push(
+      FirebaseService.sendMessages(
+        user.fcmTokens.map((fcmToken) => fcmToken.token),
+        message
+      )
+    );
   }
 
   sendQueues.push(GripService.broadcast(user.id, type, message));
@@ -47,17 +45,19 @@ export const dispatchImportNotification = (user, status, reason) => {
   return Promise.all(sendQueues);
 };
 
-export const sortUserProfileImages = user => {
+export const sortUserProfileImages = (user) => {
   if (user.toJSON) user = user.toJSON();
 
   if (user.profileImages && user.profileImages.length > 0) {
-    user.profileImages.sort((a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order);
+    user.profileImages.sort(
+      (a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order
+    );
   }
 
   return user;
 };
 
-export const sortRecipeImages = recipe => {
+export const sortRecipeImages = (recipe) => {
   if (recipe.toJSON) recipe = recipe.toJSON();
 
   if (recipe.images && recipe.images.length > 0) {
@@ -73,30 +73,35 @@ export const dispatchMessageNotification = (user, fullMessage) => {
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
     otherUser: fullMessage.otherUser,
     fromUser: fullMessage.fromUser,
-    toUser: fullMessage.toUser
+    toUser: fullMessage.toUser,
   };
 
   if (fullMessage.recipe) {
     message.recipe = {
       id: fullMessage.recipe.id,
       title: fullMessage.recipe.title,
-      images: fullMessage.recipe.images.map(image => ({
-        location: image.location
-      }))
+      images: fullMessage.recipe.images.map((image) => ({
+        location: image.location,
+      })),
     };
   }
 
   let sendQueues = [];
   if (user.fcmTokens) {
     const notification = {
-      type: 'messages:new',
-      message: JSON.stringify(message)
+      type: "messages:new",
+      message: JSON.stringify(message),
     };
 
-    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), notification));
+    sendQueues.push(
+      FirebaseService.sendMessages(
+        user.fcmTokens.map((fcmToken) => fcmToken.token),
+        notification
+      )
+    );
   }
 
-  sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
+  sendQueues.push(GripService.broadcast(user.id, "messages:new", message));
 
   return Promise.all(sendQueues);
 };
@@ -113,21 +118,23 @@ export const findFilesByRegex = (searchPath, regex) => {
       return [newPath, ...acc];
     }
 
-    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...findFilesByRegex(newPath, regex)];
+    if (fs.lstatSync(newPath).isDirectory())
+      return [...acc, ...findFilesByRegex(newPath, regex)];
 
     return acc;
   }, []);
 };
 
-export const sanitizeEmail = email => (email || '').trim().toLowerCase();
+export const sanitizeEmail = (email) => (email || "").trim().toLowerCase();
 
 // Very liberal email regex. Don't want to reject valid user emails.
 let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const validateEmail = email => emailRegex.test(email);
+export const validateEmail = (email) => emailRegex.test(email);
 
-export const validatePassword = password => typeof password === 'string' && password.length >= 6;
+export const validatePassword = (password) =>
+  typeof password === "string" && password.length >= 6;
 
-export const gunzip = buf => {
+export const gunzip = (buf) => {
   return new Promise((resolve, reject) => {
     zlib.gunzip(buf, (err, result) => {
       if (err) reject(err);
@@ -148,18 +155,24 @@ export const executeInChunks = async (cbs, chunkSize) => {
 
   await chunks.reduce((acc, chunk) => {
     return acc.then(() => {
-      return Promise.all(chunk.map(cb => cb()));
+      return Promise.all(chunk.map((cb) => cb()));
     });
   }, Promise.resolve());
 };
 
-export const cleanLabelTitle = labelTitle => {
-  const cleanedTitle = (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
+export const cleanLabelTitle = (labelTitle) => {
+  const cleanedTitle = (labelTitle || "")
+    .trim()
+    .toLowerCase()
+    .replace(/,/g, "");
 
-  if (cleanedTitle === 'unlabeled') return 'un-labeled';
+  if (cleanedTitle === "unlabeled") return "un-labeled";
 
   return cleanedTitle;
 };
 
-export const capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
-
+export const capitalizeEachWord = (input) =>
+  input
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+    .join(" ");

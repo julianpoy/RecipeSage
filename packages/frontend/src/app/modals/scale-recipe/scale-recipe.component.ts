@@ -1,11 +1,11 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
-import fractionjs from 'fraction.js';
+import { Component, Input, EventEmitter, Output } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
+import fractionjs from "fraction.js";
 
 @Component({
-  selector: 'scale-recipe',
-  templateUrl: 'scale-recipe.component.html',
-  styleUrls: ['scale-recipe.component.scss']
+  selector: "scale-recipe",
+  templateUrl: "scale-recipe.component.html",
+  styleUrls: ["scale-recipe.component.scss"],
 })
 export class ScaleRecipeComponent {
   scale: string;

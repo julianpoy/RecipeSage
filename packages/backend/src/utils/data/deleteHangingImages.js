@@ -1,11 +1,8 @@
-import Sequelize, { Op } from 'sequelize';
+import Sequelize, { Op } from "sequelize";
 
-import {
-  Image,
-  Recipe_Image
-} from '../../models/index.js';
+import { Image, Recipe_Image } from "../../models/index.js";
 
-import { deleteObjects } from '../../services/storage';
+import { deleteObjects } from "../../services/storage";
 
 export const deleteHangingImagesForUser = async (userId, transaction) => {
   const userImages = await Image.findAll({
@@ -14,24 +11,19 @@ export const deleteHangingImagesForUser = async (userId, transaction) => {
         {
           userId,
         },
-        Sequelize.where(
-          Sequelize.col('Recipe_Images.id'),
-          'IS',
-          null
-        )
-      ]
+        Sequelize.where(Sequelize.col("Recipe_Images.id"), "IS", null),
+      ],
     },
-    include: [{
-      model: Recipe_Image,
-      attributes: [],
-      required: false,
-    }],
-    attributes: ['key'],
+    include: [
+      {
+        model: Recipe_Image,
+        attributes: [],
+        required: false,
+      },
+    ],
+    attributes: ["key"],
     transaction,
   });
 
-  await deleteObjects(
-    userImages.map(image => image.key)
-  );
+  await deleteObjects(userImages.map((image) => image.key));
 };
-

@@ -1,9 +1,9 @@
-import { dedent } from 'ts-dedent';
-import { signatureHtml, signaturePlain } from './util/signature';
-import { sendMail } from './util/sendMail';
+import { dedent } from "ts-dedent";
+import { signatureHtml, signaturePlain } from "./util/signature";
+import { sendMail } from "./util/sendMail";
 
 export const sendWelcome = async (to: string[], ccTo: string[]) => {
-  const subject = 'Welcome to RecipeSage!';
+  const subject = "Welcome to RecipeSage!";
 
   const html = dedent`
     Welcome to RecipeSage!<br />
@@ -38,4 +38,3 @@ export const sendWelcome = async (to: string[], ccTo: string[]) => {
 
   await sendMail(to, ccTo, subject, html, plain);
 };
-

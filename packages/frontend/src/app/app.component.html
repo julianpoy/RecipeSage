@@ -1,11 +1,17 @@
 <ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
 
 <ion-app>
-  <ion-split-pane contentId="main-content" [disabled]="!isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]" when="(min-width: 1200px)">
+  <ion-split-pane
+    contentId="main-content"
+    [disabled]="!isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]"
+    when="(min-width: 1200px)"
+  >
     <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar color="nav">
-          <ion-title>RecipeSage{{ isSelfHost ? " Self Hosted" : "" }}</ion-title>
+          <ion-title
+            >RecipeSage{{ isSelfHost ? " Self Hosted" : "" }}</ion-title
+          >
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -14,18 +20,20 @@
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
               <ion-icon slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
-                {{p.title}}
+                {{ p.title }}
               </ion-label>
-              <ion-badge *ngIf="p.id === 'people' && friendRequestCount > 0">{{friendRequestCount}}</ion-badge>
-              <ion-badge *ngIf="p.id === 'inbox' && inboxCount > 0">{{inboxCount}}</ion-badge>
+              <ion-badge *ngIf="p.id === 'people' && friendRequestCount > 0">{{
+                friendRequestCount
+              }}</ion-badge>
+              <ion-badge *ngIf="p.id === 'inbox' && inboxCount > 0">{{
+                inboxCount
+              }}</ion-badge>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item *ngIf="isLoggedIn" (click)="logout()" button>
               <ion-icon slot="start" name="log-out"></ion-icon>
-              <ion-label>
-                Log Out
-              </ion-label>
+              <ion-label> Log Out </ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
@@ -33,19 +41,24 @@
 
       <ion-footer>
         <ion-toolbar>
-
           <p class="ion-padding-start">
             {{ version }}<br />
             <ion-menu-toggle auto-hide="false">
               <a [routerLink]="[aboutDetailsHref]">Julian Poyourow</a>
             </ion-menu-toggle>
           </p>
-
         </ion-toolbar>
       </ion-footer>
     </ion-menu>
-    <ion-router-outlet id="main-content" [class]="{ cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0 }"></ion-router-outlet>
+    <ion-router-outlet
+      id="main-content"
+      [class]="{
+        cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
+      }"
+    ></ion-router-outlet>
 
-    <cooking-toolbar *ngIf="cookingToolbarService.pinnedRecipes.length > 0"></cooking-toolbar>
+    <cooking-toolbar
+      *ngIf="cookingToolbarService.pinnedRecipes.length > 0"
+    ></cooking-toolbar>
   </ion-split-pane>
 </ion-app>

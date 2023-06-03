@@ -1,22 +1,19 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, Input, ViewChild } from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
 @Component({
-  selector: 'image-viewer',
-  templateUrl: 'image-viewer.component.html',
-  styleUrls: ['./image-viewer.component.scss']
+  selector: "image-viewer",
+  templateUrl: "image-viewer.component.html",
+  styleUrls: ["./image-viewer.component.scss"],
 })
 export class ImageViewerComponent {
-
   @Input() imageUrls: string[];
 
-  @ViewChild('slider', { static: true }) slider;
+  @ViewChild("slider", { static: true }) slider;
 
   slideNum = 0;
 
-  constructor(
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private modalCtrl: ModalController) {}
 
   ionViewWillEnter() {
     this.slider.update();

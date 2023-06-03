@@ -1,26 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { RatingFilterPopoverComponent } from './rating-filter-popover.component';
-import { GlobalModule } from '~/global.module';
-import {RatingModule} from '../rating/rating.module';
+import { RatingFilterPopoverComponent } from "./rating-filter-popover.component";
+import { GlobalModule } from "~/global.module";
+import { RatingModule } from "../rating/rating.module";
 
 @NgModule({
-  declarations: [
-    RatingFilterPopoverComponent,
-  ],
+  declarations: [RatingFilterPopoverComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
     GlobalModule,
-    RatingModule
+    RatingModule,
   ],
-  entryComponents: [
-    RatingFilterPopoverComponent
-  ]
+  entryComponents: [RatingFilterPopoverComponent],
 })
 export class RatingFilterPopoverModule {}

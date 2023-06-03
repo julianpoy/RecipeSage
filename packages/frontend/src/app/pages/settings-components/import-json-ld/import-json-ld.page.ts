@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import { NavController, ToastController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { RecipeService } from '~/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { LoadingService } from "~/services/loading.service";
+import { RecipeService } from "~/services/recipe.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 
 @Component({
-  selector: 'page-import-json-ld',
-  templateUrl: 'import-json-ld.page.html',
-  styleUrls: ['import-json-ld.page.scss']
+  selector: "page-import-json-ld",
+  templateUrl: "import-json-ld.page.html",
+  styleUrls: ["import-json-ld.page.scss"],
 })
 export class ImportJSONLDPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
@@ -25,9 +25,9 @@ export class ImportJSONLDPage {
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
-    public utilService: UtilService) {
-
-    this.ignoreLargeFiles = !!localStorage.getItem('largeFileOverride');
+    public utilService: UtilService
+  ) {
+    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
 
   setFile(event) {
@@ -40,11 +40,15 @@ export class ImportJSONLDPage {
   }
 
   filePicker() {
-    document.getElementById('filePicker').click();
+    document.getElementById("filePicker").click();
   }
 
   isFileTooLarge() {
-    if (!this.ignoreLargeFiles && this.imageFile && this.imageFile.size / 1024 / 1024 > 550) {
+    if (
+      !this.ignoreLargeFiles &&
+      this.imageFile &&
+      this.imageFile.size / 1024 / 1024 > 550
+    ) {
       // File is larger than 550MB
       return true;
     }
@@ -53,14 +57,16 @@ export class ImportJSONLDPage {
 
   showFileTypeWarning() {
     if (!this.imageFile || !this.imageFile.name) return false;
-    return !this.imageFile.name.toLowerCase().endsWith('.json');
+    return !this.imageFile.name.toLowerCase().endsWith(".json");
   }
 
   async presentToast(msg: string) {
-    (await this.toastCtrl.create({
-      message: msg,
-      duration: 6000
-    })).present();
+    (
+      await this.toastCtrl.create({
+        message: msg,
+        duration: 6000,
+      })
+    ).present();
   }
 
   async submit() {
@@ -68,41 +74,55 @@ export class ImportJSONLDPage {
 
     const response = await this.recipeService.importJSONLD(this.imageFile, {
       406: async () => {
-        const message = await this.translate.get('pages.importJsonLD.error').toPromise();
-        const close = await this.translate.get('generic.close').toPromise();
+        const message = await this.translate
+          .get("pages.importJsonLD.error")
+          .toPromise();
+        const close = await this.translate.get("generic.close").toPromise();
 
-        (await this.toastCtrl.create({
-          message,
-          buttons: [{
-            text: close,
-            role: 'cancel'
-          }]
-        })).present();
+        (
+          await this.toastCtrl.create({
+            message,
+            buttons: [
+              {
+                text: close,
+                role: "cancel",
+              },
+            ],
+          })
+        ).present();
       },
       504: async () => {
         setTimeout(async () => {
-          const message = await this.translate.get('pages.importJsonLD.timeout').toPromise();
-          const close = await this.translate.get('generic.close').toPromise();
+          const message = await this.translate
+            .get("pages.importJsonLD.timeout")
+            .toPromise();
+          const close = await this.translate.get("generic.close").toPromise();
 
-          (await this.toastCtrl.create({
-            message,
-            buttons: [{
-              text: close,
-              role: 'cancel'
-            }]
-          })).present();
-          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+          (
+            await this.toastCtrl.create({
+              message,
+              buttons: [
+                {
+                  text: close,
+                  role: "cancel",
+                },
+              ],
+            })
+          ).present();
+          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
         }, 20000);
-      }
+      },
     });
     this.loading.dismiss();
     this.loading = null;
     if (!response.success) return;
 
-    const message = await this.translate.get('pages.importJsonLD.success').toPromise();
+    const message = await this.translate
+      .get("pages.importJsonLD.success")
+      .toPromise();
 
     this.presentToast(message);
 
-    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
   }
 }

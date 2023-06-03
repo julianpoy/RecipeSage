@@ -1,16 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { ToastController } from "@ionic/angular";
 
-import { UserService } from '~/services/user.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap } from '~/services/util.service';
+import { UserService } from "~/services/user.service";
+import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
 
 @Component({
-  selector: 'select-user',
-  templateUrl: 'select-user.component.html',
-  styleUrls: ['./select-user.component.scss']
+  selector: "select-user",
+  templateUrl: "select-user.component.html",
+  styleUrls: ["./select-user.component.scss"],
 })
 export class SelectUserComponent {
   _selectedUser: any;
@@ -31,7 +31,7 @@ export class SelectUserComponent {
   searchTimeout;
   searching = false;
 
-  _searchText: string = '';
+  _searchText: string = "";
   get searchText() {
     return this._searchText;
   }
@@ -54,10 +54,7 @@ export class SelectUserComponent {
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
-    if (
-      !this.searchText.trim()
-      || this.searchText.trim() === '@'
-    ) return;
+    if (!this.searchText.trim() || this.searchText.trim() === "@") return;
 
     this.searching = true;
 
@@ -68,15 +65,15 @@ export class SelectUserComponent {
   }
 
   async search(input: string) {
-    input = input || '';
+    input = input || "";
     const loading = this.loadingService.start();
 
     const results = [];
 
-    const handle = input.startsWith('@') ? input.substring(1) : input;
+    const handle = input.startsWith("@") ? input.substring(1) : input;
     const profileResponse = await this.userService.getProfileByHandle(handle, {
       403: () => {},
-      404: () => {}
+      404: () => {},
     });
     if (profileResponse.success && profileResponse.data) {
       // TODO: Currently this pushes a profile rather than the direct user info
@@ -84,13 +81,17 @@ export class SelectUserComponent {
       results.push(profileResponse.data);
     }
 
-    const userResponse = await this.userService.getUserByEmail({
-      email: input
-    }, {
-      404: () => {}
-    });
+    const userResponse = await this.userService.getUserByEmail(
+      {
+        email: input,
+      },
+      {
+        404: () => {},
+      }
+    );
 
-    if (userResponse.success && userResponse.data) results.push(userResponse.data);
+    if (userResponse.success && userResponse.data)
+      results.push(userResponse.data);
 
     this.results = results;
 
@@ -104,7 +105,7 @@ export class SelectUserComponent {
   clearSelectedUser() {
     this.selectedUser = null;
     this.results = [];
-    this.searchText = '';
+    this.searchText = "";
     this.searching = false;
   }
 }

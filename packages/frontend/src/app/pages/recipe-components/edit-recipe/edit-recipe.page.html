@@ -1,11 +1,14 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="recipe.id">{{ 'pages.editRecipe.title.edit' | translate }}</ion-title>
-    <ion-title *ngIf="!recipe.id">{{ 'pages.editRecipe.title.new' | translate }}</ion-title>
+    <ion-title *ngIf="recipe.id"
+      >{{ 'pages.editRecipe.title.edit' | translate }}</ion-title
+    >
+    <ion-title *ngIf="!recipe.id"
+      >{{ 'pages.editRecipe.title.new' | translate }}</ion-title
+    >
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -13,12 +16,13 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
-
 <ion-content>
-  <multi-image-upload [images]="images" (onImageAdded)="markAsDirty();"></multi-image-upload>
+  <multi-image-upload
+    [images]="images"
+    (onImageAdded)="markAsDirty();"
+  ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
     <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
@@ -38,7 +42,8 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-input>
+        spellcheck="true"
+      ></ion-input>
     </ion-item>
 
     <ion-item>
@@ -53,7 +58,8 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <div class="miniflex">
@@ -68,7 +74,8 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
@@ -82,7 +89,8 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
@@ -96,7 +104,8 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
@@ -110,7 +119,8 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
@@ -124,14 +134,19 @@
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <div class="rating">
         <div class="rating-title">
           {{ 'pages.editRecipe.input.rating' | translate }}
         </div>
-        <rating [rating]="recipe.rating" (ratingChanged)="recipe.rating = $event" [enableEdit]="true"></rating>
+        <rating
+          [rating]="recipe.rating"
+          (ratingChanged)="recipe.rating = $event"
+          [enableEdit]="true"
+        ></rating>
       </div>
     </div>
 
@@ -147,7 +162,8 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <ion-item>
@@ -162,7 +178,8 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <ion-item>
@@ -177,15 +194,14 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <br />
 
     <ion-item *ngIf="!recipe.id" class="ion-text-wrap">
-      <p>
-        {{ 'pages.editRecipe.labelNotice' | translate }}
-      </p>
+      <p>{{ 'pages.editRecipe.labelNotice' | translate }}</p>
     </ion-item>
     <div class="ion-padding">
       <ion-button *ngIf="recipe.id" expand="block" (click)="save()">

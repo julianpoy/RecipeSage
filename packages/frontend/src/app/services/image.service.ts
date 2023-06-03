@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { HttpService } from './http.service';
-import { UtilService } from './util.service';
-import {ErrorHandlers} from './http-error-handler.service';
+import { HttpService } from "./http.service";
+import { UtilService } from "./util.service";
+import { ErrorHandlers } from "./http-error-handler.service";
 
 export interface Image {
   id: string;
@@ -10,10 +10,9 @@ export interface Image {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ImageService {
-
   constructor(
     private httpService: HttpService,
     private utilService: UtilService
@@ -21,23 +20,26 @@ export class ImageService {
 
   create(file: File, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append('image', file, file.name);
+    formData.append("image", file, file.name);
 
     return this.httpService.multipartRequestWithWrapper<Image>(
-      'images',
-      'POST',
+      "images",
+      "POST",
       formData,
       {},
       errorHandlers
     );
   }
 
-  createFromUrl(payload: {
-    url: string
-  }, errorHandlers?: ErrorHandlers) {
+  createFromUrl(
+    payload: {
+      url: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<Image>(
-      'images/url',
-      'POST',
+      "images/url",
+      "POST",
       payload,
       null,
       errorHandlers

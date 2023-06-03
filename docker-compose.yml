@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 # NOTE: If you're selfhosting, you'll find it much easier (and more performant) to use the proper selfhosted
 # dockerfile that exists here: https://github.com/julianpoy/recipesage-selfhost
@@ -7,9 +7,9 @@ services:
   proxy:
     image: nginx
     volumes:
-    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
-    - "80:80"
+      - "80:80"
     command: nginx -g 'daemon off;'
     depends_on:
       - frontend
@@ -121,4 +121,3 @@ services:
       - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
-

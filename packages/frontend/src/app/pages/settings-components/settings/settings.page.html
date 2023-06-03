@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -7,9 +6,7 @@
 
     <ion-title>{{ 'pages.settings.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content>
   <ion-list>
@@ -18,50 +15,49 @@
     </ion-list-header>
     <ion-item lines="inset" (click)="goToImport()" button>
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.import' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.settings.import' | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="goToExport()" button>
       <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.export' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.settings.export' | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="goToAccount()" button>
       <ion-icon name="person" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.account' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.settings.account' | translate }} </ion-label>
     </ion-item>
     <ion-item lines="inset" (click)="checkForUpdate()" button>
       <ion-icon name="sync" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.update' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.settings.update' | translate }} </ion-label>
     </ion-item>
     <ion-list-header>
       {{ 'pages.settings.section2.title' | translate }}
     </ion-list-header>
     <ion-item lines="inset" *ngIf="showSplitPaneOption">
-      <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]" (ngModelChange)="toggleSplitPane(); savePreferences()"></ion-toggle>
+      <ion-toggle
+        [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
+        (ngModelChange)="toggleSplitPane(); savePreferences()"
+      ></ion-toggle>
       <ion-label class="ion-text-wrap">
         {{ 'pages.settings.splitPane' | translate }}
       </ion-label>
-      <ion-icon name='tablet-landscape' slot="start"></ion-icon>
+      <ion-icon name="tablet-landscape" slot="start"></ion-icon>
     </ion-item>
-    <ion-item lines="inset" *ngIf="featureFlags[featureFlagKeys.EnableExperimentalOfflineCache]">
-      <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]" (ngModelChange)="toggleOfflineCache(); savePreferences()"></ion-toggle>
+    <ion-item
+      lines="inset"
+      *ngIf="featureFlags[featureFlagKeys.EnableExperimentalOfflineCache]"
+    >
+      <ion-toggle
+        [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]"
+        (ngModelChange)="toggleOfflineCache(); savePreferences()"
+      ></ion-toggle>
       <ion-label class="ion-text-wrap">
         {{ 'pages.settings.cache' | translate }}
       </ion-label>
-      <ion-icon name='cloud-download' slot="start"></ion-icon>
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
     </ion-item>
     <ion-item lines="inset">
-      <ion-icon name='brush' slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.theme' | translate }}
-      </ion-label>
+      <ion-icon name="brush" slot="start"></ion-icon>
+      <ion-label> {{ 'pages.settings.theme' | translate }} </ion-label>
       <ion-select [(ngModel)]="appTheme" (ngModelChange)="appThemeChanged();">
         <ion-select-option value="default">
           {{ 'pages.settings.theme.default' | translate }}
@@ -78,27 +74,30 @@
       </ion-select>
     </ion-item>
     <ion-item lines="inset">
-      <ion-icon name='language-outline' slot="start"></ion-icon>
+      <ion-icon name="language-outline" slot="start"></ion-icon>
       <ion-label>
         {{ 'pages.settings.language' | translate }}
-        <p>
-          {{ 'pages.settings.language.contribute' | translate }}
-        </p>
+        <p>{{ 'pages.settings.language.contribute' | translate }}</p>
       </ion-label>
-      <ion-select [interfaceOptions]="languageSelectInterfaceOptions" [(ngModel)]="language" (ngModelChange)="languageChanged();">
+      <ion-select
+        [interfaceOptions]="languageSelectInterfaceOptions"
+        [(ngModel)]="language"
+        (ngModelChange)="languageChanged();"
+      >
         <ion-select-option value="navigator">
           {{ 'pages.settings.language.default' | translate }}
         </ion-select-option>
-        <ion-select-option *ngFor="let languageOption of languageOptions" [value]="languageOption[0]">
+        <ion-select-option
+          *ngFor="let languageOption of languageOptions"
+          [value]="languageOption[0]"
+        >
           {{ languageOption[1] }}
         </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.reset' | translate }}
-      </ion-label>
+      <ion-label> {{ 'pages.settings.reset' | translate }} </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

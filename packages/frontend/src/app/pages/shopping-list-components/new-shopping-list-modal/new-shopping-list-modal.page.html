@@ -1,9 +1,6 @@
 <ion-header>
-
   <ion-toolbar>
-    <ion-title>
-      {{ 'pages.newShoppingList.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.newShoppingList.title' | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -11,7 +8,6 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 <ion-content class="ion-padding">
@@ -26,12 +22,15 @@
       autocapitalize="on"
       autocomplete="on"
       autocorrect="on"
-      spellcheck="true"></ion-input>
+      spellcheck="true"
+    ></ion-input>
   </ion-item>
 
   <br /><br />
 
-  <select-collaborators [(selectedCollaboratorIds)]="selectedCollaboratorIds"></select-collaborators>
+  <select-collaborators
+    [(selectedCollaboratorIds)]="selectedCollaboratorIds"
+  ></select-collaborators>
 </ion-content>
 
 <ion-footer class="ion-padding">

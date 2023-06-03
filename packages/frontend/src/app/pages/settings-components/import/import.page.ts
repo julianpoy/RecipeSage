@@ -1,19 +1,17 @@
-import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import { NavController } from "@ionic/angular";
 
-import { RouteMap } from '~/services/util.service';
+import { RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'page-import',
-  templateUrl: 'import.page.html',
-  styleUrls: ['import.page.scss']
+  selector: "page-import",
+  templateUrl: "import.page.html",
+  styleUrls: ["import.page.scss"],
 })
 export class ImportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
-  constructor(
-    public navCtrl: NavController) {
-  }
+  constructor(public navCtrl: NavController) {}
 
   goToImportJSONLD() {
     this.navCtrl.navigateForward(RouteMap.ImportJSONLDPage.getPath());

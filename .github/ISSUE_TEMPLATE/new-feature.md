@@ -1,10 +1,9 @@
 ---
 name: New Feature
 about: Suggest new application functionality (actionable, single, functional)
-title: ''
+title: ""
 labels: feature
 assignees: julianpoy
-
 ---
 
 **Is your new feature related to a problem? Please describe.**

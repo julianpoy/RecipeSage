@@ -1,25 +1,28 @@
-import Sequelize from 'sequelize';
-import { Umzug, SequelizeStorage } from 'umzug';
-import * as path from 'path';
-import { program } from 'commander';
+import Sequelize from "sequelize";
+import { Umzug, SequelizeStorage } from "umzug";
+import * as path from "path";
+import { program } from "commander";
 
-import configOptions from './config/sequelize-config.js';
+import configOptions from "./config/sequelize-config.js";
 const config = configOptions[process.env.NODE_ENV];
 
-program
-  .arguments('[direction] [count]')
-  .parse(process.argv);
+program.arguments("[direction] [count]").parse(process.argv);
 
 const options = {
-  direction: program.args.at(0) || 'up',
+  direction: program.args.at(0) || "up",
   count: program.args.at(1),
 };
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
 
 const umzug = new Umzug({
   migrations: {
-    glob: path.join(__dirname, 'migrations/*.js'),
+    glob: path.join(__dirname, "migrations/*.js"),
     resolve: ({ name, path, context }) => {
       return {
         name,
@@ -34,7 +37,7 @@ const umzug = new Umzug({
 });
 
 (async () => {
-  if (options.direction === 'up') {
+  if (options.direction === "up") {
     await umzug.up({
       step: options.count || undefined,
     });
@@ -44,7 +47,6 @@ const umzug = new Umzug({
       to: options.count ? undefined : 0,
     });
   }
-  console.log('All migrations performed successfully');
+  console.log("All migrations performed successfully");
   process.exit(0);
 })();
-

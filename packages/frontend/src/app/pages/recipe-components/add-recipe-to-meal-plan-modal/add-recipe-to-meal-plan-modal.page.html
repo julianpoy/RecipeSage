@@ -13,7 +13,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <p *ngIf="!destinationMealPlan">
     {{ 'pages.addRecipeToMealPlanModal.instructions1' | translate }}
   </p>
@@ -26,8 +25,13 @@
     <ion-label>
       {{ 'pages.addRecipeToMealPlanModal.selectDestination' | translate }}
     </ion-label>
-    <ion-select [(ngModel)]="selectedMealPlan" (ngModelChange)="loadMealPlan(selectedMealPlan.id)">
-      <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan">{{ mealPlan.title }}</ion-select-option>
+    <ion-select
+      [(ngModel)]="selectedMealPlan"
+      (ngModelChange)="loadMealPlan(selectedMealPlan.id)"
+    >
+      <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan"
+        >{{ mealPlan.title }}</ion-select-option
+      >
     </ion-select>
   </ion-item>
 
@@ -46,7 +50,8 @@
   <div *ngIf="destinationMealPlan">
     <meal-calendar
       [mealPlan]="destinationMealPlan"
-      (selectedDaysChange)="selectedDays = $event"></meal-calendar>
+      (selectedDaysChange)="selectedDays = $event"
+    ></meal-calendar>
   </div>
 </ion-content>
 
@@ -56,9 +61,16 @@
     <ion-button expand="block" (click)="save()" [disabled]="!isFormValid()">
       <ion-icon name="calendar" slot="start"></ion-icon>
       <ion-label>
-        <span *ngIf="isFormValid()">{{ 'pages.addRecipeToMealPlanModal.add' | translate }}</span>
-        <span *ngIf="!destinationMealPlan">{{ 'pages.addRecipeToMealPlanModal.selectMealPlan' | translate }}</span>
-        <span *ngIf="destinationMealPlan && !meal">{{ 'pages.addRecipeToMealPlanModal.selectMeal' | translate }}</span>
+        <span *ngIf="isFormValid()"
+          >{{ 'pages.addRecipeToMealPlanModal.add' | translate }}</span
+        >
+        <span *ngIf="!destinationMealPlan"
+          >{{ 'pages.addRecipeToMealPlanModal.selectMealPlan' | translate
+          }}</span
+        >
+        <span *ngIf="destinationMealPlan && !meal"
+          >{{ 'pages.addRecipeToMealPlanModal.selectMeal' | translate }}</span
+        >
       </ion-label>
     </ion-button>
   </div>

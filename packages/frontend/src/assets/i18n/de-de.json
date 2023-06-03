@@ -165,11 +165,11 @@
 
   "pages.notfound.title": "Seite nicht gefunden",
   "pages.notfound.error.title": "Seite nicht gefunden!",
-  "pages.notfound.error.message1" : "Es sieht so aus, als ob die Seite, die du suchst, nicht existiert.",
-  "pages.notfound.error.message2" : "Prüfe, ob du die URL richtig eingegeben hast.",
-  "pages.notfound.error.message3" : "Wenn du immer noch Probleme hast, oder wenn du irgendwie in der App hierher gelangt bist, kontaktiere mich bitte.",
-  "pages.notfound.error.contact" : "Kontakt",
-  "pages.notfound.error.goHome" : "Klicke hier, um zu deinen Rezepten zu gelangen",
+  "pages.notfound.error.message1": "Es sieht so aus, als ob die Seite, die du suchst, nicht existiert.",
+  "pages.notfound.error.message2": "Prüfe, ob du die URL richtig eingegeben hast.",
+  "pages.notfound.error.message3": "Wenn du immer noch Probleme hast, oder wenn du irgendwie in der App hierher gelangt bist, kontaktiere mich bitte.",
+  "pages.notfound.error.contact": "Kontakt",
+  "pages.notfound.error.goHome": "Klicke hier, um zu deinen Rezepten zu gelangen",
 
   "====== Pages.HomePopover ======": "",
 
@@ -497,7 +497,6 @@
   "pages.mealPlanPopover.options.startWeekOn.title": "Woche beginnen am",
   "pages.mealPlanPopover.options.startWeekOn.monday": "Montag",
   "pages.mealPlanPopover.options.startWeekOn.sunday": "Sonntag",
-
 
   "pages.mealPlanPopover.actions.title": "Aktionen",
   "pages.mealPlanPopover.actions.share": "Teilen",
@@ -1145,7 +1144,6 @@
   "components.multiImageUpload.imageLimit": "Du kannst bis zu 10 Bilder anhängen",
   "components.multiImageUpload.imageError": "Bei der Verarbeitung eines oder mehrerer der von dir ausgewählten Bilder ist ein Fehler aufgetreten",
 
-
   "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "Bereits hinzugefügt",
@@ -1256,7 +1254,6 @@
   "generic.close": "Schließen",
   "generic.save": "Speichern",
   "generic.okay": "OK",
-
 
   "====== Trailing Comma Placeholder ======": ""
 }

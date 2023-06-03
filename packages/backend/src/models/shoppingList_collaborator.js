@@ -1,14 +1,18 @@
 export const ShoppingListCollaboratorInit = (sequelize, DataTypes) => {
-  const ShoppingListCollaborator = sequelize.define('ShoppingList_Collaborator', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false
+  const ShoppingListCollaborator = sequelize.define(
+    "ShoppingList_Collaborator",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+    },
+    {
+      tableName: "ShoppingList_Collaborators",
     }
-  }, {
-    tableName: 'ShoppingList_Collaborators'
-  });
+  );
 
   return ShoppingListCollaborator;
 };

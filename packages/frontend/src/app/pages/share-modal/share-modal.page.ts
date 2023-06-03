@@ -1,20 +1,28 @@
-import { Component, Input } from '@angular/core';
-import { NavController, ModalController, ToastController } from '@ionic/angular';
+import { Component, Input } from "@angular/core";
+import {
+  NavController,
+  ModalController,
+  ToastController,
+} from "@ionic/angular";
 
-import { MessagingService } from '~/services/messaging.service';
-import { UserService } from '~/services/user.service';
-import { RecipeService, Recipe } from '~/services/recipe.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RecipeTemplateModifiers, RouteMap, AuthType } from '~/services/util.service';
-import { SafeResourceUrl } from '@angular/platform-browser';
+import { MessagingService } from "~/services/messaging.service";
+import { UserService } from "~/services/user.service";
+import { RecipeService, Recipe } from "~/services/recipe.service";
+import { LoadingService } from "~/services/loading.service";
+import {
+  UtilService,
+  RecipeTemplateModifiers,
+  RouteMap,
+  AuthType,
+} from "~/services/util.service";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
-  selector: 'page-share-modal',
-  templateUrl: 'share-modal.page.html',
-  styleUrls: ['share-modal.page.scss']
+  selector: "page-share-modal",
+  templateUrl: "share-modal.page.html",
+  styleUrls: ["share-modal.page.scss"],
 })
 export class ShareModalPage {
-
   @Input() recipe: Recipe;
 
   selectedUser: any;
@@ -22,7 +30,7 @@ export class ShareModalPage {
 
   threads: any = [];
 
-  shareMethod = 'account';
+  shareMethod = "account";
 
   recipeURL: string;
 
@@ -35,31 +43,37 @@ export class ShareModalPage {
     hideNotes: false,
     hideSource: false,
     hideSourceURL: false,
-    showPrintButton: true
+    showPrintButton: true,
   };
   recipePreviewURL: SafeResourceUrl;
   recipeEmbedURL: string;
   recipeEmbedCode: string;
 
   constructor(
-  public navCtrl: NavController,
-  public toastCtrl: ToastController,
-  public utilService: UtilService,
-  public loadingService: LoadingService,
-  public messagingService: MessagingService,
-  public recipeService: RecipeService,
-  public userService: UserService,
-  public modalCtrl: ModalController) {
+    public navCtrl: NavController,
+    public toastCtrl: ToastController,
+    public utilService: UtilService,
+    public loadingService: LoadingService,
+    public messagingService: MessagingService,
+    public recipeService: RecipeService,
+    public userService: UserService,
+    public modalCtrl: ModalController
+  ) {
     setTimeout(() => {
-      this.recipeURL = `${window.location.protocol}//${window.location.host}`
-                     + `/#/recipe/${this.recipe.id}?version=${(window as any).version}&usp=sharing`;
+      this.recipeURL =
+        `${window.location.protocol}//${window.location.host}` +
+        `/#/recipe/${this.recipe.id}?version=${
+          (window as any).version
+        }&usp=sharing`;
 
-      this.loadThreads().then(() => {}, () => {});
+      this.loadThreads().then(
+        () => {},
+        () => {}
+      );
 
       this.updateEmbed(true);
     });
   }
-
 
   cancel() {
     this.modalCtrl.dismiss();
@@ -67,7 +81,11 @@ export class ShareModalPage {
 
   updateEmbed(updateURL?: boolean) {
     if (updateURL) {
-      this.recipePreviewURL = this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(this.recipe.id, this.embedConfig);
+      this.recipePreviewURL = this.recipeEmbedURL =
+        this.utilService.generateRecipeTemplateURL(
+          this.recipe.id,
+          this.embedConfig
+        );
     }
 
     const jsonLDCode = `<script>
@@ -87,7 +105,7 @@ export class ShareModalPage {
       scrolling="auto"
       frameborder="0"></iframe>`;
 
-    let embedCode = '';
+    let embedCode = "";
     if (this.enableJSONLD) embedCode += `${jsonLDCode}\n`;
     embedCode += iframeCode;
 
@@ -117,14 +135,16 @@ export class ShareModalPage {
 
     const response = await this.messagingService.create({
       to: this.recipientId,
-      body: '',
-      recipeId: this.recipe.id
+      body: "",
+      recipeId: this.recipe.id,
     });
     loading.dismiss();
     if (!response.success) return;
 
     this.modalCtrl.dismiss();
-    this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(this.recipientId));
+    this.navCtrl.navigateForward(
+      RouteMap.MessageThreadPage.getPath(this.recipientId)
+    );
   }
 
   shareMethodChanged(event) {

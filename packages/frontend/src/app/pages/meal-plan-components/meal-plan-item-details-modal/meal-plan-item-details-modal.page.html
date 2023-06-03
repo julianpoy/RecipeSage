@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar>
     <ion-title>
       {{ 'pages.mealPlanItemDetailsModal.title' | translate }}
@@ -11,27 +10,28 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <ion-item (click)="mealItem.recipe ? openRecipe() : null" button>
     <ion-avatar *ngIf="mealItem.recipe?.images?.length > 0" slot="start">
-      <img src="{{ mealItem.recipe.images[0].location }}">
+      <img src="{{ mealItem.recipe.images[0].location }}" />
     </ion-avatar>
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
       <p class="mealItem-meta">
         <ion-icon name="calendar"></ion-icon>
         <span>
-          {{ 'pages.mealPlanItemDetailsModal.scheduled' | translate:{meal:mealItem.meal,date:formatDate(mealItem.scheduled)} }}
+          {{ 'pages.mealPlanItemDetailsModal.scheduled' |
+          translate:{meal:mealItem.meal,date:formatDate(mealItem.scheduled)} }}
         </span>
       </p>
       <p class="mealItem-meta">
         <ion-icon name="person"></ion-icon>
         <span>
-          {{ 'pages.mealPlanItemDetailsModal.lastModified' | translate:{name:mealItem.owner.name,date:formatDate(mealItem.updatedAt)} }}
+          {{ 'pages.mealPlanItemDetailsModal.lastModified' |
+          translate:{name:mealItem.owner.name,date:formatDate(mealItem.updatedAt)}
+          }}
         </span>
       </p>
       <p *ngIf="mealItem.recipe">
@@ -46,12 +46,17 @@
     <ion-icon slot="start" name="cart"></ion-icon>
     <ion-label>
       <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.addToShoppingList' | translate }}
+        {{ 'pages.mealPlanItemDetailsModal.actions.addToShoppingList' |
+        translate }}
       </h2>
     </ion-label>
   </ion-item>
 
-  <ion-item *ngIf="mealItem.recipe?.id" (click)="cookingToolbarService.isPinned(mealItem.recipe.id) ? unpinRecipe() : pinRecipe()" button>
+  <ion-item
+    *ngIf="mealItem.recipe?.id"
+    (click)="cookingToolbarService.isPinned(mealItem.recipe.id) ? unpinRecipe() : pinRecipe()"
+    button
+  >
     <ion-icon slot="start" name="pin"></ion-icon>
     <ion-label>
       <h2 *ngIf="cookingToolbarService.isPinned(mealItem.recipe.id)">
@@ -66,9 +71,7 @@
   <ion-item (click)="edit()" button>
     <ion-icon slot="start" name="create"></ion-icon>
     <ion-label>
-      <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.edit' | translate }}
-      </h2>
+      <h2>{{ 'pages.mealPlanItemDetailsModal.actions.edit' | translate }}</h2>
     </ion-label>
   </ion-item>
 
@@ -84,9 +87,7 @@
   <ion-item (click)="delete()" button>
     <ion-icon slot="start" name="trash" color="danger"></ion-icon>
     <ion-label color="danger">
-      <h2>
-        {{ 'pages.mealPlanItemDetailsModal.actions.delete' | translate }}
-      </h2>
+      <h2>{{ 'pages.mealPlanItemDetailsModal.actions.delete' | translate }}</h2>
     </ion-label>
   </ion-item>
 </ion-content>

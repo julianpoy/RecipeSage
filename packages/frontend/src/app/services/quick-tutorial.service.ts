@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Injectable } from "@angular/core";
+import { AlertController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
 interface QuickTutorialBlurb {
   header: string;
@@ -10,50 +10,50 @@ interface QuickTutorialBlurb {
 // Mapped values of these enums are stored in client localStorage.
 // Changing mapped value names here will reset their viewed status
 export enum QuickTutorialOptions {
-  MultipleRecipeSelection = 'multipleRecipeSelection',
-  MultipleLabelSelection = 'multipleLabelSelection',
-  SplitPaneView = 'splitPaneView',
-  ExperimentalOfflineCache = 'experimentalOfflineCache',
-  PinnedRecipes = 'pinnedRecipes'
+  MultipleRecipeSelection = "multipleRecipeSelection",
+  MultipleLabelSelection = "multipleLabelSelection",
+  SplitPaneView = "splitPaneView",
+  ExperimentalOfflineCache = "experimentalOfflineCache",
+  PinnedRecipes = "pinnedRecipes",
 }
 
 type QuickTutorialBlurbs = {
-  [ s in QuickTutorialOptions ]: QuickTutorialBlurb
+  [s in QuickTutorialOptions]: QuickTutorialBlurb;
 };
 
 const quickTutorialBlurbs: QuickTutorialBlurbs = {
   [QuickTutorialOptions.MultipleRecipeSelection]: {
-    header: 'services.quickTutorial.multipleRecipeSelection.header',
-    message: 'services.quickTutorial.multipleRecipeSelection.message'
+    header: "services.quickTutorial.multipleRecipeSelection.header",
+    message: "services.quickTutorial.multipleRecipeSelection.message",
   },
   [QuickTutorialOptions.MultipleLabelSelection]: {
-    header: 'services.quickTutorial.multipleLabelSelection.header',
-    message: 'services.quickTutorial.multipleLabelSelection.message'
+    header: "services.quickTutorial.multipleLabelSelection.header",
+    message: "services.quickTutorial.multipleLabelSelection.message",
   },
   [QuickTutorialOptions.SplitPaneView]: {
-    header: 'services.quickTutorial.splitPaneView.header',
-    message: 'services.quickTutorial.splitPaneView.message'
+    header: "services.quickTutorial.splitPaneView.header",
+    message: "services.quickTutorial.splitPaneView.message",
   },
   [QuickTutorialOptions.ExperimentalOfflineCache]: {
-    header: 'services.quickTutorial.experimentalOfflineCache.header',
-    message: 'services.quickTutorial.experimentalOfflineCache.message'
+    header: "services.quickTutorial.experimentalOfflineCache.header",
+    message: "services.quickTutorial.experimentalOfflineCache.message",
   },
   [QuickTutorialOptions.PinnedRecipes]: {
-    header: 'services.quickTutorial.pinnedRecipes.header',
-    message: 'services.quickTutorial.pinnedRecipes.message'
-  }
+    header: "services.quickTutorial.pinnedRecipes.header",
+    message: "services.quickTutorial.pinnedRecipes.message",
+  },
 };
 
-const TUTORIAL_LOCALSTORAGE_KEY = 'seenQuickTutorialOptions';
+const TUTORIAL_LOCALSTORAGE_KEY = "seenQuickTutorialOptions";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class QuickTutorialService {
   constructor(
     private alertCtrl: AlertController,
     private translate: TranslateService
-  ) { }
+  ) {}
 
   private fetchSeenTutorials(): any[] {
     try {
@@ -87,12 +87,12 @@ export class QuickTutorialService {
 
       const header = await this.translate.get(tutorial.header).toPromise();
       const message = await this.translate.get(tutorial.message).toPromise();
-      const okay = await this.translate.get('generic.okay').toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
 
       const tutorialAlert = await this.alertCtrl.create({
         header,
         message,
-        buttons: [okay]
+        buttons: [okay],
       });
 
       await tutorialAlert.present();

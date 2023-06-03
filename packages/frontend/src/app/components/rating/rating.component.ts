@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 @Component({
-  selector: 'rating',
-  templateUrl: 'rating.component.html',
-  styleUrls: ['./rating.component.scss']
+  selector: "rating",
+  templateUrl: "rating.component.html",
+  styleUrls: ["./rating.component.scss"],
 })
 export class RatingComponent {
   @Output() ratingChanged = new EventEmitter<number>();
@@ -21,14 +21,14 @@ export class RatingComponent {
 
   @Input() enableEdit: boolean = false;
 
-  ratingVisual = new Array<string>(5).fill('star-outline');
+  ratingVisual = new Array<string>(5).fill("star-outline");
 
   constructor() {}
 
   updateRatingVisual() {
     this.ratingVisual = new Array<string>(5)
-      .fill('star', 0, this.rating)
-      .fill('star-outline', this.rating, 5);
+      .fill("star", 0, this.rating)
+      .fill("star-outline", this.rating, 5);
   }
 
   setRating(rating: number) {

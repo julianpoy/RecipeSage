@@ -1,18 +1,17 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { Recipe, RecipeService } from '~/services/recipe.service';
-import { ToastController, NavController } from '@ionic/angular';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { Recipe, RecipeService } from "~/services/recipe.service";
+import { ToastController, NavController } from "@ionic/angular";
 
 @Component({
-  selector: 'select-recipe',
-  templateUrl: 'select-recipe.component.html',
-  styleUrls: ['./select-recipe.component.scss']
+  selector: "select-recipe",
+  templateUrl: "select-recipe.component.html",
+  styleUrls: ["./select-recipe.component.scss"],
 })
 export class SelectRecipeComponent {
-
   searchTimeout;
-  searchText = '';
+  searchText = "";
   searching = false;
   PAUSE_BEFORE_SEARCH = 500;
 
@@ -43,7 +42,7 @@ export class SelectRecipeComponent {
     const loading = this.loadingService.start();
 
     const response = await this.recipeService.search({
-      query: text
+      query: text,
     });
     loading.dismiss();
     this.searching = false;
@@ -70,7 +69,7 @@ export class SelectRecipeComponent {
   }
 
   async selectRecipe(recipe: Recipe) {
-    this.searchText = '';
+    this.searchText = "";
 
     const response = await this.recipeService.fetchById(recipe.id);
     if (!response.success) return;

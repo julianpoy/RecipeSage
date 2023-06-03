@@ -1,18 +1,16 @@
-
-
 export default {
   up: (queryInterface) => {
-    return queryInterface.addConstraint('Friendships', {
-      type: 'UNIQUE',
-      name: 'Friendships_userId_friendId_uk',
-      fields: ['userId', 'friendId']
+    return queryInterface.addConstraint("Friendships", {
+      type: "UNIQUE",
+      name: "Friendships_userId_friendId_uk",
+      fields: ["userId", "friendId"],
     });
   },
 
   down: (queryInterface) => {
     return queryInterface.removeConstraint(
-      'Friendships',
-      'Friendships_userId_friendId_uk'
+      "Friendships",
+      "Friendships_userId_friendId_uk"
     );
-  }
+  },
 };

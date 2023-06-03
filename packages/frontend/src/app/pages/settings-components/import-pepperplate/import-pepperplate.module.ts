@@ -1,17 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 
-import { ImportPepperplatePage } from './import-pepperplate.page';
+import { ImportPepperplatePage } from "./import-pepperplate.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    ImportPepperplatePage,
-  ],
+  declarations: [ImportPepperplatePage],
   imports: [
     GlobalModule,
     CommonModule,
@@ -20,10 +18,10 @@ import { GlobalModule } from '~/global.module';
     ReactiveFormsModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: ImportPepperplatePage
-      }
-    ])
+        path: "",
+        component: ImportPepperplatePage,
+      },
+    ]),
   ],
 })
 export class ImportPepperplatePageModule {}

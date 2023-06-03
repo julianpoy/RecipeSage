@@ -1,18 +1,16 @@
-import stripeInit from 'stripe';
+import stripeInit from "stripe";
 const stripe = stripeInit(process.env.STRIPE_SK);
 
 // DB
-import {
-  User
-} from '../models/index.js';
+import { User } from "../models/index.js";
 
-export const createOrRetrieveCustomerId = async userId => {
+export const createOrRetrieveCustomerId = async (userId) => {
   const user = await User.findByPk(userId);
 
   if (user.stripeCustomerId) return user.stripeCustomerId;
 
   const stripeCustomer = await stripe.customers.create({
-    email: user.email
+    email: user.email,
   });
 
   await User.update(
@@ -26,26 +24,29 @@ export const createOrRetrieveCustomerId = async userId => {
 export const findCheckoutUser = async (customerId, customerEmail) => {
   let user = await User.findOne({
     where: {
-      stripeCustomerId: customerId
-    }
+      stripeCustomerId: customerId,
+    },
   });
 
   if (!user && customerEmail) {
     user = await User.findOne({
       where: {
-        email: customerEmail
-      }
+        email: customerEmail,
+      },
     });
   }
 
   return user;
 };
 
-export const createPYOSession = async (isRecurring, { amount, stripeCustomerId, successUrl, cancelUrl }) => {
+export const createPYOSession = async (
+  isRecurring,
+  { amount, stripeCustomerId, successUrl, cancelUrl }
+) => {
   let checkoutData;
 
   if (isRecurring) {
-    const productId = 'pyo-monthly';
+    const productId = "pyo-monthly";
 
     let product;
 
@@ -54,8 +55,8 @@ export const createPYOSession = async (isRecurring, { amount, stripeCustomerId, 
     } catch (e) {
       product = await stripe.products.create({
         id: productId,
-        name: 'RecipeSage Monthly Membership - Choose Your Own Price',
-        type: 'service'
+        name: "RecipeSage Monthly Membership - Choose Your Own Price",
+        type: "service",
       });
     }
 
@@ -65,44 +66,52 @@ export const createPYOSession = async (isRecurring, { amount, stripeCustomerId, 
 
     try {
       plan = await stripe.plans.retrieve(planId);
-    } catch(e) {
+    } catch (e) {
       plan = await stripe.plans.create({
         id: planId,
         amount: amount,
-        interval: 'month',
+        interval: "month",
         product: product.id,
-        currency: 'usd',
+        currency: "usd",
       });
     }
 
     checkoutData = {
       subscription_data: {
-        items: [{
-          plan: plan.id,
-        }],
-      }
+        items: [
+          {
+            plan: plan.id,
+          },
+        ],
+      },
     };
   } else {
     checkoutData = {
-      line_items: [{
-        name: 'RecipeSage',
-        description: 'A one-time RecipeSage contribution',
-        amount: amount,
-        currency: 'usd',
-        quantity: 1,
-      }]
+      line_items: [
+        {
+          name: "RecipeSage",
+          description: "A one-time RecipeSage contribution",
+          amount: amount,
+          currency: "usd",
+          quantity: 1,
+        },
+      ],
     };
   }
 
   return await stripe.checkout.sessions.create({
     customer: stripeCustomerId || undefined,
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     success_url: successUrl,
     cancel_url: cancelUrl,
-    ...checkoutData
+    ...checkoutData,
   });
 };
 
 export const validateEvent = (rawRequestBody, stripeSignature) => {
-  return stripe.webhooks.constructEvent(rawRequestBody, stripeSignature, process.env.STRIPE_WEBHOOK_SECRET);
+  return stripe.webhooks.constructEvent(
+    rawRequestBody,
+    stripeSignature,
+    process.env.STRIPE_WEBHOOK_SECRET
+  );
 };

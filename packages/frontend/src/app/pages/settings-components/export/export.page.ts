@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { RecipeService, ExportFormat } from '~/services/recipe.service';
-import { RouteMap } from '~/services/util.service';
+import { RecipeService, ExportFormat } from "~/services/recipe.service";
+import { RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'page-export',
-  templateUrl: 'export.page.html',
-  styleUrls: ['export.page.scss']
+  selector: "page-export",
+  templateUrl: "export.page.html",
+  styleUrls: ["export.page.scss"],
 })
 export class ExportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

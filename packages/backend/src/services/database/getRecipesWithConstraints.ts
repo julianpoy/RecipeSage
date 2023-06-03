@@ -1,28 +1,22 @@
-import * as SQ from 'sequelize';
+import * as SQ from "sequelize";
 const Op = SQ.Op;
 
-import * as Models from '../../models';
-const {
-  User,
-  Label,
-  Recipe,
-  ProfileItem,
-  Image,
-} = Models;
-import { getFriendships } from '../../utils/getFriendships';
+import * as Models from "../../models";
+const { User, Label, Recipe, ProfileItem, Image } = Models;
+import { getFriendships } from "../../utils/getFriendships";
 
 export const getRecipesWithConstraints = async (args: {
-  userId?: string,
-  userIds: string[],
-  folder: string,
-  sortBy: [string, string],
-  offset: number,
-  limit: number,
-  transaction?: any,
-  recipeIds?: string[],
-  labels?: string[],
-  labelIntersection?: boolean,
-  ratings?: string[]
+  userId?: string;
+  userIds: string[];
+  folder: string;
+  sortBy: [string, string];
+  offset: number;
+  limit: number;
+  transaction?: any;
+  recipeIds?: string[];
+  labels?: string[];
+  labelIntersection?: boolean;
+  ratings?: string[];
 }) => {
   const {
     userId: contextUserId,
@@ -41,21 +35,31 @@ export const getRecipesWithConstraints = async (args: {
   let friends = [];
   if (contextUserId) {
     const friendships = await getFriendships(contextUserId);
-    friends = friendships.friends.reduce((acc, friend) => (acc[friend.otherUser.id] = friend, acc), {});
+    friends = friendships.friends.reduce(
+      (acc, friend) => ((acc[friend.otherUser.id] = friend), acc),
+      {}
+    );
   }
 
-  const friendUserIds = userIds.filter((userId) => friends[userId] && userId !== contextUserId);
-  const nonFriendUserIds = userIds.filter((userId) => !friends[userId] && userId !== contextUserId);
+  const friendUserIds = userIds.filter(
+    (userId) => friends[userId] && userId !== contextUserId
+  );
+  const nonFriendUserIds = userIds.filter(
+    (userId) => !friends[userId] && userId !== contextUserId
+  );
 
   const profileItems = await ProfileItem.findAll({
     where: {
-      [Op.or]: [{
-        userId: friendUserIds,
-      }, {
-        userId: nonFriendUserIds,
-        visibility: 'public',
-      }]
-    }
+      [Op.or]: [
+        {
+          userId: friendUserIds,
+        },
+        {
+          userId: nonFriendUserIds,
+          visibility: "public",
+        },
+      ],
+    },
   });
 
   const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
@@ -69,7 +73,9 @@ export const getRecipesWithConstraints = async (args: {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
 
-    const isSharingAll = profileItemsForUser.find((profileItem) => profileItem.type === 'all-recipes');
+    const isSharingAll = profileItemsForUser.find(
+      (profileItem) => profileItem.type === "all-recipes"
+    );
 
     if (isContextUser || isSharingAll) {
       queryFilters.push({
@@ -78,7 +84,7 @@ export const getRecipesWithConstraints = async (args: {
     }
 
     profileItemsForUser
-      .filter((profileItem) => profileItem.type === 'label')
+      .filter((profileItem) => profileItem.type === "label")
       .map((profileItem) => profileItem.labelId)
       .forEach((labelId) => {
         queryFilters.push({
@@ -88,7 +94,7 @@ export const getRecipesWithConstraints = async (args: {
       });
 
     profileItemsForUser
-      .filter((profileItem) => profileItem.type === 'recipe')
+      .filter((profileItem) => profileItem.type === "recipe")
       .map((profileItem) => profileItem.recipeId)
       .forEach((recipeId) => {
         queryFilters.push({
@@ -103,7 +109,7 @@ export const getRecipesWithConstraints = async (args: {
       userId: queryFilter.userId,
     } as { [key: string]: string };
 
-    if (queryFilter.labelId) filter['$labels.id$'] = queryFilter.labelId;
+    if (queryFilter.labelId) filter["$labels.id$"] = queryFilter.labelId;
     if (queryFilter.recipeId) filter.id = queryFilter.recipeId;
 
     return filter;
@@ -111,24 +117,33 @@ export const getRecipesWithConstraints = async (args: {
 
   const where = {
     [Op.or]: sqQueryFilters,
-    ...(labels ? { ['$labels.title$']: labels } : {}),
+    ...(labels ? { ["$labels.title$"]: labels } : {}),
     ...(ratings ? { rating: ratings } : {}),
     ...(filterByRecipeIds ? { id: filterByRecipeIds } : {}),
     folder,
   };
 
-  const having = labels && labelIntersection ? { having: SQ.literal(`COUNT("labels"."id") = ${SQ.escape(labels.length)}`) } : {};
+  const having =
+    labels && labelIntersection
+      ? {
+          having: SQ.literal(
+            `COUNT("labels"."id") = ${SQ.escape(labels.length)}`
+          ),
+        }
+      : {};
 
   const totalCount = await Recipe.count({
     where,
-    include: [{
-      attributes: [],
-      model: Label,
-      as: 'labels',
-      through: {
+    include: [
+      {
         attributes: [],
-      }
-    }],
+        model: Label,
+        as: "labels",
+        through: {
+          attributes: [],
+        },
+      },
+    ],
     ...having,
     distinct: true,
     transaction,
@@ -136,15 +151,17 @@ export const getRecipesWithConstraints = async (args: {
 
   const recipesWithIdsOnly = await Recipe.findAll({
     where,
-    attributes: ['id'],
-    include: [{
-      attributes: [],
-      model: Label,
-      as: 'labels',
-      through: {
+    attributes: ["id"],
+    include: [
+      {
         attributes: [],
-      }
-    }],
+        model: Label,
+        as: "labels",
+        through: {
+          attributes: [],
+        },
+      },
+    ],
     group: '"Recipe".id',
     limit,
     offset,
@@ -161,25 +178,29 @@ export const getRecipesWithConstraints = async (args: {
     where: {
       id: recipeIds,
     },
-    include: [{
-      model: Label,
-      as: 'labels',
-      attributes: ['id', 'title'],
-      through: {
-        attributes: []
-      }
-    }, {
-      model: Image,
-      as: 'images',
-      attributes: ['id', 'location'],
-      through: {
-        attributes: ['id', 'order']
-      }
-    }, {
-      model: User,
-      as: 'fromUser',
-      attributes: ['name', 'email']
-    }],
+    include: [
+      {
+        model: Label,
+        as: "labels",
+        attributes: ["id", "title"],
+        through: {
+          attributes: [],
+        },
+      },
+      {
+        model: Image,
+        as: "images",
+        attributes: ["id", "location"],
+        through: {
+          attributes: ["id", "order"],
+        },
+      },
+      {
+        model: User,
+        as: "fromUser",
+        attributes: ["name", "email"],
+      },
+    ],
     order: [sortBy],
     transaction,
   });
@@ -189,4 +210,3 @@ export const getRecipesWithConstraints = async (args: {
     totalCount,
   };
 };
-

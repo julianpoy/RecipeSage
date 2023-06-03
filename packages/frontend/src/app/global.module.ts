@@ -1,12 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from "@angular/core";
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   declarations: [],
   imports: [],
-  exports: [
-    TranslateModule
-  ]
+  exports: [TranslateModule],
 })
-export class GlobalModule { }
+export class GlobalModule {}

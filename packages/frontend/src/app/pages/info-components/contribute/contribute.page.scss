@@ -52,7 +52,7 @@
     border-radius: 10px;
     color: var(--ion-color-primary-contrast);
     margin: 5px 15px 15px 15px;
-    box-shadow: 1px 1px 7px rgba(0,0,0,0.3);
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
     font-weight: 600;
     font-size: 15px;
   }
@@ -86,7 +86,8 @@
       border: 1px solid var(--ion-border-color);
       background: transparent;
 
-      &:active, &:focus {
+      &:active,
+      &:focus {
         border: 1px solid var(--ion-color-primary);
       }
     }

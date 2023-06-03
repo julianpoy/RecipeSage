@@ -1,9 +1,8 @@
-
-
 export default {
   up: (queryInterface) => {
-    return queryInterface.sequelize.transaction(async transaction => {
-      await queryInterface.sequelize.query(`
+    return queryInterface.sequelize.transaction(async (transaction) => {
+      await queryInterface.sequelize.query(
+        `
         UPDATE "Labels" SET title = regexp_replace(
           title,
           ',',
@@ -11,19 +10,24 @@ export default {
           'g'
         )
         WHERE title LIKE '%,%';
-      `, {
-        transaction
-      });
+      `,
+        {
+          transaction,
+        }
+      );
 
-      await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(
+        `
         DELETE FROM "Labels" WHERE title = '';
-      `, {
-        transaction
-      });
+      `,
+        {
+          transaction,
+        }
+      );
     });
   },
 
   down: () => {
     return Promise.resolve();
-  }
+  },
 };

@@ -14,7 +14,7 @@ Share and collaborate on recipes, manage household shopping lists and meal plann
 - **Sharing and public profiles**: Share your recipe collection and collaborate on meal plans/shopping lists with your family or friends
 - **Import**: Supports Pepperplate, Living Cookbook, and Paprika
 - **Export**: Back up your recipes in multiple formats for data portability
-- **Dark mode**: Never blind yourself at night again! *(or leave dark mode enabled all the time like I do)*
+- **Dark mode**: Never blind yourself at night again! _(or leave dark mode enabled all the time like I do)_
 
 You can access the hosted version of RecipeSage here: https://recipesage.com
 
@@ -23,21 +23,25 @@ You can also selfhost your own copy or RecipeSage (see https://github.com/julian
 # :hamburger: GIFs
 
 ### Store your recipes
+
 All of your recipes in one place, and access them from any device.
 
 <img src="Assets/myrecipes.gif"></img>
 
 ### Progressive Web App
+
 Feels native on every device, and can be installed to the homescreen.
 
 <img src="Assets/recipe-mobile.gif"></img>
 
 ### Automatically import from any URL
-Import recipes from any website out there *(see [RecipeClipper](https://github.com/julianpoy/recipeclipper) for more info on how it does this)*.
+
+Import recipes from any website out there _(see [RecipeClipper](https://github.com/julianpoy/recipeclipper) for more info on how it does this)_.
 
 <img src="Assets/automatic-import.gif"></img>
 
 ### Plan your meals and shopping
+
 A built-in meal planner makes it easy to plan your meals. Meal plans and shopping lists can be shared between multiple people!
 
 Meal plans support drag and drop, shopping lists support automatic item categorization.
@@ -60,6 +64,7 @@ For all **commercial usage**, RecipeSage is only available for licensing upon re
 Pricing for commercial licenses will depend on usage, and all associated fees/proceeds are intended to support the project and community as a whole.
 
 # :doughnut: CLA
+
 Contributor license agreement.
 
 This allows RecipeSage to continue to provide the hosted instance, as well as license the API to other projects that may not have compatible licenses with AGPL.
@@ -67,12 +72,14 @@ This allows RecipeSage to continue to provide the hosted instance, as well as li
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
 
 # 🐤: Contributing
+
 Setting-up your development environment.
 
 Your development environment can be setup with a few easy steps.
+
 1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
 2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
 3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
-4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣 
+4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣
 
 Backend API tests can be run via `docker-compose exec backend npx nx test @recipesage/backend`

@@ -1,21 +1,25 @@
-import * as express from 'express';
+import * as express from "express";
 const router = express.Router();
-import pLimit from 'p-limit';
-import xmljs from 'xml-js';
-import * as multer from 'multer';
-import fs from 'fs-extra';
-import extract from 'extract-zip';
-import * as path from 'path';
+import pLimit from "p-limit";
+import xmljs from "xml-js";
+import * as multer from "multer";
+import fs from "fs-extra";
+import extract from "extract-zip";
+import * as path from "path";
 
-import * as MiddlewareService from '../services/middleware.js';
-import * as SubscriptionsService from '../services/subscriptions.js';
-import * as UtilService from '../services/util.js';
-import { writeImageFile, writeImageURL, writeImageBuffer } from '../services/storage/image';
-import { ObjectTypes } from '../services/storage/shared.ts';
-import { exportToPDF } from '../services/data-export/pdf';
-import * as JSONLDService from '../services/json-ld.js';
-import { wrapRequestWithErrorHandler } from '../utils/wrapRequestWithErrorHandler.js';
-import { fetchURL } from '../services/fetch';
+import * as MiddlewareService from "../services/middleware.js";
+import * as SubscriptionsService from "../services/subscriptions.js";
+import * as UtilService from "../services/util.js";
+import {
+  writeImageFile,
+  writeImageURL,
+  writeImageBuffer,
+} from "../services/storage/image";
+import { ObjectTypes } from "../services/storage/shared.ts";
+import { exportToPDF } from "../services/data-export/pdf";
+import * as JSONLDService from "../services/json-ld.js";
+import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
+import { fetchURL } from "../services/fetch";
 
 import {
   Recipe,
@@ -25,84 +29,96 @@ import {
   Image,
   Recipe_Image,
   sequelize,
-} from '../models/index.js';
+} from "../models/index.js";
 
-const getRecipeDataForExport = async userId => {
+const getRecipeDataForExport = async (userId) => {
   const results = await Recipe.findAll({
     where: {
       userId,
     },
     attributes: [
-      'id',
-      'title',
-      'description',
-      'yield',
-      'activeTime',
-      'totalTime',
-      'source',
-      'url',
-      'notes',
-      'ingredients',
-      'instructions',
-      'folder',
-      'createdAt',
-      'updatedAt',
-      'userId',
+      "id",
+      "title",
+      "description",
+      "yield",
+      "activeTime",
+      "totalTime",
+      "source",
+      "url",
+      "notes",
+      "ingredients",
+      "instructions",
+      "folder",
+      "createdAt",
+      "updatedAt",
+      "userId",
     ],
-    include: [{
-      model: User,
-      as: 'fromUser',
-      attributes: ['name', 'email', 'handle']
-    }, {
-      model: Label,
-      as: 'labels',
-      attributes: ['title']
-    }, {
-      model: Image,
-      as: 'images',
-      attributes: ['id', 'location']
-    }],
-    order: [
-      ['title', 'ASC']
+    include: [
+      {
+        model: User,
+        as: "fromUser",
+        attributes: ["name", "email", "handle"],
+      },
+      {
+        model: Label,
+        as: "labels",
+        attributes: ["title"],
+      },
+      {
+        model: Image,
+        as: "images",
+        attributes: ["id", "location"],
+      },
     ],
+    order: [["title", "ASC"]],
   });
 
-  const recipeData = results.map(e => e.toJSON());
+  const recipeData = results.map((e) => e.toJSON());
 
-  recipeData.forEach(recipe => recipe.labels.forEach(label => delete label.Recipe_Label));
-  recipeData.forEach(recipe => recipe.images.forEach(image => delete image.Recipe_Image));
+  recipeData.forEach((recipe) =>
+    recipe.labels.forEach((label) => delete label.Recipe_Label)
+  );
+  recipeData.forEach((recipe) =>
+    recipe.images.forEach((image) => delete image.Recipe_Image)
+  );
 
-  if (process.env.NODE_ENV === 'selfhost') {
+  if (process.env.NODE_ENV === "selfhost") {
     for (const recipe of recipeData) {
       const recipeImages = [];
       for (const image of recipe.images) {
         const { location } = image;
-        if (location.startsWith('http://') || location.startsWith('https://')) {
+        if (location.startsWith("http://") || location.startsWith("https://")) {
           recipeImages.push(image);
           continue;
         }
 
-        if (location.startsWith('/minio/')) {
-          const path = process.env.AWS_ENDPOINT + location.replace('/minio/', '');
+        if (location.startsWith("/minio/")) {
+          const path =
+            process.env.AWS_ENDPOINT + location.replace("/minio/", "");
           const data = await fetchURL(path);
           const buffer = await data.buffer();
-          const base64 = buffer.toString('base64');
+          const base64 = buffer.toString("base64");
 
           image.location = `data:image/png;base64,${base64}`;
           recipeImages.push(image);
           continue;
         }
 
-        if (location.startsWith('/')) {
-          const data = fs.readFileSync(location.replace('/api/images/filesystem', process.env.FILESYSTEM_STORAGE_PATH));
-          const base64 = data.toString('base64');
+        if (location.startsWith("/")) {
+          const data = fs.readFileSync(
+            location.replace(
+              "/api/images/filesystem",
+              process.env.FILESYSTEM_STORAGE_PATH
+            )
+          );
+          const base64 = data.toString("base64");
 
           image.location = `data:image/png;base64,${base64}`;
           recipeImages.push(image);
           continue;
         }
 
-        throw new Error('Unrecognized URL format: ' + image.location);
+        throw new Error("Unrecognized URL format: " + image.location);
       }
       recipe.images = recipeImages;
     }
@@ -111,97 +127,117 @@ const getRecipeDataForExport = async userId => {
   return recipeData;
 };
 
-router.get('/export/xml',
-  MiddlewareService.validateSession(['user']),
+router.get(
+  "/export/xml",
+  MiddlewareService.validateSession(["user"]),
   async (req, res, next) => {
     try {
       const recipes = await getRecipeDataForExport(res.locals.session.userId);
 
       const exportData = {
         data: {
-          recipe: recipes
-        }
+          recipe: recipes,
+        },
       };
 
-      const xml = xmljs.json2xml(exportData, { compact: true, ignoreComment: true, spaces: 4 });
+      const xml = xmljs.json2xml(exportData, {
+        compact: true,
+        ignoreComment: true,
+        spaces: 4,
+      });
 
-      if (req.query.download === 'true') res.setHeader('Content-disposition', `attachment; filename=recipesage-data-${Date.now()}.xml`);
-      res.setHeader('Content-type', 'text/xml');
+      if (req.query.download === "true")
+        res.setHeader(
+          "Content-disposition",
+          `attachment; filename=recipesage-data-${Date.now()}.xml`
+        );
+      res.setHeader("Content-type", "text/xml");
       res.write(xml);
       res.end();
-    } catch(e) {
+    } catch (e) {
       next(e);
     }
   }
 );
 
-router.get('/export/txt',
-  MiddlewareService.validateSession(['user']),
+router.get(
+  "/export/txt",
+  MiddlewareService.validateSession(["user"]),
   async (req, res, next) => {
     try {
       const recipes = await getRecipeDataForExport(res.locals.session.userId);
 
       const exportData = {
-        recipes
+        recipes,
       };
 
-      let data = '==== Recipes ====\n\n';
+      let data = "==== Recipes ====\n\n";
 
       for (let i = 0; i < exportData.recipes.length; i++) {
         let recipe = exportData.recipes[i];
 
-        recipe.labels = recipe.labels.map(label => label.title).join(', ');
+        recipe.labels = recipe.labels.map((label) => label.title).join(", ");
 
-        recipe.images = recipe.images.map(image => image.location).join(', ');
+        recipe.images = recipe.images.map((image) => image.location).join(", ");
 
         delete recipe.fromUser;
 
         for (const key in recipe) {
-          data += key + ': ';
-          data += recipe[key] + '\r\n';
+          data += key + ": ";
+          data += recipe[key] + "\r\n";
         }
-        data += '\r\n';
+        data += "\r\n";
       }
 
-      res.charset = 'UTF-8';
+      res.charset = "UTF-8";
 
-      if (req.query.download === 'true') res.setHeader('Content-disposition', `attachment; filename=recipesage-data-${Date.now()}.txt`);
-      res.setHeader('Content-type', 'text/plain');
+      if (req.query.download === "true")
+        res.setHeader(
+          "Content-disposition",
+          `attachment; filename=recipesage-data-${Date.now()}.txt`
+        );
+      res.setHeader("Content-type", "text/plain");
       res.write(data);
       res.end();
-    } catch(e) {
+    } catch (e) {
       next(e);
     }
   }
 );
 
-router.get('/export/pdf',
-  MiddlewareService.validateSession(['user']),
+router.get(
+  "/export/pdf",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const recipes = await getRecipeDataForExport(res.locals.session.userId);
 
     await exportToPDF(recipes, res, {
-      includeImages: req.query.includeImages === 'true',
-      includeImageUrls: req.query.includeImageUrls !== 'false'
+      includeImages: req.query.includeImages === "true",
+      includeImageUrls: req.query.includeImageUrls !== "false",
     });
   })
 );
 
-router.get('/export/json-ld',
-  MiddlewareService.validateSession(['user']),
+router.get(
+  "/export/json-ld",
+  MiddlewareService.validateSession(["user"]),
   async (req, res, next) => {
     try {
       const recipes = await getRecipeDataForExport(res.locals.session.userId);
 
-      const jsonLD = recipes.map(e => JSONLDService.recipeToJSONLD(e));
+      const jsonLD = recipes.map((e) => JSONLDService.recipeToJSONLD(e));
 
       const data = JSON.stringify(jsonLD);
 
-      if (req.query.download === 'true') res.setHeader('Content-disposition', `attachment; filename=recipesage-data-${Date.now()}.json-ld.json`);
-      res.setHeader('Content-type', 'application/ld+json');
+      if (req.query.download === "true")
+        res.setHeader(
+          "Content-disposition",
+          `attachment; filename=recipesage-data-${Date.now()}.json-ld.json`
+        );
+      res.setHeader("Content-type", "application/ld+json");
       res.write(data);
       res.end();
-    } catch(e) {
+    } catch (e) {
       next(e);
     }
   }
@@ -222,155 +258,207 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
   );
 
   if (recipesToImport.length > MAX_IMPORT_LIMIT) {
-    throw new Error('Too many recipes to import in one batch');
+    throw new Error("Too many recipes to import in one batch");
   }
 
-  return sequelize.transaction(async transaction => {
+  return sequelize.transaction(async (transaction) => {
     const limit = pLimit(CONCURRENT_IMAGE_IMPORTS);
 
-    const recipes = await Recipe.bulkCreate(recipesToImport.map(recipe => ({
-      title: recipe.title,
-      description: recipe.description,
-      yield: recipe.yield,
-      activeTime: recipe.activeTime,
-      totalTime: recipe.totalTime,
-      source: recipe.source,
-      url: recipe.url,
-      notes: recipe.notes,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-      folder: ['inbox', 'main'].includes(recipe.folder) ? recipe.folder : 'main',
-      userId
-    })), {
-      returning: true,
-      transaction
-    });
+    const recipes = await Recipe.bulkCreate(
+      recipesToImport.map((recipe) => ({
+        title: recipe.title,
+        description: recipe.description,
+        yield: recipe.yield,
+        activeTime: recipe.activeTime,
+        totalTime: recipe.totalTime,
+        source: recipe.source,
+        url: recipe.url,
+        notes: recipe.notes,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
+        folder: ["inbox", "main"].includes(recipe.folder)
+          ? recipe.folder
+          : "main",
+        userId,
+      })),
+      {
+        returning: true,
+        transaction,
+      }
+    );
 
     const labelMap = {};
 
     recipesToImport.forEach((recipeImport, idx) => {
       const recipe = recipes[idx];
-      recipeImport.labels.map(labelTitle => {
+      recipeImport.labels.map((labelTitle) => {
         labelTitle = UtilService.cleanLabelTitle(labelTitle);
         labelMap[labelTitle] = labelMap[labelTitle] || [];
         labelMap[labelTitle].push(recipe.id);
       });
     });
 
-    await Promise.all(Object.keys(labelMap).map(labelTitle => {
-      return Label.findOrCreate({
-        where: {
-          userId,
-          title: labelTitle
-        },
-        transaction
-      }).then(labels => {
-        return Recipe_Label.bulkCreate(labelMap[labelTitle].map(recipeId => {
-          return {
-            labelId: labels[0].id,
-            recipeId
-          };
-        }), {
-          ignoreDuplicates: true,
-          transaction
+    await Promise.all(
+      Object.keys(labelMap).map((labelTitle) => {
+        return Label.findOrCreate({
+          where: {
+            userId,
+            title: labelTitle,
+          },
+          transaction,
+        }).then((labels) => {
+          return Recipe_Label.bulkCreate(
+            labelMap[labelTitle].map((recipeId) => {
+              return {
+                labelId: labels[0].id,
+                recipeId,
+              };
+            }),
+            {
+              ignoreDuplicates: true,
+              transaction,
+            }
+          );
         });
-      });
-    }));
+      })
+    );
 
-    const imagesByRecipeIdx = await Promise.all(recipesToImport.map(async el => {
-      if (!el.images) return [];
+    const imagesByRecipeIdx = await Promise.all(
+      recipesToImport.map(async (el) => {
+        if (!el.images) return [];
 
-      return await Promise.all(
-        el.images
-          .filter((_, idx) => idx === 0 || canUploadMultipleImages)
-          .filter((_, idx) => idx < MAX_IMAGES)
-          .map(image => limit(() => {
-            if (typeof image === 'object') return writeImageBuffer(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
-            if (image.startsWith('http:') || image.startsWith('https:')) return writeImageURL(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
-            return writeImageFile(ObjectTypes.RECIPE_IMAGE, image, highResConversion);
-          }))
-      );
-    }));
+        return await Promise.all(
+          el.images
+            .filter((_, idx) => idx === 0 || canUploadMultipleImages)
+            .filter((_, idx) => idx < MAX_IMAGES)
+            .map((image) =>
+              limit(() => {
+                if (typeof image === "object")
+                  return writeImageBuffer(
+                    ObjectTypes.RECIPE_IMAGE,
+                    image,
+                    highResConversion
+                  );
+                if (image.startsWith("http:") || image.startsWith("https:"))
+                  return writeImageURL(
+                    ObjectTypes.RECIPE_IMAGE,
+                    image,
+                    highResConversion
+                  );
+                return writeImageFile(
+                  ObjectTypes.RECIPE_IMAGE,
+                  image,
+                  highResConversion
+                );
+              })
+            )
+        );
+      })
+    );
 
     console.log(imagesByRecipeIdx);
 
-    const pendingImages = imagesByRecipeIdx.map((images, recipeIdx) => images.map((image, imageIdx) => ({
-      image,
-      recipeId: recipes[recipeIdx].id,
-      order: imageIdx
-    }))).flat().filter(e => e);
+    const pendingImages = imagesByRecipeIdx
+      .map((images, recipeIdx) =>
+        images.map((image, imageIdx) => ({
+          image,
+          recipeId: recipes[recipeIdx].id,
+          order: imageIdx,
+        }))
+      )
+      .flat()
+      .filter((e) => e);
 
     console.log(pendingImages);
 
-    const savedImages = await Image.bulkCreate(pendingImages.map(p => ({
-      userId,
-      location: p.image.location,
-      key: p.image.key,
-      json: p.image
-    })), {
-      returning: true,
-      transaction
-    });
+    const savedImages = await Image.bulkCreate(
+      pendingImages.map((p) => ({
+        userId,
+        location: p.image.location,
+        key: p.image.key,
+        json: p.image,
+      })),
+      {
+        returning: true,
+        transaction,
+      }
+    );
 
-    await Recipe_Image.bulkCreate(pendingImages.map((p, idx) => ({
-      recipeId: p.recipeId,
-      imageId: savedImages[idx].id,
-      order: p.order
-    })), {
-      transaction
-    });
+    await Recipe_Image.bulkCreate(
+      pendingImages.map((p, idx) => ({
+        recipeId: p.recipeId,
+        imageId: savedImages[idx].id,
+        order: p.order,
+      })),
+      {
+        transaction,
+      }
+    );
   });
 };
 
-router.post('/import/json-ld',
-  MiddlewareService.validateSession(['user']),
+router.post(
+  "/import/json-ld",
+  MiddlewareService.validateSession(["user"]),
   multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: '100MB', files: 1 }
-  }).single('jsonLD'),
+    limits: { fileSize: "100MB", files: 1 },
+  }).single("jsonLD"),
   async (req, res, next) => {
     try {
       let jsonLD = req.body.jsonLD;
 
       if (!jsonLD && req.file) jsonLD = JSON.parse(req.file.buffer.toString());
 
-      if (!jsonLD) return res.status(400).send('No data. Only Recipe types are supported at this time.');
+      if (!jsonLD)
+        return res
+          .status(400)
+          .send("No data. Only Recipe types are supported at this time.");
 
-      if (!jsonLD.length && jsonLD['@type'] === 'Recipe') jsonLD = [jsonLD];
+      if (!jsonLD.length && jsonLD["@type"] === "Recipe") jsonLD = [jsonLD];
 
-      jsonLD = jsonLD.filter(el => el['@type'] === 'Recipe');
+      jsonLD = jsonLD.filter((el) => el["@type"] === "Recipe");
 
-      if (!jsonLD.length) return res.status(400).send('Only supports JSON-LD or array of JSON-LD with type \'Recipe\'');
+      if (!jsonLD.length)
+        return res
+          .status(400)
+          .send("Only supports JSON-LD or array of JSON-LD with type 'Recipe'");
 
-      const recipesToImport = jsonLD
-        .map(ld => JSONLDService.jsonLDToRecipe(ld));
+      const recipesToImport = jsonLD.map((ld) =>
+        JSONLDService.jsonLDToRecipe(ld)
+      );
 
-      await importStandardizedRecipes(res.locals.session.userId, recipesToImport);
+      await importStandardizedRecipes(
+        res.locals.session.userId,
+        recipesToImport
+      );
 
-      res.status(200).send('Imported');
-    } catch(e) {
+      res.status(200).send("Imported");
+    } catch (e) {
       next(e);
     }
   }
 );
 
 router.post(
-  '/import/paprika',
-  MiddlewareService.validateSession(['user']),
+  "/import/paprika",
+  MiddlewareService.validateSession(["user"]),
   multer({
-    dest: '/tmp/paprika-import/',
-  }).single('paprikadb'),
+    dest: "/tmp/paprika-import/",
+  }).single("paprikadb"),
   async (req, res, next) => {
     let zipPath, extractPath;
     try {
       if (!req.file) {
-        const badFormatError = new Error('Request must include multipart file under paprikadb field');
+        const badFormatError = new Error(
+          "Request must include multipart file under paprikadb field"
+        );
         badFormatError.status = 400;
         throw badFormatError;
       }
 
       zipPath = req.file.path;
-      extractPath = zipPath + '-extract';
+      extractPath = zipPath + "-extract";
 
       await extract(zipPath, { dir: extractPath });
 
@@ -387,22 +475,30 @@ router.post(
 
         const notes = [
           recipeData.notes,
-          recipeData.nutritional_info ? `Nutritional Info: ${recipeData.difficulty}` : '',
-          recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : '',
-          recipeData.rating ? `Rating: ${recipeData.rating}` : ''
-        ].filter(e => e && e.length > 0).join('\n');
+          recipeData.nutritional_info
+            ? `Nutritional Info: ${recipeData.difficulty}`
+            : "",
+          recipeData.difficulty ? `Difficulty: ${recipeData.difficulty}` : "",
+          recipeData.rating ? `Rating: ${recipeData.rating}` : "",
+        ]
+          .filter((e) => e && e.length > 0)
+          .join("\n");
 
         const totalTime = [
           recipeData.total_time,
-          recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : ''
-        ].filter(e => e).join(' ');
+          recipeData.cook_time ? `(${recipeData.cook_time} cooking time)` : "",
+        ]
+          .filter((e) => e)
+          .join(" ");
 
         const labels = (recipeData.categories || [])
-          .map(e => UtilService.cleanLabelTitle(e))
-          .filter(e => e);
+          .map((e) => UtilService.cleanLabelTitle(e))
+          .filter((e) => e);
 
         // Supports only the first image at the moment
-        const images = recipeData.photo_data ? [Buffer.from(recipeData.photo_data, 'base64')] : [];
+        const images = recipeData.photo_data
+          ? [Buffer.from(recipeData.photo_data, "base64")]
+          : [];
 
         recipes.push({
           title: recipeData.name,
@@ -414,12 +510,12 @@ router.post(
           activeTime: recipeData.prep_time,
           notes,
           source: recipeData.source,
-          folder: 'main',
+          folder: "main",
           fromUserId: null,
           url: recipeData.source_url,
 
           labels,
-          images
+          images,
         });
       }
 
@@ -428,9 +524,10 @@ router.post(
 
       await importStandardizedRecipes(res.locals.session.userId, recipes);
 
-      res.status(201).send('Import complete');
-    } catch(err) {
-      if (err.message === 'end of central directory record signature not found') err.status = 406;
+      res.status(201).send("Import complete");
+    } catch (err) {
+      if (err.message === "end of central directory record signature not found")
+        err.status = 406;
       await fs.remove(zipPath);
       await fs.remove(extractPath);
       next(err);
@@ -439,5 +536,3 @@ router.post(
 );
 
 export default router;
-
-

@@ -1,20 +1,24 @@
-import { Component, Input } from '@angular/core';
-import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, Input } from "@angular/core";
+import {
+  NavController,
+  ToastController,
+  ModalController,
+  AlertController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { ShoppingListService } from '~/services/shopping-list.service';
-import { LoadingService } from '~/services/loading.service';
-import { RecipeService, ParsedIngredient } from '~/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { NewShoppingListModalPage } from '~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page';
+import { ShoppingListService } from "~/services/shopping-list.service";
+import { LoadingService } from "~/services/loading.service";
+import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
 
 @Component({
-  selector: 'page-add-recipe-to-shopping-list-modal',
-  templateUrl: 'add-recipe-to-shopping-list-modal.page.html',
-  styleUrls: ['add-recipe-to-shopping-list-modal.page.scss']
+  selector: "page-add-recipe-to-shopping-list-modal",
+  templateUrl: "add-recipe-to-shopping-list-modal.page.html",
+  styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],
 })
 export class AddRecipeToShoppingListModalPage {
-
   @Input() recipes: any[];
   @Input() scale: any = 1;
   selectedIngredientsByRecipe = {};
@@ -40,23 +44,33 @@ export class AddRecipeToShoppingListModalPage {
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
-    this.loadLists().then(() => {
-      loading.dismiss();
-    }, () => {
-      loading.dismiss();
-    });
+    this.loadLists().then(
+      () => {
+        loading.dismiss();
+      },
+      () => {
+        loading.dismiss();
+      }
+    );
   }
 
   selectLastUsedShoppingList() {
-    const lastUsedShoppingListId = localStorage.getItem('lastUsedShoppingListId');
-    const matchingLists = this.shoppingLists.filter(shoppingList => shoppingList.id === lastUsedShoppingListId);
+    const lastUsedShoppingListId = localStorage.getItem(
+      "lastUsedShoppingListId"
+    );
+    const matchingLists = this.shoppingLists.filter(
+      (shoppingList) => shoppingList.id === lastUsedShoppingListId
+    );
     if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
       this.destinationShoppingList = this.shoppingLists[0];
     }
   }
 
   saveLastUsedShoppingList() {
-    localStorage.setItem('lastUsedShoppingListId', this.destinationShoppingList.id);
+    localStorage.setItem(
+      "lastUsedShoppingListId",
+      this.destinationShoppingList.id
+    );
   }
 
   async loadLists() {
@@ -71,7 +85,9 @@ export class AddRecipeToShoppingListModalPage {
   selectedIngredientsChange(recipeId, selectedIngredients) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
-    this.selectedIngredients = Object.values(this.selectedIngredientsByRecipe).flat() as ParsedIngredient[];
+    this.selectedIngredients = Object.values(
+      this.selectedIngredientsByRecipe
+    ).flat() as ParsedIngredient[];
   }
 
   isFormValid() {
@@ -89,16 +105,20 @@ export class AddRecipeToShoppingListModalPage {
 
     const items = Object.entries(this.selectedIngredientsByRecipe)
       .map(([recipeId, ingredients]) =>
-        (ingredients as ParsedIngredient[]).map(ingredient => ({
+        (ingredients as ParsedIngredient[]).map((ingredient) => ({
           title: ingredient.content,
           recipeId,
           reference,
         }))
-      ).flat();
+      )
+      .flat();
 
-    const response = await this.shoppingListService.addItems(this.destinationShoppingList.id, {
-      items,
-    });
+    const response = await this.shoppingListService.addItems(
+      this.destinationShoppingList.id,
+      {
+        items,
+      }
+    );
     loading.dismiss();
     if (!response.success) return;
 
@@ -106,10 +126,12 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   async createShoppingList() {
-    const message = await this.translate.get('pages.addRecipeToShoppingListModal.newListSuccess').toPromise();
+    const message = await this.translate
+      .get("pages.addRecipeToShoppingListModal.newListSuccess")
+      .toPromise();
 
     const modal = await this.modalCtrl.create({
-      component: NewShoppingListModalPage
+      component: NewShoppingListModalPage,
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
@@ -120,10 +142,12 @@ export class AddRecipeToShoppingListModalPage {
         if (this.shoppingLists.length === 1) {
           this.destinationShoppingList = this.shoppingLists[0];
         } else {
-          (await this.toastCtrl.create({
-            message,
-            duration: 6000
-          })).present();
+          (
+            await this.toastCtrl.create({
+              message,
+              duration: 6000,
+            })
+          ).present();
         }
       });
     });

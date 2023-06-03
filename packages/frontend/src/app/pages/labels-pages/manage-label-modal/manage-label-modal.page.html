@@ -1,7 +1,9 @@
 <ion-header>
-
   <ion-toolbar color="nav">
-    <ion-title>{{ 'pages.manageLabelModal.title' | translate:{name:label.title} }}</ion-title>
+    <ion-title
+      >{{ 'pages.manageLabelModal.title' | translate:{name:label.title}
+      }}</ion-title
+    >
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -9,20 +11,18 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
     <ion-icon name="pricetag" slot="start"></ion-icon>
     <ion-label>
-      <h2 class="ion-text-capitalize">
-        {{label.title}}
-      </h2>
+      <h2 class="ion-text-capitalize">{{label.title}}</h2>
       <p>
-        {{ 'pages.manageLabelModal.recipeCount' | translate:{count:label.recipeCount} }}<br />
-        {{ 'pages.manageLabelModal.createdAt' | translate:{dateString:createdAt} }}<br />
+        {{ 'pages.manageLabelModal.recipeCount' |
+        translate:{count:label.recipeCount} }}<br />
+        {{ 'pages.manageLabelModal.createdAt' | translate:{dateString:createdAt}
+        }}<br />
       </p>
     </ion-label>
   </ion-item>
@@ -30,8 +30,6 @@
   <br /><br />
 
   {{ 'pages.manageLabelModal.warning' | translate }}
-
-
 </ion-content>
 
 <ion-footer class="ion-padding">
@@ -57,6 +55,8 @@
 
   <ion-button expand="full" color="danger" (click)="deleteWithRecipes()">
     <ion-icon name="trash" slot="start"></ion-icon>
-    <ion-label>{{ 'pages.manageLabelModal.deleteWithRecipes' | translate }}</ion-label>
+    <ion-label
+      >{{ 'pages.manageLabelModal.deleteWithRecipes' | translate }}</ion-label
+    >
   </ion-button>
 </ion-footer>

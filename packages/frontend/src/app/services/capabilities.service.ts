@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { UserService } from './user.service';
-import { UtilService } from './util.service';
+import { Injectable } from "@angular/core";
+import { UserService } from "./user.service";
+import { UtilService } from "./util.service";
 
 const CAPABILITY_RETRY_RATE = 5000;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CapabilitiesService {
   retryTimeout: any;
@@ -18,7 +18,7 @@ export class CapabilitiesService {
 
   constructor(
     private userService: UserService,
-    private utilService: UtilService,
+    private utilService: UtilService
   ) {
     this.updateCapabilities();
   }

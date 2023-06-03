@@ -5,6 +5,5 @@ export const addJob = (job) => {
 };
 
 export const getRunningJobs = () => {
-  return jobs.filter(job => job && !job.complete);
+  return jobs.filter((job) => job && !job.complete);
 };
-

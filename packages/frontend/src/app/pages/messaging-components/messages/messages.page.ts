@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController, ModalController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import {
+  NavController,
+  ToastController,
+  ModalController,
+} from "@ionic/angular";
 
-import { MessagingService } from '~/services/messaging.service';
-import { LoadingService } from '~/services/loading.service';
-import { WebsocketService } from '~/services/websocket.service';
-import { EventService } from '~/services/event.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { NewMessageModalPage } from '~/pages/messaging-components/new-message-modal/new-message-modal.page';
+import { MessagingService } from "~/services/messaging.service";
+import { LoadingService } from "~/services/loading.service";
+import { WebsocketService } from "~/services/websocket.service";
+import { EventService } from "~/services/event.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { NewMessageModalPage } from "~/pages/messaging-components/new-message-modal/new-message-modal.page";
 
 @Component({
-  selector: 'page-messages',
-  templateUrl: 'messages.page.html',
-  styleUrls: ['messages.page.scss']
+  selector: "page-messages",
+  templateUrl: "messages.page.html",
+  styleUrls: ["messages.page.scss"],
 })
 export class MessagesPage {
-
   loading = true;
 
   threads: any = [];
@@ -27,13 +30,17 @@ export class MessagesPage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public websocketService: WebsocketService,
-    public messagingService: MessagingService) {
-
+    public messagingService: MessagingService
+  ) {
     this.messagingService.requestNotifications();
 
-    this.websocketService.register('messages:new', payload => {
-      this.loadThreads();
-    }, this);
+    this.websocketService.register(
+      "messages:new",
+      (payload) => {
+        this.loadThreads();
+      },
+      this
+    );
   }
 
   ionViewWillEnter() {
@@ -45,16 +52,19 @@ export class MessagesPage {
   }
 
   refresh(refresher) {
-    this.loadThreads().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
+    this.loadThreads().then(
+      () => {
+        refresher.target.complete();
+      },
+      () => {
+        refresher.target.complete();
+      }
+    );
   }
 
   async loadThreads() {
     const response = await this.messagingService.threads({
-      limit: 1
+      limit: 1,
     });
     if (!response.success) return;
 
@@ -67,12 +77,14 @@ export class MessagesPage {
   }
 
   openThread(thread) {
-    this.navCtrl.navigateForward(RouteMap.MessageThreadPage.getPath(thread.otherUser.id));
+    this.navCtrl.navigateForward(
+      RouteMap.MessageThreadPage.getPath(thread.otherUser.id)
+    );
   }
 
   async newThread() {
     const modal = await this.modalCtrl.create({
-      component: NewMessageModalPage
+      component: NewMessageModalPage,
     });
     modal.present();
   }

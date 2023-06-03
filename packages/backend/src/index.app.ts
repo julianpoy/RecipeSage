@@ -1,23 +1,21 @@
-import './services/sentry-init';
-import * as Sentry from '@sentry/node';
-import { program } from 'commander';
+import "./services/sentry-init";
+import * as Sentry from "@sentry/node";
+import { program } from "commander";
 
-import { indexRecipes } from './services/search';
-import * as SQ from 'sequelize';
+import { indexRecipes } from "./services/search";
+import * as SQ from "sequelize";
 const Op = SQ.Op;
 
-import {
-  Recipe
-} from './models';
+import { Recipe } from "./models";
 
 program
-  .option('-b, --batch-size [size]', 'Batch size', '1000')
-  .option('-i, --batch-interval [interval]', 'Batch interval in seconds', '1')
+  .option("-b, --batch-size [size]", "Batch size", "1000")
+  .option("-i, --batch-interval [interval]", "Batch interval in seconds", "1")
   .parse(process.argv);
 const opts = program.opts();
 const options = {
   batchSize: parseInt(opts.batchSize, 10),
-  batchInterval: parseFloat(opts.batchInterval)
+  batchInterval: parseFloat(opts.batchInterval),
 };
 
 const runIndexOp = async () => {
@@ -31,17 +29,14 @@ const runIndexOp = async () => {
 
     const recipes = await Recipe.findAll({
       where: {
-        [Op.or]: [
-          { indexedAt: null },
-          { indexedAt: { [Op.lt]: lt } }
-        ]
+        [Op.or]: [{ indexedAt: null }, { indexedAt: { [Op.lt]: lt } }],
       },
       limit: options.batchSize,
     });
 
     if (!recipes || recipes.length === 0) {
       clearInterval(runInterval);
-      console.log('Index complete!');
+      console.log("Index complete!");
       process.exit(0);
     }
 
@@ -52,24 +47,23 @@ const runIndexOp = async () => {
       { indexedAt: new Date() },
       {
         where: {
-          id: ids
+          id: ids,
         },
         silent: true,
-        hooks: false
+        hooks: false,
       }
     );
-  } catch(e) {
+  } catch (e) {
     clearInterval(runInterval);
     Sentry.captureException(e);
-    console.log('Error while indexing', e);
+    console.log("Error while indexing", e);
     process.exit(1);
   }
 };
 
 const runInterval = setInterval(runIndexOp, options.batchInterval * 1000);
 
-process.on('SIGTERM', () => {
-  console.log('RECEIVED SIGTERM - STOPPING JOB');
+process.on("SIGTERM", () => {
+  console.log("RECEIVED SIGTERM - STOPPING JOB");
   process.exit(0);
 });
-

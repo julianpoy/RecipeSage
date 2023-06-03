@@ -1,16 +1,15 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
-import { RecipeService, ParsedIngredient } from '../../services/recipe.service';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
+import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
-import { ScaleRecipeComponent } from '~/modals/scale-recipe/scale-recipe.component';
+import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
 
 @Component({
-  selector: 'select-ingredients',
-  templateUrl: 'select-ingredients.component.html',
-  styleUrls: ['./select-ingredients.component.scss']
+  selector: "select-ingredients",
+  templateUrl: "select-ingredients.component.html",
+  styleUrls: ["./select-ingredients.component.scss"],
 })
 export class SelectIngredientsComponent {
-
   allSelected = true;
   ingredientBinders: { [index: number]: boolean } = {};
   scaledIngredients: ParsedIngredient[] = [];
@@ -43,15 +42,15 @@ export class SelectIngredientsComponent {
 
   constructor(
     private popoverCtrl: PopoverController,
-    public recipeService: RecipeService,
+    public recipeService: RecipeService
   ) {}
 
   async changeScale() {
     const popover = await this.popoverCtrl.create({
       component: ScaleRecipeComponent,
       componentProps: {
-        scale: this.scale.toString()
-      }
+        scale: this.scale.toString(),
+      },
     });
 
     await popover.present();
@@ -64,12 +63,15 @@ export class SelectIngredientsComponent {
   }
 
   applyScale(init?: boolean) {
-    this.scaledIngredients = this.recipeService.parseIngredients(this._ingredients, this.scale).filter(e => !e.isHeader);
+    this.scaledIngredients = this.recipeService
+      .parseIngredients(this._ingredients, this.scale)
+      .filter((e) => !e.isHeader);
 
     this.selectedIngredients = [];
     for (let i = 0; i < (this.scaledIngredients || []).length; i++) {
       if (init) this.ingredientBinders[i] = true;
-      if (this.ingredientBinders[i]) this.selectedIngredients.push(this.scaledIngredients[i]);
+      if (this.ingredientBinders[i])
+        this.selectedIngredients.push(this.scaledIngredients[i]);
     }
 
     this.selectedIngredientsChange.emit(this.selectedIngredients);
@@ -79,7 +81,10 @@ export class SelectIngredientsComponent {
     if (this.ingredientBinders[i]) {
       this.selectedIngredients.push(this.scaledIngredients[i]);
     } else {
-      this.selectedIngredients.splice(this.selectedIngredients.indexOf(this.scaledIngredients[i]), 1);
+      this.selectedIngredients.splice(
+        this.selectedIngredients.indexOf(this.scaledIngredients[i]),
+        1
+      );
     }
 
     this.selectedIngredientsChange.emit(this.selectedIngredients);

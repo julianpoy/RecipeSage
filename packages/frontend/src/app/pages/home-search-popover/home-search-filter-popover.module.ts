@@ -1,16 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { HomeSearchFilterPopoverPage } from './home-search-filter-popover.page';
-import { ResettableSelectPopoverPageModule } from '~/pages/resettable-select-popover/resettable-select-popover.module';
-import { GlobalModule } from '~/global.module';
+import { HomeSearchFilterPopoverPage } from "./home-search-filter-popover.page";
+import { ResettableSelectPopoverPageModule } from "~/pages/resettable-select-popover/resettable-select-popover.module";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    HomeSearchFilterPopoverPage,
-  ],
+  declarations: [HomeSearchFilterPopoverPage],
   imports: [
     CommonModule,
     IonicModule,
@@ -19,8 +17,6 @@ import { GlobalModule } from '~/global.module';
     ReactiveFormsModule,
     ResettableSelectPopoverPageModule,
   ],
-  entryComponents: [
-    HomeSearchFilterPopoverPage
-  ]
+  entryComponents: [HomeSearchFilterPopoverPage],
 })
 export class HomeSearchFilterPopoverModule {}

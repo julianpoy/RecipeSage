@@ -1,29 +1,33 @@
 export const FriendshipInit = (sequelize, DataTypes) => {
-  const Friendship = sequelize.define('Friendship', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false
-    }
-  }, {});
-  Friendship.associate = function(models) {
-    Friendship.belongsTo(models.User, {
-      foreignKey: {
-        name: 'userId',
+  const Friendship = sequelize.define(
+    "Friendship",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
         allowNull: false,
       },
-      as: 'user',
-      onDelete: 'CASCADE',
+    },
+    {}
+  );
+  Friendship.associate = function (models) {
+    Friendship.belongsTo(models.User, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false,
+      },
+      as: "user",
+      onDelete: "CASCADE",
     });
 
     Friendship.belongsTo(models.User, {
       foreignKey: {
-        name: 'friendId',
+        name: "friendId",
         allowNull: false,
       },
-      as: 'friend',
-      onDelete: 'CASCADE',
+      as: "friend",
+      onDelete: "CASCADE",
     });
   };
 
@@ -31,15 +35,15 @@ export const FriendshipInit = (sequelize, DataTypes) => {
     const outgoingFriendship = await Friendship.findOne({
       where: {
         userId,
-        friendId
-      }
+        friendId,
+      },
     });
 
     const incomingFriendship = await Friendship.findOne({
       where: {
         userId: friendId,
-        friendId: userId // Reverse relationship
-      }
+        friendId: userId, // Reverse relationship
+      },
     });
 
     return outgoingFriendship && incomingFriendship;
@@ -47,4 +51,3 @@ export const FriendshipInit = (sequelize, DataTypes) => {
 
   return Friendship;
 };
-

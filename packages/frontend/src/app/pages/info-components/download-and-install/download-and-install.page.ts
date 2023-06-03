@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'page-download-and-install',
-  templateUrl: 'download-and-install.page.html',
-  styleUrls: ['download-and-install.page.scss']
+  selector: "page-download-and-install",
+  templateUrl: "download-and-install.page.html",
+  styleUrls: ["download-and-install.page.scss"],
 })
 export class DownloadAndInstallPage {
   showAndroid = false;
@@ -14,7 +14,7 @@ export class DownloadAndInstallPage {
     const wind = window as any;
     if (wind.pwaPromptInterval) clearInterval(wind.pwaPromptInterval);
     wind.pwaPromptInterval = setInterval(() => {
-      this.pwaPromptCapable()
+      this.pwaPromptCapable();
     }, 500);
   }
 
@@ -39,13 +39,12 @@ export class DownloadAndInstallPage {
     if (installPrompt) {
       installPrompt.prompt();
 
-      installPrompt.userChoice
-      .then(choiceResult => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the A2HS prompt');
+      installPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the A2HS prompt");
           (window as any).deferredInstallPrompt = null;
         } else {
-          console.log('User dismissed the A2HS prompt');
+          console.log("User dismissed the A2HS prompt");
         }
       });
     }

@@ -1,17 +1,24 @@
-import { AlertController } from '@ionic/angular';
-import { Injectable } from '@angular/core';
+import { AlertController } from "@ionic/angular";
+import { Injectable } from "@angular/core";
 
-import { Label } from './label.service';
+import { Label } from "./label.service";
 
-import { HttpService } from './http.service';
-import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
-import { UtilService } from './util.service';
-import { EventService } from './event.service';
-import { Image } from './image.service';
+import { HttpService } from "./http.service";
+import {
+  HttpErrorHandlerService,
+  ErrorHandlers,
+} from "./http-error-handler.service";
+import { UtilService } from "./util.service";
+import { EventService } from "./event.service";
+import { Image } from "./image.service";
 
-import { parseIngredients, parseInstructions, parseNotes } from '@recipesage/util';
+import {
+  parseIngredients,
+  parseInstructions,
+  parseNotes,
+} from "@recipesage/util";
 
-export type RecipeFolderName = 'main' | 'inbox';
+export type RecipeFolderName = "main" | "inbox";
 
 export interface BaseRecipe {
   title: string;
@@ -60,86 +67,83 @@ export interface ParsedNote {
 }
 
 export enum ExportFormat {
-  XML = 'xml',
-  PDF = 'pdf',
-  TXT = 'txt',
-  JSONLD = 'json-ld',
+  XML = "xml",
+  PDF = "pdf",
+  TXT = "txt",
+  JSONLD = "json-ld",
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class RecipeService {
-
   constructor(
-  public alertCtrl: AlertController,
-  public events: EventService,
-  public httpService: HttpService,
-  private httpErrorHandlerService: HttpErrorHandlerService,
-  public utilService: UtilService) {}
+    public alertCtrl: AlertController,
+    public events: EventService,
+    public httpService: HttpService,
+    private httpErrorHandlerService: HttpErrorHandlerService,
+    public utilService: UtilService
+  ) {}
 
   getExportURL(format: ExportFormat) {
     return `${this.utilService.getBase()}data/export/${format}${this.utilService.getTokenQuery()}&download=true`;
   }
 
-  count(params: {
-    folder?: string,
-  }, errorHandlers?: ErrorHandlers) {
+  count(
+    params: {
+      folder?: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<{ count: number }>(
       `recipes/count`,
-      'GET',
+      "GET",
       null,
       params,
       errorHandlers
     );
   }
 
-  fetch(params: {
-    folder?: RecipeFolderName,
-    userId?: string,
-    sort?: string,
-    offset?: number,
-    count?: number,
-    labels?: string,
-    labelIntersection?: boolean,
-    ratingFilter?: string,
-    includeFriends?: boolean,
-  }, errorHandlers?: ErrorHandlers) {
+  fetch(
+    params: {
+      folder?: RecipeFolderName;
+      userId?: string;
+      sort?: string;
+      offset?: number;
+      count?: number;
+      labels?: string;
+      labelIntersection?: boolean;
+      ratingFilter?: string;
+      includeFriends?: boolean;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<{
-      data: Recipe[],
-      totalCount: number
-    }>(
-      `recipes/by-page`,
-      'GET',
-      null,
-      params,
-      errorHandlers
-    );
+      data: Recipe[];
+      totalCount: number;
+    }>(`recipes/by-page`, "GET", null, params, errorHandlers);
   }
 
-  search(params: {
-    query: string
-    userId?: string,
-    labels?: string,
-    rating?: number,
-    ratingFilter?: string,
-    includeFriends?: boolean,
-  }, errorHandlers?: ErrorHandlers) {
+  search(
+    params: {
+      query: string;
+      userId?: string;
+      labels?: string;
+      rating?: number;
+      ratingFilter?: string;
+      includeFriends?: boolean;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<{
-      data: Recipe[]
-    }>(
-      `recipes/search`,
-      'GET',
-      null,
-      params,
-      errorHandlers
-    );
+      data: Recipe[];
+    }>(`recipes/search`, "GET", null, params, errorHandlers);
   }
 
   fetchById(recipeId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
-      'GET',
+      "GET",
       null,
       null,
       errorHandlers
@@ -149,75 +153,87 @@ export class RecipeService {
   getRecipeById(recipeId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
-      'GET',
+      "GET",
       null,
       null,
       errorHandlers
     );
   }
 
-  async create(payload: Partial<BaseRecipe> & {
-    title: string,
-    labels?: string[],
-    imageIds?: string[]
-  }, errorHandlers?: ErrorHandlers) {
+  async create(
+    payload: Partial<BaseRecipe> & {
+      title: string;
+      labels?: string[];
+      imageIds?: string[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes`,
-      'POST',
+      "POST",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
 
-  async update(payload: Partial<BaseRecipe> & {
-    id: string,
-  }, errorHandlers?: ErrorHandlers) {
+  async update(
+    payload: Partial<BaseRecipe> & {
+      id: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes/${payload.id}`,
-      'PUT',
+      "PUT",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
 
-  async deleteByLabelIds(payload: {
-    labelIds: string[],
-  }, errorHandlers?: ErrorHandlers) {
+  async deleteByLabelIds(
+    payload: {
+      labelIds: string[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/delete-by-labelIds`,
-      'POST',
+      "POST",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
 
-  async deleteBulk(payload: {
-    recipeIds: string[],
-  }, errorHandlers?: ErrorHandlers) {
+  async deleteBulk(
+    payload: {
+      recipeIds: string[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/delete-bulk`,
-      'POST',
+      "POST",
       payload,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
@@ -225,13 +241,13 @@ export class RecipeService {
   async delete(recipeId: string, errorHandlers?: ErrorHandlers) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/${recipeId}`,
-      'DELETE',
+      "DELETE",
       null,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
@@ -239,23 +255,26 @@ export class RecipeService {
   async deleteAll(errorHandlers?: ErrorHandlers) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/all`,
-      'DELETE',
+      "DELETE",
       null,
       null,
       errorHandlers
     );
 
-    this.events.publish('recipe:update');
+    this.events.publish("recipe:update");
 
     return response;
   }
 
-  clipFromUrl(params: {
-    url: string,
-  }, errorHandlers?: ErrorHandlers) {
+  clipFromUrl(
+    params: {
+      url: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<any>(
       `clip`,
-      'GET',
+      "GET",
       null,
       params,
       errorHandlers
@@ -263,49 +282,70 @@ export class RecipeService {
   }
 
   print(recipe, template) {
-    window.open(this.utilService.getBase() + 'print/' + this.utilService.getTokenQuery()
-                + '&recipeId=' + recipe.id + '&template=' + template.name + '&modifiers=' + template.modifiers + '&print=true');
+    window.open(
+      this.utilService.getBase() +
+        "print/" +
+        this.utilService.getTokenQuery() +
+        "&recipeId=" +
+        recipe.id +
+        "&template=" +
+        template.name +
+        "&modifiers=" +
+        template.modifiers +
+        "&print=true"
+    );
   }
 
-  scrapePepperplate(params: {
-    username: string,
-    password: string,
-  }, errorHandlers?: ErrorHandlers) {
+  scrapePepperplate(
+    params: {
+      username: string;
+      password: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<Recipe>(
       `scrape/pepperplate`,
-      'GET',
+      "GET",
       null,
       params,
       errorHandlers
     );
   }
 
-  importFDXZ(fdxzFile, payload: {
-    excludeImages?: boolean,
-  }, errorHandlers?: ErrorHandlers) {
+  importFDXZ(
+    fdxzFile,
+    payload: {
+      excludeImages?: boolean;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const formData: FormData = new FormData();
-    formData.append('fdxzdb', fdxzFile, fdxzFile.name);
+    formData.append("fdxzdb", fdxzFile, fdxzFile.name);
 
     return this.httpService.multipartRequestWithWrapper<void>(
-      'import/fdxz',
-      'POST',
+      "import/fdxz",
+      "POST",
       formData,
       payload,
       errorHandlers
     );
   }
 
-  importLCB(lcbFile, payload: {
-    includeStockRecipes?: boolean,
-    includeTechniques?: boolean,
-    excludeImages?: boolean,
-  }, errorHandlers?: ErrorHandlers) {
+  importLCB(
+    lcbFile,
+    payload: {
+      includeStockRecipes?: boolean;
+      includeTechniques?: boolean;
+      excludeImages?: boolean;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     const formData: FormData = new FormData();
-    formData.append('lcbdb', lcbFile, lcbFile.name);
+    formData.append("lcbdb", lcbFile, lcbFile.name);
 
     return this.httpService.multipartRequestWithWrapper<void>(
-      'import/livingcookbook',
-      'POST',
+      "import/livingcookbook",
+      "POST",
       formData,
       payload,
       errorHandlers
@@ -314,11 +354,11 @@ export class RecipeService {
 
   importPaprika(paprikaFile, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append('paprikadb', paprikaFile, paprikaFile.name);
+    formData.append("paprikadb", paprikaFile, paprikaFile.name);
 
     return this.httpService.multipartRequestWithWrapper<void>(
-      'data/import/paprika',
-      'POST',
+      "data/import/paprika",
+      "POST",
       formData,
       null,
       errorHandlers
@@ -327,18 +367,22 @@ export class RecipeService {
 
   importJSONLD(jsonLDFile, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append('jsonLD', jsonLDFile, jsonLDFile.name);
+    formData.append("jsonLD", jsonLDFile, jsonLDFile.name);
 
     return this.httpService.multipartRequestWithWrapper<void>(
-      'data/import/json-ld',
-      'POST',
+      "data/import/json-ld",
+      "POST",
       formData,
       null,
       errorHandlers
     );
   }
 
-  parseIngredients(ingredients: string, scale: number, boldify?: boolean): ParsedIngredient[] {
+  parseIngredients(
+    ingredients: string,
+    scale: number,
+    boldify?: boolean
+  ): ParsedIngredient[] {
     return parseIngredients(ingredients, scale, boldify);
   }
 
