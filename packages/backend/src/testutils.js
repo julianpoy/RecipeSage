@@ -15,8 +15,9 @@ import { exec } from "child_process";
 
 let migrate = async (down) => {
   await new Promise((resolve, reject) => {
-    let command = "npx sequelize-cli db:migrate";
-    if (down) command = "npx sequelize-cli db:migrate:undo:all";
+    let command = `cd ${__dirname} && npx sequelize-cli db:migrate`;
+    if (down)
+      command = `cd ${__dirname} && npx sequelize-cli db:migrate:undo:all`;
 
     const migrate = exec(command, { env: process.env }, (err, stdout) => {
       if (err) {
