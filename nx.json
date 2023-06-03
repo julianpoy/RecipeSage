@@ -1,12 +1,4 @@
 {
-  "extends": "nx/presets/npm.json",
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/dist", "{projectRoot}/www"]
-    }
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
@@ -14,6 +6,17 @@
         "cacheableOperations": ["build", "test", "lint", "typecheck"],
         "accessToken": "YmZkMGUwNWUtYjliMi00NjYxLThjYzUtYWNkNTc0YTI0ZmExfHJlYWQtd3JpdGU="
       }
+    }
+  },
+  "extends": "nx/presets/npm.json",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/www"]
+    },
+    "test": {
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
     }
   },
   "workspaceLayout": {

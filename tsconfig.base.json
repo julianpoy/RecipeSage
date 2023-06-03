@@ -17,10 +17,10 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["esnext", "dom"],
     "paths": {
-      "@recipesage/prisma": ["packages/prisma/src/index.ts"],
-      "@recipesage/util": ["packages/util/src/index.ts"],
-      "@recipesage/trpc": ["packages/trpc/src/index.ts"],
       "@recipesage/frontend/*": ["packages/frontend/*"],
+      "@recipesage/prisma": ["packages/prisma/src/index.ts"],
+      "@recipesage/trpc": ["packages/trpc/src/index.ts"],
+      "@recipesage/util": ["packages/util/src/index.ts"],
       "~/*": ["packages/frontend/src/app/*"]
     }
   },
