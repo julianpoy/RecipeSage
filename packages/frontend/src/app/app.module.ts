@@ -20,10 +20,7 @@ import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.ser
 
 import { CookingToolbarModule } from "./components/cooking-toolbar/cooking-toolbar.module";
 
-import {
-  environment,
-  SENTRY_SAMPLE_RATE,
-} from "@recipesage/frontend/src/environments/environment";
+import { environment, SENTRY_SAMPLE_RATE } from "../environments/environment";
 import { SupportedLanguages } from "./services/preferences.service";
 
 const checkChunkLoadError = (error) => {

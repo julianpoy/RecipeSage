@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { NavController, Platform } from "@ionic/angular";
 import { RouteMap, AuthType } from "~/services/util.service";
 
-import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
+import { IS_SELFHOST } from "../../../../environments/environment";
 
 @Component({
   selector: "page-welcome",

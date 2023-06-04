@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { API_BASE_URL } from "@recipesage/frontend/src/environments/environment";
+import { API_BASE_URL } from "../../environments/environment";
 import { SupportedLanguages } from "./preferences.service";
 
 export interface RecipeTemplateModifiers {

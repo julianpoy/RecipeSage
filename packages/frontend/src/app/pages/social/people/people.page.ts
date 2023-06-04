@@ -7,7 +7,7 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
+import { IS_SELFHOST } from "../../../../environments/environment";
 
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";

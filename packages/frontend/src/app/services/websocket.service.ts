@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { UtilService } from "./util.service";
-import { GRIP_WS_URL } from "@recipesage/frontend/src/environments/environment";
+import { GRIP_WS_URL } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root",
