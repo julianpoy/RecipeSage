@@ -2,7 +2,7 @@ import * as express from "express";
 const router = express.Router();
 import * as cors from "cors";
 import * as multer from "multer";
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import extract from "extract-zip";
 import { spawn } from "child_process";
 import { performance } from "perf_hooks";

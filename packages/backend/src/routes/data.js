@@ -3,7 +3,7 @@ const router = express.Router();
 import pLimit from "p-limit";
 import xmljs from "xml-js";
 import * as multer from "multer";
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import extract from "extract-zip";
 import * as path from "path";
 

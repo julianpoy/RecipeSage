@@ -1,8 +1,11 @@
 import { expect } from "chai";
 import { v4 as uuid } from "uuid";
 import * as path from "path";
+import { Umzug, SequelizeStorage } from "umzug";
 
 import {
+  sequelize,
+  Sequelize,
   modelNames,
   User,
   Session,
@@ -11,29 +14,29 @@ import {
   Message,
 } from "./models/index.js";
 
-import { exec } from "child_process";
-
-const baseDir = path.join(__dirname, "../");
+const umzug = new Umzug({
+  migrations: {
+    glob: path.join(__dirname, "migrations/*.js"),
+    resolve: ({ name, path }) => {
+      return {
+        name,
+        up: async () =>
+          (await import(path)).up(sequelize.getQueryInterface(), Sequelize),
+        down: async () =>
+          (await import(path)).down(sequelize.getQueryInterface(), Sequelize),
+      };
+    },
+  },
+  storage: new SequelizeStorage({ sequelize }),
+  logger: undefined,
+});
 
 let migrate = async (down) => {
-  await new Promise((resolve, reject) => {
-    let command = `cd ${baseDir} && npx sequelize-cli db:migrate`;
-    if (down)
-      command = `cd ${baseDir} && npx sequelize-cli db:migrate:undo:all`;
-
-    const migrate = exec(command, { env: process.env }, (err, stdout) => {
-      if (err) {
-        console.error(stdout);
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-
-    // Forward stdout+stderr to this process
-    // migrate.stdout.pipe(process.stdout);
-    migrate.stderr.pipe(process.stderr);
-  });
+  if (down) {
+    await umzug.down();
+  } else {
+    await umzug.up();
+  }
 };
 
 export const syncDB = async () => {
@@ -52,16 +55,13 @@ export const syncDB = async () => {
 
 export const setup = async () => {
   await migrate();
-  return require("./bin/www.js");
+  const mainExecutable = await import("./app");
+
+  return mainExecutable.app;
 };
 
-export const cleanup = async (server) => {
+export const cleanup = async () => {
   await migrate(true);
-  await new Promise((r) =>
-    server.close(() => {
-      r();
-    })
-  );
 };
 
 export function randomString(len) {

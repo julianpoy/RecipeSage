@@ -31,7 +31,7 @@ describe("recipes", () => {
   });
 
   afterAll(async () => {
-    await cleanup(server);
+    await cleanup();
   });
 
   describe("create", () => {

@@ -27,7 +27,7 @@ describe("users", () => {
   });
 
   afterAll(async () => {
-    await cleanup(server);
+    await cleanup();
   });
 
   describe("register", () => {

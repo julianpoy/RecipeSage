@@ -1,7 +1,7 @@
 import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import extract from "extract-zip";
 import xmljs from "xml-js";
 

@@ -1,7 +1,7 @@
 import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import mdb from "mdb";
 import extract from "extract-zip";
 import sqlite3 from "sqlite3";

@@ -34,7 +34,8 @@
       "outputs": [],
       "options": {
         "jestConfig": "packages/backend/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       },
       "configurations": {
         "ci": {

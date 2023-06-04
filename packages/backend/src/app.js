@@ -117,4 +117,6 @@ app.use(function (err, req, res) {
   res.render("error");
 });
 
+export { app };
+
 export default app;

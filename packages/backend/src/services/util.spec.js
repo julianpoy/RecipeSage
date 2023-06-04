@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import sinon from "sinon";
+import * as sinon from "sinon";
 import * as path from "path";
 
 import { setup, cleanup, randomString } from "../testutils.js";
@@ -18,13 +18,12 @@ import * as FirebaseService from "../services/firebase.js";
 import * as GripService from "../services/grip.js";
 
 describe("utils", () => {
-  let server;
   beforeAll(async () => {
-    server = await setup();
+    await setup();
   });
 
   afterAll(async () => {
-    await cleanup(server);
+    await cleanup();
   });
 
   describe("validatePassword", () => {

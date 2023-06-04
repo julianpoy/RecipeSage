@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import sinon from "sinon";
+import * as sinon from "sinon";
 
 import {
   setup,
@@ -13,13 +13,12 @@ import {
 import { sequelize, Recipe } from "../models";
 
 describe("recipe", () => {
-  let server;
   beforeAll(async () => {
-    server = await setup();
+    await setup();
   });
 
   afterAll(async () => {
-    await cleanup(server);
+    await cleanup();
   });
 
   describe("findTitle", () => {
