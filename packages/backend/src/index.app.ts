@@ -3,10 +3,8 @@ import * as Sentry from "@sentry/node";
 import { program } from "commander";
 
 import { indexRecipes } from "./services/search";
-import * as SQ from "sequelize";
-const Op = SQ.Op;
 
-import { Recipe } from "./models";
+import { prisma } from "@recipesage/prisma";
 
 program
   .option("-b, --batch-size [size]", "Batch size", "1000")
@@ -27,11 +25,20 @@ const runIndexOp = async () => {
       lt = new Date(process.env.INDEX_BEFORE); // Must be in '2020-03-01 22:20' format
     }
 
-    const recipes = await Recipe.findAll({
+    const recipes = await prisma.recipe.findMany({
       where: {
-        [Op.or]: [{ indexedAt: null }, { indexedAt: { [Op.lt]: lt } }],
+        OR: [
+          {
+            indexedAt: null,
+          },
+          {
+            indexedAt: {
+              lt,
+            },
+          },
+        ],
       },
-      limit: options.batchSize,
+      take: options.batchSize,
     });
 
     if (!recipes || recipes.length === 0) {
@@ -43,16 +50,16 @@ const runIndexOp = async () => {
     await indexRecipes(recipes);
 
     const ids = recipes.map((r) => r.id);
-    await Recipe.update(
-      { indexedAt: new Date() },
-      {
-        where: {
-          id: ids,
+    await prisma.recipe.updateMany({
+      data: {
+        indexedAt: new Date(),
+      },
+      where: {
+        id: {
+          in: ids,
         },
-        silent: true,
-        hooks: false,
-      }
-    );
+      },
+    });
   } catch (e) {
     clearInterval(runInterval);
     Sentry.captureException(e);

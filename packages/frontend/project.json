@@ -32,6 +32,13 @@
         "command": "ng build --configuration=selfhost && workbox injectManifest"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "tsc --noEmit"
+      }
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {

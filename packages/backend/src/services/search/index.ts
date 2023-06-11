@@ -1,9 +1,10 @@
 import * as Meilisearch from "./meilisearch";
 import * as ElasticSearch from "./elasticsearch";
 import * as Stub from "./stub";
+import { Recipe } from "@prisma/client";
 
 export interface SearchProvider {
-  indexRecipes: (recipes) => Promise<void>;
+  indexRecipes: (recipes: Recipe[]) => Promise<void>;
   deleteRecipes: (recipeIds: string[]) => Promise<void>;
   searchRecipes: (userIds: string[], queryString: string) => Promise<string[]>;
 }

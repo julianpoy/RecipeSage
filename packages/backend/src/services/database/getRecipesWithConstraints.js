@@ -1,4 +1,4 @@
-import { Transaction, Op } from "sequelize";
+import { Op } from "sequelize";
 
 import {
   sequelize,
@@ -10,19 +10,7 @@ import {
 } from "../../models";
 import { getFriendships } from "../../utils/getFriendships";
 
-export const getRecipesWithConstraints = async (args: {
-  userId?: string;
-  userIds: string[];
-  folder: string;
-  sortBy: [string, string];
-  offset: number;
-  limit: number;
-  transaction?: Transaction;
-  recipeIds?: string[];
-  labels?: string[];
-  labelIntersection?: boolean;
-  ratings?: string[];
-}) => {
+export const getRecipesWithConstraints = async (args) => {
   const {
     userId: contextUserId,
     userIds,
@@ -73,11 +61,7 @@ export const getRecipesWithConstraints = async (args: {
     return acc;
   }, {});
 
-  const queryFilters: {
-    userId: string;
-    labelId?: string;
-    recipeId?: string;
-  }[] = [];
+  const queryFilters = [];
   for (const userId of userIds) {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
@@ -116,7 +100,7 @@ export const getRecipesWithConstraints = async (args: {
   const sqQueryFilters = queryFilters.map((queryFilter) => {
     const filter = {
       userId: queryFilter.userId,
-    } as { [key: string]: string };
+    };
 
     if (queryFilter.labelId) filter["$labels.id$"] = queryFilter.labelId;
     if (queryFilter.recipeId) filter.id = queryFilter.recipeId;

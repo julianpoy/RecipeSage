@@ -7,26 +7,23 @@
 import app from "../app.js";
 import Debug from "debug";
 const debug = Debug("chefbook-backend:server");
-import { jobTracker } from "../services/job-tracker.js";
+import { getRunningJobs } from "../services/job-tracker.js";
 import * as protocol from "http";
 
 /**
  * Get port from environment and store in Express.
  */
-
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 /**
  * Create HTTP server.
  */
-
 export const server = protocol.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
@@ -34,8 +31,7 @@ server.on("listening", onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
-function normalizePort(val) {
+function normalizePort(val: string) {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -54,8 +50,7 @@ function normalizePort(val) {
 /**
  * Event listener for HTTP server "error" event.
  */
-
-function onError(error) {
+function onError(error: Error & { syscall: string; code: string }) {
   if (error.syscall !== "listen") {
     throw error;
   }
@@ -66,12 +61,10 @@ function onError(error) {
   switch (error.code) {
     case "EACCES":
       console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
+      return process.exit(1);
     case "EADDRINUSE":
       console.error(bind + " is already in use");
-      process.exit(1);
-      break;
+      return process.exit(1);
     default:
       throw error;
   }
@@ -80,10 +73,9 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr?.port;
   debug("Listening on " + bind);
 }
 
@@ -93,7 +85,7 @@ const exit = () => {
 };
 
 const attemptExit = () => {
-  const jobsWaiting = jobTracker.getRunningJobs().length;
+  const jobsWaiting = getRunningJobs().length;
   console.log("Jobs waiting: ", jobsWaiting);
   if (jobsWaiting === 0) exit();
 };

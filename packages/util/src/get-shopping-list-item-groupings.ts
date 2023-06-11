@@ -1,6 +1,15 @@
 import { ShoppingListItem } from "@prisma/client";
 
-const itemSort = (a, b, sortBy: "createdAt" | "-createdAt" | "-title") => {
+interface SortableItem {
+  title: string;
+  createdAt: string | Date;
+}
+
+const itemSort = (
+  a: SortableItem,
+  b: SortableItem,
+  sortBy: "createdAt" | "-createdAt" | "-title"
+): number => {
   switch (sortBy) {
     case "createdAt": {
       const dateComp =
@@ -34,7 +43,7 @@ const itemSort = (a, b, sortBy: "createdAt" | "-createdAt" | "-title") => {
 /**
  * Will group all items by by similar keyName and sort
  */
-const groupAndSort = <T>(
+const groupAndSort = <T extends SortableItem>(
   items: T[],
   keyName: keyof T,
   sortBy: "createdAt" | "-createdAt" | "-title"

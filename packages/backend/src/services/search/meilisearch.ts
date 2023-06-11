@@ -1,3 +1,4 @@
+import { Recipe } from "@prisma/client";
 import { MeiliSearch, MeiliSearchApiError } from "meilisearch";
 import { SearchProvider } from "./";
 
@@ -44,7 +45,7 @@ async function init() {
     ]);
 }
 
-export const indexRecipes = async (recipes) => {
+export const indexRecipes = async (recipes: Recipe[]) => {
   const indexableRecipes = recipes.map((recipe) => ({
     id: recipe.id,
     userId: recipe.userId,

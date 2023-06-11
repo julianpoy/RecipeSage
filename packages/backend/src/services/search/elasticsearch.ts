@@ -1,4 +1,5 @@
 import { Client } from "@elastic/elasticsearch";
+import { Recipe } from "@prisma/client";
 import dedent from "ts-dedent";
 import { SearchProvider } from "./";
 
@@ -47,10 +48,28 @@ async function init() {
   }
 }
 
-export const indexRecipes = async (recipes) => {
-  const actions = recipes.reduce((acc, recipe) => {
-    if (recipe.toJSON) recipe = recipe.toJSON();
+const buildIndexAction = (recipeId: string) => {
+  const action = {
+    index: {
+      _index: "recipes",
+      _id: recipeId,
+    },
+  };
 
+  return action;
+};
+
+type ElasticIndexCall =
+  | ReturnType<typeof buildIndexAction>
+  | {
+      userId: string;
+      title: string;
+      ingredients: string;
+      fullText: string;
+    };
+
+export const indexRecipes = async (recipes: Recipe[]) => {
+  const actions = recipes.reduce((acc, recipe) => {
     const {
       userId,
       title,
@@ -61,12 +80,7 @@ export const indexRecipes = async (recipes) => {
       notes,
     } = recipe;
 
-    const action = {
-      index: {
-        _index: "recipes",
-        _id: recipe.id,
-      },
-    };
+    const action = buildIndexAction(recipe.id);
 
     const fullText = dedent`
       ${title}
@@ -79,13 +93,13 @@ export const indexRecipes = async (recipes) => {
 
     const document = {
       userId,
-      title,
-      ingredients,
+      title: title || "",
+      ingredients: ingredients || "",
       fullText,
     };
 
     return [...acc, action, document];
-  }, []);
+  }, [] as ElasticIndexCall[]);
 
   if (actions.length === 0) return Promise.resolve();
 

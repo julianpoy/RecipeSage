@@ -47,28 +47,25 @@ const recipeToSchema = async (
   const showTagLine =
     recipe.source || recipe.activeTime || recipe.totalTime || recipe.yield;
   if (showTagLine) {
-    const tagline: Content[] = [];
+    const tagline: [string, string][] = [];
 
     if (recipe.source) tagline.push(["Source:", recipe.source]);
     if (recipe.activeTime) tagline.push(["Active time:", recipe.activeTime]);
     if (recipe.totalTime) tagline.push(["Total time:", recipe.totalTime]);
     if (recipe.yield) tagline.push(["Yield:", recipe.yield]);
 
-    const taglineSchema = tagline.reduce(
-      (acc: Content[], item: Content): Content[] => {
-        return [
-          ...acc,
-          {
-            text: item[0] + " ",
-            bold: true,
-          },
-          {
-            text: item[1] + "  ",
-          },
-        ];
-      },
-      [] as Content[]
-    );
+    const taglineSchema = tagline.reduce((acc, item) => {
+      return [
+        ...acc,
+        {
+          text: item[0] + " ",
+          bold: true,
+        },
+        {
+          text: item[1] + "  ",
+        },
+      ];
+    }, [] as Content[]);
 
     headerContent.push({
       text: taglineSchema,

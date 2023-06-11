@@ -21,11 +21,10 @@ const fractionMatchers = {
   8542: [/ ?\u215E/g, " 7/8"], // ⅞  \u215E;
   8529: [/ ?\u2151/g, " 1/9"], // ⅑  \u2151;
   8530: [/ ?\u2152/g, " 1/10"], // ⅒ \u2152;
-};
+} as { [key: number]: [RegExp, string] };
 
 const fractionMatchRegexp = new RegExp(
-  Object.keys(fractionMatchers)
-    .map((e) => fractionMatchers[e])
+  Object.values(fractionMatchers)
     .map((matcher) => matcher[0].source)
     .join("|"),
   "g"

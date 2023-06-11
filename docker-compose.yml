@@ -4,6 +4,17 @@ version: "3.7"
 # dockerfile that exists here: https://github.com/julianpoy/recipesage-selfhost
 
 services:
+  recipesage-monorepo: &recipesage-monorepo
+    depends_on:
+      - postgres
+      - elasticsearch
+      - pushpin
+      - browserless
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./packages:/app/packages
   proxy:
     image: nginx
     volumes:
@@ -16,25 +27,14 @@ services:
       - backend
       - pushpin
   frontend:
+    <<: *recipesage-monorepo
     ports:
       - "8100:8100"
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     command: npx nx start frontend
-    volumes:
-      - ./packages:/app/packages
   backend:
+    <<: *recipesage-monorepo
     ports:
       - "3000:3000"
-    depends_on:
-      - postgres
-      - elasticsearch
-      - pushpin
-      - browserless
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www'
     environment:
       - AWS_REGION=us-west-2
@@ -67,8 +67,6 @@ services:
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     env_file:
       - ./.secrets.env
-    volumes:
-      - ./packages:/app/packages
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
