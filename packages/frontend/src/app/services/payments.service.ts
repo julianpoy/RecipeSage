@@ -10,7 +10,7 @@ import { ErrorHandlers } from "./http-error-handler.service";
   providedIn: "root",
 })
 export class PaymentsService {
-  stripe;
+  stripe: any;
 
   constructor(
     public httpService: HttpService,
@@ -39,7 +39,7 @@ export class PaymentsService {
       `payments/stripe/custom-session`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -49,8 +49,8 @@ export class PaymentsService {
       .redirectToCheckout({
         sessionId,
       })
-      .then((response) => {
-        console.error(response.error.message, response.error);
+      .then((response?: { error?: Error }) => {
+        console.error(response?.error?.message, response?.error);
       });
   }
 }

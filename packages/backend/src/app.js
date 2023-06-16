@@ -8,6 +8,8 @@ import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 
+import { trpcExpressMiddleware } from '@recipesage/trpc';
+
 // Routes
 import index from "./routes/index.js";
 import users from "./routes/users.js";
@@ -68,8 +70,8 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");
-
 app.use("/", index);
+app.use('/trpc', trpcExpressMiddleware);
 app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/labels", labels);

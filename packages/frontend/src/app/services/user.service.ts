@@ -74,9 +74,7 @@ export interface Capabilities {
 })
 export class UserService {
   constructor(
-    private utilService: UtilService,
     private httpService: HttpService,
-    private httpErrorHandlerService: HttpErrorHandlerService
   ) {}
 
   register(
@@ -91,7 +89,7 @@ export class UserService {
       "users/register",
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -107,7 +105,7 @@ export class UserService {
       "users/login",
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -117,7 +115,7 @@ export class UserService {
       "users/logout",
       "POST",
       {},
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -132,7 +130,7 @@ export class UserService {
       "users/forgot",
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -149,7 +147,7 @@ export class UserService {
       "users/",
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -164,7 +162,7 @@ export class UserService {
       "users/fcm/token",
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -178,7 +176,7 @@ export class UserService {
     return this.httpService.requestWithWrapper<void>(
       "users/fcm/token",
       "DELETE",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -193,7 +191,7 @@ export class UserService {
     return this.httpService.requestWithWrapper<User>(
       "users/by-email",
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -203,8 +201,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<User>(
       "users/",
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -213,8 +211,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       "users/profile",
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -223,8 +221,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<User>(
       `users/${userId}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -237,7 +235,7 @@ export class UserService {
       "users/profile",
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -246,8 +244,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/${userId}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -256,8 +254,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/by-handle/${encodeURIComponent(handle)}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -266,8 +264,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<HandleInfo>(
       `users/handle-info/${encodeURIComponent(handle)}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -276,8 +274,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/friends`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -286,8 +284,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/friends/${friendId}`,
       "POST",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -296,8 +294,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<void>(
       `users/friends/${friendId}`,
       "DELETE",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -306,8 +304,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<any>(
       `users/stats`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -316,8 +314,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<Capabilities>(
       `users/capabilities`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -326,23 +324,8 @@ export class UserService {
     return this.httpService.requestWithWrapper<void>(
       `users/`,
       "DELETE",
-      null,
-      null,
-      errorHandlers
-    );
-  }
-
-  checkForUpdate(
-    payload: {
-      version: string;
-    },
-    errorHandlers?: ErrorHandlers
-  ) {
-    return this.httpService.requestWithWrapper<any>(
-      "info",
-      "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }

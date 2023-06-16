@@ -69,11 +69,11 @@ export interface MessageThread {
   providedIn: "root",
 })
 export class MessagingService {
-  private messaging: Messaging;
+  private messaging: Messaging | null = null;
   private fcmToken: any;
 
-  private _isFCMSupported: boolean;
-  private isFCMSupportedPromise: Promise<boolean>;
+  private _isFCMSupported: boolean = false;
+  private isFCMSupportedPromise: Promise<boolean> | undefined;
 
   constructor(
     public events: EventService,
@@ -103,7 +103,7 @@ export class MessagingService {
       onMessage(this.messaging, (message) => {
         console.log("received foreground FCM: ", message);
         // TODO: REPLACE WITH GRIP (WS)
-        switch (message.data.type) {
+        switch (message.data?.type) {
           case "import:pepperplate:complete":
             return this.events.publish("import:pepperplate:complete");
           case "import:pepperplate:failed":
@@ -146,7 +146,7 @@ export class MessagingService {
     return this.httpService.requestWithWrapper<Message[]>(
       `messages`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -161,7 +161,7 @@ export class MessagingService {
     return this.httpService.requestWithWrapper<MessageThread[]>(
       `messages/threads`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -179,7 +179,7 @@ export class MessagingService {
       `messages`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }

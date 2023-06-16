@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { UtilService } from "./util.service";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
 
 export const UNSAVED_CHANGES_MESSAGE =
   "It looks like you have been editing something. " +
@@ -12,7 +11,9 @@ export const UNSAVED_CHANGES_MESSAGE =
 export class UnsavedChangesService {
   private pendingChanges = false;
 
-  constructor(private utilService: UtilService, private router: Router) {
+  constructor(
+    private router: Router
+  ) {
     // Reset pending changes after every navigation event
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

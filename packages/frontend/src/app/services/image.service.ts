@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 
 import { HttpService } from "./http.service";
-import { UtilService } from "./util.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 
 export interface Image {
@@ -14,8 +13,7 @@ export interface Image {
 })
 export class ImageService {
   constructor(
-    private httpService: HttpService,
-    private utilService: UtilService
+    private httpService: HttpService
   ) {}
 
   create(file: File, errorHandlers?: ErrorHandlers) {
@@ -41,7 +39,7 @@ export class ImageService {
       "images/url",
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }

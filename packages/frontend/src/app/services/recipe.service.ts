@@ -5,7 +5,6 @@ import { Label } from "./label.service";
 
 import { HttpService } from "./http.service";
 import {
-  HttpErrorHandlerService,
   ErrorHandlers,
 } from "./http-error-handler.service";
 import { UtilService } from "./util.service";
@@ -81,7 +80,6 @@ export class RecipeService {
     public alertCtrl: AlertController,
     public events: EventService,
     public httpService: HttpService,
-    private httpErrorHandlerService: HttpErrorHandlerService,
     public utilService: UtilService
   ) {}
 
@@ -98,7 +96,7 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<{ count: number }>(
       `recipes/count`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -137,15 +135,21 @@ export class RecipeService {
   ) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
-    }>(`recipes/search`, "GET", null, params, errorHandlers);
+    }>(
+      `recipes/search`,
+      "GET",
+      undefined,
+      params,
+      errorHandlers
+    );
   }
 
   fetchById(recipeId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -154,8 +158,8 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<Recipe>(
       `recipes/${recipeId}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -172,7 +176,7 @@ export class RecipeService {
       `recipes`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -191,7 +195,7 @@ export class RecipeService {
       `recipes/${payload.id}`,
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -210,7 +214,7 @@ export class RecipeService {
       `recipes/delete-by-labelIds`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -229,7 +233,7 @@ export class RecipeService {
       `recipes/delete-bulk`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -242,8 +246,8 @@ export class RecipeService {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/${recipeId}`,
       "DELETE",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
 
@@ -256,8 +260,8 @@ export class RecipeService {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/all`,
       "DELETE",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
 
@@ -275,13 +279,13 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<any>(
       `clip`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
   }
 
-  print(recipe, template) {
+  print(recipe: Recipe, template: { name: string, modifiers: string }) {
     window.open(
       this.utilService.getBase() +
         "print/" +
@@ -306,14 +310,14 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<Recipe>(
       `scrape/pepperplate`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
   }
 
   importFDXZ(
-    fdxzFile,
+    fdxzFile: Blob,
     payload: {
       excludeImages?: boolean;
     },
@@ -332,7 +336,7 @@ export class RecipeService {
   }
 
   importLCB(
-    lcbFile,
+    lcbFile: Blob,
     payload: {
       includeStockRecipes?: boolean;
       includeTechniques?: boolean;
@@ -352,7 +356,7 @@ export class RecipeService {
     );
   }
 
-  importPaprika(paprikaFile, errorHandlers?: ErrorHandlers) {
+  importPaprika(paprikaFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("paprikadb", paprikaFile, paprikaFile.name);
 
@@ -360,12 +364,12 @@ export class RecipeService {
       "data/import/paprika",
       "POST",
       formData,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  importJSONLD(jsonLDFile, errorHandlers?: ErrorHandlers) {
+  importJSONLD(jsonLDFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("jsonLD", jsonLDFile, jsonLDFile.name);
 
@@ -373,7 +377,7 @@ export class RecipeService {
       "data/import/json-ld",
       "POST",
       formData,
-      null,
+      undefined,
       errorHandlers
     );
   }

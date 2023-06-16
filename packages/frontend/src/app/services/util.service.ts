@@ -240,9 +240,9 @@ export const RouteMap = {
 // This can be used for fallback when a non-localized language is requested
 // and we only have localized versions
 const defaultLocality = {
-  en: "en-us",
-  it: "it-it",
-  de: "de-de",
+  en: SupportedLanguages.EN_US,
+  it: SupportedLanguages.IT_IT,
+  de: SupportedLanguages.DE_DE,
 };
 
 @Injectable({
@@ -252,14 +252,14 @@ export class UtilService {
   constructor(private translate: TranslateService) {}
 
   getAppBrowserLang(): string {
-    const isSupported = (lang: string) => {
+    const isSupported = (lang: string | undefined): lang is SupportedLanguages => {
       return Object.values(SupportedLanguages).some((el) => el === lang);
     };
 
     // Navigator language can be in the form 'en', or 'en-us' for any given language
     const navLang = window.navigator.language.toLowerCase();
     const navLangNoRegion = navLang.split("-")[0];
-    const defaultLocalized = defaultLocality[navLangNoRegion];
+    const defaultLocalized = navLangNoRegion in defaultLocality ? defaultLocality[navLangNoRegion as keyof typeof defaultLocality] : undefined;
 
     // We always prefer to return the exact language the navigator requested if we have it
     if (isSupported(navLang)) return navLang;
@@ -282,15 +282,15 @@ export class UtilService {
     return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
   }
 
-  removeToken() {
+  removeToken(): void {
     localStorage.removeItem("token");
   }
 
-  setToken(token: string) {
+  setToken(token: string): void {
     localStorage.setItem("token", token);
   }
 
-  getToken(): string {
+  getToken(): string | null {
     return localStorage.getItem("token");
   }
 
@@ -327,9 +327,9 @@ export class UtilService {
     modifiers: RecipeTemplateModifiers
   ): string {
     modifiers = { version: (window as any).version, ...modifiers };
-    const modifierQuery = Object.keys(modifiers)
-      .filter((modifierKey) => modifiers[modifierKey])
-      .map((modifierKey) => `${modifierKey}=${modifiers[modifierKey]}`)
+    const modifierQuery = Object.entries(modifiers)
+      .filter(([_, value]) => value)
+      .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
     const url = `${this.getBase()}embed/recipe/${recipeId}?${modifierQuery}`;

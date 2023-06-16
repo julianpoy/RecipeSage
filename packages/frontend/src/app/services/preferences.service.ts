@@ -141,7 +141,7 @@ export class PreferencesService {
   private load() {
     try {
       const serialized = localStorage.getItem(PREFERENCE_LOCALSTORAGE_KEY);
-      const savedPreferences = JSON.parse(serialized) || {};
+      const savedPreferences = serialized ? JSON.parse(serialized) || {} : {};
 
       Object.assign(this.preferences, savedPreferences);
     } catch (e) {}

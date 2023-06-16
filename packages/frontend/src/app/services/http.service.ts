@@ -113,7 +113,7 @@ export class HttpService {
 
     if (query) {
       const params = Object.entries(query)
-        .filter(([key, value]) => value !== undefined && value !== null)
+        .filter(([_, value]) => value !== undefined && value !== null)
         .map(([key, value]) => {
           return encodeURIComponent(key) + "=" + encodeURIComponent(value);
         })
@@ -149,7 +149,7 @@ export class HttpService {
         status,
         data,
       };
-    } catch (err) {
+    } catch (err: any) {
       const response = {
         success: false,
         status: err.response ? err.response.status : 0, // 0 For no network

@@ -23,7 +23,7 @@ import { CookingToolbarModule } from "./components/cooking-toolbar/cooking-toolb
 import { environment, SENTRY_SAMPLE_RATE } from "../environments/environment";
 import { SupportedLanguages } from "./services/preferences.service";
 
-const checkChunkLoadError = (error) => {
+const checkChunkLoadError = (error: Error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
   const isChunkFailedError = chunkFailedErrorRegExp.test(error.message);
 
@@ -41,7 +41,7 @@ const checkChunkLoadError = (error) => {
   return isChunkFailedError;
 };
 
-const checkSupressedError = (error) => {
+const checkSupressedError = (error: Error) => {
   const supressedErrorRegExp =
     /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(\.isProxied)|(\[object Undefined\])/;
 
@@ -63,7 +63,7 @@ Sentry.init({
   dsn: "https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200",
   tracesSampleRate: SENTRY_SAMPLE_RATE,
   beforeSend(event, hint) {
-    const error = hint.originalException;
+    const error = hint.originalException as Error;
     if (checkChunkLoadError(error)) return null;
     if (checkSupressedError(error)) return null;
     return event;
@@ -79,12 +79,12 @@ export function createTranslateLoader(http: HttpClient) {
 
 @Injectable()
 export class SentryErrorHandler extends ErrorHandler {
-  handleError(error) {
+  handleError(error: Error) {
     super.handleError(error);
 
-    let token = "";
+    let token: string | undefined;
     try {
-      token = localStorage.getItem("token");
+      token = localStorage.getItem("token") || undefined;
     } catch (e) {}
 
     try {
@@ -93,7 +93,7 @@ export class SentryErrorHandler extends ErrorHandler {
         message: "Session: " + token,
         level: "info",
       });
-      Sentry.captureException(error.originalError || error);
+      Sentry.captureException((error as any).originalError || error);
     } catch (e) {
       console.error(e);
     }

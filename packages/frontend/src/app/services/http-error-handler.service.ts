@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { TRPCError } from "@trpc/server";
+import { getHTTPStatusCodeFromError } from "@trpc/server/http";
+import { AxiosError } from "axios";
 
 import { AuthPage } from "~/pages/auth/auth.page";
 
@@ -54,11 +57,7 @@ export class HttpErrorHandlerService {
     toast.present();
   }
 
-  handleError(error, errorHandlers?: ErrorHandlers) {
-    const statusCode = error?.response?.status;
-    // Rethrow all non-http errors
-    if (!statusCode) throw error;
-
+  _handleError(statusCode: number, errorHandlers?: ErrorHandlers) {
     // Use provided error handlers first
     if (errorHandlers?.[statusCode]) {
       errorHandlers[statusCode]();
@@ -66,11 +65,29 @@ export class HttpErrorHandlerService {
     } else if (errorHandlers?.["*"]) {
       errorHandlers["*"]();
       // Fallback to default
-    } else if (this.defaultErrorHandlers[statusCode]) {
-      this.defaultErrorHandlers[statusCode]();
+    } else if (this.defaultErrorHandlers[statusCode as keyof typeof this.defaultErrorHandlers]) {
+      this.defaultErrorHandlers[statusCode as keyof typeof this.defaultErrorHandlers]();
       // All other errors use 500 by default for generic (unexpected) error
     } else {
       this.defaultErrorHandlers[500]();
     }
+  }
+
+  handleError(error: unknown, errorHandlers?: ErrorHandlers) {
+    // Rethrow all non-http errors
+    if (
+      !(error instanceof AxiosError) ||
+      !error.response
+    ) {
+      throw error;
+    }
+
+    const statusCode = error.response.status;
+    this._handleError(statusCode, errorHandlers);
+  }
+
+  handleTrpcError(error: TRPCError, errorHandlers?: ErrorHandlers) {
+    const statusCode = getHTTPStatusCodeFromError(error);
+    this._handleError(statusCode, errorHandlers);
   }
 }

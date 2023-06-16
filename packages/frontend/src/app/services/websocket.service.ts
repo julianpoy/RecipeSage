@@ -15,7 +15,7 @@ export class WebsocketService {
     this.connect();
 
     // Before tab close, cleanup WS handler and connection
-    window.addEventListener("beforeunload", (e) => {
+    window.addEventListener("beforeunload", () => {
       try {
         this.connection.onclose = () => {};
         this.connection.close();
@@ -29,7 +29,7 @@ export class WebsocketService {
   }
 
   // Listeners
-  register(eventName, cb, ctx) {
+  register(eventName: string, cb: (payload: Record<string, string>) => void, ctx: any) {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
 
     this.listeners[eventName].push({
@@ -39,7 +39,7 @@ export class WebsocketService {
   }
 
   // Outgoing
-  send(msg) {
+  send(msg: Record<string, string>) {
     this.connection.send(JSON.stringify(msg));
   }
 
@@ -60,11 +60,10 @@ export class WebsocketService {
     this.connection.onopen = () => {
       this.handleMessage({
         type: "connected",
-        data: null,
       });
     };
 
-    this.connection.onmessage = (payload) => {
+    this.connection.onmessage = (payload: { data: string }) => {
       this.handleMessage(JSON.parse(payload.data));
     };
 
@@ -90,11 +89,11 @@ export class WebsocketService {
     }, RECONNECT_TIMEOUT_WAIT);
   }
 
-  private handleMessage(payload) {
+  private handleMessage(payload: { type: string, data?: Record<string, string> }) {
     this.broadcast(payload.type, payload.data);
   }
 
-  private broadcast(eventName, msg) {
+  private broadcast(eventName: string, msg?: Record<string, string>) {
     const queue = this.listeners[eventName];
 
     if (!queue) return;

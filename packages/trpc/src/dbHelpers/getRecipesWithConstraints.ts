@@ -13,7 +13,7 @@ export const getRecipesWithConstraints = async (args: {
   recipeIds?: string[];
   labels?: string[];
   labelIntersection?: boolean;
-  ratings?: number[];
+  ratings?: (number | null)[];
 }) => {
   const {
     tx = prisma,
@@ -153,7 +153,7 @@ export const getRecipesWithConstraints = async (args: {
     };
   }
 
-  const totalCount = await tx.recipe.findMany({
+  const totalCount = await tx.recipe.count({
     where,
   });
 

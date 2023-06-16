@@ -12,7 +12,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "~/services/loading.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 import {
   PreferencesService,
   ShoppingListPreferenceKey,
@@ -50,7 +50,7 @@ export class ShoppingListPage {
 
   initialLoadComplete = false;
 
-  reference = 0;
+  reference = '0';
 
   constructor(
     public navCtrl: NavController,
@@ -66,7 +66,13 @@ export class ShoppingListPage {
     public popoverCtrl: PopoverController,
     public route: ActivatedRoute
   ) {
-    this.shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
+    const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
+    if (shoppingListId) {
+      this.shoppingListId = shoppingListId;
+    } else {
+      this.navCtrl.navigateRoot(RouteMap.ShoppingListsPage.getPath());
+      throw new Error("Shopping list ID not provided");
+    }
 
     this.websocketService.register(
       "shoppingList:itemsUpdated",
@@ -110,11 +116,11 @@ export class ShoppingListPage {
     );
   }
 
-  processList(list?) {
+  processList(list?: any) {
     if (list) this.list = list;
 
-    const items = this.list.items.filter((item) => !item.completed);
-    const completedItems = this.list.items.filter((item) => item.completed);
+    const items = this.list.items.filter((item: any) => !item.completed);
+    const completedItems = this.list.items.filter((item: any) => item.completed);
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -168,7 +174,7 @@ export class ShoppingListPage {
     this.processList(response.data);
   }
 
-  async completeItems(items, completed: boolean) {
+  async completeItems(items: any[], completed: boolean) {
     if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
       return this.removeItems(items);
     }
@@ -199,11 +205,11 @@ export class ShoppingListPage {
     loading.dismiss();
   }
 
-  removeRecipe(recipeId) {
+  removeRecipe(recipeId: string) {
     this.removeItems(this.itemsByRecipeId[recipeId]);
   }
 
-  async removeItemsConfirm(items) {
+  async removeItemsConfirm(items: any[]) {
     const header = await this.translate
       .get("pages.shoppingList.removeMultiple.header")
       .toPromise();
@@ -234,7 +240,7 @@ export class ShoppingListPage {
     alert.present();
   }
 
-  async removeItems(items) {
+  async removeItems(items: any[]) {
     const loading = this.loadingService.start();
 
     const itemIds = items.map((el) => {
@@ -242,7 +248,7 @@ export class ShoppingListPage {
     });
 
     const response = await this.shoppingListService.deleteItems(this.list.id, {
-      itemIds,
+      itemIds: itemIds.join(','),
     });
 
     await this.loadList();
@@ -280,7 +286,7 @@ export class ShoppingListPage {
     toast.present();
   }
 
-  async _addItems(items) {
+  async _addItems(items: any[]) {
     const loading = this.loadingService.start();
 
     await this.shoppingListService.addItems(this.list.id, {
@@ -291,7 +297,7 @@ export class ShoppingListPage {
     loading.dismiss();
   }
 
-  async newShoppingListItem() {
+  async newShoppingListItem(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: NewShoppingListItemModalPage,
     });
@@ -302,11 +308,11 @@ export class ShoppingListPage {
     });
   }
 
-  formatItemCreationDate(plainTextDate) {
+  formatItemCreationDate(plainTextDate: string): string {
     return this.utilService.formatDate(plainTextDate, { now: true });
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event): Promise<void> {
     const popover = await this.popoverCtrl.create({
       component: ShoppingListPopoverPage,
       componentProps: {
@@ -323,7 +329,7 @@ export class ShoppingListPage {
     popover.present();
   }
 
-  openRecipe(id) {
+  openRecipe(id: string): void {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
   }
 }

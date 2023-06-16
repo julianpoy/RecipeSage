@@ -31,6 +31,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
+import { TRPCError } from "@trpc/server";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -202,18 +203,6 @@ export class HomePage {
 
     this.fetchMyProfile();
     this.fetchFriends();
-
-    const result = await this.trpcService.trpc.getRecipes.query({
-      example: "",
-    });
-
-    this.trpcService.trpc.getRecipes
-      .query({
-        example: "testval",
-      })
-      .then((val) => {
-        console.log(val);
-      });
   }
 
   async setDefaultBackHref() {
@@ -317,6 +306,19 @@ export class HomePage {
       (this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "yes" ||
         this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "browse");
 
+    // const asdf = this.trpcService.trpc.getRecipes.query({
+    //   userId: '2e4ed3ea-019f-45f2-a489-7c23554dcf06',
+    // });
+    //
+    // console.log(asdf);
+
+    // this.trpcService.trpc.getRecipes
+    //   .query({
+    //     example: "testval",
+    //   })
+    //   .then((val) => {
+    //     console.log(val);
+    //   });
     const response = await this.recipeService.fetch({
       folder: this.folder,
       sort: this.preferences[MyRecipesPreferenceKey.SortBy],

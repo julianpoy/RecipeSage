@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 
+interface WakelockRequest {
+  release: () => void
+}
+
 @Injectable({
   providedIn: "root",
 })
 export class WakeLockService {
   isCapable = "wakeLock" in navigator;
-  wakeLock = null;
-  wakeLockRequests = [];
+  wakeLock: WakeLockSentinel | null = null;
+  wakeLockRequests: WakelockRequest[] = [];
 
   constructor() {
     document.addEventListener("visibilitychange", () =>
@@ -28,7 +32,7 @@ export class WakeLockService {
     return wakeLockRequest;
   }
 
-  release(wakeLockRequest) {
+  release(wakeLockRequest: WakelockRequest) {
     const idx = this.wakeLockRequests.indexOf(wakeLockRequest);
     if (idx > -1) this.wakeLockRequests.splice(idx, 1);
 
@@ -38,7 +42,9 @@ export class WakeLockService {
   private async requestWakeLock() {
     if (!this.wakeLock && this.isCapable) {
       try {
-        this.wakeLock = await (navigator as any).wakeLock.request("screen");
+        this.wakeLock = await navigator.wakeLock.request("screen");
+        if (!this.wakeLock) return;
+
         this.wakeLock.addEventListener("release", () => {
           this.wakeLock = null;
         });

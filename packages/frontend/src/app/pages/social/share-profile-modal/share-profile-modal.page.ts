@@ -17,19 +17,14 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
   styleUrls: ["share-profile-modal.page.scss"],
 })
 export class ShareProfileModalPage {
-  @Input() handle;
-  @Input() userId;
-  @Input() profile;
+  @Input() handle!: string;
+  @Input() userId!: string;
+  @Input() profile!: any;
 
-  profileUrl;
+  profileUrl?: string;
 
   constructor(
-    private navCtrl: NavController,
     private translate: TranslateService,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private utilService: UtilService,
-    private loadingService: LoadingService,
     private userService: UserService,
     private modalCtrl: ModalController
   ) {
@@ -40,6 +35,10 @@ export class ShareProfileModalPage {
         this.profileUrl = this.getProfileUrl();
       }
     });
+  }
+
+  ngOnInit() {
+    this.handle = '';
   }
 
   async loadFromHandle(handle: string) {

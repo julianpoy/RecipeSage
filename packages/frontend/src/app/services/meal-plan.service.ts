@@ -58,17 +58,15 @@ export interface MealPlanItem {
 })
 export class MealPlanService {
   constructor(
-    private utilService: UtilService,
     private httpService: HttpService,
-    private httpErrorHandlerService: HttpErrorHandlerService
   ) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MealPlans>(
       "mealPlans",
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -77,8 +75,8 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<MealPlan>(
       `mealPlans/${mealPlanId}`,
       "GET",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -94,7 +92,7 @@ export class MealPlanService {
       `mealPlans`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -113,7 +111,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -129,7 +127,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}`,
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -151,7 +149,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}/items/bulk`,
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -172,7 +170,7 @@ export class MealPlanService {
       `mealPlans/${mealPlanId}/items/bulk`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
@@ -187,7 +185,7 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
       "DELETE",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -203,7 +201,7 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items`,
       "DELETE",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -213,8 +211,8 @@ export class MealPlanService {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
       "DELETE",
-      null,
-      null,
+      undefined,
+      undefined,
       errorHandlers
     );
   }

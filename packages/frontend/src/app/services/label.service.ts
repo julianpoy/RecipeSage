@@ -35,7 +35,7 @@ export class LabelService {
     return this.httpService.requestWithWrapper<Label[]>(
       `labels`,
       "GET",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -72,7 +72,7 @@ export class LabelService {
       `labels/${labelId}`,
       "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -86,7 +86,7 @@ export class LabelService {
       `labels`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -106,7 +106,7 @@ export class LabelService {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels`,
       "DELETE",
-      null,
+      undefined,
       params,
       errorHandlers
     );
@@ -127,7 +127,7 @@ export class LabelService {
       `labels/delete-bulk`,
       "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
 
@@ -146,7 +146,7 @@ export class LabelService {
     const response = await this.httpService.requestWithWrapper<void>(
       `labels/merge`,
       "POST",
-      null,
+      undefined,
       params,
       errorHandlers
     );

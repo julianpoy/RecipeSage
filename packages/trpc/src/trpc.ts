@@ -1,10 +1,12 @@
-import { initTRPC } from "@trpc/server";
+import { inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { createContext } from "./context";
 
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
-const t = initTRPC.create();
+type Context = inferAsyncReturnType<typeof createContext>;
+const t = initTRPC.context<Context>().create();
 
 /**
  * Export reusable router and procedure helpers

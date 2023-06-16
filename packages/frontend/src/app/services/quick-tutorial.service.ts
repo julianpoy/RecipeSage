@@ -55,7 +55,7 @@ export class QuickTutorialService {
     private translate: TranslateService
   ) {}
 
-  private fetchSeenTutorials(): any[] {
+  private fetchSeenTutorials(): QuickTutorialOptions[] {
     try {
       const seenTutorials = localStorage.getItem(TUTORIAL_LOCALSTORAGE_KEY);
       if (!seenTutorials) return [];
@@ -65,7 +65,7 @@ export class QuickTutorialService {
     }
   }
 
-  private saveSeenTutorials(seenTutorials) {
+  private saveSeenTutorials(seenTutorials: QuickTutorialOptions[]) {
     try {
       const serialized = JSON.stringify(seenTutorials);
       localStorage.setItem(TUTORIAL_LOCALSTORAGE_KEY, serialized);
