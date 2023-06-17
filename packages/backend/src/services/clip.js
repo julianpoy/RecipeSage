@@ -189,7 +189,7 @@ const clip = async (url) => {
   });
 
   return results;
-}
+};
 
 module.exports = clip;
 

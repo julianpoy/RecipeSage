@@ -1,9 +1,6 @@
 import { program } from 'commander';
-import * as fs from 'fs';
 
 import clip from './services/clip';
-import * as SQ from 'sequelize';
-const Op = SQ.Op;
 
 import * as Models from './models';
 import { writeImageURL } from './services/storage/image';
@@ -22,12 +19,12 @@ const options = {
 };
 
 if (!options.email) {
-  throw new Error("Must provide email");
+  throw new Error('Must provide email');
 }
 
 const failedUrls: string[] = [];
 
-var file = "";
+let file = '';
 
 const run = async () => {
   const urls = file
@@ -40,7 +37,7 @@ const run = async () => {
   const user = await User.findOne({
     email: options.email,
   });
-  if (!user) throw new Error("User with that email not found");
+  if (!user) throw new Error('User with that email not found');
 
   for (const url of urls) {
     console.log(`Importing ${url}`);
@@ -87,9 +84,9 @@ const run = async () => {
     }
   }
 
-  console.log("==== Failed URLs ====");
+  console.log('==== Failed URLs ====');
   console.log(failedUrls.join('\n') || 'None');
-}
+};
 
 const stdin = process.openStdin();
 
