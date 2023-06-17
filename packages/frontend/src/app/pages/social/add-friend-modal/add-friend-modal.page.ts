@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   NavController,
   ModalController,
@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { RouteMap } from "~/services/util.service";
 
 @Component({
   selector: "page-add-friend-modal",
@@ -17,14 +17,13 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
   styleUrls: ["add-friend-modal.page.scss"],
 })
 export class AddFriendModalPage {
-  recipientId;
+  recipientId?: string;
 
   constructor(
     private navCtrl: NavController,
     private translate: TranslateService,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private utilService: UtilService,
     private loadingService: LoadingService,
     private userService: UserService,
     private modalCtrl: ModalController
@@ -34,7 +33,7 @@ export class AddFriendModalPage {
     this.modalCtrl.dismiss();
   }
 
-  onSelectedUserChange(event) {
+  onSelectedUserChange(event: any) {
     this.recipientId = event ? event.id : null;
   }
 
@@ -63,6 +62,8 @@ export class AddFriendModalPage {
   }
 
   async send() {
+    if (!this.recipientId) return;
+
     const loading = this.loadingService.start();
 
     const profile = await this.userService.getProfileByUserId(
@@ -91,6 +92,8 @@ export class AddFriendModalPage {
   }
 
   async open() {
+    if (!this.recipientId) return;
+
     const loading = this.loadingService.start();
 
     const profile = await this.userService.getProfileByUserId(

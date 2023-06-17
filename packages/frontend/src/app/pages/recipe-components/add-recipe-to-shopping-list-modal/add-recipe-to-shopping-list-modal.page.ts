@@ -7,10 +7,10 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { ShoppingListService } from "~/services/shopping-list.service";
+import { ShoppingLists, ShoppingListService } from "~/services/shopping-list.service";
 import { LoadingService } from "~/services/loading.service";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService } from "~/services/util.service";
 import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
 
 @Component({
@@ -19,12 +19,14 @@ import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-s
   styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],
 })
 export class AddRecipeToShoppingListModalPage {
-  @Input() recipes: any[];
-  @Input() scale: any = 1;
-  selectedIngredientsByRecipe = {};
+  @Input({
+    required: true,
+  }) recipes!: any[];
+  @Input() scale = 1;
+  selectedIngredientsByRecipe: { [key: string]: ParsedIngredient[] } = {};
   selectedIngredients: ParsedIngredient[] = [];
 
-  shoppingLists: any;
+  shoppingLists?: ShoppingLists;
 
   destinationShoppingList: any;
 
@@ -55,6 +57,8 @@ export class AddRecipeToShoppingListModalPage {
   }
 
   selectLastUsedShoppingList() {
+    if (!this.shoppingLists) return;
+
     const lastUsedShoppingListId = localStorage.getItem(
       "lastUsedShoppingListId"
     );
@@ -82,12 +86,12 @@ export class AddRecipeToShoppingListModalPage {
     this.selectLastUsedShoppingList();
   }
 
-  selectedIngredientsChange(recipeId, selectedIngredients) {
+  selectedIngredientsChange(recipeId: string, selectedIngredients: ParsedIngredient[]) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
     this.selectedIngredients = Object.values(
       this.selectedIngredientsByRecipe
-    ).flat() as ParsedIngredient[];
+    ).flat();
   }
 
   isFormValid() {
@@ -139,7 +143,7 @@ export class AddRecipeToShoppingListModalPage {
 
       // Check for new lists
       this.loadLists().then(async () => {
-        if (this.shoppingLists.length === 1) {
+        if (this.shoppingLists?.length === 1) {
           this.destinationShoppingList = this.shoppingLists[0];
         } else {
           (

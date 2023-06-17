@@ -4,13 +4,13 @@ import { HttpService } from "./http.service";
 import { EventService } from "./event.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 
-interface ShoppingListCollaborator {
+export interface ShoppingListCollaborator {
   id: string;
   name: string;
   email: string;
 }
 
-type ShoppingLists = {
+export type ShoppingLists = {
   id: string;
   title: string;
   createdAt: string;
@@ -21,7 +21,7 @@ type ShoppingLists = {
   owner: ShoppingListCollaborator;
 }[];
 
-interface ShoppingList {
+export interface ShoppingList {
   id: string;
   title: string;
   createdAt: string;
@@ -32,7 +32,7 @@ interface ShoppingList {
   items: ShoppingListItem[];
 }
 
-interface ShoppingListItem {
+export interface ShoppingListItem {
   id: string;
   title: string;
   completed: boolean;

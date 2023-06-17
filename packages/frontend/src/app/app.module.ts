@@ -102,7 +102,6 @@ export class SentryErrorHandler extends ErrorHandler {
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

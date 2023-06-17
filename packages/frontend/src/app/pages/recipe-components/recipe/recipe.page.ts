@@ -18,7 +18,7 @@ import {
   ParsedNote,
   RecipeFolderName,
 } from "~/services/recipe.service";
-import { LabelService } from "~/services/label.service";
+import { Label, LabelService } from "~/services/label.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
@@ -54,9 +54,9 @@ export class RecipePage {
 
   recipe: Recipe;
   recipeId: string;
-  ingredients: ParsedIngredient[];
-  instructions: ParsedInstruction[];
-  notes: ParsedNote[];
+  ingredients?: ParsedIngredient[];
+  instructions?: ParsedInstruction[];
+  notes?: ParsedNote[];
 
   scale = 1;
 
@@ -68,7 +68,7 @@ export class RecipePage {
 
   ratingVisual = new Array<string>(5).fill("star-outline");
 
-  isLoggedIn: boolean;
+  isLoggedIn: boolean = !!localStorage.getItem("token");
 
   constructor(
     public navCtrl: NavController,
@@ -90,7 +90,12 @@ export class RecipePage {
   ) {
     this.updateIsLoggedIn();
 
-    this.recipeId = this.route.snapshot.paramMap.get("recipeId");
+    const recipeId = this.route.snapshot.paramMap.get("recipeId");
+    if (!recipeId) {
+      this.navCtrl.navigateBack(this.defaultBackHref);
+      throw new Error('No recipeId was provided');
+    }
+    this.recipeId = recipeId;
     this.recipe = {} as Recipe;
 
     this.scale =
@@ -124,7 +129,7 @@ export class RecipePage {
     this.releaseWakeLock();
   }
 
-  refresh(loader) {
+  refresh(loader: any) {
     this.loadAll().then(
       () => {
         loader.target.complete();
@@ -200,7 +205,7 @@ export class RecipePage {
       .fill("star-outline", this.recipe.rating, 5);
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event) {
     const popover = await this.popoverCtrl.create({
       component: RecipeDetailsPopoverPage,
       componentProps: {
@@ -251,7 +256,7 @@ export class RecipePage {
     }
   }
 
-  instructionClicked(event, instruction: ParsedInstruction, idx: number) {
+  instructionClicked(_: Event, instruction: ParsedInstruction, idx: number) {
     if (instruction.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
@@ -260,7 +265,7 @@ export class RecipePage {
     );
   }
 
-  ingredientClicked(event, ingredient: ParsedInstruction, idx: number) {
+  ingredientClicked(_: Event, ingredient: ParsedInstruction, idx: number) {
     if (ingredient.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(
@@ -420,7 +425,7 @@ export class RecipePage {
     this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.data.id)); // TODO: Check that this "refresh" works with new router
   }
 
-  toggleAutocomplete(show, event?) {
+  toggleAutocomplete(show: boolean, event?: any) {
     if (event) {
       if (
         event.relatedTarget &&
@@ -466,7 +471,7 @@ export class RecipePage {
     loading.dismiss();
   }
 
-  async deleteLabel(label) {
+  async deleteLabel(label: Label) {
     const header = await this.translate
       .get("pages.recipeDetails.deleteLabel.header")
       .toPromise();
@@ -499,7 +504,7 @@ export class RecipePage {
     alert.present();
   }
 
-  private async _deleteLabel(label) {
+  private async _deleteLabel(label: Label) {
     const loading = this.loadingService.start();
 
     await this.labelService.removeFromRecipe({
@@ -560,7 +565,7 @@ export class RecipePage {
     });
   }
 
-  prettyDateTime(datetime) {
+  prettyDateTime(datetime: Date | string | number) {
     if (!datetime) return "";
     return this.utilService.formatDate(datetime, { times: true });
   }

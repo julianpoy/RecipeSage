@@ -1,13 +1,10 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import {
-  NavController,
   ModalController,
-  ToastController,
 } from "@ionic/angular";
 
-import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { Recipe } from "../../../services/recipe.service";
+import { Label } from "../../../services/label.service";
 
 @Component({
   selector: "page-add-profile-item-modal",
@@ -25,15 +22,10 @@ export class AddProfileItemModalPage {
 
   itemTitle = "";
 
-  selectedRecipe;
-  selectedLabel;
+  selectedRecipe?: Recipe;
+  selectedLabel?: Label;
 
   constructor(
-    private navCtrl: NavController,
-    private toastCtrl: ToastController,
-    private utilService: UtilService,
-    private loadingService: LoadingService,
-    private userService: UserService,
     private modalCtrl: ModalController
   ) {}
 

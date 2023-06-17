@@ -13,7 +13,9 @@ import { CookingToolbarService } from "~/services/cooking-toolbar.service";
   styleUrls: ["recipe-details-popover.page.scss"],
 })
 export class RecipeDetailsPopoverPage {
-  recipeId;
+  @Input({
+    required: true
+  }) recipeId!: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;

@@ -1,18 +1,16 @@
 import { Injectable } from "@angular/core";
-import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import {
-  HttpErrorHandlerService,
   ErrorHandlers,
 } from "./http-error-handler.service";
 
-interface MealPlanCollaborator {
+export interface MealPlanCollaborator {
   id: string;
   name: string;
   email: string;
 }
 
-type MealPlans = {
+export type MealPlans = {
   id: string;
   title: string;
   createdAt: string;

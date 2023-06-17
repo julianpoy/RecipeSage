@@ -5,12 +5,11 @@ import {
   ModalController,
   AlertController,
 } from "@ionic/angular";
-import dayjs, { Dayjs } from "dayjs";
 
 import { LoadingService } from "~/services/loading.service";
 import { RecipeService } from "~/services/recipe.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { MealPlanService } from "~/services/meal-plan.service";
+import { UtilService } from "~/services/util.service";
+import { MealPlan, MealPlans, MealPlanService } from "~/services/meal-plan.service";
 
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";
@@ -23,13 +22,13 @@ import { TranslateService } from "@ngx-translate/core";
 export class AddRecipeToMealPlanModalPage {
   @Input() recipe: any;
 
-  mealPlans: any;
+  mealPlans?: MealPlans;
 
-  selectedMealPlan: any;
-  destinationMealPlan: any;
-  meal: string;
+  selectedMealPlan?: MealPlans[0];
+  destinationMealPlan?: MealPlan;
+  meal?: string;
 
-  @Input() reference: any;
+  @Input() reference?: string;
 
   selectedDays: number[] = [];
 
@@ -58,6 +57,8 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   selectLastUsedMealPlan() {
+    if (!this.mealPlans) return;
+
     const lastUsedMealPlanId = localStorage.getItem("lastUsedMealPlanId");
     const matchingPlans = this.mealPlans.filter(
       (mealPlan) => mealPlan.id === lastUsedMealPlanId
@@ -69,6 +70,8 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   saveLastUsedMealPlan() {
+    if (!this.selectedMealPlan) return;
+
     localStorage.setItem("lastUsedMealPlanId", this.selectedMealPlan.id);
   }
 
@@ -95,6 +98,8 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async save() {
+    if (!this.destinationMealPlan || !this.meal) return;
+
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
@@ -127,7 +132,7 @@ export class AddRecipeToMealPlanModalPage {
 
       // Check for new meal plans
       this.loadMealPlans().then(async () => {
-        if (this.mealPlans.length === 1) {
+        if (this.mealPlans?.length === 1) {
           this.selectedMealPlan = this.mealPlans[0];
           this.loadMealPlan(this.mealPlans[0].id);
         } else {

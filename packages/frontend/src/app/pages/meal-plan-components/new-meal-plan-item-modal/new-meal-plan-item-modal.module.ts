@@ -20,6 +20,5 @@ import { GlobalModule } from "~/global.module";
     SelectRecipeModule,
     SelectMealModule,
   ],
-  entryComponents: [NewMealPlanItemModalPage],
 })
 export class NewMealPlanItemModalPageModule {}

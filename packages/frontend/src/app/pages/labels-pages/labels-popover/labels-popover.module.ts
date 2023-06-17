@@ -16,6 +16,5 @@ import { GlobalModule } from "~/global.module";
     ReactiveFormsModule,
     GlobalModule,
   ],
-  entryComponents: [LabelsPopoverPage],
 })
 export class LabelsPopoverPageModule {}

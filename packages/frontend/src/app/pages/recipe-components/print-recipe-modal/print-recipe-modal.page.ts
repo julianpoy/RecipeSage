@@ -19,8 +19,12 @@ export interface PrintOption {
   styleUrls: ["print-recipe-modal.page.scss"],
 })
 export class PrintRecipeModalPage {
-  @Input() recipe: Recipe;
-  @Input() scale: number;
+  @Input({
+    required: true
+  }) recipe!: Recipe;
+  @Input({
+    required: true
+  }) scale!: number;
 
   selectedTemplate = -1;
   templates: PrintOption[] = [];

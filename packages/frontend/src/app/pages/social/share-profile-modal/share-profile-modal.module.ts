@@ -17,6 +17,5 @@ import { CopyWithWebshareModule } from "~/components/copy-with-webshare/copy-wit
     GlobalModule,
     CopyWithWebshareModule,
   ],
-  entryComponents: [ShareProfileModalPage],
 })
 export class ShareProfileModalPageModule {}

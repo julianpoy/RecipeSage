@@ -22,6 +22,5 @@ import { GlobalModule } from "~/global.module";
     SelectMealModule,
     NewMealPlanModalPageModule,
   ],
-  entryComponents: [AddRecipeToMealPlanModalPage],
 })
 export class AddRecipeToMealPlanModalPageModule {}

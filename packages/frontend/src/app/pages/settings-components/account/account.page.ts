@@ -5,7 +5,7 @@ import {
   NavController,
 } from "@ionic/angular";
 
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
@@ -72,12 +72,12 @@ export class AccountPage {
         ? this.utilService.formatDate(stats.data.lastLogin, { now: true })
         : this.stats.createdAt;
 
-      Object.keys(this.capabilitiesService.capabilities).map(
-        (capabilityName) => {
-          this.capabilitySubscriptions[capabilityName] = {
-            enabled: this.capabilitiesService.capabilities[capabilityName],
-            expired: this.getExpiryForCapability(capabilityName).expired,
-            expires: this.getExpiryForCapability(capabilityName).expires,
+      Object.entries(this.capabilitiesService.capabilities).map(
+        ([name, enabled]) => {
+          this.capabilitySubscriptions[name] = {
+            enabled,
+            expired: this.getExpiryForCapability(name).expired,
+            expires: this.getExpiryForCapability(name).expires,
           };
         }
       );
@@ -89,10 +89,10 @@ export class AccountPage {
 
     try {
       const matchingSubscriptions = this.account.subscriptions
-        .filter((subscription) =>
+        .filter((subscription: any) =>
           subscription.capabilities.includes(capabilityName)
         )
-        .sort((a, b) => {
+        .sort((a: any, b: any) => {
           if (a.expires == null) return -1;
           if (b.expires == null) return 1;
           return new Date(a.expires) < new Date(b.expires);

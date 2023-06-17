@@ -8,6 +8,5 @@ import { GlobalModule } from "~/global.module";
 @NgModule({
   declarations: [ShareShoppingListModalPage],
   imports: [CommonModule, IonicModule, GlobalModule],
-  entryComponents: [ShareShoppingListModalPage],
 })
 export class ShareShoppingListModalPageModule {}

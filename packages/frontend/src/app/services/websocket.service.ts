@@ -29,7 +29,7 @@ export class WebsocketService {
   }
 
   // Listeners
-  register(eventName: string, cb: (payload: Record<string, string>) => void, ctx: any) {
+  register(eventName: string, cb: (payload: Record<string, any>) => void, ctx: any) {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
 
     this.listeners[eventName].push({
@@ -39,7 +39,7 @@ export class WebsocketService {
   }
 
   // Outgoing
-  send(msg: Record<string, string>) {
+  send(msg: Record<string, any>) {
     this.connection.send(JSON.stringify(msg));
   }
 
@@ -89,11 +89,11 @@ export class WebsocketService {
     }, RECONNECT_TIMEOUT_WAIT);
   }
 
-  private handleMessage(payload: { type: string, data?: Record<string, string> }) {
+  private handleMessage(payload: { type: string, data?: Record<string, any> }) {
     this.broadcast(payload.type, payload.data);
   }
 
-  private broadcast(eventName: string, msg?: Record<string, string>) {
+  private broadcast(eventName: string, msg?: Record<string, any>) {
     const queue = this.listeners[eventName];
 
     if (!queue) return;

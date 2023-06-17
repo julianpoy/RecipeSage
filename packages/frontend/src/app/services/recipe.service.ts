@@ -188,6 +188,7 @@ export class RecipeService {
   async update(
     payload: Partial<BaseRecipe> & {
       id: string;
+      imageIds?: string[];
     },
     errorHandlers?: ErrorHandlers
   ) {

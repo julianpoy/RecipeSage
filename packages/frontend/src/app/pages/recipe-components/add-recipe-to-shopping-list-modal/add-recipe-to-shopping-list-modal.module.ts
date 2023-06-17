@@ -20,6 +20,5 @@ import { GlobalModule } from "~/global.module";
     SelectIngredientsModule,
     NewShoppingListModalPageModule,
   ],
-  entryComponents: [AddRecipeToShoppingListModalPage],
 })
 export class AddRecipeToShoppingListModalPageModule {}

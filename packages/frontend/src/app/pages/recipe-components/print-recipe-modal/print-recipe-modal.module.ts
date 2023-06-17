@@ -10,6 +10,5 @@ import { GlobalModule } from "~/global.module";
 @NgModule({
   declarations: [PrintRecipeModalPage],
   imports: [GlobalModule, CommonModule, IonicModule, RecipePreviewModule],
-  entryComponents: [PrintRecipeModalPage],
 })
 export class PrintRecipeModalPageModule {}

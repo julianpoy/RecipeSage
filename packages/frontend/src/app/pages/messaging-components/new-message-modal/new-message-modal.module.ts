@@ -18,6 +18,5 @@ import { GlobalModule } from "~/global.module";
     ReactiveFormsModule,
     SelectUserModule,
   ],
-  entryComponents: [NewMessageModalPage],
 })
 export class NewMessageModalPageModule {}

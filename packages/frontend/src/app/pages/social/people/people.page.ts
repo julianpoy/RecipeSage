@@ -9,7 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { UserService } from "~/services/user.service";
+import { User, UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
@@ -24,9 +24,9 @@ export class PeoplePage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   isSelfHost = IS_SELFHOST;
 
-  friendships;
-  accountInfo;
-  myProfile;
+  friendships?: any;
+  accountInfo?: User;
+  myProfile?: UserProfile;
 
   constructor(
     public navCtrl: NavController,
@@ -105,17 +105,17 @@ export class PeoplePage {
     });
   }
 
-  async addFriend(friendId) {
+  async addFriend(friendId: string) {
     await this.userService.addFriend(friendId);
-    await this.load();
+    this.load();
   }
 
-  async deleteFriend(friendId) {
+  async deleteFriend(friendId: string) {
     await this.userService.deleteFriend(friendId);
-    await this.load();
+    this.load();
   }
 
-  async openProfile(handle) {
+  async openProfile(handle: string) {
     this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${handle}`));
   }
 
@@ -123,7 +123,7 @@ export class PeoplePage {
     this.navCtrl.navigateForward(RouteMap.MyProfilePage.getPath());
   }
 
-  async refresh(refresher) {
+  async refresh(refresher: any) {
     refresher.target.complete();
     this.load();
   }

@@ -10,7 +10,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
 
-import { UserService } from "~/services/user.service";
+import { ProfileItem, UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
@@ -29,9 +29,9 @@ export class ProfilePage {
   isSelfHost = IS_SELFHOST;
 
   handle: string;
-  profile;
+  profile?: UserProfile;
 
-  myProfile;
+  myProfile?: UserProfile;
 
   constructor(
     public navCtrl: NavController,
@@ -45,7 +45,14 @@ export class ProfilePage {
     public recipeService: RecipeService,
     public userService: UserService
   ) {
-    this.handle = this.route.snapshot.paramMap.get("handle").substring(1);
+    const handle = this.route.snapshot.paramMap.get("handle")?.substring(1);
+
+    if (!handle) {
+      this.navCtrl.navigateRoot(RouteMap.SocialPage.getPath());
+      throw new Error('No handle specified');
+    }
+
+    this.handle = handle;
   }
 
   async profileDisabledError() {
@@ -96,6 +103,8 @@ export class ProfilePage {
   }
 
   async openImageViewer() {
+    if (!this.profile) return;
+
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
@@ -105,7 +114,7 @@ export class ProfilePage {
     imageViewerModal.present();
   }
 
-  open(item) {
+  open(item: any) {
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", { userId: item.userId })
@@ -123,6 +132,8 @@ export class ProfilePage {
   }
 
   async addFriend() {
+    if (!this.profile) return;
+
     const loading = this.loadingService.start();
 
     await this.userService.addFriend(this.profile.id);
@@ -150,6 +161,8 @@ export class ProfilePage {
   }
 
   async deleteFriend() {
+    if (!this.profile) return;
+
     const loading = this.loadingService.start();
 
     await this.userService.deleteFriend(this.profile.id);
@@ -177,6 +190,8 @@ export class ProfilePage {
   }
 
   async shareProfile() {
+    if (!this.profile) return;
+
     const modal = await this.modalCtrl.create({
       component: ShareProfileModalPage,
       componentProps: {
@@ -187,6 +202,8 @@ export class ProfilePage {
   }
 
   async sendMessage() {
+    if (!this.profile) return;
+
     const modal = await this.modalCtrl.create({
       component: NewMessageModalPage,
       componentProps: {
@@ -235,7 +252,7 @@ export class ProfilePage {
     await alert.onDidDismiss();
   }
 
-  async refresh(refresher) {
+  async refresh(refresher: any) {
     refresher.target.complete();
     this.load();
   }

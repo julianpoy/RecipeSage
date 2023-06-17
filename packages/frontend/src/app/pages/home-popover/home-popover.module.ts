@@ -17,6 +17,5 @@ import { GlobalModule } from "~/global.module";
     ReactiveFormsModule,
     ResettableSelectPopoverPageModule,
   ],
-  entryComponents: [HomePopoverPage],
 })
 export class HomePopoverPageModule {}

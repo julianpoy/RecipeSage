@@ -17,6 +17,5 @@ import { GlobalModule } from "~/global.module";
     SelectCollaboratorsModule,
     GlobalModule,
   ],
-  entryComponents: [NewShoppingListModalPage],
 })
 export class NewShoppingListModalPageModule {}

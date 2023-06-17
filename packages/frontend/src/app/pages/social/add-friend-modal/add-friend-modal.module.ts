@@ -17,6 +17,5 @@ import { GlobalModule } from "~/global.module";
     SelectUserModule,
     GlobalModule,
   ],
-  entryComponents: [AddFriendModalPage],
 })
 export class AddFriendModalPageModule {}

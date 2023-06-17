@@ -12,6 +12,6 @@ export const getQueryParams = () => {
   );
 };
 
-export const getQueryParam = (paramName: string) => {
+export const getQueryParam = (paramName: string): string | undefined => {
   return getQueryParams()[paramName];
 };

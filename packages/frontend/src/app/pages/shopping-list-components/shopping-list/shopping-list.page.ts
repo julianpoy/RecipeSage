@@ -105,7 +105,7 @@ export class ShoppingListPage {
     );
   }
 
-  refresh(loader) {
+  refresh(loader: any) {
     this.loadList().then(
       () => {
         loader.target.complete();

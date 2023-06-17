@@ -9,6 +9,5 @@ import { GlobalModule } from "~/global.module";
   declarations: [ImageViewerComponent],
   imports: [CommonModule, IonicModule, GlobalModule],
   exports: [ImageViewerComponent],
-  entryComponents: [ImageViewerComponent],
 })
 export class ImageViewerModule {}

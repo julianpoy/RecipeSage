@@ -15,9 +15,13 @@ interface Option {
 export class ResettableSelectPopoverPage {
   resetToggled = false; // Stores current state of reset all checkbox
 
-  @Input() options: Option[];
+  @Input({
+    required: true
+  }) options!: Option[];
 
-  @Input() nullMessage: string;
+  @Input({
+    required: true
+  }) nullMessage!: string;
 
   @Output() selectedValueChange = new EventEmitter();
 

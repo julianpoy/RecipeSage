@@ -20,6 +20,5 @@ import { GlobalModule } from "~/global.module";
     SelectIngredientsModule,
     GlobalModule,
   ],
-  entryComponents: [NewShoppingListItemModalPage],
 })
 export class NewShoppingListItemModalPageModule {}

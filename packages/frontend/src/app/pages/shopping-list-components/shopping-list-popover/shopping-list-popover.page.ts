@@ -55,7 +55,7 @@ export class ShoppingListPopoverPage {
         groupSimilar: this.preferences[ShoppingListPreferenceKey.GroupSimilar],
         groupCategories:
           this.preferences[ShoppingListPreferenceKey.GroupCategories],
-        sortBy: this.preferencesService[ShoppingListPreferenceKey.SortBy],
+        sortBy: this.preferences[ShoppingListPreferenceKey.SortBy],
       })
     );
   }
@@ -96,7 +96,7 @@ export class ShoppingListPopoverPage {
 
     const loading = this.loadingService.start();
 
-    const itemIds = this.shoppingList.items.map((el) => el.id);
+    const itemIds = this.shoppingList.items.map((el: any) => el.id);
 
     const response = await this.shoppingListService.deleteItems(
       this.shoppingListId,

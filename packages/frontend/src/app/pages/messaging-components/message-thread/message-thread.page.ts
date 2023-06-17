@@ -3,12 +3,13 @@ import { ActivatedRoute } from "@angular/router";
 import { NavController, ToastController } from "@ionic/angular";
 
 import { linkifyStr } from "~/utils/linkify";
-import { MessagingService } from "~/services/messaging.service";
+import { Message, MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
+import { Recipe } from "../../../services/recipe.service";
 
 @Component({
   selector: "page-message-thread",
@@ -20,8 +21,12 @@ export class MessageThreadPage {
 
   @ViewChild("content", { static: true }) content: any;
 
-  messages: any = [];
-  messagesById: any = {};
+  messages: (Message & {
+    formattedDate?: string,
+    deservesDateDiff?: boolean,
+    dateDiff?: string
+  })[] = [];
+  messagesById: { [key: string]: Message } = {};
 
   otherUserId = "";
   pendingMessage = "";
@@ -44,7 +49,12 @@ export class MessageThreadPage {
     public utilService: UtilService,
     public messagingService: MessagingService
   ) {
-    this.otherUserId = this.route.snapshot.paramMap.get("otherUserId");
+    const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
+    if (!otherUserId) {
+      this.navCtrl.navigateBack(this.defaultBackHref);
+      throw new Error('OtherUserId not provided');
+    }
+    this.otherUserId = otherUserId;
 
     this.websocketService.register(
       "messages:new",
@@ -85,7 +95,7 @@ export class MessageThreadPage {
     } else {
       const loading = this.loadingService.start();
 
-      let messageArea;
+      let messageArea: any;
       try {
         messageArea = this.content.getNativeElement().children[1].children[0];
       } catch (e) {}
@@ -117,7 +127,7 @@ export class MessageThreadPage {
     });
   }
 
-  refresh(refresher) {
+  refresh(refresher: any) {
     this.loadMessages().then(
       () => {
         refresher.target.complete();
@@ -148,7 +158,7 @@ export class MessageThreadPage {
     };
   }
 
-  trackByFn(index, item) {
+  trackByFn(_: number, item: { id: string }) {
     return item.id;
   }
 
@@ -221,12 +231,12 @@ export class MessageThreadPage {
     this.loadMessages();
   }
 
-  openRecipe(recipe) {
+  openRecipe(recipe: Recipe) {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
-  onMessageKeyUp(event) {
-    if (!(event.keyCode === 10 || event.keyCode === 13)) return;
+  onMessageKeyUp(event: KeyboardEvent) {
+    if (!(event.key === '10' || event.key === '13')) return;
 
     if (event.ctrlKey || event.shiftKey || event.altKey) {
       this.pendingMessage += "\n";
@@ -235,7 +245,7 @@ export class MessageThreadPage {
     }
   }
 
-  deservesDateDiff(previous, next) {
+  deservesDateDiff(previous: { createdAt: string }, next: { createdAt: string }) {
     if (!previous || !next) return;
 
     const p = new Date(previous.createdAt);
@@ -244,18 +254,18 @@ export class MessageThreadPage {
     return p.getDay() !== n.getDay();
   }
 
-  formatMessageDividerDate(plainTextDate) {
+  formatMessageDividerDate(plainTextDate: Date | string | number) {
     return this.utilService.formatDate(plainTextDate);
   }
 
-  formatMessageDate(plainTextDate) {
+  formatMessageDate(plainTextDate: Date | string | number) {
     return this.utilService.formatDate(plainTextDate, {
       now: true,
       times: true,
     });
   }
 
-  setSelectedChat(idx) {
+  setSelectedChat(idx: number) {
     if (idx === this.selectedChatIdx) {
       this.selectedChatIdx = -1;
     } else {
@@ -263,7 +273,7 @@ export class MessageThreadPage {
     }
   }
 
-  parseMessage(message) {
+  parseMessage(message: string) {
     return linkifyStr(message);
   }
 }

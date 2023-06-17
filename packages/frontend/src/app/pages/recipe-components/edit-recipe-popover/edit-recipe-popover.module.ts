@@ -16,6 +16,5 @@ import { GlobalModule } from "~/global.module";
     FormsModule,
     ReactiveFormsModule,
   ],
-  entryComponents: [EditRecipePopoverPage],
 })
 export class EditRecipePopoverPageModule {}

@@ -7,7 +7,7 @@ import {
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shopping-list-modal.page";
 
@@ -57,7 +57,7 @@ export class ShoppingListsPage {
     this.initialLoadComplete = true;
   }
 
-  async refresh(refresher) {
+  async refresh(refresher: any) {
     await this.loadLists();
     refresher.target.complete();
   }

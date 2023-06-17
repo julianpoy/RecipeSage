@@ -6,9 +6,9 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from "~/services/user.service";
+import { User, UserService } from "~/services/user.service";
 import { MessagingService } from "~/services/messaging.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 @Component({
   selector: "page-new-message-modal",
@@ -16,9 +16,9 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
   styleUrls: ["new-message-modal.page.scss"],
 })
 export class NewMessageModalPage {
-  @Input() initialRecipientId: string;
-  recipientId = "";
-  recipientInfo;
+  @Input() initialRecipientId?: string;
+  recipientId?: string;
+  recipientInfo?: User;
 
   message = "";
 
@@ -39,14 +39,19 @@ export class NewMessageModalPage {
   }
 
   async setSelectedUser(recipientId: string) {
-    this.recipientInfo = await this.userService.getUserById(recipientId);
+    const response = await this.userService.getUserById(recipientId);
+    if (!response.success) return;
+    
+    this.recipientInfo = response.data;
   }
 
-  onSelectedUserChange(event) {
+  onSelectedUserChange(event: any) {
     this.recipientId = event ? event.id : null;
   }
 
   async send() {
+    if (!this.recipientId) return;
+
     const defaultMessage = await this.translate
       .get("pages.newMessageModal.defaultMessage")
       .toPromise();

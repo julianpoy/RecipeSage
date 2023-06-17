@@ -5,11 +5,11 @@ import {
   ModalController,
 } from "@ionic/angular";
 
-import { MessagingService } from "~/services/messaging.service";
+import { MessageThread, MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMessageModalPage } from "~/pages/messaging-components/new-message-modal/new-message-modal.page";
 
 @Component({
@@ -36,7 +36,7 @@ export class MessagesPage {
 
     this.websocketService.register(
       "messages:new",
-      (payload) => {
+      () => {
         this.loadThreads();
       },
       this
@@ -51,7 +51,7 @@ export class MessagesPage {
     });
   }
 
-  refresh(refresher) {
+  refresh(refresher: any) {
     this.loadThreads().then(
       () => {
         refresher.target.complete();
@@ -76,7 +76,7 @@ export class MessagesPage {
     });
   }
 
-  openThread(thread) {
+  openThread(thread: MessageThread) {
     this.navCtrl.navigateForward(
       RouteMap.MessageThreadPage.getPath(thread.otherUser.id)
     );
@@ -97,7 +97,7 @@ export class MessagesPage {
     return this.messagingService.isNotificationsEnabled();
   }
 
-  prettyDate(date) {
+  prettyDate(date: Date | string | number) {
     return this.utilService.formatDate(date, { now: true });
   }
 }

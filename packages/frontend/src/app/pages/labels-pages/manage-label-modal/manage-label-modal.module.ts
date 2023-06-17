@@ -9,6 +9,5 @@ import { GlobalModule } from "~/global.module";
 @NgModule({
   declarations: [ManageLabelModalPage],
   imports: [CommonModule, IonicModule, GlobalModule],
-  entryComponents: [ManageLabelModalPage],
 })
 export class ManageLabelModalPageModule {}

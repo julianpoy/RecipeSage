@@ -1,6 +1,11 @@
 import { Injectable } from "@angular/core";
 
 import { LoadingBarService } from "@ngx-loading-bar/core";
+import { LoadingBarState } from "@ngx-loading-bar/core/loading-bar.state";
+
+export interface LoadingRef {
+  dismiss: () => void
+}
 
 @Injectable({
   providedIn: "root",
@@ -8,15 +13,19 @@ import { LoadingBarService } from "@ngx-loading-bar/core";
 export class LoadingService {
   REQUEST_COMPLETE_DELAY = 150;
 
-  constructor(private loadingBar: LoadingBarService) {}
+  loadingBarRef: LoadingBarState;
 
-  start() {
-    this.loadingBar.start();
+  constructor(private loadingBar: LoadingBarService) {
+    this.loadingBarRef = this.loadingBar.useRef();
+  }
+
+  start(): LoadingRef {
+    this.loadingBarRef.start();
 
     return {
       dismiss: () => {
         setTimeout(() => {
-          this.loadingBar.complete();
+          this.loadingBarRef.complete();
         }, this.REQUEST_COMPLETE_DELAY);
       },
     };

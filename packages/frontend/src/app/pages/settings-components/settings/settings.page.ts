@@ -21,11 +21,9 @@ import {
   QuickTutorialService,
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
 import { OfflineCacheService } from "~/services/offline-cache.service";
 
 const APP_THEME_LOCALSTORAGE_KEY = "theme";
-const LANGUAGE_LOCALSTORAGE_KEY = "language";
 
 @Component({
   selector: "page-settings",
@@ -45,7 +43,7 @@ export class SettingsPage {
 
   language: SupportedLanguages | "navigator" =
     this.preferences[GlobalPreferenceKey.Language] || "navigator";
-  languageOptions = [];
+  languageOptions: [SupportedLanguages, string][] = [];
   languageSelectInterfaceOptions = {};
 
   constructor(
@@ -67,14 +65,14 @@ export class SettingsPage {
     }
 
     try {
-      const locale = new (Intl as any).DisplayNames(
+      const locale = new Intl.DisplayNames(
         window.navigator.languages,
         { type: "language" }
       );
 
       this.languageOptions = Object.values(SupportedLanguages).map((code) => [
         code,
-        locale.of(code),
+        locale.of(code) || code,
       ]);
     } catch (e) {
       console.error("Intl not supported");

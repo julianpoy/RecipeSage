@@ -19,6 +19,5 @@ import { GlobalModule } from "~/global.module";
     SelectLabelModule,
     GlobalModule,
   ],
-  entryComponents: [AddProfileItemModalPage],
 })
 export class AddProfileItemModalModule {}

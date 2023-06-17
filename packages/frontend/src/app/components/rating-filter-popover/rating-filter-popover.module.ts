@@ -17,6 +17,5 @@ import { RatingModule } from "../rating/rating.module";
     GlobalModule,
     RatingModule,
   ],
-  entryComponents: [RatingFilterPopoverComponent],
 })
 export class RatingFilterPopoverModule {}

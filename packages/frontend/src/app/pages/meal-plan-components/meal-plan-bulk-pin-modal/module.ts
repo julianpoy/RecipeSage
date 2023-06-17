@@ -16,6 +16,5 @@ import { GlobalModule } from "~/global.module";
     FormsModule,
     ReactiveFormsModule,
   ],
-  entryComponents: [MealPlanBulkPinModalPage],
 })
 export class MealPlanBulkPinModalPageModule {}

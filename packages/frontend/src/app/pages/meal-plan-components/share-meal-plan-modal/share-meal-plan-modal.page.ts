@@ -1,5 +1,4 @@
 import { MealPlanService } from "~/services/meal-plan.service";
-import { UtilService } from "~/services/util.service";
 import { Component, Input } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
@@ -9,13 +8,14 @@ import { ModalController } from "@ionic/angular";
   styleUrls: ["share-meal-plan-modal.page.scss"],
 })
 export class ShareMealPlanModalPage {
-  @Input() mealPlanId: string;
+  @Input({
+    required: true
+  }) mealPlanId!: string;
 
   icalURL = "";
 
   constructor(
     private modalCtrl: ModalController,
-    private utilService: UtilService,
     private mealPlanService: MealPlanService
   ) {}
 

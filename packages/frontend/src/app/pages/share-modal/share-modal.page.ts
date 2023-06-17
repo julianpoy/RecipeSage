@@ -6,14 +6,13 @@ import {
 } from "@ionic/angular";
 
 import { MessagingService } from "~/services/messaging.service";
-import { UserService } from "~/services/user.service";
+import { User, UserService } from "~/services/user.service";
 import { RecipeService, Recipe } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import {
   UtilService,
   RecipeTemplateModifiers,
   RouteMap,
-  AuthType,
 } from "~/services/util.service";
 import { SafeResourceUrl } from "@angular/platform-browser";
 
@@ -23,16 +22,18 @@ import { SafeResourceUrl } from "@angular/platform-browser";
   styleUrls: ["share-modal.page.scss"],
 })
 export class ShareModalPage {
-  @Input() recipe: Recipe;
+  @Input({
+    required: true
+  }) recipe!: Recipe;
 
-  selectedUser: any;
-  recipientId: any;
+  selectedUser?: User;
+  recipientId?: string;
 
   threads: any = [];
 
   shareMethod = "account";
 
-  recipeURL: string;
+  recipeURL?: string;
 
   enableJSONLD = true;
   embedHeight = 800;
@@ -45,9 +46,9 @@ export class ShareModalPage {
     hideSourceURL: false,
     showPrintButton: true,
   };
-  recipePreviewURL: SafeResourceUrl;
-  recipeEmbedURL: string;
-  recipeEmbedCode: string;
+  recipePreviewURL?: SafeResourceUrl;
+  recipeEmbedURL?: string;
+  recipeEmbedCode?: string;
 
   constructor(
     public navCtrl: NavController,
@@ -119,10 +120,10 @@ export class ShareModalPage {
     this.threads = response.data;
   }
 
-  selectUser(user) {
+  selectUser(user: User) {
     if (!user) {
-      this.selectedUser = null;
-      this.recipientId = null;
+      this.selectedUser = undefined;
+      this.recipientId = undefined;
       return;
     }
 
@@ -131,6 +132,8 @@ export class ShareModalPage {
   }
 
   async send() {
+    if (!this.recipientId) return;
+
     const loading = this.loadingService.start();
 
     const response = await this.messagingService.create({
@@ -147,7 +150,7 @@ export class ShareModalPage {
     );
   }
 
-  shareMethodChanged(event) {
+  shareMethodChanged(event: any) {
     this.shareMethod = event.detail.value;
   }
 }

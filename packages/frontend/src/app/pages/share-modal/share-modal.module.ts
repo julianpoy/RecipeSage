@@ -21,6 +21,5 @@ import { SelectUserKnownUserModule } from "~/components/select-user-knownuser/se
     CopyWithWebshareModule,
     SelectUserKnownUserModule,
   ],
-  entryComponents: [ShareModalPage],
 })
 export class ShareModalPageModule {}

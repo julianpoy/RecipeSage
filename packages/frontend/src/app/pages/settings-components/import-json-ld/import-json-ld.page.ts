@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { NavController, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from "~/services/loading.service";
+import { LoadingRef, LoadingService } from "~/services/loading.service";
 import { RecipeService } from "~/services/recipe.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 
@@ -14,8 +14,8 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 export class ImportJSONLDPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  loading = null;
-  imageFile = null;
+  loading?: LoadingRef;
+  imageFile?: File;
 
   ignoreLargeFiles: boolean;
 
@@ -30,7 +30,7 @@ export class ImportJSONLDPage {
     this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
 
-  setFile(event) {
+  setFile(event: any) {
     const files = (event.srcElement || event.target).files;
     if (!files) {
       return;
@@ -40,7 +40,7 @@ export class ImportJSONLDPage {
   }
 
   filePicker() {
-    document.getElementById("filePicker").click();
+    document.getElementById("filePicker")?.click();
   }
 
   isFileTooLarge() {
@@ -70,6 +70,8 @@ export class ImportJSONLDPage {
   }
 
   async submit() {
+    if (!this.imageFile) return;
+
     this.loading = this.loadingService.start();
 
     const response = await this.recipeService.importJSONLD(this.imageFile, {
@@ -114,7 +116,7 @@ export class ImportJSONLDPage {
       },
     });
     this.loading.dismiss();
-    this.loading = null;
+    this.loading = undefined;
     if (!response.success) return;
 
     const message = await this.translate

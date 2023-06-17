@@ -9,6 +9,5 @@ import { CopyWithWebshareModule } from "~/components/copy-with-webshare/copy-wit
 @NgModule({
   declarations: [ShareMealPlanModalPage],
   imports: [CommonModule, IonicModule, GlobalModule, CopyWithWebshareModule],
-  entryComponents: [ShareMealPlanModalPage],
 })
 export class ShareMealPlanModalPageModule {}

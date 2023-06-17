@@ -18,6 +18,5 @@ import { GlobalModule } from "~/global.module";
     ReactiveFormsModule,
     SelectCollaboratorsModule,
   ],
-  entryComponents: [NewMealPlanModalPage],
 })
 export class NewMealPlanModalPageModule {}

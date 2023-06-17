@@ -15,7 +15,7 @@ export class NewShoppingListItemModalPage {
   itemFields: any = [{}];
 
   selectedRecipe: any;
-  selectedIngredients: ParsedIngredient[];
+  selectedIngredients: ParsedIngredient[] = [];
 
   constructor(
     public modalCtrl: ModalController,
@@ -25,7 +25,7 @@ export class NewShoppingListItemModalPage {
     public toastCtrl: ToastController
   ) {}
 
-  inputTypeChanged(event) {
+  inputTypeChanged(event: any) {
     this.inputType = event.detail.value;
   }
 
@@ -41,7 +41,7 @@ export class NewShoppingListItemModalPage {
       this.selectedRecipe &&
       this.selectedRecipe.id
     ) {
-      return (this.selectedIngredients || []).length > 0;
+      return this.selectedIngredients.length > 0;
     }
     if (this.inputType === "items") {
       for (const itemField of this.itemFields) {
@@ -61,10 +61,10 @@ export class NewShoppingListItemModalPage {
     } else {
       // Redundant for now. Kept for sterilization
       items = this.itemFields
-        .filter((e) => {
+        .filter((e: any) => {
           return (e.title || "").length > 0;
         })
-        .map((e) => {
+        .map((e: any) => {
           return {
             title: e.title,
           };

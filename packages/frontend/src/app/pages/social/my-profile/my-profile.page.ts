@@ -12,7 +12,7 @@ import { isHandleValid } from "@recipesage/util";
 import { AddProfileItemModalPage } from "../add-profile-item-modal/add-profile-item-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 
-import { UserService, UserProfile } from "~/services/user.service";
+import { UserService, UserProfile, User, ProfileItem } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
@@ -27,12 +27,12 @@ import { UnsavedChangesService } from "~/services/unsaved-changes.service";
 export class MyProfilePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
-  accountInfo;
-  myProfile: UserProfile;
+  accountInfo?: User;
+  myProfile?: UserProfile;
   requiresSetup = false;
 
   isHandleAvailable = true;
-  handleInputTimeout;
+  handleInputTimeout?: NodeJS.Timeout;
 
   updatedProfileFields: Partial<UserProfile> = {};
 
@@ -114,8 +114,10 @@ export class MyProfilePage {
             text: enable,
             handler: () => {
               this.updatedProfileFields.enableProfile = true;
-              this.myProfile.enableProfile = true;
-              this.accountInfo.enableProfile = true;
+              if (this.myProfile && this.accountInfo) {
+                this.myProfile.enableProfile = true;
+                this.accountInfo.enableProfile = true;
+              }
 
               this.markAsDirty();
             },
@@ -142,14 +144,15 @@ export class MyProfilePage {
       this.updatedProfileFields.handle =
         this.updatedProfileFields.handle.substring(1);
     if (!this.isHandleValid()) return;
+
     this.handleInputTimeout = setTimeout(
-      () => this.checkHandleAvailable(this.updatedProfileFields.handle),
+      () => this.checkHandleAvailable(this.updatedProfileFields.handle || ''),
       500
     );
   }
 
   isHandleValid() {
-    return isHandleValid(this.updatedProfileFields.handle);
+    return isHandleValid(this.updatedProfileFields.handle || '');
   }
 
   markAsDirty() {
@@ -209,6 +212,8 @@ export class MyProfilePage {
   }
 
   async startNewProfileItem() {
+    if (!this.myProfile) return;
+
     const modal = await this.modalCtrl.create({
       component: AddProfileItemModalPage,
     });
@@ -223,7 +228,9 @@ export class MyProfilePage {
     }
   }
 
-  async removeProfileItem(idx) {
+  async removeProfileItem(idx: number) {
+    if (!this.myProfile) return;
+
     this.myProfile.profileItems.splice(idx, 1);
     this.updatedProfileFields.profileItems = this.myProfile.profileItems;
 
@@ -316,7 +323,7 @@ export class MyProfilePage {
     );
   }
 
-  open(item) {
+  open(item: any) {
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", { userId: item.userId })
@@ -333,7 +340,9 @@ export class MyProfilePage {
     }
   }
 
-  ionReorder(event) {
+  ionReorder(event: any) {
+    if (!this.myProfile) return false;
+
     const item = this.myProfile.profileItems.splice(event.detail.from, 1)?.[0];
     if (item) {
       this.myProfile.profileItems.splice(event.detail.to, 0, item);
