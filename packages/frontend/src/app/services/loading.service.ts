@@ -4,7 +4,7 @@ import { LoadingBarService } from "@ngx-loading-bar/core";
 import { LoadingBarState } from "@ngx-loading-bar/core/loading-bar.state";
 
 export interface LoadingRef {
-  dismiss: () => void
+  dismiss: () => void;
 }
 
 @Injectable({

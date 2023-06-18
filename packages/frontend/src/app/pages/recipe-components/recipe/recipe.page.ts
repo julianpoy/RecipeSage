@@ -93,7 +93,7 @@ export class RecipePage {
     const recipeId = this.route.snapshot.paramMap.get("recipeId");
     if (!recipeId) {
       this.navCtrl.navigateBack(this.defaultBackHref);
-      throw new Error('No recipeId was provided');
+      throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
     this.recipe = {} as Recipe;

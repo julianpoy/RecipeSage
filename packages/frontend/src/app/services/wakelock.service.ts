@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 interface WakelockRequest {
-  release: () => void
+  release: () => void;
 }
 
 @Injectable({

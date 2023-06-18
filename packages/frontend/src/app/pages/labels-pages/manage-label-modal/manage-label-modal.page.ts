@@ -18,8 +18,9 @@ import { RecipeService } from "~/services/recipe.service";
 })
 export class ManageLabelModalPage {
   @Input({
-    required: true
-  }) label!: Label;
+    required: true,
+  })
+  label!: Label;
 
   createdAt?: string;
 

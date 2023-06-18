@@ -21,7 +21,7 @@ export class NewMealPlanItemModalPage {
   @Input() meal?: string;
   @Input() scheduled = new Date();
 
-  sanitizedScheduled: string = '';
+  sanitizedScheduled: string = "";
 
   constructor(
     public navCtrl: NavController,
@@ -72,10 +72,14 @@ export class NewMealPlanItemModalPage {
     if (!this.meal || !this.scheduled) return;
 
     const item = {
-      title: this.inputType === "recipe" && this.recipe ? this.recipe.title : this.title,
-      recipeId: this.inputType === "recipe" && this.recipe ? this.recipe.id : undefined,
+      title:
+        this.inputType === "recipe" && this.recipe
+          ? this.recipe.title
+          : this.title,
+      recipeId:
+        this.inputType === "recipe" && this.recipe ? this.recipe.id : undefined,
       meal: this.meal,
-      scheduled: this.scheduled
+      scheduled: this.scheduled,
     };
 
     this.modalCtrl.dismiss({

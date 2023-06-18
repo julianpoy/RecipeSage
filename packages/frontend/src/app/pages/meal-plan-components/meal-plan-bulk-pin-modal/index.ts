@@ -19,7 +19,8 @@ import { UtilService } from "~/services/util.service";
 export class MealPlanBulkPinModalPage {
   @Input({
     required: true,
-  }) mealItems!: MealPlanItem[];
+  })
+  mealItems!: MealPlanItem[];
 
   allSelected = true;
   recipeIdSelectionMap: { [recipeId: string]: boolean } = {};
@@ -45,9 +46,7 @@ export class MealPlanBulkPinModalPage {
     this.mealItems
       .map((mealItem) => mealItem.recipe)
       .filter((recipe): recipe is Exclude<typeof recipe, null> => !!recipe)
-      .forEach(
-        (recipe) => (this.recipeIdSelectionMap[recipe.id] = true)
-      );
+      .forEach((recipe) => (this.recipeIdSelectionMap[recipe.id] = true));
   }
 
   deselectAll() {

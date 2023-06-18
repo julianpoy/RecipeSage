@@ -7,7 +7,10 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { ShoppingLists, ShoppingListService } from "~/services/shopping-list.service";
+import {
+  ShoppingLists,
+  ShoppingListService,
+} from "~/services/shopping-list.service";
 import { LoadingService } from "~/services/loading.service";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
 import { UtilService } from "~/services/util.service";
@@ -21,7 +24,8 @@ import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-s
 export class AddRecipeToShoppingListModalPage {
   @Input({
     required: true,
-  }) recipes!: any[];
+  })
+  recipes!: any[];
   @Input() scale = 1;
   selectedIngredientsByRecipe: { [key: string]: ParsedIngredient[] } = {};
   selectedIngredients: ParsedIngredient[] = [];
@@ -86,7 +90,10 @@ export class AddRecipeToShoppingListModalPage {
     this.selectLastUsedShoppingList();
   }
 
-  selectedIngredientsChange(recipeId: string, selectedIngredients: ParsedIngredient[]) {
+  selectedIngredientsChange(
+    recipeId: string,
+    selectedIngredients: ParsedIngredient[]
+  ) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
     this.selectedIngredients = Object.values(

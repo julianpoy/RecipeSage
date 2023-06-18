@@ -1,8 +1,11 @@
 import { TRPCLink, createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "@recipesage/trpc";
 import { Injectable } from "@angular/core";
-import { observable } from '@trpc/server/observable';
-import { ErrorHandlers, HttpErrorHandlerService } from "./http-error-handler.service";
+import { observable } from "@trpc/server/observable";
+import {
+  ErrorHandlers,
+  HttpErrorHandlerService,
+} from "./http-error-handler.service";
 import { API_BASE_URL } from "../../environments/environment";
 
 const customLink: TRPCLink<AppRouter> = () => {
@@ -12,14 +15,14 @@ const customLink: TRPCLink<AppRouter> = () => {
     // this is when passing the result to the next link
     // each link needs to return an observable which propagates results
     return observable((observer) => {
-      console.log('performing operation:', op);
+      console.log("performing operation:", op);
       const unsubscribe = next(op).subscribe({
         next(value) {
-          console.log('we received value', value);
+          console.log("we received value", value);
           observer.next(value);
         },
         error(err) {
-          console.log('we received error', err);
+          console.log("we received error", err);
           observer.error(err);
         },
         complete() {
@@ -39,22 +42,19 @@ export class TRPCService {
     links: [
       customLink,
       httpBatchLink({
-        url: (API_BASE_URL || '/api/') + "trpc",
+        url: (API_BASE_URL || "/api/") + "trpc",
         maxURLLength: 2047,
         headers: () => {
           return {
-            Authorization: localStorage.getItem('token') || undefined,
+            Authorization: localStorage.getItem("token") || undefined,
           };
         },
-        
       }),
     ],
     transformer: undefined,
   });
 
-  constructor(
-    private httpErrorHandler: HttpErrorHandlerService,
-  ) {}
+  constructor(private httpErrorHandler: HttpErrorHandlerService) {}
 
   // async callWithErrorHandling
   //   <T extends (args: Args) => Promise<Output>, Args, Output>

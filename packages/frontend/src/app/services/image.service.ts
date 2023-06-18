@@ -12,9 +12,7 @@ export interface Image {
   providedIn: "root",
 })
 export class ImageService {
-  constructor(
-    private httpService: HttpService
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   create(file: File, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();

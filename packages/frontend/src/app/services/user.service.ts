@@ -74,9 +74,7 @@ export interface Capabilities {
   providedIn: "root",
 })
 export class UserService {
-  constructor(
-    private httpService: HttpService,
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   register(
     payload: {

@@ -11,9 +11,7 @@ export const UNSAVED_CHANGES_MESSAGE =
 export class UnsavedChangesService {
   private pendingChanges = false;
 
-  constructor(
-    private router: Router
-  ) {
+  constructor(private router: Router) {
     // Reset pending changes after every navigation event
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

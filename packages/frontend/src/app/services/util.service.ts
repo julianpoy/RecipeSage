@@ -252,14 +252,19 @@ export class UtilService {
   constructor(private translate: TranslateService) {}
 
   getAppBrowserLang(): string {
-    const isSupported = (lang: string | undefined): lang is SupportedLanguages => {
+    const isSupported = (
+      lang: string | undefined
+    ): lang is SupportedLanguages => {
       return Object.values(SupportedLanguages).some((el) => el === lang);
     };
 
     // Navigator language can be in the form 'en', or 'en-us' for any given language
     const navLang = window.navigator.language.toLowerCase();
     const navLangNoRegion = navLang.split("-")[0];
-    const defaultLocalized = navLangNoRegion in defaultLocality ? defaultLocality[navLangNoRegion as keyof typeof defaultLocality] : undefined;
+    const defaultLocalized =
+      navLangNoRegion in defaultLocality
+        ? defaultLocality[navLangNoRegion as keyof typeof defaultLocality]
+        : undefined;
 
     // We always prefer to return the exact language the navigator requested if we have it
     if (isSupported(navLang)) return navLang;

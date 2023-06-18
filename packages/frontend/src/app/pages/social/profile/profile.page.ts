@@ -49,7 +49,7 @@ export class ProfilePage {
 
     if (!handle) {
       this.navCtrl.navigateRoot(RouteMap.SocialPage.getPath());
-      throw new Error('No handle specified');
+      throw new Error("No handle specified");
     }
 
     this.handle = handle;

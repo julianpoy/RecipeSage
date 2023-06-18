@@ -12,7 +12,12 @@ import { isHandleValid } from "@recipesage/util";
 import { AddProfileItemModalPage } from "../add-profile-item-modal/add-profile-item-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 
-import { UserService, UserProfile, User, ProfileItem } from "~/services/user.service";
+import {
+  UserService,
+  UserProfile,
+  User,
+  ProfileItem,
+} from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
@@ -146,13 +151,13 @@ export class MyProfilePage {
     if (!this.isHandleValid()) return;
 
     this.handleInputTimeout = setTimeout(
-      () => this.checkHandleAvailable(this.updatedProfileFields.handle || ''),
+      () => this.checkHandleAvailable(this.updatedProfileFields.handle || ""),
       500
     );
   }
 
   isHandleValid() {
-    return isHandleValid(this.updatedProfileFields.handle || '');
+    return isHandleValid(this.updatedProfileFields.handle || "");
   }
 
   markAsDirty() {

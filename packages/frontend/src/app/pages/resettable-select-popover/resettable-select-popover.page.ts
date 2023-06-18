@@ -16,12 +16,14 @@ export class ResettableSelectPopoverPage {
   resetToggled = false; // Stores current state of reset all checkbox
 
   @Input({
-    required: true
-  }) options!: Option[];
+    required: true,
+  })
+  options!: Option[];
 
   @Input({
-    required: true
-  }) nullMessage!: string;
+    required: true,
+  })
+  nullMessage!: string;
 
   @Output() selectedValueChange = new EventEmitter();
 

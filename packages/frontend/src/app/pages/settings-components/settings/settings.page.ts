@@ -65,10 +65,9 @@ export class SettingsPage {
     }
 
     try {
-      const locale = new Intl.DisplayNames(
-        window.navigator.languages,
-        { type: "language" }
-      );
+      const locale = new Intl.DisplayNames(window.navigator.languages, {
+        type: "language",
+      });
 
       this.languageOptions = Object.values(SupportedLanguages).map((code) => [
         code,

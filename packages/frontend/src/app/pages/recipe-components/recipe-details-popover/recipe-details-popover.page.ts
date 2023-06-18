@@ -14,8 +14,9 @@ import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 })
 export class RecipeDetailsPopoverPage {
   @Input({
-    required: true
-  }) recipeId!: string;
+    required: true,
+  })
+  recipeId!: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;

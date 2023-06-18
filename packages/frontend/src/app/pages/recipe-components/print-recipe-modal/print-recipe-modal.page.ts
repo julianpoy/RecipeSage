@@ -20,11 +20,13 @@ export interface PrintOption {
 })
 export class PrintRecipeModalPage {
   @Input({
-    required: true
-  }) recipe!: Recipe;
+    required: true,
+  })
+  recipe!: Recipe;
   @Input({
-    required: true
-  }) scale!: number;
+    required: true,
+  })
+  scale!: number;
 
   selectedTemplate = -1;
   templates: PrintOption[] = [];

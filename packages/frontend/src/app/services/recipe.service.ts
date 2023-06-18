@@ -4,9 +4,7 @@ import { Injectable } from "@angular/core";
 import { Label } from "./label.service";
 
 import { HttpService } from "./http.service";
-import {
-  ErrorHandlers,
-} from "./http-error-handler.service";
+import { ErrorHandlers } from "./http-error-handler.service";
 import { UtilService } from "./util.service";
 import { EventService } from "./event.service";
 import { Image } from "./image.service";
@@ -135,13 +133,7 @@ export class RecipeService {
   ) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
-    }>(
-      `recipes/search`,
-      "GET",
-      undefined,
-      params,
-      errorHandlers
-    );
+    }>(`recipes/search`, "GET", undefined, params, errorHandlers);
   }
 
   fetchById(recipeId: string, errorHandlers?: ErrorHandlers) {
@@ -286,7 +278,7 @@ export class RecipeService {
     );
   }
 
-  print(recipe: Recipe, template: { name: string, modifiers: string }) {
+  print(recipe: Recipe, template: { name: string; modifiers: string }) {
     window.open(
       this.utilService.getBase() +
         "print/" +

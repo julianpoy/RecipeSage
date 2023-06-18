@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
-import {
-  ModalController,
-} from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
 import { Recipe } from "../../../services/recipe.service";
 import { Label } from "../../../services/label.service";
@@ -25,9 +23,7 @@ export class AddProfileItemModalPage {
   selectedRecipe?: Recipe;
   selectedLabel?: Label;
 
-  constructor(
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private modalCtrl: ModalController) {}
 
   cancel() {
     this.modalCtrl.dismiss();

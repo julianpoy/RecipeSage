@@ -15,11 +15,13 @@ export class EditRecipePopoverPage {
   preferenceKeys = RecipeDetailsPreferenceKey;
 
   @Input({
-    required: true
-  }) canAddImages!: boolean;
+    required: true,
+  })
+  canAddImages!: boolean;
   @Input({
-    required: true
-  }) addImageByUrlPrompt!: () => void;
+    required: true,
+  })
+  addImageByUrlPrompt!: () => void;
 
   constructor(
     private preferencesService: PreferencesService,

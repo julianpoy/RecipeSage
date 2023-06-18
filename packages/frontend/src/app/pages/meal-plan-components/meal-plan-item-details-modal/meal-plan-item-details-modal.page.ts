@@ -26,10 +26,12 @@ import dayjs from "dayjs";
 export class MealPlanItemDetailsModalPage {
   @Input({
     required: true,
-  }) mealPlanId!: string;
+  })
+  mealPlanId!: string;
   @Input({
-    required: true
-  }) mealItem!: MealPlanItem;
+    required: true,
+  })
+  mealItem!: MealPlanItem;
 
   constructor(
     public navCtrl: NavController,

@@ -23,8 +23,9 @@ export class LabelsPopoverPage {
   @Input() labels: any;
 
   @Input({
-    required: true
-  }) selectionMode!: boolean;
+    required: true,
+  })
+  selectionMode!: boolean;
 
   constructor(
     public popoverCtrl: PopoverController,

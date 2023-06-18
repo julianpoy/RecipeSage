@@ -23,8 +23,9 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 })
 export class ShareModalPage {
   @Input({
-    required: true
-  }) recipe!: Recipe;
+    required: true,
+  })
+  recipe!: Recipe;
 
   selectedUser?: User;
   recipientId?: string;

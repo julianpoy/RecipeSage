@@ -50,7 +50,7 @@ export class ShoppingListPage {
 
   initialLoadComplete = false;
 
-  reference = '0';
+  reference = "0";
 
   constructor(
     public navCtrl: NavController,
@@ -120,7 +120,9 @@ export class ShoppingListPage {
     if (list) this.list = list;
 
     const items = this.list.items.filter((item: any) => !item.completed);
-    const completedItems = this.list.items.filter((item: any) => item.completed);
+    const completedItems = this.list.items.filter(
+      (item: any) => item.completed
+    );
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -248,7 +250,7 @@ export class ShoppingListPage {
     });
 
     const response = await this.shoppingListService.deleteItems(this.list.id, {
-      itemIds: itemIds.join(','),
+      itemIds: itemIds.join(","),
     });
 
     await this.loadList();

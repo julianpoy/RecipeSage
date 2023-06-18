@@ -11,7 +11,11 @@ import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import { MealPlan, MealPlanItem, MealPlanService } from "~/services/meal-plan.service";
+import {
+  MealPlan,
+  MealPlanItem,
+  MealPlanService,
+} from "~/services/meal-plan.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
@@ -47,10 +51,10 @@ export class MealPlanPage {
     [year: number]: {
       [month: number]: {
         [day: number]: {
-          items: MealPlanItem[]
-        }
-      }
-    }
+          items: MealPlanItem[];
+        };
+      };
+    };
   } = {};
 
   itemsByRecipeId: { [key: string]: MealPlanItem } = {};
@@ -61,7 +65,8 @@ export class MealPlanPage {
 
   selectedDays: number[] = [];
 
-  @ViewChild(MealCalendarComponent, { static: true }) mealPlanCalendar?: MealCalendarComponent;
+  @ViewChild(MealCalendarComponent, { static: true })
+  mealPlanCalendar?: MealCalendarComponent;
 
   constructor(
     public route: ActivatedRoute,
@@ -124,7 +129,12 @@ export class MealPlanPage {
     this.mealPlan = response.data;
   }
 
-  async _addItem(item: { title: string, recipeId?: string, meal: string, scheduled: string }) {
+  async _addItem(item: {
+    title: string;
+    recipeId?: string;
+    meal: string;
+    scheduled: string;
+  }) {
     const loading = this.loadingService.start();
 
     await this.mealPlanService.addItem(this.mealPlanId, {
@@ -189,7 +199,7 @@ export class MealPlanPage {
     if (data?.refresh) this.loadWithProgress();
   }
 
-  async itemMoved({ day, mealItem }: { day: number, mealItem: MealPlanItem }) {
+  async itemMoved({ day, mealItem }: { day: number; mealItem: MealPlanItem }) {
     console.log(day, mealItem);
     const modal = await this.modalCtrl.create({
       component: NewMealPlanItemModalPage,
@@ -543,7 +553,8 @@ export class MealPlanPage {
   }
 
   async _moveSelectedTo(day: Date | string | number) {
-    if (!this.selectedDaysInProgress) throw new Error("Move initiated with no selected days");
+    if (!this.selectedDaysInProgress)
+      throw new Error("Move initiated with no selected days");
 
     const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], "day");
 
@@ -553,7 +564,10 @@ export class MealPlanPage {
           id: item.id,
           title: item.title,
           recipeId: item.recipeId || item.recipe?.id,
-          scheduled: dayjs(item.scheduled).add(dayDiff, "day").toDate().toISOString(),
+          scheduled: dayjs(item.scheduled)
+            .add(dayDiff, "day")
+            .toDate()
+            .toISOString(),
           meal: item.meal,
         }))
       )
@@ -568,7 +582,8 @@ export class MealPlanPage {
   }
 
   async _copySelectedTo(day: Date | string | number) {
-    if (!this.selectedDaysInProgress) throw new Error("Move initiated with no selected days");
+    if (!this.selectedDaysInProgress)
+      throw new Error("Move initiated with no selected days");
 
     const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], "day");
 
@@ -577,7 +592,10 @@ export class MealPlanPage {
         this.getItemsOnDay(selectedDay).map((item) => ({
           title: item.title,
           recipeId: item.recipeId || item.recipe?.id,
-          scheduled: dayjs(item.scheduled).add(dayDiff, "day").toDate().toISOString(),
+          scheduled: dayjs(item.scheduled)
+            .add(dayDiff, "day")
+            .toDate()
+            .toISOString(),
           meal: item.meal,
         }))
       )

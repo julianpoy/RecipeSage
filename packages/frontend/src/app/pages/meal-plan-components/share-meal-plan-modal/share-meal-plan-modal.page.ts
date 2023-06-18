@@ -9,8 +9,9 @@ import { ModalController } from "@ionic/angular";
 })
 export class ShareMealPlanModalPage {
   @Input({
-    required: true
-  }) mealPlanId!: string;
+    required: true,
+  })
+  mealPlanId!: string;
 
   icalURL = "";
 

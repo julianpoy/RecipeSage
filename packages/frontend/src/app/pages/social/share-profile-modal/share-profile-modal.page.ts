@@ -38,7 +38,7 @@ export class ShareProfileModalPage {
   }
 
   ngOnInit() {
-    this.handle = '';
+    this.handle = "";
   }
 
   async loadFromHandle(handle: string) {

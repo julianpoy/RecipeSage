@@ -41,7 +41,7 @@ export class NewMessageModalPage {
   async setSelectedUser(recipientId: string) {
     const response = await this.userService.getUserById(recipientId);
     if (!response.success) return;
-    
+
     this.recipientInfo = response.data;
   }
 

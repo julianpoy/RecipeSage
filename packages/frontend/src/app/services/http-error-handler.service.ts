@@ -65,8 +65,14 @@ export class HttpErrorHandlerService {
     } else if (errorHandlers?.["*"]) {
       errorHandlers["*"]();
       // Fallback to default
-    } else if (this.defaultErrorHandlers[statusCode as keyof typeof this.defaultErrorHandlers]) {
-      this.defaultErrorHandlers[statusCode as keyof typeof this.defaultErrorHandlers]();
+    } else if (
+      this.defaultErrorHandlers[
+        statusCode as keyof typeof this.defaultErrorHandlers
+      ]
+    ) {
+      this.defaultErrorHandlers[
+        statusCode as keyof typeof this.defaultErrorHandlers
+      ]();
       // All other errors use 500 by default for generic (unexpected) error
     } else {
       this.defaultErrorHandlers[500]();
@@ -75,14 +81,14 @@ export class HttpErrorHandlerService {
 
   handleError(error: unknown, errorHandlers?: ErrorHandlers) {
     // Rethrow all non-http errors
-    if (
-      !(error instanceof AxiosError) ||
-      !error.response
-    ) {
+    if (!(error instanceof Error) || !("response" in error)) {
       throw error;
     }
 
-    const statusCode = error.response.status;
+    // Error has been confirmed to have response property, treat as AxiosError
+    const axiosError = error as AxiosError;
+    const statusCode = axiosError.response!.status;
+
     this._handleError(statusCode, errorHandlers);
   }
 

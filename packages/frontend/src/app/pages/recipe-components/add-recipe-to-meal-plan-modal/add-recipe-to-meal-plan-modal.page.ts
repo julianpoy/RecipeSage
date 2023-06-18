@@ -9,7 +9,11 @@ import {
 import { LoadingService } from "~/services/loading.service";
 import { RecipeService } from "~/services/recipe.service";
 import { UtilService } from "~/services/util.service";
-import { MealPlan, MealPlans, MealPlanService } from "~/services/meal-plan.service";
+import {
+  MealPlan,
+  MealPlans,
+  MealPlanService,
+} from "~/services/meal-plan.service";
 
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";

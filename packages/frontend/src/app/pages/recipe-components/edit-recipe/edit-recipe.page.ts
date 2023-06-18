@@ -61,7 +61,7 @@ export class EditRecipePage {
     public domSanitizationService: DomSanitizer,
     public capabilitiesService: CapabilitiesService
   ) {
-    const recipeId = this.route.snapshot.paramMap.get("recipeId") || 'new';
+    const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
     if (recipeId === "new") {
       this.checkAutoClip();
@@ -130,38 +130,36 @@ export class EditRecipePage {
 
     const loading = this.loadingService.start();
 
-    const response = this.recipe.id ? (
-      await this.recipeService.update({
-        id: this.recipe.id,
-        title: this.recipe.title,
-        description: this.recipe.description,
-        yield: this.recipe.yield,
-        activeTime: this.recipe.activeTime,
-        totalTime: this.recipe.totalTime,
-        source: this.recipe.source,
-        url: this.recipe.url,
-        notes: this.recipe.notes,
-        ingredients: this.recipe.ingredients,
-        instructions: this.recipe.instructions,
-        rating: this.recipe.rating,
-        imageIds: this.images.map((image) => image.id),
-      })
-    ) : (
-      await this.recipeService.create({
-        title: this.recipe.title,
-        description: this.recipe.description,
-        yield: this.recipe.yield,
-        activeTime: this.recipe.activeTime,
-        totalTime: this.recipe.totalTime,
-        source: this.recipe.source,
-        url: this.recipe.url,
-        notes: this.recipe.notes,
-        ingredients: this.recipe.ingredients,
-        instructions: this.recipe.instructions,
-        rating: this.recipe.rating,
-        imageIds: this.images.map((image) => image.id),
-      })
-    );
+    const response = this.recipe.id
+      ? await this.recipeService.update({
+          id: this.recipe.id,
+          title: this.recipe.title,
+          description: this.recipe.description,
+          yield: this.recipe.yield,
+          activeTime: this.recipe.activeTime,
+          totalTime: this.recipe.totalTime,
+          source: this.recipe.source,
+          url: this.recipe.url,
+          notes: this.recipe.notes,
+          ingredients: this.recipe.ingredients,
+          instructions: this.recipe.instructions,
+          rating: this.recipe.rating,
+          imageIds: this.images.map((image) => image.id),
+        })
+      : await this.recipeService.create({
+          title: this.recipe.title,
+          description: this.recipe.description,
+          yield: this.recipe.yield,
+          activeTime: this.recipe.activeTime,
+          totalTime: this.recipe.totalTime,
+          source: this.recipe.source,
+          url: this.recipe.url,
+          notes: this.recipe.notes,
+          ingredients: this.recipe.ingredients,
+          instructions: this.recipe.instructions,
+          rating: this.recipe.rating,
+          imageIds: this.images.map((image) => image.id),
+        });
 
     loading.dismiss();
     if (!response.success) return;
@@ -283,13 +281,18 @@ export class EditRecipePage {
     if (!response.success) return;
 
     if (response.data.title) this.recipe.title = response.data.title;
-    if (response.data.description) this.recipe.description = response.data.description;
+    if (response.data.description)
+      this.recipe.description = response.data.description;
     if (response.data.source) this.recipe.source = response.data.source;
     if (response.data.yield) this.recipe.yield = response.data.yield;
-    if (response.data.activeTime) this.recipe.activeTime = response.data.activeTime;
-    if (response.data.totalTime) this.recipe.totalTime = response.data.totalTime;
-    if (response.data.ingredients) this.recipe.ingredients = response.data.ingredients;
-    if (response.data.instructions) this.recipe.instructions = response.data.instructions;
+    if (response.data.activeTime)
+      this.recipe.activeTime = response.data.activeTime;
+    if (response.data.totalTime)
+      this.recipe.totalTime = response.data.totalTime;
+    if (response.data.ingredients)
+      this.recipe.ingredients = response.data.ingredients;
+    if (response.data.instructions)
+      this.recipe.instructions = response.data.instructions;
     if (response.data.notes) this.recipe.notes = response.data.notes;
 
     this.recipe.url = url;

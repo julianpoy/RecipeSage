@@ -22,9 +22,9 @@ export class MessageThreadPage {
   @ViewChild("content", { static: true }) content: any;
 
   messages: (Message & {
-    formattedDate?: string,
-    deservesDateDiff?: boolean,
-    dateDiff?: string
+    formattedDate?: string;
+    deservesDateDiff?: boolean;
+    dateDiff?: string;
   })[] = [];
   messagesById: { [key: string]: Message } = {};
 
@@ -52,7 +52,7 @@ export class MessageThreadPage {
     const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
     if (!otherUserId) {
       this.navCtrl.navigateBack(this.defaultBackHref);
-      throw new Error('OtherUserId not provided');
+      throw new Error("OtherUserId not provided");
     }
     this.otherUserId = otherUserId;
 
@@ -236,7 +236,7 @@ export class MessageThreadPage {
   }
 
   onMessageKeyUp(event: KeyboardEvent) {
-    if (!(event.key === '10' || event.key === '13')) return;
+    if (!(event.key === "10" || event.key === "13")) return;
 
     if (event.ctrlKey || event.shiftKey || event.altKey) {
       this.pendingMessage += "\n";
@@ -245,7 +245,10 @@ export class MessageThreadPage {
     }
   }
 
-  deservesDateDiff(previous: { createdAt: string }, next: { createdAt: string }) {
+  deservesDateDiff(
+    previous: { createdAt: string },
+    next: { createdAt: string }
+  ) {
     if (!previous || !next) return;
 
     const p = new Date(previous.createdAt);
