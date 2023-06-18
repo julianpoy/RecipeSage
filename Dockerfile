@@ -11,7 +11,7 @@ RUN npm install -g tsx
 
 COPY package-lock.json package-lock.json
 COPY package.json package.json
-RUN npm install
+RUN npm ci
 
 COPY jest.config.ts jest.config.ts
 COPY jest.preset.js jest.preset.js
