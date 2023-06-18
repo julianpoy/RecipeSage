@@ -6,14 +6,26 @@ let client: Client;
 if (process.env.SEARCH_PROVIDER === 'elasticsearch') {
   if (!process.env.ELASTIC_CONN) throw new Error('Missing Elasticsearch configuration');
 
-  client = new Client({
-    node: process.env.ELASTIC_CONN,
-  });
+  const retry = async () => {
+    try {
+      await init();
+    } catch(e) {
+      console.error(e);
 
-  init();
+      setTimeout(retry, 5000);
+    }
+  };
+
+  retry();
 }
 
 async function init() {
+  if (!client) {
+    client = new Client({
+      node: process.env.ELASTIC_CONN,
+    });
+  }
+
   await client.ping();
 
   const exists = await client.indices.exists({
