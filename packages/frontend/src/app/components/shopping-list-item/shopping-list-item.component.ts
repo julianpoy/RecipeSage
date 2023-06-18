@@ -8,12 +8,28 @@ import { UtilService } from "~/services/util.service";
   styleUrls: ["./shopping-list-item.component.scss"],
 })
 export class ShoppingListItemComponent {
-  @Input() title: string;
-  @Input() completed: boolean;
-  @Input() recipeTitle: string;
-  @Input() createdAt: string;
-  @Input() ownerName: string;
+  @Input({
+    required: true,
+  })
+  title!: string;
+  @Input({
+    required: true,
+  })
+  completed!: boolean;
+  @Input({
+    required: true,
+  })
+  recipeTitle!: string;
+  @Input({
+    required: true,
+  })
+  createdAt!: string;
+  @Input({
+    required: true,
+  })
+  ownerName!: string;
   @Output() completeToggle = new EventEmitter<null>();
+
   constructor(private utilService: UtilService) {}
 
   onComplete() {

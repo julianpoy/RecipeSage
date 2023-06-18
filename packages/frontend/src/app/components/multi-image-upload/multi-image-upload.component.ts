@@ -2,11 +2,9 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from "~/services/user.service";
 import { Image, ImageService } from "~/services/image.service";
 import { LoadingService } from "~/services/loading.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
-import { UtilService, RouteMap } from "~/services/util.service";
 
 @Component({
   selector: "multi-image-upload",
@@ -16,19 +14,17 @@ import { UtilService, RouteMap } from "~/services/util.service";
 export class MultiImageUploadComponent {
   @Output() imageUpdate = new EventEmitter();
 
-  _images: Image[];
+  _images: Image[] = [];
   @Input()
   get images() {
-    return this._images || [];
+    return this._images;
   }
   set images(val: Image[]) {
     this._images = val;
   }
 
   constructor(
-    private utilService: UtilService,
     private toastCtrl: ToastController,
-    private userService: UserService,
     private imageService: ImageService,
     private loadingService: LoadingService,
     private translate: TranslateService,
@@ -36,10 +32,10 @@ export class MultiImageUploadComponent {
   ) {}
 
   filePicker() {
-    document.getElementById("filePicker").click();
+    document.getElementById("filePicker")?.click();
   }
 
-  async addImage(event) {
+  async addImage(event: any) {
     const files = (event.srcElement || event.target).files;
     if (!files || !files[0]) {
       return;

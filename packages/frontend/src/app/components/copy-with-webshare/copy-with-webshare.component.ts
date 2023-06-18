@@ -6,10 +6,22 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./copy-with-webshare.component.scss"],
 })
 export class CopyWithWebshareComponent {
-  @Input() webshareTitle: string;
-  @Input() webshareText: string;
-  @Input() webshareURL: string;
-  @Input() copyText: string;
+  @Input({
+    required: true,
+  })
+  webshareTitle!: string;
+  @Input({
+    required: true,
+  })
+  webshareText!: string;
+  @Input({
+    required: true,
+  })
+  webshareURL!: string;
+  @Input({
+    required: true,
+  })
+  copyText!: string;
 
   hasCopyAPI: boolean = !!document.execCommand;
   hasWebShareAPI: boolean = !!(navigator as any).share;

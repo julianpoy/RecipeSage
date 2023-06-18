@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import {
@@ -6,7 +6,6 @@ import {
   AlertController,
   ToastController,
   PopoverController,
-  NavParams,
 } from "@ionic/angular";
 import { Datasource } from "ngx-ui-scroll";
 
@@ -20,7 +19,7 @@ import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
 import {
@@ -31,7 +30,6 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import { TRPCError } from "@trpc/server";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -52,7 +50,7 @@ export class HomePage {
   recipeFetchBuffer = 25;
   fetchPerPage = 50;
   lastRecipeCount = 0;
-  totalRecipeCount: number;
+  totalRecipeCount?: number;
 
   loading = true;
   selectedRecipeIds: string[] = [];
@@ -67,17 +65,17 @@ export class HomePage {
 
   reloadPending = true;
 
-  userId = null;
+  userId?: string;
 
-  myProfile: UserProfile;
-  friendsById: {
+  myProfile?: UserProfile;
+  friendsById?: {
     [key: string]: UserProfile;
   };
-  otherUserProfile: UserProfile;
+  otherUserProfile?: UserProfile;
 
   ratingFilter: (number | null)[] = [];
 
-  tileColCount: number;
+  tileColCount: number = 1;
 
   datasource = new Datasource<Recipe>({
     get: async (index: number, count: number) => {
@@ -135,7 +133,8 @@ export class HomePage {
     public messagingService: MessagingService,
     public trpcService: TRPCService
   ) {
-    this.showBack = !!this.router.getCurrentNavigation().extras.state?.showBack;
+    this.showBack =
+      !!this.router.getCurrentNavigation()?.extras.state?.showBack;
 
     this.folder =
       (this.route.snapshot.paramMap.get("folder") as RecipeFolderName) ||
@@ -145,7 +144,7 @@ export class HomePage {
     )
       .split(",")
       .filter((e) => e);
-    this.userId = this.route.snapshot.queryParamMap.get("userId") || null;
+    this.userId = this.route.snapshot.queryParamMap.get("userId") || undefined;
     if (this.userId) {
       this.showBack = true;
       this.userService
@@ -234,6 +233,7 @@ export class HomePage {
     if (this.searchText) return;
 
     while (
+      this.totalRecipeCount &&
       this.lastRecipeCount <= this.totalRecipeCount &&
       this.lastRecipeCount < endIndex + this.recipeFetchBuffer
     ) {
@@ -241,7 +241,7 @@ export class HomePage {
     }
   }
 
-  resetAndLoadAll(): Promise<any> {
+  async resetAndLoadAll(): Promise<any> {
     this.reloadPending = false;
 
     // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
@@ -355,13 +355,16 @@ export class HomePage {
     const response = await this.userService.getMyFriends();
     if (!response.success) return;
 
-    this.friendsById = response.data.friends.reduce((acc, friendEntry) => {
-      acc[friendEntry.otherUser.id] = friendEntry.otherUser;
-      return acc;
-    }, {});
+    this.friendsById = response.data.friends.reduce(
+      (acc: any, friendEntry: any) => {
+        acc[friendEntry.otherUser.id] = friendEntry.otherUser;
+        return acc;
+      },
+      {}
+    );
   }
 
-  toggleLabel(labelTitle) {
+  toggleLabel(labelTitle: string) {
     const labelIdx = this.selectedLabels.indexOf(labelTitle);
     labelIdx > -1
       ? this.selectedLabels.splice(labelIdx, 1)
@@ -369,7 +372,7 @@ export class HomePage {
     this.resetAndLoadRecipes();
   }
 
-  openRecipe(recipe, event?) {
+  openRecipe(recipe: Recipe, event?: KeyboardEvent) {
     if (event && (event.metaKey || event.ctrlKey)) {
       window.open(`#/recipe/${recipe.id}`);
       return;
@@ -377,7 +380,7 @@ export class HomePage {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event) {
     const popover = await this.popoverCtrl.create({
       component: HomePopoverPage,
       componentProps: {
@@ -406,7 +409,7 @@ export class HomePage {
     this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath("new"));
   }
 
-  async search(text) {
+  async search(text: string) {
     if (text.trim().length === 0) {
       this.searchText = "";
       this.resetAndLoadRecipes();
@@ -437,11 +440,11 @@ export class HomePage {
     this.datasource.adapter.reset();
   }
 
-  trackByFn(index, item) {
+  trackByFn(_: number, item: { id: string }) {
     return item.id;
   }
 
-  selectRecipe(recipe) {
+  selectRecipe(recipe: Recipe) {
     const index = this.selectedRecipeIds.indexOf(recipe.id);
     if (index > -1) {
       this.selectedRecipeIds.splice(index, 1);
@@ -572,7 +575,7 @@ export class HomePage {
     );
   }
 
-  async showSearchFilter(event) {
+  async showSearchFilter(event: Event) {
     const modal = await this.popoverCtrl.create({
       event,
       component: HomeSearchFilterPopoverPage,

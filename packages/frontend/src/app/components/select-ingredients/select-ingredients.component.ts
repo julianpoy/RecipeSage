@@ -15,8 +15,10 @@ export class SelectIngredientsComponent {
   scaledIngredients: ParsedIngredient[] = [];
   scale = 1;
 
-  _ingredients: string;
-  @Input()
+  _ingredients!: string;
+  @Input({
+    required: true,
+  })
   get ingredients() {
     return this._ingredients;
   }
@@ -30,7 +32,7 @@ export class SelectIngredientsComponent {
     this.applyScale(true);
   }
 
-  selectedIngredients: ParsedIngredient[];
+  selectedIngredients: ParsedIngredient[] = [];
 
   @Output() selectedIngredientsChange = new EventEmitter();
 

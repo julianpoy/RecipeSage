@@ -3,7 +3,7 @@ import { ToastController } from "@ionic/angular";
 
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { UtilService } from "~/services/util.service";
 import { MessageThread, MessagingService } from "~/services/messaging.service";
 
 @Component({
@@ -38,15 +38,12 @@ export class SelectKnownUserComponent {
 
   @Output() selectedUserChange = new EventEmitter();
 
-  friendships = [];
+  friendships: any[] = [];
   threads: MessageThread[] = [];
 
   constructor(
-    private utilService: UtilService,
-    private toastCtrl: ToastController,
     private userService: UserService,
-    private messagingService: MessagingService,
-    private loadingService: LoadingService
+    private messagingService: MessagingService
   ) {
     this.fetchFriendships();
   }
@@ -55,7 +52,7 @@ export class SelectKnownUserComponent {
     const response = await this.userService.getMyFriends();
     if (!response.success) return;
 
-    this.friendships = response.data.friends.sort((a, b) =>
+    this.friendships = response.data.friends.sort((a: any, b: any) =>
       a.otherUser.name.localeCompare(b.otherUser.name)
     );
 

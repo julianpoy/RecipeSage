@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ToastController } from "@ionic/angular";
 
-import { UserService } from "~/services/user.service";
+import { User, UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
 
@@ -13,13 +11,13 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   styleUrls: ["./select-user.component.scss"],
 })
 export class SelectUserComponent {
-  _selectedUser: any;
+  _selectedUser?: User | UserProfile;
   @Input()
-  get selectedUser() {
+  get selectedUser(): User | UserProfile | undefined {
     return this._selectedUser;
   }
 
-  set selectedUser(val) {
+  set selectedUser(val: User | UserProfile | undefined) {
     this._selectedUser = val;
     this.selectedUserChange.emit(this._selectedUser);
   }
@@ -27,8 +25,8 @@ export class SelectUserComponent {
   @Output() selectedUserChange = new EventEmitter();
   @Output() searchInputChange = new EventEmitter();
 
-  results = [];
-  searchTimeout;
+  results: (UserProfile | User)[] = [];
+  searchTimeout?: NodeJS.Timeout;
   searching = false;
 
   _searchText: string = "";
@@ -41,13 +39,11 @@ export class SelectUserComponent {
   }
 
   constructor(
-    private utilService: UtilService,
-    private toastCtrl: ToastController,
     private userService: UserService,
     private loadingService: LoadingService
   ) {}
 
-  onSearchInputChange(event) {
+  onSearchInputChange(event: any) {
     this.searchText = event.detail.value;
 
     this.results = [];
@@ -98,12 +94,12 @@ export class SelectUserComponent {
     loading.dismiss();
   }
 
-  selectUser(user) {
+  selectUser(user: User | UserProfile) {
     this.selectedUser = user;
   }
 
   clearSelectedUser() {
-    this.selectedUser = null;
+    this.selectedUser = undefined;
     this.results = [];
     this.searchText = "";
     this.searching = false;

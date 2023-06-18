@@ -49,7 +49,7 @@ export class SelectMealComponent {
       (option) => option.key === lastUsedMeal
     );
 
-    if (mealExists) {
+    if (lastUsedMeal && mealExists) {
       this.meal = lastUsedMeal;
 
       setTimeout(() => {

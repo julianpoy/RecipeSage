@@ -6,20 +6,25 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./meal-group.component.scss"],
 })
 export class MealGroupComponent {
-  @Input() mealItems;
-  @Input() enableEditing;
+  @Input({
+    required: true,
+  })
+  mealItems!: {
+    meals: any[];
+  };
+  @Input() enableEditing: boolean = false;
 
   @Output() itemClicked = new EventEmitter<any>();
   @Output() itemDragEnd = new EventEmitter<any>();
 
   constructor() {}
 
-  dragStart(event, mealItem) {
+  dragStart(event: any, mealItem: any) {
     mealItem.dragging = true;
     event.dataTransfer.setData("text", mealItem.id); // Must set 'text' prop for Android dragndrop, otherwise evt will be cancelled
   }
 
-  dragEnd(event, mealItem) {
+  dragEnd(_: any, mealItem: any) {
     mealItem.dragging = false;
     this.itemDragEnd.emit();
   }

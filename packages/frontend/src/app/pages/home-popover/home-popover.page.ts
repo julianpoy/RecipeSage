@@ -1,10 +1,5 @@
-import { Component, ViewChild, Input } from "@angular/core";
-import {
-  ToastController,
-  ModalController,
-  IonSelect,
-  PopoverController,
-} from "@ionic/angular";
+import { Component, Input } from "@angular/core";
+import { ToastController, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UtilService } from "~/services/util.service";
@@ -26,9 +21,15 @@ export class HomePopoverPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
 
-  @Input() selectionMode: boolean;
+  @Input({
+    required: true,
+  })
+  selectionMode!: boolean;
 
-  @Input() guestMode: boolean;
+  @Input({
+    required: true,
+  })
+  guestMode!: boolean;
 
   constructor(
     public translate: TranslateService,

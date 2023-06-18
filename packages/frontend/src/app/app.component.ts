@@ -22,7 +22,6 @@ import { UserService } from "~/services/user.service";
 import {
   PreferencesService,
   GlobalPreferenceKey,
-  SupportedLanguages,
 } from "~/services/preferences.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
 import { VersionCheckService } from "~/services/versioncheck.service";
@@ -47,12 +46,12 @@ interface NavPage {
 })
 export class AppComponent {
   isSelfHost = IS_SELFHOST;
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 
-  navList: { title: string; icon: string; url: string }[];
+  navList?: { title: string; icon: string; url: string }[];
 
-  inboxCount: number;
-  friendRequestCount: number;
+  inboxCount?: number;
+  friendRequestCount?: number;
 
   version: number = (window as any).version;
 
@@ -86,9 +85,6 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
-    private capabilitiesService: CapabilitiesService,
-    private versionCheckService: VersionCheckService,
-    private offlineCacheService: OfflineCacheService,
     public cookingToolbarService: CookingToolbarService
   ) {
     const language =
@@ -167,7 +163,7 @@ export class AppComponent {
     g.async = true;
     g.defer = true;
     g.src = u + "piwik.js";
-    s.parentNode.insertBefore(g, s);
+    s.parentNode?.insertBefore(g, s);
 
     (window as any)._paq = _paq;
   }
@@ -480,7 +476,7 @@ export class AppComponent {
       this.menuCtrl.close();
     });
 
-    let currentUrl;
+    let currentUrl: string | undefined;
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) return;
 
@@ -497,7 +493,7 @@ export class AppComponent {
         if (!_paq) return;
 
         if (currentUrl) _paq.push(["setReferrerUrl", currentUrl]);
-        currentUrl = "" + window.location.hash.substr(1);
+        currentUrl = "" + window.location.hash.substring(1);
         _paq.push(["setCustomUrl", currentUrl]);
         _paq.push(["setDocumentTitle", viewName]);
 

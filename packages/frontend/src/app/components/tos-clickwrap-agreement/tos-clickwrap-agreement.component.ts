@@ -10,7 +10,5 @@ import { RouteMap } from "~/services/util.service";
 export class TosClickwrapAgreementComponent {
   legalPath: string = RouteMap.LegalPage.getPath();
 
-  @Input() actionTitle: string;
-
   constructor() {}
 }

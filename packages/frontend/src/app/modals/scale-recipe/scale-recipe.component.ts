@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import fractionjs from "fraction.js";
 
@@ -8,11 +8,11 @@ import fractionjs from "fraction.js";
   styleUrls: ["scale-recipe.component.scss"],
 })
 export class ScaleRecipeComponent {
-  scale: string;
+  @Input() scale: string = "1";
 
   constructor(private popoverCtrl: PopoverController) {}
 
-  format(input) {
+  format(input: string) {
     // Support fractions
     const parsed = fractionjs(input).valueOf();
 

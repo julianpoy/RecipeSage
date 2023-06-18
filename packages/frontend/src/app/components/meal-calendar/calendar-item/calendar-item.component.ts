@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { MealPlanItem } from "../../../services/meal-plan.service";
 
 @Component({
   selector: "calendar-item",
@@ -6,7 +7,10 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./calendar-item.component.scss"],
 })
 export class CalendarItemComponent {
-  @Input() mealItem;
+  @Input({
+    required: true,
+  })
+  mealItem!: MealPlanItem;
 
   constructor() {}
 }

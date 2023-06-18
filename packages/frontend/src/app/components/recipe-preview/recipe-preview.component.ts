@@ -7,8 +7,8 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
   styleUrls: ["./recipe-preview.component.scss"],
 })
 export class RecipePreviewComponent {
-  @Input() selected: boolean;
-  @Input() landscape: boolean;
+  @Input() selected: boolean = false;
+  @Input() landscape: boolean = false;
 
   trustedPreviewSrc: SafeResourceUrl =
     this.sanitizer.bypassSecurityTrustResourceUrl("");
@@ -19,13 +19,16 @@ export class RecipePreviewComponent {
     );
   }
 
-  @Input() description: string;
+  @Input({
+    required: true,
+  })
+  description!: string;
 
   @Output() previewClick = new EventEmitter();
 
   constructor(public sanitizer: DomSanitizer) {}
 
-  onClick(event) {
+  onClick(event: Event) {
     this.previewClick.emit(event);
   }
 }

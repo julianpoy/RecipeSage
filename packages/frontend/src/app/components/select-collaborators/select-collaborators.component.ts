@@ -13,7 +13,7 @@ import { UserService } from "../../services/user.service";
   styleUrls: ["./select-collaborators.component.scss"],
 })
 export class SelectCollaboratorsComponent {
-  _selectedCollaboratorIds: string[];
+  _selectedCollaboratorIds: string[] = [];
   @Input()
   set selectedCollaboratorIds(val) {
     this._selectedCollaboratorIds = val;
@@ -60,7 +60,7 @@ export class SelectCollaboratorsComponent {
     });
   }
 
-  autofillUserName(callback?) {
+  autofillUserName(callback?: () => void) {
     this.searchingForRecipient = true;
 
     if (this.autofillTimeout) clearTimeout(this.autofillTimeout);
@@ -95,7 +95,7 @@ export class SelectCollaboratorsComponent {
     }, 500);
   }
 
-  toggleAutocomplete(show, event?) {
+  toggleAutocomplete(show: boolean, event?: any) {
     if (event && event.relatedTarget) {
       if (event.relatedTarget.className.indexOf("suggestion") > -1) {
         return;
@@ -104,7 +104,7 @@ export class SelectCollaboratorsComponent {
     this.showAutocomplete = show;
   }
 
-  onAddCollaboratorEnter($event) {
+  onAddCollaboratorEnter($event: any) {
     this.autofillUserName(async () => {
       if (this.pendingCollaboratorId) {
         $event.target.value = "";
@@ -124,7 +124,7 @@ export class SelectCollaboratorsComponent {
     });
   }
 
-  async addCollaborator(userId) {
+  async addCollaborator(userId: string) {
     if (userId.length === 0) {
       const message = await this.translate
         .get("components.selectCollaborators.invalidEmail")
@@ -145,7 +145,7 @@ export class SelectCollaboratorsComponent {
     this.pendingThread = "";
   }
 
-  removeCollaborator(userId) {
+  removeCollaborator(userId: string) {
     this.selectedCollaboratorIds.splice(
       this.selectedCollaboratorIds.indexOf(userId),
       1

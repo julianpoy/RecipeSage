@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -24,10 +24,10 @@ import { CapabilitiesService } from "~/services/capabilities.service";
   providers: [UserService],
 })
 export class AuthPage {
-  @Input() startWithRegister: boolean | null;
+  @Input() startWithRegister?: boolean;
 
   showLogin = false;
-  redirect: string;
+  redirect?: string;
 
   isSelfHost = IS_SELFHOST;
 
@@ -58,9 +58,8 @@ export class AuthPage {
       this.showLogin = true;
     }
 
-    if (this.route.snapshot.paramMap.get("redirect")) {
-      this.redirect = this.route.snapshot.queryParamMap.get("redirect");
-    }
+    this.redirect =
+      this.route.snapshot.queryParamMap.get("redirect") || undefined;
   }
 
   ionViewWillEnter() {
@@ -223,7 +222,7 @@ export class AuthPage {
     successAlert.present();
   }
 
-  showLegal(e) {
+  showLegal(e: Event) {
     e.preventDefault();
     this.navCtrl.navigateForward(RouteMap.LegalPage.getPath());
   }

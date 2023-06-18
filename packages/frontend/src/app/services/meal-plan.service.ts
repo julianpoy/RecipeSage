@@ -1,8 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "./http.service";
-import {
-  ErrorHandlers,
-} from "./http-error-handler.service";
+import { ErrorHandlers } from "./http-error-handler.service";
+
+export enum MealName {
+  Breakfast = "breakfast",
+  Lunch = "lunch",
+  Dinner = "dinner",
+  Snacks = "snacks",
+  Other = "other",
+}
 
 export interface MealPlanCollaborator {
   id: string;
@@ -36,7 +42,7 @@ export interface MealPlanItem {
   id: string;
   title: string;
   scheduled: string;
-  meal: string;
+  meal: MealName;
   updatedAt: string;
   createdAt: string;
   owner: MealPlanCollaborator;
@@ -56,9 +62,7 @@ export interface MealPlanItem {
   providedIn: "root",
 })
 export class MealPlanService {
-  constructor(
-    private httpService: HttpService,
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MealPlans>(

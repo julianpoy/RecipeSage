@@ -6,8 +6,11 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./logo-icon.component.scss"],
 })
 export class LogoIconComponent {
-  @Input() href: string;
-  @Input() noBg: string;
+  @Input({
+    required: true,
+  })
+  href!: string;
+  @Input() noBg: boolean = false;
 
   constructor() {}
 }

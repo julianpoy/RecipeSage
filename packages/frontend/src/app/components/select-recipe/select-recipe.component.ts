@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { UtilService } from "~/services/util.service";
 import { Recipe, RecipeService } from "~/services/recipe.service";
 import { ToastController, NavController } from "@ionic/angular";
 
@@ -10,25 +10,25 @@ import { ToastController, NavController } from "@ionic/angular";
   styleUrls: ["./select-recipe.component.scss"],
 })
 export class SelectRecipeComponent {
-  searchTimeout;
+  searchTimeout?: NodeJS.Timeout;
   searchText = "";
   searching = false;
   PAUSE_BEFORE_SEARCH = 500;
 
-  _selectedRecipe: Recipe;
+  _selectedRecipe?: Recipe;
   @Input()
   get selectedRecipe() {
     return this._selectedRecipe;
   }
 
-  set selectedRecipe(val: Recipe) {
+  set selectedRecipe(val: Recipe | undefined) {
     this._selectedRecipe = val;
     this.selectedRecipeChange.emit(this._selectedRecipe);
   }
 
   @Output() selectedRecipeChange = new EventEmitter();
 
-  recipes: any = [];
+  recipes: Recipe[] = [];
 
   constructor(
     public loadingService: LoadingService,
@@ -52,7 +52,7 @@ export class SelectRecipeComponent {
     this.recipes = response.data.data;
   }
 
-  onSearchInputChange(event) {
+  onSearchInputChange(event: any) {
     this.searchText = event.detail.value;
 
     this.recipes = [];

@@ -1,18 +1,10 @@
 import { Component, ViewChild, Input } from "@angular/core";
-import {
-  ToastController,
-  ModalController,
-  IonSelect,
-  PopoverController,
-} from "@ionic/angular";
+import { ToastController, IonSelect, PopoverController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LabelService } from "~/services/label.service";
+import { Label, LabelService } from "~/services/label.service";
 import { UtilService } from "~/services/util.service";
-import {
-  QuickTutorialService,
-  QuickTutorialOptions,
-} from "~/services/quick-tutorial.service";
+import { QuickTutorialService } from "~/services/quick-tutorial.service";
 import {
   PreferencesService,
   MyRecipesPreferenceKey,
@@ -27,18 +19,30 @@ import { RatingFilterPopoverComponent } from "~/components/rating-filter-popover
 })
 export class HomeSearchFilterPopoverPage {
   @ViewChild("filterByLabelSelect", { static: true })
-  filterByLabelSelect: IonSelect;
+  filterByLabelSelect?: IonSelect;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
 
-  @Input() ratingFilter: (number | null)[];
+  @Input({
+    required: true,
+  })
+  ratingFilter!: (number | null)[];
 
-  @Input() labels: any;
+  @Input({
+    required: true,
+  })
+  labels!: Label[];
 
-  @Input() selectedLabels: any[];
+  @Input({
+    required: true,
+  })
+  selectedLabels!: string[];
 
-  @Input() guestMode: boolean;
+  @Input({
+    required: true,
+  })
+  guestMode!: boolean;
 
   constructor(
     public translate: TranslateService,
