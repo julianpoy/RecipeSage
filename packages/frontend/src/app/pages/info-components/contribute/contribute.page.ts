@@ -16,10 +16,10 @@ import { CapabilitiesService } from "~/services/capabilities.service";
 export class ContributePage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
-  frequency: string;
+  frequency?: string;
 
-  amount: number;
-  customAmount: string;
+  amount?: number;
+  customAmount?: string;
 
   constructor(
     public capabilitiesService: CapabilitiesService,
@@ -40,31 +40,36 @@ export class ContributePage {
 
   setAmount(amount: number) {
     this.amount = amount;
-    this.customAmount = null;
+    this.customAmount = undefined;
   }
 
   focusCustom() {
-    this.amount = null;
+    this.amount = undefined;
     this.customAmount = "0.00";
   }
 
   setFrequency(frequency: "monthly" | "single") {
     this.frequency = frequency;
-    this.amount = null;
-    this.customAmount = null;
+    this.amount = undefined;
+    this.customAmount = undefined;
   }
 
-  validAmount() {
+  validAmount(): boolean {
     try {
+      if (this.customAmount === undefined) return false;
       const customAmount = parseFloat(this.customAmount);
-      return this.amount || customAmount;
+      return !!(this.amount || customAmount);
     } catch (e) {
       return false;
     }
   }
 
   async contribute() {
-    const amount = this.amount ? this.amount : parseFloat(this.customAmount);
+    let amount = 0;
+    if (this.amount) amount = this.amount;
+    else if (this.customAmount) parseFloat(this.customAmount);
+    else return;
+
     const isRecurring = this.frequency === "monthly";
 
     const message = await this.translate

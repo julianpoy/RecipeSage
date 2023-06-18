@@ -16,7 +16,7 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 @Component({
   selector: "page-meal-plan-item-details-modal",
@@ -24,8 +24,12 @@ import dayjs, { Dayjs } from "dayjs";
   styleUrls: ["meal-plan-item-details-modal.page.scss"],
 })
 export class MealPlanItemDetailsModalPage {
-  @Input() mealPlanId: string;
-  @Input() mealItem: MealPlanItem;
+  @Input({
+    required: true,
+  }) mealPlanId!: string;
+  @Input({
+    required: true
+  }) mealItem!: MealPlanItem;
 
   constructor(
     public navCtrl: NavController,
@@ -41,6 +45,8 @@ export class MealPlanItemDetailsModalPage {
   ) {}
 
   openRecipe() {
+    if (!this.mealItem.recipe) return;
+
     this.navCtrl.navigateForward(
       RouteMap.RecipePage.getPath(this.mealItem.recipe.id)
     );
@@ -171,6 +177,8 @@ export class MealPlanItemDetailsModalPage {
   }
 
   async addToShoppingList() {
+    if (!this.mealItem.recipe) return;
+
     const loading = this.loadingService.start();
     // Fetch complete recipe (this page is provided with only topical recipe details)
     const response = await this.recipeService.getRecipeById(
@@ -190,6 +198,8 @@ export class MealPlanItemDetailsModalPage {
   }
 
   pinRecipe() {
+    if (!this.mealItem.recipe) return;
+
     this.cookingToolbarService.pinRecipe({
       id: this.mealItem.recipe.id,
       title: this.mealItem.recipe.title,
@@ -198,14 +208,16 @@ export class MealPlanItemDetailsModalPage {
   }
 
   unpinRecipe() {
+    if (!this.mealItem.recipe) return;
+
     this.cookingToolbarService.unpinRecipe(this.mealItem.recipe.id);
   }
 
-  formatDate(date) {
+  formatDate(date: Date | string | number) {
     return dayjs(date).format("YYYY-MM-DD");
   }
 
-  close(args?) {
+  close(args?: any) {
     this.modalCtrl.dismiss(args);
   }
 }

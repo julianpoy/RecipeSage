@@ -49,6 +49,7 @@ export interface MealPlanItem {
       location: string;
     }[];
   };
+  recipeId?: string;
 }
 
 @Injectable({

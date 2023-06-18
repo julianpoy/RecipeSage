@@ -17,9 +17,11 @@ import { RecipeService } from "~/services/recipe.service";
   styleUrls: ["manage-label-modal.page.scss"],
 })
 export class ManageLabelModalPage {
-  @Input() label: Label;
+  @Input({
+    required: true
+  }) label!: Label;
 
-  createdAt: string;
+  createdAt?: string;
 
   constructor(
     public navCtrl: NavController,

@@ -4,7 +4,7 @@ import {
   ModalController,
   ToastController,
 } from "@ionic/angular";
-import { RecipeService } from "~/services/recipe.service";
+import { Recipe, RecipeService } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 
@@ -16,12 +16,12 @@ import { UtilService } from "~/services/util.service";
 export class NewMealPlanItemModalPage {
   @Input() isEditing = false;
   @Input() inputType = "recipe";
-  @Input() recipe;
-  @Input() title: any = "";
-  @Input() meal: any;
+  @Input() recipe?: Recipe;
+  @Input() title: string = "";
+  @Input() meal?: string;
   @Input() scheduled = new Date();
 
-  sanitizedScheduled;
+  sanitizedScheduled: string = '';
 
   constructor(
     public navCtrl: NavController,
@@ -45,7 +45,7 @@ export class NewMealPlanItemModalPage {
     this.sanitizedScheduled = `${year}-${month}-${date}`;
   }
 
-  scheduledDateChange(event) {
+  scheduledDateChange(event: any) {
     const [year, month, date] = event.target.value.split("-");
     const scheduled = new Date();
     scheduled.setDate(date);
@@ -69,20 +69,14 @@ export class NewMealPlanItemModalPage {
   }
 
   save() {
-    let item;
-    if (this.inputType === "recipe") {
-      item = {
-        title: this.recipe.title,
-        recipeId: this.recipe.id,
-      };
-    } else {
-      item = {
-        title: this.title,
-      };
-    }
+    if (!this.meal || !this.scheduled) return;
 
-    item.meal = this.meal;
-    item.scheduled = this.scheduled;
+    const item = {
+      title: this.inputType === "recipe" && this.recipe ? this.recipe.title : this.title,
+      recipeId: this.inputType === "recipe" && this.recipe ? this.recipe.id : undefined,
+      meal: this.meal,
+      scheduled: this.scheduled
+    };
 
     this.modalCtrl.dismiss({
       item,

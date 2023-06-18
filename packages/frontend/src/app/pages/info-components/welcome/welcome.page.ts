@@ -20,7 +20,7 @@ export class WelcomePage {
     }
   }
 
-  goToAuth(type) {
+  goToAuth(type: 'login' | 'register') {
     const register = type === "register";
 
     if (register) {

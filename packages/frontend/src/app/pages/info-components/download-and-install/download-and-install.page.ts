@@ -39,7 +39,7 @@ export class DownloadAndInstallPage {
     if (installPrompt) {
       installPrompt.prompt();
 
-      installPrompt.userChoice.then((choiceResult) => {
+      installPrompt.userChoice.then((choiceResult: any) => {
         if (choiceResult.outcome === "accepted") {
           console.log("User accepted the A2HS prompt");
           (window as any).deferredInstallPrompt = null;

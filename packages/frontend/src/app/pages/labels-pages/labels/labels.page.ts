@@ -56,7 +56,7 @@ export class LabelsPage {
     });
   }
 
-  refresh(refresher) {
+  refresh(refresher: any) {
     this.loadLabels().then(
       () => {
         refresher.target.complete();
@@ -78,7 +78,7 @@ export class LabelsPage {
     this.labels = response.data;
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event) {
     const popover = await this.popoverCtrl.create({
       component: LabelsPopoverPage,
       componentProps: {
@@ -100,7 +100,7 @@ export class LabelsPage {
     popover.present();
   }
 
-  trackByFn(index, item) {
+  trackByFn(_: number, item: { id: string }) {
     return item.id;
   }
 

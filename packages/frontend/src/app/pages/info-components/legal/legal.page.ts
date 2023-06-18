@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
@@ -14,7 +14,7 @@ export class LegalPage implements AfterViewInit {
   isSelfHost = IS_SELFHOST;
   defaultBackHref: string = RouteMap.AboutPage.getPath();
 
-  @ViewChild("content") content;
+  @ViewChild("content") content?: any;
 
   constructor(public route: ActivatedRoute) {}
 
@@ -23,7 +23,7 @@ export class LegalPage implements AfterViewInit {
 
     if (scrollToSection === "sharing") {
       setTimeout(() => {
-        this.content.scrollToBottom(200);
+        this.content?.scrollToBottom(200);
       });
     }
   }

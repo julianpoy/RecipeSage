@@ -5,11 +5,11 @@ import {
   AlertController,
   ToastController,
 } from "@ionic/angular";
-import { MealPlanService } from "~/services/meal-plan.service";
+import { MealPlanItem, MealPlanService } from "~/services/meal-plan.service";
 import { RecipeService } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { UtilService } from "~/services/util.service";
 
 @Component({
   selector: "page-meal-plan-bulk-pin-modal",
@@ -17,10 +17,12 @@ import { UtilService, RouteMap } from "~/services/util.service";
   styleUrls: ["index.scss"],
 })
 export class MealPlanBulkPinModalPage {
-  @Input() mealItems;
+  @Input({
+    required: true,
+  }) mealItems!: MealPlanItem[];
 
   allSelected = true;
-  recipeIdSelectionMap = {};
+  recipeIdSelectionMap: { [recipeId: string]: boolean } = {};
 
   constructor(
     public navCtrl: NavController,
@@ -40,10 +42,11 @@ export class MealPlanBulkPinModalPage {
 
   selectAllRecipes() {
     this.allSelected = true;
-    (this.mealItems || [])
-      .filter((mealItem) => mealItem.recipe?.id)
+    this.mealItems
+      .map((mealItem) => mealItem.recipe)
+      .filter((recipe): recipe is Exclude<typeof recipe, null> => !!recipe)
       .forEach(
-        (mealItem) => (this.recipeIdSelectionMap[mealItem.recipe.id] = true)
+        (recipe) => (this.recipeIdSelectionMap[recipe.id] = true)
       );
   }
 
@@ -61,7 +64,7 @@ export class MealPlanBulkPinModalPage {
         (item) => item.recipe?.id === recipeId
       );
 
-      if (mealItem) {
+      if (mealItem && mealItem.recipe) {
         this.cookingToolbarService.pinRecipe({
           id: mealItem.recipe.id,
           title: mealItem.recipe.title,
@@ -71,7 +74,7 @@ export class MealPlanBulkPinModalPage {
     });
   }
 
-  close(args?) {
+  close(args?: any) {
     this.modalCtrl.dismiss(args);
   }
 }
