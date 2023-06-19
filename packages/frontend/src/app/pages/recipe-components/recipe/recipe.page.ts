@@ -265,7 +265,7 @@ export class RecipePage {
     );
   }
 
-  ingredientClicked(_: Event, ingredient: ParsedInstruction, idx: number) {
+  ingredientClicked(_: Event, ingredient: ParsedIngredient, idx: number) {
     if (ingredient.isHeader) return;
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(
@@ -443,6 +443,10 @@ export class RecipePage {
       }
     }
     this.showAutocomplete = show;
+  }
+
+  labelInputEnter(event: any) {
+    this.addLabel(event.target.value);
   }
 
   async addLabel(title: string) {

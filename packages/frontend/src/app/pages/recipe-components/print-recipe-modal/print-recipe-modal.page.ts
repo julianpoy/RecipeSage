@@ -1,16 +1,15 @@
 import { Component, Input } from "@angular/core";
-import { NavController, ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RecipeService, Recipe } from "~/services/recipe.service";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Recipe } from "~/services/recipe.service";
 import { UtilService, RecipeTemplateModifiers } from "~/services/util.service";
 
 export interface PrintOption {
   modifiers: RecipeTemplateModifiers;
   description: string;
   orientation: string;
-  url?: SafeResourceUrl;
+  url: string;
 }
 
 @Component({
@@ -32,12 +31,9 @@ export class PrintRecipeModalPage {
   templates: PrintOption[] = [];
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public modalCtrl: ModalController,
-    public sanitizer: DomSanitizer,
-    public utilService: UtilService,
-    public recipeService: RecipeService
+    private translate: TranslateService,
+    private modalCtrl: ModalController,
+    private utilService: UtilService
   ) {}
 
   async ionViewWillEnter() {
@@ -62,6 +58,7 @@ export class PrintRecipeModalPage {
         },
         description: standard,
         orientation: "portrait",
+        url: "",
       },
       // {
       //   name: 'halfsheet',
@@ -75,6 +72,7 @@ export class PrintRecipeModalPage {
         },
         description: standardNoImg,
         orientation: "portrait",
+        url: "",
       },
       // {
       //   name: 'halfsheet',
@@ -95,6 +93,7 @@ export class PrintRecipeModalPage {
         },
         description: halfSheetCols,
         orientation: "landscape",
+        url: "",
       },
       {
         modifiers: {
@@ -104,6 +103,7 @@ export class PrintRecipeModalPage {
         },
         description: halfSheetCompactNoCols,
         orientation: "landscape",
+        url: "",
       },
     ];
 

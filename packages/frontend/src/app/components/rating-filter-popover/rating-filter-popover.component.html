@@ -11,7 +11,7 @@
     <ion-item lines="none">
       <ion-checkbox
         slot="start"
-        [checked]="ratingFilter?.includes(null)"
+        [checked]="ratingFilter.includes(null)"
         (ionChange)="toggle(null)"
       ></ion-checkbox>
       <ion-label>
@@ -22,8 +22,8 @@
     <ion-item lines="none" *ngFor="let possibleRating of possibleRatings">
       <ion-checkbox
         slot="start"
-        [checked]="ratingFilter?.includes(possibleRating)"
-        (ionChange)="toggle(possibleRating, $event)"
+        [checked]="ratingFilter.includes(possibleRating)"
+        (ionChange)="toggle(possibleRating)"
       ></ion-checkbox>
 
       <ion-label>

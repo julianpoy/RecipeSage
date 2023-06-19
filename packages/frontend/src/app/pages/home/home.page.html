@@ -76,7 +76,7 @@
         inputmode="search"
         type="search"
         (ionClear)="search('')"
-        (keydown.enter)="search($event.target.value); $event.target.blur()"
+        (keydown.enter)="searchFieldEnter($event)"
       ></ion-searchbar>
       <ion-button fill="clear" size="small" (click)="showSearchFilter($event)">
         {{ 'pages.home.search.filter' | translate }}
@@ -151,10 +151,10 @@
             <ion-badge
               *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
             >
-              <ng-container *ngIf="friendsById[recipe.userId]">
+              <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
                 @{{friendsById[recipe.userId].handle}}
               </ng-container>
-              <ng-container *ngIf="!friendsById[recipe.userId]">
+              <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
                 {{ 'pages.home.recipe.fromSharedCollection' | translate }}
               </ng-container>
             </ion-badge>
@@ -232,10 +232,10 @@
         <ion-badge
           *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
         >
-          <ng-container *ngIf="friendsById[recipe.userId]">
+          <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
             @{{friendsById[recipe.userId].handle}}
           </ng-container>
-          <ng-container *ngIf="!friendsById[recipe.userId]">
+          <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
             {{ 'pages.home.recipe.fromSharedCollection' | translate }}
           </ng-container>
         </ion-badge>

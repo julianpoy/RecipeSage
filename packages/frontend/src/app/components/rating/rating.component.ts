@@ -11,8 +11,8 @@ export class RatingComponent {
   _rating: number = 0;
 
   @Input()
-  set rating(rating: number) {
-    this._rating = rating;
+  set rating(rating: number | undefined) {
+    this._rating = rating || 0;
     this.updateRatingVisual();
   }
   get rating() {

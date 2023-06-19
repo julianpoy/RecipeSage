@@ -5,7 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.shoppingList.title' | translate:{title:list.title} }}
+      {{ 'pages.shoppingList.title' | translate:{title: list?.title || ''} }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -54,7 +54,7 @@
               [groupTitleExpanded]="groupTitleExpanded"
               [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
               [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
+              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
               (completeToggle)="completeItems($event, true)"
             ></shopping-list-group>
           </div>
@@ -70,7 +70,7 @@
           [groupTitleExpanded]="groupTitleExpanded"
           [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
           [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0"
+          [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
           (completeToggle)="completeItems($event, true)"
         ></shopping-list-group>
       </div>
@@ -107,7 +107,7 @@
               [completed]="item.completed"
               [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
               [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
+              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
               (completeToggle)="completeItems([item], true)"
             ></shopping-list-item>
           </div>
@@ -123,7 +123,7 @@
           [completed]="item.completed"
           [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
           [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-          [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
+          [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
           (completeToggle)="completeItems([item], true)"
         ></shopping-list-item>
       </div>
@@ -195,7 +195,7 @@
       [completed]="item.completed"
       [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
       [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-      [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list.collaborators.length > 0 && item.owner?.name"
+      [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
       (completeToggle)="completeItems([item], false)"
     ></shopping-list-item>
   </ion-list>

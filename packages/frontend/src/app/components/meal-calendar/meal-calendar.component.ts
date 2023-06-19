@@ -43,7 +43,7 @@ export class MealCalendarComponent {
             [key in MealName]: MealPlanItem[];
           };
           items: MealPlanItem[];
-          meals: MealName;
+          meals: MealName[];
         };
       };
     };
@@ -220,7 +220,7 @@ export class MealCalendarComponent {
       });
   }
 
-  mealItemsByDay(date: Date | string | number) {
+  mealItemsByDay(date: Dayjs | Date | string | number) {
     const day = dayjs(date);
     return (
       this.mealsByDate[day.year()]?.[day.month()]?.[day.date()] || {

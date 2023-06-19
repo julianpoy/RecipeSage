@@ -12,7 +12,7 @@
 
 <ion-content class="ion-padding">
   <ion-list *ngIf="!itemType">
-    <ion-radio-group (ionChange)="itemType = $event?.detail?.value">
+    <ion-radio-group (ionChange)="onItemTypeChange($event)">
       <ion-list-header>
         <ion-item lines="none">
           <ion-icon name="folder-open" slot="start"></ion-icon>
@@ -89,7 +89,7 @@
   <ion-list *ngIf="isItemSelected() && !itemVisibility" class="ion-margin-top">
     <ion-radio-group
       [value]="itemVisibility"
-      (ionChange)="itemVisibility = $event?.detail?.value"
+      (ionChange)="onItemVisibilityChange($event)"
     >
       <ion-list-header>
         <ion-item>

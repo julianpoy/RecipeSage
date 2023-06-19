@@ -59,11 +59,11 @@
                   href="{{ recipe.url ? recipe.url : '' }}"
                   target="_blank"
                   rel="noreferrer noopener"
-                  >{{ recipe.source?.trim() ||
+                  >{{ recipe.source.trim() ||
                   utilService.truncate(recipe.url.trim(), 40) }}</a
                 >
                 <span *ngIf="!recipe.url?.trim()"
-                  >{{ recipe.source?.trim() }}</span
+                  >{{ recipe.source.trim() }}</span
                 >
               </p>
             </ion-col>
@@ -123,10 +123,10 @@
                 href="{{ recipe.url ? recipe.url : '' }}"
                 target="_blank"
                 rel="noreferrer noopener"
-                >{{ recipe.source?.trim() || recipe.url }}</a
+                >{{ recipe.source.trim() || recipe.url }}</a
               >
               <span *ngIf="!recipe.url?.trim()"
-                >{{ recipe.source?.trim() }}</span
+                >{{ recipe.source.trim() }}</span
               >
             </p>
           </ion-col>
@@ -291,7 +291,7 @@
       <input
         [(ngModel)]="pendingLabel"
         (click)="toggleAutocomplete(true); $event.stopPropagation();"
-        (keyup.enter)="addLabel($event.target.value); $event.target.value = ''"
+        (keyup.enter)="labelInputEnter($event)"
         placeholder="Create or select label"
         autocomplete="off"
         #labelInputField

@@ -29,7 +29,8 @@
   <br /><br />
 
   <select-collaborators
-    [(selectedCollaboratorIds)]="selectedCollaboratorIds"
+    [selectedCollaboratorIds]="selectedCollaboratorIds"
+    (selectedCollaboratorIdsChanged)="selectedCollaboratorIds = $event"
   ></select-collaborators>
 </ion-content>
 

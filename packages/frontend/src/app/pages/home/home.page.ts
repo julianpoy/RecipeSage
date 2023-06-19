@@ -372,7 +372,7 @@ export class HomePage {
     this.resetAndLoadRecipes();
   }
 
-  openRecipe(recipe: Recipe, event?: KeyboardEvent) {
+  openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
     if (event && (event.metaKey || event.ctrlKey)) {
       window.open(`#/recipe/${recipe.id}`);
       return;
@@ -407,6 +407,11 @@ export class HomePage {
 
   newRecipe() {
     this.navCtrl.navigateForward(RouteMap.EditRecipePage.getPath("new"));
+  }
+
+  searchFieldEnter(event: any) {
+    this.search(event.target.value);
+    event.target.blur();
   }
 
   async search(text: string) {

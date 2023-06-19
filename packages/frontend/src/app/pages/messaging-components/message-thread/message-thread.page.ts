@@ -231,7 +231,7 @@ export class MessageThreadPage {
     this.loadMessages();
   }
 
-  openRecipe(recipe: Recipe) {
+  openRecipe(recipe: NonNullable<Message["originalRecipe"]>) {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 

@@ -6,8 +6,8 @@
 
     <ion-title>
       {{ 'pages.messageThread.title' |
-      translate:{name:(messages[0]?.otherUser.name ||
-      messages[0]?.otherUser.email || '')} }}
+      translate:{name:(messages.at(0)?.otherUser?.name ||
+      messages.at(0)?.otherUser?.email || '')} }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -56,7 +56,6 @@
           </ion-avatar>
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
-            <p class="description">{{ message.recipe.description }}</p>
             <p class="description">
               {{ 'pages.messageThread.clickToOpen' | translate }}
             </p>
@@ -96,7 +95,6 @@
           </ion-avatar>
           <ion-label>
             <h2 class="ion-text-wrap">{{ message.originalRecipe.title }}</h2>
-            <p class="description">{{ message.originalRecipe.description }}</p>
             <p class="description">
               {{ 'pages.messageThread.recipeCopySent' | translate }}
             </p>

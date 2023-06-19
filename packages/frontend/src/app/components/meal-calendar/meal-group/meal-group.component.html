@@ -10,7 +10,7 @@
     (dragstart)="dragStart($event, mealItem)"
     (dragend)="dragEnd($event, mealItem)"
     [ngClass]="{
-      dragging: mealItem.dragging,
+      dragging: mealItemsDragging[mealItem.id],
       breakfast: mealItem.meal === 'breakfast',
       lunch: mealItem.meal === 'lunch',
       dinner: mealItem.meal === 'dinner',

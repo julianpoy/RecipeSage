@@ -82,10 +82,7 @@
         </div>
       </div>
 
-      <tos-clickwrap-agreement
-        *ngIf="!isSelfHost"
-        [actionTitle]="showLogin ? 'logging in' : 'creating an account'"
-      ></tos-clickwrap-agreement>
+      <tos-clickwrap-agreement *ngIf="!isSelfHost"></tos-clickwrap-agreement>
 
       <div *ngIf="isSelfHost">
         {{ 'pages.auth.selfhostWarning2' | translate }}

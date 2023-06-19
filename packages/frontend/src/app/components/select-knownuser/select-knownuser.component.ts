@@ -1,9 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ToastController } from "@ionic/angular";
 
 import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService } from "~/services/util.service";
 import { MessageThread, MessagingService } from "~/services/messaging.service";
 
 @Component({
@@ -71,6 +68,14 @@ export class SelectKnownUserComponent {
     this.threads = response.data
       .filter((thread) => !friendIds.has(thread.otherUser.id))
       .sort((a, b) => a.otherUser.name.localeCompare(b.otherUser.name));
+  }
+
+  friendshipRadioChanged(event: any) {
+    this.selectFriendship(event.detail.value);
+  }
+
+  threadRadioChanged(event: any) {
+    this.selectThread(event.detail.value);
   }
 
   selectFriendship(friendship: any) {

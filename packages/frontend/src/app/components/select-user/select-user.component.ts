@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { User, UserProfile, UserService } from "~/services/user.service";
+import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
@@ -11,13 +11,13 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   styleUrls: ["./select-user.component.scss"],
 })
 export class SelectUserComponent {
-  _selectedUser?: User | UserProfile;
+  _selectedUser?: any;
   @Input()
-  get selectedUser(): User | UserProfile | undefined {
+  get selectedUser(): any | undefined {
     return this._selectedUser;
   }
 
-  set selectedUser(val: User | UserProfile | undefined) {
+  set selectedUser(val: any | undefined) {
     this._selectedUser = val;
     this.selectedUserChange.emit(this._selectedUser);
   }
@@ -25,7 +25,7 @@ export class SelectUserComponent {
   @Output() selectedUserChange = new EventEmitter();
   @Output() searchInputChange = new EventEmitter();
 
-  results: (UserProfile | User)[] = [];
+  results: any[] = [];
   searchTimeout?: NodeJS.Timeout;
   searching = false;
 
@@ -72,8 +72,6 @@ export class SelectUserComponent {
       404: () => {},
     });
     if (profileResponse.success && profileResponse.data) {
-      // TODO: Currently this pushes a profile rather than the direct user info
-      // This should be cleaned up - preferrably with some typing
       results.push(profileResponse.data);
     }
 
@@ -89,12 +87,14 @@ export class SelectUserComponent {
     if (userResponse.success && userResponse.data)
       results.push(userResponse.data);
 
+    // TODO: Searching by email should fetch user profiles instead
+    // Refactor this and it's usage
     this.results = results;
 
     loading.dismiss();
   }
 
-  selectUser(user: User | UserProfile) {
+  selectUser(user: any) {
     this.selectedUser = user;
   }
 

@@ -23,11 +23,8 @@ import {
   PreferencesService,
   GlobalPreferenceKey,
 } from "~/services/preferences.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
-import { VersionCheckService } from "~/services/versioncheck.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { EventService } from "~/services/event.service";
-import { OfflineCacheService } from "~/services/offline-cache.service";
 import {
   FeatureFlagKeys,
   FeatureFlagService,
@@ -48,7 +45,7 @@ export class AppComponent {
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
 
-  navList?: { title: string; icon: string; url: string }[];
+  navList?: { id: string; title: string; icon: string; url: string }[];
 
   inboxCount?: number;
   friendRequestCount?: number;
@@ -85,7 +82,7 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
-    public cookingToolbarService: CookingToolbarService
+    public cookingToolbarService: CookingToolbarService // Required by template
   ) {
     const language =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];

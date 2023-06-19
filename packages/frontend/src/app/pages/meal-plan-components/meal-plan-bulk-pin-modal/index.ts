@@ -23,7 +23,7 @@ export class MealPlanBulkPinModalPage {
   mealItems!: MealPlanItem[];
 
   allSelected = true;
-  recipeIdSelectionMap: { [recipeId: string]: boolean } = {};
+  recipeIdSelectionMap: Record<string, boolean> = {};
 
   constructor(
     public navCtrl: NavController,
@@ -71,6 +71,10 @@ export class MealPlanBulkPinModalPage {
         });
       }
     });
+  }
+
+  checkboxChanged(event: any, recipeId: string) {
+    this.recipeIdSelectionMap[recipeId] = event.detail.value;
   }
 
   close(args?: any) {

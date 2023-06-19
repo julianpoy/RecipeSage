@@ -15,7 +15,7 @@ export class ShoppingListGroupComponent {
   @Input({
     required: true,
   })
-  groupTitleExpanded!: string;
+  groupTitleExpanded!: Record<string, boolean>;
   @Input({
     required: true,
   })

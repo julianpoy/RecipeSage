@@ -25,6 +25,14 @@ export class AddProfileItemModalPage {
 
   constructor(private modalCtrl: ModalController) {}
 
+  onItemTypeChange(event: any) {
+    this.itemType = event.detail.value;
+  }
+
+  onItemVisibilityChange(event: any) {
+    this.itemVisibility = event.detail.value;
+  }
+
   cancel() {
     this.modalCtrl.dismiss();
   }

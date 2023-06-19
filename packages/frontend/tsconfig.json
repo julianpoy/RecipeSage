@@ -3,5 +3,9 @@
   "compilerOptions": {
     "target": "ES2021",
     "outDir": "./dist/out-tsc"
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true
   }
 }

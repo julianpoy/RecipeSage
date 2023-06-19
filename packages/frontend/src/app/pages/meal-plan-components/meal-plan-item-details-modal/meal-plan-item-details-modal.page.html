@@ -14,8 +14,8 @@
 
 <ion-content class="ion-padding">
   <ion-item (click)="mealItem.recipe ? openRecipe() : null" button>
-    <ion-avatar *ngIf="mealItem.recipe?.images?.length > 0" slot="start">
-      <img src="{{ mealItem.recipe.images[0].location }}" />
+    <ion-avatar *ngIf="mealItem.recipe?.images?.length" slot="start">
+      <img src="{{ mealItem.recipe?.images?.at(0)?.location }}" />
     </ion-avatar>
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
@@ -53,7 +53,7 @@
   </ion-item>
 
   <ion-item
-    *ngIf="mealItem.recipe?.id"
+    *ngIf="mealItem.recipe && mealItem.recipe.id"
     (click)="cookingToolbarService.isPinned(mealItem.recipe.id) ? unpinRecipe() : pinRecipe()"
     button
   >

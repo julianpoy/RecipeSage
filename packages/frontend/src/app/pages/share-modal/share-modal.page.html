@@ -44,13 +44,13 @@
         *ngSwitchCase="'link'"
         [webshareTitle]="recipe.title"
         [webshareText]="recipe.title + ':'"
-        [webshareURL]="recipeURL"
-        [copyText]="recipeURL"
+        [webshareURL]="recipeURL || ''"
+        [copyText]="recipeURL || ''"
       ></copy-with-webshare>
 
       <div *ngSwitchCase="'embed'">
         <br />
-        <div class="preview-settings-container">
+        <div class="preview-settings-container" *ngIf="recipePreviewURL">
           <recipe-preview
             [url]="recipePreviewURL"
             [description]="'Embed Preview'"
@@ -156,24 +156,12 @@
         <ion-item lines="none">
           {{ 'pages.share.byEmbed.copy' | translate }}
         </ion-item>
-        <div class="codeBlock">
-          <div class="code" [ngClass]="{ hasActionButton: hasCopyAPI }">
-            {{ recipeEmbedCode }}
-          </div>
-          <ion-button
-            fill="clear"
-            *ngIf="hasCopyAPI"
-            (click)="copyCodeToClipboard()"
-          >
-            <ion-icon name="copy" slot="icon-only"></ion-icon>
-          </ion-button>
-        </div>
-        <textarea
-          id="codeBlockCopy"
-          type="text"
-          class="invisible"
-          [ngModel]="recipeEmbedCode"
-        ></textarea>
+
+        <copy-with-webshare
+          *ngSwitchCase="'link'"
+          [disableWebshare]="true"
+          [copyText]="recipeEmbedCode || ''"
+        ></copy-with-webshare>
       </div>
 
       <div *ngSwitchCase="'account'" class="ion-padding">

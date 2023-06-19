@@ -32,6 +32,9 @@ import { UnsavedChangesService } from "~/services/unsaved-changes.service";
 export class MyProfilePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
+  revealNameInput: boolean = false;
+  revealHandleInput: boolean = false;
+
   accountInfo?: User;
   myProfile?: UserProfile;
   requiresSetup = false;

@@ -14,6 +14,7 @@
 
 <ion-content>
   <copy-with-webshare
+    *ngIf="profileUrl"
     [webshareTitle]="profile.name + '\'s RecipeSage profile'"
     [webshareText]="'Click to view' + this.profile.name + '\'s public RecipeSage profile'"
     [webshareURL]="profileUrl"

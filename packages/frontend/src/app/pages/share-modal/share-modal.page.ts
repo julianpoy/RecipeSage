@@ -14,7 +14,6 @@ import {
   RecipeTemplateModifiers,
   RouteMap,
 } from "~/services/util.service";
-import { SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
   selector: "page-share-modal",
@@ -47,7 +46,7 @@ export class ShareModalPage {
     hideSourceURL: false,
     showPrintButton: true,
   };
-  recipePreviewURL?: SafeResourceUrl;
+  recipePreviewURL?: string;
   recipeEmbedURL?: string;
   recipeEmbedCode?: string;
 
@@ -83,11 +82,11 @@ export class ShareModalPage {
 
   updateEmbed(updateURL?: boolean) {
     if (updateURL) {
-      this.recipePreviewURL = this.recipeEmbedURL =
-        this.utilService.generateRecipeTemplateURL(
-          this.recipe.id,
-          this.embedConfig
-        );
+      this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(
+        this.recipe.id,
+        this.embedConfig
+      );
+      this.recipePreviewURL = this.recipeEmbedURL;
     }
 
     const jsonLDCode = `<script>

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../services/loading.service";
@@ -13,15 +13,8 @@ import { UserService } from "../../services/user.service";
   styleUrls: ["./select-collaborators.component.scss"],
 })
 export class SelectCollaboratorsComponent {
-  _selectedCollaboratorIds: string[] = [];
-  @Input()
-  set selectedCollaboratorIds(val) {
-    this._selectedCollaboratorIds = val;
-  }
-
-  get selectedCollaboratorIds() {
-    return this._selectedCollaboratorIds;
-  }
+  @Input() selectedCollaboratorIds: string[] = [];
+  @Output() selectedCollaboratorIdsChanged = new EventEmitter<string[]>();
 
   threadsByUserId: any = {};
   existingThreads: any = [];
@@ -139,6 +132,7 @@ export class SelectCollaboratorsComponent {
     }
 
     this.selectedCollaboratorIds.push(userId);
+    this.selectedCollaboratorIdsChanged.emit(this.selectedCollaboratorIds);
 
     this.toggleAutocomplete(false);
 
@@ -150,5 +144,6 @@ export class SelectCollaboratorsComponent {
       this.selectedCollaboratorIds.indexOf(userId),
       1
     );
+    this.selectedCollaboratorIdsChanged.emit(this.selectedCollaboratorIds);
   }
 }

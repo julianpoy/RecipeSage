@@ -39,15 +39,15 @@
         slot="start"
         (click)="openImageViewer()"
       >
-        <img src="{{ profile.profileImages[0].location }}" />
+        <img src="{{ profile.profileImages.at(0)?.location }}" />
       </ion-thumbnail>
 
       <div class="profile-details">
         <ion-item lines="none">
-          <h3 class="username">{{ profile?.name }}</h3>
+          <h3 class="username">{{ profile.name }}</h3>
         </ion-item>
         <ion-item lines="none">
-          <h5 class="handle">@{{ profile?.handle }}</h5>
+          <h5 class="handle">@{{ profile.handle }}</h5>
         </ion-item>
         <div class="profile-icon-buttons">
           <ion-item lines="none" (click)="shareProfile()" button>
@@ -87,7 +87,7 @@
         </ion-item>
         <ion-item *ngIf="item.type === 'recipe'" button (click)="open(item)">
           <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
-            <img [src]="item.recipe.images[0].location" />
+            <img [src]="item.recipe.images?.at(0)?.location" />
           </ion-avatar>
           <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
           <!-- <ion-badge slot="end">{{label.recipeCount}} Recipes</ion-badge> -->

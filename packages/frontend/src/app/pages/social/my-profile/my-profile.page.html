@@ -64,17 +64,17 @@
 
     <div class="profile-details-container">
       <multi-image-upload
-        [images]="myProfile?.profileImages"
-        (imageUpdate)="updatedProfileFields.profileImages = myProfile?.profileImages; markAsDirty();"
+        [images]="myProfile.profileImages"
+        (imageUpdate)="updatedProfileFields.profileImages = myProfile.profileImages; markAsDirty();"
       ></multi-image-upload>
 
       <div
         class="profile-details"
-        [ngClass]="{break: (myProfile?.profileImages?.length || 0) > 1}"
+        [ngClass]="{break: (myProfile.profileImages.length || 0) > 1}"
       >
         <ion-item *ngIf="!revealNameInput" lines="none">
           <h3 class="username-preview" (click)="revealNameInput = true">
-            {{ myProfile?.name }} <ion-icon name="pencil"></ion-icon>
+            {{ myProfile.name }} <ion-icon name="pencil"></ion-icon>
           </h3>
         </ion-item>
         <ion-item class="username-edit" *ngIf="revealNameInput">
@@ -88,7 +88,7 @@
         </ion-item>
         <ion-item *ngIf="!revealHandleInput" lines="none">
           <h5 class="handle-preview" (click)="revealHandleInput = true">
-            @{{ myProfile?.handle }} <ion-icon name="pencil"></ion-icon>
+            @{{ myProfile.handle }} <ion-icon name="pencil"></ion-icon>
           </h5>
         </ion-item>
         <ion-item class="handle-edit" *ngIf="revealHandleInput">
@@ -123,7 +123,7 @@
         <ion-item class="enable-profile" lines="none" *ngIf="accountInfo">
           <ion-toggle
             [(ngModel)]="accountInfo.enableProfile"
-            (ngModelChange)="updatedProfileFields.enableProfile = accountInfo?.enableProfile; markAsDirty();"
+            (ngModelChange)="updatedProfileFields.enableProfile = accountInfo.enableProfile; markAsDirty();"
             slot="start"
           ></ion-toggle>
           <ion-label class="ion-text-wrap">
@@ -192,7 +192,7 @@
 
           <ion-item *ngIf="item.type === 'recipe'" button (click)="open(item)">
             <ion-avatar slot="start" *ngIf="item?.recipe?.images?.length">
-              <img [src]="item.recipe.images[0].location" />
+              <img [src]="item.recipe.images?.at(0)?.location" />
             </ion-avatar>
             <ion-label class="ion-text-wrap">{{item.title}}</ion-label>
 

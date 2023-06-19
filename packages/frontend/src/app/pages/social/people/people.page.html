@@ -42,7 +42,7 @@
       <img *ngIf="!myProfile?.profileImages?.length" src="assets/avatar.svg" />
       <img
         *ngIf="myProfile?.profileImages?.length"
-        [src]="myProfile.profileImages[0].location"
+        [src]="myProfile?.profileImages?.at(0)?.location"
       />
     </ion-avatar>
     <ion-label> {{ 'pages.people.edit' | translate }} </ion-label>

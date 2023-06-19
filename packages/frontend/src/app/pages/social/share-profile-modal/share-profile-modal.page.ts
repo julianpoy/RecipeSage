@@ -1,15 +1,9 @@
 import { Component, Input } from "@angular/core";
-import {
-  NavController,
-  ModalController,
-  ToastController,
-  AlertController,
-} from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
 import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { RouteMap } from "~/services/util.service";
 
 @Component({
   selector: "page-share-profile-modal",

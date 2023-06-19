@@ -6,7 +6,7 @@
     button
   >
     <ion-avatar *ngIf="selectedUser.profileImages?.length" slot="start">
-      <img src="{{ selectedUser.profileImages[0].location }}" />
+      <img src="{{ selectedUser.profileImages?.at(0)?.location }}" />
     </ion-avatar>
     <ion-label>
       <h2>{{ selectedUser.name }}</h2>
@@ -33,7 +33,7 @@
       >
         <ion-item class="suggestion-inner" button>
           <ion-avatar *ngIf="user.profileImages?.length" slot="start">
-            <img src="{{ user.profileImages[0].location }}" />
+            <img src="{{ user.profileImages?.at(0)?.location }}" />
           </ion-avatar>
           <ion-label>
             <h2>{{ user.name }}</h2>

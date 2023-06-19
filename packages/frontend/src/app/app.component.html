@@ -22,10 +22,10 @@
               <ion-label>
                 {{ p.title }}
               </ion-label>
-              <ion-badge *ngIf="p.id === 'people' && friendRequestCount > 0">{{
+              <ion-badge *ngIf="p.id === 'people' && friendRequestCount">{{
                 friendRequestCount
               }}</ion-badge>
-              <ion-badge *ngIf="p.id === 'inbox' && inboxCount > 0">{{
+              <ion-badge *ngIf="p.id === 'inbox' && inboxCount">{{
                 inboxCount
               }}</ion-badge>
             </ion-item>

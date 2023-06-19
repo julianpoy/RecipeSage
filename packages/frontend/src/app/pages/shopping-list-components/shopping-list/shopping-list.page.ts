@@ -10,7 +10,10 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import { ShoppingListService } from "~/services/shopping-list.service";
+import {
+  ShoppingList,
+  ShoppingListService,
+} from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import {
@@ -31,17 +34,17 @@ export class ShoppingListPage {
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
 
   shoppingListId: string;
-  list: any = { items: [], collaborators: [] };
+  list?: ShoppingList;
 
   items: any[] = [];
   completedItems: any[] = [];
   groupTitles: string[] = [];
   categoryTitles: string[] = [];
-  categoryTitleCollapsed = {};
+  categoryTitleCollapsed: Record<string, boolean> = {};
   itemsByGroupTitle: any = {};
   itemsByCategoryTitle: any = {};
   groupsByCategoryTitle: any = {};
-  groupTitleExpanded: any = {};
+  groupTitleExpanded: Record<string, boolean> = {};
   itemsByRecipeId: any = {};
   recipeIds: any = [];
 
@@ -116,8 +119,9 @@ export class ShoppingListPage {
     );
   }
 
-  processList(list?: any) {
+  processList(list?: ShoppingList) {
     if (list) this.list = list;
+    if (!this.list) return;
 
     const items = this.list.items.filter((item: any) => !item.completed);
     const completedItems = this.list.items.filter(
@@ -148,7 +152,7 @@ export class ShoppingListPage {
       itemsByCategoryTitle,
       groupsByCategoryTitle,
     } = getShoppingListItemGroupings(
-      items,
+      items as any,
       this.preferences[ShoppingListPreferenceKey.SortBy]
     );
 
@@ -160,7 +164,7 @@ export class ShoppingListPage {
     this.groupsByCategoryTitle = groupsByCategoryTitle;
 
     const { items: sortedCompletedItems } = getShoppingListItemGroupings(
-      completedItems,
+      completedItems as any,
       this.preferences[ShoppingListPreferenceKey.SortBy]
     );
 
@@ -177,6 +181,8 @@ export class ShoppingListPage {
   }
 
   async completeItems(items: any[], completed: boolean) {
+    if (!this.list) return;
+
     if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
       return this.removeItems(items);
     }
@@ -243,6 +249,8 @@ export class ShoppingListPage {
   }
 
   async removeItems(items: any[]) {
+    if (!this.list) return;
+
     const loading = this.loadingService.start();
 
     const itemIds = items.map((el) => {
@@ -289,6 +297,8 @@ export class ShoppingListPage {
   }
 
   async _addItems(items: any[]) {
+    if (!this.list) return;
+
     const loading = this.loadingService.start();
 
     await this.shoppingListService.addItems(this.list.id, {

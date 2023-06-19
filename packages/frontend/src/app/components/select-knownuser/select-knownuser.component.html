@@ -2,7 +2,7 @@
   <ion-list *ngIf="friendships.length > 0">
     <ion-radio-group
       [value]="_radioFriendship"
-      (ionChange)="selectFriendship($event.detail.value)"
+      (ionChange)="friendshipRadioChanged($event)"
     >
       <ion-list-header style="margin-bottom: 0" lines="none">
         {{ "components.selectKnownUser.friends" | translate }}
@@ -31,7 +31,7 @@
   <ion-list *ngIf="threads.length > 0">
     <ion-radio-group
       [value]="_radioThread"
-      (ionChange)="selectThread($event.detail.value)"
+      (ionChange)="threadRadioChanged($event)"
     >
       <ion-list-header style="margin-bottom: 0" lines="none">
         {{ "components.selectKnownUser.conversations" | translate }}
