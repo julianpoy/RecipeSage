@@ -68,9 +68,8 @@
 
 <ion-content>
   <div class="homegrid" [ngClass]="{ 'no-search': folder !== 'main' }">
-    <div class="search-container">
+    <div *ngIf="folder === 'main'" class="search-container">
       <ion-searchbar
-        *ngIf="folder === 'main'"
         placeholder="{{ 'pages.home.search.placeholder' | translate }}"
         enterkeyhint="search"
         inputmode="search"
