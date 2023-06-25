@@ -67,7 +67,7 @@
     "pug": "^3.0.2",
     "puppeteer-core": "^19.1.0",
     "sanitize-html": "^2.8.1",
-    "semver": "^7.3.8",
+    "semver": "^7.5.2",
     "sequelize": "^6.29.0",
     "sharp": "^0.31.1",
     "sqlite3": "^5.1.5",
