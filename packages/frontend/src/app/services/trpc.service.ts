@@ -10,7 +10,7 @@ import {
   ErrorHandlers,
   HttpErrorHandlerService,
 } from "./http-error-handler.service";
-import { API_BASE_URL } from "../../environments/environment";
+import { UtilService } from "./util.service";
 
 @Injectable({
   providedIn: "root",
@@ -19,7 +19,7 @@ export class TRPCService {
   public trpc = createTRPCProxyClient<AppRouter>({
     links: [
       httpBatchLink({
-        url: (API_BASE_URL || "/api/") + "trpc",
+        url: this.utilService.getBase() + "trpc",
         maxURLLength: 2047,
         headers: () => {
           const token = localStorage.getItem("token");
@@ -32,7 +32,10 @@ export class TRPCService {
     transformer: superjson,
   });
 
-  constructor(private httpErrorHandler: HttpErrorHandlerService) {}
+  constructor(
+    private httpErrorHandler: HttpErrorHandlerService,
+    private utilService: UtilService
+  ) {}
 
   async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
     return result.catch((e) => {
