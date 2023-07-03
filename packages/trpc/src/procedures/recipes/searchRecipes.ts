@@ -57,6 +57,7 @@ export const searchRecipes = publicProcedure
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
+      recipeIds,
     });
 
     results.recipes = results.recipes.map(sortRecipeImages).sort((a, b) => {

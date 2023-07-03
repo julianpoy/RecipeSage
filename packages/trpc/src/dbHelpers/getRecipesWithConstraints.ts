@@ -28,6 +28,7 @@ export const getRecipesWithConstraints = async (args: {
     labels,
     labelIntersection,
     ratings,
+    recipeIds,
   } = args;
 
   let friends: { [key: string]: User } = {};
@@ -122,6 +123,7 @@ export const getRecipesWithConstraints = async (args: {
 
   const where = {
     OR: queryFilters,
+    ...(recipeIds ? { id: { in: recipeIds } } : {}),
     ...(ratings ? { rating: { in: ratings } } : {}),
     ...(filterByRecipeIds ? { id: { in: filterByRecipeIds } } : {}),
     folder,

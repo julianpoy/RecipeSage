@@ -29,7 +29,7 @@ export const getRecipes = publicProcedure
     else
       throw new TRPCError({
         message: "Must pass userIds or be logged in",
-        code: "BAD_REQUEST",
+        code: "UNAUTHORIZED",
       });
 
     if (ctx.session?.userId && input.includeAllFriends) {

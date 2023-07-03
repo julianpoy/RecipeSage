@@ -37,6 +37,7 @@ export class CapabilitiesService {
     if (!this.utilService.isLoggedIn()) return this.retry();
 
     const response = await this.userService.capabilities();
+    if (!response.success && response.status === 401) return;
     if (!response.success) return this.retry();
 
     this.capabilities = response.data;

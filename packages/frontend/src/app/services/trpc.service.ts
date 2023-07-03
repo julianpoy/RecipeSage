@@ -34,9 +34,8 @@ export class TRPCService {
 
   constructor(private httpErrorHandler: HttpErrorHandlerService) {}
 
-  handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
+  async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
     return result.catch((e) => {
-      console.log("whaddup yo", e, typeof e);
       if (e instanceof TRPCClientError) {
         this.httpErrorHandler.handleTrpcError(e, errorHandlers);
       } else {
