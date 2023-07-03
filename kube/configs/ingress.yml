@@ -49,47 +49,47 @@ metadata:
       text/x-cross-domain-policy;
 spec:
   rules:
-  - http:
-  - host: api.recipesage.com
-    http:
-      paths:
-      - path: /(api/?)?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-api
-            port:
-              number: 3000
-  - host: api.beta.recipesage.com
-    http:
-      paths:
-      - path: /(api/?)?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-api-beta
-            port:
-              number: 3000
-  - host: grip.recipesage.com
-    http:
-      paths:
-      - path: /(grip/)?(ws)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-pushpin
-            port:
-              number: 7999
+    - http:
+    - host: api.recipesage.com
+      http:
+        paths:
+          - path: /(api/?)?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-api
+                port:
+                  number: 3000
+    - host: api.beta.recipesage.com
+      http:
+        paths:
+          - path: /(api/?)?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-api-beta
+                port:
+                  number: 3000
+    - host: grip.recipesage.com
+      http:
+        paths:
+          - path: /(grip/)?(ws)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-pushpin
+                port:
+                  number: 7999
   tls:
-  - hosts:
-    - recipesage.com
-    - www.recipesage.com
-    - beta.recipesage.com
-    - staging.recipesage.com
-    - api.recipesage.com
-    - api.beta.recipesage.com
-    - grip.recipesage.com
-    secretName: rs-tls
+    - hosts:
+        - recipesage.com
+        - www.recipesage.com
+        - beta.recipesage.com
+        - staging.recipesage.com
+        - api.recipesage.com
+        - api.beta.recipesage.com
+        - grip.recipesage.com
+      secretName: rs-tls
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -103,11 +103,11 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    - selector: {}
-      dns01:
-        route53:
-          region: us-east-1
-          accessKeyID: AKIAZLFSMAZJ7MRMVGFN
-          secretAccessKeySecretRef:
-            name: cert-manager-aws
-            key: secret-access-key
+      - selector: {}
+        dns01:
+          route53:
+            region: us-east-1
+            accessKeyID: AKIAZLFSMAZJ7MRMVGFN
+            secretAccessKeySecretRef:
+              name: cert-manager-aws
+              key: secret-access-key

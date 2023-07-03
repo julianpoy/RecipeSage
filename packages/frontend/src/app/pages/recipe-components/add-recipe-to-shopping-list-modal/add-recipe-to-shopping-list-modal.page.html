@@ -16,7 +16,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <p>
     {{ 'pages.addRecipeToShoppingListModal.selectDestination' | translate }}
   </p>
@@ -30,17 +29,23 @@
       {{ 'pages.addRecipeToShoppingListModal.destination' | translate }}
     </ion-label>
     <ion-select [(ngModel)]="destinationShoppingList">
-      <ion-select-option *ngFor="let list of shoppingLists" [value]="list">{{ list.title }}</ion-select-option>
+      <ion-select-option *ngFor="let list of shoppingLists" [value]="list"
+        >{{ list.title }}</ion-select-option
+      >
     </ion-select>
   </ion-item>
 
-  <div *ngIf="shoppingLists && shoppingLists.length === 0" (click)="createShoppingList()">
+  <div
+    *ngIf="shoppingLists && shoppingLists.length === 0"
+    (click)="createShoppingList()"
+  >
     <p>
       {{ 'pages.addRecipeToShoppingListModal.noShoppingLists' | translate }}<br /><br />
       <ion-button>
         <ion-icon name="list" slot="start"></ion-icon>
         <ion-label>
-          {{ 'pages.addRecipeToShoppingListModal.createShoppingList' | translate }}
+          {{ 'pages.addRecipeToShoppingListModal.createShoppingList' | translate
+          }}
         </ion-label>
       </ion-button>
     </p>
@@ -55,7 +60,8 @@
     <select-ingredients
       [ingredients]="recipe.ingredients"
       [initialScale]="scale"
-      (selectedIngredientsChange)="selectedIngredientsChange(recipe.id, $event)"></select-ingredients>
+      (selectedIngredientsChange)="selectedIngredientsChange(recipe.id, $event)"
+    ></select-ingredients>
     <br />
     <br />
   </div>

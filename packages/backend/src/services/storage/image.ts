@@ -1,8 +1,8 @@
-import {StorageObjectRecord, writeBuffer} from './index';
-import {ObjectTypes} from './shared';
-import * as fs from 'fs/promises';
-import {transformImageBuffer} from '../file-transformer';
-import {fetchURL} from '../fetch';
+import { StorageObjectRecord, writeBuffer } from "./index";
+import { ObjectTypes } from "./shared";
+import * as fs from "fs/promises";
+import { transformImageBuffer } from "../file-transformer";
+import { fetchURL } from "../fetch";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -15,7 +15,7 @@ const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 export const writeImageURL = async (
   objectType: ObjectTypes,
   url: string,
-  highResConversion: boolean,
+  highResConversion: boolean
 ): Promise<StorageObjectRecord> => {
   const response = await fetchURL(url);
   const buffer = await response.buffer();
@@ -26,7 +26,7 @@ export const writeImageURL = async (
 export const writeImageFile = async (
   objectType: ObjectTypes,
   filePath: string,
-  highResConversion: boolean,
+  highResConversion: boolean
 ): Promise<StorageObjectRecord> => {
   const buffer = await fs.readFile(filePath);
 
@@ -36,26 +36,27 @@ export const writeImageFile = async (
 export const writeImageBuffer = async (
   objectType: ObjectTypes,
   buffer: Buffer,
-  highResConversion: boolean,
+  highResConversion: boolean
 ): Promise<StorageObjectRecord> => {
-  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
+  const height = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_HEIGHT
+    : LOW_RES_IMG_CONVERSION_HEIGHT;
+  const width = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_WIDTH
+    : LOW_RES_IMG_CONVERSION_WIDTH;
+  const quality = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_QUALITY
+    : LOW_RES_IMG_CONVERSION_QUALITY;
 
   const converted = await transformImageBuffer(
     buffer,
     width,
     height,
     quality,
-    highResConversion ? 'inside' : 'cover',
+    highResConversion ? "inside" : "cover"
   );
 
-  const result = await writeBuffer(
-    objectType,
-    converted,
-    'image/jpeg'
-  );
+  const result = await writeBuffer(objectType, converted, "image/jpeg");
 
   return result;
 };
-

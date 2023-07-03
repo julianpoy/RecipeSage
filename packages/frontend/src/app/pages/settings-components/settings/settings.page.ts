@@ -1,24 +1,37 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import {
+  NavController,
+  ToastController,
+  AlertController,
+  LoadingController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { RouteMap, UtilService } from '~/services/util.service';
-import { PreferencesService, GlobalPreferenceKey, SupportedLanguages } from '~/services/preferences.service';
-import { FeatureFlagService, FeatureFlagKeys } from '~/services/feature-flag.service';
-import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
-import { CapabilitiesService } from '~/services/capabilities.service';
-import { OfflineCacheService } from '~/services/offline-cache.service';
+import { RouteMap, UtilService } from "~/services/util.service";
+import {
+  PreferencesService,
+  GlobalPreferenceKey,
+  SupportedLanguages,
+} from "~/services/preferences.service";
+import {
+  FeatureFlagService,
+  FeatureFlagKeys,
+} from "~/services/feature-flag.service";
+import {
+  QuickTutorialService,
+  QuickTutorialOptions,
+} from "~/services/quick-tutorial.service";
+import { OfflineCacheService } from "~/services/offline-cache.service";
 
-const APP_THEME_LOCALSTORAGE_KEY = 'theme';
-const LANGUAGE_LOCALSTORAGE_KEY = 'language';
+const APP_THEME_LOCALSTORAGE_KEY = "theme";
 
 @Component({
-  selector: 'page-settings',
-  templateUrl: 'settings.page.html',
-  styleUrls: ['settings.page.scss']
+  selector: "page-settings",
+  templateUrl: "settings.page.html",
+  styleUrls: ["settings.page.scss"],
 })
 export class SettingsPage {
-  appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || 'default';
+  appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || "default";
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
@@ -28,8 +41,9 @@ export class SettingsPage {
 
   showSplitPaneOption = false;
 
-  language: SupportedLanguages | 'navigator' = this.preferences[GlobalPreferenceKey.Language] || 'navigator';
-  languageOptions = [];
+  language: SupportedLanguages | "navigator" =
+    this.preferences[GlobalPreferenceKey.Language] || "navigator";
+  languageOptions: [SupportedLanguages, string][] = [];
   languageSelectInterfaceOptions = {};
 
   constructor(
@@ -42,26 +56,34 @@ export class SettingsPage {
     public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
     public featureFlagService: FeatureFlagService,
-    public quickTutorialService: QuickTutorialService) {
-
+    public quickTutorialService: QuickTutorialService
+  ) {
     try {
       this.showSplitPaneOption = screen.width >= 1200;
     } catch (e) {
-      console.error('Could not get screen width', e);
+      console.error("Could not get screen width", e);
     }
 
     try {
-      const locale = new (Intl as any).DisplayNames(window.navigator.languages, {type: 'language'});
+      const locale = new Intl.DisplayNames(window.navigator.languages, {
+        type: "language",
+      });
 
-      this.languageOptions = Object.values(SupportedLanguages).map(code => [code, locale.of(code)]);
-    } catch(e) {
+      this.languageOptions = Object.values(SupportedLanguages).map((code) => [
+        code,
+        locale.of(code) || code,
+      ]);
+    } catch (e) {
       console.error("Intl not supported");
-      this.languageOptions = Object.values(SupportedLanguages).map(code => [code, code]);
+      this.languageOptions = Object.values(SupportedLanguages).map((code) => [
+        code,
+        code,
+      ]);
     }
 
     (async () => {
       this.languageSelectInterfaceOptions = {
-        header: await this.translate.get('pages.settings.language').toPromise(),
+        header: await this.translate.get("pages.settings.language").toPromise(),
       };
     })();
   }
@@ -72,23 +94,31 @@ export class SettingsPage {
 
   toggleSplitPane() {
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
-      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.SplitPaneView);
+      this.quickTutorialService.triggerQuickTutorial(
+        QuickTutorialOptions.SplitPaneView
+      );
     }
   }
 
   async toggleOfflineCache() {
     if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
-      const message = await this.translate.get('pages.settings.offline.loading').toPromise();
+      const message = await this.translate
+        .get("pages.settings.offline.loading")
+        .toPromise();
 
-      await this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.ExperimentalOfflineCache);
+      await this.quickTutorialService.triggerQuickTutorial(
+        QuickTutorialOptions.ExperimentalOfflineCache
+      );
       const loading = await this.loadingCtrl.create({
-        message
+        message,
       });
       await loading.present();
       try {
         await this.offlineCacheService.fullSync();
-      } catch(e) {
-        const error = await this.translate.get('pages.settings.offline.error').toPromise();
+      } catch (e) {
+        const error = await this.translate
+          .get("pages.settings.offline.error")
+          .toPromise();
         setTimeout(() => alert(error));
         throw e;
       }
@@ -97,32 +127,37 @@ export class SettingsPage {
   }
 
   async resetPreferences() {
-    const header = await this.translate.get('pages.settings.resetPrefs.header').toPromise();
-    const message = await this.translate.get('pages.settings.resetPrefs.message').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.delete').toPromise();
+    const header = await this.translate
+      .get("pages.settings.resetPrefs.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.settings.resetPrefs.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
       message,
       buttons: [
         {
-          text: cancel
+          text: cancel,
         },
         {
           text: del,
           handler: () => {
             localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
             this.preferencesService.resetToDefaults();
-          }
-        }]
+          },
+        },
+      ],
     });
 
     alert.present();
   }
 
   languageChanged() {
-    const newLang = this.language === 'navigator' ? null : this.language;
+    const newLang = this.language === "navigator" ? null : this.language;
     this.preferences[GlobalPreferenceKey.Language] = newLang;
     this.preferencesService.save();
 
@@ -134,16 +169,20 @@ export class SettingsPage {
     localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
 
     // Change in current session
-    const bodyClasses = document.body.className.replace(/theme-\S*/, '');
+    const bodyClasses = document.body.className.replace(/theme-\S*/, "");
     document.body.className = `${bodyClasses} theme-${this.appTheme}`;
   }
 
   async appThemeChanged() {
-    if (this.appTheme === 'black') {
-      const header = await this.translate.get('pages.settings.oled.header').toPromise();
-      const message = await this.translate.get('pages.settings.oled.message').toPromise();
-      const cancel = await this.translate.get('generic.cancel').toPromise();
-      const okay = await this.translate.get('generic.okay').toPromise();
+    if (this.appTheme === "black") {
+      const header = await this.translate
+        .get("pages.settings.oled.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.settings.oled.message")
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
 
       const alert = await this.alertCtrl.create({
         header,
@@ -152,15 +191,16 @@ export class SettingsPage {
           {
             text: cancel,
             handler: () => {
-              this.appTheme = 'default';
-            }
+              this.appTheme = "default";
+            },
           },
           {
             text: okay,
             handler: () => {
               this.applyAppTheme();
-            }
-          }]
+            },
+          },
+        ],
       });
 
       alert.present();
@@ -182,10 +222,14 @@ export class SettingsPage {
   }
 
   async checkForUpdate() {
-    const header = await this.translate.get('pages.settings.update.header').toPromise();
-    const subHeader = await this.translate.get('pages.settings.update.subHeader').toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const okay = await this.translate.get('generic.okay').toPromise();
+    const header = await this.translate
+      .get("pages.settings.update.header")
+      .toPromise();
+    const subHeader = await this.translate
+      .get("pages.settings.update.subHeader")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -193,8 +237,7 @@ export class SettingsPage {
       buttons: [
         {
           text: cancel,
-          handler: () => {
-          }
+          handler: () => {},
         },
         {
           text: okay,
@@ -206,8 +249,9 @@ export class SettingsPage {
             } catch (e) {
               (window as any).location.reload(true);
             }
-          }
-        }]
+          },
+        },
+      ],
     });
     alert.present();
   }

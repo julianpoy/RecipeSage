@@ -1,45 +1,50 @@
-import { Component, Input } from '@angular/core';
-import { NavController, ModalController, ToastController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
-import { UserService } from '~/services/user.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { Recipe } from "../../../services/recipe.service";
+import { Label } from "../../../services/label.service";
 
 @Component({
-  selector: 'page-add-profile-item-modal',
-  templateUrl: 'add-profile-item-modal.page.html',
-  styleUrls: ['add-profile-item-modal.page.scss']
+  selector: "page-add-profile-item-modal",
+  templateUrl: "add-profile-item-modal.page.html",
+  styleUrls: ["add-profile-item-modal.page.scss"],
 })
 export class AddProfileItemModalPage {
-
   itemType = null;
 
   itemVisibility = null;
   visibilityTypePrettyNameMap = {
-    public: 'public',
-    'friends-only': 'friends only',
+    public: "public",
+    "friends-only": "friends only",
   };
 
-  itemTitle = '';
+  itemTitle = "";
 
-  selectedRecipe;
-  selectedLabel;
+  selectedRecipe?: Recipe;
+  selectedLabel?: Label;
 
-  constructor(
-    private navCtrl: NavController,
-    private toastCtrl: ToastController,
-    private utilService: UtilService,
-    private loadingService: LoadingService,
-    private userService: UserService,
-    private modalCtrl: ModalController
-  ) {}
+  constructor(private modalCtrl: ModalController) {}
+
+  onItemTypeChange(event: any) {
+    this.itemType = event.detail.value;
+  }
+
+  onItemVisibilityChange(event: any) {
+    this.itemVisibility = event.detail.value;
+  }
 
   cancel() {
     this.modalCtrl.dismiss();
   }
 
   done() {
-    const { itemType, itemVisibility, itemTitle, selectedRecipe, selectedLabel } = this;
+    const {
+      itemType,
+      itemVisibility,
+      itemTitle,
+      selectedRecipe,
+      selectedLabel,
+    } = this;
 
     this.modalCtrl.dismiss({
       item: {
@@ -48,7 +53,7 @@ export class AddProfileItemModalPage {
         visibility: itemVisibility,
         label: selectedLabel || null,
         recipe: selectedRecipe || null,
-      }
+      },
     });
   }
 
@@ -57,10 +62,11 @@ export class AddProfileItemModalPage {
   }
 
   isItemSelected() {
-    return this.itemType && (
-      this.itemType === 'all-recipes'
-      || this.selectedRecipe
-      || this.selectedLabel
+    return (
+      this.itemType &&
+      (this.itemType === "all-recipes" ||
+        this.selectedRecipe ||
+        this.selectedLabel)
     );
   }
 }

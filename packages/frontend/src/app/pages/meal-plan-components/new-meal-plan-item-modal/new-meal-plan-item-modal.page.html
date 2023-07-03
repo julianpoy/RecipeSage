@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar>
     <ion-title *ngIf="isEditing">
       {{ 'pages.newMealPlanItemModal.title.update' | translate }}
@@ -14,9 +13,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <div>
@@ -31,40 +28,44 @@
   </div>
 
   <div [ngSwitch]="inputType">
-
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
         <ion-label position="floating">
           {{ 'pages.newMealPlanItemModal.itemTitle' | translate }}
         </ion-label>
-        <ion-input [(ngModel)]="title" type="text"
+        <ion-input
+          [(ngModel)]="title"
+          type="text"
           autocapitalize="on"
           autocomplete="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
     </div>
 
     <div *ngSwitchCase="'recipe'">
       <br /><br />
-      <select-recipe
-      [(selectedRecipe)]="recipe"
-      ></select-recipe>
+      <select-recipe [(selectedRecipe)]="recipe"></select-recipe>
     </div>
   </div>
 
   <br /><br />
 
   <ion-item>
-    <ion-label>
-      {{ 'pages.newMealPlanItemModal.date' | translate }}
-    </ion-label>
-    <input class="rs-date" type="date" autofill="true" value="{{ sanitizedScheduled }}" (change)="scheduledDateChange($event)" />
+    <ion-label> {{ 'pages.newMealPlanItemModal.date' | translate }} </ion-label>
+    <input
+      class="rs-date"
+      type="date"
+      autofill="true"
+      value="{{ sanitizedScheduled }}"
+      (change)="scheduledDateChange($event)"
+    />
   </ion-item>
 
   <br /><br />
 
-  <select-meal [meal]="meal" (mealChange)="meal = $event"></select-meal>
+  <select-meal [meal]="meal || ''" (mealChange)="meal = $event"></select-meal>
 </ion-content>
 
 <ion-footer class="ion-padding">

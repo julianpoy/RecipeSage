@@ -18,7 +18,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.json",
             "assets": [
               "src/manifest.json",
               "src/service-worker.js",
@@ -47,6 +47,16 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -107,10 +117,14 @@
             "production": {
               "browserTarget": "app:build:production"
             },
+            "development": {
+              "browserTarget": "app:build:development"
+            },
             "ci": {
               "progress": false
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -150,10 +164,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
         "ionic-cordova-build": {
@@ -184,7 +195,8 @@
     }
   },
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

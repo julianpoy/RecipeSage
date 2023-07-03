@@ -1,4 +1,8 @@
 # Add files here to ignore them from prettier formatting
 
-/dist
-/coverage
+build
+dist
+coverage
+www
+.angular
+

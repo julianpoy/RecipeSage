@@ -1,17 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
 
-import { UiScrollModule } from 'ngx-ui-scroll';
+import { UiScrollModule } from "ngx-ui-scroll";
 
-import { HomePage } from './home.page';
-import { LogoIconModule } from '~/components/logo-icon/logo-icon.module';
-import { HomePopoverPageModule } from '~/pages/home-popover/home-popover.module';
-import { HomeSearchFilterPopoverModule } from '~/pages/home-search-popover/home-search-filter-popover.module';
-import { NullStateModule } from '~/components/null-state/null-state.module';
+import { HomePage } from "./home.page";
+import { LogoIconModule } from "~/components/logo-icon/logo-icon.module";
+import { HomePopoverPageModule } from "~/pages/home-popover/home-popover.module";
+import { HomeSearchFilterPopoverModule } from "~/pages/home-search-popover/home-search-filter-popover.module";
+import { NullStateModule } from "~/components/null-state/null-state.module";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
   imports: [
@@ -19,9 +19,9 @@ import { GlobalModule } from '~/global.module';
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: HomePage
-      }
+        path: "",
+        component: HomePage,
+      },
     ]),
     GlobalModule,
     LogoIconModule,
@@ -30,6 +30,6 @@ import { GlobalModule } from '~/global.module';
     HomeSearchFilterPopoverModule,
     UiScrollModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
 export class HomePageModule {}

@@ -1,19 +1,28 @@
-import { Component } from '@angular/core';
-import { NavController, AlertController, ToastController, PopoverController, ModalController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import {
+  NavController,
+  AlertController,
+  ToastController,
+  PopoverController,
+  ModalController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { UtilService } from '~/services/util.service';
+import { LoadingService } from "~/services/loading.service";
+import { UtilService } from "~/services/util.service";
 
-import { LabelService, Label } from '~/services/label.service';
-import { LabelsPopoverPage } from '~/pages/labels-pages/labels-popover/labels-popover.page';
-import { ManageLabelModalPage } from '~/pages/labels-pages/manage-label-modal/manage-label-modal.page';
-import { PreferencesService, ManageLabelsPreferenceKey } from '~/services/preferences.service';
+import { LabelService, Label } from "~/services/label.service";
+import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
+import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
+import {
+  PreferencesService,
+  ManageLabelsPreferenceKey,
+} from "~/services/preferences.service";
 
 @Component({
-  selector: 'page-labels',
-  templateUrl: 'labels.page.html',
-  styleUrls: ['labels.page.scss']
+  selector: "page-labels",
+  templateUrl: "labels.page.html",
+  styleUrls: ["labels.page.scss"],
 })
 export class LabelsPage {
   preferences = this.preferencesService.preferences;
@@ -35,8 +44,8 @@ export class LabelsPage {
     public toastCtrl: ToastController,
     public labelService: LabelService,
     public utilService: UtilService,
-    public preferencesService: PreferencesService) {
-  }
+    public preferencesService: PreferencesService
+  ) {}
 
   ionViewWillEnter() {
     this.clearSelectedLabels();
@@ -47,12 +56,15 @@ export class LabelsPage {
     });
   }
 
-  refresh(refresher) {
-    this.loadLabels().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
+  refresh(refresher: any) {
+    this.loadLabels().then(
+      () => {
+        refresher.target.complete();
+      },
+      () => {
+        refresher.target.complete();
+      }
+    );
   }
 
   async loadLabels() {
@@ -66,18 +78,18 @@ export class LabelsPage {
     this.labels = response.data;
   }
 
-  async presentPopover(event) {
+  async presentPopover(event: Event) {
     const popover = await this.popoverCtrl.create({
       component: LabelsPopoverPage,
       componentProps: {
-        selectionMode: this.selectionMode
+        selectionMode: this.selectionMode,
       },
-      event
+      event,
     });
 
     popover.onDidDismiss().then(({ data }) => {
       if (!data) return;
-      if (typeof data.selectionMode === 'boolean') {
+      if (typeof data.selectionMode === "boolean") {
         this.selectionMode = data.selectionMode;
         if (!this.selectionMode) {
           this.clearSelectedLabels();
@@ -88,7 +100,7 @@ export class LabelsPage {
     popover.present();
   }
 
-  trackByFn(index, item) {
+  trackByFn(_: number, item: { id: string }) {
     return item.id;
   }
 
@@ -96,8 +108,8 @@ export class LabelsPage {
     const manageModal = await this.modalCtrl.create({
       component: ManageLabelModalPage,
       componentProps: {
-        label
-      }
+        label,
+      },
     });
 
     manageModal.onDidDismiss().then(() => {
@@ -125,12 +137,21 @@ export class LabelsPage {
   }
 
   async deleteSelectedLabels() {
-    const labelTitles = this.selectedLabelIds.map(labelId => this.labels.filter(label => label.id === labelId)[0].title).join(', ');
+    const labelTitles = this.selectedLabelIds
+      .map(
+        (labelId) =>
+          this.labels.filter((label) => label.id === labelId)[0].title
+      )
+      .join(", ");
 
-    const header = await this.translate.get('pages.labels.modal.delete.header').toPromise();
-    const message = await this.translate.get('pages.labels.modal.delete.message', {labelTitles}).toPromise();
-    const cancel = await this.translate.get('generic.cancel').toPromise();
-    const del = await this.translate.get('generic.delete').toPromise();
+    const header = await this.translate
+      .get("pages.labels.modal.delete.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.labels.modal.delete.message", { labelTitles })
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -138,16 +159,16 @@ export class LabelsPage {
       buttons: [
         {
           text: cancel,
-          role: 'cancel',
-          handler: () => { }
+          role: "cancel",
+          handler: () => {},
         },
         {
           text: del,
-          cssClass: 'alertDanger',
+          cssClass: "alertDanger",
           handler: async () => {
             const loading = this.loadingService.start();
             const response = await this.labelService.delete({
-              labelIds: this.selectedLabelIds
+              labelIds: this.selectedLabelIds,
             });
             if (!response.success) return loading.dismiss();
 
@@ -156,9 +177,9 @@ export class LabelsPage {
             await this.loadLabels();
 
             loading.dismiss();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     alert.present();
   }

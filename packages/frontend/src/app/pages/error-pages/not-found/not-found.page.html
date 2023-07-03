@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -7,9 +6,7 @@
 
     <ion-title>{{ 'pages.notfound.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <null-state>
@@ -22,8 +19,12 @@
         {{ 'pages.notfound.error.message2' | translate }}<br />
         {{ 'pages.notfound.error.message3' | translate }}<br />
         <br />
-        <a (click)="$event.preventDefault(); goToContact()" href="">{{ 'pages.notfound.error.contact' | translate }}</a><br />
-        <a (click)="$event.preventDefault(); goToHome()" href="">{{ 'pages.notfound.error.goHome' | translate }}</a><br />
+        <a (click)="$event.preventDefault(); goToContact()" href=""
+          >{{ 'pages.notfound.error.contact' | translate }}</a
+        ><br />
+        <a (click)="$event.preventDefault(); goToHome()" href=""
+          >{{ 'pages.notfound.error.goHome' | translate }}</a
+        ><br />
       </p>
     </ion-label>
   </null-state>

@@ -2,7 +2,10 @@
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button *ngIf="!selectionMode && !showBack"></ion-menu-button>
-      <ion-back-button *ngIf="!selectionMode && showBack" [defaultHref]="defaultBackHref"></ion-back-button>
+      <ion-back-button
+        *ngIf="!selectionMode && showBack"
+        [defaultHref]="defaultBackHref"
+      ></ion-back-button>
 
       <ion-button *ngIf="selectionMode" (click)="clearSelectedRecipes()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -10,7 +13,8 @@
     </ion-buttons>
 
     <ion-title *ngIf="!userId && selectionMode">
-      {{ 'pages.home.title.selectionMode' | translate:{count: selectedRecipeIds.length} }}
+      {{ 'pages.home.title.selectionMode' | translate:{count:
+      selectedRecipeIds.length} }}
     </ion-title>
     <ion-title *ngIf="!userId && !selectionMode && folder === 'main'">
       {{ 'pages.home.title.main' | translate }}
@@ -19,25 +23,39 @@
       {{ 'pages.home.title.inbox' | translate }}
     </ion-title>
     <ion-title *ngIf="userId && otherUserProfile && this.selectedLabels.length">
-      {{ 'pages.home.title.sharedLabel.withProfile' | translate:{name: otherUserProfile.name, label: selectedLabels[0]} }}
+      {{ 'pages.home.title.sharedLabel.withProfile' | translate:{name:
+      otherUserProfile.name, label: selectedLabels[0]} }}
     </ion-title>
-    <ion-title *ngIf="userId && otherUserProfile && !this.selectedLabels.length">
-      {{ 'pages.home.title.sharedAll.withProfile' | translate:{name: otherUserProfile.name} }}
+    <ion-title
+      *ngIf="userId && otherUserProfile && !this.selectedLabels.length"
+    >
+      {{ 'pages.home.title.sharedAll.withProfile' | translate:{name:
+      otherUserProfile.name} }}
     </ion-title>
-    <ion-title *ngIf="userId && !otherUserProfile && this.selectedLabels.length">
-      {{ 'pages.home.title.sharedLabel' | translate:{label: selectedLabels[0]} }}
+    <ion-title
+      *ngIf="userId && !otherUserProfile && this.selectedLabels.length"
+    >
+      {{ 'pages.home.title.sharedLabel' | translate:{label: selectedLabels[0]}
+      }}
     </ion-title>
-    <ion-title *ngIf="userId && !otherUserProfile && !this.selectedLabels.length">
+    <ion-title
+      *ngIf="userId && !otherUserProfile && !this.selectedLabels.length"
+    >
       {{ 'pages.home.title.sharedAll' | translate }}
     </ion-title>
 
-
     <ion-buttons slot="end">
-      <ion-button *ngIf="selectionMode && selectedRecipeIds.length > 0 && folder === 'main'" (click)="addLabelToSelectedRecipes()">
+      <ion-button
+        *ngIf="selectionMode && selectedRecipeIds.length > 0 && folder === 'main'"
+        (click)="addLabelToSelectedRecipes()"
+      >
         <ion-icon slot="icon-only" name="pricetag"></ion-icon>
       </ion-button>
 
-      <ion-button *ngIf="selectionMode && selectedRecipeIds.length > 0" (click)="deleteSelectedRecipes()">
+      <ion-button
+        *ngIf="selectionMode && selectedRecipeIds.length > 0"
+        (click)="deleteSelectedRecipes()"
+      >
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>
 
@@ -50,45 +68,52 @@
 
 <ion-content>
   <div class="homegrid" [ngClass]="{ 'no-search': folder !== 'main' }">
-    <div class="search-container">
+    <div *ngIf="folder === 'main'" class="search-container">
       <ion-searchbar
-        *ngIf="folder === 'main'"
         placeholder="{{ 'pages.home.search.placeholder' | translate }}"
         enterkeyhint="search"
         inputmode="search"
         type="search"
         (ionClear)="search('')"
-        (keydown.enter)="search($event.target.value); $event.target.blur()"
+        (keydown.enter)="searchFieldEnter($event)"
       ></ion-searchbar>
       <ion-button fill="clear" size="small" (click)="showSearchFilter($event)">
         {{ 'pages.home.search.filter' | translate }}
       </ion-button>
     </div>
 
-    <div class="infinite-scrolling-container" *ngIf="preferences[preferenceKeys.ViewType] === 'tiles' && recipes?.length">
+    <div
+      class="infinite-scrolling-container"
+      *ngIf="preferences[preferenceKeys.ViewType] === 'tiles' && recipes?.length"
+    >
       <div class="labelChips" *ngIf="getShouldShowLabelChips()">
         <a
           *ngFor="let label of labels"
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
-          (click)="toggleLabel(label.title)">
+          (click)="toggleLabel(label.title)"
+        >
           {{ label.title }} ({{ label.recipeCount }})
         </a>
       </div>
 
       <div *uiScroll="let recipeGroup of datasource" class="recipe-group-row">
         <div class="recipe-group">
-          <div *ngFor="let recipe of recipeGroup"
+          <div
+            *ngFor="let recipe of recipeGroup"
             class="recipe-card"
             [ngClass]="getCardClass(recipe)"
             (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
-            button>
+            button
+          >
             <img
               *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]"
-              [src]="recipe.images[0].location" />
+              [src]="recipe.images[0].location"
+            />
             <img
               *ngIf="(!recipe.images || !recipe.images.length) && preferences[preferenceKeys.ShowImages]"
               class="no-image"
-              src="/assets/imgs/logo_green.png" />
+              src="/assets/imgs/logo_green.png"
+            />
             <div class="recipe-card-content">
               <h2 [title]="recipe.title">{{ recipe.title }}</h2>
               <p
@@ -108,21 +133,27 @@
                 *ngIf="recipe.folder === 'inbox' && recipe.fromUser"
                 [title]="recipe.fromUser.name || recipe.fromUser.email"
               >
-                <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+                <b
+                  >{{ 'pages.home.recipe.from' | translate }} {{
+                  recipe.fromUser.name || recipe.fromUser.email }}</b
+                >
               </p>
 
               <p
                 *ngIf="recipe.labels?.length && preferences[preferenceKeys.ShowLabels]"
                 [title]="getLabelList(recipe)"
               >
-                {{ 'pages.home.recipe.labels' | translate }} {{ getLabelList(recipe) }}
+                {{ 'pages.home.recipe.labels' | translate }} {{
+                getLabelList(recipe) }}
               </p>
             </div>
-            <ion-badge *ngIf="!userId && myProfile && myProfile.id !== recipe.userId">
-              <ng-container *ngIf="friendsById[recipe.userId]">
+            <ion-badge
+              *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
+            >
+              <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
                 @{{friendsById[recipe.userId].handle}}
               </ng-container>
-              <ng-container *ngIf="!friendsById[recipe.userId]">
+              <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
                 {{ 'pages.home.recipe.fromSharedCollection' | translate }}
               </ng-container>
             </ion-badge>
@@ -134,47 +165,76 @@
       </div>
     </div>
 
-    <div class="infinite-scrolling-container" *ngIf="preferences[preferenceKeys.ViewType] === 'list' && recipes && recipes.length > 0">
-
+    <div
+      class="infinite-scrolling-container"
+      *ngIf="preferences[preferenceKeys.ViewType] === 'list' && recipes && recipes.length > 0"
+    >
       <div class="labelChips" *ngIf="getShouldShowLabelChips()">
         <a
           *ngFor="let label of labels"
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
-          (click)="toggleLabel(label.title)">
+          (click)="toggleLabel(label.title)"
+        >
           {{ label.title }} ({{ label.recipeCount }})
         </a>
       </div>
 
-      <div *uiScroll="let recipe of datasource" class="recipe-item"
+      <div
+        *uiScroll="let recipe of datasource"
+        class="recipe-item"
         [ngClass]="{ selected: selectedRecipeIds.indexOf(recipe.id) > -1, 'no-image': !preferences[preferenceKeys.ShowImages] }"
         (click)="selectionMode ? selectRecipe(recipe) : openRecipe(recipe, $event)"
-        button>
-        <img *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]" [src]="recipe.images[0].location" />
+        button
+      >
+        <img
+          *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]"
+          [src]="recipe.images[0].location"
+        />
         <img
           *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]"
           class="no-image"
-          src="/assets/imgs/logo_green.png" />
+          src="/assets/imgs/logo_green.png"
+        />
         <div *ngIf="!preferences[preferenceKeys.ShowImages]"></div>
 
         <div class="recipe-item-content">
           <h2>{{ recipe.title }}</h2>
-          <p *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">{{ recipe.description }}</p>
-          <p *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]">{{ 'pages.home.recipe.source' | translate }} {{ recipe.source || recipe.url }}</p>
-
-          <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
-            <b>{{ 'pages.home.recipe.from' | translate }} {{ recipe.fromUser.name || recipe.fromUser.email }}</b>
+          <p *ngIf="preferences[preferenceKeys.ShowRecipeDescription]">
+            {{ recipe.description }}
+          </p>
+          <p
+            *ngIf="(recipe.source || recipe.url) && preferences[preferenceKeys.ShowSource]"
+          >
+            {{ 'pages.home.recipe.source' | translate }} {{ recipe.source ||
+            recipe.url }}
           </p>
 
-          <p *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]">
-            {{ 'pages.home.recipe.labels' | translate }} <span *ngFor="let label of recipe.labels; let idx = index">{{ label.title }}<span *ngIf='idx+1 < recipe.labels.length'>,&nbsp;</span></span>
+          <p *ngIf="recipe.folder === 'inbox' && recipe.fromUser">
+            <b
+              >{{ 'pages.home.recipe.from' | translate }} {{
+              recipe.fromUser.name || recipe.fromUser.email }}</b
+            >
+          </p>
+
+          <p
+            *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]"
+          >
+            {{ 'pages.home.recipe.labels' | translate }}
+            <span *ngFor="let label of recipe.labels; let idx = index"
+              >{{ label.title }}<span *ngIf="idx+1 < recipe.labels.length"
+                >,&nbsp;</span
+              ></span
+            >
           </p>
         </div>
 
-        <ion-badge *ngIf="!userId && myProfile && myProfile.id !== recipe.userId">
-          <ng-container *ngIf="friendsById[recipe.userId]">
+        <ion-badge
+          *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
+        >
+          <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
             @{{friendsById[recipe.userId].handle}}
           </ng-container>
-          <ng-container *ngIf="!friendsById[recipe.userId]">
+          <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
             {{ 'pages.home.recipe.fromSharedCollection' | translate }}
           </ng-container>
         </ion-badge>
@@ -185,18 +245,26 @@
     </div>
 
     <div *ngIf="!recipes.length">
-      <div class="labelChips" *ngIf="!recipes.length && getShouldShowLabelChips()">
+      <div
+        class="labelChips"
+        *ngIf="!recipes.length && getShouldShowLabelChips()"
+      >
         <a
           *ngFor="let label of labels"
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
-          (click)="toggleLabel(label.title)">
+          (click)="toggleLabel(label.title)"
+        >
           {{ label.title }} ({{ label.recipeCount }})
         </a>
       </div>
 
       <ng-container *ngIf="!loading">
         <null-state *ngIf="searchText.length">
-          <ion-icon name="search" class="big-icon" virtualSlot="header"></ion-icon>
+          <ion-icon
+            name="search"
+            class="big-icon"
+            virtualSlot="header"
+          ></ion-icon>
           <ion-label virtualSlot="body">
             <p>
               {{ 'pages.home.errors.noSearchResults.message1' | translate }}<br /><br />
@@ -206,7 +274,11 @@
           </ion-label>
         </null-state>
         <null-state *ngIf="!searchText.length && folder === 'inbox'">
-          <ion-icon name="mail-open" class="big-icon" virtualSlot="header"></ion-icon>
+          <ion-icon
+            name="mail-open"
+            class="big-icon"
+            virtualSlot="header"
+          ></ion-icon>
           <ion-label virtualSlot="body">
             <p>
               {{ 'pages.home.errors.inboxEmpty.message1' | translate }}<br />
@@ -216,17 +288,23 @@
         </null-state>
 
         <ng-container *ngIf="!searchText.length && folder === 'main'">
-          <null-state *ngIf="userId && !totalRecipeCount && !selectedLabels.length && !ratingFilter.length">
+          <null-state
+            *ngIf="userId && !totalRecipeCount && !selectedLabels.length && !ratingFilter.length"
+          >
             <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
             <ion-label virtualSlot="body">
-              <h2>{{ 'pages.home.errors.emptyCollection.title' | translate }}</h2>
+              <h2>
+                {{ 'pages.home.errors.emptyCollection.title' | translate }}
+              </h2>
               <br /><br />
               <p>
                 {{ 'pages.home.errors.emptyCollection.message' | translate }}<br />
               </p>
             </ion-label>
           </null-state>
-          <null-state *ngIf="!userId && !totalRecipeCount && !selectedLabels.length && !ratingFilter.length">
+          <null-state
+            *ngIf="!userId && !totalRecipeCount && !selectedLabels.length && !ratingFilter.length"
+          >
             <logo-icon href="/#/about" virtualSlot="header"></logo-icon>
             <ion-label virtualSlot="body">
               <h2>{{ 'pages.home.errors.noRecipes.title' | translate }}</h2>
@@ -234,7 +312,8 @@
               <p>
                 {{ 'pages.home.errors.noRecipes.message1' | translate }}<br />
                 {{ 'pages.home.errors.noRecipes.message2' | translate }}<br />
-                <b>{{ 'pages.home.errors.noRecipes.message3' | translate }}</b><br />
+                <b>{{ 'pages.home.errors.noRecipes.message3' | translate }}</b
+                ><br />
 
                 <br /><br />
 
@@ -244,22 +323,36 @@
                 <br /><br />
 
                 {{ 'pages.home.errors.noRecipes.message6' | translate }}<br />
-                <a href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo" target="_blank" rel="noreferrer noopener">Chrome</a>
+                <a
+                  href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  >Chrome</a
+                >
                 &amp;
-                <a href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/" target="_blank" rel="noreferrer noopener">Firefox</a>
+                <a
+                  href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  >Firefox</a
+                >
 
                 <br /><br />
 
-                <a href="https://docs.recipesage.com">{{ 'pages.home.errors.noRecipes.message7' | translate }}</a>
+                <a href="https://docs.recipesage.com"
+                  >{{ 'pages.home.errors.noRecipes.message7' | translate }}</a
+                >
               </p>
             </ion-label>
           </null-state>
           <null-state *ngIf="selectedLabels.length || ratingFilter.length">
-            <ion-icon name="funnel" class="big-icon" virtualSlot="header"></ion-icon>
+            <ion-icon
+              name="funnel"
+              class="big-icon"
+              virtualSlot="header"
+            ></ion-icon>
             <ion-label virtualSlot="body">
-              <p>
-                {{ 'pages.home.errors.noResultsFilters' | translate }}
-              </p>
+              <p>{{ 'pages.home.errors.noResultsFilters' | translate }}</p>
             </ion-label>
           </null-state>
         </ng-container>
@@ -267,7 +360,12 @@
     </div>
   </div>
 
-  <ion-fab *ngIf="!userId && folder !== 'inbox'" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab
+    *ngIf="!userId && folder !== 'inbox'"
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+  >
     <ion-fab-button (click)="newRecipe()" color="primary">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

@@ -166,11 +166,11 @@
 
   "pages.notfound.title": "Page Not Found",
   "pages.notfound.error.title": "Page Not Found!",
-  "pages.notfound.error.message1" : "It looks like the page you are looking for doesn't exist.",
-  "pages.notfound.error.message2" : "Check to see if you typed the URL correctly.",
-  "pages.notfound.error.message3" : "If you're still having trouble, or if somewhere in the app took you here, please contact me.",
-  "pages.notfound.error.contact" : "Contact me",
-  "pages.notfound.error.goHome" : "Click here to go to your recipes",
+  "pages.notfound.error.message1": "It looks like the page you are looking for doesn't exist.",
+  "pages.notfound.error.message2": "Check to see if you typed the URL correctly.",
+  "pages.notfound.error.message3": "If you're still having trouble, or if somewhere in the app took you here, please contact me.",
+  "pages.notfound.error.contact": "Contact me",
+  "pages.notfound.error.goHome": "Click here to go to your recipes",
 
   "====== Pages.HomePopover ======": "",
 
@@ -312,7 +312,6 @@
   "pages.contribute.oneTime.description": "You will unlock bonus features for one year.",
   "pages.contribute.custom": "Custom",
   "pages.contribute.action": "Contribute!",
-  "pages.contribute.tosActionTitle": "contributing",
 
   "pages.contribute.bonus.title": "As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features for your account. You will be able to:",
   "pages.contribute.bonus.feature.1": "Upload images in high-resolution",
@@ -498,7 +497,6 @@
   "pages.mealPlanPopover.options.startWeekOn.title": "Start week on",
   "pages.mealPlanPopover.options.startWeekOn.monday": "Monday",
   "pages.mealPlanPopover.options.startWeekOn.sunday": "Sunday",
-
 
   "pages.mealPlanPopover.actions.title": "Actions",
   "pages.mealPlanPopover.actions.share": "Share",
@@ -1146,7 +1144,6 @@
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
   "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
 
-
   "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "Already added",
@@ -1257,7 +1254,6 @@
   "generic.close": "Close",
   "generic.save": "Save",
   "generic.okay": "Okay",
-
 
   "====== Trailing Comma Placeholder ======": ""
 }

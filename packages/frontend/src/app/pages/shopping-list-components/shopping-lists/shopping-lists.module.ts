@@ -1,29 +1,27 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
 
-import { ShoppingListsPage } from './shopping-lists.page';
-import { NewShoppingListModalPageModule } from '../new-shopping-list-modal/new-shopping-list-modal.module';
-import { NullStateModule } from '~/components/null-state/null-state.module';
-import {GlobalModule} from '~/global.module';
+import { ShoppingListsPage } from "./shopping-lists.page";
+import { NewShoppingListModalPageModule } from "../new-shopping-list-modal/new-shopping-list-modal.module";
+import { NullStateModule } from "~/components/null-state/null-state.module";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    ShoppingListsPage,
-  ],
+  declarations: [ShoppingListsPage],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: ShoppingListsPage
-      }
+        path: "",
+        component: ShoppingListsPage,
+      },
     ]),
     NewShoppingListModalPageModule,
     NullStateModule,
-    GlobalModule
+    GlobalModule,
   ],
 })
 export class ShoppingListsPageModule {}

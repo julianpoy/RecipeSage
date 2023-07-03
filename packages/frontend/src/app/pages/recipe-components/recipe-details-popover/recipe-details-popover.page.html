@@ -5,7 +5,11 @@
     </ion-list-header>
 
     <ion-item lines="full">
-      <ion-toggle [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]" (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')" slot="start"></ion-toggle>
+      <ion-toggle
+        [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]"
+        (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')"
+        slot="start"
+      ></ion-toggle>
       <ion-label>
         {{ 'pages.recipeDetailsPopover.keepScreenOn' | translate }}
       </ion-label>
@@ -16,27 +20,52 @@
     {{ 'pages.recipeDetailsPopover.actions' | translate }}
   </ion-list-header>
 
-  <ion-button (click)="closeWithAction('addToShoppingList')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='list' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('addToShoppingList')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="list" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.addToShoppingList' | translate }}
   </ion-button>
 
-  <ion-button (click)="closeWithAction('addToMealPlan')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='calendar' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('addToMealPlan')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="calendar" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.addToMealPlan' | translate }}
   </ion-button>
 
-  <ion-button (click)="closeWithAction('share')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='share' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('share')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="share" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.share' | translate }}
   </ion-button>
 
-  <ion-button (click)="closeWithAction('print')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='print' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('print')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="print" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.print' | translate }}
   </ion-button>
 
-  <ion-button (click)="cookingToolbarService.isPinned(recipeId) ? closeWithAction('unpin') : closeWithAction('pin')" expand="block" size="small" class="ion-margin">
+  <ion-button
+    (click)="cookingToolbarService.isPinned(recipeId) ? closeWithAction('unpin') : closeWithAction('pin')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
     <ion-icon name="pin" slot="start"></ion-icon>
     <span *ngIf="cookingToolbarService.isPinned(recipeId)">
       {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
@@ -46,13 +75,23 @@
     </span>
   </ion-button>
 
-  <ion-button (click)="closeWithAction('edit')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='create' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('edit')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="create" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.edit' | translate }}
   </ion-button>
 
-  <ion-button (click)="closeWithAction('clone')" expand="block" size="small" class="ion-margin">
-    <ion-icon name='copy' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('clone')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="copy" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.makeACopy' | translate }}
   </ion-button>
 
@@ -60,8 +99,14 @@
     {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
   </ion-list-header>
 
-  <ion-button (click)="closeWithAction('delete')" expand="block" size="small" color="danger" class="ion-margin">
-    <ion-icon name='trash' slot="start"></ion-icon>
+  <ion-button
+    (click)="closeWithAction('delete')"
+    expand="block"
+    size="small"
+    color="danger"
+    class="ion-margin"
+  >
+    <ion-icon name="trash" slot="start"></ion-icon>
     {{ 'pages.recipeDetailsPopover.delete' | translate }}
   </ion-button>
 </ion-list>

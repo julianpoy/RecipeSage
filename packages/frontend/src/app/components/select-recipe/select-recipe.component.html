@@ -1,52 +1,62 @@
 <div>
-  <ion-item class="selectedRecipe"
-    (click)="selectedRecipe = null"
+  <ion-item
+    class="selectedRecipe"
+    (click)="selectedRecipe = undefined"
     *ngIf="selectedRecipe"
-    button>
-    <ion-avatar *ngIf="selectedRecipe.images && selectedRecipe.images.length > 0" slot="start">
-      <img src="{{ selectedRecipe.images[0].location }}">
+    button
+  >
+    <ion-avatar
+      *ngIf="selectedRecipe.images && selectedRecipe.images.length > 0"
+      slot="start"
+    >
+      <img src="{{ selectedRecipe.images[0].location }}" />
     </ion-avatar>
     <ion-label>
       <h2>{{ selectedRecipe.title }}</h2>
       <p>
-        {{ 'components.selectRecipe.change' | translate }}
+        {{ "components.selectRecipe.change" | translate }}
       </p>
     </ion-label>
   </ion-item>
 
   <div class="dropdownSelect" *ngIf="!selectedRecipe">
     <ion-searchbar
-      (ionChange)='onSearchInputChange($event)'
+      (ionChange)="onSearchInputChange($event)"
       placeholder="Type to search for recipe..."
       autocomplete="off"
       #labelInputField
-      id="labelInputField"></ion-searchbar>
-    <div
-      class="autocomplete">
+      id="labelInputField"
+    ></ion-searchbar>
+    <div class="autocomplete">
       <button
         class="suggestion"
         *ngFor="let recipe of recipes"
-        (click)="selectRecipe(recipe)">
+        (click)="selectRecipe(recipe)"
+      >
         <ion-item class="suggestion-inner" button>
-          <ion-avatar *ngIf="recipe.images && recipe.images.length > 0" slot="start">
-            <img src="{{ recipe.images[0].location }}">
+          <ion-avatar
+            *ngIf="recipe.images && recipe.images.length > 0"
+            slot="start"
+          >
+            <img src="{{ recipe.images[0].location }}" />
           </ion-avatar>
           <ion-label>
             <h2>{{ recipe.title }}</h2>
             <p>
-              {{ 'components.selectRecipe.select' | translate }}
+              {{ "components.selectRecipe.select" | translate }}
             </p>
           </ion-label>
         </ion-item>
       </button>
       <!-- Searching for user for which a thread does not exist -->
-      <button
-        class="suggestion"
-        *ngIf="searching">
+      <button class="suggestion" *ngIf="searching">
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>
-              {{ 'components.selectRecipe.searching' | translate:{searchText:searchText} }}
+              {{
+                "components.selectRecipe.searching"
+                  | translate : { searchText: searchText }
+              }}
             </h2>
           </ion-label>
         </ion-item>
@@ -54,11 +64,15 @@
       <!-- Searching for user for which a thread does not exist -->
       <button
         class="suggestion"
-        *ngIf="recipes.length === 0 && searchText.length > 0 && !searching">
+        *ngIf="recipes.length === 0 && searchText.length > 0 && !searching"
+      >
         <ion-item class="suggestion-inner" button>
           <ion-label>
             <h2>
-              {{ 'components.selectRecipe.null' | translate:{searchText:searchText} }}
+              {{
+                "components.selectRecipe.null"
+                  | translate : { searchText: searchText }
+              }}
             </h2>
           </ion-label>
         </ion-item>

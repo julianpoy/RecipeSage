@@ -1,16 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { LabelsPopoverPage } from './labels-popover.page';
+import { LabelsPopoverPage } from "./labels-popover.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    LabelsPopoverPage,
-  ],
+  declarations: [LabelsPopoverPage],
   imports: [
     CommonModule,
     IonicModule,
@@ -18,8 +16,5 @@ import { GlobalModule } from '~/global.module';
     ReactiveFormsModule,
     GlobalModule,
   ],
-  entryComponents: [
-    LabelsPopoverPage
-  ]
 })
 export class LabelsPopoverPageModule {}

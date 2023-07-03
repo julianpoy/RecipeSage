@@ -1,15 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { UserService } from '~/services/user.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap } from '~/services/util.service';
-import {MessageThread, MessagingService} from '~/services/messaging.service';
+import { UserService } from "~/services/user.service";
+import { MessageThread, MessagingService } from "~/services/messaging.service";
 
 @Component({
-  selector: 'select-knownuser',
-  templateUrl: 'select-knownuser.component.html',
-  styleUrls: ['./select-knownuser.component.scss']
+  selector: "select-knownuser",
+  templateUrl: "select-knownuser.component.html",
+  styleUrls: ["./select-knownuser.component.scss"],
 })
 export class SelectKnownUserComponent {
   _radioFriendship: any;
@@ -28,22 +25,22 @@ export class SelectKnownUserComponent {
     if (this._radioThread && this._radioThread.otherUser.id !== val?.id) {
       this._radioThread = null;
     }
-    if (this._radioFriendship && this._radioFriendship.otherUser.id !== val?.id) {
+    if (
+      this._radioFriendship &&
+      this._radioFriendship.otherUser.id !== val?.id
+    ) {
       this._radioFriendship = null;
     }
   }
 
   @Output() selectedUserChange = new EventEmitter();
 
-  friendships = [];
+  friendships: any[] = [];
   threads: MessageThread[] = [];
 
   constructor(
-    private utilService: UtilService,
-    private toastCtrl: ToastController,
     private userService: UserService,
-    private messagingService: MessagingService,
-    private loadingService: LoadingService
+    private messagingService: MessagingService
   ) {
     this.fetchFriendships();
   }
@@ -52,8 +49,9 @@ export class SelectKnownUserComponent {
     const response = await this.userService.getMyFriends();
     if (!response.success) return;
 
-    this.friendships = response.data.friends
-      .sort((a, b) => a.otherUser.name.localeCompare(b.otherUser.name));
+    this.friendships = response.data.friends.sort((a: any, b: any) =>
+      a.otherUser.name.localeCompare(b.otherUser.name)
+    );
 
     this.fetchThreads();
   }
@@ -64,10 +62,20 @@ export class SelectKnownUserComponent {
     });
     if (!response.success) return;
 
-    const friendIds = new Set(this.friendships.map((friendship) => friendship.otherUser.id));
+    const friendIds = new Set(
+      this.friendships.map((friendship) => friendship.otherUser.id)
+    );
     this.threads = response.data
       .filter((thread) => !friendIds.has(thread.otherUser.id))
       .sort((a, b) => a.otherUser.name.localeCompare(b.otherUser.name));
+  }
+
+  friendshipRadioChanged(event: any) {
+    this.selectFriendship(event.detail.value);
+  }
+
+  threadRadioChanged(event: any) {
+    this.selectThread(event.detail.value);
   }
 
   selectFriendship(friendship: any) {

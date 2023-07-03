@@ -1,33 +1,46 @@
-import { Component } from '@angular/core';
-import { ToastController, AlertController, ModalController, NavController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import {
+  ToastController,
+  AlertController,
+  ModalController,
+  NavController,
+} from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { isHandleValid } from '@recipesage/util';
+import { isHandleValid } from "@recipesage/util";
 
-import { AddProfileItemModalPage } from '../add-profile-item-modal/add-profile-item-modal.page';
-import { ShareProfileModalPage } from '../share-profile-modal/share-profile-modal.page';
+import { AddProfileItemModalPage } from "../add-profile-item-modal/add-profile-item-modal.page";
+import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 
-import { UserService, UserProfile } from '~/services/user.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { RecipeService } from '~/services/recipe.service';
-import { ImageService } from '~/services/image.service';
-import { UnsavedChangesService } from '~/services/unsaved-changes.service';
+import {
+  UserService,
+  UserProfile,
+  User,
+  ProfileItem,
+} from "~/services/user.service";
+import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { RecipeService } from "~/services/recipe.service";
+import { ImageService } from "~/services/image.service";
+import { UnsavedChangesService } from "~/services/unsaved-changes.service";
 
 @Component({
-  selector: 'page-my-profile',
-  templateUrl: 'my-profile.page.html',
-  styleUrls: ['my-profile.page.scss']
+  selector: "page-my-profile",
+  templateUrl: "my-profile.page.html",
+  styleUrls: ["my-profile.page.scss"],
 })
 export class MyProfilePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
 
-  accountInfo;
-  myProfile: UserProfile;
+  revealNameInput: boolean = false;
+  revealHandleInput: boolean = false;
+
+  accountInfo?: User;
+  myProfile?: UserProfile;
   requiresSetup = false;
 
   isHandleAvailable = true;
-  handleInputTimeout;
+  handleInputTimeout?: NodeJS.Timeout;
 
   updatedProfileFields: Partial<UserProfile> = {};
 
@@ -42,8 +55,8 @@ export class MyProfilePage {
     public unsavedChangesService: UnsavedChangesService,
     public imageService: ImageService,
     public recipeService: RecipeService,
-    public userService: UserService) {
-
+    public userService: UserService
+  ) {
     this.load().then(() => {
       this.checkProfileEnabled();
     });
@@ -54,11 +67,13 @@ export class MyProfilePage {
 
     const [accountInfo, myProfile] = await Promise.all([
       this.userService.me({
-        401: () => this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login))
+        401: () =>
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login)),
       }),
       this.userService.getMyProfile({
-        401: () => this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login))
-      })
+        401: () =>
+          this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login)),
+      }),
     ]);
     loading.dismiss();
 
@@ -81,10 +96,18 @@ export class MyProfilePage {
       this.myProfile.name &&
       !this.myProfile.enableProfile
     ) {
-      const header = await this.translate.get('pages.myProfile.notEnabled.header').toPromise();
-      const message = await this.translate.get('pages.myProfile.notEnabled.message').toPromise();
-      const ignore = await this.translate.get('pages.myProfile.ignore').toPromise();
-      const enable = await this.translate.get('pages.myProfile.enable').toPromise();
+      const header = await this.translate
+        .get("pages.myProfile.notEnabled.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.myProfile.notEnabled.message")
+        .toPromise();
+      const ignore = await this.translate
+        .get("pages.myProfile.ignore")
+        .toPromise();
+      const enable = await this.translate
+        .get("pages.myProfile.enable")
+        .toPromise();
 
       const alert = await this.alertCtrl.create({
         header,
@@ -92,20 +115,22 @@ export class MyProfilePage {
         buttons: [
           {
             text: ignore,
-            role: 'cancel',
-            handler: () => { }
+            role: "cancel",
+            handler: () => {},
           },
           {
             text: enable,
             handler: () => {
-              this.updatedProfileFields.enableProfile = true
-              this.myProfile.enableProfile = true;
-              this.accountInfo.enableProfile = true;
+              this.updatedProfileFields.enableProfile = true;
+              if (this.myProfile && this.accountInfo) {
+                this.myProfile.enableProfile = true;
+                this.accountInfo.enableProfile = true;
+              }
 
               this.markAsDirty();
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
       alert.present();
     }
@@ -123,13 +148,19 @@ export class MyProfilePage {
 
   handleInput() {
     if (this.handleInputTimeout) clearTimeout(this.handleInputTimeout);
-    if (this.updatedProfileFields.handle?.startsWith('@')) this.updatedProfileFields.handle = this.updatedProfileFields.handle.substring(1);
+    if (this.updatedProfileFields.handle?.startsWith("@"))
+      this.updatedProfileFields.handle =
+        this.updatedProfileFields.handle.substring(1);
     if (!this.isHandleValid()) return;
-    this.handleInputTimeout = setTimeout(() => this.checkHandleAvailable(this.updatedProfileFields.handle), 500);
+
+    this.handleInputTimeout = setTimeout(
+      () => this.checkHandleAvailable(this.updatedProfileFields.handle || ""),
+      500
+    );
   }
 
   isHandleValid() {
-    return isHandleValid(this.updatedProfileFields.handle);
+    return isHandleValid(this.updatedProfileFields.handle || "");
   }
 
   markAsDirty() {
@@ -145,7 +176,8 @@ export class MyProfilePage {
   }
 
   inputIsValid() {
-    if (this.updatedProfileFields.handle && !this.isHandleAvailable) return false;
+    if (this.updatedProfileFields.handle && !this.isHandleAvailable)
+      return false;
     if (this.updatedProfileFields.handle && !this.isHandleValid()) return false;
 
     return true;
@@ -157,23 +189,27 @@ export class MyProfilePage {
       name: this.updatedProfileFields.name,
       handle: this.updatedProfileFields.handle,
       enableProfile: this.updatedProfileFields.enableProfile,
-    } as any
+    } as any;
 
     if (this.updatedProfileFields.profileImages) {
-      update.profileImageIds = this.updatedProfileFields.profileImages.map(image => image.id);
+      update.profileImageIds = this.updatedProfileFields.profileImages.map(
+        (image) => image.id
+      );
     }
 
     if (this.updatedProfileFields.profileItems) {
-      update.profileItems = this.updatedProfileFields.profileItems.map(profileItem => ({
-        title: profileItem.title,
-        visibility: profileItem.visibility,
-        type: profileItem.type,
-        labelId: profileItem.label?.id || null,
-        recipeId: profileItem.recipe?.id || null,
-      }));
+      update.profileItems = this.updatedProfileFields.profileItems.map(
+        (profileItem) => ({
+          title: profileItem.title,
+          visibility: profileItem.visibility,
+          type: profileItem.type,
+          labelId: profileItem.label?.id || null,
+          recipeId: profileItem.recipe?.id || null,
+        })
+      );
     }
 
-    console.log('updating', update)
+    console.log("updating", update);
     const updated = await this.userService.updateMyProfile(update);
     loading.dismiss();
     if (updated) {
@@ -184,6 +220,8 @@ export class MyProfilePage {
   }
 
   async startNewProfileItem() {
+    if (!this.myProfile) return;
+
     const modal = await this.modalCtrl.create({
       component: AddProfileItemModalPage,
     });
@@ -198,7 +236,9 @@ export class MyProfilePage {
     }
   }
 
-  async removeProfileItem(idx) {
+  async removeProfileItem(idx: number) {
+    if (!this.myProfile) return;
+
     this.myProfile.profileItems.splice(idx, 1);
     this.updatedProfileFields.profileItems = this.myProfile.profileItems;
 
@@ -207,10 +247,14 @@ export class MyProfilePage {
 
   async shareProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
-      const header = await this.translate.get('pages.myProfile.share.unsaved.header').toPromise();
-      const message = await this.translate.get('pages.myProfile.share.unsaved.message').toPromise();
-      const cancel = await this.translate.get('generic.cancel').toPromise();
-      const save = await this.translate.get('generic.save').toPromise();
+      const header = await this.translate
+        .get("pages.myProfile.share.unsaved.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.myProfile.share.unsaved.message")
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const save = await this.translate.get("generic.save").toPromise();
 
       const alert = await this.alertCtrl.create({
         header,
@@ -218,17 +262,17 @@ export class MyProfilePage {
         buttons: [
           {
             text: cancel,
-            role: 'cancel',
-            handler: () => { }
+            role: "cancel",
+            handler: () => {},
           },
           {
             text: save,
             handler: async () => {
               await this.save();
               this.shareProfile();
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
       alert.present();
       return;
@@ -240,18 +284,22 @@ export class MyProfilePage {
     const modal = await this.modalCtrl.create({
       component: ShareProfileModalPage,
       componentProps: {
-        profile: this.myProfile
-      }
+        profile: this.myProfile,
+      },
     });
     modal.present();
   }
 
   async viewProfile() {
     if (Object.keys(this.updatedProfileFields).length > 0) {
-      const header = await this.translate.get('pages.myProfile.view.unsaved.header').toPromise();
-      const message = await this.translate.get('pages.myProfile.view.unsaved.message').toPromise();
-      const cancel = await this.translate.get('generic.cancel').toPromise();
-      const save = await this.translate.get('generic.save').toPromise();
+      const header = await this.translate
+        .get("pages.myProfile.view.unsaved.header")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.myProfile.view.unsaved.message")
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const save = await this.translate.get("generic.save").toPromise();
 
       const alert = await this.alertCtrl.create({
         header,
@@ -259,17 +307,17 @@ export class MyProfilePage {
         buttons: [
           {
             text: cancel,
-            role: 'cancel',
-            handler: () => { }
+            role: "cancel",
+            handler: () => {},
           },
           {
             text: save,
             handler: async () => {
               await this.save();
               this.viewProfile();
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
       alert.present();
       return;
@@ -278,20 +326,31 @@ export class MyProfilePage {
       this.checkProfileEnabled();
       return;
     }
-    this.navCtrl.navigateForward(RouteMap.ProfilePage.getPath(`@${this.myProfile.handle}`));
+    this.navCtrl.navigateForward(
+      RouteMap.ProfilePage.getPath(`@${this.myProfile.handle}`)
+    );
   }
 
-  open(item) {
-    if(item.type === 'all-recipes') {
-      this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId }));
-    } else if(item.type === 'label') {
-      this.navCtrl.navigateForward(RouteMap.HomePage.getPath('main', { userId: item.userId, selectedLabels: [item.label.title] }));
-    } else if (item.type === 'recipe') {
+  open(item: any) {
+    if (item.type === "all-recipes") {
+      this.navCtrl.navigateForward(
+        RouteMap.HomePage.getPath("main", { userId: item.userId })
+      );
+    } else if (item.type === "label") {
+      this.navCtrl.navigateForward(
+        RouteMap.HomePage.getPath("main", {
+          userId: item.userId,
+          selectedLabels: [item.label.title],
+        })
+      );
+    } else if (item.type === "recipe") {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));
     }
   }
 
-  ionReorder(event) {
+  ionReorder(event: any) {
+    if (!this.myProfile) return false;
+
     const item = this.myProfile.profileItems.splice(event.detail.from, 1)?.[0];
     if (item) {
       this.myProfile.profileItems.splice(event.detail.to, 0, item);

@@ -1,52 +1,56 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { HttpService } from './http.service';
-import { UtilService } from './util.service';
+import { HttpService } from "./http.service";
+import { UtilService } from "./util.service";
 
-import { STRIPE_PK } from 'src/environments/environment';
-import {ErrorHandlers} from './http-error-handler.service';
+import { STRIPE_PK } from "../../environments/environment";
+import { ErrorHandlers } from "./http-error-handler.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PaymentsService {
-  stripe;
+  stripe: any;
 
   constructor(
     public httpService: HttpService,
     public utilService: UtilService
   ) {
-    const stripeScriptEl = document.createElement('script');
+    const stripeScriptEl = document.createElement("script");
     stripeScriptEl.onload = () => this.init();
-    stripeScriptEl.src = 'https://js.stripe.com/v3/';
+    stripeScriptEl.src = "https://js.stripe.com/v3/";
     document.head.appendChild(stripeScriptEl);
-
   }
 
   init() {
     this.stripe = (window as any).Stripe(STRIPE_PK);
   }
 
-  generateCustomSession(payload: {
-    amount: number,
-    isRecurring: boolean,
-    successUrl: string,
-    cancelUrl: string
-  }, errorHandlers?: ErrorHandlers) {
+  generateCustomSession(
+    payload: {
+      amount: number;
+      isRecurring: boolean;
+      successUrl: string;
+      cancelUrl: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<any>(
       `payments/stripe/custom-session`,
-      'POST',
+      "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
   async launchStripeCheckout(sessionId: string) {
-    await this.stripe.redirectToCheckout({
-      sessionId
-    }).then(response => {
-      console.error(response.error.message, response.error);
-    });
+    await this.stripe
+      .redirectToCheckout({
+        sessionId,
+      })
+      .then((response?: { error?: Error }) => {
+        console.error(response?.error?.message, response?.error);
+      });
   }
 }

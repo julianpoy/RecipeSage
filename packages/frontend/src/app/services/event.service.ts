@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class EventService {
-
-  eventListeners = {};
+  eventListeners: { [key: string]: ((data: any) => void)[] } = {};
 
   constructor() {}
 
@@ -15,7 +14,6 @@ export class EventService {
   }
 
   publish(eventName: string, data?: any) {
-    this.eventListeners[eventName]?.map(cb => cb(data))
+    this.eventListeners[eventName]?.map((cb) => cb(data));
   }
 }
-

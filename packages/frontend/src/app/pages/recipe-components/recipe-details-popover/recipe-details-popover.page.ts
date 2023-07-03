@@ -1,16 +1,22 @@
-import { Component, Input } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
-import { PreferencesService, RecipeDetailsPreferenceKey } from '~/services/preferences.service';
-import { WakeLockService } from '~/services/wakelock.service';
-import { CookingToolbarService } from '~/services/cooking-toolbar.service';
+import { Component, Input } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
+import {
+  PreferencesService,
+  RecipeDetailsPreferenceKey,
+} from "~/services/preferences.service";
+import { WakeLockService } from "~/services/wakelock.service";
+import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 
 @Component({
-  selector: 'page-recipe-details-popover',
-  templateUrl: 'recipe-details-popover.page.html',
-  styleUrls: ['recipe-details-popover.page.scss']
+  selector: "page-recipe-details-popover",
+  templateUrl: "recipe-details-popover.page.html",
+  styleUrls: ["recipe-details-popover.page.scss"],
 })
 export class RecipeDetailsPopoverPage {
-  recipeId;
+  @Input({
+    required: true,
+  })
+  recipeId!: string;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;

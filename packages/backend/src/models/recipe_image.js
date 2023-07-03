@@ -1,14 +1,19 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Recipe_Image = sequelize.define('Recipe_Image', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false
+export const RecipeImageInit = (sequelize, DataTypes) => {
+  const Recipe_Image = sequelize.define(
+    "Recipe_Image",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      order: DataTypes.INTEGER,
     },
-    order: DataTypes.INTEGER
-  }, {});
-  Recipe_Image.associate = function() {};
+    {}
+  );
+  Recipe_Image.associate = () => {
+    // No associations
+  };
   return Recipe_Image;
 };

@@ -1,6 +1,6 @@
-import { dedent } from 'ts-dedent';
-import { signatureHtml, signaturePlain } from './util/signature';
-import { sendMail } from './util/sendMail';
+import { dedent } from "ts-dedent";
+import { signatureHtml, signaturePlain } from "./util/signature";
+import { sendMail } from "./util/sendMail";
 
 interface PasswordResetEmailArgs {
   resetLink: string;
@@ -11,7 +11,7 @@ export const sendPasswordReset = async (
   ccTo: string[],
   args: PasswordResetEmailArgs
 ) => {
-  const subject = 'RecipeSage Password Reset';
+  const subject = "RecipeSage Password Reset";
 
   const html = dedent`
     Hello,
@@ -40,4 +40,3 @@ export const sendPasswordReset = async (
 
   await sendMail(to, ccTo, subject, html, plain);
 };
-

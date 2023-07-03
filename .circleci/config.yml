@@ -10,7 +10,7 @@ commands:
             - dependency-cache-
       - run:
           name: install-deps
-          command: 'npm install'
+          command: "npm install"
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -46,6 +46,9 @@ jobs:
     steps:
       - checkout
       - install-dependencies
+      - run:
+          name: prettier
+          command: npx prettier --check .
       - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,typecheck,test,build
@@ -183,4 +186,3 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
               ignore: /.*/
-

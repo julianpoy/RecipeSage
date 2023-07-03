@@ -1,45 +1,43 @@
-const fs = require('fs-extra');
-const path = require('path');
-const zlib = require('zlib');
+import * as fs from "fs-extra";
+import * as path from "path";
+import zlib from "zlib";
 
 // Service
-const FirebaseService = require('./firebase');
-const GripService = require('./grip');
-
-
-
+import * as FirebaseService from "./firebase.js";
+import * as GripService from "./grip.js";
 
 /**
  * DO NOT ADD ANYTHING TO THIS FILE
  * ALL ADDITIONS SHOULD EXIST IN SEPARATE TS FILES
  */
 
-
-
-
-
-exports.dispatchImportNotification = (user, status, reason) => {
+export const dispatchImportNotification = (user, status, reason) => {
   let event;
   if (status === 0) {
-    event = 'complete';
+    event = "complete";
   } else if (status === 1) {
-    event = 'failed';
+    event = "failed";
   } else if (status === 2) {
-    event = 'working';
+    event = "working";
   } else {
     return;
   }
 
-  let type = 'import:pepperplate:' + event;
+  let type = "import:pepperplate:" + event;
 
   const message = {
     type,
-    reason: reason || 'status'
+    reason: reason || "status",
   };
 
   let sendQueues = [];
   if (user.fcmTokens) {
-    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), message));
+    sendQueues.push(
+      FirebaseService.sendMessages(
+        user.fcmTokens.map((fcmToken) => fcmToken.token),
+        message
+      )
+    );
   }
 
   sendQueues.push(GripService.broadcast(user.id, type, message));
@@ -47,17 +45,19 @@ exports.dispatchImportNotification = (user, status, reason) => {
   return Promise.all(sendQueues);
 };
 
-exports.sortUserProfileImages = user => {
+export const sortUserProfileImages = (user) => {
   if (user.toJSON) user = user.toJSON();
 
   if (user.profileImages && user.profileImages.length > 0) {
-    user.profileImages.sort((a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order);
+    user.profileImages.sort(
+      (a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order
+    );
   }
 
   return user;
 };
 
-exports.sortRecipeImages = recipe => {
+export const sortRecipeImages = (recipe) => {
   if (recipe.toJSON) recipe = recipe.toJSON();
 
   if (recipe.images && recipe.images.length > 0) {
@@ -67,41 +67,46 @@ exports.sortRecipeImages = recipe => {
   return recipe;
 };
 
-exports.dispatchMessageNotification = (user, fullMessage) => {
+export const dispatchMessageNotification = (user, fullMessage) => {
   const message = {
     id: fullMessage.id,
     body: fullMessage.body.substring(0, 1000), // Keep payload size reasonable if there's a long message. Max total payload size is 2048
     otherUser: fullMessage.otherUser,
     fromUser: fullMessage.fromUser,
-    toUser: fullMessage.toUser
+    toUser: fullMessage.toUser,
   };
 
   if (fullMessage.recipe) {
     message.recipe = {
       id: fullMessage.recipe.id,
       title: fullMessage.recipe.title,
-      images: fullMessage.recipe.images.map(image => ({
-        location: image.location
-      }))
+      images: fullMessage.recipe.images.map((image) => ({
+        location: image.location,
+      })),
     };
   }
 
   let sendQueues = [];
   if (user.fcmTokens) {
     const notification = {
-      type: 'messages:new',
-      message: JSON.stringify(message)
+      type: "messages:new",
+      message: JSON.stringify(message),
     };
 
-    sendQueues.push(FirebaseService.sendMessages(user.fcmTokens.map(fcmToken => fcmToken.token), notification));
+    sendQueues.push(
+      FirebaseService.sendMessages(
+        user.fcmTokens.map((fcmToken) => fcmToken.token),
+        notification
+      )
+    );
   }
 
-  sendQueues.push(GripService.broadcast(user.id, 'messages:new', message));
+  sendQueues.push(GripService.broadcast(user.id, "messages:new", message));
 
   return Promise.all(sendQueues);
 };
 
-exports.findFilesByRegex = (searchPath, regex) => {
+export const findFilesByRegex = (searchPath, regex) => {
   if (!fs.existsSync(searchPath)) {
     return [];
   }
@@ -113,21 +118,23 @@ exports.findFilesByRegex = (searchPath, regex) => {
       return [newPath, ...acc];
     }
 
-    if (fs.lstatSync(newPath).isDirectory()) return [...acc, ...exports.findFilesByRegex(newPath, regex)];
+    if (fs.lstatSync(newPath).isDirectory())
+      return [...acc, ...findFilesByRegex(newPath, regex)];
 
     return acc;
   }, []);
 };
 
-exports.sanitizeEmail = email => (email || '').trim().toLowerCase();
+export const sanitizeEmail = (email) => (email || "").trim().toLowerCase();
 
 // Very liberal email regex. Don't want to reject valid user emails.
 let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-exports.validateEmail = email => emailRegex.test(email);
+export const validateEmail = (email) => emailRegex.test(email);
 
-exports.validatePassword = password => typeof password === 'string' && password.length >= 6;
+export const validatePassword = (password) =>
+  typeof password === "string" && password.length >= 6;
 
-exports.gunzip = buf => {
+export const gunzip = (buf) => {
   return new Promise((resolve, reject) => {
     zlib.gunzip(buf, (err, result) => {
       if (err) reject(err);
@@ -138,7 +145,7 @@ exports.gunzip = buf => {
 
 // CBs are an array of promises to be executed by chunkSize
 // Waits until previous is done before executing next chunk
-exports.executeInChunks = async (cbs, chunkSize) => {
+export const executeInChunks = async (cbs, chunkSize) => {
   if (chunkSize < 1) return Promise.resolve();
 
   let chunks = [];
@@ -148,18 +155,24 @@ exports.executeInChunks = async (cbs, chunkSize) => {
 
   await chunks.reduce((acc, chunk) => {
     return acc.then(() => {
-      return Promise.all(chunk.map(cb => cb()));
+      return Promise.all(chunk.map((cb) => cb()));
     });
   }, Promise.resolve());
 };
 
-exports.cleanLabelTitle = labelTitle => {
-  const cleanedTitle = (labelTitle || '').trim().toLowerCase().replace(/,/g, '');
+export const cleanLabelTitle = (labelTitle) => {
+  const cleanedTitle = (labelTitle || "")
+    .trim()
+    .toLowerCase()
+    .replace(/,/g, "");
 
-  if (cleanedTitle === 'unlabeled') return 'un-labeled';
+  if (cleanedTitle === "unlabeled") return "un-labeled";
 
   return cleanedTitle;
 };
 
-exports.capitalizeEachWord = input => input.split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
-
+export const capitalizeEachWord = (input) =>
+  input
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+    .join(" ");

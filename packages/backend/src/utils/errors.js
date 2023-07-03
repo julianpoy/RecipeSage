@@ -3,27 +3,13 @@ const constructError = (message, status) => {
   e.status = status;
   return e;
 };
-
 // 4xx
-const BadRequest = (message) => constructError(message, 400);
-const Unauthorized = (message) => constructError(message, 401);
-const Forbidden = (message) => constructError(message, 403);
-const NotFound = (message) => constructError(message, 404);
-const Conflict = (message) => constructError(message, 409);
-const PreconditionFailed = (message) => constructError(message, 412);
-const UnsupportedMediaType = (message) => constructError(message, 415);
-
+export const BadRequest = (message) => constructError(message, 400);
+export const Unauthorized = (message) => constructError(message, 401);
+export const Forbidden = (message) => constructError(message, 403);
+export const NotFound = (message) => constructError(message, 404);
+export const Conflict = (message) => constructError(message, 409);
+export const PreconditionFailed = (message) => constructError(message, 412);
+export const UnsupportedMediaType = (message) => constructError(message, 415);
 // 5xx
-const InternalServerError = (message) => constructError(message, 500);
-
-module.exports = {
-  BadRequest,
-  Unauthorized,
-  Forbidden,
-  NotFound,
-  Conflict,
-  PreconditionFailed,
-  UnsupportedMediaType,
-  InternalServerError,
-};
-
+export const InternalServerError = (message) => constructError(message, 500);

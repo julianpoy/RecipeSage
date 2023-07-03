@@ -1,57 +1,65 @@
-const express = require('express');
+import * as express from "express";
 const router = express.Router();
-const cors = require('cors');
-const Sentry = require('@sentry/node');
-const moment = require('moment');
+import * as cors from "cors";
+import * as Sentry from "@sentry/node";
+import * as moment from "moment";
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const User_Profile_Image = require('../models').User_Profile_Image;
-const FCMToken = require('../models').FCMToken;
-const Session = require('../models').Session;
-const Recipe = require('../models').Recipe;
-const Label = require('../models').Label;
-const Image = require('../models').Image;
-const Message = require('../models').Message;
-const Friendship = require('../models').Friendship;
-const ProfileItem = require('../models').ProfileItem;
+import { Op } from "sequelize";
+import {
+  sequelize,
+  User,
+  User_Profile_Image,
+  FCMToken,
+  Session,
+  Recipe,
+  Label,
+  Image,
+  Message,
+  Friendship,
+  ProfileItem,
+} from "../models";
 
 // Service
-const SessionService = require('../services/sessions');
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
-const SubscriptionService = require('../services/subscriptions');
-const { sendWelcome } = require('../services/email/welcome');
-const { sendPasswordReset } = require('../services/email/passwordReset');
-const { getFriendships } = require('../utils/getFriendships');
+import * as SessionService from "../services/sessions.js";
+import * as MiddlewareService from "../services/middleware.js";
+import * as UtilService from "../services/util.js";
+import * as SubscriptionService from "../services/subscriptions.js";
+import { sendWelcome } from "../services/email/welcome.ts";
+import { sendPasswordReset } from "../services/email/passwordReset.ts";
+import { getFriendships } from "../utils/getFriendships.js";
 
-const SharedUtils = require('@recipesage/util');
+import * as SharedUtils from "@recipesage/util";
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const {
+import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
+import {
   BadRequest,
   Forbidden,
   NotFound,
   PreconditionFailed,
-} = require('../utils/errors');
-const {deleteHangingImagesForUser} = require('../utils/data/deleteHangingImages');
-const {indexRecipes} = require('../services/search');
-
+} from "../utils/errors.js";
+import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
+import { indexRecipes } from "@recipesage/trpc";
 
 router.get(
-  '/',
+  "/",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const user = await User.findByPk(res.locals.session.userId);
 
-    const subscriptions = (await SubscriptionService.subscriptionsForUser(res.locals.session.userId, true)).map(subscription => {
+    const subscriptions = (
+      await SubscriptionService.subscriptionsForUser(
+        res.locals.session.userId,
+        true
+      )
+    ).map((subscription) => {
       return {
         expires: subscription.expires,
-        capabilities: SubscriptionService.capabilitiesForSubscription(subscription.name)
+        capabilities: SubscriptionService.capabilitiesForSubscription(
+          subscription.name
+        ),
       };
     });
 
@@ -65,9 +73,10 @@ router.get(
       profileVisibility: user.profileVisibility,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      subscriptions
+      subscriptions,
     });
-  }));
+  })
+);
 
 // Params:
 // profileImageId
@@ -82,47 +91,59 @@ router.get(
 // ]
 
 router.put(
-  '/profile',
-  MiddlewareService.validateSession(['user']),
+  "/profile",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const userId = res.locals.session.userId;
 
-    if (req.body.handle !== undefined && !SharedUtils.isHandleValid(req.body.handle)) {
-      throw BadRequest('Handle must only contain A-z 0-9 _ .');
+    if (
+      req.body.handle !== undefined &&
+      !SharedUtils.isHandleValid(req.body.handle)
+    ) {
+      throw BadRequest("Handle must only contain A-z 0-9 _ .");
     }
 
-    await SQ.transaction(async transaction => {
-      await User.update({
-        ...(req.body.name !== undefined ? { name: req.body.name } : {}),
-        ...(req.body.handle !== undefined ? { handle: req.body.handle.toLowerCase() } : {}),
-        ...(req.body.enableProfile !== undefined ? { enableProfile: req.body.enableProfile } : {}),
-        ...(req.body.profileVisibility !== undefined ? { profileVisibility: req.body.profileVisibility } : {}),
-      }, {
-        where: {
-          id: userId
+    await sequelize.transaction(async (transaction) => {
+      await User.update(
+        {
+          ...(req.body.name !== undefined ? { name: req.body.name } : {}),
+          ...(req.body.handle !== undefined
+            ? { handle: req.body.handle.toLowerCase() }
+            : {}),
+          ...(req.body.enableProfile !== undefined
+            ? { enableProfile: req.body.enableProfile }
+            : {}),
+          ...(req.body.profileVisibility !== undefined
+            ? { profileVisibility: req.body.profileVisibility }
+            : {}),
         },
-        transaction
-      });
+        {
+          where: {
+            id: userId,
+          },
+          transaction,
+        }
+      );
 
       if (req.body.profileItems) {
         await ProfileItem.destroy({
           where: {
-            userId
+            userId,
           },
-          transaction
+          transaction,
         });
 
         const profileItems = req.body.profileItems.map((profileItem, idx) => {
           const { title, type, recipeId, labelId, visibility } = profileItem;
 
-          if (!['public', 'friends-only'].includes(visibility)) {
-            const invalidVisibilityError = new Error('Invalid visibility type');
+          if (!["public", "friends-only"].includes(visibility)) {
+            const invalidVisibilityError = new Error("Invalid visibility type");
             invalidVisibilityError.status = 400;
             throw invalidVisibilityError;
           }
 
-          if (!['all-recipes', 'label', 'recipe'].includes(type)) {
-            const invalidTypeError = new Error('Invalid profile item type');
+          if (!["all-recipes", "label", "recipe"].includes(type)) {
+            const invalidTypeError = new Error("Invalid profile item type");
             invalidTypeError.status = 400;
             throw invalidTypeError;
           }
@@ -134,90 +155,109 @@ router.put(
             recipeId,
             labelId,
             visibility,
-            order: idx
+            order: idx,
           };
         });
 
         await ProfileItem.bulkCreate(profileItems, {
-          transaction
+          transaction,
         });
       }
 
       if (req.body.profileImageIds) {
-        const canUploadMultipleImages = await SubscriptionService.userHasCapability(
-          res.locals.session.userId,
-          SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
-        );
+        const canUploadMultipleImages =
+          await SubscriptionService.userHasCapability(
+            res.locals.session.userId,
+            SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
+          );
 
         if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
           const images = await Image.findAll({
             where: {
               id: {
-                [Op.in]: req.body.profileImageIds
-              }
+                [Op.in]: req.body.profileImageIds,
+              },
             },
-            transaction
+            transaction,
           });
-          const imagesById = images.reduce((acc, img) => ({ ...acc, [img.id]: img }), {});
+          const imagesById = images.reduce(
+            (acc, img) => ({ ...acc, [img.id]: img }),
+            {}
+          );
 
-          req.body.profileImageIds = req.body.profileImageIds.filter((imageId, idx) =>
-            idx === 0 || // Allow first image always (users can always upload the first image)
-            imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
-            moment(imagesById[imageId].createdAt).add(1, 'day').isBefore(moment()) // Allow old images (user's subscription expired)
+          req.body.profileImageIds = req.body.profileImageIds.filter(
+            (imageId, idx) =>
+              idx === 0 || // Allow first image always (users can always upload the first image)
+              imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
+              moment(imagesById[imageId].createdAt)
+                .add(1, "day")
+                .isBefore(moment()) // Allow old images (user's subscription expired)
           );
         }
 
-        if (req.body.profileImageIds.length > 10) req.body.profileImageIds.splice(10); // Limit to 10 images per recipe max
+        if (req.body.profileImageIds.length > 10)
+          req.body.profileImageIds.splice(10); // Limit to 10 images per recipe max
 
         await User_Profile_Image.destroy({
           where: {
-            userId: res.locals.session.userId
+            userId: res.locals.session.userId,
           },
-          transaction
+          transaction,
         });
 
-        await User_Profile_Image.bulkCreate(req.body.profileImageIds.map((imageId, idx) => ({
-          userId: res.locals.session.userId,
-          imageId: imageId,
-          order: idx
-        })), {
-          transaction
-        });
+        await User_Profile_Image.bulkCreate(
+          req.body.profileImageIds.map((imageId, idx) => ({
+            userId: res.locals.session.userId,
+            imageId: imageId,
+            order: idx,
+          })),
+          {
+            transaction,
+          }
+        );
       }
     });
 
-    res.status(200).send('Updated');
-  }));
+    res.status(200).send("Updated");
+  })
+);
 
 router.get(
-  '/profile',
-  MiddlewareService.validateSession(['user']),
+  "/profile",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     let user = await User.findByPk(res.locals.session.userId, {
-      include: [{
-        model: Image,
-        as: 'profileImages',
-        attributes: ['id', 'location']
-      }]
+      include: [
+        {
+          model: Image,
+          as: "profileImages",
+          attributes: ["id", "location"],
+        },
+      ],
     });
 
     user = UtilService.sortUserProfileImages(user);
 
     const profileItems = await ProfileItem.findAll({
       where: {
-        userId: res.locals.session.userId
+        userId: res.locals.session.userId,
       },
-      include: [{
-        model: Recipe,
-        as: 'recipe',
-        include: [{
-          model: Image,
-          as: 'images',
-        }],
-      }, {
-        model: Label,
-        as: 'label'
-      }]
+      include: [
+        {
+          model: Recipe,
+          as: "recipe",
+          include: [
+            {
+              model: Image,
+              as: "images",
+            },
+          ],
+        },
+        {
+          model: Label,
+          as: "label",
+        },
+      ],
     });
 
     // Note: Should be the same as /profile/:userId
@@ -230,9 +270,10 @@ router.get(
       handle: user.handle,
       enableProfile: user.enableProfile,
       profileImages: user.profileImages,
-      profileItems
+      profileItems,
     });
-  }));
+  })
+);
 
 const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
   let profileUserId;
@@ -240,10 +281,10 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
     const user = await User.findOne({
       where: {
         handle: req.params.handle.toLowerCase(),
-      }
+      },
     });
     if (!user) {
-      throw NotFound('User with that handle not found');
+      throw NotFound("User with that handle not found");
     }
     profileUserId = user.id;
   } else {
@@ -251,19 +292,21 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
   }
 
   const profileUser = await User.findByPk(profileUserId, {
-    include: [{
-      model: Image,
-      as: 'profileImages',
-      attributes: ['id', 'location']
-    }]
+    include: [
+      {
+        model: Image,
+        as: "profileImages",
+        attributes: ["id", "location"],
+      },
+    ],
   });
 
   if (!profileUser) {
-    throw NotFound('User with that id not found');
+    throw NotFound("User with that id not found");
   }
 
   if (!profileUser.enableProfile) {
-    throw Forbidden('User does not have an active profile');
+    throw Forbidden("User does not have an active profile");
   }
 
   let outgoingFriendship = false;
@@ -277,16 +320,16 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
       const incoming = await Friendship.findOne({
         where: {
           userId: profileUserId,
-          friendId: res.locals.session.userId
-        }
+          friendId: res.locals.session.userId,
+        },
       });
       incomingFriendship = !!incoming;
 
       const outgoing = await Friendship.findOne({
         where: {
           userId: res.locals.session.userId,
-          friendId: profileUserId
-        }
+          friendId: profileUserId,
+        },
       });
 
       outgoingFriendship = !!outgoing;
@@ -296,19 +339,24 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
   const profileItems = await ProfileItem.findAll({
     where: {
       userId: profileUserId,
-      ...(incomingFriendship ? {} : { visibility: 'public' })
+      ...(incomingFriendship ? {} : { visibility: "public" }),
     },
-    include: [{
-      model: Recipe,
-      as: 'recipe',
-      include: [{
-        model: Image,
-        as: 'images',
-      }],
-    }, {
-      model: Label,
-      as: 'label'
-    }]
+    include: [
+      {
+        model: Recipe,
+        as: "recipe",
+        include: [
+          {
+            model: Image,
+            as: "images",
+          },
+        ],
+      },
+      {
+        model: Label,
+        as: "label",
+      },
+    ],
   });
 
   // Note: Should be the same as /profile
@@ -321,108 +369,122 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
     handle: profileUser.handle,
     enableProfile: profileUser.enableProfile,
     profileImages: profileUser.profileImages,
-    profileItems
+    profileItems,
   });
 });
 
 router.get(
-  '/profile/by-handle/:handle',
-  MiddlewareService.validateSession(['user'], true),
+  "/profile/by-handle/:handle",
+  MiddlewareService.validateSession(["user"], true),
   getUserProfile
 );
 
 router.get(
-  '/profile/:userId',
-  MiddlewareService.validateSession(['user'], true),
+  "/profile/:userId",
+  MiddlewareService.validateSession(["user"], true),
   getUserProfile
 );
 
-router.get('/friends',
-  MiddlewareService.validateSession(['user']),
+router.get(
+  "/friends",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const myUserId = res.locals.session.userId;
 
     const friendshipSummary = await getFriendships(myUserId);
 
     res.status(200).json(friendshipSummary);
-  }));
+  })
+);
 
-router.post('/friends/:userId',
-  MiddlewareService.validateSession(['user']),
+router.post(
+  "/friends/:userId",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const profileUserId = req.params.userId;
 
     if (profileUserId === res.locals.session.userId) {
-      throw BadRequest('You can\'t create a friendship with yourself. I understand if you\'re friends with yourself in real life, though...');
+      throw BadRequest(
+        "You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though..."
+      );
     }
 
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async (transaction) => {
       await Friendship.destroy({
         where: {
           userId: res.locals.session.userId,
-          friendId: profileUserId
+          friendId: profileUserId,
         },
-        transaction
+        transaction,
       });
 
-      await Friendship.create({
-        userId: res.locals.session.userId,
-        friendId: profileUserId
-      }, {
-        transaction
-      });
+      await Friendship.create(
+        {
+          userId: res.locals.session.userId,
+          friendId: profileUserId,
+        },
+        {
+          transaction,
+        }
+      );
     });
 
-    res.status(201).send('Created');
-  }));
+    res.status(201).send("Created");
+  })
+);
 
-router.delete('/friends/:userId',
-  MiddlewareService.validateSession(['user']),
+router.delete(
+  "/friends/:userId",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-    await SQ.transaction(async transaction => {
+    await sequelize.transaction(async (transaction) => {
       await Friendship.destroy({
         where: {
           userId: res.locals.session.userId,
-          friendId: req.params.userId
+          friendId: req.params.userId,
         },
-        transaction
+        transaction,
       });
 
       await Friendship.destroy({
         where: {
           userId: req.params.userId,
-          friendId: res.locals.session.userId
+          friendId: res.locals.session.userId,
         },
-        transaction
+        transaction,
       });
     });
 
-    res.status(200).send('Friendship removed');
-  }));
+    res.status(200).send("Friendship removed");
+  })
+);
 
 router.get(
-  '/handle-info/:handle',
-  MiddlewareService.validateSession(['user']),
+  "/handle-info/:handle",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const user = await User.findOne({
       where: {
         handle: req.params.handle.toLowerCase(),
       },
-      attributes: ['id'],
+      attributes: ["id"],
     });
 
     res.status(200).json({
       available: !user,
     });
-  }));
+  })
+);
 
 router.get(
-  '/capabilities',
+  "/capabilities",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const userCapabilities = await SubscriptionService.capabilitiesForUser(res.locals.session.userId);
+    const userCapabilities = await SubscriptionService.capabilitiesForUser(
+      res.locals.session.userId
+    );
 
     const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
 
@@ -432,41 +494,47 @@ router.get(
     }, {});
 
     res.status(200).json(capabilityMap);
-  }));
+  })
+);
 
 router.get(
-  '/stats',
+  "/stats",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
     const userId = res.locals.session.userId;
 
     const recipeCount = await Recipe.count({
       where: {
-        userId
-      }
+        userId,
+      },
     });
 
     const recipeImageCount = await Recipe.count({
       where: {
-        userId
+        userId,
       },
-      include: [{
-        model: Image,
-        as: 'images',
-        required: true
-      }]
+      include: [
+        {
+          model: Image,
+          as: "images",
+          required: true,
+        },
+      ],
     });
 
     const messageCount = await Message.count({
       where: {
-        [Op.or]: [{
-          toUserId: userId
-        }, {
-          fromUserId: userId
-        }]
-      }
+        [Op.or]: [
+          {
+            toUserId: userId,
+          },
+          {
+            fromUserId: userId,
+          },
+        ],
+      },
     });
 
     res.status(200).json({
@@ -474,47 +542,61 @@ router.get(
       recipeImageCount,
       messageCount,
       createdAt: res.locals.user.createdAt,
-      lastLogin: res.locals.user.lastLogin
+      lastLogin: res.locals.user.lastLogin,
     });
-  }));
+  })
+);
 
 /* Get public user listing by email */
 router.get(
-  '/by-email',
+  "/by-email",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
     const user = await User.findOne({
       where: {
-        email: UtilService.sanitizeEmail(req.query.email)
+        email: UtilService.sanitizeEmail(req.query.email),
       },
-      attributes: ['id', 'name', 'email']
+      attributes: ["id", "name", "email"],
     });
 
     if (!user) {
-      throw NotFound('No user with that email!');
+      throw NotFound("No user with that email!");
     }
 
     res.status(200).json(user);
-  }));
+  })
+);
 
 /* Log in user */
 router.post(
-  '/login',
+  "/login",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const token = await SQ.transaction(async (transaction) => {
-      const user = await User.login(req.body.email, req.body.password, transaction);
+    const token = await sequelize.transaction(async (transaction) => {
+      const user = await User.login(
+        req.body.email,
+        req.body.password,
+        transaction
+      );
 
       // Update lastLogin
       user.lastLogin = Date.now();
       await user.save({ transaction });
 
-      const session = await SessionService.generateSession(user.id, 'user', transaction);
+      const session = await SessionService.generateSession(
+        user.id,
+        "user",
+        transaction
+      );
 
-      if (process.env.NODE_ENV === 'selfhost' || process.env.NODE_ENV === 'development') {
+      if (
+        process.env.NODE_ENV === "selfhost" ||
+        process.env.NODE_ENV === "development"
+      ) {
+        console.log(user.id, transaction);
         const recipes = await Recipe.findAll({
           where: {
-            userId: user.id
+            userId: user.id,
           },
           transaction,
         });
@@ -529,125 +611,138 @@ router.post(
     });
 
     res.status(200).json({
-      token
+      token,
     });
-  }));
+  })
+);
 
 /* Register as a user */
 router.post(
-  '/register',
+  "/register",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
-    if (process.env.DISABLE_REGISTRATION) throw new Error('Registration is disabled');
+    if (process.env.DISABLE_REGISTRATION)
+      throw new Error("Registration is disabled");
 
     let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
-    const token = await SQ.transaction(async transaction => {
+    const token = await sequelize.transaction(async (transaction) => {
       if (!UtilService.validateEmail(sanitizedEmail)) {
-        let e = new Error('Email is not valid!');
+        let e = new Error("Email is not valid!");
         e.status = 412;
         throw e;
       }
 
       if (!UtilService.validatePassword(req.body.password)) {
-        let e = new Error('Password is not valid!');
+        let e = new Error("Password is not valid!");
         e.status = 411;
         throw e;
       }
 
       const user = await User.findOne({
         where: {
-          email: sanitizedEmail
+          email: sanitizedEmail,
         },
-        attributes: ['id'],
-        transaction
+        attributes: ["id"],
+        transaction,
       });
 
       if (user) {
-        let e = new Error('Account with that email address already exists!');
+        let e = new Error("Account with that email address already exists!");
         e.status = 406;
         throw e;
       }
 
       let hashedPasswordData = User.generateHashedPassword(req.body.password);
 
-      const newUser = await User.create({
-        name: (req.body.name || sanitizedEmail).trim(),
-        email: sanitizedEmail,
-        passwordHash: hashedPasswordData.hash,
-        passwordSalt: hashedPasswordData.salt,
-        passwordVersion: hashedPasswordData.version
-      }, {
-        transaction
-      });
+      const newUser = await User.create(
+        {
+          name: (req.body.name || sanitizedEmail).trim(),
+          email: sanitizedEmail,
+          passwordHash: hashedPasswordData.hash,
+          passwordSalt: hashedPasswordData.salt,
+          passwordVersion: hashedPasswordData.version,
+        },
+        {
+          transaction,
+        }
+      );
 
-      const session = await SessionService.generateSession(newUser.id, 'user', transaction);
+      const session = await SessionService.generateSession(
+        newUser.id,
+        "user",
+        transaction
+      );
 
       return session.token;
     });
 
     res.status(200).json({
-      token
+      token,
     });
 
-    sendWelcome([sanitizedEmail], []).catch(err => {
+    sendWelcome([sanitizedEmail], []).catch((err) => {
       Sentry.captureException(err);
     });
-  }));
+  })
+);
 
 /* Forgot password */
 router.post(
-  '/forgot',
+  "/forgot",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
     let standardStatus = 200;
     let standardResponse = {
-      msg: ''
+      msg: "",
     };
 
     let origin;
-    if (process.env.NODE_ENV === 'production') {
-      origin = 'https://recipesage.com';
+    if (process.env.NODE_ENV === "production") {
+      origin = "https://recipesage.com";
     } else {
       // req.get('origin') can be unreliable depending on client browsers. Use only for dev/stg.
-      origin = req.get('origin');
+      origin = req.get("origin");
     }
 
     const user = await User.findOne({
       where: {
-        email: UtilService.sanitizeEmail(req.body.email)
-      }
+        email: UtilService.sanitizeEmail(req.body.email),
+      },
     });
 
     if (!user) {
       res.status(standardStatus).json(standardResponse);
     }
 
-    const session = await SessionService.generateSession(user.id, 'user');
+    const session = await SessionService.generateSession(user.id, "user");
 
     const link = `${origin}/#/settings/account?token=${session.token}`;
 
     await sendPasswordReset([user.email], [], { resetLink: link });
 
     res.status(standardStatus).json(standardResponse);
-  }));
+  })
+);
 
 /* Update user */
 router.put(
-  '/',
+  "/",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
-    const updatedUser = await SQ.transaction(async (transaction) => {
+    const updatedUser = await sequelize.transaction(async (transaction) => {
       const updates = {};
 
       if (req.body.password) {
         if (!UtilService.validatePassword(req.body.password)) {
-          throw PreconditionFailed('Password is not valid!');
+          throw PreconditionFailed("Password is not valid!");
         }
 
-        const hashedPasswordData = User.generateHashedPassword(req.body.password);
+        const hashedPasswordData = User.generateHashedPassword(
+          req.body.password
+        );
 
         updates.passwordHash = hashedPasswordData.hash;
         updates.passwordSalt = hashedPasswordData.salt;
@@ -655,14 +750,14 @@ router.put(
 
         await FCMToken.destroy({
           where: {
-            userId: res.locals.session.userId
+            userId: res.locals.session.userId,
           },
           transaction,
         });
 
         await Session.destroy({
           where: {
-            userId: res.locals.session.userId
+            userId: res.locals.session.userId,
           },
           transaction,
         });
@@ -672,20 +767,22 @@ router.put(
         let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
 
         if (!UtilService.validateEmail(sanitizedEmail)) {
-          throw PreconditionFailed('Email is not valid!');
+          throw PreconditionFailed("Email is not valid!");
         }
 
         const existingUserWithEmail = await User.findOne({
           where: {
             id: { [Op.ne]: res.locals.session.userId },
-            email: sanitizedEmail
+            email: sanitizedEmail,
           },
-          attributes: ['id'],
+          attributes: ["id"],
           transaction,
         });
 
         if (existingUserWithEmail) {
-          const e = new Error('Account with that email address already exists!');
+          const e = new Error(
+            "Account with that email address already exists!"
+          );
           e.status = 406;
           throw e;
         }
@@ -693,13 +790,17 @@ router.put(
         updates.email = sanitizedEmail;
       }
 
-      if (req.body.name && typeof req.body.name === 'string' && req.body.name.length > 0) {
+      if (
+        req.body.name &&
+        typeof req.body.name === "string" &&
+        req.body.name.length > 0
+      ) {
         updates.name = req.body.name;
       }
 
       const updatedUser = await User.update(updates, {
         where: {
-          id: res.locals.session.userId
+          id: res.locals.session.userId,
         },
         returning: true,
         transaction,
@@ -715,110 +816,114 @@ router.put(
       name,
       email,
       createdAt,
-      updatedAt
+      updatedAt,
     });
-  }));
+  })
+);
 
 router.post(
-  '/logout',
+  "/logout",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     await SessionService.deleteSession(res.locals.session.token);
 
     res.status(200).json({
-      msg: 'Session invalidated. User is now logged out.'
+      msg: "Session invalidated. User is now logged out.",
     });
-  }));
+  })
+);
 
 /* Check if a session token is valid */
 router.get(
-  '/sessioncheck',
+  "/sessioncheck",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-    res.status(200).send('Ok');
-  }));
+    res.status(200).send("Ok");
+  })
+);
 
 router.post(
-  '/fcm/token',
+  "/fcm/token",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-
     if (!req.body.fcmToken) {
-      throw PreconditionFailed('fcmToken required');
+      throw PreconditionFailed("fcmToken required");
     }
 
-    const token = await SQ.transaction(async (transaction) => {
+    const token = await sequelize.transaction(async (transaction) => {
       await FCMToken.destroy({
         where: {
           token: req.body.fcmToken,
-          userId: { [Op.ne]: res.locals.session.userId }
+          userId: { [Op.ne]: res.locals.session.userId },
         },
-        transaction
+        transaction,
       });
 
       const token = await FCMToken.findOrCreate({
         where: {
-          token: req.body.fcmToken
+          token: req.body.fcmToken,
         },
         defaults: {
           userId: res.locals.session.userId,
-          token: req.body.fcmToken
+          token: req.body.fcmToken,
         },
-        transaction
+        transaction,
       });
 
       return token;
     });
 
     res.status(200).send(token);
-  }));
+  })
+);
 
 router.delete(
-  '/fcm/token',
+  "/fcm/token",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-
     if (!req.query.fcmToken) {
-      throw PreconditionFailed('fcmToken required');
+      throw PreconditionFailed("fcmToken required");
     }
 
     await FCMToken.destroy({
       where: {
         token: req.query.fcmToken,
-        userId: res.locals.session.userId
-      }
+        userId: res.locals.session.userId,
+      },
     });
 
-    res.status(200).send('ok');
-  }));
+    res.status(200).send("ok");
+  })
+);
 
 /* Get public user listing by id */
 router.get(
-  '/:userId',
+  "/:userId",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
     const user = await User.findByPk(req.params.userId, {
-      attributes: ['id', 'name', 'handle']
+      attributes: ["id", "name", "handle"],
     });
 
     if (!user) {
-      throw NotFound('User not found');
+      throw NotFound("User not found");
     }
 
     res.status(200).json(user);
-  }));
+  })
+);
 
 router.delete(
-  '/',
-  MiddlewareService.validateSession(['user']),
+  "/",
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const userId = res.locals.session.userId;
 
-    await SQ.transaction(async (transaction) => {
+    await sequelize.transaction(async (transaction) => {
       await Recipe.destroy({
         where: {
           userId,
@@ -826,18 +931,20 @@ router.delete(
         transaction,
       });
 
-      await deleteHangingImagesForUser(userId, transaction)
-        .catch((e) => Sentry.captureException(e));
+      await deleteHangingImagesForUser(userId, transaction).catch((e) =>
+        Sentry.captureException(e)
+      );
 
       await User.destroy({
         where: {
           id: userId,
         },
-        transaction
+        transaction,
       });
     });
 
-    res.status(200).send('ok');
-  }));
+    res.status(200).send("ok");
+  })
+);
 
-module.exports = router;
+export default router;

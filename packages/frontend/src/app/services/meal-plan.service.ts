@@ -1,72 +1,75 @@
-import { Injectable } from '@angular/core';
-import { UtilService } from './util.service';
-import { HttpService } from './http.service';
-import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
+import { Injectable } from "@angular/core";
+import { HttpService } from "./http.service";
+import { ErrorHandlers } from "./http-error-handler.service";
 
-interface MealPlanCollaborator {
-  id: string,
-  name: string,
-  email: string,
+export enum MealName {
+  Breakfast = "breakfast",
+  Lunch = "lunch",
+  Dinner = "dinner",
+  Snacks = "snacks",
+  Other = "other",
 }
 
-type MealPlans = {
-  id: string,
-  title: string,
-  createdAt: string,
-  updatedAt: string,
-  itemCount: string,
-  myUserId: string,
-  collaborators: MealPlanCollaborator[],
-  owner: MealPlanCollaborator,
+export interface MealPlanCollaborator {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export type MealPlans = {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  itemCount: string;
+  myUserId: string;
+  collaborators: MealPlanCollaborator[];
+  owner: MealPlanCollaborator;
 }[];
 
 export interface MealPlan {
-  id: string,
-  title: string,
-  createdAt: string,
-  updatedAt: string,
-  userId: string,
-  collaborators: MealPlanCollaborator[],
-  owner: MealPlanCollaborator,
-  items: MealPlanItem[],
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  collaborators: MealPlanCollaborator[];
+  owner: MealPlanCollaborator;
+  items: MealPlanItem[];
 }
 
 export interface MealPlanItem {
-  id: string,
-  title: string,
-  scheduled: string,
-  meal: string,
-  updatedAt: string,
-  createdAt: string,
-  owner: MealPlanCollaborator,
+  id: string;
+  title: string;
+  scheduled: string;
+  meal: MealName;
+  updatedAt: string;
+  createdAt: string;
+  owner: MealPlanCollaborator;
   recipe: null | {
-    id: string,
-    title: string,
-    ingredients: string,
+    id: string;
+    title: string;
+    ingredients: string;
     images: {
-      id: string,
-      location: string,
-    }[],
-  },
+      id: string;
+      location: string;
+    }[];
+  };
+  recipeId?: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class MealPlanService {
-
-  constructor(
-    private utilService: UtilService,
-    private httpService: HttpService,
-    private httpErrorHandlerService: HttpErrorHandlerService
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MealPlans>(
-      'mealPlans',
-      'GET',
-      null,
-      null,
+      "mealPlans",
+      "GET",
+      undefined,
+      undefined,
       errorHandlers
     );
   }
@@ -74,107 +77,134 @@ export class MealPlanService {
   fetchById(mealPlanId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<MealPlan>(
       `mealPlans/${mealPlanId}`,
-      'GET',
-      null,
-      null,
+      "GET",
+      undefined,
+      undefined,
       errorHandlers
     );
   }
 
-  create(payload: {
-    title: string,
-    collaborators: string[],
-  }, errorHandlers?: ErrorHandlers) {
+  create(
+    payload: {
+      title: string;
+      collaborators: string[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<{ id: string }>(
       `mealPlans`,
-      'POST',
+      "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  addItem(mealPlanId: string, payload: {
-    title: string,
-    recipeId: string | null,
-    meal: string,
-    scheduled: string,
-  }, errorHandlers?: ErrorHandlers) {
+  addItem(
+    mealPlanId: string,
+    payload: {
+      title: string;
+      recipeId: string | null;
+      meal: string;
+      scheduled: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
-      'POST',
+      "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  update(mealPlanId: string, payload: {
-    title: string,
-  }, errorHandlers?: ErrorHandlers) {
+  update(
+    mealPlanId: string,
+    payload: {
+      title: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
-      'PUT',
+      "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  updateItems(mealPlanId: string, payload: {
-    items: {
-      id: string,
-      title: string,
-      recipeId?: string,
-      meal: string,
-      scheduled: string
-    }[]
-  }, errorHandlers?: ErrorHandlers) {
+  updateItems(
+    mealPlanId: string,
+    payload: {
+      items: {
+        id: string;
+        title: string;
+        recipeId?: string;
+        meal: string;
+        scheduled: string;
+      }[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
-      'PUT',
+      "PUT",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  addItems(mealPlanId: string, payload: {
-    items: {
-      title: string,
-      recipeId?: string,
-      meal: string,
-      scheduled: string
-    }[]
-  }, errorHandlers?: ErrorHandlers) {
+  addItems(
+    mealPlanId: string,
+    payload: {
+      items: {
+        title: string;
+        recipeId?: string;
+        meal: string;
+        scheduled: string;
+      }[];
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
-      'POST',
+      "POST",
       payload,
-      null,
+      undefined,
       errorHandlers
     );
   }
 
-  deleteItems(mealPlanId: string, params: {
-    itemIds: string,
-  }, errorHandlers?: ErrorHandlers) {
+  deleteItems(
+    mealPlanId: string,
+    params: {
+      itemIds: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
-      'DELETE',
-      null,
+      "DELETE",
+      undefined,
       params,
       errorHandlers
     );
   }
 
-  deleteItem(mealPlanId: string, params: {
-    itemId: string
-  }, errorHandlers?: ErrorHandlers) {
+  deleteItem(
+    mealPlanId: string,
+    params: {
+      itemId: string;
+    },
+    errorHandlers?: ErrorHandlers
+  ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items`,
-      'DELETE',
-      null,
+      "DELETE",
+      undefined,
       params,
       errorHandlers
     );
@@ -183,9 +213,9 @@ export class MealPlanService {
   delete(mealPlanId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
-      'DELETE',
-      null,
-      null,
+      "DELETE",
+      undefined,
+      undefined,
       errorHandlers
     );
   }

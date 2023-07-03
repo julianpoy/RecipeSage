@@ -1,31 +1,32 @@
-const express = require('express');
-const multer = require('multer');
+import * as express from "express";
+import * as multer from "multer";
 const router = express.Router();
-const Sentry = require('@sentry/node');
-const Joi = require('joi');
+import * as Sentry from "@sentry/node";
+import * as Joi from "joi";
 
 // DB
-const Image = require('../models').Image;
+import { Image } from "../models/index.js";
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const { writeImageBuffer, writeImageURL } = require('../services/storage/image');
-const SubscriptionsService = require('../services/subscriptions');
-const {ObjectTypes} = require('../services/storage/shared');
+import * as MiddlewareService from "../services/middleware.js";
+import { writeImageBuffer, writeImageURL } from "../services/storage/image";
+import * as SubscriptionsService from "../services/subscriptions.js";
+import { ObjectTypes } from "../services/storage/shared.ts";
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest, NotFound } = require('../utils/errors');
-const {joiValidator} = require('../middleware/joiValidator');
+import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
+import { BadRequest, NotFound } from "../utils/errors.js";
+import { joiValidator } from "../middleware/joiValidator.js";
 
-router.post('/',
-  MiddlewareService.validateSession(['user']),
+router.post(
+  "/",
+  MiddlewareService.validateSession(["user"]),
   multer({
     storage: multer.memoryStorage(),
     limits: {
-      fileSize: 8 * 1024 * 1024 // 8MB
-    }
-  }).single('image'),
+      fileSize: 8 * 1024 * 1024, // 8MB
+    },
+  }).single("image"),
   wrapRequestWithErrorHandler(async (req, res) => {
     if (!req.file) {
       throw BadRequest('Must specify multipart field "image"');
@@ -38,7 +39,11 @@ router.post('/',
 
     let file;
     try {
-      file = await writeImageBuffer(ObjectTypes.RECIPE_IMAGE, req.file.buffer, encodeInHighRes);
+      file = await writeImageBuffer(
+        ObjectTypes.RECIPE_IMAGE,
+        req.file.buffer,
+        encodeInHighRes
+      );
     } catch (e) {
       e.status = 415;
       Sentry.captureException(e);
@@ -49,19 +54,23 @@ router.post('/',
       userId: res.locals.session.userId,
       location: file.location,
       key: file.key,
-      json: file
+      json: file,
     });
 
     res.status(200).send(image);
-  }));
+  })
+);
 
-router.post('/url',
-  joiValidator(Joi.object({
-    body: Joi.object({
-      url: Joi.string().min(1).max(2048),
-    }),
-  })),
-  MiddlewareService.validateSession(['user']),
+router.post(
+  "/url",
+  joiValidator(
+    Joi.object({
+      body: Joi.object({
+        url: Joi.string().min(1).max(2048),
+      }),
+    })
+  ),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
@@ -70,7 +79,11 @@ router.post('/url',
 
     let file;
     try {
-      file = await writeImageURL(ObjectTypes.RECIPE_IMAGE, req.body.url, encodeInHighRes);
+      file = await writeImageURL(
+        ObjectTypes.RECIPE_IMAGE,
+        req.body.url,
+        encodeInHighRes
+      );
     } catch (e) {
       e.status = 415;
       Sentry.captureException(e);
@@ -81,26 +94,31 @@ router.post('/url',
       userId: res.locals.session.userId,
       location: file.location,
       key: file.key,
-      json: file
+      json: file,
     });
 
     res.status(200).send(image);
-  }));
+  })
+);
 
 router.get(
-  '/link/:imageId',
+  "/link/:imageId",
   wrapRequestWithErrorHandler(async (req, res) => {
     const image = await Image.findByPk(req.params.imageId);
 
     if (!image) {
-      throw NotFound('Image with that id not found');
+      throw NotFound("Image with that id not found");
     }
 
     return res.redirect(image.location);
-  }));
+  })
+);
 
-if (process.env.STORAGE_TYPE === 'filesystem') {
-  router.use('/filesystem', express.static(process.env.FILESYSTEM_STORAGE_PATH));
+if (process.env.STORAGE_TYPE === "filesystem") {
+  router.use(
+    "/filesystem",
+    express.static(process.env.FILESYSTEM_STORAGE_PATH)
+  );
 }
 
-module.exports = router;
+export default router;

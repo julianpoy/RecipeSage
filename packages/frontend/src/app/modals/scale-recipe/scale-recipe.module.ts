@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { ScaleRecipeComponent } from './scale-recipe.component';
-import {GlobalModule} from '~/global.module';
+import { ScaleRecipeComponent } from "./scale-recipe.component";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    ScaleRecipeComponent,
-  ],
+  declarations: [ScaleRecipeComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -17,8 +15,5 @@ import {GlobalModule} from '~/global.module';
     ReactiveFormsModule,
     GlobalModule,
   ],
-  entryComponents: [
-    ScaleRecipeComponent
-  ]
 })
 export class ScaleRecipeModule {}

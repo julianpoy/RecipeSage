@@ -1,28 +1,26 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
 
-import { AboutPage } from './about.page';
-import { SocialLinksModule } from '~/components/social-links/social-links.module';
+import { AboutPage } from "./about.page";
+import { SocialLinksModule } from "~/components/social-links/social-links.module";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    AboutPage,
-  ],
+  declarations: [AboutPage],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: AboutPage
-      }
+        path: "",
+        component: AboutPage,
+      },
     ]),
     GlobalModule,
-    SocialLinksModule
+    SocialLinksModule,
   ],
 })
 export class AboutPageModule {}

@@ -1,25 +1,23 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
 
-import { LegalPage } from './legal.page';
-import {GlobalModule} from '~/global.module';
+import { LegalPage } from "./legal.page";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    LegalPage,
-  ],
+  declarations: [LegalPage],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: LegalPage
-      }
+        path: "",
+        component: LegalPage,
+      },
     ]),
-    GlobalModule
+    GlobalModule,
   ],
 })
 export class LegalPageModule {}

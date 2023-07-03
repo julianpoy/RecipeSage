@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar>
     <ion-title>
       {{ 'pages.mealPlanBulkPinModal.title' | translate }}
@@ -11,9 +10,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
@@ -40,7 +37,7 @@
     (click)="deselectAll()"
     size="small"
     fill="clear"
-    >
+  >
     {{ 'pages.mealPlanBulkPinModal.deselectAll' | translate }}
   </ion-button>
   <ion-list>
@@ -54,7 +51,8 @@
       <ion-checkbox
         slot="start"
         [disabled]="!mealItem.recipe?.id"
-        [(ngModel)]="recipeIdSelectionMap[mealItem.recipe?.id]"
+        [checked]="mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]"
+        (ionChange)="mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)"
       ></ion-checkbox>
     </ion-item>
   </ion-list>

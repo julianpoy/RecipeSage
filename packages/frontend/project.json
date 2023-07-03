@@ -1,0 +1,53 @@
+{
+  "name": "frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/frontend/src",
+  "projectType": "application",
+  "targets": {
+    "ng": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ng"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ng build --configuration=production && workbox injectManifest"
+      }
+    },
+    "build:selfhost": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "ng build --configuration=selfhost && workbox injectManifest"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "command": "tsc --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/frontend",
+        "commands": [
+          "ng lint",
+          "npx --yes @julianpoy/ngx-translate-lint --config ./ngx-translate-lint.config.json"
+        ]
+      }
+    }
+  }
+}

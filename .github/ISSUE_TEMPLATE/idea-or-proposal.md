@@ -1,10 +1,9 @@
 ---
 name: Idea or Proposal
 about: Suggest a new idea for RecipeSage (general, broad scope, business/org)
-title: ''
+title: ""
 labels: proposal/idea
 assignees: julianpoy
-
 ---
 
 **Is your idea or proposal related to a problem? Please describe.**

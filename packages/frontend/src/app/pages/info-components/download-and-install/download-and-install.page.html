@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
@@ -7,55 +6,64 @@
 
     <ion-title>{{ 'pages.downloadAndInstall.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
-
 <ion-content class="ion-padding">
-  <p>
-    {{ 'pages.downloadAndInstall.subtitle' | translate }}
-  </p>
+  <p>{{ 'pages.downloadAndInstall.subtitle' | translate }}</p>
 
   <ion-list>
     <ion-item button *ngIf="pwaPromptCapable()" (click)="showPWAPrompt()">
       <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-label>{{ 'pages.downloadAndInstall.thisDevice' | translate }}</ion-label>
+      <ion-label
+        >{{ 'pages.downloadAndInstall.thisDevice' | translate }}</ion-label
+      >
     </ion-item>
     <ion-item button (click)="toggleAndroid()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label>{{ 'pages.downloadAndInstall.android.title' | translate }}</ion-label>
+      <ion-label
+        >{{ 'pages.downloadAndInstall.android.title' | translate }}</ion-label
+      >
     </ion-item>
     <ion-item *ngIf="showAndroid">
       <p class="instruction">
-        {{ 'pages.downloadAndInstall.android.instructionHeader' | translate }}<br />
+        {{ 'pages.downloadAndInstall.android.instructionHeader' | translate
+        }}<br />
         <b>1.</b> {{ 'pages.downloadAndInstall.android.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.android.step.2' | translate }} <ion-icon name="ellipsis-vertical"></ion-icon><br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.android.step.2' | translate }}
+        <ion-icon name="ellipsis-vertical"></ion-icon><br />
         <b>3.</b> {{ 'pages.downloadAndInstall.android.step.3' | translate }}<br />
         {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
     <ion-item button (click)="toggleIOS()" detail="true">
       <ion-icon name="phone-portrait" slot="start"></ion-icon>
-      <ion-label>{{ 'pages.downloadAndInstall.ios.title' | translate }}</ion-label>
+      <ion-label
+        >{{ 'pages.downloadAndInstall.ios.title' | translate }}</ion-label
+      >
     </ion-item>
     <ion-item *ngIf="showIOS">
       <p class="instruction">
         {{ 'pages.downloadAndInstall.ios.instructionHeader' | translate }}<br />
         <b>1.</b> {{ 'pages.downloadAndInstall.ios.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.ios.step.2' | translate }} <ion-icon name="share-outline" color="primary"></ion-icon><br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.ios.step.2' | translate }}
+        <ion-icon name="share-outline" color="primary"></ion-icon><br />
         <b>3.</b> {{ 'pages.downloadAndInstall.ios.step.3' | translate }}<br />
         {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
     </ion-item>
     <ion-item button (click)="toggleDesktop()" detail="true">
       <ion-icon name="laptop" slot="start"></ion-icon>
-      <ion-label>{{ 'pages.downloadAndInstall.desktop.title' | translate }}</ion-label>
+      <ion-label
+        >{{ 'pages.downloadAndInstall.desktop.title' | translate }}</ion-label
+      >
     </ion-item>
     <ion-item *ngIf="showDesktop">
       <p class="instruction">
-        {{ 'pages.downloadAndInstall.desktop.instructionHeader' | translate }}<br />
+        {{ 'pages.downloadAndInstall.desktop.instructionHeader' | translate
+        }}<br />
         <b>1.</b> {{ 'pages.downloadAndInstall.desktop.step.1' | translate }}<br />
-        <b>2.</b> {{ 'pages.downloadAndInstall.desktop.step.2' | translate }} <ion-icon name="ellipsis-vertical"></ion-icon><br />
+        <b>2.</b> {{ 'pages.downloadAndInstall.desktop.step.2' | translate }}
+        <ion-icon name="ellipsis-vertical"></ion-icon><br />
         <b>3.</b> {{ 'pages.downloadAndInstall.desktop.step.3' | translate }}<br />
         {{ 'pages.downloadAndInstall.done' | translate }}
       </p>
@@ -65,9 +73,7 @@
   <br />
   <br />
 
-  <p>
-    {{ 'pages.downloadAndInstall.other' | translate }}
-  </p>
+  <p>{{ 'pages.downloadAndInstall.other' | translate }}</p>
 
   <ion-list>
     <ion-item>
@@ -99,12 +105,14 @@
         <a
           href="https://addons.mozilla.org/en-US/firefox/addon/recipesage/"
           target="_blank"
-        >Firefox</a>
+          >Firefox</a
+        >
         <br />
         <a
           href="https://chrome.google.com/webstore/detail/oepplnnfceidfaaacjpdpobnjkcpgcpo"
           target="_blank"
-        >Chrome</a>
+          >Chrome</a
+        >
       </p>
     </ion-item>
   </ion-list>

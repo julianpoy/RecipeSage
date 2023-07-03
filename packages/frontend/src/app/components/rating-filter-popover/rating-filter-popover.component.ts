@@ -1,18 +1,17 @@
-import { Component, Input } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { Component, Input } from "@angular/core";
+import { PopoverController } from "@ionic/angular";
 
 @Component({
-  selector: 'rating-filter-popover',
-  templateUrl: 'rating-filter-popover.component.html',
-  styleUrls: ['./rating-filter-popover.component.scss']
+  selector: "rating-filter-popover",
+  templateUrl: "rating-filter-popover.component.html",
+  styleUrls: ["./rating-filter-popover.component.scss"],
 })
 export class RatingFilterPopoverComponent {
+  possibleRatings: number[] = [1, 2, 3, 4, 5];
 
-  possibleRatings: number[] = [1,2,3,4,5];
-
-  _ratingFilter: (number|null)[] = [];
+  _ratingFilter: (number | null)[] = [];
   @Input()
-  set ratingFilter(filter: (number|null)[]) {
+  set ratingFilter(filter: (number | null)[]) {
     this._ratingFilter = [...filter];
   }
   get ratingFilter() {
@@ -35,7 +34,7 @@ export class RatingFilterPopoverComponent {
 
   close() {
     this.popoverCtrl.dismiss({
-      ratingFilter: [...this.ratingFilter]
+      ratingFilter: [...this.ratingFilter],
     });
   }
 }

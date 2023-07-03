@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
-import { NavController, ModalController, ToastController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import {
+  NavController,
+  ModalController,
+  ToastController,
+} from "@ionic/angular";
 
-import { MealPlanService } from '~/services/meal-plan.service';
-import { WebsocketService } from '~/services/websocket.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { NewMealPlanModalPage } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
+import { MealPlanService } from "~/services/meal-plan.service";
+import { WebsocketService } from "~/services/websocket.service";
+import { LoadingService } from "~/services/loading.service";
+import { UtilService, RouteMap } from "~/services/util.service";
+import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 
 @Component({
-  selector: 'page-meal-plans',
-  templateUrl: 'meal-plans.page.html',
-  styleUrls: ['meal-plans.page.scss']
+  selector: "page-meal-plans",
+  templateUrl: "meal-plans.page.html",
+  styleUrls: ["meal-plans.page.scss"],
 })
 export class MealPlansPage {
-
   mealPlans: any = [];
 
   initialLoadComplete = false;
@@ -25,18 +28,26 @@ export class MealPlansPage {
     public mealPlanService: MealPlanService,
     public websocketService: WebsocketService,
     public loadingService: LoadingService,
-    public utilService: UtilService) {
+    public utilService: UtilService
+  ) {
+    this.websocketService.register(
+      "mealPlan:received",
+      () => {
+        this.loadPlans();
+      },
+      this
+    );
 
-    this.websocketService.register('mealPlan:received', () => {
-      this.loadPlans();
-    }, this);
-
-    this.websocketService.register('mealPlan:removed', () => {
-      this.loadPlans();
-    }, this);
+    this.websocketService.register(
+      "mealPlan:removed",
+      () => {
+        this.loadPlans();
+      },
+      this
+    );
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
@@ -49,12 +60,15 @@ export class MealPlansPage {
     });
   }
 
-  refresh(refresher) {
-    this.loadPlans().then(() => {
-      refresher.target.complete();
-    }, () => {
-      refresher.target.complete();
-    });
+  refresh(refresher: any) {
+    this.loadPlans().then(
+      () => {
+        refresher.target.complete();
+      },
+      () => {
+        refresher.target.complete();
+      }
+    );
   }
 
   async loadPlans() {
@@ -68,7 +82,7 @@ export class MealPlansPage {
 
   async newMealPlan() {
     const modal = await this.modalCtrl.create({
-      component: NewMealPlanModalPage
+      component: NewMealPlanModalPage,
     });
     modal.present();
     modal.onDidDismiss().then(() => {

@@ -14,68 +14,68 @@ spec:
         app: rs-pgsync
     spec:
       containers:
-      - name: rs-pgsync
-        image: julianpoy/pgsync:2.5.0
-        env:
-        - name: PG_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: rs-api-env
-              key: POSTGRES_DB
-        - name: PG_HOST
-          valueFrom:
-            secretKeyRef:
-              name: rs-api-env
-              key: POSTGRES_HOST
-        - name: PG_USER
-          valueFrom:
-            secretKeyRef:
-              name: rs-api-env
-              key: POSTGRES_USER
-        - name: PG_PORT
-          valueFrom:
-            secretKeyRef:
-              name: rs-api-env
-              key: POSTGRES_PORT
-        - name: PG_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rs-api-env
-              key: POSTGRES_PASSWORD
-        - name: LOG_LEVEL
-          value: ERROR
-        - name: ELASTICSEARCH_HOST
-          value: rs-elastic
-        - name: ELASTICSEARCH_SCHEME
-          value: http
-        - name: ELASTICSEARCH_PORT
-          value: 9200
-        - name: ELASTICSEARCH_SCHEME
-          value: http
-        - name: ELASTICSEARCH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rs-elastic-env
-              key: ELASTIC_PASSWORD
-        - name: REDIS_HOST
-          value: rs-pgsync_redis
-        - name: REDIS_PORT
-          value: 6379
-        - name: ELASTICSEARCH
-          value: true
-        - name: OPENSEARCH
-          value: false
-        volumeMounts:
-        - name: pgsync-schema
-          mountPath: /schema.json
-          subPath: pgsync.schema.json
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 200m
-            memory: 200Mi
+        - name: rs-pgsync
+          image: julianpoy/pgsync:2.5.0
+          env:
+            - name: PG_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: rs-api-env
+                  key: POSTGRES_DB
+            - name: PG_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rs-api-env
+                  key: POSTGRES_HOST
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rs-api-env
+                  key: POSTGRES_USER
+            - name: PG_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: rs-api-env
+                  key: POSTGRES_PORT
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rs-api-env
+                  key: POSTGRES_PASSWORD
+            - name: LOG_LEVEL
+              value: ERROR
+            - name: ELASTICSEARCH_HOST
+              value: rs-elastic
+            - name: ELASTICSEARCH_SCHEME
+              value: http
+            - name: ELASTICSEARCH_PORT
+              value: 9200
+            - name: ELASTICSEARCH_SCHEME
+              value: http
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rs-elastic-env
+                  key: ELASTIC_PASSWORD
+            - name: REDIS_HOST
+              value: rs-pgsync_redis
+            - name: REDIS_PORT
+              value: 6379
+            - name: ELASTICSEARCH
+              value: true
+            - name: OPENSEARCH
+              value: false
+          volumeMounts:
+            - name: pgsync-schema
+              mountPath: /schema.json
+              subPath: pgsync.schema.json
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -93,15 +93,15 @@ spec:
         app: rs-pgsync_redis
     spec:
       containers:
-      - name: rs-pgsync_redis
-        image: redis
-        resources:
-          requests:
-            cpu: 50m
-            memory: 50Mi
-          limits:
-            cpu: 100m
-            memory: 200Mi
+        - name: rs-pgsync_redis
+          image: redis
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
 ---
 apiVersion: v1
 kind: Service
@@ -115,4 +115,3 @@ spec:
     - protocol: TCP
       port: 6379
       targetPort: 6379
-

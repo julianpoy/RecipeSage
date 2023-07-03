@@ -1,103 +1,115 @@
-const express = require('express');
+import * as express from "express";
 const router = express.Router();
-const cors = require('cors');
+import * as cors from "cors";
 
 // DB
-const Op = require('sequelize').Op;
-const SQ = require('../models').sequelize;
-const User = require('../models').User;
-const Recipe = require('../models').Recipe;
-const Message = require('../models').Message;
-const FCMToken = require('../models').FCMToken;
-const Image = require('../models').Image;
+import { Op } from "sequelize";
+import {
+  sequelize,
+  User,
+  Recipe,
+  Message,
+  FCMToken,
+  Image,
+} from "../models/index.js";
 
 // Service
-const MiddlewareService = require('../services/middleware');
-const UtilService = require('../services/util');
+import * as MiddlewareService from "../services/middleware.js";
+import * as UtilService from "../services/util.js";
 
 // Util
-const { wrapRequestWithErrorHandler } = require('../utils/wrapRequestWithErrorHandler');
-const { BadRequest, NotFound, PreconditionFailed } = require('../utils/errors');
+import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
+import { BadRequest, NotFound, PreconditionFailed } from "../utils/errors.js";
 
 router.post(
-  '/',
+  "/",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-
     if (!req.body.recipeId && !req.body.body) {
-      throw PreconditionFailed('recipeId or body is required');
+      throw PreconditionFailed("recipeId or body is required");
     }
 
-    const message = await SQ.transaction(async transaction => {
+    const message = await sequelize.transaction(async (transaction) => {
       const recipient = await User.findByPk(req.body.to, {
         include: [
           {
             model: FCMToken,
-            attributes: ['id', 'token'],
-            as: 'fcmTokens'
-          }
+            attributes: ["id", "token"],
+            as: "fcmTokens",
+          },
         ],
-        transaction
+        transaction,
       });
 
       if (!recipient) {
-        throw NotFound('Could not find user under that ID.');
+        throw NotFound("Could not find user under that ID.");
       }
 
       let sharedRecipeId;
       if (req.body.recipeId) {
-        const sharedRecipe = await Recipe.share(req.body.recipeId, req.body.to, transaction);
+        const sharedRecipe = await Recipe.share(
+          req.body.recipeId,
+          req.body.to,
+          transaction
+        );
         sharedRecipeId = sharedRecipe.id;
       }
 
-      const newMessage = await Message.create({
-        fromUserId: res.locals.session.userId,
-        toUserId: req.body.to,
-        body: req.body.body,
-        recipeId: sharedRecipeId,
-        originalRecipeId: req.body.recipeId || null
-      }, {
-        transaction
-      });
+      const newMessage = await Message.create(
+        {
+          fromUserId: res.locals.session.userId,
+          toUserId: req.body.to,
+          body: req.body.body,
+          recipeId: sharedRecipeId,
+          originalRecipeId: req.body.recipeId || null,
+        },
+        {
+          transaction,
+        }
+      );
 
       const fullMessage = await Message.findOne({
         where: {
-          id: newMessage.id
+          id: newMessage.id,
         },
         include: [
           {
             model: User,
-            as: 'toUser',
-            attributes: ['id', 'name', 'email']
+            as: "toUser",
+            attributes: ["id", "name", "email"],
           },
           {
             model: User,
-            as: 'fromUser',
-            attributes: ['id', 'name', 'email']
+            as: "fromUser",
+            attributes: ["id", "name", "email"],
           },
           {
             model: Recipe,
-            as: 'recipe',
-            attributes: ['id', 'title'],
-            include: [{
-              model: Image,
-              as: 'images',
-              attributes: ['location']
-            }]
+            as: "recipe",
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: Image,
+                as: "images",
+                attributes: ["location"],
+              },
+            ],
           },
           {
             model: Recipe,
-            as: 'originalRecipe',
-            attributes: ['id', 'title'],
-            include: [{
-              model: Image,
-              as: 'images',
-              attributes: ['location']
-            }]
-          }
+            as: "originalRecipe",
+            attributes: ["id", "title"],
+            include: [
+              {
+                model: Image,
+                as: "images",
+                attributes: ["location"],
+              },
+            ],
+          },
         ],
-        transaction
+        transaction,
       });
 
       let m = fullMessage.toJSON();
@@ -117,51 +129,52 @@ router.post(
     });
 
     res.status(201).json(message);
-  }));
+  })
+);
 
 //Get all of a user's threads
 router.get(
-  '/threads',
+  "/threads",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-
     const messages = await Message.findAll({
       where: {
-        [Op.or]: [{
-          toUserId: res.locals.session.userId
-        }, {
-          fromUserId: res.locals.session.userId
-        }]
+        [Op.or]: [
+          {
+            toUserId: res.locals.session.userId,
+          },
+          {
+            fromUserId: res.locals.session.userId,
+          },
+        ],
       },
       include: [
         {
           model: User,
-          as: 'toUser',
-          attributes: ['id', 'name', 'email']
+          as: "toUser",
+          attributes: ["id", "name", "email"],
         },
         {
           model: User,
-          as: 'fromUser',
-          attributes: ['id', 'name', 'email']
+          as: "fromUser",
+          attributes: ["id", "name", "email"],
         },
         {
           model: Recipe,
-          as: 'recipe',
-          attributes: ['id', 'title']
+          as: "recipe",
+          attributes: ["id", "title"],
         },
         {
           model: Recipe,
-          as: 'originalRecipe',
-          attributes: ['id', 'title']
-        }
+          as: "originalRecipe",
+          attributes: ["id", "title"],
+        },
       ],
-      order: [
-        ['createdAt', 'ASC']
-      ]
+      order: [["createdAt", "ASC"]],
     });
 
-    const conversationsByUser = messages.reduce(function(acc, el) {
+    const conversationsByUser = messages.reduce(function (acc, el) {
       let otherUser;
       if (el.toUser.id === res.locals.session.userId) {
         otherUser = el.fromUser;
@@ -174,7 +187,7 @@ router.get(
       if (!acc[otherUser.id]) {
         acc[otherUser.id] = {
           otherUser: otherUser,
-          messageCount: 0
+          messageCount: 0,
         };
 
         // Do not fill messages for light requests
@@ -193,86 +206,101 @@ router.get(
       let conversation = conversationsByUser[userId];
 
       if (req.query.limit && conversation.messageCount > req.query.limit) {
-        conversation.messages.splice(0, conversation.messages.length - req.query.limit);
+        conversation.messages.splice(
+          0,
+          conversation.messages.length - req.query.limit
+        );
       }
 
       conversations.push(conversation);
     }
 
     res.status(200).json(conversations);
-  }));
+  })
+);
 
 router.get(
-  '/',
+  "/",
   cors(),
-  MiddlewareService.validateSession(['user']),
+  MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-
     if (!req.query.user) {
-      throw BadRequest('User parameter required.');
+      throw BadRequest("User parameter required.");
     }
 
-    const messageLimit = req.query.messageLimit ? parseInt(req.query.messageLimit, 10) : 100;
+    const messageLimit = req.query.messageLimit
+      ? parseInt(req.query.messageLimit, 10)
+      : 100;
 
     const messages = await Message.findAll({
       where: {
-        [Op.or]: [{
-          fromUserId: req.query.user,
-          toUserId: res.locals.session.userId
-        }, {
-          fromUserId: res.locals.session.userId,
-          toUserId: req.query.user
-        }]
+        [Op.or]: [
+          {
+            fromUserId: req.query.user,
+            toUserId: res.locals.session.userId,
+          },
+          {
+            fromUserId: res.locals.session.userId,
+            toUserId: req.query.user,
+          },
+        ],
       },
       include: [
         {
           model: User,
-          as: 'toUser',
-          attributes: ['id', 'name', 'email']
+          as: "toUser",
+          attributes: ["id", "name", "email"],
         },
         {
           model: User,
-          as: 'fromUser',
-          attributes: ['id', 'name', 'email']
+          as: "fromUser",
+          attributes: ["id", "name", "email"],
         },
         {
           model: Recipe,
-          as: 'recipe',
-          attributes: ['id', 'title'],
-          include: [{
-            model: Image,
-            as: 'images',
-            attributes: ['location']
-          }]
+          as: "recipe",
+          attributes: ["id", "title"],
+          include: [
+            {
+              model: Image,
+              as: "images",
+              attributes: ["location"],
+            },
+          ],
         },
         {
           model: Recipe,
-          as: 'originalRecipe',
-          attributes: ['id', 'title'],
-          include: [{
-            model: Image,
-            as: 'images',
-            attributes: ['location']
-          }]
-        }
+          as: "originalRecipe",
+          attributes: ["id", "title"],
+          include: [
+            {
+              model: Image,
+              as: "images",
+              attributes: ["location"],
+            },
+          ],
+        },
       ],
-      order: [
-        ['createdAt', 'DESC']
-      ],
-      limit: messageLimit
+      order: [["createdAt", "DESC"]],
+      limit: messageLimit,
     });
 
-    res.status(200).json(messages.map(function(message) {
-      let m = message.toJSON();
+    res.status(200).json(
+      messages
+        .map(function (message) {
+          let m = message.toJSON();
 
-      if (m.toUser.id === res.locals.session.userId) {
-        m.otherUser = m.fromUser;
-      } else {
-        m.otherUser = m.toUser;
-      }
+          if (m.toUser.id === res.locals.session.userId) {
+            m.otherUser = m.fromUser;
+          } else {
+            m.otherUser = m.toUser;
+          }
 
-      return m;
-    }).reverse());
-  }));
+          return m;
+        })
+        .reverse()
+    );
+  })
+);
 
-module.exports = router;
+export default router;

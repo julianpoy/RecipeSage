@@ -1,24 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
 
-import { WelcomePage } from './welcome.page';
+import { WelcomePage } from "./welcome.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    WelcomePage,
-  ],
+  declarations: [WelcomePage],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: WelcomePage
-      }
+        path: "",
+        component: WelcomePage,
+      },
     ]),
     GlobalModule,
   ],

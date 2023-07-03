@@ -14,7 +14,8 @@ ion-list-header {
 .shopping-list-item:nth-child(odd) {
   background: var(--ion-background-shade-color);
 
-  shopping-list-item, ion-item.groupedItem {
+  shopping-list-item,
+  ion-item.groupedItem {
     --background: var(--ion-background-shade-color);
   }
 }

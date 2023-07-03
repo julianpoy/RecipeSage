@@ -30,7 +30,8 @@ multi-image-upload {
       flex-basis: 100%;
     }
 
-    .username-preview, .handle-preview {
+    .username-preview,
+    .handle-preview {
       cursor: pointer;
 
       ion-icon {
@@ -53,7 +54,8 @@ multi-image-upload {
 
 .profile-items-list {
   ion-item {
-    ion-button, ion-reorder {
+    ion-button,
+    ion-reorder {
       margin-left: 16px;
     }
   }

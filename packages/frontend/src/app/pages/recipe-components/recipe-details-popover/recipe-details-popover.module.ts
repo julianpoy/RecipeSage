@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { RecipeDetailsPopoverPage } from './recipe-details-popover.page';
-import { GlobalModule } from '~/global.module';
+import { RecipeDetailsPopoverPage } from "./recipe-details-popover.page";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    RecipeDetailsPopoverPage,
-  ],
+  declarations: [RecipeDetailsPopoverPage],
   imports: [
     CommonModule,
     IonicModule,
@@ -17,8 +15,5 @@ import { GlobalModule } from '~/global.module';
     ReactiveFormsModule,
     GlobalModule,
   ],
-  entryComponents: [
-    RecipeDetailsPopoverPage
-  ]
 })
 export class RecipeDetailsPopoverPageModule {}
