@@ -591,9 +591,10 @@ router.post(
 
       if (
         process.env.NODE_ENV === "selfhost" ||
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === "development" ||
+        process.env.INDEX_ON_LOGIN === "true"
       ) {
-        console.log(user.id, transaction);
+        console.log(user.id);
         const recipes = await Recipe.findAll({
           where: {
             userId: user.id,
