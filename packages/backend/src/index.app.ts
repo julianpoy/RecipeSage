@@ -2,7 +2,7 @@ import "./services/sentry-init";
 import * as Sentry from "@sentry/node";
 import { program } from "commander";
 
-import { indexRecipes } from "./services/search";
+import { indexRecipes } from "@recipesage/trpc";
 
 import { prisma } from "@recipesage/prisma";
 

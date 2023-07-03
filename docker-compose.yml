@@ -51,6 +51,7 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_SSL=false
       - POSTGRES_LOGGING=true
+      - DATABASE_URL=postgresql://recipesage_dev:recipesage_dev@postgres:5432/recipesage_dev
       - GCM_KEYPAIR
       - SENTRY_DSN
       - SENTRY_SAMPLE_RATE=0

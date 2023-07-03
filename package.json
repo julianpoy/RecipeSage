@@ -79,6 +79,7 @@
     "sharp": "^0.31.1",
     "sqlite3": "^5.1.5",
     "stripe": "^11.9.1",
+    "superjson": "^1.12.3",
     "ts-dedent": "^2.2.0",
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.5.0",

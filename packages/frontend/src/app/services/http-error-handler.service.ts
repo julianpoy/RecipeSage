@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { TRPCError } from "@trpc/server";
-import { getHTTPStatusCodeFromError } from "@trpc/server/http";
+import { AppRouter } from "@recipesage/trpc";
+import { TRPCClientError } from "@trpc/client";
 import { AxiosError } from "axios";
 
 import { AuthPage } from "~/pages/auth/auth.page";
@@ -92,8 +92,11 @@ export class HttpErrorHandlerService {
     this._handleError(statusCode, errorHandlers);
   }
 
-  handleTrpcError(error: TRPCError, errorHandlers?: ErrorHandlers) {
-    const statusCode = getHTTPStatusCodeFromError(error);
+  handleTrpcError(
+    error: TRPCClientError<AppRouter>,
+    errorHandlers?: ErrorHandlers
+  ) {
+    const statusCode = error.data?.httpStatus || 500;
     this._handleError(statusCode, errorHandlers);
   }
 }

@@ -19,7 +19,7 @@ import {
 // Service
 import * as MiddlewareService from "../services/middleware.js";
 import * as UtilService from "../services/util.js";
-import * as SearchService from "../services/search/index.ts";
+import * as SearchService from "@recipesage/trpc";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JSONLDService from "../services/json-ld.js";
 import { getRecipesWithConstraints } from "../services/database/getRecipesWithConstraints";

@@ -4,7 +4,6 @@ import { TranslateService } from "@ngx-translate/core";
 import {
   NavController,
   AlertController,
-  ToastController,
   PopoverController,
 } from "@ionic/angular";
 import { Datasource } from "ngx-ui-scroll";
@@ -14,12 +13,11 @@ import {
   Recipe,
   RecipeFolderName,
 } from "~/services/recipe.service";
-import { MessagingService } from "~/services/messaging.service";
 import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+import { RouteMap } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
 import {
@@ -30,6 +28,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
+import { RecipesInflated } from "@recipesage/trpc";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -46,7 +45,7 @@ export class HomePage {
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
-  recipes: Recipe[] = [];
+  recipes: RecipesInflated[] = [];
   recipeFetchBuffer = 25;
   fetchPerPage = 50;
   lastRecipeCount = 0;
@@ -115,23 +114,20 @@ export class HomePage {
   });
 
   constructor(
-    public navCtrl: NavController,
-    public route: ActivatedRoute,
-    public router: Router,
-    public events: EventService,
-    public translate: TranslateService,
-    public popoverCtrl: PopoverController,
-    public loadingService: LoadingService,
-    public alertCtrl: AlertController,
-    public toastCtrl: ToastController,
-    public recipeService: RecipeService,
-    public labelService: LabelService,
-    public userService: UserService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public websocketService: WebsocketService,
-    public messagingService: MessagingService,
-    public trpcService: TRPCService
+    private navCtrl: NavController,
+    private route: ActivatedRoute,
+    private router: Router,
+    private events: EventService,
+    private translate: TranslateService,
+    private popoverCtrl: PopoverController,
+    private loadingService: LoadingService,
+    private alertCtrl: AlertController,
+    private recipeService: RecipeService,
+    private labelService: LabelService,
+    private userService: UserService,
+    private preferencesService: PreferencesService,
+    private websocketService: WebsocketService,
+    private trpcService: TRPCService
   ) {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
@@ -156,9 +152,9 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    events.subscribe("recipe:update", () => (this.reloadPending = true));
-    events.subscribe("label:update", () => (this.reloadPending = true));
-    events.subscribe("import:pepperplate:complete", () => {
+    this.events.subscribe("recipe:update", () => (this.reloadPending = true));
+    this.events.subscribe("label:update", () => (this.reloadPending = true));
+    this.events.subscribe("import:pepperplate:complete", () => {
       const loading = this.loadingService.start();
       this.resetAndLoadAll().then(
         () => {
@@ -301,40 +297,35 @@ export class HomePage {
   async loadRecipes(offset: number, numToFetch: number) {
     this.lastRecipeCount += numToFetch;
 
-    const includeFriends =
+    const includeAllFriends =
       !this.userId &&
       (this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "yes" ||
         this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "browse");
 
-    // const asdf = this.trpcService.trpc.getRecipes.query({
-    //   userId: '2e4ed3ea-019f-45f2-a489-7c23554dcf06',
-    // });
-    //
-    // console.log(asdf);
+    const sortPreference = this.preferences[MyRecipesPreferenceKey.SortBy];
 
-    // this.trpcService.trpc.getRecipes
-    //   .query({
-    //     example: "testval",
-    //   })
-    //   .then((val) => {
-    //     console.log(val);
-    //   });
-    const response = await this.recipeService.fetch({
-      folder: this.folder,
-      sort: this.preferences[MyRecipesPreferenceKey.SortBy],
-      offset,
-      count: numToFetch,
-      labelIntersection:
-        this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-      labels: this.selectedLabels.join(",") || undefined,
-      ratingFilter: this.ratingFilter.map(String).join(",") || undefined,
-      userId: this.userId || undefined,
-      includeFriends,
-    });
-    if (!response.success) return;
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.getRecipes.query({
+        folder: this.folder,
+        orderBy: sortPreference.replace("-", "") as
+          | "title"
+          | "createdAt"
+          | "updatedAt",
+        orderDirection: sortPreference.startsWith("-") ? "desc" : "asc",
+        offset,
+        limit: numToFetch,
+        labels: this.selectedLabels.length ? this.selectedLabels : undefined,
+        labelIntersection:
+          this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+        includeAllFriends,
+        ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+      })
+    );
 
-    this.totalRecipeCount = response.data.totalCount;
-    this.recipes = this.recipes.concat(response.data.data);
+    if (!result) return;
+
+    this.totalRecipeCount = result.totalCount;
+    this.recipes = this.recipes.concat(result.recipes);
   }
 
   async loadLabels() {
@@ -425,23 +416,29 @@ export class HomePage {
 
     this.searchText = text;
 
-    const includeFriends =
+    const includeAllFriends =
       !this.userId &&
       (this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "yes" ||
         this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "search");
 
-    const response = await this.recipeService.search({
-      query: text,
-      labels: this.selectedLabels.join(",") || undefined,
-      userId: this.userId || undefined,
-      ratingFilter: this.ratingFilter.map(String).join(",") || undefined,
-      includeFriends,
-    });
-    loading.dismiss();
-    if (!response.success) return;
+    const result = await this.trpcService
+      .handle(
+        this.trpcService.trpc.searchRecipes.query({
+          searchTerm: text,
+          folder: this.folder,
+          labels: this.selectedLabels.length ? this.selectedLabels : undefined,
+          labelIntersection:
+            this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
+          includeAllFriends,
+          ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+        })
+      )
+      .finally(loading.dismiss);
+
+    if (!result) return;
 
     this.resetRecipes();
-    this.recipes = response.data.data;
+    this.recipes = result.recipes;
     this.datasource.adapter.reset();
   }
 

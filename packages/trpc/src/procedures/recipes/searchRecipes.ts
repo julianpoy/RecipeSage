@@ -3,17 +3,15 @@ import { z } from "zod";
 import { getRecipesWithConstraints } from "../../dbHelpers/getRecipesWithConstraints";
 import { TRPCError } from "@trpc/server";
 import { getFriendships } from "../../dbHelpers/getFriendships";
+import * as SearchService from "../../services/search";
+import { sortRecipeImages } from "../../utils/sort";
 
-export const getRecipes = publicProcedure
+export const searchRecipes = publicProcedure
   .input(
     z.object({
+      searchTerm: z.string().min(1).max(255),
       userIds: z.array(z.string().uuid()).optional(),
       folder: z.enum(["main", "inbox"]),
-      orderBy: z.enum(["title", "createdAt", "updatedAt"]),
-      orderDirection: z.enum(["asc", "desc"]),
-      offset: z.number().min(0),
-      limit: z.number().min(1).max(200),
-      recipeIds: z.array(z.string().uuid()).optional(),
       labels: z.array(z.string()).optional(),
       labelIntersection: z.boolean().optional(),
       includeAllFriends: z.boolean().optional(),
@@ -37,20 +35,33 @@ export const getRecipes = publicProcedure
       userIds.push(...friendships.friends.map((user) => user.id));
     }
 
-    const recipes = await getRecipesWithConstraints({
+    const recipeIds = await SearchService.searchRecipes(
+      userIds,
+      input.searchTerm
+    );
+
+    const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
+      acc[recipeId] = idx + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const results = await getRecipesWithConstraints({
       userId: ctx.session?.userId || undefined,
       userIds,
       folder: input.folder,
       orderBy: {
-        [input.orderBy]: input.orderDirection,
+        title: "desc",
       },
-      offset: input.offset,
-      limit: input.limit,
-      recipeIds: input.recipeIds,
+      offset: 0,
+      limit: 500,
       labels: input.labels,
       labelIntersection: input.labelIntersection,
       ratings: input.ratings,
     });
 
-    return recipes;
+    results.recipes = results.recipes.map(sortRecipeImages).sort((a, b) => {
+      return recipeIdsMap[a.id] - recipeIdsMap[b.id];
+    });
+
+    return results;
   });
