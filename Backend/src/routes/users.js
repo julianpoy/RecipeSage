@@ -23,6 +23,7 @@ const SessionService = require('../services/sessions');
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const SubscriptionService = require('../services/subscriptions');
+const ElasticService = require('./services/elastic');
 const { sendWelcome } = require('../emails/welcome');
 const { sendPasswordReset } = require('../emails/passwordReset');
 
@@ -576,6 +577,22 @@ router.post(
       // Update lastLogin
       user.lastLogin = Date.now();
       await user.save({ transaction });
+
+      try {
+        const recipes = await Recipe.findAll({
+          where: {
+            userId: user.id,
+          },
+          transaction,
+        });
+
+        ElasticService.indexRecipes(recipes).catch((e) => {
+          console.error(e);
+          Sentry.captureException(e);
+        });
+      } catch(e) {
+        console.error(e);
+      }
 
       const session = await SessionService.generateSession(user.id, 'user', transaction);
 
