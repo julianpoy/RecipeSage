@@ -23,7 +23,7 @@ const SessionService = require('../services/sessions');
 const MiddlewareService = require('../services/middleware');
 const UtilService = require('../services/util');
 const SubscriptionService = require('../services/subscriptions');
-const ElasticService = require('./services/elastic');
+const ElasticService = require('../services/elastic');
 const { sendWelcome } = require('../emails/welcome');
 const { sendPasswordReset } = require('../emails/passwordReset');
 
