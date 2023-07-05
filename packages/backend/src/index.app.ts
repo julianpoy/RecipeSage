@@ -16,6 +16,12 @@ const options = {
   batchInterval: parseFloat(opts.batchInterval),
 };
 
+const waitFor = async (timeout: number) => {
+  new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const runIndexOp = async () => {
   try {
     let lt = new Date();
@@ -42,7 +48,6 @@ const runIndexOp = async () => {
     });
 
     if (!recipes || recipes.length === 0) {
-      clearInterval(runInterval);
       console.log("Index complete!");
       process.exit(0);
     }
@@ -61,14 +66,20 @@ const runIndexOp = async () => {
       },
     });
   } catch (e) {
-    clearInterval(runInterval);
     Sentry.captureException(e);
     console.log("Error while indexing", e);
     process.exit(1);
   }
 };
 
-const runInterval = setInterval(runIndexOp, options.batchInterval * 1000);
+const run = async () => {
+  const always = true;
+  while (always) {
+    await runIndexOp();
+    await waitFor(options.batchInterval * 1000);
+  }
+};
+run();
 
 process.on("SIGTERM", () => {
   console.log("RECEIVED SIGTERM - STOPPING JOB");
