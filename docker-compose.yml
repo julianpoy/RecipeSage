@@ -57,11 +57,13 @@ services:
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
-      - SEARCH_PROVIDER=elasticsearch
+      - SEARCH_PROVIDER=typesense
       - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
       - ELASTIC_PASSWORD=recipesage_dev
       - MEILI_HOST=http://meilisearch:7700
       - MEILI_API_KEY=recipesage_dev
+      - 'TYPESENSE_NODES=[{"host": "typesense", "port": 8108, "protocol": "http"}]'
+      - TYPESENSE_API_KEY=recipesage_dev
       - BROWSERLESS_HOST=browserless
       - BROWSERLESS_PORT=3000
       - BROWSERLESS_TOKEN=recipesage_dev
@@ -81,6 +83,11 @@ services:
     image: getmeili/meilisearch:v1.0
     environment:
       - MEILI_MASTER_KEY=recipesage_dev
+  typesense:
+    image: typesense/typesense:0.24.1
+    volumes:
+      - typesense-data:/data
+    command: "--data-dir /data --api-key=recipesage_dev --enable-cors"
   kibana:
     image: kibana:8.4.3
     ports:
@@ -120,3 +127,6 @@ services:
       - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
+
+volumes:
+  typesense-data:
