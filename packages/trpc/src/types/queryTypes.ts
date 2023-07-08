@@ -30,4 +30,4 @@ export const recipesInflated = Prisma.validator<Prisma.RecipeArgs>()({
   },
 });
 
-export type RecipesInflated = Prisma.RecipeGetPayload<typeof recipesInflated>;
+export type RecipeInflated = Prisma.RecipeGetPayload<typeof recipesInflated>;
