@@ -10,7 +10,7 @@ import jsdom from "jsdom";
 import RecipeClipper from "@julianpoy/recipe-clipper";
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
-import sanitizeHtml from "sanitize-html";
+import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../services/fetch";
 
 const disconnectPuppeteer = (browser) => {

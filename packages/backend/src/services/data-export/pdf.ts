@@ -5,7 +5,7 @@ import {
   parseInstructions,
   parseNotes,
 } from "@recipesage/util";
-import sanitizeHtml from "sanitize-html";
+import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../fetch";
 import fs from "fs";
 import { Image, Recipe } from "@prisma/client";
