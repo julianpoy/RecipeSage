@@ -63,7 +63,7 @@ export interface AppPreferenceTypes {
   [MyRecipesPreferenceKey.ShowRecipeDescription]: boolean;
   [MyRecipesPreferenceKey.ViewType]: "tiles" | "list";
   [MyRecipesPreferenceKey.SortBy]:
-    | "-title"
+    | "title"
     | "-createdAt"
     | "createdAt"
     | "-updatedAt"
@@ -106,7 +106,7 @@ export class PreferencesService {
     // Show list by default on small screens
     [MyRecipesPreferenceKey.ViewType]:
       Math.min(window.innerWidth, window.innerHeight) < 440 ? "list" : "tiles",
-    [MyRecipesPreferenceKey.SortBy]: "-title",
+    [MyRecipesPreferenceKey.SortBy]: "title",
     [MyRecipesPreferenceKey.IncludeFriends]: "no",
 
     [RecipeDetailsPreferenceKey.EnableWakeLock]: true,
@@ -142,6 +142,10 @@ export class PreferencesService {
     try {
       const serialized = localStorage.getItem(PREFERENCE_LOCALSTORAGE_KEY);
       const savedPreferences = serialized ? JSON.parse(serialized) || {} : {};
+
+      if (savedPreferences["myRecipes.sortBy"] === "-title") {
+        savedPreferences["myRecipes.sortBy"] = "title"; // In past, the sort was accidentally flipped
+      }
 
       Object.assign(this.preferences, savedPreferences);
     } catch (e) {}

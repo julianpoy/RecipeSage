@@ -106,11 +106,11 @@
             button
           >
             <img
-              *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]"
-              [src]="recipe.images[0].location"
+              *ngIf="recipe.recipeImages && recipe.recipeImages.length > 0 && preferences[preferenceKeys.ShowImages]"
+              [src]="recipe.recipeImages[0].image.location"
             />
             <img
-              *ngIf="(!recipe.images || !recipe.images.length) && preferences[preferenceKeys.ShowImages]"
+              *ngIf="(!recipe.recipeImages || !recipe.recipeImages.length) && preferences[preferenceKeys.ShowImages]"
               class="no-image"
               src="/assets/imgs/logo_green.png"
             />
@@ -187,11 +187,11 @@
         button
       >
         <img
-          *ngIf="recipe.images && recipe.images.length > 0 && preferences[preferenceKeys.ShowImages]"
-          [src]="recipe.images[0].location"
+          *ngIf="recipe.recipeImages && recipe.recipeImages.length > 0 && preferences[preferenceKeys.ShowImages]"
+          [src]="recipe.recipeImages[0].image.location"
         />
         <img
-          *ngIf="!recipe.image && preferences[preferenceKeys.ShowImages]"
+          *ngIf="!recipe.recipeImages.length && preferences[preferenceKeys.ShowImages]"
           class="no-image"
           src="/assets/imgs/logo_green.png"
         />
