@@ -140,7 +140,7 @@
               </p>
 
               <p
-                *ngIf="recipe.labels?.length && preferences[preferenceKeys.ShowLabels]"
+                *ngIf="recipe.recipeLabels?.length && preferences[preferenceKeys.ShowLabels]"
                 [title]="getLabelList(recipe)"
               >
                 {{ 'pages.home.recipe.labels' | translate }} {{
@@ -217,11 +217,13 @@
           </p>
 
           <p
-            *ngIf="recipe.labels && recipe.labels.length > 0 && preferences[preferenceKeys.ShowLabels]"
+            *ngIf="recipe.recipeLabels && recipe.recipeLabels.length > 0 && preferences[preferenceKeys.ShowLabels]"
           >
             {{ 'pages.home.recipe.labels' | translate }}
-            <span *ngFor="let label of recipe.labels; let idx = index"
-              >{{ label.title }}<span *ngIf="idx+1 < recipe.labels.length"
+            <span
+              *ngFor="let recipeLabel of recipe.recipeLabels; let idx = index"
+              >{{ recipeLabel.label.title }}<span
+                *ngIf="idx+1 < recipe.recipeLabels.length"
                 >,&nbsp;</span
               ></span
             >

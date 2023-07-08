@@ -1,7 +1,7 @@
 import { Prisma, User, ProfileItem } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
 import { getFriendships } from "./getFriendships";
-import { RecipesInflated, recipesInflated } from "../types/queryTypes";
+import { RecipeInflated, recipesInflated } from "../types/queryTypes";
 
 export const getRecipesWithConstraints = async (args: {
   tx?: Prisma.TransactionClient;
@@ -15,7 +15,7 @@ export const getRecipesWithConstraints = async (args: {
   labels?: string[];
   labelIntersection?: boolean;
   ratings?: (number | null)[];
-}): Promise<{ recipes: RecipesInflated[]; totalCount: number }> => {
+}): Promise<{ recipes: RecipeInflated[]; totalCount: number }> => {
   const {
     tx = prisma,
     userId: contextUserId,
@@ -160,7 +160,7 @@ export const getRecipesWithConstraints = async (args: {
     where,
   });
 
-  const recipes: RecipesInflated[] = await tx.recipe.findMany({
+  const recipes: RecipeInflated[] = await tx.recipe.findMany({
     where,
     ...recipesInflated,
     orderBy,
