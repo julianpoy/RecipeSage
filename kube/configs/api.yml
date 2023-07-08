@@ -18,8 +18,16 @@ spec:
           image: julianpoy/recipesage:api-$RELEASE_TAG
           ports:
             - containerPort: 3000
-          command: ["tsx"]
-          args: ["packages/backend/src/bin/www"]
+          command: ["npx"]
+          args:
+            [
+              "--yes",
+              "ts-node",
+              "--swc",
+              "--project",
+              "packages/backend/tsconfig.json",
+              "packages/backend/src/bin/www",
+            ]
           resources:
             requests:
               cpu: 250m
@@ -38,9 +46,13 @@ spec:
             - name: INGREDIENT_INSTRUCTION_CLASSIFIER_URL
               value: http://rs-ingredient-instruction-classifier:3000/
             - name: SEARCH_PROVIDER
-              value: elasticsearch
+              value: typesense
             - name: STORAGE_TYPE
               value: s3
+            - name: INDEX_ON_LOGIN
+              value: "true"
+            - name: TYPESENSE_NODES
+              value: '[{"host": "rs-typesense", "port": 8108, "protocol": "http"}]'
           volumeMounts:
             - name: firebase-credentials
               mountPath: /app/Backend/src/config/firebase-credentials.json
