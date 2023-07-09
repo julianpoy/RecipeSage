@@ -1,4 +1,7 @@
-import pdfmake from "pdfmake";
+// PDFMake must be imported via import xyz = require('xyz') because pdfmake
+// uses the `export =` syntax
+// See TypeScript documentation here: https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
+import pdfmake = require("pdfmake");
 import { Writable } from "stream";
 import {
   parseIngredients,
