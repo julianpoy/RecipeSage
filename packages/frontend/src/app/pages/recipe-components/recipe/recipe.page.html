@@ -170,7 +170,7 @@
       <div class="ingredientsCol">
         <ion-item lines="none">
           <ion-icon name="book" slot="start" size="large"></ion-icon>
-          <ion-label>
+          <ion-label class="section-title">
             <p>{{ 'pages.recipeDetails.ingredients' | translate }}</p>
           </ion-label>
         </ion-item>
@@ -198,7 +198,7 @@
       <div class="instructionsCol">
         <ion-item lines="none">
           <ion-icon name="list" slot="start" size="large"></ion-icon>
-          <ion-label>
+          <ion-label class="section-title">
             <p>{{ 'pages.recipeDetails.instructions' | translate }}</p>
           </ion-label>
         </ion-item>
@@ -234,7 +234,7 @@
     <div *ngIf="notes" class="notes ion-margin-top">
       <ion-item lines="none">
         <ion-icon name="document-text" slot="start" size="large"></ion-icon>
-        <ion-label>
+        <ion-label class="section-title">
           <p>{{ 'pages.recipeDetails.notes' | translate }}</p>
         </ion-label>
       </ion-item>
@@ -259,7 +259,7 @@
       lines="none"
     >
       <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
-      <ion-label>
+      <ion-label class="section-title">
         <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
       </ion-label>
     </ion-item>
@@ -341,7 +341,7 @@
     <br />
 
     <ion-item lines="full">
-      <ion-label>
+      <ion-label class="section-title">
         <p>
           <i>
             {{ 'pages.recipeDetails.created' | translate }} {{
@@ -406,7 +406,10 @@
       </ion-button>
     </div>
 
-    <ion-row *ngIf="recipe.folder === 'main' && recipe.isOwner">
+    <ion-row
+      *ngIf="recipe.folder === 'main' && recipe.isOwner"
+      class="action-buttons"
+    >
       <ion-col class="ion-text-center">
         <ion-button (click)="editRecipe()" fill="clear" size="small">
           <ion-icon name="create" slot="start"></ion-icon>

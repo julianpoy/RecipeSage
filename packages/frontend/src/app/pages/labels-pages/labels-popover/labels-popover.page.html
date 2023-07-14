@@ -11,20 +11,19 @@
     <ion-label class="ion-text-wrap">
       {{ 'pages.labelsPopover.options.showCreatedAt' | translate }}
     </ion-label>
-    <ion-icon name="calendar" slot="start"></ion-icon>
   </ion-item>
 
-  <ion-item *ngIf="!selectionMode">
-    <ion-icon name="checkmark" slot="start"></ion-icon>
-    <ion-button (click)="toggleSelectionMode()" expand="full">
-      {{ 'pages.labelsPopover.options.selectMultipleLabels' | translate }}
-    </ion-button>
-  </ion-item>
-
-  <ion-item *ngIf="selectionMode">
-    <ion-icon name="close" slot="start"></ion-icon>
-    <ion-button (click)="toggleSelectionMode()" expand="full">
+  <ion-button
+    (click)="toggleSelectionMode()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <span *ngIf="selectionMode">
       {{ 'pages.labelsPopover.options.unselectLabels' | translate }}
-    </ion-button>
-  </ion-item>
+    </span>
+    <span *ngIf="!selectionMode">
+      {{ 'pages.labelsPopover.options.selectMultipleLabels' | translate }}
+    </span>
+  </ion-button>
 </ion-list>

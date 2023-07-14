@@ -123,7 +123,7 @@ ion-badge {
       margin-right: 0;
       margin-top: 2px;
       margin-bottom: 2px;
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: normal;
 
       white-space: nowrap;
@@ -135,7 +135,7 @@ ion-badge {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 14px;
+      font-size: 0.875rem;
       margin: 0;
       color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
     }
@@ -148,12 +148,12 @@ ion-badge {
   padding: 10px;
 
   .recipe-card {
-    --paragraph-line-height: 19px;
-    --content-padding-leeway: 22px;
+    --paragraph-line-height: 1.188rem;
+    --content-padding-leeway: 1.375rem;
 
     // The following should be set to their initial value with all preferences OFF
-    --image-size: 20px;
-    --header-height: 36px;
+    --image-size: 1.25rem;
+    --header-height: 2.25rem;
     --description-height: 0px;
     --source-height: 0px;
     --fromuser-height: 0px;
@@ -205,7 +205,7 @@ ion-badge {
       padding-left: 12px;
 
       .no-image-padding {
-        height: 20px;
+        height: 1.25rem;
       }
 
       h2 {
@@ -214,7 +214,7 @@ ion-badge {
         margin-right: 0;
         margin-top: 2px;
         margin-bottom: 2px;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: normal;
 
         //white-space: nowrap;
@@ -232,7 +232,7 @@ ion-badge {
         -webkit-box-orient: vertical;
         overflow: hidden;
 
-        font-size: 14px;
+        font-size: 0.875rem;
         margin: 0;
         margin-top: 2px;
         margin-bottom: 2px;
