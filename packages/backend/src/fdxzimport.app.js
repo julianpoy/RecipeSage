@@ -2,8 +2,8 @@ import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
 import * as fs from "fs-extra";
-import extract from "extract-zip";
-import xmljs from "xml-js";
+import * as extract from "extract-zip";
+import * as xmljs from "xml-js";
 
 import {
   sequelize,
@@ -16,7 +16,7 @@ import {
 
 import * as UtilService from "./services/util.js";
 import { writeImageBuffer, writeImageFile } from "./services/storage/image";
-import { ObjectTypes } from "./services/storage/shared.js";
+import { ObjectTypes } from "./services/storage/shared";
 
 const runConfig = {
   path: process.argv[2],

@@ -410,14 +410,21 @@ router.post(
     };
     JobTrackerService.addJob(job);
 
-    let lcbImportJob = spawn("node", [
-      "src/lcbimport.app.js",
+    let lcbImportJob = spawn("node_modules/ts-node/dist/bin.js", [
+      "--project",
+      "packages/backend/tsconfig.json",
+      "packages/backend/src/lcbimport.app.js",
       req.file.path,
       res.locals.session.userId,
       ...optionalFlags,
     ]);
-    lcbImportJob.stderr.on("data", (data) => {
-      console.error(`lcbimport stderr: ${data}`);
+    lcbImportJob.stderr.setEncoding("utf8");
+    lcbImportJob.stderr.on("data", (err) => {
+      console.error(err);
+    });
+    lcbImportJob.stdout.setEncoding("utf8");
+    lcbImportJob.stdout.on("data", (msg) => {
+      console.log(msg);
     });
     lcbImportJob.on("close", (code) => {
       switch (code) {
@@ -477,12 +484,22 @@ router.post(
     };
     JobTrackerService.addJob(job);
 
-    let lcbImportJob = spawn("node", [
-      "src/fdxzimport.app.js",
+    let lcbImportJob = spawn("node_modules/ts-node/dist/bin.js", [
+      "--project",
+      "packages/backend/tsconfig.json",
+      "packages/backend/src/fdxzimport.app.js",
       req.file.path,
       res.locals.session.userId,
       ...optionalFlags,
     ]);
+    lcbImportJob.stderr.setEncoding("utf8");
+    lcbImportJob.stderr.on("data", (err) => {
+      console.error(err);
+    });
+    lcbImportJob.stdout.setEncoding("utf8");
+    lcbImportJob.stdout.on("data", (msg) => {
+      console.log(msg);
+    });
     lcbImportJob.on("close", (code) => {
       switch (code) {
         case 0: {
