@@ -28,7 +28,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import { RecipeInflated } from "@recipesage/trpc";
+import { RecipeSummary } from "@recipesage/trpc";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -45,7 +45,7 @@ export class HomePage {
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
-  recipes: RecipeInflated[] = [];
+  recipes: RecipeSummary[] = [];
   recipeFetchBuffer = 25;
   fetchPerPage = 50;
   lastRecipeCount = 0;
@@ -564,7 +564,7 @@ export class HomePage {
     };
   }
 
-  getLabelList(recipe: RecipeInflated) {
+  getLabelList(recipe: RecipeSummary) {
     return recipe.recipeLabels
       .map((recipeLabel) => recipeLabel.label.title)
       .join(", ");
