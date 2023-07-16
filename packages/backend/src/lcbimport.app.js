@@ -2,10 +2,10 @@ import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
 import * as fs from "fs-extra";
-import mdb from "mdb";
-import extract from "extract-zip";
-import sqlite3 from "sqlite3";
-import performance from "perf_hooks";
+import * as mdb from "mdb";
+import * as extract from "extract-zip";
+import * as sqlite3 from "sqlite3";
+import { performance } from "perf_hooks";
 import { exec, spawn } from "child_process";
 
 import {
@@ -19,7 +19,7 @@ import {
 
 import * as UtilService from "./services/util.js";
 import { writeImageFile } from "./services/storage/image";
-import { ObjectTypes } from "./services/storage/shared.js";
+import { ObjectTypes } from "./services/storage/shared";
 
 let runConfig = {
   path: process.argv[2],
