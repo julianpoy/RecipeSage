@@ -1,8 +1,8 @@
-import { Recipe, RecipeImage } from "@prisma/client";
-
 export const sortRecipeImages = <
-  T extends Recipe & {
-    recipeImages: RecipeImage[];
+  T extends {
+    recipeImages: {
+      order: number;
+    }[];
   }
 >(
   recipe: T

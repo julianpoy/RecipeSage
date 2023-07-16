@@ -13,16 +13,43 @@ export const userPublic = Prisma.validator<Prisma.UserArgs>()({
 
 export type UserPublic = Prisma.UserGetPayload<typeof userPublic>;
 
-export const recipesInflated = Prisma.validator<Prisma.RecipeArgs>()({
-  include: {
+/**
+ * Provides fields necessary for displaying a summary about a recipe,
+ * not including ingredients, instructions, notes, etc.
+ **/
+export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
+  select: {
+    id: true,
+    userId: true,
+    fromUserId: true,
+    title: true,
+    description: true,
+    yield: true,
+    activeTime: true,
+    totalTime: true,
+    source: true,
+    url: true,
+    folder: true,
+    createdAt: true,
+    updatedAt: true,
+    rating: true,
     recipeLabels: {
-      include: {
-        label: true,
+      select: {
+        label: {
+          select: {
+            title: true,
+          },
+        },
       },
     },
     recipeImages: {
-      include: {
-        image: true,
+      select: {
+        order: true,
+        image: {
+          select: {
+            location: true,
+          },
+        },
       },
     },
     fromUser: userPublic,
@@ -30,4 +57,8 @@ export const recipesInflated = Prisma.validator<Prisma.RecipeArgs>()({
   },
 });
 
-export type RecipeInflated = Prisma.RecipeGetPayload<typeof recipesInflated>;
+/**
+ * Provides fields necessary for displaying a summary about a recipe,
+ * not including ingredients, instructions, notes, etc.
+ **/
+export type RecipeSummary = Prisma.RecipeGetPayload<typeof recipeSummary>;
