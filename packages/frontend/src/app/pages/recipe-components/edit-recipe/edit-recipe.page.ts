@@ -278,7 +278,10 @@ export class EditRecipePage {
         },
       }
     );
-    if (!response.success) return;
+    if (!response.success) {
+      loading.dismiss();
+      return;
+    }
 
     if (response.data.title) this.recipe.title = response.data.title;
     if (response.data.description)

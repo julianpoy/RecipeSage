@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import * as Sentry from "@sentry/node";
-import he from "he";
-import url from "url";
+import * as he from "he";
+import * as url from "url";
 import { dedent } from "ts-dedent";
 
 import puppeteer from "puppeteer-core";
