@@ -1,6 +1,6 @@
 import { StorageObjectRecord } from "./";
 import { ObjectTypes } from "./shared";
-import crypto from "crypto";
+import * as crypto from "crypto";
 import { getStorage } from "firebase-admin/storage";
 
 const BUCKET = process.env.FIREBASE_BUCKET || "";

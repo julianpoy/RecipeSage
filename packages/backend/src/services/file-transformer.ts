@@ -1,5 +1,5 @@
 import { Readable, Writable } from "stream";
-import sharp from "sharp";
+import * as sharp from "sharp";
 
 export const transformImageStream = async (
   inputStream: Readable,

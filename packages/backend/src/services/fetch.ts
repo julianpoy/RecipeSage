@@ -1,6 +1,6 @@
 import fetch, { RequestInit } from "node-fetch";
-import url from "url";
-import HttpsProxyAgent, { HttpsProxyAgentOptions } from "https-proxy-agent";
+import * as url from "url";
+import { HttpsProxyAgent, HttpsProxyAgentOptions } from "https-proxy-agent";
 
 const { CLIP_PROXY_URL, CLIP_PROXY_USERNAME, CLIP_PROXY_PASSWORD } =
   process.env;
@@ -54,7 +54,7 @@ export const fetchURL = (
   const proxyAgentConfig: HttpsProxyAgentOptions = {
     ...proxyUrl,
   };
-  fetchOpts.agent = HttpsProxyAgent(proxyAgentConfig);
+  fetchOpts.agent = new HttpsProxyAgent(proxyAgentConfig);
 
   return fetch(destURL, fetchOpts);
 };

@@ -6,7 +6,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import crypto from "crypto";
+import * as crypto from "crypto";
 
 // Must begin and end with a /
 const ObjectTypesToSubpath = {
