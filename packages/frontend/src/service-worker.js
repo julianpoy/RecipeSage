@@ -86,7 +86,7 @@ registerRoute(
 // Limit the maxiumum age so that requests aren't too stale.
 const MAX_OFFLINE_API_AGE = 60; // Days
 registerRoute(
-  /https:\/\/api\.recipesage\.com/,
+  /https:\/\/api\(\.beta)?.recipesage\.com/,
   new NetworkFirst({
     cacheName: "api-cache",
     plugins: [
