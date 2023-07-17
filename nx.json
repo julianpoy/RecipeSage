@@ -17,6 +17,12 @@
     },
     "test": {
       "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+    },
+    "lint": {
+      "inputs": ["default"]
+    },
+    "typecheck": {
+      "inputs": ["default", "^default"]
     }
   },
   "workspaceLayout": {
