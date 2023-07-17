@@ -3,13 +3,13 @@ const router = express.Router();
 import * as cors from "cors";
 import * as multer from "multer";
 import * as fs from "fs-extra";
-import extract from "extract-zip";
+import * as extract from "extract-zip";
 import { spawn } from "child_process";
 import { performance } from "perf_hooks";
 import * as semver from "semver";
 import * as path from "path";
 import fetch from "node-fetch";
-import xmljs from "xml-js";
+import * as xmljs from "xml-js";
 
 // DB
 import {

@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import zlib from "zlib";
+import * as zlib from "zlib";
 
 // Service
 import * as FirebaseService from "./firebase.js";

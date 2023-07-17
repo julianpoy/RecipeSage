@@ -6,8 +6,8 @@ import { dedent } from "ts-dedent";
 
 import puppeteer from "puppeteer-core";
 
-import jsdom from "jsdom";
-import RecipeClipper from "@julianpoy/recipe-clipper";
+import * as jsdom from "jsdom";
+import * as RecipeClipper from "@julianpoy/recipe-clipper";
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 import * as sanitizeHtml from "sanitize-html";

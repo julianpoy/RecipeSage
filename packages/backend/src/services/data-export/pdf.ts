@@ -10,7 +10,7 @@ import {
 } from "@recipesage/util";
 import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../fetch";
-import fs from "fs";
+import * as fs from "fs";
 import { Image, Recipe } from "@prisma/client";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 
