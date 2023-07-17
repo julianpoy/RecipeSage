@@ -43,5 +43,7 @@ tmp.sql
 restore.sql
 .DS_Store
 .secrets.env
+.env
+nx-cloud.env
 kube/secrets.yml
 .angular
