@@ -69,7 +69,7 @@ services:
       - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     env_file:
-      - ./.secrets.env
+      - ./.env
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     environment:
