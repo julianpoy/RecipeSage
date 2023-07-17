@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import * as path from "path";
 import { OutputUnit } from "unitz-ts";
 
@@ -9,22 +9,26 @@ import {
   getMeasurementsForIngredient,
 } from "@recipesage/util";
 
-const ingredientsList = JSON.parse(
-  fs.readFileSync(
-    path.resolve(__dirname, "../constants/ingredients.json"),
-    "utf-8"
-  )
-);
-const itemCategories = JSON.parse(
-  fs.readFileSync(
-    path.resolve(__dirname, "../constants/itemCategories.json"),
-    "utf-8"
-  )
-);
+let ingredientsList = [];
+let itemCategories = {};
+let itemTitles = [];
+const init = async () => {
+  ingredientsList = JSON.parse(
+    await fs.readFile(
+      path.resolve(__dirname, "../constants/ingredients.json"),
+      "utf-8"
+    )
+  );
+  itemCategories = JSON.parse(
+    await fs.readFile(
+      path.resolve(__dirname, "../constants/itemCategories.json"),
+      "utf-8"
+    )
+  );
 
-const itemTitles = Object.keys(itemCategories).sort(
-  (a, b) => b.length - a.length
-);
+  itemTitles = Object.keys(itemCategories).sort((a, b) => b.length - a.length);
+};
+init();
 
 const formattedCategoryTitles = {
   produce: "Produce",

@@ -1,6 +1,6 @@
 import * as express from "express";
 const router = express.Router();
-import pLimit from "p-limit";
+import * as pLimit from "p-limit";
 import * as xmljs from "xml-js";
 import * as multer from "multer";
 import * as fs from "fs-extra";
