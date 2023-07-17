@@ -1,10 +1,11 @@
 import admin from "firebase-admin";
 import * as fs from "fs/promises";
+import { join } from "path";
 
 const init = async () => {
   try {
     const serviceAccount = await fs.readFile(
-      "../config/firebase-credentials.json",
+      join(__dirname, "../config/firebase-credentials.json"),
       "utf-8"
     );
 
