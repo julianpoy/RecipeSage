@@ -1,10 +1,10 @@
 import * as express from "express";
 const router = express.Router();
-import pLimit from "p-limit";
-import xmljs from "xml-js";
+import * as pLimit from "p-limit";
+import * as xmljs from "xml-js";
 import * as multer from "multer";
 import * as fs from "fs-extra";
-import extract from "extract-zip";
+import * as extract from "extract-zip";
 import * as path from "path";
 
 import * as MiddlewareService from "../services/middleware.js";
