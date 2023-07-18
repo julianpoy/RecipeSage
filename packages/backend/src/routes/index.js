@@ -25,6 +25,7 @@ import { validateSession, validateUser } from "../services/middleware.js";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";
+import * as SearchService from "@recipesage/trpc";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JobTrackerService from "../services/job-tracker.js";
 
@@ -366,6 +367,8 @@ router.get(
             transaction,
           }
         );
+
+        await SearchService.indexRecipes(savedRecipes);
       });
 
       res.status(200).json({
@@ -426,9 +429,17 @@ router.post(
     lcbImportJob.stdout.on("data", (msg) => {
       console.log(msg);
     });
-    lcbImportJob.on("close", (code) => {
+    lcbImportJob.on("close", async (code) => {
       switch (code) {
         case 0: {
+          const recipes = await Recipe.findAll({
+            where: {
+              userId: res.locals.session.userId,
+            },
+          });
+
+          await SearchService.indexRecipes(recipes);
+
           res.status(200).json({
             msg: "Ok",
           });
@@ -500,9 +511,17 @@ router.post(
     lcbImportJob.stdout.on("data", (msg) => {
       console.log(msg);
     });
-    lcbImportJob.on("close", (code) => {
+    lcbImportJob.on("close", async (code) => {
       switch (code) {
         case 0: {
+          const recipes = await Recipe.findAll({
+            where: {
+              userId: res.locals.session.userId,
+            },
+          });
+
+          await SearchService.indexRecipes(recipes);
+
           res.status(200).json({
             msg: "Ok",
           });
@@ -525,6 +544,14 @@ router.post(
       }
       job.complete = true;
     });
+
+    const recipes = await Recipe.findAll({
+      where: {
+        userId: res.locals.session.userId,
+      },
+    });
+
+    await SearchService.indexRecipes(recipes);
   }
 );
 
@@ -679,7 +706,7 @@ router.post(
           });
         });
       })
-      .then(() => {
+      .then(async () => {
         metrics.tLabelsSaved = performance.now();
 
         metrics.performance = {
@@ -692,6 +719,14 @@ router.post(
           ),
           tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved),
         };
+
+        const recipes = await Recipe.findAll({
+          where: {
+            userId: res.locals.session.userId,
+          },
+        });
+
+        await SearchService.indexRecipes(recipes);
 
         res.status(201).json({});
       })

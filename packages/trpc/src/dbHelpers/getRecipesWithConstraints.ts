@@ -122,38 +122,61 @@ export const getRecipesWithConstraints = async (args: {
     };
 
   const where = {
+    AND: [] as Prisma.RecipeWhereInput[],
+  } satisfies Prisma.RecipeWhereInput;
+
+  where.AND.push({
     OR: queryFilters,
-    ...(recipeIds ? { id: { in: recipeIds } } : {}),
-    ...(ratings ? { rating: { in: ratings } } : {}),
-    ...(filterByRecipeIds ? { id: { in: filterByRecipeIds } } : {}),
+  });
+  where.AND.push({
     folder,
-  } as Prisma.RecipeWhereInput;
+  });
+
+  if (recipeIds) {
+    where.AND.push({ id: { in: recipeIds } });
+  }
+
+  if (ratings) {
+    where.AND.push({
+      OR: ratings.map((rating) => ({
+        rating,
+      })),
+    });
+  }
+
+  if (filterByRecipeIds) {
+    where.AND.push({ id: { in: filterByRecipeIds } });
+  }
 
   if (labels && labelIntersection) {
-    where.AND = labels.map(
-      (label) =>
-        ({
-          recipeLabels: {
-            some: {
-              label: {
-                title: label,
+    where.AND.push(
+      ...labels.map(
+        (label) =>
+          ({
+            recipeLabels: {
+              some: {
+                label: {
+                  title: label,
+                },
               },
             },
-          },
-        } as Prisma.RecipeWhereInput)
+          } as Prisma.RecipeWhereInput)
+      )
     );
   }
 
   if (labels && !labelIntersection) {
-    where.recipeLabels = {
-      some: {
-        label: {
-          title: {
-            in: labels,
+    where.AND.push({
+      recipeLabels: {
+        some: {
+          label: {
+            title: {
+              in: labels,
+            },
           },
         },
       },
-    };
+    });
   }
 
   const [totalCount, recipes] = await Promise.all([
