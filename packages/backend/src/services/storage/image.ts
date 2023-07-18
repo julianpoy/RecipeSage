@@ -18,6 +18,8 @@ export const writeImageURL = async (
   highResConversion: boolean
 ): Promise<StorageObjectRecord> => {
   const response = await fetchURL(url);
+  if (response.status !== 200)
+    throw new Error(`Could not fetch image: ${response.status}`);
   const buffer = await response.buffer();
 
   return writeImageBuffer(objectType, buffer, highResConversion);
