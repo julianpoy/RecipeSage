@@ -333,24 +333,33 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
             .filter((_, idx) => idx === 0 || canUploadMultipleImages)
             .filter((_, idx) => idx < MAX_IMAGES)
             .map((image) =>
-              limit(() => {
-                if (typeof image === "object")
-                  return writeImageBuffer(
+              limit(async () => {
+                if (typeof image === "object") {
+                  return await writeImageBuffer(
                     ObjectTypes.RECIPE_IMAGE,
                     image,
                     highResConversion
                   );
-                if (image.startsWith("http:") || image.startsWith("https:"))
-                  return writeImageURL(
+                } else if (
+                  image.startsWith("http:") ||
+                  image.startsWith("https:")
+                ) {
+                  try {
+                    return await writeImageURL(
+                      ObjectTypes.RECIPE_IMAGE,
+                      image,
+                      highResConversion
+                    );
+                  } catch (e) {
+                    console.error(e);
+                  }
+                } else {
+                  return await writeImageFile(
                     ObjectTypes.RECIPE_IMAGE,
                     image,
                     highResConversion
                   );
-                return writeImageFile(
-                  ObjectTypes.RECIPE_IMAGE,
-                  image,
-                  highResConversion
-                );
+                }
               })
             )
         );
@@ -361,11 +370,13 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
 
     const pendingImages = imagesByRecipeIdx
       .map((images, recipeIdx) =>
-        images.map((image, imageIdx) => ({
-          image,
-          recipeId: recipes[recipeIdx].id,
-          order: imageIdx,
-        }))
+        images
+          .filter((image) => !!image)
+          .map((image, imageIdx) => ({
+            image,
+            recipeId: recipes[recipeIdx].id,
+            order: imageIdx,
+          }))
       )
       .flat()
       .filter((e) => e);
@@ -433,6 +444,14 @@ router.post(
         res.locals.session.userId,
         recipesToImport
       );
+
+      const recipesToIndex = await Recipe.findAll({
+        where: {
+          userId: res.locals.session.userId,
+        },
+      });
+
+      await SearchService.indexRecipes(recipesToIndex);
 
       res.status(200).send("Imported");
     } catch (e) {

@@ -23,7 +23,7 @@ export const trpcExpressMiddleware = createExpressMiddleware({
 
     const statusCode = getHTTPStatusCodeFromError(error);
     if (statusCode >= 500) {
-      console.error(error);
+      console.error(error, error.stack);
 
       const mainError =
         error instanceof TRPCError ? error.cause || error : error;
