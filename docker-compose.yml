@@ -53,7 +53,6 @@ services:
       - POSTGRES_LOGGING=true
       - DATABASE_URL=postgresql://recipesage_dev:recipesage_dev@postgres:5432/recipesage_dev
       - GCM_KEYPAIR
-      - SENTRY_DSN
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
