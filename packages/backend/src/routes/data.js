@@ -10,6 +10,7 @@ import * as path from "path";
 import * as MiddlewareService from "../services/middleware.js";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as UtilService from "../services/util.js";
+import * as SearchService from "@recipesage/trpc";
 import {
   writeImageFile,
   writeImageURL,
@@ -523,6 +524,14 @@ router.post(
       await fs.remove(extractPath);
 
       await importStandardizedRecipes(res.locals.session.userId, recipes);
+
+      const recipesToIndex = await Recipe.findAll({
+        where: {
+          userId: res.locals.session.userId,
+        },
+      });
+
+      await SearchService.indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {
