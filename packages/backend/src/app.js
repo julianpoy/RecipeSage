@@ -7,8 +7,10 @@ import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
+import { RequestContext } from '@mikro-orm/core';
 
 import { trpcExpressMiddleware } from "@recipesage/trpc";
+import { mikro, init as initMikro } from "@recipesage/mikroorm";
 
 // Routes
 import index from "./routes/index.js";
@@ -26,6 +28,13 @@ import data from "./routes/data.js";
 import proxy from "./routes/proxy.js";
 
 import ws from "./routes/ws.js";
+
+initMikro().then(() => {
+  console.log("MikroORM started");
+}).catch((e) => {
+  console.trace(e);
+  process.exit(1);
+});
 
 const app = express();
 
@@ -70,6 +79,11 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");
+
+app.use(async (req, res, next) => {
+  RequestContext.create(mikro.em, next);
+});
+
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
 app.use("/users", users);

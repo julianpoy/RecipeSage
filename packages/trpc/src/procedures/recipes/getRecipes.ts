@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getRecipesWithConstraints } from "../../dbHelpers/getRecipesWithConstraints";
 import { TRPCError } from "@trpc/server";
 import { getFriendships } from "../../dbHelpers/getFriendships";
+import { zRecipeSummary } from "../../types/queryTypes";
 
 export const getRecipes = publicProcedure
   .input(
@@ -22,23 +23,27 @@ export const getRecipes = publicProcedure
         .optional(),
     })
   )
+  .output(z.object({
+    recipes: z.array(zRecipeSummary),
+    totalCount: z.number()
+  }))
   .query(async ({ ctx, input }) => {
     const userIds: string[] = [];
     if (input.userIds) userIds.push(...input.userIds);
-    else if (ctx.session) userIds.push(ctx.session.userId);
+    else if (ctx.session) userIds.push(ctx.session.user.id);
     else
       throw new TRPCError({
         message: "Must pass userIds or be logged in",
         code: "UNAUTHORIZED",
       });
 
-    if (ctx.session?.userId && input.includeAllFriends) {
-      const friendships = await getFriendships(ctx.session.userId);
+    if (ctx.session?.user.id && input.includeAllFriends) {
+      const friendships = await getFriendships(ctx.session.user.id);
       userIds.push(...friendships.friends.map((user) => user.id));
     }
 
     const recipes = await getRecipesWithConstraints({
-      userId: ctx.session?.userId || undefined,
+      userId: ctx.session?.user.id || undefined,
       userIds,
       folder: input.folder,
       orderBy: {

@@ -1,6 +1,7 @@
-import { prisma } from "@recipesage/prisma";
+// import { prisma } from "@recipesage/prisma";
 import { inferAsyncReturnType } from "@trpc/server";
 import * as trpcExpress from "@trpc/server/adapters/express";
+import { Session, mikro } from '@recipesage/mikroorm';
 
 export async function createContext({
   req,
@@ -10,10 +11,8 @@ export async function createContext({
       const token = req.headers.authorization.split(" ")[1];
       if (!token) return null;
 
-      const session = prisma.session.findFirst({
-        where: {
-          token,
-        },
+      const session = await mikro.em.findOne(Session, {
+        token,
       });
 
       return session;

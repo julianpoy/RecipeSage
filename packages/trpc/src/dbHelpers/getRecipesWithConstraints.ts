@@ -1,14 +1,20 @@
-import { Prisma, User, ProfileItem } from "@prisma/client";
-import { prisma } from "@recipesage/prisma";
 import { getFriendships } from "./getFriendships";
-import { RecipeSummary, recipeSummary } from "../types/queryTypes";
+import { ProfileItem, Recipe, User, mikro } from '@recipesage/mikroorm';
+import { FilterQuery } from "@mikro-orm/core";
+import { RecipeSummary } from "../types/queryTypes";
+
+export interface OrderBy {
+  title?: 'asc' | 'desc';
+  createdAt?: 'asc' | 'desc';
+  updatedAt?: 'asc' | 'desc';
+}
 
 export const getRecipesWithConstraints = async (args: {
-  tx?: Prisma.TransactionClient;
+  em?: typeof mikro.em;
   userId?: string;
   userIds: string[];
   folder: string;
-  orderBy: Prisma.RecipeOrderByWithRelationInput;
+  orderBy: OrderBy;
   offset: number;
   limit: number;
   recipeIds?: string[];
@@ -17,7 +23,7 @@ export const getRecipesWithConstraints = async (args: {
   ratings?: (number | null)[];
 }): Promise<{ recipes: RecipeSummary[]; totalCount: number }> => {
   const {
-    tx = prisma,
+    em = mikro.em,
     userId: contextUserId,
     userIds,
     folder,
@@ -28,7 +34,6 @@ export const getRecipesWithConstraints = async (args: {
     labels,
     labelIntersection,
     ratings,
-    recipeIds,
   } = args;
 
   let friends: { [key: string]: User } = {};
@@ -47,31 +52,25 @@ export const getRecipesWithConstraints = async (args: {
     (userId) => !friends[userId] && userId !== contextUserId
   );
 
-  const profileItems = await tx.profileItem.findMany({
-    where: {
-      OR: [
-        {
-          userId: {
-            in: friendUserIds,
-          },
-        },
-        {
-          userId: {
-            in: nonFriendUserIds,
-          },
-          visibility: "public",
-        },
-      ],
-    },
+  const profileItems = await em.find(ProfileItem, {
+    $or: [
+      {
+        user: friendUserIds,
+      },
+      {
+        user: nonFriendUserIds,
+        visibility: "public",
+      },
+    ],
   });
 
   const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
-    acc[profileItem.userId] ??= [];
-    acc[profileItem.userId].push(profileItem);
+    acc[profileItem.user.id] ??= [];
+    acc[profileItem.user.id].push(profileItem);
     return acc;
   }, {} as { [key: string]: ProfileItem[] });
 
-  const queryFilters: Prisma.RecipeWhereInput[] = [];
+  const queryFilters: FilterQuery<Recipe>[] = [];
   for (const userId of userIds) {
     const isContextUser = contextUserId && userId === contextUserId;
     const profileItemsForUser = profileItemsByUserId[userId] || [];
@@ -82,34 +81,30 @@ export const getRecipesWithConstraints = async (args: {
 
     if (isContextUser || isSharingAll) {
       queryFilters.push({
-        userId,
+        user: userId
       });
     }
 
     profileItemsForUser
       .filter((profileItem) => profileItem.type === "label")
-      .map((profileItem) => profileItem.labelId)
+      .map((profileItem) => profileItem.label?.id)
       .filter((labelId): labelId is string => !!labelId)
       .forEach((labelId) => {
         queryFilters.push({
-          userId,
+          user: userId,
           recipeLabels: {
-            some: {
-              label: {
-                id: labelId,
-              },
-            },
+            id: labelId,
           },
         });
       });
 
     profileItemsForUser
       .filter((profileItem) => profileItem.type === "recipe")
-      .map((profileItem) => profileItem.recipeId)
+      .map((profileItem) => profileItem.recipe?.id)
       .filter((recipeId): recipeId is string => !!recipeId)
       .forEach((recipeId) => {
         queryFilters.push({
-          userId,
+          user: userId,
           id: recipeId,
         });
       });
@@ -122,34 +117,30 @@ export const getRecipesWithConstraints = async (args: {
     };
 
   const where = {
-    AND: [] as Prisma.RecipeWhereInput[],
-  } satisfies Prisma.RecipeWhereInput;
+    $and: [] as FilterQuery<Recipe>[],
+  } satisfies FilterQuery<Recipe>;
 
-  where.AND.push({
-    OR: queryFilters,
+  where.$and.push({
+    $or: queryFilters,
   });
-  where.AND.push({
+  where.$and.push({
     folder,
   });
 
-  if (recipeIds) {
-    where.AND.push({ id: { in: recipeIds } });
-  }
-
   if (ratings) {
-    where.AND.push({
-      OR: ratings.map((rating) => ({
+    where.$and.push({
+      $or: ratings.map((rating) => ({
         rating,
       })),
     });
   }
 
   if (filterByRecipeIds) {
-    where.AND.push({ id: { in: filterByRecipeIds } });
+    where.$and.push({ id: filterByRecipeIds });
   }
 
   if (labels && labelIntersection) {
-    where.AND.push(
+    where.$and.push(
       ...labels.map(
         (label) =>
           ({
@@ -160,37 +151,43 @@ export const getRecipesWithConstraints = async (args: {
                 },
               },
             },
-          } as Prisma.RecipeWhereInput)
+          } as FilterQuery<Recipe>)
       )
     );
   }
 
   if (labels && !labelIntersection) {
-    where.AND.push({
+    where.$and.push({
       recipeLabels: {
-        some: {
-          label: {
-            title: {
-              in: labels,
-            },
-          },
+        label: {
+          title: labels,
         },
       },
     });
   }
 
-  const [totalCount, recipes] = await Promise.all([
-    tx.recipe.count({
+  const [totalCount, _recipes] = await Promise.all([
+    em.count(Recipe,
       where,
-    }),
-    tx.recipe.findMany({
-      where,
-      ...recipeSummary,
+    ),
+    em.find(Recipe, where, {
       orderBy,
-      skip: offset,
-      take: limit,
+      offset,
+      limit,
+      populate: [
+        'recipeLabels.label.title',
+        'recipeImages.order',
+        'recipeImages.image.location',
+        'user',
+        'fromUser'
+      ]
     }),
   ]);
+  console.log('tb', _recipes[26].user.name);
+
+  const recipes = _recipes.map(r => r.toJSON());
+
+  console.log('t', recipes[26].user);
 
   return {
     recipes,

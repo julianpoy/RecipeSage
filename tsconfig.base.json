@@ -7,6 +7,11 @@
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -21,6 +26,8 @@
       "@recipesage/prisma": ["packages/prisma/src/index.ts"],
       "@recipesage/trpc": ["packages/trpc/src/index.ts"],
       "@recipesage/util": ["packages/util/src/index.ts"],
+      "@recipesage/mikroorm": ["packages/mikroorm/src/index.ts"],
+      "@recipesage/types": ["packages/types/src/index.ts"],
       "~/*": ["packages/frontend/src/app/*"]
     }
   },
