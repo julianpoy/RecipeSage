@@ -1,14 +1,18 @@
-import { Prisma, User, ProfileItem } from "@prisma/client";
-import { prisma } from "@recipesage/prisma";
 import { getFriendships } from "./getFriendships";
-import { RecipeSummary, recipeSummary } from "../types/queryTypes";
+import { RecipeSummary } from "../types/queryTypes";
+
+export interface OrderBy {
+  title?: 'asc' | 'desc';
+  createdAt?: 'asc' | 'desc';
+  updatedAt?: 'asc' | 'desc';
+}
 
 export const getRecipesWithConstraints = async (args: {
-  tx?: Prisma.TransactionClient;
+  // em?: typeof mikro.em;
   userId?: string;
   userIds: string[];
   folder: string;
-  orderBy: Prisma.RecipeOrderByWithRelationInput;
+  orderBy: OrderBy;
   offset: number;
   limit: number;
   recipeIds?: string[];
@@ -16,184 +20,175 @@ export const getRecipesWithConstraints = async (args: {
   labelIntersection?: boolean;
   ratings?: (number | null)[];
 }): Promise<{ recipes: RecipeSummary[]; totalCount: number }> => {
-  const {
-    tx = prisma,
-    userId: contextUserId,
-    userIds,
-    folder,
-    orderBy,
-    offset,
-    limit,
-    recipeIds: filterByRecipeIds,
-    labels,
-    labelIntersection,
-    ratings,
-    recipeIds,
-  } = args;
-
-  let friends: { [key: string]: User } = {};
-  if (contextUserId) {
-    const friendships = await getFriendships(contextUserId);
-    friends = friendships.friends.reduce(
-      (acc, friend) => ((acc[friend.id] = friend), acc),
-      {} as typeof friends
-    );
-  }
-
-  const friendUserIds = userIds.filter(
-    (userId) => friends[userId] && userId !== contextUserId
-  );
-  const nonFriendUserIds = userIds.filter(
-    (userId) => !friends[userId] && userId !== contextUserId
-  );
-
-  const profileItems = await tx.profileItem.findMany({
-    where: {
-      OR: [
-        {
-          userId: {
-            in: friendUserIds,
-          },
-        },
-        {
-          userId: {
-            in: nonFriendUserIds,
-          },
-          visibility: "public",
-        },
-      ],
-    },
-  });
-
-  const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
-    acc[profileItem.userId] ??= [];
-    acc[profileItem.userId].push(profileItem);
-    return acc;
-  }, {} as { [key: string]: ProfileItem[] });
-
-  const queryFilters: Prisma.RecipeWhereInput[] = [];
-  for (const userId of userIds) {
-    const isContextUser = contextUserId && userId === contextUserId;
-    const profileItemsForUser = profileItemsByUserId[userId] || [];
-
-    const isSharingAll = profileItemsForUser.find(
-      (profileItem) => profileItem.type === "all-recipes"
-    );
-
-    if (isContextUser || isSharingAll) {
-      queryFilters.push({
-        userId,
-      });
-    }
-
-    profileItemsForUser
-      .filter((profileItem) => profileItem.type === "label")
-      .map((profileItem) => profileItem.labelId)
-      .filter((labelId): labelId is string => !!labelId)
-      .forEach((labelId) => {
-        queryFilters.push({
-          userId,
-          recipeLabels: {
-            some: {
-              label: {
-                id: labelId,
-              },
-            },
-          },
-        });
-      });
-
-    profileItemsForUser
-      .filter((profileItem) => profileItem.type === "recipe")
-      .map((profileItem) => profileItem.recipeId)
-      .filter((recipeId): recipeId is string => !!recipeId)
-      .forEach((recipeId) => {
-        queryFilters.push({
-          userId,
-          id: recipeId,
-        });
-      });
-  }
-
-  if (!queryFilters.length)
-    return {
-      recipes: [],
-      totalCount: 0,
-    };
-
-  const where = {
-    AND: [] as Prisma.RecipeWhereInput[],
-  } satisfies Prisma.RecipeWhereInput;
-
-  where.AND.push({
-    OR: queryFilters,
-  });
-  where.AND.push({
-    folder,
-  });
-
-  if (recipeIds) {
-    where.AND.push({ id: { in: recipeIds } });
-  }
-
-  if (ratings) {
-    where.AND.push({
-      OR: ratings.map((rating) => ({
-        rating,
-      })),
-    });
-  }
-
-  if (filterByRecipeIds) {
-    where.AND.push({ id: { in: filterByRecipeIds } });
-  }
-
-  if (labels && labelIntersection) {
-    where.AND.push(
-      ...labels.map(
-        (label) =>
-          ({
-            recipeLabels: {
-              some: {
-                label: {
-                  title: label,
-                },
-              },
-            },
-          } as Prisma.RecipeWhereInput)
-      )
-    );
-  }
-
-  if (labels && !labelIntersection) {
-    where.AND.push({
-      recipeLabels: {
-        some: {
-          label: {
-            title: {
-              in: labels,
-            },
-          },
-        },
-      },
-    });
-  }
-
-  const [totalCount, recipes] = await Promise.all([
-    tx.recipe.count({
-      where,
-    }),
-    tx.recipe.findMany({
-      where,
-      ...recipeSummary,
-      orderBy,
-      skip: offset,
-      take: limit,
-    }),
-  ]);
-
-  return {
-    recipes,
-    totalCount,
-  };
+  // const {
+  //   em = mikro.em,
+  //   userId: contextUserId,
+  //   userIds,
+  //   folder,
+  //   orderBy,
+  //   offset,
+  //   limit,
+  //   recipeIds: filterByRecipeIds,
+  //   labels,
+  //   labelIntersection,
+  //   ratings,
+  // } = args;
+  //
+  // let friends: { [key: string]: User } = {};
+  // if (contextUserId) {
+  //   const friendships = await getFriendships(contextUserId);
+  //   friends = friendships.friends.reduce(
+  //     (acc, friend) => ((acc[friend.id] = friend), acc),
+  //     {} as typeof friends
+  //   );
+  // }
+  //
+  // const friendUserIds = userIds.filter(
+  //   (userId) => friends[userId] && userId !== contextUserId
+  // );
+  // const nonFriendUserIds = userIds.filter(
+  //   (userId) => !friends[userId] && userId !== contextUserId
+  // );
+  //
+  // const profileItems = await em.find(ProfileItem, {
+  //   $or: [
+  //     {
+  //       user: friendUserIds,
+  //     },
+  //     {
+  //       user: nonFriendUserIds,
+  //       visibility: "public",
+  //     },
+  //   ],
+  // });
+  //
+  // const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
+  //   acc[profileItem.user.id] ??= [];
+  //   acc[profileItem.user.id].push(profileItem);
+  //   return acc;
+  // }, {} as { [key: string]: ProfileItem[] });
+  //
+  // const queryFilters: FilterQuery<Recipe>[] = [];
+  // for (const userId of userIds) {
+  //   const isContextUser = contextUserId && userId === contextUserId;
+  //   const profileItemsForUser = profileItemsByUserId[userId] || [];
+  //
+  //   const isSharingAll = profileItemsForUser.find(
+  //     (profileItem) => profileItem.type === "all-recipes"
+  //   );
+  //
+  //   if (isContextUser || isSharingAll) {
+  //     queryFilters.push({
+  //       user: userId
+  //     });
+  //   }
+  //
+  //   profileItemsForUser
+  //     .filter((profileItem) => profileItem.type === "label")
+  //     .map((profileItem) => profileItem.label?.id)
+  //     .filter((labelId): labelId is string => !!labelId)
+  //     .forEach((labelId) => {
+  //       queryFilters.push({
+  //         user: userId,
+  //         recipeLabels: {
+  //           id: labelId,
+  //         },
+  //       });
+  //     });
+  //
+  //   profileItemsForUser
+  //     .filter((profileItem) => profileItem.type === "recipe")
+  //     .map((profileItem) => profileItem.recipe?.id)
+  //     .filter((recipeId): recipeId is string => !!recipeId)
+  //     .forEach((recipeId) => {
+  //       queryFilters.push({
+  //         user: userId,
+  //         id: recipeId,
+  //       });
+  //     });
+  // }
+  //
+  // if (!queryFilters.length)
+  //   return {
+  //     recipes: [],
+  //     totalCount: 0,
+  //   };
+  //
+  // const where = {
+  //   $and: [] as FilterQuery<Recipe>[],
+  // } satisfies FilterQuery<Recipe>;
+  //
+  // where.$and.push({
+  //   $or: queryFilters,
+  // });
+  // where.$and.push({
+  //   folder,
+  // });
+  //
+  // if (ratings) {
+  //   where.$and.push({
+  //     $or: ratings.map((rating) => ({
+  //       rating,
+  //     })),
+  //   });
+  // }
+  //
+  // if (filterByRecipeIds) {
+  //   where.$and.push({ id: filterByRecipeIds });
+  // }
+  //
+  // if (labels && labelIntersection) {
+  //   where.$and.push(
+  //     ...labels.map(
+  //       (label) =>
+  //         ({
+  //           recipeLabels: {
+  //             some: {
+  //               label: {
+  //                 title: label,
+  //               },
+  //             },
+  //           },
+  //         } as FilterQuery<Recipe>)
+  //     )
+  //   );
+  // }
+  //
+  // if (labels && !labelIntersection) {
+  //   where.$and.push({
+  //     recipeLabels: {
+  //       label: {
+  //         title: labels,
+  //       },
+  //     },
+  //   });
+  // }
+  //
+  // const [totalCount, _recipes] = await Promise.all([
+  //   em.count(Recipe,
+  //     where,
+  //   ),
+  //   em.find(Recipe, where, {
+  //     orderBy,
+  //     offset,
+  //     limit,
+  //     populate: [
+  //       'recipeLabels.label.title',
+  //       'recipeImages.order',
+  //       'recipeImages.image.location',
+  //       'user',
+  //       'fromUser'
+  //     ]
+  //   }),
+  // ]);
+  // console.log('tb', _recipes[26].user.name);
+  //
+  // const recipes = _recipes.map(r => r.toJSON());
+  //
+  // console.log('t', recipes[26].user);
+  //
+  // return {
+  //   recipes,
+  //   totalCount,
+  // };
 };

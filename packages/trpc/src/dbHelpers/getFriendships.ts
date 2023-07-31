@@ -1,19 +1,15 @@
-import { User } from "@prisma/client";
-import { prisma } from "@recipesage/prisma";
+import { db, friendships, users } from '@recipesage/drizzle';
+import { eq } from 'drizzle-orm';
 
 export const getFriendships = async (userId: string) => {
-  const outgoingFriendships = await prisma.friendship.findMany({
-    where: {
-      userId,
-    },
-    include: {
-      friend: {
-        include: {
-          profileImages: true,
-        },
-      },
-    },
-  });
+  const outgoingFriendships = await db
+    .select({
+      id: friendships.id,
+      friendId: friendships.friendId,
+      userId: friendships.userId,
+    })
+    .from(friendships)
+    .where(eq(friendships.userId, userId));
 
   const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce(
     (acc, outgoingFriendship) => ({
@@ -23,18 +19,14 @@ export const getFriendships = async (userId: string) => {
     {} as { [key: string]: (typeof outgoingFriendships)[0] }
   );
 
-  const incomingFriendships = await prisma.friendship.findMany({
-    where: {
-      friendId: userId,
-    },
-    include: {
-      user: {
-        include: {
-          profileImages: true,
-        },
-      },
-    },
-  });
+  const incomingFriendships = await db
+    .select({
+      id: friendships.id,
+      friendId: friendships.friendId,
+      userId: friendships.userId,
+    })
+    .from(friendships)
+    .where(eq(friendships.friendId, userId));
 
   const incomingFriendshipsByOtherUserId = incomingFriendships.reduce(
     (acc, incomingFriendship) => ({
@@ -57,28 +49,28 @@ export const getFriendships = async (userId: string) => {
         incomingFriendshipsByOtherUserId[friendId]
       ) {
         // Friendship both ways. They are friends!
-        if (!acc.friends.find((user) => user.id === friendId)) {
+        if (!acc.friends.find((user) => user === friendId)) {
           // Remove dupes
-          acc.friends.push(outgoingFriendshipsByOtherUserId[friendId].friend);
+          acc.friends.push(outgoingFriendshipsByOtherUserId[friendId].friendId);
         }
       } else if (outgoingFriendshipsByOtherUserId[friendId]) {
         // We're requesting them as a friend!
         acc.outgoingRequests.push(
-          outgoingFriendshipsByOtherUserId[friendId].friend
+          outgoingFriendshipsByOtherUserId[friendId].friendId
         );
       } else if (incomingFriendshipsByOtherUserId[friendId]) {
         // They're requesting us as a friend!
         acc.incomingRequests.push(
-          incomingFriendshipsByOtherUserId[friendId].user
+          incomingFriendshipsByOtherUserId[friendId].userId
         );
       }
 
       return acc;
     },
     {
-      outgoingRequests: [] as User[],
-      incomingRequests: [] as User[],
-      friends: [] as User[],
+      outgoingRequests: [] as string[],
+      incomingRequests: [] as string[],
+      friends: [] as string[],
     }
   );
 

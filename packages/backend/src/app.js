@@ -70,6 +70,7 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");
+
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
 app.use("/users", users);

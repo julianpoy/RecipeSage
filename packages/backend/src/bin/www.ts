@@ -13,7 +13,7 @@ import * as protocol from "http";
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || "3000");
+const port = normalizePort(process.env['PORT'] || "3000");
 app.set("port", port);
 
 /**
@@ -91,7 +91,7 @@ const attemptExit = () => {
 };
 
 process.on("SIGTERM", () => {
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env['NODE_ENV'] !== "production") {
     process.exit(0);
   }
 
