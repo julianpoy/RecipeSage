@@ -1,15 +1,15 @@
-import { db, friendships, users } from '@recipesage/drizzle';
+import { db, Friendships } from '@recipesage/drizzle';
 import { eq } from 'drizzle-orm';
 
 export const getFriendships = async (userId: string) => {
   const outgoingFriendships = await db
     .select({
-      id: friendships.id,
-      friendId: friendships.friendId,
-      userId: friendships.userId,
+      id: Friendships.id,
+      friendId: Friendships.friendId,
+      userId: Friendships.userId,
     })
-    .from(friendships)
-    .where(eq(friendships.userId, userId));
+    .from(Friendships)
+    .where(eq(Friendships.userId, userId));
 
   const outgoingFriendshipsByOtherUserId = outgoingFriendships.reduce(
     (acc, outgoingFriendship) => ({
@@ -21,12 +21,12 @@ export const getFriendships = async (userId: string) => {
 
   const incomingFriendships = await db
     .select({
-      id: friendships.id,
-      friendId: friendships.friendId,
-      userId: friendships.userId,
+      id: Friendships.id,
+      friendId: Friendships.friendId,
+      userId: Friendships.userId,
     })
-    .from(friendships)
-    .where(eq(friendships.friendId, userId));
+    .from(Friendships)
+    .where(eq(Friendships.friendId, userId));
 
   const incomingFriendshipsByOtherUserId = incomingFriendships.reduce(
     (acc, incomingFriendship) => ({
