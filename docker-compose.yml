@@ -35,7 +35,7 @@ services:
     <<: *recipesage-monorepo
     ports:
       - "3000:3000"
-    command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www'
+    command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
