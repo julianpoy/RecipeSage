@@ -2,7 +2,7 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { getRecipesWithConstraints } from "../../dbHelpers/getRecipesWithConstraints";
 import { TRPCError } from "@trpc/server";
-import { getFriendships } from "../../dbHelpers/getFriendships";
+import { getFriendshipIds } from "../../dbHelpers/getFriendshipIds";
 
 export const getRecipes = publicProcedure
   .input(
@@ -33,8 +33,8 @@ export const getRecipes = publicProcedure
       });
 
     if (ctx.session?.userId && input.includeAllFriends) {
-      const friendships = await getFriendships(ctx.session.userId);
-      userIds.push(...friendships.friends.map((user) => user.id));
+      const friendships = await getFriendshipIds(ctx.session.userId);
+      userIds.push(...friendships.friends);
     }
 
     const recipes = await getRecipesWithConstraints({
