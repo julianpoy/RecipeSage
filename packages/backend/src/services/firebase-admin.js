@@ -4,9 +4,11 @@ import { join } from "path";
 
 const init = async () => {
   try {
-    const serviceAccount = await fs.readFile(
-      join(__dirname, "../config/firebase-credentials.json"),
-      "utf-8"
+    const serviceAccount = JSON.parse(
+      await fs.readFile(
+        join(__dirname, "../config/firebase-credentials.json"),
+        "utf-8"
+      )
     );
 
     admin.initializeApp({
