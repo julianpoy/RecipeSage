@@ -1,5 +1,5 @@
 .headline {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .card {
@@ -13,7 +13,7 @@
   margin-right: auto;
   max-width: var(--content-max-width);
 
-  font-size: 14px;
+  font-size: 0.875rem;
 
   ::ng-deep .logo-icon {
     --iconSize: 50px;
