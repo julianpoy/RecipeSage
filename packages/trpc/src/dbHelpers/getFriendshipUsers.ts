@@ -1,7 +1,17 @@
 import { User } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
 
-export const getFriendships = async (userId: string) => {
+/**
+ * Use to get list of users in each of the 3 possible states of friendship given a userId.
+ * Note: Use getFriendshipIds for better performance if users themselves are not needed.
+ */
+export const getFriendshipUsers = async (
+  userId: string
+): Promise<{
+  outgoingRequests: User[];
+  incomingRequests: User[];
+  friends: User[];
+}> => {
   const outgoingFriendships = await prisma.friendship.findMany({
     where: {
       userId,

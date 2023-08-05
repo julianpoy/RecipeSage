@@ -1,6 +1,6 @@
-import { Prisma, User, ProfileItem } from "@prisma/client";
+import { Prisma, ProfileItem } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
-import { getFriendships } from "./getFriendships";
+import { getFriendshipIds } from "./getFriendshipIds";
 import { RecipeSummary, recipeSummary } from "../types/queryTypes";
 
 export const getRecipesWithConstraints = async (args: {
@@ -31,20 +31,17 @@ export const getRecipesWithConstraints = async (args: {
     recipeIds,
   } = args;
 
-  let friends: { [key: string]: User } = {};
+  let friends: Set<string> = new Set();
   if (contextUserId) {
-    const friendships = await getFriendships(contextUserId);
-    friends = friendships.friends.reduce(
-      (acc, friend) => ((acc[friend.id] = friend), acc),
-      {} as typeof friends
-    );
+    const friendships = await getFriendshipIds(contextUserId);
+    friends = new Set(friendships.friends);
   }
 
   const friendUserIds = userIds.filter(
-    (userId) => friends[userId] && userId !== contextUserId
+    (userId) => friends.has(userId) && userId !== contextUserId
   );
   const nonFriendUserIds = userIds.filter(
-    (userId) => !friends[userId] && userId !== contextUserId
+    (userId) => !friends.has(userId) && userId !== contextUserId
   );
 
   const profileItems = await tx.profileItem.findMany({
