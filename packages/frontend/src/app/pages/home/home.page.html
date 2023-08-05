@@ -115,6 +115,10 @@
               src="/assets/imgs/logo_green.png"
             />
             <div class="recipe-card-content">
+              <div
+                *ngIf="!preferences[preferenceKeys.ShowImages]"
+                class="no-image-padding"
+              ></div>
               <h2 [title]="recipe.title">{{ recipe.title }}</h2>
               <p
                 *ngIf="recipe.description?.length && preferences[preferenceKeys.ShowRecipeDescription]"
@@ -149,6 +153,7 @@
             </div>
             <ion-badge
               *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
+              [ngClass]="{ 'no-image': !preferences[preferenceKeys.ShowImages] }"
             >
               <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
                 @{{friendsById[recipe.userId].handle}}

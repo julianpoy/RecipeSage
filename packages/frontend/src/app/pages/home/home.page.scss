@@ -56,9 +56,15 @@ ion-badge {
   left: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 
+  max-width: 90px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
   // When in "list" mode
   .recipe-item & {
-    top: 20px;
+    top: 8px;
+    left: initial;
+    right: 10px;
   }
 
   &:nth-of-type(2) {
@@ -146,7 +152,7 @@ ion-badge {
     --content-padding-leeway: 22px;
 
     // The following should be set to their initial value with all preferences OFF
-    --image-size: 0px;
+    --image-size: 20px;
     --header-height: 36px;
     --description-height: 0px;
     --source-height: 0px;
@@ -198,6 +204,10 @@ ion-badge {
       padding: 5px;
       padding-left: 12px;
 
+      .no-image-padding {
+        height: 20px;
+      }
+
       h2 {
         line-height: calc(var(--header-height) / 2);
         margin-left: 0;
@@ -227,6 +237,12 @@ ion-badge {
         margin-top: 2px;
         margin-bottom: 2px;
         color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+      }
+    }
+
+    ion-badge {
+      &.no-image {
+        top: 5px;
       }
     }
   }
