@@ -28,4 +28,8 @@ export class ImportPage {
   goToImportPaprika() {
     this.navCtrl.navigateForward(RouteMap.ImportPaprikaPage.getPath());
   }
+
+  goToImportCookmate() {
+    this.navCtrl.navigateForward(RouteMap.ImportCookmatePage.getPath());
+  }
 }
