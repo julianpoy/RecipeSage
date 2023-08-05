@@ -217,6 +217,12 @@ export const RouteMap = {
     },
     path: "settings/import/json-ld",
   },
+  ImportCookmatePage: {
+    getPath() {
+      return `/settings/import/cookmate`;
+    },
+    path: "settings/import/cookmate",
+  },
   ImportPepperplatePage: {
     getPath() {
       return `/settings/import/pepperplate`;

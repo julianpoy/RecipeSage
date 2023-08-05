@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'pages.importCookmate.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item lines="none">
+    <ion-label class="ion-text-center ion-text-wrap">
+      <br /><br />
+      <p>{{ 'pages.importCookmate.description1' | translate }}</p>
+      <br />
+      <p>
+        <b>{{ 'pages.importCookmate.description2' | translate }}</b><br />
+        {{ 'pages.importCookmate.description3' | translate }}<br />
+      </p>
+      <br />
+      <p>
+        {{ 'pages.importCookmate.description4' | translate }}<br />
+        {{ 'pages.importCookmate.description5' | translate }}
+      </p>
+      <br />
+      <br />
+      <p>{{ 'pages.importCookmate.description6' | translate }}</p>
+    </ion-label>
+  </ion-item>
+
+  <br />
+
+  <div class="ion-text-center ion-padding">
+    <input
+      id="filePicker"
+      type="file"
+      (change)="setFile($event)"
+      style="display: none"
+      accept=".mcb"
+    />
+    <ion-button fill="outline" (click)="filePicker()">
+      <span *ngIf="imageFile">
+        {{ 'pages.importCookmate.filePicker.file' |
+        translate:{fileName:imageFile.name} }}
+      </span>
+      <span *ngIf="!imageFile">
+        {{ 'pages.importCookmate.filePicker.noFile' | translate }}
+      </span>
+    </ion-button>
+
+    <div class="ion-padding" *ngIf="showFileTypeWarning()">
+      <p>{{ 'pages.importCookmate.fileTypeWarning' | translate }}</p>
+    </div>
+
+    <div class="ion-padding" *ngIf="isFileTooLarge()">
+      <p>
+        <b>{{ 'pages.importCookmate.fileTooLarge' | translate }}</b><br />
+        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+          {{ 'pages.importCookmate.fileTooLarge.contact' | translate }}
+        </a>
+      </p>
+    </div>
+
+    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
+      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">
+        {{ 'pages.importCookmate.upload' | translate }}
+      </ion-button>
+      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">
+        {{ 'pages.importCookmate.upload.ignoreWarning' | translate }}
+      </ion-button>
+      <ion-button *ngIf="loading">
+        {{ 'pages.importCookmate.loading' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

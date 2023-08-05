@@ -741,6 +741,7 @@
   "pages.import.description2": "Beim Importieren von Rezepten werden alle Rezepte aus der Datei/dem Konto, das du ausgewählt hast, zu deinem RecipeSage-Konto hinzugefügt.",
   "pages.import.description3": "Wenn du Probleme mit dem Import hast, schick mir bitte eine E-Mail.",
   "pages.import.jsonld": "Import aus JSON-LD-Datei",
+  "pages.import.cookmate": "Cookmate-Datei importieren",
   "pages.import.pepperplate": "Von Pepperplate importieren",
   "pages.import.livingCookbook": "Living Cookbook-Dateiortieren importieren",
   "pages.import.paprika": "Paprika-Rezepte-Datei importieren",
@@ -769,6 +770,31 @@
   "pages.importJsonLD.error": "Hmm, wir hatten Probleme beim Extrahieren dieser Datei. Bitte stelle sicher, dass sie im JSON-LD-Format vorliegt. Wenn du Probleme hast, kannst du mir gerne eine E-Mail schicken.",
   "pages.importJsonLD.timeout": "Der Import dauert eine Weile (das kann passieren, wenn deine Datenbank sehr groß ist) - bitte schau in 5 Minuten wieder rein. Wenn deine Rezepte nicht erscheinen, sende mir bitte eine E-Mail.",
   "pages.importJsonLD.success": "Der Import war erfolgreich!",
+
+  "====== Pages.ImportCookmate ======": "",
+
+  "pages.importCookmate.title": "Importieren von Rezepten aus Cookmate-Dateien",
+  "pages.importCookmate.description1": "Damit wird eine Cookmate-Datei (mit der Endung .mcb) in RecipeSage importiert.",
+  "pages.importCookmate.description2": "Der Importvorgang kann mehrere Minuten dauern.",
+  "pages.importCookmate.description3": "Das hängt vom Format und der Größe Ihrer Datei ab",
+  "pages.importCookmate.description4": "Wenn Sie Probleme mit dem Import haben, schicken Sie mir eine E-Mail mit der Datei, und ich kann sie manuell importieren.",
+  "pages.importCookmate.description5": "Wenn Ihre Datei sehr groß ist, kann der Import über diese Schnittstelle aufgrund von Browserbeschränkungen problematisch sein.",
+  "pages.importCookmate.description6": "Bitte denken Sie über eine Spende nach, wenn Ihre Datei eine große Anzahl von Rezepten oder Bildern enthält.",
+
+  "pages.importCookmate.fileTypeWarning": "Warnung! Dieser Dateityp endet nicht auf .mcb. Er funktioniert möglicherweise nicht!",
+  "pages.importCookmate.fileTooLarge": "Diese Datei ist zu groß, um sie direkt hochzuladen.",
+  "pages.importCookmate.fileTooLarge.contact": "Bitte kontaktieren Sie mich, um Ihre Datenbank manuell importieren zu lassen.",
+
+  "pages.importCookmate.upload": "Hochladen und Importieren",
+  "pages.importCookmate.upload.ignoreWarning": "Hochladen und Importieren auf jeden Fall",
+  "pages.importCookmate.loading": "Importieren, bitte warten...",
+
+  "pages.importCookmate.filePicker.file": "{{fileName}} Ausgewählt",
+  "pages.importCookmate.filePicker.noFile": ".mcb-Datei auswählen",
+
+  "pages.importCookmate.error": "Hmm, wir hatten Probleme beim Extrahieren der Datei. Bitte stellen Sie sicher, dass sie im Cookmate-Format vorliegt. Wenn Sie Probleme haben, können Sie mir gerne eine E-Mail schicken.",
+  "pages.importCookmate.timeout": "Der Import dauert eine Weile (das kann passieren, wenn Ihre Datenbank sehr groß ist) - bitte schauen Sie in 5 Minuten noch einmal nach. Wenn Ihre Rezepte nicht erscheinen, senden Sie mir bitte eine E-Mail.",
+  "pages.importCookmate.success": "Der Import war erfolgreich!",
 
   "====== Pages.ImportLivingCookbook ======": "",
 
