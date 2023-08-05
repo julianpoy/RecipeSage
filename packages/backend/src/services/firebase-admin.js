@@ -25,6 +25,4 @@ const init = async () => {
 
 init();
 
-export default {
-  admin,
-};
+export { admin };
