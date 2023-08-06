@@ -622,8 +622,10 @@ router.post(
         if (!field) return [];
 
         let originalPaths;
-        if (field._text) originalPaths = [field._text];
-        if (field.length) originalPaths = field.map((item) => item._text);
+        if (field.path?._text || field._text)
+          originalPaths = [field.path?._text || field._text];
+        if (field.length)
+          originalPaths = field.map((item) => item.path?._text || item._text);
 
         if (!originalPaths) return [];
 
@@ -661,10 +663,13 @@ router.post(
           url: grabFieldText(recipe.url),
 
           labels: grabLabelTitles(recipe.category),
-          images: await grabImagePaths(
-            extractPath + "/images",
-            recipe.imagepath
-          ),
+          images: [
+            ...(await grabImagePaths(
+              extractPath + "/images",
+              recipe.imagepath
+            )),
+            ...(await grabImagePaths(extractPath + "/images", recipe.image)),
+          ],
         }))
       );
 
