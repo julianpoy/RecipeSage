@@ -719,6 +719,8 @@ router.put(
         );
       }
 
+      await SearchService.indexRecipes([updatedRecipe]);
+
       return updatedRecipe;
     });
 
