@@ -1,5 +1,5 @@
-import fractionjs from "fraction.js";
-import { unitNames } from "./units";
+// import fractionjs from "fraction.js";
+import { unitNames, parseUnit } from "./units";
 
 const fractionMatchers = {
   // Regex & replacement value by charcode
@@ -30,6 +30,10 @@ const fractionMatchRegexp = new RegExp(
   "g"
 );
 
+/**
+ * Replace symbol-based fractions with text-based fractions
+ * For example, ½ would become 1/2
+ */
 const replaceFractionsInText = (rawText: string): string => {
   return rawText.replace(fractionMatchRegexp, (match) => {
     const matcher = fractionMatchers[match.trim().charCodeAt(0)];
@@ -37,41 +41,74 @@ const replaceFractionsInText = (rawText: string): string => {
   });
 };
 
-// Starts with [, anything inbetween, ends with ]
+/**
+ * Starts with [, anything inbetween, ends with ]
+ */
 const headerRegexp = /^\[.*\]$/;
 
-const multipartQuantifierRegexp = / \+ | plus /;
+/**
+ * Intended to match ingredients in the form of
+ * '1 cup tomato sauce plus 2 tbsp soy sauce'
+ * or '1 cup + 2 cups
+ */
+const multipartQuantifierRegexp = /\s\+\s|\splus\s/;
 
 const measurementRegexp =
-  /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
+  /((\d+\s)?\d+([/.]\d+)?((-)|(\sto\s)|(\s-\s))(\d+\s)?\d+([/.]\d+)?)|((\d+\s)?\d+[/.]\d+)|\d+/;
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
 const quantityRegexp = new RegExp(
-  `(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, "\\$&")})s?(\\.)?( |$)`
+  `(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, "\\$&")})s?\\.?`
 );
 
+/**
+ * Intended to match ingredient measurement along with unit, for example:
+ * 1 1/2 cup
+ * 1 to 2 cups
+ * **Note:** Should always be used with the 'i' flag
+ */
 const measurementQuantityRegExp = new RegExp(
-  `^(${measurementRegexp.source}) *(${quantityRegexp.source})?`
-); // Should always be used with 'i' flag
+  `^(${measurementRegexp.source})\\s*(${quantityRegexp.source})?`,
+  "i"
+);
 
+/*
+ * These words often appear in ingredients, but do not add information.
+ * They also make it hard to group items that are the same ingredient.
+ */
 const fillerWordsRegexp =
   /(cubed|peeled|minced|grated|heaped|chopped|about|(slice(s)?)) /;
 
+/**
+ * Matches inline notes within parenthesis
+ * For example: 1 cup tomato sauce (see sauce section)
+ */
 const notesRegexp = /\(.*?\)/;
 
+/**
+ * Removes inline notes within parenthesis
+ * For example: 1 cup tomato sauce (see sauce section) would become:
+ * 1 cup tomato sauce
+ */
 const stripNotes = (ingredient: string): string => {
   return ingredient.replace(new RegExp(notesRegexp, "g"), "").trim();
 };
 
+/**
+ * Return only the measurements part of an ingredient. For example:
+ * '1 cup tomato sauce' would return ['1 cup']
+ * **Note:** There is currently a bug when the unit sits in the middle of a range. For example:
+ * '1 cup to 2 cups tomato sauce' would become ['1 cup']
+ */
 export const getMeasurementsForIngredient = (ingredient: string): string[] => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
   return strippedIngredient
     .split(multipartQuantifierRegexp)
     .map((ingredientPart) => {
-      const measurementMatch = stripNotes(ingredientPart).match(
-        new RegExp(measurementQuantityRegExp.source, "i")
+      const measurementMatch = measurementQuantityRegExp.exec(
+        stripNotes(ingredientPart)
       );
 
       if (measurementMatch) return measurementMatch[0].trim();
@@ -105,6 +142,11 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .trim();
 };
 
+/**
+ * Removes measurements, quantites, and any words like 'cubed'
+ * from an ingredient, returning just the ingredient text.
+ * For example, '1 cup diced tomatoes' will become 'tomatoes'
+ */
 export const stripIngredient = (ingredient: string): string => {
   const trimmed = replaceFractionsInText(ingredient)
     .trim()
@@ -132,6 +174,7 @@ export const parseIngredients = (
   complete: boolean;
   isHeader: boolean;
 }[] => {
+  console.log(parseUnit);
   if (!ingredients) return [];
 
   ingredients = replaceFractionsInText(ingredients);
@@ -153,8 +196,9 @@ export const parseIngredients = (
       new RegExp(multipartQuantifierRegexp, "g")
     ); // Multipart measurements (1 cup + 1 tablespoon)
     const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
-    const measurementMatches = ingredientParts.map((linePart) =>
-      linePart.match(measurementRegexp)
+
+    const measurementMatches = ingredientParts.map(
+      (ingredientPart) => getMeasurementsForIngredient(ingredientPart)[0]
     );
 
     if (headerMatches && headerMatches.length > 0) {
@@ -166,54 +210,35 @@ export const parseIngredients = (
       lines[i].content = headerContent;
       lines[i].isHeader = true;
     } else if (measurementMatches.find((el) => el && el.length > 0)) {
-      const updatedIngredientParts = measurementMatches.map((el, idx) => {
-        if (!el) return ingredientParts[idx];
+      const updatedIngredientParts = measurementMatches.map(
+        (measurement, idx) => {
+          if (!measurement) return ingredientParts[idx];
 
-        try {
-          const measurement = el[0];
+          try {
+            const unitSpacer = measurement
+              .replace(measurementRegexp, "")
+              .replace(quantityRegexp, "");
 
-          const measurementPartDelimiters =
-            measurement.match(/(-)|( to )|( - )/g);
-          const measurementParts = measurement.split(/-|to/);
+            let unit = parseUnit(measurement);
+            if (scale !== 1) unit = unit.scale(scale).normalize();
 
-          for (let j = 0; j < measurementParts.length; j++) {
-            // console.log(measurementParts[j].trim())
-            const frac = new fractionjs(measurementParts[j].trim()).mul(scale);
-            let scaledMeasurement = frac.toString();
-
-            // Preserve original fraction format if entered
-            if (measurementParts[j].indexOf("/") > -1) {
-              scaledMeasurement = frac.toFraction(true);
-            }
-
+            let updatedMeasurement = unit.output({
+              unitSpacer,
+              significant: 2, // Prevent absurdley long numbers due to float inaccuracies
+            });
             if (boldify)
-              measurementParts[j] =
-                '<b class="ingredientMeasurement">' +
-                scaledMeasurement +
-                "</b>";
-            else measurementParts[j] = scaledMeasurement.toString();
-          }
+              updatedMeasurement = `<b class="ingredientMeasurement">${updatedMeasurement}</b>`;
 
-          let updatedMeasurement: string;
-          if (measurementPartDelimiters) {
-            updatedMeasurement = measurementParts.reduce(
-              (acc, measurementPart, idx) =>
-                acc + measurementPart + (measurementPartDelimiters[idx] || ""),
-              ""
+            return ingredientParts[idx].replace(
+              measurementQuantityRegExp,
+              updatedMeasurement
             );
-          } else {
-            updatedMeasurement = measurementParts.join(" to ");
+          } catch (e) {
+            console.error("failed to parse", e);
+            return ingredientParts[idx];
           }
-
-          return ingredientParts[idx].replace(
-            measurementRegexp,
-            updatedMeasurement
-          );
-        } catch (e) {
-          console.error("failed to parse", e);
-          return ingredientParts[idx];
         }
-      });
+      );
 
       if (ingredientPartDelimiters) {
         lines[i].content = updatedIngredientParts.reduce(
