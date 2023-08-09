@@ -14,9 +14,6 @@
     "default_popup": "action/action.html"
   },
   "default_locale": "en",
-  "background": {
-    "service_worker": "service-worker.js"
-  },
   "icons": {
     "16": "icons/favicon-16x16.png",
     "48": "icons/icon-48x48.png",

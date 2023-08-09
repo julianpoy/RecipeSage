@@ -141,7 +141,15 @@ let newClip = async () => {
 
   const recipeData = await recipeCreateResponse.json();
 
-  window.open(`https://recipesage.com/#/recipe/${recipeData.id}`);
+  const url = `https://recipesage.com/#/recipe/${recipeData.id}`;
+  chrome.tabs.create({
+    url,
+    active: true,
+  });
+
+  setTimeout(() => {
+    window.close();
+  }, 500);
 };
 
 let tokenFetchPromise = new Promise((resolve, reject) => {
