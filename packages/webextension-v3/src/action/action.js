@@ -2,80 +2,80 @@ const API_BASE = "https://api.recipesage.com/";
 
 let token;
 
-let login = () => {
-  return fetch(API_BASE + "users/login", {
-    method: "POST",
-    mode: "cors",
-    cache: "no-cache",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    referrer: "no-referrer",
-    body: JSON.stringify({
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          // Save the token
-          chrome.storage.local.set({ token: data.token }, () => {
-            token = data.token;
-
-            chrome.storage.local.get(["seenTutorial"], (result) => {
-              if (result.seenTutorial) {
-                document.getElementById("message").innerText =
-                  "You are now logged in. Click the RecipeSage icon again to clip this website.";
-                setTimeout(() => {
-                  window.close();
-                }, 2000);
-              } else {
-                tutorial();
-              }
-            });
-          });
-        });
-      } else {
-        switch (response.status) {
-          case 412:
-            document.getElementById("message").innerText =
-              "It looks like that email or password isn't correct.";
-            break;
-          default:
-            document.getElementById("message").innerText =
-              "Something went wrong. Please try again.";
-            break;
-        }
-      }
-    })
-    .catch((e) => {
-      document.getElementById("message").innerText =
-        "Something went wrong. Please check your internet connection and try again.";
+const login = async () => {
+  try {
+    const loginResponse = await fetch(API_BASE + "users/login", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      referrer: "no-referrer",
+      body: JSON.stringify({
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+      }),
     });
+
+    if (!loginResponse.ok) {
+      switch (loginResponse.status) {
+        case 412:
+          document.getElementById("message").innerText =
+            "It looks like that email or password isn't correct.";
+          break;
+        default:
+          document.getElementById("message").innerText =
+            "Something went wrong. Please try again.";
+          break;
+      }
+      return;
+    }
+
+    const data = await loginResponse.json();
+    const { token } = data;
+
+    chrome.storage.local.set({ token }, () => {
+      chrome.storage.local.get(["seenTutorial"], (result) => {
+        if (result.seenTutorial) {
+          document.getElementById("message").innerText =
+            "You are now logged in. Click the RecipeSage icon again to clip this website.";
+          setTimeout(() => {
+            window.close();
+          }, 2000);
+        } else {
+          tutorial();
+        }
+      });
+    });
+  } catch (e) {
+    document.getElementById("message").innerText =
+      "Something went wrong. Please check your internet connection and try again.";
+  }
 };
 
-let tutorial = () => {
+const tutorial = () => {
   document.getElementById("login").style.display = "none";
   document.getElementById("tutorial").style.display = "block";
   document.getElementById("importing").style.display = "none";
 };
 
-let loading = () => {
+const loading = () => {
   document.getElementsByTagName("html")[0].style.display = "initial";
   document.getElementById("login").style.display = "none";
   document.getElementById("tutorial").style.display = "none";
   document.getElementById("importing").style.display = "block";
 };
 
-let launch = (token) => {
+const launch = (token) => {
   newClip(token);
 };
 
-let newClip = async () => {
+const newClip = async () => {
   loading();
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
   let result;
   try {
     [{ result }] = await chrome.scripting.executeScript({
@@ -152,7 +152,7 @@ let newClip = async () => {
   }, 500);
 };
 
-let tokenFetchPromise = new Promise((resolve, reject) => {
+const tokenFetchPromise = new Promise((resolve, reject) => {
   chrome.storage.local.get(["token"], (result) => {
     token = result.token;
 
@@ -180,5 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       document.getElementsByTagName("html")[0].style.display = "initial";
     })
-    .catch(() => {});
+    .catch(() => {
+      // Do nothing
+    });
 });

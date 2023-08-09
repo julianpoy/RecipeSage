@@ -1,5 +1,5 @@
 {
-  "name": "webextension",
+  "name": "webextension-v3",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/webextension/src",
   "projectType": "application",
@@ -23,6 +23,14 @@
       "options": {
         "cwd": "packages/webextension",
         "command": "nx build webextension && cd dist && zip rs-we.zip ./* ./**/*"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/webextension-v3/**/*.js"],
+        "maxWarnings": 0
       }
     }
   }
