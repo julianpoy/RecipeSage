@@ -1,7 +1,7 @@
 {
   "name": "RecipeSage Automatic Recipe Clipper",
   "short_name": "RecipeSage",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "manifest_version": 3,
   "description": "An extension for clipping recipes to your RecipeSage account",
   "homepage_url": "https://recipesage.com",
@@ -32,7 +32,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "we-v3@recipesage.com",
+      "id": "{1bd6f0af-1e56-4ecd-903b-495f25057d55}",
       "strict_min_version": "109.0"
     }
   }

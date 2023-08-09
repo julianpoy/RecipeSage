@@ -78,24 +78,6 @@
   <ion-list>
     <ion-item>
       <p>
-        {{ 'pages.downloadAndInstall.bookmark' | translate }}
-        <ion-label>
-          <p class="ion-text-wrap">
-            {{ 'pages.downloadAndInstall.bookmark.description' | translate }}
-          </p>
-        </ion-label>
-        <a
-          href="javascript:(function(){location.href='https://recipesage.com/#/edit-recipe/new?autofill-url='+encodeURIComponent(location.href);})();"
-          (click)="$event.preventDefault()"
-          title="Autoclip to RecipeSage"
-        >
-          {{ 'pages.downloadAndInstall.bookmark.instructions' | translate }}
-        </a>
-      </p>
-    </ion-item>
-
-    <ion-item>
-      <p>
         {{ 'pages.downloadAndInstall.extension' | translate }}
         <ion-label>
           <p class="ion-text-wrap">
@@ -113,6 +95,24 @@
           target="_blank"
           >Chrome</a
         >
+      </p>
+    </ion-item>
+
+    <ion-item>
+      <p>
+        {{ 'pages.downloadAndInstall.bookmark' | translate }}
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.downloadAndInstall.bookmark.description' | translate }}
+          </p>
+        </ion-label>
+        <a
+          href="javascript:(function(){location.href='https://recipesage.com/#/edit-recipe/new?autofill-url='+encodeURIComponent(location.href);})();"
+          (click)="$event.preventDefault()"
+          title="Autoclip to RecipeSage"
+        >
+          {{ 'pages.downloadAndInstall.bookmark.instructions' | translate }}
+        </a>
       </p>
     </ion-item>
   </ion-list>

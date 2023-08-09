@@ -371,7 +371,7 @@
   "pages.downloadAndInstall.bookmark.instructions": "Ziehe diesen Link in deine Lesezeichenleiste. Klicke auf das Lesezeichen, um die aktuelle Seite, auf der du dich befindest, zu importieren.",
   "pages.downloadAndInstall.bookmark.description": "Automatische Übernahme von Rezeptinhalten aus Webseiten",
   "pages.downloadAndInstall.extension": "RecipeSage Clip Tool Browser-Erweiterung",
-  "pages.downloadAndInstall.extension.description": "Greift automatisch Rezeptinhalte von Webseiten ab. Für die meisten User wird das obige Lesezeichen anstelle dieser Erweiterung empfohlen.",
+  "pages.downloadAndInstall.extension.description": "Automatische Übernahme von Rezeptinhalten von Webseiten und bessere Kompatibilität mit Webseiten, die nicht über den In-App-Importer importiert werden können",
 
   "====== Pages.LabelsPopover ======": "",
 
