@@ -20,8 +20,6 @@
     "128": "icons/icon-128x128.png"
   },
   "permissions": [
-    "https://recipesage.com/*",
-    "https://api.recipesage.com/*",
     "storage",
     "contextMenus",
     "activeTab",
@@ -31,5 +29,11 @@
   "options_ui": {
     "page": "settings/settings.html",
     "open_in_tab": false
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "we-v3@recipesage.com",
+      "strict_min_version": "109.0"
+    }
   }
 }
