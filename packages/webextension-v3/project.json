@@ -1,27 +1,27 @@
 {
   "name": "webextension-v3",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/webextension/src",
+  "sourceRoot": "packages/webextension-v3/src",
   "projectType": "application",
   "targets": {
     "start": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/webextension",
+        "cwd": "packages/webextension-v3",
         "command": "webpack --watch"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/webextension",
+        "cwd": "packages/webextension-v3",
         "command": "rm -rf dist; webpack"
       }
     },
     "package": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/webextension",
+        "cwd": "packages/webextension-v3",
         "command": "nx build webextension && cd dist && zip rs-we.zip ./* ./**/*"
       }
     },

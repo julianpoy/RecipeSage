@@ -2,10 +2,10 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./src/inject/inject.js",
+  entry: "./src/action/action.js",
   mode: "production",
   output: {
-    filename: "inject/inject.js",
+    filename: "action/action.js",
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
