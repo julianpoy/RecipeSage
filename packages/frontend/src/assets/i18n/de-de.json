@@ -367,9 +367,9 @@
   "pages.downloadAndInstall.desktop.step.3": "Klicke auf \"RecipeSage installieren...\"",
 
   "pages.downloadAndInstall.other": "Sonstige RecipeSage-Software",
-  "pages.downloadAndInstall.bookmark": "Lesezeichen mit Rezept-Auto-Clip",
+  "pages.downloadAndInstall.bookmark": "Lesezeichen mit Rezept-Auto-Clip (veraltet)",
   "pages.downloadAndInstall.bookmark.instructions": "Ziehe diesen Link in deine Lesezeichenleiste. Klicke auf das Lesezeichen, um die aktuelle Seite, auf der du dich befindest, zu importieren.",
-  "pages.downloadAndInstall.bookmark.description": "Automatische Übernahme von Rezeptinhalten aus Webseiten",
+  "pages.downloadAndInstall.bookmark.description": "Automatische Übernahme von Rezeptinhalten aus Webseiten. Anstelle dieses Lesezeichens wird die Browsererweiterung empfohlen.",
   "pages.downloadAndInstall.extension": "RecipeSage Clip Tool Browser-Erweiterung",
   "pages.downloadAndInstall.extension.description": "Automatische Übernahme von Rezeptinhalten von Webseiten und bessere Kompatibilität mit Webseiten, die nicht über den In-App-Importer importiert werden können",
 

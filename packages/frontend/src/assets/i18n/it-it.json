@@ -368,9 +368,9 @@
   "pages.downloadAndInstall.desktop.step.3": "Clicca \"Installa RecipeSage...\"",
 
   "pages.downloadAndInstall.other": "Altro software RecipeSage",
-  "pages.downloadAndInstall.bookmark": "Segnalibro di importazione automatica della ricetta",
+  "pages.downloadAndInstall.bookmark": "Segnalibro di importazione automatica della ricetta (deprecato)",
   "pages.downloadAndInstall.bookmark.instructions": "Trascina questo link nella barra dei preferiti. Fai clic sul segnalibro per importare il sito in cui ti trovi.",
-  "pages.downloadAndInstall.bookmark.description": "Cattura automaticamente il contenuto delle ricette dalle pagine web",
+  "pages.downloadAndInstall.bookmark.description": "Cattura automaticamente il contenuto delle ricette dalle pagine web. Si consiglia di utilizzare l'estensione del browser al posto di questo segnalibro.",
   "pages.downloadAndInstall.extension": "Estensione del browser RecipeSage Clip Tool",
   "pages.downloadAndInstall.extension.description": "Acquisisce automaticamente il contenuto delle ricette dalle pagine web e ha una maggiore compatibilità con i siti web che non possono essere importati tramite l'importatore in-app.",
 
