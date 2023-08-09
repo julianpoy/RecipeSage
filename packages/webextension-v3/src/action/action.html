@@ -87,14 +87,14 @@
     <div class="container">
       <div id="importing">
         <div class="headline">
-          <img id="login-logo" /><br /><br />
+          <img class="logo" /><br /><br />
           <h2>Importing, please wait...</h2>
         </div>
         <span id="message">This can take a minute.</span>
       </div>
       <div id="login">
         <div class="headline">
-          <img id="login-logo" /><br />
+          <img class="logo" /><br />
           <h2>Login</h2>
         </div>
         <label>
@@ -108,40 +108,42 @@
           <input id="password" type="password" />
         </label>
         <br /><br />
-        <button id="login-submit">Login</button>
+        <button id="login-submit">&nbsp;Login&nbsp;</button>&nbsp;
+        <a href="https://recipesage.com/#/auth/register" target="_blank"
+          >Create an account</a
+        >
         <span id="message"></span>
       </div>
       <div id="tutorial">
         <div class="headline">
-          <img id="tutorial-logo" /><br />
+          <img class="logo" /><br />
           <h2>Tutorial</h2>
         </div>
-        To view a full version of this tutorial,
-        <a href="https://docs.recipesage.com" target="_blank">click here</a>
-        <br />
-        <br />
 
         The RecipeSage browser extension allows you to quickly snip recipes from
-        the internet. It's fairly simple:
+        the internet.
 
         <br />
 
         <ol>
+          <li>Navigate to a page that contains a recipe.</li>
           <li>
-            Activate the RecipeSage clip tool by clicking the RecipeSage icon
-            (you've already done this)
+            Activate the RecipeSage clip tool by clicking the RecipeSage icon in
+            your browser's toolbar (you've already done this to view this
+            popup).
           </li>
-          <li>Highlight some text on the page</li>
           <li>
-            In the RecipeSage clip tool, press the scissors icon next to the
-            corresponding field
+            The clip tool will automatically grab the contents of the page and
+            find recipe content within it.
           </li>
-          <li>Edit the text as desired</li>
-          <li>Repeat for all fields you want to clip</li>
           <li>
-            Press the save button to save the recipe directly to your account
+            The saved recipe will open in a new tab once the process is
+            complete.
           </li>
         </ol>
+
+        To get started, click the dismiss button below and then start with step
+        1.
 
         <br />
         <button id="tutorial-submit">Dismiss</button>

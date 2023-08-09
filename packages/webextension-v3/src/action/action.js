@@ -167,13 +167,16 @@ const tokenFetchPromise = new Promise((resolve, reject) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("login-logo").src = chrome.runtime.getURL(
-    "./images/recipesage-black-trimmed.png"
-  );
-  document.getElementById("tutorial-logo").src = chrome.runtime.getURL(
-    "./images/recipesage-black-trimmed.png"
+  [...document.getElementsByClassName("logo")].forEach(
+    (logo) =>
+      (logo.src = chrome.runtime.getURL(
+        "./images/recipesage-black-trimmed.png"
+      ))
   );
   document.getElementById("login-submit").onclick = login;
+  document.getElementById("password").onkeydown = (event) => {
+    if (event.key === "Enter") login();
+  };
   document.getElementById("tutorial-submit").onclick = () => window.close();
 
   tokenFetchPromise
