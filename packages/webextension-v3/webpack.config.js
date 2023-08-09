@@ -13,4 +13,7 @@ module.exports = {
       patterns: [{ from: "src", to: "./" }],
     }),
   ],
+  optimization: {
+    minimize: false,
+  },
 };
