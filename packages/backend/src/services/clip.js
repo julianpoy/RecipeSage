@@ -21,7 +21,7 @@ const disconnectPuppeteer = (browser) => {
   }
 };
 
-const _clipRecipe = async (clipUrl) => {
+const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
   let browser;
   try {
     let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
@@ -134,11 +134,7 @@ const replaceBrWithBreak = (html) => {
   return html.replaceAll(new RegExp(/<br( \/)?>/, "g"), "\n");
 };
 
-const _clipRecipeJSDOM = async (clipUrl) => {
-  const response = await fetchURL(clipUrl);
-
-  const document = await response.text();
-
+const clipRecipeHtmlWithJSDOM = async (document) => {
   const dom = new jsdom.JSDOM(document);
 
   const { window } = dom;
@@ -161,8 +157,16 @@ const _clipRecipeJSDOM = async (clipUrl) => {
   });
 };
 
-export const clip = async (url) => {
-  const recipeDataBrowser = await _clipRecipe(url).catch((e) => {
+const clipRecipeUrlWithJSDOM = async (clipUrl) => {
+  const response = await fetchURL(clipUrl);
+
+  const document = await response.text();
+
+  return await clipRecipeHtmlWithJSDOM(document);
+};
+
+export const clipUrl = async (url) => {
+  const recipeDataBrowser = await clipRecipeUrlWithPuppeteer(url).catch((e) => {
     console.log(e);
     Sentry.captureException(e);
   });
@@ -173,7 +177,7 @@ export const clip = async (url) => {
     !recipeDataBrowser.ingredients ||
     !recipeDataBrowser.instructions
   ) {
-    const recipeDataJSDOM = await _clipRecipeJSDOM(url).catch((e) => {
+    const recipeDataJSDOM = await clipRecipeUrlWithJSDOM(url).catch((e) => {
       console.log(e);
       Sentry.captureException(e);
     });
@@ -187,6 +191,20 @@ export const clip = async (url) => {
       });
     }
   }
+
+  // Decode all html entities from fields
+  Object.entries(results).forEach((entry) => {
+    results[entry[0]] = he.decode(entry[1]);
+  });
+
+  return results;
+};
+
+export const clipHtml = async (document) => {
+  const results = await clipRecipeHtmlWithJSDOM(document).catch((e) => {
+    console.log(e);
+    Sentry.captureException(e);
+  });
 
   // Decode all html entities from fields
   Object.entries(results).forEach((entry) => {
