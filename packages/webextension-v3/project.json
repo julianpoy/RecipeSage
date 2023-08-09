@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/webextension-v3",
-        "command": "nx build webextension && cd dist && zip rs-we.zip ./* ./**/*"
+        "command": "nx build webextension-v3 && cd dist && zip rs-we.zip ./* ./**/*"
       }
     },
     "lint": {
