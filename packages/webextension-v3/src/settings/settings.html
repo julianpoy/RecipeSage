@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>RecipeSage Browser Settings</title>
+    <style>
+      body {
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+        padding-top: 50px;
+
+        text-align: center;
+
+        font-size: 14px;
+      }
+
+      #loggedInMessage,
+      #loggedOutMessage {
+        display: none;
+      }
+
+      button {
+        height: 32px;
+        padding: 0 11px;
+        margin: 4px;
+
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        background: #00a8ff;
+        color: white;
+        cursor: pointer;
+
+        border: none;
+        border-radius: 2px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      }
+    </style>
+  </head>
+  <body>
+    <h2>RecipeSage Browser Extension Settings</h2>
+    <br />
+    <div id="loggedInMessage">
+      You're currently logged in as <span id="loggedInEmail">loading...</span>
+      <br />
+      <br />
+      <button id="logoutButton">Logout</button>
+    </div>
+    <div id="loggedOutMessage">
+      You're not logged in. Click the RecipeSage icon next to the address bar to
+      log in.<br /><br />
+      Note: If you don't see the RecipeSage icon next to the address bar, you
+      may need to enable it in your browser settings.
+    </div>
+
+    <br />
+
+    <script src="settings.js"></script>
+  </body>
+</html>
