@@ -71,6 +71,27 @@ const launch = (token) => {
   newClip(token);
 };
 
+const fetchAndCreateImage = async (imageURL) => {
+  const imageBlobResponse = await fetch(imageURL);
+
+  if (!imageBlobResponse.ok) return;
+
+  const imageBlob = await imageBlobResponse.blob();
+  const formData = new FormData();
+  formData.append("image", imageBlob, "image");
+
+  const imageCreateResponse = await fetch(`${API_BASE}images?token=${token}`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!imageCreateResponse.ok) return;
+
+  const imageData = await imageCreateResponse.json();
+
+  return imageData.id;
+};
+
 const newClip = async () => {
   loading();
 
@@ -108,6 +129,10 @@ const newClip = async () => {
 
   const clipData = await clipResponse.json();
 
+  const imageId = clipData.imageURL?.trim()
+    ? await fetchAndCreateImage(clipData.imageURL)
+    : undefined;
+
   const recipeCreateResponse = await fetch(
     `${API_BASE}recipes?token=${token}`,
     {
@@ -117,7 +142,10 @@ const newClip = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(clipData),
+      body: JSON.stringify({
+        ...clipData,
+        imageIds: imageId ? [imageId] : [],
+      }),
     }
   );
 
