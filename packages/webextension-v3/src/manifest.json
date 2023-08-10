@@ -19,13 +19,7 @@
     "48": "icons/icon-48x48.png",
     "128": "icons/icon-128x128.png"
   },
-  "permissions": [
-    "storage",
-    "contextMenus",
-    "activeTab",
-    "webRequest",
-    "scripting"
-  ],
+  "permissions": ["storage", "activeTab", "scripting"],
   "options_ui": {
     "page": "settings/settings.html",
     "open_in_tab": false
