@@ -1,0 +1,37 @@
+{
+  "name": "webextension-v3",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/webextension-v3/src",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/webextension-v3",
+        "command": "webpack --watch"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/webextension-v3",
+        "command": "rm -rf dist; webpack"
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/webextension-v3",
+        "command": "nx build webextension-v3 && cd dist && zip rs-we.zip ./* ./**/* ./**/**/*"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/webextension-v3/**/*.js"],
+        "maxWarnings": 0
+      }
+    }
+  }
+}

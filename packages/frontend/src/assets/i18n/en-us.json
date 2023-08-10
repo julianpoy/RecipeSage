@@ -368,11 +368,11 @@
   "pages.downloadAndInstall.desktop.step.3": "Click \"Install RecipeSage...\"",
 
   "pages.downloadAndInstall.other": "Other RecipeSage Software",
-  "pages.downloadAndInstall.bookmark": "Recipe auto-clip bookmark",
+  "pages.downloadAndInstall.bookmark": "Recipe auto-clip bookmark (deprecated)",
   "pages.downloadAndInstall.bookmark.instructions": "Drag this link to your bookmarks bar. Click the bookmark to import the current site you're on.",
-  "pages.downloadAndInstall.bookmark.description": "Automatically grabs recipe content from webpages",
+  "pages.downloadAndInstall.bookmark.description": "Automatically grabs recipe content from webpages. The browser extension is recommended instead of this bookmark.",
   "pages.downloadAndInstall.extension": "RecipeSage Clip Tool browser extension",
-  "pages.downloadAndInstall.extension.description": "Automatically grabs recipe content from webpages. The bookmark above is recommended instead of this extension for most users.",
+  "pages.downloadAndInstall.extension.description": "Automatically grabs recipe content from webpages, and has greater compatibility across websites that might not import via the in-app importer.",
 
   "====== Pages.LabelsPopover ======": "",
 
