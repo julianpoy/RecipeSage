@@ -56,9 +56,11 @@ export class ContributePage {
 
   validAmount(): boolean {
     try {
-      if (this.customAmount === undefined) return false;
+      if (this.amount) return true;
+      if (!this.customAmount) return false;
+
       const customAmount = parseFloat(this.customAmount);
-      return !!(this.amount || customAmount);
+      return !!customAmount;
     } catch (e) {
       return false;
     }
@@ -67,7 +69,7 @@ export class ContributePage {
   async contribute() {
     let amount = 0;
     if (this.amount) amount = this.amount;
-    else if (this.customAmount) parseFloat(this.customAmount);
+    else if (this.customAmount) amount = parseFloat(this.customAmount);
     else return;
 
     const isRecurring = this.frequency === "monthly";

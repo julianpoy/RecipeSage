@@ -4,6 +4,7 @@ import * as pLimit from "p-limit";
 import * as xmljs from "xml-js";
 import * as multer from "multer";
 import * as fs from "fs-extra";
+import * as fsPromises from "fs/promises";
 import * as extract from "extract-zip";
 import * as path from "path";
 
@@ -543,6 +544,139 @@ router.post(
       await fs.remove(extractPath);
 
       await importStandardizedRecipes(res.locals.session.userId, recipes);
+
+      const recipesToIndex = await Recipe.findAll({
+        where: {
+          userId: res.locals.session.userId,
+        },
+      });
+
+      await SearchService.indexRecipes(recipesToIndex);
+
+      res.status(201).send("Import complete");
+    } catch (err) {
+      if (err.message === "end of central directory record signature not found")
+        err.status = 406;
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+      next(err);
+    }
+  }
+);
+
+router.post(
+  "/import/cookmate",
+  MiddlewareService.validateSession(["user"]),
+  multer({
+    dest: "/tmp/cookmate-import/",
+  }).single("cookmatedb"),
+  async (req, res, next) => {
+    let zipPath, extractPath;
+    try {
+      if (!req.file) {
+        const badFormatError = new Error(
+          "Request must include multipart file under cookmatedb field"
+        );
+        badFormatError.status = 400;
+        throw badFormatError;
+      }
+
+      zipPath = req.file.path;
+      extractPath = zipPath + "-extract";
+
+      await extract(zipPath, { dir: extractPath });
+
+      const fileNames = await fs.readdir(extractPath);
+
+      const filename = fileNames.find((filename) => filename.endsWith(".xml"));
+      if (!filename) {
+        const badFormatError = new Error("Bad cookmate file format");
+        badFormatError.status = 400;
+        throw badFormatError;
+      }
+
+      const xml = fs.readFileSync(extractPath + "/" + filename, "utf8");
+      const data = JSON.parse(
+        xmljs.xml2json(xml, { compact: true, spaces: 4 })
+      );
+
+      const grabFieldText = (field) => {
+        if (!field) return "";
+        if (field.li) {
+          return field.li.map((item) => item._text).join("\n");
+        }
+
+        return field._text || "";
+      };
+
+      const grabLabelTitles = (field) => {
+        if (!field) return [];
+        if (field._text) return [UtilService.cleanLabelTitle(field._text)];
+        if (field.length)
+          return field.map((item) => UtilService.cleanLabelTitle(item._text));
+
+        return [];
+      };
+
+      const grabImagePaths = async (basePath, field) => {
+        if (!field) return [];
+
+        let originalPaths;
+        if (field.path?._text || field._text)
+          originalPaths = [field.path?._text || field._text];
+        if (field.length)
+          originalPaths = field.map((item) => item.path?._text || item._text);
+
+        if (!originalPaths) return [];
+
+        const paths = originalPaths
+          .filter((e) => e)
+          .map((originalPath) => originalPath.split("/").at(-1))
+          .map((trimmedPath) => basePath + "/" + trimmedPath);
+
+        const pathsOnDisk = [];
+        for (const path of paths) {
+          try {
+            await fsPromises.stat(path);
+            pathsOnDisk.push(path);
+          } catch (e) {
+            // Do nothing, image does not exist in backup
+          }
+        }
+
+        return pathsOnDisk;
+      };
+
+      const recipes = await Promise.all(
+        data.cookbook.recipe.map(async (recipe) => ({
+          title: grabFieldText(recipe.title),
+          description: grabFieldText(recipe.description),
+          ingredients: grabFieldText(recipe.ingredient),
+          instructions: grabFieldText(recipe.recipetext),
+          yield: grabFieldText(recipe.quantity),
+          totalTime: grabFieldText(recipe.totaltime),
+          activeTime: grabFieldText(recipe.preptime),
+          notes: grabFieldText(recipe.comments),
+          source: grabFieldText(recipe.source),
+          folder: "main",
+          fromUserId: null,
+          url: grabFieldText(recipe.url),
+
+          labels: grabLabelTitles(recipe.category),
+          images: [
+            ...(await grabImagePaths(
+              extractPath + "/images",
+              recipe.imagepath
+            )),
+            ...(await grabImagePaths(extractPath + "/images", recipe.image)),
+          ],
+        }))
+      );
+
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
+
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
 
       const recipesToIndex = await Recipe.findAll({
         where: {
