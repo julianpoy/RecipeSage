@@ -1,4 +1,3 @@
-// import fractionjs from "fraction.js";
 import { unitNames, parseUnit } from "./units";
 
 const fractionMatchers = {
@@ -58,9 +57,18 @@ const measurementRegexp =
 // TODO: Replace measurementRegexp with this:
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
-const quantityRegexp = new RegExp(
-  `(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, "\\$&")})s?\\.?`
-);
+/**
+ * All known unit names sanitized for use within a regex pattern
+ */
+const preparedUnitNames = unitNames
+  .sort((a, b) => (a.length < b.length ? 1 : -1))
+  .join("|")
+  .replace(/[.*+?^${}()[\]\\]/g, "\\$&");
+
+/**
+ * Matches quantity names, such as 'cup'
+ */
+const quantityRegexp = new RegExp(`(${preparedUnitNames})s?\\.?`);
 
 /**
  * Intended to match ingredient measurement along with unit, for example:
@@ -69,7 +77,7 @@ const quantityRegexp = new RegExp(
  * **Note:** Should always be used with the 'i' flag
  */
 const measurementQuantityRegExp = new RegExp(
-  `^(${measurementRegexp.source})\\s*(${quantityRegexp.source})?`,
+  `^(${measurementRegexp.source})\\s*(${quantityRegexp.source})?\\s`,
   "i"
 );
 
@@ -228,6 +236,8 @@ export const parseIngredients = (
             });
             if (boldify)
               updatedMeasurement = `<b class="ingredientMeasurement">${updatedMeasurement}</b>`;
+
+            if (!updatedMeasurement.endsWith(" ")) updatedMeasurement += " ";
 
             return ingredientParts[idx].replace(
               measurementQuantityRegExp,
