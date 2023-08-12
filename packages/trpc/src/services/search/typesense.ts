@@ -105,7 +105,9 @@ export const searchRecipes = async (userIds: string[], queryString: string) => {
       q: queryString,
       query_by: "title,description,ingredients,source,notes,instructions",
       filter_by: `userId:=[${userIds.join(", ")}]`,
-      limit_hits: Math.min(userIds.length * 500, 1000),
+      per_page: 250,
+      limit_hits: 250, // Desired page count * per_page
+      include_fields: "id",
     });
 
   return (

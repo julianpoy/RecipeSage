@@ -368,11 +368,11 @@
   "pages.downloadAndInstall.desktop.step.3": "Clicca \"Installa RecipeSage...\"",
 
   "pages.downloadAndInstall.other": "Altro software RecipeSage",
-  "pages.downloadAndInstall.bookmark": "Segnalibro di importazione automatica della ricetta",
+  "pages.downloadAndInstall.bookmark": "Segnalibro di importazione automatica della ricetta (deprecato)",
   "pages.downloadAndInstall.bookmark.instructions": "Trascina questo link nella barra dei preferiti. Fai clic sul segnalibro per importare il sito in cui ti trovi.",
-  "pages.downloadAndInstall.bookmark.description": "Cattura automaticamente il contenuto delle ricette dalle pagine web",
+  "pages.downloadAndInstall.bookmark.description": "Cattura automaticamente il contenuto delle ricette dalle pagine web. Si consiglia di utilizzare l'estensione del browser al posto di questo segnalibro.",
   "pages.downloadAndInstall.extension": "Estensione del browser RecipeSage Clip Tool",
-  "pages.downloadAndInstall.extension.description": "Acquisisce automaticamente il contenuto delle ricette dalle pagine web. Il segnalibro sopra è consigliato al posto di questa estensione per la maggior parte degli utenti.",
+  "pages.downloadAndInstall.extension.description": "Acquisisce automaticamente il contenuto delle ricette dalle pagine web e ha una maggiore compatibilità con i siti web che non possono essere importati tramite l'importatore in-app.",
 
   "====== Pages.LabelsPopover ======": "",
 
@@ -742,6 +742,7 @@
   "pages.import.description2": "L'importazione di ricette aggiungerà tutte le ricette del file/account selezionato al tuo account RecipeSage.",
   "pages.import.description3": "Se stai avendo problemi con l’importazione, contattami.",
   "pages.import.jsonld": "Importa da file JSON-LD",
+  "pages.import.cookmate": "Importazione del file Cookmate",
   "pages.import.pepperplate": "Importa da Pepperplate",
   "pages.import.livingCookbook": "Importa da Living Cookbook",
   "pages.import.paprika": "Importa da Paprika",
@@ -770,6 +771,31 @@
   "pages.importJsonLD.error": "Hmm, abbiamo avuto problemi nell'estrarre il file. Assicurati che sia in formato JSON-LD. Se hai problemi, non esitare a inviarmi un'e-mail.",
   "pages.importJsonLD.timeout": "L'importazione sta richiedendo un po' di tempo (può succedere se il database è molto pesante) - torna a controllare tra 5 minuti. Se le tue ricette non appaiono, mandami un'e-mail.",
   "pages.importJsonLD.success": "Importazione terminata!",
+
+  "====== Pages.ImportCookmate ======": "",
+
+  "pages.importCookmate.title": "Importazione di ricette dal file Cookmate",
+  "pages.importCookmate.description1": "Questo importerà un file Cookmate (che termina in .mcb) in RecipeSage.",
+  "pages.importCookmate.description2": "L'operazione di importazione può richiedere diversi minuti",
+  "pages.importCookmate.description3": "Dipende dal formato e dalle dimensioni del file.",
+  "pages.importCookmate.description4": "Se avete problemi con l'importazione, inviatemi un'e-mail con il file e potrò importarlo manualmente.",
+  "pages.importCookmate.description5": "Se il file è molto grande, potrebbe essere difficile importarlo tramite questa interfaccia a causa delle limitazioni del browser.",
+  "pages.importCookmate.description6": "Si prega di considerare la possibilità di donare se il file contiene un gran numero di ricette o immagini.",
+
+  "pages.importCookmate.fileTypeWarning": "Attenzione! Questo tipo di file non termina con .mcb. Potrebbe non funzionare!",
+  "pages.importCookmate.fileTooLarge": "Questo file è troppo grande per essere caricato direttamente.",
+  "pages.importCookmate.fileTooLarge.contact": "Contattatemi per far importare manualmente il vostro database.",
+
+  "pages.importCookmate.upload": "Caricamento e importazione",
+  "pages.importCookmate.upload.ignoreWarning": "Caricare e importare in ogni caso",
+  "pages.importCookmate.loading": "Importazione, attendere prego...",
+
+  "pages.importCookmate.filePicker.file": "{{fileName}} Selezionato",
+  "pages.importCookmate.filePicker.noFile": "Scegliere il file .mcb",
+
+  "pages.importCookmate.error": "Abbiamo avuto problemi a estrarre il file. Assicuratevi che sia in formato Cookmate. Se hai problemi, inviami pure un'e-mail.",
+  "pages.importCookmate.timeout": "L'importazione sta richiedendo un po' di tempo (questo può accadere se il database è molto grande) - si prega di controllare tra 5 minuti. Se le vostre ricette non appaiono, inviatemi un'e-mail.",
+  "pages.importCookmate.success": "L'importazione è avvenuta con successo!",
 
   "====== Pages.ImportLivingCookbook ======": "",
 

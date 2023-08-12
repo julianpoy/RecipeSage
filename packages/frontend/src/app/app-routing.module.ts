@@ -240,6 +240,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportCookmatePage.path,
+    loadChildren: () =>
+      import(
+        "~/pages/settings-components/import-cookmate/import-cookmate.module"
+      ).then((module) => module.ImportCookmatePageModule),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ImportPepperplatePage.path,
     loadChildren: () =>
       import(

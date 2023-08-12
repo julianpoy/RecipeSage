@@ -375,6 +375,19 @@ export class RecipeService {
     );
   }
 
+  importCookmate(file: Blob, errorHandlers?: ErrorHandlers) {
+    const formData: FormData = new FormData();
+    formData.append("cookmatedb", file, file.name);
+
+    return this.httpService.multipartRequestWithWrapper<void>(
+      "data/import/cookmate",
+      "POST",
+      formData,
+      undefined,
+      errorHandlers
+    );
+  }
+
   parseIngredients(
     ingredients: string,
     scale: number,

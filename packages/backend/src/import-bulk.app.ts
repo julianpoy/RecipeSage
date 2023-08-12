@@ -1,6 +1,6 @@
 import { program } from "commander";
 
-import { clip } from "./services/clip";
+import { clipUrl } from "./services/clip";
 
 import * as Models from "./models";
 import { writeImageURL } from "./services/storage/image";
@@ -42,7 +42,7 @@ const run = async () => {
   for (const url of urls) {
     console.log(`Importing ${url}`);
     try {
-      const clippedRecipe = await clip(url);
+      const clippedRecipe = await clipUrl(url);
       const recipe = await Recipe.create({
         userId: user.id,
         title: clippedRecipe.title,
