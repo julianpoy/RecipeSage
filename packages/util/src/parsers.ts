@@ -68,7 +68,7 @@ const preparedUnitNames = unitNames
 /**
  * Matches quantity names, such as 'cup'
  */
-const quantityRegexp = new RegExp(`(${preparedUnitNames})s?\\.?`);
+const quantityRegexp = new RegExp(`(${preparedUnitNames})s?\\.?`, "i");
 
 /**
  * Intended to match ingredient measurement along with unit, for example:
