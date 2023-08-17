@@ -29,5 +29,16 @@
       "id": "{1bd6f0af-1e56-4ecd-903b-495f25057d55}",
       "strict_min_version": "109.0"
     }
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "inject/alert.css",
+        "inject/clipTool.css",
+        "icons/android-chrome-512x512.png",
+        "images/recipesage-black-trimmed.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
