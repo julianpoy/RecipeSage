@@ -92,14 +92,9 @@ const showLogin = () => {
   document.getElementById("start").style.display = "none";
 };
 
-const fetchAndCreateImage = async (imageURL) => {
-  const imageBlobResponse = await fetch(imageURL);
-
-  if (!imageBlobResponse.ok) return;
-
-  const imageBlob = await imageBlobResponse.blob();
+const createImageFromBlob = async (imageBlob) => {
   const formData = new FormData();
-  formData.append("image", imageBlob, "image");
+  formData.append("image", imageBlob);
 
   const imageCreateResponse = await fetch(`${API_BASE}images?token=${token}`, {
     method: "POST",
@@ -118,7 +113,7 @@ const interactiveClip = async () => {
 
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["inject/inject.js"],
+    files: ["/inject/inject.js"],
   });
 
   window.close();
@@ -143,7 +138,7 @@ const clipWithInject = async () => {
 
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["inject/clip.js"],
+    files: ["/inject/clip.js"],
   });
 };
 
@@ -179,9 +174,16 @@ const clipWithAPI = async () => {
 };
 
 const saveClip = async (clipData) => {
-  const imageId = clipData.imageURL?.trim()
-    ? await fetchAndCreateImage(clipData.imageURL)
-    : undefined;
+  let imageId;
+  if (clipData.imageBase64) {
+    try {
+      const response = await fetch(clipData.imageBase64);
+      const blob = await response.blob();
+      imageId = await createImageFromBlob(blob);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const recipeCreateResponse = await fetch(
     `${API_BASE}recipes?token=${token}`,

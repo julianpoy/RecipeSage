@@ -422,72 +422,101 @@ if (window[extensionContainerId]) {
         });
       };
 
-      let submit = () => {
-        fetchToken().then((token) => {
-          return fetch(`https://api.recipesage.com/recipes?token=${token}`, {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(currentSnip),
-          })
-            .then((response) => {
-              if (response.ok) {
-                response.json().then((data) => {
-                  hide();
+      let submit = async () => {
+        try {
+          const token = await fetchToken();
+
+          let imageId;
+          try {
+            const imageResponse = await fetch(currentSnip.imageURL);
+            const imageBlob = await imageResponse.blob();
+
+            const formData = new FormData();
+            formData.append("image", imageBlob);
+
+            const imageCreateResponse = await fetch(
+              `https://api.recipesage.com/images?token=${token}`,
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            if (!imageCreateResponse.ok) return;
+
+            const imageData = await imageCreateResponse.json();
+
+            imageId = imageData.id;
+          } catch (e) {
+            console.error("Error creating image", e);
+          }
+
+          const recipeCreateResponse = await fetch(
+            `https://api.recipesage.com/recipes?token=${token}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ...currentSnip,
+                imageIds: imageId ? [imageId] : [],
+              }),
+            }
+          );
+
+          if (recipeCreateResponse.ok) {
+            recipeCreateResponse.json().then((data) => {
+              hide();
+              displayAlert(
+                `Recipe Saved!`,
+                `Click to open`,
+                4000,
+                `https://recipesage.com/#/recipe/${data.id}`
+              );
+            });
+          } else {
+            switch (recipeCreateResponse.status) {
+              case 401:
+                chrome.storage.local.set({ token: null }, () => {
                   displayAlert(
-                    `Recipe Saved!`,
-                    `Click to open`,
-                    4000,
-                    `https://recipesage.com/#/recipe/${data.id}`
+                    "Please Login",
+                    `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
+                    4000
                   );
                 });
-              } else {
-                switch (response.status) {
-                  case 401:
-                    chrome.storage.local.set({ token: null }, () => {
-                      displayAlert(
-                        "Please Login",
-                        `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
-                        4000
-                      );
-                    });
-                    break;
-                  case 412:
-                    displayAlert(
-                      `Could Not Save Recipe`,
-                      `A recipe title is required.`,
-                      4000
-                    );
-                    break;
-                  case 415:
-                    displayAlert(
-                      `Could Not Save Recipe`,
-                      `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
-                      6000
-                    );
-                    break;
-                  default:
-                    displayAlert(
-                      "Could Not Save Recipe",
-                      "An error occurred while saving the recipe. Please try again.",
-                      4000
-                    );
-                    break;
-                }
-              }
-            })
-            .catch((e) => {
-              displayAlert(
-                "Could Not Save Recipe",
-                "An error occurred while saving the recipe. Please try again.",
-                4000
-              );
-              console.error(e);
-            });
-        });
+                break;
+              case 412:
+                displayAlert(
+                  `Could Not Save Recipe`,
+                  `A recipe title is required.`,
+                  4000
+                );
+                break;
+              case 415:
+                displayAlert(
+                  `Could Not Save Recipe`,
+                  `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
+                  6000
+                );
+                break;
+              default:
+                displayAlert(
+                  "Could Not Save Recipe",
+                  "An error occurred while saving the recipe. Please try again.",
+                  4000
+                );
+                break;
+            }
+          }
+        } catch (e) {
+          displayAlert(
+            "Could Not Save Recipe",
+            "An error occurred while saving the recipe. Please try again.",
+            4000
+          );
+          console.error(e);
+        }
       };
 
       window.recipeSageBrowserExtensionRootTrigger = show;

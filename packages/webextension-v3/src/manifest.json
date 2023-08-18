@@ -1,7 +1,7 @@
 {
   "name": "RecipeSage Automatic Recipe Clipper",
   "short_name": "RecipeSage",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "manifest_version": 3,
   "description": "An extension for clipping recipes to your RecipeSage account",
   "homepage_url": "https://recipesage.com",
@@ -35,6 +35,8 @@
       "resources": [
         "inject/alert.css",
         "inject/clipTool.css",
+        "inject/inject.js",
+        "inject/clip.js",
         "icons/android-chrome-512x512.png",
         "images/recipesage-black-trimmed.png"
       ],
