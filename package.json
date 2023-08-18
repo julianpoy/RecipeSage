@@ -94,7 +94,7 @@
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1601.0",
-    "@angular-devkit/build-angular": "16.1.0",
+    "@angular-devkit/build-angular": "16.2.0",
     "@angular-devkit/core": "16.1.0",
     "@angular-devkit/schematics": "16.1.0",
     "@angular-eslint/builder": "16.0.3",
