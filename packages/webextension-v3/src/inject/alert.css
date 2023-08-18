@@ -1,0 +1,41 @@
+:host {
+  all: initial !important;
+  contain: content;
+}
+
+.alert {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 300px;
+  padding: 20px;
+
+  z-index: 99999999999999999999999999;
+  background: white;
+  box-shadow: 1px 1px 12px #666666;
+
+  user-select: none;
+
+  font-size: 14px;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  color: black;
+}
+
+.headline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+img {
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+}
+
+h3 {
+  margin: 0 10px;
+  font-size: 16px;
+}

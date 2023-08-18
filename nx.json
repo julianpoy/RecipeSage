@@ -4,7 +4,8 @@
       "runner": "nx-cloud",
       "options": {
         "cacheableOperations": ["build", "test", "lint", "typecheck"],
-        "accessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ=="
+        "accessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ==",
+        "useDaemonProcess": false
       }
     }
   },
@@ -12,6 +13,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
+      "inputs": ["default"],
       "dependsOn": ["^build"],
       "outputs": ["{projectRoot}/dist", "{projectRoot}/www"]
     },

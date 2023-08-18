@@ -1,5 +1,12 @@
 const API_BASE = "https://api.recipesage.com/";
 
+chrome.runtime.onMessage.addListener((request) => {
+  const clipData = request;
+  console.log(clipData);
+
+  saveClip(clipData);
+});
+
 let token;
 
 const login = async () => {
@@ -44,7 +51,7 @@ const login = async () => {
             window.close();
           }, 2000);
         } else {
-          tutorial();
+          showTutorial();
         }
       });
     });
@@ -54,31 +61,40 @@ const login = async () => {
   }
 };
 
-const tutorial = () => {
+const showTutorial = () => {
   document.getElementById("login").style.display = "none";
   document.getElementById("tutorial").style.display = "block";
   document.getElementById("importing").style.display = "none";
+  document.getElementById("start").style.display = "none";
 };
 
-const loading = () => {
+const showLoading = () => {
   document.getElementsByTagName("html")[0].style.display = "initial";
   document.getElementById("login").style.display = "none";
   document.getElementById("tutorial").style.display = "none";
   document.getElementById("importing").style.display = "block";
+  document.getElementById("start").style.display = "none";
 };
 
-const launch = (token) => {
-  newClip(token);
+const showStart = () => {
+  document.getElementsByTagName("html")[0].style.display = "initial";
+  document.getElementById("login").style.display = "none";
+  document.getElementById("tutorial").style.display = "none";
+  document.getElementById("importing").style.display = "none";
+  document.getElementById("start").style.display = "block";
 };
 
-const fetchAndCreateImage = async (imageURL) => {
-  const imageBlobResponse = await fetch(imageURL);
+const showLogin = () => {
+  document.getElementsByTagName("html")[0].style.display = "initial";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("tutorial").style.display = "none";
+  document.getElementById("importing").style.display = "none";
+  document.getElementById("start").style.display = "none";
+};
 
-  if (!imageBlobResponse.ok) return;
-
-  const imageBlob = await imageBlobResponse.blob();
+const createImageFromBlob = async (imageBlob) => {
   const formData = new FormData();
-  formData.append("image", imageBlob, "image");
+  formData.append("image", imageBlob);
 
   const imageCreateResponse = await fetch(`${API_BASE}images?token=${token}`, {
     method: "POST",
@@ -92,22 +108,47 @@ const fetchAndCreateImage = async (imageURL) => {
   return imageData.id;
 };
 
-const newClip = async () => {
-  loading();
-
+const interactiveClip = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  let result;
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["/inject/inject.js"],
+  });
+
+  window.close();
+};
+
+const autoClip = async () => {
+  showLoading();
+
   try {
-    [{ result }] = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => document.documentElement.innerHTML,
-    });
+    await clipWithInject();
   } catch (e) {
-    console.error(e);
-    window.alert("Failed to fetch page content");
-    return;
+    try {
+      await clipWithAPI();
+    } catch (e) {
+      window.alert("Failed to fetch page content");
+    }
   }
+};
+
+const clipWithInject = async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["/inject/clip.js"],
+  });
+};
+
+const clipWithAPI = async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  const [{ result }] = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: () => document.documentElement.innerHTML,
+  });
 
   const clipResponse = await fetch(`${API_BASE}clip?token=${token}`, {
     method: "POST",
@@ -129,9 +170,20 @@ const newClip = async () => {
 
   const clipData = await clipResponse.json();
 
-  const imageId = clipData.imageURL?.trim()
-    ? await fetchAndCreateImage(clipData.imageURL)
-    : undefined;
+  await saveClip(clipData);
+};
+
+const saveClip = async (clipData) => {
+  let imageId;
+  if (clipData.imageBase64) {
+    try {
+      const response = await fetch(clipData.imageBase64);
+      const blob = await response.blob();
+      imageId = await createImageFromBlob(blob);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const recipeCreateResponse = await fetch(
     `${API_BASE}recipes?token=${token}`,
@@ -180,20 +232,6 @@ const newClip = async () => {
   }, 500);
 };
 
-const tokenFetchPromise = new Promise((resolve, reject) => {
-  chrome.storage.local.get(["token"], (result) => {
-    token = result.token;
-
-    // If user is logged in, launch the tool
-    if (token) {
-      launch(token);
-      reject();
-    } else {
-      resolve();
-    }
-  });
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   [...document.getElementsByClassName("logo")].forEach(
     (logo) =>
@@ -206,12 +244,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.key === "Enter") login();
   };
   document.getElementById("tutorial-submit").onclick = () => window.close();
+  document.getElementById("auto-import").onclick = autoClip;
+  document.getElementById("interactive-import").onclick = interactiveClip;
 
-  tokenFetchPromise
-    .then(() => {
-      document.getElementsByTagName("html")[0].style.display = "initial";
-    })
-    .catch(() => {
-      // Do nothing
-    });
+  chrome.storage.local.get(["token"], (result) => {
+    token = result.token;
+
+    document.getElementsByTagName("html")[0].style.display = "initial";
+
+    if (token) {
+      showStart();
+    } else {
+      showLogin();
+    }
+  });
 });

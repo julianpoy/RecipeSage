@@ -53,7 +53,7 @@
     "https-proxy-agent": "^5.0.1",
     "ical-generator": "^3.6.0",
     "joi": "^17.7.0",
-    "jsdom": "^21.1.0",
+    "jsdom": "^22.1.0",
     "linkify-string": "^4.1.0",
     "linkifyjs": "^4.1.0",
     "mdb": "git+https://git@github.com/julianpoy/node-mdb.git",
