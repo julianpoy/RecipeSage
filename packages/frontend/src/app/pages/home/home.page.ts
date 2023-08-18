@@ -319,6 +319,7 @@ export class HomePage {
           this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
         includeAllFriends,
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+        userIds: this.userId ? [this.userId] : undefined,
       })
     );
 
@@ -431,6 +432,7 @@ export class HomePage {
             this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
           includeAllFriends,
           ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
+          userIds: this.userId ? [this.userId] : undefined,
         })
       )
       .finally(loading.dismiss);
