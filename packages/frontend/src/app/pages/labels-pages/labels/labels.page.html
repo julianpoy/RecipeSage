@@ -39,7 +39,9 @@
   <ion-list *ngIf="!loading && labels.length > 0">
     <ion-item>
       <ion-label>
-        <p>{{ 'pages.labels.subtitle' | translate:{count:labels.length} }}</p>
+        <p class="ion-text-wrap">
+          {{ 'pages.labels.subtitle' | translate:{count:labels.length} }}
+        </p>
       </ion-label>
     </ion-item>
     <ion-item
