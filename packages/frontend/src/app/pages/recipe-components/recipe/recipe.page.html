@@ -408,21 +408,21 @@
 
     <ion-row
       *ngIf="recipe.folder === 'main' && recipe.isOwner"
-      class="action-buttons"
+      class="action-buttons ion-justify-content-around"
     >
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="editRecipe()" fill="clear" size="small">
           <ion-icon name="create" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.edit' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="deleteRecipe()" fill="clear" size="small">
           <ion-icon name="trash" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.delete' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button
           (click)="addRecipeToShoppingList()"
           fill="clear"
@@ -432,31 +432,31 @@
           {{ 'pages.recipeDetails.addToShoppingList' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="addRecipeToMealPlan()" fill="clear" size="small">
           <ion-icon name="calendar" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.addToMealPlan' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="shareRecipe()" fill="clear" size="small">
           <ion-icon name="share" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.share' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="printRecipe()" fill="clear" size="small">
           <ion-icon name="print" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.print' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button (click)="cloneRecipe()" fill="clear" size="small">
           <ion-icon name="copy" slot="start"></ion-icon>
           {{ 'pages.recipeDetails.makeACopy' | translate }}
         </ion-button>
       </ion-col>
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" size="auto">
         <ion-button
           (click)="cookingToolbarService.isPinned(recipeId) ? unpinRecipe() : pinRecipe()"
           fill="clear"
