@@ -916,6 +916,7 @@
   "pages.settings.language": "Sprache",
   "pages.settings.language.contribute": "Bitte kontaktiere mich, um eine Sprache beizusteuern",
   "pages.settings.language.default": "Browser Standard",
+  "pages.settings.fontSize": "Schriftgröße anpassen",
   "pages.settings.reset": "Alle Einstellungen zurücksetzen",
 
   "pages.settings.offline.loading": "Alle Rezepte abrufen, bitte warten...",
@@ -1247,6 +1248,18 @@
   "components.scaleRecipe.manual": "Oder gib eine Zahl oder einen Bruch ein",
   "components.scaleRecipe.cancel": "Abbrechen",
   "components.scaleRecipe.apply": "Anwenden",
+
+  "====== Modals.FontSize ======": "",
+
+  "components.fontSize.title": "Schriftgröße anpassen",
+  "components.fontSize.option.X1_0": "Systempräferenz respektieren",
+  "components.fontSize.option.PX14": "14px (Klein)",
+  "components.fontSize.option.PX16": "16px (Normal)",
+  "components.fontSize.option.PX18": "18px (Größere)",
+  "components.fontSize.option.PX20": "20px (Größere)",
+  "components.fontSize.option.PX22": "22px (Größere)",
+  "components.fontSize.option.PX24": "24px (Größere)",
+  "components.fontSize.reset": "Zurücksetzen",
 
   "====== Services.QuickTutorial ======": "",
 

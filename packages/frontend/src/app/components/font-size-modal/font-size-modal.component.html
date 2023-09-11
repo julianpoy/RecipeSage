@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ "components.fontSize.title" | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-radio-group [value]="fontSize" (ionChange)="onFontSizeChanged($event)">
+      <ion-item lines="none" *ngFor="let fontSizeOption of fontSizeOptions">
+        <ion-radio slot="start" [value]="fontSizeOption.fontSize"></ion-radio>
+
+        <ion-label [ngStyle]="{ fontSize: fontSizeOption.fontSize }">
+          {{ fontSizeOption.displayName }}
+        </ion-label>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="close()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ "generic.okay" | translate }}
+    </ion-label>
+  </ion-button>
+  <ion-button (click)="reset()" fill="clear" class="ion-float-end">
+    <ion-label>
+      {{ "components.fontSize.reset" | translate }}
+    </ion-label>
+  </ion-button>
+</ion-footer>

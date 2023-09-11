@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { API_BASE_URL } from "../../environments/environment";
-import { SupportedLanguages } from "./preferences.service";
+import { SupportedFontSize, SupportedLanguages } from "./preferences.service";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -291,6 +291,10 @@ export class UtilService {
     const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
 
     return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
+  }
+
+  setFontSize(fontSize: SupportedFontSize) {
+    window.document.documentElement.style.fontSize = fontSize;
   }
 
   removeToken(): void {

@@ -147,6 +147,7 @@ h2.recipeTitle {
 
   ion-col {
     padding: 5px;
+    font-size: 0.875rem;
 
     p {
       margin-top: 0;
@@ -159,4 +160,12 @@ h2.recipeTitle {
     font-size: 18px;
     line-height: 14px; /* Should match other meta items */
   }
+}
+
+.label {
+  font-size: 0.875rem;
+}
+
+.dropdownSelect input {
+  font-size: 0.875rem;
 }

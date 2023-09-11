@@ -4,6 +4,7 @@ import {
   ToastController,
   AlertController,
   LoadingController,
+  ModalController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -22,6 +23,7 @@ import {
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
 import { OfflineCacheService } from "~/services/offline-cache.service";
+import { FontSizeModalComponent } from "../../../components/font-size-modal/font-size-modal.component";
 
 const APP_THEME_LOCALSTORAGE_KEY = "theme";
 
@@ -46,11 +48,14 @@ export class SettingsPage {
   languageOptions: [SupportedLanguages, string][] = [];
   languageSelectInterfaceOptions = {};
 
+  fontSize = this.preferences[GlobalPreferenceKey.FontSize];
+
   constructor(
     public navCtrl: NavController,
     public translate: TranslateService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
     public loadingCtrl: LoadingController,
     public utilService: UtilService,
     public offlineCacheService: OfflineCacheService,
@@ -162,6 +167,31 @@ export class SettingsPage {
     this.preferencesService.save();
 
     this.translate.use(newLang || this.utilService.getAppBrowserLang());
+  }
+
+  fontSizeChanged() {
+    this.preferences[GlobalPreferenceKey.FontSize] = this.fontSize;
+    this.preferencesService.save();
+
+    this.utilService.setFontSize(this.fontSize);
+  }
+
+  async showFontSizePopover() {
+    const fontSizeModal = await this.modalCtrl.create({
+      component: FontSizeModalComponent,
+      componentProps: {
+        fontSize: this.fontSize,
+      },
+    });
+
+    await fontSizeModal.present();
+
+    const { data } = await fontSizeModal.onDidDismiss();
+    if (!data) return;
+
+    this.fontSize = data.fontSize;
+
+    this.fontSizeChanged();
   }
 
   private applyAppTheme() {
