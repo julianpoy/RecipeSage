@@ -917,6 +917,7 @@
   "pages.settings.language": "Lingua",
   "pages.settings.language.contribute": "Contattami per contribuire con una lingua",
   "pages.settings.language.default": "Default del Browser",
+  "pages.settings.fontSize": "Dimensione del carattere",
   "pages.settings.reset": "Ripristina Preferenze",
 
   "pages.settings.offline.loading": "Recupero tutte le ricette, attendi...",
@@ -1248,6 +1249,18 @@
   "components.scaleRecipe.manual": "Oppure, inserisci un numero o una frazione",
   "components.scaleRecipe.cancel": "Annulla",
   "components.scaleRecipe.apply": "Applica",
+
+  "====== Modals.FontSize ======": "",
+
+  "components.fontSize.title": "Dimensione del carattere",
+  "components.fontSize.option.X1_0": "Rispettare le preferenze del sistema",
+  "components.fontSize.option.PX14": "14px (Piccolo)",
+  "components.fontSize.option.PX16": "16px (Normale)",
+  "components.fontSize.option.PX18": "18px (Più grande)",
+  "components.fontSize.option.PX20": "20px (Più grande)",
+  "components.fontSize.option.PX22": "22px (Più grande)",
+  "components.fontSize.option.PX24": "24px (Più grande)",
+  "components.fontSize.reset": "Reset",
 
   "====== Services.QuickTutorial ======": "",
 

@@ -8,10 +8,21 @@ export enum SupportedLanguages {
   DE_DE = "de-de",
 }
 
+export enum SupportedFontSize {
+  X1_0 = "1rem",
+  PX14 = "14px",
+  PX16 = "16px",
+  PX18 = "18px",
+  PX20 = "20px",
+  PX22 = "22px",
+  PX24 = "24px",
+}
+
 export enum GlobalPreferenceKey {
   EnableSplitPane = "global.enableSplitPane",
   EnableExperimentalOfflineCache = "global.enableExperimentalOfflineCache",
   Language = "global.language",
+  FontSize = "global.fontSize",
 }
 
 export enum MyRecipesPreferenceKey {
@@ -54,6 +65,7 @@ export interface AppPreferenceTypes {
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
   [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
   [GlobalPreferenceKey.Language]: null | SupportedLanguages;
+  [GlobalPreferenceKey.FontSize]: SupportedFontSize;
 
   [MyRecipesPreferenceKey.EnableLabelIntersection]: boolean;
   [MyRecipesPreferenceKey.ShowLabels]: boolean;
@@ -96,6 +108,7 @@ export class PreferencesService {
     [GlobalPreferenceKey.EnableSplitPane]: false,
     [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
     [GlobalPreferenceKey.Language]: null,
+    [GlobalPreferenceKey.FontSize]: SupportedFontSize.X1_0,
 
     [MyRecipesPreferenceKey.EnableLabelIntersection]: false,
     [MyRecipesPreferenceKey.ShowLabels]: true,

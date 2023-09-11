@@ -88,6 +88,10 @@ export class AppComponent {
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
     this.translate.use(language || this.utilService.getAppBrowserLang());
 
+    const fontSize =
+      this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
+    this.utilService.setFontSize(fontSize);
+
     if (ENABLE_ANALYTICS) {
       this.initAnalytics();
     }
