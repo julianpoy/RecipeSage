@@ -89,7 +89,7 @@
     "unitz-ts": "^1.0.1",
     "uuid": "^9.0.0",
     "xml-js": "^1.6.11",
-    "zod": "^3.21.4",
+    "zod": "^3.22.3",
     "zone.js": "0.13.1"
   },
   "devDependencies": {
