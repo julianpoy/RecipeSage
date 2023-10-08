@@ -7,6 +7,14 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
+ion-searchbar {
+  .searchbar-input-container {
+    input.searchbar-input {
+      font-size: 1rem;
+    }
+  }
+}
+
 ion-router-outlet.cookingToolbarOpen {
   bottom: 60px;
 }
@@ -182,4 +190,104 @@ ion-button.button-outline {
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+/* Font size overrides */
+html,
+:host {
+  font-size: 1rem;
+}
+
+ion-item {
+  font-size: 1rem;
+
+  > h3 {
+    font-size: 1.375rem;
+  }
+}
+
+ion-list-header.md {
+  font-size: 0.875rem;
+}
+ion-list-header.ios {
+  font-size: 1.375rem;
+}
+
+ion-label.md,
+ion-label.ios {
+  p {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  > h2 {
+    font-size: 1rem;
+  }
+}
+ion-label.sc-ion-label-ios-h.ios {
+  font-size: 0.875rem;
+}
+
+ion-button {
+  white-space: normal;
+  font-size: 0.875rem;
+}
+
+ion-alert.md {
+  .alert-title {
+    font-size: 1.25rem;
+  }
+
+  .alert-sub-title {
+    font-size: 1rem;
+  }
+
+  .alert-message {
+    font-size: 1rem;
+  }
+
+  input {
+    font-size: 0.875rem;
+  }
+
+  .alert-button {
+    font-size: 0.875rem;
+  }
+}
+
+ion-alert.ios {
+  .alert-title {
+    font-size: 1.063rem;
+  }
+
+  .alert-sub-title {
+    font-size: 0.875rem;
+  }
+
+  .alert-message {
+    font-size: 0.813rem;
+  }
+
+  input {
+    font-size: 0.813rem;
+  }
+
+  .alert-button {
+    font-size: 1.063rem;
+  }
+}
+
+.alert-radio-label.sc-ion-alert-md {
+  font-size: 1rem;
+}
+.alert-radio-label.sc-ion-alert-ios {
+  font-size: 0.875rem;
+}
+
+.popover-viewport > ion-header > ion-toolbar > ion-title.md {
+  font-size: 1.25rem;
+}
+.popover-viewport > ion-header > ion-toolbar > ion-title.ios {
+  font-size: 1.0625rem;
+  padding-inline: unset;
 }

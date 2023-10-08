@@ -95,6 +95,18 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+
+    <ion-item
+      lines="full"
+      class="cursor-pointer"
+      (click)="showFontSizePopover()"
+      button
+      detail="false"
+    >
+      <ion-icon name="text-outline" slot="start"></ion-icon>
+      <ion-label> {{ 'pages.settings.fontSize' | translate}} </ion-label>
+      <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+    </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.reset' | translate }} </ion-label>

@@ -4,17 +4,6 @@ version: "3.7"
 # dockerfile that exists here: https://github.com/julianpoy/recipesage-selfhost
 
 services:
-  recipesage-monorepo: &recipesage-monorepo
-    depends_on:
-      - postgres
-      - elasticsearch
-      - pushpin
-      - browserless
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./packages:/app/packages
   proxy:
     image: nginx
     volumes:
@@ -27,12 +16,24 @@ services:
       - backend
       - pushpin
   frontend:
-    <<: *recipesage-monorepo
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./packages:/app/packages
     ports:
       - "8100:8100"
     command: npx nx start frontend
   backend:
-    <<: *recipesage-monorepo
+    depends_on:
+      - postgres
+      - pushpin
+      - browserless
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./packages:/app/packages
     ports:
       - "3000:3000"
     command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
@@ -57,10 +58,6 @@ services:
       - GRIP_URL=http://pushpin:5561/
       - GRIP_KEY=changeme
       - SEARCH_PROVIDER=typesense
-      - ELASTIC_CONN=http://elastic:recipesage_dev@elasticsearch:9200
-      - ELASTIC_PASSWORD=recipesage_dev
-      - MEILI_HOST=http://meilisearch:7700
-      - MEILI_API_KEY=recipesage_dev
       - 'TYPESENSE_NODES=[{"host": "typesense", "port": 8108, "protocol": "http"}]'
       - TYPESENSE_API_KEY=recipesage_dev
       - BROWSERLESS_HOST=browserless
@@ -69,35 +66,15 @@ services:
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     env_file:
       - ./.env
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
-    environment:
-      - discovery.type=single-node
-      - ELASTIC_PASSWORD=recipesage_dev
-      - "ES_JAVA_OPTS=-Xms1500m -Xmx1500m"
-      - xpack.security.enabled=false
-    ports:
-      - 9200:9200
-  meilisearch:
-    image: getmeili/meilisearch:v1.0
-    environment:
-      - MEILI_MASTER_KEY=recipesage_dev
   typesense:
     image: typesense/typesense:0.24.1
     volumes:
       - typesense-data:/data
     command: "--data-dir /data --api-key=recipesage_dev --enable-cors"
-  kibana:
-    image: kibana:8.4.3
-    ports:
-      - 5601:5601
   pushpin:
     image: fanout/pushpin:1.27.0
     environment:
       - target=backend:3000
-    ports:
-      - "7999:7999"
-      - "5560-5563:5560-5563"
   postgres:
     image: postgres
     command:
