@@ -435,32 +435,32 @@
 
   "====== Pages.MealPlan ======": "",
 
-  "pages.mealPlan.title": "Meal Plan - {{name}}",
+  "pages.mealPlan.title": "План харчування - {{name}}",
 
-  "pages.mealPlan.modal.emptyDays.header": "Empty day(s) selected",
-  "pages.mealPlan.modal.emptyDays.message": "The day(s) you've selected do not contain any meal plan items. You'll need to select at least one day with meal plan items.",
+  "pages.mealPlan.modal.emptyDays.header": "Вибраний день (дні) порожній",
+  "pages.mealPlan.modal.emptyDays.message": "Вибрані Вами дні не містять жодних пунктів плану харчування. Вам потрібно буде вибрати принаймні один день із пунктами плану харчування.",
 
-  "pages.mealPlan.modal.copy.header": "Copy To",
-  "pages.mealPlan.modal.copy.message": "This will copy the meal items on the selected days to a series of days starting on the day you select. Please click the day you'd like to copy to.",
+  "pages.mealPlan.modal.copy.header": "Копіювати",
+  "pages.mealPlan.modal.copy.message": "Це скопіює страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Клацніть день, у який ви бажаєте скопіювати.",
 
-  "pages.mealPlan.modal.move.header": "Move To",
-  "pages.mealPlan.modal.move.message": "This will move the meal items on the selected days to a series of days starting on the day you select. Please click the day you'd like to move to.",
+  "pages.mealPlan.modal.move.header": "Перенести",
+  "pages.mealPlan.modal.move.message": "Це перемістить страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Клацніть день, у який ви бажаєте перенести.",
 
-  "pages.mealPlan.modal.delete.header": "Delete Meal Plan Items",
-  "pages.mealPlan.modal.delete.message": "This will delete all items on {{daysList}}",
+  "pages.mealPlan.modal.delete.header": "Видалити пункти плану харчування",
+  "pages.mealPlan.modal.delete.message": "Це видалить всі пункти із {{daysList}}",
 
-  "pages.mealPlan.modal.noRecipes.header": "No Recipes",
-  "pages.mealPlan.modal.noRecipes.message": "The selected days contain no recipes.\nKeep in mind that only meal items that are recipes can be added to the shopping list.\nYou cannot add manually entered meal items to the shopping list from here.",
+  "pages.mealPlan.modal.noRecipes.header": "Немає рецептів",
+  "pages.mealPlan.modal.noRecipes.message": "Вибрані дні не містять рецептів.\Пам’ятайте, що до списку покупок можна додати лише ті страви, для яких існують рецепти.\Звідси Ви не можете додавати страви, введені вручну, до списку покупок.",
 
-  "pages.mealPlan.modal.copyConfirm.header": "Copy All Selected Items",
-  "pages.mealPlan.modal.copyConfirm.messageSingle": "This will copy the meal items on {{selectedDayList}} to {{destDay}}",
-  "pages.mealPlan.modal.copyConfirm.messageMultiple": "This will copy the meal items on {{selectedDayList}} to the days on and following {{destDay}}",
-  "pages.mealPlan.modal.copyConfirm.change": "Select Another Day",
+  "pages.mealPlan.modal.copyConfirm.header": "Копіювати всі вибрані страви",
+  "pages.mealPlan.modal.copyConfirm.messageSingle": "Це скопіює страви із {{selectedDayList}} на {{destDay}}",
+  "pages.mealPlan.modal.copyConfirm.messageMultiple": "Це скопіює страви із {{selectedDayList}} на {{destDay}} і наступні дні",
+  "pages.mealPlan.modal.copyConfirm.change": "Виберіть інший день",
 
-  "pages.mealPlan.modal.moveConfirm.header": "Move All Selected Items",
-  "pages.mealPlan.modal.moveConfirm.messageSingle": "This will move the meal items on {{selectedDayList}} to {{destDay}}",
-  "pages.mealPlan.modal.moveConfirm.messageMultiple": "This will move the meal items on {{selectedDayList}} to the days on and following {{destDay}}",
-  "pages.mealPlan.modal.moveConfirm.change": "Select Another Day",
+  "pages.mealPlan.modal.moveConfirm.header": "Перемістити всі вибрані страви",
+  "pages.mealPlan.modal.moveConfirm.messageSingle": "Це перенесе страви із {{selectedDayList}} до {{destDay}}",
+  "pages.mealPlan.modal.moveConfirm.messageMultiple": "Це перенесе страви із {{selectedDayList}} на {{destDay}} і наступні дні",
+  "pages.mealPlan.modal.moveConfirm.change": "Виберіть інший день",
 
   "====== Pages.MealPlanBulkPinModal ======": "",
 
