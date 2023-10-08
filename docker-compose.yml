@@ -75,9 +75,6 @@ services:
     image: fanout/pushpin:1.27.0
     environment:
       - target=backend:3000
-    ports:
-      - "7999:7999"
-      - "5560-5563:5560-5563"
   postgres:
     image: postgres
     command:
