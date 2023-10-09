@@ -584,31 +584,31 @@
 
   "====== Pages.AddRecipeToMealPlanModal ======": "",
 
-  "pages.addRecipeToMealPlanModal.title": "Add Recipe To Meal Plan",
-  "pages.addRecipeToMealPlanModal.instructions1": "First, select the destination meal plan:",
-  "pages.addRecipeToMealPlanModal.loading": "Loading meal plans...",
-  "pages.addRecipeToMealPlanModal.selectDestination": "Select Meal Plan",
-  "pages.addRecipeToMealPlanModal.noMealPlans": "You have no meal plans.",
-  "pages.addRecipeToMealPlanModal.createMealPlan": "Create a Meal Plan",
+  "pages.addRecipeToMealPlanModal.title": "Додати рецепт до плану харчування",
+  "pages.addRecipeToMealPlanModal.instructions1": "Спершу оберіть цільовий план харчування:",
+  "pages.addRecipeToMealPlanModal.loading": "Завантажуємо плани харчування...",
+  "pages.addRecipeToMealPlanModal.selectDestination": "Оберіть план харчування",
+  "pages.addRecipeToMealPlanModal.noMealPlans": "У Вас немає планів харчування.",
+  "pages.addRecipeToMealPlanModal.createMealPlan": "Створити план харчування",
 
-  "pages.addRecipeToMealPlanModal.add": "Add to Meal Plan",
-  "pages.addRecipeToMealPlanModal.selectMealPlan": "Select a meal plan",
-  "pages.addRecipeToMealPlanModal.selectMeal": "Select a meal",
+  "pages.addRecipeToMealPlanModal.add": "Додати до плану харчування",
+  "pages.addRecipeToMealPlanModal.selectMealPlan": "Оберіть план харчування",
+  "pages.addRecipeToMealPlanModal.selectMeal": "Виберіть страву",
 
-  "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Excellent! Now select the meal plan you just created.",
+  "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Чудово! Тепер виберіть щойно створений план харчування.",
 
   "====== Pages.AddRecipeToShoppingListModal ======": "",
 
-  "pages.addRecipeToShoppingListModal.title.singular": "Add Recipe To Shopping List",
-  "pages.addRecipeToShoppingListModal.title.plural": "Add Recipes To Shopping List",
-  "pages.addRecipeToShoppingListModal.selectDestination": "Select the destination shopping list:",
-  "pages.addRecipeToShoppingListModal.loading": "Loading shopping lists...",
-  "pages.addRecipeToShoppingListModal.destination": "Destination Shopping List",
-  "pages.addRecipeToShoppingListModal.noShoppingLists": "You have no shopping lists.",
-  "pages.addRecipeToShoppingListModal.createShoppingList": "Create a Shopping List",
-  "pages.addRecipeToShoppingListModal.add": "Add to List",
+  "pages.addRecipeToShoppingListModal.title.singular": "Додати рецепт до списку покупок",
+  "pages.addRecipeToShoppingListModal.title.plural": "Додати рецепти до списк покупок",
+  "pages.addRecipeToShoppingListModal.selectDestination": "Оберіть до якого списку додавати:",
+  "pages.addRecipeToShoppingListModal.loading": "Завантажуємо списки покупок...",
+  "pages.addRecipeToShoppingListModal.destination": "Цільовий список покупок",
+  "pages.addRecipeToShoppingListModal.noShoppingLists": "У Вас немає списків покупок.",
+  "pages.addRecipeToShoppingListModal.createShoppingList": "Створити список покупок",
+  "pages.addRecipeToShoppingListModal.add": "Додати до списку",
 
-  "pages.addRecipeToShoppingListModal.newListSuccess": "Excellent! Now select the shopping list you just created.",
+  "pages.addRecipeToShoppingListModal.newListSuccess": "Чудово! Тепер виберіть щойно створений список покупок.",
 
   "====== Pages.EditRecipe ======": "",
 
