@@ -1229,57 +1229,57 @@
 
   "====== Components.TosClickwrap ======": "",
 
-  "components.tos.warning": "By continuing, you're agreeing to the RecipeSage",
-  "components.tos.title": "Terms of Service",
+  "components.tos.warning": "Продовжуючи, Ви погоджуєтеся з нашими",
+  "components.tos.title": "Умовами використання",
 
   "====== Components.RatingFilter ======": "",
 
-  "components.ratingFilter.title": "Filter by Rating",
+  "components.ratingFilter.title": "Фільтрувати за рейтингом",
 
-  "components.ratingFilter.unrated": "Unrated",
+  "components.ratingFilter.unrated": "Без рейтингу",
 
-  "components.ratingFilter.reset": "Reset",
+  "components.ratingFilter.reset": "Скидання",
 
   "====== Modals.ScaleRecipe ======": "",
 
-  "components.scaleRecipe.title": "Scale Recipe",
-  "components.scaleRecipe.change": "Adjust the scale of the recipe",
-  "components.scaleRecipe.click": "Click a button or enter a scale manually",
-  "components.scaleRecipe.manual": "Or, enter a number or fraction",
-  "components.scaleRecipe.cancel": "Cancel",
-  "components.scaleRecipe.apply": "Apply",
+  "components.scaleRecipe.title": "Масштабування рецепту",
+  "components.scaleRecipe.change": "Вкажіть масштаб рецепта",
+  "components.scaleRecipe.click": "Натисніть кнопку або введіть масштаб вручну",
+  "components.scaleRecipe.manual": "Або введіть число чи дріб",
+  "components.scaleRecipe.cancel": "Скасувати",
+  "components.scaleRecipe.apply": "Застосувати",
 
   "====== Services.QuickTutorial ======": "",
 
-  "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
-  "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",
-  "services.quickTutorial.multipleLabelSelection.header": "Multiple Label Selection",
-  "services.quickTutorial.multipleLabelSelection.message": "You're now in multiple label selection mode. You can click as many labels as you'd like to select, then use the buttons that appear in the header to take bulk actions. You can exit multiple label selection mode at any time by clicking the X in the header, or via the options menu.",
-  "services.quickTutorial.splitPaneView.header": "Split Pane View",
-  "services.quickTutorial.splitPaneView.message": "Split pane view is only visible on devices with large screens (laptops, large tablets, etc). When split pane view is enabled, the side menu will always be visible. This feature is useful for optimizing the experience on larger devices.",
-  "services.quickTutorial.experimentalOfflineCache.header": "Experimental Offline Cache",
-  "services.quickTutorial.experimentalOfflineCache.message": "Experimental offline cache is a test feature. RecipeSage normally caches recipes you access automatically, but this will now fetch all of your recipes in the background. Your system may remove cached recipes automatically if it needs the storage, or when you do not use the app for long periods of time. Important note: Filtering by label and searching will not work. This may work in future implementations, but not for this test implementation.",
-  "services.quickTutorial.pinnedRecipes.header": "Pinned Recipes",
-  "services.quickTutorial.pinnedRecipes.message": "This recipe is now pinned! Pinning recipes provides a quick way to jump between multiple recipes quickly while cooking. Pinned recipes appear in the toolbar at the bottom of the screen. You'll see a bubble with the recipe image and the first letter of the recipe title. Pinned recipes will stay open until they are unpinned or until you close the application.",
+  "services.quickTutorial.multipleRecipeSelection.header": "Вибір кількох рецептів",
+  "services.quickTutorial.multipleRecipeSelection.message": "Тепер Ви перебуваєте в режимі вибору кількох рецептів. Ви можете натиснути скільки завгодно рецептів, а потім скористатися кнопками, що з’являться в заголовку, щоб виконувати масові дії, наприклад позначати мітками чи видаляти. Ви можете будь-коли вийти з режиму вибору кількох рецептів, натиснувши X у заголовку або за допомогою меню параметрів.",
+  "services.quickTutorial.multipleLabelSelection.header": "Вибір кількох міток",
+  "services.quickTutorial.multipleLabelSelection.message": "Тепер Ви перебуваєте в режимі вибору кількох міток. Ви можете натиснути скільки завгодно міток, а потім скористатися кнопками в заголовку, щоб виконати масові дії. Ви можете будь-коли вийти з режиму вибору кількох міток, натиснувши X у заголовку або за допомогою меню параметрів.",
+  "services.quickTutorial.splitPaneView.header": "Перегляд бічної панелі",
+  "services.quickTutorial.splitPaneView.message": "Бічна панель відображається лише на пристроях із великими екранами (ноутбуках, великих планшетах тощо). Коли ввімкнено цей режим, бічне меню завжди буде видимим. Ця функція корисна для оптимізації роботи на більших пристроях.",
+  "services.quickTutorial.experimentalOfflineCache.header": "Експериментальне офлайн кешування",
+  "services.quickTutorial.experimentalOfflineCache.message": "Експериментальне офлайн кешування є тестовою функцією. RecipeSage зазвичай кешує рецепти, до яких ви отримуєте доступ автоматично, але тепер усі Ваші рецепти будуть отримані у фоновому режимі. Ваша система може автоматично видаляти кешовані рецепти, якщо їй потрібна пам’ять або якщо ви не використовуєте програму протягом тривалого часу. Важливо: Фільтрування за міткою та пошук не працюватимуть. Це може працювати в майбутніх реалізаціях, але не для цієї тестової реалізації.",
+  "services.quickTutorial.pinnedRecipes.header": "Закріплені рецепти",
+  "services.quickTutorial.pinnedRecipes.message": "Цей рецепт зараз закріплено! Закріплення рецептів дає змогу швидко переходити між кількома рецептами під час приготування. Закріплені рецепти з’являються на панелі інструментів у нижній частині екрана. Ви побачите бульбашку із зображенням рецепта та першою літерою назви рецепту. Закріплені рецепти залишатимуться відкритими, доки їх не буде відкріплено або доки Ви не закриєте додаток.",
 
   "====== Services.Util ======": "",
 
-  "services.util.justNow": "just now",
-  "services.util.today": "today",
+  "services.util.justNow": "просто зараз",
+  "services.util.today": "сьогодні",
 
   "====== Errors ======": "",
 
-  "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
+  "errors.offline": "Схоже, Ви офлайн. У режимі офлайн ми можемо отримати лише дані, до яких Ви раніше отримували доступ на цьому пристрої.",
+  "errors.unexpected": "Сталася неочікувана помилка. Будь ласка спробуйте ще раз. Якщо проблема не зникне, зв’яжіться зі мною.",
 
   "====== Generic ======": "",
 
-  "generic.delete": "Delete",
-  "generic.cancel": "Cancel",
-  "generic.confirm": "Confirm",
-  "generic.close": "Close",
-  "generic.save": "Save",
-  "generic.okay": "Okay",
+  "generic.delete": "Видалити",
+  "generic.cancel": "Скасувати",
+  "generic.confirm": "Підтвердити",
+  "generic.close": "Закрити",
+  "generic.save": "Зберегти",
+  "generic.okay": "Гаразд",
 
   "====== Trailing Comma Placeholder ======": ""
 }
