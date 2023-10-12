@@ -124,7 +124,7 @@
   "pages.home.errors.noRecipes.title": "Вітамо на RecipeSage!",
   "pages.home.errors.noRecipes.message1": "Тут з’являться Ваші рецепти.",
   "pages.home.errors.noRecipes.message2": "Схоже, у вас ще немає жодного рецепту.",
-  "pages.home.errors.noRecipes.message3": "Клацніть кнопку + у правому нижньому куті, щоб сворити перший!",
+  "pages.home.errors.noRecipes.message3": "Натисніть кнопку + у правому нижньому куті, щоб сворити перший!",
   "pages.home.errors.noRecipes.message4": "Ви також можете імпортувати рецепти!",
   "pages.home.errors.noRecipes.message5": "Використовуйте бічне меню, щоб перейти до Налаштувань -> Імпорт",
   "pages.home.errors.noRecipes.message6": "Ви можете встановити як додаток до настільного браузера інструмент Recipe Clipper:",
@@ -170,7 +170,7 @@
   "pages.notfound.error.message2": "Перевірте, чи правильно ви вказали URL-адресу.",
   "pages.notfound.error.message3": "Якщо у вас все ще виникають проблеми, будь ласка, зв'яжіться зі мною.",
   "pages.notfound.error.contact": "Зв'яжіться зі мною",
-  "pages.notfound.error.goHome": "Клацніть тут, щоб перейти до своїх рецептів",
+  "pages.notfound.error.goHome": "Натисніть тут, щоб перейти до своїх рецептів",
 
   "====== Pages.HomePopover ======": "",
 
@@ -225,9 +225,9 @@
   "pages.recipeDetails.labels": "Мітки",
   "pages.recipeDetails.mustSaveBeforeLabelling": "Ви можете додати мітки, як тільки ви збережете цей рецепт до своєї колекції",
 
-  "pages.recipeDetails.labels.clickToCreate": "Клацніть, щоб створити",
+  "pages.recipeDetails.labels.clickToCreate": "Натисніть, щоб створити",
   "pages.recipeDetails.labels.alreadyAdded": "Вже додано",
-  "pages.recipeDetails.labels.clickToAdd": "Клацніть, щоб додати",
+  "pages.recipeDetails.labels.clickToAdd": "Натисніть, щоб додати",
 
   "pages.recipeDetails.created": "Створений",
   "pages.recipeDetails.updated": "Останнє редагування",
@@ -353,23 +353,23 @@
   "pages.downloadAndInstall.android.instructionHeader": "Для встановлення RecipeSage на Android:",
   "pages.downloadAndInstall.android.step.1": "Відкрийте баузер Chrome",
   "pages.downloadAndInstall.android.step.2": "Відкрийте меню браузера за допомогою кнопки у своєму браузері, яка виглядає так:",
-  "pages.downloadAndInstall.android.step.3": "Клацніть \"Додати на головний екран \"",
+  "pages.downloadAndInstall.android.step.3": "Натисніть \"Додати на головний екран \"",
 
   "pages.downloadAndInstall.ios.title": "Пристрій Apple Mobile",
   "pages.downloadAndInstall.ios.instructionHeader": "Для встановлення RecipeSage на пристрій Apple Mobile (IOS):",
   "pages.downloadAndInstall.ios.step.1": "Відкрийте Safari",
   "pages.downloadAndInstall.ios.step.2": "Відкрийте меню Share за допомогою кнопки в нижній панелі, яка виглядає так:",
-  "pages.downloadAndInstall.ios.step.3": "Клацніть \"Додати на головний екран \"",
+  "pages.downloadAndInstall.ios.step.3": "Натисніть \"Додати на головний екран \"",
 
   "pages.downloadAndInstall.desktop.title": "Настільний компьютер або ноутбук",
   "pages.downloadAndInstall.desktop.instructionHeader": "Для встановлення RecipeSage на настільний компьютер або ноутбук:",
   "pages.downloadAndInstall.desktop.step.1": "Відкрийте баузер Chrome",
   "pages.downloadAndInstall.desktop.step.2": "Відкрийте меню браузера за допомогою кнопки у верхньому правому куті, яка виглядає так:",
-  "pages.downloadAndInstall.desktop.step.3": "Клацніть \"Встановити RecipeSage...\"",
+  "pages.downloadAndInstall.desktop.step.3": "Натисніть \"Встановити RecipeSage...\"",
 
   "pages.downloadAndInstall.other": "Інше програмне забезпечення від RecipeSage",
   "pages.downloadAndInstall.bookmark": "Закладка для автоматичного захоплення рецепту (застаріле)",
-  "pages.downloadAndInstall.bookmark.instructions": "Перетягніть це посилання на панель закладок. Клацніть закладку, щоб імпортувати поточну сторінку, на якій Ви знаходитесь.",
+  "pages.downloadAndInstall.bookmark.instructions": "Перетягніть це посилання на панель закладок. Натисніть закладку, щоб імпортувати поточну сторінку, на якій Ви знаходитесь.",
   "pages.downloadAndInstall.bookmark.description": "Автоматично захоплює вміст рецептів з вебсторінок. Замість цієї закладки рекомендується розширення браузера.",
   "pages.downloadAndInstall.extension": "Розширення браузера RecipeSage для захоплення рецепту",
   "pages.downloadAndInstall.extension.description": "Автоматично захоплює вміст рецептів з вебсторінок і має більшу сумісність на вебсайтах, які можуть не імпортуватися через імпортер в додатку.",
@@ -441,10 +441,10 @@
   "pages.mealPlan.modal.emptyDays.message": "Вибрані Вами дні не містять жодних пунктів плану харчування. Вам потрібно буде вибрати принаймні один день із пунктами плану харчування.",
 
   "pages.mealPlan.modal.copy.header": "Копіювати",
-  "pages.mealPlan.modal.copy.message": "Це скопіює страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Клацніть день, у який ви бажаєте скопіювати.",
+  "pages.mealPlan.modal.copy.message": "Це скопіює страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Натисніть день, у який ви бажаєте скопіювати.",
 
   "pages.mealPlan.modal.move.header": "Перенести",
-  "pages.mealPlan.modal.move.message": "Це перемістить страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Клацніть день, у який ви бажаєте перенести.",
+  "pages.mealPlan.modal.move.message": "Це перемістить страви із вибраних днів у серію днів, починаючи з дня, який ви вибрали. Натисніть день, у який ви бажаєте перенести.",
 
   "pages.mealPlan.modal.delete.header": "Видалити пункти плану харчування",
   "pages.mealPlan.modal.delete.message": "Це видалить всі пункти із {{daysList}}",
@@ -478,7 +478,7 @@
   "pages.mealPlanItemDetailsModal.title": "Деталі пунктів плана харчування",
   "pages.mealPlanItemDetailsModal.scheduled": "Заплановано дляй {{meal}} на {{date}}",
   "pages.mealPlanItemDetailsModal.lastModified": "Востаннє змінено {{name}} {{date}}",
-  "pages.mealPlanItemDetailsModal.clickToOpen": "Клацніть щоб відкрити рецепт",
+  "pages.mealPlanItemDetailsModal.clickToOpen": "Натисніть щоб відкрити рецепт",
 
   "pages.mealPlanItemDetailsModal.actions.addToShoppingList": "Додати цей рецепт до списку покупок",
   "pages.mealPlanItemDetailsModal.actions.pinRecipe": "Закріпити цей рецепт відкритим",
@@ -550,7 +550,7 @@
   "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "Спілкування з {{name}}",
-  "pages.messageThread.clickToOpen": "Клацніть щоб відкрити",
+  "pages.messageThread.clickToOpen": "Натисніть щоб відкрити",
   "pages.messageThread.recipeDeleted": "Рецепт видалено",
   "pages.messageThread.yourRecipeDeleted": "Вашої копії рецепту більше не існує",
   "pages.messageThread.recipeCopySent": "Копію цього рецепту було надіслано",
@@ -829,7 +829,7 @@
   "pages.importLivingCookbook.step3.upload.ignoreWarning": "Все одно завантажити",
   "pages.importLivingCookbook.step3.loading": "Імортуємо, будь ласка, зачекайте...",
 
-  "pages.importLivingCookbook.troubleshooting": "Клацніть для довідки з усунення несправностей",
+  "pages.importLivingCookbook.troubleshooting": "Натисніть для довідки з усунення несправностей",
   "pages.importLivingCookbook.troubleshooting.missing.1": "Якщо Ви виявили, що під час імпорту імпортуються не всі Ваші рецепти:",
   "pages.importLivingCookbook.troubleshooting.missing.2": "Спробуйте вибрати вище опцію \"Включити готові рецепти \"наповнювача\" LCB\" і повторіть спробу.",
   "pages.importLivingCookbook.troubleshooting.missing.3": "Ви також можете спробувати експортувати свої рецепти з Living Cookbook у форматі .FDX або .FDXZ і натомість завантажити в цьому форматі.",
@@ -1043,7 +1043,7 @@
   "pages.addProfileItem.type.label": "Мітка",
   "pages.addProfileItem.type.allRecipes": "Всі рецепти",
 
-  "pages.addProfileItem.change": "Клацніть щоб змінити",
+  "pages.addProfileItem.change": "Натисніть щоб змінити",
   "pages.addProfileItem.select": "Оберіть",
   "pages.addProfileItem.select.recipe": "свій рецепт",
   "pages.addProfileItem.select.label": "свою мітку",
@@ -1145,7 +1145,7 @@
   "pages.shareProfileModal.close": "Закрити",
 
   "pages.shareProfileModal.shareTitle": "{{name}} профіль у RecipeSage",
-  "pages.shareProfileModal.shareBody": "Клацніть для перегляду публічного профіля {{name}} в RecipeSage:",
+  "pages.shareProfileModal.shareBody": "Натисніть для перегляду публічного профіля {{name}} в RecipeSage:",
 
   "====== Components.CookingToolbar ======": "",
 
@@ -1166,14 +1166,14 @@
 
   "====== Components.MealCalendar ======": "",
 
-  "components.multiImageUpload.add": "Клацніть щоб додати зображення",
+  "components.multiImageUpload.add": "Натисніть щоб додати зображення",
   "components.multiImageUpload.imageLimit": "Ви можете приєднати до 10 зображень",
   "components.multiImageUpload.imageError": "Під час обробки одного чи кількох зображень, які Ви вибрали, сталася помилка",
 
   "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "Вже додано",
-  "components.selectCollaborators.add": "Клацніть щоб додати",
+  "components.selectCollaborators.add": "Натисніть щоб додати",
   "components.selectCollaborators.searching": "Шукаю...",
   "components.selectCollaborators.notFound": "Користувача не знайдено",
   "components.selectCollaborators.notFoundError": "Не вдалося знайти користувача з цією електронною адресою.",
@@ -1188,8 +1188,8 @@
 
   "====== Components.SelectLabel ======": "",
 
-  "components.selectLabel.change": "Клацніть щоб змінити",
-  "components.selectLabel.select": "Клацніть щоб виділити",
+  "components.selectLabel.change": "Натисніть щоб змінити",
+  "components.selectLabel.select": "Натисніть щоб виділити",
   "components.selectLabel.null": "Немає міток з назвою \"{{name}}\"",
 
   "====== Components.SelectMeal ======": "",
@@ -1198,16 +1198,16 @@
 
   "====== Components.SelectRecipe ======": "",
 
-  "components.selectRecipe.change": "Клацніть щоб змінити",
-  "components.selectRecipe.select": "Клацніть щоб вибрати",
+  "components.selectRecipe.change": "Натисніть щоб змінити",
+  "components.selectRecipe.select": "Натисніть щоб вибрати",
   "components.selectRecipe.searching": "Шукаю на \"{{searchText}}\"...",
   "components.selectRecipe.null": "Немає результатів для \"{{searchText}}\"",
 
   "====== Components.SelectUser ======": "",
 
   "components.selectUser.placeholder": "Пошук за електронною адресою або дескриптором",
-  "components.selectUser.change": "Клацніть щоб змінити",
-  "components.selectUser.select": "Клацніть щоб вибрати",
+  "components.selectUser.change": "Натисніть щоб змінити",
+  "components.selectUser.select": "Натисніть щоб вибрати",
   "components.selectUser.searching": "Шукаю на \"{{name}}\"...",
   "components.selectUser.null": "Немає результатів для \"{{name}}\"",
 
