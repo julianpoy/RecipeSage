@@ -917,6 +917,8 @@
   "pages.settings.language": "Мова",
   "pages.settings.language.contribute": "Зв’яжіться зі мною, щоб додати мову",
   "pages.settings.language.default": "Згідно з браузером",
+
+  "pages.settings.fontSize": "Розмір шрифту",
   "pages.settings.reset": "Скинути всі параметри",
 
   "pages.settings.offline.loading": "Отримання всіх рецептів, зачекайте...",
