@@ -1249,6 +1249,18 @@
   "components.scaleRecipe.cancel": "Скасувати",
   "components.scaleRecipe.apply": "Застосувати",
 
+  "====== Modals.FontSize ======": "",
+
+  "components.fontSize.title": "Налаштувати розмір шрифту",
+  "components.fontSize.option.X1_0": "Повага до системи Перевага",
+  "components.fontSize.option.PX14": "14px (Малий)",
+  "components.fontSize.option.PX16": "16px (Нормально)",
+  "components.fontSize.option.PX18": "18px (Більший)",
+  "components.fontSize.option.PX20": "20px (Більший)",
+  "components.fontSize.option.PX22": "22px (Більший)",
+  "components.fontSize.option.PX24": "24px (Більший)",
+  "components.fontSize.reset": "Перезавантаження",
+
   "====== Services.QuickTutorial ======": "",
 
   "services.quickTutorial.multipleRecipeSelection.header": "Вибір кількох рецептів",
