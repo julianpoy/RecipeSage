@@ -353,13 +353,13 @@
   "pages.downloadAndInstall.android.instructionHeader": "Для встановлення RecipeSage на Android:",
   "pages.downloadAndInstall.android.step.1": "Відкрийте баузер Chrome",
   "pages.downloadAndInstall.android.step.2": "Відкрийте меню браузера за допомогою кнопки у своєму браузері, яка виглядає так:",
-  "pages.downloadAndInstall.android.step.3": "Натисніть \"Додати на головний екран \"",
+  "pages.downloadAndInstall.android.step.3": "Натисніть \"Додати на головний екран\"",
 
   "pages.downloadAndInstall.ios.title": "Пристрій Apple Mobile",
   "pages.downloadAndInstall.ios.instructionHeader": "Для встановлення RecipeSage на пристрій Apple Mobile (IOS):",
   "pages.downloadAndInstall.ios.step.1": "Відкрийте Safari",
   "pages.downloadAndInstall.ios.step.2": "Відкрийте меню Share за допомогою кнопки в нижній панелі, яка виглядає так:",
-  "pages.downloadAndInstall.ios.step.3": "Натисніть \"Додати на головний екран \"",
+  "pages.downloadAndInstall.ios.step.3": "Натисніть \"Додати на головний екран\"",
 
   "pages.downloadAndInstall.desktop.title": "Настільний компьютер або ноутбук",
   "pages.downloadAndInstall.desktop.instructionHeader": "Для встановлення RecipeSage на настільний компьютер або ноутбук:",
@@ -450,7 +450,7 @@
   "pages.mealPlan.modal.delete.message": "Це видалить всі пункти із {{daysList}}",
 
   "pages.mealPlan.modal.noRecipes.header": "Немає рецептів",
-  "pages.mealPlan.modal.noRecipes.message": "Вибрані дні не містять рецептів.\Пам’ятайте, що до списку покупок можна додати лише ті страви, для яких існують рецепти.\Звідси Ви не можете додавати страви, введені вручну, до списку покупок.",
+  "pages.mealPlan.modal.noRecipes.message": "Вибрані дні не містять рецептів. Пам’ятайте, що до списку покупок можна додати лише ті страви, для яких існують рецепти. Звідси Ви не можете додавати страви, введені вручну, до списку покупок.",
 
   "pages.mealPlan.modal.copyConfirm.header": "Копіювати всі вибрані страви",
   "pages.mealPlan.modal.copyConfirm.messageSingle": "Це скопіює страви із {{selectedDayList}} на {{destDay}}",
