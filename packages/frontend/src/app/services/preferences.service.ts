@@ -2,6 +2,14 @@ import { Injectable } from "@angular/core";
 
 const PREFERENCE_LOCALSTORAGE_KEY = "preferences";
 
+/**
+ * All supported languages by RecipeSage.
+ *
+ * NOTE: To add a language, you'll need to:
+ * 1. Add the language json file to the frontend assets/i18n folder
+ * 2. Add the language to this enum
+ * 3. Add the language to the util service `defaultLocality`
+ **/
 export enum SupportedLanguages {
   EN_US = "en-us",
   IT_IT = "it-it",
