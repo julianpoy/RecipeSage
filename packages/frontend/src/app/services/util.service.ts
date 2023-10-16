@@ -249,6 +249,7 @@ const defaultLocality = {
   en: SupportedLanguages.EN_US,
   it: SupportedLanguages.IT_IT,
   de: SupportedLanguages.DE_DE,
+  uk: SupportedLanguages.UK_UA,
 };
 
 @Injectable({
