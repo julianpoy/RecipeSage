@@ -6,7 +6,11 @@
     [disabled]="!isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]"
     when="(min-width: 1200px)"
   >
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu
+      (ionWillOpen)="updateNavList()"
+      contentId="main-content"
+      type="overlay"
+    >
       <ion-header>
         <ion-toolbar color="nav">
           <ion-title
