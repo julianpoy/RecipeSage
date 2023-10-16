@@ -772,7 +772,7 @@
   "pages.importJsonLD.timeout": "Імпортування триває деякий час (це може трапитися, якщо Ваша база даних дуже велика) – перевірте через 5 хвилин. Якщо Ваші рецепти не з’являться, надішліть мені електронного листа.",
   "pages.importJsonLD.success": "Імпортування закінчено!",
 
-"====== Pages.ImportCookmate ======": "",
+  "====== Pages.ImportCookmate ======": "",
 
   "pages.importCookmate.title": "Імпорт рецептів із Cookmate файлу",
   "pages.importCookmate.description1": "Це імпортує файл Cookmate (закінчується на .mcb) у RecipeSage.",
