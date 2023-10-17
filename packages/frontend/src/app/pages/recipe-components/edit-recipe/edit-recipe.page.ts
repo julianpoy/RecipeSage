@@ -300,17 +300,27 @@ export class EditRecipePage {
 
     this.recipe.url = url;
 
-    const imageResponse = await this.imageService.createFromUrl(
-      {
-        url: response.data.imageURL,
-      },
-      {
-        400: () => {},
-        415: () => {},
-        500: () => {},
-      }
-    );
-    if (imageResponse.success) this.images.push(imageResponse.data);
+    if (response.data.imageURL?.trim().length) {
+      const IMAGE_LOADING_TIMEOUT = 3000;
+
+      // Handle very long image fetch. Dismiss loading overlay if image import takes too long.
+      await Promise.race([
+        new Promise((resolve) => setTimeout(resolve, IMAGE_LOADING_TIMEOUT)),
+        (async () => {
+          const imageResponse = await this.imageService.createFromUrl(
+            {
+              url: response.data.imageURL,
+            },
+            {
+              400: () => {},
+              415: () => {},
+              500: () => {},
+            }
+          );
+          if (imageResponse.success) this.images.push(imageResponse.data);
+        })()
+      ]);
+    }
 
     loading.dismiss();
   }
