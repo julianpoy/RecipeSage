@@ -4,6 +4,8 @@
 
 Share and collaborate on recipes, manage household shopping lists and meal planning, and import recipes from anywhere on the web instantly.
 
+<a href="https://docs.recipesage.com">Documentation</a> | <a href="https://recipesage.com">Hosted Version</a> | <a href="https://github.com/julianpoy/recipesage-selfhost">Selfhost Resources</a>
+
 ## :fork_and_knife: What can RecipeSage do?
 
 - **Import from any URL**: Create a recipe simply by punching in a web URL
