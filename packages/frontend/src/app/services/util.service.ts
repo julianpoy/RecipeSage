@@ -250,7 +250,10 @@ const defaultLocality = {
   it: SupportedLanguages.IT_IT,
   de: SupportedLanguages.DE_DE,
   uk: SupportedLanguages.UK_UA,
+  he: SupportedLanguages.HE,
 };
+
+const rtlLanguages = [SupportedLanguages.HE];
 
 @Injectable({
   providedIn: "root",
@@ -283,6 +286,13 @@ export class UtilService {
     if (isSupported(defaultLocalized)) return defaultLocalized;
 
     return SupportedLanguages.EN_US;
+  }
+
+  setHtmlBrowserLang(lang: string) {
+    document.documentElement.lang = lang;
+    if (rtlLanguages.includes(lang as SupportedLanguages)) {
+      document.documentElement.dir = 'rtl';
+    }
   }
 
   getBase(): string {
