@@ -318,7 +318,7 @@ export class EditRecipePage {
             }
           );
           if (imageResponse.success) this.images.push(imageResponse.data);
-        })()
+        })(),
       ]);
     }
 
