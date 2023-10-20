@@ -5,13 +5,13 @@ metadata:
   labels:
     app: rs-api
 spec:
+  selector:
+    matchLabels:
+      app: rs-api
   strategy:
     rollingUpdate:
       maxUnavailable: 0
       maxSurge: 100%
-  selector:
-    matchLabels:
-      app: rs-api
   template:
     metadata:
       labels:

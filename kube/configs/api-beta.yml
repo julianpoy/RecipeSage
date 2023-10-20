@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: rs-api-beta
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
   template:
     metadata:
       labels:
