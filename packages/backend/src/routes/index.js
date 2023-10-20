@@ -10,6 +10,7 @@ import * as semver from "semver";
 import * as path from "path";
 import fetch from "node-fetch";
 import * as xmljs from "xml-js";
+import { prisma } from "@recipesage/prisma";
 
 // DB
 import {
@@ -46,6 +47,46 @@ router.get("/versioncheck", (req, res) => {
   res.status(200).json({
     supported,
   });
+});
+
+// Health information in JSON response
+router.get("/health", async (req, res) => {
+  const healthy = {
+    sequelize: false,
+    prisma: false,
+  };
+
+  try {
+    await sequelize.authenticate();
+    healthy.sequelize = true;
+  } catch (e) {
+    // Do nothing
+  }
+
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    healthy.prisma = true;
+  } catch (e) {
+    // Do nothing
+  }
+
+  const status = Object.values(healthy).includes(false) ? 500 : 200;
+
+  res.status(status).json(healthy);
+});
+
+// Health information for kube/monitoring
+// 200 => healthy
+// 500 => unhealthy, roll pod
+router.get("/healthz", async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    await prisma.$queryRaw`SELECT 1`;
+
+    res.status(200).send("healthy");
+  } catch (e) {
+    res.status(500).send(e);
+  }
 });
 
 router.get(
