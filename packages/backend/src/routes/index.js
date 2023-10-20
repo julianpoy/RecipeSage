@@ -1,5 +1,6 @@
 import * as express from "express";
 const router = express.Router();
+import * as Sentry from "@sentry/node";
 import * as cors from "cors";
 import * as multer from "multer";
 import * as fs from "fs-extra";
@@ -85,7 +86,8 @@ router.get("/healthz", async (req, res) => {
 
     res.status(200).send("healthy");
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send("unhealthy");
+    Sentry.captureException(e);
   }
 });
 
