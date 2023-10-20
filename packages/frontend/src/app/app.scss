@@ -231,6 +231,10 @@ ion-label.sc-ion-label-ios-h.ios {
 ion-button {
   white-space: normal;
   font-size: 0.875rem;
+
+  &.button-small {
+    font-size: 0.8125rem;
+  }
 }
 
 ion-alert.md {
