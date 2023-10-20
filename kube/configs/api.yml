@@ -8,6 +8,10 @@ spec:
   selector:
     matchLabels:
       app: rs-api
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
   template:
     metadata:
       labels:
@@ -28,6 +32,18 @@ spec:
               "packages/backend/tsconfig.json",
               "packages/backend/src/bin/www",
             ]
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 1
+            periodSeconds: 10
           resources:
             requests:
               cpu: 250m
