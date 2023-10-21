@@ -291,7 +291,7 @@ export class UtilService {
   setHtmlBrowserLang(lang: string) {
     document.documentElement.lang = lang;
     if (rtlLanguages.includes(lang as SupportedLanguages)) {
-      document.documentElement.dir = 'rtl';
+      document.documentElement.dir = "rtl";
     }
   }
 
