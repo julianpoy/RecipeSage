@@ -44,7 +44,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-ingredient-instruction-classifier
