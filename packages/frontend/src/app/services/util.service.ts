@@ -292,6 +292,8 @@ export class UtilService {
     document.documentElement.lang = lang;
     if (rtlLanguages.includes(lang as SupportedLanguages)) {
       document.documentElement.dir = "rtl";
+    } else {
+      document.documentElement.dir = "ltr";
     }
   }
 
