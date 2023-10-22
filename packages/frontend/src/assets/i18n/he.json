@@ -108,7 +108,7 @@
   "pages.home.title.sharedAll": "מתכונים משותפים",
   "pages.home.title.sharedLabel": "תוויות משותפות: {{label}}",
   "pages.home.title.sharedAll.withProfile": "מתכונים משותפים של {{name}}",
-  "pages.home.title.sharedLabel.withProfile": "תווית משותפת של {{label}}  : {{name}}",
+  "pages.home.title.sharedLabel.withProfile": "תווית משותפת של {{label}}: {{name}}",
 
   "pages.home.search.placeholder": "חיפוש",
   "pages.home.search.filter": "סינון",
@@ -232,7 +232,7 @@
 
   "pages.recipeDetails.created": "נוצר",
   "pages.recipeDetails.updated": "עודכן לאחרונה",
-  "pages.recipeDetails.saveToMyRecipes": "שמירה",
+  "pages.recipeDetails.saveToMyRecipes": "שמור את המתכון",
   "pages.recipeDetails.delete": "מחיקה",
   "pages.recipeDetails.doesNotBelongToYou": "המתכון הזה עדיין לא שייך לך.",
   "pages.recipeDetails.requiresAccountToSave": "יש לבצע הרשמה / כניסה כדי לשמור את המתכון.",
