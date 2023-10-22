@@ -166,7 +166,9 @@ export class SettingsPage {
     this.preferences[GlobalPreferenceKey.Language] = newLang;
     this.preferencesService.save();
 
-    this.translate.use(newLang || this.utilService.getAppBrowserLang());
+    const language = newLang || this.utilService.getAppBrowserLang();
+    this.translate.use(language);
+    this.utilService.setHtmlBrowserLang(language);
   }
 
   fontSizeChanged() {

@@ -84,9 +84,11 @@ export class AppComponent {
     private featureFlagService: FeatureFlagService,
     public cookingToolbarService: CookingToolbarService // Required by template
   ) {
-    const language =
+    const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
-    this.translate.use(language || this.utilService.getAppBrowserLang());
+    const language = languagePref || this.utilService.getAppBrowserLang();
+    this.translate.use(language);
+    this.utilService.setHtmlBrowserLang(language);
 
     const fontSize =
       this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
