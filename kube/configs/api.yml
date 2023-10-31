@@ -103,8 +103,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-api
-  minReplicas: 2
-  maxReplicas: 4
+  minReplicas: 4
+  maxReplicas: 6
   metrics:
     - type: Resource
       resource:

@@ -12,7 +12,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
     nginx.ingress.kubernetes.io/limit-rps: "5"
-    nginx.ingress.kubernetes.io/limit-burst-multiplier: "4"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "6"
     nginx.ingress.kubernetes.io/server-snippet: |
       gzip on;
       gzip_vary on;
@@ -80,6 +80,16 @@ spec:
                 name: rs-pushpin
                 port:
                   number: 7999
+    - host: grafana.recipesage.com
+      http:
+        paths:
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-grafana
+                port:
+                  number: 3000
   tls:
     - hosts:
         - recipesage.com
@@ -89,6 +99,7 @@ spec:
         - api.recipesage.com
         - api.beta.recipesage.com
         - grip.recipesage.com
+        - grafana.recipesage.com
       secretName: rs-tls
 ---
 apiVersion: cert-manager.io/v1
