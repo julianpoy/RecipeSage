@@ -95,6 +95,12 @@
         <ion-button *ngIf="!showLogin" expand="block" (click)="auth()"
           >{{ 'pages.auth.button.register' | translate }}</ion-button
         >
+        <ion-button *ngIf="showLogin" expand="block" (click)="signInWithGoogle()"
+          >{{ 'pages.auth.button.loginGoogle' | translate }}</ion-button
+        >
+        <ion-button *ngIf="!showLogin" expand="block" (click)="signInWithGoogle()"
+          >{{ 'pages.auth.button.registerGoogle' | translate }}</ion-button
+        >
       </div>
 
       <div>

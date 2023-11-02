@@ -1,4 +1,3 @@
-import { initializeApp } from "firebase/app";
 import {
   getMessaging,
   getToken,
@@ -9,13 +8,13 @@ import {
 
 import { Injectable } from "@angular/core";
 
-import { ToastController, AlertController } from "@ionic/angular";
+import { AlertController } from "@ionic/angular";
 
 import { UserService } from "./user.service";
-import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import { EventService } from "./event.service";
 import { ErrorHandlers } from "./http-error-handler.service";
+import { FirebaseService } from "./firebase.service";
 
 export interface Message {
   id: string;
@@ -76,12 +75,11 @@ export class MessagingService {
   private isFCMSupportedPromise: Promise<boolean> | undefined;
 
   constructor(
-    public events: EventService,
-    public utilService: UtilService,
-    public httpService: HttpService,
-    public userService: UserService,
-    public alertCtrl: AlertController,
-    public toastCtrl: ToastController
+    private events: EventService,
+    private httpService: HttpService,
+    private userService: UserService,
+    private alertCtrl: AlertController,
+    private firebaseService: FirebaseService,
   ) {
     this.updateFCMSupported();
 
@@ -90,15 +88,8 @@ export class MessagingService {
       if (!isFCMSupported) return;
 
       console.log("Has service worker registration. Beginning setup.");
-      const config = {
-        appId: "1:1064631313987:android:b6ca7a14265a6a01",
-        apiKey: "AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0",
-        projectId: "chef-book",
-        messagingSenderId: "1064631313987",
-      };
-      const app = initializeApp(config);
 
-      this.messaging = getMessaging(app);
+      this.messaging = getMessaging(this.firebaseService.app);
 
       onMessage(this.messaging, (message) => {
         console.log("received foreground FCM: ", message);

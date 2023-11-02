@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, ElementRef, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -7,6 +7,8 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import * as Sentry from "@sentry/browser";
 
 import { IS_SELFHOST } from "../../../environments/environment";
 
@@ -16,6 +18,7 @@ import { LoadingService } from "~/services/loading.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
+import { FirebaseService } from "../../services/firebase.service";
 
 @Component({
   selector: "page-auth",
@@ -38,19 +41,22 @@ export class AuthPage {
 
   isInModal = false;
 
+  googleAuthProvider = new GoogleAuthProvider();
+
   constructor(
-    public events: EventService,
-    public translate: TranslateService,
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public messagingService: MessagingService,
-    public capabilitiesService: CapabilitiesService,
-    public alertCtrl: AlertController,
-    public toastCtrl: ToastController,
-    public route: ActivatedRoute,
-    public userService: UserService
+    private events: EventService,
+    private translate: TranslateService,
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
+    private utilService: UtilService,
+    private loadingService: LoadingService,
+    private messagingService: MessagingService,
+    private capabilitiesService: CapabilitiesService,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private firebaseService: FirebaseService,
   ) {
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
@@ -84,6 +90,25 @@ export class AuthPage {
         duration: 6000,
       })
     ).present();
+  }
+
+  async signInWithGoogle() {
+    const auth = getAuth(this.firebaseService.app);
+
+    try {
+      const result = await signInWithPopup(auth, this.googleAuthProvider);
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (!credential) return;
+
+      const user = result.user;
+
+      console.log(user);
+    } catch(e) {
+      console.error(e);
+      Sentry.captureException(e);
+    }
   }
 
   async auth() {

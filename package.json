@@ -44,7 +44,7 @@
     "express": "~4.18.2",
     "express-grip": "^1.2.1",
     "extract-zip": "^2.0.1",
-    "firebase": "^9.17.1",
+    "firebase": "^9.23.0",
     "firebase-admin": "^11.4.1",
     "fraction.js": "^4.2.0",
     "fs-extra": "^11.1.0",
