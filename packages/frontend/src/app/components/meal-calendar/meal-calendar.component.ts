@@ -262,12 +262,12 @@ export class MealCalendarComponent {
   getDaysBetween(day1: number, day2: number): number[] {
     const days: number[] = [];
 
-    const iterDate = dayjs(day1);
+    const iterDate = new Date(day1);
 
-    while (iterDate.isBefore(day2)) {
-      days.push(dayjs(iterDate).valueOf());
+    while (iterDate <= new Date(day2)) {
+      days.push(iterDate.getTime());
 
-      iterDate.add(1, "day");
+      iterDate.setDate(iterDate.getDate() + 1);
     }
 
     return days;
