@@ -42,8 +42,8 @@ spec:
             httpGet:
               path: /healthz
               port: 3000
-            failureThreshold: 1
-            periodSeconds: 10
+            failureThreshold: 2
+            periodSeconds: 5
           resources:
             requests:
               cpu: 250m
@@ -103,8 +103,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-api
-  minReplicas: 2
-  maxReplicas: 4
+  minReplicas: 4
+  maxReplicas: 6
   metrics:
     - type: Resource
       resource:
