@@ -74,8 +74,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-browserless
-  minReplicas: 1
-  maxReplicas: 2
+  minReplicas: 2
+  maxReplicas: 3
   metrics:
     - type: Resource
       resource:
