@@ -28,7 +28,6 @@ model Friendship {
   user                              User     @relation("Friendships_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, friendId], map: "Friendships_userId_friendId_uk")
-
   @@map("Friendships")
 }
 
@@ -44,6 +43,7 @@ model Image {
   recipeImages        RecipeImage[]
   profileImages       UserProfileImage[]
 
+  @@index([userId], map: "images_user_id")
   @@map("Images")
 }
 
@@ -58,7 +58,6 @@ model Label {
   recipeLabels  RecipeLabel[]
 
   @@unique([userId, title], map: "Labels_userId_title_uk")
-
   @@map("Labels")
 }
 
@@ -77,6 +76,8 @@ model MealPlanItem {
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   shoppingListItems ShoppingListItem[]
 
+  @@index([mealPlanId], map: "meal_plan_items_meal_plan_id")
+  @@index([recipeId], map: "meal_plan_items_recipe_id")
   @@map("MealPlanItems")
 }
 
@@ -89,6 +90,7 @@ model MealPlanCollaborator {
   mealPlan   MealPlan  @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([mealPlanId, userId])
   @@map("MealPlan_Collaborators")
 }
 
@@ -120,6 +122,8 @@ model Message {
   recipe                                     Recipe?  @relation("Messages_recipeIdToRecipes", fields: [recipeId], references: [id])
   toUser                                     User     @relation("Messages_toUserIdToUsers", fields: [toUserId], references: [id], onDelete: Cascade)
 
+  @@index([originalRecipeId], map: "messages_original_recipe_id")
+  @@index([recipeId], map: "messages_recipe_id")
   @@map("Messages")
 }
 
@@ -152,7 +156,7 @@ model RecipeImage {
   recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@index([recipeId], map: "recipe__images_recipe_id")
-
+  @@index([imageId], map: "recipe__images_image_id")
   @@map("Recipe_Images")
 }
 
@@ -166,9 +170,9 @@ model RecipeLabel {
   recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([labelId, recipeId], map: "Recipe_Labels_labelId_recipeId_uk")
+  @@unique([recipeId, labelId])
   @@index([labelId], map: "recipe__labels_label_id")
   @@index([recipeId], map: "recipe__labels_recipe_id")
-
   @@map("Recipe_Labels")
 }
 
@@ -202,7 +206,7 @@ model Recipe {
   shoppingListItems                           ShoppingListItem[]
 
   @@index([userId], map: "recipes_user_id")
-
+  @@index([fromUserId], map: "recipes_from_user_id")
   @@map("Recipes")
 }
 
@@ -234,6 +238,8 @@ model ShoppingListItem {
   shoppingList   ShoppingList   @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([recipeId], map: "shopping_list_items_recipe_id")
+  @@index([shoppingListId], map: "shopping_list_items_shopping_list_id")
   @@map("ShoppingListItems")
 }
 
@@ -246,6 +252,7 @@ model ShoppingListCollaborator {
   shoppingList   ShoppingList  @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([shoppingListId, userId])
   @@map("ShoppingList_Collaborators")
 }
 
