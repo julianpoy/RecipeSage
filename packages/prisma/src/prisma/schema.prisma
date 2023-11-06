@@ -39,7 +39,7 @@ model Image {
   json          Json?
   createdAt     DateTime           @db.Timestamptz(6)
   updatedAt     DateTime           @db.Timestamptz(6)
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User               @relation(fields: [userId], references: [id], onDelete: SetNull)
   recipeImages  RecipeImage[]
   profileImages UserProfileImage[]
 
