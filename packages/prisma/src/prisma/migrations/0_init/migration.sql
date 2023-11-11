@@ -160,13 +160,6 @@ CREATE TABLE "Recipes" (
 );
 
 -- CreateTable
-CREATE TABLE "SequelizeMeta" (
-    "name" VARCHAR(255) NOT NULL,
-
-    CONSTRAINT "SequelizeMeta_pkey" PRIMARY KEY ("name")
-);
-
--- CreateTable
 CREATE TABLE "Sessions" (
     "id" UUID NOT NULL,
     "userId" UUID NOT NULL,
@@ -275,14 +268,42 @@ CREATE TABLE "Users" (
     CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "SequelizeMeta" (
+    "name" VARCHAR(255) NOT NULL,
+
+    CONSTRAINT "SequelizeMeta_pkey" PRIMARY KEY ("name")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Friendships_userId_friendId_uk" ON "Friendships"("userId", "friendId");
+
+-- CreateIndex
+CREATE INDEX "images_user_id" ON "Images"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Labels_userId_title_uk" ON "Labels"("userId", "title");
 
 -- CreateIndex
+CREATE INDEX "meal_plan_items_meal_plan_id" ON "MealPlanItems"("mealPlanId");
+
+-- CreateIndex
+CREATE INDEX "meal_plan_items_recipe_id" ON "MealPlanItems"("recipeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MealPlan_Collaborators_mealPlanId_userId_key" ON "MealPlan_Collaborators"("mealPlanId", "userId");
+
+-- CreateIndex
+CREATE INDEX "messages_original_recipe_id" ON "Messages"("originalRecipeId");
+
+-- CreateIndex
+CREATE INDEX "messages_recipe_id" ON "Messages"("recipeId");
+
+-- CreateIndex
 CREATE INDEX "recipe__images_recipe_id" ON "Recipe_Images"("recipeId");
+
+-- CreateIndex
+CREATE INDEX "recipe__images_image_id" ON "Recipe_Images"("imageId");
 
 -- CreateIndex
 CREATE INDEX "recipe__labels_label_id" ON "Recipe_Labels"("labelId");
@@ -294,7 +315,22 @@ CREATE INDEX "recipe__labels_recipe_id" ON "Recipe_Labels"("recipeId");
 CREATE UNIQUE INDEX "Recipe_Labels_labelId_recipeId_uk" ON "Recipe_Labels"("labelId", "recipeId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Recipe_Labels_recipeId_labelId_key" ON "Recipe_Labels"("recipeId", "labelId");
+
+-- CreateIndex
 CREATE INDEX "recipes_user_id" ON "Recipes"("userId");
+
+-- CreateIndex
+CREATE INDEX "recipes_from_user_id" ON "Recipes"("fromUserId");
+
+-- CreateIndex
+CREATE INDEX "shopping_list_items_recipe_id" ON "ShoppingListItems"("recipeId");
+
+-- CreateIndex
+CREATE INDEX "shopping_list_items_shopping_list_id" ON "ShoppingListItems"("shoppingListId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ShoppingList_Collaborators_shoppingListId_userId_key" ON "ShoppingList_Collaborators"("shoppingListId", "userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StripePayments_paymentIntentId_key" ON "StripePayments"("paymentIntentId");
@@ -318,7 +354,7 @@ ALTER TABLE "Friendships" ADD CONSTRAINT "Friendships_friendId_fkey" FOREIGN KEY
 ALTER TABLE "Friendships" ADD CONSTRAINT "Friendships_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Images" ADD CONSTRAINT "Images_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Images" ADD CONSTRAINT "Images_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Labels" ADD CONSTRAINT "Labels_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
