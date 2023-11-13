@@ -1056,8 +1056,8 @@
   "pages.addProfileItem.selectVisibility.friends": "My Friends Only",
 
   "pages.addProfileItem.visibility": "Visibility:",
-  "pages.addProfileItem.visibility.public": "public",
-  "pages.addProfileItem.visibility.friends": "friends only",
+  "pages.addProfileItem.visibility.public": "Public",
+  "pages.addProfileItem.visibility.friends": "Friends only",
 
   "pages.addProfileItem.itemTitle": "Featured Title",
   "pages.addProfileItem.tos": "By adding this item, you agree to the RecipeSage Sharing Policy",
