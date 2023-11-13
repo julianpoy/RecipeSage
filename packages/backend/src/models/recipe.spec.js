@@ -163,12 +163,14 @@ describe("recipe", () => {
     });
 
     describe("shares recipe to recipient", () => {
-      let user1, user2, recipe, sharedRecipe;
+      let user1, user2, recipe, sharedRecipe, initialCount;
       beforeAll(async () => {
         user1 = await createUser();
         user2 = await createUser();
 
         recipe = await createRecipe(user1.id);
+
+        initialCount = await Recipe.count();
 
         await sequelize.transaction(async (t) => {
           sharedRecipe = await recipe.share(user2.id, t);
@@ -179,7 +181,9 @@ describe("recipe", () => {
         expect(recipe.id).not.to.equal(sharedRecipe.id);
 
         return Promise.all([
-          Recipe.count().then((count) => expect(count).to.equal(2)),
+          Recipe.count().then((count) =>
+            expect(count).to.equal(initialCount + 1)
+          ),
           Recipe.findByPk(recipe.id).then((r) => expect(r).to.not.be.null),
           Recipe.findByPk(sharedRecipe.id).then(
             (r) => expect(r).to.not.be.null

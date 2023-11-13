@@ -130,13 +130,16 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
+      const intialCount = await Label.count();
+
       return request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
         .expect(500)
-        .then(() => {
-          Label.count().then((count) => expect(count).to.equal(0));
+        .then(async () => {
+          const count = await Label.count();
+          expect(count).to.equal(intialCount);
         });
     });
 
