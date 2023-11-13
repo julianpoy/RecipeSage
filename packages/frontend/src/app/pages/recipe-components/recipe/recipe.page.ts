@@ -38,6 +38,8 @@ import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import { RecipeSummary } from "@recipesage/trpc";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-recipe",
@@ -53,6 +55,7 @@ export class RecipePage {
   } = null;
 
   recipe: Recipe;
+  similarRecipes: RecipeSummary[] = [];
   recipeId: string;
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
@@ -86,7 +89,8 @@ export class RecipePage {
     public labelService: LabelService,
     public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public trpcService: TRPCService,
   ) {
     this.updateIsLoggedIn();
 
@@ -180,6 +184,12 @@ export class RecipePage {
     this.selectedLabels = this.recipe.labels.map((label) => label.title);
 
     this.updateRatingVisual();
+
+    if (this.isLoggedIn) {
+      this.similarRecipes = await this.trpcService.trpc.getSimilarRecipes.query({
+        recipeIds: [this.recipe.id],
+      });
+    }
   }
 
   async loadLabels() {
@@ -594,6 +604,10 @@ export class RecipePage {
 
   unpinRecipe() {
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  openRecipe(recipeId: string, event?: MouseEvent | KeyboardEvent) {
+    this.utilService.openRecipe(this.navCtrl, recipeId, event);
   }
 
   setupWakeLock() {

@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/node";
 import { router } from "./trpc";
 import { getRecipes } from "./procedures/recipes/getRecipes";
 import { searchRecipes } from "./procedures/recipes/searchRecipes";
+import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
 import { sendAssistantMessage } from "./procedures/assistant/sendAssistantMessage";
 import { getAssistantMessages } from "./procedures/assistant/getAssistantMessages";
 import { createContext } from "./context";
@@ -15,6 +16,7 @@ export * from "./services/search"; // Legacy while old backend still needs it
 const appRouter = router({
   getRecipes,
   searchRecipes,
+  getSimilarRecipes,
   sendAssistantMessage,
   getAssistantMessages,
 });

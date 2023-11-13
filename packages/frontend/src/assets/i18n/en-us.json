@@ -259,6 +259,7 @@
   "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
 
   "pages.recipeDetails.cloned": "The recipe has been saved to your account",
+  "pages.recipeDetails.similar": "Similar recipes in your collection",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 

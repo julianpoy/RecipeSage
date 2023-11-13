@@ -75,16 +75,16 @@ router.post(
   joiValidator(
     Joi.object({
       body: Joi.object({
-        title: Joi.string().allow("").optional(), // TODO: change to required once frontend no longer needs PreconditionFailed
-        description: Joi.string().allow("").optional(),
-        yield: Joi.string().allow("").optional(),
-        activeTime: Joi.string().allow("").optional(),
-        totalTime: Joi.string().allow("").optional(),
-        source: Joi.string().allow("").optional(),
-        url: Joi.string().allow("").optional(),
-        notes: Joi.string().allow("").optional(),
-        ingredients: Joi.string().allow("").optional(),
-        instructions: Joi.string().allow("").optional(),
+        title: Joi.string().allow("").optional().allow(null), // TODO: change to required once frontend no longer needs PreconditionFailed
+        description: Joi.string().allow("", null).optional(),
+        yield: Joi.string().allow("", null).optional(),
+        activeTime: Joi.string().allow("", null).optional(),
+        totalTime: Joi.string().allow("", null).optional(),
+        source: Joi.string().allow("", null).optional(),
+        url: Joi.string().allow("", null).optional(),
+        notes: Joi.string().allow("", null).optional(),
+        ingredients: Joi.string().allow("", null).optional(),
+        instructions: Joi.string().allow("", null).optional(),
         rating: Joi.number().min(1).max(5).allow(null).optional(),
         labels: Joi.array().items(Joi.string()).optional(),
         imageIds: Joi.array().items(Joi.string().uuid()).optional(),

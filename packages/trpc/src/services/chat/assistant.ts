@@ -153,7 +153,7 @@ export class Assistant {
           toolCallsById[toolCall.id] = toolCall;
         });
       }
-    };
+    }
 
     for (const message of response) {
       let recipeId: string | undefined = undefined;
