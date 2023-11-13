@@ -13,6 +13,7 @@
   "pages.app.nav.home": "Мої рецепти",
   "pages.app.nav.labels": "Управління мітками",
   "pages.app.nav.people": "Люди & Профілі",
+  "pages.app.nav.assistant": "Помічник кухаря",
   "pages.app.nav.messages": "Повідомлення",
   "pages.app.nav.inbox": "Вхідні рецепти",
   "pages.app.nav.newrecipe": "Створити рецепт",
@@ -258,6 +259,7 @@
   "pages.recipeDetails.deleteLabel.message": "Буде видалено мітку \"{{title}}\" з цього рецепту.",
 
   "pages.recipeDetails.cloned": "Рецепт було збережено до Вашого облікового запису",
+  "pages.recipeDetails.similar": "Схожі рецепти у вашій колекції",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -547,6 +549,13 @@
 
   "pages.shareMealPlanModal.title": "Поділитись планом харчування",
   "pages.shareMealPlanModal.description": "Посилання iCal/ICS нижче можна використовувати майже в будь-якій програмі календаря для синхронізації вашого плану харчування поза RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Помічник кухаря",
+  "pages.assistant.welcome.1": "Ласкаво просимо до кулінарного помічника RecipeSage!",
+  "pages.assistant.welcome.2": "Асистент приготування їжі - це модель штучного інтелекту, яка може відповідати на ваші кулінарні запитання та допомагати створювати рецепти.",
+  "pages.assistant.welcome.3": "Помічник кулінара має ліміт на 5 повідомлень на день через високі витрати на запуск ШІ. Для дописувачів цей ліміт збільшується до 50 повідомлень на день.",
 
   "====== Pages.MessageThread ======": "",
 

@@ -13,6 +13,7 @@
   "pages.app.nav.home": "Meine Rezepte",
   "pages.app.nav.labels": "Label verwalten",
   "pages.app.nav.people": "Personen & Profil",
+  "pages.app.nav.assistant": "Assistentin in der Küche",
   "pages.app.nav.messages": "Nachrichten",
   "pages.app.nav.inbox": "Rezepte Postfach",
   "pages.app.nav.newrecipe": "Rezept anlegen",
@@ -257,6 +258,7 @@
   "pages.recipeDetails.deleteLabel.message": "Dadurch wird das Label \"{{title}}\" von diesem Rezept entfernt.",
 
   "pages.recipeDetails.cloned": "Das Rezept wurde in deinem Konto gespeichert",
+  "pages.recipeDetails.similar": "Ähnliche Rezepte in Ihrer Sammlung",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -546,6 +548,13 @@
 
   "pages.shareMealPlanModal.title": "Essensplan teilen",
   "pages.shareMealPlanModal.description": "Der unten stehende iCal/ICS-Link kann in fast jedem Kalenderprogramm verwendet werden, um deinen Essensplan außerhalb von RecipeSage zu synchronisieren",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Assistentin in der Küche",
+  "pages.assistant.welcome.1": "Willkommen bei der RecipeSage Kochhilfe!",
+  "pages.assistant.welcome.2": "Der Kochassistent ist ein KI-Modell, das Ihre Fragen zum Thema Kochen beantworten und bei der Erstellung von Rezepten helfen kann.",
+  "pages.assistant.welcome.3": "Der Kochassistent hat wegen der hohen Kosten für den Betrieb der KI ein Nachrichtenlimit von 5 Nachrichten pro Tag. Dieses Limit wird für Beitragszahler auf 50 Nachrichten pro Tag erhöht.",
 
   "====== Pages.MessageThread ======": "",
 

@@ -13,6 +13,7 @@
   "pages.app.nav.home": "Le Mie Ricette",
   "pages.app.nav.labels": "Gestisci Etichette",
   "pages.app.nav.people": "Persone & Profilo",
+  "pages.app.nav.assistant": "Assistente di cucina",
   "pages.app.nav.messages": "Messaggi",
   "pages.app.nav.inbox": "Ricette Ricevute",
   "pages.app.nav.newrecipe": "Crea una Ricetta",
@@ -258,6 +259,7 @@
   "pages.recipeDetails.deleteLabel.message": "Rimuovere l’etichetta \"{{title}}\" da questa ricetta.",
 
   "pages.recipeDetails.cloned": "La ricetta è stata aggiunta alla tua raccolta",
+  "pages.recipeDetails.similar": "Ricette simili nella vostra collezione",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -547,6 +549,13 @@
 
   "pages.shareMealPlanModal.title": "Condividi piano alimentare",
   "pages.shareMealPlanModal.description": "Il collegamento iCal/ICS di seguito può essere utilizzato in quasi tutti i programmi di calendario per sincronizzare il piano alimentare al di fuori di RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Assistente di cucina",
+  "pages.assistant.welcome.1": "Benvenuti nell'assistente di cucina di RecipeSage!",
+  "pages.assistant.welcome.2": "L'assistente di cucina è un modello AI in grado di rispondere alle vostre domande di cucina e di aiutarvi a creare ricette.",
+  "pages.assistant.welcome.3": "L'assistente di cucina ha un limite di 5 messaggi al giorno a causa degli alti costi di gestione dell'IA. Questo limite è aumentato a 50 messaggi al giorno per i collaboratori.",
 
   "====== Pages.MessageThread ======": "",
 

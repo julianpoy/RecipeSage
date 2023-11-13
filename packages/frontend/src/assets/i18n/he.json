@@ -13,6 +13,7 @@
   "pages.app.nav.home": "המתכונים שלי",
   "pages.app.nav.labels": "ניהול תוויות",
   "pages.app.nav.people": "אנשים ופרופיל",
+  "pages.app.nav.assistant": "עוזר בישול",
   "pages.app.nav.messages": "הודעות",
   "pages.app.nav.inbox": "דואר נכנס",
   "pages.app.nav.newrecipe": "הוספת מתכון",
@@ -258,6 +259,7 @@
   "pages.recipeDetails.deleteLabel.message": "פעולה זו תמחק את התווית  \"{{title}}\" מהמתכון.",
 
   "pages.recipeDetails.cloned": "המתכון נשמר",
+  "pages.recipeDetails.similar": "מתכונים דומים באוסף שלך",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -547,6 +549,13 @@
 
   "pages.shareMealPlanModal.title": "שיתוף תוכנית ארוחה",
   "pages.shareMealPlanModal.description": "ניתן להשתמש בקישור iCal/ICS כמעט בכל תוכנית לוח שנה כדי לסנכרן את תכנית הארוחות שלך מחוץ ל-RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "עוזר בישול",
+  "pages.assistant.welcome.1": "ברוכים הבאים לעוזר הבישול של RecipeSage!",
+  "pages.assistant.welcome.2": "עוזר הבישול הוא מודל AI שיכול להגיב לשאלות הבישול שלך ולעזור ביצירת מתכונים",
+  "pages.assistant.welcome.3": "לעוזר הבישול יש מגבלת הודעות של 5 הודעות ביום בגלל העלויות הגבוהות להפעלת ה-AI, מגבלה זו גדלה ל-50 הודעות ביום עבור תורמים",
 
   "====== Pages.MessageThread ======": "",
 
