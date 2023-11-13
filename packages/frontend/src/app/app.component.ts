@@ -258,7 +258,9 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
-    const assistant = await this.translate.get("pages.app.nav.assistant").toPromise();
+    const assistant = await this.translate
+      .get("pages.app.nav.assistant")
+      .toPromise();
     const messages = await this.translate
       .get("pages.app.nav.messages")
       .toPromise();

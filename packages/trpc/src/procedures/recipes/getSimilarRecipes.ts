@@ -20,7 +20,7 @@ export const getSimilarRecipes = publicProcedure
 
     const similarRecipes = await _getSimilarRecipes(
       session.userId,
-      input.recipeIds,
+      input.recipeIds
     );
 
     return similarRecipes;

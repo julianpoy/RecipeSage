@@ -90,7 +90,7 @@ export class RecipePage {
     public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService,
     public translate: TranslateService,
-    public trpcService: TRPCService,
+    public trpcService: TRPCService
   ) {
     this.updateIsLoggedIn();
 
@@ -186,9 +186,11 @@ export class RecipePage {
     this.updateRatingVisual();
 
     if (this.isLoggedIn) {
-      this.similarRecipes = await this.trpcService.trpc.getSimilarRecipes.query({
-        recipeIds: [this.recipe.id],
-      });
+      this.similarRecipes = await this.trpcService.trpc.getSimilarRecipes.query(
+        {
+          recipeIds: [this.recipe.id],
+        }
+      );
     }
   }
 

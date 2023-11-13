@@ -4,19 +4,16 @@ import { TRPCError } from "@trpc/server";
 
 const assistant = new Assistant();
 
-export const getAssistantMessages = publicProcedure
-  .query(async ({ ctx }) => {
-    const session = ctx.session;
-    if (!session) {
-      throw new TRPCError({
-        message: "Must be logged in",
-        code: "UNAUTHORIZED",
-      });
-    }
+export const getAssistantMessages = publicProcedure.query(async ({ ctx }) => {
+  const session = ctx.session;
+  if (!session) {
+    throw new TRPCError({
+      message: "Must be logged in",
+      code: "UNAUTHORIZED",
+    });
+  }
 
-    const chatHistory = await assistant.getChatHistory(
-      session.userId,
-    );
+  const chatHistory = await assistant.getChatHistory(session.userId);
 
-    return chatHistory;
-  });
+  return chatHistory;
+});
