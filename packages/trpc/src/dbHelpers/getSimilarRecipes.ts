@@ -2,11 +2,11 @@ import { prisma } from "@recipesage/prisma";
 import { recipeSummary } from "../types/queryTypes";
 
 /**
-  * Removes the duplicate-numbered recipe title
-  * `Chicken Soup (2)` would become `Chicken Soup`
-  */
+ * Removes the duplicate-numbered recipe title
+ * `Chicken Soup (2)` would become `Chicken Soup`
+ */
 const stripNumberedRecipeTitle = (title: string) => {
-  return title.replace(/\s?\(\d\)$/, '');
+  return title.replace(/\s?\(\d\)$/, "");
 };
 
 export const getSimilarRecipes = async (
@@ -17,8 +17,8 @@ export const getSimilarRecipes = async (
     where: {
       id: {
         in: recipeIds,
-      }
-    }
+      },
+    },
   });
 
   if (recipes.length === 0) {
@@ -34,24 +34,27 @@ export const getSimilarRecipes = async (
       OR: [
         ...recipes.map((recipe) => ({
           title: {
-            startsWith: stripNumberedRecipeTitle(recipe.title!),
+            startsWith: stripNumberedRecipeTitle(recipe.title as string),
           },
         })),
-        ...recipes.filter((recipe) => recipe.ingredients).map((recipe) => ({
-          ingredients: recipe.ingredients,
-        })),
-        ...recipes.filter((recipe) => recipe.instructions).map((recipe) => ({
-          instructions: recipe.instructions,
-        })),
-      ]
+        ...recipes
+          .filter((recipe) => recipe.ingredients)
+          .map((recipe) => ({
+            ingredients: recipe.ingredients,
+          })),
+        ...recipes
+          .filter((recipe) => recipe.instructions)
+          .map((recipe) => ({
+            instructions: recipe.instructions,
+          })),
+      ],
     },
     ...recipeSummary,
     take: 100,
     orderBy: {
-      title: 'asc',
-    }
+      title: "asc",
+    },
   });
 
   return relatedRecipes;
 };
-

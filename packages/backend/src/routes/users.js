@@ -168,7 +168,7 @@ router.put(
         const canUploadMultipleImages =
           await SubscriptionService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionService.Capabilities.MultipleImages
           );
 
         if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
@@ -486,7 +486,7 @@ router.get(
       res.locals.session.userId
     );
 
-    const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
+    const capabilityTypes = Object.values(SubscriptionService.Capabilities);
 
     const capabilityMap = capabilityTypes.reduce((acc, capabilityType) => {
       acc[capabilityType] = userCapabilities.indexOf(capabilityType) > -1;

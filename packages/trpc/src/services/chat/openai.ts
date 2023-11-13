@@ -1,10 +1,11 @@
 import { OpenAI } from "openai";
 import { RunnableTools } from "openai/lib/RunnableFunction";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import { initBuildRecipe } from "./chatFunctions";
 
 export class OpenAIHelper {
   private openAi: OpenAI;
-  private gptModel = process.env.OPENAI_GPT_MODEL || 'gpt-3.5-turbo-1106';
+  private gptModel = process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo-1106";
 
   constructor() {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -19,7 +20,7 @@ export class OpenAIHelper {
 
   async getChatResponse(
     context: ChatCompletionMessageParam[],
-    tools: RunnableTools<any>,
+    tools: RunnableTools<[ReturnType<typeof initBuildRecipe>]>
   ): Promise<ChatCompletionMessageParam[]> {
     const runner = this.openAi.beta.chat.completions.runTools({
       messages: context,
@@ -39,19 +40,14 @@ export class OpenAIHelper {
     return chats;
   }
 
-  async generateImage(
-    prompt: string,
-    userId: string,
-  ) {
-    const image = await this.openAi.images.generate(
-      {
-        prompt,
-        n: 1,
-        response_format: 'url',
-        size: '512x512',
-        user: userId,
-      },
-    );
+  async generateImage(prompt: string, userId: string) {
+    const image = await this.openAi.images.generate({
+      prompt,
+      n: 1,
+      response_format: "url",
+      size: "512x512",
+      user: userId,
+    });
 
     const url = image.data[0].url;
     if (!url) {

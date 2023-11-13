@@ -555,6 +555,7 @@
   "pages.assistant.welcome.1": "Willkommen bei der RecipeSage Kochhilfe!",
   "pages.assistant.welcome.2": "Der Kochassistent ist ein KI-Modell, das Ihre Fragen zum Thema Kochen beantworten und bei der Erstellung von Rezepten helfen kann.",
   "pages.assistant.welcome.3": "Der Kochassistent hat wegen der hohen Kosten für den Betrieb der KI ein Nachrichtenlimit von 5 Nachrichten pro Tag. Dieses Limit wird für Beitragszahler auf 50 Nachrichten pro Tag erhöht.",
+  "pages.assistant.messageLimit": "Maximale Nachrichtenanzahl erreicht (sorry, das ist teuer!). Der Nachrichtenzähler wird um 0:00GMT zurückgesetzt.",
 
   "====== Pages.MessageThread ======": "",
 

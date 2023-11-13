@@ -556,6 +556,7 @@
   "pages.assistant.welcome.1": "Benvenuti nell'assistente di cucina di RecipeSage!",
   "pages.assistant.welcome.2": "L'assistente di cucina è un modello AI in grado di rispondere alle vostre domande di cucina e di aiutarvi a creare ricette.",
   "pages.assistant.welcome.3": "L'assistente di cucina ha un limite di 5 messaggi al giorno a causa degli alti costi di gestione dell'IA. Questo limite è aumentato a 50 messaggi al giorno per i collaboratori.",
+  "pages.assistant.messageLimit": "Raggiunto il massimo dei messaggi (scusate, è costoso!). Il conteggio dei messaggi si azzera a 0:00GMT",
 
   "====== Pages.MessageThread ======": "",
 

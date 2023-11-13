@@ -1,15 +1,14 @@
-import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, ToastController } from "@ionic/angular";
 
 import { linkifyStr } from "~/utils/linkify";
-import { Message, MessagingService } from "~/services/messaging.service";
+import { MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
-import { Recipe } from "../../../services/recipe.service";
 import { TRPCService } from "../../../services/trpc.service";
 import { AssistantMessageSummary, RecipeSummary } from "@recipesage/trpc";
 
@@ -60,7 +59,7 @@ export class AssistantPage {
     } catch (e) {}
 
     if (messageArea) messageArea.style.opacity = 0;
-    this.loadMessages('bottom', false).then(
+    this.loadMessages("bottom", false).then(
       () => {
         loading.dismiss();
         if (messageArea) messageArea.style.opacity = 1;
@@ -78,7 +77,7 @@ export class AssistantPage {
   reload() {
     this.reloading = true;
 
-    this.loadMessages('bottom', true).finally(() => {
+    this.loadMessages("bottom", true).finally(() => {
       setTimeout(() => {
         this.reloading = false; // TODO: Replace with better delay for minimum animation time
       }, 350);
@@ -86,7 +85,7 @@ export class AssistantPage {
   }
 
   refresh(refresher: any) {
-    this.loadMessages('bottom', true).then(
+    this.loadMessages("bottom", true).then(
       () => {
         refresher.target.complete();
       },
@@ -109,9 +108,15 @@ export class AssistantPage {
     }
   }
 
-  scrollIntoView(elRef: string | Element, animate?: boolean, delay?: boolean, callback?: () => any) {
+  scrollIntoView(
+    elRef: string | Element,
+    animate?: boolean,
+    delay?: boolean,
+    callback?: () => any
+  ) {
     const go = () => {
-      const element = typeof elRef === 'string' ? document.querySelector(elRef) : elRef;
+      const element =
+        typeof elRef === "string" ? document.querySelector(elRef) : elRef;
       if (!element) return;
 
       element.scrollIntoView({
@@ -140,8 +145,13 @@ export class AssistantPage {
     return item.id;
   }
 
-  async loadMessages(scrollBehavior?: 'newest' | 'bottom' | 'none', animateScroll?: boolean) {
-    const response = await this.trpcService.handle(this.trpcService.trpc.getAssistantMessages.query());
+  async loadMessages(
+    scrollBehavior?: "newest" | "bottom" | "none",
+    animateScroll?: boolean
+  ) {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.getAssistantMessages.query()
+    );
     if (!response) return;
 
     let firstNewMessage: AssistantMessageSummary | undefined = undefined;
@@ -163,20 +173,25 @@ export class AssistantPage {
         message.content = this.parseMessage(message.content);
       }
 
-      if (!this.messagesById[message.id] && !firstNewMessage) firstNewMessage = message;
+      if (!this.messagesById[message.id] && !firstNewMessage)
+        firstNewMessage = message;
       this.messagesById[message.id] = message;
 
       messages.push(message);
-    };
+    }
     this.messages = messages;
 
     this.processMessages();
 
-    if (!scrollBehavior || scrollBehavior === 'bottom') {
+    if (!scrollBehavior || scrollBehavior === "bottom") {
       this.scrollToBottom(animateScroll, true);
     }
-    if (scrollBehavior === 'newest' && firstNewMessage) {
-      this.scrollIntoView(`#message-${firstNewMessage.id}`, animateScroll, true);
+    if (scrollBehavior === "newest" && firstNewMessage) {
+      this.scrollIntoView(
+        `#message-${firstNewMessage.id}`,
+        animateScroll,
+        true
+      );
     }
   }
 
@@ -199,9 +214,31 @@ export class AssistantPage {
 
     this.processing = true;
 
-    const response = await this.trpcService.handle(this.trpcService.trpc.sendAssistantMessage.query({
-      content: pendingMessage,
-    }));
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.sendAssistantMessage.query({
+        content: pendingMessage,
+      }),
+      {
+        429: async () => {
+          const message = await this.translate
+            .get("pages.assistant.messageLimit")
+            .toPromise();
+          const close = await this.translate.get("generic.close").toPromise();
+
+          const toast = await this.toastCtrl.create({
+            message,
+            buttons: [
+              {
+                text: close,
+                role: "cancel",
+              },
+            ],
+          });
+          await toast.present();
+          return;
+        },
+      }
+    );
 
     if (!response) {
       setTimeout(() => {
@@ -211,7 +248,15 @@ export class AssistantPage {
 
     this.processing = false;
     this.pendingMessage = "";
-    this.loadMessages('newest', true);
+    this.loadMessages("newest", true);
+
+    setTimeout(() => {
+      (
+        document.querySelector(
+          "#assistant-message-textarea textarea"
+        ) as HTMLElement
+      )?.focus();
+    });
   }
 
   openRecipe(recipe: RecipeSummary) {
