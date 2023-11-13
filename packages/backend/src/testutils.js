@@ -3,23 +3,14 @@ import { v4 as uuid } from "uuid";
 
 import { User, Session, Recipe, Label, Message } from "./models/index.js";
 
-let migrate = async () => {
-  // TODO: Remove stub
-};
-
-export const syncDB = async () => {
-  // TODO: Remove stub
-};
-
 export const setup = async () => {
-  await migrate();
   const mainExecutable = await import("./app");
 
   return mainExecutable.app;
 };
 
 export const cleanup = async () => {
-  await migrate(true);
+  // Stub
 };
 
 export function randomString(len) {

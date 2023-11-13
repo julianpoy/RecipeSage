@@ -4,7 +4,6 @@ import { expect } from "chai";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createSession,
@@ -22,10 +21,6 @@ describe("labels", () => {
   let server;
   beforeAll(async () => {
     server = await setup();
-  });
-
-  beforeEach(async () => {
-    await syncDB();
   });
 
   afterAll(async () => {

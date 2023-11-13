@@ -5,7 +5,6 @@ import * as sinon from "sinon";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createSession,
@@ -25,10 +24,6 @@ describe("messages", () => {
   let server;
   beforeAll(async () => {
     server = await setup();
-  });
-
-  beforeEach(async () => {
-    await syncDB();
   });
 
   afterAll(async () => {

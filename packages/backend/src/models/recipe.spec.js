@@ -4,7 +4,6 @@ import * as sinon from "sinon";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createRecipe,
@@ -56,10 +55,6 @@ describe("recipe", () => {
   });
 
   describe("_findTitle", () => {
-    beforeEach(async () => {
-      await syncDB();
-    });
-
     it("returns initial name when no conflicts arise", async () => {
       let user = await createUser();
 
@@ -121,7 +116,6 @@ describe("recipe", () => {
     let _shareStub;
 
     beforeAll(async () => {
-      await syncDB();
       _shareStub = sinon
         .stub(Recipe.prototype, "share")
         .returns(Promise.resolve());
@@ -152,7 +146,6 @@ describe("recipe", () => {
   describe("instance.share", () => {
     let findTitleStub;
     beforeAll(async () => {
-      await syncDB();
       findTitleStub = sinon
         .stub(Recipe, "findTitle")
         .callsFake((a, b, title) => Promise.resolve(title));
