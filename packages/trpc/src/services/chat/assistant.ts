@@ -15,7 +15,7 @@ import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 
 // TODO: Move to seed lib
-(async () => {
+const initAssistantUser = async () => {
   const assistantUser = await prisma.user.upsert({
     create: {
       name: "RecipeSage Cooking Assistant",
@@ -50,7 +50,10 @@ import { Capabilities, userHasCapability } from "../capabilities";
       },
     });
   }
-})();
+};
+if (process.env.NODE_ENV !== "test") {
+  initAssistantUser();
+}
 
 export class Assistant {
   private openAiHelper: OpenAIHelper;
