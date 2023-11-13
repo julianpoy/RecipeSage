@@ -127,6 +127,12 @@ export const RouteMap = {
     },
     path: "meal-planners/:mealPlanId",
   },
+  AssistantPage: {
+    getPath() {
+      return `/assistant`;
+    },
+    path: "assistant",
+  },
   MessagesPage: {
     getPath() {
       return `/messages`;
