@@ -76,7 +76,7 @@
     "sanitize-html": "^2.8.1",
     "semver": "^7.5.3",
     "sequelize": "^6.29.0",
-    "sharp": "^0.31.1",
+    "sharp": "^0.32.6",
     "sqlite3": "^5.1.5",
     "stripe": "^11.9.1",
     "superjson": "^1.12.3",
