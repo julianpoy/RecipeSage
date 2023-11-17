@@ -13,6 +13,7 @@
   "pages.app.nav.home": "My Recipes",
   "pages.app.nav.labels": "Manage Labels",
   "pages.app.nav.people": "People & Profile",
+  "pages.app.nav.assistant": "Cooking Assistant",
   "pages.app.nav.messages": "Messages",
   "pages.app.nav.inbox": "Recipe Inbox",
   "pages.app.nav.newrecipe": "Create Recipe",
@@ -257,6 +258,7 @@
   "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
 
   "pages.recipeDetails.cloned": "The recipe has been saved to your account",
+  "pages.recipeDetails.similar": "Similar recipes in your collection",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -546,6 +548,14 @@
 
   "pages.shareMealPlanModal.title": "Share Meal Plan",
   "pages.shareMealPlanModal.description": "The iCal/ICS link below can be used in almost any calendar program to sync your meal plan outside of RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Cooking Assistant",
+  "pages.assistant.welcome.1": "Welcome to the RecipeSage cooking assistant!",
+  "pages.assistant.welcome.2": "The cooking assistant is an AI model that can respond to your cooking questions and help create recipes.",
+  "pages.assistant.welcome.3": "The cooking assistant has a message limit of 5 messages/day because of the high costs to run the AI. This limit is increased to 50 messages/day for contributors.",
+  "pages.assistant.messageLimit": "Maximum messages reached (sorry, it's costly!). Message count resets at 0:00GMT.",
 
   "====== Pages.MessageThread ======": "",
 

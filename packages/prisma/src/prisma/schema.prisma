@@ -8,22 +8,22 @@ datasource db {
 }
 
 model FCMToken {
-  id        String   @id @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   token     String?
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("FCMTokens")
 }
 
 model Friendship {
-  id        String   @id @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   friendId  String   @db.Uuid
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   friend    User     @relation("Friendships_friendIdToUsers", fields: [friendId], references: [id], onDelete: Cascade)
   user      User     @relation("Friendships_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
 
@@ -32,13 +32,13 @@ model Friendship {
 }
 
 model Image {
-  id            String             @id @db.Uuid
+  id            String             @id @default(uuid()) @db.Uuid
   userId        String             @db.Uuid
   location      String?            @db.VarChar(255)
   key           String?            @db.VarChar(255)
   json          Json?
-  createdAt     DateTime           @db.Timestamptz(6)
-  updatedAt     DateTime           @db.Timestamptz(6)
+  createdAt     DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime           @updatedAt @db.Timestamptz(6)
   user          User               @relation(fields: [userId], references: [id], onDelete: SetNull)
   recipeImages  RecipeImage[]
   profileImages UserProfileImage[]
@@ -48,11 +48,11 @@ model Image {
 }
 
 model Label {
-  id           String        @id @db.Uuid
+  id           String        @id @default(uuid()) @db.Uuid
   userId       String        @db.Uuid
   title        String?       @db.VarChar(255)
-  createdAt    DateTime      @db.Timestamptz(6)
-  updatedAt    DateTime      @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(6)
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   profileItems ProfileItem[]
   recipeLabels RecipeLabel[]
@@ -62,15 +62,15 @@ model Label {
 }
 
 model MealPlanItem {
-  id                String             @id @db.Uuid
+  id                String             @id @default(uuid()) @db.Uuid
   userId            String             @db.Uuid
   mealPlanId        String             @db.Uuid
   recipeId          String?            @db.Uuid
   title             String?
   scheduled         DateTime?          @db.Timestamptz(6)
   meal              String?            @db.VarChar(255)
-  createdAt         DateTime           @db.Timestamptz(6)
-  updatedAt         DateTime           @db.Timestamptz(6)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
   mealPlan          MealPlan           @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
   recipe            Recipe?            @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -82,11 +82,11 @@ model MealPlanItem {
 }
 
 model MealPlanCollaborator {
-  id         String   @id @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   mealPlanId String   @db.Uuid
   userId     String   @db.Uuid
-  createdAt  DateTime @db.Timestamptz(6)
-  updatedAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
   mealPlan   MealPlan @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -95,11 +95,11 @@ model MealPlanCollaborator {
 }
 
 model MealPlan {
-  id                String                 @id @db.Uuid
+  id                String                 @id @default(uuid()) @db.Uuid
   userId            String                 @db.Uuid
   title             String?
-  createdAt         DateTime               @db.Timestamptz(6)
-  updatedAt         DateTime               @db.Timestamptz(6)
+  createdAt         DateTime               @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime               @updatedAt @db.Timestamptz(6)
   items             MealPlanItem[]
   collaboratorUsers MealPlanCollaborator[]
   user              User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -108,15 +108,15 @@ model MealPlan {
 }
 
 model Message {
-  id               String   @id @db.Uuid
+  id               String   @id @default(uuid()) @db.Uuid
   fromUserId       String   @db.Uuid
   toUserId         String   @db.Uuid
   recipeId         String?  @db.Uuid
   originalRecipeId String?  @db.Uuid
   body             String?
   type             String?  @db.VarChar(255)
-  createdAt        DateTime @db.Timestamptz(6)
-  updatedAt        DateTime @db.Timestamptz(6)
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime @updatedAt @db.Timestamptz(6)
   fromUser         User     @relation("Messages_fromUserIdToUsers", fields: [fromUserId], references: [id], onDelete: Cascade)
   originalRecipe   Recipe?  @relation("Messages_originalRecipeIdToRecipes", fields: [originalRecipeId], references: [id])
   recipe           Recipe?  @relation("Messages_recipeIdToRecipes", fields: [recipeId], references: [id])
@@ -127,8 +127,24 @@ model Message {
   @@map("Messages")
 }
 
+model AssistantMessage {
+  id                    String   @id @default(uuid()) @db.Uuid
+  userId                String   @db.Uuid
+  role                  String   @db.VarChar(255)
+  content               String?
+  name                  String?
+  json                  Json
+  recipeId              String?  @db.Uuid
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @updatedAt @db.Timestamptz(6)
+  user                  User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
+  recipe                Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@map("AssistantMessages")
+}
+
 model ProfileItem {
-  id         String   @id @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   userId     String   @db.Uuid
   recipeId   String?  @db.Uuid
   labelId    String?  @db.Uuid
@@ -136,8 +152,8 @@ model ProfileItem {
   type       String   @db.VarChar(255)
   visibility String   @db.VarChar(255)
   order      Int
-  createdAt  DateTime @db.Timestamptz(6)
-  updatedAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
   label      Label?   @relation(fields: [labelId], references: [id], onDelete: Cascade)
   recipe     Recipe?  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -146,12 +162,12 @@ model ProfileItem {
 }
 
 model RecipeImage {
-  id        String   @id @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   recipeId  String   @db.Uuid
   imageId   String   @db.Uuid
   order     Int
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   image     Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
   recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -161,11 +177,11 @@ model RecipeImage {
 }
 
 model RecipeLabel {
-  id        String   @id @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   recipeId  String   @db.Uuid
   labelId   String   @db.Uuid
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   label     Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
   recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -177,7 +193,7 @@ model RecipeLabel {
 }
 
 model Recipe {
-  id                String             @id @db.Uuid
+  id                String             @id @default(uuid()) @db.Uuid
   userId            String             @db.Uuid
   fromUserId        String?            @db.Uuid
   title             String?
@@ -191,13 +207,14 @@ model Recipe {
   ingredients       String?
   instructions      String?
   folder            String?            @db.VarChar(255)
-  createdAt         DateTime           @db.Timestamptz(6)
-  updatedAt         DateTime           @db.Timestamptz(6)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
   indexedAt         DateTime?          @db.Timestamptz(6)
   rating            Int?
   mealPlanItems     MealPlanItem[]
   originalRecipe    Message[]          @relation("Messages_originalRecipeIdToRecipes")
   messages          Message[]          @relation("Messages_recipeIdToRecipes")
+  assistantMessages AssistantMessage[] @relation("AssistantMessages_recipeIdToRecipes")
   profileItems      ProfileItem[]
   recipeImages      RecipeImage[]
   recipeLabels      RecipeLabel[]
@@ -211,28 +228,28 @@ model Recipe {
 }
 
 model Session {
-  id        String    @id @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   userId    String    @db.Uuid
   type      String?   @db.VarChar(255)
   token     String?   @db.VarChar(255)
   expires   DateTime? @db.Timestamptz(6)
-  createdAt DateTime  @db.Timestamptz(6)
-  updatedAt DateTime  @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("Sessions")
 }
 
 model ShoppingListItem {
-  id             String        @id @db.Uuid
+  id             String        @id @default(uuid()) @db.Uuid
   userId         String        @db.Uuid
   shoppingListId String        @db.Uuid
   mealPlanItemId String?       @db.Uuid
   recipeId       String?       @db.Uuid
   title          String
   completed      Boolean
-  createdAt      DateTime      @db.Timestamptz(6)
-  updatedAt      DateTime      @db.Timestamptz(6)
+  createdAt      DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @db.Timestamptz(6)
   mealPlanItem   MealPlanItem? @relation(fields: [mealPlanItemId], references: [id], onDelete: Cascade)
   recipe         Recipe?       @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   shoppingList   ShoppingList  @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
@@ -244,11 +261,11 @@ model ShoppingListItem {
 }
 
 model ShoppingListCollaborator {
-  id             String       @id @db.Uuid
+  id             String       @id @default(uuid()) @db.Uuid
   shoppingListId String       @db.Uuid
   userId         String       @db.Uuid
-  createdAt      DateTime     @db.Timestamptz(6)
-  updatedAt      DateTime     @db.Timestamptz(6)
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime     @updatedAt @db.Timestamptz(6)
   shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -257,11 +274,11 @@ model ShoppingListCollaborator {
 }
 
 model ShoppingList {
-  id                String                     @id @db.Uuid
+  id                String                     @id @default(uuid()) @db.Uuid
   userId            String                     @db.Uuid
   title             String?
-  createdAt         DateTime                   @db.Timestamptz(6)
-  updatedAt         DateTime                   @db.Timestamptz(6)
+  createdAt         DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                   @updatedAt @db.Timestamptz(6)
   items             ShoppingListItem[]
   collaboratorUsers ShoppingListCollaborator[]
   user              User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -270,7 +287,7 @@ model ShoppingList {
 }
 
 model StripePayment {
-  id              String   @id @db.Uuid
+  id              String   @id @default(uuid()) @db.Uuid
   userId          String?  @db.Uuid
   amountPaid      Int
   customerId      String   @db.VarChar(255)
@@ -278,32 +295,32 @@ model StripePayment {
   paymentIntentId String   @unique @db.VarChar(255)
   subscriptionId  String?  @db.VarChar(255)
   invoiceBlob     Json
-  createdAt       DateTime @db.Timestamptz(6)
-  updatedAt       DateTime @db.Timestamptz(6)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
   user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("StripePayments")
 }
 
 model UserSubscription {
-  id        String    @id @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   userId    String    @db.Uuid
   name      String?   @db.VarChar(255)
   expires   DateTime? @db.Timestamptz(6)
-  createdAt DateTime  @db.Timestamptz(6)
-  updatedAt DateTime  @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("UserSubscriptions")
 }
 
 model UserProfileImage {
-  id        String   @id @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   imageId   String   @db.Uuid
   order     Int
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   image     Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -311,15 +328,15 @@ model UserProfileImage {
 }
 
 model User {
-  id                        String                     @id @db.Uuid
+  id                        String                     @id @default(uuid()) @db.Uuid
   name                      String?
   email                     String?                    @unique(map: "Users_email_uk")
   passwordHash              String?
   passwordSalt              String?
   passwordVersion           Int?
   lastLogin                 DateTime?                  @db.Timestamptz(6)
-  createdAt                 DateTime                   @db.Timestamptz(6)
-  updatedAt                 DateTime                   @db.Timestamptz(6)
+  createdAt                 DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt                 DateTime                   @updatedAt @db.Timestamptz(6)
   stripeCustomerId          String?                    @unique @db.VarChar(255)
   handle                    String?                    @unique(map: "Users_handle_uk") @db.VarChar(255)
   enableProfile             Boolean                    @default(false)
@@ -334,6 +351,7 @@ model User {
   mealPlans                 MealPlan[]
   incomingMessages          Message[]                  @relation("Messages_fromUserIdToUsers")
   outgoingMessages          Message[]                  @relation("Messages_toUserIdToUsers")
+  assistantMessages         AssistantMessage[]         @relation("AssistantMessages_userIdToUsers")
   profileItems              ProfileItem[]
   outgoingRecipes           Recipe[]                   @relation("Recipes_fromUserIdToUsers")
   recipes                   Recipe[]                   @relation("Recipes_userIdToUsers")

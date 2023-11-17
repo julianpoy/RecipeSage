@@ -69,6 +69,11 @@ export const Message = MessageInit(sequelize, DataTypes);
 db.modelNames.push(Message.name);
 db[Message.name] = Message;
 
+import { AssistantMessageInit } from "./assistantMessage.js";
+export const AssistantMessage = AssistantMessageInit(sequelize, DataTypes);
+db.modelNames.push(AssistantMessage.name);
+db[AssistantMessage.name] = AssistantMessage;
+
 import { ProfileItemInit } from "./profileitem.js";
 export const ProfileItem = ProfileItemInit(sequelize, DataTypes);
 db.modelNames.push(ProfileItem.name);

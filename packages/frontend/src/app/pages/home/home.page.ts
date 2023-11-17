@@ -17,7 +17,7 @@ import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
-import { RouteMap } from "~/services/util.service";
+import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
 import {
@@ -127,7 +127,8 @@ export class HomePage {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private websocketService: WebsocketService,
-    private trpcService: TRPCService
+    private trpcService: TRPCService,
+    private utilService: UtilService
   ) {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
@@ -365,11 +366,7 @@ export class HomePage {
   }
 
   openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
-    if (event && (event.metaKey || event.ctrlKey)) {
-      window.open(`#/recipe/${recipe.id}`);
-      return;
-    }
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
+    this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
   async presentPopover(event: Event) {

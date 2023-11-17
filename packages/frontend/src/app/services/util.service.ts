@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { API_BASE_URL } from "../../environments/environment";
 import { SupportedFontSize, SupportedLanguages } from "./preferences.service";
+import { NavController } from "@ionic/angular";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -126,6 +127,12 @@ export const RouteMap = {
       return `/meal-planners/${mealPlanId}`;
     },
     path: "meal-planners/:mealPlanId",
+  },
+  AssistantPage: {
+    getPath() {
+      return `/assistant`;
+    },
+    path: "assistant",
   },
   MessagesPage: {
     getPath() {
@@ -442,5 +449,17 @@ export class UtilService {
 
     if (str.length <= trueMaxLength) return str;
     return `${str.substring(0, trueMaxLength)}${ellipsis}`;
+  }
+
+  openRecipe(
+    navCtrl: NavController,
+    recipeId: string,
+    event?: MouseEvent | KeyboardEvent
+  ) {
+    if (event && (event.metaKey || event.ctrlKey)) {
+      window.open(`#/recipe/${recipeId}`);
+      return;
+    }
+    navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipeId));
   }
 }

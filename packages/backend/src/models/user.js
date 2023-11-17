@@ -84,6 +84,11 @@ export const UserInit = (sequelize, DataTypes) => {
       as: "ownedShoppingLists",
     });
 
+    User.hasMany(models.AssistantMessage, {
+      foreignKey: "userId",
+      as: "assistantMessages",
+    });
+
     User.belongsToMany(models.ShoppingList, {
       foreignKey: "userId",
       otherKey: "shoppingListId",

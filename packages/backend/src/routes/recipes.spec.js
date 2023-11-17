@@ -6,7 +6,6 @@ const Op = Sequelize.Op;
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createSession,
@@ -26,10 +25,6 @@ describe("recipes", () => {
     server = await setup();
   });
 
-  beforeEach(async () => {
-    await syncDB();
-  });
-
   afterAll(async () => {
     await cleanup();
   });
@@ -39,6 +34,8 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
+
+      const initialCount = await Recipe.count();
 
       const payload = {
         title: randomString(20),
@@ -68,10 +65,9 @@ describe("recipes", () => {
             .then((recipe) => {
               expect(recipe).not.to.be.null;
             })
-            .then(() => {
-              Recipe.count().then((count) => {
-                expect(count).to.equal(1);
-              });
+            .then(async () => {
+              const count = await Recipe.count();
+              expect(count).to.equal(initialCount + 1);
             })
         );
     });
@@ -80,6 +76,8 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
+
+      const initialCount = await Recipe.count();
 
       const payload = {
         title: randomString(20),
@@ -99,10 +97,9 @@ describe("recipes", () => {
             .then((recipe) => {
               expect(recipe).not.to.be.null;
             })
-            .then(() => {
-              Recipe.count().then((count) => {
-                expect(count).to.equal(1);
-              });
+            .then(async () => {
+              const count = await Recipe.count();
+              expect(count).to.equal(initialCount + 1);
             })
         );
     });
@@ -111,6 +108,8 @@ describe("recipes", () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
+
+      const initialCount = await Recipe.count();
 
       const payload = {
         description: randomString(20),
@@ -130,17 +129,18 @@ describe("recipes", () => {
         .query({ token: session.token })
         .send(payload)
         .expect(412)
-        .then(() =>
-          Recipe.count().then((count) => {
-            expect(count).to.equal(0);
-          })
-        );
+        .then(async () => {
+          const count = await Recipe.count();
+          expect(count).to.equal(initialCount);
+        });
     });
 
     it("rejects if title is an empty string", async () => {
       const user = await createUser();
 
       const session = await createSession(user.id);
+
+      const initialCount = await Recipe.count();
 
       const payload = {
         title: "",
@@ -161,14 +161,15 @@ describe("recipes", () => {
         .query({ token: session.token })
         .send(payload)
         .expect(412)
-        .then(() =>
-          Recipe.count().then((count) => {
-            expect(count).to.equal(0);
-          })
-        );
+        .then(async () => {
+          const count = await Recipe.count();
+          expect(count).to.equal(initialCount);
+        });
     });
 
     it("rejects invalid token", async () => {
+      const initialCount = await Recipe.count();
+
       const payload = {
         title: randomString(20),
         description: randomString(20),
@@ -188,11 +189,10 @@ describe("recipes", () => {
         .send(payload)
         .query({ token: "invalid" })
         .expect(401)
-        .then(() =>
-          Recipe.count().then((count) => {
-            expect(count).to.equal(0);
-          })
-        );
+        .then(async () => {
+          const count = await Recipe.count();
+          expect(count).to.equal(initialCount);
+        });
     });
   });
 

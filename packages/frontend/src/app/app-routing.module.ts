@@ -128,6 +128,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.AssistantPage.path,
+    loadChildren: () =>
+      import("~/pages/messaging-components/assistant/assistant.module").then(
+        (module) => module.AssistantPageModule
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.MessagesPage.path,
     loadChildren: () =>
       import("~/pages/messaging-components/messages/messages.module").then(

@@ -4,7 +4,6 @@ import { expect } from "chai";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createSession,
@@ -22,10 +21,6 @@ describe("labels", () => {
   let server;
   beforeAll(async () => {
     server = await setup();
-  });
-
-  beforeEach(async () => {
-    await syncDB();
   });
 
   afterAll(async () => {
@@ -130,13 +125,16 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
+      const intialCount = await Label.count();
+
       return request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
         .expect(500)
-        .then(() => {
-          Label.count().then((count) => expect(count).to.equal(0));
+        .then(async () => {
+          const count = await Label.count();
+          expect(count).to.equal(intialCount);
         });
     });
 

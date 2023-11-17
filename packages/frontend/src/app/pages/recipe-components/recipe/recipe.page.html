@@ -340,19 +340,6 @@
 
     <br />
 
-    <ion-item lines="full">
-      <ion-label class="section-title">
-        <p>
-          <i>
-            {{ 'pages.recipeDetails.created' | translate }} {{
-            prettyDateTime(recipe.createdAt) }}<br />
-            {{ 'pages.recipeDetails.updated' | translate }} {{
-            prettyDateTime(recipe.updatedAt) }}
-          </i>
-        </p>
-      </ion-label>
-    </ion-item>
-
     <div *ngIf="recipe.folder === 'inbox'" class="ion-padding">
       <ion-grid>
         <ion-row>
@@ -370,6 +357,24 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </div>
+
+    <div *ngIf="similarRecipes.length">
+      <ion-item lines="none">
+        <ion-icon name="flashlight" slot="start" size="large"></ion-icon>
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.recipeDetails.similar' | translate }}
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none" *ngFor="let similarRecipe of similarRecipes">
+        <ion-button fill="clear" (click)="openRecipe(similarRecipe.id, $event)">
+          {{similarRecipe.title}}
+        </ion-button>
+      </ion-item>
+
+      <br />
     </div>
 
     <div
@@ -405,6 +410,19 @@
         {{ 'pages.recipeDetails.registerOrLoginToSave' | translate }}
       </ion-button>
     </div>
+
+    <ion-item lines="full">
+      <ion-label class="section-title">
+        <p>
+          <i>
+            {{ 'pages.recipeDetails.created' | translate }} {{
+            prettyDateTime(recipe.createdAt) }}<br />
+            {{ 'pages.recipeDetails.updated' | translate }} {{
+            prettyDateTime(recipe.updatedAt) }}
+          </i>
+        </p>
+      </ion-label>
+    </ion-item>
 
     <ion-row
       *ngIf="recipe.folder === 'main' && recipe.isOwner"
