@@ -52,7 +52,7 @@ Meal plans support drag and drop, shopping lists support automatic item categori
 
 # :ramen: Self Hosting
 
-To selfhost RecipeSage, I recommend that you use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
+To selfhost RecipeSage, I recommend that you use the preconfigured docker compose files available here: https://github.com/julianpoy/recipesage-selfhost
 
 You're welcome to configure or set up your own selfhost config based on this repository, but you may run into complications. The selfhost repository is setup to be easy to spin up, while this repository is oriented towards development.
 
@@ -80,8 +80,8 @@ Setting-up your development environment.
 Your development environment can be setup with a few easy steps.
 
 1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
-2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
-3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
+2. Up the docker images `docker compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
+3. Run the migrations scripts; `docker compose exec backend npx tsx packages/backend/src/migrate.js`
 4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣
 
-Backend API tests can be run via `docker-compose run backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
+Backend API tests can be run via `docker compose run backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
