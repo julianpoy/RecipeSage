@@ -27,7 +27,7 @@ const fractionMatchRegexp = new RegExp(
   Object.values(fractionMatchers)
     .map((matcher) => matcher[0].source)
     .join("|"),
-  "g"
+  "g",
 );
 
 const replaceFractionsInText = (rawText: string): string => {
@@ -48,11 +48,11 @@ const measurementRegexp =
 // var measurementRegexp = /(( ?\d+([\/\.]\d+)?){1,2})(((-)|( to )|( - ))(( ?\d+([\/\.]\d+)?){1,2}))?/; // Simpler version of above, but has a bug where it removes some spacing
 
 const quantityRegexp = new RegExp(
-  `(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, "\\$&")})s?(\\.)?( |$)`
+  `(${unitNames.join("|").replace(/[.*+?^${}()[\]\\]/g, "\\$&")})s?(\\.)?( |$)`,
 );
 
 const measurementQuantityRegExp = new RegExp(
-  `^(${measurementRegexp.source}) *(${quantityRegexp.source})?`
+  `^(${measurementRegexp.source}) *(${quantityRegexp.source})?`,
 ); // Should always be used with 'i' flag
 
 const fillerWordsRegexp =
@@ -71,7 +71,7 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
     .split(multipartQuantifierRegexp)
     .map((ingredientPart) => {
       const measurementMatch = stripNotes(ingredientPart).match(
-        new RegExp(measurementQuantityRegExp.source, "i")
+        new RegExp(measurementQuantityRegExp.source, "i"),
       );
 
       if (measurementMatch) return measurementMatch[0].trim();
@@ -84,7 +84,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
   const ingredientPartDelimiters = strippedIngredient.match(
-    new RegExp(multipartQuantifierRegexp, "ig")
+    new RegExp(multipartQuantifierRegexp, "ig"),
   );
 
   return strippedIngredient
@@ -92,7 +92,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .map((ingredientPart) => {
       return stripNotes(ingredientPart).replace(
         new RegExp(measurementQuantityRegExp, "i"),
-        ""
+        "",
       );
     })
     .reduce(
@@ -100,7 +100,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
         acc +
         ingredientPart +
         (ingredientPartDelimiters ? ingredientPartDelimiters[idx] || "" : ""),
-      ""
+      "",
     )
     .trim();
 };
@@ -125,7 +125,7 @@ export const stripIngredient = (ingredient: string): string => {
 export const parseIngredients = (
   ingredients: string,
   scale: number,
-  boldify?: boolean
+  boldify?: boolean,
 ): {
   content: string;
   originalContent: string;
@@ -150,11 +150,11 @@ export const parseIngredients = (
     const headerMatches = line.match(headerRegexp);
 
     const ingredientPartDelimiters = line.match(
-      new RegExp(multipartQuantifierRegexp, "g")
+      new RegExp(multipartQuantifierRegexp, "g"),
     ); // Multipart measurements (1 cup + 1 tablespoon)
     const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
     const measurementMatches = ingredientParts.map((linePart) =>
-      linePart.match(measurementRegexp)
+      linePart.match(measurementRegexp),
     );
 
     if (headerMatches && headerMatches.length > 0) {
@@ -199,7 +199,7 @@ export const parseIngredients = (
             updatedMeasurement = measurementParts.reduce(
               (acc, measurementPart, idx) =>
                 acc + measurementPart + (measurementPartDelimiters[idx] || ""),
-              ""
+              "",
             );
           } else {
             updatedMeasurement = measurementParts.join(" to ");
@@ -207,7 +207,7 @@ export const parseIngredients = (
 
           return ingredientParts[idx].replace(
             measurementRegexp,
-            updatedMeasurement
+            updatedMeasurement,
           );
         } catch (e) {
           console.error("failed to parse", e);
@@ -219,7 +219,7 @@ export const parseIngredients = (
         lines[i].content = updatedIngredientParts.reduce(
           (acc, ingredientPart, idx) =>
             acc + ingredientPart + (ingredientPartDelimiters[idx] || ""),
-          ""
+          "",
         );
       } else {
         lines[i].content = updatedIngredientParts.join(" + ");
@@ -233,7 +233,7 @@ export const parseIngredients = (
 };
 
 export const parseInstructions = (
-  instructions: string
+  instructions: string,
 ): {
   content: string;
   isHeader: boolean;
@@ -277,7 +277,7 @@ export const parseInstructions = (
 };
 
 export const parseNotes = (
-  notes: string
+  notes: string,
 ): {
   content: string;
   isHeader: boolean;

@@ -18,7 +18,7 @@ export class CapabilitiesService {
 
   constructor(
     private userService: UserService,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {
     this.updateCapabilities();
   }

@@ -58,7 +58,7 @@ export class ShareModalPage {
     public messagingService: MessagingService,
     public recipeService: RecipeService,
     public userService: UserService,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
   ) {
     setTimeout(() => {
       this.recipeURL =
@@ -69,7 +69,7 @@ export class ShareModalPage {
 
       this.loadThreads().then(
         () => {},
-        () => {}
+        () => {},
       );
 
       this.updateEmbed(true);
@@ -84,7 +84,7 @@ export class ShareModalPage {
     if (updateURL) {
       this.recipeEmbedURL = this.utilService.generateRecipeTemplateURL(
         this.recipe.id,
-        this.embedConfig
+        this.embedConfig,
       );
       this.recipePreviewURL = this.recipeEmbedURL;
     }
@@ -146,7 +146,7 @@ export class ShareModalPage {
 
     this.modalCtrl.dismiss();
     this.navCtrl.navigateForward(
-      RouteMap.MessageThreadPage.getPath(this.recipientId)
+      RouteMap.MessageThreadPage.getPath(this.recipientId),
     );
   }
 

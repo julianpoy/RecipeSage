@@ -164,7 +164,7 @@ const clipWithAPI = async () => {
 
   if (!clipResponse.ok) {
     return window.alert(
-      "Failed to clip recipe. If this continues, please report a bug"
+      "Failed to clip recipe. If this continues, please report a bug",
     );
   }
 
@@ -198,7 +198,7 @@ const saveClip = async (clipData) => {
         ...clipData,
         imageIds: imageId ? [imageId] : [],
       }),
-    }
+    },
   );
 
   if (!recipeCreateResponse.ok) {
@@ -206,13 +206,13 @@ const saveClip = async (clipData) => {
       case 401:
         chrome.storage.local.set({ token: null }, () => {
           window.alert(
-            "Please Login. It looks like you're logged out. Please click the RecipeSage icon to login again."
+            "Please Login. It looks like you're logged out. Please click the RecipeSage icon to login again.",
           );
         });
         break;
       default:
         window.alert(
-          "Could Not Save Recipe. An error occurred while saving the recipe. Please try again."
+          "Could Not Save Recipe. An error occurred while saving the recipe. Please try again.",
         );
         break;
     }
@@ -236,8 +236,8 @@ document.addEventListener("DOMContentLoaded", () => {
   [...document.getElementsByClassName("logo")].forEach(
     (logo) =>
       (logo.src = chrome.runtime.getURL(
-        "./images/recipesage-black-trimmed.png"
-      ))
+        "./images/recipesage-black-trimmed.png",
+      )),
   );
   document.getElementById("login-submit").onclick = login;
   document.getElementById("password").onkeydown = (event) => {

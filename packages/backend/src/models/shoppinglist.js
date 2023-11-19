@@ -13,7 +13,7 @@ export const ShoppingListInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   ShoppingList.associate = function (models) {
     ShoppingList.belongsTo(models.User, {

@@ -35,8 +35,8 @@ export const dispatchImportNotification = (user, status, reason) => {
     sendQueues.push(
       FirebaseService.sendMessages(
         user.fcmTokens.map((fcmToken) => fcmToken.token),
-        message
-      )
+        message,
+      ),
     );
   }
 
@@ -50,7 +50,7 @@ export const sortUserProfileImages = (user) => {
 
   if (user.profileImages && user.profileImages.length > 0) {
     user.profileImages.sort(
-      (a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order
+      (a, b) => a.User_Profile_Image.order - b.User_Profile_Image.order,
     );
   }
 
@@ -96,8 +96,8 @@ export const dispatchMessageNotification = (user, fullMessage) => {
     sendQueues.push(
       FirebaseService.sendMessages(
         user.fcmTokens.map((fcmToken) => fcmToken.token),
-        notification
-      )
+        notification,
+      ),
     );
   }
 

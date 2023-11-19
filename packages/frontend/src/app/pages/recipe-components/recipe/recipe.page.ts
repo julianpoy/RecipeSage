@@ -90,7 +90,7 @@ export class RecipePage {
     public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService,
     public translate: TranslateService,
-    public trpcService: TRPCService
+    public trpcService: TRPCService,
   ) {
     this.updateIsLoggedIn();
 
@@ -123,7 +123,7 @@ export class RecipePage {
       },
       () => {
         loading.dismiss();
-      }
+      },
     );
 
     this.setupWakeLock();
@@ -140,7 +140,7 @@ export class RecipePage {
       },
       () => {
         loader.target.complete();
-      }
+      },
     );
 
     this.loadLabels();
@@ -166,7 +166,7 @@ export class RecipePage {
 
     if (this.recipe.instructions && this.recipe.instructions.length > 0) {
       this.instructions = this.recipeService.parseInstructions(
-        this.recipe.instructions
+        this.recipe.instructions,
       );
     }
 
@@ -189,7 +189,7 @@ export class RecipePage {
       this.similarRecipes = await this.trpcService.trpc.getSimilarRecipes.query(
         {
           recipeIds: [this.recipe.id],
-        }
+        },
       );
     }
   }
@@ -275,7 +275,7 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -284,21 +284,21 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getInstructionComplete(idx: number) {
     return this.recipeCompletionTrackerService.getInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getIngredientComplete(idx: number) {
     return this.recipeCompletionTrackerService.getIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -317,7 +317,7 @@ export class RecipePage {
       this.scale = data.scale;
       this.recipeCompletionTrackerService.setRecipeScale(
         this.recipeId,
-        this.scale
+        this.scale,
       );
       this.applyScale();
     }
@@ -329,13 +329,13 @@ export class RecipePage {
     this.ingredients = this.recipeService.parseIngredients(
       this.recipe.ingredients,
       this.scale,
-      true
+      true,
     );
   }
 
   editRecipe() {
     this.navCtrl.navigateForward(
-      RouteMap.EditRecipePage.getPath(this.recipeId)
+      RouteMap.EditRecipePage.getPath(this.recipeId),
     );
   }
 

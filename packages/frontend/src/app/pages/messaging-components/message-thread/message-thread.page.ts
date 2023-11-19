@@ -47,7 +47,7 @@ export class MessageThreadPage {
     public loadingService: LoadingService,
     public websocketService: WebsocketService,
     public utilService: UtilService,
-    public messagingService: MessagingService
+    public messagingService: MessagingService,
   ) {
     const otherUserId = this.route.snapshot.paramMap.get("otherUserId");
     if (!otherUserId) {
@@ -64,10 +64,10 @@ export class MessageThreadPage {
 
         this.loadMessages().then(
           () => {},
-          () => {}
+          () => {},
         );
       },
-      this
+      this,
     );
 
     events.subscribe("application:multitasking:resumed", () => {
@@ -77,7 +77,7 @@ export class MessageThreadPage {
         () => {
           this.changeDetector.detectChanges();
         },
-        () => {}
+        () => {},
       );
     });
   }
@@ -108,7 +108,7 @@ export class MessageThreadPage {
         },
         () => {
           loading.dismiss();
-        }
+        },
       );
     }
   }
@@ -134,7 +134,7 @@ export class MessageThreadPage {
       },
       () => {
         refresher.target.complete();
-      }
+      },
     );
   }
 
@@ -191,7 +191,7 @@ export class MessageThreadPage {
       const message = this.messages[i];
       message.deservesDateDiff = !!this.deservesDateDiff(
         this.messages[i - 1],
-        message
+        message,
       );
       if (message.deservesDateDiff)
         message.dateDiff = this.formatMessageDividerDate(message.createdAt);
@@ -247,7 +247,7 @@ export class MessageThreadPage {
 
   deservesDateDiff(
     previous: { createdAt: string },
-    next: { createdAt: string }
+    next: { createdAt: string },
   ) {
     if (!previous || !next) return;
 

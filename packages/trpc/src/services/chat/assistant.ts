@@ -56,7 +56,7 @@ export class Assistant {
   }
 
   private async getChatContext(
-    userId: string
+    userId: string,
   ): Promise<ChatCompletionMessageParam[]> {
     const assistantMessages = await prisma.assistantMessage.findMany({
       where: {
@@ -74,7 +74,7 @@ export class Assistant {
       .reverse() // Oldest first
       .map(
         (assistantMessage) =>
-          assistantMessage.json as unknown as ChatCompletionMessageParam
+          assistantMessage.json as unknown as ChatCompletionMessageParam,
       );
 
     // Insert the system prompt at the beginning of the messages sent to ChatGPT (oldest)
@@ -89,7 +89,7 @@ export class Assistant {
   async checkMessageLimit(userId: string) {
     const moreMessages = await userHasCapability(
       userId,
-      Capabilities.AssistantMoreMessages
+      Capabilities.AssistantMoreMessages,
     );
 
     const lastDayReset = new Date();
@@ -161,7 +161,7 @@ export class Assistant {
         const recipeToCreate = recipes.shift();
         if (!recipeToCreate) {
           throw new Error(
-            "ChatGPT claims it created a recipe but no recipe was created by function call"
+            "ChatGPT claims it created a recipe but no recipe was created by function call",
           );
         }
 

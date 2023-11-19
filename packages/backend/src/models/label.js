@@ -13,7 +13,7 @@ export const LabelInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   Label.associate = function (models) {
     Label.belongsTo(models.User, {

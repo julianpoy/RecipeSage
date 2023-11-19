@@ -43,7 +43,7 @@ export class ProfilePage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
-    public userService: UserService
+    public userService: UserService,
   ) {
     const handle = this.route.snapshot.paramMap.get("handle")?.substring(1);
 
@@ -89,7 +89,7 @@ export class ProfilePage {
       this.handle,
       {
         403: () => this.profileDisabledError(),
-      }
+      },
     );
 
     const myProfileResponse = await this.userService.getMyProfile({
@@ -117,14 +117,14 @@ export class ProfilePage {
   open(item: any) {
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
-        RouteMap.HomePage.getPath("main", { userId: item.userId })
+        RouteMap.HomePage.getPath("main", { userId: item.userId }),
       );
     } else if (item.type === "label") {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", {
           userId: item.userId,
           selectedLabels: [item.label.title],
-        })
+        }),
       );
     } else if (item.type === "recipe") {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));

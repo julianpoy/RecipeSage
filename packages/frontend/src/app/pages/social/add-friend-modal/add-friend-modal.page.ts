@@ -26,7 +26,7 @@ export class AddFriendModalPage {
     private alertCtrl: AlertController,
     private loadingService: LoadingService,
     private userService: UserService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {}
 
   cancel() {
@@ -70,7 +70,7 @@ export class AddFriendModalPage {
       this.recipientId,
       {
         403: () => this.profileDisabledError(),
-      }
+      },
     );
 
     loading.dismiss();
@@ -100,14 +100,14 @@ export class AddFriendModalPage {
       this.recipientId,
       {
         403: () => this.profileDisabledError(),
-      }
+      },
     );
 
     loading.dismiss();
     if (!profile.success) return;
 
     this.navCtrl.navigateForward(
-      RouteMap.ProfilePage.getPath(`@${profile.data.handle}`)
+      RouteMap.ProfilePage.getPath(`@${profile.data.handle}`),
     );
     this.modalCtrl.dismiss();
   }

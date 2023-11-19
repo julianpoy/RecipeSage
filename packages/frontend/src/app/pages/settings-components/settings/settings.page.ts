@@ -61,7 +61,7 @@ export class SettingsPage {
     public offlineCacheService: OfflineCacheService,
     public preferencesService: PreferencesService,
     public featureFlagService: FeatureFlagService,
-    public quickTutorialService: QuickTutorialService
+    public quickTutorialService: QuickTutorialService,
   ) {
     try {
       this.showSplitPaneOption = screen.width >= 1200;
@@ -100,7 +100,7 @@ export class SettingsPage {
   toggleSplitPane() {
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
       this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.SplitPaneView
+        QuickTutorialOptions.SplitPaneView,
       );
     }
   }
@@ -112,7 +112,7 @@ export class SettingsPage {
         .toPromise();
 
       await this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.ExperimentalOfflineCache
+        QuickTutorialOptions.ExperimentalOfflineCache,
       );
       const loading = await this.loadingCtrl.create({
         message,

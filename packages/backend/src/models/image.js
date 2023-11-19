@@ -21,7 +21,7 @@ export const ImageInit = (sequelize, DataTypes) => {
         type: DataTypes.JSONB,
       },
     },
-    {}
+    {},
   );
   Image.associate = function (models) {
     Image.belongsTo(models.User, {

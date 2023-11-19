@@ -27,7 +27,7 @@ export class NewMealPlanModalPage {
     public mealPlanService: MealPlanService,
     public messagingService: MessagingService,
     public utilService: UtilService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {}
 
   async save() {
@@ -44,7 +44,7 @@ export class NewMealPlanModalPage {
       success: true,
     });
     this.navCtrl.navigateForward(
-      RouteMap.MealPlanPage.getPath(response.data.id)
+      RouteMap.MealPlanPage.getPath(response.data.id),
     );
   }
 

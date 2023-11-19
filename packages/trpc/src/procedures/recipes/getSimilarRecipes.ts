@@ -7,7 +7,7 @@ export const getSimilarRecipes = publicProcedure
   .input(
     z.object({
       recipeIds: z.array(z.string()).min(1),
-    })
+    }),
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -20,7 +20,7 @@ export const getSimilarRecipes = publicProcedure
 
     const similarRecipes = await _getSimilarRecipes(
       session.userId,
-      input.recipeIds
+      input.recipeIds,
     );
 
     return similarRecipes;

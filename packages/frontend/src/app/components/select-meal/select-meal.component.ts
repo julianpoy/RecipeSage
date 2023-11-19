@@ -46,7 +46,7 @@ export class SelectMealComponent {
   selectLastUsedMeal() {
     const lastUsedMeal = localStorage.getItem(LAST_USED_MEAL_VAR);
     const mealExists = this.mealOptions.find(
-      (option) => option.key === lastUsedMeal
+      (option) => option.key === lastUsedMeal,
     );
 
     if (lastUsedMeal && mealExists) {

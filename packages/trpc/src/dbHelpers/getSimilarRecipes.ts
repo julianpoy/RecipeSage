@@ -11,7 +11,7 @@ const stripNumberedRecipeTitle = (title: string) => {
 
 export const getSimilarRecipes = async (
   userId: string,
-  recipeIds: string[]
+  recipeIds: string[],
 ) => {
   const recipes = await prisma.recipe.findMany({
     where: {

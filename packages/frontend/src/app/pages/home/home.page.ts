@@ -96,7 +96,7 @@ export class HomePage {
         for (let i = 0; i < groupCount; i++) {
           const recipeIdx = i * this.tileColCount;
           recipeGroups.push(
-            recipes.slice(recipeIdx, recipeIdx + this.tileColCount)
+            recipes.slice(recipeIdx, recipeIdx + this.tileColCount),
           );
         }
 
@@ -128,7 +128,7 @@ export class HomePage {
     private preferencesService: PreferencesService,
     private websocketService: WebsocketService,
     private trpcService: TRPCService,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
@@ -163,7 +163,7 @@ export class HomePage {
         },
         () => {
           loading.dismiss();
-        }
+        },
       );
     });
 
@@ -174,7 +174,7 @@ export class HomePage {
           this.resetAndLoadRecipes();
         }
       },
-      this
+      this,
     );
 
     this.updateTileColCount();
@@ -193,7 +193,7 @@ export class HomePage {
         },
         () => {
           loading.dismiss();
-        }
+        },
       );
     }
 
@@ -207,7 +207,7 @@ export class HomePage {
       if (!response.success) return;
 
       this.defaultBackHref = RouteMap.ProfilePage.getPath(
-        `@${response.data.handle}`
+        `@${response.data.handle}`,
       );
     }
   }
@@ -254,7 +254,7 @@ export class HomePage {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
       this.selectedLabels = this.selectedLabels.filter((e) =>
-        labelNames.has(e)
+        labelNames.has(e),
       );
 
       return this.resetAndLoadRecipes();
@@ -276,7 +276,7 @@ export class HomePage {
       },
       () => {
         this.loading = false;
-      }
+      },
     );
   }
 
@@ -321,7 +321,7 @@ export class HomePage {
         includeAllFriends,
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
         userIds: this.userId ? [this.userId] : undefined,
-      })
+      }),
     );
 
     if (!result) return;
@@ -353,7 +353,7 @@ export class HomePage {
         acc[friendEntry.otherUser.id] = friendEntry.otherUser;
         return acc;
       },
-      {}
+      {},
     );
   }
 
@@ -430,7 +430,7 @@ export class HomePage {
           includeAllFriends,
           ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
           userIds: this.userId ? [this.userId] : undefined,
-        })
+        }),
       )
       .finally(loading.dismiss);
 
@@ -507,7 +507,7 @@ export class HomePage {
     const recipeNames = this.selectedRecipeIds
       .map(
         (recipeId) =>
-          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title
+          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title,
       )
       .join(", ");
 

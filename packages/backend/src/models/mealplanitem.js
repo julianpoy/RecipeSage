@@ -22,7 +22,7 @@ export const MealPlanItemInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   MealPlanItem.associate = function (models) {
     MealPlanItem.belongsTo(models.User, {

@@ -10,7 +10,7 @@ module.exports = {
   down: (queryInterface) => {
     return queryInterface.removeConstraint(
       "Friendships",
-      "Friendships_userId_friendId_uk"
+      "Friendships_userId_friendId_uk",
     );
   },
 };

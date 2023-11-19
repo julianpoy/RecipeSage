@@ -17,7 +17,7 @@ export const UserSubscriptionInit = (sequelize, DataTypes) => {
         allowNull: true,
       },
     },
-    {}
+    {},
   );
   UserSubscription.associate = function (models) {
     UserSubscription.belongsTo(models.User, {

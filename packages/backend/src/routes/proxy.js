@@ -17,7 +17,7 @@ router.post(
             "Content-Type": "application/json",
           },
           body: JSON.stringify(req.body),
-        }
+        },
       );
 
       const json = await response.json();
@@ -26,7 +26,7 @@ router.post(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 export default router;

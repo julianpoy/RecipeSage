@@ -20,7 +20,7 @@ export class OfflineCacheService {
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
     private recipeService: RecipeService,
-    private events: EventService
+    private events: EventService,
   ) {
     const ffEnabled =
       this.featureFlagService.flags[

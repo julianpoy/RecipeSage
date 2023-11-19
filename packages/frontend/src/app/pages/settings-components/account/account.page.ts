@@ -45,7 +45,7 @@ export class AccountPage {
     public loadingService: LoadingService,
     public recipeService: RecipeService,
     public userService: UserService,
-    public capabilitiesService: CapabilitiesService
+    public capabilitiesService: CapabilitiesService,
   ) {
     const resetToken = getQueryParam("token");
     if (resetToken) localStorage.setItem("token", resetToken);
@@ -79,7 +79,7 @@ export class AccountPage {
             expired: this.getExpiryForCapability(name).expired,
             expires: this.getExpiryForCapability(name).expires,
           };
-        }
+        },
       );
     });
   }
@@ -90,7 +90,7 @@ export class AccountPage {
     try {
       const matchingSubscriptions = this.account.subscriptions
         .filter((subscription: any) =>
-          subscription.capabilities.includes(capabilityName)
+          subscription.capabilities.includes(capabilityName),
         )
         .sort((a: any, b: any) => {
           if (a.expires == null) return -1;
@@ -205,7 +205,7 @@ export class AccountPage {
             })
           ).present();
         },
-      }
+      },
     );
 
     loading.dismiss();
@@ -280,7 +280,7 @@ export class AccountPage {
           text: okay,
           handler: () => {
             this.navCtrl.navigateRoot(
-              RouteMap.AuthPage.getPath(AuthType.Login)
+              RouteMap.AuthPage.getPath(AuthType.Login),
             );
           },
         },

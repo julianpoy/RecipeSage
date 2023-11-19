@@ -63,7 +63,7 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
                 "Content-Type": "application/json",
               },
               body: interceptedRequest.postData(),
-            }
+            },
           );
 
           const text = await response.text();

@@ -44,7 +44,7 @@ module.exports = {
             fields: ["shoppingListId", "userId"],
           },
         },
-      }
+      },
     );
   },
   down: (queryInterface) => {

@@ -88,7 +88,7 @@ describe("messages", () => {
             expect(message.toUser.email).to.equal(user2.email);
             // Should have dispatched notification to recipient
             sinon.assert.calledOnce(dispatchStub);
-          })
+          }),
         );
     });
 
@@ -155,7 +155,7 @@ describe("messages", () => {
 
             // Should have dispatched notification to recipient
             sinon.assert.calledOnce(dispatchStub);
-          })
+          }),
         );
     });
 
@@ -248,7 +248,7 @@ describe("messages", () => {
           user1.id,
           user3.id,
           recipeNew.id,
-          recipeOrig.id
+          recipeOrig.id,
         );
 
         const session = await createSession(user1.id);

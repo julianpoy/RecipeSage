@@ -36,7 +36,7 @@ export class ShoppingListPopoverPage {
     public shoppingListService: ShoppingListService,
     public toastCtrl: ToastController,
     public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {}
 
   savePreferences() {
@@ -56,7 +56,7 @@ export class ShoppingListPopoverPage {
         groupCategories:
           this.preferences[ShoppingListPreferenceKey.GroupCategories],
         sortBy: this.preferences[ShoppingListPreferenceKey.SortBy],
-      })
+      }),
     );
   }
 
@@ -102,7 +102,7 @@ export class ShoppingListPopoverPage {
       this.shoppingListId,
       {
         itemIds,
-      }
+      },
     );
 
     loading.dismiss();

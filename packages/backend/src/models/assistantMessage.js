@@ -21,7 +21,7 @@ export const AssistantMessageInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   AssistantMessage.associate = function (models) {
     AssistantMessage.belongsTo(models.User, {

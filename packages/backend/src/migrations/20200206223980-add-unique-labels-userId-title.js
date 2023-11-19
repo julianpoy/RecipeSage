@@ -14,7 +14,7 @@ module.exports = {
         {
           transaction,
           type: queryInterface.sequelize.QueryTypes.SELECT,
-        }
+        },
       );
 
       const duplicateLabelTitlesByUserId = {};
@@ -23,7 +23,7 @@ module.exports = {
           duplicateLabelTitlesByUserId[dupeLabel.userId] || [];
         if (
           !duplicateLabelTitlesByUserId[dupeLabel.userId].includes(
-            dupeLabel.title
+            dupeLabel.title,
           )
         ) {
           duplicateLabelTitlesByUserId[dupeLabel.userId].push(dupeLabel.title);
@@ -57,7 +57,7 @@ module.exports = {
                   userId,
                   title: duplicateLabelTitle,
                 },
-              }
+              },
             )
           ).map((result) => result.id);
 
@@ -76,7 +76,7 @@ module.exports = {
                 finalLabelId,
                 duplicateLabelIds,
               },
-            }
+            },
           );
 
           await queryInterface.sequelize.query(
@@ -89,7 +89,7 @@ module.exports = {
               replacements: {
                 duplicateLabelIds,
               },
-            }
+            },
           );
 
           labelTitlesUpdated++;

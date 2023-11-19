@@ -20,7 +20,7 @@ export const getRecipes = publicProcedure
       ratings: z
         .array(z.union([z.number().min(0).max(5), z.null()]))
         .optional(),
-    })
+    }),
   )
   .query(async ({ ctx, input }) => {
     const userIds: string[] = [];

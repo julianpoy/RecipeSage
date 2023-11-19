@@ -11,7 +11,7 @@ export const ShoppingListCollaboratorInit = (sequelize, DataTypes) => {
     },
     {
       tableName: "ShoppingList_Collaborators",
-    }
+    },
   );
   ShoppingListCollaborator.associate = () => {
     // No associations

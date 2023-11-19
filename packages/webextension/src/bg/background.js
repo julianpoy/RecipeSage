@@ -3,7 +3,7 @@ let initClipTool = (cb) => {
     {
       file: "inject/inject.js",
     },
-    cb
+    cb,
   );
 };
 
@@ -46,7 +46,7 @@ let renewToken = () => {
 
     if (token)
       fetch(
-        `https://api.recipesage.com/users/sessioncheck?token=${token}`
+        `https://api.recipesage.com/users/sessioncheck?token=${token}`,
       ).then((response) => {
         if (!response.ok && response.status == 401) {
           chrome.storage.local.set({ token: null });

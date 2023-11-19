@@ -29,7 +29,7 @@ export class NewMealPlanItemModalPage {
     public recipeService: RecipeService,
     public loadingService: LoadingService,
     public utilService: UtilService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {
     setTimeout(() => {
       this.setSanitizedScheduled();

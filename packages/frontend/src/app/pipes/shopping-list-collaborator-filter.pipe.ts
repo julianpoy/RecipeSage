@@ -8,7 +8,7 @@ export class ShoppingListCollaboratorFilterPipe implements PipeTransform {
     users: any[],
     updateWhenChanged: any,
     filter: string,
-    selectedUserIds: any[]
+    selectedUserIds: any[],
   ) {
     return users.filter((user) => {
       if (selectedUserIds.indexOf(user.id) > -1) return false;

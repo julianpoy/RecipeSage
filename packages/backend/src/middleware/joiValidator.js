@@ -8,7 +8,7 @@ export const joiValidator = (joiSchema) => {
       },
       {
         allowUnknown: true,
-      }
+      },
     );
 
     if (error) {

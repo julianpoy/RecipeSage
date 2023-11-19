@@ -20,7 +20,7 @@ export const fetchURL = (
   destURL: string,
   options?: {
     requestConfig?: Partial<RequestInit>;
-  }
+  },
 ) => {
   const fetchOpts: RequestInit = {
     method: "GET",
@@ -33,7 +33,7 @@ export const fetchURL = (
   };
 
   const isAllowlisted = FETCH_DOMAIN_ALLOWLIST.includes(
-    new URL(destURL).hostname
+    new URL(destURL).hostname,
   );
 
   if (isAllowlisted || process.env.NODE_ENV === "selfhost") {

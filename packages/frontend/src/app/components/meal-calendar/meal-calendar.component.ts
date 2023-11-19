@@ -85,7 +85,7 @@ export class MealCalendarComponent {
 
   constructor(
     public utilService: UtilService,
-    public preferencesService: PreferencesService
+    public preferencesService: PreferencesService,
   ) {
     setTimeout(() => {
       this.mealsByDateChange.emit(this.mealsByDate);
@@ -253,7 +253,7 @@ export class MealCalendarComponent {
     if (event.shiftKey)
       this.selectedDays = this.getDaysBetween(
         this.selectedDays[0],
-        day.valueOf()
+        day.valueOf(),
       );
     else this.selectedDays = [day.toDate().getTime()];
     this.dayClicked.emit(day.toDate());
@@ -277,7 +277,7 @@ export class MealCalendarComponent {
     if (this.dayDragInProgress) {
       this.selectedDays = this.getDaysBetween(
         this.selectedDays[0],
-        day.valueOf()
+        day.valueOf(),
       );
     }
   }

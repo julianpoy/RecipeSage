@@ -34,11 +34,11 @@ export class SelectCollaboratorsComponent {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
-    public translate: TranslateService
+    public translate: TranslateService,
   ) {
     this.loadThreads().then(
       () => {},
-      () => {}
+      () => {},
     );
   }
 
@@ -65,7 +65,7 @@ export class SelectCollaboratorsComponent {
         },
         {
           404: () => {},
-        }
+        },
       );
 
       if (response.success) {
@@ -142,7 +142,7 @@ export class SelectCollaboratorsComponent {
   removeCollaborator(userId: string) {
     this.selectedCollaboratorIds.splice(
       this.selectedCollaboratorIds.indexOf(userId),
-      1
+      1,
     );
     this.selectedCollaboratorIdsChanged.emit(this.selectedCollaboratorIds);
   }

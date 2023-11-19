@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  config,
 );
 
 const authPromise = sequelize.authenticate();
@@ -54,7 +54,7 @@ db[MealPlan.name] = MealPlan;
 import { MealPlanCollaboratorInit } from "./mealPlan_collaborator.js";
 export const MealPlan_Collaborator = MealPlanCollaboratorInit(
   sequelize,
-  DataTypes
+  DataTypes,
 );
 db.modelNames.push(MealPlan_Collaborator.name);
 db[MealPlan_Collaborator.name] = MealPlan_Collaborator;
@@ -107,7 +107,7 @@ db[ShoppingList.name] = ShoppingList;
 import { ShoppingListCollaboratorInit } from "./shoppingList_collaborator.js";
 export const ShoppingList_Collaborator = ShoppingListCollaboratorInit(
   sequelize,
-  DataTypes
+  DataTypes,
 );
 db.modelNames.push(ShoppingList_Collaborator.name);
 db[ShoppingList_Collaborator.name] = ShoppingList_Collaborator;

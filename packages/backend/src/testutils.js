@@ -91,7 +91,7 @@ export const createMessage = (
   fromUserId,
   toUserId,
   recipeId,
-  originalRecipeId
+  originalRecipeId,
 ) => {
   return Message.create({
     fromUserId,
