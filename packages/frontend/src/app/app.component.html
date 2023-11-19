@@ -10,6 +10,9 @@
       (ionWillOpen)="updateNavList()"
       contentId="main-content"
       type="overlay"
+      [class]="{
+        cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
+      }"
     >
       <ion-header>
         <ion-toolbar color="nav">

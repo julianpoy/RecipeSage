@@ -15,8 +15,9 @@ ion-searchbar {
   }
 }
 
-ion-router-outlet.cookingToolbarOpen {
-  bottom: 60px;
+ion-router-outlet.cookingToolbarOpen,
+ion-menu.cookingToolbarOpen {
+  height: calc(100% - 60px);
 }
 
 .bar-button-default-md:hover:not(.disable-hover),
