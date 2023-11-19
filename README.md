@@ -77,12 +77,13 @@ When contributing or suggesting code for RecipeSage, you irrevocably grant Recip
 
 Setting-up your development environment.
 
-1. Install [Docker](https://docs.docker.com/get-docker/)
+1. Install [Docker](https://docs.docker.com/get-docker/) and [Node](https://nodejs.org/en/)
 2. Clone this repo
 3. Create a `.env` file in the root of the repository using `example.env` as a template. These can be left as placeholders, but the dependent functionality will not work without a real key in place.
-4. Start the Docker containers by running `docker compose up -d` in the cloned repo
-5. Run database migrations `docker compose exec backend npx prisma migrate dev`
-6. RecipeSage should be running on `localhost` on port `80`
+4. Install dependencies by running `npm install` at the root of the repo.
+5. Start the Docker containers by running `docker compose up -d` in the cloned repo
+6. Run database migrations `docker compose exec backend npx prisma migrate dev`
+7. RecipeSage should be running on `localhost` on port `80`
 
 Some notes for the repo:
 
