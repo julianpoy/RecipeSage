@@ -4,8 +4,6 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -120,8 +118,6 @@ export class SentryErrorHandler extends ErrorHandler {
   ],
   providers: [
     { provide: ErrorHandler, useClass: SentryErrorHandler },
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DefaultPageGuardService,
     UnsavedChangesGuardService,

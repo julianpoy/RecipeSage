@@ -9,8 +9,9 @@ import {
   AlertController,
   NavController,
 } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+
+import { register } from "swiper/element/bundle";
+register();
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
@@ -69,8 +70,6 @@ export class AppComponent {
     private route: ActivatedRoute,
     private router: Router,
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private menuCtrl: MenuController,
     private events: EventService,
     private toastCtrl: ToastController,
@@ -486,8 +485,6 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
       this.menuCtrl.close();
     });
 
