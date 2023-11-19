@@ -47,3 +47,5 @@ restore.sql
 nx-cloud.env
 kube/secrets.yml
 .angular
+
+.nx/cache
