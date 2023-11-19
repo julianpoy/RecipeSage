@@ -131,7 +131,7 @@ router.post(
         const canUploadMultipleImages =
           await SubscriptionsService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionsService.Capabilities.MultipleImages
           );
 
         if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
@@ -671,7 +671,7 @@ router.put(
         const canUploadMultipleImages =
           await SubscriptionsService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionsService.Capabilities.MultipleImages
           );
 
         if (!canUploadMultipleImages && req.body.imageIds.length > 1) {

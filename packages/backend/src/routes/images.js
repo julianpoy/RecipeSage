@@ -34,7 +34,7 @@ router.post(
 
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
-      SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+      SubscriptionsService.Capabilities.HighResImages
     );
 
     let file;
@@ -74,7 +74,7 @@ router.post(
   wrapRequestWithErrorHandler(async (req, res) => {
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
-      SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+      SubscriptionsService.Capabilities.HighResImages
     );
 
     let file;

@@ -441,7 +441,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+        SubscriptionsService.Capabilities.MultipleImages
       );
 
     let optionalFlags = [];
@@ -526,7 +526,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+        SubscriptionsService.Capabilities.MultipleImages
       );
 
     let optionalFlags = [];

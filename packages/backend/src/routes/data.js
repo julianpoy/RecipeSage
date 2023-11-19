@@ -251,12 +251,12 @@ const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kil
 const importStandardizedRecipes = async (userId, recipesToImport) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
-    SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+    SubscriptionsService.Capabilities.HighResImages
   );
 
   const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
     userId,
-    SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+    SubscriptionsService.Capabilities.MultipleImages
   );
 
   if (recipesToImport.length > MAX_IMPORT_LIMIT) {
