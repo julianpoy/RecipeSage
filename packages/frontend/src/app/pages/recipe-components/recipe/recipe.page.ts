@@ -54,7 +54,7 @@ export class RecipePage {
     release: () => void;
   } = null;
 
-  recipe: Recipe;
+  recipe: Recipe | null;
   similarRecipes: RecipeSummary[] = [];
   recipeId: string;
   ingredients?: ParsedIngredient[];
@@ -100,7 +100,7 @@ export class RecipePage {
       throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
-    this.recipe = {} as Recipe;
+    this.recipe = null;
 
     this.scale =
       this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
@@ -115,7 +115,7 @@ export class RecipePage {
   ionViewWillEnter() {
     const loading = this.loadingService.start();
 
-    this.recipe = {} as Recipe;
+    this.recipe = null;
 
     this.loadAll().then(
       () => {
@@ -212,6 +212,8 @@ export class RecipePage {
   }
 
   updateRatingVisual() {
+    if (!this.recipe) return;
+
     this.ratingVisual = new Array<string>(5)
       .fill("star", 0, this.recipe.rating)
       .fill("star-outline", this.recipe.rating, 5);
@@ -322,6 +324,8 @@ export class RecipePage {
   }
 
   applyScale() {
+    if (!this.recipe) return;
+
     this.ingredients = this.recipeService.parseIngredients(
       this.recipe.ingredients,
       this.scale,
@@ -367,6 +371,8 @@ export class RecipePage {
   }
 
   private async _deleteRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     const response = await this.recipeService.delete(this.recipe.id);
@@ -423,6 +429,8 @@ export class RecipePage {
   }
 
   async moveToFolder(folderName: RecipeFolderName) {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;
@@ -462,6 +470,8 @@ export class RecipePage {
   }
 
   async addLabel(title: string) {
+    if (!this.recipe) return;
+
     if (title.length === 0) {
       const message = await this.translate
         .get("pages.recipeDetails.enterLabelWarning")
@@ -521,6 +531,8 @@ export class RecipePage {
   }
 
   private async _deleteLabel(label: Label) {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     await this.labelService.removeFromRecipe({
@@ -532,6 +544,8 @@ export class RecipePage {
   }
 
   async cloneRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
     const response = await this.recipeService.create({
       ...this.recipe,
@@ -587,6 +601,8 @@ export class RecipePage {
   }
 
   async openImageViewer() {
+    if (!this.recipe) return;
+
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
@@ -597,6 +613,8 @@ export class RecipePage {
   }
 
   pinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.pinRecipe({
       id: this.recipe.id,
       title: this.recipe.title,
@@ -605,6 +623,8 @@ export class RecipePage {
   }
 
   unpinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
   }
 
