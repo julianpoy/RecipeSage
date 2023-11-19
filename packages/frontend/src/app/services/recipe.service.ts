@@ -317,7 +317,7 @@ export class RecipeService {
     errorHandlers?: ErrorHandlers
   ) {
     const formData: FormData = new FormData();
-    formData.append("fdxzdb", fdxzFile, fdxzFile.name);
+    formData.append("fdxzdb", fdxzFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "import/fdxz",
@@ -338,7 +338,7 @@ export class RecipeService {
     errorHandlers?: ErrorHandlers
   ) {
     const formData: FormData = new FormData();
-    formData.append("lcbdb", lcbFile, lcbFile.name);
+    formData.append("lcbdb", lcbFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "import/livingcookbook",
@@ -351,7 +351,7 @@ export class RecipeService {
 
   importPaprika(paprikaFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("paprikadb", paprikaFile, paprikaFile.name);
+    formData.append("paprikadb", paprikaFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/paprika",
@@ -364,7 +364,7 @@ export class RecipeService {
 
   importJSONLD(jsonLDFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("jsonLD", jsonLDFile, jsonLDFile.name);
+    formData.append("jsonLD", jsonLDFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/json-ld",
@@ -377,7 +377,7 @@ export class RecipeService {
 
   importCookmate(file: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("cookmatedb", file, file.name);
+    formData.append("cookmatedb", file);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/cookmate",
