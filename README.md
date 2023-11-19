@@ -83,4 +83,9 @@ Setting-up your development environment.
 4. Run database migrations `docker compose exec backend npx prisma migrate dev`
 5. RecipeSage should be running on `localhost` on port `80`
 
+Some notes for the repo:
+
+1. The repo uses the monorepo management tool [nx](https://nx.dev/api). You'll find things divided up in the `packages` directory.
+2. I'm currently migrating to Prisma & TRPC, so any new functionality should be added within the `trpc` package rather than the `backend` package, unless it's an update to an existing behavior that does not merit moving.
+
 Backend API tests can be run via `docker compose exec backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
