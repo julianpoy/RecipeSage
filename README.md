@@ -73,15 +73,14 @@ This allows RecipeSage to continue to provide the hosted instance, as well as li
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
 
-# 🐤: Contributing
+# 🐤 Contributing
 
 Setting-up your development environment.
 
-Your development environment can be setup with a few easy steps.
+1. Install [Docker](https://docs.docker.com/get-docker/)
+2. Clone this repo
+3. Start the Docker containers by running `docker compose up -d` in the cloned repo
+4. Run database migrations `docker compose exec backend npx prisma migrate dev`
+5. RecipeSage should be running on `localhost` on port `80`
 
-1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
-2. Up the docker images `docker compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
-3. Run the migrations scripts; `docker compose exec backend npx tsx packages/backend/src/migrate.js`
-4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣
-
-Backend API tests can be run via `docker compose run backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
+Backend API tests can be run via `docker compose exec backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
