@@ -4,10 +4,7 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title
-      >{{ 'pages.recipeDetails.pageTitle' | translate }}: {{ recipe.title
-      }}</ion-title
-    >
+    <ion-title> {{ 'pages.recipeDetails.pageTitle' | translate }} </ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -21,7 +18,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card class="ion-no-margin">
+  <ion-card *ngIf="recipe" class="ion-no-margin">
     <ion-item lines="none">
       <ion-thumbnail
         class="ion-margin-top"
