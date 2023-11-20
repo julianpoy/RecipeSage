@@ -328,6 +328,15 @@ export class AppComponent {
       [
         true,
         {
+          id: "settings",
+          title: settings,
+          icon: "settings",
+          url: RouteMap.SettingsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "about",
           title: about,
           icon: "help-buoy",
@@ -522,21 +531,5 @@ export class AppComponent {
         console.warn(e);
       }
     });
-  }
-
-  _logout() {
-    this.utilService.removeToken();
-
-    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
-  }
-
-  logout() {
-    this.messagingService.disableNotifications();
-
-    this.userService.logout({
-      "*": () => {},
-    });
-
-    this._logout();
   }
 }

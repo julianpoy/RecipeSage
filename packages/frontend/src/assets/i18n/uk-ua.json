@@ -20,7 +20,6 @@
   "pages.app.nav.shopping": "Списки покупок",
   "pages.app.nav.meals": "Плани харчування",
   "pages.app.nav.settings": "Параметри",
-  "pages.app.nav.logout": "Вийти з системи",
 
   "====== Pages.Welcome ======": "",
 
@@ -915,8 +914,9 @@
   "pages.settings.import": "Імпорт рецептів",
   "pages.settings.export": "Експорт рецептів",
   "pages.settings.account": "Параметри й статистика",
-  "pages.settings.update": "Перевірити на оновлення",
+  "pages.settings.logout": "Вийти з системи",
   "pages.settings.section2.title": "Загальні налаштування",
+  "pages.settings.update": "Перевірити на оновлення",
   "pages.settings.splitPane": "Увімкнути розділену панель для великих екранів",
   "pages.settings.cache": "Експериментально: Кешувати всі рецепти офлайн",
   "pages.settings.theme": "Тема",

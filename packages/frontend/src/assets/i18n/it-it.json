@@ -20,7 +20,6 @@
   "pages.app.nav.shopping": "Lista della Spesa",
   "pages.app.nav.meals": "Pianifica Pasti",
   "pages.app.nav.settings": "Impostazioni",
-  "pages.app.nav.logout": "Disconnettersi",
 
   "====== Pages.Welcome ======": "",
 
@@ -915,8 +914,9 @@
   "pages.settings.import": "Importa Dati Ricette",
   "pages.settings.export": "Esporta Dati Ricette",
   "pages.settings.account": "Impostazione Profilo e Statistiche",
-  "pages.settings.update": "Controlla Aggiornamenti",
+  "pages.settings.logout": "Disconnettersi",
   "pages.settings.section2.title": "Impostazioni Generali",
+  "pages.settings.update": "Controlla Aggiornamenti",
   "pages.settings.splitPane": "Abilita la visualizzazione a riquadri separati su schermi grandi",
   "pages.settings.cache": "Versione sperimentale: Cache di tutte le ricette offline",
   "pages.settings.theme": "Tema",
