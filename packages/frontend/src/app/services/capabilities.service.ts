@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { UserService } from "./user.service";
+import { Capabilities, UserService } from "./user.service";
 import { UtilService } from "./util.service";
 
 const CAPABILITY_RETRY_RATE = 5000;
@@ -10,10 +10,11 @@ const CAPABILITY_RETRY_RATE = 5000;
 export class CapabilitiesService {
   retryTimeout: any;
 
-  capabilities = {
+  capabilities: Capabilities = {
     highResImages: false,
     multipleImages: false,
     expandablePreviews: false,
+    assistantMoreMessages: false,
   };
 
   constructor(
