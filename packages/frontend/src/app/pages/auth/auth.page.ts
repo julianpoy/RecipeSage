@@ -50,7 +50,7 @@ export class AuthPage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
-    public userService: UserService
+    public userService: UserService,
   ) {
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
@@ -148,7 +148,7 @@ export class AuthPage {
           },
           {
             412: () => this.presentToast(incorrectLogin),
-          }
+          },
         )
       : await this.userService.register(
           {
@@ -158,7 +158,7 @@ export class AuthPage {
           },
           {
             406: () => this.presentToast(emailTaken),
-          }
+          },
         );
     loading.dismiss();
     if (!response.success) return;
@@ -233,7 +233,7 @@ export class AuthPage {
       await this.modalCtrl.dismiss();
     } else {
       this.navCtrl.navigateRoot(
-        this.redirect || RouteMap.HomePage.getPath("main")
+        this.redirect || RouteMap.HomePage.getPath("main"),
       );
     }
   }

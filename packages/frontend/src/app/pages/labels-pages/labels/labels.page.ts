@@ -44,7 +44,7 @@ export class LabelsPage {
     public toastCtrl: ToastController,
     public labelService: LabelService,
     public utilService: UtilService,
-    public preferencesService: PreferencesService
+    public preferencesService: PreferencesService,
   ) {}
 
   ionViewWillEnter() {
@@ -63,7 +63,7 @@ export class LabelsPage {
       },
       () => {
         refresher.target.complete();
-      }
+      },
     );
   }
 
@@ -140,7 +140,7 @@ export class LabelsPage {
     const labelTitles = this.selectedLabelIds
       .map(
         (labelId) =>
-          this.labels.filter((label) => label.id === labelId)[0].title
+          this.labels.filter((label) => label.id === labelId)[0].title,
       )
       .join(", ");
 

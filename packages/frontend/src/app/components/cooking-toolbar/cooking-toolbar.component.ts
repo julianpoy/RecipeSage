@@ -15,7 +15,7 @@ export class CookingToolbarComponent {
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private translate: TranslateService,
-    public cookingToolbarService: CookingToolbarService
+    public cookingToolbarService: CookingToolbarService,
   ) {}
 
   openRecipe(recipeId: string) {

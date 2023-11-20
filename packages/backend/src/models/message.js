@@ -14,7 +14,7 @@ export const MessageInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   Message.associate = function (models) {
     Message.belongsTo(models.User, {

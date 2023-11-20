@@ -66,7 +66,7 @@ export class FontSizeModalComponent {
   constructor(
     private modalCtrl: ModalController,
     private preferencesService: PreferencesService,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {
     this.loadFontSizeOptions();
   }

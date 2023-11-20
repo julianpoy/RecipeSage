@@ -78,10 +78,10 @@ const getRecipeDataForExport = async (userId) => {
   const recipeData = results.map((e) => e.toJSON());
 
   recipeData.forEach((recipe) =>
-    recipe.labels.forEach((label) => delete label.Recipe_Label)
+    recipe.labels.forEach((label) => delete label.Recipe_Label),
   );
   recipeData.forEach((recipe) =>
-    recipe.images.forEach((image) => delete image.Recipe_Image)
+    recipe.images.forEach((image) => delete image.Recipe_Image),
   );
 
   if (process.env.NODE_ENV === "selfhost") {
@@ -110,8 +110,8 @@ const getRecipeDataForExport = async (userId) => {
           const data = fs.readFileSync(
             location.replace(
               "/api/images/filesystem",
-              process.env.FILESYSTEM_STORAGE_PATH
-            )
+              process.env.FILESYSTEM_STORAGE_PATH,
+            ),
           );
           const base64 = data.toString("base64");
 
@@ -151,7 +151,7 @@ router.get(
       if (req.query.download === "true")
         res.setHeader(
           "Content-disposition",
-          `attachment; filename=recipesage-data-${Date.now()}.xml`
+          `attachment; filename=recipesage-data-${Date.now()}.xml`,
         );
       res.setHeader("Content-type", "text/xml");
       res.write(xml);
@@ -159,7 +159,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 router.get(
@@ -196,7 +196,7 @@ router.get(
       if (req.query.download === "true")
         res.setHeader(
           "Content-disposition",
-          `attachment; filename=recipesage-data-${Date.now()}.txt`
+          `attachment; filename=recipesage-data-${Date.now()}.txt`,
         );
       res.setHeader("Content-type", "text/plain");
       res.write(data);
@@ -204,7 +204,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 router.get(
@@ -217,7 +217,7 @@ router.get(
       includeImages: req.query.includeImages === "true",
       includeImageUrls: req.query.includeImageUrls !== "false",
     });
-  })
+  }),
 );
 
 router.get(
@@ -234,7 +234,7 @@ router.get(
       if (req.query.download === "true")
         res.setHeader(
           "Content-disposition",
-          `attachment; filename=recipesage-data-${Date.now()}.json-ld.json`
+          `attachment; filename=recipesage-data-${Date.now()}.json-ld.json`,
         );
       res.setHeader("Content-type", "application/ld+json");
       res.write(data);
@@ -242,7 +242,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 const CONCURRENT_IMAGE_IMPORTS = 2;
@@ -251,12 +251,12 @@ const MAX_IMPORT_LIMIT = 10000; // A reasonable cutoff to make sure we don't kil
 const importStandardizedRecipes = async (userId, recipesToImport) => {
   const highResConversion = await SubscriptionsService.userHasCapability(
     userId,
-    SubscriptionsService.CAPABILITIES.HIGH_RES_IMAGES
+    SubscriptionsService.Capabilities.HighResImages,
   );
 
   const canUploadMultipleImages = await SubscriptionsService.userHasCapability(
     userId,
-    SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+    SubscriptionsService.Capabilities.MultipleImages,
   );
 
   if (recipesToImport.length > MAX_IMPORT_LIMIT) {
@@ -286,7 +286,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
       {
         returning: true,
         transaction,
-      }
+      },
     );
 
     const labelMap = {};
@@ -319,10 +319,10 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
             {
               ignoreDuplicates: true,
               transaction,
-            }
+            },
           );
         });
-      })
+      }),
     );
 
     const imagesByRecipeIdx = await Promise.all(
@@ -339,7 +339,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
                   return await writeImageBuffer(
                     ObjectTypes.RECIPE_IMAGE,
                     image,
-                    highResConversion
+                    highResConversion,
                   );
                 } else if (
                   image.startsWith("http:") ||
@@ -349,7 +349,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
                     return await writeImageURL(
                       ObjectTypes.RECIPE_IMAGE,
                       image,
-                      highResConversion
+                      highResConversion,
                     );
                   } catch (e) {
                     console.error(e);
@@ -358,13 +358,13 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
                   return await writeImageFile(
                     ObjectTypes.RECIPE_IMAGE,
                     image,
-                    highResConversion
+                    highResConversion,
                   );
                 }
-              })
-            )
+              }),
+            ),
         );
-      })
+      }),
     );
 
     console.log(imagesByRecipeIdx);
@@ -377,7 +377,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
             image,
             recipeId: recipes[recipeIdx].id,
             order: imageIdx,
-          }))
+          })),
       )
       .flat()
       .filter((e) => e);
@@ -394,7 +394,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
       {
         returning: true,
         transaction,
-      }
+      },
     );
 
     await Recipe_Image.bulkCreate(
@@ -405,7 +405,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
       })),
       {
         transaction,
-      }
+      },
     );
   });
 };
@@ -438,12 +438,12 @@ router.post(
           .send("Only supports JSON-LD or array of JSON-LD with type 'Recipe'");
 
       const recipesToImport = jsonLD.map((ld) =>
-        JSONLDService.jsonLDToRecipe(ld)
+        JSONLDService.jsonLDToRecipe(ld),
       );
 
       await importStandardizedRecipes(
         res.locals.session.userId,
-        recipesToImport
+        recipesToImport,
       );
 
       const recipesToIndex = await Recipe.findAll({
@@ -458,7 +458,7 @@ router.post(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 router.post(
@@ -472,7 +472,7 @@ router.post(
     try {
       if (!req.file) {
         const badFormatError = new Error(
-          "Request must include multipart file under paprikadb field"
+          "Request must include multipart file under paprikadb field",
         );
         badFormatError.status = 400;
         throw badFormatError;
@@ -561,7 +561,7 @@ router.post(
       await fs.remove(extractPath);
       next(err);
     }
-  }
+  },
 );
 
 router.post(
@@ -575,7 +575,7 @@ router.post(
     try {
       if (!req.file) {
         const badFormatError = new Error(
-          "Request must include multipart file under cookmatedb field"
+          "Request must include multipart file under cookmatedb field",
         );
         badFormatError.status = 400;
         throw badFormatError;
@@ -597,7 +597,7 @@ router.post(
 
       const xml = fs.readFileSync(extractPath + "/" + filename, "utf8");
       const data = JSON.parse(
-        xmljs.xml2json(xml, { compact: true, spaces: 4 })
+        xmljs.xml2json(xml, { compact: true, spaces: 4 }),
       );
 
       const grabFieldText = (field) => {
@@ -666,11 +666,11 @@ router.post(
           images: [
             ...(await grabImagePaths(
               extractPath + "/images",
-              recipe.imagepath
+              recipe.imagepath,
             )),
             ...(await grabImagePaths(extractPath + "/images", recipe.image)),
           ],
-        }))
+        })),
       );
 
       await importStandardizedRecipes(res.locals.session.userId, recipes);
@@ -694,7 +694,7 @@ router.post(
       await fs.remove(extractPath);
       next(err);
     }
-  }
+  },
 );
 
 export default router;

@@ -1,6 +1,5 @@
 import fetch, { RequestInit } from "node-fetch";
-import * as url from "url";
-import { HttpsProxyAgent, HttpsProxyAgentOptions } from "https-proxy-agent";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 const { CLIP_PROXY_URL, CLIP_PROXY_USERNAME, CLIP_PROXY_PASSWORD } =
   process.env;
@@ -21,7 +20,7 @@ export const fetchURL = (
   destURL: string,
   options?: {
     requestConfig?: Partial<RequestInit>;
-  }
+  },
 ) => {
   const fetchOpts: RequestInit = {
     method: "GET",
@@ -34,7 +33,7 @@ export const fetchURL = (
   };
 
   const isAllowlisted = FETCH_DOMAIN_ALLOWLIST.includes(
-    new URL(destURL).hostname
+    new URL(destURL).hostname,
   );
 
   if (isAllowlisted || process.env.NODE_ENV === "selfhost") {
@@ -46,15 +45,13 @@ export const fetchURL = (
     throw new Error("Domain not allowlisted and proxy not enabled");
   }
 
-  const proxyUrl = url.parse(CLIP_PROXY_URL);
-  if (CLIP_PROXY_PASSWORD && CLIP_PROXY_PASSWORD) {
-    proxyUrl.auth = `${CLIP_PROXY_USERNAME}:${CLIP_PROXY_PASSWORD}`;
+  const proxyUrl = new URL(CLIP_PROXY_URL);
+  if (CLIP_PROXY_USERNAME && CLIP_PROXY_PASSWORD) {
+    proxyUrl.username = CLIP_PROXY_USERNAME;
+    proxyUrl.password = CLIP_PROXY_PASSWORD;
   }
 
-  const proxyAgentConfig: HttpsProxyAgentOptions = {
-    ...proxyUrl,
-  };
-  fetchOpts.agent = new HttpsProxyAgent(proxyAgentConfig);
+  fetchOpts.agent = new HttpsProxyAgent(proxyUrl);
 
   return fetch(destURL, fetchOpts);
 };

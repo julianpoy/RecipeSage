@@ -13,7 +13,7 @@ export const FCMTokenInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   FCMToken.associate = function (models) {
     FCMToken.belongsTo(models.User, {

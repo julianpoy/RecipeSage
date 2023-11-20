@@ -35,7 +35,7 @@ export class SelectRecipeComponent {
     public utilService: UtilService,
     public recipeService: RecipeService,
     public toastCtrl: ToastController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
   ) {}
 
   async search(text: string) {

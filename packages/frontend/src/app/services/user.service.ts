@@ -82,14 +82,14 @@ export class UserService {
       email: string;
       password: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{ token: string }>(
       "users/register",
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -98,14 +98,14 @@ export class UserService {
       email: string;
       password: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{ token: string }>(
       "users/login",
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -115,7 +115,7 @@ export class UserService {
       "POST",
       {},
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -123,14 +123,14 @@ export class UserService {
     payload: {
       email: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       "users/forgot",
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -140,14 +140,14 @@ export class UserService {
       email?: string;
       password?: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       "users/",
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -155,14 +155,14 @@ export class UserService {
     payload: {
       fcmToken: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       "users/fcm/token",
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -170,14 +170,14 @@ export class UserService {
     params: {
       fcmToken: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       "users/fcm/token",
       "DELETE",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -185,14 +185,14 @@ export class UserService {
     params: {
       email: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<User>(
       "users/by-email",
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -202,7 +202,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -212,7 +212,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -222,20 +222,20 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   updateMyProfile(
     payload: Partial<EditUserProfile>,
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       "users/profile",
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -245,7 +245,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -255,7 +255,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -265,7 +265,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -275,7 +275,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -285,7 +285,7 @@ export class UserService {
       "POST",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -295,7 +295,7 @@ export class UserService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -305,7 +305,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -315,7 +315,7 @@ export class UserService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -325,7 +325,7 @@ export class UserService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 }

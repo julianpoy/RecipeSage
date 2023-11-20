@@ -24,6 +24,8 @@ import {
 } from "~/services/quick-tutorial.service";
 import { OfflineCacheService } from "~/services/offline-cache.service";
 import { FontSizeModalComponent } from "../../../components/font-size-modal/font-size-modal.component";
+import { MessagingService } from "../../../services/messaging.service";
+import { UserService } from "../../../services/user.service";
 
 const APP_THEME_LOCALSTORAGE_KEY = "theme";
 
@@ -49,19 +51,22 @@ export class SettingsPage {
   languageSelectInterfaceOptions = {};
 
   fontSize = this.preferences[GlobalPreferenceKey.FontSize];
+  isLoggedIn: boolean = false;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-    public loadingCtrl: LoadingController,
-    public utilService: UtilService,
-    public offlineCacheService: OfflineCacheService,
-    public preferencesService: PreferencesService,
-    public featureFlagService: FeatureFlagService,
-    public quickTutorialService: QuickTutorialService
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
+    private utilService: UtilService,
+    private offlineCacheService: OfflineCacheService,
+    private preferencesService: PreferencesService,
+    private featureFlagService: FeatureFlagService,
+    private quickTutorialService: QuickTutorialService,
+    private messagingService: MessagingService,
+    private userService: UserService,
   ) {
     try {
       this.showSplitPaneOption = screen.width >= 1200;
@@ -93,6 +98,26 @@ export class SettingsPage {
     })();
   }
 
+  ionViewWillEnter() {
+    this.isLoggedIn = this.utilService.isLoggedIn();
+  }
+
+  _logout() {
+    this.utilService.removeToken();
+
+    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
+  }
+
+  logout() {
+    this.messagingService.disableNotifications();
+
+    this.userService.logout({
+      "*": () => {},
+    });
+
+    this._logout();
+  }
+
   savePreferences() {
     this.preferencesService.save();
   }
@@ -100,7 +125,7 @@ export class SettingsPage {
   toggleSplitPane() {
     if (this.preferences[GlobalPreferenceKey.EnableSplitPane]) {
       this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.SplitPaneView
+        QuickTutorialOptions.SplitPaneView,
       );
     }
   }
@@ -112,7 +137,7 @@ export class SettingsPage {
         .toPromise();
 
       await this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.ExperimentalOfflineCache
+        QuickTutorialOptions.ExperimentalOfflineCache,
       );
       const loading = await this.loadingCtrl.create({
         message,

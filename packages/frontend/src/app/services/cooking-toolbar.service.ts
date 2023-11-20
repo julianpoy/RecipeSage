@@ -23,7 +23,7 @@ export class CookingToolbarService {
     this.pinnedRecipes.push(recipe);
 
     this.quickTutorialService.triggerQuickTutorial(
-      QuickTutorialOptions.PinnedRecipes
+      QuickTutorialOptions.PinnedRecipes,
     );
   }
 
@@ -33,7 +33,7 @@ export class CookingToolbarService {
 
   unpinRecipe(recipeId: string) {
     const recipeIdx = this.pinnedRecipes.findIndex(
-      (recipe) => recipe.id === recipeId
+      (recipe) => recipe.id === recipeId,
     );
 
     this.pinnedRecipes.splice(recipeIdx, 1);

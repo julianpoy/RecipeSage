@@ -33,7 +33,7 @@ export class SelectLabelComponent {
     public utilService: UtilService,
     public labelService: LabelService,
     public toastCtrl: ToastController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
   ) {
     this.load();
   }
@@ -52,7 +52,7 @@ export class SelectLabelComponent {
     this.searchText = event.detail.value || "";
 
     this.results = this.labels.filter((label) =>
-      label.title.includes(this.searchText)
+      label.title.includes(this.searchText),
     );
   }
 

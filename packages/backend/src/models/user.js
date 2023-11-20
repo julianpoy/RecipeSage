@@ -42,7 +42,7 @@ export const UserInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   User.associate = function (models) {
     User.hasMany(models.Session, {
@@ -82,6 +82,11 @@ export const UserInit = (sequelize, DataTypes) => {
     User.hasMany(models.ShoppingList, {
       foreignKey: "userId",
       as: "ownedShoppingLists",
+    });
+
+    User.hasMany(models.AssistantMessage, {
+      foreignKey: "userId",
+      as: "assistantMessages",
     });
 
     User.belongsToMany(models.ShoppingList, {
@@ -189,7 +194,7 @@ export const UserInit = (sequelize, DataTypes) => {
         password,
         this.passwordHash,
         this.passwordSalt,
-        this.passwordVersion
+        this.passwordVersion,
       );
 
       // Don't update if password isn't valid, or password is of current version

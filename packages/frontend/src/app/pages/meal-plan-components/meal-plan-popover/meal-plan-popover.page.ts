@@ -39,7 +39,7 @@ export class MealPlanPopoverPage {
     public loadingService: LoadingService,
     public mealPlanService: MealPlanService,
     public toastCtrl: ToastController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {}
 
   savePreferences() {

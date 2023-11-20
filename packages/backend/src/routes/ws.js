@@ -45,7 +45,7 @@ router.all(
 
     // next() must be called for the post-handler middleware to execute
     next();
-  }
+  },
 );
 
 // Add the post-handler middleware to the back of the stack

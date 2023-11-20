@@ -9,8 +9,9 @@ import {
   AlertController,
   NavController,
 } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+
+import { register } from "swiper/element/bundle";
+register();
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
@@ -55,7 +56,7 @@ export class AppComponent {
   unsupportedBrowser: boolean =
     !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem(
-    "seenOldBrowserWarning"
+    "seenOldBrowserWarning",
   );
 
   aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
@@ -69,8 +70,6 @@ export class AppComponent {
     private route: ActivatedRoute,
     private router: Router,
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private menuCtrl: MenuController,
     private events: EventService,
     private toastCtrl: ToastController,
@@ -82,7 +81,7 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
-    public cookingToolbarService: CookingToolbarService // Required by template
+    public cookingToolbarService: CookingToolbarService, // Required by template
   ) {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
@@ -219,7 +218,7 @@ export class AppComponent {
               role: "cancel",
               handler: () => {
                 this.navCtrl.navigateForward(
-                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id)
+                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id),
                 );
               },
             },
@@ -227,7 +226,7 @@ export class AppComponent {
         });
         toast.present();
       },
-      this
+      this,
     );
   }
 
@@ -258,6 +257,9 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
+    const assistant = await this.translate
+      .get("pages.app.nav.assistant")
+      .toPromise();
     const messages = await this.translate
       .get("pages.app.nav.messages")
       .toPromise();
@@ -326,6 +328,15 @@ export class AppComponent {
       [
         true,
         {
+          id: "settings",
+          title: settings,
+          icon: "settings",
+          url: RouteMap.SettingsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "about",
           title: about,
           icon: "help-buoy",
@@ -365,9 +376,18 @@ export class AppComponent {
       [
         true,
         {
+          id: "assistant",
+          title: assistant,
+          icon: "chatbox-ellipses",
+          url: RouteMap.AssistantPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "messages",
           title: messages,
-          icon: "chatbox",
+          icon: "chatbubbles",
           url: RouteMap.MessagesPage.getPath(),
         },
       ],
@@ -474,8 +494,6 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
       this.menuCtrl.close();
     });
 
@@ -513,21 +531,5 @@ export class AppComponent {
         console.warn(e);
       }
     });
-  }
-
-  _logout() {
-    this.utilService.removeToken();
-
-    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
-  }
-
-  logout() {
-    this.messagingService.disableNotifications();
-
-    this.userService.logout({
-      "*": () => {},
-    });
-
-    this._logout();
   }
 }

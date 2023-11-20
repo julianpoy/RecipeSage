@@ -41,7 +41,7 @@ export class CopyWithWebshareComponent implements AfterViewInit {
 
   clipboard() {
     const copyText = document.getElementById(
-      "codeBlockCopy"
+      "codeBlockCopy",
     ) as HTMLTextAreaElement;
 
     copyText.select();

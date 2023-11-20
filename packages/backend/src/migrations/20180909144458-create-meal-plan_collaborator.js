@@ -44,7 +44,7 @@ module.exports = {
             fields: ["mealPlanId", "userId"],
           },
         },
-      }
+      },
     );
   },
   down: (queryInterface) => {

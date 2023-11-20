@@ -81,7 +81,7 @@ export class MealPlanPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {
     const mealPlanId = this.route.snapshot.paramMap.get("mealPlanId");
     if (!mealPlanId) {
@@ -97,7 +97,7 @@ export class MealPlanPage {
           this.loadMealPlan();
         }
       },
-      this
+      this,
     );
   }
 
@@ -112,7 +112,7 @@ export class MealPlanPage {
       },
       () => {
         loader.target.complete();
-      }
+      },
     );
   }
 
@@ -569,7 +569,7 @@ export class MealPlanPage {
             .toDate()
             .toISOString(),
           meal: item.meal,
-        }))
+        })),
       )
       .flat();
 
@@ -597,7 +597,7 @@ export class MealPlanPage {
             .toDate()
             .toISOString(),
           meal: item.meal,
-        }))
+        })),
       )
       .flat();
 

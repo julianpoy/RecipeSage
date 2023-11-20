@@ -13,13 +13,13 @@
   "pages.app.nav.home": "המתכונים שלי",
   "pages.app.nav.labels": "ניהול תוויות",
   "pages.app.nav.people": "אנשים ופרופיל",
+  "pages.app.nav.assistant": "עוזר בישול",
   "pages.app.nav.messages": "הודעות",
   "pages.app.nav.inbox": "דואר נכנס",
   "pages.app.nav.newrecipe": "הוספת מתכון",
   "pages.app.nav.shopping": "רשימת קניות",
   "pages.app.nav.meals": "תכנית ארוחות",
   "pages.app.nav.settings": "הגדרות",
-  "pages.app.nav.logout": "להתנתק",
 
   "====== Pages.Welcome ======": "",
 
@@ -29,7 +29,6 @@
   "pages.welcome.subtitle": "שומר מתכונים חינמי, מתכנן ארוחות ומארגן רשימת קניות עבור דפדפן, IOS ו- Android",
   "pages.welcome.registerButton": "הרשמה",
   "pages.welcome.loginButton": "כניסה",
-  "pages.welcome.appDemoImageAlt": "המתכונים שלי - תצוגה",
 
   "pages.welcome.description.welcome": "ברוכים הבאים ל- RecipeSage!",
   "pages.welcome.description.1": "RecipeSage שומר מתכונים אישי בחינם (מבוסס על תרומה וקוד פתוח), מתכנן ארוחות ומנהל רשימת קניות עבור אינטרנט, IOS ואנדרואיד.",
@@ -258,6 +257,7 @@
   "pages.recipeDetails.deleteLabel.message": "פעולה זו תמחק את התווית  \"{{title}}\" מהמתכון.",
 
   "pages.recipeDetails.cloned": "המתכון נשמר",
+  "pages.recipeDetails.similar": "מתכונים דומים באוסף שלך",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -547,6 +547,14 @@
 
   "pages.shareMealPlanModal.title": "שיתוף תוכנית ארוחה",
   "pages.shareMealPlanModal.description": "ניתן להשתמש בקישור iCal/ICS כמעט בכל תוכנית לוח שנה כדי לסנכרן את תכנית הארוחות שלך מחוץ ל-RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "עוזר בישול",
+  "pages.assistant.welcome.1": "ברוכים הבאים לעוזר הבישול של RecipeSage!",
+  "pages.assistant.welcome.2": "עוזר הבישול הוא מודל AI שיכול להגיב לשאלות הבישול שלך ולעזור ביצירת מתכונים",
+  "pages.assistant.welcome.3": "לעוזר הבישול יש מגבלת הודעות של 5 הודעות ביום בגלל העלויות הגבוהות להפעלת ה-AI, מגבלה זו גדלה ל-50 הודעות ביום עבור תורמים",
+  "pages.assistant.messageLimit": "הגעתם למקסימום ההודעות (מצטער, זה יקר!). ספירת ההודעות מתאפסת ב-0:00 GMT",
 
   "====== Pages.MessageThread ======": "",
 
@@ -906,8 +914,9 @@
   "pages.settings.import": "ייבוא מתכון",
   "pages.settings.export": "ייצוא מתכון",
   "pages.settings.account": "הגדרות",
-  "pages.settings.update": "בדיקת עדכון",
+  "pages.settings.logout": "להתנתק",
   "pages.settings.section2.title": "הגדרות כלליות",
+  "pages.settings.update": "בדיקת עדכון",
   "pages.settings.splitPane": "אפשר פיצול מסכים במסך גדול",
   "pages.settings.cache": "ניסוי: Cache all recipes offline",
   "pages.settings.theme": "תבנית",

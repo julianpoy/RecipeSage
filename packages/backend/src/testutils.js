@@ -1,67 +1,16 @@
 import { expect } from "chai";
 import { v4 as uuid } from "uuid";
-import * as path from "path";
-import { Umzug, SequelizeStorage } from "umzug";
 
-import {
-  sequelize,
-  Sequelize,
-  modelNames,
-  User,
-  Session,
-  Recipe,
-  Label,
-  Message,
-} from "./models/index.js";
-
-const umzug = new Umzug({
-  migrations: {
-    glob: path.join(__dirname, "migrations/*.js"),
-    resolve: ({ name, path }) => {
-      return {
-        name,
-        up: async () =>
-          (await import(path)).up(sequelize.getQueryInterface(), Sequelize),
-        down: async () =>
-          (await import(path)).down(sequelize.getQueryInterface(), Sequelize),
-      };
-    },
-  },
-  storage: new SequelizeStorage({ sequelize }),
-  logger: undefined,
-});
-
-let migrate = async (down) => {
-  if (down) {
-    await umzug.down();
-  } else {
-    await umzug.up();
-  }
-};
-
-export const syncDB = async () => {
-  await Promise.all(
-    modelNames.map(async (modelName) => {
-      await (
-        await import("./models")
-      )[modelName].destroy({
-        truncate: true,
-        cascade: true,
-        hooks: false,
-      });
-    })
-  );
-};
+import { User, Session, Recipe, Label, Message } from "./models/index.js";
 
 export const setup = async () => {
-  await migrate();
   const mainExecutable = await import("./app");
 
   return mainExecutable.app;
 };
 
 export const cleanup = async () => {
-  await migrate(true);
+  // Stub
 };
 
 export function randomString(len) {
@@ -142,7 +91,7 @@ export const createMessage = (
   fromUserId,
   toUserId,
   recipeId,
-  originalRecipeId
+  originalRecipeId,
 ) => {
   return Message.create({
     fromUserId,

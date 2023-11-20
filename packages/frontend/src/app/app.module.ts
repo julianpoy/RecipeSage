@@ -4,8 +4,6 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -31,7 +29,7 @@ const checkChunkLoadError = (error: Error) => {
     (window as any).currentChunkError = true;
 
     const shouldReload = confirm(
-      "There was a connection interruption while loading this page. Do you want to reload the application?"
+      "There was a connection interruption while loading this page. Do you want to reload the application?",
     );
     if (shouldReload) {
       window.location.reload();
@@ -120,8 +118,6 @@ export class SentryErrorHandler extends ErrorHandler {
   ],
   providers: [
     { provide: ErrorHandler, useClass: SentryErrorHandler },
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DefaultPageGuardService,
     UnsavedChangesGuardService,

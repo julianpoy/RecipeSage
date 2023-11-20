@@ -61,7 +61,7 @@ const run = async () => {
           const file = await writeImageURL(
             ObjectTypes.RECIPE_IMAGE,
             clippedRecipe.imageURL,
-            true
+            true,
           );
 
           const image = await Image.create({

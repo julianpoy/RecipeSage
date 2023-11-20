@@ -17,7 +17,7 @@ import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
-import { RouteMap } from "~/services/util.service";
+import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
 import {
@@ -96,7 +96,7 @@ export class HomePage {
         for (let i = 0; i < groupCount; i++) {
           const recipeIdx = i * this.tileColCount;
           recipeGroups.push(
-            recipes.slice(recipeIdx, recipeIdx + this.tileColCount)
+            recipes.slice(recipeIdx, recipeIdx + this.tileColCount),
           );
         }
 
@@ -127,7 +127,8 @@ export class HomePage {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private websocketService: WebsocketService,
-    private trpcService: TRPCService
+    private trpcService: TRPCService,
+    private utilService: UtilService,
   ) {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
@@ -162,7 +163,7 @@ export class HomePage {
         },
         () => {
           loading.dismiss();
-        }
+        },
       );
     });
 
@@ -173,7 +174,7 @@ export class HomePage {
           this.resetAndLoadRecipes();
         }
       },
-      this
+      this,
     );
 
     this.updateTileColCount();
@@ -192,7 +193,7 @@ export class HomePage {
         },
         () => {
           loading.dismiss();
-        }
+        },
       );
     }
 
@@ -206,7 +207,7 @@ export class HomePage {
       if (!response.success) return;
 
       this.defaultBackHref = RouteMap.ProfilePage.getPath(
-        `@${response.data.handle}`
+        `@${response.data.handle}`,
       );
     }
   }
@@ -253,7 +254,7 @@ export class HomePage {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
       this.selectedLabels = this.selectedLabels.filter((e) =>
-        labelNames.has(e)
+        labelNames.has(e),
       );
 
       return this.resetAndLoadRecipes();
@@ -275,7 +276,7 @@ export class HomePage {
       },
       () => {
         this.loading = false;
-      }
+      },
     );
   }
 
@@ -320,7 +321,7 @@ export class HomePage {
         includeAllFriends,
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
         userIds: this.userId ? [this.userId] : undefined,
-      })
+      }),
     );
 
     if (!result) return;
@@ -352,7 +353,7 @@ export class HomePage {
         acc[friendEntry.otherUser.id] = friendEntry.otherUser;
         return acc;
       },
-      {}
+      {},
     );
   }
 
@@ -365,11 +366,7 @@ export class HomePage {
   }
 
   openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
-    if (event && (event.metaKey || event.ctrlKey)) {
-      window.open(`#/recipe/${recipe.id}`);
-      return;
-    }
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
+    this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
   async presentPopover(event: Event) {
@@ -433,7 +430,7 @@ export class HomePage {
           includeAllFriends,
           ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
           userIds: this.userId ? [this.userId] : undefined,
-        })
+        }),
       )
       .finally(loading.dismiss);
 
@@ -510,7 +507,7 @@ export class HomePage {
     const recipeNames = this.selectedRecipeIds
       .map(
         (recipeId) =>
-          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title
+          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title,
       )
       .join(", ");
 

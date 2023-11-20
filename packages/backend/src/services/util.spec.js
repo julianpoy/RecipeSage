@@ -90,7 +90,7 @@ describe("utils", () => {
     it("returns an array of file paths for test image img1.png", () => {
       let files = findFilesByRegex(
         path.join(__dirname, "../test/exampleFiles"),
-        new RegExp(/img1\.png/, "i")
+        new RegExp(/img1\.png/, "i"),
       );
 
       expect(files[0].endsWith("test/exampleFiles/img1.png")).to.be.true;
@@ -99,7 +99,7 @@ describe("utils", () => {
     it("returns an array of file paths for test image img1.png recursive", () => {
       let files = findFilesByRegex(
         path.join(__dirname, "../test"),
-        new RegExp(/img1\.png/, "i")
+        new RegExp(/img1\.png/, "i"),
       );
 
       expect(files[0].endsWith("/test/exampleFiles/img1.png")).to.be.true;
@@ -108,7 +108,7 @@ describe("utils", () => {
     it("returns empty array when it finds no files", () => {
       let files = findFilesByRegex(
         path.join(__dirname, "../test"),
-        new RegExp("doesnotexist")
+        new RegExp("doesnotexist"),
       );
 
       expect(files).to.be.an("array");
@@ -148,10 +148,10 @@ describe("utils", () => {
       await dispatchImportNotification({ fcmTokens }, 0, "anyreason");
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal(
-        "import:pepperplate:complete"
+        "import:pepperplate:complete",
       );
       expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal(
-        "import:pepperplate:complete"
+        "import:pepperplate:complete",
       );
     });
 
@@ -159,10 +159,10 @@ describe("utils", () => {
       await dispatchImportNotification({ fcmTokens }, 1, "anyreason");
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal(
-        "import:pepperplate:failed"
+        "import:pepperplate:failed",
       );
       expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal(
-        "import:pepperplate:failed"
+        "import:pepperplate:failed",
       );
     });
 
@@ -170,10 +170,10 @@ describe("utils", () => {
       await dispatchImportNotification({ fcmTokens }, 2, "anyreason");
 
       expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal(
-        "import:pepperplate:working"
+        "import:pepperplate:working",
       );
       expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal(
-        "import:pepperplate:working"
+        "import:pepperplate:working",
       );
     });
 
@@ -196,10 +196,10 @@ describe("utils", () => {
       await dispatchImportNotification({ fcmTokens }, 0, "anyreason");
 
       expect(fcmSendMessagesStub.getCalls()[0].args[0][0]).to.equal(
-        fcmTokens[0].token
+        fcmTokens[0].token,
       );
       expect(fcmSendMessagesStub.getCalls()[0].args[0][1]).to.equal(
-        fcmTokens[1].token
+        fcmTokens[1].token,
       );
     });
   });
@@ -264,16 +264,16 @@ describe("utils", () => {
 
       it("sends to all passed tokens", () => {
         expect(fcmSendMessagesStub.getCalls()[0].args[0][0]).to.equal(
-          fcmTokens[0].token
+          fcmTokens[0].token,
         );
         expect(fcmSendMessagesStub.getCalls()[0].args[0][1]).to.equal(
-          fcmTokens[1].token
+          fcmTokens[1].token,
         );
       });
 
       it("sends with correct type", () => {
         expect(fcmSendMessagesStub.getCalls()[0].args[1].type).to.equal(
-          "messages:new"
+          "messages:new",
         );
       });
 
@@ -315,7 +315,7 @@ describe("utils", () => {
 
       it("sends with correct type", () => {
         expect(gripBroadcastStub.getCalls()[0].args[1]).to.equal(
-          "messages:new"
+          "messages:new",
         );
       });
 
@@ -339,10 +339,10 @@ describe("utils", () => {
 
         // Recipe image should be immutable
         expect(stubMessageCall.recipe.images).to.not.equal(
-          message.recipe.images
+          message.recipe.images,
         );
         expect(stubMessageCall.recipe.images[0].location).to.equal(
-          message.recipe.images[0].location
+          message.recipe.images[0].location,
         );
       });
 

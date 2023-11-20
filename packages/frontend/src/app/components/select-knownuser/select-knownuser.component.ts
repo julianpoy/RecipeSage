@@ -40,7 +40,7 @@ export class SelectKnownUserComponent {
 
   constructor(
     private userService: UserService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
   ) {
     this.fetchFriendships();
   }
@@ -50,7 +50,7 @@ export class SelectKnownUserComponent {
     if (!response.success) return;
 
     this.friendships = response.data.friends.sort((a: any, b: any) =>
-      a.otherUser.name.localeCompare(b.otherUser.name)
+      a.otherUser.name.localeCompare(b.otherUser.name),
     );
 
     this.fetchThreads();
@@ -63,7 +63,7 @@ export class SelectKnownUserComponent {
     if (!response.success) return;
 
     const friendIds = new Set(
-      this.friendships.map((friendship) => friendship.otherUser.id)
+      this.friendships.map((friendship) => friendship.otherUser.id),
     );
     this.threads = response.data
       .filter((thread) => !friendIds.has(thread.otherUser.id))

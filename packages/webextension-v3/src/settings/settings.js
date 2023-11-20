@@ -5,7 +5,7 @@ chrome.storage.local.get(["token"], async (result) => {
   if (result.token) {
     try {
       const response = await fetch(
-        `https://api.recipesage.com/users?token=${result.token}`
+        `https://api.recipesage.com/users?token=${result.token}`,
       );
       const data = await response.json();
       document.getElementById("loggedInEmail").innerText = data.email;

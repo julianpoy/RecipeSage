@@ -4,15 +4,22 @@ import * as Sentry from "@sentry/node";
 import { router } from "./trpc";
 import { getRecipes } from "./procedures/recipes/getRecipes";
 import { searchRecipes } from "./procedures/recipes/searchRecipes";
+import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
+import { sendAssistantMessage } from "./procedures/assistant/sendAssistantMessage";
+import { getAssistantMessages } from "./procedures/assistant/getAssistantMessages";
 import { createContext } from "./context";
 import { TRPCError } from "@trpc/server";
 
 export * from "./types/queryTypes";
 export * from "./services/search"; // Legacy while old backend still needs it
+export * from "./services/capabilities"; // Legacy while old backend still needs it
 
 const appRouter = router({
   getRecipes,
   searchRecipes,
+  getSimilarRecipes,
+  sendAssistantMessage,
+  getAssistantMessages,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({

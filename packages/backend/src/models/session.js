@@ -21,7 +21,7 @@ export const SessionInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   Session.associate = function (models) {
     Session.belongsTo(models.User, {

@@ -22,7 +22,7 @@ export class NewShoppingListItemModalPage {
     public utilService: UtilService,
     public recipeService: RecipeService,
     public loadingService: LoadingService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {}
 
   inputTypeChanged(event: any) {

@@ -51,7 +51,7 @@ router.post(
         const sharedRecipe = await Recipe.share(
           req.body.recipeId,
           req.body.to,
-          transaction
+          transaction,
         );
         sharedRecipeId = sharedRecipe.id;
       }
@@ -66,7 +66,7 @@ router.post(
         },
         {
           transaction,
-        }
+        },
       );
 
       const fullMessage = await Message.findOne({
@@ -129,7 +129,7 @@ router.post(
     });
 
     res.status(201).json(message);
-  })
+  }),
 );
 
 //Get all of a user's threads
@@ -208,7 +208,7 @@ router.get(
       if (req.query.limit && conversation.messageCount > req.query.limit) {
         conversation.messages.splice(
           0,
-          conversation.messages.length - req.query.limit
+          conversation.messages.length - req.query.limit,
         );
       }
 
@@ -216,7 +216,7 @@ router.get(
     }
 
     res.status(200).json(conversations);
-  })
+  }),
 );
 
 router.get(
@@ -298,9 +298,9 @@ router.get(
 
           return m;
         })
-        .reverse()
+        .reverse(),
     );
-  })
+  }),
 );
 
 export default router;

@@ -5,7 +5,6 @@ import * as sinon from "sinon";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createSession,
@@ -25,10 +24,6 @@ describe("messages", () => {
   let server;
   beforeAll(async () => {
     server = await setup();
-  });
-
-  beforeEach(async () => {
-    await syncDB();
   });
 
   afterAll(async () => {
@@ -93,7 +88,7 @@ describe("messages", () => {
             expect(message.toUser.email).to.equal(user2.email);
             // Should have dispatched notification to recipient
             sinon.assert.calledOnce(dispatchStub);
-          })
+          }),
         );
     });
 
@@ -160,7 +155,7 @@ describe("messages", () => {
 
             // Should have dispatched notification to recipient
             sinon.assert.calledOnce(dispatchStub);
-          })
+          }),
         );
     });
 
@@ -253,7 +248,7 @@ describe("messages", () => {
           user1.id,
           user3.id,
           recipeNew.id,
-          recipeOrig.id
+          recipeOrig.id,
         );
 
         const session = await createSession(user1.id);

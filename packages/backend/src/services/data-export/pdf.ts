@@ -21,7 +21,7 @@ export interface ExportOptions {
 
 const parsedToSchema = (
   parsedItems: { content: string; isHeader: boolean }[],
-  includeMargin: boolean
+  includeMargin: boolean,
 ): {
   text: string;
   bold: boolean;
@@ -36,7 +36,7 @@ const parsedToSchema = (
 
 const recipeToSchema = async (
   recipe: Recipe & { images: Image[] },
-  options?: ExportOptions
+  options?: ExportOptions,
 ): Promise<Content> => {
   const schema: Content[] = [];
 
@@ -113,12 +113,12 @@ const recipeToSchema = async (
   }
 
   const parsedInstructions = parseInstructions(
-    sanitizeHtml(recipe.instructions || "")
+    sanitizeHtml(recipe.instructions || ""),
   );
   const parsedIngredients = parseIngredients(
     sanitizeHtml(recipe.ingredients || ""),
     1,
-    false
+    false,
   );
   const parsedNotes = parseNotes(sanitizeHtml(recipe.notes || ""));
   if (recipe.ingredients && recipe.instructions) {
@@ -191,7 +191,7 @@ const recipeToSchema = async (
 export const exportToPDF = async (
   recipes: (Recipe & { images: Image[] })[],
   writeStream: Writable,
-  options?: ExportOptions
+  options?: ExportOptions,
 ): Promise<void> => {
   const fonts = {
     Helvetica: {

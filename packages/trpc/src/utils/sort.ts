@@ -3,9 +3,9 @@ export const sortRecipeImages = <
     recipeImages: {
       order: number;
     }[];
-  }
+  },
 >(
-  recipe: T
+  recipe: T,
 ): T => {
   recipe.recipeImages = recipe.recipeImages.sort((a, b) => {
     return a.order - b.order;

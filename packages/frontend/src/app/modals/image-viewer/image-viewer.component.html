@@ -12,18 +12,23 @@
 <ion-content [forceOverscroll]="false" color="dark" fullscreen="true">
   <ion-icon
     *ngIf="slideNum > 0"
-    (click)="slider.slidePrev()"
+    (click)="swiperContainer.swiper.slidePrev()"
     name="arrow-back"
     class="back"
   ></ion-icon>
-  <ion-slides #slider (ionSlideDidChange)="slideDidChange()" pager="true">
-    <ion-slide *ngFor="let imageUrl of imageUrls">
+  <swiper-container
+    #swiperContainer
+    [modules]="swiperModules"
+    pagination="true"
+    centeredSlides="true"
+  >
+    <swiper-slide *ngFor="let imageUrl of imageUrls">
       <div class="image-container"><img [src]="imageUrl" /></div>
-    </ion-slide>
-  </ion-slides>
+    </swiper-slide>
+  </swiper-container>
   <ion-icon
     *ngIf="slideNum < imageUrls.length - 1"
-    (click)="slider.slideNext()"
+    (click)="swiperContainer.swiper.slideNext()"
     name="arrow-forward"
     class="forward"
   ></ion-icon>

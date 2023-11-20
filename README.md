@@ -52,7 +52,7 @@ Meal plans support drag and drop, shopping lists support automatic item categori
 
 # :ramen: Self Hosting
 
-To selfhost RecipeSage, I recommend that you use the preconfigured docker-compose files available here: https://github.com/julianpoy/recipesage-selfhost
+To selfhost RecipeSage, I recommend that you use the preconfigured docker compose files available here: https://github.com/julianpoy/recipesage-selfhost
 
 You're welcome to configure or set up your own selfhost config based on this repository, but you may run into complications. The selfhost repository is setup to be easy to spin up, while this repository is oriented towards development.
 
@@ -73,15 +73,21 @@ This allows RecipeSage to continue to provide the hosted instance, as well as li
 
 When contributing or suggesting code for RecipeSage, you irrevocably grant RecipeSage all rights to that code. See the [CLA file](docs/CLA.md) in the repo for the complete CLA.
 
-# 🐤: Contributing
+# 🐤 Contributing
 
 Setting-up your development environment.
 
-Your development environment can be setup with a few easy steps.
+1. Install [Docker](https://docs.docker.com/get-docker/) and [Node](https://nodejs.org/en/)
+2. Clone this repo
+3. Create a `.env` file in the root of the repository using `example.env` as a template. These can be left as placeholders, but the dependent functionality will not work without a real key in place.
+4. Install dependencies by running `npm install` at the root of the repo.
+5. Start the Docker containers by running `docker compose up -d` in the cloned repo
+6. Run database migrations `docker compose exec backend npx prisma migrate dev`
+7. RecipeSage should be running on `localhost` on port `80`
 
-1. Generate the ssl certificates for your devbox by running `./scripts/generate-ssl.sh` from the project's root directory
-2. Up the docker images `docker-compose up -d` (If you don't have docker installed, you may get it [here](https://docs.docker.com/get-docker/)
-3. Run the migrations scripts; `docker-compose exec backend npx tsx packages/backend/src/migrate.js`
-4. That's all! Your localized version of recipe sage should be viewable at `localhost` on port `80`🐣
+Some notes for the repo:
 
-Backend API tests can be run via `docker-compose run backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.
+1. The repo uses the monorepo management tool [nx](https://nx.dev/nx-api). You'll find things divided up in the `packages` directory.
+2. I'm currently migrating to Prisma & TRPC, so any new functionality should be added within the `trpc` package rather than the `backend` package, unless it's an update to an existing behavior that does not merit moving.
+
+Backend API tests can be run via `docker compose exec backend env NODE_ENV=test POSTGRES_LOGGING=false npx nx test backend`.

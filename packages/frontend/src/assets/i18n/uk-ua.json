@@ -13,13 +13,13 @@
   "pages.app.nav.home": "Мої рецепти",
   "pages.app.nav.labels": "Управління мітками",
   "pages.app.nav.people": "Люди & Профілі",
+  "pages.app.nav.assistant": "Помічник кухаря",
   "pages.app.nav.messages": "Повідомлення",
   "pages.app.nav.inbox": "Вхідні рецепти",
   "pages.app.nav.newrecipe": "Створити рецепт",
   "pages.app.nav.shopping": "Списки покупок",
   "pages.app.nav.meals": "Плани харчування",
   "pages.app.nav.settings": "Параметри",
-  "pages.app.nav.logout": "Вийти з системи",
 
   "====== Pages.Welcome ======": "",
 
@@ -29,7 +29,6 @@
   "pages.welcome.subtitle": "Безкоштовний зберігач рецептів, планувальник харчування, і органайзер списків покупок для Web, IOS, і Android",
   "pages.welcome.registerButton": "Створити обліквий запис",
   "pages.welcome.loginButton": "Увійти",
-  "pages.welcome.appDemoImageAlt": "Попередній перегляд рецептів",
 
   "pages.welcome.description.welcome": "Вітаємо на RecipeSage!",
   "pages.welcome.description.1": "RecipeSage безкоштовний (існує на пожертвування та з відкритим кодом) персональний зберігач рецептів, планувальник харчування, і органайзер списків покупок для Web, IOS, і Android.",
@@ -258,6 +257,7 @@
   "pages.recipeDetails.deleteLabel.message": "Буде видалено мітку \"{{title}}\" з цього рецепту.",
 
   "pages.recipeDetails.cloned": "Рецепт було збережено до Вашого облікового запису",
+  "pages.recipeDetails.similar": "Схожі рецепти у вашій колекції",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -547,6 +547,14 @@
 
   "pages.shareMealPlanModal.title": "Поділитись планом харчування",
   "pages.shareMealPlanModal.description": "Посилання iCal/ICS нижче можна використовувати майже в будь-якій програмі календаря для синхронізації вашого плану харчування поза RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Помічник кухаря",
+  "pages.assistant.welcome.1": "Ласкаво просимо до кулінарного помічника RecipeSage!",
+  "pages.assistant.welcome.2": "Асистент приготування їжі - це модель штучного інтелекту, яка може відповідати на ваші кулінарні запитання та допомагати створювати рецепти.",
+  "pages.assistant.welcome.3": "Помічник кулінара має ліміт на 5 повідомлень на день через високі витрати на запуск ШІ. Для дописувачів цей ліміт збільшується до 50 повідомлень на день.",
+  "pages.assistant.messageLimit": "Досягнуто максимальної кількості повідомлень (вибачте, це дорого!). Лічильник повідомлень обнуляється о 0:00GMT",
 
   "====== Pages.MessageThread ======": "",
 
@@ -906,8 +914,9 @@
   "pages.settings.import": "Імпорт рецептів",
   "pages.settings.export": "Експорт рецептів",
   "pages.settings.account": "Параметри й статистика",
-  "pages.settings.update": "Перевірити на оновлення",
+  "pages.settings.logout": "Вийти з системи",
   "pages.settings.section2.title": "Загальні налаштування",
+  "pages.settings.update": "Перевірити на оновлення",
   "pages.settings.splitPane": "Увімкнути розділену панель для великих екранів",
   "pages.settings.cache": "Експериментально: Кешувати всі рецепти офлайн",
   "pages.settings.theme": "Тема",

@@ -15,7 +15,7 @@ Core.addClass(
         cans: Plurality.PLURAL,
       },
     },
-  ])
+  ]),
 );
 
 Core.addClass(
@@ -31,7 +31,7 @@ Core.addClass(
         packages: Plurality.PLURAL,
       },
     },
-  ])
+  ]),
 );
 
 Core.getGroup("tablespoon").addUnits({

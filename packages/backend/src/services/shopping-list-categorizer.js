@@ -16,14 +16,14 @@ const init = async () => {
   ingredientsList = JSON.parse(
     await fs.readFile(
       path.resolve(__dirname, "../constants/ingredients.json"),
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
   itemCategories = JSON.parse(
     await fs.readFile(
       path.resolve(__dirname, "../constants/itemCategories.json"),
-      "utf-8"
-    )
+      "utf-8",
+    ),
   );
 
   itemTitles = Object.keys(itemCategories).sort((a, b) => b.length - a.length);
@@ -58,7 +58,7 @@ export const getCategoryTitle = (itemTitle) => {
         ? [potentialMatch.substring(1)]
         : potentialMatch.split(" "); // Matchers beginning with * should be matched whole
     const diffChunks = potentialChunks.filter(
-      (token) => !itemTitle.includes(token)
+      (token) => !itemTitle.includes(token),
     ); // Filter by any chunks that _do not_ match our itemTitle
 
     return diffChunks.length === 0;
@@ -101,19 +101,19 @@ export const groupShoppingListItems = (items) => {
   const result = [];
   for (let [ingredientName, items] of Object.entries(itemGrouper)) {
     const measurements = items.map((item) =>
-      getMeasurementsForIngredient(item.title)
+      getMeasurementsForIngredient(item.title),
     );
     let title = ingredientName;
 
     if (!measurements.find((measurementSet) => !measurementSet.length)) {
       const flatMeasurements = measurements.reduce(
         (acc, val) => acc.concat(val),
-        []
+        [],
       ); // Flatten (equiv to .flat)
       const combinedUz = flatMeasurements.reduce(
         (acc, measurement) =>
           acc ? acc.add(measurement) : parseUnit(measurement),
-        null
+        null,
       );
       if (combinedUz) {
         const combinedMeasurements = combinedUz.sort().output({

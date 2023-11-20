@@ -10,7 +10,7 @@ export class VersionCheckService {
   constructor(
     private utilService: UtilService,
     private httpService: HttpService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
   ) {
     this.checkVersion();
   }

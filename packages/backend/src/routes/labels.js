@@ -61,14 +61,14 @@ router.post(
         {
           ignoreDuplicates: true,
           transaction,
-        }
+        },
       );
 
       return label;
     });
 
     res.status(201).send(label);
-  })
+  }),
 );
 
 //Get all of a user's labels
@@ -109,7 +109,7 @@ router.get(
     });
 
     res.status(200).json(labels);
-  })
+  }),
 );
 
 //Get recipes associated with specific label
@@ -144,7 +144,7 @@ router.get(
     });
 
     res.status(200).json(label);
-  })
+  }),
 );
 
 //Combine two labels
@@ -201,14 +201,14 @@ router.post(
       }
 
       const sourceLabelRecipeIds = sourceLabel.recipe_labels.map(
-        (recipeLabel) => recipeLabel.recipeId
+        (recipeLabel) => recipeLabel.recipeId,
       );
       const targetLabelRecipeIds = targetLabel.recipe_labels.map(
-        (recipeLabel) => recipeLabel.recipeId
+        (recipeLabel) => recipeLabel.recipeId,
       );
 
       const recipeIdsToUpdate = sourceLabelRecipeIds.filter(
-        (recipeId) => !targetLabelRecipeIds.includes(recipeId)
+        (recipeId) => !targetLabelRecipeIds.includes(recipeId),
       );
 
       await Recipe_Label.update(
@@ -221,7 +221,7 @@ router.post(
             recipeId: recipeIdsToUpdate,
           },
           transaction,
-        }
+        },
       );
 
       await Label.destroy({
@@ -233,7 +233,7 @@ router.post(
     });
 
     res.status(200).send("ok");
-  })
+  }),
 );
 
 //Delete a label from a recipe
@@ -282,7 +282,7 @@ router.delete(
       .then((label) => {
         res.status(200).json(label);
       });
-  })
+  }),
 );
 
 // Update label for all associated recipes
@@ -331,7 +331,7 @@ router.put(
     });
 
     res.status(200).json(label);
-  })
+  }),
 );
 
 // Delete labels from all associated recipes
@@ -342,7 +342,7 @@ router.post(
       body: Joi.object({
         labelIds: Joi.array().items(Joi.string()).min(1).required(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -355,7 +355,7 @@ router.post(
     });
 
     res.sendStatus(200);
-  })
+  }),
 );
 
 export default router;

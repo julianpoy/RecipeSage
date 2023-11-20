@@ -8,7 +8,7 @@ export const getQueryParams = () => {
     queryString
       .split("&")
       .map((el) => el.split("="))
-      .map(([key, val]) => [decodeURIComponent(key), decodeURIComponent(val)])
+      .map(([key, val]) => [decodeURIComponent(key), decodeURIComponent(val)]),
   );
 };
 

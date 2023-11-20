@@ -23,7 +23,7 @@ export class ImageService {
       "POST",
       formData,
       {},
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -31,14 +31,14 @@ export class ImageService {
     payload: {
       url: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<Image>(
       "images/url",
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 }

@@ -28,14 +28,14 @@ export class ShoppingListsPage {
     public shoppingListService: ShoppingListService,
     public websocketService: WebsocketService,
     public loadingService: LoadingService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {
     this.websocketService.register(
       "shoppingList:received",
       () => {
         this.loadLists();
       },
-      this
+      this,
     );
 
     this.websocketService.register(
@@ -43,7 +43,7 @@ export class ShoppingListsPage {
       () => {
         this.loadLists();
       },
-      this
+      this,
     );
   }
 

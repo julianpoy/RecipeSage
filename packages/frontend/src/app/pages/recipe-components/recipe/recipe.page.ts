@@ -38,6 +38,8 @@ import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import { RecipeSummary } from "@recipesage/trpc";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-recipe",
@@ -52,7 +54,8 @@ export class RecipePage {
     release: () => void;
   } = null;
 
-  recipe: Recipe;
+  recipe: Recipe | null;
+  similarRecipes: RecipeSummary[] = [];
   recipeId: string;
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
@@ -86,7 +89,8 @@ export class RecipePage {
     public labelService: LabelService,
     public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public trpcService: TRPCService,
   ) {
     this.updateIsLoggedIn();
 
@@ -96,7 +100,7 @@ export class RecipePage {
       throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
-    this.recipe = {} as Recipe;
+    this.recipe = null;
 
     this.scale =
       this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
@@ -111,7 +115,7 @@ export class RecipePage {
   ionViewWillEnter() {
     const loading = this.loadingService.start();
 
-    this.recipe = {} as Recipe;
+    this.recipe = null;
 
     this.loadAll().then(
       () => {
@@ -119,7 +123,7 @@ export class RecipePage {
       },
       () => {
         loading.dismiss();
-      }
+      },
     );
 
     this.setupWakeLock();
@@ -136,7 +140,7 @@ export class RecipePage {
       },
       () => {
         loader.target.complete();
-      }
+      },
     );
 
     this.loadLabels();
@@ -162,7 +166,7 @@ export class RecipePage {
 
     if (this.recipe.instructions && this.recipe.instructions.length > 0) {
       this.instructions = this.recipeService.parseInstructions(
-        this.recipe.instructions
+        this.recipe.instructions,
       );
     }
 
@@ -180,6 +184,14 @@ export class RecipePage {
     this.selectedLabels = this.recipe.labels.map((label) => label.title);
 
     this.updateRatingVisual();
+
+    if (this.isLoggedIn) {
+      this.similarRecipes = await this.trpcService.trpc.getSimilarRecipes.query(
+        {
+          recipeIds: [this.recipe.id],
+        },
+      );
+    }
   }
 
   async loadLabels() {
@@ -200,6 +212,8 @@ export class RecipePage {
   }
 
   updateRatingVisual() {
+    if (!this.recipe) return;
+
     this.ratingVisual = new Array<string>(5)
       .fill("star", 0, this.recipe.rating)
       .fill("star-outline", this.recipe.rating, 5);
@@ -261,7 +275,7 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -270,21 +284,21 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getInstructionComplete(idx: number) {
     return this.recipeCompletionTrackerService.getInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getIngredientComplete(idx: number) {
     return this.recipeCompletionTrackerService.getIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -303,23 +317,25 @@ export class RecipePage {
       this.scale = data.scale;
       this.recipeCompletionTrackerService.setRecipeScale(
         this.recipeId,
-        this.scale
+        this.scale,
       );
       this.applyScale();
     }
   }
 
   applyScale() {
+    if (!this.recipe) return;
+
     this.ingredients = this.recipeService.parseIngredients(
       this.recipe.ingredients,
       this.scale,
-      true
+      true,
     );
   }
 
   editRecipe() {
     this.navCtrl.navigateForward(
-      RouteMap.EditRecipePage.getPath(this.recipeId)
+      RouteMap.EditRecipePage.getPath(this.recipeId),
     );
   }
 
@@ -355,6 +371,8 @@ export class RecipePage {
   }
 
   private async _deleteRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     const response = await this.recipeService.delete(this.recipe.id);
@@ -411,6 +429,8 @@ export class RecipePage {
   }
 
   async moveToFolder(folderName: RecipeFolderName) {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     this.recipe.folder = folderName;
@@ -450,6 +470,8 @@ export class RecipePage {
   }
 
   async addLabel(title: string) {
+    if (!this.recipe) return;
+
     if (title.length === 0) {
       const message = await this.translate
         .get("pages.recipeDetails.enterLabelWarning")
@@ -509,6 +531,8 @@ export class RecipePage {
   }
 
   private async _deleteLabel(label: Label) {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     await this.labelService.removeFromRecipe({
@@ -520,6 +544,8 @@ export class RecipePage {
   }
 
   async cloneRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
     const response = await this.recipeService.create({
       ...this.recipe,
@@ -575,6 +601,8 @@ export class RecipePage {
   }
 
   async openImageViewer() {
+    if (!this.recipe) return;
+
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
@@ -585,6 +613,8 @@ export class RecipePage {
   }
 
   pinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.pinRecipe({
       id: this.recipe.id,
       title: this.recipe.title,
@@ -593,7 +623,13 @@ export class RecipePage {
   }
 
   unpinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  openRecipe(recipeId: string, event?: MouseEvent | KeyboardEvent) {
+    this.utilService.openRecipe(this.navCtrl, recipeId, event);
   }
 
   setupWakeLock() {

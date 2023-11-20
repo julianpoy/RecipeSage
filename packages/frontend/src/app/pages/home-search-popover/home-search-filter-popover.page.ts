@@ -51,7 +51,7 @@ export class HomeSearchFilterPopoverPage {
     public utilService: UtilService,
     public preferencesService: PreferencesService,
     public quickTutorialService: QuickTutorialService,
-    public labelService: LabelService
+    public labelService: LabelService,
   ) {}
 
   savePreferences(refreshSearch?: boolean) {
@@ -106,7 +106,7 @@ export class HomeSearchFilterPopoverPage {
         this.selectedLabels.splice(
           0,
           this.selectedLabels.length,
-          ...data.selectedLabels
+          ...data.selectedLabels,
         );
       }
 

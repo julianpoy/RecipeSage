@@ -15,7 +15,7 @@ module.exports = {
       `,
         {
           transaction,
-        }
+        },
       );
 
       await queryInterface.addConstraint("Recipe_Labels", {
@@ -30,7 +30,7 @@ module.exports = {
   down: (queryInterface) => {
     return queryInterface.removeConstraint(
       "Recipe_Labels",
-      "Recipe_Labels_labelId_recipeId_uk"
+      "Recipe_Labels_labelId_recipeId_uk",
     );
   },
 };

@@ -55,7 +55,7 @@ export class MyProfilePage {
     public unsavedChangesService: UnsavedChangesService,
     public imageService: ImageService,
     public recipeService: RecipeService,
-    public userService: UserService
+    public userService: UserService,
   ) {
     this.load().then(() => {
       this.checkProfileEnabled();
@@ -155,7 +155,7 @@ export class MyProfilePage {
 
     this.handleInputTimeout = setTimeout(
       () => this.checkHandleAvailable(this.updatedProfileFields.handle || ""),
-      500
+      500,
     );
   }
 
@@ -193,7 +193,7 @@ export class MyProfilePage {
 
     if (this.updatedProfileFields.profileImages) {
       update.profileImageIds = this.updatedProfileFields.profileImages.map(
-        (image) => image.id
+        (image) => image.id,
       );
     }
 
@@ -205,7 +205,7 @@ export class MyProfilePage {
           type: profileItem.type,
           labelId: profileItem.label?.id || null,
           recipeId: profileItem.recipe?.id || null,
-        })
+        }),
       );
     }
 
@@ -327,21 +327,21 @@ export class MyProfilePage {
       return;
     }
     this.navCtrl.navigateForward(
-      RouteMap.ProfilePage.getPath(`@${this.myProfile.handle}`)
+      RouteMap.ProfilePage.getPath(`@${this.myProfile.handle}`),
     );
   }
 
   open(item: any) {
     if (item.type === "all-recipes") {
       this.navCtrl.navigateForward(
-        RouteMap.HomePage.getPath("main", { userId: item.userId })
+        RouteMap.HomePage.getPath("main", { userId: item.userId }),
       );
     } else if (item.type === "label") {
       this.navCtrl.navigateForward(
         RouteMap.HomePage.getPath("main", {
           userId: item.userId,
           selectedLabels: [item.label.title],
-        })
+        }),
       );
     } else if (item.type === "recipe") {
       this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(item.recipe.id));

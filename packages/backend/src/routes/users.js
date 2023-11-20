@@ -52,13 +52,13 @@ router.get(
     const subscriptions = (
       await SubscriptionService.subscriptionsForUser(
         res.locals.session.userId,
-        true
+        true,
       )
     ).map((subscription) => {
       return {
         expires: subscription.expires,
         capabilities: SubscriptionService.capabilitiesForSubscription(
-          subscription.name
+          subscription.name,
         ),
       };
     });
@@ -75,7 +75,7 @@ router.get(
       updatedAt: user.updatedAt,
       subscriptions,
     });
-  })
+  }),
 );
 
 // Params:
@@ -122,7 +122,7 @@ router.put(
             id: userId,
           },
           transaction,
-        }
+        },
       );
 
       if (req.body.profileItems) {
@@ -168,7 +168,7 @@ router.put(
         const canUploadMultipleImages =
           await SubscriptionService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionService.Capabilities.MultipleImages,
           );
 
         if (!canUploadMultipleImages && req.body.profileImageIds.length > 1) {
@@ -182,7 +182,7 @@ router.put(
           });
           const imagesById = images.reduce(
             (acc, img) => ({ ...acc, [img.id]: img }),
-            {}
+            {},
           );
 
           req.body.profileImageIds = req.body.profileImageIds.filter(
@@ -191,7 +191,7 @@ router.put(
               imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
               moment(imagesById[imageId].createdAt)
                 .add(1, "day")
-                .isBefore(moment()) // Allow old images (user's subscription expired)
+                .isBefore(moment()), // Allow old images (user's subscription expired)
           );
         }
 
@@ -213,13 +213,13 @@ router.put(
           })),
           {
             transaction,
-          }
+          },
         );
       }
     });
 
     res.status(200).send("Updated");
-  })
+  }),
 );
 
 router.get(
@@ -272,7 +272,7 @@ router.get(
       profileImages: user.profileImages,
       profileItems,
     });
-  })
+  }),
 );
 
 const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
@@ -376,13 +376,13 @@ const getUserProfile = wrapRequestWithErrorHandler(async (req, res) => {
 router.get(
   "/profile/by-handle/:handle",
   MiddlewareService.validateSession(["user"], true),
-  getUserProfile
+  getUserProfile,
 );
 
 router.get(
   "/profile/:userId",
   MiddlewareService.validateSession(["user"], true),
-  getUserProfile
+  getUserProfile,
 );
 
 router.get(
@@ -394,7 +394,7 @@ router.get(
     const friendshipSummary = await getFriendships(myUserId);
 
     res.status(200).json(friendshipSummary);
-  })
+  }),
 );
 
 router.post(
@@ -405,7 +405,7 @@ router.post(
 
     if (profileUserId === res.locals.session.userId) {
       throw BadRequest(
-        "You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though..."
+        "You can't create a friendship with yourself. I understand if you're friends with yourself in real life, though...",
       );
     }
 
@@ -425,12 +425,12 @@ router.post(
         },
         {
           transaction,
-        }
+        },
       );
     });
 
     res.status(201).send("Created");
-  })
+  }),
 );
 
 router.delete(
@@ -456,7 +456,7 @@ router.delete(
     });
 
     res.status(200).send("Friendship removed");
-  })
+  }),
 );
 
 router.get(
@@ -473,7 +473,7 @@ router.get(
     res.status(200).json({
       available: !user,
     });
-  })
+  }),
 );
 
 router.get(
@@ -483,10 +483,10 @@ router.get(
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
     const userCapabilities = await SubscriptionService.capabilitiesForUser(
-      res.locals.session.userId
+      res.locals.session.userId,
     );
 
-    const capabilityTypes = Object.values(SubscriptionService.CAPABILITIES);
+    const capabilityTypes = Object.values(SubscriptionService.Capabilities);
 
     const capabilityMap = capabilityTypes.reduce((acc, capabilityType) => {
       acc[capabilityType] = userCapabilities.indexOf(capabilityType) > -1;
@@ -494,7 +494,7 @@ router.get(
     }, {});
 
     res.status(200).json(capabilityMap);
-  })
+  }),
 );
 
 router.get(
@@ -544,7 +544,7 @@ router.get(
       createdAt: res.locals.user.createdAt,
       lastLogin: res.locals.user.lastLogin,
     });
-  })
+  }),
 );
 
 /* Get public user listing by email */
@@ -564,7 +564,7 @@ router.get(
     }
 
     res.status(200).json(user);
-  })
+  }),
 );
 
 /* Log in user */
@@ -576,7 +576,7 @@ router.post(
       const user = await User.login(
         req.body.email,
         req.body.password,
-        transaction
+        transaction,
       );
 
       // Update lastLogin
@@ -586,7 +586,7 @@ router.post(
       const session = await SessionService.generateSession(
         user.id,
         "user",
-        transaction
+        transaction,
       );
 
       if (
@@ -614,7 +614,7 @@ router.post(
     res.status(200).json({
       token,
     });
-  })
+  }),
 );
 
 /* Register as a user */
@@ -666,13 +666,13 @@ router.post(
         },
         {
           transaction,
-        }
+        },
       );
 
       const session = await SessionService.generateSession(
         newUser.id,
         "user",
-        transaction
+        transaction,
       );
 
       return session.token;
@@ -685,7 +685,7 @@ router.post(
     sendWelcome([sanitizedEmail], []).catch((err) => {
       Sentry.captureException(err);
     });
-  })
+  }),
 );
 
 /* Forgot password */
@@ -723,7 +723,7 @@ router.post(
     await sendPasswordReset([user.email], [], { resetLink: link });
 
     res.status(standardStatus).json(standardResponse);
-  })
+  }),
 );
 
 /* Update user */
@@ -742,7 +742,7 @@ router.put(
         }
 
         const hashedPasswordData = User.generateHashedPassword(
-          req.body.password
+          req.body.password,
         );
 
         updates.passwordHash = hashedPasswordData.hash;
@@ -782,7 +782,7 @@ router.put(
 
         if (existingUserWithEmail) {
           const e = new Error(
-            "Account with that email address already exists!"
+            "Account with that email address already exists!",
           );
           e.status = 406;
           throw e;
@@ -819,7 +819,7 @@ router.put(
       createdAt,
       updatedAt,
     });
-  })
+  }),
 );
 
 router.post(
@@ -832,7 +832,7 @@ router.post(
     res.status(200).json({
       msg: "Session invalidated. User is now logged out.",
     });
-  })
+  }),
 );
 
 /* Check if a session token is valid */
@@ -842,7 +842,7 @@ router.get(
   MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     res.status(200).send("Ok");
-  })
+  }),
 );
 
 router.post(
@@ -878,7 +878,7 @@ router.post(
     });
 
     res.status(200).send(token);
-  })
+  }),
 );
 
 router.delete(
@@ -898,7 +898,7 @@ router.delete(
     });
 
     res.status(200).send("ok");
-  })
+  }),
 );
 
 /* Get public user listing by id */
@@ -915,7 +915,7 @@ router.get(
     }
 
     res.status(200).json(user);
-  })
+  }),
 );
 
 router.delete(
@@ -933,7 +933,7 @@ router.delete(
       });
 
       await deleteHangingImagesForUser(userId, transaction).catch((e) =>
-        Sentry.captureException(e)
+        Sentry.captureException(e),
       );
 
       await User.destroy({
@@ -945,7 +945,7 @@ router.delete(
     });
 
     res.status(200).send("ok");
-  })
+  }),
 );
 
 export default router;

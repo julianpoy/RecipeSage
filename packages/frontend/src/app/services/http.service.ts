@@ -43,7 +43,7 @@ export class HttpService {
 
   constructor(
     private httpErrorHandlerService: HttpErrorHandlerService,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {
     this.axiosClient = axios.create({
       timeout: REQUEST_TIMEOUT_FALLBACK,
@@ -68,7 +68,7 @@ export class HttpService {
     method: string,
     payload?: any,
     query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this._requestWithWrapper<ResponseType>(
       {},
@@ -76,7 +76,7 @@ export class HttpService {
       method,
       payload || {},
       query || {},
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -85,7 +85,7 @@ export class HttpService {
     method: string,
     payload?: any,
     query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this._requestWithWrapper<ResponseType>(
       {
@@ -97,7 +97,7 @@ export class HttpService {
       method,
       payload || {},
       query || {},
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -107,7 +107,7 @@ export class HttpService {
     method: string,
     payload: any,
     query: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
     let url = this.getBase() + path + this.utilService.getTokenQuery();
 
@@ -140,9 +140,8 @@ export class HttpService {
 
   async request<ResponseType>(requestConfig: AxiosRequestConfig) {
     try {
-      const { status, data } = await this.axiosClient.request<ResponseType>(
-        requestConfig
-      );
+      const { status, data } =
+        await this.axiosClient.request<ResponseType>(requestConfig);
 
       return {
         success: true,

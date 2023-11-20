@@ -38,7 +38,7 @@ router.post(
     let stripeCustomerId;
     if (res.locals.session) {
       stripeCustomerId = await StripeService.createOrRetrieveCustomerId(
-        res.locals.session.userId
+        res.locals.session.userId,
       );
     }
 
@@ -52,7 +52,7 @@ router.post(
     res.status(200).json({
       id: stripeSession.id,
     });
-  })
+  }),
 );
 
 router.post(
@@ -82,7 +82,7 @@ router.post(
       if (session.mode !== "subscription") {
         const user = await StripeService.findCheckoutUser(
           session.customer,
-          session.customer_email
+          session.customer_email,
         );
 
         const amountPaid = session.display_items
@@ -102,14 +102,14 @@ router.post(
             },
             {
               transaction,
-            }
+            },
           );
 
           if (user) {
             await SubscriptionService.extend(
               user.id,
               "pyo-single",
-              transaction
+              transaction,
             );
           }
         });
@@ -122,7 +122,7 @@ router.post(
 
       const user = await StripeService.findCheckoutUser(
         invoice.customer,
-        invoice.customer_email
+        invoice.customer_email,
       );
 
       await sequelize.transaction(async (transaction) => {
@@ -138,7 +138,7 @@ router.post(
           },
           {
             transaction,
-          }
+          },
         );
 
         if (user) {
@@ -148,16 +148,16 @@ router.post(
               await SubscriptionService.extend(
                 user.id,
                 subscriptionModelName,
-                transaction
+                transaction,
               );
-            })
+            }),
           );
         }
       });
     }
 
     res.status(200).json({ received: true });
-  })
+  }),
 );
 
 export default router;

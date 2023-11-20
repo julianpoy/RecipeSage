@@ -33,7 +33,7 @@ export class ImportPepperplatePage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public utilService: UtilService,
-    public recipeService: RecipeService
+    public recipeService: RecipeService,
   ) {}
 
   async scrapePepperplate() {
@@ -128,7 +128,7 @@ export class ImportPepperplatePage {
             ).present();
           }, 10000);
         },
-      }
+      },
     );
     this.loading = false;
     loading.dismiss();

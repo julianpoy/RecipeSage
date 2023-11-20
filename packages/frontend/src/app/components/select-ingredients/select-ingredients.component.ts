@@ -44,7 +44,7 @@ export class SelectIngredientsComponent {
 
   constructor(
     private popoverCtrl: PopoverController,
-    public recipeService: RecipeService
+    public recipeService: RecipeService,
   ) {}
 
   async changeScale() {
@@ -85,7 +85,7 @@ export class SelectIngredientsComponent {
     } else {
       this.selectedIngredients.splice(
         this.selectedIngredients.indexOf(this.scaledIngredients[i]),
-        1
+        1,
       );
     }
 

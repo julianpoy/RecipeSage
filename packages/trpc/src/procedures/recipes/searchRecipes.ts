@@ -18,7 +18,7 @@ export const searchRecipes = publicProcedure
       ratings: z
         .array(z.union([z.number().min(0).max(5), z.null()]))
         .optional(),
-    })
+    }),
   )
   .query(async ({ ctx, input }) => {
     const userIds: string[] = [];
@@ -37,13 +37,16 @@ export const searchRecipes = publicProcedure
 
     const recipeIds = await SearchService.searchRecipes(
       userIds,
-      input.searchTerm
+      input.searchTerm,
     );
 
-    const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
-      acc[recipeId] = idx + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const recipeIdsMap = recipeIds.reduce(
+      (acc, recipeId, idx) => {
+        acc[recipeId] = idx + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
     const results = await getRecipesWithConstraints({
       userId: ctx.session?.userId || undefined,

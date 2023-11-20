@@ -59,7 +59,7 @@ export class EditRecipePage {
     public recipeService: RecipeService,
     public imageService: ImageService,
     public domSanitizationService: DomSanitizer,
-    public capabilitiesService: CapabilitiesService
+    public capabilitiesService: CapabilitiesService,
   ) {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
@@ -108,7 +108,7 @@ export class EditRecipePage {
     // Robust URL finding regex from https://www.regextester.com/93652
     // TODO: Replace this with a lib
     const matchedUrl = s.match(
-      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/gi
+      /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/gi,
     );
     if (matchedUrl) return matchedUrl.pop();
   }
@@ -167,7 +167,7 @@ export class EditRecipePage {
     this.markAsClean();
 
     this.navCtrl.navigateRoot(
-      RouteMap.RecipePage.getPath(this.recipe.id || response.data.id)
+      RouteMap.RecipePage.getPath(this.recipe.id || response.data.id),
     );
   }
 
@@ -276,7 +276,7 @@ export class EditRecipePage {
             })
           ).present();
         },
-      }
+      },
     );
     if (!response.success) {
       loading.dismiss();
@@ -315,7 +315,7 @@ export class EditRecipePage {
               400: () => {},
               415: () => {},
               500: () => {},
-            }
+            },
           );
           if (imageResponse.success) this.images.push(imageResponse.data);
         })(),

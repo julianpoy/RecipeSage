@@ -20,7 +20,7 @@ export class ShareProfileModalPage {
   constructor(
     private translate: TranslateService,
     private userService: UserService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     setTimeout(() => {
       if (this.handle) this.loadFromHandle(this.handle);
@@ -52,7 +52,7 @@ export class ShareProfileModalPage {
   getProfileUrl() {
     if (!this.profile) return "Error loading profile url";
     return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(
-      `@${this.profile.handle}`
+      `@${this.profile.handle}`,
     )}`;
   }
 
@@ -60,7 +60,7 @@ export class ShareProfileModalPage {
     const win = window.open() as any;
     win.opener = null;
     win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      this.getProfileUrl()
+      this.getProfileUrl(),
     )}`;
   }
 
@@ -72,7 +72,7 @@ export class ShareProfileModalPage {
     const win = window.open() as any;
     win.opener = null;
     win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-      this.getProfileUrl()
+      this.getProfileUrl(),
     )}&text=${encodeURIComponent(message)}`;
   }
 
@@ -82,13 +82,13 @@ export class ShareProfileModalPage {
       .toPromise();
 
     const imageUrl = encodeURIComponent(
-      this.profile.profileImages?.[0]?.location || ""
+      this.profile.profileImages?.[0]?.location || "",
     );
     const url = encodeURIComponent(this.getProfileUrl());
     const win = window.open() as any;
     win.opener = null;
     win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(
-      message
+      message,
     )}`;
   }
 
@@ -104,7 +104,7 @@ export class ShareProfileModalPage {
     const win = window.open() as any;
     win.opener = null;
     win.location = `mailto:info@example.com?&subject=${encodeURIComponent(
-      subject
+      subject,
     )}&body=${encodeURIComponent(message)}${url}`;
   }
 }
