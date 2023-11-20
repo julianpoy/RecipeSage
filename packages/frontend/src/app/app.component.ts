@@ -328,6 +328,15 @@ export class AppComponent {
       [
         true,
         {
+          id: "settings",
+          title: settings,
+          icon: "settings",
+          url: RouteMap.SettingsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "about",
           title: about,
           icon: "help-buoy",
