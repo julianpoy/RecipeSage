@@ -9,7 +9,7 @@ export const FriendshipInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   Friendship.associate = function (models) {
     Friendship.belongsTo(models.User, {

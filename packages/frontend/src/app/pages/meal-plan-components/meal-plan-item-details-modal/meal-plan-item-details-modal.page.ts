@@ -43,14 +43,14 @@ export class MealPlanItemDetailsModalPage {
     public recipeService: RecipeService,
     public loadingService: LoadingService,
     public utilService: UtilService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {}
 
   openRecipe() {
     if (!this.mealItem.recipe) return;
 
     this.navCtrl.navigateForward(
-      RouteMap.RecipePage.getPath(this.mealItem.recipe.id)
+      RouteMap.RecipePage.getPath(this.mealItem.recipe.id),
     );
     this.close();
   }
@@ -184,7 +184,7 @@ export class MealPlanItemDetailsModalPage {
     const loading = this.loadingService.start();
     // Fetch complete recipe (this page is provided with only topical recipe details)
     const response = await this.recipeService.getRecipeById(
-      this.mealItem.recipe.id
+      this.mealItem.recipe.id,
     );
     loading.dismiss();
 

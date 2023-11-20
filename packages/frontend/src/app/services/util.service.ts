@@ -40,7 +40,7 @@ export const RouteMap = {
         params.push(
           `labels=${filters.selectedLabels
             .map((labelName) => encodeURIComponent(labelName))
-            .join(",")}`
+            .join(",")}`,
         );
       }
 
@@ -270,7 +270,7 @@ export class UtilService {
 
   getAppBrowserLang(): string {
     const isSupported = (
-      lang: string | undefined
+      lang: string | undefined,
     ): lang is SupportedLanguages => {
       return Object.values(SupportedLanguages).some((el) => el === lang);
     };
@@ -344,7 +344,7 @@ export class UtilService {
       groupSimilar?: boolean;
       groupCategories?: boolean;
       sortBy?: string;
-    }
+    },
   ) {
     let query = `${this.getTokenQuery()}&version=${
       (window as any).version
@@ -359,7 +359,7 @@ export class UtilService {
 
   generateRecipeTemplateURL(
     recipeId: string,
-    modifiers: RecipeTemplateModifiers
+    modifiers: RecipeTemplateModifiers,
   ): string {
     modifiers = { version: (window as any).version, ...modifiers };
     const modifierQuery = Object.entries(modifiers)
@@ -374,7 +374,7 @@ export class UtilService {
 
   formatDate(
     date: string | number | Date,
-    options?: { now?: boolean; times?: boolean }
+    options?: { now?: boolean; times?: boolean },
   ): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
@@ -454,7 +454,7 @@ export class UtilService {
   openRecipe(
     navCtrl: NavController,
     recipeId: string,
-    event?: MouseEvent | KeyboardEvent
+    event?: MouseEvent | KeyboardEvent,
   ) {
     if (event && (event.metaKey || event.ctrlKey)) {
       window.open(`#/recipe/${recipeId}`);

@@ -132,7 +132,7 @@ router.get(
         </soap:Body>
       </soap:Envelope>
       `,
-        }
+        },
       );
 
       const authResponseText = await authResponse.text();
@@ -171,7 +171,7 @@ router.get(
           </soap:Body>
         </soap:Envelope>
         `,
-          }
+          },
         );
 
         const syncResponseText = await syncResponse.text();
@@ -179,7 +179,7 @@ router.get(
         console.log("repeat");
 
         const recipeJson = JSON.parse(
-          xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 })
+          xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 }),
         );
 
         syncToken =
@@ -219,14 +219,14 @@ router.get(
         const savedRecipes = await Recipe.bulkCreate(
           recipes.map((pepperRecipe) => {
             const ingredientGroups = objToArr(
-              (pepperRecipe.Ingredients || {}).IngredientSyncGroup
+              (pepperRecipe.Ingredients || {}).IngredientSyncGroup,
             );
 
             const finalIngredients = ingredientGroups
               .sort(
                 (a, b) =>
                   parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                  parseInt((b.DisplayOrder || {})._text || 0, 10)
+                  parseInt((b.DisplayOrder || {})._text || 0, 10),
               )
               .map((ingredientGroup) => {
                 let ingredients = [];
@@ -234,19 +234,19 @@ router.get(
                   ingredients.push(`[${ingredientGroup.Title._text}]`);
                 }
                 const innerIngredients = objToArr(
-                  (ingredientGroup.Ingredients || {}).IngredientSync
+                  (ingredientGroup.Ingredients || {}).IngredientSync,
                 )
                   .sort(
                     (a, b) =>
                       parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                      parseInt((b.DisplayOrder || {})._text || 0, 10)
+                      parseInt((b.DisplayOrder || {})._text || 0, 10),
                   )
                   .map((ingredient) =>
                     (
                       ((ingredient.Quantity || {})._text || "") +
                       " " +
                       ingredient.Text._text
-                    ).trim()
+                    ).trim(),
                   )
                   .join("\r\n");
                 return [...ingredients, innerIngredients].join("\r\n");
@@ -254,14 +254,14 @@ router.get(
               .join("\r\n");
 
             const directionGroups = objToArr(
-              (pepperRecipe.Directions || {}).DirectionSyncGroup
+              (pepperRecipe.Directions || {}).DirectionSyncGroup,
             );
 
             const finalDirections = directionGroups
               .sort(
                 (a, b) =>
                   parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                  parseInt((b.DisplayOrder || {})._text || 0, 10)
+                  parseInt((b.DisplayOrder || {})._text || 0, 10),
               )
               .map((directionGroup) => {
                 let directions = [];
@@ -269,12 +269,12 @@ router.get(
                   directions.push(`[${directionGroup.Title._text}]`);
                 }
                 const innerDirections = objToArr(
-                  (directionGroup.Directions || {}).DirectionSync
+                  (directionGroup.Directions || {}).DirectionSync,
                 )
                   .sort(
                     (a, b) =>
                       parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                      parseInt((b.DisplayOrder || {})._text || 0, 10)
+                      parseInt((b.DisplayOrder || {})._text || 0, 10),
                   )
                   .map((direction) => direction.Text._text)
                   .join("\r\n");
@@ -304,7 +304,7 @@ router.get(
           {
             transaction,
             returning: true,
-          }
+          },
         );
 
         const recipeIdsByLabelTitle = recipes.reduce(
@@ -325,7 +325,7 @@ router.get(
             }
             return acc;
           },
-          {}
+          {},
         );
 
         await Promise.all(
@@ -349,10 +349,10 @@ router.get(
                   {
                     ignoreDuplicates: true,
                     transaction,
-                  }
+                  },
                 );
               });
-            })
+            }),
         );
 
         const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
@@ -363,7 +363,7 @@ router.get(
               return writeImageURL(
                 ObjectTypes.RECIPE_IMAGE,
                 pepperRecipe.ImageUrl._text,
-                false
+                false,
               )
                 .then((image) => {
                   pepperRecipe.image = image;
@@ -373,7 +373,7 @@ router.get(
                 });
             }
           }),
-          PEPPERPLATE_IMG_CHUNK_SIZE
+          PEPPERPLATE_IMG_CHUNK_SIZE,
         );
 
         const pendingImageData = [];
@@ -397,7 +397,7 @@ router.get(
           {
             returning: true,
             transaction,
-          }
+          },
         );
 
         await Recipe_Image.bulkCreate(
@@ -408,7 +408,7 @@ router.get(
           })),
           {
             transaction,
-          }
+          },
         );
 
         await SearchService.indexRecipes(savedRecipes);
@@ -420,7 +420,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 router.post(
@@ -441,7 +441,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.Capabilities.MultipleImages
+        SubscriptionsService.Capabilities.MultipleImages,
       );
 
     let optionalFlags = [];
@@ -490,7 +490,7 @@ router.post(
         }
         case 3: {
           let badFileErr = new Error(
-            "Bad file format (not in .LCB ZIP format)"
+            "Bad file format (not in .LCB ZIP format)",
           );
           badFileErr.status = 406;
           next(badFileErr);
@@ -505,7 +505,7 @@ router.post(
       }
       job.complete = true;
     });
-  }
+  },
 );
 
 router.post(
@@ -526,7 +526,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.Capabilities.MultipleImages
+        SubscriptionsService.Capabilities.MultipleImages,
       );
 
     let optionalFlags = [];
@@ -572,7 +572,7 @@ router.post(
         }
         case 3: {
           let badFileErr = new Error(
-            "Bad file format (not in .FDX or .FDXZ format)"
+            "Bad file format (not in .FDX or .FDXZ format)",
           );
           badFileErr.status = 406;
           next(badFileErr);
@@ -595,7 +595,7 @@ router.post(
     });
 
     await SearchService.indexRecipes(recipes);
-  }
+  },
 );
 
 router.post(
@@ -645,7 +645,7 @@ router.post(
                         ? writeImageBuffer(
                             ObjectTypes.RECIPE_IMAGE,
                             Buffer.from(recipeData.photo_data, "base64"),
-                            true
+                            true,
                           )
                         : Promise.resolve();
 
@@ -708,7 +708,7 @@ router.post(
                   {
                     returning: true,
                     transaction: t,
-                  }
+                  },
                 ).then((recipes) => {
                   recipes.map((recipe, idx) => {
                     pendingRecipes[idx].labels.map((labelTitle) => {
@@ -740,10 +740,10 @@ router.post(
                         {
                           ignoreDuplicates: true,
                           transaction: t,
-                        }
+                        },
                       );
                     });
-                  })
+                  }),
                 );
               });
           });
@@ -755,10 +755,10 @@ router.post(
         metrics.performance = {
           tExtract: Math.floor(metrics.tExtracted - metrics.t0),
           tRecipesProcess: Math.floor(
-            metrics.tRecipesProcessed - metrics.tExtracted
+            metrics.tRecipesProcessed - metrics.tExtracted,
           ),
           tRecipesSave: Math.floor(
-            metrics.tRecipesSaved - metrics.tRecipesProcessed
+            metrics.tRecipesSaved - metrics.tRecipesProcessed,
           ),
           tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved),
         };
@@ -782,13 +782,13 @@ router.post(
         fs.removeSync(extractPath);
         next(err);
       });
-  }
+  },
 );
 
 router.get("/embed/recipe/:recipeId", (req, res) => {
   res.redirect(
     302,
-    `/api/print/${req.params.recipeId}${req._parsedUrl.search}`
+    `/api/print/${req.params.recipeId}${req._parsedUrl.search}`,
   );
 });
 

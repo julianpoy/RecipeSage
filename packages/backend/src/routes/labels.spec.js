@@ -59,7 +59,7 @@ describe("labels", () => {
             expect(label.title).to.equal(payload.title);
             expect(label.recipes.length).to.equal(1);
             expect(label.recipes[0].id).to.equal(payload.recipeId);
-          })
+          }),
         );
     });
 

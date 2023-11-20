@@ -95,7 +95,7 @@ export const generateSession = function (userId, type, transaction) {
     },
     {
       transaction: transaction,
-    }
+    },
   );
 };
 

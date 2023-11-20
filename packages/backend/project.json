@@ -19,7 +19,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
@@ -34,13 +34,7 @@
       "outputs": [],
       "options": {
         "jestConfig": "packages/backend/jest.config.ts",
-        "passWithNoTests": true,
         "runInBand": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true
-        }
       }
     }
   }

@@ -27,7 +27,7 @@ export class RecipeDetailsPopoverPage {
     private preferencesService: PreferencesService,
     private wakeLockService: WakeLockService,
     public cookingToolbarService: CookingToolbarService,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
   ) {
     this.wakeLockCapable = this.wakeLockService.isCapable;
   }

@@ -81,7 +81,7 @@ export class MessagingService {
     public httpService: HttpService,
     public userService: UserService,
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {
     this.updateFCMSupported();
 
@@ -109,7 +109,7 @@ export class MessagingService {
           case "import:pepperplate:failed":
             return this.events.publish(
               "import:pepperplate:failed",
-              message.data.reason
+              message.data.reason,
             );
           case "import:pepperplate:working":
             return this.events.publish("import:pepperplate:working");
@@ -141,14 +141,14 @@ export class MessagingService {
     params: {
       user: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<Message[]>(
       `messages`,
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -156,14 +156,14 @@ export class MessagingService {
     params?: {
       limit?: number;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<MessageThread[]>(
       `messages/threads`,
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -173,14 +173,14 @@ export class MessagingService {
       to: string;
       recipeId?: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `messages`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 

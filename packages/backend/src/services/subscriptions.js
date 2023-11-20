@@ -31,7 +31,7 @@ export const extend = async (userId, subscriptionName, transaction) => {
   if (existingSubscription) {
     const expires = moment(existingSubscription.expires || undefined).add(
       renewalLength,
-      "days"
+      "days",
     );
 
     await UserSubscription.update(
@@ -39,7 +39,7 @@ export const extend = async (userId, subscriptionName, transaction) => {
       {
         where: { id: existingSubscription.id },
         transaction,
-      }
+      },
     );
   } else {
     const expires = moment().add(renewalLength, "days");
@@ -52,7 +52,7 @@ export const extend = async (userId, subscriptionName, transaction) => {
       },
       {
         transaction,
-      }
+      },
     );
   }
 };

@@ -37,7 +37,7 @@ export class PeoplePage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public recipeService: RecipeService,
-    public userService: UserService
+    public userService: UserService,
   ) {}
 
   ionViewWillEnter() {

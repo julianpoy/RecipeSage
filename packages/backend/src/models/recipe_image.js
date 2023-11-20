@@ -10,7 +10,7 @@ export const RecipeImageInit = (sequelize, DataTypes) => {
       },
       order: DataTypes.INTEGER,
     },
-    {}
+    {},
   );
   Recipe_Image.associate = () => {
     // No associations

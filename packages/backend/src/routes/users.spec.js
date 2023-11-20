@@ -54,7 +54,7 @@ describe("users", () => {
             }).then((user) => {
               expect(user).not.to.be.null;
             });
-          })
+          }),
         );
     });
 
@@ -112,7 +112,7 @@ describe("users", () => {
             },
           }).then((session) => {
             expect(session).not.to.be.null;
-          })
+          }),
         );
     });
 
@@ -160,7 +160,7 @@ describe("users", () => {
             },
           }).then((session) => {
             expect(session).not.to.be.null;
-          })
+          }),
         );
     });
 
@@ -223,10 +223,10 @@ describe("users", () => {
           expect(body.name).to.equal(user.name);
           expect(body.email).to.equal(user.email);
           expect(new Date(body.createdAt).getTime()).to.equal(
-            new Date(user.createdAt).getTime()
+            new Date(user.createdAt).getTime(),
           );
           expect(new Date(body.updatedAt).getTime()).to.equal(
-            new Date(user.updatedAt).getTime()
+            new Date(user.updatedAt).getTime(),
           );
         });
     });

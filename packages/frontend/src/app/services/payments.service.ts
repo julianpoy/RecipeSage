@@ -14,7 +14,7 @@ export class PaymentsService {
 
   constructor(
     public httpService: HttpService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {
     const stripeScriptEl = document.createElement("script");
     stripeScriptEl.onload = () => this.init();
@@ -33,14 +33,14 @@ export class PaymentsService {
       successUrl: string;
       cancelUrl: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<any>(
       `payments/stripe/custom-session`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 

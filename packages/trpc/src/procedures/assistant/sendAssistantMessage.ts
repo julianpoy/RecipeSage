@@ -9,7 +9,7 @@ export const sendAssistantMessage = publicProcedure
   .input(
     z.object({
       content: z.string().max(500),
-    })
+    }),
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -21,7 +21,7 @@ export const sendAssistantMessage = publicProcedure
     }
 
     const isOverMessageLimit = await assistant.checkMessageLimit(
-      session.userId
+      session.userId,
     );
     if (isOverMessageLimit) {
       throw new TRPCError({

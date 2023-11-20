@@ -48,9 +48,9 @@ router.get(
 
     res.redirect(
       302,
-      `/api/print/${req.query.recipeId}?printPreview=true&version=legacy${modifierQuery}`
+      `/api/print/${req.query.recipeId}?printPreview=true&version=legacy${modifierQuery}`,
     );
-  })
+  }),
 );
 
 router.get(
@@ -105,8 +105,8 @@ router.get(
     shoppingList.items.forEach(
       (item) =>
         (item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
-          item.title
-        ))
+          item.title,
+        )),
     );
 
     const {
@@ -118,7 +118,7 @@ router.get(
       groupsByCategoryTitle,
     } = SharedUtils.getShoppingListItemGroupings(
       shoppingList.items,
-      modifiers.sortBy
+      modifiers.sortBy,
     );
 
     res.render("shoppinglist-default", {
@@ -132,7 +132,7 @@ router.get(
       date: new Date().toDateString(),
       modifiers,
     });
-  })
+  }),
 );
 
 router.get(
@@ -196,12 +196,12 @@ router.get(
           if (!recipe.isOwner) recipe.labels = [];
 
           recipe.instructions = SharedUtils.parseInstructions(
-            sanitizeHtml(recipe.instructions)
+            sanitizeHtml(recipe.instructions),
           );
           recipe.ingredients = SharedUtils.parseIngredients(
             sanitizeHtml(recipe.ingredients),
             modifiers.scale,
-            true
+            true,
           );
           recipe.notes = SharedUtils.parseNotes(sanitizeHtml(recipe.notes));
 
@@ -228,7 +228,7 @@ router.get(
 
         next(err);
       });
-  }
+  },
 );
 
 export default router;

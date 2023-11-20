@@ -30,7 +30,7 @@ export class ImportLivingcookbookPage {
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {
     this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
@@ -155,7 +155,7 @@ export class ImportLivingcookbookPage {
         {
           excludeImages: this.excludeImages || undefined,
         },
-        errorHandlers
+        errorHandlers,
       );
     } else {
       importPromise = this.recipeService.importLCB(
@@ -165,7 +165,7 @@ export class ImportLivingcookbookPage {
           includeTechniques: this.includeTechniques || undefined,
           excludeImages: this.excludeImages || undefined,
         },
-        errorHandlers
+        errorHandlers,
       );
     }
 

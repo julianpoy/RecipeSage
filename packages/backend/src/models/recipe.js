@@ -147,7 +147,7 @@ export const RecipeInit = (sequelize, DataTypes) => {
           recipeId,
           basename,
           transaction,
-          ctr + 1
+          ctr + 1,
         );
       }
 
@@ -176,7 +176,7 @@ export const RecipeInit = (sequelize, DataTypes) => {
       recipientId,
       null,
       this.title,
-      transaction
+      transaction,
     );
 
     const recipe = await Recipe.create(
@@ -197,7 +197,7 @@ export const RecipeInit = (sequelize, DataTypes) => {
       },
       {
         transaction,
-      }
+      },
     );
 
     const Recipe_Image = require("../models").Recipe_Image;
@@ -218,7 +218,7 @@ export const RecipeInit = (sequelize, DataTypes) => {
         })),
         {
           transaction,
-        }
+        },
       );
     }
 

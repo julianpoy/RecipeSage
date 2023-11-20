@@ -70,7 +70,7 @@ export class MealPlanService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -80,7 +80,7 @@ export class MealPlanService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -89,14 +89,14 @@ export class MealPlanService {
       title: string;
       collaborators: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{ id: string }>(
       `mealPlans`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -108,14 +108,14 @@ export class MealPlanService {
       meal: string;
       scheduled: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -124,14 +124,14 @@ export class MealPlanService {
     payload: {
       title: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}`,
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -146,14 +146,14 @@ export class MealPlanService {
         scheduled: string;
       }[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -167,14 +167,14 @@ export class MealPlanService {
         scheduled: string;
       }[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -183,14 +183,14 @@ export class MealPlanService {
     params: {
       itemIds: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items/bulk`,
       "DELETE",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -199,14 +199,14 @@ export class MealPlanService {
     params: {
       itemId: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `mealPlans/${mealPlanId}/items`,
       "DELETE",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -216,7 +216,7 @@ export class MealPlanService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 

@@ -5,7 +5,7 @@ import { prisma } from "@recipesage/prisma";
  * Note: Use getFriendshipUsers if user profiles are needed at the cost of performance.
  */
 export const getFriendshipIds = async (
-  userId: string
+  userId: string,
 ): Promise<{
   incomingRequests: string[];
   outgoingRequests: string[];
@@ -48,7 +48,7 @@ export const getFriendshipIds = async (
       } else {
         incomingRequests.push(otherUserId);
       }
-    }
+    },
   );
 
   return {

@@ -33,7 +33,7 @@ export class ManageLabelModalPage {
     public alertCtrl: AlertController,
     public utilService: UtilService,
     public labelService: LabelService,
-    public recipeService: RecipeService
+    public recipeService: RecipeService,
   ) {
     setTimeout(() => {
       this.createdAt = utilService.formatDate(this.label.createdAt);
@@ -71,7 +71,7 @@ export class ManageLabelModalPage {
             })
           ).present();
         },
-      }
+      },
     );
     loading.dismiss();
     if (!response.success) return;
@@ -90,7 +90,7 @@ export class ManageLabelModalPage {
         state: {
           showBack: true,
         },
-      }
+      },
     );
   }
 

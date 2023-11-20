@@ -32,7 +32,7 @@ export const StripePaymentInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   StripePayment.associate = function (models) {
     StripePayment.belongsTo(models.User, {

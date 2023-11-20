@@ -45,7 +45,7 @@ export class AddRecipeToShoppingListModalPage {
     public utilService: UtilService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
   ) {}
 
   ionViewWillEnter() {
@@ -56,7 +56,7 @@ export class AddRecipeToShoppingListModalPage {
       },
       () => {
         loading.dismiss();
-      }
+      },
     );
   }
 
@@ -64,10 +64,10 @@ export class AddRecipeToShoppingListModalPage {
     if (!this.shoppingLists) return;
 
     const lastUsedShoppingListId = localStorage.getItem(
-      "lastUsedShoppingListId"
+      "lastUsedShoppingListId",
     );
     const matchingLists = this.shoppingLists.filter(
-      (shoppingList) => shoppingList.id === lastUsedShoppingListId
+      (shoppingList) => shoppingList.id === lastUsedShoppingListId,
     );
     if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
       this.destinationShoppingList = this.shoppingLists[0];
@@ -77,7 +77,7 @@ export class AddRecipeToShoppingListModalPage {
   saveLastUsedShoppingList() {
     localStorage.setItem(
       "lastUsedShoppingListId",
-      this.destinationShoppingList.id
+      this.destinationShoppingList.id,
     );
   }
 
@@ -92,12 +92,12 @@ export class AddRecipeToShoppingListModalPage {
 
   selectedIngredientsChange(
     recipeId: string,
-    selectedIngredients: ParsedIngredient[]
+    selectedIngredients: ParsedIngredient[],
   ) {
     this.selectedIngredientsByRecipe[recipeId] = selectedIngredients;
 
     this.selectedIngredients = Object.values(
-      this.selectedIngredientsByRecipe
+      this.selectedIngredientsByRecipe,
     ).flat();
   }
 
@@ -120,7 +120,7 @@ export class AddRecipeToShoppingListModalPage {
           title: ingredient.content,
           recipeId,
           reference,
-        }))
+        })),
       )
       .flat();
 
@@ -128,7 +128,7 @@ export class AddRecipeToShoppingListModalPage {
       this.destinationShoppingList.id,
       {
         items,
-      }
+      },
     );
     loading.dismiss();
     if (!response.success) return;

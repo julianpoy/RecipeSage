@@ -25,7 +25,7 @@ export class EditRecipePopoverPage {
 
   constructor(
     private preferencesService: PreferencesService,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
   ) {}
 
   savePreferences() {

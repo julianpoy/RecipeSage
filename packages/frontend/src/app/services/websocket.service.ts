@@ -32,7 +32,7 @@ export class WebsocketService {
   register(
     eventName: string,
     cb: (payload: Record<string, any>) => void,
-    ctx: any
+    ctx: any,
   ) {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
 
@@ -58,7 +58,7 @@ export class WebsocketService {
       GRIP_WS_URL || prot + "://" + window.location.hostname + "/grip/ws";
 
     this.connection = new WebSocket(
-      connBaseUrl + this.utilService.getTokenQuery()
+      connBaseUrl + this.utilService.getTokenQuery(),
     );
 
     this.connection.onopen = () => {

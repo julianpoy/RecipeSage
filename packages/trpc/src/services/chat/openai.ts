@@ -20,7 +20,7 @@ export class OpenAIHelper {
 
   async getChatResponse(
     context: ChatCompletionMessageParam[],
-    tools: RunnableTools<[ReturnType<typeof initBuildRecipe>]>
+    tools: RunnableTools<[ReturnType<typeof initBuildRecipe>]>,
   ): Promise<ChatCompletionMessageParam[]> {
     const runner = this.openAi.beta.chat.completions.runTools({
       messages: context,

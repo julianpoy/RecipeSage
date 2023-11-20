@@ -45,7 +45,7 @@ export class AddRecipeToMealPlanModalPage {
     public utilService: UtilService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
   ) {}
 
   ionViewWillEnter() {
@@ -56,7 +56,7 @@ export class AddRecipeToMealPlanModalPage {
       },
       () => {
         loading.dismiss();
-      }
+      },
     );
   }
 
@@ -65,7 +65,7 @@ export class AddRecipeToMealPlanModalPage {
 
     const lastUsedMealPlanId = localStorage.getItem("lastUsedMealPlanId");
     const matchingPlans = this.mealPlans.filter(
-      (mealPlan) => mealPlan.id === lastUsedMealPlanId
+      (mealPlan) => mealPlan.id === lastUsedMealPlanId,
     );
     if (matchingPlans.length > 0 || this.mealPlans.length === 1) {
       this.selectedMealPlan = this.mealPlans[0];
@@ -115,7 +115,7 @@ export class AddRecipeToMealPlanModalPage {
         recipeId: this.recipe.id,
         meal: this.meal,
         scheduled: new Date(this.selectedDays[0]).toISOString(),
-      }
+      },
     );
     loading.dismiss();
 

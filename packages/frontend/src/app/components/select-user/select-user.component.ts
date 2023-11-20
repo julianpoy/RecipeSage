@@ -40,7 +40,7 @@ export class SelectUserComponent {
 
   constructor(
     private userService: UserService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
   ) {}
 
   onSearchInputChange(event: any) {
@@ -81,7 +81,7 @@ export class SelectUserComponent {
       },
       {
         404: () => {},
-      }
+      },
     );
 
     if (userResponse.success && userResponse.data)

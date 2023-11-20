@@ -15,7 +15,7 @@ export const createOrRetrieveCustomerId = async (userId) => {
 
   await User.update(
     { stripeCustomerId: stripeCustomer.id },
-    { where: { id: userId } }
+    { where: { id: userId } },
   );
 
   return stripeCustomer.id;
@@ -41,7 +41,7 @@ export const findCheckoutUser = async (customerId, customerEmail) => {
 
 export const createPYOSession = async (
   isRecurring,
-  { amount, stripeCustomerId, successUrl, cancelUrl }
+  { amount, stripeCustomerId, successUrl, cancelUrl },
 ) => {
   let checkoutData;
 
@@ -112,6 +112,6 @@ export const validateEvent = (rawRequestBody, stripeSignature) => {
   return stripe.webhooks.constructEvent(
     rawRequestBody,
     stripeSignature,
-    process.env.STRIPE_WEBHOOK_SECRET
+    process.env.STRIPE_WEBHOOK_SECRET,
   );
 };

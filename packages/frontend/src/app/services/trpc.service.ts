@@ -34,7 +34,7 @@ export class TRPCService {
 
   constructor(
     private httpErrorHandler: HttpErrorHandlerService,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {}
 
   async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {

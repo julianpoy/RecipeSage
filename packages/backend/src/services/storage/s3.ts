@@ -68,7 +68,7 @@ const paginate = <T>(objects: T[], limit: number): T[][] => {
 export const writeBuffer = async (
   objectType: ObjectTypes,
   buffer: Buffer,
-  mimetype: string
+  mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const key = generateKey(objectType);
 
@@ -80,7 +80,7 @@ export const writeBuffer = async (
       CacheControl: S3_DEFAULT_CACHECONTROL,
       Body: buffer,
       ContentType: mimetype,
-    })
+    }),
   );
 
   return {
@@ -100,7 +100,7 @@ export const deleteObject = async (key: string) => {
     new DeleteObjectCommand({
       Bucket: AWS_BUCKET,
       Key: key,
-    })
+    }),
   );
 
   return;
@@ -117,9 +117,9 @@ export const deleteObjects = async (keys: string[]) => {
           Delete: {
             Objects: keyPage.map((key) => ({ Key: key })),
           },
-        })
+        }),
       );
-    })
+    }),
   );
 
   return;

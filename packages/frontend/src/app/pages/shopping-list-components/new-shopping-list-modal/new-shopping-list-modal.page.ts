@@ -29,7 +29,7 @@ export class NewShoppingListModalPage {
     public shoppingListService: ShoppingListService,
     public messagingService: MessagingService,
     public userService: UserService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {}
 
   async save() {
@@ -47,7 +47,7 @@ export class NewShoppingListModalPage {
       success: true,
     });
     this.navCtrl.navigateRoot(
-      RouteMap.ShoppingListPage.getPath(response.data.id)
+      RouteMap.ShoppingListPage.getPath(response.data.id),
     );
   }
 

@@ -45,7 +45,7 @@ export class AssistantPage {
     public websocketService: WebsocketService,
     public utilService: UtilService,
     public messagingService: MessagingService,
-    public trpcService: TRPCService
+    public trpcService: TRPCService,
   ) {}
 
   ionViewWillEnter() {
@@ -66,7 +66,7 @@ export class AssistantPage {
       },
       () => {
         loading.dismiss();
-      }
+      },
     );
   }
 
@@ -91,7 +91,7 @@ export class AssistantPage {
       },
       () => {
         refresher.target.complete();
-      }
+      },
     );
   }
 
@@ -112,7 +112,7 @@ export class AssistantPage {
     elRef: string | Element,
     animate?: boolean,
     delay?: boolean,
-    callback?: () => any
+    callback?: () => any,
   ) {
     const go = () => {
       const element =
@@ -147,10 +147,10 @@ export class AssistantPage {
 
   async loadMessages(
     scrollBehavior?: "newest" | "bottom" | "none",
-    animateScroll?: boolean
+    animateScroll?: boolean,
   ) {
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.getAssistantMessages.query()
+      this.trpcService.trpc.getAssistantMessages.query(),
     );
     if (!response) return;
 
@@ -190,7 +190,7 @@ export class AssistantPage {
       this.scrollIntoView(
         `#message-${firstNewMessage.id}`,
         animateScroll,
-        true
+        true,
       );
     }
   }
@@ -200,7 +200,7 @@ export class AssistantPage {
       const message = this.messages[i];
       message.deservesDateDiff = !!this.deservesDateDiff(
         this.messages[i - 1],
-        message
+        message,
       );
       if (message.deservesDateDiff)
         message.dateDiff = this.formatMessageDividerDate(message.createdAt);
@@ -237,7 +237,7 @@ export class AssistantPage {
           await toast.present();
           return;
         },
-      }
+      },
     );
 
     if (!response) {
@@ -253,7 +253,7 @@ export class AssistantPage {
     setTimeout(() => {
       (
         document.querySelector(
-          "#assistant-message-textarea textarea"
+          "#assistant-message-textarea textarea",
         ) as HTMLElement
       )?.focus();
     });
@@ -276,7 +276,7 @@ export class AssistantPage {
 
   deservesDateDiff(
     previous: { createdAt: Date | string | number },
-    next: { createdAt: Date | string | number }
+    next: { createdAt: Date | string | number },
   ) {
     if (!previous || !next) return;
 

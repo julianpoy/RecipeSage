@@ -3,7 +3,7 @@ import { RunnableToolFunction } from "openai/lib/RunnableFunction";
 
 export const initBuildRecipe = (
   userId: string,
-  result: Prisma.RecipeUncheckedCreateInput[]
+  result: Prisma.RecipeUncheckedCreateInput[],
 ): RunnableToolFunction<{
   title: unknown;
   yield: unknown;

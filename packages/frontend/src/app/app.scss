@@ -112,7 +112,9 @@ ion-thumbnail {
       border-radius: 10px;
     }
     html:not([mode="ios"]) & .label {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
       border-radius: 2px;
     }
   }
@@ -129,7 +131,9 @@ ion-thumbnail {
   }
 
   .autocomplete {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(0, 0, 0, 0.24);
     max-width: 600px;
     max-height: 200px;
     overflow-y: auto;

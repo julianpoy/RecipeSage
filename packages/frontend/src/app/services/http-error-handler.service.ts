@@ -25,7 +25,7 @@ export class HttpErrorHandlerService {
   constructor(
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   async promptForAuth() {
@@ -94,7 +94,7 @@ export class HttpErrorHandlerService {
 
   handleTrpcError(
     error: TRPCClientError<AppRouter>,
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const statusCode = error.data?.httpStatus || 500;
     this._handleError(statusCode, errorHandlers);

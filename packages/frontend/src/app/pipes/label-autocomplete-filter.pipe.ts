@@ -8,7 +8,7 @@ export class LabelAutocompleteFilterPipe implements PipeTransform {
     labels: any[],
     updateWhenChanged: any,
     filter: string,
-    selectedLabels: any[]
+    selectedLabels: any[],
   ) {
     return labels.filter((el) => {
       if (selectedLabels.indexOf(el.toLowerCase()) > -1) return false;

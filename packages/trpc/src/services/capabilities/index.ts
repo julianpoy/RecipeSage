@@ -51,13 +51,13 @@ const SUBSCRIPTION_MODELS = {
 
 export const modelsForCapability = (capability: Capabilities) => {
   return Object.values(SUBSCRIPTION_MODELS).filter(
-    (model) => model.capabilities.indexOf(capability) > -1
+    (model) => model.capabilities.indexOf(capability) > -1,
   );
 };
 
 export const subscriptionsForUser = async (
   userId: string,
-  includeExpired?: boolean
+  includeExpired?: boolean,
 ) => {
   // Allow users to continue to access expired features for grace period
   const mustBeValidUntil = includeExpired
@@ -87,7 +87,7 @@ export const subscriptionsForUser = async (
 };
 
 export const capabilitiesForSubscription = (
-  subscriptionName: SubscriptionModels
+  subscriptionName: SubscriptionModels,
 ) => {
   return SUBSCRIPTION_MODELS[subscriptionName].capabilities;
 };
@@ -97,7 +97,7 @@ export const capabilitiesForUser = async (userId: string) => {
 
   return activeSubscriptions.reduce((acc, activeSubscription) => {
     const capabilities = capabilitiesForSubscription(
-      activeSubscription.name as SubscriptionModels
+      activeSubscription.name as SubscriptionModels,
     );
     return [...acc, ...capabilities];
   }, [] as Capabilities[]);
@@ -105,7 +105,7 @@ export const capabilitiesForUser = async (userId: string) => {
 
 export const userHasCapability = async (
   userId: string,
-  capability: Capabilities
+  capability: Capabilities,
 ) => {
   const capabilities = await capabilitiesForUser(userId);
   return capabilities.includes(capability);

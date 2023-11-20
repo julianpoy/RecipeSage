@@ -3,7 +3,7 @@
 const APP_VERSION = "development";
 
 importScripts(
-  "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
+  "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js",
 );
 
 const { precaching, routing, strategies, expiration } = workbox;
@@ -23,7 +23,7 @@ self.addEventListener("install", async (event) => {
   event.waitUntil(
     caches
       .open(BASE_CACHE_NAME)
-      .then((cache) => cache.addAll(networkFirstPrecacheUrls))
+      .then((cache) => cache.addAll(networkFirstPrecacheUrls)),
   );
 
   const languagePrecacheUrls = [
@@ -35,8 +35,8 @@ self.addEventListener("install", async (event) => {
       .then(() =>
         caches
           .open(LANG_CACHE_NAME)
-          .then((cache) => cache.addAll(languagePrecacheUrls))
-      )
+          .then((cache) => cache.addAll(languagePrecacheUrls)),
+      ),
   );
 });
 
@@ -51,7 +51,7 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFILE_APP_AGE,
       }),
     ],
-  })
+  }),
 );
 
 // Language files should always come from network first since they change frequently
@@ -65,7 +65,7 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * MAX_LANGUAGE_AGE,
       }),
     ],
-  })
+  }),
 );
 
 // Icons should be served cache first - they almost never change, and serving an old version is accepable
@@ -79,7 +79,7 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * MAX_SVG_ICON_AGE,
       }),
     ],
-  })
+  }),
 );
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
@@ -94,7 +94,7 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * MAX_OFFLINE_API_AGE,
       }),
     ],
-  })
+  }),
 );
 
 // S3 assets don't share ID's so we can cache them indefinitely
@@ -109,7 +109,7 @@ registerRoute(
         purgeOnQuotaError: true, // Clear the image cache if we exceed the browser cache limit
       }),
     ],
-  })
+  }),
 );
 
 // ==== FIREBASE MESSAGING ====
@@ -119,7 +119,7 @@ try {
 
   importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
   importScripts(
-    "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
+    "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js",
   );
 
   firebase.initializeApp({
@@ -167,7 +167,7 @@ try {
 
     return self.registration.showNotification(
       notificationTitle,
-      notificationOptions
+      notificationOptions,
     );
   });
 
@@ -194,19 +194,19 @@ try {
               return clients.openWindow(
                 self.registration.scope +
                   "#/recipe/" +
-                  event.notification.data.recipeId
+                  event.notification.data.recipeId,
               );
             } else if (event.notification.data.otherUserId) {
               return clients.openWindow(
                 self.registration.scope +
                   "#/messages/" +
-                  event.notification.data.otherUserId
+                  event.notification.data.otherUserId,
               );
             } else {
               return clients.openWindow(self.registration.scope);
             }
           }
-        })
+        }),
     );
   });
 } catch (e) {

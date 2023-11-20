@@ -23,7 +23,7 @@ export const sendMail = async (
   ccAddresses: string[],
   subject: string,
   html: string,
-  plain: string
+  plain: string,
 ) => {
   if (!ENABLE) return;
 
@@ -55,6 +55,6 @@ export const sendMail = async (
   await ses.send(
     new SendEmailCommand({
       ...params,
-    })
+    }),
   );
 };

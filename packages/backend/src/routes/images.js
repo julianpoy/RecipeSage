@@ -34,7 +34,7 @@ router.post(
 
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
-      SubscriptionsService.Capabilities.HighResImages
+      SubscriptionsService.Capabilities.HighResImages,
     );
 
     let file;
@@ -42,7 +42,7 @@ router.post(
       file = await writeImageBuffer(
         ObjectTypes.RECIPE_IMAGE,
         req.file.buffer,
-        encodeInHighRes
+        encodeInHighRes,
       );
     } catch (e) {
       e.status = 415;
@@ -58,7 +58,7 @@ router.post(
     });
 
     res.status(200).send(image);
-  })
+  }),
 );
 
 router.post(
@@ -68,13 +68,13 @@ router.post(
       body: Joi.object({
         url: Joi.string().min(1).max(2048),
       }),
-    })
+    }),
   ),
   MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
     const encodeInHighRes = await SubscriptionsService.userHasCapability(
       res.locals.session.userId,
-      SubscriptionsService.Capabilities.HighResImages
+      SubscriptionsService.Capabilities.HighResImages,
     );
 
     let file;
@@ -82,7 +82,7 @@ router.post(
       file = await writeImageURL(
         ObjectTypes.RECIPE_IMAGE,
         req.body.url,
-        encodeInHighRes
+        encodeInHighRes,
       );
     } catch (e) {
       e.status = 415;
@@ -98,7 +98,7 @@ router.post(
     });
 
     res.status(200).send(image);
-  })
+  }),
 );
 
 router.get(
@@ -111,13 +111,13 @@ router.get(
     }
 
     return res.redirect(image.location);
-  })
+  }),
 );
 
 if (process.env.STORAGE_TYPE === "filesystem") {
   router.use(
     "/filesystem",
-    express.static(process.env.FILESYSTEM_STORAGE_PATH)
+    express.static(process.env.FILESYSTEM_STORAGE_PATH),
   );
 }
 

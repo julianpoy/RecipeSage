@@ -49,7 +49,7 @@ describe("recipe", () => {
           expect(opts[2]).to.equal(basename);
           expect(opts[3]).to.equal(transaction);
           expect(opts[4]).to.equal(1); // recursive start idx
-        }
+        },
       );
     });
   });
@@ -64,7 +64,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, recipe.id, recipe.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe.title);
-          }
+          },
         );
       });
     });
@@ -79,7 +79,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, recipe1.id, recipe2.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe2.title + " (2)");
-          }
+          },
         );
       });
     });
@@ -92,7 +92,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, null, desiredTitle, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(desiredTitle);
-          }
+          },
         );
       });
     });
@@ -106,7 +106,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, null, recipe1.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe1.title + " (2)");
-          }
+          },
         );
       });
     });
@@ -175,11 +175,11 @@ describe("recipe", () => {
 
         return Promise.all([
           Recipe.count().then((count) =>
-            expect(count).to.equal(initialCount + 1)
+            expect(count).to.equal(initialCount + 1),
           ),
           Recipe.findByPk(recipe.id).then((r) => expect(r).to.not.be.null),
           Recipe.findByPk(sharedRecipe.id).then(
-            (r) => expect(r).to.not.be.null
+            (r) => expect(r).to.not.be.null,
           ),
         ]);
       });

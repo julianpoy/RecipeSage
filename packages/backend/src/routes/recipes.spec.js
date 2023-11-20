@@ -68,7 +68,7 @@ describe("recipes", () => {
             .then(async () => {
               const count = await Recipe.count();
               expect(count).to.equal(initialCount + 1);
-            })
+            }),
         );
     });
 
@@ -100,7 +100,7 @@ describe("recipes", () => {
             .then(async () => {
               const count = await Recipe.count();
               expect(count).to.equal(initialCount + 1);
-            })
+            }),
         );
     });
 
@@ -331,7 +331,7 @@ describe("recipes", () => {
             expect(updatedRecipe.ingredients).to.equal(payload.ingredients);
             expect(updatedRecipe.instructions).to.equal(payload.instructions);
             expect(updatedRecipe.folder).to.equal(payload.folder);
-          })
+          }),
         );
     });
 
@@ -494,15 +494,15 @@ describe("recipes", () => {
         .then(() =>
           Promise.all([
             Recipe.findByPk(recipe.id).then(
-              (deletedRecipe) => expect(deletedRecipe).to.be.null
+              (deletedRecipe) => expect(deletedRecipe).to.be.null,
             ),
             Label.findByPk(label1.id).then(
-              (deletedLabel1) => expect(deletedLabel1).to.be.null
+              (deletedLabel1) => expect(deletedLabel1).to.be.null,
             ),
             Label.findByPk(label2.id).then(
-              (deletedLabel2) => expect(deletedLabel2).to.be.null
+              (deletedLabel2) => expect(deletedLabel2).to.be.null,
             ),
-          ])
+          ]),
         );
     });
 
@@ -526,15 +526,15 @@ describe("recipes", () => {
         .then(() =>
           Promise.all([
             Recipe.findByPk(recipe1.id).then(
-              (deletedRecipe1) => expect(deletedRecipe1).to.be.null
+              (deletedRecipe1) => expect(deletedRecipe1).to.be.null,
             ),
             Recipe.findByPk(recipe2.id).then(
-              (notDeletedRecipe2) => expect(notDeletedRecipe2).not.to.be.null
+              (notDeletedRecipe2) => expect(notDeletedRecipe2).not.to.be.null,
             ),
             Label.findByPk(label.id).then(
-              (deletedLabel) => expect(deletedLabel).not.to.be.null
+              (deletedLabel) => expect(deletedLabel).not.to.be.null,
             ),
-          ])
+          ]),
         );
     });
 

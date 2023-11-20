@@ -6,7 +6,7 @@ import { UtilService, RouteMap } from "./util.service";
 export class DefaultPageGuardService {
   constructor(
     private navCtrl: NavController,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {}
 
   canActivate() {

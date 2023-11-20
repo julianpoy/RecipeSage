@@ -6,7 +6,7 @@ import { prisma } from "@recipesage/prisma";
  * Note: Use getFriendshipIds for better performance if users themselves are not needed.
  */
 export const getFriendshipUsers = async (
-  userId: string
+  userId: string,
 ): Promise<{
   outgoingRequests: User[];
   incomingRequests: User[];
@@ -30,7 +30,7 @@ export const getFriendshipUsers = async (
       ...acc,
       [outgoingFriendship.friendId]: outgoingFriendship,
     }),
-    {} as { [key: string]: (typeof outgoingFriendships)[0] }
+    {} as { [key: string]: (typeof outgoingFriendships)[0] },
   );
 
   const incomingFriendships = await prisma.friendship.findMany({
@@ -51,7 +51,7 @@ export const getFriendshipUsers = async (
       ...acc,
       [incomingFriendship.userId]: incomingFriendship,
     }),
-    {} as { [key: string]: (typeof incomingFriendships)[0] }
+    {} as { [key: string]: (typeof incomingFriendships)[0] },
   );
 
   const friendshipSummary = [
@@ -74,12 +74,12 @@ export const getFriendshipUsers = async (
       } else if (outgoingFriendshipsByOtherUserId[friendId]) {
         // We're requesting them as a friend!
         acc.outgoingRequests.push(
-          outgoingFriendshipsByOtherUserId[friendId].friend
+          outgoingFriendshipsByOtherUserId[friendId].friend,
         );
       } else if (incomingFriendshipsByOtherUserId[friendId]) {
         // They're requesting us as a friend!
         acc.incomingRequests.push(
-          incomingFriendshipsByOtherUserId[friendId].user
+          incomingFriendshipsByOtherUserId[friendId].user,
         );
       }
 
@@ -89,7 +89,7 @@ export const getFriendshipUsers = async (
       outgoingRequests: [] as User[],
       incomingRequests: [] as User[],
       friends: [] as User[],
-    }
+    },
   );
 
   return friendshipSummary;

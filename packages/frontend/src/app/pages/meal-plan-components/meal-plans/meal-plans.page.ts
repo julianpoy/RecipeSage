@@ -28,14 +28,14 @@ export class MealPlansPage {
     public mealPlanService: MealPlanService,
     public websocketService: WebsocketService,
     public loadingService: LoadingService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {
     this.websocketService.register(
       "mealPlan:received",
       () => {
         this.loadPlans();
       },
-      this
+      this,
     );
 
     this.websocketService.register(
@@ -43,7 +43,7 @@ export class MealPlansPage {
       () => {
         this.loadPlans();
       },
-      this
+      this,
     );
   }
 
@@ -67,7 +67,7 @@ export class MealPlansPage {
       },
       () => {
         refresher.target.complete();
-      }
+      },
     );
   }
 

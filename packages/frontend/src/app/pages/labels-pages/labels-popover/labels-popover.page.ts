@@ -31,14 +31,14 @@ export class LabelsPopoverPage {
     public popoverCtrl: PopoverController,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
-    public quickTutorialService: QuickTutorialService
+    public quickTutorialService: QuickTutorialService,
   ) {}
 
   toggleSelectionMode() {
     const enteringSelectionMode = !this.selectionMode;
     if (enteringSelectionMode) {
       this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.MultipleLabelSelection
+        QuickTutorialOptions.MultipleLabelSelection,
       );
     }
 

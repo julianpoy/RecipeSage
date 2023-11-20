@@ -4,7 +4,7 @@ module.exports = {
       `
         ALTER TABLE "Images"
         DROP CONSTRAINT "Images_userId_fkey";
-      `
+      `,
     );
 
     await queryInterface.sequelize.query(
@@ -15,14 +15,14 @@ module.exports = {
         REFERENCES "Users" (id)
         ON DELETE SET NULL
         ON UPDATE CASCADE;
-      `
+      `,
     );
 
     await queryInterface.sequelize.query(
       `
         ALTER TABLE "Images"
         DROP CONSTRAINT "Images_userId_fkey1";
-      `
+      `,
     );
   },
 
@@ -35,14 +35,14 @@ module.exports = {
         REFERENCES "Users" (id)
         ON DELETE SET NULL
         ON UPDATE CASCADE;
-      `
+      `,
     );
 
     await queryInterface.sequelize.query(
       `
         ALTER TABLE "Images"
         DROP CONSTRAINT "Images_userId_fkey";
-      `
+      `,
     );
 
     await queryInterface.sequelize.query(
@@ -53,7 +53,7 @@ module.exports = {
         REFERENCES "Users" (id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;
-      `
+      `,
     );
   },
 };

@@ -56,7 +56,7 @@ export class AppComponent {
   unsupportedBrowser: boolean =
     !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem(
-    "seenOldBrowserWarning"
+    "seenOldBrowserWarning",
   );
 
   aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
@@ -81,7 +81,7 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
-    public cookingToolbarService: CookingToolbarService // Required by template
+    public cookingToolbarService: CookingToolbarService, // Required by template
   ) {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
@@ -218,7 +218,7 @@ export class AppComponent {
               role: "cancel",
               handler: () => {
                 this.navCtrl.navigateForward(
-                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id)
+                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id),
                 );
               },
             },
@@ -226,7 +226,7 @@ export class AppComponent {
         });
         toast.present();
       },
-      this
+      this,
     );
   }
 

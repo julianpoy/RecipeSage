@@ -8,7 +8,7 @@ interface SortableItem {
 const itemSort = (
   a: SortableItem,
   b: SortableItem,
-  sortBy: "createdAt" | "-createdAt" | "-title"
+  sortBy: "createdAt" | "-createdAt" | "-title",
 ): number => {
   switch (sortBy) {
     case "createdAt": {
@@ -46,23 +46,29 @@ const itemSort = (
 const groupAndSort = <T extends SortableItem>(
   items: T[],
   keyName: keyof T,
-  sortBy: "createdAt" | "-createdAt" | "-title"
+  sortBy: "createdAt" | "-createdAt" | "-title",
 ): { [key: string]: T[] } => {
-  const itemsGroupedByKey = items.reduce((acc, item) => {
-    const key = item[keyName] as string;
-    acc[key] = acc[key] || [];
-    acc[key].push(item);
-    return acc;
-  }, {} as { [key: string]: T[] });
+  const itemsGroupedByKey = items.reduce(
+    (acc, item) => {
+      const key = item[keyName] as string;
+      acc[key] = acc[key] || [];
+      acc[key].push(item);
+      return acc;
+    },
+    {} as { [key: string]: T[] },
+  );
 
   const entries = Object.entries(itemsGroupedByKey);
 
-  const groupedAndSorted = entries.reduce((acc, [key, items]) => {
-    acc[key] = items.sort((a, b) => {
-      return itemSort(a, b, sortBy);
-    });
-    return acc;
-  }, {} as { [key: string]: T[] });
+  const groupedAndSorted = entries.reduce(
+    (acc, [key, items]) => {
+      acc[key] = items.sort((a, b) => {
+        return itemSort(a, b, sortBy);
+      });
+      return acc;
+    },
+    {} as { [key: string]: T[] },
+  );
 
   return groupedAndSorted;
 };
@@ -85,7 +91,7 @@ interface GroupableShoppingListItemsByGroupAndCategory {
 // Result will be items grouped by group/category/groupcategory
 export const getShoppingListItemGroupings = (
   items: GroupableShoppingListItem[],
-  sortBy: "createdAt" | "-createdAt" | "-title"
+  sortBy: "createdAt" | "-createdAt" | "-title",
 ): {
   items: GroupableShoppingListItem[];
   groupTitles: string[];
@@ -99,14 +105,14 @@ export const getShoppingListItemGroupings = (
   });
 
   const groupTitles = Array.from(
-    new Set<string>(items.map((item) => item.groupTitle))
+    new Set<string>(items.map((item) => item.groupTitle)),
   ).sort((a, b) => {
     // Sort groups by title (always)
     return a.localeCompare(b);
   });
 
   const categoryTitles = Array.from(
-    new Set<string>(items.map((item) => item.categoryTitle))
+    new Set<string>(items.map((item) => item.categoryTitle)),
   ).sort((a, b) => {
     // Sort categories by title (always)
     return a.localeCompare(b);

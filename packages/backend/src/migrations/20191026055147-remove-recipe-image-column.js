@@ -9,7 +9,7 @@ module.exports = {
         'SELECT id, "userId", image FROM "Recipes" WHERE image IS NOT NULL',
         {
           transaction,
-        }
+        },
       );
 
       if (recipes.length) {
@@ -30,7 +30,7 @@ module.exports = {
           {
             transaction,
             returning: true,
-          }
+          },
         );
 
         await queryInterface.bulkInsert(
@@ -45,7 +45,7 @@ module.exports = {
           })),
           {
             transaction,
-          }
+          },
         );
       }
 
@@ -68,7 +68,7 @@ module.exports = {
         'SELECT "recipeId", "json" FROM "Recipe_Images" INNER JOIN "Images" on "Images".id = "Recipe_Images"."imageId" WHERE "Recipe_Images"."order" = 0',
         {
           transaction,
-        }
+        },
       );
 
       if (recipeImages.length) {
@@ -85,9 +85,9 @@ module.exports = {
               },
               {
                 transaction,
-              }
+              },
             );
-          })
+          }),
         );
       }
 

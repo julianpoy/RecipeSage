@@ -38,7 +38,7 @@ router.post(
         },
         {
           transaction,
-        }
+        },
       );
 
       await mealPlan.addCollaborators(req.body.collaborators || [], {
@@ -60,7 +60,7 @@ router.post(
     }
 
     res.status(200).json(mealPlan);
-  })
+  }),
 );
 
 router.get(
@@ -132,7 +132,7 @@ router.get(
     });
 
     res.status(200).json(serializedMealPlan);
-  })
+  }),
 );
 
 // Add items to a meal plan
@@ -161,7 +161,7 @@ router.post(
 
     if (!mealPlan) {
       throw NotFound(
-        "Meal plan with that ID not found or you do not have access!"
+        "Meal plan with that ID not found or you do not have access!",
       );
     }
 
@@ -189,20 +189,20 @@ router.post(
     GripService.broadcast(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
-      broadcastPayload
+      broadcastPayload,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
       GripService.broadcast(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
-        broadcastPayload
+        broadcastPayload,
       );
     }
 
     res.status(200).json({
       reference,
     });
-  })
+  }),
 );
 
 // Delete meal plan from account
@@ -250,7 +250,7 @@ router.delete(
     }
 
     res.status(200).json({});
-  })
+  }),
 );
 
 // Delete items from a meal plan, either by recipeId or by itemId
@@ -303,20 +303,20 @@ router.delete(
     GripService.broadcast(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
-      deletedItemBroadcast
+      deletedItemBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
       GripService.broadcast(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
-        deletedItemBroadcast
+        deletedItemBroadcast,
       );
     }
 
     res.status(200).json({
       reference,
     });
-  })
+  }),
 );
 
 // Update items from a meal plan in bulk
@@ -363,7 +363,7 @@ router.put(
               mealPlanId: mealPlan.id,
             },
             transaction,
-          }
+          },
         );
       }
 
@@ -385,20 +385,20 @@ router.put(
     GripService.broadcast(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
-      updateBroadcast
+      updateBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
       GripService.broadcast(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
-        updateBroadcast
+        updateBroadcast,
       );
     }
 
     res.status(200).json({
       reference,
     });
-  })
+  }),
 );
 
 // Create items for a meal plan in bulk
@@ -442,7 +442,7 @@ router.post(
         })),
         {
           transaction,
-        }
+        },
       );
 
       return mealPlan;
@@ -463,20 +463,20 @@ router.post(
     GripService.broadcast(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
-      updateBroadcast
+      updateBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
       GripService.broadcast(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
-        updateBroadcast
+        updateBroadcast,
       );
     }
 
     res.status(200).json({
       reference,
     });
-  })
+  }),
 );
 
 router.delete(
@@ -539,20 +539,20 @@ router.delete(
     GripService.broadcast(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
-      updateBroadcast
+      updateBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
       GripService.broadcast(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
-        updateBroadcast
+        updateBroadcast,
       );
     }
 
     res.status(200).json({
       reference,
     });
-  })
+  }),
 );
 
 //Get a single meal plan
@@ -645,7 +645,7 @@ router.get(
     });
 
     res.status(200).json(mealPlanSummary);
-  })
+  }),
 );
 
 // Get ical for meal plan
@@ -697,7 +697,7 @@ router.get(
     });
 
     mealPlanICal.serve(res);
-  })
+  }),
 );
 
 // Update a meal plan meta info (NOT INCLUDING ITEMS)
