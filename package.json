@@ -108,7 +108,6 @@
     "@babel/preset-env": "^7.23.3",
     "@capacitor/cli": "5.5.1",
     "@ionic/angular-toolkit": "9.0.0",
-    "@ionic/cli": "7.1.5",
     "@nx/devkit": "17.1.2",
     "@nx/eslint": "17.1.2",
     "@nx/eslint-plugin": "17.1.2",
