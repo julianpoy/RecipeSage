@@ -20,7 +20,6 @@
   "pages.app.nav.shopping": "Einkaufslisten",
   "pages.app.nav.meals": "Essenspläne",
   "pages.app.nav.settings": "Einstellungen",
-  "pages.app.nav.logout": "Abmelden",
 
   "====== Pages.Welcome ======": "",
 
@@ -914,8 +913,9 @@
   "pages.settings.import": "Rezeptdaten importieren",
   "pages.settings.export": "Rezeptdaten exportieren",
   "pages.settings.account": "Kontoeinstellungen & Statistiken",
-  "pages.settings.update": "Auf Aktualisierung prüfen",
+  "pages.settings.logout": "Abmelden",
   "pages.settings.section2.title": "Allgemeine Einstellungen",
+  "pages.settings.update": "Auf Aktualisierung prüfen",
   "pages.settings.splitPane": "Geteilte Fensteransicht auf großen Bildschirmen aktivieren",
   "pages.settings.cache": "Experimentell: Alle Rezepte offline zwischenspeichern",
   "pages.settings.theme": "Theme",

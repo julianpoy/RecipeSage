@@ -20,7 +20,6 @@
   "pages.app.nav.shopping": "Shopping Lists",
   "pages.app.nav.meals": "Meal Plans",
   "pages.app.nav.settings": "Settings",
-  "pages.app.nav.logout": "Log Out",
 
   "====== Pages.Welcome ======": "",
 
@@ -915,8 +914,9 @@
   "pages.settings.import": "Import Recipe Data",
   "pages.settings.export": "Export Recipe Data",
   "pages.settings.account": "Account Settings & Stats",
-  "pages.settings.update": "Check for Update",
+  "pages.settings.logout": "Log Out",
   "pages.settings.section2.title": "General Settings",
+  "pages.settings.update": "Check for Update",
   "pages.settings.splitPane": "Enable Split Pane View on Large Screens",
   "pages.settings.cache": "Experimental: Cache all recipes offline",
   "pages.settings.theme": "Theme",

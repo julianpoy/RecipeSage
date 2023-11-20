@@ -25,40 +25,53 @@
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.account' | translate }} </ion-label>
     </ion-item>
-    <ion-item lines="inset" (click)="checkForUpdate()" button>
-      <ion-icon name="sync" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.update' | translate }} </ion-label>
+    <ion-item [disabled]="isLoggedIn" (click)="logout()" button>
+      <ion-icon slot="start" name="log-out"></ion-icon>
+      <ion-label> {{ "pages.settings.logout" | translate }} </ion-label>
     </ion-item>
     <ion-list-header>
       {{ 'pages.settings.section2.title' | translate }}
     </ion-list-header>
+    <ion-item lines="inset" (click)="checkForUpdate()" button>
+      <ion-icon name="sync" slot="start"></ion-icon>
+      <ion-label> {{ 'pages.settings.update' | translate }} </ion-label>
+    </ion-item>
     <ion-item lines="inset" *ngIf="showSplitPaneOption">
+      <ion-icon name="tablet-landscape" slot="start"></ion-icon>
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
         (ngModelChange)="toggleSplitPane(); savePreferences()"
-      ></ion-toggle>
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.settings.splitPane' | translate }}
-      </ion-label>
-      <ion-icon name="tablet-landscape" slot="start"></ion-icon>
+        labelPlacement="end"
+        justify="start"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ 'pages.settings.splitPane' | translate }}
+        </ion-label>
+      </ion-toggle>
     </ion-item>
     <ion-item
       lines="inset"
       *ngIf="featureFlags[featureFlagKeys.EnableExperimentalOfflineCache]"
     >
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]"
         (ngModelChange)="toggleOfflineCache(); savePreferences()"
-      ></ion-toggle>
-      <ion-label class="ion-text-wrap">
-        {{ 'pages.settings.cache' | translate }}
-      </ion-label>
-      <ion-icon name="cloud-download" slot="start"></ion-icon>
+        labelPlacement="end"
+        justify="start"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ 'pages.settings.cache' | translate }}
+        </ion-label>
+      </ion-toggle>
     </ion-item>
     <ion-item lines="inset">
       <ion-icon name="brush" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.settings.theme' | translate }} </ion-label>
-      <ion-select [(ngModel)]="appTheme" (ngModelChange)="appThemeChanged();">
+      <ion-select
+        [(ngModel)]="appTheme"
+        (ngModelChange)="appThemeChanged();"
+        label="{{ 'pages.settings.theme' | translate }}"
+      >
         <ion-select-option value="default">
           {{ 'pages.settings.theme.default' | translate }}
         </ion-select-option>
@@ -75,15 +88,16 @@
     </ion-item>
     <ion-item lines="inset">
       <ion-icon name="language-outline" slot="start"></ion-icon>
-      <ion-label>
-        {{ 'pages.settings.language' | translate }}
-        <p>{{ 'pages.settings.language.contribute' | translate }}</p>
-      </ion-label>
       <ion-select
         [interfaceOptions]="languageSelectInterfaceOptions"
         [(ngModel)]="language"
         (ngModelChange)="languageChanged();"
       >
+        <ion-label slot="label" class="ion-text-wrap">
+          {{ 'pages.settings.language' | translate }}
+          <p>{{ 'pages.settings.language.contribute' | translate }}</p>
+        </ion-label>
+
         <ion-select-option value="navigator">
           {{ 'pages.settings.language.default' | translate }}
         </ion-select-option>
@@ -105,7 +119,12 @@
     >
       <ion-icon name="text-outline" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.fontSize' | translate}} </ion-label>
-      <ion-icon name="caret-down-sharp" size="small" slot="end"></ion-icon>
+      <ion-icon
+        name="caret-down-sharp"
+        size="small"
+        slot="end"
+        class="custom-select-icon"
+      ></ion-icon>
     </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>

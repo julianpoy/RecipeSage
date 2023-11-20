@@ -20,7 +20,6 @@
   "pages.app.nav.shopping": "רשימת קניות",
   "pages.app.nav.meals": "תכנית ארוחות",
   "pages.app.nav.settings": "הגדרות",
-  "pages.app.nav.logout": "להתנתק",
 
   "====== Pages.Welcome ======": "",
 
@@ -915,8 +914,9 @@
   "pages.settings.import": "ייבוא מתכון",
   "pages.settings.export": "ייצוא מתכון",
   "pages.settings.account": "הגדרות",
-  "pages.settings.update": "בדיקת עדכון",
+  "pages.settings.logout": "להתנתק",
   "pages.settings.section2.title": "הגדרות כלליות",
+  "pages.settings.update": "בדיקת עדכון",
   "pages.settings.splitPane": "אפשר פיצול מסכים במסך גדול",
   "pages.settings.cache": "ניסוי: Cache all recipes offline",
   "pages.settings.theme": "תבנית",

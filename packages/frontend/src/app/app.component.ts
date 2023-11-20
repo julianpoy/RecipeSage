@@ -523,20 +523,4 @@ export class AppComponent {
       }
     });
   }
-
-  _logout() {
-    this.utilService.removeToken();
-
-    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
-  }
-
-  logout() {
-    this.messagingService.disableNotifications();
-
-    this.userService.logout({
-      "*": () => {},
-    });
-
-    this._logout();
-  }
 }

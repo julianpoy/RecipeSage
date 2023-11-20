@@ -37,14 +37,6 @@
               }}</ion-badge>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="isLoggedIn" (click)="logout()" button>
-              <ion-icon slot="start" name="log-out"></ion-icon>
-              <ion-label>
-                {{ "pages.app.nav.logout" | translate }}
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
         </ion-list>
       </ion-content>
 

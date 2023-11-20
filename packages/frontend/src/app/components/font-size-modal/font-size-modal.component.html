@@ -10,11 +10,15 @@
   <ion-list>
     <ion-radio-group [value]="fontSize" (ionChange)="onFontSizeChanged($event)">
       <ion-item lines="none" *ngFor="let fontSizeOption of fontSizeOptions">
-        <ion-radio slot="start" [value]="fontSizeOption.fontSize"></ion-radio>
-
-        <ion-label [ngStyle]="{ fontSize: fontSizeOption.fontSize }">
-          {{ fontSizeOption.displayName }}
-        </ion-label>
+        <ion-radio
+          labelPlacement="end"
+          justify="start"
+          [value]="fontSizeOption.fontSize"
+        >
+          <ion-label [ngStyle]="{ fontSize: fontSizeOption.fontSize }">
+            {{ fontSizeOption.displayName }}
+          </ion-label>
+        </ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
