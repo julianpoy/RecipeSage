@@ -25,18 +25,18 @@ $content-layer: 2;
     overflow: hidden;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
 
-    background-image: url("/assets/stockphotos/chicken-salad-640.jpg");
+    background-image: url("../../../../assets/stockphotos/chicken-salad-640.jpg");
     background-position: top;
     background-size: cover;
 
     @media only screen and (min-width: 641px) {
-      background-image: url("/assets/stockphotos/chicken-salad-1280.jpg");
+      background-image: url("../../../../assets/stockphotos/chicken-salad-1280.jpg");
     }
     @media only screen and (min-width: 1281px) {
-      background-image: url("/assets/stockphotos/chicken-salad-1920.jpg");
+      background-image: url("../../../../assets/stockphotos/chicken-salad-1920.jpg");
     }
     @media only screen and (min-width: 1921px) {
-      background-image: url("/assets/stockphotos/chicken-salad-original.jpg");
+      background-image: url("../../../../assets/stockphotos/chicken-salad-original.jpg");
     }
   }
 
