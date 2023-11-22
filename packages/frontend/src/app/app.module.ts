@@ -71,7 +71,7 @@ Sentry.init({
 });
 
 export function createTranslateLoader(http: HttpClient) {
-  const prefix = "/assets/i18n/";
+  const prefix = "assets/i18n/";
   const suffix = `.json?version=${(window as any).version}`;
 
   return new TranslateHttpLoader(http, prefix, suffix);

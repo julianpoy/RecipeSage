@@ -113,7 +113,7 @@
             <img
               *ngIf="(!recipe.recipeImages || !recipe.recipeImages.length) && preferences[preferenceKeys.ShowImages]"
               class="no-image"
-              src="/assets/imgs/logo_green.png"
+              src="assets/imgs/logo_green.png"
             />
             <div class="recipe-card-content">
               <div
@@ -199,7 +199,7 @@
         <img
           *ngIf="!recipe.recipeImages.length && preferences[preferenceKeys.ShowImages]"
           class="no-image"
-          src="/assets/imgs/logo_green.png"
+          src="assets/imgs/logo_green.png"
         />
         <div *ngIf="!preferences[preferenceKeys.ShowImages]"></div>
 
