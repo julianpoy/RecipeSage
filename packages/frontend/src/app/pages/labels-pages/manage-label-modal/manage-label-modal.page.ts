@@ -10,6 +10,7 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import { RecipeService } from "~/services/recipe.service";
+import { LabelSummary } from "packages/trpc/src/types/labelSummary";
 
 @Component({
   selector: "page-manage-label-modal",
@@ -20,7 +21,7 @@ export class ManageLabelModalPage {
   @Input({
     required: true,
   })
-  label!: Label;
+  label!: LabelSummary;
 
   createdAt?: string;
 

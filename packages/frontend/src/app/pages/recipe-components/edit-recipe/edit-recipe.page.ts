@@ -19,6 +19,9 @@ import { Image, ImageService } from "~/services/image.service";
 import { getQueryParam } from "~/utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
+import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import { TRPCService } from "../../../services/trpc.service";
+import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
 
 @Component({
   selector: "page-edit-recipe",
@@ -30,6 +33,8 @@ export class EditRecipePage {
   defaultBackHref: string;
 
   recipeId?: string;
+  // TODO: Clean this up
+  fullRecipe?: Recipe;
   recipe: Partial<BaseRecipe> & { id?: string } = {
     title: "",
     description: "",
@@ -44,22 +49,25 @@ export class EditRecipePage {
   };
 
   images: Image[] = [];
+  allLabels: LabelSummary[] = [];
+  selectedLabels: LabelSummary[] = [];
 
   constructor(
-    public route: ActivatedRoute,
-    public translate: TranslateService,
-    public navCtrl: NavController,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public popoverCtrl: PopoverController,
-    public utilService: UtilService,
-    public unsavedChangesService: UnsavedChangesService,
-    public loadingCtrl: LoadingController,
-    public loadingService: LoadingService,
-    public recipeService: RecipeService,
-    public imageService: ImageService,
-    public domSanitizationService: DomSanitizer,
-    public capabilitiesService: CapabilitiesService,
+    private route: ActivatedRoute,
+    private translate: TranslateService,
+    private navCtrl: NavController,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
+    private utilService: UtilService,
+    private trpcService: TRPCService,
+    private unsavedChangesService: UnsavedChangesService,
+    private loadingCtrl: LoadingController,
+    private loadingService: LoadingService,
+    private recipeService: RecipeService,
+    private imageService: ImageService,
+    private domSanitizationService: DomSanitizer,
+    private capabilitiesService: CapabilitiesService,
   ) {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
@@ -67,23 +75,43 @@ export class EditRecipePage {
       this.checkAutoClip();
     } else {
       this.recipeId = recipeId;
-
-      const loading = this.loadingService.start();
-      this.recipeService.fetchById(this.recipeId).then((response) => {
-        loading.dismiss();
-        if (!response.success) return;
-        this.recipe = response.data;
-        this.images = response.data.images;
-      });
     }
+    this.load();
 
     this.defaultBackHref = this.recipeId
       ? RouteMap.RecipePage.getPath(this.recipeId)
       : RouteMap.HomePage.getPath("main");
   }
 
-  goToAuth(cb?: () => any) {
-    // TODO: Needs functionality
+  async load() {
+    const loading = this.loadingService.start();
+
+    if (this.recipeId) {
+      const response = await this.recipeService.fetchById(this.recipeId);
+
+      if (response.success) {
+        this.fullRecipe = response.data;
+        this.recipe = response.data;
+        this.images = response.data.images;
+      }
+    }
+
+    const allLabels = await this.trpcService.handle(this.trpcService.trpc.labels.getLabels.query());
+    if (allLabels) {
+      this.allLabels = allLabels;
+      const allLabelsById = allLabels.reduce((acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      }, {} as Record<string, LabelSummary>);
+
+      if (this.fullRecipe) {
+        this.selectedLabels = this.fullRecipe.labels
+          .map((label) => allLabelsById[label.id])
+          .filter((label) => label);
+      }
+    }
+
+    loading.dismiss();
   }
 
   checkAutoClip() {
@@ -166,7 +194,7 @@ export class EditRecipePage {
 
     this.markAsClean();
 
-    this.navCtrl.navigateRoot(
+    this.navCtrl.navigateForward(
       RouteMap.RecipePage.getPath(this.recipe.id || response.data.id),
     );
   }
@@ -413,5 +441,36 @@ export class EditRecipePage {
     });
 
     await popover.present();
+  }
+
+  mapLabelsToSelectableItems(labels: LabelSummary[]) {
+    const mapped = labels.map((label) => ({
+      id: label.id,
+      title: label.title,
+      icon: "pricetag"
+    }));
+
+    return mapped;
+  }
+
+  selectedLabelsChange(selectedLabels: SelectableItem[]) {
+    const labelsById = this.allLabels.reduce((acc, label) => {
+      acc[label.id] = label;
+      return acc;
+    }, {} as Record<string, LabelSummary>);
+
+    this.selectedLabels = selectedLabels
+      .map((selectedLabel) => labelsById[selectedLabel.id])
+      .filter((label) => label);
+  }
+
+  async addLabel(title: string) {
+    const label = await this.trpcService.handle(this.trpcService.trpc.labels.createLabel.mutate({
+      title,
+    }));
+    if (!label) return;
+
+    this.allLabels.push(label);
+    this.selectedLabels.push(label);
   }
 }

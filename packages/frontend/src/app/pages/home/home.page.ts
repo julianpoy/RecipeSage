@@ -5,6 +5,7 @@ import {
   NavController,
   AlertController,
   PopoverController,
+  ToastController,
 } from "@ionic/angular";
 import { Datasource } from "ngx-ui-scroll";
 
@@ -16,7 +17,7 @@ import {
 import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
@@ -120,6 +121,7 @@ export class HomePage {
     private events: EventService,
     private translate: TranslateService,
     private popoverCtrl: PopoverController,
+    private toastCtrl: ToastController,
     private loadingService: LoadingService,
     private alertCtrl: AlertController,
     private recipeService: RecipeService,
@@ -153,14 +155,19 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    this.events.subscribe("recipe:update", () => (this.reloadPending = true));
-    this.events.subscribe("label:update", () => (this.reloadPending = true));
-    this.events.subscribe("import:pepperplate:complete", () => {
+    this.events.subscribe([
+      EventName.RecipeCreated,
+      EventName.RecipeUpdated,
+      EventName.RecipeDeleted,
+    ], () => (this.reloadPending = true));
+    this.events.subscribe([
+      EventName.LabelCreated,
+      EventName.LabelUpdated,
+      EventName.LabelDeleted,
+    ], () => (this.reloadPending = true));
+    this.events.subscribe(EventName.ImportPepperplateComplete, () => {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
+      this.resetAndLoadAll().finally(
         () => {
           loading.dismiss();
         },
@@ -186,11 +193,27 @@ export class HomePage {
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
+      if (this.recipes && this.recipes.length > 2) {
+        const message = await this.translate
+          .get("pages.home.reloadMessage")
+          .toPromise();
+        const close = await this.translate.get("pages.home.reload").toPromise();
+
+        const reloadToast = await this.toastCtrl.create({
+          message,
+          buttons: [
+            {
+              text: close,
+              role: "cancel",
+            },
+          ],
+        });
+        await reloadToast.present();
+        await reloadToast.onDidDismiss();
+      }
+
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
+      this.resetAndLoadAll().finally(
         () => {
           loading.dismiss();
         },

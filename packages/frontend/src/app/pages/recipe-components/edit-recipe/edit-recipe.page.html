@@ -200,9 +200,22 @@
 
     <br />
 
-    <ion-item *ngIf="!recipe.id" class="ion-text-wrap">
-      <p>{{ 'pages.editRecipe.labelNotice' | translate }}</p>
+    <ion-item>
+      <ion-label>
+        Labels
+      </ion-label>
     </ion-item>
+
+    <select-multiple-items
+      [items]="mapLabelsToSelectableItems(allLabels)"
+      [enableCreateNew]="true"
+      [selectedItems]="mapLabelsToSelectableItems(selectedLabels)"
+      (selectedItemsChange)="selectedLabelsChange($event)"
+      (newItem)="addLabel($event)"
+    ></select-multiple-items>
+
+    <br />
+
     <div class="ion-padding">
       <ion-button *ngIf="recipe.id" expand="block" (click)="save()">
         {{ 'pages.editRecipe.save' | translate }}

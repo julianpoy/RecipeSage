@@ -150,7 +150,7 @@ export class AssistantPage {
     animateScroll?: boolean,
   ) {
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.getAssistantMessages.query(),
+      this.trpcService.trpc.assistant.getAssistantMessages.query(),
     );
     if (!response) return;
 
@@ -215,7 +215,7 @@ export class AssistantPage {
     this.processing = true;
 
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.sendAssistantMessage.query({
+      this.trpcService.trpc.assistant.sendAssistantMessage.query({
         content: pendingMessage,
       }),
       {

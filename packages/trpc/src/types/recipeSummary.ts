@@ -1,17 +1,5 @@
 import { Prisma } from "@prisma/client";
-
-export const userPublic = Prisma.validator<Prisma.UserArgs>()({
-  select: {
-    id: true,
-    email: true,
-    name: true,
-    handle: true,
-    profileVisibility: true,
-    enableProfile: true,
-  },
-});
-
-export type UserPublic = Prisma.UserGetPayload<typeof userPublic>;
+import { userPublic } from "./userPublic";
 
 /**
  * Provides fields necessary for displaying a summary about a recipe,
@@ -63,27 +51,3 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
  **/
 export type RecipeSummary = Prisma.RecipeGetPayload<typeof recipeSummary>;
 
-/**
- * Provides assistant chat history with recipe summary included
- **/
-export const assistantMessageSummary =
-  Prisma.validator<Prisma.AssistantMessageArgs>()({
-    select: {
-      id: true,
-      userId: true,
-      role: true,
-      content: true,
-      name: true,
-      recipeId: true,
-      createdAt: true,
-      updatedAt: true,
-      recipe: recipeSummary,
-    },
-  });
-
-/**
- * Provides assistant chat history with recipe summary included
- **/
-export type AssistantMessageSummary = Prisma.AssistantMessageGetPayload<
-  typeof assistantMessageSummary
->;

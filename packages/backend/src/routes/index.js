@@ -24,6 +24,7 @@ import {
 } from "../models/index.js";
 
 import { validateSession, validateUser } from "../services/middleware.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";
@@ -312,7 +313,7 @@ router.get(
             try {
               objToArr((pepperRecipe.Tags || {}).TagSync).map((tag) => {
                 // Avoid dupes potentially returned by PP API
-                const labelTitle = UtilService.cleanLabelTitle(tag.Text._text);
+                const labelTitle = Util.cleanLabelTitle(tag.Text._text);
 
                 acc[labelTitle] = acc[labelTitle] || [];
                 // Avoid dupes potentially returned by PP API
@@ -692,7 +693,7 @@ router.post(
                             url: recipeData.source_url,
                           },
                           labels: (recipeData.categories || [])
-                            .map((e) => UtilService.cleanLabelTitle(e))
+                            .map((e) => Util.cleanLabelTitle(e))
                             .filter((e) => e && e.length > 0),
                         });
                       });

@@ -1,7 +1,7 @@
 import { Prisma, ProfileItem } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
 import { getFriendshipIds } from "./getFriendshipIds";
-import { RecipeSummary, recipeSummary } from "../types/queryTypes";
+import { RecipeSummary, recipeSummary } from "../types/recipeSummary";
 
 export const getRecipesWithConstraints = async (args: {
   tx?: Prisma.TransactionClient;

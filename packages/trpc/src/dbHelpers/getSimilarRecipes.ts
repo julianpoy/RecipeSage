@@ -1,5 +1,5 @@
 import { prisma } from "@recipesage/prisma";
-import { recipeSummary } from "../types/queryTypes";
+import { recipeSummary } from "../types/recipeSummary";
 
 /**
  * Removes the duplicate-numbered recipe title

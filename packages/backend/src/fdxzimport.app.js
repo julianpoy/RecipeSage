@@ -14,6 +14,7 @@ import {
   Image,
 } from "./models/index.js";
 
+import * as Util from "@recipesage/util";
 import * as UtilService from "./services/util.js";
 import { writeImageBuffer, writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";
@@ -192,7 +193,7 @@ async function main() {
         ]),
       ]
         .filter((el) => el && el.length > 0)
-        .map((el) => UtilService.cleanLabelTitle(el));
+        .map((el) => Util.cleanLabelTitle(el));
 
       return {
         model: {
