@@ -40,11 +40,13 @@
     <ion-item>
       <ion-label>
         <h1>
-          {{ 'pages.labels.label.sectionTitle' | translate:{count:labels.length} }}
+          {{ 'pages.labels.label.sectionTitle' | translate:{count:labels.length}
+          }}
         </h1>
 
         <p class="ion-text-wrap">
-          {{ 'pages.labels.label.sectionDescription' | translate:{count:labels.length} }}
+          {{ 'pages.labels.label.sectionDescription' |
+          translate:{count:labels.length} }}
         </p>
       </ion-label>
     </ion-item>
@@ -58,8 +60,7 @@
       <ion-label virtualSlot="body">
         <p>
           {{ 'pages.labels.label.nullState.1' | translate }}<br />
-          {{ 'pages.labels.label.nullState.2' | translate }}<br />
-          {{ 'pages.labels.label.nullState.3' | translate }}
+          {{ 'pages.labels.label.nullState.2' | translate }}
         </p>
       </ion-label>
     </null-state>
@@ -75,6 +76,14 @@
         <p>
           {{ 'pages.labels.label.recipeCount' |
           translate:{count:label._count.recipeLabels} }}<br />
+          <span *ngIf="label.labelGroup">
+            {{ 'pages.labels.label.group' |
+            translate:{title:label.labelGroup.title} }}
+          </span>
+          <span *ngIf="!label.labelGroup">
+            {{ 'pages.labels.label.noGroup' | translate }}
+          </span>
+          <br />
           <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">
             {{ 'pages.labels.label.createdAt' |
             translate:{dateString:formatDate(label.createdAt)} }}
@@ -90,11 +99,10 @@
   <ion-list *ngIf="!loading">
     <ion-item>
       <ion-label>
-        <h1>
-          {{ 'pages.labels.group.sectionTitle' | translate }}
-        </h1>
+        <h1>{{ 'pages.labels.group.sectionTitle' | translate }}</h1>
         <p class="ion-text-wrap">
-          {{ 'pages.labels.group.sectionDescription' | translate:{count:labelGroups.length} }}
+          {{ 'pages.labels.group.sectionDescription' |
+          translate:{count:labelGroups.length} }}
         </p>
       </ion-label>
     </ion-item>
@@ -137,11 +145,7 @@
   <br />
   <br />
 
-  <ion-fab
-    vertical="bottom"
-    horizontal="end"
-    slot="fixed"
-  >
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="new()" color="primary">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

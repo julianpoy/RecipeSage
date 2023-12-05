@@ -8,4 +8,3 @@ export const cleanLabelTitle = (labelTitle: string): string => {
 
   return cleanedTitle;
 };
-

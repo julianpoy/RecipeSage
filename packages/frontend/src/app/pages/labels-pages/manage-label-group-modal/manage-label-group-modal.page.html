@@ -28,14 +28,12 @@
   <br />
 
   <ion-item lines="none">
-    <ion-toggle
-      [checked]="false"
-      (ionChange)="warnToggle($event)"
-    >
+    <ion-toggle [checked]="false" (ionChange)="warnToggle($event)">
       Warn me when I do not add
       <ion-label>
         <p class="ion-text-wrap">
-          When enabled, you will be warned if saving a recipe without a label in this category attached
+          When enabled, you will be warned if saving a recipe without a label in
+          this category attached
         </p>
       </ion-label>
     </ion-toggle>

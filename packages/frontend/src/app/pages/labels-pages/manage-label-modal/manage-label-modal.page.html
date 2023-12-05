@@ -25,14 +25,16 @@
         </span>
         <br />
         <span *ngIf="label.labelGroup">
-          {{ 'pages.manageLabelModal.group' | translate:{title:label.labelGroup.title} }}
+          {{ 'pages.manageLabelModal.group' |
+          translate:{title:label.labelGroup.title} }}
         </span>
         <span *ngIf="!label.labelGroup">
           {{ 'pages.manageLabelModal.noGroup' | translate }}
         </span>
         <br />
         <span>
-          {{ 'pages.manageLabelModal.createdAt' | translate:{dateString:createdAt} }}
+          {{ 'pages.manageLabelModal.createdAt' |
+          translate:{dateString:createdAt} }}
         </span>
         <br />
       </p>

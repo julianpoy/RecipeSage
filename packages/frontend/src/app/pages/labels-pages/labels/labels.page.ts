@@ -51,7 +51,7 @@ export class LabelsPage {
     private labelService: LabelService,
     private utilService: UtilService,
     private preferencesService: PreferencesService,
-    private trpcService: TRPCService
+    private trpcService: TRPCService,
   ) {}
 
   ionViewWillEnter() {
@@ -71,10 +71,10 @@ export class LabelsPage {
     this.loading = true;
 
     const labelsResponse = await this.trpcService.handle(
-      this.trpcService.trpc.labels.getLabels.query()
+      this.trpcService.trpc.labels.getLabels.query(),
     );
     const labelGroupsResponse = await this.trpcService.handle(
-      this.trpcService.trpc.labelGroups.getLabelGroups.query()
+      this.trpcService.trpc.labelGroups.getLabelGroups.query(),
     );
     this.loading = false;
     if (!labelsResponse || !labelGroupsResponse) return;

@@ -12,4 +12,3 @@ export const userPublic = Prisma.validator<Prisma.UserArgs>()({
 });
 
 export type UserPublic = Prisma.UserGetPayload<typeof userPublic>;
-

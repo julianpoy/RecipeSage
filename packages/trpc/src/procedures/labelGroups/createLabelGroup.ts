@@ -10,7 +10,7 @@ export const createLabelGroup = publicProcedure
     z.object({
       title: z.string().min(1).max(100),
       labelIds: z.array(z.string()),
-    })
+    }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -20,13 +20,13 @@ export const createLabelGroup = publicProcedure
       where: {
         userId: session.userId,
         title: input.title,
-      }
+      },
     });
 
     if (existingLabelGroup) {
       throw new TRPCError({
         message: "Conflicting labelGroup title",
-        code: "CONFLICT"
+        code: "CONFLICT",
       });
     }
 
@@ -34,7 +34,7 @@ export const createLabelGroup = publicProcedure
       data: {
         title: input.title,
         userId: session.userId,
-      }
+      },
     });
 
     if (input.labelIds.length) {
@@ -47,15 +47,15 @@ export const createLabelGroup = publicProcedure
             in: input.labelIds,
           },
           userId: session.userId,
-        }
-      })
+        },
+      });
     }
 
     const labelGroup = await prisma.labelGroup.findUniqueOrThrow({
       where: {
         id: _labelGroup.id,
       },
-      ...labelGroupSummary
+      ...labelGroupSummary,
     });
 
     return labelGroup;

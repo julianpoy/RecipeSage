@@ -12,10 +12,9 @@ export const labelSummary = Prisma.validator<Prisma.LabelArgs>()({
     _count: {
       select: {
         recipeLabels: true,
-      }
-    }
+      },
+    },
   },
 });
 
 export type LabelSummary = Prisma.LabelGetPayload<typeof labelSummary>;
-

@@ -9,7 +9,7 @@ export const deleteLabelGroup = publicProcedure
   .input(
     z.object({
       id: z.string().min(1).max(100),
-    })
+    }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -26,7 +26,7 @@ export const deleteLabelGroup = publicProcedure
     if (!labelGroup) {
       throw new TRPCError({
         message: "Label group not found",
-        code: "NOT_FOUND"
+        code: "NOT_FOUND",
       });
     }
 
@@ -34,7 +34,7 @@ export const deleteLabelGroup = publicProcedure
       where: {
         userId: session.userId,
         id: input.id,
-      }
+      },
     });
 
     return labelGroup;

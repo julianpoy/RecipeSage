@@ -23,7 +23,8 @@ import { SelectableItem } from "../../../components/select-multiple-items/select
 export class ManageLabelGroupModalPage {
   @Input({
     required: true,
-  }) labelGroup!: LabelGroupSummary;
+  })
+  labelGroup!: LabelGroupSummary;
 
   title: string = "";
   labels: LabelSummary[] = [];
@@ -46,7 +47,7 @@ export class ManageLabelGroupModalPage {
     this.title = this.labelGroup.title;
 
     const labelsResult = await this.trpcService.handle(
-      this.trpcService.trpc.labels.getLabels.query()
+      this.trpcService.trpc.labels.getLabels.query(),
     );
     if (labelsResult) {
       this.labels = labelsResult;
@@ -59,9 +60,7 @@ export class ManageLabelGroupModalPage {
     }
   }
 
-  warnToggle(event: any) {
-
-  }
+  warnToggle(event: any) {}
 
   cancel() {
     this.modalCtrl.dismiss();
@@ -71,17 +70,20 @@ export class ManageLabelGroupModalPage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag"
+      icon: "pricetag",
     }));
 
     return mapped;
   }
 
   selectedLabelsChange(selectedLabels: SelectableItem[]) {
-    const labelsById = this.labels.reduce((acc, label) => {
-      acc[label.id] = label;
-      return acc;
-    }, {} as Record<string, LabelSummary>);
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
 
     this.selectedLabels = selectedLabels
       .map((selectedLabel) => labelsById[selectedLabel.id])
@@ -92,34 +94,37 @@ export class ManageLabelGroupModalPage {
     if (!this.title) return;
 
     const loading = this.loadingService.start();
-    const result = await this.trpcService.handle(this.trpcService.trpc.labelGroups.updateLabelGroup.mutate({
-      id: this.labelGroup.id,
-      title: this.title,
-      labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
-    }), {
-      409: async () => {
-        const header = await this.translate
-          .get("pages.manageLabelGroupModal.conflict")
-          .toPromise();
-        const message = await this.translate
-          .get("pages.manageLabelGroupModal.conflictMessage")
-          .toPromise();
-        const okay = await this.translate.get("generic.okay").toPromise();
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.updateLabelGroup.mutate({
+        id: this.labelGroup.id,
+        title: this.title,
+        labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
+      }),
+      {
+        409: async () => {
+          const header = await this.translate
+            .get("pages.manageLabelGroupModal.conflict")
+            .toPromise();
+          const message = await this.translate
+            .get("pages.manageLabelGroupModal.conflictMessage")
+            .toPromise();
+          const okay = await this.translate.get("generic.okay").toPromise();
 
-        const alert = await this.alertCtrl.create({
-          header,
-          message,
-          buttons: [
-            {
-              text: okay,
-              role: "cancel",
-            },
-          ],
-        });
+          const alert = await this.alertCtrl.create({
+            header,
+            message,
+            buttons: [
+              {
+                text: okay,
+                role: "cancel",
+              },
+            ],
+          });
 
-        alert.present();
+          alert.present();
+        },
       },
-    });
+    );
     loading.dismiss();
     if (result) {
       this.cancel();
@@ -128,9 +133,11 @@ export class ManageLabelGroupModalPage {
 
   async _delete() {
     const loading = this.loadingService.start();
-    await this.trpcService.handle(this.trpcService.trpc.labelGroups.deleteLabelGroup.mutate({
-      id: this.labelGroup.id,
-    }));
+    await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.deleteLabelGroup.mutate({
+        id: this.labelGroup.id,
+      }),
+    );
     loading.dismiss();
 
     this.cancel();
@@ -141,7 +148,9 @@ export class ManageLabelGroupModalPage {
       .get("pages.manageLabelGroupModal.delete.header")
       .toPromise();
     const message = await this.translate
-      .get("pages.manageLabelGroupModal.delete.message", { title: this.labelGroup.title })
+      .get("pages.manageLabelGroupModal.delete.message", {
+        title: this.labelGroup.title,
+      })
       .toPromise();
     const cancel = await this.translate.get("generic.cancel").toPromise();
     const del = await this.translate.get("generic.delete").toPromise();

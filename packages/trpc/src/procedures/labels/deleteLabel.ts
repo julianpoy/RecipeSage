@@ -9,8 +9,8 @@ export const deleteLabel = publicProcedure
   .input(
     z.object({
       id: z.string().min(1).max(100),
-      includeAttachedRecipes: z.boolean().optional()
-    })
+      includeAttachedRecipes: z.boolean().optional(),
+    }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -27,7 +27,7 @@ export const deleteLabel = publicProcedure
     if (!label) {
       throw new TRPCError({
         message: "Label not found",
-        code: "NOT_FOUND"
+        code: "NOT_FOUND",
       });
     }
 
@@ -39,15 +39,15 @@ export const deleteLabel = publicProcedure
           },
           select: {
             recipeId: true,
-          }
+          },
         });
 
         await tx.recipe.deleteMany({
           where: {
             id: {
               in: recipeLabels.map((label) => label.recipeId),
-            }
-          }
+            },
+          },
         });
       }
 
@@ -55,7 +55,7 @@ export const deleteLabel = publicProcedure
         where: {
           userId: session.userId,
           id: input.id,
-        }
+        },
       });
     });
 

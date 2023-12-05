@@ -10,7 +10,8 @@ export const createLabel = publicProcedure
   .input(
     z.object({
       title: z.string().min(1).max(100),
-    })
+      labelGroupId: z.string().min(1).max(100).nullable(),
+    }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -20,7 +21,7 @@ export const createLabel = publicProcedure
     if (!title.length) {
       throw new TRPCError({
         message: "Label title invalid",
-        code: "BAD_REQUEST"
+        code: "BAD_REQUEST",
       });
     }
 
@@ -28,28 +29,45 @@ export const createLabel = publicProcedure
       where: {
         userId: session.userId,
         title,
-      }
+      },
     });
 
     if (existingLabel) {
       throw new TRPCError({
         message: "Conflicting label title",
-        code: "CONFLICT"
+        code: "CONFLICT",
       });
+    }
+
+    if (input.labelGroupId) {
+      const labelGroup = await prisma.labelGroup.findFirst({
+        where: {
+          userId: session.userId,
+          id: input.labelGroupId,
+        },
+      });
+
+      if (!labelGroup) {
+        throw new TRPCError({
+          message: "Label group not found",
+          code: "NOT_FOUND",
+        });
+      }
     }
 
     const _label = await prisma.label.create({
       data: {
         title,
         userId: session.userId,
-      }
+        labelGroupId: input.labelGroupId,
+      },
     });
 
     const label = await prisma.label.findUniqueOrThrow({
       where: {
         id: _label.id,
       },
-      ...labelSummary
+      ...labelSummary,
     });
 
     return label;

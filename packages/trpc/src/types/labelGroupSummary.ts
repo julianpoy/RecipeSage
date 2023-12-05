@@ -9,10 +9,11 @@ export const labelGroupSummary = Prisma.validator<Prisma.LabelGroupArgs>()({
     _count: {
       select: {
         labels: true,
-      }
-    }
+      },
+    },
   },
 });
 
-export type LabelGroupSummary = Prisma.LabelGroupGetPayload<typeof labelGroupSummary>;
-
+export type LabelGroupSummary = Prisma.LabelGroupGetPayload<
+  typeof labelGroupSummary
+>;

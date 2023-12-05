@@ -11,7 +11,7 @@ export const updateLabelGroup = publicProcedure
       id: z.string().min(1).max(100),
       title: z.string().min(1).max(100),
       labelIds: z.array(z.string()),
-    })
+    }),
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
@@ -24,13 +24,13 @@ export const updateLabelGroup = publicProcedure
         },
         userId: session.userId,
         title: input.title,
-      }
+      },
     });
 
     if (existingLabelGroup) {
       throw new TRPCError({
         message: "Conflicting labelGroup title",
-        code: "CONFLICT"
+        code: "CONFLICT",
       });
     }
 
@@ -41,7 +41,7 @@ export const updateLabelGroup = publicProcedure
       },
       data: {
         title: input.title,
-      }
+      },
     });
 
     await prisma.label.updateMany({
@@ -51,7 +51,7 @@ export const updateLabelGroup = publicProcedure
       },
       data: {
         labelGroupId: null,
-      }
+      },
     });
 
     await prisma.label.updateMany({
@@ -59,11 +59,11 @@ export const updateLabelGroup = publicProcedure
         userId: session.userId,
         id: {
           in: input.labelIds,
-        }
+        },
       },
       data: {
         labelGroupId: input.id,
-      }
+      },
     });
 
     const labelGroup = await prisma.labelGroup.findUniqueOrThrow({

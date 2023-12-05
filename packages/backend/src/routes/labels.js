@@ -10,7 +10,6 @@ import { sequelize, Recipe, Label, Recipe_Label } from "../models/index.js";
 // Services
 import * as MiddlewareService from "../services/middleware.js";
 import * as Util from "@recipesage/util";
-import * as UtilService from "../services/util.js";
 import { joiValidator } from "../middleware/joiValidator.js";
 
 // Util

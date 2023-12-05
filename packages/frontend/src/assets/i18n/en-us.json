@@ -393,6 +393,8 @@
   "pages.labels.label.sectionTitle": "Your Labels",
   "pages.labels.label.sectionDescription": "You have {{count}} total labels. Click a label to view.",
   "pages.labels.label.recipeCount": "{{count}} Recipes",
+  "pages.labels.label.group": "Category: {{title}}",
+  "pages.labels.label.noGroup": "No category",
   "pages.labels.label.createdAt": "Created {{dateString}}",
   "pages.labels.label.selected": "Selected",
   "pages.labels.label.nullState.1": "You don't have any labels yet.",
@@ -681,6 +683,8 @@
   "pages.editRecipe.input.instructions": "Instructions",
   "pages.editRecipe.input.notes": "Notes",
   "pages.editRecipe.input.rating": "Rating",
+
+  "pages.editRecipe.input.uncatLabels": "Uncategorized",
 
   "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
   "pages.editRecipe.save": "Save",

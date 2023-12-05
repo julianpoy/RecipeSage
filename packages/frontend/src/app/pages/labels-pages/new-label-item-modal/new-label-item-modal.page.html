@@ -75,10 +75,7 @@
   <br />
 
   <ion-item lines="none">
-    <ion-toggle
-      [checked]="false"
-      (ionChange)="warnToggle($event)"
-    >
+    <ion-toggle [checked]="false" (ionChange)="warnToggle($event)">
       {{ 'pages.manageLabelGroupModal.warn' | translate }}
       <ion-label>
         <p class="ion-text-wrap">

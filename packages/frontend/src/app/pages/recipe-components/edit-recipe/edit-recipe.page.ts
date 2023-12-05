@@ -22,6 +22,7 @@ import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popove
 import { LabelSummary } from "packages/trpc/src/types/labelSummary";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
+import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
 
 @Component({
   selector: "page-edit-recipe",
@@ -49,7 +50,8 @@ export class EditRecipePage {
   };
 
   images: Image[] = [];
-  allLabels: LabelSummary[] = [];
+  labels: LabelSummary[] = [];
+  labelGroups: LabelGroupSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
   constructor(
@@ -86,6 +88,31 @@ export class EditRecipePage {
   async load() {
     const loading = this.loadingService.start();
 
+    // Important that we load all in parallel so that user isn't left waiting for slow connections
+    await Promise.all([
+      this._loadRecipe(),
+      this._loadLabels(),
+      this._loadLabelGroups(),
+    ]);
+
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
+
+    if (this.fullRecipe) {
+      this.selectedLabels = this.fullRecipe.labels
+        .map((label) => labelsById[label.id])
+        .filter((label) => label);
+    }
+
+    loading.dismiss();
+  }
+
+  async _loadRecipe() {
     if (this.recipeId) {
       const response = await this.recipeService.fetchById(this.recipeId);
 
@@ -95,23 +122,32 @@ export class EditRecipePage {
         this.images = response.data.images;
       }
     }
+  }
 
-    const allLabels = await this.trpcService.handle(this.trpcService.trpc.labels.getLabels.query());
-    if (allLabels) {
-      this.allLabels = allLabels;
-      const allLabelsById = allLabels.reduce((acc, label) => {
-        acc[label.id] = label;
-        return acc;
-      }, {} as Record<string, LabelSummary>);
-
-      if (this.fullRecipe) {
-        this.selectedLabels = this.fullRecipe.labels
-          .map((label) => allLabelsById[label.id])
-          .filter((label) => label);
-      }
+  async _loadLabels() {
+    const labels = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabels.query(),
+    );
+    if (labels) {
+      this.labels = labels;
     }
+  }
 
-    loading.dismiss();
+  async _loadLabelGroups() {
+    const labelGroups = await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.getLabelGroups.query(),
+    );
+    if (labelGroups) {
+      this.labelGroups = labelGroups;
+    }
+  }
+
+  labelsForGroupId(labels: LabelSummary[], labelGroupId: string | null) {
+    const filtered = labels.filter(
+      (label) => label.labelGroupId === labelGroupId,
+    );
+
+    return filtered;
   }
 
   checkAutoClip() {
@@ -447,30 +483,50 @@ export class EditRecipePage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag"
+      icon: "pricetag",
     }));
 
     return mapped;
   }
 
-  selectedLabelsChange(selectedLabels: SelectableItem[]) {
-    const labelsById = this.allLabels.reduce((acc, label) => {
-      acc[label.id] = label;
-      return acc;
-    }, {} as Record<string, LabelSummary>);
+  // Note that this is, in effect, just a change for the correlated group
+  selectedLabelsChange(
+    labelGroupId: string | null,
+    updatedSelectedLabelsForGroup: SelectableItem[],
+  ) {
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
 
-    this.selectedLabels = selectedLabels
+    const unrelatedSelectedLabels = this.selectedLabels.filter(
+      (selectedLabel) => {
+        return selectedLabel.labelGroupId !== labelGroupId;
+      },
+    );
+
+    const unrelatedAndChangedLabels = [
+      ...unrelatedSelectedLabels,
+      ...updatedSelectedLabelsForGroup,
+    ];
+    this.selectedLabels = unrelatedAndChangedLabels
       .map((selectedLabel) => labelsById[selectedLabel.id])
       .filter((label) => label);
   }
 
-  async addLabel(title: string) {
-    const label = await this.trpcService.handle(this.trpcService.trpc.labels.createLabel.mutate({
-      title,
-    }));
+  async addLabel(title: string, labelGroupId: string | null) {
+    const label = await this.trpcService.handle(
+      this.trpcService.trpc.labels.createLabel.mutate({
+        title,
+        labelGroupId,
+      }),
+    );
     if (!label) return;
 
-    this.allLabels.push(label);
+    this.labels.push(label);
     this.selectedLabels.push(label);
   }
 }

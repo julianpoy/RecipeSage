@@ -175,13 +175,16 @@ export class AppComponent {
   }
 
   initEventListeners() {
-    this.events.subscribe([
-      EventName.RecipeCreated,
-      EventName.RecipeUpdated,
-      EventName.RecipeDeleted,
-    ], () => {
-      this.loadInboxCount();
-    });
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => {
+        this.loadInboxCount();
+      },
+    );
 
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();

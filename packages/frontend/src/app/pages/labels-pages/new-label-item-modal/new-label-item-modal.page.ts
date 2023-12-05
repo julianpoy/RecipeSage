@@ -23,9 +23,10 @@ import { SelectableItem } from "../../../components/select-multiple-items/select
 export class NewLabelItemModalPage {
   @Input({
     required: false,
-  }) labelGroup?: LabelGroupSummary;
+  })
+  labelGroup?: LabelGroupSummary;
 
-  type: 'label' | 'group' | null = null;
+  type: "label" | "group" | null = null;
 
   title: string = "";
   labels: LabelSummary[] = [];
@@ -46,11 +47,11 @@ export class NewLabelItemModalPage {
 
   async ionViewWillEnter() {
     if (this.labelGroup) {
-      this.type = 'group';
+      this.type = "group";
       this.title = this.labelGroup.title;
     }
     const labelsResult = await this.trpcService.handle(
-      this.trpcService.trpc.labels.getLabels.query()
+      this.trpcService.trpc.labels.getLabels.query(),
     );
     if (labelsResult) {
       this.labels = labelsResult;
@@ -66,9 +67,7 @@ export class NewLabelItemModalPage {
     }
   }
 
-  warnToggle(event: any) {
-
-  }
+  warnToggle(event: any) {}
 
   cancel() {
     this.modalCtrl.dismiss();
@@ -78,17 +77,20 @@ export class NewLabelItemModalPage {
     const mapped = labels.map((label) => ({
       id: label.id,
       title: label.title,
-      icon: "pricetag"
+      icon: "pricetag",
     }));
 
     return mapped;
   }
 
   selectedLabelsChange(selectedLabels: SelectableItem[]) {
-    const labelsById = this.labels.reduce((acc, label) => {
-      acc[label.id] = label;
-      return acc;
-    }, {} as Record<string, LabelSummary>);
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
 
     this.selectedLabels = selectedLabels
       .map((selectedLabel) => labelsById[selectedLabel.id])
@@ -96,10 +98,10 @@ export class NewLabelItemModalPage {
   }
 
   save() {
-    if (this.type === 'label') {
+    if (this.type === "label") {
       this.saveLabel();
     }
-    if (this.type === 'group') {
+    if (this.type === "group") {
       this.saveLabelGroup();
     }
   }
@@ -108,9 +110,12 @@ export class NewLabelItemModalPage {
     if (!this.title) return;
 
     const loading = this.loadingService.start();
-    await this.trpcService.handle(this.trpcService.trpc.labels.createLabel.mutate({
-      title: this.title,
-    }));
+    await this.trpcService.handle(
+      this.trpcService.trpc.labels.createLabel.mutate({
+        title: this.title,
+        labelGroupId: null,
+      }),
+    );
     loading.dismiss();
 
     this.cancel();
@@ -120,33 +125,36 @@ export class NewLabelItemModalPage {
     if (!this.title) return;
 
     const loading = this.loadingService.start();
-    const result = await this.trpcService.handle(this.trpcService.trpc.labelGroups.createLabelGroup.mutate({
-      title: this.title,
-      labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
-    }), {
-      409: async () => {
-        const header = await this.translate
-          .get("pages.manageLabelGroupModal.conflict")
-          .toPromise();
-        const message = await this.translate
-          .get("pages.manageLabelGroupModal.conflictMessage")
-          .toPromise();
-        const okay = await this.translate.get("generic.okay").toPromise();
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.createLabelGroup.mutate({
+        title: this.title,
+        labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
+      }),
+      {
+        409: async () => {
+          const header = await this.translate
+            .get("pages.manageLabelGroupModal.conflict")
+            .toPromise();
+          const message = await this.translate
+            .get("pages.manageLabelGroupModal.conflictMessage")
+            .toPromise();
+          const okay = await this.translate.get("generic.okay").toPromise();
 
-        const alert = await this.alertCtrl.create({
-          header,
-          message,
-          buttons: [
-            {
-              text: okay,
-              role: "cancel",
-            },
-          ],
-        });
+          const alert = await this.alertCtrl.create({
+            header,
+            message,
+            buttons: [
+              {
+                text: okay,
+                role: "cancel",
+              },
+            ],
+          });
 
-        alert.present();
+          alert.present();
+        },
       },
-    });
+    );
     loading.dismiss();
     if (result) {
       this.cancel();

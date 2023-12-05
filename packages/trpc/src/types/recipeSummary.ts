@@ -50,4 +50,3 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
  * not including ingredients, instructions, notes, etc.
  **/
 export type RecipeSummary = Prisma.RecipeGetPayload<typeof recipeSummary>;
-

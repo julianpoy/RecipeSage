@@ -155,23 +155,23 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    this.events.subscribe([
-      EventName.RecipeCreated,
-      EventName.RecipeUpdated,
-      EventName.RecipeDeleted,
-    ], () => (this.reloadPending = true));
-    this.events.subscribe([
-      EventName.LabelCreated,
-      EventName.LabelUpdated,
-      EventName.LabelDeleted,
-    ], () => (this.reloadPending = true));
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => (this.reloadPending = true),
+    );
+    this.events.subscribe(
+      [EventName.LabelCreated, EventName.LabelUpdated, EventName.LabelDeleted],
+      () => (this.reloadPending = true),
+    );
     this.events.subscribe(EventName.ImportPepperplateComplete, () => {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().finally(
-        () => {
-          loading.dismiss();
-        },
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     });
 
     this.websocketService.register(
@@ -213,11 +213,9 @@ export class HomePage {
       }
 
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().finally(
-        () => {
-          loading.dismiss();
-        },
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     }
 
     this.fetchMyProfile();

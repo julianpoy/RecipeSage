@@ -175,6 +175,7 @@ export class ManageLabelModalPage {
         },
         {
           text: del,
+          cssClass: "alertDanger",
           handler: (response) => {
             this._delete();
           },
@@ -210,6 +211,7 @@ export class ManageLabelModalPage {
         },
         {
           text: del,
+          cssClass: "alertDanger",
           handler: (response) => {
             this._deleteWithRecipes();
           },
