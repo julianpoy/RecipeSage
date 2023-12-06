@@ -201,7 +201,9 @@
     <br />
 
     <ion-item lines="none">
-      <ion-label> Labels </ion-label>
+      <ion-label>
+        <h2>{{ 'pages.editRecipe.input.labels' | translate }}</h2>
+      </ion-label>
     </ion-item>
 
     <div class="label-input-group-container">
@@ -218,6 +220,7 @@
           [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, null))"
           (selectedItemsChange)="selectedLabelsChange(null, $event)"
           (newItem)="addLabel($event, null)"
+          [disallowedTitles]="disallowedTitleMap(labels, null)"
         ></select-multiple-items>
       </div>
 
@@ -232,10 +235,13 @@
           [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, labelGroup.id))"
           (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
           (newItem)="addLabel($event, labelGroup.id)"
+          [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
         ></select-multiple-items>
       </div>
     </div>
 
+    <br />
+    <br />
     <br />
 
     <div class="ion-padding">

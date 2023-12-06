@@ -10,7 +10,7 @@ import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
-import { AssistantMessageSummary, RecipeSummary } from "@recipesage/trpc";
+import { AssistantMessageSummary, RecipeSummaryLite } from "@recipesage/trpc";
 
 @Component({
   selector: "page-assistant",
@@ -259,7 +259,7 @@ export class AssistantPage {
     });
   }
 
-  openRecipe(recipe: RecipeSummary) {
+  openRecipe(recipe: RecipeSummaryLite) {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
   }
 

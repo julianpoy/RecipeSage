@@ -270,15 +270,15 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
     const recipes = await Recipe.bulkCreate(
       recipesToImport.map((recipe) => ({
         title: recipe.title,
-        description: recipe.description,
-        yield: recipe.yield,
-        activeTime: recipe.activeTime,
-        totalTime: recipe.totalTime,
-        source: recipe.source,
-        url: recipe.url,
-        notes: recipe.notes,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
+        description: recipe.description || "",
+        yield: recipe.yield || "",
+        activeTime: recipe.activeTime || "",
+        totalTime: recipe.totalTime || "",
+        source: recipe.source || "",
+        url: recipe.url || "",
+        notes: recipe.notes || "",
+        ingredients: recipe.ingredients || "",
+        instructions: recipe.instructions || "",
         folder: ["inbox", "main"].includes(recipe.folder)
           ? recipe.folder
           : "main",

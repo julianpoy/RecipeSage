@@ -150,6 +150,30 @@ export class EditRecipePage {
     return filtered;
   }
 
+  labelsNotInGroupId(labels: LabelSummary[], labelGroupId: string | null) {
+    const filtered = labels.filter(
+      (label) => label.labelGroupId !== labelGroupId,
+    );
+
+    return filtered;
+  }
+
+  disallowedTitleMap(labels: LabelSummary[], labelGroupId: string | null) {
+    const labelsNotInGroup = this.labelsNotInGroupId(labels, labelGroupId);
+
+    const labelTitlesInOtherGroups = labelsNotInGroup.map(
+      (label) => label.title,
+    );
+
+    return labelTitlesInOtherGroups.reduce(
+      (acc, title) => {
+        acc[title] = "pages.editRecipe.addLabel.otherGroup";
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+  }
+
   checkAutoClip() {
     // Check if we're handling a Web Share API launch. If so, attempt to automatically import the given recipe
     const autofillUrl = getQueryParam("autofill-url");
@@ -177,8 +201,51 @@ export class EditRecipePage {
     if (matchedUrl) return matchedUrl.pop();
   }
 
+  async _create(title: string) {
+    return this.trpcService.handle(
+      this.trpcService.trpc.recipes.createRecipe.mutate({
+        title,
+        description: this.recipe.description || "",
+        yield: this.recipe.yield || "",
+        activeTime: this.recipe.activeTime || "",
+        totalTime: this.recipe.totalTime || "",
+        source: this.recipe.source || "",
+        url: this.recipe.url || "",
+        notes: this.recipe.notes || "",
+        ingredients: this.recipe.ingredients || "",
+        instructions: this.recipe.instructions || "",
+        rating: this.recipe.rating || null,
+        folder: "main",
+        imageIds: this.images.map((image) => image.id),
+        labelIds: this.selectedLabels.map((label) => label.id),
+      }),
+    );
+  }
+
+  async _update(id: string, title: string) {
+    return this.trpcService.handle(
+      this.trpcService.trpc.recipes.updateRecipe.mutate({
+        id,
+        title,
+        description: this.recipe.description || "",
+        yield: this.recipe.yield || "",
+        activeTime: this.recipe.activeTime || "",
+        totalTime: this.recipe.totalTime || "",
+        source: this.recipe.source || "",
+        url: this.recipe.url || "",
+        notes: this.recipe.notes || "",
+        ingredients: this.recipe.ingredients || "",
+        instructions: this.recipe.instructions || "",
+        rating: this.recipe.rating || null,
+        folder: "main",
+        imageIds: this.images.map((image) => image.id),
+        labelIds: this.selectedLabels.map((label) => label.id),
+      }),
+    );
+  }
+
   async save() {
-    if (!this.recipe.title || this.recipe.title.length === 0) {
+    if (!this.recipe.title) {
       const message = await this.translate
         .get("pages.editRecipe.titleRequired")
         .toPromise();
@@ -194,45 +261,16 @@ export class EditRecipePage {
 
     const loading = this.loadingService.start();
 
-    const response = this.recipe.id
-      ? await this.recipeService.update({
-          id: this.recipe.id,
-          title: this.recipe.title,
-          description: this.recipe.description,
-          yield: this.recipe.yield,
-          activeTime: this.recipe.activeTime,
-          totalTime: this.recipe.totalTime,
-          source: this.recipe.source,
-          url: this.recipe.url,
-          notes: this.recipe.notes,
-          ingredients: this.recipe.ingredients,
-          instructions: this.recipe.instructions,
-          rating: this.recipe.rating,
-          imageIds: this.images.map((image) => image.id),
-        })
-      : await this.recipeService.create({
-          title: this.recipe.title,
-          description: this.recipe.description,
-          yield: this.recipe.yield,
-          activeTime: this.recipe.activeTime,
-          totalTime: this.recipe.totalTime,
-          source: this.recipe.source,
-          url: this.recipe.url,
-          notes: this.recipe.notes,
-          ingredients: this.recipe.ingredients,
-          instructions: this.recipe.instructions,
-          rating: this.recipe.rating,
-          imageIds: this.images.map((image) => image.id),
-        });
+    const response = await (this.recipe.id
+      ? this._update(this.recipe.id, this.recipe.title)
+      : this._create(this.recipe.title));
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.markAsClean();
 
-    this.navCtrl.navigateForward(
-      RouteMap.RecipePage.getPath(this.recipe.id || response.data.id),
-    );
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
   }
 
   markAsDirty() {

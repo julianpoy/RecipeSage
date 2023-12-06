@@ -1,5 +1,5 @@
 import { prisma } from "@recipesage/prisma";
-import { recipeSummary } from "../types/recipeSummary";
+import { recipeSummaryLite } from "../types/recipeSummaryLite";
 
 /**
  * Removes the duplicate-numbered recipe title
@@ -49,7 +49,7 @@ export const getSimilarRecipes = async (
           })),
       ],
     },
-    ...recipeSummary,
+    ...recipeSummaryLite,
     take: 100,
     orderBy: {
       title: "asc",

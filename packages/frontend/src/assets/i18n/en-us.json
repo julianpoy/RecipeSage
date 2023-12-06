@@ -436,6 +436,8 @@
   "pages.manageLabelGroupModal.warnDescription": "When enabled, you will be warned if saving a recipe without a label in this category attached",
   "pages.manageLabelGroupModal.labels": "Select Labels",
   "pages.manageLabelGroupModal.labelsHint": "Selected labels will be grouped under this category. A given label can belong to at maximum 1 category at a time.",
+  "pages.manageLabelGroupModal.labels.noItems": "No uncategorized labels",
+  "pages.manageLabelGroupModal.labels.search": "Search for a label",
 
   "pages.manageLabelGroupModal.conflict": "Error",
   "pages.manageLabelGroupModal.conflictMessage": "A label category with that title already exists",
@@ -447,7 +449,7 @@
 
   "pages.manageLabelModal.title": "Manage Label: {{name}}",
   "pages.manageLabelModal.recipeCount": "Assigned to {{count}} recipes",
-  "pages.manageLabelModal.group": "Assigned to label category: {{name}}",
+  "pages.manageLabelModal.group": "Assigned to label category: {{title}}",
   "pages.manageLabelModal.noGroup": "Is not assigned to a label category",
   "pages.manageLabelModal.createdAt": "First created {{dateString}}",
   "pages.manageLabelModal.warning": "Note: These actions are permanent",
@@ -684,7 +686,9 @@
   "pages.editRecipe.input.notes": "Notes",
   "pages.editRecipe.input.rating": "Rating",
 
-  "pages.editRecipe.input.uncatLabels": "Uncategorized",
+  "pages.editRecipe.input.labels": "Labels",
+  "pages.editRecipe.input.uncatLabels": "General",
+  "pages.editRecipe.addLabel.otherGroup": "Exists in another category",
 
   "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
   "pages.editRecipe.save": "Save",

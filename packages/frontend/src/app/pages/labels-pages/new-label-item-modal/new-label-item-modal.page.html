@@ -95,8 +95,10 @@
   </ion-item>
 
   <select-multiple-items
-    [items]="mapLabelsToSelectableItems(labels)"
+    [items]="mapLabelsToSelectableItems(ungroupedLabels)"
     (selectedItemsChange)="selectedLabelsChange($event)"
+    noItemsText="{{ 'pages.manageLabelGroupModal.labels.noItems' | translate }}"
+    searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
   ></select-multiple-items>
 </ion-content>
 

@@ -17,9 +17,15 @@ import { deleteLabel } from "./procedures/labels/deleteLabel";
 import { deleteLabelGroup } from "./procedures/labelGroups/deleteLabelGroup";
 import { updateLabelGroup } from "./procedures/labelGroups/updateLabelGroup";
 import { updateLabel } from "./procedures/labels/updateLabel";
+import { createRecipe } from "./procedures/recipes/createRecipe";
+import { updateRecipe } from "./procedures/recipes/updateRecipe";
+import { getRecipe } from "./procedures/recipes/getRecipe";
+import { deleteRecipe } from "./procedures/recipes/deleteRecipe";
+import { getMe } from "./procedures/users/getMe";
 
 export * from "./types/assistantMessageSummary";
 export * from "./types/recipeSummary";
+export * from "./types/recipeSummaryLite";
 export * from "./types/userPublic";
 export * from "./services/search"; // Legacy while old backend still needs it
 export * from "./services/capabilities"; // Legacy while old backend still needs it
@@ -38,6 +44,10 @@ const appRouter = router({
     deleteLabel,
   }),
   recipes: router({
+    createRecipe,
+    getRecipe,
+    updateRecipe,
+    deleteRecipe,
     getRecipes,
     searchRecipes,
     getSimilarRecipes,
@@ -45,6 +55,9 @@ const appRouter = router({
   assistant: router({
     sendAssistantMessage,
     getAssistantMessages,
+  }),
+  users: router({
+    getMe,
   }),
 
   // TODO: Legacy compat remove

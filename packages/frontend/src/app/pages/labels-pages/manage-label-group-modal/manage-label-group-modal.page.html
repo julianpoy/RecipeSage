@@ -39,12 +39,21 @@
     </ion-toggle>
   </ion-item>
 
-  <h2>Select Labels</h2>
+  <ion-item lines="none">
+    <ion-label>
+      {{ 'pages.manageLabelGroupModal.labels' | translate }}
+      <p class="ion-text-wrap">
+        {{ 'pages.manageLabelGroupModal.labelsHint' | translate }}
+      </p>
+    </ion-label>
+  </ion-item>
 
   <select-multiple-items
     [selectedItems]="mapLabelsToSelectableItems(selectedLabels)"
-    [items]="mapLabelsToSelectableItems(labels)"
+    [items]="mapLabelsToSelectableItems(ungroupedLabels)"
     (selectedItemsChange)="selectedLabelsChange($event)"
+    noItemsText="{{ 'pages.manageLabelGroupModal.labels.noItems' | translate }}"
+    searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
   ></select-multiple-items>
 </ion-content>
 

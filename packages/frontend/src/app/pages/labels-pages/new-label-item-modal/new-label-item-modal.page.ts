@@ -30,6 +30,7 @@ export class NewLabelItemModalPage {
 
   title: string = "";
   labels: LabelSummary[] = [];
+  ungroupedLabels: LabelSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
   constructor(
@@ -55,6 +56,9 @@ export class NewLabelItemModalPage {
     );
     if (labelsResult) {
       this.labels = labelsResult;
+      this.ungroupedLabels = labelsResult.filter((label) => {
+        return !label.labelGroupId;
+      });
 
       if (this.labelGroup) {
         // Dialogue was opened with a label

@@ -28,6 +28,11 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
   })
   items!: T[];
 
+  @Input({
+    required: false,
+  })
+  disallowedTitles: { [title: string]: string } = {}; // Keys are label titles, values are lang keys
+
   _selectedItems: T[] = [];
   @Input()
   get selectedItems() {
@@ -94,6 +99,12 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     );
 
     return unselectedItems;
+  }
+
+  isSelected(item: T) {
+    return this.selectedItems.some(
+      (selectedItem) => selectedItem.id === item.id,
+    );
   }
 
   isMatch(item: T) {

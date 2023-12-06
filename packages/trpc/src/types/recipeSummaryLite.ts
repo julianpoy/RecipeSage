@@ -1,11 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { userPublic } from "./userPublic";
-import { labelSummary } from "./labelSummary";
 
 /**
- * All recipe fields including labels, user profile, images, etc
+ * Provides fields necessary for displaying a summary about a recipe,
+ * not including ingredients, instructions, notes, etc.
  **/
-export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
+export const recipeSummaryLite = Prisma.validator<Prisma.RecipeArgs>()({
   select: {
     id: true,
     userId: true,
@@ -18,30 +18,23 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
     source: true,
     url: true,
     folder: true,
-    ingredients: true,
-    instructions: true,
-    notes: true,
     createdAt: true,
     updatedAt: true,
     rating: true,
     recipeLabels: {
       select: {
-        id: true,
-        labelId: true,
-        recipeId: true,
-        createdAt: true,
-        updatedAt: true,
-        label: labelSummary,
+        label: {
+          select: {
+            title: true,
+          },
+        },
       },
     },
     recipeImages: {
       select: {
-        id: true,
         order: true,
-        imageId: true,
         image: {
           select: {
-            id: true,
             location: true,
           },
         },
@@ -56,4 +49,6 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
  * Provides fields necessary for displaying a summary about a recipe,
  * not including ingredients, instructions, notes, etc.
  **/
-export type RecipeSummary = Prisma.RecipeGetPayload<typeof recipeSummary>;
+export type RecipeSummaryLite = Prisma.RecipeGetPayload<
+  typeof recipeSummaryLite
+>;

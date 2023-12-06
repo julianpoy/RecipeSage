@@ -28,6 +28,7 @@ export class ManageLabelGroupModalPage {
 
   title: string = "";
   labels: LabelSummary[] = [];
+  ungroupedLabels: LabelSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
   constructor(
@@ -51,6 +52,9 @@ export class ManageLabelGroupModalPage {
     );
     if (labelsResult) {
       this.labels = labelsResult;
+      this.ungroupedLabels = labelsResult.filter((label) => {
+        return !label.labelGroupId;
+      });
 
       for (const label of labelsResult) {
         if (label.labelGroupId === this.labelGroup.id) {

@@ -39,10 +39,6 @@
 .label-input-group-container {
   padding: 16px;
   padding-top: 0;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.label-input-group {
-  width: 350px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, auto));
 }

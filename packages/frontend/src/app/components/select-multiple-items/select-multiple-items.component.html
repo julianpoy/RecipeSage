@@ -59,7 +59,7 @@
             <p>{{ "components.selectMultipleItems.select" | translate }}</p>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="exactItemMatch">
+        <ion-item *ngIf="exactItemMatch && isSelected(exactItemMatch)">
           <ion-avatar
             *ngIf="exactItemMatch.image"
             aria-hidden="true"
@@ -82,9 +82,7 @@
         </ion-item>
         <ion-item
           *ngIf="
-            !enableCreateNew &&
-            searchResults.length === 0 &&
-            searchText.length > 0
+            !enableCreateNew && !searchResults.length && searchText.length > 0
           "
         >
           <ion-label>
@@ -97,7 +95,12 @@
           </ion-label>
         </ion-item>
         <ion-item
-          *ngIf="enableCreateNew && !exactItemMatch && searchText.length > 0"
+          *ngIf="
+            enableCreateNew &&
+            !exactItemMatch &&
+            searchText.length > 0 &&
+            !disallowedTitles[searchText]
+          "
           (click)="create()"
           button
         >
@@ -106,6 +109,22 @@
             <h2>{{ searchText }}</h2>
             <p>
               {{ "components.selectMultipleItems.create" | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item
+          *ngIf="
+            enableCreateNew &&
+            !exactItemMatch &&
+            searchText.length > 0 &&
+            disallowedTitles[searchText]
+          "
+        >
+          <ion-icon aria-hidden="true" name="ban" slot="start"></ion-icon>
+          <ion-label>
+            <h2>{{ searchText }}</h2>
+            <p>
+              {{ disallowedTitles[searchText] | translate }}
             </p>
           </ion-label>
         </ion-item>

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { recipeSummary } from "./recipeSummary";
+import { recipeSummaryLite } from "./recipeSummaryLite";
 
 /**
  * Provides assistant chat history with recipe summary included
@@ -15,7 +15,7 @@ export const assistantMessageSummary =
       recipeId: true,
       createdAt: true,
       updatedAt: true,
-      recipe: recipeSummary,
+      recipe: recipeSummaryLite,
     },
   });
 
