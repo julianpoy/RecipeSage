@@ -228,6 +228,7 @@
   "pages.recipeDetails.labels": "Labels",
   "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
 
+  "pages.recipeDetails.labels.uncatLabels": "General",
   "pages.recipeDetails.labels.clickToCreate": "Click to create",
   "pages.recipeDetails.labels.alreadyAdded": "Already added",
   "pages.recipeDetails.labels.clickToAdd": "Click to add",

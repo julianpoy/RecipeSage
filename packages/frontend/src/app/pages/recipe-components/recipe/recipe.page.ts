@@ -65,8 +65,11 @@ export class RecipePage {
 
   scale = 1;
 
-  groupTitles: string[] = [];
-  labelsByGroupTitle: Record<string, LabelGroupSummary> = {};
+  labelGroupIds: string[] = [];
+  labelGroupById: Record<
+    string,
+    NonNullable<RecipeSummary["recipeLabels"][0]["label"]["labelGroup"]>
+  > = {};
 
   ratingVisual = new Array<string>(5).fill("star-outline");
 
@@ -172,9 +175,27 @@ export class RecipePage {
         }));
     }
 
+    const groupIdsSet = new Set<string>();
+    for (const recipeLabel of this.recipe.recipeLabels) {
+      const labelGroup = recipeLabel.label.labelGroup;
+      if (labelGroup) {
+        groupIdsSet.add(labelGroup.id);
+        this.labelGroupById[labelGroup.id] = labelGroup;
+      }
+    }
+    this.labelGroupIds = Array.from(groupIdsSet);
+
     this.applyScale();
 
     this.updateRatingVisual();
+  }
+
+  recipeLabelsForGroupId(labelGroupId: string | null) {
+    if (!this.recipe) return [];
+
+    return this.recipe.recipeLabels.filter(
+      (recipeLabel) => recipeLabel.label.labelGroupId === labelGroupId,
+    );
   }
 
   async _loadSimilarRecipes() {
@@ -581,5 +602,12 @@ export class RecipePage {
   releaseWakeLock() {
     if (this.wakeLockRequest) this.wakeLockRequest.release();
     this.wakeLockRequest = null;
+  }
+
+  recipeLabelTrackBy(
+    idx: number,
+    recipeLabel: RecipeSummary["recipeLabels"][0],
+  ) {
+    return recipeLabel.id;
   }
 }

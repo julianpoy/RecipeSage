@@ -24,9 +24,12 @@ import { deleteRecipe } from "./procedures/recipes/deleteRecipe";
 import { getMe } from "./procedures/users/getMe";
 
 export * from "./types/assistantMessageSummary";
+export * from "./types/labelGroupSummary";
+export * from "./types/labelSummary";
 export * from "./types/recipeSummary";
 export * from "./types/recipeSummaryLite";
 export * from "./types/userPublic";
+
 export * from "./services/search"; // Legacy while old backend still needs it
 export * from "./services/capabilities"; // Legacy while old backend still needs it
 
