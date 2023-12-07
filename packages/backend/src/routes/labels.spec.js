@@ -279,8 +279,19 @@ describe("labels", () => {
         .query(payload)
         .expect(200)
         .then(() => {
-          // Removes the label as well
-          Label.findByPk(label.id).then((label) => expect(label).to.be.null);
+          // Does not remove the label anymore (should be done via label management)
+          Label.findByPk(label.id, {
+            include: [
+              {
+                model: Recipe,
+                as: "recipes",
+                attributes: ["id"],
+              },
+            ],
+          }).then((label) => {
+            // Has removed the recipe
+            expect(label.recipes.length).to.equal(0);
+          });
         });
     });
 
