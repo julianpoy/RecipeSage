@@ -27,7 +27,10 @@ const config = {
           }
         : false,
   },
-  logging: !process.env.JEST_WORKER_ID && process.env.POSTGRES_LOGGING === "true" && console.log,
+  logging:
+    !process.env.JEST_WORKER_ID &&
+    process.env.POSTGRES_LOGGING === "true" &&
+    console.log,
 };
 
 // Must be commonjs for sequelize-cli
