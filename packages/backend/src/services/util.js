@@ -160,17 +160,6 @@ export const executeInChunks = async (cbs, chunkSize) => {
   }, Promise.resolve());
 };
 
-export const cleanLabelTitle = (labelTitle) => {
-  const cleanedTitle = (labelTitle || "")
-    .trim()
-    .toLowerCase()
-    .replace(/,/g, "");
-
-  if (cleanedTitle === "unlabeled") return "un-labeled";
-
-  return cleanedTitle;
-};
-
 export const capitalizeEachWord = (input) =>
   input
     .split(" ")

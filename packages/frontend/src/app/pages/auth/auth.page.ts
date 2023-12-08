@@ -10,7 +10,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../environments/environment";
 
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { MessagingService } from "~/services/messaging.service";
@@ -173,7 +173,7 @@ export class AuthPage {
       this.messagingService.requestNotifications();
     }
 
-    this.events.publish("auth");
+    this.events.publish(EventName.Auth);
     this.close();
   }
 

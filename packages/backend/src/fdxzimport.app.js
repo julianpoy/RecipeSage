@@ -14,6 +14,7 @@ import {
   Image,
 } from "./models/index.js";
 
+import * as Util from "@recipesage/util";
 import * as UtilService from "./services/util.js";
 import { writeImageBuffer, writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";
@@ -192,21 +193,21 @@ async function main() {
         ]),
       ]
         .filter((el) => el && el.length > 0)
-        .map((el) => UtilService.cleanLabelTitle(el));
+        .map((el) => Util.cleanLabelTitle(el));
 
       return {
         model: {
           userId: runConfig.userId,
           title: recipe._attributes.Name,
-          description,
-          yield: rYield,
-          activeTime: recipe._attributes.PreparationTime,
-          totalTime,
-          source: recipe._attributes.Source,
-          url: recipe._attributes.WebPage,
-          notes,
-          ingredients,
-          instructions,
+          description: description || "",
+          yield: rYield || "",
+          activeTime: recipe._attributes.PreparationTime || "",
+          totalTime: totalTime || "",
+          source: recipe._attributes.Source || "",
+          url: recipe._attributes.WebPage || "",
+          notes: notes || "",
+          ingredients: ingredients || "",
+          instructions: instructions || "",
           folder: "main",
           fromUserId: null,
           createdAt: Date.now(),

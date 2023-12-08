@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
-import { EventService } from "./event.service";
+import { EventName, EventService } from "./event.service";
 import {
   HttpErrorHandlerService,
   ErrorHandlers,
@@ -56,7 +56,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelCreated);
 
     return response;
   }
@@ -76,7 +76,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelUpdated);
 
     return response;
   }
@@ -90,7 +90,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelCreated);
 
     return response;
   }
@@ -111,7 +111,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelUpdated);
 
     return response;
   }
@@ -131,7 +131,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelDeleted);
 
     return response;
   }
@@ -151,7 +151,7 @@ export class LabelService {
       errorHandlers,
     );
 
-    this.events.publish("label:update");
+    this.events.publish(EventName.LabelUpdated);
 
     return response;
   }

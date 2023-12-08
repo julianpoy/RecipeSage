@@ -10,6 +10,7 @@ import * as path from "path";
 
 import * as MiddlewareService from "../services/middleware.js";
 import * as SubscriptionsService from "../services/subscriptions.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import * as SearchService from "@recipesage/trpc";
 import {
@@ -269,15 +270,15 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
     const recipes = await Recipe.bulkCreate(
       recipesToImport.map((recipe) => ({
         title: recipe.title,
-        description: recipe.description,
-        yield: recipe.yield,
-        activeTime: recipe.activeTime,
-        totalTime: recipe.totalTime,
-        source: recipe.source,
-        url: recipe.url,
-        notes: recipe.notes,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
+        description: recipe.description || "",
+        yield: recipe.yield || "",
+        activeTime: recipe.activeTime || "",
+        totalTime: recipe.totalTime || "",
+        source: recipe.source || "",
+        url: recipe.url || "",
+        notes: recipe.notes || "",
+        ingredients: recipe.ingredients || "",
+        instructions: recipe.instructions || "",
         folder: ["inbox", "main"].includes(recipe.folder)
           ? recipe.folder
           : "main",
@@ -294,7 +295,7 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
     recipesToImport.forEach((recipeImport, idx) => {
       const recipe = recipes[idx];
       recipeImport.labels.map((labelTitle) => {
-        labelTitle = UtilService.cleanLabelTitle(labelTitle);
+        labelTitle = Util.cleanLabelTitle(labelTitle);
         labelMap[labelTitle] = labelMap[labelTitle] || [];
         labelMap[labelTitle].push(recipe.id);
       });
@@ -513,7 +514,7 @@ router.post(
           .join(" ");
 
         const labels = (recipeData.categories || [])
-          .map((e) => UtilService.cleanLabelTitle(e))
+          .map((e) => Util.cleanLabelTitle(e))
           .filter((e) => e);
 
         // Supports only the first image at the moment
@@ -611,9 +612,9 @@ router.post(
 
       const grabLabelTitles = (field) => {
         if (!field) return [];
-        if (field._text) return [UtilService.cleanLabelTitle(field._text)];
+        if (field._text) return [Util.cleanLabelTitle(field._text)];
         if (field.length)
-          return field.map((item) => UtilService.cleanLabelTitle(item._text));
+          return field.map((item) => Util.cleanLabelTitle(item._text));
 
         return [];
       };

@@ -17,6 +17,7 @@ import {
   Image,
 } from "./models/index.js";
 
+import * as Util from "@recipesage/util";
 import * as UtilService from "./services/util.js";
 import { writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";
@@ -463,21 +464,21 @@ async function main() {
             ]),
           ]
             .filter((el) => el && el.length > 0)
-            .map((el) => UtilService.cleanLabelTitle(el));
+            .map((el) => Util.cleanLabelTitle(el));
 
           return pendingRecipes.push({
             model: {
               userId: runConfig.userId,
               title: lcbRecipe.recipename || "",
-              description,
+              description: description || "",
               yield: (lcbRecipe.yield || "").toString(),
               activeTime: (lcbRecipe.preparationtime || "").toString(),
-              totalTime,
+              totalTime: totalTime || "",
               source: lcbRecipe.source || "",
               url: lcbRecipe.webpage || "",
-              notes,
-              ingredients,
-              instructions,
+              notes: notes || "",
+              ingredients: ingredients || "",
+              instructions: instructions || "",
               folder: "main",
               fromUserId: null,
             },

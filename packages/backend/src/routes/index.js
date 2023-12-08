@@ -24,6 +24,7 @@ import {
 } from "../models/index.js";
 
 import { validateSession, validateUser } from "../services/middleware.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";
@@ -287,8 +288,8 @@ router.get(
               title: pepperRecipe.Title._text,
               description: (pepperRecipe.Description || {})._text || "",
               notes: (pepperRecipe.Note || {})._text || "",
-              ingredients: finalIngredients,
-              instructions: finalDirections,
+              ingredients: finalIngredients || "",
+              instructions: finalDirections || "",
               totalTime: (pepperRecipe.TotalTime || {})._text || "",
               activeTime: (pepperRecipe.ActiveTime || {})._text || "",
               source:
@@ -312,7 +313,7 @@ router.get(
             try {
               objToArr((pepperRecipe.Tags || {}).TagSync).map((tag) => {
                 // Avoid dupes potentially returned by PP API
-                const labelTitle = UtilService.cleanLabelTitle(tag.Text._text);
+                const labelTitle = Util.cleanLabelTitle(tag.Text._text);
 
                 acc[labelTitle] = acc[labelTitle] || [];
                 // Avoid dupes potentially returned by PP API
@@ -679,20 +680,20 @@ router.post(
                             userId: res.locals.session.userId,
                             title: recipeData.name,
                             image,
-                            description: recipeData.description,
-                            ingredients: recipeData.ingredients,
-                            instructions: recipeData.directions,
-                            yield: recipeData.servings,
-                            totalTime,
-                            activeTime: recipeData.prep_time,
-                            notes,
-                            source: recipeData.source,
+                            description: recipeData.description || "",
+                            ingredients: recipeData.ingredients || "",
+                            instructions: recipeData.directions || "",
+                            yield: recipeData.servings || "",
+                            totalTime: totalTime || "",
+                            activeTime: recipeData.prep_time || "",
+                            notes: notes || "",
+                            source: recipeData.source || "",
                             folder: "main",
                             fromUserId: null,
-                            url: recipeData.source_url,
+                            url: recipeData.source_url || "",
                           },
                           labels: (recipeData.categories || [])
-                            .map((e) => UtilService.cleanLabelTitle(e))
+                            .map((e) => Util.cleanLabelTitle(e))
                             .filter((e) => e && e.length > 0),
                         });
                       });

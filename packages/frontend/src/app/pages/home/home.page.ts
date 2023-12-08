@@ -5,6 +5,7 @@ import {
   NavController,
   AlertController,
   PopoverController,
+  ToastController,
 } from "@ionic/angular";
 import { Datasource } from "ngx-ui-scroll";
 
@@ -16,7 +17,7 @@ import {
 import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
@@ -28,7 +29,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import { RecipeSummary } from "@recipesage/trpc";
+import { RecipeSummaryLite } from "@recipesage/trpc";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -45,7 +46,7 @@ export class HomePage {
   labels: Label[] = [];
   selectedLabels: string[] = [];
 
-  recipes: RecipeSummary[] = [];
+  recipes: RecipeSummaryLite[] = [];
   recipeFetchBuffer = 25;
   fetchPerPage = 50;
   lastRecipeCount = 0;
@@ -120,6 +121,7 @@ export class HomePage {
     private events: EventService,
     private translate: TranslateService,
     private popoverCtrl: PopoverController,
+    private toastCtrl: ToastController,
     private loadingService: LoadingService,
     private alertCtrl: AlertController,
     private recipeService: RecipeService,
@@ -153,18 +155,23 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    this.events.subscribe("recipe:update", () => (this.reloadPending = true));
-    this.events.subscribe("label:update", () => (this.reloadPending = true));
-    this.events.subscribe("import:pepperplate:complete", () => {
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => (this.reloadPending = true),
+    );
+    this.events.subscribe(
+      [EventName.LabelCreated, EventName.LabelUpdated, EventName.LabelDeleted],
+      () => (this.reloadPending = true),
+    );
+    this.events.subscribe(EventName.ImportPepperplateComplete, () => {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
-        () => {
-          loading.dismiss();
-        },
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     });
 
     this.websocketService.register(
@@ -187,14 +194,9 @@ export class HomePage {
 
     if (this.reloadPending) {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
-        () => {
-          loading.dismiss();
-        },
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     }
 
     this.fetchMyProfile();
@@ -563,7 +565,7 @@ export class HomePage {
     };
   }
 
-  getLabelList(recipe: RecipeSummary) {
+  getLabelList(recipe: RecipeSummaryLite) {
     return recipe.recipeLabels
       .map((recipeLabel) => recipeLabel.label.title)
       .join(", ");
