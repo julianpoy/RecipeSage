@@ -118,9 +118,6 @@
   "pages.home.recipe.selected": "Selected",
   "pages.home.recipe.fromSharedCollection": "Friend's Recipe",
 
-  "pages.home.reload": "Reload",
-  "pages.home.reloadMessage": "A recipe or label has changed and these results may be out of date",
-
   "pages.home.errors.emptyCollection.title": "This user's collection is empty",
   "pages.home.errors.emptyCollection.message": "This shared collection has no recipes in it.",
 
@@ -226,12 +223,7 @@
   "pages.recipeDetails.noNotes": "No Notes",
 
   "pages.recipeDetails.labels": "Labels",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
-
   "pages.recipeDetails.labels.uncatLabels": "General",
-  "pages.recipeDetails.labels.clickToCreate": "Click to create",
-  "pages.recipeDetails.labels.alreadyAdded": "Already added",
-  "pages.recipeDetails.labels.clickToAdd": "Click to add",
 
   "pages.recipeDetails.created": "Created",
   "pages.recipeDetails.updated": "Last edited",
@@ -254,11 +246,6 @@
 
   "pages.recipeDetails.delete.header": "Confirm Delete",
   "pages.recipeDetails.delete.message": "This will permanently delete the recipe from your account. This action is irreversible.",
-
-  "pages.recipeDetails.enterLabelWarning": "Please enter a label and press enter to label this recipe.",
-
-  "pages.recipeDetails.deleteLabel.header": "Confirm Label Removal",
-  "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
 
   "pages.recipeDetails.cloned": "The recipe has been saved to your account",
   "pages.recipeDetails.similar": "Similar recipes in your collection",
@@ -408,7 +395,6 @@
   "pages.labels.group.sectionDescription": "You have {{count}} total label categories. Click a category to edit.",
   "pages.labels.group.labelCount": "{{count}} labels belong to this category",
   "pages.labels.group.createdAt": "Created {{dateString}}",
-  "pages.labels.group.selected": "Selected",
   "pages.labels.group.nullState.1": "You don't have any label categories yet.",
   "pages.labels.group.nullState.2": "Click the + button to create a new label category.",
 
@@ -686,12 +672,10 @@
   "pages.editRecipe.input.instructions": "Instructions",
   "pages.editRecipe.input.notes": "Notes",
   "pages.editRecipe.input.rating": "Rating",
-
   "pages.editRecipe.input.labels": "Labels",
   "pages.editRecipe.input.uncatLabels": "General",
   "pages.editRecipe.addLabel.otherGroup": "Exists in another category",
 
-  "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
   "pages.editRecipe.save": "Save",
   "pages.editRecipe.create": "Create",
 
@@ -1265,7 +1249,6 @@
   "components.selectMultipleItems.create": "Click to create",
   "components.selectMultipleItems.noItems": "No items",
   "components.selectMultipleItems.alreadyAdded": "Already added",
-  "components.selectMultipleItems.hint": "Search results will show here",
   "components.selectMultipleItems.searchPlaceholder": "Search for an item to add",
 
   "====== Components.SelectMeal ======": "",

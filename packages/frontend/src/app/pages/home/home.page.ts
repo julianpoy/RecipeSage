@@ -193,25 +193,6 @@ export class HomePage {
     this.clearSelectedRecipes();
 
     if (this.reloadPending) {
-      if (this.recipes && this.recipes.length > 2) {
-        const message = await this.translate
-          .get("pages.home.reloadMessage")
-          .toPromise();
-        const close = await this.translate.get("pages.home.reload").toPromise();
-
-        const reloadToast = await this.toastCtrl.create({
-          message,
-          buttons: [
-            {
-              text: close,
-              role: "cancel",
-            },
-          ],
-        });
-        await reloadToast.present();
-        await reloadToast.onDidDismiss();
-      }
-
       const loading = this.loadingService.start();
       this.resetAndLoadAll().finally(() => {
         loading.dismiss();
