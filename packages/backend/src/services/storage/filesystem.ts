@@ -32,7 +32,7 @@ export const generateStorageLocation = (
   // Generate the location of the object for the browser to resolve
   // this won't refer to the file, but rather the URL that the browser
   // will use to fetch the file
-  const location = `/api/images/filesystem/${key}`;
+  const location = `api/images/filesystem/${key}`;
 
   return location;
 };
