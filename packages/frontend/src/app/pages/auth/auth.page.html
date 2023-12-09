@@ -65,6 +65,7 @@
             [(ngModel)]="password"
             (keyup.enter)="showLogin && auth()"
             type="password"
+            appToggleablePassword
           />
         </label>
         <br /><br />
@@ -76,6 +77,7 @@
               [(ngModel)]="confirmPassword"
               (keyup.enter)="auth()"
               type="password"
+              appToggleablePassword
             />
           </label>
           <br /><br />
