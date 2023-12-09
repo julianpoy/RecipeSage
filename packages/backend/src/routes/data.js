@@ -107,10 +107,10 @@ const getRecipeDataForExport = async (userId) => {
           continue;
         }
 
-        if (location.startsWith("/")) {
+        if (location.startsWith("/") || location.startsWith("api/")) {
           const data = fs.readFileSync(
             location.replace(
-              "/api/images/filesystem",
+              /^\/?api\/images\/filesystem/,
               process.env.FILESYSTEM_STORAGE_PATH,
             ),
           );
