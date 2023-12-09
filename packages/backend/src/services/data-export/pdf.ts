@@ -13,6 +13,7 @@ import { fetchURL } from "../fetch";
 import * as fs from "fs";
 import { Image, Recipe } from "@prisma/client";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
+import * as path from "path";
 
 export interface ExportOptions {
   includeImages?: boolean;
@@ -194,11 +195,20 @@ export const exportToPDF = async (
   options?: ExportOptions,
 ): Promise<void> => {
   const fonts = {
-    Helvetica: {
-      normal: "Helvetica",
-      bold: "Helvetica-Bold",
-      italics: "Helvetica-Oblique",
-      bolditalics: "Helvetica-BoldOblique",
+    NotoSans: {
+      normal: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-Regular.ttf",
+      ),
+      bold: path.join(__dirname, "../../../fonts/Noto_Sans/NotoSans-Bold.ttf"),
+      italics: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-Italic.ttf",
+      ),
+      bolditalics: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-BoldItalic.ttf",
+      ),
     },
   };
 
@@ -219,7 +229,7 @@ export const exportToPDF = async (
   const docDefinition: TDocumentDefinitions = {
     content,
     defaultStyle: {
-      font: "Helvetica",
+      font: "NotoSans",
       fontSize: 10,
       lineHeight: 1.2,
     },
