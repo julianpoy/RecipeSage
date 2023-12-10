@@ -170,3 +170,9 @@ h2.recipeTitle {
 .dropdownSelect input {
   font-size: 0.875rem;
 }
+
+.label-group-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}

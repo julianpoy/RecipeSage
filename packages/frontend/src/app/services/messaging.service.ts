@@ -14,7 +14,7 @@ import { ToastController, AlertController } from "@ionic/angular";
 import { UserService } from "./user.service";
 import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
-import { EventService } from "./event.service";
+import { EventName, EventService } from "./event.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 
 export interface Message {
@@ -104,15 +104,15 @@ export class MessagingService {
         console.log("received foreground FCM: ", message);
         // TODO: REPLACE WITH GRIP (WS)
         switch (message.data?.type) {
-          case "import:pepperplate:complete":
-            return this.events.publish("import:pepperplate:complete");
-          case "import:pepperplate:failed":
+          case EventName.ImportPepperplateComplete:
+            return this.events.publish(EventName.ImportPepperplateComplete);
+          case EventName.ImportPepperplateFailed:
             return this.events.publish(
-              "import:pepperplate:failed",
+              EventName.ImportPepperplateFailed,
               message.data.reason,
             );
-          case "import:pepperplate:working":
-            return this.events.publish("import:pepperplate:working");
+          case EventName.ImportPepperplateWorking:
+            return this.events.publish(EventName.ImportPepperplateWorking);
         }
       });
     };

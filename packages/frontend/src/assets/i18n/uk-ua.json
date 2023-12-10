@@ -223,11 +223,7 @@
   "pages.recipeDetails.noNotes": "Немає нотаток",
 
   "pages.recipeDetails.labels": "Мітки",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "Ви можете додати мітки, як тільки ви збережете цей рецепт до своєї колекції",
-
-  "pages.recipeDetails.labels.clickToCreate": "Натисніть, щоб створити",
-  "pages.recipeDetails.labels.alreadyAdded": "Вже додано",
-  "pages.recipeDetails.labels.clickToAdd": "Натисніть, щоб додати",
+  "pages.recipeDetails.labels.uncatLabels": "Генерал",
 
   "pages.recipeDetails.created": "Створений",
   "pages.recipeDetails.updated": "Останнє редагування",
@@ -250,11 +246,6 @@
 
   "pages.recipeDetails.delete.header": "Підтвердьте видалення",
   "pages.recipeDetails.delete.message": "Буде видалено назавжди рецепт з Вашого облікового запису. Ця дія незворотна.",
-
-  "pages.recipeDetails.enterLabelWarning": "Введіть мітку і натисніть Enter щоб маркувати цей рецепт.",
-
-  "pages.recipeDetails.deleteLabel.header": "Підтвердьте видалення мітки",
-  "pages.recipeDetails.deleteLabel.message": "Буде видалено мітку \"{{title}}\" з цього рецепту.",
 
   "pages.recipeDetails.cloned": "Рецепт було збережено до Вашого облікового запису",
   "pages.recipeDetails.similar": "Схожі рецепти у вашій колекції",
@@ -386,22 +377,67 @@
 
   "pages.labels.title": "Мої мітки - керування",
   "pages.labels.selectionModeTitle": "{{count}} виділено",
-  "pages.labels.subtitle": "Ви маєте загалом {{count}} міток. Натисніть на мітку для перегляду.",
+
+  "pages.labels.label.sectionTitle": "Ваші етикетки",
+  "pages.labels.label.sectionDescription": "У вас є {{count}} міток. Клацніть мітку, щоб переглянути її.",
   "pages.labels.label.recipeCount": "{{count}} рецептів",
+  "pages.labels.label.group": "Категорія: {{title}}",
+  "pages.labels.label.noGroup": "Без категорії",
   "pages.labels.label.createdAt": "Створено {{dateString}}",
   "pages.labels.label.selected": "Виділено",
-
-  "pages.labels.nullState.1": "Наразі Ви не маєте міток.",
-  "pages.labels.nullState.2": "Мітки можна створювати на сторінці подробиць рецепта.",
-  "pages.labels.nullState.3": "Мітки існують лише до тих пір, поки вони пов'язані принаймні з одним рецептом.",
+  "pages.labels.label.nullState.1": "У вас ще немає ярликів.",
+  "pages.labels.label.nullState.2": "Натисніть кнопку +, щоб створити нову мітку.",
 
   "pages.labels.modal.delete.header": "Підтвердіть видалення",
   "pages.labels.modal.delete.message": "Це назавжди видалить вибрані мітки з Вашого облікового запису. Ця дія незворотна. Наступні мітки будуть видалені: {{labelTitles}}",
+
+  "pages.labels.group.sectionTitle": "Ваші категорії етикеток",
+  "pages.labels.group.sectionDescription": "Ви маєте {{count}} загальних категорій міток. Клацніть категорію для редагування.",
+  "pages.labels.group.labelCount": "{{count}} мітки належать до цієї категорії",
+  "pages.labels.group.createdAt": "Створено {{dateString}}",
+  "pages.labels.group.nullState.1": "У вас ще немає категорій лейблів.",
+  "pages.labels.group.nullState.2": "Натисніть кнопку +, щоб створити нову категорію міток.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "Нова мітка або категорія міток",
+  "pages.newLabelItemModal.categoryTitle": "Нова категорія етикеток",
+  "pages.newLabelItemModal.labelTitle": "Нова етикетка",
+
+  "pages.newLabelItemModal.label": "Створіть етикетку",
+  "pages.newLabelItemModal.labelDescription": "До рецептів можна прикріплювати мітки, щоб впорядкувати і відфільтрувати їх пізніше. Деякі поширені приклади етикеток: \"сніданок\", \"десерт\" і \"вегетаріанський\"",
+  "pages.newLabelItemModal.group": "Створіть категорію етикеток",
+  "pages.newLabelItemModal.groupDescription": "Категорії етикеток можна використовувати для об'єднання етикеток у групи, наприклад, \"страви\" або \"дієта\". Наприклад, ви можете помістити мітки \"сніданок\", \"обід\" і \"вечеря\" в категорію міток під назвою \"страви\". Кожна категорія буде відображатися окремо під час редагування рецепта.",
+
+  "pages.newLabelItemModal.labelTitleInput": "Назва етикетки",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "Введіть назву мітки",
+  "pages.newLabelItemModal.labelTitleInputHint": "Багато людей починають з простих етикеток, таких як \"сніданок\", \"десерт\" або \"вегетаріанський\".",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "Керування категорією етикеток",
+  "pages.manageLabelGroupModal.groupTitle": "Назва категорії етикетки Назва категорії",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "Введіть назву категорії етикеток",
+  "pages.manageLabelGroupModal.groupTitleHint": "Багато людей починають зі слів \"їжа\", \"дієта\" або \"кухня\"",
+  "pages.manageLabelGroupModal.warn": "Попередьте мене, коли я не додаю",
+  "pages.manageLabelGroupModal.warnDescription": "Якщо увімкнено, ви отримаєте попередження, якщо збережете рецепт без прикріпленої етикетки в цій категорії",
+  "pages.manageLabelGroupModal.labels": "Виберіть етикетки",
+  "pages.manageLabelGroupModal.labelsHint": "Вибрані етикетки будуть згруповані в цій категорії. Одна етикетка може належати щонайбільше до 1 категорії одночасно.",
+  "pages.manageLabelGroupModal.labels.noItems": "Ніяких некатегоризованих етикеток",
+  "pages.manageLabelGroupModal.labels.search": "Пошук етикетки",
+
+  "pages.manageLabelGroupModal.conflict": "Помилка.",
+  "pages.manageLabelGroupModal.conflictMessage": "Категорія етикеток з такою назвою вже існує",
+
+  "pages.manageLabelGroupModal.delete.header": "Підтвердити видалення категорії мітки",
+  "pages.manageLabelGroupModal.delete.message": "Категорію міток \"{{title}}\" буде вилучено. Примітка: ця дія не вплине на жодний з міток у цій категорії.",
 
   "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Керування міткою: {{name}}",
   "pages.manageLabelModal.recipeCount": "Відмічено {{count}} рецептів",
+  "pages.manageLabelModal.group": "Присвоєно категорії міток: {{title}}",
+  "pages.manageLabelModal.noGroup": "Це не відноситься до категорії етикеток",
   "pages.manageLabelModal.createdAt": "Спочатку створено: {{dateString}}",
   "pages.manageLabelModal.warning": "Зауважте: Ці дії є незворотними",
   "pages.manageLabelModal.view": "Показати всі рецепти",
@@ -636,8 +672,10 @@
   "pages.editRecipe.input.instructions": "Інструкції",
   "pages.editRecipe.input.notes": "Замітки",
   "pages.editRecipe.input.rating": "Рейтинг",
+  "pages.editRecipe.input.labels": "Етикетки",
+  "pages.editRecipe.input.uncatLabels": "Генерал",
+  "pages.editRecipe.addLabel.otherGroup": "Це існує в іншій категорії",
 
-  "pages.editRecipe.labelNotice": "Ви зможете додавати категорії та мітки після створення рецепту.",
   "pages.editRecipe.save": "Зберегти",
   "pages.editRecipe.create": "Створити",
 
@@ -1203,6 +1241,15 @@
   "components.selectLabel.change": "Натисніть щоб змінити",
   "components.selectLabel.select": "Натисніть щоб виділити",
   "components.selectLabel.null": "Немає міток з назвою \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "components.selectMultipleItems.null": "Немає результатів для {{searchText}}",
+  "components.selectMultipleItems.select": "Натисніть, щоб вибрати",
+  "components.selectMultipleItems.create": "Натисніть, щоб створити",
+  "components.selectMultipleItems.noItems": "Немає предметів",
+  "components.selectMultipleItems.alreadyAdded": "Вже додано",
+  "components.selectMultipleItems.searchPlaceholder": "Пошук елемента",
 
   "====== Components.SelectMeal ======": "",
 

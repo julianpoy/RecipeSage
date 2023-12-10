@@ -19,6 +19,10 @@ import { Image, ImageService } from "~/services/image.service";
 import { getQueryParam } from "~/utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
+import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import { TRPCService } from "../../../services/trpc.service";
+import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
+import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
 
 @Component({
   selector: "page-edit-recipe",
@@ -30,6 +34,8 @@ export class EditRecipePage {
   defaultBackHref: string;
 
   recipeId?: string;
+  // TODO: Clean this up
+  fullRecipe?: Recipe;
   recipe: Partial<BaseRecipe> & { id?: string } = {
     title: "",
     description: "",
@@ -44,22 +50,26 @@ export class EditRecipePage {
   };
 
   images: Image[] = [];
+  labels: LabelSummary[] = [];
+  labelGroups: LabelGroupSummary[] = [];
+  selectedLabels: LabelSummary[] = [];
 
   constructor(
-    public route: ActivatedRoute,
-    public translate: TranslateService,
-    public navCtrl: NavController,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public popoverCtrl: PopoverController,
-    public utilService: UtilService,
-    public unsavedChangesService: UnsavedChangesService,
-    public loadingCtrl: LoadingController,
-    public loadingService: LoadingService,
-    public recipeService: RecipeService,
-    public imageService: ImageService,
-    public domSanitizationService: DomSanitizer,
-    public capabilitiesService: CapabilitiesService,
+    private route: ActivatedRoute,
+    private translate: TranslateService,
+    private navCtrl: NavController,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
+    private utilService: UtilService,
+    private trpcService: TRPCService,
+    private unsavedChangesService: UnsavedChangesService,
+    private loadingCtrl: LoadingController,
+    private loadingService: LoadingService,
+    private recipeService: RecipeService,
+    private imageService: ImageService,
+    private domSanitizationService: DomSanitizer,
+    private capabilitiesService: CapabilitiesService,
   ) {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
@@ -67,23 +77,101 @@ export class EditRecipePage {
       this.checkAutoClip();
     } else {
       this.recipeId = recipeId;
-
-      const loading = this.loadingService.start();
-      this.recipeService.fetchById(this.recipeId).then((response) => {
-        loading.dismiss();
-        if (!response.success) return;
-        this.recipe = response.data;
-        this.images = response.data.images;
-      });
     }
+    this.load();
 
     this.defaultBackHref = this.recipeId
       ? RouteMap.RecipePage.getPath(this.recipeId)
       : RouteMap.HomePage.getPath("main");
   }
 
-  goToAuth(cb?: () => any) {
-    // TODO: Needs functionality
+  async load() {
+    const loading = this.loadingService.start();
+
+    // Important that we load all in parallel so that user isn't left waiting for slow connections
+    await Promise.all([
+      this._loadRecipe(),
+      this._loadLabels(),
+      this._loadLabelGroups(),
+    ]);
+
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
+
+    if (this.fullRecipe) {
+      this.selectedLabels = this.fullRecipe.labels
+        .map((label) => labelsById[label.id])
+        .filter((label) => label);
+    }
+
+    loading.dismiss();
+  }
+
+  async _loadRecipe() {
+    if (this.recipeId) {
+      const response = await this.recipeService.fetchById(this.recipeId);
+
+      if (response.success) {
+        this.fullRecipe = response.data;
+        this.recipe = response.data;
+        this.images = response.data.images;
+      }
+    }
+  }
+
+  async _loadLabels() {
+    const labels = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabels.query(),
+    );
+    if (labels) {
+      this.labels = labels;
+    }
+  }
+
+  async _loadLabelGroups() {
+    const labelGroups = await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.getLabelGroups.query(),
+    );
+    if (labelGroups) {
+      this.labelGroups = labelGroups;
+    }
+  }
+
+  labelsForGroupId(labels: LabelSummary[], labelGroupId: string | null) {
+    const filtered = labels.filter(
+      (label) => label.labelGroupId === labelGroupId,
+    );
+
+    return filtered;
+  }
+
+  labelsNotInGroupId(labels: LabelSummary[], labelGroupId: string | null) {
+    const filtered = labels.filter(
+      (label) => label.labelGroupId !== labelGroupId,
+    );
+
+    return filtered;
+  }
+
+  disallowedTitleMap(labels: LabelSummary[], labelGroupId: string | null) {
+    const labelsNotInGroup = this.labelsNotInGroupId(labels, labelGroupId);
+
+    const labelTitlesInOtherGroups = labelsNotInGroup.map(
+      (label) => label.title,
+    );
+
+    return labelTitlesInOtherGroups.reduce(
+      (acc, title) => {
+        acc[title] = "pages.editRecipe.addLabel.otherGroup";
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   checkAutoClip() {
@@ -113,8 +201,51 @@ export class EditRecipePage {
     if (matchedUrl) return matchedUrl.pop();
   }
 
+  async _create(title: string) {
+    return this.trpcService.handle(
+      this.trpcService.trpc.recipes.createRecipe.mutate({
+        title,
+        description: this.recipe.description || "",
+        yield: this.recipe.yield || "",
+        activeTime: this.recipe.activeTime || "",
+        totalTime: this.recipe.totalTime || "",
+        source: this.recipe.source || "",
+        url: this.recipe.url || "",
+        notes: this.recipe.notes || "",
+        ingredients: this.recipe.ingredients || "",
+        instructions: this.recipe.instructions || "",
+        rating: this.recipe.rating || null,
+        folder: "main",
+        imageIds: this.images.map((image) => image.id),
+        labelIds: this.selectedLabels.map((label) => label.id),
+      }),
+    );
+  }
+
+  async _update(id: string, title: string) {
+    return this.trpcService.handle(
+      this.trpcService.trpc.recipes.updateRecipe.mutate({
+        id,
+        title,
+        description: this.recipe.description || "",
+        yield: this.recipe.yield || "",
+        activeTime: this.recipe.activeTime || "",
+        totalTime: this.recipe.totalTime || "",
+        source: this.recipe.source || "",
+        url: this.recipe.url || "",
+        notes: this.recipe.notes || "",
+        ingredients: this.recipe.ingredients || "",
+        instructions: this.recipe.instructions || "",
+        rating: this.recipe.rating || null,
+        folder: "main",
+        imageIds: this.images.map((image) => image.id),
+        labelIds: this.selectedLabels.map((label) => label.id),
+      }),
+    );
+  }
+
   async save() {
-    if (!this.recipe.title || this.recipe.title.length === 0) {
+    if (!this.recipe.title) {
       const message = await this.translate
         .get("pages.editRecipe.titleRequired")
         .toPromise();
@@ -130,45 +261,16 @@ export class EditRecipePage {
 
     const loading = this.loadingService.start();
 
-    const response = this.recipe.id
-      ? await this.recipeService.update({
-          id: this.recipe.id,
-          title: this.recipe.title,
-          description: this.recipe.description,
-          yield: this.recipe.yield,
-          activeTime: this.recipe.activeTime,
-          totalTime: this.recipe.totalTime,
-          source: this.recipe.source,
-          url: this.recipe.url,
-          notes: this.recipe.notes,
-          ingredients: this.recipe.ingredients,
-          instructions: this.recipe.instructions,
-          rating: this.recipe.rating,
-          imageIds: this.images.map((image) => image.id),
-        })
-      : await this.recipeService.create({
-          title: this.recipe.title,
-          description: this.recipe.description,
-          yield: this.recipe.yield,
-          activeTime: this.recipe.activeTime,
-          totalTime: this.recipe.totalTime,
-          source: this.recipe.source,
-          url: this.recipe.url,
-          notes: this.recipe.notes,
-          ingredients: this.recipe.ingredients,
-          instructions: this.recipe.instructions,
-          rating: this.recipe.rating,
-          imageIds: this.images.map((image) => image.id),
-        });
+    const response = await (this.recipe.id
+      ? this._update(this.recipe.id, this.recipe.title)
+      : this._create(this.recipe.title));
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.markAsClean();
 
-    this.navCtrl.navigateRoot(
-      RouteMap.RecipePage.getPath(this.recipe.id || response.data.id),
-    );
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
   }
 
   markAsDirty() {
@@ -413,5 +515,56 @@ export class EditRecipePage {
     });
 
     await popover.present();
+  }
+
+  mapLabelsToSelectableItems(labels: LabelSummary[]) {
+    const mapped = labels.map((label) => ({
+      id: label.id,
+      title: label.title,
+      icon: "pricetag",
+    }));
+
+    return mapped;
+  }
+
+  // Note that this is, in effect, just a change for the correlated group
+  selectedLabelsChange(
+    labelGroupId: string | null,
+    updatedSelectedLabelsForGroup: SelectableItem[],
+  ) {
+    const labelsById = this.labels.reduce(
+      (acc, label) => {
+        acc[label.id] = label;
+        return acc;
+      },
+      {} as Record<string, LabelSummary>,
+    );
+
+    const unrelatedSelectedLabels = this.selectedLabels.filter(
+      (selectedLabel) => {
+        return selectedLabel.labelGroupId !== labelGroupId;
+      },
+    );
+
+    const unrelatedAndChangedLabels = [
+      ...unrelatedSelectedLabels,
+      ...updatedSelectedLabelsForGroup,
+    ];
+    this.selectedLabels = unrelatedAndChangedLabels
+      .map((selectedLabel) => labelsById[selectedLabel.id])
+      .filter((label) => label);
+  }
+
+  async addLabel(title: string, labelGroupId: string | null) {
+    const label = await this.trpcService.handle(
+      this.trpcService.trpc.labels.createLabel.mutate({
+        title,
+        labelGroupId,
+      }),
+    );
+    if (!label) return;
+
+    this.labels.push(label);
+    this.selectedLabels.push(label);
   }
 }

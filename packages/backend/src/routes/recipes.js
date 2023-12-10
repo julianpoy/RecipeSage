@@ -18,6 +18,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import * as SearchService from "@recipesage/trpc";
 import * as SubscriptionsService from "../services/subscriptions.js";
@@ -174,7 +175,7 @@ router.post(
 
       if (req.body.labels?.length) {
         const sanitizedLabelTitles = req.body.labels
-          .map((title) => UtilService.cleanLabelTitle(title || ""))
+          .map((title) => Util.cleanLabelTitle(title || ""))
           .filter((el) => el.trim());
         const labelTitles = [...new Set(sanitizedLabelTitles)]; // Dedupe
 

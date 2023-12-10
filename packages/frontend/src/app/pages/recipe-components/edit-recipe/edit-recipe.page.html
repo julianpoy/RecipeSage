@@ -200,9 +200,50 @@
 
     <br />
 
-    <ion-item *ngIf="!recipe.id" class="ion-text-wrap">
-      <p>{{ 'pages.editRecipe.labelNotice' | translate }}</p>
+    <ion-item lines="none">
+      <ion-label>
+        <h2>{{ 'pages.editRecipe.input.labels' | translate }}</h2>
+      </ion-label>
     </ion-item>
+
+    <div class="label-input-group-container">
+      <div class="label-input-group">
+        <ion-item *ngIf="labelGroups.length > 1" lines="none">
+          <ion-label>
+            {{ 'pages.editRecipe.input.uncatLabels' | translate }}
+          </ion-label>
+        </ion-item>
+
+        <select-multiple-items
+          [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, null))"
+          [enableCreateNew]="true"
+          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, null))"
+          (selectedItemsChange)="selectedLabelsChange(null, $event)"
+          (newItem)="addLabel($event, null)"
+          [disallowedTitles]="disallowedTitleMap(labels, null)"
+        ></select-multiple-items>
+      </div>
+
+      <div class="label-input-group" *ngFor="let labelGroup of labelGroups">
+        <ion-item lines="none">
+          <ion-label> {{labelGroup.title}} </ion-label>
+        </ion-item>
+
+        <select-multiple-items
+          [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, labelGroup.id))"
+          [enableCreateNew]="true"
+          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, labelGroup.id))"
+          (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
+          (newItem)="addLabel($event, labelGroup.id)"
+          [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
+        ></select-multiple-items>
+      </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
     <div class="ion-padding">
       <ion-button *ngIf="recipe.id" expand="block" (click)="save()">
         {{ 'pages.editRecipe.save' | translate }}

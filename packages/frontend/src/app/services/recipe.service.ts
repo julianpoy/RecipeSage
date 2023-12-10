@@ -6,7 +6,7 @@ import { Label } from "./label.service";
 import { HttpService } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 import { UtilService } from "./util.service";
-import { EventService } from "./event.service";
+import { EventName, EventService } from "./event.service";
 import { Image } from "./image.service";
 
 import {
@@ -172,7 +172,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeCreated);
 
     return response;
   }
@@ -192,7 +192,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeUpdated);
 
     return response;
   }
@@ -211,7 +211,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -230,7 +230,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -244,7 +244,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -258,7 +258,7 @@ export class RecipeService {
       errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }

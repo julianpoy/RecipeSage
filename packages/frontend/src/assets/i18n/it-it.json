@@ -223,11 +223,7 @@
   "pages.recipeDetails.noNotes": "Nessuna Nota",
 
   "pages.recipeDetails.labels": "Etichette",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "Potrai aggiungere le etichette dopo aver salvato questa ricetta",
-
-  "pages.recipeDetails.labels.clickToCreate": "Clicca per Creare",
-  "pages.recipeDetails.labels.alreadyAdded": "Aggiunta",
-  "pages.recipeDetails.labels.clickToAdd": "Clicca per Aggiungere",
+  "pages.recipeDetails.labels.uncatLabels": "Generale",
 
   "pages.recipeDetails.created": "Creazione",
   "pages.recipeDetails.updated": "Ultima modifica",
@@ -250,11 +246,6 @@
 
   "pages.recipeDetails.delete.header": "Conferma Eliminazione",
   "pages.recipeDetails.delete.message": "In questo modo eliminerai definitivamente la ricetta dalla tua raccolta. Questa azione è irreversibile.",
-
-  "pages.recipeDetails.enterLabelWarning": "Aggiungi un’etichetta e premi invio per taggare questa ricetta.",
-
-  "pages.recipeDetails.deleteLabel.header": "Conferma Rimozione Etichetta",
-  "pages.recipeDetails.deleteLabel.message": "Rimuovere l’etichetta \"{{title}}\" da questa ricetta.",
 
   "pages.recipeDetails.cloned": "La ricetta è stata aggiunta alla tua raccolta",
   "pages.recipeDetails.similar": "Ricette simili nella vostra collezione",
@@ -386,22 +377,67 @@
 
   "pages.labels.title": "Gestisci Etichette",
   "pages.labels.selectionModeTitle": "{{count}} Selezionati",
-  "pages.labels.subtitle": "Hai {{count}} etichette. Cliccane una per visualizzarla.",
+
+  "pages.labels.label.sectionTitle": "Le vostre etichette",
+  "pages.labels.label.sectionDescription": "Le etichette totali sono {{count}}. Fare clic su un'etichetta per visualizzarla.",
   "pages.labels.label.recipeCount": "{{count}} Ricette",
+  "pages.labels.label.group": "Categoria: {{title}}",
+  "pages.labels.label.noGroup": "Nessuna categoria",
   "pages.labels.label.createdAt": "Creazione {{dateString}}",
   "pages.labels.label.selected": "Selezionato",
-
-  "pages.labels.nullState.1": "Non hai ancora creato nessuna etichetta.",
-  "pages.labels.nullState.2": "Puoi creare un’etichetta nei dettagli di una ricetta.",
-  "pages.labels.nullState.3": "Le etichette esistono solo finché sono assegnate ad almeno una ricetta.",
+  "pages.labels.label.nullState.1": "Non ci sono ancora etichette.",
+  "pages.labels.label.nullState.2": "Fare clic sul pulsante + per creare una nuova etichetta.",
 
   "pages.labels.modal.delete.header": "Conferma Eliminazione",
   "pages.labels.modal.delete.message": "In questo modo si eliminano definitivamente le etichette selezionate dal proprio profilo. Questa azione è irreversibile. Verranno eliminate le seguenti etichette: {{labelTitles}}",
+
+  "pages.labels.group.sectionTitle": "Categorie di etichette",
+  "pages.labels.group.sectionDescription": "Sono presenti {{count}} categorie totali di etichette. Fare clic su una categoria per modificarla.",
+  "pages.labels.group.labelCount": "Le etichette di {{count}} appartengono a questa categoria",
+  "pages.labels.group.createdAt": "Creazione {{dateString}}",
+  "pages.labels.group.nullState.1": "Non ci sono ancora categorie di etichette.",
+  "pages.labels.group.nullState.2": "Fare clic sul pulsante + per creare una nuova categoria di etichette.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "Nuova etichetta o categoria",
+  "pages.newLabelItemModal.categoryTitle": "Nuova categoria per le etichette",
+  "pages.newLabelItemModal.labelTitle": "Nuova etichetta",
+
+  "pages.newLabelItemModal.label": "Creare un'etichetta",
+  "pages.newLabelItemModal.labelDescription": "Le etichette possono essere applicate alle ricette per organizzarle e filtrarle in seguito. Alcuni esempi comuni di etichette sono \"colazione\", \"dessert\" e \"vegetariano\".",
+  "pages.newLabelItemModal.group": "Creare una categoria per le etichette",
+  "pages.newLabelItemModal.groupDescription": "Le categorie di etichette possono essere utilizzate per organizzare le etichette in gruppi, come \"pasto\" o \"dieta\". Ad esempio, si possono inserire le etichette \"colazione\", \"pranzo\" e \"cena\" in una categoria di etichette chiamata \"pasto\". Ogni categoria verrà visualizzata separatamente quando si modifica una ricetta.",
+
+  "pages.newLabelItemModal.labelTitleInput": "Nome dell'etichetta",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "Inserire il nome dell'etichetta",
+  "pages.newLabelItemModal.labelTitleInputHint": "Molte persone iniziano con etichette semplici come \"colazione\", \"dessert\" o \"vegetariano\".",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "Gestione della categoria di etichette",
+  "pages.manageLabelGroupModal.groupTitle": "Etichetta Nome della categoria",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "Nome della categoria dell'etichetta",
+  "pages.manageLabelGroupModal.groupTitleHint": "Molte persone iniziano con \"pasto\", \"dieta\" o \"cucina\".",
+  "pages.manageLabelGroupModal.warn": "Avvisatemi quando non aggiungo questo",
+  "pages.manageLabelGroupModal.warnDescription": "Quando questa impostazione è attivata, si viene avvisati se si salva una ricetta senza un'etichetta in questa categoria.",
+  "pages.manageLabelGroupModal.labels": "Selezionare le etichette",
+  "pages.manageLabelGroupModal.labelsHint": "Le etichette selezionate saranno raggruppate in questa categoria. Un'etichetta può appartenere al massimo a una categoria alla volta.",
+  "pages.manageLabelGroupModal.labels.noItems": "Nessuna etichetta non categorizzata",
+  "pages.manageLabelGroupModal.labels.search": "Ricerca di un'etichetta",
+
+  "pages.manageLabelGroupModal.conflict": "Errore",
+  "pages.manageLabelGroupModal.conflictMessage": "Esiste già una categoria di etichette con questo titolo",
+
+  "pages.manageLabelGroupModal.delete.header": "Conferma Eliminazione",
+  "pages.manageLabelGroupModal.delete.message": "La categoria di etichette \"{{title}}\" verrà eliminata. Nota: questa azione non avrà effetto su nessuna etichetta all'interno di questa categoria.",
 
   "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Gestisci Etichetta: {{name}}",
   "pages.manageLabelModal.recipeCount": "Aggiunta a {{count}} ricette",
+  "pages.manageLabelModal.group": "Assegnato alla categoria di etichette: {{title}}",
+  "pages.manageLabelModal.noGroup": "Non è assegnato a una categoria di etichette",
   "pages.manageLabelModal.createdAt": "Creazione: {{dateString}}",
   "pages.manageLabelModal.warning": "Attenzione: queste azioni sono irreversibili",
   "pages.manageLabelModal.view": "Visualizza tutte le ricette",
@@ -636,8 +672,10 @@
   "pages.editRecipe.input.instructions": "Procedimento",
   "pages.editRecipe.input.notes": "Note",
   "pages.editRecipe.input.rating": "Valutazione",
+  "pages.editRecipe.input.labels": "Etichette",
+  "pages.editRecipe.input.uncatLabels": "Generale",
+  "pages.editRecipe.addLabel.otherGroup": "Questo esiste in un'altra categoria",
 
-  "pages.editRecipe.labelNotice": "Potrai aggiungere categorie/etichette dopo la creazione della ricetta.",
   "pages.editRecipe.save": "Salva",
   "pages.editRecipe.create": "Crea",
 
@@ -1202,6 +1240,15 @@
   "components.selectLabel.change": "Clicca per modificare",
   "components.selectLabel.select": "Clicca per selezionare",
   "components.selectLabel.null": "Nessuna etichetta chiamata \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "components.selectMultipleItems.null": "Nessun risultato per {{searchText}}",
+  "components.selectMultipleItems.select": "Fare clic per selezionare",
+  "components.selectMultipleItems.create": "Fare clic per creare",
+  "components.selectMultipleItems.noItems": "Nessun articolo",
+  "components.selectMultipleItems.alreadyAdded": "Già aggiunto",
+  "components.selectMultipleItems.searchPlaceholder": "Cercare un elemento da aggiungere",
 
   "====== Components.SelectMeal ======": "",
 

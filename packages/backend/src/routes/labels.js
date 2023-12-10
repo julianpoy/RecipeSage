@@ -9,7 +9,7 @@ import { sequelize, Recipe, Label, Recipe_Label } from "../models/index.js";
 
 // Services
 import * as MiddlewareService from "../services/middleware.js";
-import * as UtilService from "../services/util.js";
+import * as Util from "@recipesage/util";
 import { joiValidator } from "../middleware/joiValidator.js";
 
 // Util
@@ -27,7 +27,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const title = UtilService.cleanLabelTitle(req.body.title || "");
+    const title = Util.cleanLabelTitle(req.body.title || "");
 
     if (!title || title.length === 0) {
       throw PreconditionFailed("Label title must be provided.");
@@ -271,13 +271,7 @@ router.delete(
           transaction,
         });
 
-        if (label.recipes.length === 1) {
-          await label.destroy({ transaction });
-
-          return {}; // Label was deleted;
-        } else {
-          return label;
-        }
+        return label;
       })
       .then((label) => {
         res.status(200).json(label);
@@ -293,7 +287,7 @@ router.put(
   wrapRequestWithErrorHandler(async (req, res) => {
     if (
       typeof req.body.title === "string" &&
-      UtilService.cleanLabelTitle(req.body.title).length === 0
+      Util.cleanLabelTitle(req.body.title).length === 0
     ) {
       throw BadRequest("Label title must be longer than 0.");
     }
@@ -312,7 +306,7 @@ router.put(
       }
 
       if (typeof req.body.title === "string")
-        label.title = UtilService.cleanLabelTitle(req.body.title);
+        label.title = Util.cleanLabelTitle(req.body.title);
 
       const labels = await Label.findAll({
         where: {

@@ -9,7 +9,7 @@ import {
   FeatureFlagKeys,
 } from "~/services/feature-flag.service";
 import { RecipeFolderName, RecipeService } from "~/services/recipe.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 
 @Injectable({
   providedIn: "root",
@@ -32,15 +32,15 @@ export class OfflineCacheService {
       ];
 
     if (ffEnabled && preferenceEnabled) {
-      this.events.subscribe("recipe:created", () => {
+      this.events.subscribe(EventName.RecipeCreated, () => {
         this.updateAllRecipeLists();
       });
 
-      this.events.subscribe("recipe:updated", () => {
+      this.events.subscribe(EventName.RecipeUpdated, () => {
         this.updateAllRecipeLists();
       });
 
-      this.events.subscribe("recipe:deleted", () => {
+      this.events.subscribe(EventName.RecipeDeleted, () => {
         this.updateAllRecipeLists();
       });
     }

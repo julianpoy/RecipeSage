@@ -183,6 +183,8 @@ ion-label[position="floating"] {
 ion-toast {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
+  /* Override button color, must be done this way because they don't otherwise allow you to... */
+  --ion-color-step-100: var(--ion-color-light);
 }
 
 ion-button.button-outline {

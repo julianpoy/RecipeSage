@@ -223,11 +223,7 @@
   "pages.recipeDetails.noNotes": "No Notes",
 
   "pages.recipeDetails.labels": "Labels",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "You can add labels once you save this recipe to your collection",
-
-  "pages.recipeDetails.labels.clickToCreate": "Click to create",
-  "pages.recipeDetails.labels.alreadyAdded": "Already added",
-  "pages.recipeDetails.labels.clickToAdd": "Click to add",
+  "pages.recipeDetails.labels.uncatLabels": "General",
 
   "pages.recipeDetails.created": "Created",
   "pages.recipeDetails.updated": "Last edited",
@@ -250,11 +246,6 @@
 
   "pages.recipeDetails.delete.header": "Confirm Delete",
   "pages.recipeDetails.delete.message": "This will permanently delete the recipe from your account. This action is irreversible.",
-
-  "pages.recipeDetails.enterLabelWarning": "Please enter a label and press enter to label this recipe.",
-
-  "pages.recipeDetails.deleteLabel.header": "Confirm Label Removal",
-  "pages.recipeDetails.deleteLabel.message": "This will remove the label \"{{title}}\" from this recipe.",
 
   "pages.recipeDetails.cloned": "The recipe has been saved to your account",
   "pages.recipeDetails.similar": "Similar recipes in your collection",
@@ -384,25 +375,70 @@
 
   "====== Pages.Labels ======": "",
 
-  "pages.labels.title": "My Labels - Manage",
+  "pages.labels.title": "Manage Labels & Categories",
   "pages.labels.selectionModeTitle": "{{count}} Selected",
-  "pages.labels.subtitle": "You have {{count}} total labels. Click a label to view.",
+
+  "pages.labels.label.sectionTitle": "Your Labels",
+  "pages.labels.label.sectionDescription": "You have {{count}} total labels. Click a label to view.",
   "pages.labels.label.recipeCount": "{{count}} Recipes",
+  "pages.labels.label.group": "Category: {{title}}",
+  "pages.labels.label.noGroup": "No category",
   "pages.labels.label.createdAt": "Created {{dateString}}",
   "pages.labels.label.selected": "Selected",
-
-  "pages.labels.nullState.1": "You don't have any labels yet.",
-  "pages.labels.nullState.2": "Labels can be created on the recipe details page.",
-  "pages.labels.nullState.3": "Labels only exist so long as they are assigned to at least one recipe.",
+  "pages.labels.label.nullState.1": "You don't have any labels yet.",
+  "pages.labels.label.nullState.2": "Click the + button to create a new label.",
 
   "pages.labels.modal.delete.header": "Confirm Delete",
   "pages.labels.modal.delete.message": "This will permanently delete the selected labels from your account. This action is irreversible. The following labels will be deleted: {{labelTitles}}",
 
+  "pages.labels.group.sectionTitle": "Your Label Categories",
+  "pages.labels.group.sectionDescription": "You have {{count}} total label categories. Click a category to edit.",
+  "pages.labels.group.labelCount": "{{count}} labels belong to this category",
+  "pages.labels.group.createdAt": "Created {{dateString}}",
+  "pages.labels.group.nullState.1": "You don't have any label categories yet.",
+  "pages.labels.group.nullState.2": "Click the + button to create a new label category.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "New Label or Label Category",
+  "pages.newLabelItemModal.categoryTitle": "New Label Category",
+  "pages.newLabelItemModal.labelTitle": "New Label",
+
+  "pages.newLabelItemModal.label": "Create a label",
+  "pages.newLabelItemModal.labelDescription": "Labels can be attached to recipes to organize & filter them later. Some common label examples are \"breakfast\", \"dessert\", and \"vegetarian\"",
+  "pages.newLabelItemModal.group": "Create a label category",
+  "pages.newLabelItemModal.groupDescription": "Label categories can be used to organize labels into groups, such as \"meal\", or \"diet\". For example, you might put the labels \"breakfast\", \"lunch\", and \"dinner\" under a label category called \"meal\". Each category will be displayed separately when editing a recipe.",
+
+  "pages.newLabelItemModal.labelTitleInput": "Label Name",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "Enter label name",
+  "pages.newLabelItemModal.labelTitleInputHint": "Many people start simple labels such as \"breakfast\", \"dessert\", or \"vegetarian\"",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "Manage Label Category",
+  "pages.manageLabelGroupModal.groupTitle": "Label Category Name",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "Enter label category name",
+  "pages.manageLabelGroupModal.groupTitleHint": "Many people start with \"meal\", \"diet\", or \"cuisine\"",
+  "pages.manageLabelGroupModal.warn": "Warn me when I do not add",
+  "pages.manageLabelGroupModal.warnDescription": "When enabled, you will be warned if saving a recipe without a label in this category attached",
+  "pages.manageLabelGroupModal.labels": "Select Labels",
+  "pages.manageLabelGroupModal.labelsHint": "Selected labels will be grouped under this category. A given label can belong to at maximum 1 category at a time.",
+  "pages.manageLabelGroupModal.labels.noItems": "No uncategorized labels",
+  "pages.manageLabelGroupModal.labels.search": "Search for a label",
+
+  "pages.manageLabelGroupModal.conflict": "Error",
+  "pages.manageLabelGroupModal.conflictMessage": "A label category with that title already exists",
+
+  "pages.manageLabelGroupModal.delete.header": "Confirm Delete Label Category",
+  "pages.manageLabelGroupModal.delete.message": "The label category \"{{title}}\" will be deleted. Note: this action will not affect any labels within this category.",
+
   "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Manage Label: {{name}}",
-  "pages.manageLabelModal.recipeCount": "Tagged on {{count}} recipes",
-  "pages.manageLabelModal.createdAt": "First created: {{dateString}}",
+  "pages.manageLabelModal.recipeCount": "Assigned to {{count}} recipes",
+  "pages.manageLabelModal.group": "Assigned to label category: {{title}}",
+  "pages.manageLabelModal.noGroup": "Is not assigned to a label category",
+  "pages.manageLabelModal.createdAt": "First created {{dateString}}",
   "pages.manageLabelModal.warning": "Note: These actions are permanent",
   "pages.manageLabelModal.view": "View All Recipes",
   "pages.manageLabelModal.rename": "Rename",
@@ -636,8 +672,10 @@
   "pages.editRecipe.input.instructions": "Instructions",
   "pages.editRecipe.input.notes": "Notes",
   "pages.editRecipe.input.rating": "Rating",
+  "pages.editRecipe.input.labels": "Labels",
+  "pages.editRecipe.input.uncatLabels": "General",
+  "pages.editRecipe.addLabel.otherGroup": "Exists in another category",
 
-  "pages.editRecipe.labelNotice": "You'll be able to add categories/labels after the recipe is created.",
   "pages.editRecipe.save": "Save",
   "pages.editRecipe.create": "Create",
 
@@ -1203,6 +1241,15 @@
   "components.selectLabel.change": "Click to change",
   "components.selectLabel.select": "Click to select",
   "components.selectLabel.null": "No labels called \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "components.selectMultipleItems.null": "No results for {{searchText}}",
+  "components.selectMultipleItems.select": "Click to select",
+  "components.selectMultipleItems.create": "Click to create",
+  "components.selectMultipleItems.noItems": "No items",
+  "components.selectMultipleItems.alreadyAdded": "Already added",
+  "components.selectMultipleItems.searchPlaceholder": "Search for an item to add",
 
   "====== Components.SelectMeal ======": "",
 
