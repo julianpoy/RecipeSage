@@ -71,6 +71,10 @@ export enum ShoppingListPreferenceKey {
   GroupCategories = "ShoppingList.groupCategories",
 }
 
+export enum AssistantPreferenceKey {
+  ShowMessageHints = "Assistant.showMessageHints",
+}
+
 export interface AppPreferenceTypes {
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
   [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
@@ -107,6 +111,8 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.PreferDelete]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
   [ShoppingListPreferenceKey.GroupCategories]: boolean;
+
+  [AssistantPreferenceKey.ShowMessageHints]: boolean;
 }
 
 @Injectable({
@@ -147,6 +153,8 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.PreferDelete]: false,
     [ShoppingListPreferenceKey.GroupSimilar]: true,
     [ShoppingListPreferenceKey.GroupCategories]: true,
+
+    [AssistantPreferenceKey.ShowMessageHints]: false,
   };
 
   constructor() {

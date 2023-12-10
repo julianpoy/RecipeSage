@@ -1,6 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { NavController, ToastController } from "@ionic/angular";
+import { NavController, PopoverController, ToastController } from "@ionic/angular";
 
 import { linkifyStr } from "~/utils/linkify";
 import { MessagingService } from "~/services/messaging.service";
@@ -11,6 +11,8 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
 import { AssistantMessageSummary, RecipeSummaryLite } from "@recipesage/trpc";
+import { AssistantPreferenceKey, PreferencesService } from "../../../services/preferences.service";
+import { AssistantPopoverPage } from "../assistant-popover/assistant-popover.page";
 
 @Component({
   selector: "page-assistant",
@@ -35,18 +37,27 @@ export class AssistantPage {
 
   selectedChatIdx = -1;
 
+  hints: string[] = [];
+
+  preferences = this.preferencesService.preferences;
+  preferenceKeys = AssistantPreferenceKey;
+
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public route: ActivatedRoute,
-    public events: EventService,
-    public toastCtrl: ToastController,
-    public loadingService: LoadingService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public messagingService: MessagingService,
-    public trpcService: TRPCService,
-  ) {}
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private route: ActivatedRoute,
+    private events: EventService,
+    private toastCtrl: ToastController,
+    private loadingService: LoadingService,
+    private websocketService: WebsocketService,
+    private utilService: UtilService,
+    private messagingService: MessagingService,
+    private preferencesService: PreferencesService,
+    private trpcService: TRPCService,
+    private popoverCtrl: PopoverController,
+  ) {
+    this.generateHints();
+  }
 
   ionViewWillEnter() {
     this.isViewLoaded = true;
@@ -307,5 +318,29 @@ export class AssistantPage {
 
   parseMessage(message: string) {
     return linkifyStr(message);
+  }
+
+  async generateHints() {
+    const hintKeys = [
+      "pages.assistant.hint.measurement",
+      "pages.assistant.hint.advice",
+      "pages.assistant.hint.ideas",
+    ];
+
+    for (const hintKey of hintKeys) {
+      const hint = await this.translate
+        .get(hintKey)
+        .toPromise();
+      this.hints.push(hint);
+    }
+  }
+
+  async presentPopover(event: Event) {
+    const popover = await this.popoverCtrl.create({
+      component: AssistantPopoverPage,
+      event,
+    });
+
+    popover.present();
   }
 }

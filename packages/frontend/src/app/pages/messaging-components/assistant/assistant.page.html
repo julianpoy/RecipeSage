@@ -14,6 +14,9 @@
       >
         <ion-icon name="refresh" slot="icon-only"></ion-icon>
       </ion-button>
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -136,6 +139,16 @@
 </ion-content>
 
 <ion-footer>
+  <div *ngIf="preferences[preferenceKeys.ShowMessageHints] || messages.length < 10">
+    <ion-chip
+      *ngFor="let hint of hints"
+      outline="true"
+      [disabled]="processing"
+      (click)="pendingMessage = hint; sendMessage()"
+    >
+      {{ hint }}
+    </ion-chip>
+  </div>
   <form ng-submit="sendMessage()">
     <ion-item>
       <ion-textarea

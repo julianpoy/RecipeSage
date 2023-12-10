@@ -1,0 +1,16 @@
+<ion-list no-border>
+  <ion-list-header>
+    {{ 'generic.options' | translate }}
+  </ion-list-header>
+
+  <ion-item lines="full">
+    <ion-toggle
+      [(ngModel)]="preferences[preferenceKeys.ShowMessageHints]"
+      (ngModelChange)="savePreferences()"
+      slot="start"
+    ></ion-toggle>
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.assistantpopover.hints' | translate }}
+    </ion-label>
+  </ion-item>
+</ion-list>

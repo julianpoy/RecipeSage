@@ -592,6 +592,14 @@
   "pages.assistant.welcome.3": "The cooking assistant has a message limit of 5 messages/day because of the high costs to run the AI. This limit is increased to 50 messages/day for contributors.",
   "pages.assistant.messageLimit": "Maximum messages reached (sorry, it's costly!). Message count resets at 0:00GMT.",
 
+  "pages.assistant.hint.measurement": "How many cups are in a gallon?",
+  "pages.assistant.hint.advice": "Why didn't my bread rise?",
+  "pages.assistant.hint.ideas": "What spices usually go in chili?",
+
+  "====== Pages.AssistantPopover ======": "",
+
+  "pages.assistantpopover.hints": "Show message hints",
+
   "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "Conversation with {{name}}",
@@ -1345,6 +1353,7 @@
 
   "====== Generic ======": "",
 
+  "generic.options": "Options",
   "generic.delete": "Delete",
   "generic.cancel": "Cancel",
   "generic.confirm": "Confirm",
