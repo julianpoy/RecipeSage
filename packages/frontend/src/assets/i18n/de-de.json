@@ -688,6 +688,9 @@
   "pages.editRecipe.clip.loading": "Bitte warten...",
   "pages.editRecipe.clip.failed": "Automatisches Befüllen von dieser URL fehlgeschlagen",
 
+  "pages.editRecipe.missingLabelGroup.title": "Fehlende Etikettengruppe",
+  "pages.editRecipe.missingLabelGroup.message": "Sie haben angegeben, dass die Etikettengruppe \"{{groupName}}\" erforderlich sein soll. Sie können dies auf der Seite \"Meine Labels\" deaktivieren.",
+
   "pages.editRecipe.addImage.header": "Bild über URL hinzufügen",
   "pages.editRecipe.addImage.message": "Gib eine Bild-URL ein, die dem Rezept hinzugefügt werden soll",
   "pages.editRecipe.addImage.placeholder": "Bild-URL",
@@ -1348,6 +1351,7 @@
   "generic.close": "Schließen",
   "generic.save": "Speichern",
   "generic.okay": "OK",
+  "generic.ignore": "Ignorieren Sie",
 
   "====== Trailing Comma Placeholder ======": ""
 }

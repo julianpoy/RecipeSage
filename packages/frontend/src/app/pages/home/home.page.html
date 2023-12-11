@@ -93,7 +93,7 @@
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
           (click)="toggleLabel(label.title)"
         >
-          {{ label.title }} ({{ label.recipeCount }})
+          {{ label.title }} ({{ label._count.recipeLabels }})
         </a>
       </div>
 
@@ -157,7 +157,7 @@
               [ngClass]="{ 'no-image': !preferences[preferenceKeys.ShowImages] }"
             >
               <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
-                @{{friendsById[recipe.userId].handle}}
+                &commat;{{friendsById[recipe.userId].handle}}
               </ng-container>
               <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
                 {{ 'pages.home.recipe.fromSharedCollection' | translate }}
@@ -181,7 +181,7 @@
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
           (click)="toggleLabel(label.title)"
         >
-          {{ label.title }} ({{ label.recipeCount }})
+          {{ label.title }} ({{ label._count.recipeLabels }})
         </a>
       </div>
 
@@ -240,7 +240,7 @@
           *ngIf="!userId && myProfile && myProfile.id !== recipe.userId"
         >
           <ng-container *ngIf="friendsById && friendsById[recipe.userId]">
-            @{{friendsById[recipe.userId].handle}}
+            &commat;{{friendsById[recipe.userId].handle}}
           </ng-container>
           <ng-container *ngIf="!friendsById || !friendsById[recipe.userId]">
             {{ 'pages.home.recipe.fromSharedCollection' | translate }}
@@ -262,7 +262,7 @@
           [ngClass]="{ selected: selectedLabels.indexOf(label.title) > -1 }"
           (click)="toggleLabel(label.title)"
         >
-          {{ label.title }} ({{ label.recipeCount }})
+          {{ label.title }} ({{ label._count.recipeLabels }})
         </a>
       </div>
 

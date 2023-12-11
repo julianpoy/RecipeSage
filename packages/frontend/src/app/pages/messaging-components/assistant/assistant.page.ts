@@ -10,7 +10,10 @@ import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
-import { AssistantMessageSummary, RecipeSummaryLite } from "@recipesage/trpc";
+import type {
+  AssistantMessageSummary,
+  RecipeSummaryLite,
+} from "@recipesage/trpc";
 
 @Component({
   selector: "page-assistant",

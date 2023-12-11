@@ -64,13 +64,14 @@ model Label {
 }
 
 model LabelGroup {
-  id           String        @id @default(uuid()) @db.Uuid
-  userId       String        @db.Uuid
-  title        String        @db.VarChar(255)
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime      @updatedAt @db.Timestamptz(6)
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  labels       Label[]
+  id                 String   @id @default(uuid()) @db.Uuid
+  userId             String   @db.Uuid
+  title              String   @db.VarChar(255)
+  warnWhenNotPresent Boolean
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime @updatedAt @db.Timestamptz(6)
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  labels             Label[]
 
   @@unique([userId, title], map: "LabelGroups_userId_title_uk")
   @@map("LabelGroups")
@@ -143,17 +144,17 @@ model Message {
 }
 
 model AssistantMessage {
-  id                    String   @id @default(uuid()) @db.Uuid
-  userId                String   @db.Uuid
-  role                  String   @db.VarChar(255)
-  content               String?
-  name                  String?
-  json                  Json
-  recipeId              String?  @db.Uuid
-  createdAt             DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime @updatedAt @db.Timestamptz(6)
-  user                  User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
-  recipe                Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  role      String   @db.VarChar(255)
+  content   String?
+  name      String?
+  json      Json
+  recipeId  String?  @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  user      User     @relation("AssistantMessages_userIdToUsers", fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe?  @relation("AssistantMessages_recipeIdToRecipes", fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@map("AssistantMessages")
 }

@@ -11,6 +11,7 @@ export const updateLabelGroup = publicProcedure
       id: z.string().min(1).max(100),
       title: z.string().min(1).max(100),
       labelIds: z.array(z.string()),
+      warnWhenNotPresent: z.boolean(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -41,6 +42,7 @@ export const updateLabelGroup = publicProcedure
       },
       data: {
         title: input.title,
+        warnWhenNotPresent: input.warnWhenNotPresent,
       },
     });
 

@@ -4,6 +4,7 @@ import {
   ModalController,
   AlertController,
   ToastController,
+  ToggleCustomEvent,
 } from "@ionic/angular";
 import { Label, LabelService } from "~/services/label.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
@@ -32,6 +33,8 @@ export class NewLabelItemModalPage {
   labels: LabelSummary[] = [];
   ungroupedLabels: LabelSummary[] = [];
   selectedLabels: LabelSummary[] = [];
+
+  warnWhenNotPresent = false;
 
   constructor(
     private navCtrl: NavController,
@@ -71,7 +74,9 @@ export class NewLabelItemModalPage {
     }
   }
 
-  warnToggle(event: any) {}
+  warnToggle(event: ToggleCustomEvent) {
+    this.warnWhenNotPresent = event.detail.checked;
+  }
 
   cancel() {
     this.modalCtrl.dismiss();
@@ -133,6 +138,7 @@ export class NewLabelItemModalPage {
       this.trpcService.trpc.labelGroups.createLabelGroup.mutate({
         title: this.title,
         labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
+        warnWhenNotPresent: this.warnWhenNotPresent,
       }),
       {
         409: async () => {

@@ -689,6 +689,9 @@
   "pages.editRecipe.clip.loading": "Зачекайте будь ласка...",
   "pages.editRecipe.clip.failed": "Не вдалося виконати автозаповнення з цього URL",
 
+  "pages.editRecipe.missingLabelGroup.title": "Відсутня група етикеток",
+  "pages.editRecipe.missingLabelGroup.message": "Ви вказали, що група міток \"{{groupName}}\" має бути обов'язковою. Ви можете вимкнути її на сторінці Мої мітки.",
+
   "pages.editRecipe.addImage.header": "Додавання зображення за URL-адресою",
   "pages.editRecipe.addImage.message": "Введіть URL-адресу зображення, яке потрібно додати до рецепту",
   "pages.editRecipe.addImage.placeholder": "URL зображення",
@@ -1350,6 +1353,7 @@
   "generic.close": "Закрити",
   "generic.save": "Зберегти",
   "generic.okay": "Гаразд",
+  "generic.ignore": "Ігнорувати",
 
   "====== Trailing Comma Placeholder ======": ""
 }

@@ -4,6 +4,7 @@ import {
   ModalController,
   AlertController,
   ToastController,
+  ToggleCustomEvent,
 } from "@ionic/angular";
 import { Label, LabelService } from "~/services/label.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
@@ -31,6 +32,8 @@ export class ManageLabelGroupModalPage {
   ungroupedLabels: LabelSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
+  warnWhenNotPresent: boolean = false;
+
   constructor(
     private navCtrl: NavController,
     private translate: TranslateService,
@@ -46,6 +49,7 @@ export class ManageLabelGroupModalPage {
 
   async ionViewWillEnter() {
     this.title = this.labelGroup.title;
+    this.warnWhenNotPresent = this.labelGroup.warnWhenNotPresent;
 
     const labelsResult = await this.trpcService.handle(
       this.trpcService.trpc.labels.getLabels.query(),
@@ -64,7 +68,9 @@ export class ManageLabelGroupModalPage {
     }
   }
 
-  warnToggle(event: any) {}
+  warnToggle(event: ToggleCustomEvent) {
+    this.warnWhenNotPresent = event.detail.checked;
+  }
 
   cancel() {
     this.modalCtrl.dismiss();
@@ -103,6 +109,7 @@ export class ManageLabelGroupModalPage {
         id: this.labelGroup.id,
         title: this.title,
         labelIds: this.selectedLabels.map((selectedLabel) => selectedLabel.id),
+        warnWhenNotPresent: this.warnWhenNotPresent,
       }),
       {
         409: async () => {
