@@ -689,6 +689,9 @@
   "pages.editRecipe.clip.loading": "Attendi...",
   "pages.editRecipe.clip.failed": "Impossibile compilare la ricetta da questo URL",
 
+  "pages.editRecipe.missingLabelGroup.title": "Gruppo di etichette mancante",
+  "pages.editRecipe.missingLabelGroup.message": "È stato specificato che il gruppo di etichette \"{{groupName}}\" deve essere obbligatorio. È possibile disattivarlo dalla pagina Le mie etichette.",
+
   "pages.editRecipe.addImage.header": "Aggiungi immagine da URL",
   "pages.editRecipe.addImage.message": "Inserisci l’URL di un’immagine per aggiungerla alla ricetta",
   "pages.editRecipe.addImage.placeholder": "URL immagine",
@@ -1349,6 +1352,7 @@
   "generic.close": "Chiudi",
   "generic.save": "Salva",
   "generic.okay": "Okay",
+  "generic.ignore": "Ignorare",
 
   "====== Trailing Comma Placeholder ======": ""
 }

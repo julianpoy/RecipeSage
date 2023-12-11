@@ -689,6 +689,9 @@
   "pages.editRecipe.clip.loading": "המתנה...",
   "pages.editRecipe.clip.failed": "כישלון למשוך את פרטי המתכון מהכתובת שסופקה",
 
+  "pages.editRecipe.missingLabelGroup.title": "חסרה קבוצת תוויות",
+  "pages.editRecipe.missingLabelGroup.message": "ציינת שיש לדרוש את קבוצת התווית \"{{groupName}}\". אתה יכול לבטל את זה דרך דף התוויות שלי.",
+
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "כתובת URL של תמונה כדי להוסיפה למתכון",
   "pages.editRecipe.addImage.placeholder": "כתובת URL של תמונה",
@@ -1349,7 +1352,8 @@
   "generic.confirm": "אישור",
   "generic.close": "סגירה",
   "generic.save": "שמירה",
-  "generic.okay": "Okay",
+  "generic.okay": "בסדר",
+  "generic.ignore": "להתעלם",
 
   "====== Trailing Comma Placeholder ======": ""
 }
