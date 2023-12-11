@@ -32,10 +32,9 @@
     <br />
     <br />
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.title' | translate }}
-      </ion-label>
       <ion-input
+        label="{{ 'pages.editRecipe.input.title' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.title"
         (ngModelChange)="markAsDirty()"
         type="text"
@@ -47,10 +46,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.description' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.description' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.description"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -64,10 +62,9 @@
 
     <div class="miniflex">
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.yield' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.yield' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.yield"
           (ngModelChange)="markAsDirty()"
           type="text"
@@ -79,10 +76,9 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.activeTime' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.activeTime' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.activeTime"
           (ngModelChange)="markAsDirty()"
           type="text"
@@ -94,10 +90,9 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.totalTime' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.totalTime' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.totalTime"
           (ngModelChange)="markAsDirty()"
           type="text"
@@ -109,10 +104,9 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.source' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.source' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.source"
           (ngModelChange)="markAsDirty()"
           type="text"
@@ -124,10 +118,9 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.sourceUrl' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.sourceUrl' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.url"
           (ngModelChange)="markAsDirty()"
           type="url"
@@ -151,10 +144,9 @@
     </div>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.ingredients' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.ingredients' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.ingredients"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -167,10 +159,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.instructions' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.instructions' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.instructions"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -183,10 +174,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.notes' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.notes' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.notes"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"

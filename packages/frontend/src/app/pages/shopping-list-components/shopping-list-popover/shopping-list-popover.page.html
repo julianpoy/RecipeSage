@@ -4,10 +4,8 @@
   </ion-list-header>
 
   <ion-item lines="full">
-    <ion-label>
-      {{ 'pages.shoppingListPopover.sortBy' | translate }}
-    </ion-label>
     <ion-select
+      label="{{ 'pages.shoppingListPopover.sortBy' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.SortBy]"
       (ngModelChange)="savePreferences();"
     >
@@ -27,66 +25,66 @@
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.GroupCategories]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.groupCategories' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.groupCategories' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.GroupSimilar]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.groupSimilar' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.groupSimilar' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowRecipeTitle]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.showTitle' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.showTitle' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full" *ngIf="shoppingList.collaborators.length > 0">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowAddedBy]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.showAddedBy' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.showAddedBy' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowAddedOn]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.showAddedOn' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.showAddedOn' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.PreferDelete]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label>
-      {{ 'pages.shoppingListPopover.preferDelete' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.shoppingListPopover.preferDelete' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-button (click)="print()" expand="block" size="small" class="ion-margin">

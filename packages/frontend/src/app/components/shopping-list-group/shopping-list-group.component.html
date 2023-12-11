@@ -12,14 +12,16 @@
     <ion-row class="ion-align-items-center">
       <ion-col class="ion-no-padding">
         <ion-item class="groupedItem">
-          <ion-label class="ion-text-wrap ion-no-margin">
-            {{ group.title }}
-          </ion-label>
           <ion-checkbox
-            slot="start"
+            labelPlacement="end"
+            justify="start"
             [(ngModel)]="group.items[0].completed"
             (ngModelChange)="completeToggle.emit(group.items)"
-          ></ion-checkbox>
+          >
+            <div class="ion-text-wrap">
+              {{ group.title }}
+            </div>
+          </ion-checkbox>
         </ion-item>
       </ion-col>
       <ion-col size="auto">

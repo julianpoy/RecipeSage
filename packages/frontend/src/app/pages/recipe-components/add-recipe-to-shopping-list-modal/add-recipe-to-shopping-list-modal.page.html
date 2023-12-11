@@ -25,10 +25,10 @@
   </p>
 
   <ion-item *ngIf="shoppingLists && shoppingLists.length > 0">
-    <ion-label>
-      {{ 'pages.addRecipeToShoppingListModal.destination' | translate }}
-    </ion-label>
-    <ion-select [(ngModel)]="destinationShoppingList">
+    <ion-select
+      label="{{ 'pages.addRecipeToShoppingListModal.destination' | translate }}"
+      [(ngModel)]="destinationShoppingList"
+    >
       <ion-select-option *ngFor="let list of shoppingLists" [value]="list"
         >{{ list.title }}</ion-select-option
       >

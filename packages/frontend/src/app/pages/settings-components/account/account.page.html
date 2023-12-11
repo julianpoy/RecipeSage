@@ -25,10 +25,9 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">
-      {{ 'pages.account.creds.name' | translate }}
-    </ion-label>
     <ion-input
+      label="{{ 'pages.account.creds.name' | translate }}"
+      labelPlacement="stacked"
       autocomplete="off"
       autofill="off"
       type="text"
@@ -47,10 +46,9 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">
-      {{ 'pages.account.creds.email' | translate }}
-    </ion-label>
     <ion-input
+      label="{{ 'pages.account.creds.email' | translate }}"
+      labelPlacement="stacked"
       autocomplete="off"
       autofill="off"
       type="email"
@@ -69,10 +67,9 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">
-      {{ 'pages.account.creds.password' | translate }}
-    </ion-label>
     <ion-input
+      label="{{ 'pages.account.creds.password' | translate }}"
+      labelPlacement="stacked"
       autocomplete="new-password"
       autofill="off"
       type="password"
@@ -83,10 +80,9 @@
   </ion-item>
 
   <ion-item *ngIf="passwordChanged">
-    <ion-label position="stacked">
-      {{ 'pages.account.creds.password.confirm' | translate }}
-    </ion-label>
     <ion-input
+      label="{{ 'pages.account.creds.password.confirm' | translate }}"
+      labelPlacement="stacked"
       autocomplete="new-password"
       autofill="off"
       type="password"

@@ -1092,17 +1092,14 @@
   "pages.addProfileItem.type.allRecipes": "Alle Rezepte",
 
   "pages.addProfileItem.change": "Zum Ändern klicken",
-  "pages.addProfileItem.select": "Wähle dein",
-  "pages.addProfileItem.select.recipe": "Rezept",
-  "pages.addProfileItem.select.label": "Label",
+  "pages.addProfileItem.selectRecipe": "Wählen Sie ein Rezept",
+  "pages.addProfileItem.selectLabel": "Wählen Sie ein Etikett",
 
   "pages.addProfileItem.selectVisibility": "Wer soll das sehen können?",
   "pages.addProfileItem.selectVisibility.public": "Jeder (Öffentlich)",
   "pages.addProfileItem.selectVisibility.friends": "Nur meine Freunde",
-
-  "pages.addProfileItem.visibility": "Sichtbarkeit:",
-  "pages.addProfileItem.visibility.public": "öffentlich",
-  "pages.addProfileItem.visibility.friends": "nur Freunde",
+  "pages.addProfileItem.visibilityPublic": "Sichtbarkeit: Öffentlich",
+  "pages.addProfileItem.visibilityFriends": "Sichtbarkeit: Nur für Freunde",
 
   "pages.addProfileItem.itemTitle": "Ausgewählter Titel",
   "pages.addProfileItem.tos": "Durch das Hinzufügen dieses Artikels akzeptierst du dich mit der RecipeSage Sharing Policy einverstanden",
@@ -1238,6 +1235,7 @@
 
   "components.selectLabel.change": "Zum Ändern klicken",
   "components.selectLabel.select": "Zum Auswählen klicken",
+  "components.selectLabel.search": "Suche nach einem Etikett...",
   "components.selectLabel.null": "Es gibt keine Label mit Namen \"{{name}}\"",
 
   "====== Components.SelectMultipleItems ======": "",
@@ -1257,6 +1255,7 @@
 
   "components.selectRecipe.change": "Zum Ändern klicken",
   "components.selectRecipe.select": "Zum Auswählen klicken",
+  "components.selectRecipe.search": "Suche nach einem Rezept...",
   "components.selectRecipe.searching": "Suchen nach \"{{searchText}}\"...",
   "components.selectRecipe.null": "Keine Treffer für \"{{searchText}}\"",
 

@@ -43,18 +43,16 @@
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.EnableLabelIntersection]"
       (ngModelChange)="savePreferences(true);"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homeSearchFilterPopover.matchAllLabels' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homeSearchFilterPopover.matchAllLabels' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full" *ngIf="!guestMode">
-    <ion-label>
-      {{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}
-    </ion-label>
     <ion-select
+      label="{{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
       (ngModelChange)="savePreferences(true);"
     >

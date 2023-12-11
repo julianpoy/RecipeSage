@@ -25,10 +25,11 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">
-      {{ "components.scaleRecipe.manual" | translate }}
-    </ion-label>
-    <ion-input [(ngModel)]="scale"></ion-input>
+    <ion-input
+      label="{{ 'components.scaleRecipe.manual' | translate }}"
+      labelPlacement="stacked"
+      [(ngModel)]="scale"
+    ></ion-input>
   </ion-item>
 
   <br />
