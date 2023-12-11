@@ -689,6 +689,10 @@
   "pages.editRecipe.clip.loading": "Please wait...",
   "pages.editRecipe.clip.failed": "Failed to autofill from that URL",
 
+  "pages.editRecipe.missingLabelGroup.title": "Missing label group",
+  "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the manage labels page.",
+  "pages.editRecipe.missingLabelGroup.ignore": "Ignore",
+
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "Enter an image URL to be added to the recipe",
   "pages.editRecipe.addImage.placeholder": "Image URL",

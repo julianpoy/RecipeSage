@@ -29,7 +29,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import { RecipeSummaryLite } from "@recipesage/trpc";
+import { LabelGroupSummary, LabelSummary, RecipeSummaryLite } from "@recipesage/trpc";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -43,7 +43,7 @@ export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   showBack: boolean = false;
 
-  labels: Label[] = [];
+  labels: LabelSummary[] = [];
   selectedLabels: string[] = [];
 
   recipes: RecipeSummaryLite[] = [];
@@ -333,21 +333,27 @@ export class HomePage {
   }
 
   async loadLabels() {
-    const response = await this.labelService.fetch();
-    if (!response.success) return;
+    const response = await this.trpcService.handle(this.trpcService.trpc.labels.getLabels.query(), {
+      401: () => {}
+    });
+    if (!response) return;
 
-    this.labels = response.data;
+    this.labels = response;
   }
 
   async fetchMyProfile() {
-    const response = await this.userService.getMyProfile();
+    const response = await this.userService.getMyProfile({
+      401: () => {}
+    });
     if (!response.success) return;
 
     this.myProfile = response.data;
   }
 
   async fetchFriends() {
-    const response = await this.userService.getMyFriends();
+    const response = await this.userService.getMyFriends({
+      401: () => {}
+    });
     if (!response.success) return;
 
     this.friendsById = response.data.friends.reduce(

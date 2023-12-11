@@ -10,6 +10,7 @@ export const createLabelGroup = publicProcedure
     z.object({
       title: z.string().min(1).max(100),
       labelIds: z.array(z.string()),
+      warnWhenNotPresent: z.boolean(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -34,6 +35,7 @@ export const createLabelGroup = publicProcedure
       data: {
         title: input.title,
         userId: session.userId,
+        warnWhenNotPresent: input.warnWhenNotPresent
       },
     });
 

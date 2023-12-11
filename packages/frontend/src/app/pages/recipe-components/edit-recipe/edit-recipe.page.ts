@@ -244,6 +244,23 @@ export class EditRecipePage {
     );
   }
 
+  async _save() {
+    if (!this.recipe.title) return;
+
+    const loading = this.loadingService.start();
+
+    const response = await (this.recipe.id
+      ? this._update(this.recipe.id, this.recipe.title)
+      : this._create(this.recipe.title));
+
+    loading.dismiss();
+    if (!response) return;
+
+    this.markAsClean();
+
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
+  }
+
   async save() {
     if (!this.recipe.title) {
       const message = await this.translate
@@ -259,18 +276,62 @@ export class EditRecipePage {
       return;
     }
 
-    const loading = this.loadingService.start();
+    const missingWarnLabelGroups = this.getMissingWarnLabelGroups();
+    if (missingWarnLabelGroups.length) {
+      const header = await this.translate
+        .get("pages.editRecipe.missingLabelGroup.title")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.editRecipe.missingLabelGroup.message", {
+          groupName: missingWarnLabelGroups[0].title,
+        })
+        .toPromise();
+      const cancel = await this.translate
+        .get("generic.cancel")
+        .toPromise();
+      const okay = await this.translate
+        .get("pages.editRecipe.missingLabelGroup.ignore")
+        .toPromise();
 
-    const response = await (this.recipe.id
-      ? this._update(this.recipe.id, this.recipe.title)
-      : this._create(this.recipe.title));
+      const confirmPrompt = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: cancel,
+            role: "cancel",
+          },
+          {
+            text: okay,
+            handler: () => {
+              this._save();
+            },
+          },
+        ],
+      });
 
-    loading.dismiss();
-    if (!response) return;
+      await confirmPrompt.present();
+    } else {
+      return this._save();
+    }
+  }
 
-    this.markAsClean();
+  getMissingWarnLabelGroups() {
+    const warnLabelGroups = this.labelGroups.filter((labelGroup) => labelGroup.warnWhenNotPresent);
+    const warnLabelGroupsById = warnLabelGroups.reduce((acc, labelGroup) => {
+      acc[labelGroup.id] = labelGroup;
+      return acc;
+    }, {} as Record<string, LabelGroupSummary>);
+    const missingLabelGroupIds = new Set(Object.keys(warnLabelGroupsById));
 
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
+    for (const selectedLabel of this.selectedLabels) {
+      if (!selectedLabel.labelGroupId) continue;
+      missingLabelGroupIds.delete(selectedLabel.labelGroupId);
+    }
+
+    const missingLabelGroups = Array.from(missingLabelGroupIds).map((el) => warnLabelGroupsById[el]);
+
+    return missingLabelGroups;
   }
 
   markAsDirty() {
