@@ -9,10 +9,12 @@
       <img src="{{ selectedUser.profileImages?.at(0)?.location }}" />
     </ion-avatar>
     <ion-avatar *ngIf="!selectedUser.profileImages?.length" slot="start">
-      <img src="assets/imgs/logo_green_padded.png" />
+      <img src="assets/avatar.svg" />
     </ion-avatar>
     <ion-label>
-      {{ selectedUser.name }}
+      <h2>
+        {{ selectedUser.name }}
+      </h2>
       <p>
         {{ "components.selectUser.change" | translate }}
       </p>
@@ -37,7 +39,7 @@
               <img src="{{ user.profileImages?.at(0)?.location }}" />
             </ion-avatar>
             <ion-avatar *ngIf="!user.profileImages?.length" slot="start">
-              <img src="assets/imgs/logo_green_padded.png" />
+              <img src="assets/avatar.svg" />
             </ion-avatar>
             <ion-label>
               <h2>
