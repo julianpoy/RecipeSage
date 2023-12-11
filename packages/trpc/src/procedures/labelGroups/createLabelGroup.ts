@@ -35,7 +35,7 @@ export const createLabelGroup = publicProcedure
       data: {
         title: input.title,
         userId: session.userId,
-        warnWhenNotPresent: input.warnWhenNotPresent
+        warnWhenNotPresent: input.warnWhenNotPresent,
       },
     });
 

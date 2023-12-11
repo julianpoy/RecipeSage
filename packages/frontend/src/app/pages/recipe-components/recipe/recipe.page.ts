@@ -38,7 +38,11 @@ import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
-import type { RecipeSummary, RecipeSummaryLite, UserPublic } from "@recipesage/trpc";
+import type {
+  RecipeSummary,
+  RecipeSummaryLite,
+  UserPublic,
+} from "@recipesage/trpc";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({

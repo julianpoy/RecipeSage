@@ -333,9 +333,12 @@ export class HomePage {
   }
 
   async loadLabels() {
-    const response = await this.trpcService.handle(this.trpcService.trpc.labels.getLabels.query(), {
-      401: () => {}
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabels.query(),
+      {
+        401: () => {},
+      },
+    );
     if (!response) return;
 
     this.labels = response;
@@ -343,7 +346,7 @@ export class HomePage {
 
   async fetchMyProfile() {
     const response = await this.userService.getMyProfile({
-      401: () => {}
+      401: () => {},
     });
     if (!response.success) return;
 
@@ -352,7 +355,7 @@ export class HomePage {
 
   async fetchFriends() {
     const response = await this.userService.getMyFriends({
-      401: () => {}
+      401: () => {},
     });
     if (!response.success) return;
 

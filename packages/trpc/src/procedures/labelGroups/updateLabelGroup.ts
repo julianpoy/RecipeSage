@@ -42,7 +42,7 @@ export const updateLabelGroup = publicProcedure
       },
       data: {
         title: input.title,
-        warnWhenNotPresent: input.warnWhenNotPresent
+        warnWhenNotPresent: input.warnWhenNotPresent,
       },
     });
 

@@ -286,12 +286,8 @@ export class EditRecipePage {
           groupName: missingWarnLabelGroups[0].title,
         })
         .toPromise();
-      const cancel = await this.translate
-        .get("generic.cancel")
-        .toPromise();
-      const okay = await this.translate
-        .get("generic.ignore")
-        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const okay = await this.translate.get("generic.ignore").toPromise();
 
       const confirmPrompt = await this.alertCtrl.create({
         header,
@@ -317,11 +313,16 @@ export class EditRecipePage {
   }
 
   getMissingWarnLabelGroups() {
-    const warnLabelGroups = this.labelGroups.filter((labelGroup) => labelGroup.warnWhenNotPresent);
-    const warnLabelGroupsById = warnLabelGroups.reduce((acc, labelGroup) => {
-      acc[labelGroup.id] = labelGroup;
-      return acc;
-    }, {} as Record<string, LabelGroupSummary>);
+    const warnLabelGroups = this.labelGroups.filter(
+      (labelGroup) => labelGroup.warnWhenNotPresent,
+    );
+    const warnLabelGroupsById = warnLabelGroups.reduce(
+      (acc, labelGroup) => {
+        acc[labelGroup.id] = labelGroup;
+        return acc;
+      },
+      {} as Record<string, LabelGroupSummary>,
+    );
     const missingLabelGroupIds = new Set(Object.keys(warnLabelGroupsById));
 
     for (const selectedLabel of this.selectedLabels) {
@@ -329,7 +330,9 @@ export class EditRecipePage {
       missingLabelGroupIds.delete(selectedLabel.labelGroupId);
     }
 
-    const missingLabelGroups = Array.from(missingLabelGroupIds).map((el) => warnLabelGroupsById[el]);
+    const missingLabelGroups = Array.from(missingLabelGroupIds).map(
+      (el) => warnLabelGroupsById[el],
+    );
 
     return missingLabelGroups;
   }
