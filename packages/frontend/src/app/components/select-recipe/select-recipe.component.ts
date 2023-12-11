@@ -76,4 +76,8 @@ export class SelectRecipeComponent {
 
     this.selectedRecipe = response.data;
   }
+
+  recipeTrackBy(index: number, recipe: Recipe) {
+    return recipe.id;
+  }
 }

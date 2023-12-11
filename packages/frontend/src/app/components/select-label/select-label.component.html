@@ -21,7 +21,7 @@
       <div class="results-list-container" *ngIf="searchText.length">
         <div class="results-list">
           <ion-item
-            *ngFor="let label of results"
+            *ngFor="let label of results; trackBy: labelTrackBy"
             (click)="selectLabel(label)"
             button
           >

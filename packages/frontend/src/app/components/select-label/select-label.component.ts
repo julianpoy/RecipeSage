@@ -65,4 +65,8 @@ export class SelectLabelComponent {
     this.searchText = "";
     this.results = this.labels;
   }
+
+  labelTrackBy(index: number, label: Label) {
+    return label.id;
+  }
 }
