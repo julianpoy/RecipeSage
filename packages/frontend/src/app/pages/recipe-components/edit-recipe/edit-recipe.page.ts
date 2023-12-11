@@ -290,7 +290,7 @@ export class EditRecipePage {
         .get("generic.cancel")
         .toPromise();
       const okay = await this.translate
-        .get("pages.editRecipe.missingLabelGroup.ignore")
+        .get("generic.ignore")
         .toPromise();
 
       const confirmPrompt = await this.alertCtrl.create({
