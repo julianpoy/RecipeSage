@@ -1093,17 +1093,14 @@
   "pages.addProfileItem.type.allRecipes": "Tutte le Ricette",
 
   "pages.addProfileItem.change": "Clicca per modificare",
-  "pages.addProfileItem.select": "Seleziona",
-  "pages.addProfileItem.select.recipe": "ricetta",
-  "pages.addProfileItem.select.label": "etichetta",
+  "pages.addProfileItem.selectRecipe": "Selezionare una ricetta",
+  "pages.addProfileItem.selectLabel": "Selezionare un'etichetta",
 
   "pages.addProfileItem.selectVisibility": "Chi Può Visualizzarlo?",
   "pages.addProfileItem.selectVisibility.public": "Tutti (Pubblico)",
   "pages.addProfileItem.selectVisibility.friends": "Solo i Miei Amici",
-
-  "pages.addProfileItem.visibility": "Permessi di Visualizzazione:",
-  "pages.addProfileItem.visibility.public": "pubblico",
-  "pages.addProfileItem.visibility.friends": "solo amici",
+  "pages.addProfileItem.visibilityPublic": "Visibilità: Pubblico",
+  "pages.addProfileItem.visibilityFriends": "Visibilità: Solo per gli amici",
 
   "pages.addProfileItem.itemTitle": "Titolo",
   "pages.addProfileItem.tos": "Aggiungendo questo elemento, accetti la Politica di Condivisione di RecipeSage.",
@@ -1239,6 +1236,7 @@
 
   "components.selectLabel.change": "Clicca per modificare",
   "components.selectLabel.select": "Clicca per selezionare",
+  "components.selectLabel.search": "Cercare un'etichetta...",
   "components.selectLabel.null": "Nessuna etichetta chiamata \"{{name}}\"",
 
   "====== Components.SelectMultipleItems ======": "",
@@ -1258,6 +1256,7 @@
 
   "components.selectRecipe.change": "Clicca per Modificare",
   "components.selectRecipe.select": "Clicca per selezionare",
+  "components.selectRecipe.search": "Cerca una ricetta...",
   "components.selectRecipe.searching": "Cercando \"{{searchText}}\"...",
   "components.selectRecipe.null": "Impossibile trovare \"{{searchText}}\"",
 

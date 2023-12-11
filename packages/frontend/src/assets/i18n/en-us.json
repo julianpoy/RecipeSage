@@ -1094,17 +1094,14 @@
   "pages.addProfileItem.type.allRecipes": "All Recipes",
 
   "pages.addProfileItem.change": "Click to change",
-  "pages.addProfileItem.select": "Select your",
-  "pages.addProfileItem.select.recipe": "recipe",
-  "pages.addProfileItem.select.label": "label",
+  "pages.addProfileItem.selectRecipe": "Select a recipe",
+  "pages.addProfileItem.selectLabel": "Select a label",
 
   "pages.addProfileItem.selectVisibility": "Who Should Be Able to See This?",
   "pages.addProfileItem.selectVisibility.public": "Anyone (Public)",
   "pages.addProfileItem.selectVisibility.friends": "My Friends Only",
-
-  "pages.addProfileItem.visibility": "Visibility:",
-  "pages.addProfileItem.visibility.public": "Public",
-  "pages.addProfileItem.visibility.friends": "Friends only",
+  "pages.addProfileItem.visibilityPublic": "Visibility: Public",
+  "pages.addProfileItem.visibilityFriends": "Visibility: Friends only",
 
   "pages.addProfileItem.itemTitle": "Featured Title",
   "pages.addProfileItem.tos": "By adding this item, you agree to the RecipeSage Sharing Policy",
@@ -1240,6 +1237,7 @@
 
   "components.selectLabel.change": "Click to change",
   "components.selectLabel.select": "Click to select",
+  "components.selectLabel.search": "Type to search for a label...",
   "components.selectLabel.null": "No labels called \"{{name}}\"",
 
   "====== Components.SelectMultipleItems ======": "",
@@ -1259,6 +1257,7 @@
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",
+  "components.selectRecipe.search": "Type to search for a recipe...",
   "components.selectRecipe.searching": "Searching for \"{{searchText}}\"...",
   "components.selectRecipe.null": "No results for \"{{searchText}}\"",
 

@@ -1094,17 +1094,14 @@
   "pages.addProfileItem.type.allRecipes": "כל המתכונים",
 
   "pages.addProfileItem.change": "לחיצה כדי לשנות",
-  "pages.addProfileItem.select": "בחירה",
-  "pages.addProfileItem.select.recipe": "מתכון",
-  "pages.addProfileItem.select.label": "תווית",
+  "pages.addProfileItem.selectRecipe": "בחר מתכון",
+  "pages.addProfileItem.selectLabel": "בחר תווית",
 
   "pages.addProfileItem.selectVisibility": "מי רשאי לראות?",
   "pages.addProfileItem.selectVisibility.public": "כל אחד (ציבורי)",
   "pages.addProfileItem.selectVisibility.friends": "חברים שלי בלבד",
-
-  "pages.addProfileItem.visibility": "נראות:",
-  "pages.addProfileItem.visibility.public": "ציבורי",
-  "pages.addProfileItem.visibility.friends": "חברים בלבד",
+  "pages.addProfileItem.visibilityPublic": "נראות: ציבורית",
+  "pages.addProfileItem.visibilityFriends": "נראות: חברים בלבד",
 
   "pages.addProfileItem.itemTitle": "כותרת",
   "pages.addProfileItem.tos": "על ידי הוספת פריט זה, הינך מסכים/מה למדיניות השיתוף של RecipeSage",
@@ -1240,6 +1237,7 @@
 
   "components.selectLabel.change": "שינוי",
   "components.selectLabel.select": "בחירה",
+  "components.selectLabel.search": "הקלד כדי לחפש תווית...",
   "components.selectLabel.null": "אין תוויות בשם \"{{name}}\"",
 
   "====== Components.SelectMultipleItems ======": "",
@@ -1259,6 +1257,7 @@
 
   "components.selectRecipe.change": "שינוי",
   "components.selectRecipe.select": "בחירה",
+  "components.selectRecipe.search": "הקלד כדי לחפש מתכון...",
   "components.selectRecipe.searching": "חיפוש של \"{{searchText}}\"...",
   "components.selectRecipe.null": "אין תוצאות עבור \"{{searchText}}\"",
 

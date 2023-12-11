@@ -1094,17 +1094,14 @@
   "pages.addProfileItem.type.allRecipes": "Всі рецепти",
 
   "pages.addProfileItem.change": "Натисніть щоб змінити",
-  "pages.addProfileItem.select": "Оберіть",
-  "pages.addProfileItem.select.recipe": "свій рецепт",
-  "pages.addProfileItem.select.label": "свою мітку",
+  "pages.addProfileItem.selectRecipe": "Виберіть рецепт",
+  "pages.addProfileItem.selectLabel": "Виберіть етикетку",
 
   "pages.addProfileItem.selectVisibility": "Хто може це бачити?",
   "pages.addProfileItem.selectVisibility.public": "Будь хто (відкритий)",
   "pages.addProfileItem.selectVisibility.friends": "Лише мої друзі",
-
-  "pages.addProfileItem.visibility": "Видимість:",
-  "pages.addProfileItem.visibility.public": "відкритий",
-  "pages.addProfileItem.visibility.friends": "лише друзі",
+  "pages.addProfileItem.visibilityPublic": "Видимість: Публічна",
+  "pages.addProfileItem.visibilityFriends": "Видимість: Тільки для друзів",
 
   "pages.addProfileItem.itemTitle": "Відображувана назва",
   "pages.addProfileItem.tos": "Додаючи цей елемент, Ви погоджуєтеся з Політикою поширення RecipeSage",
@@ -1240,6 +1237,7 @@
 
   "components.selectLabel.change": "Натисніть щоб змінити",
   "components.selectLabel.select": "Натисніть щоб виділити",
+  "components.selectLabel.search": "Введіть, щоб знайти етикетку...",
   "components.selectLabel.null": "Немає міток з назвою \"{{name}}\"",
 
   "====== Components.SelectMultipleItems ======": "",
@@ -1259,6 +1257,7 @@
 
   "components.selectRecipe.change": "Натисніть щоб змінити",
   "components.selectRecipe.select": "Натисніть щоб вибрати",
+  "components.selectRecipe.search": "Введіть, щоб знайти рецепт...",
   "components.selectRecipe.searching": "Шукаю на \"{{searchText}}\"...",
   "components.selectRecipe.null": "Немає результатів для \"{{searchText}}\"",
 

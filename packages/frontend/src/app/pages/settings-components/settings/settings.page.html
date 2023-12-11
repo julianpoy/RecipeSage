@@ -41,12 +41,10 @@
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableSplitPane]"
         (ngModelChange)="toggleSplitPane(); savePreferences()"
-        labelPlacement="end"
-        justify="start"
       >
-        <ion-label class="ion-text-wrap">
+        <div class="ion-text-wrap">
           {{ 'pages.settings.splitPane' | translate }}
-        </ion-label>
+        </div>
       </ion-toggle>
     </ion-item>
     <ion-item
@@ -57,12 +55,10 @@
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]"
         (ngModelChange)="toggleOfflineCache(); savePreferences()"
-        labelPlacement="end"
-        justify="start"
       >
-        <ion-label class="ion-text-wrap">
+        <div class="ion-text-wrap">
           {{ 'pages.settings.cache' | translate }}
-        </ion-label>
+        </div>
       </ion-toggle>
     </ion-item>
     <ion-item lines="inset">

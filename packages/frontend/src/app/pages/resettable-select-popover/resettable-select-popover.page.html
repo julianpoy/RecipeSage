@@ -7,15 +7,17 @@
 <ion-list>
   <ion-item *ngFor="let option of options">
     <ion-checkbox
-      slot="start"
+      labelPlacement="end"
+      justify="start"
       [(ngModel)]="option.selected"
       (ngModelChange)="emitChange();"
-    ></ion-checkbox>
-    <ion-label class="ion-text-wrap"> {{option.title}} </ion-label>
+    >
+      <div class="ion-text-wrap">{{option.title}}</div>
+    </ion-checkbox>
   </ion-item>
 
   <ion-item *ngIf="options.length === 0">
-    <ion-label class="ion-text-wrap"> {{nullMessage}} </ion-label>
+    <ion-label class="ion-text-wrap">{{nullMessage}}</ion-label>
   </ion-item>
 </ion-list>
 
