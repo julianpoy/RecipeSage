@@ -33,13 +33,13 @@ model Friendship {
 
 model Image {
   id            String             @id @default(uuid()) @db.Uuid
-  userId        String             @db.Uuid
+  userId        String?            @db.Uuid
   location      String?            @db.VarChar(255)
   key           String?            @db.VarChar(255)
   json          Json?
   createdAt     DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime           @updatedAt @db.Timestamptz(6)
-  user          User               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
   recipeImages  RecipeImage[]
   profileImages UserProfileImage[]
 
