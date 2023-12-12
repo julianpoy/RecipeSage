@@ -17,10 +17,9 @@
 
     {{ 'pages.myProfile.setup.name' | translate }}
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.myProfile.name' | translate }}
-      </ion-label>
       <ion-input
+        label="{{ 'pages.myProfile.name' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="myProfile.name"
         (ngModelChange)="updatedProfileFields.name = myProfile.name"
       ></ion-input>
@@ -30,10 +29,9 @@
 
     {{ 'pages.myProfile.setup2' | translate }}
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.myProfile.handle' | translate }}
-      </ion-label>
       <ion-input
+        label="{{ 'pages.myProfile.handle' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="myProfile.handle"
         (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput();"
       ></ion-input>
@@ -78,24 +76,22 @@
           </h3>
         </ion-item>
         <ion-item class="username-edit" *ngIf="revealNameInput">
-          <ion-label position="stacked">
-            {{ 'pages.myProfile.name' | translate }}
-          </ion-label>
           <ion-input
+            label="{{ 'pages.myProfile.name' | translate }}"
+            labelPlacement="stacked"
             [(ngModel)]="myProfile.name"
             (ngModelChange)="updatedProfileFields.name = myProfile.name"
           ></ion-input>
         </ion-item>
         <ion-item *ngIf="!revealHandleInput" lines="none">
           <h5 class="handle-preview" (click)="revealHandleInput = true">
-            @{{ myProfile.handle }} <ion-icon name="pencil"></ion-icon>
+            &commat;{{ myProfile.handle }} <ion-icon name="pencil"></ion-icon>
           </h5>
         </ion-item>
         <ion-item class="handle-edit" *ngIf="revealHandleInput">
-          <ion-label position="stacked">
-            {{ 'pages.myProfile.handle' | translate }}
-          </ion-label>
           <ion-input
+            label="{{ 'pages.myProfile.handle' | translate }}"
+            labelPlacement="stacked"
             [(ngModel)]="myProfile.handle"
             (ngModelChange)="updatedProfileFields.handle = myProfile.handle; handleInput()"
           ></ion-input>
@@ -124,11 +120,11 @@
           <ion-toggle
             [(ngModel)]="accountInfo.enableProfile"
             (ngModelChange)="updatedProfileFields.enableProfile = accountInfo.enableProfile; markAsDirty();"
-            slot="start"
-          ></ion-toggle>
-          <ion-label class="ion-text-wrap">
-            {{ 'pages.myProfile.enable' | translate }}
-          </ion-label>
+          >
+            <div class="ion-text-wrap">
+              {{ 'pages.myProfile.enable' | translate }}
+            </div>
+          </ion-toggle>
         </ion-item>
 
         <div style="display: flex">

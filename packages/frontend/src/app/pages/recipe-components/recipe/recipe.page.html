@@ -22,11 +22,11 @@
     <ion-item lines="none">
       <ion-thumbnail
         class="ion-margin-top"
-        *ngIf="recipe.images && recipe.images.length > 0"
+        *ngIf="recipe.recipeImages.length"
         slot="start"
         (click)="openImageViewer()"
       >
-        <img src="{{ recipe.images[0].location }}" />
+        <img src="{{ sortedRecipeImages()[0].image.location }}" />
       </ion-thumbnail>
 
       <ion-label>
@@ -250,88 +250,41 @@
       </ion-item>
     </div>
 
-    <ion-item
-      *ngIf="recipe.folder !== 'inbox'"
-      class="labels ion-text-wrap ion-margin-top"
-      lines="none"
-    >
-      <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
-      <ion-label class="section-title">
-        <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
-      </ion-label>
-    </ion-item>
+    <div *ngIf="recipe.folder !== 'inbox'">
+      <ion-item class="labels ion-text-wrap ion-margin-top" lines="none">
+        <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
+        <ion-label class="section-title">
+          <p>{{ 'pages.recipeDetails.labels' | translate }}</p>
+        </ion-label>
+      </ion-item>
 
-    <ion-item *ngIf="recipe.id && !recipe.isOwner" lines="none">
-      <p class="ion-text-wrap">
-        {{ 'pages.recipeDetails.mustSaveBeforeLabelling' | translate }}
-      </p>
-    </ion-item>
+      <div class="label-group-container ion-padding-start ion-margin-start">
+        <div class="label-group" *ngIf="recipeLabelsForGroupId(null).length">
+          <ion-label *ngIf="labelGroupIds.length">
+            <p>{{ 'pages.recipeDetails.labels.uncatLabels' | translate }}</p>
+          </ion-label>
 
-    <div
-      class="dropdownSelect ion-margin-start ion-margin-end"
-      *ngIf="recipe.folder !== 'inbox' && recipe.isOwner"
-    >
-      <div class="labels">
-        <span class="label" *ngFor="let label of selectedLabels">
-          <button>
-            <ion-icon
-              class="delete-label"
-              (click)="deleteLabel(labelObjectsByTitle[label])"
-              name="trash"
-              slot="start"
-            ></ion-icon>
-          </button>
-          {{ label }}
-        </span>
-      </div>
+          <div>
+            <ion-chip
+              *ngFor="let recipeLabel of recipeLabelsForGroupId(null); trackBy: recipeLabelTrackBy"
+            >
+              {{recipeLabel.label.title}}
+            </ion-chip>
+          </div>
+        </div>
+        <div class="label-group" *ngFor="let labelGroupId of labelGroupIds">
+          <ion-label>
+            <p>{{labelGroupById[labelGroupId].title}}</p>
+          </ion-label>
 
-      <input
-        [(ngModel)]="pendingLabel"
-        (click)="toggleAutocomplete(true); $event.stopPropagation();"
-        (keyup.enter)="labelInputEnter($event)"
-        placeholder="Create or select label"
-        autocomplete="off"
-        #labelInputField
-        id="labelInputField"
-      />
-      <div class="autocomplete" *ngIf="showAutocomplete">
-        <button
-          class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) === -1 && existingLabels.indexOf(pendingLabel) === -1"
-          (click)="addLabel(pendingLabel)"
-        >
-          <ion-item class="suggestion-inner" button>
-            <ion-label>
-              {{ pendingLabel }}
-              <p>
-                {{ 'pages.recipeDetails.labels.clickToCreate' | translate }}
-              </p>
-            </ion-label>
-          </ion-item>
-        </button>
-        <button
-          class="suggestion"
-          *ngIf="pendingLabel && pendingLabel.length > 0 && selectedLabels.indexOf(pendingLabel) > -1"
-        >
-          <ion-item class="suggestion-inner" button>
-            <ion-label>
-              {{ pendingLabel }}
-              <p>{{ 'pages.recipeDetails.labels.alreadyAdded' | translate }}</p>
-            </ion-label>
-          </ion-item>
-        </button>
-        <button
-          class="suggestion"
-          *ngFor="let label of existingLabels | labelAutocompleteFilter:pendingLabel+selectedLabels.join():pendingLabel:selectedLabels"
-          (click)="addLabel(label)"
-        >
-          <ion-item class="suggestion-inner" button>
-            <ion-label>
-              {{ label }}
-              <p>{{ 'pages.recipeDetails.labels.clickToAdd' | translate }}</p>
-            </ion-label>
-          </ion-item>
-        </button>
+          <div>
+            <ion-chip
+              *ngFor="let recipeLabel of recipeLabelsForGroupId(labelGroupId)"
+            >
+              {{recipeLabel.label.title}}
+            </ion-chip>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -375,7 +328,7 @@
     </div>
 
     <div
-      *ngIf="recipe && recipe.id && !recipe.isOwner && isLoggedIn"
+      *ngIf="recipe && recipe.id && recipe.userId !== me?.id && isLoggedIn"
       class="ion-padding"
     >
       <ion-item lines="none" class="ion-no-padding">
@@ -392,7 +345,7 @@
     </div>
 
     <div
-      *ngIf="recipe && recipe.id && !recipe.isOwner && !isLoggedIn"
+      *ngIf="recipe && recipe.id && recipe.userId !== me?.id && !isLoggedIn"
       class="ion-padding"
     >
       <ion-item lines="none" class="ion-no-padding">
@@ -422,7 +375,7 @@
     </ion-item>
 
     <ion-row
-      *ngIf="recipe.folder === 'main' && recipe.isOwner"
+      *ngIf="recipe.folder === 'main' && recipe.userId === me?.id"
       class="action-buttons ion-justify-content-around"
     >
       <ion-col class="ion-text-center" size="auto">

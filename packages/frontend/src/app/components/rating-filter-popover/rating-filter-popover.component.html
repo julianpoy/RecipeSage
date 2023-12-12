@@ -10,25 +10,26 @@
   <ion-list *ngIf="ratingFilter">
     <ion-item lines="none">
       <ion-checkbox
-        slot="start"
+        labelPlacement="end"
+        justify="start"
         [checked]="ratingFilter.includes(null)"
         (ionChange)="toggle(null)"
-      ></ion-checkbox>
-      <ion-label>
+      >
         {{ "components.ratingFilter.unrated" | translate }}
-      </ion-label>
+      </ion-checkbox>
     </ion-item>
 
     <ion-item lines="none" *ngFor="let possibleRating of possibleRatings">
       <ion-checkbox
-        slot="start"
+        labelPlacement="end"
+        justify="start"
         [checked]="ratingFilter.includes(possibleRating)"
         (ionChange)="toggle(possibleRating)"
-      ></ion-checkbox>
-
-      <ion-label>
-        <rating [rating]="possibleRating"></rating>
-      </ion-label>
+      >
+        <div style="display: flex">
+          <rating [rating]="possibleRating"></rating>&nbsp;
+        </div>
+      </ion-checkbox>
     </ion-item>
   </ion-list>
 </ion-content>

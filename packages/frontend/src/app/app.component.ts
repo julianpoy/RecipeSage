@@ -25,7 +25,7 @@ import {
   GlobalPreferenceKey,
 } from "~/services/preferences.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import {
   FeatureFlagKeys,
   FeatureFlagService,
@@ -175,19 +175,18 @@ export class AppComponent {
   }
 
   initEventListeners() {
-    this.events.subscribe("recipe:created", () => {
-      this.loadInboxCount();
-    });
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => {
+        this.loadInboxCount();
+      },
+    );
 
-    this.events.subscribe("recipe:updated", () => {
-      this.loadInboxCount();
-    });
-
-    this.events.subscribe("recipe:deleted", () => {
-      this.loadInboxCount();
-    });
-
-    this.events.subscribe("auth", () => {
+    this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
       this.loadInboxCount();

@@ -2,24 +2,71 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { getHTTPStatusCodeFromError } from "@trpc/server/http";
 import * as Sentry from "@sentry/node";
 import { router } from "./trpc";
+import { createContext } from "./context";
+import { TRPCError } from "@trpc/server";
 import { getRecipes } from "./procedures/recipes/getRecipes";
 import { searchRecipes } from "./procedures/recipes/searchRecipes";
 import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
 import { sendAssistantMessage } from "./procedures/assistant/sendAssistantMessage";
 import { getAssistantMessages } from "./procedures/assistant/getAssistantMessages";
-import { createContext } from "./context";
-import { TRPCError } from "@trpc/server";
+import { getLabels } from "./procedures/labels/getLabels";
+import { getLabelGroups } from "./procedures/labelGroups/getLabelGroups";
+import { createLabelGroup } from "./procedures/labelGroups/createLabelGroup";
+import { createLabel } from "./procedures/labels/createLabel";
+import { deleteLabel } from "./procedures/labels/deleteLabel";
+import { deleteLabelGroup } from "./procedures/labelGroups/deleteLabelGroup";
+import { updateLabelGroup } from "./procedures/labelGroups/updateLabelGroup";
+import { updateLabel } from "./procedures/labels/updateLabel";
+import { createRecipe } from "./procedures/recipes/createRecipe";
+import { updateRecipe } from "./procedures/recipes/updateRecipe";
+import { getRecipe } from "./procedures/recipes/getRecipe";
+import { deleteRecipe } from "./procedures/recipes/deleteRecipe";
+import { getMe } from "./procedures/users/getMe";
 
-export * from "./types/queryTypes";
+export * from "./types/assistantMessageSummary";
+export * from "./types/labelGroupSummary";
+export * from "./types/labelSummary";
+export * from "./types/recipeSummary";
+export * from "./types/recipeSummaryLite";
+export * from "./types/userPublic";
+
 export * from "./services/search"; // Legacy while old backend still needs it
 export * from "./services/capabilities"; // Legacy while old backend still needs it
 
 const appRouter = router({
+  labelGroups: router({
+    createLabelGroup,
+    getLabelGroups,
+    updateLabelGroup,
+    deleteLabelGroup,
+  }),
+  labels: router({
+    createLabel,
+    getLabels,
+    updateLabel,
+    deleteLabel,
+  }),
+  recipes: router({
+    createRecipe,
+    getRecipe,
+    updateRecipe,
+    deleteRecipe,
+    getRecipes,
+    searchRecipes,
+    getSimilarRecipes,
+  }),
+  assistant: router({
+    sendAssistantMessage,
+    getAssistantMessages,
+  }),
+  users: router({
+    getMe,
+  }),
+
+  // TODO: Legacy compat remove
   getRecipes,
   searchRecipes,
   getSimilarRecipes,
-  sendAssistantMessage,
-  getAssistantMessages,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({

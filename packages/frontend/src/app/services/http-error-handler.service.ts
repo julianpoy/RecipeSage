@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { AppRouter } from "@recipesage/trpc";
+import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";
 import { AxiosError } from "axios";
 

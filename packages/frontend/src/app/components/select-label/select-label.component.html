@@ -1,0 +1,49 @@
+<div>
+  <ion-item (click)="selectedLabel = undefined" *ngIf="selectedLabel" button>
+    <ion-icon name="pricetag" slot="start"></ion-icon>
+    <ion-label>
+      <h2>
+        {{ selectedLabel.title }}
+      </h2>
+      <p>
+        {{ "components.selectLabel.change" | translate }}
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <div *ngIf="!selectedLabel">
+    <ion-searchbar
+      (ionInput)="onSearchInputChange($event)"
+      placeholder="{{ 'components.selectLabel.search' | translate }}"
+      autocomplete="off"
+    ></ion-searchbar>
+    <div class="ion-padding-start ion-padding-end">
+      <div class="results-list-container" *ngIf="searchText.length">
+        <div class="results-list">
+          <ion-item
+            *ngFor="let label of results; trackBy: labelTrackBy"
+            (click)="selectLabel(label)"
+            button
+          >
+            <ion-icon name="pricetag" slot="start"></ion-icon>
+            <ion-label>
+              <h2>
+                {{ label.title }}
+              </h2>
+              <p>{{ "components.selectLabel.select" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <!-- Searching for label which does not exist -->
+          <ion-item *ngIf="results.length === 0 && searchText.length > 0">
+            <ion-icon name="folder-open" slot="start"></ion-icon>
+            <ion-label>
+              {{
+                "components.selectLabel.null" | translate: { name: searchText }
+              }}
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

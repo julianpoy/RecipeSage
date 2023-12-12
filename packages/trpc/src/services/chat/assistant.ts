@@ -10,7 +10,7 @@ import { initBuildRecipe } from "./chatFunctions";
 import {
   AssistantMessageSummary,
   assistantMessageSummary,
-} from "../../types/queryTypes";
+} from "../../types/assistantMessageSummary";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 

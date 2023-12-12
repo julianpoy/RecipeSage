@@ -24,23 +24,22 @@ export const initBuildRecipe = (
       const recipe: Prisma.RecipeUncheckedCreateInput = {
         userId,
         fromUserId: null,
-        title: typeof args.title === "string" ? args.title : null,
-        description: null,
+        title: typeof args.title === "string" ? args.title : "Unnamed",
+        description: "",
         folder: "main",
         source: "RecipeSage Cooking Assistant",
-        url: null,
+        url: "",
         rating: null,
-        yield: typeof args.yield === "string" ? args.yield : null,
-        activeTime:
-          typeof args.activeTime === "string" ? args.activeTime : null,
-        totalTime: typeof args.totalTime === "string" ? args.totalTime : null,
+        yield: typeof args.yield === "string" ? args.yield : "",
+        activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
+        totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
         ingredients: Array.isArray(args.ingredients)
           ? args.ingredients.join("\n")
-          : null,
+          : "",
         instructions: Array.isArray(args.instructions)
           ? args.instructions.join("\n")
-          : null,
-        notes: null,
+          : "",
+        notes: "",
       };
 
       result.push(recipe);

@@ -19,7 +19,7 @@
     "@capacitor/core": "5.5.1",
     "@capacitor/ios": "5.5.1",
     "@elastic/elasticsearch": "~8.10.0",
-    "@ionic/angular": "^7.5.5",
+    "@ionic/angular": "^7.5.7",
     "@julianpoy/recipe-clipper": "^3.0.1",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-translate/core": "^14.0.0",

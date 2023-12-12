@@ -6,7 +6,7 @@ import { linkifyStr } from "~/utils/linkify";
 import { Message, MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { Recipe } from "../../../services/recipe.service";
@@ -70,7 +70,7 @@ export class MessageThreadPage {
       this,
     );
 
-    events.subscribe("application:multitasking:resumed", () => {
+    events.subscribe(EventName.ApplicationMultitaskingResumed, () => {
       if (!this.isViewLoaded) return;
 
       this.loadMessages().then(

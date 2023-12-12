@@ -18,10 +18,8 @@
   <!--</ion-item>-->
 
   <ion-item lines="full">
-    <ion-label>
-      {{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}
-    </ion-label>
     <ion-select
+      label="{{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.StartOfWeek]"
       (ngModelChange)="savePreferences();"
     >

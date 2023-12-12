@@ -81,7 +81,7 @@ ion-badge {
   grid-template-columns: var(--image-size) auto;
   height: calc(var(--image-size) + calc(var(--padding) * 2));
   overflow: hidden;
-  margin-left: 16px;
+  padding-left: 8px;
   cursor: pointer;
 
   &:hover {

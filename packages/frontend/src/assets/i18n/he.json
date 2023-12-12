@@ -223,11 +223,7 @@
   "pages.recipeDetails.noNotes": "אין הערות",
 
   "pages.recipeDetails.labels": "תוויות",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "ניתן להוסיף תוויות רק לאחר שמירת המתכון",
-
-  "pages.recipeDetails.labels.clickToCreate": "יצירת תווית",
-  "pages.recipeDetails.labels.alreadyAdded": "תווית כבר קיימת",
-  "pages.recipeDetails.labels.clickToAdd": "הוספת תווית",
+  "pages.recipeDetails.labels.uncatLabels": "כללי",
 
   "pages.recipeDetails.created": "נוצר",
   "pages.recipeDetails.updated": "עודכן לאחרונה",
@@ -250,11 +246,6 @@
 
   "pages.recipeDetails.delete.header": "אישור מחיקה",
   "pages.recipeDetails.delete.message": "פעולה זו תמחק לצמיתות את המתכון ללא יכולת שיחזור.",
-
-  "pages.recipeDetails.enterLabelWarning": "יש להכניס תווית וללחוץ Enter כדי לתייג את המתכון",
-
-  "pages.recipeDetails.deleteLabel.header": "אישור הסרת תווית",
-  "pages.recipeDetails.deleteLabel.message": "פעולה זו תמחק את התווית  \"{{title}}\" מהמתכון.",
 
   "pages.recipeDetails.cloned": "המתכון נשמר",
   "pages.recipeDetails.similar": "מתכונים דומים באוסף שלך",
@@ -386,22 +377,67 @@
 
   "pages.labels.title": "תוויות שלי - ניהול",
   "pages.labels.selectionModeTitle": "{{count}} נבחרו",
-  "pages.labels.subtitle": "יש {{count}} תויות. יש ללחוץ על התווית כדי לראות.",
+
+  "pages.labels.label.sectionTitle": "התוויות שלך",
+  "pages.labels.label.sectionDescription": "יש לך {{count}} תוויות בסך הכל. לחץ על תווית לצפייה.",
   "pages.labels.label.recipeCount": "{{count}} מתכונים",
+  "pages.labels.label.group": "קטגוריה: {{title}}",
+  "pages.labels.label.noGroup": "אין קטגוריה",
   "pages.labels.label.createdAt": "תאריך הוספה {{dateString}}",
   "pages.labels.label.selected": "נבחרו",
-
-  "pages.labels.nullState.1": "אין תוויות עדיין.",
-  "pages.labels.nullState.2": "ניתן להוסיף תוויות רק בדף המתכון.",
-  "pages.labels.nullState.3": "תווית קיימת כל עוד היא משוייכת למתכון אחד לפחות.",
+  "pages.labels.label.nullState.1": "עדיין אין לך תוויות.",
+  "pages.labels.label.nullState.2": "לחץ על הלחצן + כדי ליצור תווית חדשה.",
 
   "pages.labels.modal.delete.header": "אישור מחיקה",
   "pages.labels.modal.delete.message": "פעולה זו תמחק לצמיתות את התוויות ללא יכולת שיחזור. ימחקו התוויות הבאות: {{labelTitles}}",
+
+  "pages.labels.group.sectionTitle": "קטגוריות התווית שלך",
+  "pages.labels.group.sectionDescription": "יש לך בסך הכל {{count}} קטגוריות תוויות. לחץ על קטגוריה כדי לערוך.",
+  "pages.labels.group.labelCount": "{{count}} תוויות שייכות לקטגוריה זו",
+  "pages.labels.group.createdAt": "תאריך הוספה {{dateString}}",
+  "pages.labels.group.nullState.1": "עדיין אין לך קטגוריות של תוויות.",
+  "pages.labels.group.nullState.2": "לחץ על הלחצן + כדי ליצור קטגוריית תווית חדשה.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "תווית חדשה או קטגוריית תווית",
+  "pages.newLabelItemModal.categoryTitle": "קטגוריית תווית חדשה",
+  "pages.newLabelItemModal.labelTitle": "תווית חדשה",
+
+  "pages.newLabelItemModal.label": "צור תווית",
+  "pages.newLabelItemModal.labelDescription": "ניתן לצרף תוויות למתכונים כדי לארגן ולסנן אותם מאוחר יותר. כמה דוגמאות תווית נפוצות הן \"ארוחת בוקר\", \"קינוח\" ו\"צמחוני\"",
+  "pages.newLabelItemModal.group": "צור קטגוריית תווית",
+  "pages.newLabelItemModal.groupDescription": "ניתן להשתמש בקטגוריות תוויות כדי לארגן תוויות לקבוצות, כגון \"ארוחה\" או \"דיאטה\". לדוגמה, תוכל לשים את התוויות \"ארוחת בוקר\", \"צהריים\" ו\"ארוחת ערב\" תחת קטגוריית תווית בשם \"ארוחה\". כל קטגוריה תוצג בנפרד בעת עריכת מתכון.",
+
+  "pages.newLabelItemModal.labelTitleInput": "שם התווית",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "הזן שם תווית",
+  "pages.newLabelItemModal.labelTitleInputHint": "אנשים רבים מתחילים תוויות פשוטות כמו \"ארוחת בוקר\", \"קינוח\" או \"צמחוני\"",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "נהל את קטגוריית התווית",
+  "pages.manageLabelGroupModal.groupTitle": "שם קטגוריית התווית",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "הזן את שם קטגוריית התווית",
+  "pages.manageLabelGroupModal.groupTitleHint": "אנשים רבים מתחילים עם \"ארוחה\", \"דיאטה\" או \"מטבח\"",
+  "pages.manageLabelGroupModal.warn": "הזהיר אותי כשאני לא מוסיף",
+  "pages.manageLabelGroupModal.warnDescription": "כאשר מופעל, תקבל אזהרה אם תשמור מתכון ללא תווית בקטגוריה זו מצורפת",
+  "pages.manageLabelGroupModal.labels": "בחר תוויות",
+  "pages.manageLabelGroupModal.labelsHint": "התוויות שנבחרו יקובצו תחת קטגוריה זו. תווית נתונה יכולה להשתייך לקטגוריה אחת לכל היותר בכל פעם.",
+  "pages.manageLabelGroupModal.labels.noItems": "אין תוויות לא מסווגות",
+  "pages.manageLabelGroupModal.labels.search": "חפש תווית",
+
+  "pages.manageLabelGroupModal.conflict": "שְׁגִיאָה",
+  "pages.manageLabelGroupModal.conflictMessage": "קטגוריית תווית עם כותרת זו כבר קיימת",
+
+  "pages.manageLabelGroupModal.delete.header": "אשר את מחיקת קטגוריית התווית",
+  "pages.manageLabelGroupModal.delete.message": "קטגוריית התווית \"{{title}}\" תימחק. הערה: פעולה זו לא תשפיע על אף תוויות בקטגוריה זו.",
 
   "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "ניהול תווית: {{name}}",
   "pages.manageLabelModal.recipeCount": "מתוייג ב {{count}} מתכונים",
+  "pages.manageLabelModal.group": "הוקצתה לקטגוריית התוויות: {{title}}",
+  "pages.manageLabelModal.noGroup": "לא מוקצה לקטגוריית תווית",
   "pages.manageLabelModal.createdAt": "פורסם: {{dateString}}",
   "pages.manageLabelModal.warning": "הערה: פעולות אלה לא ניתנות לביטול",
   "pages.manageLabelModal.view": "צפייה בכל המתכונים",
@@ -636,8 +672,10 @@
   "pages.editRecipe.input.instructions": "הוראות הכנה",
   "pages.editRecipe.input.notes": "הערות",
   "pages.editRecipe.input.rating": "דירוג",
+  "pages.editRecipe.input.labels": "תוויות",
+  "pages.editRecipe.input.uncatLabels": "כללי",
+  "pages.editRecipe.addLabel.otherGroup": "זה קיים בקטגוריה אחרת",
 
-  "pages.editRecipe.labelNotice": "ניתן להוסיף תוויות מיד לאחר יצירת המתכון.",
   "pages.editRecipe.save": "שמירה",
   "pages.editRecipe.create": "יצירה",
 
@@ -650,6 +688,9 @@
   "pages.editRecipe.clip.invalidUrl": "טעות: יש לספק URL תקין",
   "pages.editRecipe.clip.loading": "המתנה...",
   "pages.editRecipe.clip.failed": "כישלון למשוך את פרטי המתכון מהכתובת שסופקה",
+
+  "pages.editRecipe.missingLabelGroup.title": "חסרה קבוצת תוויות",
+  "pages.editRecipe.missingLabelGroup.message": "ציינת שיש לדרוש את קבוצת התווית \"{{groupName}}\". אתה יכול לבטל את זה דרך דף התוויות שלי.",
 
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "כתובת URL של תמונה כדי להוסיפה למתכון",
@@ -1056,17 +1097,14 @@
   "pages.addProfileItem.type.allRecipes": "כל המתכונים",
 
   "pages.addProfileItem.change": "לחיצה כדי לשנות",
-  "pages.addProfileItem.select": "בחירה",
-  "pages.addProfileItem.select.recipe": "מתכון",
-  "pages.addProfileItem.select.label": "תווית",
+  "pages.addProfileItem.selectRecipe": "בחר מתכון",
+  "pages.addProfileItem.selectLabel": "בחר תווית",
 
   "pages.addProfileItem.selectVisibility": "מי רשאי לראות?",
   "pages.addProfileItem.selectVisibility.public": "כל אחד (ציבורי)",
   "pages.addProfileItem.selectVisibility.friends": "חברים שלי בלבד",
-
-  "pages.addProfileItem.visibility": "נראות:",
-  "pages.addProfileItem.visibility.public": "ציבורי",
-  "pages.addProfileItem.visibility.friends": "חברים בלבד",
+  "pages.addProfileItem.visibilityPublic": "נראות: ציבורית",
+  "pages.addProfileItem.visibilityFriends": "נראות: חברים בלבד",
 
   "pages.addProfileItem.itemTitle": "כותרת",
   "pages.addProfileItem.tos": "על ידי הוספת פריט זה, הינך מסכים/מה למדיניות השיתוף של RecipeSage",
@@ -1202,7 +1240,17 @@
 
   "components.selectLabel.change": "שינוי",
   "components.selectLabel.select": "בחירה",
+  "components.selectLabel.search": "הקלד כדי לחפש תווית...",
   "components.selectLabel.null": "אין תוויות בשם \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "components.selectMultipleItems.null": "אין תוצאות עבור {{searchText}}",
+  "components.selectMultipleItems.select": "לחץ כדי לבחור",
+  "components.selectMultipleItems.create": "לחץ כדי ליצור",
+  "components.selectMultipleItems.noItems": "אין פריטים",
+  "components.selectMultipleItems.alreadyAdded": "כבר נוסף",
+  "components.selectMultipleItems.searchPlaceholder": "חפש פריט להוספה",
 
   "====== Components.SelectMeal ======": "",
 
@@ -1212,6 +1260,7 @@
 
   "components.selectRecipe.change": "שינוי",
   "components.selectRecipe.select": "בחירה",
+  "components.selectRecipe.search": "הקלד כדי לחפש מתכון...",
   "components.selectRecipe.searching": "חיפוש של \"{{searchText}}\"...",
   "components.selectRecipe.null": "אין תוצאות עבור \"{{searchText}}\"",
 
@@ -1303,7 +1352,8 @@
   "generic.confirm": "אישור",
   "generic.close": "סגירה",
   "generic.save": "שמירה",
-  "generic.okay": "Okay",
+  "generic.okay": "בסדר",
+  "generic.ignore": "להתעלם",
 
   "====== Trailing Comma Placeholder ======": ""
 }

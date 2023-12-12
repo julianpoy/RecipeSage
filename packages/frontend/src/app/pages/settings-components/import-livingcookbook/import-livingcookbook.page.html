@@ -38,27 +38,33 @@
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label
-      >{{ 'pages.importLivingCookbook.step1.excludeImages' | translate
-      }}</ion-label
+    <ion-checkbox
+      labelPlacement="end"
+      justify="start"
+      [(ngModel)]="excludeImages"
     >
-    <ion-checkbox [(ngModel)]="excludeImages"></ion-checkbox>
+      {{ 'pages.importLivingCookbook.step1.excludeImages' | translate }}
+    </ion-checkbox>
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label
-      >{{ 'pages.importLivingCookbook.step1.includeStock' | translate
-      }}</ion-label
+    <ion-checkbox
+      labelPlacement="end"
+      justify="start"
+      [(ngModel)]="includeStockRecipes"
     >
-    <ion-checkbox [(ngModel)]="includeStockRecipes"></ion-checkbox>
+      {{ 'pages.importLivingCookbook.step1.includeStock' | translate }}
+    </ion-checkbox>
   </ion-item>
 
   <ion-item lines="none" class="option">
-    <ion-label
-      >{{ 'pages.importLivingCookbook.step1.includeTechniques' | translate
-      }}</ion-label
+    <ion-checkbox
+      labelPlacement="end"
+      justify="start"
+      [(ngModel)]="includeTechniques"
     >
-    <ion-checkbox [(ngModel)]="includeTechniques"></ion-checkbox>
+      {{ 'pages.importLivingCookbook.step1.includeTechniques' | translate }}
+    </ion-checkbox>
   </ion-item>
 
   <br />

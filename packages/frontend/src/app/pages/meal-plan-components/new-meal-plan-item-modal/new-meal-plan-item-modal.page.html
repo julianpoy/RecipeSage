@@ -30,10 +30,9 @@
   <div [ngSwitch]="inputType">
     <div *ngSwitchCase="'manualEntry'">
       <ion-item>
-        <ion-label position="floating">
-          {{ 'pages.newMealPlanItemModal.itemTitle' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.newMealPlanItemModal.itemTitle' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="title"
           type="text"
           autocapitalize="on"

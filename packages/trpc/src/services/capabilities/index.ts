@@ -2,6 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import * as moment from "moment";
 
 const CAPABILITY_GRACE_PERIOD = 7;
+export const MULTIPLE_IMAGES_UNLOCKED_LIMIT = 10;
 
 export enum Capabilities {
   HighResImages = "highResImages",
