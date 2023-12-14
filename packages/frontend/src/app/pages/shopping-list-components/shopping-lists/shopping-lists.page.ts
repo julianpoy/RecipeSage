@@ -10,6 +10,7 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 
 import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shopping-list-modal.page";
+import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
 
 @Component({
   selector: "page-shopping-lists",
@@ -74,6 +75,13 @@ export class ShoppingListsPage {
   async newShoppingList() {
     const modal = await this.modalCtrl.create({
       component: NewShoppingListModalPage,
+    });
+    modal.present();
+  }
+
+  async showIgnoreModal() {
+    const modal = await this.modalCtrl.create({
+      component: ShoppingListIgnoreModalPage,
     });
     modal.present();
   }

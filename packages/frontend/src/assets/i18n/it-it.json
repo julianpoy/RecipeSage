@@ -1064,12 +1064,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Liste della Spesa",
+  "pages.shoppingLists.editIgnore": "Modifica dell'elenco degli ignoranti",
   "pages.shoppingLists.created": "Creata {{date}}",
   "pages.shoppingLists.collaboration": "Collaboratori:",
   "pages.shoppingLists.createdBy": "Creatore {{name}}",
   "pages.shoppingLists.owner": "Sei il proprietario di questa lista",
   "pages.shoppingLists.nullState.1": "Non hai nessuna lista della spesa.",
   "pages.shoppingLists.nullState.2": "Per creare una lista della spesa, premi il pulsante più nell’angolo in basso.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Lista della spesa Elenco degli articoli da ignorare",
+  "pages.shoppingListIgnoreModal.description": "Le voci elencate qui saranno automaticamente escluse quando si aggiunge una ricetta a una lista della spesa. Questo è particolarmente utile per ingredienti come il sale, che probabilmente non è necessario aggiungere ogni volta che si aggiunge un elemento a una lista della spesa.",
+  "pages.shoppingListIgnoreModal.instructions": "Ogni voce deve essere sulla propria riga. Le voci corrispondono a un ingrediente se l'ingrediente contiene una parte qualsiasi della riga. Se si inserisce \"sale\", corrisponderà a \"1 cucchiaio di sale marino finemente macinato\".",
+  "pages.shoppingListIgnoreModal.label": "Ignorare l'elenco",
+  "pages.shoppingListIgnoreModal.placeholder": "Parole chiave da ignorare, ognuna sulla propria riga",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1353,6 +1362,7 @@
   "generic.save": "Salva",
   "generic.okay": "Okay",
   "generic.ignore": "Ignorare",
+  "generic.options": "Opzioni",
 
   "====== Trailing Comma Placeholder ======": ""
 }

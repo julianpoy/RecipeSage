@@ -1065,12 +1065,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Список покупок",
+  "pages.shoppingLists.editIgnore": "Редагування списку ігнорування",
   "pages.shoppingLists.created": "Створений {{date}}",
   "pages.shoppingLists.collaboration": "Спільно з:",
   "pages.shoppingLists.createdBy": "Створювач {{name}}",
   "pages.shoppingLists.owner": "Ви володієте цим списком",
   "pages.shoppingLists.nullState.1": "У Вас немає списків покупок.",
   "pages.shoppingLists.nullState.2": "Щоб створити список покупок, натисніть кнопку плюс у нижньому кутку.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Список покупок Список ігнорування позицій",
+  "pages.shoppingListIgnoreModal.description": "Перелічені тут позиції будуть автоматично виключені під час додавання рецепта до списку покупок. Це особливо зручно для таких інгредієнтів, як сіль, які, швидше за все, не потрібно додавати щоразу, коли ви додаєте позицію до списку покупок.",
+  "pages.shoppingListIgnoreModal.instructions": "Кожна відповідь повинна бути в окремому рядку. Введені дані будуть відповідати інгредієнту, якщо цей інгредієнт містить будь-яку частину рядка. Якщо ви введете \"сіль\", це буде \"1 ст.л. морської солі дрібного помелу\".",
+  "pages.shoppingListIgnoreModal.label": "Список ігнорування",
+  "pages.shoppingListIgnoreModal.placeholder": "Ключові слова, які слід ігнорувати, кожен у своєму рядку",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1363,7 @@
   "generic.save": "Зберегти",
   "generic.okay": "Гаразд",
   "generic.ignore": "Ігнорувати",
+  "generic.options": "Параметри",
 
   "====== Trailing Comma Placeholder ======": ""
 }
