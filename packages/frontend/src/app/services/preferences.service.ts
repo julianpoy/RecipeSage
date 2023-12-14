@@ -69,6 +69,7 @@ export enum ShoppingListPreferenceKey {
   PreferDelete = "ShoppingList.preferDelete",
   GroupSimilar = "ShoppingList.groupSimilar",
   GroupCategories = "ShoppingList.groupCategories",
+  IgnoreItemTitles = "ShoppingList.ignoreItemTitles",
 }
 
 export interface AppPreferenceTypes {
@@ -107,6 +108,7 @@ export interface AppPreferenceTypes {
   [ShoppingListPreferenceKey.PreferDelete]: boolean;
   [ShoppingListPreferenceKey.GroupSimilar]: boolean;
   [ShoppingListPreferenceKey.GroupCategories]: boolean;
+  [ShoppingListPreferenceKey.IgnoreItemTitles]: string;
 }
 
 @Injectable({
@@ -147,6 +149,7 @@ export class PreferencesService {
     [ShoppingListPreferenceKey.PreferDelete]: false,
     [ShoppingListPreferenceKey.GroupSimilar]: true,
     [ShoppingListPreferenceKey.GroupCategories]: true,
+    [ShoppingListPreferenceKey.IgnoreItemTitles]: "",
   };
 
   constructor() {

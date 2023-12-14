@@ -1065,12 +1065,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Shopping Lists",
+  "pages.shoppingLists.editIgnore": "Edit Item Ignore List",
   "pages.shoppingLists.created": "Created {{date}}",
   "pages.shoppingLists.collaboration": "In collaboration with:",
   "pages.shoppingLists.createdBy": "Created by {{name}}",
   "pages.shoppingLists.owner": "You own this list",
   "pages.shoppingLists.nullState.1": "You have no shopping lists.",
   "pages.shoppingLists.nullState.2": "To create a shopping list, press the plus button in the bottom corner.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Shopping List Item Ignore List",
+  "pages.shoppingListIgnoreModal.description": "Items listed here will be automatically excluded when adding a recipe to a shopping list. This is particularly handy for ingredients such as salt, which you likely don't need added every time you add an item to a shopping list.",
+  "pages.shoppingListIgnoreModal.instructions": "Each entry should be on it's own line. Entries will match an ingredient if the ingredient contains any part of the line. If you enter \"salt\", it will match \"1 tbsp sea salt finely ground\".",
+  "pages.shoppingListIgnoreModal.label": "Ignore list",
+  "pages.shoppingListIgnoreModal.placeholder": "Keywords to ignore, each on their own line",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1363,7 @@
   "generic.save": "Save",
   "generic.okay": "Okay",
   "generic.ignore": "Ignore",
+  "generic.options": "Options",
 
   "====== Trailing Comma Placeholder ======": ""
 }

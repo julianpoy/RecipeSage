@@ -1065,12 +1065,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "רשימת קניות",
+  "pages.shoppingLists.editIgnore": "ערוך רשימת התעלמות פריטים",
   "pages.shoppingLists.created": "נוצר {{date}}",
   "pages.shoppingLists.collaboration": "בשיתוף עם:",
   "pages.shoppingLists.createdBy": "נוצר על ידי {{name}}",
   "pages.shoppingLists.owner": "רשימה בבעלותך",
   "pages.shoppingLists.nullState.1": "איך לך רשימת קניות.",
   "pages.shoppingLists.nullState.2": "ליצירת רשימת קניות, לחץ על כפתור הפלוס בפינה התחתונה.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "רשימת התעלמות של פריטים ברשימת קניות",
+  "pages.shoppingListIgnoreModal.description": "ערכים הרשומים כאן לא ייכללו אוטומטית בעת הוספת מתכון לרשימת קניות. זה שימושי במיוחד עבור מרכיבים כגון מלח, שסביר להניח שלא תצטרך להוסיף אותם בכל פעם שאתה מוסיף פריט לרשימת קניות.",
+  "pages.shoppingListIgnoreModal.instructions": "כל ערך צריך להיות בשורה משלו. ערכים יתאימו למרכיב אם המרכיב מכיל חלק כלשהו מהשורה. אם תזין \"מלח\", זה יתאים ל\"1 כף מלח ים טחון דק\".",
+  "pages.shoppingListIgnoreModal.label": "התעלם מהרשימה",
+  "pages.shoppingListIgnoreModal.placeholder": "מילות מפתח שיש להתעלם מהם, כל אחת בשורה שלה",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1363,7 @@
   "generic.save": "שמירה",
   "generic.okay": "בסדר",
   "generic.ignore": "להתעלם",
+  "generic.options": "אפשרויות",
 
   "====== Trailing Comma Placeholder ======": ""
 }

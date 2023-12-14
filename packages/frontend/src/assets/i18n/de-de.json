@@ -1063,12 +1063,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Einkaufslisten",
+  "pages.shoppingLists.editIgnore": "Artikel-Ignorierliste bearbeiten",
   "pages.shoppingLists.created": "Erstellt am {{date}}",
   "pages.shoppingLists.collaboration": "In Zusammenarbeit mit:",
   "pages.shoppingLists.createdBy": "Erstellt von {{name}}",
   "pages.shoppingLists.owner": "Diese Liste gehört dir",
   "pages.shoppingLists.nullState.1": "Du hast keine Einkaufslisten.",
   "pages.shoppingLists.nullState.2": "Um eine Einkaufsliste zu erstellen, drücke auf die Plus-Taste in der unteren Ecke.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Einkaufsliste Artikel ignorieren",
+  "pages.shoppingListIgnoreModal.description": "Die hier aufgelisteten Einträge werden automatisch ausgeschlossen, wenn ein Rezept einer Einkaufsliste hinzugefügt wird. Dies ist besonders praktisch für Zutaten wie Salz, die Sie wahrscheinlich nicht jedes Mal hinzufügen müssen, wenn Sie einen Artikel zu einer Einkaufsliste hinzufügen.",
+  "pages.shoppingListIgnoreModal.instructions": "Jeder Eintrag sollte in einer eigenen Zeile stehen. Die Einträge passen zu einer Zutat, wenn die Zutat einen Teil der Zeile enthält. Wenn Sie \"Salz\" eingeben, wird es mit \"1 EL Meersalz fein gemahlen\" übereinstimmen.",
+  "pages.shoppingListIgnoreModal.label": "Liste ignorieren",
+  "pages.shoppingListIgnoreModal.placeholder": "Zu ignorierende Schlüsselwörter, jedes in seiner eigenen Zeile",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1352,6 +1361,7 @@
   "generic.save": "Speichern",
   "generic.okay": "OK",
   "generic.ignore": "Ignorieren Sie",
+  "generic.options": "Optionen",
 
   "====== Trailing Comma Placeholder ======": ""
 }
