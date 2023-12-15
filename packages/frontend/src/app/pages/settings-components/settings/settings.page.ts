@@ -9,11 +9,13 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap, UtilService } from "~/services/util.service";
+import { PreferencesService } from "~/services/preferences.service";
 import {
-  PreferencesService,
+  AppTheme,
   GlobalPreferenceKey,
+  PreferencesSync,
   SupportedLanguages,
-} from "~/services/preferences.service";
+} from "@recipesage/util";
 import {
   FeatureFlagService,
   FeatureFlagKeys,
@@ -27,16 +29,12 @@ import { FontSizeModalComponent } from "../../../components/font-size-modal/font
 import { MessagingService } from "../../../services/messaging.service";
 import { UserService } from "../../../services/user.service";
 
-const APP_THEME_LOCALSTORAGE_KEY = "theme";
-
 @Component({
   selector: "page-settings",
   templateUrl: "settings.page.html",
   styleUrls: ["settings.page.scss"],
 })
 export class SettingsPage {
-  appTheme = localStorage.getItem(APP_THEME_LOCALSTORAGE_KEY) || "default";
-
   preferences = this.preferencesService.preferences;
   preferenceKeys = GlobalPreferenceKey;
 
@@ -130,6 +128,66 @@ export class SettingsPage {
     }
   }
 
+  async togglePreferencesSync(event: any) {
+    const value = event.detail.checked
+      ? PreferencesSync.Enabled
+      : PreferencesSync.Disabled;
+
+    if (value === PreferencesSync.Disabled) {
+      this.preferences[GlobalPreferenceKey.PreferencesSync] = value;
+      this.preferencesService.save();
+      return;
+    }
+
+    const header = await this.translate
+      .get("pages.settings.preferencesSync.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.settings.preferencesSync.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const local = await this.translate
+      .get("pages.settings.preferencesSync.local")
+      .toPromise();
+    const remote = await this.translate
+      .get("pages.settings.preferencesSync.remote")
+      .toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+          handler: () => {
+            window.location.reload();
+          },
+        },
+        {
+          text: local,
+          handler: () => {
+            this.preferences[GlobalPreferenceKey.PreferencesSync] = value;
+            this.preferencesService.save();
+          },
+        },
+        {
+          text: remote,
+          handler: () => {
+            this.preferences[GlobalPreferenceKey.PreferencesSync] = value;
+            // Must persist preferences local-only first so that the sync setting is preserved
+            this.preferencesService.save(true);
+            // Load cloud settings into our local, (they are not saved to localstorage yet)
+            this.preferencesService.load();
+            // Persist cloud-downloaded settings to localstorage
+            this.preferencesService.save(true);
+          },
+        },
+      ],
+    });
+
+    alert.present();
+  }
+
   async toggleOfflineCache() {
     if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
       const message = await this.translate
@@ -176,7 +234,6 @@ export class SettingsPage {
         {
           text: del,
           handler: () => {
-            localStorage.removeItem(APP_THEME_LOCALSTORAGE_KEY);
             this.preferencesService.resetToDefaults();
           },
         },
@@ -221,17 +278,14 @@ export class SettingsPage {
     this.fontSizeChanged();
   }
 
-  private applyAppTheme() {
-    // Change in localStorage
-    localStorage.setItem(APP_THEME_LOCALSTORAGE_KEY, this.appTheme);
+  themeChanged() {
+    this.preferencesService.save();
 
-    // Change in current session
-    const bodyClasses = document.body.className.replace(/theme-\S*/, "");
-    document.body.className = `${bodyClasses} theme-${this.appTheme}`;
+    this.utilService.setAppTheme(this.preferences[GlobalPreferenceKey.Theme]);
   }
 
   async appThemeChanged() {
-    if (this.appTheme === "black") {
+    if (this.preferences[GlobalPreferenceKey.Theme] === "black") {
       const header = await this.translate
         .get("pages.settings.oled.header")
         .toPromise();
@@ -248,13 +302,14 @@ export class SettingsPage {
           {
             text: cancel,
             handler: () => {
-              this.appTheme = "default";
+              this.preferences[GlobalPreferenceKey.Theme] = AppTheme.Default;
+              this.themeChanged();
             },
           },
           {
             text: okay,
             handler: () => {
-              this.applyAppTheme();
+              this.themeChanged();
             },
           },
         ],
@@ -262,7 +317,7 @@ export class SettingsPage {
 
       alert.present();
     } else {
-      this.applyAppTheme();
+      this.themeChanged();
     }
   }
 

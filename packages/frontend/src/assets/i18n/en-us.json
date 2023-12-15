@@ -970,10 +970,16 @@
   "pages.settings.language.default": "Browser Default",
 
   "pages.settings.fontSize": "Font Size",
+  "pages.settings.preferencesSync": "Sync Preferences Between Devices",
   "pages.settings.reset": "Reset All Preferences",
 
   "pages.settings.offline.loading": "Fetching all recipes, please wait...",
   "pages.settings.offline.error": "There was an error while syncing. Please report this.",
+
+  "pages.settings.preferencesSync.header": "Sync Preferences",
+  "pages.settings.preferencesSync.message": "You must select whether you want to override the synced settings in the cloud with the local settings on this device, or override the settings on this device with the settings from the cloud.",
+  "pages.settings.preferencesSync.local": "Keep Local Settings",
+  "pages.settings.preferencesSync.remote": "Keep Cloud Settings",
 
   "pages.settings.resetPrefs.header": "Reset Preferences Warning",
   "pages.settings.resetPrefs.message": "Resetting your preferences will set all app preferences back to their default state. This includes preferences set via menus on the home page, meal plans page, shopping list page, etc. Note: This only affects this device.",

@@ -1,7 +1,11 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { API_BASE_URL } from "../../environments/environment";
-import { SupportedFontSize, SupportedLanguages } from "./preferences.service";
+import {
+  AppTheme,
+  SupportedFontSize,
+  SupportedLanguages,
+} from "@recipesage/util";
 import { NavController } from "@ionic/angular";
 
 export interface RecipeTemplateModifiers {
@@ -315,6 +319,11 @@ export class UtilService {
 
   setFontSize(fontSize: SupportedFontSize) {
     window.document.documentElement.style.fontSize = fontSize;
+  }
+
+  setAppTheme(theme: AppTheme) {
+    const bodyClasses = document.body.className.replace(/theme-\S*/, "");
+    document.body.className = `${bodyClasses} theme-${theme}`;
   }
 
   removeToken(): void {

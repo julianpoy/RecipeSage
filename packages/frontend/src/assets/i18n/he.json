@@ -970,10 +970,16 @@
   "pages.settings.language.default": "ברירת מחדל דפדפן",
 
   "pages.settings.fontSize": "גודל טקסט",
+  "pages.settings.preferencesSync": "סנכרון העדפות בין מכשירים",
   "pages.settings.reset": "איתחול",
 
   "pages.settings.offline.loading": "Fetching all recipes, please wait...",
   "pages.settings.offline.error": "אירעה שגיאה במהלך הסנכרון. יש לשלוח אליי מייל.",
+
+  "pages.settings.preferencesSync.header": "העדפות סנכרון",
+  "pages.settings.preferencesSync.message": "עליך לבחור אם ברצונך לעקוף את ההגדרות המסונכרנות בענן עם ההגדרות המקומיות במכשיר זה, או לעקוף את ההגדרות במכשיר זה עם ההגדרות מהענן.",
+  "pages.settings.preferencesSync.local": "שמור על הגדרות מקומיות",
+  "pages.settings.preferencesSync.remote": "שמור על הגדרות ענן",
 
   "pages.settings.resetPrefs.header": "Reset Preferences Warning",
   "pages.settings.resetPrefs.message": "איפוס ההעדפות שלך יחזיר את כל העדפות האפליקציה למצב ברירת המחדל שלהן. זה כולל העדפות שנקבעו באמצעות תפריטים בדף הבית, דף תכניות ארוחות, דף רשימת קניות וכו'. הערה: זה משפיע רק על מכשיר זה.",

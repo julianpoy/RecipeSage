@@ -150,7 +150,15 @@
     <app-root></app-root>
 
     <script>
-      const storedTheme = localStorage.getItem("theme");
+      let storedTheme = "default";
+      try {
+        // Backwards compat
+        storedTheme = localStorage.getItem("theme") || storedTheme;
+
+        storedTheme =
+          JSON.parse(localStorage.getItem("preferences"))["global.theme"] ||
+          storedTheme;
+      } catch (e) {}
       switch (storedTheme) {
         case "black":
         case "dark":

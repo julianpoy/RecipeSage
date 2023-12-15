@@ -10,10 +10,8 @@ import { ShoppingListService } from "~/services/shopping-list.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UserService } from "~/services/user.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import {
-  PreferencesService,
-  ShoppingListPreferenceKey,
-} from "../../../services/preferences.service";
+import { PreferencesService } from "../../../services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "page-shopping-list-ignore-modal",

@@ -16,10 +16,8 @@ import {
 } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
-import {
-  PreferencesService,
-  ShoppingListPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 import { getShoppingListItemGroupings } from "@recipesage/util";
 
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";

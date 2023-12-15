@@ -3,10 +3,8 @@ import { PopoverController } from "@ionic/angular";
 import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
-import {
-  PreferencesService,
-  ShoppingListPreferenceKey,
-} from "../../services/preferences.service";
+import { PreferencesService } from "../../services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "select-ingredients",

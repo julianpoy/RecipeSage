@@ -22,6 +22,8 @@ import { updateRecipe } from "./procedures/recipes/updateRecipe";
 import { getRecipe } from "./procedures/recipes/getRecipe";
 import { deleteRecipe } from "./procedures/recipes/deleteRecipe";
 import { getMe } from "./procedures/users/getMe";
+import { updatePreferences } from "./procedures/users/updatePreferences";
+import { getPreferences } from "./procedures/users/getPreferences";
 
 export * from "./types/assistantMessageSummary";
 export * from "./types/labelGroupSummary";
@@ -61,6 +63,8 @@ const appRouter = router({
   }),
   users: router({
     getMe,
+    updatePreferences,
+    getPreferences,
   }),
 
   // TODO: Legacy compat remove
