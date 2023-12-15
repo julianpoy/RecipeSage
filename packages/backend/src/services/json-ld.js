@@ -3,6 +3,7 @@ import * as SharedUtils from "@recipesage/util";
 export const recipeToJSONLD = (recipe) => ({
   "@context": "http://schema.org",
   "@type": "Recipe",
+  identifier: recipe.id,
   datePublished: new Date(recipe.createdAt).toISOString(),
   description: recipe.description,
   image: (recipe.images || []).map((image) => image.location),
