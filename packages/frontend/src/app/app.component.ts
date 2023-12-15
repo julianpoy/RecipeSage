@@ -20,10 +20,8 @@ import { RecipeService } from "~/services/recipe.service";
 import { MessagingService } from "~/services/messaging.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UserService } from "~/services/user.service";
-import {
-  PreferencesService,
-  GlobalPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { GlobalPreferenceKey, SupportedLanguages } from "@recipesage/util";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { EventName, EventService } from "~/services/event.service";
 import {
@@ -86,6 +84,7 @@ export class AppComponent {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
     const language = languagePref || this.utilService.getAppBrowserLang();
+    this.translate.setDefaultLang(SupportedLanguages.EN_US);
     this.translate.use(language);
     this.utilService.setHtmlBrowserLang(language);
 

@@ -64,7 +64,7 @@
     <ion-item lines="inset">
       <ion-icon name="brush" slot="start"></ion-icon>
       <ion-select
-        [(ngModel)]="appTheme"
+        [(ngModel)]="preferences[preferenceKeys.Theme]"
         (ngModelChange)="appThemeChanged();"
         label="{{ 'pages.settings.theme' | translate }}"
       >
@@ -107,7 +107,7 @@
     </ion-item>
 
     <ion-item
-      lines="full"
+      lines="inset"
       class="cursor-pointer"
       (click)="showFontSizePopover()"
       button
@@ -121,6 +121,17 @@
         slot="end"
         class="custom-select-icon"
       ></ion-icon>
+    </ion-item>
+    <ion-item lines="inset">
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      <ion-toggle
+        [checked]="preferences[preferenceKeys.PreferencesSync] === 'enabled'"
+        (ionChange)="togglePreferencesSync($event)"
+      >
+        <div class="ion-text-wrap">
+          {{ 'pages.settings.preferencesSync' | translate }}
+        </div>
+      </ion-toggle>
     </ion-item>
     <ion-item lines="inset" (click)="resetPreferences()" button>
       <ion-icon name="close" slot="start"></ion-icon>

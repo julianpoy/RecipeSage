@@ -970,7 +970,13 @@
   "pages.settings.language.default": "Згідно з браузером",
 
   "pages.settings.fontSize": "Розмір шрифту",
+  "pages.settings.preferencesSync": "Налаштування синхронізації між пристроями",
   "pages.settings.reset": "Скинути всі параметри",
+
+  "pages.settings.preferencesSync.header": "Налаштування синхронізації",
+  "pages.settings.preferencesSync.message": "Ви повинні вибрати, чи хочете ви замінити синхронізовані налаштування в хмарі локальними налаштуваннями на цьому пристрої, чи замінити налаштування на цьому пристрої налаштуваннями з хмари.",
+  "pages.settings.preferencesSync.local": "Зберегти локальні налаштування",
+  "pages.settings.preferencesSync.remote": "Зберігайте налаштування хмари",
 
   "pages.settings.offline.loading": "Отримання всіх рецептів, зачекайте...",
   "pages.settings.offline.error": "Під час синхронізації сталася помилка. Будь ласка, повідомте про це.",

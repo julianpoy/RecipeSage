@@ -357,6 +357,7 @@ model User {
   handle                    String?                    @unique(map: "Users_handle_uk") @db.VarChar(255)
   enableProfile             Boolean                    @default(false)
   profileVisibility         String?                    @db.VarChar(255)
+  preferences               Json?
   fcmTokens                 FCMToken[]
   incomingFriendships       Friendship[]               @relation("Friendships_friendIdToUsers")
   outgoingFriendships       Friendship[]               @relation("Friendships_userIdToUsers")

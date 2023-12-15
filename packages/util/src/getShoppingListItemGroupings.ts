@@ -1,4 +1,5 @@
 import { ShoppingListItem } from "@prisma/client";
+import { ShoppingListSortOptions } from "./preferences";
 
 interface SortableItem {
   title: string;
@@ -8,7 +9,7 @@ interface SortableItem {
 const itemSort = (
   a: SortableItem,
   b: SortableItem,
-  sortBy: "createdAt" | "-createdAt" | "-title",
+  sortBy: ShoppingListSortOptions,
 ): number => {
   switch (sortBy) {
     case "createdAt": {
@@ -46,7 +47,7 @@ const itemSort = (
 const groupAndSort = <T extends SortableItem>(
   items: T[],
   keyName: keyof T,
-  sortBy: "createdAt" | "-createdAt" | "-title",
+  sortBy: ShoppingListSortOptions,
 ): { [key: string]: T[] } => {
   const itemsGroupedByKey = items.reduce(
     (acc, item) => {
@@ -91,7 +92,7 @@ interface GroupableShoppingListItemsByGroupAndCategory {
 // Result will be items grouped by group/category/groupcategory
 export const getShoppingListItemGroupings = (
   items: GroupableShoppingListItem[],
-  sortBy: "createdAt" | "-createdAt" | "-title",
+  sortBy: ShoppingListSortOptions,
 ): {
   items: GroupableShoppingListItem[];
   groupTitles: string[];
