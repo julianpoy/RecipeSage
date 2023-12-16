@@ -39,7 +39,7 @@ jobs:
           FILESYSTEM_STORAGE_PATH: ~/project/rsdata
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
-      - image: postgres:9.6.9
+      - image: postgres:16.1
         environment:
           POSTGRES_USER: chefbook
           POSTGRES_PASSWORD: admin
