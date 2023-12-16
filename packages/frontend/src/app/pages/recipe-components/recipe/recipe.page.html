@@ -250,7 +250,7 @@
       </ion-item>
     </div>
 
-    <div *ngIf="recipe.folder !== 'inbox'">
+    <div *ngIf="recipe.folder !== 'inbox' && this.recipe.recipeLabels.length">
       <ion-item class="labels ion-text-wrap ion-margin-top" lines="none">
         <ion-icon name="pricetag" slot="start" size="large"></ion-icon>
         <ion-label class="section-title">
