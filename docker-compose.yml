@@ -74,8 +74,14 @@ services:
     command: "--data-dir /data --api-key=recipesage_dev --enable-cors"
   pushpin:
     image: julianpoy/pushpin:2023-09-17
+    entrypoint: /bin/sh -c
+    command:
+      [
+        'sed -i "s/sig_key=changeme/sig_key=$$GRIP_KEY/" /etc/pushpin/pushpin.conf && echo "* $${TARGET},over_http" > /etc/pushpin/routes && pushpin --merge-output',
+      ]
     environment:
-      - target=backend:3000
+      - GRIP_KEY=changeme
+      - TARGET=backend:3000
   postgres:
     image: postgres:16.1
     command:
