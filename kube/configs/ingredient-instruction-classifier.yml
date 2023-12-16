@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: rs-ingredient-instruction-classifier
-          image: julianpoy/ingredient-instruction-classifier:1.1.0
+          image: julianpoy/ingredient-instruction-classifier:1.4.9
           ports:
             - containerPort: 3000
           env:

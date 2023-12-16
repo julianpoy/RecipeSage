@@ -73,11 +73,11 @@ services:
       - typesense-data:/data
     command: "--data-dir /data --api-key=recipesage_dev --enable-cors"
   pushpin:
-    image: fanout/pushpin:1.27.0
+    image: julianpoy/pushpin:2023-09-17
     environment:
       - target=backend:3000
   postgres:
-    image: postgres
+    image: postgres:16.1
     command:
       - "postgres"
       - "-c"
@@ -89,7 +89,7 @@ services:
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
   browserless:
-    image: browserless/chrome:1.60.0-chrome-stable
+    image: browserless/chrome:1.61.0-puppeteer-21.4.1
     environment:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10
@@ -103,7 +103,7 @@ services:
       - FUNCTION_ENABLE_INCOGNITO_MODE=true
       - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
-    image: julianpoy/ingredient-instruction-classifier:latest
+    image: julianpoy/ingredient-instruction-classifier:1.4.9
 
 volumes:
   typesense-data:
