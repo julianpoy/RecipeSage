@@ -198,16 +198,16 @@ export const exportToPDF = async (
     NotoSans: {
       normal: path.join(
         __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-Regular.ttf",
+        "../../../fonts/Noto_Sans/NotoSans-Regular.ttf"
       ),
       bold: path.join(__dirname, "../../../fonts/Noto_Sans/NotoSans-Bold.ttf"),
       italics: path.join(
         __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-Italic.ttf",
+        "../../../fonts/Noto_Sans/NotoSans-Italic.ttf"
       ),
       bolditalics: path.join(
         __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-BoldItalic.ttf",
+        "../../../fonts/Noto_Sans/NotoSans-BoldItalic.ttf"
       ),
     },
   };
