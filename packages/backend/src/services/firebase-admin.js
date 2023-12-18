@@ -6,7 +6,7 @@ const init = async () => {
   try {
     const serviceAccount = JSON.parse(
       await fs.readFile(
-        join(__dirname, "../config/firebase-credentials.json"),
+        join(__dirname, "../../../../.credentials/firebase.json"),
         "utf-8",
       ),
     );

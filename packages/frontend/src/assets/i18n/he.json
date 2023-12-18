@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "עדכון מתכון",
   "pages.editRecipe.title.new": "מתכון חדש",
-  "pages.editRecipe.autoclip": "מילוי אוטומטי של שדות מתוך URL (beta)",
+  "pages.editRecipe.autoclip": "מילוי אוטומטי של שדות מתוך URL",
+  "pages.editRecipe.scan": "סריקה מתמונה (beta)",
 
   "pages.editRecipe.input.title": "כותרת / שם מתכון",
   "pages.editRecipe.input.description": "תיאור",

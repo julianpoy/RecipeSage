@@ -22,7 +22,7 @@ spec:
                 name: rs-api-env
           volumeMounts:
             - name: firebase-credentials
-              mountPath: /app/Backend/src/config/firebase-credentials.json
+              mountPath: /app/.credentials/firebase.json
               subPath: firebase-credentials.json
       volumes:
         - name: firebase-credentials

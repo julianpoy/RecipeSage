@@ -74,7 +74,7 @@ spec:
               value: gpt-3.5-turbo-1106
           volumeMounts:
             - name: firebase-credentials
-              mountPath: /app/packages/backend/src/config/firebase-credentials.json
+              mountPath: /app/.credentials/firebase.json
               subPath: firebase-credentials.json
       volumes:
         - name: firebase-credentials

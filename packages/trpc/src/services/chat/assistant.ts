@@ -130,7 +130,7 @@ export class Assistant {
 
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
-    const response = await this.openAiHelper.getChatResponse(context, [
+    const response = await this.openAiHelper.getChatResponseWithTools(context, [
       initBuildRecipe(assistantUser.id, recipes),
     ]);
 

@@ -41,4 +41,19 @@ export class ImageService {
       errorHandlers,
     );
   }
+
+  createFromB64(
+    payload: {
+      data: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
+    return this.httpService.requestWithWrapper<Image>(
+      "images/b64",
+      "POST",
+      payload,
+      undefined,
+      errorHandlers,
+    );
+  }
 }
