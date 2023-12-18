@@ -41,6 +41,7 @@ export class EditRecipePage {
   defaultBackHref: string;
 
   recipeId?: string;
+  originalTitle?: string;
   // TODO: Clean this up
   fullRecipe?: Recipe;
   recipe: Partial<BaseRecipe> & { id?: string } = {
@@ -127,6 +128,7 @@ export class EditRecipePage {
         this.fullRecipe = response.data;
         this.recipe = response.data;
         this.images = response.data.images;
+        this.originalTitle = response.data.title;
       }
     }
   }
@@ -265,7 +267,81 @@ export class EditRecipePage {
 
     this.markAsClean();
 
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
+    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
+  }
+
+  async _saveCheckConflict() {
+    if (!this.recipe.title) return;
+
+    const loading = this.loadingService.start();
+
+    const conflictingRecipes = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getRecipesByTitle.query({
+        title: this.recipe.title,
+      }),
+    );
+
+    const uniqueTitle = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getUniqueRecipeTitle.query({
+        title: this.recipe.title,
+        ignoreIds: this.recipe.id ? [this.recipe.id] : undefined,
+      }),
+    );
+
+    loading.dismiss();
+    if (!conflictingRecipes || !uniqueTitle) return;
+
+    // We do not want to warn user if they haven't modified the title
+    const hasTitleChanged = this.originalTitle !== this.recipe.title;
+    if (
+      hasTitleChanged &&
+      conflictingRecipes.some((recipe) => recipe.id !== this.recipe.id)
+    ) {
+      const header = await this.translate
+        .get("pages.editRecipe.conflict.title")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.editRecipe.conflict.message", {
+          title: this.recipe.title,
+          uniqueTitle,
+        })
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const rename = await this.translate
+        .get("pages.editRecipe.conflict.rename")
+        .toPromise();
+      const ignore = await this.translate
+        .get("pages.editRecipe.conflict.ignore")
+        .toPromise();
+
+      const confirmPrompt = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: cancel,
+            role: "cancel",
+          },
+          {
+            text: rename,
+            handler: () => {
+              this.recipe.title = uniqueTitle;
+              this._save();
+            },
+          },
+          {
+            text: ignore,
+            handler: () => {
+              this._save();
+            },
+          },
+        ],
+      });
+
+      await confirmPrompt.present();
+    } else {
+      this._save();
+    }
   }
 
   async save() {
@@ -307,7 +383,7 @@ export class EditRecipePage {
           {
             text: okay,
             handler: () => {
-              this._save();
+              this._saveCheckConflict();
             },
           },
         ],
@@ -315,7 +391,7 @@ export class EditRecipePage {
 
       await confirmPrompt.present();
     } else {
-      return this._save();
+      return this._saveCheckConflict();
     }
   }
 

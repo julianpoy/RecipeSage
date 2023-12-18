@@ -25,6 +25,8 @@ import { getMe } from "./procedures/users/getMe";
 import { updatePreferences } from "./procedures/users/updatePreferences";
 import { getPreferences } from "./procedures/users/getPreferences";
 import { getRecipeFromOCR } from "./procedures/ml/getRecipeFromOCR";
+import { getRecipesByTitle } from "./procedures/recipes/getRecipesByTitle";
+import { getUniqueRecipeTitle } from "./procedures/recipes/getUniqueRecipeTitle";
 
 export * from "./types/assistantMessageSummary";
 export * from "./types/labelGroupSummary";
@@ -57,6 +59,8 @@ const appRouter = router({
     getRecipes,
     searchRecipes,
     getSimilarRecipes,
+    getRecipesByTitle,
+    getUniqueRecipeTitle,
   }),
   assistant: router({
     sendAssistantMessage,

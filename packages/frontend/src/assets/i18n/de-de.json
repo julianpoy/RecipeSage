@@ -692,6 +692,11 @@
   "pages.editRecipe.missingLabelGroup.title": "Fehlende Etikettengruppe",
   "pages.editRecipe.missingLabelGroup.message": "Sie haben angegeben, dass die Etikettengruppe \"{{groupName}}\" erforderlich sein soll. Sie können dies auf der Seite \"Meine Labels\" deaktivieren.",
 
+  "pages.editRecipe.conflict.title": "Titel duplizieren",
+  "pages.editRecipe.conflict.message": "Ein Rezept mit dem Titel \"{{title}}\" ist bereits in Ihrer Sammlung vorhanden. Sie können es trotzdem speichern oder das Rezept in \"{{uniqueTitle}}\" umbenennen.",
+  "pages.editRecipe.conflict.ignore": "Trotzdem speichern",
+  "pages.editRecipe.conflict.rename": "Umbenennen",
+
   "pages.editRecipe.addImage.header": "Bild über URL hinzufügen",
   "pages.editRecipe.addImage.message": "Gib eine Bild-URL ein, die dem Rezept hinzugefügt werden soll",
   "pages.editRecipe.addImage.placeholder": "Bild-URL",

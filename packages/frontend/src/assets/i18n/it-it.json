@@ -693,6 +693,11 @@
   "pages.editRecipe.missingLabelGroup.title": "Gruppo di etichette mancante",
   "pages.editRecipe.missingLabelGroup.message": "È stato specificato che il gruppo di etichette \"{{groupName}}\" deve essere obbligatorio. È possibile disattivarlo dalla pagina Le mie etichette.",
 
+  "pages.editRecipe.conflict.title": "Titolo duplicato",
+  "pages.editRecipe.conflict.message": "Una ricetta con il titolo \"{{title}}\" esiste già nella vostra collezione. Si può scegliere di salvare comunque, oppure di rinominare la ricetta in \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Salva comunque",
+  "pages.editRecipe.conflict.rename": "Rinominare",
+
   "pages.editRecipe.addImage.header": "Aggiungi immagine da URL",
   "pages.editRecipe.addImage.message": "Inserisci l’URL di un’immagine per aggiungerla alla ricetta",
   "pages.editRecipe.addImage.placeholder": "URL immagine",
