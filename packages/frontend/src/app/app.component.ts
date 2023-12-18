@@ -44,6 +44,9 @@ export class AppComponent {
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
 
+  // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
+  enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
+
   navList?: { id: string; title: string; icon: string; url: string }[];
 
   inboxCount?: number;

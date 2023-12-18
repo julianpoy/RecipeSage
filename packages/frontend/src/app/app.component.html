@@ -53,6 +53,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
+      [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
       }"
