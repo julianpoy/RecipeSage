@@ -6,6 +6,13 @@ import { initOCRFormatRecipe } from "../../services/chat/chatFunctions";
 import { Prisma } from "@prisma/client";
 import { ocrImageBuffer } from "../../services/ml/ocr";
 
+/**
+ * If OCR returns very little text, we're not going to get
+ * a meaningful result from ChatGPT. If returned text length is less
+ * than this number, processing will abort early.
+ */
+const OCR_MIN_VALID_TEXT = 20;
+
 const openAiHelper = new OpenAIHelper();
 
 export const getRecipeFromOCR = publicProcedure
@@ -30,6 +37,13 @@ export const getRecipeFromOCR = publicProcedure
 
     console.log("OCR results", stringifiedOCRResults);
 
+    if (stringifiedOCRResults.length < OCR_MIN_VALID_TEXT) {
+      throw new TRPCError({
+        message: "OCR did not return enough text to create a meaningful recipe",
+        code: "BAD_REQUEST",
+      });
+    }
+
     const recognizedRecipes: Prisma.RecipeUncheckedCreateInput[] = [];
     const gptFn = initOCRFormatRecipe(session.userId, recognizedRecipes);
     const gptFnName = gptFn.function.name;
@@ -41,7 +55,7 @@ export const getRecipeFromOCR = publicProcedure
         {
           role: "system",
           content:
-            "I have scanned a recipe via OCR and this array of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Here's the OCR text:\n\n" +
+            "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Here's the OCR text:\n\n" +
             stringifiedOCRResults,
         },
       ],
