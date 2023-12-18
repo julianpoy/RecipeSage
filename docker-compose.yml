@@ -34,6 +34,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./packages:/app/packages
+      - ./.credentials:/app/.credentials
     ports:
       - "3000:3000"
     command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma

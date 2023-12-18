@@ -101,6 +101,48 @@ router.post(
   }),
 );
 
+router.post(
+  "/b64",
+  joiValidator(
+    Joi.object({
+      body: Joi.object({
+        data: Joi.string().min(1),
+      }),
+    }),
+  ),
+  MiddlewareService.validateSession(["user"]),
+  wrapRequestWithErrorHandler(async (req, res) => {
+    const encodeInHighRes = await SubscriptionsService.userHasCapability(
+      res.locals.session.userId,
+      SubscriptionsService.Capabilities.HighResImages,
+    );
+
+    const buffer = Buffer.from(req.body.data, "base64");
+
+    let file;
+    try {
+      file = await writeImageBuffer(
+        ObjectTypes.RECIPE_IMAGE,
+        buffer,
+        encodeInHighRes,
+      );
+    } catch (e) {
+      e.status = 415;
+      Sentry.captureException(e);
+      throw e;
+    }
+
+    const image = await Image.create({
+      userId: res.locals.session.userId,
+      location: file.location,
+      key: file.key,
+      json: file,
+    });
+
+    res.status(200).send(image);
+  }),
+);
+
 router.get(
   "/link/:imageId",
   wrapRequestWithErrorHandler(async (req, res) => {

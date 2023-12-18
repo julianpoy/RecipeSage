@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Змінити рецепт",
   "pages.editRecipe.title.new": "Новий рецепт",
-  "pages.editRecipe.autoclip": "Автоматичне заповнення полів із URL-адреси (beta)",
+  "pages.editRecipe.autoclip": "Автоматичне заповнення полів із URL-адреси",
+  "pages.editRecipe.scan": "Сканування з фото (beta)",
 
   "pages.editRecipe.input.title": "Назва",
   "pages.editRecipe.input.description": "Описання",

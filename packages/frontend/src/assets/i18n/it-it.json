@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Modifica Ricetta",
   "pages.editRecipe.title.new": "Nuova Ricetta",
-  "pages.editRecipe.autoclip": "Autocompleta campi da un URL (beta)",
+  "pages.editRecipe.autoclip": "Autocompleta campi da un URL",
+  "pages.editRecipe.scan": "Scansione da foto (beta)",
 
   "pages.editRecipe.input.title": "Titolo",
   "pages.editRecipe.input.description": "Descrizione",

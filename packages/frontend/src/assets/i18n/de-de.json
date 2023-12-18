@@ -658,7 +658,8 @@
 
   "pages.editRecipe.title.edit": "Rezept bearbeiten",
   "pages.editRecipe.title.new": "Neues Rezept",
-  "pages.editRecipe.autoclip": "Automatisches Ausfüllen von Feldern aus einer URL (beta)",
+  "pages.editRecipe.autoclip": "Automatisches Ausfüllen von Feldern aus einer URL",
+  "pages.editRecipe.scan": "Scan vom Foto (beta)",
 
   "pages.editRecipe.input.title": "Name",
   "pages.editRecipe.input.description": "Beschreibung",

@@ -1,7 +1,9 @@
 import { OpenAI } from "openai";
-import { RunnableTools } from "openai/lib/RunnableFunction";
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { initBuildRecipe } from "./chatFunctions";
+import {
+  ChatCompletionMessageParam,
+  ChatCompletionToolChoiceOption,
+} from "openai/resources/chat/completions";
+import { RSRunnableFunction } from "./chatFunctions";
 
 export class OpenAIHelper {
   private openAi: OpenAI;
@@ -18,9 +20,36 @@ export class OpenAIHelper {
     });
   }
 
-  async getChatResponse(
+  async getJsonResponseWithTools(
     context: ChatCompletionMessageParam[],
-    tools: RunnableTools<[ReturnType<typeof initBuildRecipe>]>,
+    tools: RSRunnableFunction[],
+    toolChoice?: ChatCompletionToolChoiceOption,
+  ): Promise<ChatCompletionMessageParam[]> {
+    const runner = this.openAi.beta.chat.completions.runTools({
+      messages: context,
+      model: this.gptModel,
+      tools,
+      tool_choice: toolChoice,
+      response_format: {
+        type: "json_object",
+      },
+    });
+
+    await runner.done();
+
+    // Messages includes the context passed in for some reason. We only want to return new messages
+    const chats = runner.messages.slice(context.length);
+
+    console.log("messages", chats);
+
+    console.log("cost", await runner.totalUsage());
+
+    return chats;
+  }
+
+  async getChatResponseWithTools(
+    context: ChatCompletionMessageParam[],
+    tools: RSRunnableFunction[],
   ): Promise<ChatCompletionMessageParam[]> {
     const runner = this.openAi.beta.chat.completions.runTools({
       messages: context,
