@@ -213,15 +213,15 @@ model Recipe {
   userId            String             @db.Uuid
   fromUserId        String?            @db.Uuid
   title             String
-  description       String
-  yield             String
-  activeTime        String
-  totalTime         String
-  source            String
-  url               String
-  notes             String
-  ingredients       String
-  instructions      String
+  description       String             @default("")
+  yield             String             @default("")
+  activeTime        String             @default("")
+  totalTime         String             @default("")
+  source            String             @default("")
+  url               String             @default("")
+  notes             String             @default("")
+  ingredients       String             @default("")
+  instructions      String             @default("")
   folder            String             @db.VarChar(255)
   createdAt         DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
