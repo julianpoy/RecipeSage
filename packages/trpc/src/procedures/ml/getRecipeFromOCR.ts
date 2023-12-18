@@ -4,11 +4,11 @@ import { z } from "zod";
 import { OpenAIHelper } from "../../services/chat/openai";
 import { initOCRFormatRecipe } from "../../services/chat/chatFunctions";
 import { Prisma } from "@prisma/client";
-import { ocr } from "../../services/ml/ocr";
+import { ocrImageBuffer } from "../../services/ml/ocr";
 
 const openAiHelper = new OpenAIHelper();
 
-export const getOCR = publicProcedure
+export const getRecipeFromOCR = publicProcedure
   .input(
     z.object({
       image: z.string(),
@@ -23,7 +23,8 @@ export const getOCR = publicProcedure
       });
     }
 
-    const ocrResults = await ocr(input.image);
+    const imageBuffer = Buffer.from(input.image, "base64");
+    const ocrResults = await ocrImageBuffer(imageBuffer);
 
     const stringifiedOCRResults = ocrResults.join("\n");
 

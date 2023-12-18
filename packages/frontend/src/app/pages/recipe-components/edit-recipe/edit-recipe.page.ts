@@ -391,7 +391,7 @@ export class EditRecipePage {
     await loading.present();
 
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.ml.getOCR.mutate({
+      this.trpcService.trpc.ml.getRecipeFromOCR.mutate({
         image: capturedPhoto.base64String,
       }),
     );

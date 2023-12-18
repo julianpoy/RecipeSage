@@ -1,14 +1,13 @@
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { join } from "path";
 
-export const ocr = async (imageB64: string) => {
+export const ocrImageBuffer = async (imageBuffer: Buffer) => {
   const imageAnnotationClient = new ImageAnnotatorClient({
     keyFile: join(__dirname, "../../../../../.credentials/firebase.json"),
   });
 
-  const ocrResults = await imageAnnotationClient.documentTextDetection(
-    Buffer.from(imageB64, "base64"),
-  );
+  const ocrResults =
+    await imageAnnotationClient.documentTextDetection(imageBuffer);
 
   const text = ocrResults
     .map((el) => {
