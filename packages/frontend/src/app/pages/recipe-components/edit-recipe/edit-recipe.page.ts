@@ -368,8 +368,6 @@ export class EditRecipePage {
   }
 
   async scan() {
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Base64,
       source: CameraSource.Prompt,
@@ -377,10 +375,6 @@ export class EditRecipePage {
       quality: 100,
       allowEditing: true,
       width: 2160,
-      promptLabelHeader: "Photo of Recipe",
-      promptLabelCancel: cancel,
-      promptLabelPhoto: "From library",
-      promptLabelPicture: "Take a photo",
       webUseInput: true,
     });
 

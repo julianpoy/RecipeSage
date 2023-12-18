@@ -22,7 +22,6 @@
     "@elastic/elasticsearch": "~8.10.0",
     "@google-cloud/vision": "^4.0.2",
     "@ionic/angular": "^7.5.7",
-    "@ionic/pwa-elements": "^3.2.2",
     "@julianpoy/recipe-clipper": "^3.0.1",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-translate/core": "^14.0.0",
