@@ -693,6 +693,11 @@
   "pages.editRecipe.missingLabelGroup.title": "חסרה קבוצת תוויות",
   "pages.editRecipe.missingLabelGroup.message": "ציינת שיש לדרוש את קבוצת התווית \"{{groupName}}\". אתה יכול לבטל את זה דרך דף התוויות שלי.",
 
+  "pages.editRecipe.conflict.title": "כותרת כפולה",
+  "pages.editRecipe.conflict.message": "מתכון עם הכותרת \"{{title}}\" כבר קיים באוסף שלך. אתה יכול לבחור לשמור בכל מקרה, או שאתה יכול לבחור לשנות את שם המתכון ל-\"{{uniquetitle}}\".",
+  "pages.editRecipe.conflict.ignore": "שמור בכל מקרה",
+  "pages.editRecipe.conflict.rename": "שנה שם",
+
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "כתובת URL של תמונה כדי להוסיפה למתכון",
   "pages.editRecipe.addImage.placeholder": "כתובת URL של תמונה",

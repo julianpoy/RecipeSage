@@ -693,6 +693,11 @@
   "pages.editRecipe.missingLabelGroup.title": "Відсутня група етикеток",
   "pages.editRecipe.missingLabelGroup.message": "Ви вказали, що група міток \"{{groupName}}\" має бути обов'язковою. Ви можете вимкнути її на сторінці Мої мітки.",
 
+  "pages.editRecipe.conflict.title": "Дублікат заголовка",
+  "pages.editRecipe.conflict.message": "Рецепт з назвою \"{{title}}\" вже існує у вашій колекції. Ви можете зберегти його або перейменувати на \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Все одно врятуй",
+  "pages.editRecipe.conflict.rename": "Перейменувати",
+
   "pages.editRecipe.addImage.header": "Додавання зображення за URL-адресою",
   "pages.editRecipe.addImage.message": "Введіть URL-адресу зображення, яке потрібно додати до рецепту",
   "pages.editRecipe.addImage.placeholder": "URL зображення",
