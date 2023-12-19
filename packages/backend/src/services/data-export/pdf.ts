@@ -86,29 +86,33 @@ const recipeToSchema = async (
 
   const imageUrl = recipe.images[0]?.location;
   if (imageUrl && options?.includeImages) {
-    let buffer: Buffer;
-    if (process.env.NODE_ENV === "selfhost" && imageUrl.startsWith("/")) {
-      buffer = await fs.promises.readFile(imageUrl);
-    } else {
-      const response = await fetchURL(imageUrl);
-      buffer = await response.buffer();
-    }
+    try {
+      let buffer: Buffer;
+      if (process.env.NODE_ENV === "selfhost" && imageUrl.startsWith("/")) {
+        buffer = await fs.promises.readFile(imageUrl);
+      } else {
+        const response = await fetchURL(imageUrl);
+        buffer = await response.buffer();
+      }
 
-    schema.push({
-      columns: [
-        {
-          width: 100,
-          image: `data:image/jpeg;base64,${buffer.toString("base64")}`,
-          fit: [100, 100],
-        },
-        {
-          width: "auto",
-          stack: headerContent,
-          margin: [10, 10, 0, 0],
-        },
-      ],
-      margin: [0, 0, 0, 10],
-    });
+      schema.push({
+        columns: [
+          {
+            width: 100,
+            image: `data:image/jpeg;base64,${buffer.toString("base64")}`,
+            fit: [100, 100],
+          },
+          {
+            width: "auto",
+            stack: headerContent,
+            margin: [10, 10, 0, 0],
+          },
+        ],
+        margin: [0, 0, 0, 10],
+      });
+    } catch (e) {
+      schema.push(...headerContent);
+    }
   } else {
     schema.push(...headerContent);
   }
