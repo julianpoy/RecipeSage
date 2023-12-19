@@ -113,6 +113,11 @@ export const initOCRFormatRecipe = (
     function: (args) => {
       console.log("buildRecipe called with", args);
 
+      const parseIngredInstr = (text: any) => {
+        const value = text.value.replaceAll('\n', ' ').replaceAll(/\s\s+/g, ' ');
+        return text.isHeader ? `[${value}]` : value;
+      }
+
       const recipe: Prisma.RecipeUncheckedCreateInput = {
         userId,
         fromUserId: null,
@@ -127,10 +132,10 @@ export const initOCRFormatRecipe = (
         activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
         totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
         ingredients: Array.isArray(args.ingredients)
-          ? args.ingredients.join("\n")
+          ? args.ingredients.map((el) => parseIngredInstr(el)).join("\n")
           : "",
         instructions: Array.isArray(args.instructions)
-          ? args.instructions.join("\n")
+          ? args.instructions.map((el) => parseIngredInstr(el)).join("\n")
           : "",
         notes: typeof args.notes === "string" ? args.notes : "",
       };
@@ -168,15 +173,33 @@ export const initOCRFormatRecipe = (
         ingredients: {
           type: "array",
           items: {
-            type: "string",
-            description: "An ingredient required for the recipe",
+            type: "object",
+            properties: {
+              isHeader: {
+                type: "boolean",
+                description: "Mark if this entry is a header"
+              },
+              value: {
+                type: "string",
+                description: "An ingredient or ingredients section header for the recipe"
+              }
+            }
           },
         },
         instructions: {
           type: "array",
           items: {
-            type: "string",
-            description: "An instruction for the recipe",
+            type: "object",
+            properties: {
+              isHeader: {
+                type: "boolean",
+                description: "Mark if this entry is a header"
+              },
+              value: {
+                type: "string",
+                description: "An instruction or instructions section header for the recipe"
+              }
+            }
           },
         },
         notes: {
@@ -184,7 +207,7 @@ export const initOCRFormatRecipe = (
           description: "Any notes by the author.",
         },
       },
-      required: ["title", "ingredients", "instructions"],
+      required: ["title"],
     },
   },
 });

@@ -55,7 +55,7 @@ export const getRecipeFromOCR = publicProcedure
         {
           role: "system",
           content:
-            "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Here's the OCR text:\n\n" +
+            "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Only use text from the OCR text, do not invent anything. Headers are generally on their own line and often all caps. Here's the OCR text:\n\n" +
             stringifiedOCRResults,
         },
       ],
