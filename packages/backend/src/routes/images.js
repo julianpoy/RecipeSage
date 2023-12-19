@@ -86,7 +86,6 @@ router.post(
       );
     } catch (e) {
       e.status = 415;
-      Sentry.captureException(e);
       throw e;
     }
 
