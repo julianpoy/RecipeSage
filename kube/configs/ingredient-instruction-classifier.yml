@@ -25,11 +25,11 @@ spec:
               value: "1"
           resources:
             requests:
-              cpu: 200m
-              memory: 300Mi
+              cpu: 250m
+              memory: 700Mi
             limits:
               cpu: 1
-              memory: 700Mi
+              memory: 1000Mi
 ---
 apiVersion: v1
 kind: Service
