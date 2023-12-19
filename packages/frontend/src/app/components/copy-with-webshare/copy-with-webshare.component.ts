@@ -28,7 +28,7 @@ export class CopyWithWebshareComponent implements AfterViewInit {
   async webShare() {
     if (this.hasWebShareAPI) {
       try {
-        navigator.share({
+        await navigator.share({
           title: this.webshareTitle,
           text: this.webshareText,
           url: this.webshareURL,
