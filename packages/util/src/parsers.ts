@@ -1,4 +1,7 @@
-import fractionjs from "fraction.js";
+import * as FractionJSModule from "fraction.js";
+// Fix for https://github.com/rawify/Fraction.js/issues/72
+const fractionjs =
+  FractionJSModule as unknown as FractionJSModule.FractionConstructor;
 import { unitNames } from "./units";
 
 const fractionMatchers = {
@@ -178,7 +181,7 @@ export const parseIngredients = (
 
           for (let j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
-            const frac = new fractionjs(measurementParts[j].trim()).mul(scale);
+            const frac = fractionjs(measurementParts[j].trim()).mul(scale);
             let scaledMeasurement = frac.toString();
 
             // Preserve original fraction format if entered
