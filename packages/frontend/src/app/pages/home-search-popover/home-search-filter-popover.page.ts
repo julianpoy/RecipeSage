@@ -86,7 +86,7 @@ export class HomeSearchFilterPopoverPage {
       .reduce((acc, label) => {
         acc[label.labelGroup?.title || ungroupedTitle] ||= [];
         acc[label.labelGroup?.title || ungroupedTitle].push({
-          title: `${label.title} (${label._count.recipeLabels})`,
+          title: `${label.title} (${label.recipeLabels.length})`,
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1,
         });

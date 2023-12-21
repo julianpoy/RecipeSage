@@ -75,7 +75,7 @@
         {{label.title}}
         <p>
           {{ 'pages.labels.label.recipeCount' |
-          translate:{count:label._count.recipeLabels} }}<br />
+          translate:{count:label.recipeLabels.length} }}<br />
           <span *ngIf="label.labelGroup">
             {{ 'pages.labels.label.group' |
             translate:{title:label.labelGroup.title} }}
@@ -130,7 +130,7 @@
         {{labelGroup.title}}
         <p>
           {{ 'pages.labels.group.labelCount' |
-          translate:{count:labelGroup._count.labels} }}<br />
+          translate:{count:labelGroup.labels.length} }}<br />
           <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">
             {{ 'pages.labels.group.createdAt' |
             translate:{dateString:formatDate(labelGroup.createdAt)} }}

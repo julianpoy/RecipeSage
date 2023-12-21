@@ -7,9 +7,9 @@ export const labelGroupSummary = Prisma.validator<Prisma.LabelGroupArgs>()({
     warnWhenNotPresent: true,
     createdAt: true,
     updatedAt: true,
-    _count: {
+    labels: {
       select: {
-        labels: true,
+        labelGroupId: true,
       },
     },
   },
