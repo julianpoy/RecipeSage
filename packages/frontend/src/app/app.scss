@@ -15,8 +15,9 @@ ion-searchbar {
   }
 }
 
-ion-router-outlet.cookingToolbarOpen {
-  bottom: 60px;
+ion-router-outlet.cookingToolbarOpen,
+ion-menu.cookingToolbarOpen {
+  height: calc(100% - 60px);
 }
 
 .bar-button-default-md:hover:not(.disable-hover),
@@ -27,6 +28,14 @@ ion-router-outlet.cookingToolbarOpen {
 
 .big-icon {
   font-size: 40px;
+}
+
+.medium-icon {
+  font-size: 2em;
+}
+
+.eye-icon {
+  vertical-align: middle;
 }
 
 ion-popover,
@@ -111,7 +120,9 @@ ion-thumbnail {
       border-radius: 10px;
     }
     html:not([mode="ios"]) & .label {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
       border-radius: 2px;
     }
   }
@@ -128,7 +139,9 @@ ion-thumbnail {
   }
 
   .autocomplete {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(0, 0, 0, 0.24);
     max-width: 600px;
     max-height: 200px;
     overflow-y: auto;
@@ -170,6 +183,8 @@ ion-label[position="floating"] {
 ion-toast {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
+  /* Override button color, must be done this way because they don't otherwise allow you to... */
+  --ion-color-step-100: var(--ion-color-light);
 }
 
 ion-button.button-outline {
@@ -190,104 +205,4 @@ ion-button.button-outline {
   border: none;
   padding: 0;
   cursor: pointer;
-}
-
-/* Font size overrides */
-html,
-:host {
-  font-size: 1rem;
-}
-
-ion-item {
-  font-size: 1rem;
-
-  > h3 {
-    font-size: 1.375rem;
-  }
-}
-
-ion-list-header.md {
-  font-size: 0.875rem;
-}
-ion-list-header.ios {
-  font-size: 1.375rem;
-}
-
-ion-label.md,
-ion-label.ios {
-  p {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
-  > h2 {
-    font-size: 1rem;
-  }
-}
-ion-label.sc-ion-label-ios-h.ios {
-  font-size: 0.875rem;
-}
-
-ion-button {
-  white-space: normal;
-  font-size: 0.875rem;
-}
-
-ion-alert.md {
-  .alert-title {
-    font-size: 1.25rem;
-  }
-
-  .alert-sub-title {
-    font-size: 1rem;
-  }
-
-  .alert-message {
-    font-size: 1rem;
-  }
-
-  input {
-    font-size: 0.875rem;
-  }
-
-  .alert-button {
-    font-size: 0.875rem;
-  }
-}
-
-ion-alert.ios {
-  .alert-title {
-    font-size: 1.063rem;
-  }
-
-  .alert-sub-title {
-    font-size: 0.875rem;
-  }
-
-  .alert-message {
-    font-size: 0.813rem;
-  }
-
-  input {
-    font-size: 0.813rem;
-  }
-
-  .alert-button {
-    font-size: 1.063rem;
-  }
-}
-
-.alert-radio-label.sc-ion-alert-md {
-  font-size: 1rem;
-}
-.alert-radio-label.sc-ion-alert-ios {
-  font-size: 0.875rem;
-}
-
-.popover-viewport > ion-header > ion-toolbar > ion-title.md {
-  font-size: 1.25rem;
-}
-.popover-viewport > ion-header > ion-toolbar > ion-title.ios {
-  font-size: 1.0625rem;
-  padding-inline: unset;
 }

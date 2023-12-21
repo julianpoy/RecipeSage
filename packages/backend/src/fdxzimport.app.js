@@ -14,6 +14,7 @@ import {
   Image,
 } from "./models/index.js";
 
+import * as Util from "@recipesage/util";
 import * as UtilService from "./services/util.js";
 import { writeImageBuffer, writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";
@@ -98,8 +99,8 @@ async function main() {
           fs.copyFileSync(
             xmlPath,
             `/tmp/chefbook-fail-dump/fdxz-fail-${Math.floor(
-              Math.random() * 10 ** 10
-            )}.xml`
+              Math.random() * 10 ** 10,
+            )}.xml`,
           );
           err.devmsg = "tried to replace RecipeNutrition, but failed";
           err.status = 3; // Unrecognized file, could not parse
@@ -123,7 +124,7 @@ async function main() {
           lcbCookbook &&
           lcbCookbook._attributes &&
           lcbCookbook._attributes.Name &&
-          lcbCookbook._attributes.ID
+          lcbCookbook._attributes.ID,
       )
       .reduce((acc, lcbCookbook) => {
         acc[lcbCookbook._attributes.ID] = lcbCookbook._attributes.Name;
@@ -142,7 +143,7 @@ async function main() {
         .map((lcbTip) => lcbTip._text);
 
       const authorNotes = fetchDeepProp(recipe, "RecipeAuthorNote").map(
-        (authorNote) => authorNote._text
+        (authorNote) => authorNote._text,
       );
 
       // Add "author notes" to description or notes depending on length
@@ -168,7 +169,7 @@ async function main() {
           (lcbIngredient) =>
             `${lcbIngredient.Quantity || ""} ${lcbIngredient.Unit || ""} ${
               lcbIngredient.Ingredient || ""
-            }`
+            }`,
         )
         .join("\r\n");
 
@@ -187,26 +188,26 @@ async function main() {
             .split(",")
             .map((el) => el.trim().toLowerCase()),
           ...[lcbCookbookNamesById[recipe.CookbookID] || ""].map((el) =>
-            el.trim().toLowerCase()
+            el.trim().toLowerCase(),
           ),
         ]),
       ]
         .filter((el) => el && el.length > 0)
-        .map((el) => UtilService.cleanLabelTitle(el));
+        .map((el) => Util.cleanLabelTitle(el));
 
       return {
         model: {
           userId: runConfig.userId,
           title: recipe._attributes.Name,
-          description,
-          yield: rYield,
-          activeTime: recipe._attributes.PreparationTime,
-          totalTime,
-          source: recipe._attributes.Source,
-          url: recipe._attributes.WebPage,
-          notes,
-          ingredients,
-          instructions,
+          description: description || "",
+          yield: rYield || "",
+          activeTime: recipe._attributes.PreparationTime || "",
+          totalTime: totalTime || "",
+          source: recipe._attributes.Source || "",
+          url: recipe._attributes.WebPage || "",
+          notes: notes || "",
+          ingredients: ingredients || "",
+          instructions: instructions || "",
           folder: "main",
           fromUserId: null,
           createdAt: Date.now(),
@@ -225,7 +226,7 @@ async function main() {
             .map((pendingRecipe) => {
               pendingRecipe.imageRefs = fetchDeepProp(
                 pendingRecipe.original,
-                "RecipeImage"
+                "RecipeImage",
               );
               return pendingRecipe;
             })
@@ -254,7 +255,7 @@ async function main() {
                     return writeImageBuffer(
                       ObjectTypes.RECIPE_IMAGE,
                       Buffer.from(imageRef._text, "base64"),
-                      false
+                      false,
                     )
                       .then((image) => {
                         lcbRecipe.images.push(image);
@@ -269,7 +270,7 @@ async function main() {
 
                   let possibleImageFiles = UtilService.findFilesByRegex(
                     extractPath,
-                    new RegExp(`(${possibleFileNameRegex})$`, "i")
+                    new RegExp(`(${possibleFileNameRegex})$`, "i"),
                   );
 
                   if (possibleImageFiles.length == 0) return;
@@ -277,7 +278,7 @@ async function main() {
                   return writeImageFile(
                     ObjectTypes.RECIPE_IMAGE,
                     possibleImageFiles[0],
-                    false
+                    false,
                   )
                     .then((image) => {
                       lcbRecipe.images.push(image);
@@ -285,9 +286,9 @@ async function main() {
                     .catch(() => {
                       // Do nothing
                     });
-                })
+                }),
               );
-            })
+            }),
           );
         });
       }, Promise.resolve());
@@ -297,7 +298,7 @@ async function main() {
         {
           returning: true,
           transaction: t,
-        }
+        },
       );
 
       const pendingRecipeImages = [];
@@ -307,7 +308,7 @@ async function main() {
             image,
             recipeId: recipe.id,
             order: idx, // This may need to be improved - currently it just depends on which image finishes uploading first
-          }))
+          })),
         );
 
         pendingRecipes[idx].lcbRecipeLabels.map((lcbLabelName) => {
@@ -335,10 +336,10 @@ async function main() {
               {
                 ignoreDuplicates: true,
                 transaction: t,
-              }
+              },
             );
           });
-        })
+        }),
       );
 
       const savedImages = await Image.bulkCreate(
@@ -351,7 +352,7 @@ async function main() {
         {
           returning: true,
           transaction: t,
-        }
+        },
       );
 
       await Recipe_Image.bulkCreate(
@@ -362,7 +363,7 @@ async function main() {
         })),
         {
           transaction: t,
-        }
+        },
       );
     });
 

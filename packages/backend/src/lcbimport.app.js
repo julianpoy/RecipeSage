@@ -17,6 +17,7 @@ import {
   Image,
 } from "./models/index.js";
 
+import * as Util from "@recipesage/util";
 import * as UtilService from "./services/util.js";
 import { writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";
@@ -133,7 +134,7 @@ async function main() {
 
     let potentialDbPaths = await UtilService.findFilesByRegex(
       extractPath,
-      /\.mdb/i
+      /\.mdb/i,
     );
     if (potentialDbPaths.length == 0) throw new Error("No lcb db paths!");
 
@@ -164,7 +165,7 @@ async function main() {
         (err, stdout, stderr) => {
           console.log(err, stderr);
           err ? reject(err) : resolve();
-        }
+        },
       );
     });
 
@@ -175,7 +176,7 @@ async function main() {
           reject(err);
         }
         lcbTables = tables.filter(
-          (table) => tablesNeeded.indexOf(table) !== -1
+          (table) => tablesNeeded.indexOf(table) !== -1,
         );
 
         resolve();
@@ -217,7 +218,7 @@ async function main() {
             resolve();
           });
         });
-      })
+      }),
     );
 
     metrics.tSqliteFetched = performance.now();
@@ -230,7 +231,7 @@ async function main() {
     tableMap.t_recipe = (tableMap.t_recipe || []).filter(
       (lcbRecipe) =>
         !!lcbRecipe.recipeid &&
-        (runConfig.includeStockRecipes || !!lcbRecipe.modifieddate)
+        (runConfig.includeStockRecipes || !!lcbRecipe.modifieddate),
     );
 
     let lcbImagesById = (tableMap.t_image || []).reduce((acc, image) => {
@@ -251,7 +252,7 @@ async function main() {
         }
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbTechniquesById = (tableMap.t_technique || []).reduce(
@@ -259,7 +260,7 @@ async function main() {
         acc[technique.techniqueid] = technique;
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbTechniquesByRecipeId = (tableMap.t_recipetechnique || []).reduce(
@@ -268,14 +269,14 @@ async function main() {
           acc[lcbRecipeTechnique.recipeid] =
             acc[lcbRecipeTechnique.recipeid] || [];
           acc[lcbRecipeTechnique.recipeid].push(
-            lcbTechniquesById[lcbRecipeTechnique.techniqueid]
+            lcbTechniquesById[lcbRecipeTechnique.techniqueid],
           );
         } catch (e) {
           // Do nothing
         }
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbIngredientsByRecipeId = (tableMap.t_recipeingredient || []).reduce(
@@ -284,7 +285,7 @@ async function main() {
         acc[lcbIngredient.recipeid].push(lcbIngredient);
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbInstructionsByRecipeId = (tableMap.t_recipeprocedure || []).reduce(
@@ -293,7 +294,7 @@ async function main() {
         acc[lcbInstruction.recipeid].push(lcbInstruction);
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbTipsByRecipeId = (tableMap.t_recipetip || []).reduce(
@@ -302,7 +303,7 @@ async function main() {
         acc[lcbTip.recipeid].push(lcbTip);
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbAuthorNotesByRecipeId = (tableMap.t_authornote || []).reduce(
@@ -311,7 +312,7 @@ async function main() {
         acc[lcbAuthorNote.recipeid].push(lcbAuthorNote);
         return acc;
       },
-      {}
+      {},
     );
 
     let lcbCookbooksById = (tableMap.t_cookbook || []).reduce(
@@ -320,7 +321,7 @@ async function main() {
         acc[lcbCookbook.cookbookid].push(lcbCookbook);
         return acc;
       },
-      {}
+      {},
     );
 
     metrics.tRecipeDataAssembled = performance.now();
@@ -355,7 +356,7 @@ async function main() {
                 lcbRecipe.imageFileNames.map((imageFileName) => {
                   let possibleImageFiles = UtilService.findFilesByRegex(
                     extractPath,
-                    new RegExp(`(${imageFileName})$`, "i")
+                    new RegExp(`(${imageFileName})$`, "i"),
                   );
 
                   if (possibleImageFiles.length == 0) return;
@@ -363,7 +364,7 @@ async function main() {
                   return writeImageFile(
                     ObjectTypes.RECIPE_IMAGE,
                     possibleImageFiles[0],
-                    false
+                    false,
                   )
                     .then((image) => {
                       lcbRecipe.images = lcbRecipe.images || [];
@@ -372,9 +373,9 @@ async function main() {
                     .catch(() => {
                       // Do nothing
                     });
-                })
+                }),
               );
-            })
+            }),
           );
         });
       }, Promise.resolve());
@@ -392,7 +393,7 @@ async function main() {
               (lcbIngredient) =>
                 `${lcbIngredient.quantitytext || ""} ${
                   lcbIngredient.unittext || ""
-                } ${lcbIngredient.ingredienttext || ""}`
+                } ${lcbIngredient.ingredienttext || ""}`,
             )
             .join("\r\n");
 
@@ -400,7 +401,7 @@ async function main() {
             lcbInstructionsByRecipeId[lcbRecipe.recipeid] || []
           )
             .filter(
-              (lcbProcedure) => lcbProcedure && lcbProcedure.proceduretext
+              (lcbProcedure) => lcbProcedure && lcbProcedure.proceduretext,
             )
             .sort((a, b) => a.procedureindex > b.procedureindex)
             .map((lcbProcedure) => lcbProcedure.proceduretext)
@@ -413,7 +414,7 @@ async function main() {
 
           let authorNotes = (lcbAuthorNotesByRecipeId[lcbRecipe.recipeid] || [])
             .filter(
-              (lcbAuthorNote) => lcbAuthorNote && lcbAuthorNote.authornotetext
+              (lcbAuthorNote) => lcbAuthorNote && lcbAuthorNote.authornotetext,
             )
             .sort((a, b) => a.authornoteindex > b.authornoteindex)
             .map((lcbAuthorNote) => lcbAuthorNote.authornotetext);
@@ -424,7 +425,7 @@ async function main() {
             .filter((lcbTechnique) => lcbTechnique && lcbTechnique.comments)
             .map(
               (lcbTechnique) =>
-                `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`
+                `${lcbTechnique.name}:\r\n${lcbTechnique.comments}`,
             );
 
           if (!runConfig.includeTechniques) techniqueNotes = [];
@@ -458,33 +459,33 @@ async function main() {
                 .split(",")
                 .map((el) => el.trim().toLowerCase()),
               ...(lcbCookbooksById[lcbRecipe.cookbookid] || []).map((el) =>
-                el.name.trim().toLowerCase()
+                el.name.trim().toLowerCase(),
               ),
             ]),
           ]
             .filter((el) => el && el.length > 0)
-            .map((el) => UtilService.cleanLabelTitle(el));
+            .map((el) => Util.cleanLabelTitle(el));
 
           return pendingRecipes.push({
             model: {
               userId: runConfig.userId,
               title: lcbRecipe.recipename || "",
-              description,
+              description: description || "",
               yield: (lcbRecipe.yield || "").toString(),
               activeTime: (lcbRecipe.preparationtime || "").toString(),
-              totalTime,
+              totalTime: totalTime || "",
               source: lcbRecipe.source || "",
               url: lcbRecipe.webpage || "",
-              notes,
-              ingredients,
-              instructions,
+              notes: notes || "",
+              ingredients: ingredients || "",
+              instructions: instructions || "",
               folder: "main",
               fromUserId: null,
             },
             lcbRecipeLabels,
             images,
           });
-        })
+        }),
       );
 
       metrics.tRecipesProcessed = performance.now();
@@ -494,7 +495,7 @@ async function main() {
         {
           returning: true,
           transaction: t,
-        }
+        },
       );
 
       const pendingRecipeImages = [];
@@ -505,7 +506,7 @@ async function main() {
             image: image,
             recipeId: recipe.id,
             order: idx, // This may need to be improved - currently it just depends on which image finishes uploading first
-          }))
+          })),
         );
 
         pendingRecipes[idx].lcbRecipeLabels.map((lcbLabelName) => {
@@ -524,7 +525,7 @@ async function main() {
         {
           returning: true,
           transaction: t,
-        }
+        },
       );
 
       await Recipe_Image.bulkCreate(
@@ -535,7 +536,7 @@ async function main() {
         })),
         {
           transaction: t,
-        }
+        },
       );
 
       metrics.tRecipesSaved = performance.now();
@@ -559,10 +560,10 @@ async function main() {
               {
                 ignoreDuplicates: true,
                 transaction: t,
-              }
+              },
             );
           });
-        })
+        }),
       );
 
       metrics.tLabelsSaved = performance.now();
@@ -574,16 +575,16 @@ async function main() {
       tSqliteStore: Math.floor(metrics.tSqliteStored - metrics.tExported),
       tSqliteFetch: Math.floor(metrics.tSqliteFetched - metrics.tSqliteStored),
       tRecipeDataAssemble: Math.floor(
-        metrics.tRecipeDataAssembled - metrics.tSqliteFetched
+        metrics.tRecipeDataAssembled - metrics.tSqliteFetched,
       ),
       tImagesUpload: Math.floor(
-        metrics.tImagesUploaded - metrics.tRecipeDataAssembled
+        metrics.tImagesUploaded - metrics.tRecipeDataAssembled,
       ),
       tRecipesProcess: Math.floor(
-        metrics.tRecipesProcessed - metrics.tImagesUploaded
+        metrics.tRecipesProcessed - metrics.tImagesUploaded,
       ),
       tRecipesSave: Math.floor(
-        metrics.tRecipesSaved - metrics.tRecipesProcessed
+        metrics.tRecipesSaved - metrics.tRecipesProcessed,
       ),
       tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved),
     };

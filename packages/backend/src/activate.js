@@ -24,7 +24,7 @@ const run = async () => {
   console.log("\n");
   console.log("Thanks for activating RecipeSage's bonus features");
   console.log(
-    "Please consider contributing to RecipeSage's development & maintenance: https://recipesage.com/#/contribute"
+    "Please consider contributing to RecipeSage's development & maintenance: https://recipesage.com/#/contribute",
   );
   console.log("");
   console.log("- Julian");

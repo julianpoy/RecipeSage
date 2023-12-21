@@ -34,7 +34,7 @@ export class MealPlanBulkPinModalPage {
     public recipeService: RecipeService,
     public loadingService: LoadingService,
     public utilService: UtilService,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
   ) {
     setTimeout(() => {
       this.selectAllRecipes();
@@ -52,7 +52,7 @@ export class MealPlanBulkPinModalPage {
   deselectAll() {
     this.allSelected = false;
     Object.keys(this.recipeIdSelectionMap).forEach(
-      (recipeId) => (this.recipeIdSelectionMap[recipeId] = false)
+      (recipeId) => (this.recipeIdSelectionMap[recipeId] = false),
     );
   }
 
@@ -60,7 +60,7 @@ export class MealPlanBulkPinModalPage {
     Object.keys(this.recipeIdSelectionMap).forEach((recipeId) => {
       if (!this.recipeIdSelectionMap[recipeId]) return;
       const mealItem = this.mealItems.find(
-        (item) => item.recipe?.id === recipeId
+        (item) => item.recipe?.id === recipeId,
       );
 
       if (mealItem && mealItem.recipe) {

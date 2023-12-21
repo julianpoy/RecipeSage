@@ -25,7 +25,7 @@ export const ProfileItemInit = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
     },
-    {}
+    {},
   );
   ProfileItem.associate = function (models) {
     ProfileItem.belongsTo(models.User, {

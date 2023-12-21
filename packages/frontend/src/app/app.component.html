@@ -6,7 +6,14 @@
     [disabled]="!isLoggedIn || !preferences[preferenceKeys.EnableSplitPane]"
     when="(min-width: 1200px)"
   >
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu
+      (ionWillOpen)="updateNavList()"
+      contentId="main-content"
+      type="overlay"
+      [class]="{
+        cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
+      }"
+    >
       <ion-header>
         <ion-toolbar color="nav">
           <ion-title
@@ -30,12 +37,6 @@
               }}</ion-badge>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="isLoggedIn" (click)="logout()" button>
-              <ion-icon slot="start" name="log-out"></ion-icon>
-              <ion-label> Log Out </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
         </ion-list>
       </ion-content>
 
@@ -52,6 +53,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
+      [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
       }"

@@ -15,7 +15,7 @@ const LOW_RES_IMG_CONVERSION_QUALITY = 55;
 export const writeImageURL = async (
   objectType: ObjectTypes,
   url: string,
-  highResConversion: boolean
+  highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
   const response = await fetchURL(url);
   if (response.status !== 200)
@@ -28,7 +28,7 @@ export const writeImageURL = async (
 export const writeImageFile = async (
   objectType: ObjectTypes,
   filePath: string,
-  highResConversion: boolean
+  highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
   const buffer = await fs.readFile(filePath);
 
@@ -38,7 +38,7 @@ export const writeImageFile = async (
 export const writeImageBuffer = async (
   objectType: ObjectTypes,
   buffer: Buffer,
-  highResConversion: boolean
+  highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
   const height = highResConversion
     ? HIGH_RES_IMG_CONVERSION_HEIGHT
@@ -55,7 +55,7 @@ export const writeImageBuffer = async (
     width,
     height,
     quality,
-    highResConversion ? "inside" : "cover"
+    highResConversion ? "inside" : "cover",
   );
 
   const result = await writeBuffer(objectType, converted, "image/jpeg");

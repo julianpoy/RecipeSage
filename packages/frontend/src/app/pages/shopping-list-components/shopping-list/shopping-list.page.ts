@@ -16,10 +16,8 @@ import {
 } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
-import {
-  PreferencesService,
-  ShoppingListPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 import { getShoppingListItemGroupings } from "@recipesage/util";
 
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";
@@ -67,7 +65,7 @@ export class ShoppingListPage {
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public popoverCtrl: PopoverController,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
   ) {
     const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
     if (shoppingListId) {
@@ -88,7 +86,7 @@ export class ShoppingListPage {
           this.loadList();
         }
       },
-      this
+      this,
     );
   }
 
@@ -104,7 +102,7 @@ export class ShoppingListPage {
       () => {
         loading.dismiss();
         this.initialLoadComplete = true;
-      }
+      },
     );
   }
 
@@ -115,7 +113,7 @@ export class ShoppingListPage {
       },
       () => {
         loader.target.complete();
-      }
+      },
     );
   }
 
@@ -125,7 +123,7 @@ export class ShoppingListPage {
 
     const items = this.list.items.filter((item: any) => !item.completed);
     const completedItems = this.list.items.filter(
-      (item: any) => item.completed
+      (item: any) => item.completed,
     );
 
     this.recipeIds = [];
@@ -153,7 +151,7 @@ export class ShoppingListPage {
       groupsByCategoryTitle,
     } = getShoppingListItemGroupings(
       items as any,
-      this.preferences[ShoppingListPreferenceKey.SortBy]
+      this.preferences[ShoppingListPreferenceKey.SortBy],
     );
 
     this.items = sortedItems;
@@ -165,7 +163,7 @@ export class ShoppingListPage {
 
     const { items: sortedCompletedItems } = getShoppingListItemGroupings(
       completedItems as any,
-      this.preferences[ShoppingListPreferenceKey.SortBy]
+      this.preferences[ShoppingListPreferenceKey.SortBy],
     );
 
     this.completedItems = sortedCompletedItems;
@@ -173,7 +171,7 @@ export class ShoppingListPage {
 
   async loadList() {
     const response = await this.shoppingListService.fetchById(
-      this.shoppingListId
+      this.shoppingListId,
     );
     if (!response.success) return;
 
@@ -202,7 +200,7 @@ export class ShoppingListPage {
       },
       {
         completed,
-      }
+      },
     );
 
     if (response.success && this.reference !== response.data.reference) {
@@ -287,7 +285,7 @@ export class ShoppingListPage {
                 id: el.shoppingListId,
                 mealPlanItemId: (el.mealPlanItem || {}).id || null,
                 recipeId: (el.recipe || {}).id || null,
-              }))
+              })),
             );
           },
         },

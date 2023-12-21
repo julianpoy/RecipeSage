@@ -60,7 +60,7 @@ if (window[extensionContainerId]) {
 
         return RecipeClipper.clipRecipe().catch((err) => {
           alert(
-            "Error while attempting to automatically clip recipe from page"
+            "Error while attempting to automatically clip recipe from page",
           );
         });
       });
@@ -189,7 +189,7 @@ if (window[extensionContainerId]) {
 
         let logo = document.createElement("img");
         logo.src = chrome.extension.getURL(
-          "./images/recipesage-black-trimmed.png"
+          "./images/recipesage-black-trimmed.png",
         );
         logo.className = "logo";
         logo.draggable = false;
@@ -227,7 +227,7 @@ if (window[extensionContainerId]) {
           displayAlert(
             "Preferences saved!",
             `Please reload the page for these changes to take effect`,
-            4000
+            4000,
           );
         };
         preferencesContainer.appendChild(autoSnipToggle);
@@ -242,7 +242,7 @@ if (window[extensionContainerId]) {
           "imageURL",
           false,
           currentSnip.imageURL,
-          true
+          true,
         ).input;
         createSnipper("Title", "title", false, currentSnip.title);
         createSnipper(
@@ -250,14 +250,14 @@ if (window[extensionContainerId]) {
           "description",
           false,
           currentSnip.description,
-          false
+          false,
         );
         createSnipper("Yield", "yield", false, currentSnip.yield, false);
         createSnipper(
           "Active Time",
           "activeTime",
           false,
-          currentSnip.activeTime
+          currentSnip.activeTime,
         );
         createSnipper("Total Time", "totalTime", false, currentSnip.totalTime);
         createSnipper("Source", "source", false, currentSnip.source);
@@ -266,13 +266,13 @@ if (window[extensionContainerId]) {
           "Ingredients",
           "ingredients",
           true,
-          currentSnip.ingredients
+          currentSnip.ingredients,
         );
         createSnipper(
           "Instructions",
           "instructions",
           true,
-          currentSnip.instructions
+          currentSnip.instructions,
         );
         createSnipper("Notes", "notes", true, currentSnip.notes);
 
@@ -300,7 +300,7 @@ if (window[extensionContainerId]) {
         isTextArea,
         initialValue,
         disableSnip,
-        formatCb
+        formatCb,
       ) => {
         let label = document.createElement("label");
         label.onmousedown = (e) => e.stopPropagation();
@@ -391,7 +391,7 @@ if (window[extensionContainerId]) {
 
         let alertImg = document.createElement("img");
         alertImg.src = chrome.extension.getURL(
-          "./icons/android-chrome-512x512.png"
+          "./icons/android-chrome-512x512.png",
         );
         headline.appendChild(alertImg);
 
@@ -441,7 +441,7 @@ if (window[extensionContainerId]) {
                     `Recipe Saved!`,
                     `Click to open`,
                     4000,
-                    `https://recipesage.com/#/recipe/${data.id}`
+                    `https://recipesage.com/#/recipe/${data.id}`,
                   );
                 });
               } else {
@@ -451,7 +451,7 @@ if (window[extensionContainerId]) {
                       displayAlert(
                         "Please Login",
                         `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
-                        4000
+                        4000,
                       );
                     });
                     break;
@@ -459,21 +459,21 @@ if (window[extensionContainerId]) {
                     displayAlert(
                       `Could Not Save Recipe`,
                       `A recipe title is required.`,
-                      4000
+                      4000,
                     );
                     break;
                   case 415:
                     displayAlert(
                       `Could Not Save Recipe`,
                       `We could not fetch the specified image URL. Please try another image URL, or try uploading the image after creating the recipe.`,
-                      6000
+                      6000,
                     );
                     break;
                   default:
                     displayAlert(
                       "Could Not Save Recipe",
                       "An error occurred while saving the recipe. Please try again.",
-                      4000
+                      4000,
                     );
                     break;
                 }
@@ -483,7 +483,7 @@ if (window[extensionContainerId]) {
               displayAlert(
                 "Could Not Save Recipe",
                 "An error occurred while saving the recipe. Please try again.",
-                4000
+                4000,
               );
               console.error(e);
             });

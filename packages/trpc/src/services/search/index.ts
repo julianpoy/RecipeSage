@@ -11,7 +11,7 @@ export interface SearchProvider {
 }
 
 const searchProviders: {
-  [key: string]: SearchProvider;
+  [key: string]: SearchProvider | undefined;
 } = {
   meilisearch: Meilisearch,
   elasticsearch: ElasticSearch,
@@ -19,11 +19,17 @@ const searchProviders: {
   none: Stub,
 };
 
-if (!process.env.SEARCH_PROVIDER)
+if (!process.env.SEARCH_PROVIDER) {
   throw new Error(
-    'SEARCH_PROVIDER not set. Can be set to "elasticsearch", "meilisearch", "typesense" or "none".'
+    'SEARCH_PROVIDER not set. Can be set to "elasticsearch", "meilisearch", "typesense" or "none".',
   );
+}
 const searchProvider = searchProviders[process.env.SEARCH_PROVIDER];
+if (!searchProvider) {
+  throw new Error(
+    'SEARCH_PROVIDER must be set to "elasticsearch", "meilisearch", "typesense" or "none".',
+  );
+}
 
 export const indexRecipes = searchProvider.indexRecipes;
 export const deleteRecipes = searchProvider.deleteRecipes;

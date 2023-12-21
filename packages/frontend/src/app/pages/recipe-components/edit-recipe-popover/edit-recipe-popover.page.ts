@@ -1,9 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
-import {
-  PreferencesService,
-  RecipeDetailsPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { RecipeDetailsPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "page-edit-recipe-popover",
@@ -25,7 +23,7 @@ export class EditRecipePopoverPage {
 
   constructor(
     private preferencesService: PreferencesService,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
   ) {}
 
   savePreferences() {

@@ -40,11 +40,12 @@ export class SelectUserComponent {
 
   constructor(
     private userService: UserService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
   ) {}
 
   onSearchInputChange(event: any) {
     this.searchText = event.detail.value;
+    if (!this.searchText) return;
 
     this.results = [];
     if (this.searchTimeout) {
@@ -81,7 +82,7 @@ export class SelectUserComponent {
       },
       {
         404: () => {},
-      }
+      },
     );
 
     if (userResponse.success && userResponse.data)
@@ -103,5 +104,9 @@ export class SelectUserComponent {
     this.results = [];
     this.searchText = "";
     this.searching = false;
+  }
+
+  userTrackBy(index: number, user: any) {
+    return user.id;
   }
 }

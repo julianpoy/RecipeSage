@@ -9,7 +9,7 @@ interface PasswordResetEmailArgs {
 export const sendPasswordReset = async (
   to: string[],
   ccTo: string[],
-  args: PasswordResetEmailArgs
+  args: PasswordResetEmailArgs,
 ) => {
   const subject = "RecipeSage Password Reset";
 

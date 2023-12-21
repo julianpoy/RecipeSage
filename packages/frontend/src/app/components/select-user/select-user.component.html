@@ -8,67 +8,69 @@
     <ion-avatar *ngIf="selectedUser.profileImages?.length" slot="start">
       <img src="{{ selectedUser.profileImages?.at(0)?.location }}" />
     </ion-avatar>
+    <ion-avatar *ngIf="!selectedUser.profileImages?.length" slot="start">
+      <img src="assets/avatar.svg" />
+    </ion-avatar>
     <ion-label>
-      <h2>{{ selectedUser.name }}</h2>
+      <h2>
+        {{ selectedUser.name }}
+      </h2>
       <p>
         {{ "components.selectUser.change" | translate }}
       </p>
     </ion-label>
   </ion-item>
 
-  <div class="dropdownSelect" *ngIf="!selectedUser">
+  <div *ngIf="!selectedUser">
     <ion-searchbar
-      (ionChange)="onSearchInputChange($event)"
+      (ionInput)="onSearchInputChange($event)"
       placeholder="{{ 'components.selectUser.placeholder' | translate }}"
       autocomplete="off"
-      #userInputField
-      debounce="0"
-      id="userInputField"
     ></ion-searchbar>
-    <div class="autocomplete">
-      <button
-        class="suggestion"
-        *ngFor="let user of results"
-        (click)="selectUser(user)"
-      >
-        <ion-item class="suggestion-inner" button>
-          <ion-avatar *ngIf="user.profileImages?.length" slot="start">
-            <img src="{{ user.profileImages?.at(0)?.location }}" />
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ user.name }}</h2>
-            <p>
-              {{ "components.selectUser.select" | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-      </button>
-      <button class="suggestion" *ngIf="searching">
-        <ion-item class="suggestion-inner" button>
-          <ion-label>
-            <h2>
+    <div class="ion-padding-start ion-padding-end">
+      <div class="results-list-container" *ngIf="searchText.length">
+        <div class="results-list">
+          <ion-item
+            *ngFor="let user of results; trackBy: userTrackBy"
+            (click)="selectUser(user)"
+            button
+          >
+            <ion-avatar *ngIf="user.profileImages?.length" slot="start">
+              <img src="{{ user.profileImages?.at(0)?.location }}" />
+            </ion-avatar>
+            <ion-avatar *ngIf="!user.profileImages?.length" slot="start">
+              <img src="assets/avatar.svg" />
+            </ion-avatar>
+            <ion-label>
+              <h2>
+                {{ user.name }}
+              </h2>
+              <p>
+                {{ "components.selectUser.select" | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="searching">
+            <ion-spinner slot="start"></ion-spinner>
+            <ion-label>
               {{
                 "components.selectUser.searching"
-                  | translate : { name: searchText }
+                  | translate: { name: searchText }
               }}
-            </h2>
-          </ion-label>
-        </ion-item>
-      </button>
-      <button
-        class="suggestion"
-        *ngIf="results.length === 0 && searchText.length > 0 && !searching"
-      >
-        <ion-item class="suggestion-inner" button>
-          <ion-label>
-            <h2>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="results.length === 0 && searchText.length > 0 && !searching"
+          >
+            <ion-icon name="folder-open" slot="start"></ion-icon>
+            <ion-label>
               {{
-                "components.selectUser.null" | translate : { name: searchText }
+                "components.selectUser.null" | translate: { name: searchText }
               }}
-            </h2>
-          </ion-label>
-        </ion-item>
-      </button>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
     </div>
   </div>
 </div>

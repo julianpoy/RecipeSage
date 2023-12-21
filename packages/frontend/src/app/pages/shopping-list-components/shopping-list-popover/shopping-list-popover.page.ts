@@ -10,10 +10,8 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "~/services/loading.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { UtilService, RouteMap } from "~/services/util.service";
-import {
-  PreferencesService,
-  ShoppingListPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "page-shopping-list-popover",
@@ -36,7 +34,7 @@ export class ShoppingListPopoverPage {
     public shoppingListService: ShoppingListService,
     public toastCtrl: ToastController,
     public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {}
 
   savePreferences() {
@@ -56,7 +54,7 @@ export class ShoppingListPopoverPage {
         groupCategories:
           this.preferences[ShoppingListPreferenceKey.GroupCategories],
         sortBy: this.preferences[ShoppingListPreferenceKey.SortBy],
-      })
+      }),
     );
   }
 
@@ -102,7 +100,7 @@ export class ShoppingListPopoverPage {
       this.shoppingListId,
       {
         itemIds,
-      }
+      },
     );
 
     loading.dismiss();

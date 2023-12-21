@@ -5,26 +5,30 @@
     </p>
 
     <ion-item>
-      <ion-label>
-        {{ "components.selectIngredients.toggleAll" | translate }}
-      </ion-label>
       <ion-checkbox
+        labelPlacement="end"
+        justify="start"
         [(ngModel)]="allSelected"
         (ngModelChange)="resetAll()"
         checked="true"
-      ></ion-checkbox>
+      >
+        {{ "components.selectIngredients.toggleAll" | translate }}
+      </ion-checkbox>
     </ion-item>
     <ion-item *ngFor="let ingredient of scaledIngredients; let i = index">
-      <ion-label>{{ ingredient.content }}</ion-label>
       <ion-checkbox
+        labelPlacement="end"
+        justify="start"
         [(ngModel)]="ingredientBinders[i]"
         (ngModelChange)="toggleIngredient(i)"
         checked="true"
-      ></ion-checkbox>
+      >
+        {{ ingredient.content }}
+      </ion-checkbox>
     </ion-item>
     <br />
     <a class="scale" (click)="changeScale()">
-      {{ "components.selectIngredients.scale" | translate : { scale: scale } }}
+      {{ "components.selectIngredients.scale" | translate: { scale: scale } }}
     </a>
   </div>
   <div *ngIf="!scaledIngredients || scaledIngredients.length === 0">

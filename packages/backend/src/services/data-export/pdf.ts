@@ -13,6 +13,7 @@ import { fetchURL } from "../fetch";
 import * as fs from "fs";
 import { Image, Recipe } from "@prisma/client";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
+import * as path from "path";
 
 export interface ExportOptions {
   includeImages?: boolean;
@@ -21,7 +22,7 @@ export interface ExportOptions {
 
 const parsedToSchema = (
   parsedItems: { content: string; isHeader: boolean }[],
-  includeMargin: boolean
+  includeMargin: boolean,
 ): {
   text: string;
   bold: boolean;
@@ -36,7 +37,7 @@ const parsedToSchema = (
 
 const recipeToSchema = async (
   recipe: Recipe & { images: Image[] },
-  options?: ExportOptions
+  options?: ExportOptions,
 ): Promise<Content> => {
   const schema: Content[] = [];
 
@@ -85,40 +86,44 @@ const recipeToSchema = async (
 
   const imageUrl = recipe.images[0]?.location;
   if (imageUrl && options?.includeImages) {
-    let buffer: Buffer;
-    if (process.env.NODE_ENV === "selfhost" && imageUrl.startsWith("/")) {
-      buffer = await fs.promises.readFile(imageUrl);
-    } else {
-      const response = await fetchURL(imageUrl);
-      buffer = await response.buffer();
-    }
+    try {
+      let buffer: Buffer;
+      if (process.env.NODE_ENV === "selfhost" && imageUrl.startsWith("/")) {
+        buffer = await fs.promises.readFile(imageUrl);
+      } else {
+        const response = await fetchURL(imageUrl);
+        buffer = await response.buffer();
+      }
 
-    schema.push({
-      columns: [
-        {
-          width: 100,
-          image: `data:image/jpeg;base64,${buffer.toString("base64")}`,
-          fit: [100, 100],
-        },
-        {
-          width: "auto",
-          stack: headerContent,
-          margin: [10, 10, 0, 0],
-        },
-      ],
-      margin: [0, 0, 0, 10],
-    });
+      schema.push({
+        columns: [
+          {
+            width: 100,
+            image: `data:image/jpeg;base64,${buffer.toString("base64")}`,
+            fit: [100, 100],
+          },
+          {
+            width: "auto",
+            stack: headerContent,
+            margin: [10, 10, 0, 0],
+          },
+        ],
+        margin: [0, 0, 0, 10],
+      });
+    } catch (e) {
+      schema.push(...headerContent);
+    }
   } else {
     schema.push(...headerContent);
   }
 
   const parsedInstructions = parseInstructions(
-    sanitizeHtml(recipe.instructions || "")
+    sanitizeHtml(recipe.instructions || ""),
   );
   const parsedIngredients = parseIngredients(
     sanitizeHtml(recipe.ingredients || ""),
     1,
-    false
+    false,
   );
   const parsedNotes = parseNotes(sanitizeHtml(recipe.notes || ""));
   if (recipe.ingredients && recipe.instructions) {
@@ -191,14 +196,23 @@ const recipeToSchema = async (
 export const exportToPDF = async (
   recipes: (Recipe & { images: Image[] })[],
   writeStream: Writable,
-  options?: ExportOptions
+  options?: ExportOptions,
 ): Promise<void> => {
   const fonts = {
-    Helvetica: {
-      normal: "Helvetica",
-      bold: "Helvetica-Bold",
-      italics: "Helvetica-Oblique",
-      bolditalics: "Helvetica-BoldOblique",
+    NotoSans: {
+      normal: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-Regular.ttf",
+      ),
+      bold: path.join(__dirname, "../../../fonts/Noto_Sans/NotoSans-Bold.ttf"),
+      italics: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-Italic.ttf",
+      ),
+      bolditalics: path.join(
+        __dirname,
+        "../../../fonts/Noto_Sans/NotoSans-BoldItalic.ttf",
+      ),
     },
   };
 
@@ -219,7 +233,7 @@ export const exportToPDF = async (
   const docDefinition: TDocumentDefinitions = {
     content,
     defaultStyle: {
-      font: "Helvetica",
+      font: "NotoSans",
       fontSize: 10,
       lineHeight: 1.2,
     },

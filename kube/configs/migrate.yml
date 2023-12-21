@@ -1,28 +1,28 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migrate-2020-12-21
+  name: migrate-$RELEASE_TAG
 spec:
   template:
     spec:
       containers:
-        - name: migrate-2020-12-21
-          image: julianpoy/recipesage:api-v2.6.0-beta1
+        - name: migrate-$RELEASE_TAG
+          image: julianpoy/recipesage:api-$RELEASE_TAG
           command: ["npx"]
-          args: ["sequelize", "db:migrate"]
+          args: ["prisma", "migrate", "deploy"]
           resources:
             requests:
-              cpu: 50m
-              memory: 100Mi
+              cpu: 250m
+              memory: 300Mi
             limits:
-              cpu: 100m
+              cpu: 1
               memory: 1G
           envFrom:
             - secretRef:
                 name: rs-api-env
           volumeMounts:
             - name: firebase-credentials
-              mountPath: /app/Backend/src/config/firebase-credentials.json
+              mountPath: /app/.credentials/firebase.json
               subPath: firebase-credentials.json
       volumes:
         - name: firebase-credentials

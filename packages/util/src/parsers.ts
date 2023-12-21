@@ -26,7 +26,7 @@ const fractionMatchRegexp = new RegExp(
   Object.values(fractionMatchers)
     .map((matcher) => matcher[0].source)
     .join("|"),
-  "g"
+  "g",
 );
 
 /**
@@ -78,7 +78,7 @@ const quantityRegexp = new RegExp(`(${preparedUnitNames})s?\\.?`, "i");
  */
 const measurementQuantityRegExp = new RegExp(
   `^(${measurementRegexp.source})\\s*(${quantityRegexp.source})?\\s`,
-  "i"
+  "i",
 );
 
 /*
@@ -116,7 +116,7 @@ export const getMeasurementsForIngredient = (ingredient: string): string[] => {
     .split(multipartQuantifierRegexp)
     .map((ingredientPart) => {
       const measurementMatch = measurementQuantityRegExp.exec(
-        stripNotes(ingredientPart)
+        stripNotes(ingredientPart),
       );
 
       if (measurementMatch) return measurementMatch[0].trim();
@@ -129,7 +129,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
   const strippedIngredient = replaceFractionsInText(ingredient);
 
   const ingredientPartDelimiters = strippedIngredient.match(
-    new RegExp(multipartQuantifierRegexp, "ig")
+    new RegExp(multipartQuantifierRegexp, "ig"),
   );
 
   return strippedIngredient
@@ -137,7 +137,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
     .map((ingredientPart) => {
       return stripNotes(ingredientPart).replace(
         new RegExp(measurementQuantityRegExp, "i"),
-        ""
+        "",
       );
     })
     .reduce(
@@ -145,7 +145,7 @@ export const getTitleForIngredient = (ingredient: string): string => {
         acc +
         ingredientPart +
         (ingredientPartDelimiters ? ingredientPartDelimiters[idx] || "" : ""),
-      ""
+      "",
     )
     .trim();
 };
@@ -175,7 +175,7 @@ export const stripIngredient = (ingredient: string): string => {
 export const parseIngredients = (
   ingredients: string,
   scale: number,
-  boldify?: boolean
+  boldify?: boolean,
 ): {
   content: string;
   originalContent: string;
@@ -201,12 +201,12 @@ export const parseIngredients = (
     const headerMatches = line.match(headerRegexp);
 
     const ingredientPartDelimiters = line.match(
-      new RegExp(multipartQuantifierRegexp, "g")
+      new RegExp(multipartQuantifierRegexp, "g"),
     ); // Multipart measurements (1 cup + 1 tablespoon)
     const ingredientParts = line.split(multipartQuantifierRegexp); // Multipart measurements (1 cup + 1 tablespoon)
 
     const measurementMatches = ingredientParts.map(
-      (ingredientPart) => getMeasurementsForIngredient(ingredientPart)[0]
+      (ingredientPart) => getMeasurementsForIngredient(ingredientPart)[0],
     );
 
     if (headerMatches && headerMatches.length > 0) {
@@ -241,20 +241,20 @@ export const parseIngredients = (
 
             return ingredientParts[idx].replace(
               measurementQuantityRegExp,
-              updatedMeasurement
+              updatedMeasurement,
             );
           } catch (e) {
             console.error("failed to parse", e);
             return ingredientParts[idx];
           }
-        }
+        },
       );
 
       if (ingredientPartDelimiters) {
         lines[i].content = updatedIngredientParts.reduce(
           (acc, ingredientPart, idx) =>
             acc + ingredientPart + (ingredientPartDelimiters[idx] || ""),
-          ""
+          "",
         );
       } else {
         lines[i].content = updatedIngredientParts.join(" + ");
@@ -268,7 +268,7 @@ export const parseIngredients = (
 };
 
 export const parseInstructions = (
-  instructions: string
+  instructions: string,
 ): {
   content: string;
   isHeader: boolean;
@@ -312,7 +312,7 @@ export const parseInstructions = (
 };
 
 export const parseNotes = (
-  notes: string
+  notes: string,
 ): {
   content: string;
   isHeader: boolean;

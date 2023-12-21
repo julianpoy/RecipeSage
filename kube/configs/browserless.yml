@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: rs-browserless
-          image: browserless/chrome:1.53.0-chrome-stable
+          image: browserless/chrome:1.61.0-puppeteer-21.4.1
           ports:
             - containerPort: 3000
           env:
@@ -65,7 +65,7 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-browserless
@@ -74,8 +74,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-browserless
-  minReplicas: 1
-  maxReplicas: 2
+  minReplicas: 2
+  maxReplicas: 3
   metrics:
     - type: Resource
       resource:

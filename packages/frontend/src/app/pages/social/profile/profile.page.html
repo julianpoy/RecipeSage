@@ -31,7 +31,7 @@
         *ngIf="!profile.profileImages || profile.profileImages.length === 0"
         class="no-image"
       >
-        <img src="/assets/imgs/logo_green.png" />
+        <img src="assets/imgs/logo_green.png" />
       </div>
       <ion-thumbnail
         class="profile-image ion-margin-top"
@@ -47,7 +47,7 @@
           <h3 class="username">{{ profile.name }}</h3>
         </ion-item>
         <ion-item lines="none">
-          <h5 class="handle">@{{ profile.handle }}</h5>
+          <h5 class="handle">&commat;{{ profile.handle }}</h5>
         </ion-item>
         <div class="profile-icon-buttons">
           <ion-item lines="none" (click)="shareProfile()" button>

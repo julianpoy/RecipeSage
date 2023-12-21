@@ -6,7 +6,7 @@ import { Label } from "./label.service";
 import { HttpService } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 import { UtilService } from "./util.service";
-import { EventService } from "./event.service";
+import { EventName, EventService } from "./event.service";
 import { Image } from "./image.service";
 
 import {
@@ -78,7 +78,7 @@ export class RecipeService {
     public alertCtrl: AlertController,
     public events: EventService,
     public httpService: HttpService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {}
 
   getExportURL(format: ExportFormat) {
@@ -89,14 +89,14 @@ export class RecipeService {
     params: {
       folder?: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{ count: number }>(
       `recipes/count`,
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -112,7 +112,7 @@ export class RecipeService {
       ratingFilter?: string;
       includeFriends?: boolean;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
@@ -129,7 +129,7 @@ export class RecipeService {
       ratingFilter?: string;
       includeFriends?: boolean;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
@@ -142,7 +142,7 @@ export class RecipeService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -152,7 +152,7 @@ export class RecipeService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -162,17 +162,17 @@ export class RecipeService {
       labels?: string[];
       imageIds?: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeCreated);
 
     return response;
   }
@@ -182,17 +182,17 @@ export class RecipeService {
       id: string;
       imageIds?: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.httpService.requestWithWrapper<Recipe>(
       `recipes/${payload.id}`,
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeUpdated);
 
     return response;
   }
@@ -201,17 +201,17 @@ export class RecipeService {
     payload: {
       labelIds: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/delete-by-labelIds`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -220,17 +220,17 @@ export class RecipeService {
     payload: {
       recipeIds: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const response = await this.httpService.requestWithWrapper<void>(
       `recipes/delete-bulk`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -241,10 +241,10 @@ export class RecipeService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -255,10 +255,10 @@ export class RecipeService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
 
-    this.events.publish("recipe:update");
+    this.events.publish(EventName.RecipeDeleted);
 
     return response;
   }
@@ -267,14 +267,14 @@ export class RecipeService {
     params: {
       url: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<any>(
       `clip`,
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -289,7 +289,7 @@ export class RecipeService {
         template.name +
         "&modifiers=" +
         template.modifiers +
-        "&print=true"
+        "&print=true",
     );
   }
 
@@ -298,14 +298,14 @@ export class RecipeService {
       username: string;
       password: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<Recipe>(
       `scrape/pepperplate`,
       "GET",
       undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -314,17 +314,17 @@ export class RecipeService {
     payload: {
       excludeImages?: boolean;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const formData: FormData = new FormData();
-    formData.append("fdxzdb", fdxzFile, fdxzFile.name);
+    formData.append("fdxzdb", fdxzFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "import/fdxz",
       "POST",
       formData,
       payload,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -335,63 +335,63 @@ export class RecipeService {
       includeTechniques?: boolean;
       excludeImages?: boolean;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const formData: FormData = new FormData();
-    formData.append("lcbdb", lcbFile, lcbFile.name);
+    formData.append("lcbdb", lcbFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "import/livingcookbook",
       "POST",
       formData,
       payload,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   importPaprika(paprikaFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("paprikadb", paprikaFile, paprikaFile.name);
+    formData.append("paprikadb", paprikaFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/paprika",
       "POST",
       formData,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   importJSONLD(jsonLDFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("jsonLD", jsonLDFile, jsonLDFile.name);
+    formData.append("jsonLD", jsonLDFile);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/json-ld",
       "POST",
       formData,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   importCookmate(file: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
-    formData.append("cookmatedb", file, file.name);
+    formData.append("cookmatedb", file);
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/cookmate",
       "POST",
       formData,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   parseIngredients(
     ingredients: string,
     scale: number,
-    boldify?: boolean
+    boldify?: boolean,
   ): ParsedIngredient[] {
     return parseIngredients(ingredients, scale, boldify);
   }

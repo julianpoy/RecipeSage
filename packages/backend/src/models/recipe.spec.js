@@ -4,7 +4,6 @@ import * as sinon from "sinon";
 import {
   setup,
   cleanup,
-  syncDB,
   randomString,
   createUser,
   createRecipe,
@@ -50,16 +49,12 @@ describe("recipe", () => {
           expect(opts[2]).to.equal(basename);
           expect(opts[3]).to.equal(transaction);
           expect(opts[4]).to.equal(1); // recursive start idx
-        }
+        },
       );
     });
   });
 
   describe("_findTitle", () => {
-    beforeEach(async () => {
-      await syncDB();
-    });
-
     it("returns initial name when no conflicts arise", async () => {
       let user = await createUser();
 
@@ -69,7 +64,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, recipe.id, recipe.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe.title);
-          }
+          },
         );
       });
     });
@@ -84,7 +79,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, recipe1.id, recipe2.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe2.title + " (2)");
-          }
+          },
         );
       });
     });
@@ -97,7 +92,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, null, desiredTitle, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(desiredTitle);
-          }
+          },
         );
       });
     });
@@ -111,7 +106,7 @@ describe("recipe", () => {
         return Recipe.findTitle(user.id, null, recipe1.title, t).then(
           (adjustedTitle) => {
             expect(adjustedTitle).to.equal(recipe1.title + " (2)");
-          }
+          },
         );
       });
     });
@@ -121,7 +116,6 @@ describe("recipe", () => {
     let _shareStub;
 
     beforeAll(async () => {
-      await syncDB();
       _shareStub = sinon
         .stub(Recipe.prototype, "share")
         .returns(Promise.resolve());
@@ -152,7 +146,6 @@ describe("recipe", () => {
   describe("instance.share", () => {
     let findTitleStub;
     beforeAll(async () => {
-      await syncDB();
       findTitleStub = sinon
         .stub(Recipe, "findTitle")
         .callsFake((a, b, title) => Promise.resolve(title));
@@ -163,12 +156,14 @@ describe("recipe", () => {
     });
 
     describe("shares recipe to recipient", () => {
-      let user1, user2, recipe, sharedRecipe;
+      let user1, user2, recipe, sharedRecipe, initialCount;
       beforeAll(async () => {
         user1 = await createUser();
         user2 = await createUser();
 
         recipe = await createRecipe(user1.id);
+
+        initialCount = await Recipe.count();
 
         await sequelize.transaction(async (t) => {
           sharedRecipe = await recipe.share(user2.id, t);
@@ -179,10 +174,12 @@ describe("recipe", () => {
         expect(recipe.id).not.to.equal(sharedRecipe.id);
 
         return Promise.all([
-          Recipe.count().then((count) => expect(count).to.equal(2)),
+          Recipe.count().then((count) =>
+            expect(count).to.equal(initialCount + 1),
+          ),
           Recipe.findByPk(recipe.id).then((r) => expect(r).to.not.be.null),
           Recipe.findByPk(sharedRecipe.id).then(
-            (r) => expect(r).to.not.be.null
+            (r) => expect(r).to.not.be.null,
           ),
         ]);
       });

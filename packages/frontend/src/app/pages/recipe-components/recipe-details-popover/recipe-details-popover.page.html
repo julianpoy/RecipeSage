@@ -5,14 +5,15 @@
     </ion-list-header>
 
     <ion-item lines="full">
+      <ion-icon name="eye" slot="start"></ion-icon>
       <ion-toggle
         [(ngModel)]="preferences[preferenceKeys.EnableWakeLock]"
         (ngModelChange)="savePreferences(); closeWithAction('updateWakeLock')"
-        slot="start"
-      ></ion-toggle>
-      <ion-label>
-        {{ 'pages.recipeDetailsPopover.keepScreenOn' | translate }}
-      </ion-label>
+      >
+        <div class="ion-text-wrap">
+          {{ 'pages.recipeDetailsPopover.keepScreenOn' | translate }}
+        </div>
+      </ion-toggle>
     </ion-item>
   </div>
 

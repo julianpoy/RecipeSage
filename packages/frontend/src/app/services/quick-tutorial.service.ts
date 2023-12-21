@@ -52,7 +52,7 @@ const TUTORIAL_LOCALSTORAGE_KEY = "seenQuickTutorialOptions";
 export class QuickTutorialService {
   constructor(
     private alertCtrl: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   private fetchSeenTutorials(): QuickTutorialOptions[] {

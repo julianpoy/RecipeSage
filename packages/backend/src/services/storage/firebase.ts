@@ -32,7 +32,7 @@ const generateStorageLocation = (key: string): string => {
 export const writeBuffer = async (
   objectType: ObjectTypes,
   buffer: Buffer,
-  mimetype: string
+  mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const bucket = getStorage().bucket(BUCKET);
 
@@ -78,7 +78,7 @@ export const deleteObjects = async (keys: string[]): Promise<void> => {
     keys.map((key) =>
       bucket.file(key).delete({
         ignoreNotFound: true,
-      })
-    )
+      }),
+    ),
   );
 };

@@ -54,7 +54,7 @@ export class ShoppingListService {
   constructor(
     public events: EventService,
     public utilService: UtilService,
-    public httpService: HttpService
+    public httpService: HttpService,
   ) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
@@ -63,7 +63,7 @@ export class ShoppingListService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -73,7 +73,7 @@ export class ShoppingListService {
       "GET",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -82,14 +82,14 @@ export class ShoppingListService {
       title: string;
       collaborators: string[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<ShoppingList>(
       `shoppingLists`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -102,14 +102,14 @@ export class ShoppingListService {
         reference: string;
       }[];
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}`,
       "POST",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -118,14 +118,14 @@ export class ShoppingListService {
     payload: {
       title: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}`,
       "PUT",
       payload,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -138,14 +138,14 @@ export class ShoppingListService {
       title?: string;
       completed?: boolean;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<{ reference: string }>(
       `shoppingLists/${shoppingListId}/items`,
       "PUT",
       payload,
       query,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -154,14 +154,14 @@ export class ShoppingListService {
     query: {
       itemIds: string;
     },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this.httpService.requestWithWrapper<void>(
       `shoppingLists/${shoppingListId}/items`,
       "DELETE",
       undefined,
       query,
-      errorHandlers
+      errorHandlers,
     );
   }
 
@@ -171,7 +171,7 @@ export class ShoppingListService {
       "DELETE",
       undefined,
       undefined,
-      errorHandlers
+      errorHandlers,
     );
   }
 }

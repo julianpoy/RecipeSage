@@ -1,5 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+.credentials
 .git
 
 # compiled output
@@ -47,3 +48,5 @@ restore.sql
 nx-cloud.env
 kube/secrets.yml
 .angular
+
+.nx/cache

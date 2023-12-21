@@ -13,7 +13,7 @@ export const MealPlanInit = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {}
+    {},
   );
   MealPlan.associate = function (models) {
     MealPlan.belongsTo(models.User, {

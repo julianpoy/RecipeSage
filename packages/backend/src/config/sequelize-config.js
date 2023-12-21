@@ -6,7 +6,7 @@ if (
   !process.env.POSTGRES_PORT
 ) {
   throw new Error(
-    "Must provide POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_HOST, POSTGRES_PORT"
+    "Must provide POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_HOST, POSTGRES_PORT",
   );
 }
 
@@ -27,7 +27,10 @@ const config = {
           }
         : false,
   },
-  logging: process.env.POSTGRES_LOGGING == "true" && console.log,
+  logging:
+    !process.env.JEST_WORKER_ID &&
+    process.env.POSTGRES_LOGGING === "true" &&
+    console.log,
 };
 
 // Must be commonjs for sequelize-cli

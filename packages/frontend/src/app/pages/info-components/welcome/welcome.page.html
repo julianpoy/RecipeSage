@@ -51,25 +51,25 @@
       <br />
 
       <ion-button (click)="goToAuth('login')" size="small">
-        <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
+        <ion-icon src="assets/icon/carrot.svg" slot="start"></ion-icon>
         <ion-label> {{ 'pages.welcome.loginButton' | translate }} </ion-label>
       </ion-button>
     </div>
 
     <div class="screen">
-      <picture>
-        <img
-          *ngIf="!isIOS"
-          src="assets/stockphotos/my-recipes-cap-dec-22.jpg"
-          alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}"
+      <video
+        width="100%"
+        controls
+        loop
+        preload="none"
+        muted
+        poster="https://static.recipesage.com/assets/{{ isIOS ? 'ios' : 'android' }}-autoimport-demo.png"
+      >
+        <source
+          src="https://static.recipesage.com/assets/{{ isIOS ? 'ios' : 'android' }}-autoimport-demo.mp4"
+          type="video/mp4"
         />
-        <img
-          *ngIf="isIOS"
-          class="ios"
-          src="assets/stockphotos/my-recipes-ios.jpg"
-          alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}"
-        />
-      </picture>
+      </video>
     </div>
 
     <div class="ion-padding welcomeContent">
@@ -149,7 +149,7 @@
         <br /><br />
 
         <ion-button (click)="goToAuth('login')" size="small">
-          <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
+          <ion-icon src="assets/icon/carrot.svg" slot="start"></ion-icon>
           <ion-label> {{ 'pages.welcome.loginButton' | translate }} </ion-label>
         </ion-button>
       </div>

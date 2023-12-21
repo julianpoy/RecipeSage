@@ -14,10 +14,10 @@ export class WakeLockService {
 
   constructor() {
     document.addEventListener("visibilitychange", () =>
-      this.onVisiblityChange()
+      this.onVisiblityChange(),
     );
     document.addEventListener("fullscreenchange", () =>
-      this.onVisiblityChange()
+      this.onVisiblityChange(),
     );
   }
 

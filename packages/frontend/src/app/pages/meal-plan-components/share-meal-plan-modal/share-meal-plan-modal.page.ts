@@ -17,7 +17,7 @@ export class ShareMealPlanModalPage {
 
   constructor(
     private modalCtrl: ModalController,
-    private mealPlanService: MealPlanService
+    private mealPlanService: MealPlanService,
   ) {}
 
   ionViewWillEnter() {

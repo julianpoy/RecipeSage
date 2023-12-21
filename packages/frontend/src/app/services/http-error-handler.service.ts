@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { ToastController, ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { AppRouter } from "@recipesage/trpc";
+import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";
 import { AxiosError } from "axios";
+import * as Sentry from "@sentry/browser";
 
 import { AuthPage } from "~/pages/auth/auth.page";
 
@@ -25,7 +26,7 @@ export class HttpErrorHandlerService {
   constructor(
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   async promptForAuth() {
@@ -94,9 +95,20 @@ export class HttpErrorHandlerService {
 
   handleTrpcError(
     error: TRPCClientError<AppRouter>,
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     const statusCode = error.data?.httpStatus || 500;
+
+    // If it was code-based or API-based, we want to know about unexpected errors
+    if (statusCode >= 500) {
+      console.error(error);
+      try {
+        Sentry.captureException(error);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     this._handleError(statusCode, errorHandlers);
   }
 }

@@ -1,0 +1,112 @@
+.assistant-recipe-image {
+  --border-radius: 0;
+}
+
+.submit {
+  margin-top: 10px;
+}
+
+.message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .time-divider {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  .chat {
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+    background-color: rgb(0, 104, 166);
+    display: inline-block;
+    padding: 10px;
+    // border-radius: 20px;
+    border-radius: 6px;
+    text-align: left;
+    width: 90%;
+    max-width: 600px;
+
+    span {
+      white-space: pre-wrap;
+      color: var(--ion-color-primary-contrast);
+
+      a {
+        color: var(--ion-color-primary-contrast);
+        opacity: 1;
+      }
+    }
+  }
+
+  .recipe {
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+    background-color: rgb(0, 104, 166);
+    width: 60%;
+    max-width: 400px;
+    // border-radius: 20px;
+    border-radius: 6px;
+
+    ion-item {
+      --background: transparent;
+
+      h2 {
+        margin-top: 0;
+        color: var(--ion-color-primary-contrast);
+      }
+
+      .description {
+        color: var(--ion-color-primary-contrast);
+      }
+    }
+  }
+
+  &.me {
+    text-align: right;
+
+    .recipe {
+      margin-left: auto;
+    }
+  }
+
+  &.blue {
+    .chat {
+      background-color: var(--ion-background-tint-color);
+
+      span {
+        color: var(--ion-text-color, #000);
+
+        a {
+          color: var(--ion-text-color, #000);
+        }
+      }
+    }
+
+    .recipe {
+      background-color: var(--ion-background-tint-color);
+
+      ion-item {
+        h2 {
+          color: var(--ion-text-color, #000);
+        }
+
+        .description {
+          color: var(--ion-text-color, #000);
+        }
+      }
+    }
+  }
+}
+
+.reload.reloading {
+  animation: spin 1s linear infinite normal none;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

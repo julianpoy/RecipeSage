@@ -57,100 +57,96 @@
           ></recipe-preview>
 
           <ion-item>
+            <ion-icon name="image" slot="start"></ion-icon>
             <ion-toggle
               [(ngModel)]="embedConfig.titleImage"
               (ngModelChange)="updateEmbed(true);"
-              slot="start"
-            ></ion-toggle>
-            <ion-label>
-              {{ 'pages.share.byEmbed.image' | translate }}
-            </ion-label>
-            <ion-icon name="image" slot="start"></ion-icon>
+            >
+              <div class="ion-text-wrap">
+                {{ 'pages.share.byEmbed.image' | translate }}
+              </div>
+            </ion-toggle>
           </ion-item>
 
           <ion-item>
+            <ion-icon name="swap-horizontal" slot="start"></ion-icon>
             <ion-toggle
               [(ngModel)]="embedConfig.verticalInstrIng"
               (ngModelChange)="updateEmbed(true);"
-              slot="start"
-            ></ion-toggle>
-            <ion-label>
-              {{ 'pages.share.byEmbed.columns' | translate }}
-            </ion-label>
-            <ion-icon name="swap-horizontal" slot="start"></ion-icon>
+            >
+              <div class="ion-text-wrap">
+                {{ 'pages.share.byEmbed.columns' | translate }}
+              </div>
+            </ion-toggle>
           </ion-item>
 
           <ion-item>
+            <ion-icon name="print" slot="start"></ion-icon>
             <ion-toggle
               [(ngModel)]="embedConfig.showPrintButton"
               (ngModelChange)="updateEmbed(true);"
-              slot="start"
-            ></ion-toggle>
-            <ion-label>
-              {{ 'pages.share.byEmbed.print' | translate }}
-            </ion-label>
-            <ion-icon name="print" slot="start"></ion-icon>
+            >
+              <div class="ion-text-wrap">
+                {{ 'pages.share.byEmbed.print' | translate }}
+              </div>
+            </ion-toggle>
           </ion-item>
 
           <ion-item>
+            <ion-icon name="link" slot="start"></ion-icon>
             <ion-toggle
               [(ngModel)]="embedConfig.hideSource"
               (ngModelChange)="embedConfig.hideSourceURL = embedConfig.hideSource; updateEmbed(true);"
-              slot="start"
-            ></ion-toggle>
-            <ion-label>
-              {{ 'pages.share.byEmbed.sources' | translate }}
-            </ion-label>
-            <ion-icon name="link" slot="start"></ion-icon>
+            >
+              <div class="ion-text-wrap">
+                {{ 'pages.share.byEmbed.sources' | translate }}
+              </div>
+            </ion-toggle>
           </ion-item>
 
           <ion-item>
+            <ion-icon name="document-text" slot="start"></ion-icon>
             <ion-toggle
               [(ngModel)]="embedConfig.hideNotes"
               (ngModelChange)="updateEmbed(true);"
-              slot="start"
-            ></ion-toggle>
-            <ion-label>
-              {{ 'pages.share.byEmbed.notes' | translate }}
-            </ion-label>
-            <ion-icon name="document-text" slot="start"></ion-icon>
+            >
+              <div class="ion-text-wrap">
+                {{ 'pages.share.byEmbed.notes' | translate }}
+              </div>
+            </ion-toggle>
           </ion-item>
         </div>
 
         <ion-item>
+          <ion-icon name="resize" slot="start"></ion-icon>
           <ion-input
+            label="{{ 'pages.share.byEmbed.height' | translate }}"
             type="number"
             [(ngModel)]="embedHeight"
             (ngModelChange)="updateEmbed();"
-            slot="start"
           ></ion-input>
-          <ion-label>
-            {{ 'pages.share.byEmbed.height' | translate }}
-          </ion-label>
-          <ion-icon name="resize" slot="start"></ion-icon>
         </ion-item>
 
         <ion-item>
+          <ion-icon name="resize" slot="start"></ion-icon>
           <ion-input
+            label="{{ 'pages.share.byEmbed.width' | translate }}"
             type="number"
             [(ngModel)]="embedWidth"
             (ngModelChange)="updateEmbed();"
-            slot="start"
           ></ion-input>
-          <ion-label> {{ 'pages.share.byEmbed.width' | translate }} </ion-label>
-          <ion-icon name="resize" slot="start"></ion-icon>
         </ion-item>
 
         <ion-item>
+          <ion-icon name="code-working" slot="start"></ion-icon>
           <ion-toggle
             [(ngModel)]="enableJSONLD"
             (ngModelChange)="updateEmbed();"
-            slot="start"
-          ></ion-toggle>
-          <ion-label>
-            {{ 'pages.share.byEmbed.jsonLD' | translate }}
-          </ion-label>
-          <ion-icon name="resize" slot="start"></ion-icon>
+          >
+            <div class="ion-text-wrap">
+              {{ 'pages.share.byEmbed.jsonLD' | translate }}
+            </div>
+          </ion-toggle>
         </ion-item>
 
         <ion-item lines="none">
@@ -158,7 +154,6 @@
         </ion-item>
 
         <copy-with-webshare
-          *ngSwitchCase="'link'"
           [disableWebshare]="true"
           [copyText]="recipeEmbedCode || ''"
         ></copy-with-webshare>

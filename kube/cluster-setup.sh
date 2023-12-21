@@ -2,7 +2,7 @@
 
 kubectl apply -f https://www.digitalocean.com/docs/kubernetes/resources/doks-metrics-server.yaml
 
-kubectl create configmap firebase-credentials --from-file=./Backend/src/config/firebase-credentials.json
+kubectl create configmap firebase-credentials --from-file=./.credentials/firebase.json
 
 kubectl create configmap pgsync-schema --from-file=./pgsync.schema.json
 

@@ -19,11 +19,12 @@
             [src]="friendship.otherUser.profileImages[0].location"
           />
         </ion-avatar>
-        <ion-label>
-          <h2>{{ friendship.otherUser.name }}</h2>
-          <p>@{{ friendship.otherUser.handle }}</p>
-        </ion-label>
-        <ion-radio [value]="friendship"></ion-radio>
+        <ion-radio labelPlacement="end" justify="start" [value]="friendship">
+          <ion-label>
+            {{ friendship.otherUser.name }}
+            <p>&commat;{{ friendship.otherUser.handle }}</p>
+          </ion-label>
+        </ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
@@ -38,11 +39,12 @@
       </ion-list-header>
 
       <ion-item *ngFor="let thread of threads">
-        <ion-label>
-          <h2>{{ thread.otherUser.name }}</h2>
-          <p>{{ thread.otherUser.email }}</p>
-        </ion-label>
-        <ion-radio [value]="thread"></ion-radio>
+        <ion-radio labelPlacement="end" justify="start" [value]="thread">
+          <ion-label>
+            {{ thread.otherUser.name }}
+            <p>{{ thread.otherUser.email }}</p>
+          </ion-label>
+        </ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>

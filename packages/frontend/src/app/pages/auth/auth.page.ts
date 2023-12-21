@@ -10,7 +10,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { IS_SELFHOST } from "../../../environments/environment";
 
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { MessagingService } from "~/services/messaging.service";
@@ -50,7 +50,7 @@ export class AuthPage {
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
-    public userService: UserService
+    public userService: UserService,
   ) {
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
@@ -148,7 +148,7 @@ export class AuthPage {
           },
           {
             412: () => this.presentToast(incorrectLogin),
-          }
+          },
         )
       : await this.userService.register(
           {
@@ -158,7 +158,7 @@ export class AuthPage {
           },
           {
             406: () => this.presentToast(emailTaken),
-          }
+          },
         );
     loading.dismiss();
     if (!response.success) return;
@@ -173,7 +173,7 @@ export class AuthPage {
       this.messagingService.requestNotifications();
     }
 
-    this.events.publish("auth");
+    this.events.publish(EventName.Auth);
     this.close();
   }
 
@@ -233,7 +233,7 @@ export class AuthPage {
       await this.modalCtrl.dismiss();
     } else {
       this.navCtrl.navigateRoot(
-        this.redirect || RouteMap.HomePage.getPath("main")
+        this.redirect || RouteMap.HomePage.getPath("main"),
       );
     }
   }

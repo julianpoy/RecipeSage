@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app: rs-api-beta
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
   template:
     metadata:
       labels:
@@ -29,6 +33,18 @@ spec:
               "packages/backend/tsconfig.json",
               "packages/backend/src/bin/www",
             ]
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 2
+            periodSeconds: 5
           resources:
             requests:
               cpu: 100m
@@ -54,9 +70,11 @@ spec:
               value: "true"
             - name: TYPESENSE_NODES
               value: '[{"host": "rs-typesense", "port": 8108, "protocol": "http"}]'
+            - name: OPENAI_GPT_MODEL
+              value: gpt-3.5-turbo-1106
           volumeMounts:
             - name: firebase-credentials
-              mountPath: /app/packages/backend/src/config/firebase-credentials.json
+              mountPath: /app/.credentials/firebase.json
               subPath: firebase-credentials.json
       volumes:
         - name: firebase-credentials

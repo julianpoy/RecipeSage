@@ -3,6 +3,7 @@ import * as SharedUtils from "@recipesage/util";
 export const recipeToJSONLD = (recipe) => ({
   "@context": "http://schema.org",
   "@type": "Recipe",
+  identifier: recipe.id,
   datePublished: new Date(recipe.createdAt).toISOString(),
   description: recipe.description,
   image: (recipe.images || []).map((image) => image.location),
@@ -11,13 +12,13 @@ export const recipeToJSONLD = (recipe) => ({
   recipeIngredient: SharedUtils.parseIngredients(
     recipe.ingredients,
     1,
-    false
+    false,
   ).map((el) => (el.isHeader ? `[${el.content}]` : el.content)),
   recipeInstructions: SharedUtils.parseInstructions(recipe.instructions).map(
     (el) => ({
       "@type": el.isHeader ? "HowToSection" : "HowToStep",
       text: el.isHeader ? `[${el.content}]` : el.content,
-    })
+    }),
   ),
   recipeYield: recipe.yield,
   totalTime: convertToISO8601Time(recipe.totalTime) || recipe.totalTime,
@@ -57,7 +58,7 @@ const getImageSrcFromSchema = (jsonLD) => {
       ) {
         return Buffer.from(
           url.href.replace("data:image/png;base64,", ""),
-          "base64"
+          "base64",
         );
       }
     } catch (_) {
@@ -94,7 +95,7 @@ const getImageSRCsFromSchema = (jsonLD) => {
         ) {
           return Buffer.from(
             url.href.replace("data:image/png;base64,", ""),
-            "base64"
+            "base64",
           );
         }
       } catch (_) {
@@ -139,7 +140,7 @@ const convertToISO8601Time = (time) => {
   if (hourMatch) timeString += `${hourMatch[1].trim()}H`;
 
   const minuteMatch = time.match(
-    /(\d* ?(\d+\/\d+)?(\.\d+)?) *(minutes?|mins?|m)/i
+    /(\d* ?(\d+\/\d+)?(\.\d+)?) *(minutes?|mins?|m)/i,
   );
   if (minuteMatch) timeString += `${minuteMatch[1].trim()}M`;
 

@@ -9,8 +9,9 @@ import {
   AlertController,
   NavController,
 } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+
+import { register } from "swiper/element/bundle";
+register();
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
@@ -19,12 +20,10 @@ import { RecipeService } from "~/services/recipe.service";
 import { MessagingService } from "~/services/messaging.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UserService } from "~/services/user.service";
-import {
-  PreferencesService,
-  GlobalPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { GlobalPreferenceKey, SupportedLanguages } from "@recipesage/util";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
-import { EventService } from "~/services/event.service";
+import { EventName, EventService } from "~/services/event.service";
 import {
   FeatureFlagKeys,
   FeatureFlagService,
@@ -45,6 +44,9 @@ export class AppComponent {
   isSelfHost = IS_SELFHOST;
   isLoggedIn?: boolean;
 
+  // See https://bugzilla.mozilla.org/show_bug.cgi?id=1811099
+  enableAnimations = !navigator.userAgent.toLowerCase().includes("firefox");
+
   navList?: { id: string; title: string; icon: string; url: string }[];
 
   inboxCount?: number;
@@ -55,7 +57,7 @@ export class AppComponent {
   unsupportedBrowser: boolean =
     !!window.navigator.userAgent.match(/(MSIE|Trident)/);
   seenOldBrowserWarning: boolean = !!localStorage.getItem(
-    "seenOldBrowserWarning"
+    "seenOldBrowserWarning",
   );
 
   aboutDetailsHref: string = RouteMap.AboutDetailsPage.getPath();
@@ -69,8 +71,6 @@ export class AppComponent {
     private route: ActivatedRoute,
     private router: Router,
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private menuCtrl: MenuController,
     private events: EventService,
     private toastCtrl: ToastController,
@@ -82,11 +82,14 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
-    public cookingToolbarService: CookingToolbarService // Required by template
+    public cookingToolbarService: CookingToolbarService, // Required by template
   ) {
-    const language =
+    const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
-    this.translate.use(language || this.utilService.getAppBrowserLang());
+    const language = languagePref || this.utilService.getAppBrowserLang();
+    this.translate.setDefaultLang(SupportedLanguages.EN_US);
+    this.translate.use(language);
+    this.utilService.setHtmlBrowserLang(language);
 
     const fontSize =
       this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
@@ -174,19 +177,18 @@ export class AppComponent {
   }
 
   initEventListeners() {
-    this.events.subscribe("recipe:created", () => {
-      this.loadInboxCount();
-    });
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => {
+        this.loadInboxCount();
+      },
+    );
 
-    this.events.subscribe("recipe:updated", () => {
-      this.loadInboxCount();
-    });
-
-    this.events.subscribe("recipe:deleted", () => {
-      this.loadInboxCount();
-    });
-
-    this.events.subscribe("auth", () => {
+    this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
       this.loadInboxCount();
@@ -217,7 +219,7 @@ export class AppComponent {
               role: "cancel",
               handler: () => {
                 this.navCtrl.navigateForward(
-                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id)
+                  RouteMap.MessageThreadPage.getPath(myMessage.otherUser.id),
                 );
               },
             },
@@ -225,7 +227,7 @@ export class AppComponent {
         });
         toast.present();
       },
-      this
+      this,
     );
   }
 
@@ -256,6 +258,9 @@ export class AppComponent {
     const home = await this.translate.get("pages.app.nav.home").toPromise();
     const labels = await this.translate.get("pages.app.nav.labels").toPromise();
     const people = await this.translate.get("pages.app.nav.people").toPromise();
+    const assistant = await this.translate
+      .get("pages.app.nav.assistant")
+      .toPromise();
     const messages = await this.translate
       .get("pages.app.nav.messages")
       .toPromise();
@@ -324,6 +329,15 @@ export class AppComponent {
       [
         true,
         {
+          id: "settings",
+          title: settings,
+          icon: "settings",
+          url: RouteMap.SettingsPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "about",
           title: about,
           icon: "help-buoy",
@@ -363,9 +377,18 @@ export class AppComponent {
       [
         true,
         {
+          id: "assistant",
+          title: assistant,
+          icon: "chatbox-ellipses",
+          url: RouteMap.AssistantPage.getPath(),
+        },
+      ],
+      [
+        true,
+        {
           id: "messages",
           title: messages,
-          icon: "chatbox",
+          icon: "chatbubbles",
           url: RouteMap.MessagesPage.getPath(),
         },
       ],
@@ -472,8 +495,6 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
       this.menuCtrl.close();
     });
 
@@ -511,21 +532,5 @@ export class AppComponent {
         console.warn(e);
       }
     });
-  }
-
-  _logout() {
-    this.utilService.removeToken();
-
-    this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
-  }
-
-  logout() {
-    this.messagingService.disableNotifications();
-
-    this.userService.logout({
-      "*": () => {},
-    });
-
-    this._logout();
   }
 }

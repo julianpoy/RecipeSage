@@ -26,11 +26,11 @@ export class ContributePage {
     private translate: TranslateService,
     private utilService: UtilService,
     private paymentsService: PaymentsService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
   ) {
     if (IS_SELFHOST) {
       window.alert(
-        "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe"
+        "Opening the RecipeSage site, since selfhosted versions aren't linked to Stripe",
       );
       window.location.href = "https://recipesage.com/#/contribute";
     }
@@ -83,10 +83,10 @@ export class ContributePage {
         amount: amount * 100,
         isRecurring,
         successUrl: this.utilService.buildPublicRoutePath(
-          RouteMap.ContributeThankYouPage.getPath()
+          RouteMap.ContributeThankYouPage.getPath(),
         ),
         cancelUrl: this.utilService.buildPublicRoutePath(
-          RouteMap.ContributeCancelPage.getPath()
+          RouteMap.ContributeCancelPage.getPath(),
         ),
       },
       {
@@ -98,7 +98,7 @@ export class ContributePage {
             })
           ).present();
         },
-      }
+      },
     );
     if (!response.success) return;
 

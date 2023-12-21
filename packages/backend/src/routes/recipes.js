@@ -18,6 +18,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import * as SearchService from "@recipesage/trpc";
 import * as SubscriptionsService from "../services/subscriptions.js";
@@ -75,21 +76,21 @@ router.post(
   joiValidator(
     Joi.object({
       body: Joi.object({
-        title: Joi.string().allow("").optional(), // TODO: change to required once frontend no longer needs PreconditionFailed
-        description: Joi.string().allow("").optional(),
-        yield: Joi.string().allow("").optional(),
-        activeTime: Joi.string().allow("").optional(),
-        totalTime: Joi.string().allow("").optional(),
-        source: Joi.string().allow("").optional(),
-        url: Joi.string().allow("").optional(),
-        notes: Joi.string().allow("").optional(),
-        ingredients: Joi.string().allow("").optional(),
-        instructions: Joi.string().allow("").optional(),
+        title: Joi.string().allow("").optional().allow(null), // TODO: change to required once frontend no longer needs PreconditionFailed
+        description: Joi.string().allow("", null).optional(),
+        yield: Joi.string().allow("", null).optional(),
+        activeTime: Joi.string().allow("", null).optional(),
+        totalTime: Joi.string().allow("", null).optional(),
+        source: Joi.string().allow("", null).optional(),
+        url: Joi.string().allow("", null).optional(),
+        notes: Joi.string().allow("", null).optional(),
+        ingredients: Joi.string().allow("", null).optional(),
+        instructions: Joi.string().allow("", null).optional(),
         rating: Joi.number().min(1).max(5).allow(null).optional(),
         labels: Joi.array().items(Joi.string()).optional(),
         imageIds: Joi.array().items(Joi.string().uuid()).optional(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -103,7 +104,7 @@ router.post(
         res.locals.session.userId,
         null,
         req.body.title,
-        transaction
+        transaction,
       );
 
       const recipe = await Recipe.create(
@@ -124,14 +125,14 @@ router.post(
         },
         {
           transaction,
-        }
+        },
       );
 
       if (req.body.imageIds) {
         const canUploadMultipleImages =
           await SubscriptionsService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionsService.Capabilities.MultipleImages,
           );
 
         if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
@@ -145,7 +146,7 @@ router.post(
           });
           const imagesById = images.reduce(
             (acc, img) => ({ ...acc, [img.id]: img }),
-            {}
+            {},
           );
 
           req.body.imageIds = req.body.imageIds.filter(
@@ -154,7 +155,7 @@ router.post(
               imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
               moment(imagesById[imageId].createdAt)
                 .add(1, "hour")
-                .isBefore(moment()) // Allow old images (user's subscription expired)
+                .isBefore(moment()), // Allow old images (user's subscription expired)
           );
         }
 
@@ -168,13 +169,13 @@ router.post(
           })),
           {
             transaction,
-          }
+          },
         );
       }
 
       if (req.body.labels?.length) {
         const sanitizedLabelTitles = req.body.labels
-          .map((title) => UtilService.cleanLabelTitle(title || ""))
+          .map((title) => Util.cleanLabelTitle(title || ""))
           .filter((el) => el.trim());
         const labelTitles = [...new Set(sanitizedLabelTitles)]; // Dedupe
 
@@ -186,7 +187,7 @@ router.post(
           {
             ignoreDuplicates: true,
             transaction,
-          }
+          },
         );
 
         const labels = await Label.findAll({
@@ -200,7 +201,7 @@ router.post(
 
         if (labels.length !== labelTitles.length) {
           throw InternalServerError(
-            "Labels length did not match labelTitles length. Orphaned labels!"
+            "Labels length did not match labelTitles length. Orphaned labels!",
           );
         }
 
@@ -212,7 +213,7 @@ router.post(
           {
             ignoreDuplicates: true,
             transaction,
-          }
+          },
         );
       }
 
@@ -224,7 +225,7 @@ router.post(
     const serializedRecipe = recipe.toJSON();
     serializedRecipe.labels = [];
     res.status(201).json(serializedRecipe);
-  })
+  }),
 );
 
 // Count a user's recipes
@@ -243,7 +244,7 @@ router.get(
     res.status(200).json({
       count,
     });
-  })
+  }),
 );
 
 //Get all of a user's recipes (paginated)
@@ -266,7 +267,7 @@ router.get(
         count: Joi.number().optional(),
         offset: Joi.number().optional(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"], true),
@@ -332,7 +333,7 @@ router.get(
       .map(applyLegacyImageField);
 
     res.status(200).send(recipes);
-  })
+  }),
 );
 
 router.get(
@@ -347,7 +348,7 @@ router.get(
         ratingFilter: Joi.string().regex(VALID_RATING_FILTERS).optional(),
         includeFriends: Joi.boolean().optional(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"], true),
@@ -373,7 +374,7 @@ router.get(
     console.log(userIds);
     const recipeIds = await SearchService.searchRecipes(
       userIds,
-      req.query.query
+      req.query.query,
     );
 
     const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
@@ -402,7 +403,7 @@ router.get(
       });
 
     res.status(200).send(recipes);
-  })
+  }),
 );
 
 router.get(
@@ -496,18 +497,18 @@ router.get(
         break;
       default:
         throw BadRequest(
-          "Unknown export format. Please send json, xml, or txt."
+          "Unknown export format. Please send json, xml, or txt.",
         );
     }
 
     res.setHeader(
       "Content-disposition",
-      "attachment; filename=recipes-" + Date.now() + "." + req.query.format
+      "attachment; filename=recipes-" + Date.now() + "." + req.query.format,
     );
     res.setHeader("Content-type", mimetype);
     res.write(data);
     res.end();
-  })
+  }),
 );
 
 //Get a single recipe
@@ -560,7 +561,7 @@ router.get(
     if (!recipe.isOwner) recipe.labels = [];
 
     res.status(200).json(recipe);
-  })
+  }),
 );
 
 router.get(
@@ -593,7 +594,7 @@ router.get(
     const jsonLD = JSONLDService.recipeToJSONLD(recipe);
 
     res.status(200).json(jsonLD);
-  })
+  }),
 );
 
 //Update a recipe
@@ -618,7 +619,7 @@ router.put(
           .optional(),
         imageIds: Joi.array().items(Joi.string().uuid()).optional(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -658,7 +659,7 @@ router.put(
         res.locals.session.userId,
         recipe.id,
         req.body.title || recipe.title,
-        transaction
+        transaction,
       );
 
       recipe.title = adjustedTitle;
@@ -671,7 +672,7 @@ router.put(
         const canUploadMultipleImages =
           await SubscriptionsService.userHasCapability(
             res.locals.session.userId,
-            SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+            SubscriptionsService.Capabilities.MultipleImages,
           );
 
         if (!canUploadMultipleImages && req.body.imageIds.length > 1) {
@@ -685,7 +686,7 @@ router.put(
           });
           const imagesById = images.reduce(
             (acc, img) => ({ ...acc, [img.id]: img }),
-            {}
+            {},
           );
 
           req.body.imageIds = req.body.imageIds.filter(
@@ -694,7 +695,7 @@ router.put(
               imagesById[imageId].userId !== res.locals.session.userId || // Allow images uploaded by others (shared to me)
               moment(imagesById[imageId].createdAt)
                 .add(1, "day")
-                .isBefore(moment()) // Allow old images (user's subscription expired)
+                .isBefore(moment()), // Allow old images (user's subscription expired)
           );
         }
 
@@ -715,7 +716,7 @@ router.put(
           })),
           {
             transaction,
-          }
+          },
         );
       }
 
@@ -725,7 +726,7 @@ router.put(
     });
 
     res.status(200).json(updatedRecipe);
-  })
+  }),
 );
 
 router.delete(
@@ -768,7 +769,7 @@ router.delete(
     });
 
     res.status(200).send({});
-  })
+  }),
 );
 
 const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
@@ -863,7 +864,7 @@ router.post(
       body: Joi.object({
         labelIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -874,12 +875,12 @@ router.post(
         {
           labelIds: req.body.labelIds,
         },
-        transaction
+        transaction,
       );
     });
 
     res.sendStatus(200);
-  })
+  }),
 );
 
 router.post(
@@ -889,7 +890,7 @@ router.post(
       body: Joi.object({
         recipeIds: Joi.array().items(Joi.string().uuid()).min(1).required(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -900,12 +901,12 @@ router.post(
         {
           recipeIds: req.body.recipeIds,
         },
-        transaction
+        transaction,
       );
     });
 
     res.sendStatus(200);
-  })
+  }),
 );
 
 router.delete(
@@ -915,7 +916,7 @@ router.delete(
       params: Joi.object({
         id: Joi.string().uuid().required(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -926,12 +927,12 @@ router.delete(
         {
           recipeIds: [req.params.id],
         },
-        transaction
+        transaction,
       );
     });
 
     res.sendStatus(200);
-  })
+  }),
 );
 
 export default router;

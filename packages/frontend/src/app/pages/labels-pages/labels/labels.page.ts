@@ -14,10 +14,13 @@ import { UtilService } from "~/services/util.service";
 import { LabelService, Label } from "~/services/label.service";
 import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
 import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
-import {
-  PreferencesService,
-  ManageLabelsPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { ManageLabelsPreferenceKey } from "@recipesage/util";
+import { TRPCService } from "../../../services/trpc.service";
+import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
+import { NewLabelItemModalPage } from "../new-label-item-modal/new-label-item-modal.page";
+import { ManageLabelGroupModalPage } from "../manage-label-group-modal/manage-label-group-modal.page";
 
 @Component({
   selector: "page-labels",
@@ -28,54 +31,61 @@ export class LabelsPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = ManageLabelsPreferenceKey;
 
-  labels: Label[] = [];
+  labels: LabelSummary[] = [];
+  labelGroups: LabelGroupSummary[] = [];
 
   loading = true;
   selectedLabelIds: string[] = [];
   selectionMode = false;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public popoverCtrl: PopoverController,
-    public loadingService: LoadingService,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
-    public toastCtrl: ToastController,
-    public labelService: LabelService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private popoverCtrl: PopoverController,
+    private loadingService: LoadingService,
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
+    private toastCtrl: ToastController,
+    private labelService: LabelService,
+    private utilService: UtilService,
+    private preferencesService: PreferencesService,
+    private trpcService: TRPCService,
   ) {}
 
   ionViewWillEnter() {
     this.clearSelectedLabels();
-
-    const loading = this.loadingService.start();
-    this.loadLabels().finally(() => {
-      loading.dismiss();
-    });
+    this.loadWithBar();
   }
 
   refresh(refresher: any) {
-    this.loadLabels().then(
-      () => {
-        refresher.target.complete();
-      },
-      () => {
-        refresher.target.complete();
-      }
-    );
+    this.load().finally(() => {
+      refresher.target.complete();
+    });
   }
 
-  async loadLabels() {
+  async load() {
     this.labels = [];
+    this.labelGroups = [];
     this.loading = true;
 
-    const response = await this.labelService.fetch();
+    const labelsResponse = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabels.query(),
+    );
+    const labelGroupsResponse = await this.trpcService.handle(
+      this.trpcService.trpc.labelGroups.getLabelGroups.query(),
+    );
     this.loading = false;
-    if (!response.success) return;
+    if (!labelsResponse || !labelGroupsResponse) return;
 
-    this.labels = response.data;
+    this.labels = labelsResponse;
+    this.labelGroups = labelGroupsResponse;
+  }
+
+  loadWithBar() {
+    const loading = this.loadingService.start();
+    this.load().finally(() => {
+      loading.dismiss();
+    });
   }
 
   async presentPopover(event: Event) {
@@ -104,7 +114,34 @@ export class LabelsPage {
     return item.id;
   }
 
-  async manage(label: Label) {
+  async new() {
+    const newModal = await this.modalCtrl.create({
+      component: NewLabelItemModalPage,
+    });
+
+    newModal.onDidDismiss().then(() => {
+      this.loadWithBar();
+    });
+
+    newModal.present();
+  }
+
+  async manageLabelGroup(labelGroup: LabelGroupSummary) {
+    const manageModal = await this.modalCtrl.create({
+      component: ManageLabelGroupModalPage,
+      componentProps: {
+        labelGroup,
+      },
+    });
+
+    manageModal.onDidDismiss().then(() => {
+      this.loadWithBar();
+    });
+
+    manageModal.present();
+  }
+
+  async manageLabel(label: LabelSummary) {
     const manageModal = await this.modalCtrl.create({
       component: ManageLabelModalPage,
       componentProps: {
@@ -113,16 +150,13 @@ export class LabelsPage {
     });
 
     manageModal.onDidDismiss().then(() => {
-      const loading = this.loadingService.start();
-      this.loadLabels().finally(() => {
-        loading.dismiss();
-      });
+      this.loadWithBar();
     });
 
     manageModal.present();
   }
 
-  selectLabel(label: Label) {
+  selectLabel(label: LabelSummary) {
     const index = this.selectedLabelIds.indexOf(label.id);
     if (index > -1) {
       this.selectedLabelIds.splice(index, 1);
@@ -140,7 +174,7 @@ export class LabelsPage {
     const labelTitles = this.selectedLabelIds
       .map(
         (labelId) =>
-          this.labels.filter((label) => label.id === labelId)[0].title
+          this.labels.filter((label) => label.id === labelId)[0].title,
       )
       .join(", ");
 
@@ -174,7 +208,7 @@ export class LabelsPage {
 
             this.clearSelectedLabels();
 
-            await this.loadLabels();
+            await this.load();
 
             loading.dismiss();
           },
@@ -184,7 +218,7 @@ export class LabelsPage {
     alert.present();
   }
 
-  formatDate(input: string) {
+  formatDate(input: string | number | Date) {
     return this.utilService.formatDate(input);
   }
 }

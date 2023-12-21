@@ -6,10 +6,8 @@ import {
   QuickTutorialService,
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
-import {
-  PreferencesService,
-  ManageLabelsPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { ManageLabelsPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "page-labels-popover",
@@ -31,14 +29,14 @@ export class LabelsPopoverPage {
     public popoverCtrl: PopoverController,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
-    public quickTutorialService: QuickTutorialService
+    public quickTutorialService: QuickTutorialService,
   ) {}
 
   toggleSelectionMode() {
     const enteringSelectionMode = !this.selectionMode;
     if (enteringSelectionMode) {
       this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.MultipleLabelSelection
+        QuickTutorialOptions.MultipleLabelSelection,
       );
     }
 

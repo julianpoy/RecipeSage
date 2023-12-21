@@ -7,10 +7,11 @@
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowCreatedAt]"
       (ngModelChange)="savePreferences()"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.labelsPopover.options.showCreatedAt' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.labelsPopover.options.showCreatedAt' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-button

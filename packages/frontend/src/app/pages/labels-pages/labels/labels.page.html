@@ -36,24 +36,54 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list *ngIf="!loading && labels.length > 0">
+  <ion-list *ngIf="!loading">
     <ion-item>
       <ion-label>
+        <h1>
+          {{ 'pages.labels.label.sectionTitle' | translate:{count:labels.length}
+          }}
+        </h1>
+
         <p class="ion-text-wrap">
-          {{ 'pages.labels.subtitle' | translate:{count:labels.length} }}
+          {{ 'pages.labels.label.sectionDescription' |
+          translate:{count:labels.length} }}
         </p>
       </ion-label>
     </ion-item>
+
+    <null-state *ngIf="!labels.length">
+      <ion-icon
+        name="pricetag"
+        class="big-icon"
+        virtualSlot="header"
+      ></ion-icon>
+      <ion-label virtualSlot="body">
+        <p>
+          {{ 'pages.labels.label.nullState.1' | translate }}<br />
+          {{ 'pages.labels.label.nullState.2' | translate }}
+        </p>
+      </ion-label>
+    </null-state>
     <ion-item
-      (click)="selectionMode ? selectLabel(label) : manage(label)"
+      (click)="selectionMode ? selectLabel(label) : manageLabel(label)"
       *ngFor="let label of labels"
       button
+      class="ion-margin-start"
     >
+      <ion-icon name="pricetag" slot="start"></ion-icon>
       <ion-label>
         {{label.title}}
         <p>
           {{ 'pages.labels.label.recipeCount' |
-          translate:{count:label.recipeCount} }}<br />
+          translate:{count:label.recipeLabels.length} }}<br />
+          <span *ngIf="label.labelGroup">
+            {{ 'pages.labels.label.group' |
+            translate:{title:label.labelGroup.title} }}
+          </span>
+          <span *ngIf="!label.labelGroup">
+            {{ 'pages.labels.label.noGroup' | translate }}
+          </span>
+          <br />
           <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">
             {{ 'pages.labels.label.createdAt' |
             translate:{dateString:formatDate(label.createdAt)} }}
@@ -67,7 +97,16 @@
   </ion-list>
 
   <ion-list *ngIf="!loading">
-    <null-state *ngIf="labels.length === 0">
+    <ion-item>
+      <ion-label>
+        <h1>{{ 'pages.labels.group.sectionTitle' | translate }}</h1>
+        <p class="ion-text-wrap">
+          {{ 'pages.labels.group.sectionDescription' |
+          translate:{count:labelGroups.length} }}
+        </p>
+      </ion-label>
+    </ion-item>
+    <null-state *ngIf="!labelGroups.length">
       <ion-icon
         name="pricetags"
         class="big-icon"
@@ -75,11 +114,40 @@
       ></ion-icon>
       <ion-label virtualSlot="body">
         <p>
-          {{ 'pages.labels.nullState.1' | translate }}<br />
-          {{ 'pages.labels.nullState.2' | translate }}<br />
-          {{ 'pages.labels.nullState.3' | translate }}
+          {{ 'pages.labels.group.nullState.1' | translate }}<br />
+          {{ 'pages.labels.group.nullState.2' | translate }}
         </p>
       </ion-label>
     </null-state>
+    <ion-item
+      (click)="manageLabelGroup(labelGroup)"
+      *ngFor="let labelGroup of labelGroups"
+      button
+      class="ion-margin-start"
+    >
+      <ion-icon name="pricetags" slot="start"></ion-icon>
+      <ion-label>
+        {{labelGroup.title}}
+        <p>
+          {{ 'pages.labels.group.labelCount' |
+          translate:{count:labelGroup.labels.length} }}<br />
+          <span *ngIf="preferences[preferenceKeys.ShowCreatedAt]">
+            {{ 'pages.labels.group.createdAt' |
+            translate:{dateString:formatDate(labelGroup.createdAt)} }}
+          </span>
+        </p>
+      </ion-label>
+    </ion-item>
   </ion-list>
+
+  <br />
+  <br />
+  <br />
+  <br />
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="new()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

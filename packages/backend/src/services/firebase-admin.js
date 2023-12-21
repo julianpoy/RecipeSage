@@ -6,9 +6,9 @@ const init = async () => {
   try {
     const serviceAccount = JSON.parse(
       await fs.readFile(
-        join(__dirname, "../config/firebase-credentials.json"),
-        "utf-8"
-      )
+        join(__dirname, "../../../../.credentials/firebase.json"),
+        "utf-8",
+      ),
     );
 
     admin.initializeApp({

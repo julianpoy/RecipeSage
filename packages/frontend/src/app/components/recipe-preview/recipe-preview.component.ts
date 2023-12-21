@@ -15,7 +15,7 @@ export class RecipePreviewComponent {
   @Input()
   set url(url: string) {
     this.trustedPreviewSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-      url || ""
+      url || "",
     );
   }
 

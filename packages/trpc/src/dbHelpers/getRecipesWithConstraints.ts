@@ -1,7 +1,10 @@
 import { Prisma, ProfileItem } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
 import { getFriendshipIds } from "./getFriendshipIds";
-import { RecipeSummary, recipeSummary } from "../types/queryTypes";
+import {
+  RecipeSummaryLite,
+  recipeSummaryLite,
+} from "../types/recipeSummaryLite";
 
 export const getRecipesWithConstraints = async (args: {
   tx?: Prisma.TransactionClient;
@@ -15,7 +18,7 @@ export const getRecipesWithConstraints = async (args: {
   labels?: string[];
   labelIntersection?: boolean;
   ratings?: (number | null)[];
-}): Promise<{ recipes: RecipeSummary[]; totalCount: number }> => {
+}): Promise<{ recipes: RecipeSummaryLite[]; totalCount: number }> => {
   const {
     tx = prisma,
     userId: contextUserId,
@@ -38,10 +41,10 @@ export const getRecipesWithConstraints = async (args: {
   }
 
   const friendUserIds = userIds.filter(
-    (userId) => friends.has(userId) && userId !== contextUserId
+    (userId) => friends.has(userId) && userId !== contextUserId,
   );
   const nonFriendUserIds = userIds.filter(
-    (userId) => !friends.has(userId) && userId !== contextUserId
+    (userId) => !friends.has(userId) && userId !== contextUserId,
   );
 
   const profileItems = await tx.profileItem.findMany({
@@ -62,11 +65,14 @@ export const getRecipesWithConstraints = async (args: {
     },
   });
 
-  const profileItemsByUserId = profileItems.reduce((acc, profileItem) => {
-    acc[profileItem.userId] ??= [];
-    acc[profileItem.userId].push(profileItem);
-    return acc;
-  }, {} as { [key: string]: ProfileItem[] });
+  const profileItemsByUserId = profileItems.reduce(
+    (acc, profileItem) => {
+      acc[profileItem.userId] ??= [];
+      acc[profileItem.userId].push(profileItem);
+      return acc;
+    },
+    {} as { [key: string]: ProfileItem[] },
+  );
 
   const queryFilters: Prisma.RecipeWhereInput[] = [];
   for (const userId of userIds) {
@@ -74,7 +80,7 @@ export const getRecipesWithConstraints = async (args: {
     const profileItemsForUser = profileItemsByUserId[userId] || [];
 
     const isSharingAll = profileItemsForUser.find(
-      (profileItem) => profileItem.type === "all-recipes"
+      (profileItem) => profileItem.type === "all-recipes",
     );
 
     if (isContextUser || isSharingAll) {
@@ -157,8 +163,8 @@ export const getRecipesWithConstraints = async (args: {
                 },
               },
             },
-          } as Prisma.RecipeWhereInput)
-      )
+          }) as Prisma.RecipeWhereInput,
+      ),
     );
   }
 
@@ -182,7 +188,7 @@ export const getRecipesWithConstraints = async (args: {
     }),
     tx.recipe.findMany({
       where,
-      ...recipeSummary,
+      ...recipeSummaryLite,
       orderBy,
       skip: offset,
       take: limit,

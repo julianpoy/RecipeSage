@@ -1,5 +1,6 @@
 import * as express from "express";
 const router = express.Router();
+import * as Sentry from "@sentry/node";
 import * as cors from "cors";
 import * as multer from "multer";
 import * as fs from "fs-extra";
@@ -10,6 +11,7 @@ import * as semver from "semver";
 import * as path from "path";
 import fetch from "node-fetch";
 import * as xmljs from "xml-js";
+import { prisma } from "@recipesage/prisma";
 
 // DB
 import {
@@ -22,6 +24,7 @@ import {
 } from "../models/index.js";
 
 import { validateSession, validateUser } from "../services/middleware.js";
+import * as Util from "@recipesage/util";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";
@@ -46,6 +49,47 @@ router.get("/versioncheck", (req, res) => {
   res.status(200).json({
     supported,
   });
+});
+
+// Health information in JSON response
+router.get("/health", async (req, res) => {
+  const healthy = {
+    sequelize: false,
+    prisma: false,
+  };
+
+  try {
+    await sequelize.authenticate();
+    healthy.sequelize = true;
+  } catch (e) {
+    // Do nothing
+  }
+
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    healthy.prisma = true;
+  } catch (e) {
+    // Do nothing
+  }
+
+  const status = Object.values(healthy).includes(false) ? 500 : 200;
+
+  res.status(status).json(healthy);
+});
+
+// Health information for kube/monitoring
+// 200 => healthy
+// 500 => unhealthy, roll pod
+router.get("/healthz", async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    await prisma.$queryRaw`SELECT 1`;
+
+    res.status(200).send("healthy");
+  } catch (e) {
+    res.status(500).send("unhealthy");
+    Sentry.captureException(e);
+  }
 });
 
 router.get(
@@ -89,7 +133,7 @@ router.get(
         </soap:Body>
       </soap:Envelope>
       `,
-        }
+        },
       );
 
       const authResponseText = await authResponse.text();
@@ -128,7 +172,7 @@ router.get(
           </soap:Body>
         </soap:Envelope>
         `,
-          }
+          },
         );
 
         const syncResponseText = await syncResponse.text();
@@ -136,7 +180,7 @@ router.get(
         console.log("repeat");
 
         const recipeJson = JSON.parse(
-          xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 })
+          xmljs.xml2json(syncResponseText, { compact: true, spaces: 4 }),
         );
 
         syncToken =
@@ -176,14 +220,14 @@ router.get(
         const savedRecipes = await Recipe.bulkCreate(
           recipes.map((pepperRecipe) => {
             const ingredientGroups = objToArr(
-              (pepperRecipe.Ingredients || {}).IngredientSyncGroup
+              (pepperRecipe.Ingredients || {}).IngredientSyncGroup,
             );
 
             const finalIngredients = ingredientGroups
               .sort(
                 (a, b) =>
                   parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                  parseInt((b.DisplayOrder || {})._text || 0, 10)
+                  parseInt((b.DisplayOrder || {})._text || 0, 10),
               )
               .map((ingredientGroup) => {
                 let ingredients = [];
@@ -191,19 +235,19 @@ router.get(
                   ingredients.push(`[${ingredientGroup.Title._text}]`);
                 }
                 const innerIngredients = objToArr(
-                  (ingredientGroup.Ingredients || {}).IngredientSync
+                  (ingredientGroup.Ingredients || {}).IngredientSync,
                 )
                   .sort(
                     (a, b) =>
                       parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                      parseInt((b.DisplayOrder || {})._text || 0, 10)
+                      parseInt((b.DisplayOrder || {})._text || 0, 10),
                   )
                   .map((ingredient) =>
                     (
                       ((ingredient.Quantity || {})._text || "") +
                       " " +
                       ingredient.Text._text
-                    ).trim()
+                    ).trim(),
                   )
                   .join("\r\n");
                 return [...ingredients, innerIngredients].join("\r\n");
@@ -211,14 +255,14 @@ router.get(
               .join("\r\n");
 
             const directionGroups = objToArr(
-              (pepperRecipe.Directions || {}).DirectionSyncGroup
+              (pepperRecipe.Directions || {}).DirectionSyncGroup,
             );
 
             const finalDirections = directionGroups
               .sort(
                 (a, b) =>
                   parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                  parseInt((b.DisplayOrder || {})._text || 0, 10)
+                  parseInt((b.DisplayOrder || {})._text || 0, 10),
               )
               .map((directionGroup) => {
                 let directions = [];
@@ -226,12 +270,12 @@ router.get(
                   directions.push(`[${directionGroup.Title._text}]`);
                 }
                 const innerDirections = objToArr(
-                  (directionGroup.Directions || {}).DirectionSync
+                  (directionGroup.Directions || {}).DirectionSync,
                 )
                   .sort(
                     (a, b) =>
                       parseInt((a.DisplayOrder || {})._text || 0, 10) -
-                      parseInt((b.DisplayOrder || {})._text || 0, 10)
+                      parseInt((b.DisplayOrder || {})._text || 0, 10),
                   )
                   .map((direction) => direction.Text._text)
                   .join("\r\n");
@@ -244,8 +288,8 @@ router.get(
               title: pepperRecipe.Title._text,
               description: (pepperRecipe.Description || {})._text || "",
               notes: (pepperRecipe.Note || {})._text || "",
-              ingredients: finalIngredients,
-              instructions: finalDirections,
+              ingredients: finalIngredients || "",
+              instructions: finalDirections || "",
               totalTime: (pepperRecipe.TotalTime || {})._text || "",
               activeTime: (pepperRecipe.ActiveTime || {})._text || "",
               source:
@@ -261,7 +305,7 @@ router.get(
           {
             transaction,
             returning: true,
-          }
+          },
         );
 
         const recipeIdsByLabelTitle = recipes.reduce(
@@ -269,7 +313,7 @@ router.get(
             try {
               objToArr((pepperRecipe.Tags || {}).TagSync).map((tag) => {
                 // Avoid dupes potentially returned by PP API
-                const labelTitle = UtilService.cleanLabelTitle(tag.Text._text);
+                const labelTitle = Util.cleanLabelTitle(tag.Text._text);
 
                 acc[labelTitle] = acc[labelTitle] || [];
                 // Avoid dupes potentially returned by PP API
@@ -282,7 +326,7 @@ router.get(
             }
             return acc;
           },
-          {}
+          {},
         );
 
         await Promise.all(
@@ -306,10 +350,10 @@ router.get(
                   {
                     ignoreDuplicates: true,
                     transaction,
-                  }
+                  },
                 );
               });
-            })
+            }),
         );
 
         const PEPPERPLATE_IMG_CHUNK_SIZE = 50;
@@ -320,7 +364,7 @@ router.get(
               return writeImageURL(
                 ObjectTypes.RECIPE_IMAGE,
                 pepperRecipe.ImageUrl._text,
-                false
+                false,
               )
                 .then((image) => {
                   pepperRecipe.image = image;
@@ -330,7 +374,7 @@ router.get(
                 });
             }
           }),
-          PEPPERPLATE_IMG_CHUNK_SIZE
+          PEPPERPLATE_IMG_CHUNK_SIZE,
         );
 
         const pendingImageData = [];
@@ -354,7 +398,7 @@ router.get(
           {
             returning: true,
             transaction,
-          }
+          },
         );
 
         await Recipe_Image.bulkCreate(
@@ -365,7 +409,7 @@ router.get(
           })),
           {
             transaction,
-          }
+          },
         );
 
         await SearchService.indexRecipes(savedRecipes);
@@ -377,7 +421,7 @@ router.get(
     } catch (e) {
       next(e);
     }
-  }
+  },
 );
 
 router.post(
@@ -398,7 +442,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+        SubscriptionsService.Capabilities.MultipleImages,
       );
 
     let optionalFlags = [];
@@ -447,7 +491,7 @@ router.post(
         }
         case 3: {
           let badFileErr = new Error(
-            "Bad file format (not in .LCB ZIP format)"
+            "Bad file format (not in .LCB ZIP format)",
           );
           badFileErr.status = 406;
           next(badFileErr);
@@ -462,7 +506,7 @@ router.post(
       }
       job.complete = true;
     });
-  }
+  },
 );
 
 router.post(
@@ -483,7 +527,7 @@ router.post(
     const canImportMultipleImages =
       await SubscriptionsService.userHasCapability(
         res.locals.session.userId,
-        SubscriptionsService.CAPABILITIES.MULTIPLE_IMAGES
+        SubscriptionsService.Capabilities.MultipleImages,
       );
 
     let optionalFlags = [];
@@ -529,7 +573,7 @@ router.post(
         }
         case 3: {
           let badFileErr = new Error(
-            "Bad file format (not in .FDX or .FDXZ format)"
+            "Bad file format (not in .FDX or .FDXZ format)",
           );
           badFileErr.status = 406;
           next(badFileErr);
@@ -552,7 +596,7 @@ router.post(
     });
 
     await SearchService.indexRecipes(recipes);
-  }
+  },
 );
 
 router.post(
@@ -602,7 +646,7 @@ router.post(
                         ? writeImageBuffer(
                             ObjectTypes.RECIPE_IMAGE,
                             Buffer.from(recipeData.photo_data, "base64"),
-                            true
+                            true,
                           )
                         : Promise.resolve();
 
@@ -636,20 +680,20 @@ router.post(
                             userId: res.locals.session.userId,
                             title: recipeData.name,
                             image,
-                            description: recipeData.description,
-                            ingredients: recipeData.ingredients,
-                            instructions: recipeData.directions,
-                            yield: recipeData.servings,
-                            totalTime,
-                            activeTime: recipeData.prep_time,
-                            notes,
-                            source: recipeData.source,
+                            description: recipeData.description || "",
+                            ingredients: recipeData.ingredients || "",
+                            instructions: recipeData.directions || "",
+                            yield: recipeData.servings || "",
+                            totalTime: totalTime || "",
+                            activeTime: recipeData.prep_time || "",
+                            notes: notes || "",
+                            source: recipeData.source || "",
                             folder: "main",
                             fromUserId: null,
-                            url: recipeData.source_url,
+                            url: recipeData.source_url || "",
                           },
                           labels: (recipeData.categories || [])
-                            .map((e) => UtilService.cleanLabelTitle(e))
+                            .map((e) => Util.cleanLabelTitle(e))
                             .filter((e) => e && e.length > 0),
                         });
                       });
@@ -665,7 +709,7 @@ router.post(
                   {
                     returning: true,
                     transaction: t,
-                  }
+                  },
                 ).then((recipes) => {
                   recipes.map((recipe, idx) => {
                     pendingRecipes[idx].labels.map((labelTitle) => {
@@ -697,10 +741,10 @@ router.post(
                         {
                           ignoreDuplicates: true,
                           transaction: t,
-                        }
+                        },
                       );
                     });
-                  })
+                  }),
                 );
               });
           });
@@ -712,10 +756,10 @@ router.post(
         metrics.performance = {
           tExtract: Math.floor(metrics.tExtracted - metrics.t0),
           tRecipesProcess: Math.floor(
-            metrics.tRecipesProcessed - metrics.tExtracted
+            metrics.tRecipesProcessed - metrics.tExtracted,
           ),
           tRecipesSave: Math.floor(
-            metrics.tRecipesSaved - metrics.tRecipesProcessed
+            metrics.tRecipesSaved - metrics.tRecipesProcessed,
           ),
           tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved),
         };
@@ -739,13 +783,13 @@ router.post(
         fs.removeSync(extractPath);
         next(err);
       });
-  }
+  },
 );
 
 router.get("/embed/recipe/:recipeId", (req, res) => {
   res.redirect(
     302,
-    `/api/print/${req.params.recipeId}${req._parsedUrl.search}`
+    `/api/print/${req.params.recipeId}${req._parsedUrl.search}`,
   );
 });
 

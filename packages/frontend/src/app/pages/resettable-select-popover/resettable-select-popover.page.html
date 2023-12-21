@@ -5,17 +5,37 @@
 </ion-header>
 
 <ion-list>
-  <ion-item *ngFor="let option of options">
+  <ion-item *ngFor="let option of ungroupedOptions">
     <ion-checkbox
-      slot="start"
+      labelPlacement="end"
+      justify="start"
       [(ngModel)]="option.selected"
       (ngModelChange)="emitChange();"
-    ></ion-checkbox>
-    <ion-label class="ion-text-wrap"> {{option.title}} </ion-label>
+    >
+      <div class="ion-text-wrap">{{option.title}}</div>
+    </ion-checkbox>
   </ion-item>
 
-  <ion-item *ngIf="options.length === 0">
-    <ion-label class="ion-text-wrap"> {{nullMessage}} </ion-label>
+  <div *ngFor="let groupTitle of getGroupTitles()">
+    <ion-item lines="none">
+      <ion-label> {{groupTitle}} </ion-label>
+    </ion-item>
+    <div class="ion-padding-start">
+      <ion-item *ngFor="let option of groupedOptions[groupTitle]">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          [(ngModel)]="option.selected"
+          (ngModelChange)="emitChange();"
+        >
+          <div class="ion-text-wrap">{{option.title}}</div>
+        </ion-checkbox>
+      </ion-item>
+    </div>
+  </div>
+
+  <ion-item *ngIf="!ungroupedOptions.length && !getGroupTitles().length">
+    <ion-label class="ion-text-wrap">{{nullMessage}}</ion-label>
   </ion-item>
 </ion-list>
 

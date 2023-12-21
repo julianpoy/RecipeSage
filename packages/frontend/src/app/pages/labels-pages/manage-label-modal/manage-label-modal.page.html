@@ -19,10 +19,24 @@
     <ion-label>
       <h2 class="ion-text-capitalize">{{label.title}}</h2>
       <p>
-        {{ 'pages.manageLabelModal.recipeCount' |
-        translate:{count:label.recipeCount} }}<br />
-        {{ 'pages.manageLabelModal.createdAt' | translate:{dateString:createdAt}
-        }}<br />
+        <span>
+          {{ 'pages.manageLabelModal.recipeCount' |
+          translate:{count:label.recipeLabels.length} }}
+        </span>
+        <br />
+        <span *ngIf="label.labelGroup">
+          {{ 'pages.manageLabelModal.group' |
+          translate:{title:label.labelGroup.title} }}
+        </span>
+        <span *ngIf="!label.labelGroup">
+          {{ 'pages.manageLabelModal.noGroup' | translate }}
+        </span>
+        <br />
+        <span>
+          {{ 'pages.manageLabelModal.createdAt' |
+          translate:{dateString:createdAt} }}
+        </span>
+        <br />
       </p>
     </ion-label>
   </ion-item>

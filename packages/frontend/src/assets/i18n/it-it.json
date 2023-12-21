@@ -13,6 +13,7 @@
   "pages.app.nav.home": "Le Mie Ricette",
   "pages.app.nav.labels": "Gestisci Etichette",
   "pages.app.nav.people": "Persone & Profilo",
+  "pages.app.nav.assistant": "Assistente di cucina",
   "pages.app.nav.messages": "Messaggi",
   "pages.app.nav.inbox": "Ricette Ricevute",
   "pages.app.nav.newrecipe": "Crea una Ricetta",
@@ -28,7 +29,6 @@
   "pages.welcome.subtitle": "Un'applicazione gratuita per la conservazione delle ricette, la pianificazione dei pasti e l'organizzazione di liste della spesa per Web, iOS e Android.",
   "pages.welcome.registerButton": "Crea un Profilo",
   "pages.welcome.loginButton": "Accedi",
-  "pages.welcome.appDemoImageAlt": "Le mie Ricette Anteprima",
 
   "pages.welcome.description.welcome": "Benvenuto in RecipeSage!",
   "pages.welcome.description.1": "RecipeSage è un'applicazione gratuita (basata su donazioni e open-source) per la conservazione delle ricette, la pianificazione dei pasti e l'organizzazione di liste della spesa, per Web, iOS e Android.",
@@ -223,11 +223,7 @@
   "pages.recipeDetails.noNotes": "Nessuna Nota",
 
   "pages.recipeDetails.labels": "Etichette",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "Potrai aggiungere le etichette dopo aver salvato questa ricetta",
-
-  "pages.recipeDetails.labels.clickToCreate": "Clicca per Creare",
-  "pages.recipeDetails.labels.alreadyAdded": "Aggiunta",
-  "pages.recipeDetails.labels.clickToAdd": "Clicca per Aggiungere",
+  "pages.recipeDetails.labels.uncatLabels": "Generale",
 
   "pages.recipeDetails.created": "Creazione",
   "pages.recipeDetails.updated": "Ultima modifica",
@@ -251,12 +247,8 @@
   "pages.recipeDetails.delete.header": "Conferma Eliminazione",
   "pages.recipeDetails.delete.message": "In questo modo eliminerai definitivamente la ricetta dalla tua raccolta. Questa azione è irreversibile.",
 
-  "pages.recipeDetails.enterLabelWarning": "Aggiungi un’etichetta e premi invio per taggare questa ricetta.",
-
-  "pages.recipeDetails.deleteLabel.header": "Conferma Rimozione Etichetta",
-  "pages.recipeDetails.deleteLabel.message": "Rimuovere l’etichetta \"{{title}}\" da questa ricetta.",
-
   "pages.recipeDetails.cloned": "La ricetta è stata aggiunta alla tua raccolta",
+  "pages.recipeDetails.similar": "Ricette simili nella vostra collezione",
 
   "====== Pages.RecipeDetailsPopover ======": "",
 
@@ -385,22 +377,67 @@
 
   "pages.labels.title": "Gestisci Etichette",
   "pages.labels.selectionModeTitle": "{{count}} Selezionati",
-  "pages.labels.subtitle": "Hai {{count}} etichette. Cliccane una per visualizzarla.",
+
+  "pages.labels.label.sectionTitle": "Le vostre etichette",
+  "pages.labels.label.sectionDescription": "Le etichette totali sono {{count}}. Fare clic su un'etichetta per visualizzarla.",
   "pages.labels.label.recipeCount": "{{count}} Ricette",
+  "pages.labels.label.group": "Categoria: {{title}}",
+  "pages.labels.label.noGroup": "Nessuna categoria",
   "pages.labels.label.createdAt": "Creazione {{dateString}}",
   "pages.labels.label.selected": "Selezionato",
-
-  "pages.labels.nullState.1": "Non hai ancora creato nessuna etichetta.",
-  "pages.labels.nullState.2": "Puoi creare un’etichetta nei dettagli di una ricetta.",
-  "pages.labels.nullState.3": "Le etichette esistono solo finché sono assegnate ad almeno una ricetta.",
+  "pages.labels.label.nullState.1": "Non ci sono ancora etichette.",
+  "pages.labels.label.nullState.2": "Fare clic sul pulsante + per creare una nuova etichetta.",
 
   "pages.labels.modal.delete.header": "Conferma Eliminazione",
   "pages.labels.modal.delete.message": "In questo modo si eliminano definitivamente le etichette selezionate dal proprio profilo. Questa azione è irreversibile. Verranno eliminate le seguenti etichette: {{labelTitles}}",
+
+  "pages.labels.group.sectionTitle": "Categorie di etichette",
+  "pages.labels.group.sectionDescription": "Sono presenti {{count}} categorie totali di etichette. Fare clic su una categoria per modificarla.",
+  "pages.labels.group.labelCount": "Le etichette di {{count}} appartengono a questa categoria",
+  "pages.labels.group.createdAt": "Creazione {{dateString}}",
+  "pages.labels.group.nullState.1": "Non ci sono ancora categorie di etichette.",
+  "pages.labels.group.nullState.2": "Fare clic sul pulsante + per creare una nuova categoria di etichette.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "Nuova etichetta o categoria",
+  "pages.newLabelItemModal.categoryTitle": "Nuova categoria per le etichette",
+  "pages.newLabelItemModal.labelTitle": "Nuova etichetta",
+
+  "pages.newLabelItemModal.label": "Creare un'etichetta",
+  "pages.newLabelItemModal.labelDescription": "Le etichette possono essere applicate alle ricette per organizzarle e filtrarle in seguito. Alcuni esempi comuni di etichette sono \"colazione\", \"dessert\" e \"vegetariano\".",
+  "pages.newLabelItemModal.group": "Creare una categoria per le etichette",
+  "pages.newLabelItemModal.groupDescription": "Le categorie di etichette possono essere utilizzate per organizzare le etichette in gruppi, come \"pasto\" o \"dieta\". Ad esempio, si possono inserire le etichette \"colazione\", \"pranzo\" e \"cena\" in una categoria di etichette chiamata \"pasto\". Ogni categoria verrà visualizzata separatamente quando si modifica una ricetta.",
+
+  "pages.newLabelItemModal.labelTitleInput": "Nome dell'etichetta",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "Inserire il nome dell'etichetta",
+  "pages.newLabelItemModal.labelTitleInputHint": "Molte persone iniziano con etichette semplici come \"colazione\", \"dessert\" o \"vegetariano\".",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "Gestione della categoria di etichette",
+  "pages.manageLabelGroupModal.groupTitle": "Etichetta Nome della categoria",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "Nome della categoria dell'etichetta",
+  "pages.manageLabelGroupModal.groupTitleHint": "Molte persone iniziano con \"pasto\", \"dieta\" o \"cucina\".",
+  "pages.manageLabelGroupModal.warn": "Avvisatemi quando non aggiungo questo",
+  "pages.manageLabelGroupModal.warnDescription": "Quando questa impostazione è attivata, si viene avvisati se si salva una ricetta senza un'etichetta in questa categoria.",
+  "pages.manageLabelGroupModal.labels": "Selezionare le etichette",
+  "pages.manageLabelGroupModal.labelsHint": "Le etichette selezionate saranno raggruppate in questa categoria. Un'etichetta può appartenere al massimo a una categoria alla volta.",
+  "pages.manageLabelGroupModal.labels.noItems": "Nessuna etichetta non categorizzata",
+  "pages.manageLabelGroupModal.labels.search": "Ricerca di un'etichetta",
+
+  "pages.manageLabelGroupModal.conflict": "Errore",
+  "pages.manageLabelGroupModal.conflictMessage": "Esiste già una categoria di etichette con questo titolo",
+
+  "pages.manageLabelGroupModal.delete.header": "Conferma Eliminazione",
+  "pages.manageLabelGroupModal.delete.message": "La categoria di etichette \"{{title}}\" verrà eliminata. Nota: questa azione non avrà effetto su nessuna etichetta all'interno di questa categoria.",
 
   "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Gestisci Etichetta: {{name}}",
   "pages.manageLabelModal.recipeCount": "Aggiunta a {{count}} ricette",
+  "pages.manageLabelModal.group": "Assegnato alla categoria di etichette: {{title}}",
+  "pages.manageLabelModal.noGroup": "Non è assegnato a una categoria di etichette",
   "pages.manageLabelModal.createdAt": "Creazione: {{dateString}}",
   "pages.manageLabelModal.warning": "Attenzione: queste azioni sono irreversibili",
   "pages.manageLabelModal.view": "Visualizza tutte le ricette",
@@ -547,6 +584,14 @@
   "pages.shareMealPlanModal.title": "Condividi piano alimentare",
   "pages.shareMealPlanModal.description": "Il collegamento iCal/ICS di seguito può essere utilizzato in quasi tutti i programmi di calendario per sincronizzare il piano alimentare al di fuori di RecipeSage",
 
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Assistente di cucina",
+  "pages.assistant.welcome.1": "Benvenuti nell'assistente di cucina di RecipeSage!",
+  "pages.assistant.welcome.2": "L'assistente di cucina è un modello AI in grado di rispondere alle vostre domande di cucina e di aiutarvi a creare ricette.",
+  "pages.assistant.welcome.3": "L'assistente di cucina ha un limite di 5 messaggi al giorno a causa degli alti costi di gestione dell'IA. Questo limite è aumentato a 50 messaggi al giorno per i collaboratori.",
+  "pages.assistant.messageLimit": "Raggiunto il massimo dei messaggi (scusate, è costoso!). Il conteggio dei messaggi si azzera a 0:00GMT",
+
   "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "Conversazione con {{name}}",
@@ -614,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Modifica Ricetta",
   "pages.editRecipe.title.new": "Nuova Ricetta",
-  "pages.editRecipe.autoclip": "Autocompleta campi da un URL (beta)",
+  "pages.editRecipe.autoclip": "Autocompleta campi da un URL",
+  "pages.editRecipe.scan": "Scansione da foto (beta)",
 
   "pages.editRecipe.input.title": "Titolo",
   "pages.editRecipe.input.description": "Descrizione",
@@ -627,8 +673,10 @@
   "pages.editRecipe.input.instructions": "Procedimento",
   "pages.editRecipe.input.notes": "Note",
   "pages.editRecipe.input.rating": "Valutazione",
+  "pages.editRecipe.input.labels": "Etichette",
+  "pages.editRecipe.input.uncatLabels": "Generale",
+  "pages.editRecipe.addLabel.otherGroup": "Questo esiste in un'altra categoria",
 
-  "pages.editRecipe.labelNotice": "Potrai aggiungere categorie/etichette dopo la creazione della ricetta.",
   "pages.editRecipe.save": "Salva",
   "pages.editRecipe.create": "Crea",
 
@@ -641,6 +689,14 @@
   "pages.editRecipe.clip.invalidUrl": "Errore: URL non valido",
   "pages.editRecipe.clip.loading": "Attendi...",
   "pages.editRecipe.clip.failed": "Impossibile compilare la ricetta da questo URL",
+
+  "pages.editRecipe.missingLabelGroup.title": "Gruppo di etichette mancante",
+  "pages.editRecipe.missingLabelGroup.message": "È stato specificato che il gruppo di etichette \"{{groupName}}\" deve essere obbligatorio. È possibile disattivarlo dalla pagina Le mie etichette.",
+
+  "pages.editRecipe.conflict.title": "Titolo duplicato",
+  "pages.editRecipe.conflict.message": "Una ricetta con il titolo \"{{title}}\" esiste già nella vostra collezione. Si può scegliere di salvare comunque, oppure di rinominare la ricetta in \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Salva comunque",
+  "pages.editRecipe.conflict.rename": "Rinominare",
 
   "pages.editRecipe.addImage.header": "Aggiungi immagine da URL",
   "pages.editRecipe.addImage.message": "Inserisci l’URL di un’immagine per aggiungerla alla ricetta",
@@ -905,8 +961,9 @@
   "pages.settings.import": "Importa Dati Ricette",
   "pages.settings.export": "Esporta Dati Ricette",
   "pages.settings.account": "Impostazione Profilo e Statistiche",
-  "pages.settings.update": "Controlla Aggiornamenti",
+  "pages.settings.logout": "Disconnettersi",
   "pages.settings.section2.title": "Impostazioni Generali",
+  "pages.settings.update": "Controlla Aggiornamenti",
   "pages.settings.splitPane": "Abilita la visualizzazione a riquadri separati su schermi grandi",
   "pages.settings.cache": "Versione sperimentale: Cache di tutte le ricette offline",
   "pages.settings.theme": "Tema",
@@ -918,10 +975,16 @@
   "pages.settings.language.contribute": "Contattami per contribuire con una lingua",
   "pages.settings.language.default": "Default del Browser",
   "pages.settings.fontSize": "Dimensione del carattere",
+  "pages.settings.preferencesSync": "Sincronizzazione delle preferenze tra i dispositivi",
   "pages.settings.reset": "Ripristina Preferenze",
 
   "pages.settings.offline.loading": "Recupero tutte le ricette, attendi...",
   "pages.settings.offline.error": "Si è verificato un errore durante la sincronizzazione. Si prega di segnalarlo.",
+
+  "pages.settings.preferencesSync.header": "Preferenze di sincronizzazione",
+  "pages.settings.preferencesSync.message": "È necessario selezionare se si desidera sovrascrivere le impostazioni sincronizzate nel cloud con le impostazioni locali del dispositivo o se si desidera sovrascrivere le impostazioni del dispositivo con le impostazioni del cloud.",
+  "pages.settings.preferencesSync.local": "Mantenere le impostazioni locali",
+  "pages.settings.preferencesSync.remote": "Mantenere le impostazioni del cloud",
 
   "pages.settings.resetPrefs.header": "Avviso di ripristino delle preferenze",
   "pages.settings.resetPrefs.message": "Ripristinando le preferenze, tutte le impostazioni dell'applicazione verranno riportate allo stato predefinito. Ciò include le preferenze impostate tramite i menu della pagina iniziale, della pagina di pianificazione dei pasti, della pagina della lista della spesa, ecc. Nota: questa operazione riguarda solo questo dispositivo.",
@@ -1013,12 +1076,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Liste della Spesa",
+  "pages.shoppingLists.editIgnore": "Modifica dell'elenco degli ignoranti",
   "pages.shoppingLists.created": "Creata {{date}}",
   "pages.shoppingLists.collaboration": "Collaboratori:",
   "pages.shoppingLists.createdBy": "Creatore {{name}}",
   "pages.shoppingLists.owner": "Sei il proprietario di questa lista",
   "pages.shoppingLists.nullState.1": "Non hai nessuna lista della spesa.",
   "pages.shoppingLists.nullState.2": "Per creare una lista della spesa, premi il pulsante più nell’angolo in basso.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Lista della spesa Elenco degli articoli da ignorare",
+  "pages.shoppingListIgnoreModal.description": "Le voci elencate qui saranno automaticamente escluse quando si aggiunge una ricetta a una lista della spesa. Questo è particolarmente utile per ingredienti come il sale, che probabilmente non è necessario aggiungere ogni volta che si aggiunge un elemento a una lista della spesa.",
+  "pages.shoppingListIgnoreModal.instructions": "Ogni voce deve essere sulla propria riga. Le voci corrispondono a un ingrediente se l'ingrediente contiene una parte qualsiasi della riga. Se si inserisce \"sale\", corrisponderà a \"1 cucchiaio di sale marino finemente macinato\".",
+  "pages.shoppingListIgnoreModal.label": "Ignorare l'elenco",
+  "pages.shoppingListIgnoreModal.placeholder": "Parole chiave da ignorare, ognuna sulla propria riga",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1045,17 +1117,14 @@
   "pages.addProfileItem.type.allRecipes": "Tutte le Ricette",
 
   "pages.addProfileItem.change": "Clicca per modificare",
-  "pages.addProfileItem.select": "Seleziona",
-  "pages.addProfileItem.select.recipe": "ricetta",
-  "pages.addProfileItem.select.label": "etichetta",
+  "pages.addProfileItem.selectRecipe": "Selezionare una ricetta",
+  "pages.addProfileItem.selectLabel": "Selezionare un'etichetta",
 
   "pages.addProfileItem.selectVisibility": "Chi Può Visualizzarlo?",
   "pages.addProfileItem.selectVisibility.public": "Tutti (Pubblico)",
   "pages.addProfileItem.selectVisibility.friends": "Solo i Miei Amici",
-
-  "pages.addProfileItem.visibility": "Permessi di Visualizzazione:",
-  "pages.addProfileItem.visibility.public": "pubblico",
-  "pages.addProfileItem.visibility.friends": "solo amici",
+  "pages.addProfileItem.visibilityPublic": "Visibilità: Pubblico",
+  "pages.addProfileItem.visibilityFriends": "Visibilità: Solo per gli amici",
 
   "pages.addProfileItem.itemTitle": "Titolo",
   "pages.addProfileItem.tos": "Aggiungendo questo elemento, accetti la Politica di Condivisione di RecipeSage.",
@@ -1191,7 +1260,17 @@
 
   "components.selectLabel.change": "Clicca per modificare",
   "components.selectLabel.select": "Clicca per selezionare",
+  "components.selectLabel.search": "Cercare un'etichetta...",
   "components.selectLabel.null": "Nessuna etichetta chiamata \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "components.selectMultipleItems.null": "Nessun risultato per {{searchText}}",
+  "components.selectMultipleItems.select": "Fare clic per selezionare",
+  "components.selectMultipleItems.create": "Fare clic per creare",
+  "components.selectMultipleItems.noItems": "Nessun articolo",
+  "components.selectMultipleItems.alreadyAdded": "Già aggiunto",
+  "components.selectMultipleItems.searchPlaceholder": "Cercare un elemento da aggiungere",
 
   "====== Components.SelectMeal ======": "",
 
@@ -1201,6 +1280,7 @@
 
   "components.selectRecipe.change": "Clicca per Modificare",
   "components.selectRecipe.select": "Clicca per selezionare",
+  "components.selectRecipe.search": "Cerca una ricetta...",
   "components.selectRecipe.searching": "Cercando \"{{searchText}}\"...",
   "components.selectRecipe.null": "Impossibile trovare \"{{searchText}}\"",
 
@@ -1293,6 +1373,8 @@
   "generic.close": "Chiudi",
   "generic.save": "Salva",
   "generic.okay": "Okay",
+  "generic.ignore": "Ignorare",
+  "generic.options": "Opzioni",
 
   "====== Trailing Comma Placeholder ======": ""
 }

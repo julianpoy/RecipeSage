@@ -4,8 +4,8 @@
   </ion-list-header>
 
   <ion-item lines="full">
-    <ion-label>{{ 'pages.homepopover.options.layout' | translate }}</ion-label>
     <ion-select
+      label="{{ 'pages.homepopover.options.layout' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.ViewType]"
       (ngModelChange)="savePreferences();"
     >
@@ -24,60 +24,60 @@
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowLabels]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homepopover.options.showLabels' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homepopover.options.showLabels' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full" *ngIf="!guestMode">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowLabelChips]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homepopover.options.showLabelToggles' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homepopover.options.showLabelToggles' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowImages]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homepopover.options.showImages' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homepopover.options.showImages' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowSource]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homepopover.options.showSource' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homepopover.options.showSource' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
     <ion-toggle
       [(ngModel)]="preferences[preferenceKeys.ShowRecipeDescription]"
       (ngModelChange)="savePreferences()"
-      slot="start"
-    ></ion-toggle>
-    <ion-label class="ion-text-wrap">
-      {{ 'pages.homepopover.options.showRecipeDescription' | translate }}
-    </ion-label>
+    >
+      <div class="ion-text-wrap">
+        {{ 'pages.homepopover.options.showRecipeDescription' | translate }}
+      </div>
+    </ion-toggle>
   </ion-item>
 
   <ion-item lines="full">
-    <ion-label>{{ 'pages.homepopover.options.sortBy' | translate }}</ion-label>
     <ion-select
+      label="{{ 'pages.homepopover.options.sortBy' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.SortBy]"
       (ngModelChange)="savePreferences(true);"
     >

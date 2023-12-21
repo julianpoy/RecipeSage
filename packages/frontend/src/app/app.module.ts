@@ -4,8 +4,6 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -20,8 +18,12 @@ import { UnsavedChangesGuardService } from "./services/unsaved-changes-guard.ser
 
 import { CookingToolbarModule } from "./components/cooking-toolbar/cooking-toolbar.module";
 
-import { environment, SENTRY_SAMPLE_RATE } from "../environments/environment";
-import { SupportedLanguages } from "./services/preferences.service";
+import {
+  environment,
+  IS_SELFHOST,
+  SENTRY_SAMPLE_RATE,
+} from "../environments/environment";
+import { SupportedLanguages } from "@recipesage/util";
 
 const checkChunkLoadError = (error: Error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
@@ -31,7 +33,7 @@ const checkChunkLoadError = (error: Error) => {
     (window as any).currentChunkError = true;
 
     const shouldReload = confirm(
-      "There was a connection interruption while loading this page. Do you want to reload the application?"
+      "There was a connection interruption while loading this page. Do you want to reload the application?",
     );
     if (shouldReload) {
       window.location.reload();
@@ -42,8 +44,9 @@ const checkChunkLoadError = (error: Error) => {
 };
 
 const checkSupressedError = (error: Error) => {
+  // These errors commonly come from Ionic and/or Webpack chunk loading. We don't want to send these to Sentry and consume our budget there.
   const supressedErrorRegExp =
-    /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(\.isProxied)|(\[object Undefined\])/;
+    /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(Cannot read properties of undefined \(reading 'isProxied'\))|(\.isProxied)|(\[object Undefined\])/;
 
   return supressedErrorRegExp.test(error.message);
 };
@@ -57,21 +60,23 @@ console.error = (...args) => {
   origConsoleError.apply(console, args);
 };
 
-Sentry.init({
-  release: (window as any).version,
-  environment: environment.production ? "production" : "dev",
-  dsn: "https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200",
-  tracesSampleRate: SENTRY_SAMPLE_RATE,
-  beforeSend(event, hint) {
-    const error = hint.originalException as Error;
-    if (checkChunkLoadError(error)) return null;
-    if (checkSupressedError(error)) return null;
-    return event;
-  },
-});
+if (!IS_SELFHOST) {
+  Sentry.init({
+    release: (window as any).version,
+    environment: environment.production ? "production" : "dev",
+    dsn: "https://056d11b20e624d52a5771ac8508dd0b8@sentry.io/1219200",
+    tracesSampleRate: SENTRY_SAMPLE_RATE,
+    beforeSend(event, hint) {
+      const error = hint.originalException as Error;
+      if (checkChunkLoadError(error)) return null;
+      if (checkSupressedError(error)) return null;
+      return event;
+    },
+  });
+}
 
 export function createTranslateLoader(http: HttpClient) {
-  const prefix = "/assets/i18n/";
+  const prefix = "assets/i18n/";
   const suffix = `.json?version=${(window as any).version}`;
 
   return new TranslateHttpLoader(http, prefix, suffix);
@@ -120,8 +125,6 @@ export class SentryErrorHandler extends ErrorHandler {
   ],
   providers: [
     { provide: ErrorHandler, useClass: SentryErrorHandler },
-    StatusBar,
-    SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DefaultPageGuardService,
     UnsavedChangesGuardService,

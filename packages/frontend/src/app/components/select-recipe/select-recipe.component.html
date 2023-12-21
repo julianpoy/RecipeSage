@@ -5,11 +5,11 @@
     *ngIf="selectedRecipe"
     button
   >
-    <ion-avatar
-      *ngIf="selectedRecipe.images && selectedRecipe.images.length > 0"
-      slot="start"
-    >
+    <ion-avatar *ngIf="selectedRecipe.images?.length" slot="start">
       <img src="{{ selectedRecipe.images[0].location }}" />
+    </ion-avatar>
+    <ion-avatar *ngIf="!selectedRecipe.images?.length" slot="start">
+      <img src="assets/imgs/logo_green_padded.png" />
     </ion-avatar>
     <ion-label>
       <h2>{{ selectedRecipe.title }}</h2>
@@ -19,64 +19,61 @@
     </ion-label>
   </ion-item>
 
-  <div class="dropdownSelect" *ngIf="!selectedRecipe">
+  <div *ngIf="!selectedRecipe">
     <ion-searchbar
-      (ionChange)="onSearchInputChange($event)"
-      placeholder="Type to search for recipe..."
+      (ionInput)="onSearchInputChange($event)"
+      placeholder="{{ 'components.selectRecipe.search' | translate }}"
       autocomplete="off"
-      #labelInputField
-      id="labelInputField"
     ></ion-searchbar>
-    <div class="autocomplete">
-      <button
-        class="suggestion"
-        *ngFor="let recipe of recipes"
-        (click)="selectRecipe(recipe)"
-      >
-        <ion-item class="suggestion-inner" button>
-          <ion-avatar
-            *ngIf="recipe.images && recipe.images.length > 0"
-            slot="start"
+    <div class="ion-padding-start ion-padding-end">
+      <div class="results-list-container" *ngIf="searchText.length">
+        <div class="results-list">
+          <ion-item
+            *ngFor="let recipe of recipes; trackBy: recipeTrackBy"
+            (click)="selectRecipe(recipe)"
+            button
           >
-            <img src="{{ recipe.images[0].location }}" />
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ recipe.title }}</h2>
-            <p>
-              {{ "components.selectRecipe.select" | translate }}
-            </p>
-          </ion-label>
-        </ion-item>
-      </button>
-      <!-- Searching for user for which a thread does not exist -->
-      <button class="suggestion" *ngIf="searching">
-        <ion-item class="suggestion-inner" button>
-          <ion-label>
-            <h2>
-              {{
-                "components.selectRecipe.searching"
-                  | translate : { searchText: searchText }
-              }}
-            </h2>
-          </ion-label>
-        </ion-item>
-      </button>
-      <!-- Searching for user for which a thread does not exist -->
-      <button
-        class="suggestion"
-        *ngIf="recipes.length === 0 && searchText.length > 0 && !searching"
-      >
-        <ion-item class="suggestion-inner" button>
-          <ion-label>
-            <h2>
-              {{
-                "components.selectRecipe.null"
-                  | translate : { searchText: searchText }
-              }}
-            </h2>
-          </ion-label>
-        </ion-item>
-      </button>
+            <ion-avatar *ngIf="recipe.images?.length" slot="start">
+              <img src="{{ recipe.images[0].location }}" />
+            </ion-avatar>
+            <ion-avatar *ngIf="!recipe.images?.length" slot="start">
+              <img src="assets/imgs/logo_green_padded.png" />
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ recipe.title }}</h2>
+              <p>
+                {{ "components.selectRecipe.select" | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+          <!-- Searching for user for which a thread does not exist -->
+          <ion-item *ngIf="searching">
+            <ion-spinner slot="start"></ion-spinner>
+            <ion-label>
+              <h2>
+                {{
+                  "components.selectRecipe.searching"
+                    | translate: { searchText: searchText }
+                }}
+              </h2>
+            </ion-label>
+          </ion-item>
+          <!-- Searching for user for which a thread does not exist -->
+          <ion-item
+            *ngIf="recipes.length === 0 && searchText.length > 0 && !searching"
+          >
+            <ion-icon name="folder-open" slot="start"></ion-icon>
+            <ion-label>
+              <h2>
+                {{
+                  "components.selectRecipe.null"
+                    | translate: { searchText: searchText }
+                }}
+              </h2>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
     </div>
   </div>
 </div>

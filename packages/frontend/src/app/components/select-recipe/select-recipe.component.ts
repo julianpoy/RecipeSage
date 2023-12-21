@@ -35,7 +35,7 @@ export class SelectRecipeComponent {
     public utilService: UtilService,
     public recipeService: RecipeService,
     public toastCtrl: ToastController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
   ) {}
 
   async search(text: string) {
@@ -75,5 +75,9 @@ export class SelectRecipeComponent {
     if (!response.success) return;
 
     this.selectedRecipe = response.data;
+  }
+
+  recipeTrackBy(index: number, recipe: Recipe) {
+    return recipe.id;
   }
 }

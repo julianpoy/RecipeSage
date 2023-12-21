@@ -26,7 +26,7 @@ export const getFriendships = async (userId) => {
       ...acc,
       [outgoingFriendship.friendId]: outgoingFriendship,
     }),
-    {}
+    {},
   );
 
   const incomingFriendships = await Friendship.findAll({
@@ -54,7 +54,7 @@ export const getFriendships = async (userId) => {
       ...acc,
       [incomingFriendship.userId]: incomingFriendship,
     }),
-    {}
+    {},
   );
 
   const friendshipSummary = [
@@ -99,7 +99,7 @@ export const getFriendships = async (userId) => {
       outgoingRequests: [],
       incomingRequests: [],
       friends: [],
-    }
+    },
   );
 
   return friendshipSummary;

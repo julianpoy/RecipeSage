@@ -10,7 +10,7 @@ const routes: Routes = [
     path: "",
     loadChildren: () =>
       import("~/pages/info-components/welcome/welcome.module").then(
-        (module) => module.WelcomePageModule
+        (module) => module.WelcomePageModule,
       ),
     pathMatch: "full",
     canActivate: [DefaultPageGuardService],
@@ -20,7 +20,7 @@ const routes: Routes = [
     path: RouteMap.HomePage.path,
     loadChildren: () =>
       import("~/pages/home/home.module").then(
-        (module) => module.HomePageModule
+        (module) => module.HomePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -28,14 +28,14 @@ const routes: Routes = [
     path: RouteMap.LabelsPage.path,
     loadChildren: () =>
       import("~/pages/labels-pages/labels/labels.module").then(
-        (module) => module.LabelsPageModule
+        (module) => module.LabelsPageModule,
       ),
   },
   {
     path: RouteMap.AboutPage.path,
     loadChildren: () =>
       import("~/pages/info-components/about/about.module").then(
-        (module) => module.AboutPageModule
+        (module) => module.AboutPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -51,7 +51,7 @@ const routes: Routes = [
     path: RouteMap.AboutDetailsPage.path,
     loadChildren: () =>
       import("~/pages/info-components/about-details/about-details.module").then(
-        (module) => module.AboutDetailsPageModule
+        (module) => module.AboutDetailsPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -59,7 +59,7 @@ const routes: Routes = [
     path: RouteMap.ContactPage.path,
     loadChildren: () =>
       import("~/pages/info-components/contact/contact.module").then(
-        (module) => module.ContactPageModule
+        (module) => module.ContactPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -67,7 +67,7 @@ const routes: Routes = [
     path: RouteMap.LegalPage.path,
     loadChildren: () =>
       import("~/pages/info-components/legal/legal.module").then(
-        (module) => module.LegalPageModule
+        (module) => module.LegalPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -75,7 +75,7 @@ const routes: Routes = [
     path: RouteMap.ContributePage.path,
     loadChildren: () =>
       import("~/pages/info-components/contribute/contribute.module").then(
-        (module) => module.ContributePageModule
+        (module) => module.ContributePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -99,7 +99,7 @@ const routes: Routes = [
     path: RouteMap.WelcomePage.path,
     loadChildren: () =>
       import("~/pages/info-components/welcome/welcome.module").then(
-        (module) => module.WelcomePageModule
+        (module) => module.WelcomePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -107,7 +107,7 @@ const routes: Routes = [
     path: RouteMap.AuthPage.path,
     loadChildren: () =>
       import("~/pages/auth/auth.module").then(
-        (module) => module.AuthPageModule
+        (module) => module.AuthPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -115,7 +115,7 @@ const routes: Routes = [
     path: RouteMap.MealPlansPage.path,
     loadChildren: () =>
       import("~/pages/meal-plan-components/meal-plans/meal-plans.module").then(
-        (module) => module.MealPlansPageModule
+        (module) => module.MealPlansPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -123,7 +123,15 @@ const routes: Routes = [
     path: RouteMap.MealPlanPage.path,
     loadChildren: () =>
       import("~/pages/meal-plan-components/meal-plan/meal-plan.module").then(
-        (module) => module.MealPlanPageModule
+        (module) => module.MealPlanPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.AssistantPage.path,
+    loadChildren: () =>
+      import("~/pages/messaging-components/assistant/assistant.module").then(
+        (module) => module.AssistantPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -131,7 +139,7 @@ const routes: Routes = [
     path: RouteMap.MessagesPage.path,
     loadChildren: () =>
       import("~/pages/messaging-components/messages/messages.module").then(
-        (module) => module.MessagesPageModule
+        (module) => module.MessagesPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -147,7 +155,7 @@ const routes: Routes = [
     path: RouteMap.EditRecipePage.path,
     loadChildren: () =>
       import("~/pages/recipe-components/edit-recipe/edit-recipe.module").then(
-        (module) => module.EditRecipePageModule
+        (module) => module.EditRecipePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -155,7 +163,7 @@ const routes: Routes = [
     path: RouteMap.RecipePage.path,
     loadChildren: () =>
       import("~/pages/recipe-components/recipe/recipe.module").then(
-        (module) => module.RecipePageModule
+        (module) => module.RecipePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -163,7 +171,7 @@ const routes: Routes = [
     path: RouteMap.SettingsPage.path,
     loadChildren: () =>
       import("~/pages/settings-components/settings/settings.module").then(
-        (module) => module.SettingsPageModule
+        (module) => module.SettingsPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -171,7 +179,7 @@ const routes: Routes = [
     path: RouteMap.AccountPage.path,
     loadChildren: () =>
       import("~/pages/settings-components/account/account.module").then(
-        (module) => module.AccountPageModule
+        (module) => module.AccountPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -179,7 +187,7 @@ const routes: Routes = [
     path: RouteMap.PeoplePage.path,
     loadChildren: () =>
       import("~/pages/social/people/people.module").then(
-        (module) => module.PeoplePageModule
+        (module) => module.PeoplePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -187,7 +195,7 @@ const routes: Routes = [
     path: RouteMap.MyProfilePage.path,
     loadChildren: () =>
       import("~/pages/social/my-profile/my-profile.module").then(
-        (module) => module.MyProfilePageModule
+        (module) => module.MyProfilePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -195,7 +203,7 @@ const routes: Routes = [
     path: RouteMap.ProfilePage.path,
     loadChildren: () =>
       import("~/pages/social/profile/profile.module").then(
-        (module) => module.ProfilePageModule
+        (module) => module.ProfilePageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -203,7 +211,7 @@ const routes: Routes = [
     path: RouteMap.ExportPage.path,
     loadChildren: () =>
       import("~/pages/settings-components/export/export.module").then(
-        (module) => module.ExportPageModule
+        (module) => module.ExportPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -211,7 +219,7 @@ const routes: Routes = [
     path: RouteMap.ImportPage.path,
     loadChildren: () =>
       import("~/pages/settings-components/import/import.module").then(
-        (module) => module.ImportPageModule
+        (module) => module.ImportPageModule,
       ),
     canDeactivate: [UnsavedChangesGuardService],
   },
@@ -280,7 +288,7 @@ const routes: Routes = [
     path: "**",
     loadChildren: () =>
       import("~/pages/error-pages/not-found/not-found.module").then(
-        (module) => module.NotFoundPageModule
+        (module) => module.NotFoundPageModule,
       ),
   },
 ];

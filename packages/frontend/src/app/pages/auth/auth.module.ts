@@ -9,9 +9,10 @@ import { LogoIconModule } from "~/components/logo-icon/logo-icon.module";
 import { TosClickwrapAgreementModule } from "~/components/tos-clickwrap-agreement/tos-clickwrap-agreement.module";
 
 import { GlobalModule } from "~/global.module";
+import { ToggleablePasswordDirective } from "../../directives/toggleable-password.directive";
 
 @NgModule({
-  declarations: [AuthPage],
+  declarations: [AuthPage, ToggleablePasswordDirective],
   imports: [
     CommonModule,
     IonicModule,

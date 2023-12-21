@@ -2,10 +2,8 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
-import {
-  PreferencesService,
-  MealPlanPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MealPlanPreferenceKey } from "@recipesage/util";
 import {
   MealName,
   MealPlan,
@@ -85,7 +83,7 @@ export class MealCalendarComponent {
 
   constructor(
     public utilService: UtilService,
-    public preferencesService: PreferencesService
+    public preferencesService: PreferencesService,
   ) {
     setTimeout(() => {
       this.mealsByDateChange.emit(this.mealsByDate);
@@ -253,7 +251,7 @@ export class MealCalendarComponent {
     if (event.shiftKey)
       this.selectedDays = this.getDaysBetween(
         this.selectedDays[0],
-        day.valueOf()
+        day.valueOf(),
       );
     else this.selectedDays = [day.toDate().getTime()];
     this.dayClicked.emit(day.toDate());
@@ -262,12 +260,12 @@ export class MealCalendarComponent {
   getDaysBetween(day1: number, day2: number): number[] {
     const days: number[] = [];
 
-    const iterDate = dayjs(day1);
+    const iterDate = new Date(day1);
 
-    while (iterDate.isBefore(day2)) {
-      days.push(dayjs(iterDate).valueOf());
+    while (iterDate <= new Date(day2)) {
+      days.push(iterDate.getTime());
 
-      iterDate.add(1, "day");
+      iterDate.setDate(iterDate.getDate() + 1);
     }
 
     return days;
@@ -277,7 +275,7 @@ export class MealCalendarComponent {
     if (this.dayDragInProgress) {
       this.selectedDays = this.getDaysBetween(
         this.selectedDays[0],
-        day.valueOf()
+        day.valueOf(),
       );
     }
   }

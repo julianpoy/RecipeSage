@@ -27,12 +27,12 @@ export const generateKey = (objectType: ObjectTypes): string => {
 
 export const generateStorageLocation = (
   objectType: ObjectTypes,
-  key: string
+  key: string,
 ): string => {
   // Generate the location of the object for the browser to resolve
   // this won't refer to the file, but rather the URL that the browser
   // will use to fetch the file
-  const location = `/api/images/filesystem/${key}`;
+  const location = `api/images/filesystem/${key}`;
 
   return location;
 };
@@ -41,7 +41,7 @@ export const generateStorageLocation = (
 export const writeBuffer = async (
   objectType: ObjectTypes,
   buffer: Buffer,
-  mimetype: string
+  mimetype: string,
 ): Promise<StorageObjectRecord> => {
   const key = generateKey(objectType);
   const location = generateStorageLocation(objectType, key);

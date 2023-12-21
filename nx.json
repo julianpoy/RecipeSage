@@ -1,30 +1,33 @@
 {
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "test", "lint", "typecheck"],
-        "accessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ==",
-        "useDaemonProcess": false
-      }
-    }
-  },
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
       "inputs": ["default"],
       "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/dist", "{projectRoot}/www"]
-    },
-    "test": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+      "outputs": ["{projectRoot}/dist", "{projectRoot}/www"],
+      "cache": true
     },
     "lint": {
-      "inputs": ["default"]
+      "inputs": ["default"],
+      "cache": true
     },
     "typecheck": {
-      "inputs": ["default", "^default"]
+      "inputs": ["default", "^default"],
+      "cache": true
+    },
+    "@nx/jest:jest": {
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
+      "cache": true,
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
     }
   },
   "workspaceLayout": {
@@ -33,5 +36,7 @@
   },
   "affected": {
     "defaultBase": "master"
-  }
+  },
+  "useDaemonProcess": false,
+  "nxCloudAccessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ=="
 }

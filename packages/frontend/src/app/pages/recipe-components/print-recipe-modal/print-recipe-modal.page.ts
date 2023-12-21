@@ -33,7 +33,7 @@ export class PrintRecipeModalPage {
   constructor(
     private translate: TranslateService,
     private modalCtrl: ModalController,
-    private utilService: UtilService
+    private utilService: UtilService,
   ) {}
 
   async ionViewWillEnter() {
@@ -111,7 +111,7 @@ export class PrintRecipeModalPage {
       template.modifiers.scale = this.scale;
       template.url = this.utilService.generateRecipeTemplateURL(
         this.recipe.id,
-        template.modifiers
+        template.modifiers,
       );
     }
   }
@@ -123,7 +123,7 @@ export class PrintRecipeModalPage {
       {
         ...template.modifiers,
         print: true,
-      }
+      },
     );
     window.open(printUrl, "_blank", 'rel="noopener"');
     this.modalCtrl.dismiss();

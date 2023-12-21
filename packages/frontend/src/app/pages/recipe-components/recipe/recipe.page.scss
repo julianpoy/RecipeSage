@@ -22,6 +22,7 @@ ion-thumbnail {
 }
 
 h2.recipeTitle {
+  font-size: 1.125rem;
   margin-top: 0 !important;
 }
 
@@ -168,4 +169,10 @@ h2.recipeTitle {
 
 .dropdownSelect input {
   font-size: 0.875rem;
+}
+
+.label-group-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
 }

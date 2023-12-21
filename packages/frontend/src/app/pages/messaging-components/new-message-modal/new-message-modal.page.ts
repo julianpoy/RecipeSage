@@ -29,7 +29,7 @@ export class NewMessageModalPage {
     public toastCtrl: ToastController,
     public userService: UserService,
     public utilService: UtilService,
-    public messagingService: MessagingService
+    public messagingService: MessagingService,
   ) {
     setTimeout(() => {
       if (this.initialRecipientId) {
@@ -66,7 +66,7 @@ export class NewMessageModalPage {
 
     this.modalCtrl.dismiss();
     this.navCtrl.navigateForward(
-      RouteMap.MessageThreadPage.getPath(this.recipientId)
+      RouteMap.MessageThreadPage.getPath(this.recipientId),
     );
   }
 

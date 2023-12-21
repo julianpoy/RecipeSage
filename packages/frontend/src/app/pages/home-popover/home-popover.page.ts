@@ -7,10 +7,8 @@ import {
   QuickTutorialService,
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
-import {
-  PreferencesService,
-  MyRecipesPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MyRecipesPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "page-home-popover",
@@ -37,14 +35,14 @@ export class HomePopoverPage {
     public toastCtrl: ToastController,
     public utilService: UtilService,
     public preferencesService: PreferencesService,
-    public quickTutorialService: QuickTutorialService
+    public quickTutorialService: QuickTutorialService,
   ) {}
 
   toggleSelectionMode() {
     const enteringSelectionMode = !this.selectionMode;
     if (enteringSelectionMode) {
       this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.MultipleRecipeSelection
+        QuickTutorialOptions.MultipleRecipeSelection,
       );
     }
 

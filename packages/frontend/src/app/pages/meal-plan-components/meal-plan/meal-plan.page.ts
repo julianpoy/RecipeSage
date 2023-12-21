@@ -19,10 +19,8 @@ import {
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
-import {
-  PreferencesService,
-  MealPlanPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MealPlanPreferenceKey } from "@recipesage/util";
 
 import { MealCalendarComponent } from "~/components/meal-calendar/meal-calendar.component";
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
@@ -81,7 +79,7 @@ export class MealPlanPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {
     const mealPlanId = this.route.snapshot.paramMap.get("mealPlanId");
     if (!mealPlanId) {
@@ -97,7 +95,7 @@ export class MealPlanPage {
           this.loadMealPlan();
         }
       },
-      this
+      this,
     );
   }
 
@@ -112,7 +110,7 @@ export class MealPlanPage {
       },
       () => {
         loader.target.complete();
-      }
+      },
     );
   }
 
@@ -569,7 +567,7 @@ export class MealPlanPage {
             .toDate()
             .toISOString(),
           meal: item.meal,
-        }))
+        })),
       )
       .flat();
 
@@ -597,7 +595,7 @@ export class MealPlanPage {
             .toDate()
             .toISOString(),
           meal: item.meal,
-        }))
+        })),
       )
       .flat();
 

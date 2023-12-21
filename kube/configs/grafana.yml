@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rs-grafana
+spec:
+  serviceName: rs-grafana
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rs-grafana
+  template:
+    metadata:
+      labels:
+        app: rs-grafana
+    spec:
+      initContainers:
+        - name: rs-grafana-chown
+          image: alpine
+          command: ["chown", "-R", "472:472", "/var/lib/grafana"]
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 100Mi
+            limits:
+              cpu: 0.1
+              memory: 500Mi
+          volumeMounts:
+            - name: grafana-data
+              mountPath: /var/lib/grafana
+      containers:
+        - name: rs-grafana
+          image: grafana/grafana-oss:10.2.2
+          env:
+            - name: discovery.type
+              value: single-node
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 300Mi
+            limits:
+              cpu: 1
+              memory: 500Mi
+          volumeMounts:
+            - name: grafana-data
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-data
+          persistentVolumeClaim:
+            claimName: grafana-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-grafana
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-grafana
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: do-block-storage

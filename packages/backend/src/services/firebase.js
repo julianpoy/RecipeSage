@@ -8,7 +8,7 @@ let invalidFcmTokenErrors = ["messaging/registration-token-not-registered"];
 
 export const sendMessages = (tokens, payload) => {
   return Promise.all(
-    tokens.map((token) => exports.sendMessage(token, payload))
+    tokens.map((token) => exports.sendMessage(token, payload)),
   );
 };
 

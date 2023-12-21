@@ -10,6 +10,7 @@ import { RatingModule } from "~/components/rating/rating.module";
 import { EditRecipePopoverPageModule } from "../edit-recipe-popover/edit-recipe-popover.module";
 
 import { GlobalModule } from "~/global.module";
+import { SelectMultipleItemsModule } from "../../../components/select-multiple-items/select-multiple-items.module";
 
 @NgModule({
   declarations: [EditRecipePage],
@@ -28,6 +29,7 @@ import { GlobalModule } from "~/global.module";
     MultiImageUploadModule,
     EditRecipePopoverPageModule,
     RatingModule,
+    SelectMultipleItemsModule,
   ],
 })
 export class EditRecipePageModule {}

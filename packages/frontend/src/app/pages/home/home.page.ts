@@ -5,6 +5,7 @@ import {
   NavController,
   AlertController,
   PopoverController,
+  ToastController,
 } from "@ionic/angular";
 import { Datasource } from "ngx-ui-scroll";
 
@@ -16,19 +17,16 @@ import {
 import { UserProfile, UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
-import { EventService } from "~/services/event.service";
-import { RouteMap } from "~/services/util.service";
+import { EventName, EventService } from "~/services/event.service";
+import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
-import {
-  PreferencesService,
-  MyRecipesPreferenceKey,
-  GlobalPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MyRecipesPreferenceKey, GlobalPreferenceKey } from "@recipesage/util";
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import { RecipeSummary } from "@recipesage/trpc";
+import type { LabelSummary, RecipeSummaryLite } from "@recipesage/trpc";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -42,10 +40,10 @@ export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();
   showBack: boolean = false;
 
-  labels: Label[] = [];
+  labels: LabelSummary[] = [];
   selectedLabels: string[] = [];
 
-  recipes: RecipeSummary[] = [];
+  recipes: RecipeSummaryLite[] = [];
   recipeFetchBuffer = 25;
   fetchPerPage = 50;
   lastRecipeCount = 0;
@@ -96,7 +94,7 @@ export class HomePage {
         for (let i = 0; i < groupCount; i++) {
           const recipeIdx = i * this.tileColCount;
           recipeGroups.push(
-            recipes.slice(recipeIdx, recipeIdx + this.tileColCount)
+            recipes.slice(recipeIdx, recipeIdx + this.tileColCount),
           );
         }
 
@@ -120,6 +118,7 @@ export class HomePage {
     private events: EventService,
     private translate: TranslateService,
     private popoverCtrl: PopoverController,
+    private toastCtrl: ToastController,
     private loadingService: LoadingService,
     private alertCtrl: AlertController,
     private recipeService: RecipeService,
@@ -127,7 +126,8 @@ export class HomePage {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private websocketService: WebsocketService,
-    private trpcService: TRPCService
+    private trpcService: TRPCService,
+    private utilService: UtilService,
   ) {
     this.showBack =
       !!this.router.getCurrentNavigation()?.extras.state?.showBack;
@@ -152,18 +152,23 @@ export class HomePage {
     }
     this.setDefaultBackHref();
 
-    this.events.subscribe("recipe:update", () => (this.reloadPending = true));
-    this.events.subscribe("label:update", () => (this.reloadPending = true));
-    this.events.subscribe("import:pepperplate:complete", () => {
+    this.events.subscribe(
+      [
+        EventName.RecipeCreated,
+        EventName.RecipeUpdated,
+        EventName.RecipeDeleted,
+      ],
+      () => (this.reloadPending = true),
+    );
+    this.events.subscribe(
+      [EventName.LabelCreated, EventName.LabelUpdated, EventName.LabelDeleted],
+      () => (this.reloadPending = true),
+    );
+    this.events.subscribe(EventName.ImportPepperplateComplete, () => {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
-        () => {
-          loading.dismiss();
-        }
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     });
 
     this.websocketService.register(
@@ -173,7 +178,7 @@ export class HomePage {
           this.resetAndLoadRecipes();
         }
       },
-      this
+      this,
     );
 
     this.updateTileColCount();
@@ -186,14 +191,9 @@ export class HomePage {
 
     if (this.reloadPending) {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().then(
-        () => {
-          loading.dismiss();
-        },
-        () => {
-          loading.dismiss();
-        }
-      );
+      this.resetAndLoadAll().finally(() => {
+        loading.dismiss();
+      });
     }
 
     this.fetchMyProfile();
@@ -206,7 +206,7 @@ export class HomePage {
       if (!response.success) return;
 
       this.defaultBackHref = RouteMap.ProfilePage.getPath(
-        `@${response.data.handle}`
+        `@${response.data.handle}`,
       );
     }
   }
@@ -253,7 +253,7 @@ export class HomePage {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
       this.selectedLabels = this.selectedLabels.filter((e) =>
-        labelNames.has(e)
+        labelNames.has(e),
       );
 
       return this.resetAndLoadRecipes();
@@ -275,7 +275,7 @@ export class HomePage {
       },
       () => {
         this.loading = false;
-      }
+      },
     );
   }
 
@@ -320,7 +320,7 @@ export class HomePage {
         includeAllFriends,
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
         userIds: this.userId ? [this.userId] : undefined,
-      })
+      }),
     );
 
     if (!result) return;
@@ -330,21 +330,30 @@ export class HomePage {
   }
 
   async loadLabels() {
-    const response = await this.labelService.fetch();
-    if (!response.success) return;
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.labels.getLabels.query(),
+      {
+        401: () => {},
+      },
+    );
+    if (!response) return;
 
-    this.labels = response.data;
+    this.labels = response;
   }
 
   async fetchMyProfile() {
-    const response = await this.userService.getMyProfile();
+    const response = await this.userService.getMyProfile({
+      401: () => {},
+    });
     if (!response.success) return;
 
     this.myProfile = response.data;
   }
 
   async fetchFriends() {
-    const response = await this.userService.getMyFriends();
+    const response = await this.userService.getMyFriends({
+      401: () => {},
+    });
     if (!response.success) return;
 
     this.friendsById = response.data.friends.reduce(
@@ -352,7 +361,7 @@ export class HomePage {
         acc[friendEntry.otherUser.id] = friendEntry.otherUser;
         return acc;
       },
-      {}
+      {},
     );
   }
 
@@ -365,11 +374,7 @@ export class HomePage {
   }
 
   openRecipe(recipe: Recipe, event?: MouseEvent | KeyboardEvent) {
-    if (event && (event.metaKey || event.ctrlKey)) {
-      window.open(`#/recipe/${recipe.id}`);
-      return;
-    }
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipe.id));
+    this.utilService.openRecipe(this.navCtrl, recipe.id, event);
   }
 
   async presentPopover(event: Event) {
@@ -433,7 +438,7 @@ export class HomePage {
           includeAllFriends,
           ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
           userIds: this.userId ? [this.userId] : undefined,
-        })
+        }),
       )
       .finally(loading.dismiss);
 
@@ -510,7 +515,7 @@ export class HomePage {
     const recipeNames = this.selectedRecipeIds
       .map(
         (recipeId) =>
-          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title
+          this.recipes.filter((recipe) => recipe.id === recipeId)[0].title,
       )
       .join(", ");
 
@@ -566,7 +571,7 @@ export class HomePage {
     };
   }
 
-  getLabelList(recipe: RecipeSummary) {
+  getLabelList(recipe: RecipeSummaryLite) {
     return recipe.recipeLabels
       .map((recipeLabel) => recipeLabel.label.title)
       .join(", ");

@@ -24,10 +24,8 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
 import { WakeLockService } from "~/services/wakelock.service";
-import {
-  PreferencesService,
-  RecipeDetailsPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { RecipeDetailsPreferenceKey } from "@recipesage/util";
 import { RecipeCompletionTrackerService } from "~/services/recipe-completion-tracker.service";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
@@ -38,6 +36,12 @@ import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import type {
+  RecipeSummary,
+  RecipeSummaryLite,
+  UserPublic,
+} from "@recipesage/trpc";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-recipe",
@@ -52,7 +56,9 @@ export class RecipePage {
     release: () => void;
   } = null;
 
-  recipe: Recipe;
+  me: UserPublic | null = null;
+  recipe: RecipeSummary | null = null;
+  similarRecipes: RecipeSummaryLite[] = [];
   recipeId: string;
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
@@ -60,11 +66,11 @@ export class RecipePage {
 
   scale = 1;
 
-  labelObjectsByTitle: any = {};
-  existingLabels: string[] = [];
-  selectedLabels: string[] = [];
-  pendingLabel = "";
-  showAutocomplete = false;
+  labelGroupIds: string[] = [];
+  labelGroupById: Record<
+    string,
+    NonNullable<RecipeSummary["recipeLabels"][0]["label"]["labelGroup"]>
+  > = {};
 
   ratingVisual = new Array<string>(5).fill("star-outline");
 
@@ -86,7 +92,8 @@ export class RecipePage {
     public labelService: LabelService,
     public cookingToolbarService: CookingToolbarService,
     public capabilitiesService: CapabilitiesService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public trpcService: TRPCService,
   ) {
     this.updateIsLoggedIn();
 
@@ -96,65 +103,59 @@ export class RecipePage {
       throw new Error("No recipeId was provided");
     }
     this.recipeId = recipeId;
-    this.recipe = {} as Recipe;
 
     this.scale =
       this.recipeCompletionTrackerService.getRecipeScale(this.recipeId) || 1;
 
     this.applyScale();
-
-    document.addEventListener("click", (event) => {
-      if (this.showAutocomplete) this.toggleAutocomplete(false, event);
-    });
   }
 
   ionViewWillEnter() {
-    const loading = this.loadingService.start();
+    this.recipe = null;
+    this.me = null;
+    this.similarRecipes = [];
 
-    this.recipe = {} as Recipe;
-
-    this.loadAll().then(
-      () => {
-        loading.dismiss();
-      },
-      () => {
-        loading.dismiss();
-      }
-    );
+    this.loadWithBar();
 
     this.setupWakeLock();
+  }
+
+  async loadWithBar() {
+    const loading = this.loadingService.start();
+    await this.load();
+    loading.dismiss();
   }
 
   ionViewWillLeave() {
     this.releaseWakeLock();
   }
 
-  refresh(loader: any) {
-    this.loadAll().then(
-      () => {
-        loader.target.complete();
-      },
-      () => {
-        loader.target.complete();
-      }
-    );
-
-    this.loadLabels();
+  async refresh(loader: any) {
+    await this.load();
+    loader.target.complete();
   }
 
   updateIsLoggedIn() {
     this.isLoggedIn = !!localStorage.getItem("token");
   }
 
-  loadAll() {
-    return Promise.all([this.loadRecipe(), this.loadLabels()]);
+  async load() {
+    return Promise.all([
+      this._loadRecipe(),
+      this._loadSimilarRecipes(),
+      this._loadMyUserProfile(),
+    ]);
   }
 
-  async loadRecipe() {
-    const response = await this.recipeService.fetchById(this.recipeId);
-    if (!response.success) return;
+  async _loadRecipe() {
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getRecipe.query({
+        id: this.recipeId,
+      }),
+    );
+    if (!response) return;
 
-    this.recipe = response.data;
+    this.recipe = response;
 
     if (this.recipe.url && !this.recipe.url.trim().startsWith("http")) {
       this.recipe.url = "http://" + this.recipe.url.trim();
@@ -162,7 +163,7 @@ export class RecipePage {
 
     if (this.recipe.instructions && this.recipe.instructions.length > 0) {
       this.instructions = this.recipeService.parseInstructions(
-        this.recipe.instructions
+        this.recipe.instructions,
       );
     }
 
@@ -175,34 +176,59 @@ export class RecipePage {
         }));
     }
 
-    this.applyScale();
+    const groupIdsSet = new Set<string>();
+    for (const recipeLabel of this.recipe.recipeLabels) {
+      const labelGroup = recipeLabel.label.labelGroup;
+      if (labelGroup) {
+        groupIdsSet.add(labelGroup.id);
+        this.labelGroupById[labelGroup.id] = labelGroup;
+      }
+    }
+    this.labelGroupIds = Array.from(groupIdsSet);
 
-    this.selectedLabels = this.recipe.labels.map((label) => label.title);
+    this.applyScale();
 
     this.updateRatingVisual();
   }
 
-  async loadLabels() {
+  recipeLabelsForGroupId(labelGroupId: string | null) {
+    if (!this.recipe) return [];
+
+    return this.recipe.recipeLabels.filter(
+      (recipeLabel) => recipeLabel.label.labelGroupId === labelGroupId,
+    );
+  }
+
+  async _loadSimilarRecipes() {
     if (!this.isLoggedIn) return;
 
-    const response = await this.labelService.fetch();
-    if (!response.success) return;
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getSimilarRecipes.query({
+        recipeIds: [this.recipeId],
+      }),
+    );
+    if (!response) return;
 
-    this.labelObjectsByTitle = {};
-    this.existingLabels = [];
+    this.similarRecipes = response;
+  }
 
-    for (const label of response.data) {
-      this.existingLabels.push(label.title);
-      this.labelObjectsByTitle[label.title] = label;
-    }
+  async _loadMyUserProfile() {
+    if (!this.isLoggedIn) return;
 
-    this.existingLabels.sort((a, b) => a.localeCompare(b));
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.getMe.query(),
+    );
+    if (!response) return;
+
+    this.me = response;
   }
 
   updateRatingVisual() {
+    if (!this.recipe) return;
+
     this.ratingVisual = new Array<string>(5)
-      .fill("star", 0, this.recipe.rating)
-      .fill("star-outline", this.recipe.rating, 5);
+      .fill("star", 0, this.recipe.rating || 0)
+      .fill("star-outline", this.recipe.rating || 0, 5);
   }
 
   async presentPopover(event: Event) {
@@ -261,7 +287,7 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -270,21 +296,21 @@ export class RecipePage {
 
     this.recipeCompletionTrackerService.toggleIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getInstructionComplete(idx: number) {
     return this.recipeCompletionTrackerService.getInstructionComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
   getIngredientComplete(idx: number) {
     return this.recipeCompletionTrackerService.getIngredientComplete(
       this.recipeId,
-      idx
+      idx,
     );
   }
 
@@ -303,23 +329,25 @@ export class RecipePage {
       this.scale = data.scale;
       this.recipeCompletionTrackerService.setRecipeScale(
         this.recipeId,
-        this.scale
+        this.scale,
       );
       this.applyScale();
     }
   }
 
   applyScale() {
+    if (!this.recipe) return;
+
     this.ingredients = this.recipeService.parseIngredients(
       this.recipe.ingredients,
       this.scale,
-      true
+      true,
     );
   }
 
   editRecipe() {
     this.navCtrl.navigateForward(
-      RouteMap.EditRecipePage.getPath(this.recipeId)
+      RouteMap.EditRecipePage.getPath(this.recipeId),
     );
   }
 
@@ -355,6 +383,8 @@ export class RecipePage {
   }
 
   private async _deleteRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
 
     const response = await this.recipeService.delete(this.recipe.id);
@@ -411,128 +441,75 @@ export class RecipePage {
   }
 
   async moveToFolder(folderName: RecipeFolderName) {
-    const loading = this.loadingService.start();
-
-    this.recipe.folder = folderName;
-
-    console.log(this.recipe);
-
-    const response = await this.recipeService.update(this.recipe);
-
-    loading.dismiss();
-    if (!response.success) return;
-
-    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.data.id)); // TODO: Check that this "refresh" works with new router
-  }
-
-  toggleAutocomplete(show: boolean, event?: any) {
-    if (event) {
-      if (
-        event.relatedTarget &&
-        event.relatedTarget.className.indexOf("suggestion") > -1
-      ) {
-        return;
-      }
-      if (
-        event.target &&
-        (event.target.id.match("labelInputField") ||
-          event.target.className.match("labelInputField") ||
-          event.target.className.match("suggestion"))
-      ) {
-        return;
-      }
-    }
-    this.showAutocomplete = show;
-  }
-
-  labelInputEnter(event: any) {
-    this.addLabel(event.target.value);
-  }
-
-  async addLabel(title: string) {
-    if (title.length === 0) {
-      const message = await this.translate
-        .get("pages.recipeDetails.enterLabelWarning")
-        .toPromise();
-      (
-        await this.toastCtrl.create({
-          message,
-          duration: 6000,
-        })
-      ).present();
-      return;
-    }
-
-    this.pendingLabel = "";
+    if (!this.recipe) return;
 
     const loading = this.loadingService.start();
 
-    await this.labelService.create({
-      recipeId: this.recipe.id,
-      title: title.toLowerCase(),
-    });
-    this.loadAll();
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.updateRecipe.mutate({
+        id: this.recipe.id,
+        title: this.recipe.title,
+        description: this.recipe.description,
+        yield: this.recipe.yield,
+        activeTime: this.recipe.activeTime,
+        totalTime: this.recipe.totalTime,
+        source: this.recipe.source,
+        url: this.recipe.url,
+        notes: this.recipe.notes,
+        ingredients: this.recipe.ingredients,
+        instructions: this.recipe.instructions,
+        rating: this.recipe.rating,
+        folder: folderName,
+        labelIds: this.recipe.recipeLabels.map(
+          (recipeLabel) => recipeLabel.labelId,
+        ),
+        imageIds: this.recipe.recipeImages.map(
+          (recipeImage) => recipeImage.imageId,
+        ),
+      }),
+    );
+
     loading.dismiss();
-  }
+    if (!response) return;
 
-  async deleteLabel(label: Label) {
-    const header = await this.translate
-      .get("pages.recipeDetails.deleteLabel.header")
-      .toPromise();
-    const message = await this.translate
-      .get("pages.recipeDetails.deleteLabel.message", { title: label.title })
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const del = await this.translate.get("generic.delete").toPromise();
-
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: [
-        {
-          text: cancel,
-          role: "cancel",
-          handler: () => {
-            // this.selectedLabels.push(label.title);
-          },
-        },
-        {
-          text: del,
-          cssClass: "alertDanger",
-          handler: () => {
-            this._deleteLabel(label);
-          },
-        },
-      ],
-    });
-    alert.present();
-  }
-
-  private async _deleteLabel(label: Label) {
-    const loading = this.loadingService.start();
-
-    await this.labelService.removeFromRecipe({
-      labelId: label.id,
-      recipeId: this.recipe.id,
-    });
-    await this.loadAll();
-    loading.dismiss();
+    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
   }
 
   async cloneRecipe() {
+    if (!this.recipe) return;
+
     const loading = this.loadingService.start();
-    const response = await this.recipeService.create({
-      ...this.recipe,
-      imageIds: this.recipe.images.map((image) => image.id),
-      labels: this.recipe.isOwner
-        ? this.recipe.labels.map((label) => label.title)
-        : [],
-    });
+
+    const labelIds =
+      this.me?.id === this.recipe.id
+        ? this.recipe.recipeLabels.map((recipeLabel) => recipeLabel.labelId)
+        : [];
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.createRecipe.mutate({
+        title: this.recipe.title,
+        description: this.recipe.description,
+        yield: this.recipe.yield,
+        activeTime: this.recipe.activeTime,
+        totalTime: this.recipe.totalTime,
+        source: this.recipe.source,
+        url: this.recipe.url,
+        notes: this.recipe.notes,
+        ingredients: this.recipe.ingredients,
+        instructions: this.recipe.instructions,
+        rating: this.recipe.rating,
+        folder: this.recipe.folder as "main" | "inbox",
+        labelIds,
+        imageIds: this.recipe.recipeImages.map(
+          (recipeImage) => recipeImage.imageId,
+        ),
+      }),
+    );
 
     loading.dismiss();
-    if (!response.success) return false;
+    if (!response) return false;
 
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.data.id));
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
 
     return true;
   }
@@ -574,26 +551,42 @@ export class RecipePage {
     return this.utilService.formatDate(datetime, { times: true });
   }
 
+  sortedRecipeImages() {
+    return this.recipe?.recipeImages.sort((a, b) => a.order - b.order) || [];
+  }
+
   async openImageViewer() {
+    if (!this.recipe) return;
+
     const imageViewerModal = await this.modalCtrl.create({
       component: ImageViewerComponent,
       componentProps: {
-        imageUrls: this.recipe.images.map((image) => image.location),
+        imageUrls: this.sortedRecipeImages().map(
+          (recipeImage) => recipeImage.image.location,
+        ),
       },
     });
     imageViewerModal.present();
   }
 
   pinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.pinRecipe({
       id: this.recipe.id,
       title: this.recipe.title,
-      imageUrl: this.recipe.images?.[0]?.location,
+      imageUrl: this.sortedRecipeImages()[0]?.image.location || undefined,
     });
   }
 
   unpinRecipe() {
+    if (!this.recipe) return;
+
     this.cookingToolbarService.unpinRecipe(this.recipe.id);
+  }
+
+  openRecipe(recipeId: string, event?: MouseEvent | KeyboardEvent) {
+    this.utilService.openRecipe(this.navCtrl, recipeId, event);
   }
 
   setupWakeLock() {
@@ -610,5 +603,12 @@ export class RecipePage {
   releaseWakeLock() {
     if (this.wakeLockRequest) this.wakeLockRequest.release();
     this.wakeLockRequest = null;
+  }
+
+  recipeLabelTrackBy(
+    idx: number,
+    recipeLabel: RecipeSummary["recipeLabels"][0],
+  ) {
+    return recipeLabel.id;
   }
 }

@@ -30,15 +30,15 @@ export const getRecipesWithConstraints = async (args) => {
     const friendships = await getFriendships(contextUserId);
     friends = friendships.friends.reduce(
       (acc, friend) => ((acc[friend.otherUser.id] = friend), acc),
-      {}
+      {},
     );
   }
 
   const friendUserIds = userIds.filter(
-    (userId) => friends[userId] && userId !== contextUserId
+    (userId) => friends[userId] && userId !== contextUserId,
   );
   const nonFriendUserIds = userIds.filter(
-    (userId) => !friends[userId] && userId !== contextUserId
+    (userId) => !friends[userId] && userId !== contextUserId,
   );
 
   const profileItems = await ProfileItem.findAll({
@@ -67,7 +67,7 @@ export const getRecipesWithConstraints = async (args) => {
     const profileItemsForUser = profileItemsByUserId[userId] || [];
 
     const isSharingAll = profileItemsForUser.find(
-      (profileItem) => profileItem.type === "all-recipes"
+      (profileItem) => profileItem.type === "all-recipes",
     );
 
     if (isContextUser || isSharingAll) {
@@ -120,7 +120,7 @@ export const getRecipesWithConstraints = async (args) => {
     labels && labelIntersection
       ? {
           having: sequelize.literal(
-            `COUNT("labels"."id") = ${sequelize.escape(labels.length)}`
+            `COUNT("labels"."id") = ${sequelize.escape(labels.length)}`,
           ),
         }
       : {};

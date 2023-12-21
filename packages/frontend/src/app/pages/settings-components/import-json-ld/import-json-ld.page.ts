@@ -25,7 +25,7 @@ export class ImportJSONLDPage {
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
-    public utilService: UtilService
+    public utilService: UtilService,
   ) {
     this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }

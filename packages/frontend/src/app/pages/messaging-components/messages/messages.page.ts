@@ -30,7 +30,7 @@ export class MessagesPage {
     public utilService: UtilService,
     public loadingService: LoadingService,
     public websocketService: WebsocketService,
-    public messagingService: MessagingService
+    public messagingService: MessagingService,
   ) {
     this.messagingService.requestNotifications();
 
@@ -39,7 +39,7 @@ export class MessagesPage {
       () => {
         this.loadThreads();
       },
-      this
+      this,
     );
   }
 
@@ -58,7 +58,7 @@ export class MessagesPage {
       },
       () => {
         refresher.target.complete();
-      }
+      },
     );
   }
 
@@ -78,7 +78,7 @@ export class MessagesPage {
 
   openThread(thread: MessageThread) {
     this.navCtrl.navigateForward(
-      RouteMap.MessageThreadPage.getPath(thread.otherUser.id)
+      RouteMap.MessageThreadPage.getPath(thread.otherUser.id),
     );
   }
 

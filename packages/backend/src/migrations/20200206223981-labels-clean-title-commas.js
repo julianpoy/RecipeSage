@@ -13,7 +13,7 @@ module.exports = {
       `,
         {
           transaction,
-        }
+        },
       );
 
       await queryInterface.sequelize.query(
@@ -22,7 +22,7 @@ module.exports = {
       `,
         {
           transaction,
-        }
+        },
       );
     });
   },

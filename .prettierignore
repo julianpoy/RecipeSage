@@ -6,3 +6,5 @@ coverage
 www
 .angular
 
+
+/.nx/cache

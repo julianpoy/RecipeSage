@@ -6,8 +6,8 @@ import { ToastController, NavController } from "@ionic/angular";
 
 @Component({
   selector: "select-label",
-  templateUrl: "index.html",
-  styleUrls: ["./index.scss"],
+  templateUrl: "select-label.component.html",
+  styleUrls: ["./select-label.component.scss"],
 })
 export class SelectLabelComponent {
   searchText = "";
@@ -33,7 +33,7 @@ export class SelectLabelComponent {
     public utilService: UtilService,
     public labelService: LabelService,
     public toastCtrl: ToastController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
   ) {
     this.load();
   }
@@ -50,9 +50,13 @@ export class SelectLabelComponent {
 
   onSearchInputChange(event: any) {
     this.searchText = event.detail.value || "";
+    if (!this.searchText) {
+      this.results = this.labels;
+      return;
+    }
 
     this.results = this.labels.filter((label) =>
-      label.title.includes(this.searchText)
+      label.title.includes(this.searchText),
     );
   }
 
@@ -60,5 +64,9 @@ export class SelectLabelComponent {
     this.selectedLabel = label;
     this.searchText = "";
     this.results = this.labels;
+  }
+
+  labelTrackBy(index: number, label: Label) {
+    return label.id;
   }
 }

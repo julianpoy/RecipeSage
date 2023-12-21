@@ -9,7 +9,7 @@ import { sequelize, Recipe, Label, Recipe_Label } from "../models/index.js";
 
 // Services
 import * as MiddlewareService from "../services/middleware.js";
-import * as UtilService from "../services/util.js";
+import * as Util from "@recipesage/util";
 import { joiValidator } from "../middleware/joiValidator.js";
 
 // Util
@@ -27,7 +27,7 @@ router.post(
   cors(),
   MiddlewareService.validateSession(["user"]),
   wrapRequestWithErrorHandler(async (req, res) => {
-    const title = UtilService.cleanLabelTitle(req.body.title || "");
+    const title = Util.cleanLabelTitle(req.body.title || "");
 
     if (!title || title.length === 0) {
       throw PreconditionFailed("Label title must be provided.");
@@ -61,14 +61,14 @@ router.post(
         {
           ignoreDuplicates: true,
           transaction,
-        }
+        },
       );
 
       return label;
     });
 
     res.status(201).send(label);
-  })
+  }),
 );
 
 //Get all of a user's labels
@@ -109,7 +109,7 @@ router.get(
     });
 
     res.status(200).json(labels);
-  })
+  }),
 );
 
 //Get recipes associated with specific label
@@ -144,7 +144,7 @@ router.get(
     });
 
     res.status(200).json(label);
-  })
+  }),
 );
 
 //Combine two labels
@@ -201,14 +201,14 @@ router.post(
       }
 
       const sourceLabelRecipeIds = sourceLabel.recipe_labels.map(
-        (recipeLabel) => recipeLabel.recipeId
+        (recipeLabel) => recipeLabel.recipeId,
       );
       const targetLabelRecipeIds = targetLabel.recipe_labels.map(
-        (recipeLabel) => recipeLabel.recipeId
+        (recipeLabel) => recipeLabel.recipeId,
       );
 
       const recipeIdsToUpdate = sourceLabelRecipeIds.filter(
-        (recipeId) => !targetLabelRecipeIds.includes(recipeId)
+        (recipeId) => !targetLabelRecipeIds.includes(recipeId),
       );
 
       await Recipe_Label.update(
@@ -221,7 +221,7 @@ router.post(
             recipeId: recipeIdsToUpdate,
           },
           transaction,
-        }
+        },
       );
 
       await Label.destroy({
@@ -233,7 +233,7 @@ router.post(
     });
 
     res.status(200).send("ok");
-  })
+  }),
 );
 
 //Delete a label from a recipe
@@ -271,18 +271,12 @@ router.delete(
           transaction,
         });
 
-        if (label.recipes.length === 1) {
-          await label.destroy({ transaction });
-
-          return {}; // Label was deleted;
-        } else {
-          return label;
-        }
+        return label;
       })
       .then((label) => {
         res.status(200).json(label);
       });
-  })
+  }),
 );
 
 // Update label for all associated recipes
@@ -293,7 +287,7 @@ router.put(
   wrapRequestWithErrorHandler(async (req, res) => {
     if (
       typeof req.body.title === "string" &&
-      UtilService.cleanLabelTitle(req.body.title).length === 0
+      Util.cleanLabelTitle(req.body.title).length === 0
     ) {
       throw BadRequest("Label title must be longer than 0.");
     }
@@ -312,7 +306,7 @@ router.put(
       }
 
       if (typeof req.body.title === "string")
-        label.title = UtilService.cleanLabelTitle(req.body.title);
+        label.title = Util.cleanLabelTitle(req.body.title);
 
       const labels = await Label.findAll({
         where: {
@@ -331,7 +325,7 @@ router.put(
     });
 
     res.status(200).json(label);
-  })
+  }),
 );
 
 // Delete labels from all associated recipes
@@ -342,7 +336,7 @@ router.post(
       body: Joi.object({
         labelIds: Joi.array().items(Joi.string()).min(1).required(),
       }),
-    })
+    }),
   ),
   cors(),
   MiddlewareService.validateSession(["user"]),
@@ -355,7 +349,7 @@ router.post(
     });
 
     res.sendStatus(200);
-  })
+  }),
 );
 
 export default router;

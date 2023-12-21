@@ -31,10 +31,9 @@
 
     <ion-list>
       <ion-item>
-        <ion-label position="floating">
-          {{ 'pages.importPepperplate.username' | translate }}<br />
-        </ion-label>
         <ion-input
+          label="{{ 'pages.importPepperplate.username' | translate }}"
+          labelPlacement="stacked"
           autocomplete="off"
           autofill="off"
           [(ngModel)]="username"
@@ -43,10 +42,9 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">
-          {{ 'pages.importPepperplate.password' | translate }}<br />
-        </ion-label>
         <ion-input
+          label="{{ 'pages.importPepperplate.password' | translate }}"
+          labelPlacement="stacked"
           autocomplete="new-password"
           autofill="off"
           [(ngModel)]="password"

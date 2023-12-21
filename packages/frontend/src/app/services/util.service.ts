@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { API_BASE_URL } from "../../environments/environment";
-import { SupportedFontSize, SupportedLanguages } from "./preferences.service";
+import {
+  AppTheme,
+  SupportedFontSize,
+  SupportedLanguages,
+} from "@recipesage/util";
+import { NavController } from "@ionic/angular";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -39,7 +44,7 @@ export const RouteMap = {
         params.push(
           `labels=${filters.selectedLabels
             .map((labelName) => encodeURIComponent(labelName))
-            .join(",")}`
+            .join(",")}`,
         );
       }
 
@@ -126,6 +131,12 @@ export const RouteMap = {
       return `/meal-planners/${mealPlanId}`;
     },
     path: "meal-planners/:mealPlanId",
+  },
+  AssistantPage: {
+    getPath() {
+      return `/assistant`;
+    },
+    path: "assistant",
   },
   MessagesPage: {
     getPath() {
@@ -249,7 +260,11 @@ const defaultLocality = {
   en: SupportedLanguages.EN_US,
   it: SupportedLanguages.IT_IT,
   de: SupportedLanguages.DE_DE,
+  uk: SupportedLanguages.UK_UA,
+  he: SupportedLanguages.HE,
 };
+
+const rtlLanguages = [SupportedLanguages.HE];
 
 @Injectable({
   providedIn: "root",
@@ -259,7 +274,7 @@ export class UtilService {
 
   getAppBrowserLang(): string {
     const isSupported = (
-      lang: string | undefined
+      lang: string | undefined,
     ): lang is SupportedLanguages => {
       return Object.values(SupportedLanguages).some((el) => el === lang);
     };
@@ -284,6 +299,15 @@ export class UtilService {
     return SupportedLanguages.EN_US;
   }
 
+  setHtmlBrowserLang(lang: string) {
+    document.documentElement.lang = lang;
+    if (rtlLanguages.includes(lang as SupportedLanguages)) {
+      document.documentElement.dir = "rtl";
+    } else {
+      document.documentElement.dir = "ltr";
+    }
+  }
+
   getBase(): string {
     if (window.location.hostname === "beta.recipesage.com")
       return "https://api.beta.recipesage.com/";
@@ -295,6 +319,11 @@ export class UtilService {
 
   setFontSize(fontSize: SupportedFontSize) {
     window.document.documentElement.style.fontSize = fontSize;
+  }
+
+  setAppTheme(theme: AppTheme) {
+    const bodyClasses = document.body.className.replace(/theme-\S*/, "");
+    document.body.className = `${bodyClasses} theme-${theme}`;
   }
 
   removeToken(): void {
@@ -324,7 +353,7 @@ export class UtilService {
       groupSimilar?: boolean;
       groupCategories?: boolean;
       sortBy?: string;
-    }
+    },
   ) {
     let query = `${this.getTokenQuery()}&version=${
       (window as any).version
@@ -339,7 +368,7 @@ export class UtilService {
 
   generateRecipeTemplateURL(
     recipeId: string,
-    modifiers: RecipeTemplateModifiers
+    modifiers: RecipeTemplateModifiers,
   ): string {
     modifiers = { version: (window as any).version, ...modifiers };
     const modifierQuery = Object.entries(modifiers)
@@ -354,7 +383,7 @@ export class UtilService {
 
   formatDate(
     date: string | number | Date,
-    options?: { now?: boolean; times?: boolean }
+    options?: { now?: boolean; times?: boolean },
   ): string {
     options = options || {};
     const aFewMomentsAgoAfter = new Date();
@@ -429,5 +458,17 @@ export class UtilService {
 
     if (str.length <= trueMaxLength) return str;
     return `${str.substring(0, trueMaxLength)}${ellipsis}`;
+  }
+
+  openRecipe(
+    navCtrl: NavController,
+    recipeId: string,
+    event?: MouseEvent | KeyboardEvent,
+  ) {
+    if (event && (event.metaKey || event.ctrlKey)) {
+      window.open(`#/recipe/${recipeId}`);
+      return;
+    }
+    navCtrl.navigateForward(RouteMap.RecipePage.getPath(recipeId));
   }
 }
