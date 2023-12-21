@@ -70,7 +70,7 @@
     "pdfmake": "^0.2.8",
     "pg": "8.11.3",
     "pg-hstore": "^2.3.4",
-    "prisma": "^5.6.0",
+    "prisma": "^5.7.1",
     "pug": "^3.0.2",
     "puppeteer-core": "^21.5.2",
     "sanitize-html": "^2.11.0",

@@ -60,6 +60,8 @@ model Label {
   recipeLabels RecipeLabel[]
 
   @@unique([userId, title], map: "Labels_userId_title_uk")
+  @@index([userId], map: "labels_user_id")
+  @@index([labelGroupId], map: "labels_label_group_id")
   @@map("Labels")
 }
 
@@ -74,6 +76,7 @@ model LabelGroup {
   labels             Label[]
 
   @@unique([userId, title], map: "LabelGroups_userId_title_uk")
+  @@index([userId], map: "labelgroups_user_id")
   @@map("LabelGroups")
 }
 
@@ -253,6 +256,7 @@ model Session {
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([token], map: "sessions_token")
   @@map("Sessions")
 }
 

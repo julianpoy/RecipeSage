@@ -21,7 +21,7 @@
       <p>
         <span>
           {{ 'pages.manageLabelModal.recipeCount' |
-          translate:{count:label._count.recipeLabels} }}
+          translate:{count:label.recipeLabels.length} }}
         </span>
         <br />
         <span *ngIf="label.labelGroup">

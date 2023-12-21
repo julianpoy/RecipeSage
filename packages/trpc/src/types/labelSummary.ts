@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { labelGroupSummary } from "./labelGroupSummary";
 
 export const labelSummary = Prisma.validator<Prisma.LabelArgs>()({
   select: {
@@ -8,10 +7,18 @@ export const labelSummary = Prisma.validator<Prisma.LabelArgs>()({
     createdAt: true,
     updatedAt: true,
     labelGroupId: true,
-    labelGroup: labelGroupSummary,
-    _count: {
+    labelGroup: {
       select: {
-        recipeLabels: true,
+        id: true,
+        title: true,
+        warnWhenNotPresent: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    },
+    recipeLabels: {
+      select: {
+        labelId: true,
       },
     },
   },
