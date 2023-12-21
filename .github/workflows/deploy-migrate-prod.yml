@@ -1,4 +1,4 @@
-name: Deploy to beta.recipesage.com
+name: Deploy migrations to api.recipesage.com
 
 on:
   workflow_dispatch:
@@ -21,12 +21,13 @@ jobs:
         uses: actions/checkout@v3
         ref: inputs.tag
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Push
-        run: ./scripts/deploy/deploy_tag.sh static-beta ${{ inputs.tag }}
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save 43e06009-6d1b-40cb-abbc-38736cc6746c
+
+      - name: Deploy
+        run: ./scripts/deploy/deploy_migrate.sh ${{ inputs.tag }}
