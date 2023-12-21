@@ -10,5 +10,5 @@ fi
 
 export RELEASE_TAG="$1"
 
-envsubst < kube/configs/api.yml | kubectl apply -f -
+envsubst < kube/configs/migrate.yml | kubectl apply -f -
 
