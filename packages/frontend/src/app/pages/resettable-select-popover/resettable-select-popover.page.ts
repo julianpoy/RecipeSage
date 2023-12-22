@@ -59,7 +59,7 @@ export class ResettableSelectPopoverPage {
       }
     }
 
-    return selectedValues;
+    return [...selectedValues];
   }
 
   getGroupTitles() {
