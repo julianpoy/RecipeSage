@@ -38,10 +38,10 @@ export const initBuildRecipe = (
         activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
         totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
         ingredients: Array.isArray(args.ingredients)
-          ? args.ingredients.join("\n")
+          ? JSON.parse(`"${args.ingredients.join("\n")}`)
           : "",
         instructions: Array.isArray(args.instructions)
-          ? args.instructions.join("\n")
+          ? JSON.parse(`"${args.instructions.join("\n")}`)
           : "",
         notes: "",
       };
@@ -127,10 +127,10 @@ export const initOCRFormatRecipe = (
         activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
         totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
         ingredients: Array.isArray(args.ingredients)
-          ? args.ingredients.join("\n")
+          ? JSON.parse(`"${args.ingredients.join("\n")}`)
           : "",
         instructions: Array.isArray(args.instructions)
-          ? args.instructions.join("\n")
+          ? JSON.parse(`"${args.instructions.join("\n")}`)
           : "",
         notes: typeof args.notes === "string" ? args.notes : "",
       };
