@@ -30,16 +30,20 @@ h2.recipeTitle {
   display: flex;
   flex-wrap: wrap;
   padding-left: 0;
+  gap: 16px;
 
   .ingredientsCol {
     flex-shrink: 0;
     max-width: 100%;
-    margin-bottom: 8px;
   }
 
   .instructionsCol {
     min-width: 100%; // Force instructions column to wrap
-    max-width: 700px;
+    flex-grow: 1;
+
+    .instruction {
+      max-width: 900px;
+    }
   }
 
   @media (min-width: 576px) {
@@ -61,10 +65,6 @@ h2.recipeTitle {
   }
 
   @media (min-width: 1200px) {
-    .instructionsCol {
-      max-width: 900px;
-    }
-
     .ingredientsCol {
       width: 325px;
     }
