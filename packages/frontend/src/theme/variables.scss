@@ -3,13 +3,18 @@
 
 @mixin blackModeVars() {
   --ion-border-color: var(--ion-color-dark-shade);
-  --ion-background-color: #000;
+  --ion-background-color: #000000;
   --ion-background-color-rgb: rgb(0, 0, 0);
   --ion-background-shade-color: var(--ion-color-dark-shade);
   --ion-background-tint-color: var(--ion-color-dark-tint);
   --ion-background-tint-active-color: var(--ion-color-dark-tint-active);
   --ion-text-color: var(--ion-color-light);
   --ion-text-color-rgb: var(--ion-color-light-rgb);
+
+  --ion-item-background: #000000;
+  --ion-toolbar-background: #000000;
+  --ion-tab-bar-background: #000000;
+  --ion-card-background: #000000;
 
   --ion-color-step-50: #232323;
   --ion-color-step-100: #2e2e2e;
@@ -39,13 +44,19 @@
 }
 
 @mixin darkModeVars() {
+  --ion-border-color: #2c2c2c;
   --ion-background-color: #121212;
   --ion-background-color-rgb: 18, 18, 18;
-
+  --ion-background-shade-color: #101010;
+  --ion-background-tint-color: #2a2a2a;
+  --ion-background-tint-active-color: #3a3a3a;
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255, 255, 255;
 
-  --ion-border-color: #2c2c2c;
+  --ion-item-background: #121212;
+  --ion-toolbar-background: #1f1f1f;
+  --ion-tab-bar-background: #1f1f1f;
+  --ion-card-background: #1e1e1e;
 
   --ion-color-step-50: #1e1e1e;
   --ion-color-step-100: #2a2a2a;
@@ -66,14 +77,6 @@
   --ion-color-step-850: #dbdbdb;
   --ion-color-step-900: #e7e7e7;
   --ion-color-step-950: #f3f3f3;
-
-  --ion-item-background: #121212;
-
-  --ion-toolbar-background: #1f1f1f;
-
-  --ion-tab-bar-background: #1f1f1f;
-
-  --ion-card-background: #1e1e1e;
 }
 
 @mixin lightModeVars() {
