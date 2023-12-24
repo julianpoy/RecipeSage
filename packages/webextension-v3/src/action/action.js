@@ -1,4 +1,7 @@
-const API_BASE = "https://api.recipesage.com/";
+let api_base;
+chrome.storage.local.get(["api_base"], (result) => {
+  api_base = result.api_base ? result.api_base : "https://api.recipesage.com/";
+});
 
 chrome.runtime.onMessage.addListener((request) => {
   const clipData = request;
@@ -11,7 +14,7 @@ let token;
 
 const login = async () => {
   try {
-    const loginResponse = await fetch(API_BASE + "users/login", {
+    const loginResponse = await fetch(api_base + "users/login", {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
@@ -42,7 +45,7 @@ const login = async () => {
     const data = await loginResponse.json();
     const { token } = data;
 
-    chrome.storage.local.set({ token }, () => {
+    chrome.storage.local.set({ token, api_base }, () => {
       chrome.storage.local.get(["seenTutorial"], (result) => {
         if (result.seenTutorial) {
           document.getElementById("message").innerText =
@@ -96,7 +99,7 @@ const createImageFromBlob = async (imageBlob) => {
   const formData = new FormData();
   formData.append("image", imageBlob);
 
-  const imageCreateResponse = await fetch(`${API_BASE}images?token=${token}`, {
+  const imageCreateResponse = await fetch(`${api_base}images?token=${token}`, {
     method: "POST",
     body: formData,
   });
@@ -135,7 +138,6 @@ const autoClip = async () => {
 
 const clipWithInject = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
     files: ["/inject/clip.js"],
@@ -150,7 +152,7 @@ const clipWithAPI = async () => {
     func: () => document.documentElement.innerHTML,
   });
 
-  const clipResponse = await fetch(`${API_BASE}clip?token=${token}`, {
+  const clipResponse = await fetch(`${api_base}clip?token=${token}`, {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
@@ -186,7 +188,7 @@ const saveClip = async (clipData) => {
   }
 
   const recipeCreateResponse = await fetch(
-    `${API_BASE}recipes?token=${token}`,
+    `${api_base}recipes?token=${token}`,
     {
       method: "POST",
       mode: "cors",
@@ -204,7 +206,7 @@ const saveClip = async (clipData) => {
   if (!recipeCreateResponse.ok) {
     switch (recipeCreateResponse.status) {
       case 401:
-        chrome.storage.local.set({ token: null }, () => {
+        chrome.storage.local.set({ token: null, api_base: null }, () => {
           window.alert(
             "Please Login. It looks like you're logged out. Please click the RecipeSage icon to login again.",
           );
@@ -220,8 +222,8 @@ const saveClip = async (clipData) => {
   }
 
   const recipeData = await recipeCreateResponse.json();
-
-  const url = `https://recipesage.com/#/recipe/${recipeData.id}`;
+  // assuming that api address is accessible under 'api' subdomain
+  const url = `${api_base.replace("api.", "")}#/recipe/${recipeData.id}`;
   chrome.tabs.create({
     url,
     active: true,
@@ -233,6 +235,10 @@ const saveClip = async (clipData) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("server").onchange = () => {
+    // replace ensures that the url ends with a forward slash
+    api_base = document.getElementById("server").value.replace(/\/?$/, "/");
+  };
   [...document.getElementsByClassName("logo")].forEach(
     (logo) =>
       (logo.src = chrome.runtime.getURL(

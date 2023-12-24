@@ -1,14 +1,15 @@
 const loggedInMessage = document.getElementById("loggedInMessage");
 const loggedOutMessage = document.getElementById("loggedOutMessage");
 
-chrome.storage.local.get(["token"], async (result) => {
+chrome.storage.local.get(["token", "api_base"], async (result) => {
   if (result.token) {
     try {
       const response = await fetch(
-        `https://api.recipesage.com/users?token=${result.token}`,
+        `${result.api_base}users?token=${result.token}`,
       );
       const data = await response.json();
       document.getElementById("loggedInEmail").innerText = data.email;
+      document.getElementById("loggedInServer").innerText = result.api_base;
       loggedInMessage.style.display = "block";
     } catch (e) {
       switch (e.status) {
@@ -26,7 +27,7 @@ chrome.storage.local.get(["token"], async (result) => {
 });
 
 const logout = () => {
-  chrome.storage.local.set({ token: null }, () => {
+  chrome.storage.local.set({ token: null, api_base: null }, () => {
     loggedOutMessage.style.display = "block";
     loggedInMessage.style.display = "none";
   });

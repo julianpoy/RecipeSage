@@ -1,9 +1,7 @@
 import { clipRecipe } from "@julianpoy/recipe-clipper/dist/recipe-clipper.mjs";
 
-chrome.storage.local.get(["token"], async (result) => {
-  window.RC_ML_CLASSIFY_ENDPOINT =
-    "https://api.recipesage.com/proxy/ingredient-instruction-classifier?token=" +
-    result.token;
+chrome.storage.local.get(["token", "api_base"], async (result) => {
+  window.RC_ML_CLASSIFY_ENDPOINT = `${result.api_base}proxy/ingredient-instruction-classifier?token=${result.token}`;
 
   const clip = await clipRecipe().catch(() => {
     alert("Error while attempting to automatically clip recipe from page");
