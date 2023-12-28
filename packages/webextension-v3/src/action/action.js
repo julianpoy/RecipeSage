@@ -48,7 +48,8 @@ const login = async () => {
           let message = document.getElementById("message");
           message.style.color = "green";
           message.innerText =
-            "\nYou are now logged in. Click the RecipeSage icon again to clip this website.";
+            "\nYou are now logged in. Click the RecipeSage icon again to clip\
+             this website.";
           setTimeout(() => {
             window.close();
           }, 5000);
@@ -59,7 +60,8 @@ const login = async () => {
     });
   } catch (e) {
     document.getElementById("message").innerText =
-      "Something went wrong. Please check your internet connection and try again.";
+      "Something went wrong. Please check your internet connection and try\
+       again.";
   }
 };
 
@@ -209,13 +211,15 @@ const saveClip = async (clipData) => {
       case 401:
         chrome.storage.local.set({ token: null }, () => {
           window.alert(
-            "Please Login. It looks like you're logged out. Please click the RecipeSage icon to login again.",
+            "Please Login. It looks like you're logged out. Please click the\
+             RecipeSage icon to login again.",
           );
         });
         break;
       default:
         window.alert(
-          "Could Not Save Recipe. An error occurred while saving the recipe. Please try again.",
+          "Could Not Save Recipe. An error occurred while saving the recipe.\
+           Please try again.",
         );
         break;
     }
