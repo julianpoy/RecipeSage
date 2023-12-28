@@ -95,6 +95,16 @@ const showLogin = () => {
   document.getElementById("start").style.display = "none";
 };
 
+const showServerInput = () => {
+  document.getElementById("custom-server-input").style.display = "block";
+  document.getElementById("register-link").style.display = "none";
+};
+
+const hideServerInput = () => {
+  document.getElementById("custom-server-input").style.display = "none";
+  document.getElementById("register-link").style.display = "initial";
+};
+
 const createImageFromBlob = async (imageBlob) => {
   const formData = new FormData();
   formData.append("image", imageBlob);
@@ -235,9 +245,16 @@ const saveClip = async (clipData) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("server").onchange = () => {
+  document.getElementById("default-server-checkbox").onchange = (event) => {
+    if (event.target.checked) {
+      hideServerInput();
+    } else {
+      showServerInput();
+    }
+  };
+  document.getElementById("server").onchange = (event) => {
     // replace ensures that the url ends with a forward slash
-    api_base = document.getElementById("server").value.replace(/\/?$/, "/");
+    api_base = event.target.value.replace(/\/?$/, "/");
   };
   [...document.getElementsByClassName("logo")].forEach(
     (logo) =>
