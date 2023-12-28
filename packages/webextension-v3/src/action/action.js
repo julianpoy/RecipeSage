@@ -68,6 +68,7 @@ const showTutorial = () => {
   document.getElementById("tutorial").style.display = "block";
   document.getElementById("importing").style.display = "none";
   document.getElementById("start").style.display = "none";
+  chrome.storage.local.set({ seenTutorial: true });
 };
 
 const showLoading = () => {
