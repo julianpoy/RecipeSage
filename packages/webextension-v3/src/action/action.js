@@ -249,6 +249,33 @@ const saveClip = async (clipData) => {
   }, 500);
 };
 
+const userDetailsValid = () => {
+  console.log("userDetailsValid");
+  const username = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const server = document.getElementById("server").value;
+
+  if (!username || !password) {
+    document.getElementById("message").innerText =
+      "Please enter a username and password";
+    return false;
+  }
+
+  if (!server) {
+    document.getElementById("message").innerText =
+      "Please enter a server address";
+    return false;
+  }
+
+  if (!server.startsWith("https://")) {
+    document.getElementById("message").innerText =
+      "Please enter a valid https:// URL";
+    return false;
+  }
+
+  return true;
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("default-server-checkbox").onchange = (event) => {
     if (event.target.checked) {
@@ -267,7 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "./images/recipesage-black-trimmed.png",
       )),
   );
-  document.getElementById("login-submit").onclick = login;
+  document.getElementById("login-submit").onclick = () => {
+    if (userDetailsValid()) login();
+  };
   document.getElementById("password").onkeydown = (event) => {
     if (event.key === "Enter") login();
   };
