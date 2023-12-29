@@ -46,10 +46,11 @@ const login = async () => {
       chrome.storage.local.get(["seenTutorial"], (result) => {
         if (result.seenTutorial) {
           document.getElementById("message").innerText =
-            "You are now logged in. Click the RecipeSage icon again to clip this website.";
+            "You are now logged in. Click the RecipeSage icon again to clip\
+             this website.";
           setTimeout(() => {
             window.close();
-          }, 2000);
+          }, 5000);
         } else {
           showTutorial();
         }
@@ -57,7 +58,8 @@ const login = async () => {
     });
   } catch (e) {
     document.getElementById("message").innerText =
-      "Something went wrong. Please check your internet connection and try again.";
+      "Something went wrong. Please check your internet connection and try\
+       again.";
   }
 };
 
@@ -66,6 +68,7 @@ const showTutorial = () => {
   document.getElementById("tutorial").style.display = "block";
   document.getElementById("importing").style.display = "none";
   document.getElementById("start").style.display = "none";
+  chrome.storage.local.set({ seenTutorial: true });
 };
 
 const showLoading = () => {
@@ -206,13 +209,15 @@ const saveClip = async (clipData) => {
       case 401:
         chrome.storage.local.set({ token: null }, () => {
           window.alert(
-            "Please Login. It looks like you're logged out. Please click the RecipeSage icon to login again.",
+            "Please Login. It looks like you're logged out. Please click the\
+             RecipeSage icon to login again.",
           );
         });
         break;
       default:
         window.alert(
-          "Could Not Save Recipe. An error occurred while saving the recipe. Please try again.",
+          "Could Not Save Recipe. An error occurred while saving the recipe.\
+           Please try again.",
         );
         break;
     }

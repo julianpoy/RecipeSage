@@ -28,11 +28,14 @@ export const getRecipesWithConstraints = async (args: {
     offset,
     limit,
     recipeIds: filterByRecipeIds,
-    labels,
+    labels: _labels,
     labelIntersection,
     ratings,
     recipeIds,
   } = args;
+
+  const labels = _labels?.filter((label) => label !== "unlabeled");
+  const mustBeUnlabeled = !!_labels?.includes("unlabeled");
 
   let friends: Set<string> = new Set();
   if (contextUserId) {
@@ -151,7 +154,21 @@ export const getRecipesWithConstraints = async (args: {
     where.AND.push({ id: { in: filterByRecipeIds } });
   }
 
-  if (labels && labelIntersection) {
+  if (mustBeUnlabeled) {
+    where.AND.push({
+      recipeLabels: {
+        none: {
+          label: {
+            userId: {
+              in: userIds, // We do this rather than none:{} due to Prisma perf issues...
+            },
+          },
+        },
+      },
+    });
+  }
+
+  if (labels?.length && labelIntersection) {
     where.AND.push(
       ...labels.map(
         (label) =>
@@ -168,7 +185,7 @@ export const getRecipesWithConstraints = async (args: {
     );
   }
 
-  if (labels && !labelIntersection) {
+  if (labels?.length && !labelIntersection) {
     where.AND.push({
       recipeLabels: {
         some: {
