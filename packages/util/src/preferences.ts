@@ -29,6 +29,7 @@ export enum AppTheme {
   Light = "light",
   Dark = "dark",
   Black = "black",
+  Midnight = "midnight",
 }
 
 export enum PreferencesSync {

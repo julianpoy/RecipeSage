@@ -968,6 +968,7 @@
   "pages.settings.theme": "Theme",
   "pages.settings.theme.default": "System Standard",
   "pages.settings.theme.light": "Hell",
+  "pages.settings.theme.midnight": "Mitternacht",
   "pages.settings.theme.dark": "Dunkel",
   "pages.settings.theme.black": "Schwarz (OLED)",
   "pages.settings.language": "Sprache",

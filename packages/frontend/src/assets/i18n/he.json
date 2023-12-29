@@ -969,6 +969,7 @@
   "pages.settings.theme": "תבנית",
   "pages.settings.theme.default": "ברירת מחדל",
   "pages.settings.theme.light": "בהירה",
+  "pages.settings.theme.midnight": "חצות",
   "pages.settings.theme.dark": "כהה",
   "pages.settings.theme.black": "שחורה (OLED)",
   "pages.settings.language": "שפה",
