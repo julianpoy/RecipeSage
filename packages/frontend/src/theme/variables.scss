@@ -79,6 +79,37 @@
   --ion-color-step-950: #f3f3f3;
 }
 
+@mixin midnightModeVars() {
+  --ion-border-color: var(--ion-color-dark-shade);
+  --ion-background-color: var(--ion-color-dark);
+  --ion-background-color-rgb: var(--ion-color-dark-rgb);
+  --ion-background-shade-color: var(--ion-color-dark-shade);
+  --ion-background-tint-color: var(--ion-color-dark-tint);
+  --ion-background-tint-active-color: var(--ion-color-dark-tint-active);
+  --ion-text-color: var(--ion-color-light);
+  --ion-text-color-rgb: var(--ion-color-light-rgb);
+
+  --ion-color-step-50: #232323;
+  --ion-color-step-100: #2e2e2e;
+  --ion-color-step-150: #3a3a3a;
+  --ion-color-step-200: #454545;
+  --ion-color-step-250: #515151;
+  --ion-color-step-300: #5d5d5d;
+  --ion-color-step-350: #8b8b8b;
+  --ion-color-step-400: #c2c2c2;
+  --ion-color-step-450: #c6c6c6;
+  --ion-color-step-500: #cacaca;
+  --ion-color-step-550: #cecece;
+  --ion-color-step-600: #d2d2d2;
+  --ion-color-step-650: #d6d6d6;
+  --ion-color-step-700: #dadada;
+  --ion-color-step-750: #dedede;
+  --ion-color-step-800: #e2e2e2;
+  --ion-color-step-850: #e6e6e6;
+  --ion-color-step-900: #eaeaea;
+  --ion-color-step-950: #f4f4f4;
+}
+
 @mixin lightModeVars() {
   --ion-border-color: rgba(0, 0, 0, 0.13);
   --ion-background-color: #ffffff;
@@ -223,6 +254,10 @@
 
   .theme-black {
     @include blackModeVars;
+  }
+
+  .theme-midnight {
+    @include midnightModeVars;
   }
 
   .theme-dark {

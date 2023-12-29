@@ -969,6 +969,7 @@
   "pages.settings.theme": "Тема",
   "pages.settings.theme.default": "Згідно з системою",
   "pages.settings.theme.light": "Світла",
+  "pages.settings.theme.midnight": "Опівночі.",
   "pages.settings.theme.dark": "Темна",
   "pages.settings.theme.black": "Чорна (OLED)",
   "pages.settings.language": "Мова",

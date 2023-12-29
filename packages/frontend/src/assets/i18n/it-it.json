@@ -969,6 +969,7 @@
   "pages.settings.theme": "Tema",
   "pages.settings.theme.default": "Default di Sistema",
   "pages.settings.theme.light": "Chiaro",
+  "pages.settings.theme.midnight": "Mezzanotte",
   "pages.settings.theme.dark": "Scuro",
   "pages.settings.theme.black": "Nero (OLED)",
   "pages.settings.language": "Lingua",

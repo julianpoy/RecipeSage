@@ -970,6 +970,7 @@
   "pages.settings.theme.default": "System Default",
   "pages.settings.theme.light": "Light",
   "pages.settings.theme.dark": "Dark",
+  "pages.settings.theme.midnight": "Midnight",
   "pages.settings.theme.black": "Black (OLED)",
   "pages.settings.language": "Language",
   "pages.settings.language.contribute": "Contact me to contribute a language",
