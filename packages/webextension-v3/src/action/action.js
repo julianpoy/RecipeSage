@@ -29,11 +29,11 @@ const login = async () => {
       switch (loginResponse.status) {
         case 412:
           document.getElementById("message").innerText =
-            "\nIt looks like that email or password isn't correct.";
+            "It looks like that email or password isn't correct.";
           break;
         default:
           document.getElementById("message").innerText =
-            "\nSomething went wrong. Please try again.";
+            "Something went wrong. Please try again.";
           break;
       }
       return;
@@ -45,10 +45,8 @@ const login = async () => {
     chrome.storage.local.set({ token }, () => {
       chrome.storage.local.get(["seenTutorial"], (result) => {
         if (result.seenTutorial) {
-          let message = document.getElementById("message");
-          message.style.color = "green";
-          message.innerText =
-            "\nYou are now logged in. Click the RecipeSage icon again to clip\
+          document.getElementById("message").innerText =
+            "You are now logged in. Click the RecipeSage icon again to clip\
              this website.";
           setTimeout(() => {
             window.close();
