@@ -15,6 +15,7 @@
   --ion-toolbar-background: #000000;
   --ion-tab-bar-background: #000000;
   --ion-card-background: #000000;
+  --ion-card-background-hover: #101010;
 
   --ion-color-step-50: #232323;
   --ion-color-step-100: #2e2e2e;
@@ -56,7 +57,9 @@
   --ion-item-background: #121212;
   --ion-toolbar-background: #1f1f1f;
   --ion-tab-bar-background: #1f1f1f;
-  --ion-card-background: #1e1e1e;
+  --ion-card-background: #171717;
+  --ion-card-background-hover: #1a1a1a;
+  // --ion-card-background: #1e1e1e;
 
   --ion-color-step-50: #1e1e1e;
   --ion-color-step-100: #2a2a2a;
@@ -77,6 +80,10 @@
   --ion-color-step-850: #dbdbdb;
   --ion-color-step-900: #e7e7e7;
   --ion-color-step-950: #f3f3f3;
+
+  ion-searchbar {
+    --background: var(--ion-card-background);
+  }
 }
 
 @mixin midnightModeVars() {
@@ -88,6 +95,9 @@
   --ion-background-tint-active-color: var(--ion-color-dark-tint-active);
   --ion-text-color: var(--ion-color-light);
   --ion-text-color-rgb: var(--ion-color-light-rgb);
+
+  --ion-card-background: #222428;
+  --ion-card-background-hover: #282a2f;
 
   --ion-color-step-50: #232323;
   --ion-color-step-100: #2e2e2e;
@@ -119,6 +129,9 @@
   --ion-background-tint-active-color: var(--ion-color-light-tint-active);
   --ion-text-color: var(--ion-color-dark);
   --ion-text-color-rgb: var(--ion-color-dark-rgb);
+
+  --ion-card-background: #ffffff;
+  --ion-card-background-hover: #f6f6f6;
 
   // Generated from this: https://ionicframework.com/docs/theming/themes
   --ion-color-step-50: #f4f4f4;
