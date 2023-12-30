@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Edit Recipe",
   "pages.editRecipe.title.new": "New Recipe",
-  "pages.editRecipe.autoclip": "Autofill fields from URL (beta)",
+  "pages.editRecipe.autoclip": "Autofill fields from URL",
+  "pages.editRecipe.scan": "Scan from photo (beta)",
 
   "pages.editRecipe.input.title": "Title",
   "pages.editRecipe.input.description": "Description",
@@ -691,6 +692,11 @@
 
   "pages.editRecipe.missingLabelGroup.title": "Missing label group",
   "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the my labels page.",
+
+  "pages.editRecipe.conflict.title": "Duplicate Title",
+  "pages.editRecipe.conflict.message": "A recipe with the title \"{{title}}\" already exists in your collection. You can choose to save anyway, or you can choose to rename the recipe to \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Save anyway",
+  "pages.editRecipe.conflict.rename": "Rename",
 
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "Enter an image URL to be added to the recipe",
@@ -964,16 +970,23 @@
   "pages.settings.theme.default": "System Default",
   "pages.settings.theme.light": "Light",
   "pages.settings.theme.dark": "Dark",
+  "pages.settings.theme.midnight": "Midnight",
   "pages.settings.theme.black": "Black (OLED)",
   "pages.settings.language": "Language",
   "pages.settings.language.contribute": "Contact me to contribute a language",
   "pages.settings.language.default": "Browser Default",
 
   "pages.settings.fontSize": "Font Size",
+  "pages.settings.preferencesSync": "Sync Preferences Between Devices",
   "pages.settings.reset": "Reset All Preferences",
 
   "pages.settings.offline.loading": "Fetching all recipes, please wait...",
   "pages.settings.offline.error": "There was an error while syncing. Please report this.",
+
+  "pages.settings.preferencesSync.header": "Sync Preferences",
+  "pages.settings.preferencesSync.message": "You must select whether you want to override the synced settings in the cloud with the local settings on this device, or override the settings on this device with the settings from the cloud.",
+  "pages.settings.preferencesSync.local": "Keep Local Settings",
+  "pages.settings.preferencesSync.remote": "Keep Cloud Settings",
 
   "pages.settings.resetPrefs.header": "Reset Preferences Warning",
   "pages.settings.resetPrefs.message": "Resetting your preferences will set all app preferences back to their default state. This includes preferences set via menus on the home page, meal plans page, shopping list page, etc. Note: This only affects this device.",
@@ -1065,12 +1078,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Shopping Lists",
+  "pages.shoppingLists.editIgnore": "Edit Item Ignore List",
   "pages.shoppingLists.created": "Created {{date}}",
   "pages.shoppingLists.collaboration": "In collaboration with:",
   "pages.shoppingLists.createdBy": "Created by {{name}}",
   "pages.shoppingLists.owner": "You own this list",
   "pages.shoppingLists.nullState.1": "You have no shopping lists.",
   "pages.shoppingLists.nullState.2": "To create a shopping list, press the plus button in the bottom corner.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Shopping List Item Ignore List",
+  "pages.shoppingListIgnoreModal.description": "Items listed here will be automatically excluded when adding a recipe to a shopping list. This is particularly handy for ingredients such as salt, which you likely don't need added every time you add an item to a shopping list.",
+  "pages.shoppingListIgnoreModal.instructions": "Each entry should be on it's own line. Entries will match an ingredient if the ingredient contains any part of the line. If you enter \"salt\", it will match \"1 tbsp sea salt finely ground\".",
+  "pages.shoppingListIgnoreModal.label": "Ignore list",
+  "pages.shoppingListIgnoreModal.placeholder": "Keywords to ignore, each on their own line",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1376,7 @@
   "generic.save": "Save",
   "generic.okay": "Okay",
   "generic.ignore": "Ignore",
+  "generic.options": "Options",
 
   "====== Trailing Comma Placeholder ======": ""
 }

@@ -9,6 +9,13 @@ import {
   LoadingController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import {
+  Camera,
+  CameraDirection,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from "@capacitor/camera";
 
 import { UtilService, RouteMap } from "~/services/util.service";
 import { RecipeService, Recipe, BaseRecipe } from "~/services/recipe.service";
@@ -34,6 +41,7 @@ export class EditRecipePage {
   defaultBackHref: string;
 
   recipeId?: string;
+  originalTitle?: string;
   // TODO: Clean this up
   fullRecipe?: Recipe;
   recipe: Partial<BaseRecipe> & { id?: string } = {
@@ -120,6 +128,7 @@ export class EditRecipePage {
         this.fullRecipe = response.data;
         this.recipe = response.data;
         this.images = response.data.images;
+        this.originalTitle = response.data.title;
       }
     }
   }
@@ -258,7 +267,81 @@ export class EditRecipePage {
 
     this.markAsClean();
 
-    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id));
+    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
+  }
+
+  async _saveCheckConflict() {
+    if (!this.recipe.title) return;
+
+    const loading = this.loadingService.start();
+
+    const conflictingRecipes = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getRecipesByTitle.query({
+        title: this.recipe.title,
+      }),
+    );
+
+    const uniqueTitle = await this.trpcService.handle(
+      this.trpcService.trpc.recipes.getUniqueRecipeTitle.query({
+        title: this.recipe.title,
+        ignoreIds: this.recipe.id ? [this.recipe.id] : undefined,
+      }),
+    );
+
+    loading.dismiss();
+    if (!conflictingRecipes || !uniqueTitle) return;
+
+    // We do not want to warn user if they haven't modified the title
+    const hasTitleChanged = this.originalTitle !== this.recipe.title;
+    if (
+      hasTitleChanged &&
+      conflictingRecipes.some((recipe) => recipe.id !== this.recipe.id)
+    ) {
+      const header = await this.translate
+        .get("pages.editRecipe.conflict.title")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.editRecipe.conflict.message", {
+          title: this.recipe.title,
+          uniqueTitle,
+        })
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const rename = await this.translate
+        .get("pages.editRecipe.conflict.rename")
+        .toPromise();
+      const ignore = await this.translate
+        .get("pages.editRecipe.conflict.ignore")
+        .toPromise();
+
+      const confirmPrompt = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: cancel,
+            role: "cancel",
+          },
+          {
+            text: rename,
+            handler: () => {
+              this.recipe.title = uniqueTitle;
+              this._save();
+            },
+          },
+          {
+            text: ignore,
+            handler: () => {
+              this._save();
+            },
+          },
+        ],
+      });
+
+      await confirmPrompt.present();
+    } else {
+      this._save();
+    }
   }
 
   async save() {
@@ -300,7 +383,7 @@ export class EditRecipePage {
           {
             text: okay,
             handler: () => {
-              this._save();
+              this._saveCheckConflict();
             },
           },
         ],
@@ -308,7 +391,7 @@ export class EditRecipePage {
 
       await confirmPrompt.present();
     } else {
-      return this._save();
+      return this._saveCheckConflict();
     }
   }
 
@@ -358,6 +441,63 @@ export class EditRecipePage {
     }
 
     return url.protocol.startsWith("http");
+  }
+
+  async scan() {
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Prompt,
+      direction: CameraDirection.Rear,
+      quality: 100,
+      allowEditing: true,
+      width: 2160,
+      webUseInput: true,
+    });
+
+    if (!capturedPhoto.base64String) {
+      throw new Error("Photo did not return base64String");
+    }
+
+    const pleaseWait = await this.translate
+      .get("pages.editRecipe.clip.loading")
+      .toPromise();
+    const loading = await this.loadingCtrl.create({
+      message: pleaseWait,
+    });
+    await loading.present();
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.ml.getRecipeFromOCR.mutate({
+        image: capturedPhoto.base64String,
+      }),
+    );
+
+    loading.dismiss();
+
+    if (!response) return;
+
+    if (response.title) this.recipe.title = response.title;
+    if (response.description) this.recipe.description = response.description;
+    if (response.source) this.recipe.source = response.source;
+    if (response.yield) this.recipe.yield = response.yield;
+    if (response.activeTime) this.recipe.activeTime = response.activeTime;
+    if (response.totalTime) this.recipe.totalTime = response.totalTime;
+    if (response.ingredients) this.recipe.ingredients = response.ingredients;
+    if (response.instructions) this.recipe.instructions = response.instructions;
+    if (response.notes) this.recipe.notes = response.notes;
+
+    const imageResponse = await this.imageService.createFromB64(
+      {
+        data: capturedPhoto.base64String,
+      },
+      {
+        "*": () => {},
+      },
+    );
+
+    if (imageResponse.success) {
+      this.images.push(imageResponse.data);
+    }
   }
 
   async clipFromUrl() {

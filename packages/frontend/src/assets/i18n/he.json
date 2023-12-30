@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "עדכון מתכון",
   "pages.editRecipe.title.new": "מתכון חדש",
-  "pages.editRecipe.autoclip": "מילוי אוטומטי של שדות מתוך URL (beta)",
+  "pages.editRecipe.autoclip": "מילוי אוטומטי של שדות מתוך URL",
+  "pages.editRecipe.scan": "סריקה מתמונה (beta)",
 
   "pages.editRecipe.input.title": "כותרת / שם מתכון",
   "pages.editRecipe.input.description": "תיאור",
@@ -691,6 +692,11 @@
 
   "pages.editRecipe.missingLabelGroup.title": "חסרה קבוצת תוויות",
   "pages.editRecipe.missingLabelGroup.message": "ציינת שיש לדרוש את קבוצת התווית \"{{groupName}}\". אתה יכול לבטל את זה דרך דף התוויות שלי.",
+
+  "pages.editRecipe.conflict.title": "כותרת כפולה",
+  "pages.editRecipe.conflict.message": "מתכון עם הכותרת \"{{title}}\" כבר קיים באוסף שלך. אתה יכול לבחור לשמור בכל מקרה, או שאתה יכול לבחור לשנות את שם המתכון ל-\"{{uniquetitle}}\".",
+  "pages.editRecipe.conflict.ignore": "שמור בכל מקרה",
+  "pages.editRecipe.conflict.rename": "שנה שם",
 
   "pages.editRecipe.addImage.header": "Add Image by URL",
   "pages.editRecipe.addImage.message": "כתובת URL של תמונה כדי להוסיפה למתכון",
@@ -963,6 +969,7 @@
   "pages.settings.theme": "תבנית",
   "pages.settings.theme.default": "ברירת מחדל",
   "pages.settings.theme.light": "בהירה",
+  "pages.settings.theme.midnight": "חצות",
   "pages.settings.theme.dark": "כהה",
   "pages.settings.theme.black": "שחורה (OLED)",
   "pages.settings.language": "שפה",
@@ -970,10 +977,16 @@
   "pages.settings.language.default": "ברירת מחדל דפדפן",
 
   "pages.settings.fontSize": "גודל טקסט",
+  "pages.settings.preferencesSync": "סנכרון העדפות בין מכשירים",
   "pages.settings.reset": "איתחול",
 
   "pages.settings.offline.loading": "Fetching all recipes, please wait...",
   "pages.settings.offline.error": "אירעה שגיאה במהלך הסנכרון. יש לשלוח אליי מייל.",
+
+  "pages.settings.preferencesSync.header": "העדפות סנכרון",
+  "pages.settings.preferencesSync.message": "עליך לבחור אם ברצונך לעקוף את ההגדרות המסונכרנות בענן עם ההגדרות המקומיות במכשיר זה, או לעקוף את ההגדרות במכשיר זה עם ההגדרות מהענן.",
+  "pages.settings.preferencesSync.local": "שמור על הגדרות מקומיות",
+  "pages.settings.preferencesSync.remote": "שמור על הגדרות ענן",
 
   "pages.settings.resetPrefs.header": "Reset Preferences Warning",
   "pages.settings.resetPrefs.message": "איפוס ההעדפות שלך יחזיר את כל העדפות האפליקציה למצב ברירת המחדל שלהן. זה כולל העדפות שנקבעו באמצעות תפריטים בדף הבית, דף תכניות ארוחות, דף רשימת קניות וכו'. הערה: זה משפיע רק על מכשיר זה.",
@@ -1065,12 +1078,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "רשימת קניות",
+  "pages.shoppingLists.editIgnore": "ערוך רשימת התעלמות פריטים",
   "pages.shoppingLists.created": "נוצר {{date}}",
   "pages.shoppingLists.collaboration": "בשיתוף עם:",
   "pages.shoppingLists.createdBy": "נוצר על ידי {{name}}",
   "pages.shoppingLists.owner": "רשימה בבעלותך",
   "pages.shoppingLists.nullState.1": "איך לך רשימת קניות.",
   "pages.shoppingLists.nullState.2": "ליצירת רשימת קניות, לחץ על כפתור הפלוס בפינה התחתונה.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "רשימת התעלמות של פריטים ברשימת קניות",
+  "pages.shoppingListIgnoreModal.description": "ערכים הרשומים כאן לא ייכללו אוטומטית בעת הוספת מתכון לרשימת קניות. זה שימושי במיוחד עבור מרכיבים כגון מלח, שסביר להניח שלא תצטרך להוסיף אותם בכל פעם שאתה מוסיף פריט לרשימת קניות.",
+  "pages.shoppingListIgnoreModal.instructions": "כל ערך צריך להיות בשורה משלו. ערכים יתאימו למרכיב אם המרכיב מכיל חלק כלשהו מהשורה. אם תזין \"מלח\", זה יתאים ל\"1 כף מלח ים טחון דק\".",
+  "pages.shoppingListIgnoreModal.label": "התעלם מהרשימה",
+  "pages.shoppingListIgnoreModal.placeholder": "מילות מפתח שיש להתעלם מהם, כל אחת בשורה שלה",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1376,7 @@
   "generic.save": "שמירה",
   "generic.okay": "בסדר",
   "generic.ignore": "להתעלם",
+  "generic.options": "אפשרויות",
 
   "====== Trailing Comma Placeholder ======": ""
 }

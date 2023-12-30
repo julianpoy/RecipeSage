@@ -658,7 +658,8 @@
 
   "pages.editRecipe.title.edit": "Rezept bearbeiten",
   "pages.editRecipe.title.new": "Neues Rezept",
-  "pages.editRecipe.autoclip": "Automatisches Ausfüllen von Feldern aus einer URL (beta)",
+  "pages.editRecipe.autoclip": "Automatisches Ausfüllen von Feldern aus einer URL",
+  "pages.editRecipe.scan": "Scan vom Foto (beta)",
 
   "pages.editRecipe.input.title": "Name",
   "pages.editRecipe.input.description": "Beschreibung",
@@ -690,6 +691,11 @@
 
   "pages.editRecipe.missingLabelGroup.title": "Fehlende Etikettengruppe",
   "pages.editRecipe.missingLabelGroup.message": "Sie haben angegeben, dass die Etikettengruppe \"{{groupName}}\" erforderlich sein soll. Sie können dies auf der Seite \"Meine Labels\" deaktivieren.",
+
+  "pages.editRecipe.conflict.title": "Titel duplizieren",
+  "pages.editRecipe.conflict.message": "Ein Rezept mit dem Titel \"{{title}}\" ist bereits in Ihrer Sammlung vorhanden. Sie können es trotzdem speichern oder das Rezept in \"{{uniqueTitle}}\" umbenennen.",
+  "pages.editRecipe.conflict.ignore": "Trotzdem speichern",
+  "pages.editRecipe.conflict.rename": "Umbenennen",
 
   "pages.editRecipe.addImage.header": "Bild über URL hinzufügen",
   "pages.editRecipe.addImage.message": "Gib eine Bild-URL ein, die dem Rezept hinzugefügt werden soll",
@@ -962,16 +968,23 @@
   "pages.settings.theme": "Theme",
   "pages.settings.theme.default": "System Standard",
   "pages.settings.theme.light": "Hell",
+  "pages.settings.theme.midnight": "Mitternacht",
   "pages.settings.theme.dark": "Dunkel",
   "pages.settings.theme.black": "Schwarz (OLED)",
   "pages.settings.language": "Sprache",
   "pages.settings.language.contribute": "Bitte kontaktiere mich, um eine Sprache beizusteuern",
   "pages.settings.language.default": "Browser Standard",
   "pages.settings.fontSize": "Schriftgröße anpassen",
+  "pages.settings.preferencesSync": "Einstellungen zwischen Geräten synchronisieren",
   "pages.settings.reset": "Alle Einstellungen zurücksetzen",
 
   "pages.settings.offline.loading": "Alle Rezepte abrufen, bitte warten...",
   "pages.settings.offline.error": "Es ist ein Fehler bei der Synchronisierung aufgetreten. Bitte melde dies.",
+
+  "pages.settings.preferencesSync.header": "Sync-Einstellungen",
+  "pages.settings.preferencesSync.message": "Sie müssen auswählen, ob Sie die synchronisierten Einstellungen in der Cloud mit den lokalen Einstellungen auf diesem Gerät überschreiben möchten oder ob Sie die Einstellungen auf diesem Gerät mit den Einstellungen aus der Cloud überschreiben möchten.",
+  "pages.settings.preferencesSync.local": "Lokale Einstellungen beibehalten",
+  "pages.settings.preferencesSync.remote": "Cloud-Einstellungen beibehalten",
 
   "pages.settings.resetPrefs.header": "Warnung Einstellungen zurücksetzen",
   "pages.settings.resetPrefs.message": "Wenn du deine Einstellungen zurücksetzt, werden alle App-Einstellungen auf ihren Standardzustand zurückgesetzt. Dies gilt auch für Einstellungen, die über die Menüs auf der Startseite, der Seite mit den Essensplänen, der Einkaufslistenseite usw. vorgenommen wurden. Hinweis: Dies betrifft nur dieses Gerät.",
@@ -1063,12 +1076,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Einkaufslisten",
+  "pages.shoppingLists.editIgnore": "Artikel-Ignorierliste bearbeiten",
   "pages.shoppingLists.created": "Erstellt am {{date}}",
   "pages.shoppingLists.collaboration": "In Zusammenarbeit mit:",
   "pages.shoppingLists.createdBy": "Erstellt von {{name}}",
   "pages.shoppingLists.owner": "Diese Liste gehört dir",
   "pages.shoppingLists.nullState.1": "Du hast keine Einkaufslisten.",
   "pages.shoppingLists.nullState.2": "Um eine Einkaufsliste zu erstellen, drücke auf die Plus-Taste in der unteren Ecke.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Einkaufsliste Artikel ignorieren",
+  "pages.shoppingListIgnoreModal.description": "Die hier aufgelisteten Einträge werden automatisch ausgeschlossen, wenn ein Rezept einer Einkaufsliste hinzugefügt wird. Dies ist besonders praktisch für Zutaten wie Salz, die Sie wahrscheinlich nicht jedes Mal hinzufügen müssen, wenn Sie einen Artikel zu einer Einkaufsliste hinzufügen.",
+  "pages.shoppingListIgnoreModal.instructions": "Jeder Eintrag sollte in einer eigenen Zeile stehen. Die Einträge passen zu einer Zutat, wenn die Zutat einen Teil der Zeile enthält. Wenn Sie \"Salz\" eingeben, wird es mit \"1 EL Meersalz fein gemahlen\" übereinstimmen.",
+  "pages.shoppingListIgnoreModal.label": "Liste ignorieren",
+  "pages.shoppingListIgnoreModal.placeholder": "Zu ignorierende Schlüsselwörter, jedes in seiner eigenen Zeile",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1352,6 +1374,7 @@
   "generic.save": "Speichern",
   "generic.okay": "OK",
   "generic.ignore": "Ignorieren Sie",
+  "generic.options": "Optionen",
 
   "====== Trailing Comma Placeholder ======": ""
 }

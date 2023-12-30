@@ -16,9 +16,16 @@
     >
       <ion-header>
         <ion-toolbar color="nav">
-          <ion-title
-            >RecipeSage{{ isSelfHost ? " Self Hosted" : "" }}</ion-title
-          >
+          <ion-title>
+            <span *ngIf="isSelfHost">RecipeSage Self Hosted</span>
+            <img
+              *ngIf="!isSelfHost"
+              src="assets/recipesage-white-trimmed.png"
+              alt="RecipeSage Logo"
+              style="display: inline-block"
+              height="40px"
+            />
+          </ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -53,6 +60,7 @@
     </ion-menu>
     <ion-router-outlet
       id="main-content"
+      [animated]="enableAnimations"
       [class]="{
         cookingToolbarOpen: cookingToolbarService.pinnedRecipes.length > 0
       }"

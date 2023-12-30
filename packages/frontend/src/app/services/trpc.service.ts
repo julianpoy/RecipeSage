@@ -1,8 +1,4 @@
-import {
-  TRPCClientError,
-  createTRPCProxyClient,
-  httpBatchLink,
-} from "@trpc/client";
+import { TRPCClientError, createTRPCProxyClient, httpLink } from "@trpc/client";
 import type { AppRouter } from "@recipesage/trpc";
 import { Injectable } from "@angular/core";
 import superjson from "superjson";
@@ -18,9 +14,8 @@ import { UtilService } from "./util.service";
 export class TRPCService {
   public trpc = createTRPCProxyClient<AppRouter>({
     links: [
-      httpBatchLink({
+      httpLink({
         url: this.utilService.getBase() + "trpc",
-        maxURLLength: 2047,
         headers: () => {
           const token = localStorage.getItem("token");
           return {

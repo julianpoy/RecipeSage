@@ -5,6 +5,12 @@
     </ion-buttons>
 
     <ion-title> {{ 'pages.shoppingLists.title' | translate }} </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button id="popover-trigger">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,6 +18,24 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-popover trigger="popover-trigger" triggerAction="click">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <ion-list-header> {{ 'generic.options' | translate }} </ion-list-header>
+
+        <ion-button
+          (click)="showIgnoreModal()"
+          expand="block"
+          size="small"
+          class="ion-margin"
+        >
+          <ion-icon name="ban" slot="start"></ion-icon>
+          {{ 'pages.shoppingLists.editIgnore' | translate }}
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+
   <ion-list>
     <ion-item
       button

@@ -5,10 +5,8 @@ import { TranslateService } from "@ngx-translate/core";
 import { Label, LabelService } from "~/services/label.service";
 import { UtilService } from "~/services/util.service";
 import { QuickTutorialService } from "~/services/quick-tutorial.service";
-import {
-  PreferencesService,
-  MyRecipesPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MyRecipesPreferenceKey } from "@recipesage/util";
 import {
   ResettableSelectGroupedOptions,
   ResettableSelectOption,
@@ -88,7 +86,7 @@ export class HomeSearchFilterPopoverPage {
       .reduce((acc, label) => {
         acc[label.labelGroup?.title || ungroupedTitle] ||= [];
         acc[label.labelGroup?.title || ungroupedTitle].push({
-          title: `${label.title} (${label._count.recipeLabels})`,
+          title: `${label.title} (${label.recipeLabels.length})`,
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1,
         });

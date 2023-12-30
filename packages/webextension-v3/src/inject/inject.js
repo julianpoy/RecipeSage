@@ -1,4 +1,4 @@
-const RecipeClipper = require("@julianpoy/recipe-clipper");
+import { clipRecipe } from "@julianpoy/recipe-clipper/dist/recipe-clipper.mjs";
 var extensionContainerId = "recipeSageBrowserExtensionRootContainer";
 
 if (window[extensionContainerId]) {
@@ -60,7 +60,7 @@ if (window[extensionContainerId]) {
           "https://api.recipesage.com/proxy/ingredient-instruction-classifier?token=" +
           token;
 
-        return RecipeClipper.clipRecipe().catch(() => {
+        return clipRecipe().catch(() => {
           alert(
             "Error while attempting to automatically clip recipe from page",
           );

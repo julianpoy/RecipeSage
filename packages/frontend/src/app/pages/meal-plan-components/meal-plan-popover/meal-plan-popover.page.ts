@@ -11,10 +11,8 @@ import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "~/services/loading.service";
 import { MealPlanService } from "~/services/meal-plan.service";
 import { UtilService, RouteMap } from "~/services/util.service";
-import {
-  PreferencesService,
-  MealPlanPreferenceKey,
-} from "~/services/preferences.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MealPlanPreferenceKey } from "@recipesage/util";
 import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
 
 @Component({

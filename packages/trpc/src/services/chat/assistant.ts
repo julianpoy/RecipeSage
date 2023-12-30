@@ -13,6 +13,7 @@ import {
 } from "../../types/assistantMessageSummary";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
+import * as Sentry from "@sentry/node";
 
 export class Assistant {
   private openAiHelper: OpenAIHelper;
@@ -77,6 +78,38 @@ export class Assistant {
           assistantMessage.json as unknown as ChatCompletionMessageParam,
       );
 
+    let expectedToolCalls = 0;
+    let toolCallingError = false;
+    for (const message of chatGPTContext) {
+      if (expectedToolCalls > 0 && message.role !== "tool") {
+        toolCallingError = true;
+        continue;
+      }
+
+      if (expectedToolCalls > 0 && message.role === "tool") {
+        expectedToolCalls--;
+        continue;
+      }
+
+      if (message.role === "assistant" && message.tool_calls) {
+        expectedToolCalls = message.tool_calls.length;
+      }
+    }
+
+    if (toolCallingError) {
+      console.error("TOOL CALLING ERROR", userId);
+      Sentry.captureMessage("TOOL CALLING ERROR", {
+        extra: {
+          userId,
+          context: chatGPTContext,
+        },
+      });
+      // If we have a tool calling error (a tool call not followed by tool responses)
+      // we must remove all context otherwise gpt will fail.
+      // TODO: better solution for this
+      return chatGPTContext.splice(0);
+    }
+
     // Insert the system prompt at the beginning of the messages sent to ChatGPT (oldest)
     chatGPTContext.unshift({
       role: "system",
@@ -130,65 +163,71 @@ export class Assistant {
 
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
-    const response = await this.openAiHelper.getChatResponse(context, [
+    const response = await this.openAiHelper.getChatResponseWithTools(context, [
       initBuildRecipe(assistantUser.id, recipes),
     ]);
 
-    await prisma.assistantMessage.create({
-      data: {
-        userId,
-        role: userMessage.role,
-        content: userMessage.content,
-        json: userMessage,
-      },
-    });
-
-    const toolCallsById: Record<string, ChatCompletionMessageToolCall> = {};
-    for (const message of response) {
-      if (message.role === "assistant" && message.tool_calls) {
-        message.tool_calls.forEach((toolCall) => {
-          toolCallsById[toolCall.id] = toolCall;
-        });
-      }
-    }
-
-    for (const message of response) {
-      let recipeId: string | undefined = undefined;
-      if (
-        message.role === "tool" &&
-        toolCallsById[message.tool_call_id]?.function.name === "displayRecipe"
-      ) {
-        const recipeToCreate = recipes.shift();
-        if (!recipeToCreate) {
-          throw new Error(
-            "ChatGPT claims it created a recipe but no recipe was created by function call",
-          );
-        }
-
-        const recipe = await prisma.recipe.create({
-          data: recipeToCreate,
-        });
-
-        recipeId = recipe.id;
-      }
-
-      const content = Array.isArray(message.content)
-        ? message.content
-            .map((part) => (part.type === "text" ? part.text : part.image_url))
-            .join("\n")
-        : message.content;
-
-      await prisma.assistantMessage.create({
+    await prisma.$transaction(async (tx) => {
+      await tx.assistantMessage.create({
         data: {
           userId,
-          role: message.role,
-          recipeId,
-          content,
-          name: "name" in message ? message.name : null,
-          json: message as object, // Prisma does not like OpenAI's typings
+          role: userMessage.role,
+          content: userMessage.content,
+          json: userMessage,
+          createdAt: new Date(), // Since ordering is important and we're in a transaction, we must create date here
         },
       });
-    }
+
+      const toolCallsById: Record<string, ChatCompletionMessageToolCall> = {};
+      for (const message of response) {
+        if (message.role === "assistant" && message.tool_calls) {
+          message.tool_calls.forEach((toolCall) => {
+            toolCallsById[toolCall.id] = toolCall;
+          });
+        }
+      }
+
+      for (const message of response) {
+        let recipeId: string | undefined = undefined;
+        if (
+          message.role === "tool" &&
+          toolCallsById[message.tool_call_id]?.function.name === "displayRecipe"
+        ) {
+          const recipeToCreate = recipes.shift();
+          if (!recipeToCreate) {
+            throw new Error(
+              "ChatGPT claims it created a recipe but no recipe was created by function call",
+            );
+          }
+
+          const recipe = await tx.recipe.create({
+            data: recipeToCreate,
+          });
+
+          recipeId = recipe.id;
+        }
+
+        const content = Array.isArray(message.content)
+          ? message.content
+              .map((part) =>
+                part.type === "text" ? part.text : part.image_url,
+              )
+              .join("\n")
+          : message.content;
+
+        await tx.assistantMessage.create({
+          data: {
+            userId,
+            role: message.role,
+            recipeId,
+            content,
+            name: "name" in message ? message.name : null,
+            json: message as object, // Prisma does not like OpenAI's typings
+            createdAt: new Date(), // Since ordering is important and we're in a transaction, we must create date here
+          },
+        });
+      }
+    });
   }
 
   async getChatHistory(userId: string): Promise<AssistantMessageSummary[]> {

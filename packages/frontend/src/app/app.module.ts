@@ -23,7 +23,7 @@ import {
   IS_SELFHOST,
   SENTRY_SAMPLE_RATE,
 } from "../environments/environment";
-import { SupportedLanguages } from "./services/preferences.service";
+import { SupportedLanguages } from "@recipesage/util";
 
 const checkChunkLoadError = (error: Error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;
@@ -44,8 +44,9 @@ const checkChunkLoadError = (error: Error) => {
 };
 
 const checkSupressedError = (error: Error) => {
+  // These errors commonly come from Ionic and/or Webpack chunk loading. We don't want to send these to Sentry and consume our budget there.
   const supressedErrorRegExp =
-    /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(\.isProxied)|(\[object Undefined\])/;
+    /(Loading chunk [\d]+ failed)|(Cstr is undefined)|(Cannot read property 'isProxied' of undefined)|(Cannot read properties of undefined \(reading 'isProxied'\))|(\.isProxied)|(\[object Undefined\])/;
 
   return supressedErrorRegExp.test(error.message);
 };

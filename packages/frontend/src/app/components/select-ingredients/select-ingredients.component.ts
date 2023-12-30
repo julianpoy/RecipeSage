@@ -3,6 +3,8 @@ import { PopoverController } from "@ionic/angular";
 import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
+import { PreferencesService } from "../../services/preferences.service";
+import { ShoppingListPreferenceKey } from "@recipesage/util";
 
 @Component({
   selector: "select-ingredients",
@@ -44,7 +46,8 @@ export class SelectIngredientsComponent {
 
   constructor(
     private popoverCtrl: PopoverController,
-    public recipeService: RecipeService,
+    private recipeService: RecipeService,
+    private preferencesService: PreferencesService,
   ) {}
 
   async changeScale() {
@@ -64,6 +67,21 @@ export class SelectIngredientsComponent {
     }
   }
 
+  isIngredientIgnored(ingredient: ParsedIngredient) {
+    const ignoredIngredients =
+      this.preferencesService.preferences[
+        ShoppingListPreferenceKey.IgnoreItemTitles
+      ].split("\n");
+
+    for (const ignoredIngredient of ignoredIngredients) {
+      if (ingredient.originalContent.includes(ignoredIngredient)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   applyScale(init?: boolean) {
     this.scaledIngredients = this.recipeService
       .parseIngredients(this._ingredients, this.scale)
@@ -71,7 +89,8 @@ export class SelectIngredientsComponent {
 
     this.selectedIngredients = [];
     for (let i = 0; i < (this.scaledIngredients || []).length; i++) {
-      if (init) this.ingredientBinders[i] = true;
+      const isIgnored = this.isIngredientIgnored(this.scaledIngredients[i]);
+      if (init) this.ingredientBinders[i] = !isIgnored;
       if (this.ingredientBinders[i])
         this.selectedIngredients.push(this.scaledIngredients[i]);
     }

@@ -15,15 +15,13 @@ spec:
     spec:
       containers:
         - name: rs-pushpin
-          image: fanout/pushpin:1.27.0
+          image: julianpoy/pushpin:2023-09-17
           command: ["/bin/sh", "-c"]
           args:
             [
-              "docker-entrypoint.sh && sed -i 's/sig_key=changeme/sig_key=$(GRIP_KEY)/' /etc/pushpin/pushpin.conf && pushpin",
+              "sed -i 's/sig_key=changeme/sig_key=$(GRIP_KEY)/' /etc/pushpin/pushpin.conf && echo '* rs-api:3000,over_http' > /etc/pushpin/routes && pushpin --merge-output",
             ]
           env:
-            - name: target
-              value: rs-api:3000
             - name: GRIP_KEY
               valueFrom:
                 secretKeyRef:

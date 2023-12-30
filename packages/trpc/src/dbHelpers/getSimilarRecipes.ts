@@ -1,13 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { recipeSummaryLite } from "../types/recipeSummaryLite";
-
-/**
- * Removes the duplicate-numbered recipe title
- * `Chicken Soup (2)` would become `Chicken Soup`
- */
-const stripNumberedRecipeTitle = (title: string) => {
-  return title.replace(/\s?\(\d\)$/, "");
-};
+import { stripNumberedRecipeTitle } from "../utils/stripNumberedRecipeTitle";
 
 export const getSimilarRecipes = async (
   userId: string,

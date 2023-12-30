@@ -1,5 +1,10 @@
-import fractionjs from "fraction.js";
+import _FractionJS from "fraction.js";
+import * as FractionJSModule from "fraction.js";
 import { unitNames } from "./units";
+
+// Fix for https://github.com/rawify/Fraction.js/issues/72
+const FractionJS =
+  _FractionJS || (FractionJSModule as unknown as typeof _FractionJS);
 
 const fractionMatchers = {
   // Regex & replacement value by charcode
@@ -178,7 +183,7 @@ export const parseIngredients = (
 
           for (let j = 0; j < measurementParts.length; j++) {
             // console.log(measurementParts[j].trim())
-            const frac = new fractionjs(measurementParts[j].trim()).mul(scale);
+            const frac = new FractionJS(measurementParts[j].trim()).mul(scale);
             let scaledMeasurement = frac.toString();
 
             // Preserve original fraction format if entered

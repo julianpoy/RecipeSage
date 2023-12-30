@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Змінити рецепт",
   "pages.editRecipe.title.new": "Новий рецепт",
-  "pages.editRecipe.autoclip": "Автоматичне заповнення полів із URL-адреси (beta)",
+  "pages.editRecipe.autoclip": "Автоматичне заповнення полів із URL-адреси",
+  "pages.editRecipe.scan": "Сканування з фото (beta)",
 
   "pages.editRecipe.input.title": "Назва",
   "pages.editRecipe.input.description": "Описання",
@@ -691,6 +692,11 @@
 
   "pages.editRecipe.missingLabelGroup.title": "Відсутня група етикеток",
   "pages.editRecipe.missingLabelGroup.message": "Ви вказали, що група міток \"{{groupName}}\" має бути обов'язковою. Ви можете вимкнути її на сторінці Мої мітки.",
+
+  "pages.editRecipe.conflict.title": "Дублікат заголовка",
+  "pages.editRecipe.conflict.message": "Рецепт з назвою \"{{title}}\" вже існує у вашій колекції. Ви можете зберегти його або перейменувати на \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Все одно врятуй",
+  "pages.editRecipe.conflict.rename": "Перейменувати",
 
   "pages.editRecipe.addImage.header": "Додавання зображення за URL-адресою",
   "pages.editRecipe.addImage.message": "Введіть URL-адресу зображення, яке потрібно додати до рецепту",
@@ -963,6 +969,7 @@
   "pages.settings.theme": "Тема",
   "pages.settings.theme.default": "Згідно з системою",
   "pages.settings.theme.light": "Світла",
+  "pages.settings.theme.midnight": "Опівночі.",
   "pages.settings.theme.dark": "Темна",
   "pages.settings.theme.black": "Чорна (OLED)",
   "pages.settings.language": "Мова",
@@ -970,7 +977,13 @@
   "pages.settings.language.default": "Згідно з браузером",
 
   "pages.settings.fontSize": "Розмір шрифту",
+  "pages.settings.preferencesSync": "Налаштування синхронізації між пристроями",
   "pages.settings.reset": "Скинути всі параметри",
+
+  "pages.settings.preferencesSync.header": "Налаштування синхронізації",
+  "pages.settings.preferencesSync.message": "Ви повинні вибрати, чи хочете ви замінити синхронізовані налаштування в хмарі локальними налаштуваннями на цьому пристрої, чи замінити налаштування на цьому пристрої налаштуваннями з хмари.",
+  "pages.settings.preferencesSync.local": "Зберегти локальні налаштування",
+  "pages.settings.preferencesSync.remote": "Зберігайте налаштування хмари",
 
   "pages.settings.offline.loading": "Отримання всіх рецептів, зачекайте...",
   "pages.settings.offline.error": "Під час синхронізації сталася помилка. Будь ласка, повідомте про це.",
@@ -1065,12 +1078,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Список покупок",
+  "pages.shoppingLists.editIgnore": "Редагування списку ігнорування",
   "pages.shoppingLists.created": "Створений {{date}}",
   "pages.shoppingLists.collaboration": "Спільно з:",
   "pages.shoppingLists.createdBy": "Створювач {{name}}",
   "pages.shoppingLists.owner": "Ви володієте цим списком",
   "pages.shoppingLists.nullState.1": "У Вас немає списків покупок.",
   "pages.shoppingLists.nullState.2": "Щоб створити список покупок, натисніть кнопку плюс у нижньому кутку.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Список покупок Список ігнорування позицій",
+  "pages.shoppingListIgnoreModal.description": "Перелічені тут позиції будуть автоматично виключені під час додавання рецепта до списку покупок. Це особливо зручно для таких інгредієнтів, як сіль, які, швидше за все, не потрібно додавати щоразу, коли ви додаєте позицію до списку покупок.",
+  "pages.shoppingListIgnoreModal.instructions": "Кожна відповідь повинна бути в окремому рядку. Введені дані будуть відповідати інгредієнту, якщо цей інгредієнт містить будь-яку частину рядка. Якщо ви введете \"сіль\", це буде \"1 ст.л. морської солі дрібного помелу\".",
+  "pages.shoppingListIgnoreModal.label": "Список ігнорування",
+  "pages.shoppingListIgnoreModal.placeholder": "Ключові слова, які слід ігнорувати, кожен у своєму рядку",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1354,6 +1376,7 @@
   "generic.save": "Зберегти",
   "generic.okay": "Гаразд",
   "generic.ignore": "Ігнорувати",
+  "generic.options": "Параметри",
 
   "====== Trailing Comma Placeholder ======": ""
 }

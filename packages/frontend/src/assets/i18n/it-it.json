@@ -659,7 +659,8 @@
 
   "pages.editRecipe.title.edit": "Modifica Ricetta",
   "pages.editRecipe.title.new": "Nuova Ricetta",
-  "pages.editRecipe.autoclip": "Autocompleta campi da un URL (beta)",
+  "pages.editRecipe.autoclip": "Autocompleta campi da un URL",
+  "pages.editRecipe.scan": "Scansione da foto (beta)",
 
   "pages.editRecipe.input.title": "Titolo",
   "pages.editRecipe.input.description": "Descrizione",
@@ -691,6 +692,11 @@
 
   "pages.editRecipe.missingLabelGroup.title": "Gruppo di etichette mancante",
   "pages.editRecipe.missingLabelGroup.message": "È stato specificato che il gruppo di etichette \"{{groupName}}\" deve essere obbligatorio. È possibile disattivarlo dalla pagina Le mie etichette.",
+
+  "pages.editRecipe.conflict.title": "Titolo duplicato",
+  "pages.editRecipe.conflict.message": "Una ricetta con il titolo \"{{title}}\" esiste già nella vostra collezione. Si può scegliere di salvare comunque, oppure di rinominare la ricetta in \"{{uniqueTitle}}\".",
+  "pages.editRecipe.conflict.ignore": "Salva comunque",
+  "pages.editRecipe.conflict.rename": "Rinominare",
 
   "pages.editRecipe.addImage.header": "Aggiungi immagine da URL",
   "pages.editRecipe.addImage.message": "Inserisci l’URL di un’immagine per aggiungerla alla ricetta",
@@ -963,16 +969,23 @@
   "pages.settings.theme": "Tema",
   "pages.settings.theme.default": "Default di Sistema",
   "pages.settings.theme.light": "Chiaro",
+  "pages.settings.theme.midnight": "Mezzanotte",
   "pages.settings.theme.dark": "Scuro",
   "pages.settings.theme.black": "Nero (OLED)",
   "pages.settings.language": "Lingua",
   "pages.settings.language.contribute": "Contattami per contribuire con una lingua",
   "pages.settings.language.default": "Default del Browser",
   "pages.settings.fontSize": "Dimensione del carattere",
+  "pages.settings.preferencesSync": "Sincronizzazione delle preferenze tra i dispositivi",
   "pages.settings.reset": "Ripristina Preferenze",
 
   "pages.settings.offline.loading": "Recupero tutte le ricette, attendi...",
   "pages.settings.offline.error": "Si è verificato un errore durante la sincronizzazione. Si prega di segnalarlo.",
+
+  "pages.settings.preferencesSync.header": "Preferenze di sincronizzazione",
+  "pages.settings.preferencesSync.message": "È necessario selezionare se si desidera sovrascrivere le impostazioni sincronizzate nel cloud con le impostazioni locali del dispositivo o se si desidera sovrascrivere le impostazioni del dispositivo con le impostazioni del cloud.",
+  "pages.settings.preferencesSync.local": "Mantenere le impostazioni locali",
+  "pages.settings.preferencesSync.remote": "Mantenere le impostazioni del cloud",
 
   "pages.settings.resetPrefs.header": "Avviso di ripristino delle preferenze",
   "pages.settings.resetPrefs.message": "Ripristinando le preferenze, tutte le impostazioni dell'applicazione verranno riportate allo stato predefinito. Ciò include le preferenze impostate tramite i menu della pagina iniziale, della pagina di pianificazione dei pasti, della pagina della lista della spesa, ecc. Nota: questa operazione riguarda solo questo dispositivo.",
@@ -1064,12 +1077,21 @@
   "====== Pages.ShoppingLists ======": "",
 
   "pages.shoppingLists.title": "Liste della Spesa",
+  "pages.shoppingLists.editIgnore": "Modifica dell'elenco degli ignoranti",
   "pages.shoppingLists.created": "Creata {{date}}",
   "pages.shoppingLists.collaboration": "Collaboratori:",
   "pages.shoppingLists.createdBy": "Creatore {{name}}",
   "pages.shoppingLists.owner": "Sei il proprietario di questa lista",
   "pages.shoppingLists.nullState.1": "Non hai nessuna lista della spesa.",
   "pages.shoppingLists.nullState.2": "Per creare una lista della spesa, premi il pulsante più nell’angolo in basso.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Lista della spesa Elenco degli articoli da ignorare",
+  "pages.shoppingListIgnoreModal.description": "Le voci elencate qui saranno automaticamente escluse quando si aggiunge una ricetta a una lista della spesa. Questo è particolarmente utile per ingredienti come il sale, che probabilmente non è necessario aggiungere ogni volta che si aggiunge un elemento a una lista della spesa.",
+  "pages.shoppingListIgnoreModal.instructions": "Ogni voce deve essere sulla propria riga. Le voci corrispondono a un ingrediente se l'ingrediente contiene una parte qualsiasi della riga. Se si inserisce \"sale\", corrisponderà a \"1 cucchiaio di sale marino finemente macinato\".",
+  "pages.shoppingListIgnoreModal.label": "Ignorare l'elenco",
+  "pages.shoppingListIgnoreModal.placeholder": "Parole chiave da ignorare, ognuna sulla propria riga",
 
   "====== Pages.AddFriendModal ======": "",
 
@@ -1353,6 +1375,7 @@
   "generic.save": "Salva",
   "generic.okay": "Okay",
   "generic.ignore": "Ignorare",
+  "generic.options": "Opzioni",
 
   "====== Trailing Comma Placeholder ======": ""
 }
