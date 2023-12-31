@@ -925,24 +925,24 @@
   "pages.myProfile.title": "Editar perfil",
   "pages.myProfile.welcome": "¡Bienvenido a tu perfil!",
   "pages.myProfile.setup1": "Antes de empezar, tendrás que configurar algunas cosas.",
-  "pages.myProfile.setup.name": "En primer lugar, elige el nombre o apodo que aparecerá en tu perfil.",
-  "pages.myProfile.name": "Nombre/Apodo",
+  "pages.myProfile.setup.name": "En primer lugar, elige el nombre de usuario que aparecerá en tu perfil.",
+  "pages.myProfile.name": "Nombre de usuario",
   "pages.myProfile.setup2": "Ahora, elige el nombre de usuario de tu perfil, por ejemplo: @superchef",
-  "pages.myProfile.handle": "Mango @único",
-  "pages.myProfile.handle.taken": "Ese mango está cogido",
-  "pages.myProfile.handle.invalid": "El mango no es válido",
+  "pages.myProfile.handle": "@nombre válido",
+  "pages.myProfile.handle.taken": "Ese nombre está en uso",
+  "pages.myProfile.handle.invalid": "El nombre no es válido",
   "pages.myProfile.handle.unique": "Nota: El identificador debe ser único y no debe contener caracteres especiales.",
   "pages.myProfile.enable": "Activar",
   "pages.myProfile.share": "Compartir",
   "pages.myProfile.view": "Ver perfil",
-  "pages.myProfile.pinned": "Recetas y etiquetas marcadas",
+  "pages.myProfile.pinned": "Recetas y etiquetas ancladas",
   "pages.myProfile.add": "Añadir",
   "pages.myProfile.nullState.1": "Aún no tienes nada en tu perfil.",
   "pages.myProfile.nullState.2": "Para añadir su primer elemento de perfil, haga clic en el botón \"añadir\" de la derecha.",
   "pages.myProfile.save": "Guardar",
   "pages.myProfile.notEnabled.header": "Perfil no activado",
   "pages.myProfile.notEnabled.message": "Tendrás que activar tu perfil para interactuar con las funciones de uso compartido, como el envío de solicitudes de amistad.",
-  "pages.myProfile.ignore": "Ignore",
+  "pages.myProfile.ignore": "Ignorar",
   "pages.myProfile.share.unsaved.header": "Cambios no guardados",
   "pages.myProfile.share.unsaved.message": "Tendrás que guardar los cambios antes de poder ver el aspecto de tu perfil.",
 
@@ -954,11 +954,11 @@
   "pages.people.create": "Crear",
   "pages.people.edit": "Ver/editar mi perfil",
   "pages.people.friends": "Amigos",
-  "pages.people.unfriend": "Unfriend",
+  "pages.people.unfriend": "Quitar de amigos",
   "pages.people.invites": "Invitaciones de amigos (entrantes)",
   "pages.people.accept": "Acepte",
   "pages.people.decline": "Disminución",
-  "pages.people.sentInvites": "Solicitudes de amistad pendientes (enviadas)",
+  "pages.people.sentInvites": "Solicitudes de amistad pendientes (Próximamente)",
   "pages.people.cancel": "Cancelar",
   "pages.people.noFriends.1": "No tienes ningún amigo añadido.",
   "pages.people.noFriends.2": "Añadir a alguien como amigo te permite colaborar en recetas, planes de comidas y listas de la compra.",
@@ -976,7 +976,7 @@
   "pages.profile.cancel": "Cancelar solicitud de amistad",
   "pages.profile.accept": "Aceptar solicitud de amistad",
   "pages.profile.decline": "Rechazar solicitud de amistad",
-  "pages.profile.unfriend": "Unfriend",
+  "pages.profile.unfriend": "Quitar de amigos",
   "pages.profile.setup": "Configura tu perfil para añadir amigos",
   "pages.profile.login": "Conectarse/Registrarse para añadir a un amigo",
   "pages.profile.disabled.header": "El perfil no está activado",
@@ -1001,7 +1001,7 @@
 
   "====== Components.CopyWithWebshare ======": "",
 
-  "components.copyWithWebshare.instructions": "Para compartir, copie el enlace siguiente",
+  "components.copyWithWebshare.instructions": "Para compartir, copie el siguiente enlace",
   "components.copyWithWebshare.shareIcon": "o pulsa el icono de compartir",
 
   "====== Components.MealCalendar ======": "",
@@ -1017,7 +1017,7 @@
 
   "====== Components.SelectCollaborators ======": "",
 
-  "components.selectCollaborators.added": "Ya añadido",
+  "components.selectCollaborators.added": "Ya está añadido",
   "components.selectCollaborators.add": "Haga clic para añadir",
   "components.selectCollaborators.searching": "Buscando...",
   "components.selectCollaborators.notFound": "Usuario no encontrado",
@@ -1028,7 +1028,7 @@
 
   "components.selectIngredients.title": "Seleccione los ingredientes que desea añadir:",
   "components.selectIngredients.toggleAll": "Seleccionar/Deseleccionar todo",
-  "components.selectIngredients.scale": "{Escala x (haga clic para cambiar)",
+  "components.selectIngredients.scale": "Escala x{scale} (haga clic para cambiar)",
   "components.selectIngredients.null": "Esta receta no lleva ingredientes.",
 
   "====== Components.SelectLabel ======": "",
@@ -1063,7 +1063,7 @@
 
   "====== Components.SelfhostWarning ======": "",
 
-  "components.selfhostWarning.1": "Nota: Esta es una versión autoalojada de RecipeSage y por lo tanto no está asociada con",
+  "components.selfhostWarning.1": "Nota: Esta es una versión autoalojada de RecipeSage y por lo tanto no está asociada a",
   "components.selfhostWarning.2": "o cualquiera de las cuentas situadas en el sitio principal.",
 
   "====== Components.ShoppingListItem ======": "",
