@@ -75,7 +75,25 @@ When contributing or suggesting code for RecipeSage, you irrevocably grant Recip
 
 # 🐤 Contributing
 
-Setting-up your development environment.
+## Translations
+
+Translations can be contributed via the RecipeSage Weblate instance at [https://weblate.recipesage.com](https://weblate.recipesage.com) which automatically syncs to this repository. You can login there with a Github account and get started translating.
+
+If you'd rather translate the JSON files directly, you're welcome to do that as well. You can find all of the corresponding language files [here](https://github.com/julianpoy/RecipeSage/tree/master/packages/frontend/src/assets/i18n).
+
+Entirely AI-generated translations are not currently accepted, since they very frequently produce low-quality and inaccurate results. When using AI to assist in your translation efforts, please use DeepL or Google Translate - do not translate using ChatGPT.
+
+## Code
+
+Code contributions are always very, very welcome. I'm very open to collaborating, and if there's a feature you'd like to see come to RecipeSage I'd love to help you facilitate that.
+
+Although you don't have to reach out before starting work and contributing a PR, either opening an issue and tagging me (@julianpoy), or commenting on an existing issue is a good idea. I may have suggestions for how to approach the problem, where one might look to implement a feature, or general guidance of how to "fit" the RecipeSage UX.
+
+### Development
+
+Below are some notes for getting setup to contribute code.
+
+#### Setting-up your development environment
 
 1. Install [Docker](https://docs.docker.com/get-docker/) and [Node](https://nodejs.org/en/)
 2. Clone this repo
@@ -85,7 +103,7 @@ Setting-up your development environment.
 6. Run database migrations `docker compose exec backend npx prisma migrate dev`
 7. RecipeSage should be running on `localhost` on port `80`
 
-Some notes for the repo:
+#### Notes about the repo
 
 1. The repo uses the monorepo management tool [nx](https://nx.dev/nx-api). You'll find things divided up in the `packages` directory.
 2. I'm currently migrating to Prisma & TRPC, so any new functionality should be added within the `trpc` package rather than the `backend` package, unless it's an update to an existing behavior that does not merit moving.
