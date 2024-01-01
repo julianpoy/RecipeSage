@@ -43,6 +43,10 @@ spec:
               value: "weblate@recipesage.com"
             - name: WEBLATE_DEFAULT_FROM_EMAIL
               value: "weblate@recipesage.com"
+            - name: WEBLATE_DEFAULT_COMMITER_EMAIL
+              value: "weblate@recipesage.com"
+            - name: WEBLATE_DEFAULT_COMMITER_NAME
+              value: "RecipeSage Weblate Bot"
             - name: WEBLATE_ALLOWED_HOSTS
               value: "*"
             - name: WEBLATE_REGISTRATION_OPEN
