@@ -1,6 +1,4 @@
 {
-  "====== Pages.Welcome ======": "",
-
   "pages.app.oldBrowserAlert.header": "Navegador no compatible",
   "pages.app.oldBrowserAlert.message": "Parece que estás utilizando un navegador antiguo que no es compatible. Es posible que algunas funciones no funcionen o estén dañadas. Por favor, cambia a un navegador moderno como Firefox para una funcionalidad completa.",
   "pages.app.nav.welcome": "Bienvenido",
@@ -18,9 +16,6 @@
   "pages.app.nav.shopping": "Listas de la compra",
   "pages.app.nav.meals": "Planes de comidas",
   "pages.app.nav.settings": "Ajustes",
-  "pages.app.nav.logout": "Cerrar sesión",
-
-  "====== Pages.Welcome ======": "",
 
   "pages.welcome.selfhostTitle": "RecipeSage ¡Autoalojado!",
   "pages.welcome.selfhostSubtitle": "Una versión no oficial de RecipeSage.com, un organizador gratuito de recetas, comidas y listas de la compra para Web, IOS y Android.",
@@ -28,7 +23,6 @@
   "pages.welcome.subtitle": "Un organizador gratuito de recetas, comidas y listas de la compra para Web, IOS y Android",
   "pages.welcome.registerButton": "Crear una cuenta",
   "pages.welcome.loginButton": "Iniciar sesión",
-  "pages.welcome.appDemoImageAlt": "Mis Recetas",
   "pages.welcome.description.welcome": "¡Bienvenido a RecipeSage!",
   "pages.welcome.description.1": "RecipeSage es un gestor de recetas personales, planificador de comidas y lista de la compra gratuito (basado en donaciones y de código abierto) para Web, IOS y Android.",
   "pages.welcome.description.2": "Capture y guarde rápidamente recetas de cualquier sitio web simplemente introduciendo la URL de la web. Sincroniza tus recetas, planes de comidas y listas de la compra entre todos tus dispositivos. Comparte tus recetas, listas de la compra y planes de comidas con familiares y amigos.",
@@ -55,8 +49,6 @@
   "pages.welcome.description.cta.3": "Fácil de usar",
   "pages.welcome.description.cta.4": "Disponible en ordenadores de sobremesa y todos los dispositivos móviles",
   "pages.welcome.description.cta.5": "Importa recetas desde cualquier URL",
-
-  "====== Pages.Auth ======": "",
 
   "pages.auth.title.login": "Iniciar sesión",
   "pages.auth.title.register": "Crear una cuenta",
@@ -85,8 +77,6 @@
   "pages.auth.error.incorrectLogin": "Parece que el correo electrónico o la contraseña no son correctos.",
   "pages.auth.error.emailTaken": "Ya existe una cuenta con esa dirección de correo electrónico.",
   "pages.auth.forgot.toast": "Si tiene una cuenta RecipeSage asociada a esta dirección de correo electrónico, en los próximos minutos recibirá un enlace para restablecer su contraseña.",
-
-  "====== Pages.Home ======": "",
 
   "pages.home.title.selectionMode": "{{count}} Seleccionado",
   "pages.home.title.main": "Mis recetas",
@@ -124,8 +114,6 @@
   "pages.home.deleteSelected.header": "Confirmar Eliminación",
   "pages.home.deleteSelected.message": "Esto eliminará permanentemente las recetas seleccionadas de su cuenta. Esta acción es irreversible. Se eliminarán las siguientes recetas: {{recipeNames}}",
 
-  "====== Pages.HomeSearchFilterPopover ======": "",
-
   "pages.homeSearchFilterPopover.title": "Filtros de búsqueda",
   "pages.homeSearchFilterPopover.filterByRating": "Filtrar por valoración",
   "pages.homeSearchFilterPopover.filterByLabel": "Filtrar por etiqueta",
@@ -137,8 +125,6 @@
   "pages.homeSearchFilterPopover.includeFriends.no": "Nunca",
   "pages.homeSearchFilterPopover.optionsHidden": "Nota: algunas opciones están ocultas, ya que se trata de una colección compartida",
 
-  "====== Pages.NotFound ======": "",
-
   "pages.notfound.title": "Página no encontrada",
   "pages.notfound.error.title": "Página no encontrada",
   "pages.notfound.error.message1": "Parece que la página que busca no existe.",
@@ -146,8 +132,6 @@
   "pages.notfound.error.message3": "Si sigues teniendo problemas, o si alguna parte de la aplicación te ha llevado hasta aquí, ponte en contacto conmigo.",
   "pages.notfound.error.contact": "Póngase en contacto conmigo",
   "pages.notfound.error.goHome": "Haga clic aquí para ir a sus recetas",
-
-  "====== Pages.HomePopover ======": "",
 
   "pages.homepopover.options": "Opciones",
   "pages.homepopover.options.layout": "Diseño",
@@ -170,8 +154,6 @@
   "pages.homepopover.labelNull": "Aún no ha creado una etiqueta. Puede crear una a partir de los detalles de una receta.",
   "pages.homepopover.unlabeled": "Sólo sin etiqueta",
 
-  "====== Pages.RecipeDetails ======": "",
-
   "pages.recipeDetails.pageTitle": "Detalles de la receta",
   "pages.recipeDetails.rating": "Valoración",
   "pages.recipeDetails.source": "Fuente",
@@ -188,10 +170,6 @@
   "pages.recipeDetails.notes": "Notas",
   "pages.recipeDetails.noNotes": "Sin notas",
   "pages.recipeDetails.labels": "Etiquetas",
-  "pages.recipeDetails.mustSaveBeforeLabelling": "Podrás añadir etiquetas después de guardar esta receta",
-  "pages.recipeDetails.labels.clickToCreate": "Haga clic para crear",
-  "pages.recipeDetails.labels.alreadyAdded": "Ya añadido",
-  "pages.recipeDetails.labels.clickToAdd": "Haga clic para añadir",
   "pages.recipeDetails.created": "Creado",
   "pages.recipeDetails.updated": "Última edición",
   "pages.recipeDetails.saveToMyRecipes": "Guardar esta receta en Mis recetas",
@@ -209,12 +187,7 @@
   "pages.recipeDetails.unPinRecipe": "Descanclar receta",
   "pages.recipeDetails.delete.header": "Confirmar Eliminación",
   "pages.recipeDetails.delete.message": "Esto eliminará permanentemente la receta de su cuenta. Esta acción es irreversible.",
-  "pages.recipeDetails.enterLabelWarning": "Introduzca una etiqueta y pulse intro para etiquetar esta receta.",
-  "pages.recipeDetails.deleteLabel.header": "Confirmar la retirada de la etiqueta",
-  "pages.recipeDetails.deleteLabel.message": "Esto eliminará la etiqueta \"{{title}}\" de esta receta.",
   "pages.recipeDetails.cloned": "La receta se ha guardado en su cuenta",
-
-  "====== Pages.RecipeDetailsPopover ======": "",
 
   "pages.recipeDetailsPopover.options": "Opciones",
   "pages.recipeDetailsPopover.keepScreenOn": "Mantener la pantalla encendida",
@@ -230,12 +203,8 @@
   "pages.recipeDetailsPopover.dangerZone": "Atención",
   "pages.recipeDetailsPopover.delete": "Eliminar receta",
 
-  "====== Pages.ResettableSelectPopover ======": "",
-
   "pages.rselectpopover.resetAll": "Restablecer todo",
   "pages.rselectpopover.done": "Hecho",
-
-  "====== Pages.About ======": "",
 
   "pages.about.title": "Acerca de",
   "pages.about.links.details": "Sobre mí y RecipeSage",
@@ -246,15 +215,11 @@
   "pages.about.links.legal": "Aviso legal, acuerdos y descargos de responsabilidad",
   "pages.about.socialTitle": "Redes sociales",
 
-  "====== Pages.Contact ======": "",
-
   "pages.contact.title": "Póngase en contacto conmigo",
   "pages.contact.subtitle": "Información de contacto",
   "pages.contact.pleaseUserGuide": "Si tiene alguna pregunta, consulte la guía del usuario antes de enviar un correo electrónico:",
   "pages.contact.emailMe": "Para cualquier problema, error o sugerencia, puede enviarme un correo electrónico a",
   "pages.contact.socialTitle": "Redes sociales",
-
-  "====== Pages.Contribute ======": "",
 
   "pages.contribute.title": "Contribuir",
   "pages.contribute.subtitle": "Contribuir a RecipeSage",
@@ -275,14 +240,10 @@
   "pages.contribute.cta.2": "Considere la posibilidad de contribuir al mantenimiento de RecipeSage.",
   "pages.contribute.minimum": "Lamentablemente, el importe mínimo es de ${{amount}} debido a las tasas de transacción - Lo siento",
 
-  "====== Pages.ContributeThankYou ======": "",
-
   "pages.contributeThankYou.title": "¡Gracias!",
   "pages.contributeThankYou.thanks": "¡Gracias por formar parte de la familia RecipeSage y ayudar a mantenerla viva!",
   "pages.contributeThankYou.bonus": "Las funciones adicionales deberían desbloquearse en tu cuenta en breve.",
   "pages.contributeThankYou.questions": "No dude en ponerse en contacto conmigo para cualquier pregunta, duda o comentario.",
-
-  "====== Pages.ContributeCancel ======": "",
 
   "pages.contributeCancel.title": "¡Necesitamos tu ayuda!",
   "pages.contributeCancel.cta.1": "RecipeSage se basa en donaciones: ¡Todas las contribuciones ayudan!",
@@ -290,8 +251,6 @@
   "pages.contributeCancel.cta.3": "Para mantenerlo gratuito y al mismo tiempo pagar los costos de alojamiento, necesitamos tu ayuda.",
   "pages.contributeCancel.cta.4": "Por favor, reconsidérelo: ¡Su contribución es realmente apreciada!",
   "pages.contributeCancel.contribute": "Contribuir",
-
-  "====== Pages.DownloadAndInstall ======": "",
 
   "pages.downloadAndInstall.title": "Descargar e Instalar",
   "pages.downloadAndInstall.subtitle": "Aplicación RecipeSage",
@@ -319,28 +278,18 @@
   "pages.downloadAndInstall.extension": "Extensión del navegador RecipeSage Clip Tool",
   "pages.downloadAndInstall.extension.description": "Captura automáticamente el contenido de recetas de páginas web y tiene mayor compatibilidad con sitios web que no se pueden importar vía in-app.",
 
-  "====== Pages.LabelsPopover ======": "",
-
   "pages.labelsPopover.title": "Opciones",
   "pages.labelsPopover.options.showCreatedAt": "Mostrar Creado en",
   "pages.labelsPopover.options.selectMultipleLabels": "Seleccionar varias etiquetas",
   "pages.labelsPopover.options.unselectLabels": "Deseleccionar todas las etiquetas",
 
-  "====== Pages.Labels ======": "",
-
   "pages.labels.title": "Mis etiquetas - Gestionar",
   "pages.labels.selectionModeTitle": "{{count}} Seleccionado",
-  "pages.labels.subtitle": "Tiene {{count}} etiquetas en total. Haga clic en una etiqueta para verla.",
   "pages.labels.label.recipeCount": "{{count}} Recetas",
   "pages.labels.label.createdAt": "Creado {{dateString}}",
   "pages.labels.label.selected": "Selección",
-  "pages.labels.nullState.1": "Aún no tienes etiquetas.",
-  "pages.labels.nullState.2": "Las etiquetas pueden crearse en la página de detalles de la receta.",
-  "pages.labels.nullState.3": "Las etiquetas sólo existen mientras estén asignadas al menos a una receta.",
   "pages.labels.modal.delete.header": "Confirmar Eliminación",
   "pages.labels.modal.delete.message": "Esto eliminará permanentemente las etiquetas seleccionadas de su cuenta. Esta acción es irreversible. Se eliminarán las siguientes etiquetas: {{labelTitles}}",
-
-  "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Gestionar etiqueta: {{name}}",
   "pages.manageLabelModal.recipeCount": "Etiquetado en {{count}} recetas",
@@ -370,8 +319,6 @@
   "pages.manageLabelModal.merge.message": "Todas las recetas de \"{{title}}\" se volverán a etiquetar con la etiqueta de destino, y la etiqueta \"{{title}}\" será eliminada.",
   "pages.manageLabelModal.merge.placeholder": "Nombre de la etiqueta de destino",
 
-  "====== Pages.MealPlan ======": "",
-
   "pages.mealPlan.title": "Plan de comida - {{name}}",
   "pages.mealPlan.modal.emptyDays.header": "Día(s) vacío(s) seleccionado(s)",
   "pages.mealPlan.modal.emptyDays.message": "Los días seleccionados no contienen entradas de plan de comidas. Seleccione al menos un día con entradas de plan de comidas.",
@@ -392,8 +339,6 @@
   "pages.mealPlan.modal.moveConfirm.messageMultiple": "Esto moverá las comidas de {{selectedDayList}} a los días a partir de {{destDay}}.",
   "pages.mealPlan.modal.moveConfirm.change": "Seleccionar otro día",
 
-  "====== Pages.MealPlanBulkPinModal ======": "",
-
   "pages.mealPlanBulkPinModal.title": "Anclar Comidas",
   "pages.mealPlanBulkPinModal.instructions1": "Seleccione los platos que desea abrir.",
   "pages.mealPlanBulkPinModal.instructions2": "Nota: Sólo puede fijar elementos vinculados a recetas.",
@@ -402,8 +347,6 @@
   "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(no vinculado a una receta)",
   "pages.mealPlanBulkPinModal.cancel": "Cancelar",
   "pages.mealPlanBulkPinModal.pin": "Anclar",
-
-  "====== Pages.MealPlanItemDetailsModal ======": "",
 
   "pages.mealPlanItemDetailsModal.title": "Detalles del plan de comidas",
   "pages.mealPlanItemDetailsModal.scheduled": "Programado para {{meal}} el {{date}}",
@@ -418,8 +361,6 @@
   "pages.mealPlanItemDetailsModal.actions.close": "Cerrar",
   "pages.mealPlanItemDetailsModal.delete.header": "Confirmar eliminación",
   "pages.mealPlanItemDetailsModal.delete.message": "Esto eliminará \"{{title}}\" de este plan de comidas.",
-
-  "====== Pages.MealPlanPopover ======": "",
 
   "pages.mealPlanPopover.options.title": "Opciones",
   "pages.mealPlanPopover.options.startWeekOn.title": "Inicio de la semana",
@@ -437,8 +378,6 @@
   "pages.mealPlanPopover.delete.header": "Confirmar Eliminación",
   "pages.mealPlanPopover.delete.message": "Esto eliminará permanentemente este plan de comidas de tu cuenta. Nota: Si sólo eres colaborador en este plan de comidas, sólo se eliminará de tu cuenta. Si eres el propietario de este plan de comidas, se eliminará de las cuentas de todos los demás colaboradores.",
 
-  "====== Pages.MealPlans ======": "",
-
   "pages.mealPlans.title": "Planes de comidas",
   "pages.mealPlans.metadata.createdOn": "Creado {{date}}",
   "pages.mealPlans.metadata.collaborators": "En colaboración con:",
@@ -446,8 +385,6 @@
   "pages.mealPlans.metadata.youOwn": "Este plan de comidas es tuyo",
   "pages.mealPlans.noPlans": "No tienes planes de comidas.",
   "pages.mealPlans.toCreate": "Para crear un plan de comidas, pulse el botón más de la esquina inferior.",
-
-  "====== Pages.NewMealPlanItemModal ======": "",
 
   "pages.newMealPlanItemModal.title.update": "Actualizar el plan de comidas",
   "pages.newMealPlanItemModal.title.new": "Añadir elemento al plan de comidas",
@@ -458,27 +395,19 @@
   "pages.newMealPlanItemModal.save": "Guardar cambios",
   "pages.newMealPlanItemModal.create": "Añadir al plan de comidas",
 
-  "====== Pages.NewMealPlanModal ======": "",
-
   "pages.newMealPlanModal.title": "Nuevo planificador de comidas",
   "pages.newMealPlanModal.input.title": "Título",
   "pages.newMealPlanModal.createAndShare": "Crear y compartir",
   "pages.newMealPlanModal.create": "Crear",
 
-  "====== Pages.ShareMealPlanModal ======": "",
-
   "pages.shareMealPlanModal.title": "Compartir plan de comidas",
   "pages.shareMealPlanModal.description": "El enlace iCal/ICS que aparece a continuación se puede utilizar en casi cualquier programa de calendario para sincronizar su plan de comidas fuera de RecipeSage",
-
-  "====== Pages.Assistant ======": "",
 
   "pages.assistant.title": "Asistente de cocina",
   "pages.assistant.welcome.1": "¡Bienvenido al asistente de cocina RecipeSage!",
   "pages.assistant.welcome.2": "El asistente de cocina es un modelo de IA que puede responder a tus preguntas sobre cocina y ayudarte a crear recetas.",
   "pages.assistant.welcome.3": "El asistente de cocina tiene un límite de 5 mensajes/día debido a los elevados costes de funcionamiento de la IA. Este límite aumenta a 50 mensajes/día para los colaboradores.",
   "pages.assistant.messageLimit": "Máximo de mensajes alcanzado (¡lo siento, es costoso!). El recuento de mensajes se reinicia a las 0:00 GMT.",
-
-  "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "Conversación con {{name}}",
   "pages.messageThread.clickToOpen": "Haga clic para abrir",
@@ -489,8 +418,6 @@
   "pages.messageThread.sent": "¡Enviado!",
   "pages.messageThread.messagePlaceholder": "Mensaje...",
 
-  "====== Pages.Messages ======": "",
-
   "pages.messages.title": "Mensajes",
   "pages.messages.history.you": "Tú",
   "pages.messages.history.sentRecipe": "Envió una receta",
@@ -500,16 +427,12 @@
   "pages.messages.notificationsRequired": "Las notificaciones deben estar activadas para que la mensajería funcione correctamente.",
   "pages.messages.notificationsInstructions": "Vea cómo reactivar las notificaciones aquí",
 
-  "====== Pages.NewMessageModal ======": "",
-
   "pages.newMessageModal.title": "Nuevo mensaje",
   "pages.newMessageModal.input.target": "Introduzca un correo electrónico de usuario de RecipeSage o @usuario",
   "pages.newMessageModal.compose": "Redactar un mensaje",
   "pages.newMessageModal.input.messagePlaceholder": "¡Hola! Me gustaría chatear en RecipeSage",
   "pages.newMessageModal.send": "Enviar",
   "pages.newMessageModal.defaultMessage": "¡Hola! Me gustaría chatear en RecipeSage",
-
-  "====== Pages.AddRecipeToMealPlanModal ======": "",
 
   "pages.addRecipeToMealPlanModal.title": "Añadir receta a los planes de comidas",
   "pages.addRecipeToMealPlanModal.instructions1": "En primer lugar, seleccione el plan de comidas de destino:",
@@ -522,8 +445,6 @@
   "pages.addRecipeToMealPlanModal.selectMeal": "Seleccione una comida",
   "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Excelente. Ahora seleccione el plan de comidas que acaba de crear.",
 
-  "====== Pages.AddRecipeToShoppingListModal ======": "",
-
   "pages.addRecipeToShoppingListModal.title.singular": "Añadir receta a la lista de la compra",
   "pages.addRecipeToShoppingListModal.title.plural": "Añadir recetas a la lista de la compra",
   "pages.addRecipeToShoppingListModal.selectDestination": "Seleccione la lista de la compra de destino:",
@@ -533,8 +454,6 @@
   "pages.addRecipeToShoppingListModal.createShoppingList": "Crear una lista de la compra",
   "pages.addRecipeToShoppingListModal.add": "Añadir a la lista",
   "pages.addRecipeToShoppingListModal.newListSuccess": "Excelente. Ahora seleccione la lista de la compra que acaba de crear.",
-
-  "====== Pages.EditRecipe ======": "",
 
   "pages.editRecipe.title.edit": "Editar receta",
   "pages.editRecipe.title.new": "Nueva receta",
@@ -550,7 +469,6 @@
   "pages.editRecipe.input.instructions": "Instrucciones",
   "pages.editRecipe.input.notes": "Notas",
   "pages.editRecipe.input.rating": "Valoración",
-  "pages.editRecipe.labelNotice": "Podrás añadir categorías/etiquetas después de crear la receta.",
   "pages.editRecipe.save": "Guardar",
   "pages.editRecipe.create": "Crear",
   "pages.editRecipe.titleRequired": "Añada el título de la receta (único campo obligatorio).",
@@ -567,12 +485,8 @@
   "pages.editRecipe.addImage.downloading": "Descargando imagen...",
   "pages.editRecipe.addImage.invalidUrl": "Introduzca una URL de una imagen válida",
 
-  "====== Pages.EditRecipePopover ======": "",
-
   "pages.editRecipePopover.actions": "Acciones",
   "pages.editRecipePopover.addImage": "Añadir imagen por URL",
-
-  "====== Pages.PrintRecipeModal ======": "",
 
   "pages.printRecipeModal.title": "Seleccionar diseño de impresión",
   "pages.printRecipeModal.print": "Imprimir",
@@ -580,8 +494,6 @@
   "pages.printRecipeModal.template.standardNoImg": "Estándar Sin imagen",
   "pages.printRecipeModal.template.halfSheetCols": "Media hoja, Columnas",
   "pages.printRecipeModal.template.halfSheetCompactNoCols": "Media hoja, compacto, sin columnas",
-
-  "====== Pages.Account ======": "",
 
   "pages.account.title": "Cuenta y credenciales",
   "pages.account.description": "Aquí puede actualizar y cambiar aspectos sobre su cuenta",
@@ -641,8 +553,6 @@
   "pages.export.txt": "Exportar como texto sin formato",
   "pages.export.pdf": "Exportar como PDF",
 
-  "====== Pages.Import ======": "",
-
   "pages.import.title": "Importar",
   "pages.import.description1": "RecipeSage permite importar desde Pepperplate, Living Cookbook y Paprika.",
   "pages.import.description2": "La importación de recetas añadirá todas las recetas del archivo/cuenta que haya seleccionado a su cuenta RecipeSage.",
@@ -652,8 +562,6 @@
   "pages.import.pepperplate": "Importar desde Pepperplate",
   "pages.import.livingCookbook": "Importar archivo Living Cookbook",
   "pages.import.paprika": "Importar archivo Paprika",
-
-  "====== Pages.ImportJSONLD ======": "",
 
   "pages.importJsonLD.title": "Importar recetas desde un archivo JSON-LD",
   "pages.importJsonLD.description1": "Esto importará un archivo JSON-LD (con la extensión .json) en RecipeSage (este es uno de los formatos de archivo exportados por RecipeSage).",
@@ -674,8 +582,6 @@
   "pages.importJsonLD.timeout": "La importación está tardando un poco (esto puede ocurrir si su base de datos es muy grande) - por favor, vuelva a comprobarlo en 5 minutos. Si sus recetas no aparecen, envíeme un correo electrónico.",
   "pages.importJsonLD.success": "La importación se ha realizado correctamente.",
 
-  "====== Pages.ImportCookmate ======": "",
-
   "pages.importCookmate.title": "Importar recetas desde un archivo Cookmate",
   "pages.importCookmate.description1": "Esto importará un archivo Cookmate (con la extensión .mcb) a RecipeSage.",
   "pages.importCookmate.description2": "La tarea de importación puede durar varios minutos",
@@ -694,8 +600,6 @@
   "pages.importCookmate.error": "Hmm, hemos tenido problemas para extraer ese archivo. Por favor, asegúrate de que está en formato Cookmate. Si tienes problemas, no dudes en enviarme un correo electrónico.",
   "pages.importCookmate.timeout": "La importación está tardando un poco (esto puede ocurrir si su base de datos es muy grande) - por favor, vuelva a comprobarlo en 5 minutos. Si sus recetas no aparecen, envíeme un correo electrónico.",
   "pages.importCookmate.success": "La importación se ha realizado correctamente.",
-
-  "====== Pages.ImportLivingCookbook ======": "",
 
   "pages.importLivingCookbook.title": "Importar recetas de Living Cookbook",
   "pages.importLivingCookbook.description1": "Esto importará su base de datos de Living Cookbook a RecipeSage.",
@@ -735,8 +639,6 @@
   "pages.importLivingCookbook.timeout": "La importación está tardando un poco (esto puede ocurrir si su base de datos es muy grande) - por favor, vuelva a comprobarlo en 5 minutos. Si sus recetas no aparecen, envíeme un correo electrónico.",
   "pages.importLivingCookbook.success": "La importación se ha realizado correctamente.",
 
-  "====== Pages.ImportPaprika ======": "",
-
   "pages.importPaprika.title": "Importar recetas des archivo Paprika",
   "pages.importPaprika.description1": "Esto importará su base de datos de Paprika a RecipeSage. Tenga en cuenta que esta función está en fase beta.",
   "pages.importPaprika.description2": "Todos los archivos deben estar en formato .paprikarecipes (exportar como Paprika Recipe Format en los ajustes de Paprika). Otros formatos no funcionarán.",
@@ -752,8 +654,6 @@
   "pages.importPaprika.error": "Hmm, hemos tenido problemas para extraer ese archivo. Asegúrese de que está en formato Paprika Recipe Format directamente desde la aplicación. Si tiene problemas, no dude en enviarme un correo electrónico.",
   "pages.importPaprika.timeout": "La importación está tardando un poco (esto puede ocurrir si su base de datos es muy grande) - por favor, vuelva a comprobarlo en 5 minutos. Si sus recetas no aparecen, envíeme un correo electrónico.",
   "pages.importPaprika.success": "La importación se ha realizado correctamente.",
-
-  "====== Pages.ImportPepperplate ======": "",
 
   "pages.importPepperplate.title": "Importar recetas desde un archivo Pepperplate",
   "pages.importPepperplate.description1": "La tarea de importación puede tardar varios minutos y depende de la disponibilidad de los servidores Pepperplate.",
@@ -776,13 +676,12 @@
   "pages.importPepperplate.error.message": "Se ha producido un error - Por favor, comprueba tu página Mis Recetas antes de iniciar una nueva importación para evitar crear duplicados.",
   "pages.importPepperplate.success": "Importación completada.",
 
-  "====== Pages.Settings ======": "",
-
   "pages.settings.title": "Ajustes",
   "pages.settings.section1.title": "Datos y cuenta",
   "pages.settings.import": "Importar datos de recetas",
   "pages.settings.export": "Exportar datos de recetas",
   "pages.settings.account": "Configuración de la cuenta y estadísticas",
+  "pages.settings.logout": "Cerrar sesión",
   "pages.settings.update": "Comprobar actualización",
   "pages.settings.section2.title": "Ajustes generales",
   "pages.settings.splitPane": "Activar la vista de panel dividido en pantallas grandes",
@@ -806,8 +705,6 @@
   "pages.settings.update.header": "La aplicación se recargará",
   "pages.settings.update.subHeader": "La aplicación se reiniciará para comprobar si hay alguna actualización.",
 
-  "====== Pages.Share ======": "",
-
   "pages.share.title": "Compartir receta",
   "pages.share.description": "Al compartir, se enviará una copia de esta receta al destinatario. Su copia no se verá afectada.",
   "pages.share.byAccount": "RecipeSage",
@@ -826,22 +723,16 @@
   "pages.share.send": "Enviar",
   "pages.share.close": "Cerrar",
 
-  "====== Pages.NewShoppingListItem ======": "",
-
   "pages.newShoppingListItem.title": "Añadir artículo(s)",
   "pages.newShoppingListItem.items": "Artículos",
   "pages.newShoppingListItem.recipe": "Receta",
   "pages.newShoppingListItem.itemTitle": "Título del artículo",
   "pages.newShoppingListItem.add": "Añadir a la lista",
 
-  "====== Pages.NewShoppingList ======": "",
-
   "pages.newShoppingList.title": "Nueva lista de la compra",
   "pages.newShoppingList.listTitle": "Título",
   "pages.newShoppingList.create": "Crear",
   "pages.newShoppingList.share": "y Compartir",
-
-  "====== Pages.ShoppingList ======": "",
 
   "pages.shoppingList.title": "Lista de la compra - {{title}}",
   "pages.shoppingList.nullState.1": "No hay artículos en esta lista de la compra.",
@@ -853,8 +744,6 @@
   "pages.shoppingList.removeMultiple.message": "Esto eliminará permanentemente estos elementos de la lista.",
   "pages.shoppingList.removed": "Elemento(s) eliminado(s)",
   "pages.shoppingList.removed.undo": "Deshacer",
-
-  "====== Pages.ShoppingListPopover ======": "",
 
   "pages.shoppingListPopover.title": "Opciones",
   "pages.shoppingListPopover.sortBy": "Ordenar por",
@@ -875,8 +764,6 @@
   "pages.shoppingListPopover.deleteList.header": "Confirmar Eliminación",
   "pages.shoppingListPopover.deleteList.message": "Esto eliminará permanentemente esta lista de la compra de tu cuenta. Nota: Si sólo eres colaborador en esta lista, sólo se eliminará de tu cuenta. Si eres el propietario de esta lista, se eliminará de todas las cuentas de los demás colaboradores.",
 
-  "====== Pages.ShoppingLists ======": "",
-
   "pages.shoppingLists.title": "Listas de la compra",
   "pages.shoppingLists.created": "Creado {{date}}",
   "pages.shoppingLists.collaboration": "En colaboración con:",
@@ -885,8 +772,6 @@
   "pages.shoppingLists.nullState.1": "No tienes listas de la compra.",
   "pages.shoppingLists.nullState.2": "Para crear una lista de la compra, pulse el botón más de la esquina inferior.",
 
-  "====== Pages.AddFriendModal ======": "",
-
   "pages.addFriendModal.title": "Buscar usuario",
   "pages.addFriendModal.profileWarning": "Nota: El usuario indicado debe tener habilitado su perfil público.",
   "pages.addFriendModal.send": "Enviar solicitud de amistad",
@@ -894,8 +779,6 @@
   "pages.addFriendModal.profileDisabled.header": "El perfil no está activado",
   "pages.addFriendModal.profileDisabled.message": "Este usuario ha desactivado su perfil y, por lo tanto, es privado/inaccesible.",
   "pages.addFriendModal.success": "Invitación de amistad enviada",
-
-  "====== Pages.AddProfileItem ======": "",
 
   "pages.addProfileItem.title": "Añadir elemento de perfil",
   "pages.addProfileItem.prompt": "¿Qué le gustaría compartir?",
@@ -907,20 +790,16 @@
   "pages.addProfileItem.type.label": "Etiqueta",
   "pages.addProfileItem.type.allRecipes": "Todas las recetas",
   "pages.addProfileItem.change": "Haz clic para cambiar",
-  "pages.addProfileItem.select": "Seleccione su",
-  "pages.addProfileItem.select.recipe": "receta",
-  "pages.addProfileItem.select.label": "etiqueta",
+  "pages.addProfileItem.selectRecipe": "Seleccione su receta",
+  "pages.addProfileItem.selectLabel": "Seleccione su etiqueta",
   "pages.addProfileItem.selectVisibility": "¿Quién debería poder ver esto?",
   "pages.addProfileItem.selectVisibility.public": "Cualquiera (Público)",
   "pages.addProfileItem.selectVisibility.friends": "Sólo para mis amigos",
-  "pages.addProfileItem.visibility": "Visibilidad:",
-  "pages.addProfileItem.visibility.public": "público",
-  "pages.addProfileItem.visibility.friends": "sólo amigos",
+  "pages.addProfileItem.visibilityPublic": "Visibilidad: público",
+  "pages.addProfileItem.visibilityFriends": "Visibilidad: sólo amigos",
   "pages.addProfileItem.itemTitle": "Título destacado",
   "pages.addProfileItem.tos": "Al añadir este artículo, acepta la Política de uso compartido de RecipeSage",
   "pages.addProfileItem.done": "Hecho",
-
-  "====== Pages.MyProfile ======": "",
 
   "pages.myProfile.title": "Editar perfil",
   "pages.myProfile.welcome": "¡Bienvenido a tu perfil!",
@@ -946,8 +825,6 @@
   "pages.myProfile.share.unsaved.header": "Cambios no guardados",
   "pages.myProfile.share.unsaved.message": "Tendrás que guardar los cambios antes de poder ver el aspecto de tu perfil.",
 
-  "====== Pages.People ======": "",
-
   "pages.people.title": "Personas",
   "pages.people.nullState.1": "No has creado un perfil.",
   "pages.people.nullState.2": "Crear un perfil permite compartir colecciones de recetas con amigos y con el público.",
@@ -966,8 +843,6 @@
   "pages.people.setup.header": "Perfil no configurado",
   "pages.people.setup.message": "Tendrás que configurar tu perfil antes de empezar a añadir amigos.",
   "pages.people.setup.confirm": "Configurar",
-
-  "====== Pages.Profile ======": "",
 
   "pages.profile.title": "Perfil de {{name}}",
   "pages.profile.pinned": "Recetas y etiquetas marcadas",
@@ -988,23 +863,15 @@
   "pages.profile.setup.confirm": "Configurar",
   "pages.profile.alreadyRequested": "Parece que ya tienes una amistad en curso. Por favor, inténtalo de nuevo.",
 
-  "====== Pages.ShareProfileModal ======": "",
-
   "pages.shareProfileModal.title": "Compartir el perfil de {{name}}",
   "pages.shareProfileModal.close": "Cerrar",
   "pages.shareProfileModal.shareTitle": "Perfil RecipeSage de {{name}}",
   "pages.shareProfileModal.shareBody": "Haz clic para ver el perfil público de {{name}} en RecipeSage:",
 
-  "====== Components.CookingToolbar ======": "",
-
   "components.cookingToolbar.clear": "¿Eliminar todas las recetas ancladas?",
-
-  "====== Components.CopyWithWebshare ======": "",
 
   "components.copyWithWebshare.instructions": "Para compartir, copie el siguiente enlace",
   "components.copyWithWebshare.shareIcon": "o pulsa el icono de compartir",
-
-  "====== Components.MealCalendar ======": "",
 
   "components.mealCalendar.recipes": "Recetas programadas para este día",
   "components.mealCalendar.noRecipes": "Actualmente no hay recetas programadas para este día.",
@@ -1015,8 +882,6 @@
   "components.multiImageUpload.imageLimit": "Puedes adjuntar hasta 10 imágenes",
   "components.multiImageUpload.imageError": "Se ha producido un error al procesar una o varias de las imágenes seleccionadas.",
 
-  "====== Components.SelectCollaborators ======": "",
-
   "components.selectCollaborators.added": "Ya está añadido",
   "components.selectCollaborators.add": "Haga clic para añadir",
   "components.selectCollaborators.searching": "Buscando...",
@@ -1024,31 +889,21 @@
   "components.selectCollaborators.notFoundError": "No se ha podido encontrar un usuario con esa dirección de correo electrónico.",
   "components.selectCollaborators.invalidEmail": "Introduzca un correo electrónico válido y pulse Intro.",
 
-  "====== Components.SelectIngredients ======": "",
-
   "components.selectIngredients.title": "Seleccione los ingredientes que desea añadir:",
   "components.selectIngredients.toggleAll": "Seleccionar/Deseleccionar todo",
   "components.selectIngredients.scale": "Escala x{scale} (haga clic para cambiar)",
   "components.selectIngredients.null": "Esta receta no lleva ingredientes.",
 
-  "====== Components.SelectLabel ======": "",
-
   "components.selectLabel.change": "Haz clic para cambiar",
   "components.selectLabel.select": "Haga clic para seleccionar",
   "components.selectLabel.null": "No hay etiquetas llamadas \"{{name}}\"",
 
-  "====== Components.SelectMeal ======": "",
-
   "components.selectMeal.title": "Seleccionar comida",
-
-  "====== Components.SelectRecipe ======": "",
 
   "components.selectRecipe.change": "Haz clic para cambiar",
   "components.selectRecipe.select": "Haga clic para seleccionar",
   "components.selectRecipe.searching": "Buscando \"{{searchText}}\"...",
   "components.selectRecipe.null": "No hay resultados para \"{{searchText}}\"",
-
-  "====== Components.SelectUser ======": "",
 
   "components.selectUser.placeholder": "Búsqueda por correo electrónico o @usuario",
   "components.selectUser.change": "Haz clic para cambiar",
@@ -1056,34 +911,22 @@
   "components.selectUser.searching": "Buscando \"{{name}}\"...",
   "components.selectUser.null": "No hay resultados para \"{{name}}\"",
 
-  "====== Components.SelectKnownUser ======": "",
-
   "components.selectKnownUser.friends": "Amigos",
   "components.selectKnownUser.conversations": "Hilos de mensajes",
 
-  "====== Components.SelfhostWarning ======": "",
-
   "components.selfhostWarning.1": "Nota: Esta es una versión autoalojada de RecipeSage y por lo tanto no está asociada a",
   "components.selfhostWarning.2": "o cualquiera de las cuentas situadas en el sitio principal.",
-
-  "====== Components.ShoppingListItem ======": "",
 
   "components.shoppingListItem.recipe": "Para la receta:",
   "components.shoppingListItem.added": "Añadido",
   "components.shoppingListItem.addedBy": "Añadido por",
 
-  "====== Components.TosClickwrap ======": "",
-
   "components.tos.warning": "Al continuar, está aceptando la política de privacidad de RecipeSage.",
   "components.tos.title": "Condiciones de uso",
-
-  "====== Components.RatingFilter ======": "",
 
   "components.ratingFilter.title": "Filtrar por valoración",
   "components.ratingFilter.unrated": "Sin valorar",
   "components.ratingFilter.reset": "Restablecer",
-
-  "====== Modals.ScaleRecipe ======": "",
 
   "components.scaleRecipe.title": "Receta Escala",
   "components.scaleRecipe.change": "Ajustar la escala de la receta",
@@ -1091,8 +934,6 @@
   "components.scaleRecipe.manual": "O introduzca un número o una fracción",
   "components.scaleRecipe.cancel": "Cancelar",
   "components.scaleRecipe.apply": "Solicitar",
-
-  "====== Modals.FontSize ======": "",
 
   "components.fontSize.title": "Ajustar tamaño de fuente",
   "components.fontSize.option.X1_0": "Respetar las preferencias del sistema",
@@ -1103,8 +944,6 @@
   "components.fontSize.option.PX22": "22px (Más grande)",
   "components.fontSize.option.PX24": "24px (Más grande)",
   "components.fontSize.reset": "Restablecer",
-
-  "====== Services.QuickTutorial ======": "",
 
   "services.quickTutorial.multipleRecipeSelection.header": "Selección múltiple de recetas",
   "services.quickTutorial.multipleRecipeSelection.message": "Ahora se encuentra en el modo de selección múltiple de recetas. Puede hacer clic en tantas recetas como desee seleccionar y, a continuación, utilizar los botones que aparecen en la cabecera para realizar acciones masivas como etiquetar o eliminar. Puede salir del modo de selección múltiple de recetas en cualquier momento haciendo clic en la X de la cabecera o a través del menú de opciones.",
@@ -1117,24 +956,16 @@
   "services.quickTutorial.pinnedRecipes.header": "Recetas ancladas",
   "services.quickTutorial.pinnedRecipes.message": "Esta receta ya está anclada. Anclar recetas permite saltar rápidamente entre varias recetas mientras se cocina. Las recetas ancladas aparecen en la barra de herramientas de la parte inferior de la pantalla. Verás una burbuja con la imagen de la receta y la primera letra del título de la receta. Las recetas ancladas permanecerán abiertas hasta que las desancle o hasta que cierre la aplicación.",
 
-  "====== Services.Util ======": "",
-
   "services.util.justNow": "ahora mismo",
   "services.util.today": "hoy",
 
-  "====== Errors ======": "",
-
   "errors.offline": "Parece que estás desconectado. Cuando no estás conectado, solo podemos recuperar los datos a los que has accedido anteriormente en este dispositivo.",
   "errors.unexpected": "Se ha producido un error inesperado. Por favor, inténtelo de nuevo. Si el problema persiste, póngase en contacto conmigo.",
-
-  "====== Generic ======": "",
 
   "generic.delete": "Eliminar",
   "generic.cancel": "Cancelar",
   "generic.confirm": "Confirmar",
   "generic.close": "Cerrar",
   "generic.save": "Guardar",
-  "generic.okay": "Vale",
-
-  "====== Trailing Comma Placeholder ======": ""
+  "generic.okay": "Vale"
 }
