@@ -256,7 +256,6 @@ model Session {
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([token], map: "sessions_token")
   @@map("Sessions")
 }
 

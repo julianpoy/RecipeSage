@@ -71,6 +71,11 @@
         display: none;
       }
 
+      #message {
+        display: inline-block;
+        padding-top: 10px;
+      }
+
       .headline {
         text-align: center;
       }
@@ -92,18 +97,15 @@
           <img class="logo" /><br /><br />
           <h2>Import Site</h2>
         </div>
-        <span id="message">
-          <button id="auto-import">&nbsp;Auto Import&nbsp;</button>&nbsp;
-          <button id="interactive-import">&nbsp;Interactive Import&nbsp;</button
-          >&nbsp;
-        </span>
+        <button id="auto-import">&nbsp;Auto Import&nbsp;</button>&nbsp;
+        <button id="interactive-import">&nbsp;Interactive Import&nbsp;</button
+        >&nbsp;
       </div>
       <div id="importing">
         <div class="headline">
           <img class="logo" /><br /><br />
           <h2>Importing, please wait...</h2>
         </div>
-        <span id="message">This can take a minute.</span>
       </div>
       <div id="login">
         <div class="headline">
@@ -125,7 +127,6 @@
         <a href="https://recipesage.com/#/auth/register" target="_blank"
           >Create an account</a
         >
-        <span id="message"></span>
       </div>
       <div id="tutorial">
         <div class="headline">
@@ -161,6 +162,7 @@
         <br />
         <button id="tutorial-submit">Dismiss</button>
       </div>
+      <span id="message"></span>
     </div>
   </body>
 </html>
