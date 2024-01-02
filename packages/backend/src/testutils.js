@@ -1,7 +1,15 @@
 import { expect } from "chai";
 import { v4 as uuid } from "uuid";
 
-import { User, Session, Recipe, Label, Message } from "./models/index.js";
+import {
+  User,
+  Session,
+  Recipe,
+  Label,
+  Message,
+  ShoppingList,
+  ShoppingList_Collaborator,
+} from "./models/index.js";
 
 export const setup = async () => {
   const mainExecutable = await import("./app");
@@ -67,6 +75,24 @@ export const createRecipe = (userId, folder, fromUserId) => {
     ingredients: randomString(20),
     instructions: randomString(20),
     folder: folder || "main",
+  });
+};
+
+export const createShoppingList = (userId) => {
+  return ShoppingList.create({
+    userId,
+    title: randomString(20),
+  }).then(function (shoppingList) {
+    return shoppingList;
+  });
+};
+
+export const createShoppingCollaborator = (list) => {
+  return ShoppingList_Collaborator.create({
+    shoppingListId: list.id,
+    userId: list.userId,
+  }).then(function (collaborator) {
+    return collaborator;
   });
 };
 
