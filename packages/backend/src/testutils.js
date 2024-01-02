@@ -82,17 +82,13 @@ export const createShoppingList = (userId) => {
   return ShoppingList.create({
     userId,
     title: randomString(20),
-  }).then(function (shoppingList) {
-    return shoppingList;
   });
 };
 
-export const createShoppingCollaborator = (list) => {
+export const createShoppingCollaborator = (shoppingListId, userId) => {
   return ShoppingList_Collaborator.create({
-    shoppingListId: list.id,
-    userId: list.userId,
-  }).then(function (collaborator) {
-    return collaborator;
+    shoppingListId,
+    userId,
   });
 };
 
