@@ -15,9 +15,9 @@ if (window[extensionContainerId]) {
 
   console.log("Loading RecipeSage Browser Extension");
 
-  const fetchTokenAndApiBase = () => {
+  const fetchTokenAndUrls = () => {
     return new Promise((resolve) => {
-      chrome.storage.local.get(["token", "api_base"], (result) => {
+      chrome.storage.local.get(["token", "api_url", "base_url"], (result) => {
         resolve(result);
       });
     });
@@ -55,8 +55,8 @@ if (window[extensionContainerId]) {
       autoSnipPending.innerText = "Grabbing Recipe Content...";
       autoSnipPendingContainer.appendChild(autoSnipPending);
 
-      autoSnipPromise = fetchTokenAndApiBase().then((result) => {
-        window.RC_ML_CLASSIFY_ENDPOINT = `${result.api_base}proxy/ingredient-instruction-classifier?token=${result.token}`;
+      autoSnipPromise = fetchTokenAndUrls().then((result) => {
+        window.RC_ML_CLASSIFY_ENDPOINT = `${result.api_url}proxy/ingredient-instruction-classifier?token=${result.token}`;
 
         return clipRecipe().catch(() => {
           alert(
@@ -422,7 +422,7 @@ if (window[extensionContainerId]) {
 
       let submit = async () => {
         try {
-          const result = await fetchTokenAndApiBase();
+          const result = await fetchTokenAndUrls();
 
           let imageId;
           try {
@@ -433,7 +433,7 @@ if (window[extensionContainerId]) {
             formData.append("image", imageBlob);
 
             const imageCreateResponse = await fetch(
-              `${result.api_base}images?token=${result.token}`,
+              `${result.api_url}images?token=${result.token}`,
               {
                 method: "POST",
                 body: formData,
@@ -450,7 +450,7 @@ if (window[extensionContainerId]) {
           }
 
           const recipeCreateResponse = await fetch(
-            `${result.api_base}recipes?token=${result.token}`,
+            `${result.api_url}recipes?token=${result.token}`,
             {
               method: "POST",
               headers: {
@@ -470,15 +470,14 @@ if (window[extensionContainerId]) {
                 `Recipe Saved!`,
                 `Click to open`,
                 4000,
-                // assuming that api address is accessible under 'api' subdomain
-                `${result.api_base.replace("api.", "")}#/recipe/${data.id}`,
+                `${result.base_url}#/recipe/${data.id}`,
               );
             });
           } else {
             switch (recipeCreateResponse.status) {
               case 401:
                 chrome.storage.local.set(
-                  { token: null, api_base: null },
+                  { token: null, api_url: null, base_url: null },
                   () => {
                     displayAlert(
                       "Please Login",
