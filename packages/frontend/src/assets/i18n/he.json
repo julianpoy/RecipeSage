@@ -1,6 +1,4 @@
 {
-  "====== Pages.Welcome ======": "",
-
   "pages.app.oldBrowserAlert.header": "דפדפן אינו נתמך",
   "pages.app.oldBrowserAlert.message": "נראה שהדפדפן ישן ואינו נתמך. ייתכן שחלק מהפונקציונליות לא תפעל או שתפעל לא טוב. שימוש בדפדפן מודרני כמו Google Chrome לקבלת פונקציונליות מלאה.",
 
@@ -20,8 +18,6 @@
   "pages.app.nav.shopping": "רשימת קניות",
   "pages.app.nav.meals": "תכנית ארוחות",
   "pages.app.nav.settings": "הגדרות",
-
-  "====== Pages.Welcome ======": "",
 
   "pages.welcome.selfhostTitle": "RecipeSage Self Hosted!",
   "pages.welcome.selfhostSubtitle": "גרסה לא רשמית של RecipeSage.com, שומר מתכונים בחינם, מתכנן ארוחות ומארגן רשימות קניות עבור אינטרנט, IOS ו- Android",
@@ -60,8 +56,6 @@
   "pages.welcome.description.cta.4": "זמין במחשב שולחני ובכל המכשירים הניידים",
   "pages.welcome.description.cta.5": "ייבא מתכונים מכתובת URL",
 
-  "====== Pages.Auth ======": "",
-
   "pages.auth.title.login": "כניסה",
   "pages.auth.title.register": "הרשמה",
 
@@ -97,8 +91,6 @@
   "pages.auth.error.emailTaken": "חשבון עם מייל זה כבר קיים במערכת.",
 
   "pages.auth.forgot.toast": "אם קיים חשבון RecipeSage המשויך לכתובת מייל זו, מייל עם קישור לאיפוס סיסמה בדרכו אליך בדקות הקרובות.",
-
-  "====== Pages.Home ======": "",
 
   "pages.home.title.selectionMode": "{{count}} נבחרו",
   "pages.home.title.main": "המתכונים שלי",
@@ -147,8 +139,6 @@
   "pages.home.deleteSelected.message": "פעולה זו תימחק, באופן סופי, את המתכונים הנבחרים, ללא אפשרות שיחזור.",
   "pages.home.deleteSelected.message": "פעולה זו תימחק, באופן סופי, את המתכונים הנבחרים, ללא אפשרות שיחזור. המתכונים הבאים ימחקו {{recipeNames}}:",
 
-  "====== Pages.HomeSearchFilterPopover ======": "",
-
   "pages.homeSearchFilterPopover.title": "חיפוש מסננים",
 
   "pages.homeSearchFilterPopover.filterByRating": "סינון לפי דירוג",
@@ -162,8 +152,6 @@
 
   "pages.homeSearchFilterPopover.optionsHidden": "הערה: כמה אפשרויות אין מופיעות מאחר וזהו אוסף משותף",
 
-  "====== Pages.NotFound ======": "",
-
   "pages.notfound.title": "דף לא נמצא",
   "pages.notfound.error.title": "דף לא נמצא!",
   "pages.notfound.error.message1": "נראה שהעמוד אינו קיים.",
@@ -171,8 +159,6 @@
   "pages.notfound.error.message3": "אם עדיין יש בעיה, צור קשר",
   "pages.notfound.error.contact": "צור קשר",
   "pages.notfound.error.goHome": "למתכונים שלי",
-
-  "====== Pages.HomePopover ======": "",
 
   "pages.homepopover.options": "אפשרויות",
   "pages.homepopover.options.layout": "Layout",
@@ -198,8 +184,6 @@
 
   "pages.homepopover.labelNull": "אין לך תוויות. ניתן להוסיף תוויות בדף המתכון.",
   "pages.homepopover.unlabeled": "רק ללא תווית",
-
-  "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "מתכון",
   "pages.recipeDetails.rating": "דירוג",
@@ -250,8 +234,6 @@
   "pages.recipeDetails.cloned": "המתכון נשמר",
   "pages.recipeDetails.similar": "מתכונים דומים באוסף שלך",
 
-  "====== Pages.RecipeDetailsPopover ======": "",
-
   "pages.recipeDetailsPopover.options": "אפשרויות",
   "pages.recipeDetailsPopover.keepScreenOn": "מסך פעיל",
   "pages.recipeDetailsPopover.actions": "פעולות",
@@ -268,12 +250,8 @@
   "pages.recipeDetailsPopover.dangerZone": "סכנה",
   "pages.recipeDetailsPopover.delete": "מחיקת מתכון",
 
-  "====== Pages.ResettableSelectPopover ======": "",
-
   "pages.rselectpopover.resetAll": "איתחול מחדש לכל",
   "pages.rselectpopover.done": "בוצע",
-
-  "====== Pages.About ======": "",
 
   "pages.about.title": "אודות ותמיכה",
   "pages.about.links.details": "אודותיי ואודות RecipeSage",
@@ -284,15 +262,11 @@
   "pages.about.links.legal": "תנאי שימוש, מדיניות פרטיות",
   "pages.about.socialTitle": "מדיה חברתית",
 
-  "====== Pages.Contact ======": "",
-
   "pages.contact.title": "צור קשר",
   "pages.contact.subtitle": "צור קשר",
   "pages.contact.pleaseUserGuide": "לכל שאלה, יש לפנות אל המדריך למשתמש לפני משלוח מייל לתמיכה:",
   "pages.contact.emailMe": "בכל ענין, תקלה או הצעה, צור קשר",
   "pages.contact.socialTitle": "מדיה חברתית",
-
-  "====== Pages.Contribute ======": "",
 
   "pages.contribute.title": "תמיכה באתר",
   "pages.contribute.subtitle": "לתמיכה ב- RecipeSage",
@@ -317,14 +291,10 @@
 
   "pages.contribute.minimum": "מינימום תמיכה של ${{amount}} בגלל עלויות סליקה",
 
-  "====== Pages.ContributeThankYou ======": "",
-
   "pages.contributeThankYou.title": "תודה רבה!",
   "pages.contributeThankYou.thanks": "תודה על התמיכה שלך ב- RecipeSage שעוזרת לשמור אותה בחיים!",
   "pages.contributeThankYou.bonus": "תכונות הבונוס יתאפשרו בחשבונך בקרוב.",
   "pages.contributeThankYou.questions": "מוזמנים לפנות אלי בכל שאלה, חשש או הערה.",
-
-  "====== Pages.ContributeCancel ======": "",
 
   "pages.contributeCancel.title": "אנחנו זקוקיל לעזרתך!",
   "pages.contributeCancel.cta.1": "RecipeSage מבוססת על תרומות - התמיכה שלך חשובה!",
@@ -332,8 +302,6 @@
   "pages.contributeCancel.cta.3": "על מנת לאפשר לך שירות בחינם, אני משלם כסף עבור איחסון האתר וזאת הסיבה שאנו זקוקים לעזרתך.",
   "pages.contributeCancel.cta.4": "אנא שקול מחדש - תרומתך מוערכת באמת!",
   "pages.contributeCancel.contribute": "תמיכה / תרומה",
-
-  "====== Pages.DownloadAndInstall ======": "",
 
   "pages.downloadAndInstall.title": "הורדה והתקנה",
   "pages.downloadAndInstall.subtitle": "RecipeSage אפליקציית",
@@ -366,14 +334,10 @@
   "pages.downloadAndInstall.extension": "RecipeSage Clip Tool תוסף לדפדפן",
   "pages.downloadAndInstall.extension.description": "תוכן המתכון מיובא באופן אוטומטי מדף אינטרנט, ויש לו תאימות רבה יותר בין אתרים שאולי לא ייבאו דרך פעולת ייבוא בתוך האפליקציה.",
 
-  "====== Pages.LabelsPopover ======": "",
-
   "pages.labelsPopover.title": "אפשרויות",
   "pages.labelsPopover.options.showCreatedAt": "הצגת תאריך יצירה",
   "pages.labelsPopover.options.selectMultipleLabels": "בחירה של מספר תוויות",
   "pages.labelsPopover.options.unselectLabels": "ביטול בחירה",
-
-  "====== Pages.Labels ======": "",
 
   "pages.labels.title": "תוויות שלי - ניהול",
   "pages.labels.selectionModeTitle": "{{count}} נבחרו",
@@ -398,8 +362,6 @@
   "pages.labels.group.nullState.1": "עדיין אין לך קטגוריות של תוויות.",
   "pages.labels.group.nullState.2": "לחץ על הלחצן + כדי ליצור קטגוריית תווית חדשה.",
 
-  "====== Pages.NewLabelItemModal ======": "",
-
   "pages.newLabelItemModal.title": "תווית חדשה או קטגוריית תווית",
   "pages.newLabelItemModal.categoryTitle": "קטגוריית תווית חדשה",
   "pages.newLabelItemModal.labelTitle": "תווית חדשה",
@@ -412,8 +374,6 @@
   "pages.newLabelItemModal.labelTitleInput": "שם התווית",
   "pages.newLabelItemModal.labelTitleInputPlaceholder": "הזן שם תווית",
   "pages.newLabelItemModal.labelTitleInputHint": "אנשים רבים מתחילים תוויות פשוטות כמו \"ארוחת בוקר\", \"קינוח\" או \"צמחוני\"",
-
-  "====== Pages.ManageLabelGroupModal ======": "",
 
   "pages.manageLabelGroupModal.title": "נהל את קטגוריית התווית",
   "pages.manageLabelGroupModal.groupTitle": "שם קטגוריית התווית",
@@ -431,8 +391,6 @@
 
   "pages.manageLabelGroupModal.delete.header": "אשר את מחיקת קטגוריית התווית",
   "pages.manageLabelGroupModal.delete.message": "קטגוריית התווית \"{{title}}\" תימחק. הערה: פעולה זו לא תשפיע על אף תוויות בקטגוריה זו.",
-
-  "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "ניהול תווית: {{name}}",
   "pages.manageLabelModal.recipeCount": "מתוייג ב {{count}} מתכונים",
@@ -470,8 +428,6 @@
   "pages.manageLabelModal.merge.message": "לכל המתכונים עם התווית \"{{title}}\" תינתן התווית החדשה, התווית \"{{title}}\" תוסר.",
   "pages.manageLabelModal.merge.placeholder": "שם תוויות אליה יבוצע המיזוג",
 
-  "====== Pages.MealPlan ======": "",
-
   "pages.mealPlan.title": "תוכנית ארוחה - {{name}}",
 
   "pages.mealPlan.modal.emptyDays.header": "נבחרו ימים ריקים",
@@ -499,8 +455,6 @@
   "pages.mealPlan.modal.moveConfirm.messageMultiple": "פעולה זו תעביר את פריטי הארוחות שנבחרו {{selectedDayList}} אל הימים הבאים {{destDay}}",
   "pages.mealPlan.modal.moveConfirm.change": "בחירה של יום חדש",
 
-  "====== Pages.MealPlanBulkPinModal ======": "",
-
   "pages.mealPlanBulkPinModal.title": "הצמדה של פריטי ארוחה",
   "pages.mealPlanBulkPinModal.instructions1": "בחר את פריטי הארוחה שברצונך להצמיד.",
   "pages.mealPlanBulkPinModal.instructions2": "הערה: ניתן להצמיד רק פריטים המקושרים למתכונים.",
@@ -509,8 +463,6 @@
   "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(לא מקושר למתכון)",
   "pages.mealPlanBulkPinModal.cancel": "ביטול",
   "pages.mealPlanBulkPinModal.pin": "הצמדה",
-
-  "====== Pages.MealPlanItemDetailsModal ======": "",
 
   "pages.mealPlanItemDetailsModal.title": "תוכנית ארוחה - פרטים",
   "pages.mealPlanItemDetailsModal.scheduled": "מתוזמן עבור {{meal}} ביום {{date}}",
@@ -527,8 +479,6 @@
 
   "pages.mealPlanItemDetailsModal.delete.header": "אישור הסרה",
   "pages.mealPlanItemDetailsModal.delete.message": "פעולה זו תימחר פריט בשם \"{{title}}\" מתוכנית ארוחות זו.",
-
-  "====== Pages.MealPlanPopover ======": "",
 
   "pages.mealPlanPopover.options.title": "אפשרויות",
   "pages.mealPlanPopover.options.startWeekOn.title": "שבוע מתחיל ביום",
@@ -549,8 +499,6 @@
   "pages.mealPlanPopover.delete.header": "אישור מחיקה",
   "pages.mealPlanPopover.delete.message": "פעולה זו תמחק לצמיתות את תוכנית הארוחה. הערה: אם אתה רק שותף בתוכנית הארוחות הזו, היא תוסר מחשבונך בלבד. אם אתה הבעלים של תוכנית הארוחות הזו, היא תוסר מכל חשבונות שותפי עריכה אחרים.",
 
-  "====== Pages.MealPlans ======": "",
-
   "pages.mealPlans.title": "תוכניות ארוחה",
   "pages.mealPlans.metadata.createdOn": "נוצר {{date}}",
   "pages.mealPlans.metadata.collaborators": "בשיתוף עם:",
@@ -559,8 +507,6 @@
 
   "pages.mealPlans.noPlans": "אין לך תוכניות ארוחה.",
   "pages.mealPlans.toCreate": "כדי ליצור תוכנית ארוחה, יש ללחוץ על כפתור הפלוס בפינה התחתונה.",
-
-  "====== Pages.NewMealPlanItemModal ======": "",
 
   "pages.newMealPlanItemModal.title.update": "עדכן פריט בתוכנית ארוחה",
   "pages.newMealPlanItemModal.title.new": "הוספה לתוכנית ארוחה",
@@ -572,27 +518,19 @@
   "pages.newMealPlanItemModal.save": "שמור שינויים",
   "pages.newMealPlanItemModal.create": "הוספה לתכנית ארוחה",
 
-  "====== Pages.NewMealPlanModal ======": "",
-
   "pages.newMealPlanModal.title": "תכנון ארוחה חדשה",
   "pages.newMealPlanModal.input.title": "כותרת / שם מתכון",
   "pages.newMealPlanModal.createAndShare": "יצירה ושיתוף",
   "pages.newMealPlanModal.create": "יצירה",
 
-  "====== Pages.ShareMealPlanModal ======": "",
-
   "pages.shareMealPlanModal.title": "שיתוף תוכנית ארוחה",
   "pages.shareMealPlanModal.description": "ניתן להשתמש בקישור iCal/ICS כמעט בכל תוכנית לוח שנה כדי לסנכרן את תכנית הארוחות שלך מחוץ ל-RecipeSage",
-
-  "====== Pages.Assistant ======": "",
 
   "pages.assistant.title": "עוזר בישול",
   "pages.assistant.welcome.1": "ברוכים הבאים לעוזר הבישול של RecipeSage!",
   "pages.assistant.welcome.2": "עוזר הבישול הוא מודל AI שיכול להגיב לשאלות הבישול שלך ולעזור ביצירת מתכונים",
   "pages.assistant.welcome.3": "לעוזר הבישול יש מגבלת הודעות של 5 הודעות ביום בגלל העלויות הגבוהות להפעלת ה-AI, מגבלה זו גדלה ל-50 הודעות ביום עבור תורמים",
   "pages.assistant.messageLimit": "הגעתם למקסימום ההודעות (מצטער, זה יקר!). ספירת ההודעות מתאפסת ב-0:00 GMT",
-
-  "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "שיחה עם {{name}}",
   "pages.messageThread.clickToOpen": "פתיחה",
@@ -603,8 +541,6 @@
   "pages.messageThread.sending": "שולח...",
   "pages.messageThread.sent": "נשלח!",
   "pages.messageThread.messagePlaceholder": "הודעה...",
-
-  "====== Pages.Messages ======": "",
 
   "pages.messages.title": "דואר",
   "pages.messages.history.you": "את/ה",
@@ -617,8 +553,6 @@
   "pages.messages.notificationsRequired": "יש להפעיל התראות כדי שהעברת הודעות תפעל כהלכה.",
   "pages.messages.notificationsInstructions": "הוראות להפעלה מחדש של התראות",
 
-  "====== Pages.NewMessageModal ======": "",
-
   "pages.newMessageModal.title": "שיחה חדשה",
   "pages.newMessageModal.input.target": "הזנת כתובת אימייל של משתמש RecipeSage או @handle",
   "pages.newMessageModal.compose": "הודעה",
@@ -626,8 +560,6 @@
   "pages.newMessageModal.send": "שליחה",
 
   "pages.newMessageModal.defaultMessage": "שלום! אני רוצה לשוחח איתך באמצעות RecipeSage",
-
-  "====== Pages.AddRecipeToMealPlanModal ======": "",
 
   "pages.addRecipeToMealPlanModal.title": "הוספת מתכון לתוכנית ארוחה",
   "pages.addRecipeToMealPlanModal.instructions1": "ראשית, יש לבחור תוכנית ארוחה:",
@@ -642,8 +574,6 @@
 
   "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "מצויין! בחירת תוכנית הארוחה שזה עתה יצרת.",
 
-  "====== Pages.AddRecipeToShoppingListModal ======": "",
-
   "pages.addRecipeToShoppingListModal.title.singular": "הוספת מתכון לרשימת קניות",
   "pages.addRecipeToShoppingListModal.title.plural": "הוספת מתכונים לרשימת קניות",
   "pages.addRecipeToShoppingListModal.selectDestination": "בחירה של רשימת קניות:",
@@ -654,8 +584,6 @@
   "pages.addRecipeToShoppingListModal.add": "הוספה לרשימה",
 
   "pages.addRecipeToShoppingListModal.newListSuccess": "מצויין! יש לבחור את רשימת הקניות שזה עתה יצרת.",
-
-  "====== Pages.EditRecipe ======": "",
 
   "pages.editRecipe.title.edit": "עדכון מתכון",
   "pages.editRecipe.title.new": "מתכון חדש",
@@ -704,12 +632,8 @@
   "pages.editRecipe.addImage.downloading": "הורדת תמונה...",
   "pages.editRecipe.addImage.invalidUrl": "יש להכניס כתובת URL תקינה של התמונה",
 
-  "====== Pages.EditRecipePopover ======": "",
-
   "pages.editRecipePopover.actions": "פעולות",
   "pages.editRecipePopover.addImage": "הוספת תמונה באמצעות URL",
-
-  "====== Pages.PrintRecipeModal ======": "",
 
   "pages.printRecipeModal.title": "בחירה של תבנית הדפסה",
   "pages.printRecipeModal.print": "הדפסה",
@@ -718,8 +642,6 @@
   "pages.printRecipeModal.template.standardNoImg": "כיוון לאורך, ללא תמונה",
   "pages.printRecipeModal.template.halfSheetCols": "כיוון לרוחב, חצי עמוד",
   "pages.printRecipeModal.template.halfSheetCompactNoCols": "כיוון לרוחב, חצי עמוד, טור אחד",
-
-  "====== Pages.Account ======": "",
 
   "pages.account.title": "Account & Credentials",
 
@@ -780,8 +702,6 @@
   "pages.account.deleteAccount.header": "מחיקת חשבון ונתונים",
   "pages.account.deleteAccount.message": "פעולה זו בלתי הפיכה ותסיר לחלוטין את כל הנתונים שלך מ-RecipeSage. פעולה זאת עשוי להימשך מספר דקות.",
 
-  "====== Pages.Account ======": "",
-
   "pages.export.title": "ייצוא",
   "pages.export.description1": "לאחר שהייצוא יתחיל, תחל הורשה של קובץ למחשב שלך. ייתכן ויהיה צורך לתת אישור.",
   "pages.export.description2": "קובץ הייצוא יכיל את כל המתכונים שלך בפורמט שנבחר.",
@@ -790,8 +710,6 @@
   "pages.export.xml": "ייצוא XML",
   "pages.export.txt": "ייצוא טקסט פשוט",
   "pages.export.pdf": "ייצוא PDF",
-
-  "====== Pages.Import ======": "",
 
   "pages.import.title": "ייבוא",
   "pages.import.description1": "RecipeSage תומך בייבוא מאתר Pepperplate, Living Cookbook, ו- Paprika.",
@@ -802,8 +720,6 @@
   "pages.import.pepperplate": "ייבוא מאפליקציה Pepperplate",
   "pages.import.livingCookbook": "ייבוא  קובץ Living Cookbook",
   "pages.import.paprika": "ייבוא מאפליקציה Paprika Recipes",
-
-  "====== Pages.ImportJSONLD ======": "",
 
   "pages.importJsonLD.title": "ייבוא מתכונים מקובץ JSON-LD",
   "pages.importJsonLD.description1": "ייבוא קובץ JSON-LD (סיומת .json) לתוך RecipeSage (זהו אחד מהפורמטים המייוצאים על ידי RecipeSage).",
@@ -828,8 +744,6 @@
   "pages.importJsonLD.timeout": "הייבוא נמשך מספר דקות (תלוי בגודל הקובץ). יש בעיה?  יש לפנות לתמיכה.",
   "pages.importJsonLD.success": "ייבוא הצליח!",
 
-  "====== Pages.ImportCookmate ======": "",
-
   "pages.importCookmate.title": "ייבוא מתכונים מקובץ Cookmate",
   "pages.importCookmate.description1": "פעולה זו תייבא קובץ Cookmate (ends in .mcb) לתוך RecipeSage.",
   "pages.importCookmate.description2": "הייבוא נמשך מספר דקות",
@@ -852,8 +766,6 @@
   "pages.importCookmate.error": "יש בעיה לקרוא את הקובץ. יש לוודא כי הקובץ בפורמט Cookmate. יש בעיה? יש לפנות לתמיכה.",
   "pages.importCookmate.timeout": "הייבוא נמשך מספר דקות (תלוי בגודל הקובץ) - אם לאחר 5 דקות, הקובץ עדיין לא עלה, יש לפנות לתמיכה לקבלת עזרה.",
   "pages.importCookmate.success": "ייבוא הצליח!",
-
-  "====== Pages.ImportLivingCookbook ======": "",
 
   "pages.importLivingCookbook.title": "ייבוא מתכונים מאפליקציית Living Cookbook",
   "pages.importLivingCookbook.description1": "ייבוא של כל המתכונים שלך מאפליקציה Living Cookbook לתוך RecipeSage.",
@@ -903,8 +815,6 @@
   "pages.importLivingCookbook.timeout": "הייבוא נמשך מספר דקות (תלוי בגודל הקובץ) - אם לאחר 5 דקות, הקובץ עדיין לא עלה, יש לפנות לתמיכה לקבלת עזרה.",
   "pages.importLivingCookbook.success": "ייבוא הצליח!",
 
-  "====== Pages.ImportPaprika ======": "",
-
   "pages.importPaprika.title": "ייבוא מתכונים מקובץ Paprika",
 
   "pages.importPaprika.description1": "פעולה זו תייבא קובץ Paprika לתוך RecipeSage. לתשומת ליבך, זוהי בטא.",
@@ -923,8 +833,6 @@
   "pages.importPaprika.error": "יש בעיה לקרוא את הקובץ. יש לוודא שהוא בפורמט Paprika Recipe Format דרך האפליקציה. יש בעיה? יש לפנות לתמיכה.",
   "pages.importPaprika.timeout": "הייבוא נמשך מספר דקות (תלוי בכמות הנתונים) - אם לאחר 5 דקות, הקובץ עדיין לא עלה, יש לפנות לתמיכה לקבלת עזרה.",
   "pages.importPaprika.success": "הייבוא הצליח!",
-
-  "====== Pages.ImportPepperplate ======": "",
 
   "pages.importPepperplate.title": "ייבוא מתכונים מאפליקציה Pepperplate",
   "pages.importPepperplate.description1": "הייבוא נמשך מספר דקות, תלוי בזמינות של שרתי Pepperplate.",
@@ -954,8 +862,6 @@
 
   "pages.importPepperplate.success": "ייבוא הושלם!",
 
-  "====== Pages.Settings ======": "",
-
   "pages.settings.title": "הגדרות",
   "pages.settings.section1.title": " נתונים וחשבון משתמש",
   "pages.settings.import": "ייבוא מתכון",
@@ -969,6 +875,7 @@
   "pages.settings.theme": "תבנית",
   "pages.settings.theme.default": "ברירת מחדל",
   "pages.settings.theme.light": "בהירה",
+  "pages.settings.theme.midnight": "חצות",
   "pages.settings.theme.dark": "כהה",
   "pages.settings.theme.black": "שחורה (OLED)",
   "pages.settings.language": "שפה",
@@ -996,8 +903,6 @@
   "pages.settings.update.header": "אפליקציה תיטען מחדש",
   "pages.settings.update.subHeader": "האפליקציה תיטען מחדש כדי לבדוק אם יש עדכון.",
 
-  "====== Pages.Share ======": "",
-
   "pages.share.title": "שיתוף מתכון",
   "pages.share.description": "בעת שיתוף, עותק של מתכון זה יישלח לנמען. העותק שלך לא יושפע.",
   "pages.share.byAccount": "RecipeSage",
@@ -1019,22 +924,16 @@
   "pages.share.send": "שליחה",
   "pages.share.close": "סגירה",
 
-  "====== Pages.NewShoppingListItem ======": "",
-
   "pages.newShoppingListItem.title": "הוספת פריט(ים)",
   "pages.newShoppingListItem.items": "פריטים",
   "pages.newShoppingListItem.recipe": "מתכון",
   "pages.newShoppingListItem.itemTitle": "כותרת פריט",
   "pages.newShoppingListItem.add": "הוספה לרשימה",
 
-  "====== Pages.NewShoppingList ======": "",
-
   "pages.newShoppingList.title": "רשימת קניות חדשה",
   "pages.newShoppingList.listTitle": "כותרת / שם מתכון",
   "pages.newShoppingList.create": "יצירה",
   "pages.newShoppingList.share": "ושיתוף",
-
-  "====== Pages.ShoppingList ======": "",
 
   "pages.shoppingList.title": "רשימת קניות - {{title}}",
   "pages.shoppingList.nullState.1": "אין פריטים ברשימת קניות זו.",
@@ -1048,8 +947,6 @@
 
   "pages.shoppingList.removed": "הסרה של  {{itemCount}} פריט(ים)",
   "pages.shoppingList.removed.undo": "ביטול",
-
-  "====== Pages.ShoppingListPopover ======": "",
 
   "pages.shoppingListPopover.title": "אפשרויות",
 
@@ -1074,8 +971,6 @@
   "pages.shoppingListPopover.deleteList.header": "אישור מחיקה",
   "pages.shoppingListPopover.deleteList.message": "פעולה זו תסיר לצמיתות את רשימת הקניות הזו מחשבונך. הערה: אם הינך רק שותף עריכה ברשימה זו, היא תוסר מחשבונך בלבד. אם הרשימה הזו בבעלותך, היא תוסר מכל חשבונות שותפי עריכה אחרים.",
 
-  "====== Pages.ShoppingLists ======": "",
-
   "pages.shoppingLists.title": "רשימת קניות",
   "pages.shoppingLists.editIgnore": "ערוך רשימת התעלמות פריטים",
   "pages.shoppingLists.created": "נוצר {{date}}",
@@ -1085,15 +980,11 @@
   "pages.shoppingLists.nullState.1": "איך לך רשימת קניות.",
   "pages.shoppingLists.nullState.2": "ליצירת רשימת קניות, לחץ על כפתור הפלוס בפינה התחתונה.",
 
-  "====== Pages.ShoppingListItemIgnoreModal ======": "",
-
   "pages.shoppingListIgnoreModal.title": "רשימת התעלמות של פריטים ברשימת קניות",
   "pages.shoppingListIgnoreModal.description": "ערכים הרשומים כאן לא ייכללו אוטומטית בעת הוספת מתכון לרשימת קניות. זה שימושי במיוחד עבור מרכיבים כגון מלח, שסביר להניח שלא תצטרך להוסיף אותם בכל פעם שאתה מוסיף פריט לרשימת קניות.",
   "pages.shoppingListIgnoreModal.instructions": "כל ערך צריך להיות בשורה משלו. ערכים יתאימו למרכיב אם המרכיב מכיל חלק כלשהו מהשורה. אם תזין \"מלח\", זה יתאים ל\"1 כף מלח ים טחון דק\".",
   "pages.shoppingListIgnoreModal.label": "התעלם מהרשימה",
   "pages.shoppingListIgnoreModal.placeholder": "מילות מפתח שיש להתעלם מהם, כל אחת בשורה שלה",
-
-  "====== Pages.AddFriendModal ======": "",
 
   "pages.addFriendModal.title": "מציאת משתמש",
   "pages.addFriendModal.profileWarning": "הערה: משתמש חייב להפעיל את הפרופיל שלו.",
@@ -1103,8 +994,6 @@
   "pages.addFriendModal.profileDisabled.header": "פרופיל לא פעיל",
   "pages.addFriendModal.profileDisabled.message": "משתמש זה השבית את הפרופיל שלו ולכן הוא פרטי/לא נגיש.",
   "pages.addFriendModal.success": "הזמנה נשלחה!",
-
-  "====== Pages.AddProfileItem ======": "",
 
   "pages.addProfileItem.title": "הוספת פריט לפרופיל",
   "pages.addProfileItem.prompt": "מה לשתף?",
@@ -1130,8 +1019,6 @@
   "pages.addProfileItem.itemTitle": "כותרת",
   "pages.addProfileItem.tos": "על ידי הוספת פריט זה, הינך מסכים/מה למדיניות השיתוף של RecipeSage",
   "pages.addProfileItem.done": "בוצע",
-
-  "====== Pages.MyProfile ======": "",
 
   "pages.myProfile.title": "עדכון פרופיל",
   "pages.myProfile.welcome": "ברוכים הבאים לפרופיל!",
@@ -1163,8 +1050,6 @@
   "pages.myProfile.share.unsaved.header": "ישנם שינויים שלא נשמרו",
   "pages.myProfile.share.unsaved.message": "יש לשמור את השינויים שלך לפני שניצן לצפות בפרופיל שלך.",
 
-  "====== Pages.People ======": "",
-
   "pages.people.title": "אנשים",
   "pages.people.nullState.1": "לא קיים פרופיל.",
   "pages.people.nullState.2": "יצירת פרופיל מאפשרת לשתף אוספי מתכונים עם חברים ועם הציבור.",
@@ -1184,8 +1069,6 @@
   "pages.people.setup.header": "פרופיל לא הוקם",
   "pages.people.setup.message": "יש צורך להקים את הפרופיל שלך לפני שתוכל להוסיף חבר.",
   "pages.people.setup.confirm": "הקמה",
-
-  "====== Pages.Profile ======": "",
 
   "pages.profile.title": "{{name}} הפרופיל של",
   "pages.profile.pinned": "מתכונים ותוויות מוצמדות",
@@ -1210,24 +1093,16 @@
 
   "pages.profile.alreadyRequested": "נראה שכבר יש לך חברות בתהליך. יש לנסות פעם נוספת.",
 
-  "====== Pages.ShareProfileModal ======": "",
-
   "pages.shareProfileModal.title": "שיתוף פרופיל של  {{name}}",
   "pages.shareProfileModal.close": "סגירה",
 
   "pages.shareProfileModal.shareTitle": "{{name}} של RecipeSage פרופיל",
   "pages.shareProfileModal.shareBody": "הצגת פרופיל RecipeSage ציבורי של {{name}}:",
 
-  "====== Components.CookingToolbar ======": "",
-
   "components.cookingToolbar.clear": "הסר הצמדה של כל המתכונים?",
-
-  "====== Components.CopyWithWebshare ======": "",
 
   "components.copyWithWebshare.instructions": "כדי לשתף, יש להעתיק את הקישור מטה",
   "components.copyWithWebshare.shareIcon": "או ללחוץ על כפתור השיתוף",
-
-  "====== Components.MealCalendar ======": "",
 
   "components.mealCalendar.recipes": "מתכונים שתוזמנו ליום זה",
   "components.mealCalendar.noRecipes": "אין מתכונים שתוזמנו ליום זה.",
@@ -1235,13 +1110,9 @@
   "components.mealCalendar.selectDay": "בחירה של יום תציג את כל הארוחות באותו יום.",
   "components.mealCalendar.noMeals": "אין ארוחות מתוזמנות להיום.",
 
-  "====== Components.MealCalendar ======": "",
-
   "components.multiImageUpload.add": "הוספת תמונה",
   "components.multiImageUpload.imageLimit": "ניתן לצרף לצרף עד 10 תמונות",
   "components.multiImageUpload.imageError": "אירעה שגיאה בעיבוד אחת או יותר מהתמונות שנבחרו",
-
-  "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "כבר הוסף",
   "components.selectCollaborators.add": "הוספה",
@@ -1250,21 +1121,15 @@
   "components.selectCollaborators.notFoundError": "לא ניתן למצוא משתמש עם מייל זה.",
   "components.selectCollaborators.invalidEmail": "יש להכניס מייל תקני וללחוץ Enter.",
 
-  "====== Components.SelectIngredients ======": "",
-
   "components.selectIngredients.title": "בחירת מרכיבים אותם יש להוסיף:",
   "components.selectIngredients.toggleAll": "בחירה/ביטול בחירה של הכל",
   "components.selectIngredients.scale": "{{scale}}x scale (click to change)",
   "components.selectIngredients.null": "למתכון זה אין מרכיבים.",
 
-  "====== Components.SelectLabel ======": "",
-
   "components.selectLabel.change": "שינוי",
   "components.selectLabel.select": "בחירה",
   "components.selectLabel.search": "הקלד כדי לחפש תווית...",
   "components.selectLabel.null": "אין תוויות בשם \"{{name}}\"",
-
-  "====== Components.SelectMultipleItems ======": "",
 
   "components.selectMultipleItems.null": "אין תוצאות עבור {{searchText}}",
   "components.selectMultipleItems.select": "לחץ כדי לבחור",
@@ -1273,11 +1138,7 @@
   "components.selectMultipleItems.alreadyAdded": "כבר נוסף",
   "components.selectMultipleItems.searchPlaceholder": "חפש פריט להוספה",
 
-  "====== Components.SelectMeal ======": "",
-
   "components.selectMeal.title": "בחירת ארוחה",
-
-  "====== Components.SelectRecipe ======": "",
 
   "components.selectRecipe.change": "שינוי",
   "components.selectRecipe.select": "בחירה",
@@ -1285,36 +1146,24 @@
   "components.selectRecipe.searching": "חיפוש של \"{{searchText}}\"...",
   "components.selectRecipe.null": "אין תוצאות עבור \"{{searchText}}\"",
 
-  "====== Components.SelectUser ======": "",
-
   "components.selectUser.placeholder": "חיפוש לפי מייל או שם",
   "components.selectUser.change": "שינוי",
   "components.selectUser.select": "בחירה",
   "components.selectUser.searching": "חיפוש אחר \"{{name}}\"...",
   "components.selectUser.null": "אין תוצאות עבור \"{{name}}\"",
 
-  "====== Components.SelectKnownUser ======": "",
-
   "components.selectKnownUser.friends": "חברים",
   "components.selectKnownUser.conversations": "שיחות",
 
-  "====== Components.SelfhostWarning ======": "",
-
   "components.selfhostWarning.1": "הערה: זוהי גרסה מארח עצמית של RecipeSage ולכן אינה משויכת אליה",
   "components.selfhostWarning.2": "או כל אחד מהחשבונות באתר הראשי.",
-
-  "====== Components.ShoppingListItem ======": "",
 
   "components.shoppingListItem.recipe": "למתכון:",
   "components.shoppingListItem.added": "נוסף",
   "components.shoppingListItem.addedBy": "נוסף על ידי",
 
-  "====== Components.TosClickwrap ======": "",
-
   "components.tos.warning": "המשך משמעו שיש לך הסכמה לתנאים של  RecipeSage",
   "components.tos.title": "תנאי שירות",
-
-  "====== Components.RatingFilter ======": "",
 
   "components.ratingFilter.title": "סינון לפי דירוג",
 
@@ -1322,16 +1171,12 @@
 
   "components.ratingFilter.reset": "איתחול",
 
-  "====== Modals.ScaleRecipe ======": "",
-
   "components.scaleRecipe.title": "דירוג מתכון",
   "components.scaleRecipe.change": "שינוי דירוג המתכון",
   "components.scaleRecipe.click": "להכנסת דירוג באופן ידני, יש ללחוץ Enter",
   "components.scaleRecipe.manual": "או, יש להקליד מספר",
   "components.scaleRecipe.cancel": "ביטול",
   "components.scaleRecipe.apply": "אישור",
-
-  "====== Modals.FontSize ======": "",
 
   "components.fontSize.title": "שנה את גודל הטקסט",
   "components.fontSize.option.X1_0": "אוֹטוֹמָטִי",
@@ -1342,8 +1187,6 @@
   "components.fontSize.option.PX22": "22 פיקסלים (גדול)",
   "components.fontSize.option.PX24": "24 פיקסלים (גדול)",
   "components.fontSize.reset": "אִתחוּל",
-
-  "====== Services.QuickTutorial ======": "",
 
   "services.quickTutorial.multipleRecipeSelection.header": "בחירה מרובה של מתכונים",
   "services.quickTutorial.multipleRecipeSelection.message": "זהו מצב בחירה  מרובה של מתכונים. ניתן לבחור מתכונים בלחיצה וללא הגבלת כמות, ולאחר מכן להשתמש בלחצנים המופיעים בכותרת כדי לבצע פעולות בכמות גדולה כגון: תיוג או מחיקה. כדי לצאת ממצב בחירה מרובה של מתכונים יש ללחוץ על ה-X בכותרת, או דרך תפריט אפשרויות.",
@@ -1356,17 +1199,11 @@
   "services.quickTutorial.pinnedRecipes.header": "מתכונים מוצמדים",
   "services.quickTutorial.pinnedRecipes.message": "המתכון הזה מוצמד עכשיו! הצמדת מתכונים מספקת דרך מהירה לדלג בין מספר מתכונים במהירות בזמן הבישול. מתכונים מוצמדים מופיעים בסרגל הכלים בתחתית המסך על ידי בועה עם תמונת המתכון והאות הראשונה של כותרת המתכון. מתכונים מוצמדים יישארו פתוחים עד לביטול ההצמדה או עד שתיסגר האפליקציה.",
 
-  "====== Services.Util ======": "",
-
   "services.util.justNow": "עכשיו",
   "services.util.today": "היום",
 
-  "====== Errors ======": "",
-
   "errors.offline": "נראה שאין חיבור לאינטרנט. במצב זה, אנו יכולים לאחזר נתונים שאליהם ניגשת בעבר במכשיר זה.",
   "errors.unexpected": "שגיאה לא צפויה התרחשה. אפשר לנסות שוב. אם הבעיה ממשיכה להתרחש, יש ליצור קשר.",
-
-  "====== Generic ======": "",
 
   "generic.delete": "מחיקה",
   "generic.cancel": "ביטול",
@@ -1375,7 +1212,5 @@
   "generic.save": "שמירה",
   "generic.okay": "בסדר",
   "generic.ignore": "להתעלם",
-  "generic.options": "אפשרויות",
-
-  "====== Trailing Comma Placeholder ======": ""
+  "generic.options": "אפשרויות"
 }

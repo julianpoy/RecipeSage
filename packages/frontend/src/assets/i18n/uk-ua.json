@@ -1,6 +1,4 @@
 {
-  "====== Pages.Welcome ======": "",
-
   "pages.app.oldBrowserAlert.header": "Непідтримуваний браузер",
   "pages.app.oldBrowserAlert.message": "Схоже, Ви використовуєте старий браузер, який не підтримується. Деяка функціональність може не працювати або може бути порушена. Будь ласка, перейдіть на сучасний браузер, такий як Firefox, для повної функціональності.",
 
@@ -20,8 +18,6 @@
   "pages.app.nav.shopping": "Списки покупок",
   "pages.app.nav.meals": "Плани харчування",
   "pages.app.nav.settings": "Параметри",
-
-  "====== Pages.Welcome ======": "",
 
   "pages.welcome.selfhostTitle": "RecipeSage саморозміщена!",
   "pages.welcome.selfhostSubtitle": "Це - неофіційна, самостійно розміщена на власному хостінгу версія RecipeSage, безкоштовний зберігач рецептів, планувальник харчування, і органайзер списків покупок для Web, IOS, і Android",
@@ -60,8 +56,6 @@
   "pages.welcome.description.cta.4": "Підтримуються десктоп і мобільні пристрої",
   "pages.welcome.description.cta.5": "Імпорт рецептів із будь-якої URL-адреси",
 
-  "====== Pages.Auth ======": "",
-
   "pages.auth.title.login": "Увійти",
   "pages.auth.title.register": "Створити обліковий запис",
 
@@ -97,8 +91,6 @@
   "pages.auth.error.emailTaken": "Обліковий запис з цією електронною адресою вже існує.",
 
   "pages.auth.forgot.toast": "Якщо у Вас є обліковий запис RecipeSage, пов’язаний з цією електронною адресою, вам слід отримати посилання на скидання пароля протягом наступних кількох хвилин.",
-
-  "====== Pages.Home ======": "",
 
   "pages.home.title.selectionMode": "{{count}} обрано",
   "pages.home.title.main": "Мої рецепти",
@@ -147,8 +139,6 @@
   "pages.home.deleteSelected.message": "Будуть видалені назавжди вибрані рецепти з Вашого облікового запису. Ця дія незворотна.",
   "pages.home.deleteSelected.message": "Будуть видалені назавжди вибрані рецепти з Вашого облікового запису. Ця дія незворотна. Наступні рецепти буде видалено: {{recipeNames}}",
 
-  "====== Pages.HomeSearchFilterPopover ======": "",
-
   "pages.homeSearchFilterPopover.title": "Фільтри пошуку",
 
   "pages.homeSearchFilterPopover.filterByRating": "Фільтр за рейтингом",
@@ -162,8 +152,6 @@
 
   "pages.homeSearchFilterPopover.optionsHidden": "Примітка: деякі варіанти приховані, оскільки це спільна колекція",
 
-  "====== Pages.NotFound ======": "",
-
   "pages.notfound.title": "Сторінку не знайдено",
   "pages.notfound.error.title": "Сторінку не знайдено!",
   "pages.notfound.error.message1": "Схоже, сторінки, яку ви шукаєте, не існує.",
@@ -171,8 +159,6 @@
   "pages.notfound.error.message3": "Якщо у вас все ще виникають проблеми, будь ласка, зв'яжіться зі мною.",
   "pages.notfound.error.contact": "Зв'яжіться зі мною",
   "pages.notfound.error.goHome": "Натисніть тут, щоб перейти до своїх рецептів",
-
-  "====== Pages.HomePopover ======": "",
 
   "pages.homepopover.options": "Опції",
   "pages.homepopover.options.layout": "Макет",
@@ -198,8 +184,6 @@
 
   "pages.homepopover.labelNull": "У вас немає міток. Ви можете створити мітки на сторінці подробиць рецепту.",
   "pages.homepopover.unlabeled": "Лише без міток",
-
-  "====== Pages.RecipeDetails ======": "",
 
   "pages.recipeDetails.pageTitle": "Подробиці рецепту",
   "pages.recipeDetails.rating": "Рейтинг",
@@ -250,8 +234,6 @@
   "pages.recipeDetails.cloned": "Рецепт було збережено до Вашого облікового запису",
   "pages.recipeDetails.similar": "Схожі рецепти у вашій колекції",
 
-  "====== Pages.RecipeDetailsPopover ======": "",
-
   "pages.recipeDetailsPopover.options": "Опції",
   "pages.recipeDetailsPopover.keepScreenOn": "Залишати екран ввімкнутим",
   "pages.recipeDetailsPopover.actions": "Дії",
@@ -268,12 +250,8 @@
   "pages.recipeDetailsPopover.dangerZone": "Небезпечна зона",
   "pages.recipeDetailsPopover.delete": "Видалити рецепт",
 
-  "====== Pages.ResettableSelectPopover ======": "",
-
   "pages.rselectpopover.resetAll": "Скинути все",
   "pages.rselectpopover.done": "Виконано",
-
-  "====== Pages.About ======": "",
 
   "pages.about.title": "Про нас & Підтримка",
   "pages.about.links.details": "Про мене & RecipeSage",
@@ -284,15 +262,11 @@
   "pages.about.links.legal": "Юридична інформація, угоди та застереження",
   "pages.about.socialTitle": "Соціальні медіа",
 
-  "====== Pages.Contact ======": "",
-
   "pages.contact.title": "Зв'язатися зі мною",
   "pages.contact.subtitle": "Контактна інформація",
   "pages.contact.pleaseUserGuide": "З будь-яких питань спочатку зверніться до Посібника користувача:",
   "pages.contact.emailMe": "У випадку будь-яких проблем, помилок чи пропозицій щодо функцій ви можете писати мені за адресою",
   "pages.contact.socialTitle": "Соціальні медіа",
-
-  "====== Pages.Contribute ======": "",
 
   "pages.contribute.title": "Внесок",
   "pages.contribute.subtitle": "Посприяти RecipeSage",
@@ -317,14 +291,10 @@
 
   "pages.contribute.minimum": "На жаль, мінімальна сума становить ${{amount}} через плату за транзакції - вибачте",
 
-  "====== Pages.ContributeThankYou ======": "",
-
   "pages.contributeThankYou.title": "Дякую!",
   "pages.contributeThankYou.thanks": "Дякуємо, що ви були частиною сім'ї RecipeSage та допомогли зберегти його в живих!",
   "pages.contributeThankYou.bonus": "Незабаром для вашого облікового запису будуть розблокувані бонусні функції.",
   "pages.contributeThankYou.questions": "Будь ласка, не соромтеся зв’язатися зі мною з будь-якими питаннями, проблемами чи коментарями.",
-
-  "====== Pages.ContributeCancel ======": "",
 
   "pages.contributeCancel.title": "Нам потрібна ваша допомога!",
   "pages.contributeCancel.cta.1": "RecipeSage засновані на пожертвах - кожен внесок допомагає!",
@@ -332,8 +302,6 @@
   "pages.contributeCancel.cta.3": "Для того, щоб зберегти безкоштовність для користувачів під час оплати витрат на сервер, нам потрібна ваша допомога.",
   "pages.contributeCancel.cta.4": "Будь ласка, зауважте - ми справді вдячні за Ваш внесок!",
   "pages.contributeCancel.contribute": "Внесок",
-
-  "====== Pages.DownloadAndInstall ======": "",
 
   "pages.downloadAndInstall.title": "Завантаження і встановлення",
   "pages.downloadAndInstall.subtitle": "Застосунки RecipeSage",
@@ -366,14 +334,10 @@
   "pages.downloadAndInstall.extension": "Розширення браузера RecipeSage для захоплення рецепту",
   "pages.downloadAndInstall.extension.description": "Автоматично захоплює вміст рецептів з вебсторінок і має більшу сумісність на вебсайтах, які можуть не імпортуватися через імпортер в додатку.",
 
-  "====== Pages.LabelsPopover ======": "",
-
   "pages.labelsPopover.title": "Опції",
   "pages.labelsPopover.options.showCreatedAt": "Показувати після створення",
   "pages.labelsPopover.options.selectMultipleLabels": "Вибрати кілька міток",
   "pages.labelsPopover.options.unselectLabels": "Зняти виділення",
-
-  "====== Pages.Labels ======": "",
 
   "pages.labels.title": "Мої мітки - керування",
   "pages.labels.selectionModeTitle": "{{count}} виділено",
@@ -398,8 +362,6 @@
   "pages.labels.group.nullState.1": "У вас ще немає категорій лейблів.",
   "pages.labels.group.nullState.2": "Натисніть кнопку +, щоб створити нову категорію міток.",
 
-  "====== Pages.NewLabelItemModal ======": "",
-
   "pages.newLabelItemModal.title": "Нова мітка або категорія міток",
   "pages.newLabelItemModal.categoryTitle": "Нова категорія етикеток",
   "pages.newLabelItemModal.labelTitle": "Нова етикетка",
@@ -412,8 +374,6 @@
   "pages.newLabelItemModal.labelTitleInput": "Назва етикетки",
   "pages.newLabelItemModal.labelTitleInputPlaceholder": "Введіть назву мітки",
   "pages.newLabelItemModal.labelTitleInputHint": "Багато людей починають з простих етикеток, таких як \"сніданок\", \"десерт\" або \"вегетаріанський\".",
-
-  "====== Pages.ManageLabelGroupModal ======": "",
 
   "pages.manageLabelGroupModal.title": "Керування категорією етикеток",
   "pages.manageLabelGroupModal.groupTitle": "Назва категорії етикетки Назва категорії",
@@ -431,8 +391,6 @@
 
   "pages.manageLabelGroupModal.delete.header": "Підтвердити видалення категорії мітки",
   "pages.manageLabelGroupModal.delete.message": "Категорію міток \"{{title}}\" буде вилучено. Примітка: ця дія не вплине на жодний з міток у цій категорії.",
-
-  "====== Pages.ManageLabelModal ======": "",
 
   "pages.manageLabelModal.title": "Керування міткою: {{name}}",
   "pages.manageLabelModal.recipeCount": "Відмічено {{count}} рецептів",
@@ -470,8 +428,6 @@
   "pages.manageLabelModal.merge.message": "Всі рецепти з \"{{title}}\" буде перемарковано цільовою міткою, а мітку \"{{title}}\" буде видалено.",
   "pages.manageLabelModal.merge.placeholder": "Назва цільової мітки",
 
-  "====== Pages.MealPlan ======": "",
-
   "pages.mealPlan.title": "План харчування - {{name}}",
 
   "pages.mealPlan.modal.emptyDays.header": "Вибраний день (дні) порожній",
@@ -499,8 +455,6 @@
   "pages.mealPlan.modal.moveConfirm.messageMultiple": "Це перенесе страви із {{selectedDayList}} на {{destDay}} і наступні дні",
   "pages.mealPlan.modal.moveConfirm.change": "Виберіть інший день",
 
-  "====== Pages.MealPlanBulkPinModal ======": "",
-
   "pages.mealPlanBulkPinModal.title": "Закріпити страви",
   "pages.mealPlanBulkPinModal.instructions1": "Виберіть страви, які Ви хочете закріпити відкритими.",
   "pages.mealPlanBulkPinModal.instructions2": "Примітка: Ви можете закріпити лише ті страви, які пов'язані з рецептами.",
@@ -509,8 +463,6 @@
   "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(не пов'язане з рецептом)",
   "pages.mealPlanBulkPinModal.cancel": "Скасувати",
   "pages.mealPlanBulkPinModal.pin": "Закріпити",
-
-  "====== Pages.MealPlanItemDetailsModal ======": "",
 
   "pages.mealPlanItemDetailsModal.title": "Деталі пунктів плана харчування",
   "pages.mealPlanItemDetailsModal.scheduled": "Заплановано дляй {{meal}} на {{date}}",
@@ -527,8 +479,6 @@
 
   "pages.mealPlanItemDetailsModal.delete.header": "Підтверджуєте видалення?",
   "pages.mealPlanItemDetailsModal.delete.message": "Це видалить \"{{title}}\" із цього плану харчування.",
-
-  "====== Pages.MealPlanPopover ======": "",
 
   "pages.mealPlanPopover.options.title": "Опції",
   "pages.mealPlanPopover.options.startWeekOn.title": "Початок тижня з",
@@ -549,8 +499,6 @@
   "pages.mealPlanPopover.delete.header": "Підтвердьте видалення",
   "pages.mealPlanPopover.delete.message": "Це назавжди видалить цей план харчування з вашого облікового запису. Примітка. Якщо ви лише співавтор цього плану харчування, його буде видалено лише з вашого облікового запису. Якщо ви володієте цим планом харчування, його буде видалено з усіх облікових записів інших співавторів.",
 
-  "====== Pages.MealPlans ======": "",
-
   "pages.mealPlans.title": "Плани харчування",
   "pages.mealPlans.metadata.createdOn": "Створено {{date}}",
   "pages.mealPlans.metadata.collaborators": "Спільно з:",
@@ -559,8 +507,6 @@
 
   "pages.mealPlans.noPlans": "У Вас немає планів харчування.",
   "pages.mealPlans.toCreate": "Щоб створити план харчування, натисніть кнопку з плюсом у нижньому кутку.",
-
-  "====== Pages.NewMealPlanItemModal ======": "",
 
   "pages.newMealPlanItemModal.title.update": "Оновити пункт плану харчування",
   "pages.newMealPlanItemModal.title.new": "Додати пункт плану харчування",
@@ -572,27 +518,19 @@
   "pages.newMealPlanItemModal.save": "Зберегти зміни",
   "pages.newMealPlanItemModal.create": "Додати до плану харчування",
 
-  "====== Pages.NewMealPlanModal ======": "",
-
   "pages.newMealPlanModal.title": "Новий план харчування",
   "pages.newMealPlanModal.input.title": "Заголовок",
   "pages.newMealPlanModal.createAndShare": "Створити і поділитись",
   "pages.newMealPlanModal.create": "Створити",
 
-  "====== Pages.ShareMealPlanModal ======": "",
-
   "pages.shareMealPlanModal.title": "Поділитись планом харчування",
   "pages.shareMealPlanModal.description": "Посилання iCal/ICS нижче можна використовувати майже в будь-якій програмі календаря для синхронізації вашого плану харчування поза RecipeSage",
-
-  "====== Pages.Assistant ======": "",
 
   "pages.assistant.title": "Помічник кухаря",
   "pages.assistant.welcome.1": "Ласкаво просимо до кулінарного помічника RecipeSage!",
   "pages.assistant.welcome.2": "Асистент приготування їжі - це модель штучного інтелекту, яка може відповідати на ваші кулінарні запитання та допомагати створювати рецепти.",
   "pages.assistant.welcome.3": "Помічник кулінара має ліміт на 5 повідомлень на день через високі витрати на запуск ШІ. Для дописувачів цей ліміт збільшується до 50 повідомлень на день.",
   "pages.assistant.messageLimit": "Досягнуто максимальної кількості повідомлень (вибачте, це дорого!). Лічильник повідомлень обнуляється о 0:00GMT",
-
-  "====== Pages.MessageThread ======": "",
 
   "pages.messageThread.title": "Спілкування з {{name}}",
   "pages.messageThread.clickToOpen": "Натисніть щоб відкрити",
@@ -603,8 +541,6 @@
   "pages.messageThread.sending": "Надсилається...",
   "pages.messageThread.sent": "Надіслано!",
   "pages.messageThread.messagePlaceholder": "Повідомлення...",
-
-  "====== Pages.Messages ======": "",
 
   "pages.messages.title": "Повідомлення",
   "pages.messages.history.you": "Ви",
@@ -617,8 +553,6 @@
   "pages.messages.notificationsRequired": "Щоб обмін повідомленнями працював належним чином, потрібно ввімкнути сповіщення.",
   "pages.messages.notificationsInstructions": "Подивитися як повторно ввімкнути сповіщення можна тут",
 
-  "====== Pages.NewMessageModal ======": "",
-
   "pages.newMessageModal.title": "Новий ланцюжок повідомлень",
   "pages.newMessageModal.input.target": "Введіть адресу електронної пошти або @дескриптор користувача RecipeSage",
   "pages.newMessageModal.compose": "Напишіть повідомлення",
@@ -626,8 +560,6 @@
   "pages.newMessageModal.send": "Надіслати",
 
   "pages.newMessageModal.defaultMessage": "Привіт! Я хотів би поспілкуватися на RecipeSage",
-
-  "====== Pages.AddRecipeToMealPlanModal ======": "",
 
   "pages.addRecipeToMealPlanModal.title": "Додати рецепт до плану харчування",
   "pages.addRecipeToMealPlanModal.instructions1": "Спершу оберіть цільовий план харчування:",
@@ -642,8 +574,6 @@
 
   "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Чудово! Тепер виберіть щойно створений план харчування.",
 
-  "====== Pages.AddRecipeToShoppingListModal ======": "",
-
   "pages.addRecipeToShoppingListModal.title.singular": "Додати рецепт до списку покупок",
   "pages.addRecipeToShoppingListModal.title.plural": "Додати рецепти до списк покупок",
   "pages.addRecipeToShoppingListModal.selectDestination": "Оберіть до якого списку додавати:",
@@ -654,8 +584,6 @@
   "pages.addRecipeToShoppingListModal.add": "Додати до списку",
 
   "pages.addRecipeToShoppingListModal.newListSuccess": "Чудово! Тепер виберіть щойно створений список покупок.",
-
-  "====== Pages.EditRecipe ======": "",
 
   "pages.editRecipe.title.edit": "Змінити рецепт",
   "pages.editRecipe.title.new": "Новий рецепт",
@@ -704,12 +632,8 @@
   "pages.editRecipe.addImage.downloading": "Завантаження зображення...",
   "pages.editRecipe.addImage.invalidUrl": "Будь ласка, вкажіть валідний URL зображення",
 
-  "====== Pages.EditRecipePopover ======": "",
-
   "pages.editRecipePopover.actions": "Дії",
   "pages.editRecipePopover.addImage": "Додати зображення за URL",
-
-  "====== Pages.PrintRecipeModal ======": "",
 
   "pages.printRecipeModal.title": "Виберіть макет для друку",
   "pages.printRecipeModal.print": "Друк",
@@ -718,8 +642,6 @@
   "pages.printRecipeModal.template.standardNoImg": "Стандарт без зображення",
   "pages.printRecipeModal.template.halfSheetCols": "Половина листа, колонки",
   "pages.printRecipeModal.template.halfSheetCompactNoCols": "Половина листа, компактний, без колонок",
-
-  "====== Pages.Account ======": "",
 
   "pages.account.title": "Обліковий запис і дані",
 
@@ -780,8 +702,6 @@
   "pages.account.deleteAccount.header": "Видалити обліковий запис і всю інформацію",
   "pages.account.deleteAccount.message": "Ця дія є НЕЗВОРОТНЬОЮ і повністю видалить усі Ваші дані з RecipeSage. Це може зайняти кілька хвилин.",
 
-  "====== Pages.Account ======": "",
-
   "pages.export.title": "Експорт",
   "pages.export.description1": "Після вибору експорту даних розпочнеться завантаження файлу. Можливо, Вам доведеться натиснути \"Дозволити\".",
   "pages.export.description2": "Експортований файл міститиме всі Ваші рецепти у вибраному форматі.",
@@ -790,8 +710,6 @@
   "pages.export.xml": "Експортувати як XML",
   "pages.export.txt": "Експортувати як простий текст",
   "pages.export.pdf": "Експортувати як PDF",
-
-  "====== Pages.Import ======": "",
 
   "pages.import.title": "Імпорт",
   "pages.import.description1": "RecipeSage підтримує імпорт із Pepperplate, Living Cookbook і Paprika.",
@@ -802,8 +720,6 @@
   "pages.import.pepperplate": "Import from Pepperplate",
   "pages.import.livingCookbook": "Імпорт Living Cookbook файлу",
   "pages.import.paprika": "Імпорт Paprika Recipes файлу",
-
-  "====== Pages.ImportJSONLD ======": "",
 
   "pages.importJsonLD.title": "Імпорт рецептів із JSON-LD файлу",
   "pages.importJsonLD.description1": "Це імпортує файл JSON-LD (закінчується на .json) у RecipeSage (це один із форматів файлів, експортованих RecipeSage).",
@@ -828,8 +744,6 @@
   "pages.importJsonLD.timeout": "Імпортування триває деякий час (це може трапитися, якщо Ваша база даних дуже велика) – перевірте через 5 хвилин. Якщо Ваші рецепти не з’являться, надішліть мені електронного листа.",
   "pages.importJsonLD.success": "Імпортування закінчено!",
 
-  "====== Pages.ImportCookmate ======": "",
-
   "pages.importCookmate.title": "Імпорт рецептів із Cookmate файлу",
   "pages.importCookmate.description1": "Це імпортує файл Cookmate (закінчується на .mcb) у RecipeSage.",
   "pages.importCookmate.description2": "Процес імпорту може тривати кілька хвилин",
@@ -852,8 +766,6 @@
   "pages.importCookmate.error": "Хм, у нас виникли проблеми з розпакуванням цього файлу. Будь ласка, переконайтеся, що він у форматі Cookmate. Якщо у Вас виникли проблеми, будь ласка, надішліть мені електронного листа.",
   "pages.importCookmate.timeout": "Імпортування триває деякий час (це може трапитися, якщо Ваша база даних дуже велика) – перевірте через 5 хвилин. Якщо Ваші рецепти не з’являться, надішліть мені електронного листа.",
   "pages.importCookmate.success": "Імпортування закінчено!",
-
-  "====== Pages.ImportLivingCookbook ======": "",
 
   "pages.importLivingCookbook.title": "Імпорт рецептів із Living Cookbook",
   "pages.importLivingCookbook.description1": "Це імпортує базу даних Вашої Living Cookbook у RecipeSage.",
@@ -903,8 +815,6 @@
   "pages.importLivingCookbook.timeout": "Імпортування триває деякий час (це може трапитися, якщо Ваша база даних дуже велика) – перевірте через 5 хвилин. Якщо Ваші рецепти не з’являться, надішліть мені електронного листа.",
   "pages.importLivingCookbook.success": "Імпортування закінчено!",
 
-  "====== Pages.ImportPaprika ======": "",
-
   "pages.importPaprika.title": "Імпорт рецептів із Paprika файлу",
 
   "pages.importPaprika.description1": "Це імпортує файл експорту Вашої Paprika до RecipeSage. Зауважте будь ласка, ця функція знаходиться в бета-версії.",
@@ -923,8 +833,6 @@
   "pages.importPaprika.error": "Хм, у нас виникли проблеми з розпакуванням цього файлу. Будь ласка, переконайтеся, що він у форматі Cookmate. Якщо у Вас виникли проблеми, будь ласка, надішліть мені електронного листа.",
   "pages.importPaprika.timeout": "Імпортування триває деякий час (це може трапитися, якщо Ваша база даних дуже велика) – перевірте через 5 хвилин. Якщо Ваші рецепти не з’являться, надішліть мені електронного листа.",
   "pages.importPaprika.success": "Імпортування закінчено!",
-
-  "====== Pages.ImportPepperplate ======": "",
 
   "pages.importPepperplate.title": "Імпорт рецептів із Pepperplate",
   "pages.importPepperplate.description1": "Процес імпорту може тривати кілька хвилин залежно від доступності серверів Pepperplate.",
@@ -954,8 +862,6 @@
 
   "pages.importPepperplate.success": "Імпортування закінчено!",
 
-  "====== Pages.Settings ======": "",
-
   "pages.settings.title": "Параметри",
   "pages.settings.section1.title": "Дані та обліковий запис",
   "pages.settings.import": "Імпорт рецептів",
@@ -969,6 +875,7 @@
   "pages.settings.theme": "Тема",
   "pages.settings.theme.default": "Згідно з системою",
   "pages.settings.theme.light": "Світла",
+  "pages.settings.theme.midnight": "Опівночі.",
   "pages.settings.theme.dark": "Темна",
   "pages.settings.theme.black": "Чорна (OLED)",
   "pages.settings.language": "Мова",
@@ -996,8 +903,6 @@
   "pages.settings.update.header": "Програма перезавантажиться",
   "pages.settings.update.subHeader": "Програма має перезавантажитись для перевірки наявності оновлень.",
 
-  "====== Pages.Share ======": "",
-
   "pages.share.title": "Поділитись рецептом",
   "pages.share.description": "При поширенні копія цього рецепту буде надіслана одержувачу. Це не вплине на Вашу копію.",
   "pages.share.byAccount": "RecipeSage",
@@ -1019,22 +924,16 @@
   "pages.share.send": "Надіслати",
   "pages.share.close": "Закрити",
 
-  "====== Pages.NewShoppingListItem ======": "",
-
   "pages.newShoppingListItem.title": "Додати пункт(и)",
   "pages.newShoppingListItem.items": "Пункти",
   "pages.newShoppingListItem.recipe": "Рецепт",
   "pages.newShoppingListItem.itemTitle": "Назва пункту",
   "pages.newShoppingListItem.add": "Додати до списку",
 
-  "====== Pages.NewShoppingList ======": "",
-
   "pages.newShoppingList.title": "Новий список покупок",
   "pages.newShoppingList.listTitle": "Назва",
   "pages.newShoppingList.create": "Створити",
   "pages.newShoppingList.share": "і поділитись",
-
-  "====== Pages.ShoppingList ======": "",
 
   "pages.shoppingList.title": "Список покупок - {{title}}",
   "pages.shoppingList.nullState.1": "Наразі немає пунктів у цьому списку покупок",
@@ -1048,8 +947,6 @@
 
   "pages.shoppingList.removed": "Видалено пункт(и) {{itemCount}}",
   "pages.shoppingList.removed.undo": "Відмінити",
-
-  "====== Pages.ShoppingListPopover ======": "",
 
   "pages.shoppingListPopover.title": "Опції",
 
@@ -1074,8 +971,6 @@
   "pages.shoppingListPopover.deleteList.header": "Підтвердіть видалення",
   "pages.shoppingListPopover.deleteList.message": "Це назавжди видалить цей список покупок з Вашого одліковго запису. Зауважте: якщо Ви є лише співавтором цього списку, його буде видалено лише з Вашого облікового запису. Якщо Ви володієте цим списком, його буде видалено з усіх облікових записів інших співавторів.",
 
-  "====== Pages.ShoppingLists ======": "",
-
   "pages.shoppingLists.title": "Список покупок",
   "pages.shoppingLists.editIgnore": "Редагування списку ігнорування",
   "pages.shoppingLists.created": "Створений {{date}}",
@@ -1085,15 +980,11 @@
   "pages.shoppingLists.nullState.1": "У Вас немає списків покупок.",
   "pages.shoppingLists.nullState.2": "Щоб створити список покупок, натисніть кнопку плюс у нижньому кутку.",
 
-  "====== Pages.ShoppingListItemIgnoreModal ======": "",
-
   "pages.shoppingListIgnoreModal.title": "Список покупок Список ігнорування позицій",
   "pages.shoppingListIgnoreModal.description": "Перелічені тут позиції будуть автоматично виключені під час додавання рецепта до списку покупок. Це особливо зручно для таких інгредієнтів, як сіль, які, швидше за все, не потрібно додавати щоразу, коли ви додаєте позицію до списку покупок.",
   "pages.shoppingListIgnoreModal.instructions": "Кожна відповідь повинна бути в окремому рядку. Введені дані будуть відповідати інгредієнту, якщо цей інгредієнт містить будь-яку частину рядка. Якщо ви введете \"сіль\", це буде \"1 ст.л. морської солі дрібного помелу\".",
   "pages.shoppingListIgnoreModal.label": "Список ігнорування",
   "pages.shoppingListIgnoreModal.placeholder": "Ключові слова, які слід ігнорувати, кожен у своєму рядку",
-
-  "====== Pages.AddFriendModal ======": "",
 
   "pages.addFriendModal.title": "Пошук користувача",
   "pages.addFriendModal.profileWarning": "Примітка: Потрібний користувач має ввімкнути свій профіль.",
@@ -1103,8 +994,6 @@
   "pages.addFriendModal.profileDisabled.header": "Профіль не ввімкнутий",
   "pages.addFriendModal.profileDisabled.message": "Цей користувач вимкнув свій профіль, тому він є приватним або недоступним.",
   "pages.addFriendModal.success": "Запрошення на дружбу надіслано!",
-
-  "====== Pages.AddProfileItem ======": "",
 
   "pages.addProfileItem.title": "Додавання елементу профіля",
   "pages.addProfileItem.prompt": "Чим Ви хочете поділитись??",
@@ -1130,8 +1019,6 @@
   "pages.addProfileItem.itemTitle": "Відображувана назва",
   "pages.addProfileItem.tos": "Додаючи цей елемент, Ви погоджуєтеся з Політикою поширення RecipeSage",
   "pages.addProfileItem.done": "Готово",
-
-  "====== Pages.MyProfile ======": "",
 
   "pages.myProfile.title": "Правка профіля",
   "pages.myProfile.welcome": "Вітаю у Вашому профілі!",
@@ -1163,8 +1050,6 @@
   "pages.myProfile.share.unsaved.header": "Не збережено зміни",
   "pages.myProfile.share.unsaved.message": "Вам потрібно зберегти зміни, перш ніж Ви зможете переглянути, як виглядає Ааш профіль.",
 
-  "====== Pages.People ======": "",
-
   "pages.people.title": "Люди",
   "pages.people.nullState.1": "Ви не налаштували профіль.",
   "pages.people.nullState.2": "Створення профілю дозволить Вам ділитися колекціями рецептів з друзями та широким загалом.",
@@ -1184,8 +1069,6 @@
   "pages.people.setup.header": "Профіль не встановлено",
   "pages.people.setup.message": "Вам потрібно налаштувати свій профіль, перш ніж додавати друзів.",
   "pages.people.setup.confirm": "Налаштувати",
-
-  "====== Pages.Profile ======": "",
 
   "pages.profile.title": "{{name}} профіль",
   "pages.profile.pinned": "Закріплені рецепти та мітки",
@@ -1210,24 +1093,16 @@
 
   "pages.profile.alreadyRequested": "Схоже, у ви вже є друзями. Будь ласка спробуйте ще раз.",
 
-  "====== Pages.ShareProfileModal ======": "",
-
   "pages.shareProfileModal.title": "Поділитись профілем {{name}}",
   "pages.shareProfileModal.close": "Закрити",
 
   "pages.shareProfileModal.shareTitle": "{{name}} профіль у RecipeSage",
   "pages.shareProfileModal.shareBody": "Натисніть для перегляду публічного профіля {{name}} в RecipeSage:",
 
-  "====== Components.CookingToolbar ======": "",
-
   "components.cookingToolbar.clear": "Очистити всі закріплені рецепти?",
-
-  "====== Components.CopyWithWebshare ======": "",
 
   "components.copyWithWebshare.instructions": "Для поширення, скопіюйте посилання внизу",
   "components.copyWithWebshare.shareIcon": "або натисніть на значок поширення",
-
-  "====== Components.MealCalendar ======": "",
 
   "components.mealCalendar.recipes": "Заплановані на цей день рецепти",
   "components.mealCalendar.noRecipes": "Наразі на цей день не заплановано рецептів.",
@@ -1235,13 +1110,9 @@
   "components.mealCalendar.selectDay": "Виберіть день щоб побачити страви на цей день.",
   "components.mealCalendar.noMeals": "Немає страв, запланованих на цей день.",
 
-  "====== Components.MealCalendar ======": "",
-
   "components.multiImageUpload.add": "Натисніть щоб додати зображення",
   "components.multiImageUpload.imageLimit": "Ви можете приєднати до 10 зображень",
   "components.multiImageUpload.imageError": "Під час обробки одного чи кількох зображень, які Ви вибрали, сталася помилка",
-
-  "====== Components.SelectCollaborators ======": "",
 
   "components.selectCollaborators.added": "Вже додано",
   "components.selectCollaborators.add": "Натисніть щоб додати",
@@ -1250,21 +1121,15 @@
   "components.selectCollaborators.notFoundError": "Не вдалося знайти користувача з цією електронною адресою.",
   "components.selectCollaborators.invalidEmail": "Будь ласка, введіть дійсну електронну адресу та натисніть enter.",
 
-  "====== Components.SelectIngredients ======": "",
-
   "components.selectIngredients.title": "Оберіть інгредієнти, які б Ви хотіли додати:",
   "components.selectIngredients.toggleAll": "Вибрати/Скасувати всіх",
   "components.selectIngredients.scale": "{{scale}}x масштабування (натисніть, щоб змінити)",
   "components.selectIngredients.null": "Цей рецепт не містить інгредієнтів.",
 
-  "====== Components.SelectLabel ======": "",
-
   "components.selectLabel.change": "Натисніть щоб змінити",
   "components.selectLabel.select": "Натисніть щоб виділити",
   "components.selectLabel.search": "Введіть, щоб знайти етикетку...",
   "components.selectLabel.null": "Немає міток з назвою \"{{name}}\"",
-
-  "====== Components.SelectMultipleItems ======": "",
 
   "components.selectMultipleItems.null": "Немає результатів для {{searchText}}",
   "components.selectMultipleItems.select": "Натисніть, щоб вибрати",
@@ -1273,11 +1138,7 @@
   "components.selectMultipleItems.alreadyAdded": "Вже додано",
   "components.selectMultipleItems.searchPlaceholder": "Пошук елемента",
 
-  "====== Components.SelectMeal ======": "",
-
   "components.selectMeal.title": "Вибір страви",
-
-  "====== Components.SelectRecipe ======": "",
 
   "components.selectRecipe.change": "Натисніть щоб змінити",
   "components.selectRecipe.select": "Натисніть щоб вибрати",
@@ -1285,36 +1146,24 @@
   "components.selectRecipe.searching": "Шукаю на \"{{searchText}}\"...",
   "components.selectRecipe.null": "Немає результатів для \"{{searchText}}\"",
 
-  "====== Components.SelectUser ======": "",
-
   "components.selectUser.placeholder": "Пошук за електронною адресою або дескриптором",
   "components.selectUser.change": "Натисніть щоб змінити",
   "components.selectUser.select": "Натисніть щоб вибрати",
   "components.selectUser.searching": "Шукаю на \"{{name}}\"...",
   "components.selectUser.null": "Немає результатів для \"{{name}}\"",
 
-  "====== Components.SelectKnownUser ======": "",
-
   "components.selectKnownUser.friends": "Друзі",
   "components.selectKnownUser.conversations": "Ланцюжки повідомлень",
 
-  "====== Components.SelfhostWarning ======": "",
-
   "components.selfhostWarning.1": "Примітка: це самостійна, окремо розміщена версія RecipeSage, тому вона не пов’язана з",
   "components.selfhostWarning.2": "або будь-яким із облікових записів, розташованих на головному сайті.",
-
-  "====== Components.ShoppingListItem ======": "",
 
   "components.shoppingListItem.recipe": "Для рецепта:",
   "components.shoppingListItem.added": "Додано",
   "components.shoppingListItem.addedBy": "Додавач",
 
-  "====== Components.TosClickwrap ======": "",
-
   "components.tos.warning": "Продовжуючи, Ви погоджуєтеся з нашими",
   "components.tos.title": "Умовами використання",
-
-  "====== Components.RatingFilter ======": "",
 
   "components.ratingFilter.title": "Фільтрувати за рейтингом",
 
@@ -1322,16 +1171,12 @@
 
   "components.ratingFilter.reset": "Скидання",
 
-  "====== Modals.ScaleRecipe ======": "",
-
   "components.scaleRecipe.title": "Масштабування рецепту",
   "components.scaleRecipe.change": "Вкажіть масштаб рецепта",
   "components.scaleRecipe.click": "Натисніть кнопку або введіть масштаб вручну",
   "components.scaleRecipe.manual": "Або введіть число чи дріб",
   "components.scaleRecipe.cancel": "Скасувати",
   "components.scaleRecipe.apply": "Застосувати",
-
-  "====== Modals.FontSize ======": "",
 
   "components.fontSize.title": "Налаштувати розмір шрифту",
   "components.fontSize.option.X1_0": "Повага до системи Перевага",
@@ -1342,8 +1187,6 @@
   "components.fontSize.option.PX22": "22px (Більший)",
   "components.fontSize.option.PX24": "24px (Більший)",
   "components.fontSize.reset": "Перезавантаження",
-
-  "====== Services.QuickTutorial ======": "",
 
   "services.quickTutorial.multipleRecipeSelection.header": "Вибір кількох рецептів",
   "services.quickTutorial.multipleRecipeSelection.message": "Тепер Ви перебуваєте в режимі вибору кількох рецептів. Ви можете натиснути скільки завгодно рецептів, а потім скористатися кнопками, що з’являться в заголовку, щоб виконувати масові дії, наприклад позначати мітками чи видаляти. Ви можете будь-коли вийти з режиму вибору кількох рецептів, натиснувши X у заголовку або за допомогою меню параметрів.",
@@ -1356,17 +1199,11 @@
   "services.quickTutorial.pinnedRecipes.header": "Закріплені рецепти",
   "services.quickTutorial.pinnedRecipes.message": "Цей рецепт зараз закріплено! Закріплення рецептів дає змогу швидко переходити між кількома рецептами під час приготування. Закріплені рецепти з’являються на панелі інструментів у нижній частині екрана. Ви побачите бульбашку із зображенням рецепта та першою літерою назви рецепту. Закріплені рецепти залишатимуться відкритими, доки їх не буде відкріплено або доки Ви не закриєте додаток.",
 
-  "====== Services.Util ======": "",
-
   "services.util.justNow": "просто зараз",
   "services.util.today": "сьогодні",
 
-  "====== Errors ======": "",
-
   "errors.offline": "Схоже, Ви офлайн. У режимі офлайн ми можемо отримати лише дані, до яких Ви раніше отримували доступ на цьому пристрої.",
   "errors.unexpected": "Сталася неочікувана помилка. Будь ласка спробуйте ще раз. Якщо проблема не зникне, зв’яжіться зі мною.",
-
-  "====== Generic ======": "",
 
   "generic.delete": "Видалити",
   "generic.cancel": "Скасувати",
@@ -1375,7 +1212,5 @@
   "generic.save": "Зберегти",
   "generic.okay": "Гаразд",
   "generic.ignore": "Ігнорувати",
-  "generic.options": "Параметри",
-
-  "====== Trailing Comma Placeholder ======": ""
+  "generic.options": "Параметри"
 }

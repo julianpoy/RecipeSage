@@ -1,0 +1,215 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rs-weblate
+spec:
+  selector:
+    matchLabels:
+      app: rs-weblate
+  template:
+    metadata:
+      labels:
+        app: rs-weblate
+    spec:
+      initContainers:
+        - name: rs-weblate-chown
+          image: alpine
+          command: ["chown", "-R", "1000:1000", "/app/data", "/app/cache"]
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 100Mi
+            limits:
+              cpu: 0.1
+              memory: 500Mi
+          volumeMounts:
+            - name: rs-weblate-data
+              mountPath: /app/data
+            - name: rs-weblate-cache
+              mountPath: /app/cache
+      containers:
+        - name: rs-weblate
+          image: weblate/weblate:5.3.1.1
+          env:
+            - name: WEBLATE_DEBUG
+              value: "0"
+            - name: WEBLATE_LOGLEVEL
+              value: "INFO"
+            - name: WEBLATE_SITE_DOMAIN
+              value: "weblate.recipesage.com"
+            - name: WEBLATE_SITE_TITLE
+              value: "RecipeSage Weblate"
+            - name: WEBLATE_SERVER_EMAIL
+              value: "weblate@recipesage.com"
+            - name: WEBLATE_DEFAULT_FROM_EMAIL
+              value: "weblate@recipesage.com"
+            - name: WEBLATE_DEFAULT_COMMITER_EMAIL
+              value: "weblate@recipesage.com"
+            - name: WEBLATE_DEFAULT_COMMITER_NAME
+              value: "RecipeSage Weblate Bot"
+            - name: WEBLATE_ALLOWED_HOSTS
+              value: "*"
+            - name: WEBLATE_REGISTRATION_OPEN
+              value: "1"
+            - name: POSTGRES_HOST
+              value: "rs-weblate-postgres"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: REDIS_HOST
+              value: "rs-weblate-redis"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: CLIENT_MAX_BODY_SIZE
+              value: "200M"
+            - name: WEBLATE_WORKERS
+              value: "2"
+          envFrom:
+            - secretRef:
+                name: rs-weblate-env
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 1.5Gi
+            limits:
+              cpu: 2
+              memory: 3Gi
+          volumeMounts:
+            - name: rs-weblate-data
+              mountPath: /app/data
+            - name: rs-weblate-cache
+              mountPath: /app/cache
+      volumes:
+        - name: rs-weblate-data
+          persistentVolumeClaim:
+            claimName: rs-weblate-data
+        - name: rs-weblate-cache
+          emptyDir:
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-weblate
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-weblate
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rs-weblate-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rs-weblate-postgres
+spec:
+  selector:
+    matchLabels:
+      app: rs-weblate-postgres
+  template:
+    metadata:
+      labels:
+        app: rs-weblate-postgres
+    spec:
+      containers:
+        - name: rs-weblate-postgres
+          image: postgres:15.4
+          envFrom:
+            - secretRef:
+                name: rs-weblate-postgres-env
+          ports:
+            - containerPort: 5432
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 250Mi
+            limits:
+              cpu: 1
+              memory: 250Mi
+          volumeMounts:
+            - name: rs-weblate-postgres-data
+              subPath: postgres
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: rs-weblate-postgres-data
+          persistentVolumeClaim:
+            claimName: rs-weblate-postgres-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-weblate-postgres
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-weblate-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rs-weblate-postgres-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rs-weblate-redis
+spec:
+  selector:
+    matchLabels:
+      app: rs-weblate-redis
+  template:
+    metadata:
+      labels:
+        app: rs-weblate-redis
+    spec:
+      containers:
+        - name: rs-weblate-redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 50Mi
+            limits:
+              cpu: 1
+              memory: 150Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-weblate-redis
+spec:
+  type: ClusterIP
+  selector:
+    app: rs-weblate-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379

@@ -12,6 +12,7 @@ export enum SupportedLanguages {
   DE_DE = "de-de",
   UK_UA = "uk-ua",
   HE = "he",
+  ES_ES = "es-es",
 }
 
 export enum SupportedFontSize {
@@ -29,6 +30,7 @@ export enum AppTheme {
   Light = "light",
   Dark = "dark",
   Black = "black",
+  Midnight = "midnight",
 }
 
 export enum PreferencesSync {
