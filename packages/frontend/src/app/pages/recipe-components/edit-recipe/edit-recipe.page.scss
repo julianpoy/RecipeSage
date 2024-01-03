@@ -41,6 +41,7 @@
   padding: 16px;
   padding-top: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+  grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), auto));
   background: var(--ion-item-background);
+  margin-bottom: 100px;
 }
