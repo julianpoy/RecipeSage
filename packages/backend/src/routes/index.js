@@ -411,7 +411,10 @@ router.get(
           }
         );
 
-        await SearchService.indexRecipes(savedRecipes);
+        const savedRecipeData = savedRecipes.map((e) => e.toJSON());
+        if (savedRecipeData.length) {
+          await SearchService.indexRecipes(savedRecipeData);
+        }
       });
 
       res.status(200).json({
@@ -481,7 +484,10 @@ router.post(
             },
           });
 
-          await SearchService.indexRecipes(recipes);
+          const recipeData = recipes.map((e) => e.toJSON());
+          if (recipeData.length) {
+            await SearchService.indexRecipes(recipeData);
+          }
 
           res.status(200).json({
             msg: "Ok",
@@ -563,7 +569,10 @@ router.post(
             },
           });
 
-          await SearchService.indexRecipes(recipes);
+          const recipeData = recipes.map((e) => e.toJSON());
+          if (recipeData.length) {
+            await SearchService.indexRecipes(recipeData);
+          }
 
           res.status(200).json({
             msg: "Ok",
@@ -587,14 +596,6 @@ router.post(
       }
       job.complete = true;
     });
-
-    const recipes = await Recipe.findAll({
-      where: {
-        userId: res.locals.session.userId,
-      },
-    });
-
-    await SearchService.indexRecipes(recipes);
   }
 );
 
@@ -769,7 +770,10 @@ router.post(
           },
         });
 
-        await SearchService.indexRecipes(recipes);
+        const recipeData = recipes.map((e) => e.toJSON());
+        if (recipeData.length) {
+          await SearchService.indexRecipes(recipeData);
+        }
 
         res.status(201).json({});
       })
