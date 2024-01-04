@@ -92,6 +92,8 @@ export class PreferencesService {
     )
       return;
 
+    // Do not sync remote preferences if not logged in
+    if (!localStorage.getItem("token")) return;
     this.trpcService.trpc.users.updatePreferences.mutate(this.preferences);
   }
 
@@ -151,6 +153,8 @@ export class PreferencesService {
     )
       return;
 
+    // Do not sync remote preferences if not logged in
+    if (!localStorage.getItem("token")) return;
     this.trpcService.trpc.users.getPreferences
       .query()
       .then((remotePreferences) => {
