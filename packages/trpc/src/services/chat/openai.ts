@@ -11,7 +11,11 @@ export class OpenAIHelper {
 
   constructor() {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-    if (!OPENAI_API_KEY && process.env.NODE_ENV !== "selfhost") {
+    if (
+      !OPENAI_API_KEY &&
+      process.env.NODE_ENV !== "selfhost" &&
+      process.env.NODE_ENV !== "test"
+    ) {
       throw new Error("OPENAI_API_KEY must be provided");
     }
 
