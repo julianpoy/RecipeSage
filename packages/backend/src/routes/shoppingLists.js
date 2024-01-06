@@ -22,7 +22,7 @@ import { joiValidator } from "../middleware/joiValidator.js";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
-import { NotFound } from "../utils/errors.js";
+import { NotFound, PreconditionFailed } from "../utils/errors.js";
 
 router.post(
   "/",
@@ -30,6 +30,9 @@ router.post(
   MiddlewareService.validateSession(["user"]),
   MiddlewareService.validateUser,
   wrapRequestWithErrorHandler(async (req, res) => {
+    if (!req.body.title || req.body.title.length === 0) {
+      throw PreconditionFailed("Shopping list title must be provided.");
+    }
     const shoppingList = await sequelize.transaction(async (transaction) => {
       const shoppingList = await ShoppingList.create(
         {

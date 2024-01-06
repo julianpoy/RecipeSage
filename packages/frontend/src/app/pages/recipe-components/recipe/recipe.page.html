@@ -18,7 +18,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card *ngIf="recipe" class="ion-no-margin">
+  <div *ngIf="recipe" class="ion-no-margin">
     <ion-item lines="none">
       <ion-thumbnail
         class="ion-margin-top"
@@ -34,7 +34,6 @@
 
         <ion-grid
           class="meta metacontainer-desktop"
-          showWhen="core"
           *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
         >
           <ion-row class="ion-justify-content-start">
@@ -96,8 +95,9 @@
       </ion-label>
     </ion-item>
 
-    <div
-      class="metacontainer-mobile ion-padding-start ion-padding-end"
+    <ion-item
+      class="metacontainer-mobile"
+      lines="none"
       *ngIf="recipe.rating || recipe.source || recipe.url || recipe.activeTime || recipe.totalTime || recipe.yield"
     >
       <ion-grid class="meta">
@@ -147,7 +147,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    </div>
+    </ion-item>
 
     <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
       <p class="ion-text-wrap">
@@ -159,9 +159,7 @@
       </p>
     </ion-item>
 
-    <br
-      *ngIf="!(recipe.yield || recipe.activeTime || recipe.totalTime || recipe.source || recipe.url)"
-    />
+    <br />
 
     <div class="ingredientsInstructionsGrid">
       <div class="ingredientsCol">
@@ -189,6 +187,7 @@
                 }}</a
               >
             </p>
+            <br />
           </ion-label>
         </ion-item>
       </div>
@@ -290,6 +289,24 @@
 
     <br />
 
+    <div *ngIf="similarRecipes.length">
+      <ion-item lines="none">
+        <ion-icon name="flashlight" slot="start" size="large"></ion-icon>
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.recipeDetails.similar' | translate }}
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none" *ngFor="let similarRecipe of similarRecipes">
+        <ion-button fill="clear" (click)="openRecipe(similarRecipe.id, $event)">
+          {{similarRecipe.title}}
+        </ion-button>
+      </ion-item>
+
+      <br />
+    </div>
+
     <div *ngIf="recipe.folder === 'inbox'" class="ion-padding">
       <ion-grid>
         <ion-row>
@@ -307,24 +324,6 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    </div>
-
-    <div *ngIf="similarRecipes.length">
-      <ion-item lines="none">
-        <ion-icon name="flashlight" slot="start" size="large"></ion-icon>
-        <ion-label>
-          <p class="ion-text-wrap">
-            {{ 'pages.recipeDetails.similar' | translate }}
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-item lines="none" *ngFor="let similarRecipe of similarRecipes">
-        <ion-button fill="clear" (click)="openRecipe(similarRecipe.id, $event)">
-          {{similarRecipe.title}}
-        </ion-button>
-      </ion-item>
-
-      <br />
     </div>
 
     <div
@@ -373,6 +372,8 @@
         </p>
       </ion-label>
     </ion-item>
+
+    <br />
 
     <ion-row
       *ngIf="recipe.folder === 'main' && recipe.userId === me?.id"
@@ -440,5 +441,5 @@
         </ion-button>
       </ion-col>
     </ion-row>
-  </ion-card>
+  </div>
 </ion-content>

@@ -24,6 +24,7 @@
 
   <div [ngSwitch]="inputType">
     <div *ngSwitchCase="'items'">
+      <br />
       <ion-item *ngFor="let item of itemFields">
         <ion-input
           label="{{ 'pages.newShoppingListItem.itemTitle' | translate }}"

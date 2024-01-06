@@ -5,6 +5,10 @@ export type RSRunnableFunction =
   | ReturnType<typeof initOCRFormatRecipe>
   | ReturnType<typeof initBuildRecipe>;
 
+const parseUTF8 = (str: string) => {
+  return JSON.parse(JSON.stringify(str));
+};
+
 export const initBuildRecipe = (
   userId: string,
   result: Prisma.RecipeUncheckedCreateInput[],
@@ -25,28 +29,37 @@ export const initBuildRecipe = (
     function: (args) => {
       console.log("buildRecipe called with", args);
 
-      const recipe: Prisma.RecipeUncheckedCreateInput = {
-        userId,
-        fromUserId: null,
-        title: typeof args.title === "string" ? args.title : "Unnamed",
-        description: "",
-        folder: "main",
-        source: "RecipeSage Cooking Assistant",
-        url: "",
-        rating: null,
-        yield: typeof args.yield === "string" ? args.yield : "",
-        activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
-        totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
-        ingredients: Array.isArray(args.ingredients)
-          ? JSON.parse(`"${args.ingredients.join("\n")}`)
-          : "",
-        instructions: Array.isArray(args.instructions)
-          ? JSON.parse(`"${args.instructions.join("\n")}`)
-          : "",
-        notes: "",
-      };
+      try {
+        const recipe: Prisma.RecipeUncheckedCreateInput = {
+          userId,
+          fromUserId: null,
+          title:
+            typeof args.title === "string" ? parseUTF8(args.title) : "Unnamed",
+          description: "",
+          folder: "main",
+          source: "RecipeSage Cooking Assistant",
+          url: "",
+          rating: null,
+          yield: typeof args.yield === "string" ? parseUTF8(args.yield) : "",
+          activeTime:
+            typeof args.activeTime === "string"
+              ? parseUTF8(args.activeTime)
+              : "",
+          totalTime:
+            typeof args.totalTime === "string" ? parseUTF8(args.totalTime) : "",
+          ingredients: Array.isArray(args.ingredients)
+            ? parseUTF8(args.ingredients.join("\n"))
+            : "",
+          instructions: Array.isArray(args.instructions)
+            ? parseUTF8(args.instructions.join("\n"))
+            : "",
+          notes: "",
+        };
 
-      result.push(recipe);
+        result.push(recipe);
+      } catch (e) {
+        console.error("failed to construct a recipe", e);
+      }
 
       // Return the same thing GPT sent us so that it replies to user with what it built
       // If we don't do this, ChatGPT will create a new (different) recipe and reply with that
@@ -113,29 +126,40 @@ export const initOCRFormatRecipe = (
     function: (args) => {
       console.log("buildRecipe called with", args);
 
-      const recipe: Prisma.RecipeUncheckedCreateInput = {
-        userId,
-        fromUserId: null,
-        title: typeof args.title === "string" ? args.title : "Unnamed",
-        description:
-          typeof args.description === "string" ? args.description : "",
-        folder: "main",
-        source: "",
-        url: "",
-        rating: null,
-        yield: typeof args.yield === "string" ? args.yield : "",
-        activeTime: typeof args.activeTime === "string" ? args.activeTime : "",
-        totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
-        ingredients: Array.isArray(args.ingredients)
-          ? JSON.parse(`"${args.ingredients.join("\n")}`)
-          : "",
-        instructions: Array.isArray(args.instructions)
-          ? JSON.parse(`"${args.instructions.join("\n")}`)
-          : "",
-        notes: typeof args.notes === "string" ? args.notes : "",
-      };
+      try {
+        const recipe: Prisma.RecipeUncheckedCreateInput = {
+          userId,
+          fromUserId: null,
+          title:
+            typeof args.title === "string" ? parseUTF8(args.title) : "Unnamed",
+          description:
+            typeof args.description === "string"
+              ? parseUTF8(args.description)
+              : "",
+          folder: "main",
+          source: "",
+          url: "",
+          rating: null,
+          yield: typeof args.yield === "string" ? parseUTF8(args.yield) : "",
+          activeTime:
+            typeof args.activeTime === "string"
+              ? parseUTF8(args.activeTime)
+              : "",
+          totalTime:
+            typeof args.totalTime === "string" ? parseUTF8(args.totalTime) : "",
+          ingredients: Array.isArray(args.ingredients)
+            ? parseUTF8(args.ingredients.join("\n"))
+            : "",
+          instructions: Array.isArray(args.instructions)
+            ? parseUTF8(args.instructions.join("\n"))
+            : "",
+          notes: typeof args.notes === "string" ? args.notes : "",
+        };
 
-      result.push(recipe);
+        result.push(recipe);
+      } catch (e) {
+        console.error("failed to construct a recipe", e);
+      }
 
       // Return the same thing GPT sent us so that it replies to user with what it built
       // If we don't do this, ChatGPT will create a new (different) recipe and reply with that

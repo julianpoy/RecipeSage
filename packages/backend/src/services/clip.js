@@ -117,6 +117,7 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
       // eslint-disable-next-line no-undef
       return window.RecipeClipper.clipRecipe({
         mlClassifyEndpoint: interceptUrl,
+        ignoreMLClassifyErrors: true,
       });
     }, INTERCEPT_PLACEHOLDER_URL);
 
@@ -154,6 +155,7 @@ const clipRecipeHtmlWithJSDOM = async (document) => {
   return await RecipeClipper.clipRecipe({
     window,
     mlClassifyEndpoint: process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL,
+    ignoreMLClassifyErrors: true,
   });
 };
 

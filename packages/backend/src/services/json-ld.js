@@ -128,7 +128,9 @@ const getYieldFromSchema = (jsonLD) => {
   if (!recipeYield) return "";
 
   if (typeof recipeYield === "string") return recipeYield;
-  if (typeof recipeYield[0] === "string") return getLongestString(recipeYield);
+  if (Array.isArray(recipeYield) && typeof recipeYield[0] === "string") {
+    return getLongestString(recipeYield);
+  }
 
   return "";
 };
@@ -150,6 +152,8 @@ const convertToISO8601Time = (time) => {
 };
 
 const convertFromISO8601Time = (time) => {
+  if (!time.startsWith("PT")) return time;
+
   return time
     .replace("PT", "")
     .replace("H", " Hour(s) ")
@@ -161,18 +165,28 @@ const getActiveTimeFromSchema = (jsonLD) => {
   const { prepTime } = jsonLD;
   if (!prepTime) return "";
 
-  if (prepTime.startsWith("PT")) return convertFromISO8601Time(prepTime);
+  if (typeof prepTime === "string") {
+    return convertFromISO8601Time(prepTime);
+  }
+  if (Array.isArray(prepTime) && prepTime[0] === "string") {
+    return convertFromISO8601Time(getLongestString(prepTime));
+  }
 
-  return prepTime;
+  return "";
 };
 
 const getTotalTimeFromSchema = (jsonLD) => {
   const { totalTime } = jsonLD;
   if (!totalTime) return "";
 
-  if (totalTime.startsWith("PT")) return convertFromISO8601Time(totalTime);
+  if (typeof totalTime === "string") {
+    return convertFromISO8601Time(totalTime);
+  }
+  if (Array.isArray(totalTime) && totalTime[0] === "string") {
+    return convertFromISO8601Time(getLongestString(totalTime));
+  }
 
-  return totalTime;
+  return "";
 };
 
 const getInstructionsFromSchema = (jsonLD) => {

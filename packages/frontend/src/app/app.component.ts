@@ -278,6 +278,8 @@ export class AppComponent {
 
     const enableInstallInstructions =
       this.featureFlagService.flags[FeatureFlagKeys.EnableInstallInstructions];
+    const enableAssistant =
+      this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
     const enableContribution =
       this.featureFlagService.flags[FeatureFlagKeys.EnableContribution];
     const loggedOutPages = [
@@ -375,7 +377,7 @@ export class AppComponent {
         },
       ],
       [
-        true,
+        enableAssistant,
         {
           id: "assistant",
           title: assistant,
