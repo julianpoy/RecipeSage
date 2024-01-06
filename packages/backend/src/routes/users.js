@@ -622,7 +622,7 @@ router.post(
   "/register",
   cors(),
   wrapRequestWithErrorHandler(async (req, res) => {
-    if (process.env.DISABLE_REGISTRATION)
+    if (process.env.DISABLE_REGISTRATION === "true")
       throw new Error("Registration is disabled");
 
     let sanitizedEmail = UtilService.sanitizeEmail(req.body.email);
