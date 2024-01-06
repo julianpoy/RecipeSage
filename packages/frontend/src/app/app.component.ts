@@ -95,7 +95,7 @@ export class AppComponent {
       this.preferencesService.preferences[GlobalPreferenceKey.FontSize];
     this.utilService.setFontSize(fontSize);
 
-    if (ENABLE_ANALYTICS) {
+    if (ENABLE_ANALYTICS || true) {
       this.initAnalytics();
     }
 
@@ -170,6 +170,22 @@ export class AppComponent {
     s.parentNode?.insertBefore(g, s);
 
     (window as any)._paq = _paq;
+
+    const googleScriptTag = document.createElement("script");
+    googleScriptTag.async = true;
+    googleScriptTag.src =
+      "https://www.googletagmanager.com/gtag/js?id=G-VCB97YRGYB";
+
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    function gtag() {
+      (window as any).dataLayer.push(arguments);
+    }
+    (window as any).gtag = gtag;
+    (window as any).gtag("js", new Date());
+
+    (window as any).gtag("config", "G-VCB97YRGYB");
+
+    document.head.appendChild(googleScriptTag);
   }
 
   initUpdateListeners() {
@@ -495,6 +511,36 @@ export class AppComponent {
     this.friendRequestCount = response.data.incomingRequests?.length || null;
   }
 
+  capturePaq(viewName: string, currentUrl: string | undefined) {
+    const _paq = (window as any)._paq;
+
+    if (!_paq) return;
+
+    if (currentUrl) _paq.push(["setReferrerUrl", currentUrl]);
+    currentUrl = "" + window.location.hash.substring(1);
+    _paq.push(["setCustomUrl", currentUrl]);
+    _paq.push(["setDocumentTitle", viewName]);
+
+    // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+    _paq.push(["deleteCustomVariables", "page"]);
+    _paq.push(["trackPageView"]);
+
+    // make Matomo aware of newly added content
+    _paq.push(["MediaAnalytics::scanForMedia"]);
+    _paq.push(["FormAnalytics::scanForForms"]);
+    _paq.push(["trackContentImpressionsWithinNode"]);
+    _paq.push(["enableLinkTracking"]);
+  }
+
+  captureG() {
+    const gtag = (window as any).gtag;
+    if (!gtag) return;
+
+    gtag("event", "page_view", {
+      page_path: location.pathname + location.hash,
+    });
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.menuCtrl.close();
@@ -511,25 +557,8 @@ export class AppComponent {
 
       try {
         const viewName = event.url;
-
-        const _paq = (window as any)._paq;
-
-        if (!_paq) return;
-
-        if (currentUrl) _paq.push(["setReferrerUrl", currentUrl]);
-        currentUrl = "" + window.location.hash.substring(1);
-        _paq.push(["setCustomUrl", currentUrl]);
-        _paq.push(["setDocumentTitle", viewName]);
-
-        // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
-        _paq.push(["deleteCustomVariables", "page"]);
-        _paq.push(["trackPageView"]);
-
-        // make Matomo aware of newly added content
-        _paq.push(["MediaAnalytics::scanForMedia"]);
-        _paq.push(["FormAnalytics::scanForForms"]);
-        _paq.push(["trackContentImpressionsWithinNode"]);
-        _paq.push(["enableLinkTracking"]);
+        this.capturePaq(viewName, currentUrl);
+        this.captureG();
       } catch (e) {
         console.warn(e);
       }
