@@ -378,7 +378,7 @@
   "pages.manageLabelGroupModal.title": "Manage Label Category",
   "pages.manageLabelGroupModal.groupTitle": "Label Category Name",
   "pages.manageLabelGroupModal.groupTitlePlaceholder": "Enter label category name",
-  "pages.manageLabelGroupModal.groupTitleHint": "Many people start with \"meal\", \"diet\", or \"cuisine\"",
+  "pages.manageLabelGroupModal.groupTitleHint": "Many people start with \"Meal\", \"Diet\", or \"Cuisine\"",
   "pages.manageLabelGroupModal.warn": "Warn me when I do not add",
   "pages.manageLabelGroupModal.warnDescription": "When enabled, you will be warned if saving a recipe without a label in this category attached",
   "pages.manageLabelGroupModal.labels": "Select Labels",
