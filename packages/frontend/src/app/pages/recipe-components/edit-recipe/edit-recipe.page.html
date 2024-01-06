@@ -29,7 +29,7 @@
       <ion-icon name="clipboard" slot="start"></ion-icon>
       {{ 'pages.editRecipe.autoclip' | translate }}
     </ion-button>
-    <ion-button *ngIf="!recipe.id" (click)="scan()" size="small">
+    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()" size="small">
       <ion-icon name="camera" slot="start"></ion-icon>
       {{ 'pages.editRecipe.scan' | translate }}
     </ion-button>

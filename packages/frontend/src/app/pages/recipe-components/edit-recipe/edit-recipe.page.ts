@@ -30,6 +30,7 @@ import { LabelSummary } from "packages/trpc/src/types/labelSummary";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
+import { FeatureFlagService } from "../../../services/feature-flag.service";
 
 @Component({
   selector: "page-edit-recipe",
@@ -62,6 +63,8 @@ export class EditRecipePage {
   labelGroups: LabelGroupSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
+  enableOCR = this.featureFlagService.flags.enableOCR;
+
   constructor(
     private route: ActivatedRoute,
     private translate: TranslateService,
@@ -76,8 +79,8 @@ export class EditRecipePage {
     private loadingService: LoadingService,
     private recipeService: RecipeService,
     private imageService: ImageService,
-    private domSanitizationService: DomSanitizer,
     private capabilitiesService: CapabilitiesService,
+    private featureFlagService: FeatureFlagService,
   ) {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
 
