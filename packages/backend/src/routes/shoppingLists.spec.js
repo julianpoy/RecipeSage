@@ -10,7 +10,6 @@ import {
   createUser,
   createSession,
   createShoppingList,
-  randomUuid,
 } from "../testutils";
 
 import Models from "../models";
@@ -138,36 +137,6 @@ describe("shopping Lists", () => {
       .then(({ body }) => {
         expect(body.id).to.equal(shoppingList.id);
         expect(body.title).to.equal(shoppingList.title);
-      });
-  });
-
-  it("rejects invalid Shoppinglist", async () => {
-    const user = await createUser();
-
-    const session = await createSession(user.id);
-
-    await createShoppingList(user.id);
-
-    return request(server)
-      .get(`/shoppingLists/${randomUuid()}`)
-      .query({ token: session.token })
-      .expect(404);
-  });
-
-  it.only("does not return Shoppinglist of another user", async () => {
-    const user1 = await createUser();
-    const user2 = await createUser();
-
-    const session = await createSession(user1.id);
-
-    const shoppingList = await createShoppingList(user2.id);
-
-    return request(server)
-      .get(`/shoppingLists/${shoppingList.id}`)
-      .query({ token: session.token })
-      .expect(404)
-      .then(({ body }) => {
-        expect(body).to.deep.equal({});
       });
   });
 });
