@@ -149,9 +149,11 @@
   <br />
 
   <ion-list *ngIf="recipeIds.length > 0">
-    <ion-item-divider>
-      <ion-label> {{ 'pages.shoppingList.recipes' | translate }} </ion-label>
-    </ion-item-divider>
+    <ion-item>
+      <ion-label class="ion-text-wrap">
+        {{ 'pages.shoppingList.recipes' | translate }}
+      </ion-label>
+    </ion-item>
     <ion-item *ngFor="let recipeId of recipeIds" button>
       <ion-icon
         class="delete-recipe"
