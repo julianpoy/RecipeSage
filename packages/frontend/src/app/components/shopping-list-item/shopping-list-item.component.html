@@ -5,7 +5,7 @@
     [checked]="completed"
     (ionChange)="onComplete()"
   >
-    <ion-label class="ion-text-wrap ion-no-margin">
+    <div class="ion-checkbox-label ion-text-wrap">
       {{ title }}
       <p *ngIf="recipeTitle">
         {{ "components.shoppingListItem.recipe" | translate }}
@@ -19,6 +19,6 @@
         {{ "components.shoppingListItem.addedBy" | translate }}
         <span>{{ ownerName }}</span>
       </p>
-    </ion-label>
+    </div>
   </ion-checkbox>
 </ion-item>

@@ -49,12 +49,12 @@
         [checked]="mealItem.recipe && recipeIdSelectionMap[mealItem.recipe.id]"
         (ionChange)="mealItem.recipe && checkboxChanged($event, mealItem.recipe.id)"
       >
-        <ion-label>
+        <div class="ion-checkbox-label">
           {{ mealItem.recipe?.title || mealItem.title }}
           <p *ngIf="!mealItem.recipe?.id">
             {{ 'pages.mealPlanBulkPinModal.notLinkedToRecipe' | translate }}
           </p>
-        </ion-label>
+        </div>
       </ion-checkbox>
     </ion-item>
   </ion-list>
