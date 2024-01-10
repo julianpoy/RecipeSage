@@ -39,16 +39,6 @@ jobs:
           FILESYSTEM_STORAGE_PATH: ~/project/rsdata
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
-          AWS_REGION: us-west-2
-          AWS_BUCKET: chefbook-dev
-          VERBOSE: false
-          VERSION: development
-          OPENAI_GPT_MODEL: gpt-3.5-turbo-1106
-          SENTRY_SAMPLE_RATE: 0
-          BROWSERLESS_HOST: browserless
-          BROWSERLESS_PORT: 3000
-          BROWSERLESS_TOKEN: recipesage_dev
-          INGREDIENT_INSTRUCTION_CLASSIFIER_URL: http://ingredient-instruction-classifier:3000/
       - image: postgres:16.1
         environment:
           POSTGRES_USER: chefbook
