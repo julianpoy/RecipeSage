@@ -107,6 +107,7 @@
     "@angular/language-service": "16.1.0",
     "@babel/preset-env": "^7.23.3",
     "@capacitor/cli": "5.5.1",
+    "@faker-js/faker": "^8.3.1",
     "@ionic/angular-toolkit": "9.0.0",
     "@nx/devkit": "17.1.2",
     "@nx/eslint": "17.1.2",
