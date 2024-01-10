@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { TranslateService } from "@ngx-translate/core";
 
 const LAST_USED_MEAL_VAR = "lastUsedMeal";
 
@@ -13,34 +14,59 @@ export class SelectMealComponent {
 
   mealOptions = [
     {
-      title: "Breakfast",
+      title: "",
       key: "breakfast",
     },
     {
-      title: "Lunch",
+      title: "",
       key: "lunch",
     },
     {
-      title: "Dinner",
+      title: "",
       key: "dinner",
     },
     {
-      title: "Snack",
+      title: "",
       key: "snacks",
     },
     {
-      title: "Other",
+      title: "",
       key: "other",
     },
   ];
 
-  constructor() {
-    // Wait until after props are set
-    setTimeout(() => {
-      if (!this.meal) {
-        this.selectLastUsedMeal();
-      }
-    });
+  constructor(private translate: TranslateService) {}
+
+  ngAfterViewInit() {
+    if (!this.meal) {
+      this.selectLastUsedMeal();
+    }
+
+    this.loadTranslations();
+  }
+
+  async loadTranslations() {
+    const breakfast = await this.translate
+      .get("components.selectMeal.breakfast")
+      .toPromise();
+    const lunch = await this.translate
+      .get("components.selectMeal.lunch")
+      .toPromise();
+    const dinner = await this.translate
+      .get("components.selectMeal.dinner")
+      .toPromise();
+    const snack = await this.translate
+      .get("components.selectMeal.snack")
+      .toPromise();
+    const other = await this.translate
+      .get("components.selectMeal.other")
+      .toPromise();
+
+    this.mealOptions[0].title = breakfast;
+    this.mealOptions[1].title = lunch;
+    this.mealOptions[2].title = dinner;
+    this.mealOptions[3].title = snack;
+    this.mealOptions[4].title = other;
   }
 
   selectLastUsedMeal() {

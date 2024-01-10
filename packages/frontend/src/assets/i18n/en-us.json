@@ -981,6 +981,11 @@
   "components.selectMultipleItems.searchPlaceholder": "Search for an item to add",
 
   "components.selectMeal.title": "Select Meal",
+  "components.selectMeal.breakfast": "Breakfast",
+  "components.selectMeal.lunch": "Lunch",
+  "components.selectMeal.dinner": "Dinner",
+  "components.selectMeal.snack": "Snack",
+  "components.selectMeal.other": "Other",
 
   "components.selectRecipe.change": "Click to change",
   "components.selectRecipe.select": "Click to select",
