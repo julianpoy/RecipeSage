@@ -18,14 +18,6 @@
         "lintFilePatterns": ["packages/trpc/**/*.ts"],
         "maxWarnings": 0
       }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [],
-      "options": {
-        "jestConfig": "packages/trpc/jest.config.ts",
-        "runInBand": true
-      }
     }
   }
 }
