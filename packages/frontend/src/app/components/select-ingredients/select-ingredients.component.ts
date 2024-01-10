@@ -68,10 +68,11 @@ export class SelectIngredientsComponent {
   }
 
   isIngredientIgnored(ingredient: ParsedIngredient) {
-    const ignoredIngredients =
-      this.preferencesService.preferences[
-        ShoppingListPreferenceKey.IgnoreItemTitles
-      ].split("\n");
+    const ignoredIngredients = this.preferencesService.preferences[
+      ShoppingListPreferenceKey.IgnoreItemTitles
+    ]
+      .split("\n")
+      .filter((el) => el.trim());
 
     for (const ignoredIngredient of ignoredIngredients) {
       if (ingredient.originalContent.includes(ignoredIngredient)) {
