@@ -21,6 +21,16 @@ jobs:
     docker:
       - image: cimg/node:18.15
         environment:
+          AWS_REGION: us-west-2
+          AWS_BUCKET: chefbook-dev
+          VERBOSE: false
+          VERSION: development
+          OPENAI_GPT_MODEL: gpt-3.5-turbo-1106
+          SENTRY_SAMPLE_RATE: 0
+          BROWSERLESS_HOST: browserless
+          BROWSERLESS_PORT: 3000
+          BROWSERLESS_TOKEN: recipesage_dev
+          INGREDIENT_INSTRUCTION_CLASSIFIER_URL: http://ingredient-instruction-classifier:3000/
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
           RS_TEST_DB_DATABASE: chefbook_test
@@ -56,6 +66,12 @@ jobs:
       - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,typecheck,test,build
+      - run:
+          name: start backend
+          command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
+      - run:
+          name: integration test
+          command: npx nx run-many --targets=integrationTest
   push_backend:
     resource_class: large
     docker:
