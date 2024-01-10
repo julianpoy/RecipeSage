@@ -58,7 +58,7 @@ jobs:
           command: npx nx run-many --targets=lint,typecheck,test,build
       - run:
           name: start backend
-          command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
+          command: npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
       - run:
           name: integration test
           command: npx nx run-many --targets=integrationTest
