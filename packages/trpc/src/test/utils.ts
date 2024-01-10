@@ -23,7 +23,7 @@ export async function createTrpcClient(token: string) {
   return createTRPCProxyClient<AppRouter>({
     links: [
       httpLink({
-        url: "http://localhost:80/api/trpc",
+        url: "http://localhost:3000/trpc",
         headers: () => {
           return {
             Authorization: token ? `Bearer ${token}` : undefined,
