@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { createTRPCProxyClient, httpLink } from "@trpc/client";
-import type { AppRouter } from "../index";
+import type { AppRouter } from "./index";
 import superjson from "superjson";
 import { faker } from "@faker-js/faker";
 
