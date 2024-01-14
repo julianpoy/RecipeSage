@@ -34,8 +34,30 @@ Core.addClass(
   ]),
 );
 
+Core.addClass(
+  new Class("Pinch", [
+    {
+      system: System.ANY,
+      common: true,
+      unit: "pinch",
+      baseUnit: "pinch",
+      denominators: [2, 3, 4],
+      units: {
+        pinch: Plurality.SINGULAR,
+        pinches: Plurality.PLURAL,
+        knsp: Plurality.EITHER,
+      },
+    },
+  ]),
+);
+
 Core.getGroup("tablespoon").addUnits({
   tbs: Plurality.SINGULAR,
+  spsk: Plurality.EITHER,
+});
+
+Core.getGroup("teaspoon").addUnits({
+  tsk: Plurality.EITHER,
 });
 
 export const unitNames: string[] = Object.keys(Core.classMap)
