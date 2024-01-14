@@ -33,7 +33,7 @@
           <ion-menu-toggle auto-hide="false" *ngFor="let p of navList">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
               <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
+              <ion-label class="ion-text-wrap">
                 {{ p.title }}
               </ion-label>
               <ion-badge *ngIf="p.id === 'people' && friendRequestCount">{{

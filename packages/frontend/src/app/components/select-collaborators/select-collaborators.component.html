@@ -1,6 +1,6 @@
 <div>
   <div class="dropdownSelect">
-    <h6>Collaborators</h6>
+    <h6>{{ "components.selectCollaborators.title" | translate }}</h6>
 
     <div class="labels">
       <span class="label" *ngFor="let userId of selectedCollaboratorIds">
@@ -21,7 +21,9 @@
       (focusout)="toggleAutocomplete(false, $event)"
       (blur)="toggleAutocomplete(false, $event)"
       (keyup.enter)="onAddCollaboratorEnter($event)"
-      placeholder="Add collaborators by email address"
+      placeholder="{{
+        'components.selectCollaborators.placeholder' | translate
+      }}"
       autocomplete="off"
       #labelInputField
       id="labelInputField"

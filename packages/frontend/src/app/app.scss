@@ -20,6 +20,17 @@ ion-menu.cookingToolbarOpen {
   height: calc(100% - 60px);
 }
 
+.ion-checkbox-label {
+  line-height: 24px;
+}
+
+.ion-checkbox-label p {
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 20px;
+}
+
 .bar-button-default-md:hover:not(.disable-hover),
 .bar-button-clear-md-default:hover:not(.disable-hover),
 .bar-button-md-default:hover:not(.disable-hover) {
