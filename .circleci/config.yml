@@ -54,6 +54,13 @@ jobs:
           name: migrate
           command: npx prisma migrate dev
       - run:
+          name: start api
+          command: npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www
+          background: true
+      - run:
+          name: wait for api
+          command: dockerize -wait tcp://localhost:3000 -timeout 30s
+      - run:
           name: lint, typecheck, test, build
           command: npx nx run-many --targets=lint,typecheck,test,build
   push_backend:

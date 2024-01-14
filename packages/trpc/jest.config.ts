@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: "backend",
+  displayName: "trpc",
   preset: "../../jest.preset.js",
   testEnvironment: "node",
   testPathIgnorePatterns: ["dist/"],
