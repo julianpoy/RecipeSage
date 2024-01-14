@@ -956,6 +956,8 @@
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
   "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
 
+  "components.selectCollaborators.title": "Collaborators",
+  "components.selectCollaborators.placeholder": "Add collaborators by email address",
   "components.selectCollaborators.added": "Already added",
   "components.selectCollaborators.add": "Click to add",
   "components.selectCollaborators.searching": "Searching...",
