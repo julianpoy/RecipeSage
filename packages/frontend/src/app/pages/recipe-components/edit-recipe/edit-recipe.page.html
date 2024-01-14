@@ -25,14 +25,15 @@
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
-    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
-      <ion-icon name="clipboard" slot="start"></ion-icon>
+    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()">
+      <ion-icon name="link" slot="start"></ion-icon>
       {{ 'pages.editRecipe.autoclip' | translate }}
     </ion-button>
-    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()" size="small">
+    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()">
       <ion-icon name="camera" slot="start"></ion-icon>
       {{ 'pages.editRecipe.scan' | translate }}
     </ion-button>
+    <br />
     <br />
     <br />
     <ion-item>
