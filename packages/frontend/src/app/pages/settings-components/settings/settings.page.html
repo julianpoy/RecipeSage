@@ -67,6 +67,8 @@
         [(ngModel)]="preferences[preferenceKeys.Theme]"
         (ngModelChange)="appThemeChanged();"
         label="{{ 'pages.settings.theme' | translate }}"
+        okText="{{ 'generic.ok' | translate }}"
+        cancelText="{{ 'generic.cancel' | translate }}"
       >
         <ion-select-option value="default">
           {{ 'pages.settings.theme.default' | translate }}

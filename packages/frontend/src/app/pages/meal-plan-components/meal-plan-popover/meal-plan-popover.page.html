@@ -22,6 +22,8 @@
       label="{{ 'pages.mealPlanPopover.options.startWeekOn.title' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.StartOfWeek]"
       (ngModelChange)="savePreferences();"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="sunday">
         {{ 'pages.mealPlanPopover.options.startWeekOn.sunday' | translate }}

@@ -8,6 +8,8 @@
       label="{{ 'pages.shoppingListPopover.sortBy' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.SortBy]"
       (ngModelChange)="savePreferences();"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="-title">
         {{ 'pages.shoppingListPopover.sortBy.title' | translate }}

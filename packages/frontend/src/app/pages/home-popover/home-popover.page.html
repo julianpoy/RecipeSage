@@ -8,6 +8,8 @@
       label="{{ 'pages.homepopover.options.layout' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.ViewType]"
       (ngModelChange)="savePreferences();"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="tiles"
         >{{ 'pages.homepopover.options.layout.tiles' | translate
@@ -80,6 +82,8 @@
       label="{{ 'pages.homepopover.options.sortBy' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.SortBy]"
       (ngModelChange)="savePreferences(true);"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="title"
         >{{ 'pages.homepopover.options.sortBy.title' | translate
