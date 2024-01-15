@@ -525,7 +525,6 @@
     "pages.importLivingCookbook.contactMe": "Ha problémái vannak az importálással, küldjön egy e-mailt az adatbázisfájllal és manuálisan importálom.",
     "pages.importLivingCookbook.donate": "Kérjük, fontolja meg a támogatást, ha adatbázisa nagyszámú receptet vagy képet tartalmaz.",
     "pages.importLivingCookbook.step1": "1. Válassza az Importálási beállítások lehetőséget (ha van):",
-    "pages.importLivingCookbook.step1.includeTechniques": "",
     "pages.importLivingCookbook.step2": "2. Válassza ki az Élő Szakácskönyvadatbázisát:",
     "pages.importLivingCookbook.step2.sizeWarning": "Ez az adatbázis nagyon nagy.",
     "pages.importLivingCookbook.step2.sizeWarning.time": "Az internetkapcsolattól függően nagyon sokáig tarthat a feltöltés.",
