@@ -14,6 +14,7 @@ export enum SupportedLanguages {
   HE = "he",
   ES_ES = "es-es",
   FR_FR = "fr-fr",
+  RU_RU = "ru-ru",
 }
 
 export enum SupportedFontSize {

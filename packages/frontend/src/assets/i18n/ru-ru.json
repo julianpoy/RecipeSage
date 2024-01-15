@@ -1,0 +1,1369 @@
+{
+  "====== Pages.Welcome ======": "",
+
+  "pages.app.oldBrowserAlert.header": "Неподдерживаемый браузер",
+  "pages.app.oldBrowserAlert.message": "Похоже, вы используете старый браузер, который не поддерживается. Некоторые функции могут не работать или работать некорректно. Пожалуйста, установите современный браузер, например Firefox, для полной функциональности.",
+
+  "pages.app.nav.welcome": "Приветствие",
+  "pages.app.nav.login": "Вход",
+  "pages.app.nav.register": "Создать уч. запись",
+  "pages.app.nav.download": "Загрузка и установка",
+  "pages.app.nav.contribute": "Пожертвования",
+  "pages.app.nav.about": "Поддержка",
+  "pages.app.nav.home": "Мои рецепты",
+  "pages.app.nav.labels": "Метки",
+  "pages.app.nav.people": "Люди и профили",
+  "pages.app.nav.assistant": "Помощник по кулинарии",
+  "pages.app.nav.messages": "Сообщения",
+  "pages.app.nav.inbox": "Входящие рецепты",
+  "pages.app.nav.newrecipe": "Создать рецепт",
+  "pages.app.nav.shopping": "Список покупок",
+  "pages.app.nav.meals": "Планы питания",
+  "pages.app.nav.settings": "Настройки",
+
+  "====== Pages.Welcome ======": "",
+
+  "pages.welcome.selfhostTitle": "РецептSage на собственном хостинге!",
+  "pages.welcome.selfhostSubtitle": "Неофициальная локальная версия RecipeSage.com, бесплатного хранилища рецептов, планировщика питания и органайзера списков покупок для Web, IOS и Android.",
+  "pages.welcome.title": "Все ваши рецепты в одном месте",
+  "pages.welcome.subtitle": "Бесплатное хранилище рецептов, планировщик питания и органайзер списков покупок для Web, IOS и Android.",
+  "pages.welcome.registerButton": "Создать учетную запись",
+  "pages.welcome.loginButton": "Вход",
+
+  "pages.welcome.description.welcome": "Добро пожаловать в RecipeSage!",
+  "pages.welcome.description.1": "RecipeSage — это бесплатный (на основе пожертвований и с открытым исходным кодом) персональный органайзер рецептов, планировщик питания и менеджер списков покупок для Web, IOS и Android.",
+  "pages.welcome.description.2": "Просто захватывайте и сохраняйте рецепты с любого веб-сайта, просто введя URL-адрес веб-сайта. Синхронизируйте свои рецепты, планы питания и списки покупок между всеми вашими устройствами. Поделитесь своими рецептами, списками покупок и планами питания с семьей и друзьями.",
+
+  "pages.welcome.description.features": "Что может RecipeSage?",
+  "pages.welcome.description.features": "Что может RecipeSage?",
+  "pages.welcome.description.features.1.title": "Импорт с любого URL:",
+  "pages.welcome.description.features.1.description": "Создайте рецепт, просто введя URL-адрес.",
+  "pages.welcome.description.features.2.title": "Мощный поиск:",
+  "pages.welcome.description.features.2.description": "Выполняйте поиск по всем полям ваших рецептов, включая орфографические ошибки и похожие слова.",
+  "pages.welcome.description.features.3.title": "Система маркировки/категоризации:",
+  "pages.welcome.description.features.3.description": "Отмечайте свои рецепты и фильтруйте по тегам",
+  "pages.welcome.description.features.4.title": "Перетаскивайте планы питания:",
+  "pages.welcome.description.features.4.description": "Планируйте приемы пищи в интерактивном режиме, быстро и легко",
+  "pages.welcome.description.features.5.title": "Списки покупок:",
+  "pages.welcome.description.features.5.description": "Автоматическая категоризация и интеллектуальная группировка — добавляйте свои рецепты прямо в список покупок, и похожие товары будут объединены",
+  "pages.welcome.description.features.6.title": "Совместное использование:",
+  "pages.welcome.description.features.6.description": "Делитесь своими рецептами, совместно составляйте планы питания и списки покупок с семьей или друзьями.",
+  "pages.welcome.description.features.7.title": "Импорт:",
+  "pages.welcome.description.features.7.description": "Подержка импорт из Pepperplate, Living Cookbook и Paprika",
+  "pages.welcome.description.features.8.title": "Экспорт:",
+  "pages.welcome.description.features.8.description": "Сохраняйте резервные копии своих рецептов в нескольких форматах для переноса данных.",
+
+  "pages.welcome.description.cta": "Почему RecipeSage?",
+  "pages.welcome.description.cta.1": "Бесплатно (основано на донатах)",
+  "pages.welcome.description.cta.2": "Открытый исходный код",
+  "pages.welcome.description.cta.3": "Простой в использовании",
+  "pages.welcome.description.cta.4": "Доступно на настольном компьютере и всех мобильных устройствах",
+  "pages.welcome.description.cta.5": "Импорт рецептов с любого URL-адреса.",
+
+  "====== Pages.Auth ======": "",
+
+  "pages.auth.title.login": "Войти",
+  "pages.auth.title.register": "Создать учетную запись",
+
+  "pages.auth.selfhostWarning": "Примечание. Это локальная версия RecipeSage, поэтому она не связана с RecipeSage.com или какой-либо учетной записью, расположенной на основном сайте.",
+
+  "pages.auth.welcome.login": "С возвращением!",
+  "pages.auth.welcome.login.sub": "Пожалуйста, войдите в систему, используя данные своей учетной записи ниже.",
+
+  "pages.auth.welcome.register": "Добро пожаловать!",
+  "pages.auth.welcome.register.sub1": "Для создания вашей учетной записи нам нужны еще некоторые данные.",
+  "pages.auth.welcome.register.sub2": "После этого вы будете настроены и готовы к работе.",
+
+  "pages.auth.input.name": "Полное имя или псевдоним",
+  "pages.auth.input.email": "Электронная почта",
+  "pages.auth.input.password": "Пароль",
+  "pages.auth.input.confirmPassword": "Подтверждение пароля",
+
+  "pages.auth.selfhostWarning2": "Убедитесь, что вы доверяете владельцу этой копии хоста",
+
+  "pages.auth.button.login": "Войти",
+  "pages.auth.button.register": "Создать учетную запись",
+  "pages.auth.button.forgotPassword": "Забыли пароль?",
+  "pages.auth.button.registerInstead": "Вместо этого создайте учетную запись",
+  "pages.auth.button.loginInstead": "Вместо этого войдите в систему",
+
+  "pages.auth.error.invalidEmail": "Пожалуйста, введите действительный адрес электронной почты.",
+  "pages.auth.error.noName": "Пожалуйста, введите имя (вы можете ввести псевдоним!)",
+  "pages.auth.error.noPassword": "Пожалуйста, введите пароль.",
+  "pages.auth.error.passwordLength": "Пожалуйста, введите пароль длиной не менее 6 символов.",
+  "pages.auth.error.noEmail": "Пожалуйста, введите свой адрес электронной почты.",
+  "pages.auth.error.passwordMatch": "Введенный вами пароль и подтверждение не совпадают.",
+  "pages.auth.error.incorrectLogin": "Похоже, адрес электронной почты или пароль неверны.",
+  "pages.auth.error.emailTaken": "Учетная запись с таким адресом электронной почты уже существует.",
+
+  "pages.auth.forgot.toast": "Если с этим адресом электронной почты связана учетная запись RecipeSage, вы должны получить ссылку для сброса пароля в течение следующих нескольких минут.",
+
+  "====== Pages.Home ======": "",
+
+  "pages.home.title.selectionMode": "Выбрано: {{count}}",
+  "pages.home.title.main": "Мои рецепты",
+  "pages.home.title.inbox": "Входящие рецепты",
+
+  "pages.home.title.sharedAll": "Общие рецепты",
+  "pages.home.title.sharedLabel": "Общая метка: {{label}}",
+  "pages.home.title.sharedAll.withProfile": "Общие рецепты {{name}}",
+  "pages.home.title.sharedLabel.withProfile": "Общая метка {{name}}: {{label}}",
+
+  "pages.home.search.placeholder": "Поиск",
+  "pages.home.search.filter": "Фильтр",
+
+  "pages.home.recipe.source": "Источник:",
+  "pages.home.recipe.from": "От:",
+  "pages.home.recipe.labels": "Метки:",
+  "pages.home.recipe.selected": "Выбрано",
+  "pages.home.recipe.fromSharedCollection": "Рецепты друзей",
+
+  "pages.home.errors.emptyCollection.title": "Коллекция этого пользователя пуста",
+  "pages.home.errors.emptyCollection.message": "В этой общей коллекции нет рецептов.",
+
+  "pages.home.errors.noRecipes.title": "Добро пожаловать в RecipeSage!",
+  "pages.home.errors.noRecipes.message1": "Здесь будут появляться ваши рецепты.",
+  "pages.home.errors.noRecipes.message2": "Похоже, у вас еще нет рецептов.",
+  "pages.home.errors.noRecipes.message3": "Нажмите кнопку + в правом нижнем углу, чтобы добавить рецепт!",
+  "pages.home.errors.noRecipes.message4": "Вы также можете импортировать рецепты!",
+  "pages.home.errors.noRecipes.message5": "Используйте боковое меню, чтобы перейти к настройкам -> импорт",
+  "pages.home.errors.noRecipes.message6": "Вы можете установить расширение браузера для вырезки рецептов с сайтов:",
+  "pages.home.errors.noRecipes.message7": "Подробные инструкции можно найти на странице Советы, подсказки и руководства",
+
+  "pages.home.errors.inboxEmpty.message1": "Ваш почтовый ящик с рецептами пуст.",
+  "pages.home.errors.inboxEmpty.message2": "Когда кто-то отправит вам рецепт, он появится здесь!",
+
+  "pages.home.errors.noResultsFilters": "Нет рецептов, соответствующих текущим фильтрам",
+
+  "pages.home.errors.noSearchResults.message1": "Нет результатов поиска.",
+  "pages.home.errors.noSearchResults.message2": "Поиск включает:",
+  "pages.home.errors.noSearchResults.message3": "Название, описание, источник, ингредиенты, инструкции и примечания.",
+
+  "pages.home.addLabel.header": "Добавить метку к выбранным рецептам",
+  "pages.home.addLabel.message": "Введите имя метки",
+  "pages.home.addLabel.placeholder": "Имя метки",
+
+  "pages.home.deleteSelected.header": "Подтвердить удаление",
+  "pages.home.deleteSelected.message": "Выбранные рецепты будут удалены из вашей учетной записи навсегда. Это действие необратимо.",
+  "pages.home.deleteSelected.message": "Выбранные рецепты будут удалены из вашей учетной записи навсегда. Это действие необратимо. Следующие рецепты будут удалены: {{recipeNames}}",
+
+  "====== Pages.HomeSearchFilterPopover ======": "",
+
+  "pages.homeSearchFilterPopover.title": "Поисковые фильтры",
+
+  "pages.homeSearchFilterPopover.filterByRating": "Фильтровать по рейтингу",
+  "pages.homeSearchFilterPopover.filterByLabel": "Фильтровать по метке",
+  "pages.homeSearchFilterPopover.matchAllLabels": "Соответствовать всем меткам",
+  "pages.homeSearchFilterPopover.includeFriends": "Показать рецепты друзей",
+  "pages.homeSearchFilterPopover.includeFriends.yes": "Всегда",
+  "pages.homeSearchFilterPopover.includeFriends.search": "Только в результатах поиска",
+  "pages.homeSearchFilterPopover.includeFriends.browse": "Только когда не выполняется поиск",
+  "pages.homeSearchFilterPopover.includeFriends.no": "Никогда",
+
+  "pages.homeSearchFilterPopover.optionsHidden": "Примечание: некоторые параметры скрыты, поскольку это общая коллекция",
+
+  "====== Pages.NotFound ======": "",
+
+  "pages.notfound.title": "Страница не найдена",
+  "pages.notfound.error.title": "Страница не найдена!",
+  "pages.notfound.error.message1": "Похоже, страница, которую вы ищете, не существует.",
+  "pages.notfound.error.message2": "Проверьте, правильно ли вы ввели URL.",
+  "pages.notfound.error.message3": "Если у вас все еще возникают проблемы или если где-то в приложении вы оказались здесь, свяжитесь со мной.",
+  "pages.notfound.error.contact": "Свяжитесь со мной",
+  "pages.not Found.error.go Home": "Нажмите здесь, чтобы перейти к своим рецептам",
+
+  "====== Pages.HomePopover ======": "",
+
+  "pages.homepopover.options": "Параметры",
+  "pages.homepopover.options.layout": "Макет",
+  "pages.homepopover.options.layout.tiles": "Плитки",
+  "pages.homepopover.options.layout.list": "Список",
+  "pages.homepopover.options.showLabels": "Показать ярлыки",
+  "pages.homepopover.options.showLabelToggles": "Показать переключатели меток",
+  "pages.homepopover.options.showImages": "Показать изображения",
+  "pages.homepopover.options.showSource": "Показать источник",
+  "pages.homepopover.options.showRecipeDescription": "Показать описание",
+
+  "pages.homepopover.options.sortBy": "Сортировать по",
+  "pages.homepopover.options.sortBy.title": "Название",
+  "pages.home popover.options.sort By.created Newest": "Создано (сначала самые новые)",
+  "pages.home popover.options.sort By.created Oldest": "Создано (сначала самые старые)",
+  "pages.home popover.options.sort By.updated Newest": "Обновлено (сначала самые новые)",
+  "pages.home popover.options.sort By.updated Oldest": "Обновлено (сначала самые старые)",
+
+  "pages.homepopover.options.unselectAllRecipes": "Отменить выбор всех рецептов",
+  "pages.homepopover.options.selectMultipleRecipes": "Выбрать несколько рецептов",
+
+  "pages.homepopover.warning.optionsHidden": "Примечание: некоторые параметры скрыты, поскольку это общая коллекция",
+
+  "pages.homepopover.labelNull": "У вас нет меток. Вы можете создавать метки на странице сведений о рецепте.",
+  "pages.homepopover.unlabeled": "Только без метки",
+
+  "====== Pages.RecipeDetails ======": "",
+
+  "pages.recipeDetails.pageTitle": "Подробности рецепта",
+  "pages.recipeDetails.rating": "Рейтинг",
+  "pages.recipeDetails.source": "Источник",
+  "pages.recipeDetails.activeTime": "Время приготовления",
+  "pages.recipeDetails.totalTime": "Общее время",
+  "pages.recipeDetails.yield": "Выход",
+
+  "pages.recipeDetails.sentBy": "Этот рецепт был отправлен вам пользователем {{name}}",
+  "pages.recipeDetails.sentByAction": "Добавьте этот рецепт в свои рецепты, нажав кнопку внизу страницы.",
+
+  "pages.recipeDetails.ingredients": "Ингредиенты",
+  "pages.recipeDetails.noIngredients": "Нет ингредиентов",
+
+  "pages.recipeDetails.scaleStatus": "Кратность x {{scale}} (нажмите, чтобы изменить)",
+
+  "pages.recipeDetails.instructions": "Инструкции",
+  "pages.recipeDetails.noInstructions": "Нет инструкций",
+
+  "pages.recipeDetails.notes": "Примечания",
+  "pages.recipeDetails.noNotes": "Нет примечаний",
+
+  "pages.recipeDetails.labels": "Метки",
+  "pages.recipeDetails.labels.uncatLabels": "Общие",
+
+  "pages.recipeDetails.created": "Создано",
+  "pages.recipeDetails.updated": "Последнее редактирование",
+  "pages.recipeDetails.saveToMyRecipes": "Сохранить этот рецепт в моих рецептах",
+  "pages.recipeDetails.delete": "Удалить",
+  "pages.recipeDetails.doesNotBelongToYou": "Этот рецепт вам еще не принадлежит.",
+  "pages.recipeDetails.requiresAccountToSave": "Создайте учетную запись или войдите, чтобы сохранить этот рецепт в свою коллекцию.",
+  "pages.recipeDetails.registerOrLoginToSave": "Зарегистрируйтесь/войдите, чтобы сохранить этот рецепт",
+
+  "pages.recipeDetails.edit": "Изменить",
+  "pages.recipeDetails.delete": "Удалить",
+  "pages.recipeDetails.addToShoppingList": "Добавить в список покупок",
+  "pages.recipeDetails.addToMealPlan": "Добавить в план питания",
+  "pages.recipeDetails.share": "Поделиться",
+  "pages.recipeDetails.print": "Печать",
+  "pages.recipeDetails.makeACopy": "Сделать копию",
+
+  "pages.recipeDetails.pinRecipe": "Прикрепить рецепт",
+  "pages.recipeDetails.unPinRecipe": "Открепить рецепт",
+
+  "pages.recipeDetails.delete.header": "Подтвердить удаление",
+  "pages.recipeDetails.delete.message": "Это приведет к окончательному удалению рецепта из вашей учетной записи. Это действие необратимо.",
+
+  "pages.recipeDetails.cloned": "Рецепт сохранен в вашей учетной записи",
+  "pages.recipeDetails.similar": "Похожие рецепты в вашей коллекции",
+
+  "====== Pages.RecipeDetailsPopover ======": "",
+
+  "pages.recipeDetailsPopover.options": "Параметры",
+  "pages.recipeDetailsPopover.keepScreenOn": "Оставлять экран включенным",
+  "pages.recipeDetailsPopover.actions": "Действия",
+  "pages.recipeDetailsPopover.addToShoppingList": "Добавить в список покупок",
+  "pages.recipeDetailsPopover.addToMealPlan": "Добавить в план питания",
+  "pages.recipeDetailsPopover.share": "Поделиться",
+  "pages.recipeDetailsPopover.print": "Печать",
+
+  "pages.recipeDetailsPopover.pinRecipe": "Прикрепить рецепт",
+  "pages.recipeDetailsPopover.unPinRecipe": "Открепить рецепт",
+
+  "pages.recipeDetailsPopover.edit": "Изменить",
+  "pages.recipeDetailsPopover.makeACopy": "Сделать копию",
+  "pages.recipeDetailsPopover.dangerZone": "Будьте внимательны!",
+  "pages.recipeDetailsPopover.delete": "Удалить рецепт",
+
+  "====== Pages.ResettableSelectPopover ======": "",
+
+  "pages.rselectpopover.resetAll": "Сбросить все",
+  "pages.rselectpopover.done": "Готово",
+
+  "====== Pages.About ======": "",
+
+  "pages.about.title": "О программе и поддержка",
+  "pages.about.links.details": "Обо мне и RecipeSage",
+  "pages.about.links.contact": "Контакт",
+  "pages.about.links.contribute": "Внести свой вклад!",
+  "pages.about.links.userGuide": "Руководство пользователя (руководства)",
+  "pages.about.links.releaseNotes": "Примечания к выпуску",
+  "pages.about.links.legal": "Юридическая информация, соглашения и отказ от ответственности",
+  "pages.about.socialTitle": "Социальные сети",
+
+  "====== Pages.Contact ======": "",
+
+  "pages.contact.title": "Свяжитесь со мной",
+  "pages.contact.subtitle": "Контактная информация",
+  "pages.contact.pleaseUserGuide": "По любым вопросам, пожалуйста, обратитесь к руководству пользователя, прежде чем отправлять электронное письмо:",
+  "pages.contact.emailMe": "По любым вопросам, ошибкам или предложениям по функциям вы можете написать мне по адресу",
+  "pages.contact.socialTitle": "Социальные сети",
+
+  "====== Pages.Contribute ======": "",
+
+  "pages.contribute.title": "Внести вклад",
+  "pages.contribute.subtitle": "Внести свой вклад в RecipeSage",
+  "pages.contribute.mission": "Моя цель — сделать RecipeSage открытым для всех, не обременяя его рекламой.",
+  "pages.contribute.function": "Однако по мере роста RecipeSage затраты на хостинг серверов и изображений начинают увеличиваться.",
+  "pages.contribute.monthly": "Ежемесячно",
+  "pages.contribute.monthly.description": "Вы разблокируете бонусные функции за те месяцы, на которые вы подписаны.",
+  "pages.contribute.oneTime": "Одноразовый",
+  "pages.contribute.oneTime.description": "Вы разблокируете бонусные функции на один год.",
+  "pages.contribute.custom": "Пользовательский",
+  "pages.contribute.action": "Внести вклад!",
+
+  "pages.contribute.bonus.title": "В благодарность тем, кто сделал RecipeSage возможным, Ваш вклад откроет некоторые бонусные функции для вашей учетной записи. Вы сможете:",
+  "pages.contribute.bonus.feature.1": "Загружать изображения в высоком разрешении",
+  "pages.contribute.bonus.feature.2": "Загружать несколько изображений для каждого рецепта",
+  "pages.contribute.bonus.enabled": "Включено",
+
+  "pages.contribute.bonus.reason": "Бонусные функции доступны только участникам, поскольку размещение этих конкретных функций обходится мне дорого.",
+
+  "pages.contribute.cta.1": "Изначально я создал RecipeSage для своей семьи, чтобы размещать рецепты, которыми мы любим делиться. С тех пор RecipeSage превратился в полноценный проект с открытым исходным кодом.",
+  "pages.contribute.cta.2": "Пожалуйста, рассмотрите возможность внести свой вклад в постоянное обслуживание RecipeSage.",
+
+  "pages.contribute.minimum": "К сожалению, минимальная сумма составляет ${{amount}} из-за комиссий за транзакцию — приносим извинения",
+
+  "====== Pages.Contributeспасибо ======": "",
+
+  "pages.contributethankYou.title": "Спасибо!",
+  "pages.contribute Спасибо.спасибо": "Спасибо за то, что вы являетесь частью семьи RecipeSage и помогаете поддерживать ее!",
+  "pages.contributethankYou.bonus": "Бонусные функции должны быть разблокированы для вашей учетной записи в ближайшее время.",
+  "pages.contributethankYou.questions": "Пожалуйста, не стесняйтесь обращаться ко мне с любыми вопросами, проблемами или комментариями.",
+
+  "====== Pages.ContributeCancel ======": "",
+
+  "pages.contributeCancel.title": "Нам нужна ваша помощь!",
+  "pages.contributeCancel.cta.1": "RecipeSage основан на пожертвованиях — каждый вклад помогает!",
+  "pages.contributeCancel.cta.2": "К сожалению, RecipeSage не получает много пожертвований, поскольку это довольно маленькая платформа.",
+  "pages.contributeCancel.cta.3": "Чтобы сохранить бесплатность при оплате расходов на сервер, нам нужна ваша помощь.",
+  "pages.contributeCancel.cta.4": "Пожалуйста, подумайте еще раз — ваш вклад действительно ценен!",
+  "pages.contributeCancel.contribute": "Внести вклад",
+
+  "====== Pages.DownloadAndInstall ======": "",
+
+  "pages.downloadAndInstall.title": "Загрузить и установить",
+  "pages.downloadAndInstall.subtitle": "Приложение RecipeSage",
+  "pages.downloadAndInstall.done": "При этом RecipeSage будет установлен как собственное приложение на вашем устройстве.",
+
+  "pages.downloadAndInstall.thisDevice": "Это устройство",
+
+  "pages.downloadAndInstall.android.title": "Устройство Android",
+  "pages.downloadAndInstall.android.instructionHeader": "Чтобы установить RecipeSage на Android:",
+  "pages.downloadAndInstall.android.step.1": "Откройте браузер Chrome",
+  "pages.downloadAndInstall.android.step.2": "Откройте меню браузера с помощью кнопки в браузере, которая выглядит следующим образом:",
+  "pages.downloadAndInstall.android.step.3": "Нажмите \"Добавить на главный экран\"",
+
+  "pages.downloadAndInstall.ios.title": "Мобильное устройство Apple",
+  "pages.downloadAndInstall.ios.instructionHeader": "Чтобы установить RecipeSage на мобильные устройства Apple (iOS):",
+  "pages.downloadAndInstall.ios.step.1": "Откройте браузер Safari",
+  "pages.downloadAndInstall.ios.step.2": "Откройте меню общего доступа с помощью кнопки на нижней панели, которая выглядит следующим образом:",
+  "pages.downloadAndInstall.ios.step.3": "Нажмите \"Добавить на главный экран\"",
+
+  "pages.downloadAndInstall.desktop.title": "Настольные или портативные устройства",
+  "pages.downloadAndInstall.desktop.instructionHeader": "Чтобы установить RecipeSage на настольные компьютеры или ноутбуки:",
+  "pages.downloadAndInstall.desktop.step.1": "Откройте браузер Google Chrome",
+  "pages.downloadAndInstall.desktop.step.2": "Откройте меню браузера с помощью кнопки в правом верхнем углу, которая выглядит следующим образом:",
+  "pages.downloadAndInstall.desktop.step.3": "Нажмите \"Установить RecipeSage...\"",
+
+  "pages.downloadAndInstall.other": "Другое программное обеспечение RecipeSage",
+  "pages.downloadAndInstall.bookmark": "Закладка для автоматического вырезания рецептов (устарела)",
+  "pages.downloadAndInstall.bookmark.instructions": "Перетащите эту ссылку на панель закладок. Щелкните закладку, чтобы импортировать текущий сайт, на котором вы находитесь.",
+  "pages.downloadAndInstall.bookmark.description": "Автоматически извлекает содержимое рецептов с веб-страниц. Вместо этой закладки рекомендуется использовать расширение для браузера.",
+  "pages.downloadAndInstall.extension": "Браузерное расширение RecipeSage Clip Tool",
+  "pages.downloadAndInstall.extension.description": "Автоматически извлекает содержимое рецептов с веб-страниц и обеспечивает большую совместимость с веб-сайтами, которые могут не импортироваться через импортер в приложении.",
+
+  "====== Pages.LabelsPopover ======": "",
+
+  "pages.labelsPopover.title": "Параметры",
+  "pages.labelsPopover.options.showCreatedAt": "Показать Дату Создания",
+  "pages.labelsPopover.options.selectMultipleLabels": "Выбрать несколько меток",
+  "pages.labelsPopover.options.unselectLabels": "Отменить выбор всех меток",
+
+  "====== Pages.Labels ======": "",
+
+  "pages.labels.title": "Управление метками и категориями",
+  "pages.labels.selectionModeTitle": "Выбрано: {{count}}",
+
+  "pages.labels.label.sectionTitle": "Ваши метки",
+  "pages.labels.label.sectionDescription": "Всего у вас {{count}} меток. Нажмите на метку, чтобы просмотреть.",
+  "pages.labels.label.recipeCount": "Рецепты: {{count}}",
+  "pages.labels.label.group": "Категория: {{title}}",
+  "pages.labels.label.noGroup": "Нет категории",
+  "pages.labels.label.createdAt": "Создано {{dateString}}",
+  "pages.labels.label.selected": "Выбрано",
+  "pages.labels.label.nullState.1": "У вас пока нет меток.",
+  "pages.labels.label.nullState.2": "Нажмите кнопку +, чтобы создать новую метку.",
+
+  "pages.labels.modal.delete.header": "Подтвердить удаление",
+  "pages.labels.modal.delete.message": "Выбранные метки будут удалены из вашей учетной записи без возможности восстановления. Это действие необратимо. Следующие метки будут удалены: {{labelTitles}}",
+
+  "pages.labels.group.sectionTitle": "Категории ваших меток",
+  "pages.labels.group.sectionDescription": "Всего у вас {{count}} категорий меток. Нажмите категорию для редактирования.",
+  "pages.labels.group.labelCount": "{{count}} меток относятся к этой категории",
+  "pages.labels.group.createdAt": "Создано {{dateString}}",
+  "pages.labels.group.nullState.1": "У вас пока нет категорий меток.",
+  "pages.labels.group.nullState.2": "Нажмите кнопку +, чтобы создать новую категорию меток.",
+
+  "====== Pages.NewLabelItemModal ======": "",
+
+  "pages.newLabelItemModal.title": "Новая метка или категория меток",
+  "pages.newLabelItemModal.categoryTitle": "Новая категория меток",
+  "pages.newLabelItemModal.labelTitle": "Новая метка",
+
+  "pages.newLabelItemModal.label": "Создать метку",
+  "pages.newLabelItemModal.labelDescription": "Метки можно прикреплять к рецептам, чтобы систематизировать и фильтровать их позже. Некоторые распространенные примеры ярлыков: \"завтрак\", \"десерт\" и \"вегетарианское\"",
+  "pages.newLabelItemModal.group": "Создать категорию меток",
+  "pages.newLabelItemModal.groupDescription": "Категории меток можно использовать для организации меток в группы, например \"еда\" или \"диета\". Например, вы можете поместить метки \"завтрак\", \"обед\" и \"ужин\" в категорию \"еда\". Каждая категория будет отображаться отдельно при редактировании рецепта.",
+
+  "pages.newLabelItemModal.labelTitleInput": "Имя метки",
+  "pages.newLabelItemModal.labelTitleInputPlaceholder": "Введите имя метки",
+  "pages.newLabelItemModal.labelTitleInputHint": "Многие люди начинают использовать простые ярлыки, такие как \"завтрак\", \"десерт\" или \"вегетарианское\"",
+
+  "====== Pages.ManageLabelGroupModal ======": "",
+
+  "pages.manageLabelGroupModal.title": "Управление категорией меток",
+  "pages.manageLabelGroupModal.groupTitle": "Имя категории меток",
+  "pages.manageLabelGroupModal.groupTitlePlaceholder": "Введите название категории меток",
+  "pages.manageLabelGroupModal.groupTitleHint": "Многие люди начинают с \"еда\", \"диета\" или \"кухня\"",
+  "pages.manageLabelGroupModal.warn": "Предупредить меня, если я не добавлю",
+  "pages.manageLabelGroupModal.warnDescription": "Если эта опция включена, вы будете предупреждены, если сохраните рецепт без прикрепленной метки в этой категории",
+  "pages.manageLabelGroupModal.labels": "Выбрать метки",
+  "pages.manageLabelGroupModal.labelsHint": "Выбранные метки будут сгруппированы в эту категорию. Данная метка может одновременно принадлежать не более чем к одной категории.",
+  "pages.manageLabelGroupModal.labels.noItems": "Нет меток без категорий",
+  "pages.manageLabelGroupModal.labels.search": "Поиск метки",
+
+  "pages.manageLabelGroupModal.conflict": "Ошибка",
+  "pages.manageLabelGroupModal.conflictMessage": "Категория меток с таким заголовком уже существует",
+
+  "pages.manageLabelGroupModal.delete.header": "Подтвердить удаление категории меток",
+  "pages.manageLabelGroupModal.delete.message": "Категория меток \"{{title}}\" будет удалена. Примечание. Это действие не повлияет ни на какие метки в этой категории.",
+
+  "====== Pages.ManageLabelModal ======": "",
+
+  "pages.manageLabelModal.title": "Управление меткой: {{name}}",
+  "pages.manageLabelModal.recipeCount": "Назначена {{count}} рецептам",
+  "pages.manageLabelModal.group": "Назначена категории меток: {{title}}",
+  "pages.manageLabelModal.noGroup": "Не присвоена категории меток",
+  "pages.manageLabelModal.createdAt": "Впервые создана {{dateString}}",
+  "pages.manageLabelModal.warning": "Примечание: эти действия являются постоянными",
+  "pages.manageLabelModal.view": "Просмотреть все рецепты",
+  "pages.manageLabelModal.rename": "Переименовать",
+  "pages.manageLabelModal.merge": "Объединить с другой меткой",
+  "pages.manageLabelModal.delete": "Удалить",
+  "pages.manageLabelModal.deleteWithRecipes": "Удалить, включая рецепты",
+
+  "pages.manageLabelModal.renameConflict.header": "Ошибка",
+  "pages.manageLabelModal.renameConflict.message": "Метка с таким заголовком уже существует",
+
+  "pages.manageLabelModal.rename.header": "Переименовать метку: {{name}}",
+  "pages.manageLabelModal.delete.header": "Удалить метку: {{name}}",
+  "pages.manageLabelModal.deleteWithRecipes.header": "Удалить метку \"{{name}}\", включая рецепты",
+  "pages.manageLabelModal.deleteWithRecipes.message": "Это приведет к удалению метки {{name}} вместе со всеми рецептами, к которым прикреплена эта метка.",
+
+  "pages.manageLabelModal.notFound.header": "Метка не найдена",
+  "pages.manageLabelModal.notFound.subHeader": "Целевая метка \"{{name}}\" не найдена",
+  "pages.manageLabelModal.notFound.message": "Необходимо ввести заголовок существующей метки, с которой она будет объединена.",
+
+  "pages.manageLabelModal.selfMerge.header": "Невозможно объединить метку саму с собой",
+  "pages.manageLabelModal.selfMerge.subHeader": "Исходная и целевая метки должны быть разными метками",
+
+  "pages.manageLabelModal.mergeComplete.header": "Объединение завершено!",
+  "pages.manageLabelModal.mergeComplete.subHeader": "Метка \"{{sourceTitle}}\" успешно объединена с \"{{targetTitle}}\"",
+  "pages.manageLabelModal.mergeComplete.message": "Метка \"{{sourceTitle}}\" была удалена — вы обнаружите, что все ее рецепты перемещены в \"{{targetTitle}}\".",
+
+  "pages.manageLabelModal.merge.header": "Объединить метку: {{title}}",
+  "pages.manageLabelModal.merge.subHeader": "С какой меткой вы хотите объединить \"{{title}}\"?",
+  "pages.manageLabelModal.merge.message": "Все рецепты в \"{{title}}\" вместо этого будут переименованы в целевую метку, а метка \"{{title}}\" будет удалена.",
+  "pages.manageLabelModal.merge.placeholder": "Имя целевой метки",
+
+  "====== Pages.MealPlan ======": "",
+
+  "pages.mealPlan.title": "План питания — {{name}}",
+
+  "pages.mealPlan.modal.emptyDays.header": "Выбраны пустые дни",
+  "pages.mealPlan.modal.emptyDays.message": "Выбранные вами дни не содержат никаких элементов плана питания. Вам нужно будет выбрать хотя бы один день с элементами плана питания.",
+
+  "pages.mealPlan.modal.copy.header": "Копировать в",
+  "pages.mealPlan.modal.copy.message": "При этом блюда из выбранных дней будут скопированы в серию дней, начиная с выбранного вами дня. Нажмите на день, в который вы хотите скопировать.",
+
+  "pages.mealPlan.modal.move.header": "Переместить",
+  "pages.mealPlan.modal.move.message": "Это переместит блюда в выбранные дни в серию дней, начиная с выбранного вами дня. Нажмите на день, в который вы хотите перейти.",
+
+  "pages.mealPlan.modal.delete.header": "Удалить пункты плана питания",
+  "pages.mealPlan.modal.delete.message": "Это приведет к удалению всех элементов в {{daysList}}",
+
+  "pages.meal Plan.model.no Recipes.header": "Нет рецептов",
+  "pages.mealPlan.modal.noRecipes.message": "Выбранные дни не содержат рецептов.\nИмейте в виду, что в список покупок можно добавлять только блюда, являющиеся рецептами.\nОтсюда вы не можете добавлять блюда, введенные вручную, в список покупок.",
+
+  "pages.mealPlan.modal.copyConfirm.header": "Копировать все выбранные элементы",
+  "pages.mealPlan.modal.copyConfirm.messageSingle": "При этом блюда из {{selectedDayList}} будут скопированы в {{destDay}}",
+  "pages.mealPlan.modal.copyConfirm.messageMultiple": "При этом блюда из {{selectedDayList}} будут скопированы в дни, начиная и следующие за {{destDay}}",
+  "pages.mealPlan.modal.copyConfirm.change": "Выберите другой день",
+
+  "pages.mealPlan.modal.moveConfirm.header": "Переместить все выбранные элементы",
+  "pages.mealPlan.modal.moveConfirm.messageSingle": "Это переместит блюда из {{selectedDayList}} в {{destDay}}",
+  "pages.mealPlan.modal.moveConfirm.messageMultiple": "При этом блюда из {{selectedDayList}} будут перенесены на дни, начиная с {{destDay}} и следующие за ним",
+  "pages.mealPlan.modal.moveConfirm.change": "Выберите другой день",
+
+  "====== Pages.MealPlanBulkPinModal ======": "",
+
+  "pages.mealPlanBulkPinModal.title": "Закрепленные блюда",
+  "pages.mealPlanBulkPinModal.instructions1": "Выберите блюда, которые вы хотите закрепить открытыми.",
+  "pages.mealPlanBulkPinModal.instructions2": "Примечание: вы можете закреплять только те элементы, которые связаны с рецептами.",
+  "pages.mealPlanBulkPinModal.selectAll": "Выбрать все",
+  "pages.mealPlanBulkPinModal.deselectAll": "Отменить выбор",
+  "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(не связана с рецептом)",
+  "pages.mealPlanBulkPinModal.cancel": "Отмена",
+  "pages.mealPlanBulkPinModal.pin": "Прикрепить",
+
+  "====== Pages.MealPlanItemDetailsModal ======": "",
+
+  "pages.mealPlanItemDetailsModal.title": "Информация об элементе плана питания",
+  "pages.mealPlanItemDetailsModal.scheduled": "Запланировано на {{meal}} на {{date}}",
+  "pages.mealPlanItemDetailsModal.lastModified": "Последнее изменение пользователем {{name}} {{date}}",
+  "pages.mealPlanItemDetailsModal.clickToOpen": "Нажмите, чтобы открыть рецепт",
+
+  "pages.mealPlanItemDetailsModal.actions.addToShoppingList": "Добавить этот рецепт в список покупок",
+  "pages.mealPlanItemDetailsModal.actions.pinRecipe": "Прикрепить этот рецепт",
+  "pages.mealPlanItemDetailsModal.actions.unpinRecipe": "Открепить этот рецепт",
+  "pages.mealPlanItemDetailsModal.actions.edit": "Изменить этот элемент",
+  "pages.mealPlanItemDetailsModal.actions.duulate": "Создать копию этого элемента",
+  "pages.mealPlanItemDetailsModal.actions.delete": "Удалить этот элемент",
+  "pages.mealPlanItemDetailsModal.actions.close": "Закрыть",
+
+  "pages.mealPlanItemDetailsModal.delete.header": "Подтвердить удаление",
+  "pages.mealPlanItemDetailsModal.delete.message": "Это приведет к удалению \"{{title}}\" из этого плана питания.",
+
+  "====== Pages.MealPlanPopover ======": "",
+
+  "pages.mealPlanPopover.options.title": "Параметры",
+  "pages.mealPlanPopover.options.startWeekOn.title": "Начало недели",
+  "pages.mealPlanPopover.options.startWeekOn.monday": "Понедельник",
+  "pages.mealPlanPopover.options.startWeekOn.sunday": "Воскресенье",
+
+  "pages.mealPlanPopover.actions.title": "Действия",
+  "pages.mealPlanPopover.actions.share": "Поделиться",
+  "pages.mealPlanPopover.actions.pinRecipesOpen": "Закрепить рецепты",
+  "pages.mealPlanPopover.actions.addToShoppingList": "Добавить в список покупок",
+  "pages.mealPlanPopover.actions.copyDays": "Копировать выбранные дни",
+  "pages.mealPlanPopover.actions.moveDays": "Переместить выбранные дни",
+  "pages.mealPlanPopover.actions.deleteDays": "Удалить выбранные дни",
+
+  "pages.mealPlanPopover.dangerZone.title": "Будьте внимательны!",
+  "pages.mealPlanPopover.dangerZone.delete": "Удалить план питания",
+
+  "pages.mealPlanPopover.delete.header": "Подтвердить удаление",
+  "pages.mealPlanPopover.delete.message": "Этот план питания будет навсегда удален из вашей учетной записи. Примечание. Если вы являетесь только соавтором этого плана питания, он будет удален только из вашей учетной записи. Если вы являетесь владельцем этого плана питания, он будет удален из всех аккаунтов других соавторов.",
+
+  "====== Pages.MealPlans ======": "",
+
+  "pages.mealPlans.title": "Планы питания",
+  "pages.mealPlans.metadata.createdOn": "Создан {{date}}",
+  "pages.mealPlans.metadata.collaborators": "В сотрудничестве с:",
+  "pages.mealPlans.metadata.createdBy": "Создан {{name}}",
+  "pages.mealPlans.metadata.youOwn": "Этот план питания принадлежит вам",
+
+  "pages.meal Plans.no Plans": "У вас нет планов питания.",
+  "pages.mealPlans.toCreate": "Чтобы создать план питания, нажмите кнопку + в нижнем углу.",
+
+  "====== Pages.NewMealPlanItemModal ======": "",
+
+  "pages.newMealPlanItemModal.title.update": "Обновить элемент плана питания",
+  "pages.newMealPlanItemModal.title.new": "Добавить элемент плана питания",
+  "pages.newMealPlanItemModal.inputType.recipe": "Выбрать рецепт",
+  "pages.newMealPlanItemModal.inputType.manual": "Ввод вручную",
+  "pages.newMealPlanItemModal.itemTitle": "Название элемента",
+  "pages.newMealPlanItemModal.date": "Дата",
+
+  "pages.newMealPlanItemModal.save": "Сохранить изменения",
+  "pages.newMealPlanItemModal.create": "Добавить в план питания",
+
+  "====== Pages.NewMealPlanModal ======": "",
+
+  "pages.newMealPlanModal.title": "Новый планировщик еды",
+  "pages.newMealPlanModal.input.title": "Название",
+  "pages.newMealPlanModal.createAndShare": "Создавать и Поделиться",
+  "pages.newMealPlanModal.create": "Создать",
+
+  "====== Pages.ShareMealPlanModal ======": "",
+
+  "pages.shareMealPlanModal.title": "Поделиться планом питания",
+  "pages.shareMealPlanModal.description": "Ссылку iCal/ICS ниже можно использовать практически в любой программе-календаре для синхронизации вашего плана питания за пределами RecipeSage",
+
+  "====== Pages.Assistant ======": "",
+
+  "pages.assistant.title": "Помощник по кулинарии",
+  "pages.assistant.welcome.1": "Добро пожаловать в кулинарный помощник RecipeSage!",
+  "pages.assistant.welcome.2": "Помощник по приготовлению пищи — это модель искусственного интеллекта, которая может отвечать на ваши вопросы о кулинарии и помогать создавать рецепты.",
+  "pages.assistant.welcome.3": "Помощник по приготовлению пищи имеет ограничение на количество сообщений в 5 сообщений в день из-за высоких затрат на запуск ИИ. Для участников этот лимит увеличивается до 50 сообщений в день.",
+  "pages.assistant.messageLimit": "Достигнуто максимальное количество сообщений (извините, это дорого!). Счетчик сообщений сбрасывается в 0:00GMT.",
+
+  "====== Pages.MessageThread ======": "",
+
+  "pages.messageThread.title": "Беседа с {{name}}",
+  "pages.messageThread.clickToOpen": "Нажмите, чтобы открыть",
+  "pages.messageThread.recipeDeleted": "Рецепт удален",
+  "pages.messageThread.yourRecipeDeleted": "Ваша копия этого рецепта больше не существует",
+  "pages.messageThread.recipeCopySent": "Копия этого рецепта была отправлена",
+
+  "pages.messageThread.sending": "Отправка...",
+  "pages.messageThread.sent": "Отправлено!",
+  "pages.messageThread.messagePlaceholder": "Сообщение...",
+
+  "====== Pages.Messages ======": "",
+
+  "pages.messages.title": "Сообщения",
+  "pages.messages.history.you": "Вы",
+  "pages.messages.history.sentRecipe": "Отправил рецепт",
+
+  "pages.messages.noMessages": "У вас нет цепочек сообщений.",
+  "pages.messages.instructions": "Чтобы начать разговор с кем-то, нажмите кнопку + в нижнем углу.",
+
+  "pages.messages.warning": "Предупреждение:",
+  "pages.messages.notificationsRequired": "Для правильной работы обмена сообщениями уведомления должны быть включены.",
+  "pages.messages.notificationsInstructions": "Узнайте, как снова включить уведомления здесь",
+
+  "====== Pages.NewMessageModal ======": "",
+
+  "pages.newMessageModal.title": "Новая ветка сообщений",
+  "pages.newMessageModal.input.target": "Введите адрес электронной почты пользователя RecipeSage или @handle",
+  "pages.newMessageModal.compose": "Составьте сообщение",
+  "pages.newMessageModal.input.messagePlaceholder": "Привет! Я бы хотел пообщаться в RecipeSage",
+  "pages.newMessageModal.send": "Отправить",
+
+  "pages.newMessageModal.defaultMessage": "Привет! Я бы хотел пообщаться в RecipeSage",
+
+  "====== Pages.AddRecipeToMealPlanModal ======": "",
+
+  "pages.addRecipeToMealPlanModal.title": "Добавить рецепт в план питания",
+  "pages.addRecipeToMealPlanModal.instructions1": "Сначала выберите целевой план питания:",
+  "pages.addRecipeToMealPlanModal.loading": "Загрузка планов питания...",
+  "pages.addRecipeToMealPlanModal.selectDestination": "Выбрать план питания",
+  "pages.addRecipeToMealPlanModal.noMealPlans": "У вас нет планов питания.",
+  "pages.addRecipeToMealPlanModal.createMealPlan": "Создать план питания",
+
+  "pages.addRecipeToMealPlanModal.add": "Добавить в план питания",
+  "pages.addRecipeToMealPlanModal.selectMealPlan": "Выберите план питания",
+  "pages.addRecipeToMealPlanModal.selectMeal": "Выберите блюдо",
+
+  "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Отлично! Теперь выберите только что созданный план питания.",
+
+  "====== Pages.AddRecipeToShoppingListModal ======": "",
+
+  "pages.addRecipeToShoppingListModal.title.singular": "Добавить рецепт в список покупок",
+  "pages.addRecipeToShoppingListModal.title.plural": "Добавить рецепты в список покупок",
+  "pages.addRecipeToShoppingListModal.selectDestination": "Выберите целевой список покупок:",
+  "pages.addRecipeToShoppingListModal.loading": "Загрузка списков покупок...",
+  "pages.addRecipeToShoppingListModal.destination": "Целевой список покупок",
+  "pages.addRecipeToShoppingListModal.noShoppingLists": "У вас нет списков покупок.",
+  "pages.addRecipeToShoppingListModal.createShoppingList": "Создать список покупок",
+  "pages.addRecipeToShoppingListModal.add": "Добавить в список",
+
+  "pages.addRecipeToShoppingListModal.newListSuccess": "Отлично! Теперь выберите список покупок, который вы только что создали.",
+
+  "====== Pages.EditRecipe ======": "",
+
+  "pages.editRecipe.title.edit": "Изменить рецепт",
+  "pages.editRecipe.title.new": "Новый рецепт",
+  "pages.editRecipe.autoclip": "Автозаполнение полей из URL (бета)",
+
+  "pages.editRecipe.input.title": "Заголовок",
+  "pages.editRecipe.input.description": "Описание",
+  "pages.editRecipe.input.yield": "Выход блюда",
+  "pages.editRecipe.input.activeTime": "Время приготовления",
+  "pages.editRecipe.input.totalTime": "Общее время",
+  "pages.editRecipe.input.source": "Источник",
+  "pages.editRecipe.input.sourceUrl": "Исходный URL",
+  "pages.editRecipe.input.ingredients": "Ингредиенты",
+  "pages.editRecipe.input.instructions": "Инструкции",
+  "pages.editRecipe.input.notes": "Заметки",
+  "pages.editRecipe.input.rating": "Рейтинг",
+  "pages.editRecipe.input.labels": "Метки",
+  "pages.editRecipe.input.uncatLabels": "Общий",
+  "pages.editRecipe.addLabel.otherGroup": "Существует в другой категории",
+
+  "pages.editRecipe.save": "Сохранить",
+  "pages.editRecipe.create": "Создать",
+
+  "pages.editRecipe.titleRequired": "Укажите название рецепта (единственное обязательное поле).",
+
+  "pages.editRecipe.clip.header": "Автозаполнение полей из URL",
+  "pages.editRecipe.clip.subHeader": "Введите URL-адрес веб-сайта, чтобы получить данные рецепта",
+  "pages.editRecipe.clip.message": "Примечание: эта функция находится в стадии бета-тестирования",
+  "pages.editRecipe.clip.placeholder": "URL-адрес рецепта",
+  "pages.editRecipe.clip.invalidUrl": "Ошибка: необходимо указать действительный URL-адрес",
+  "pages.editRecipe.clip.loading": "Пожалуйста, подождите...",
+  "pages.editRecipe.clip.failed": "Не удалось выполнить автозаполнение с этого URL",
+
+  "pages.editRecipe.missingLabelGroup.title": "Отсутствует группа меток",
+  "pages.editRecipe.missingLabelGroup.message": "Вы указали, что группа меток \"{{groupName}}\" должна быть обязательной. Вы можете отключить это на странице моих меток.",
+
+  "pages.editRecipe.addImage.header": "Добавить изображение по URL",
+  "pages.editRecipe.addImage.message": "Введите URL-адрес изображения, которое будет добавлено в рецепт",
+  "pages.editRecipe.addImage.placeholder": "URL-адрес изображения",
+  "pages.editRecipe.addImage.downloading": "Загрузка изображения...",
+  "pages.editRecipe.addImage.invalidUrl": "Пожалуйста, введите действительный URL-адрес изображения",
+
+  "====== Pages.EditRecipePopover ======": "",
+
+  "pages.editRecipePopover.actions": "Действия",
+  "pages.editRecipePopover.addImage": "Добавить изображение по URL",
+
+  "====== Pages.PrintRecipeModal ======": "",
+
+  "pages.printRecipeModal.title": "Выберите макет печати",
+  "pages.printRecipeModal.print": "Печать",
+
+  "pages.printRecipeModal.template.standard": "Стандарт",
+  "pages.printRecipeModal.template.standardNoImg": "Стандартное без изображения",
+  "pages.printRecipeModal.template.halfSheetCols": "Половина листа, столбцы",
+  "pages.printRecipeModal.template.halfSheetCompactNoCols": "Половина листа, компактный, без столбцов",
+
+  "====== Pages.Account ======": "",
+
+  "pages.account.title": "Учетная запись и учетные данные",
+
+  "pages.account.description": "Здесь вы можете обновить и изменить аспекты своей учетной записи",
+  "pages.account.creds.title": "Учетные данные и детали",
+  "pages.account.creds.name": "Имя/Псевдоним",
+  "pages.account.creds.name.save": "Сохранить имя",
+  "pages.account.creds.email": "Электронная почта",
+  "pages.account.creds.email.save": "Сохранить электронную почту",
+  "pages.account.creds.password": "Пароль",
+  "pages.account.creds.password.confirm": "Подтвердить пароль",
+  "pages.account.creds.password.save": "Сохранить пароль",
+  "pages.account.creds.instructions": "Чтобы изменить поле выше, коснитесь поля, отредактируйте его и нажмите появившуюся кнопку сохранения.",
+
+  "pages.account.stats.title": "Статистика",
+  "pages.account.stats.recipeCount": "Количество рецептов",
+  "pages.account.stats.recipeImageCount": "Количество изображений рецепта",
+  "pages.account.stats.messageCount": "Общее количество сообщений",
+  "pages.account.stats.createdAt": "Учетная запись создана",
+  "pages.account.stats.lastLogin": "Последний вход",
+
+  "pages.account.bonus.title": "Статус бонусных возможностей",
+  "pages.account.bonus.description": "Пользователи открывают определенные функции, размещение которых требует больших затрат:",
+  "pages.account.bonus.highResImages": "Изображения с высоким разрешением",
+  "pages.account.bonus.multiple Images": "Несколько изображений для каждого рецепта",
+
+  "pages.account.bonus.enabled": "Включено",
+  "pages.account.bonus.notEnabled": "Не включено",
+  "pages.account.bonus.subscription Expired": "Срок действия истек {{date}}",
+  "pages.account.bonus.subscriptionExpires": "Включено до {{date}}",
+  "pages.account.bonus.subscriptionNeverExpires": "Срок действия никогда не истекает",
+  "pages.account.bonus.automatic Renewal": "(при ежемесячной подписке будет обновляться автоматически)",
+
+  "pages.account.dangerZone.title": "Будьте внимательны!",
+  "pages.account.dangerZone.warning1": "Будьте осторожны с этими действиями — они необратимы.",
+  "pages.account.dangerZone.warning2": "Вам будет предложено подтвердить любые действия, которые вы совершаете здесь.",
+  "pages.account.danger Zone.delete AllRecipes": "Удалить все рецепты",
+  "pages.account.danger Zone.delete Account": "Удалить аккаунт и все данные",
+  "pages.account.dangerZone.description": "Эти действия необратимы и могут занять несколько минут.",
+
+  "pages.account.nameRequired": "Имя/псевдоним не должно быть пустым.",
+  "pages.account.nameUpdated": "Имя профиля обновлено.",
+  "pages.account.emailRequired": "Электронный адрес не должен быть пустым.",
+  "pages.account.emailConflict": "К сожалению, учетная запись с таким адресом электронной почты уже существует.",
+  "pages.account.emailInvalid": "Пожалуйста, введите действительный адрес электронной почты.",
+  "pages.account.emailUpdated": "Адрес электронной почты был обновлен.",
+
+  "pages.account.passwordMatch": "Пароли не совпадают.",
+  "pages.account.passwordLength": "Пароли должны быть длиной не менее 6 символов.",
+  "pages.account.passwordUpdated.header": "Пароль обновлен",
+  "pages.account.passwordUpdated.message": "Ваш пароль был обновлен. Вам нужно будет снова войти в систему на всех устройствах, которые используют эту учетную запись.",
+
+  "pages.account.delete AllRecipes.header": "Внимание! Вы собираетесь удалить все свои рецепты!",
+  "pages.account.deleteAllRecipes.message": "Это действие НЕОБРАТИМО!!! Все ваши рецепты и связанные с ними ярлыки будут удалены из системы RecipeSage.",
+  "pages.account.delete AllRecipes.confirm": "Да, продолжить",
+  "pages.account.delete AllRecipes.success": "Данные вашего рецепта были удалены.",
+
+  "pages.account.delete Account.header": "Удалить аккаунт и все данные",
+  "pages.account.deleteAccount.message": "Это НЕОБРАТИМО и приведет к полному удалению всех ваших данных из RecipeSage. Это может занять несколько минут.",
+
+  "====== Pages.Account ======": "",
+
+  "pages.export.title": "Экспорт",
+  "pages.export.description1": "После выбора экспорта данных начнется загрузка файла. Возможно, вам придется нажать \"разрешить\".",
+  "pages.export.description2": "Экспортированный файл будет содержать все ваши рецепты в выбранном формате.",
+  "pages.export.description3": "Примечание. Если вы планируете повторно импортировать данные позже, вам нужно будет выбрать формат JSON-LD.",
+  "pages.export.jsonld": "Экспортировать в формате JSON-LD (лучше всего)",
+  "pages.export.xml": "Экспортировать как XML",
+  "pages.export.txt": "Экспортировать как обычный текст",
+  "pages.export.pdf": "Экспортировать в PDF",
+
+  "====== Pages.Import ======": "",
+
+  "pages.import.title": "Импорт",
+  "pages.import.description1": "RecipeSage поддерживает импорт из Pepperplate, Living Cookbook и Paprika.",
+  "pages.import.description2": "При импорте рецептов все рецепты из выбранного вами файла/учетной записи будут добавлены в вашу учетную запись RecipeSage.",
+  "pages.import.description3": "Если у вас возникли проблемы с импортом, отправьте мне электронное письмо.",
+  "pages.import.jsonld": "Импортировать из файла JSON-LD",
+  "pages.import.cookmate": "Импортировать файл Cookmate",
+  "pages.import.pepperplate": "Импортировать из Pepperplate",
+  "pages.import.livingCookbook": "Импортировать файл Living Cookbook",
+  "pages.import.paprika": "Импортировать файл рецептов Paprika",
+
+  "====== Pages.ImportJSONLD ======": "",
+
+  "pages.importJsonLD.title": "Импорт рецептов из файла JSON-LD",
+  "pages.importJsonLD.description1": "Это позволит импортировать файл JSON-LD (оканчивается на .json) в RecipeSage (это один из форматов файлов, экспортируемых RecipeSage).",
+  "pages.importJsonLD.description2": "Задача импорта может занять несколько минут",
+  "pages.importJsonLD.description3": "Это зависит от формата и размера вашего файла",
+  "pages.importJsonLD.description4": "Если у вас возникли проблемы с импортом, отправьте мне электронное письмо с файлом, и я смогу импортировать его вручную.",
+  "pages.importJsonLD.description5": "Если ваш файл очень большой, у вас могут возникнуть проблемы с его импортом через этот интерфейс из-за ограничений браузера.",
+  "pages.importJsonLD.description6": "Пожалуйста, рассмотрите возможность пожертвования, если ваш файл содержит большое количество рецептов или изображений.",
+
+  "pages.importJsonLD.fileTypeWarning": "Внимание! Этот тип файла не заканчивается на .json. Он может не работать!",
+  "pages.importJsonLD.fileTooLarge": "Этот файл слишком велик для прямой загрузки.",
+  "pages.importJsonLD.fileTooLarge.contact": "Пожалуйста, свяжитесь со мной, чтобы импортировать вашу базу данных вручную.",
+
+  "pages.importJsonLD.upload": "Загрузка и импорт",
+  "pages.importJsonLD.upload.ignoreWarning": "Все равно загрузить и импортировать",
+  "pages.importJsonLD.loading": "Импортируется, подождите...",
+
+  "pages.importJsonLD.filePicker.file": "Выбран {{fileName}}",
+  "pages.importJsonLD.filePicker.noFile": "Выберите файл .json",
+
+  "pages.importJsonLD.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате JSON-LD. Если у вас возникли проблемы, пришлите мне электронное письмо.",
+  "pages.importJsonLD.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
+  "pages.importJsonLD.success": "Импорт прошел успешно!",
+
+  "====== Pages.ImportCookmate ======": "",
+
+  "pages.importCookmate.title": "Импорт рецептов из файла Cookmate",
+  "pages.importCookmate.description1": "Это позволит импортировать файл Cookmate (оканчивается на .mcb) в RecipeSage.",
+  "pages.importCookmate.description2": "Задача импорта может занять несколько минут",
+  "pages.importCookmate.description3": "Это зависит от формата и размера вашего файла",
+  "pages.importCookmate.description4": "Если у вас возникли проблемы с импортом, отправьте мне электронное письмо с файлом, и я смогу импортировать его вручную.",
+  "pages.importCookmate.description5": "Если ваш файл очень большой, у вас могут возникнуть проблемы с его импортом через этот интерфейс из-за ограничений браузера.",
+  "pages.importCookmate.description6": "Пожалуйста, рассмотрите возможность пожертвования, если ваш файл содержит большое количество рецептов или изображений.",
+
+  "pages.importCookmate.fileTypeWarning": "Внимание! Этот тип файла не заканчивается на .mcb. Это может не работать!",
+  "pages.importCookmate.fileTooLarge": "Этот файл слишком велик для прямой загрузки.",
+  "pages.importCookmate.fileTooLarge.contact": "Пожалуйста, свяжитесь со мной, чтобы импортировать вашу базу данных вручную.",
+
+  "pages.importCookmate.upload": "Загрузка и импорт",
+  "pages.importCookmate.upload.ignoreWarning": "Все равно загрузить и импортировать",
+  "pages.importCookmate.loading": "Импортируется, подождите...",
+
+  "pages.importCookmate.filePicker.file": "Выбран {{fileName}}",
+  "pages.importCookmate.filePicker.noFile": "Выберите файл .mcb",
+
+  "pages.importCookmate.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате Cookmate. Если у вас возникли проблемы, пришлите мне электронное письмо.",
+  "pages.importCookmate.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
+  "pages.importCookmate.success": "Импорт прошел успешно!",
+
+  "====== Pages.ImportLivingCookbook ======": "",
+
+  "pages.importLivingCookbook.title": "Импорт рецептов из Living Cookbook",
+  "pages.importLivingCookbook.description1": "Это позволит импортировать базу данных вашей Living Cookbook в RecipeSage.",
+  "pages.importLivingCookbook.betaWarning": "Обратите внимание, что эта функция находится в стадии бета-тестирования.",
+  "pages.importLivingCookbook.description2": "Все файлы должны быть в формате .lcb, .fdx или .fdxz. Другие форматы не будут работать.",
+  "pages.importLivingCookbook.timeWarning": "Задача импорта может занять несколько минут",
+  "pages.importLivingCookbook.timeWarning.description": "Это зависит от формата и размера файла вашей базы данных",
+  "pages.importLivingCookbook.contactMe": "Если у вас возникли проблемы с импортом, отправьте мне электронное письмо с файлом базы данных, и я смогу импортировать его вручную.",
+  "pages.importLivingCookbook.sizeWarning": "Если ваш файл базы данных очень большой, у вас могут возникнуть проблемы с его импортом через этот интерфейс из-за ограничений браузера.",
+  "pages.importLivingCookbook.donate": "Пожалуйста, рассмотрите возможность пожертвования, если ваша база данных содержит большое количество рецептов или изображений.",
+
+  "pages.importLivingCookbook.step1": "1. Выберите параметры импорта (если есть):",
+  "pages.importLivingCookbook.step1.excludeImages": "Исключить изображения рецептов (необязательно, не рекомендуется)",
+  "pages.importLivingCookbook.step1.includeStock": "Включить стандартные \"наполнители\" рецептов LCB (необязательно, не рекомендуется)",
+  "pages.importLivingCookbook.step1.includeTechniques": "Копировать техники в примечания к рецептам (необязательно, не рекомендуется)",
+
+  "pages.importLivingCookbook.step2": "2. Выберите базу данных вашей Living Cookbook:",
+  "pages.importLivingCookbook.step2.fileTypeWarning": "Внимание! Этот тип файла не заканчивается на .lcb, .fdx или .fdxz. Это может не работать.",
+
+  "pages.importLivingCookbook.step2.sizeWarning": "Эта база данных очень большая.",
+  "pages.import Living Cookbook.step 2.sizeWarning.time": "Загрузка может занять очень много времени в зависимости от вашего интернет-соединения.",
+  "pages.importLivingCookbook.step2.sizeWarning.contact": "Если у вас возникли проблемы, свяжитесь со мной, чтобы импортировать вашу базу данных вручную.",
+
+  "pages.importLivingCookbook.step2.sizeError": "Этот файл слишком велик для прямой загрузки.",
+  "pages.importLivingCookbook.step2.sizeError.contact": "Пожалуйста, свяжитесь со мной, чтобы импортировать вашу базу данных вручную.",
+
+  "pages.import Living Cookbook.step 3": "3. Загрузить!",
+  "pages.importLivingCookbook.step3.upload": "Загрузить и импортировать",
+  "pages.importLivingCookbook.step3.upload.ignoreWarning": "Все равно загрузить и импортировать",
+  "pages.importLivingCookbook.step3.loading": "Импортируется, подождите...",
+
+  "pages.importLivingCookbook.troubleshooting": "Нажмите, чтобы получить помощь по устранению неполадок",
+  "pages.importLivingCookbook.troubleshooting.missing.1": "Если вы обнаружите, что при импорте импортируются не все ваши рецепты:",
+  "pages.importLivingCookbook.troubleshooting.missing.2": "Попробуйте выбрать опцию выше для \"Включить стандартные \"наполнители\" рецептов LCB\" и повторите попытку.",
+  "pages.importLivingCookbook.troubleshooting.missing.3": "Вы также можете попробовать экспортировать свои рецепты из Living Cookbook в формате .FDX или .FDXZ и вместо этого загрузить их в этом формате.",
+
+  "pages.importLivingCookbook.troubleshooting.longTime.1": "Если импорт занимает много времени:",
+  "pages.importLivingCookbook.troubleshooting.longTime.2": "В зависимости от скорости вашего интернета, размера базы данных и содержимого изображений импорт может занять много времени.",
+
+  "pages.importLivingCookbook.troubleshooting.tooLarge.1": "Если ваша база данных слишком велика:",
+  "pages.importLivingCookbook.troubleshooting.tooLarge.2": "Загрузите файл базы данных в такой сервис, как Google Drive, и пришлите мне ссылку. Я импортирую его для вас.",
+
+  "pages.importLivingCookbook.filePicker.file": "Выбран {{fileName}}",
+  "pages.importLivingCookbook.filePicker.noFile": "Выберите файл .lcb, .fdx или .fdxz",
+
+  "pages.importLivingCookbook.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате .lcb. Если у вас возникли проблемы, пришлите мне электронное письмо.",
+  "pages.importLivingCookbook.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
+  "pages.importLivingCookbook.success": "Импорт прошел успешно!",
+
+  "====== Pages.ImportPaprika ======": "",
+
+  "pages.importPaprika.title": "Импорт рецептов из файла Paprika",
+
+  "pages.importPaprika.description1": "Этот файл экспорта Paprika будет импортирован в RecipeSage. Обратите внимание, что эта функция находится в стадии бета-тестирования.",
+  "pages.importPaprika.description2": "Все файлы должны быть в формате .paprikarecipes (экспортировать как формат рецепта паприки в настройках Paprika). Другие форматы не будут работать.",
+  "pages.importPaprika.description3": "Задача импорта может занять несколько минут",
+  "pages.importPaprika.description4": "Это зависит от формата и размера вашего файла",
+  "pages.importPaprika.description5": "Если у вас возникли проблемы с импортом, отправьте мне электронное письмо с файлом, и я смогу импортировать его вручную.",
+  "pages.importPaprika.description6": "Если ваш файл очень большой, у вас могут возникнуть проблемы с его импортом через этот интерфейс из-за ограничений браузера.",
+  "pages.importPaprika.description7": "Пожалуйста, рассмотрите возможность пожертвования, если ваш файл содержит большое количество рецептов или изображений.",
+  "pages.import Paprika.description 8": "Внимание! Этот тип файла не заканчивается на .paprikarecipes",
+  "pages.importPaprika.description9": "Это может не сработать.",
+
+  "pages.importPaprika.filePicker.noFile": "Выберите файл .paprikarecipes",
+  "pages.importPaprika.filePicker.file": "Выбран {{fileName}}",
+
+  "pages.importPaprika.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате рецепта паприки прямо из приложения. Если у вас возникли проблемы, пришлите мне электронное письмо.",
+  "pages.importPaprika.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
+  "pages.importPaprika.success": "Импорт прошел успешно!",
+
+  "====== Pages.ImportPepperplate ======": "",
+
+  "pages.importPepperplate.title": "Импортировать рецепты из Pepperplate",
+  "pages.importPepperplate.description1": "Задача импорта может занять несколько минут и зависит от доступности серверов Pepperplate.",
+  "pages.importPepperplate.description2": "Вы увидите импортированные рецепты в своей библиотеке только после завершения полной задачи импорта.",
+  "pages.importPepperplate.description3": "Если у вас возникнут проблемы с процессом импорта, обращайтесь.",
+  "pages.importPepperplate.description4": "Примечание. Если у вас очень большая коллекция рецептов, время ожидания вашего браузера может истечь до завершения импорта, что приведет к ошибке.",
+  "pages.importPepperplate.description5": "Чтобы избежать создания дубликатов, проверьте страницу \"Мои рецепты\", прежде чем повторить попытку импорта.",
+  "pages.importPepperplate.description6": "Если дубликаты созданы случайно, вы можете использовать кнопку \"удалить все рецепты\" на странице учетной записи, чтобы начать заново.",
+
+  "pages.importPepperplate.description7": "Пожалуйста, введите учетные данные, связанные с вашей учетной записью Pepperplate:",
+  "pages.importPepperplate.username": "Электронная почта/имя пользователя Pepperplate",
+  "pages.importPepperplate.password": "Пароль Pepperplate",
+
+  "pages.importPepperplate.start": "Начать импорт",
+  "pages.importPepperplate.loading": "Импортируется, подождите...",
+
+  "pages.importPepperplate.usernameRequired": "Пожалуйста, введите свой адрес электронной почты/имя пользователя.",
+  "pages.importPepperplate.passwordRequired": "Пожалуйста, введите пароль от Pepperplate.",
+
+  "pages.importPepperplate.invalid.header": "Неверные учетные данные",
+  "pages.importPepperplate.invalid.message": "Pepperplate отклонила эти учетные данные. Пожалуйста, попробуйте еще раз.",
+
+  "pages.importPepperplate.timeout.header": "Это занимает немного больше времени, чем ожидалось",
+  "pages.importPepperplate.timeout.message": "Это может произойти, когда Pepperplate находится под большой нагрузкой. Импорт все еще продолжается. Если вы не видите свои рецепты, напишите мне по электронной почте.",
+
+  "pages.importPepperplate.error.message": "Произошла ошибка. Пожалуйста, проверьте страницу «Мои рецепты» перед началом нового импорта, чтобы избежать создания дубликатов.",
+
+  "pages.importPepperplate.success": "Импорт завершен!",
+
+  "====== Pages.Settings ======": "",
+
+  "pages.settings.title": "Настройки",
+  "pages.settings.section1.title": "Данные и учетная запись",
+  "pages.settings.import": "Импортировать данные",
+  "pages.settings.export": "Экспортировать данные",
+  "pages.settings.account": "Настройки и статистика аккаунта",
+  "pages.settings.logout": "Выйти",
+  "pages.settings.section2.title": "Общие настройки",
+  "pages.settings.update": "Проверить наличие обновлений",
+  "pages.settings.splitPane": "Включить разделение панели на больших экранах",
+  "pages.settings.cache": "Экспериментальная функция: кэшировать все рецепты в автономном режиме",
+  "pages.settings.theme": "Тема",
+  "pages.settings.theme.default": "Системные настройки по умолчанию",
+  "pages.settings.theme.light": "Светлая",
+  "pages.settings.theme.dark": "Темная",
+  "pages.settings.theme.black": "Черная (OLED)",
+  "pages.settings.language": "Язык",
+  "pages.settings.language.contribute": "Свяжитесь со мной, чтобы добавить язык",
+  "pages.settings.language.default": "Системный язык браузера",
+
+  "pages.settings.fontSize": "Размер шрифта",
+  "pages.settings.reset": "Сбросить все настройки",
+
+  "pages.settings.offline.loading": "Загрузка всех рецептов, подождите...",
+  "pages.settings.offline.error": "При синхронизации произошла ошибка. Сообщите об этом.",
+
+  "pages.settings.resetPrefs.header": "Предупреждение о сбросе настроек",
+  "pages.settings.resetPrefs.message": "Сброс настроек вернет все настройки приложения в состояние по умолчанию. Это включает в себя настройки, установленные через меню на домашней странице, странице планов питания, странице списка покупок и т.д. Примечание. Это повлияет только на текущее устройство.",
+
+  "pages.settings.oled.header": "Предупреждение о черном цвете (OLED)",
+  "pages.settings.oled.message": "Черная (OLED) тема может затруднить различение элементов и предупреждений. Тени и другая визуальная анимация также не будут отображаться.",
+
+  "pages.settings.update.header": "Приложение перезагрузится",
+  "pages.settings.update.subHeader": "Приложение перезагрузится, чтобы проверить наличие обновлений.",
+
+  "====== Pages.Share ======": "",
+
+  "pages.share.title": "Поделиться рецептом",
+  "pages.share.description": "При публикации копия этого рецепта будет отправлена ​​получателю. Ваша копия не будет затронута.",
+  "pages.share.byAccount": "RecipeSage",
+  "pages.share.byLink": "Ссылка",
+  "pages.share.byEmbed": "Встроить",
+
+  "pages.share.byAccount.description": "Получатель должен иметь учетную запись RecipeSage. Если вы хотите поделиться с пользователем, не являющимся пользователем RecipeSage, используйте опцию обмена ссылкой.",
+
+  "pages.share.byEmbed.image": "Показать изображение заголовка",
+  "pages.share.byEmbed.columns": "Отключить столбцы",
+  "pages.share.byEmbed.print": "Показать кнопку печати",
+  "pages.share.byEmbed.sources": "Скрыть источники",
+  "pages.share.byEmbed.notes": "Скрыть заметки",
+  "pages.share.byEmbed.height": "Высота (не показана)",
+  "pages.share.byEmbed.width": "Ширина (не показана)",
+  "pages.share.byEmbed.jsonLD": "Включить JSON-LD для SEO",
+  "pages.share.byEmbed.copy": "Скопируйте приведенный ниже код и вставьте его в HTML своего сайта",
+
+  "pages.share.send": "Отправить",
+  "pages.share.close": "Закрыть",
+
+  "====== Pages.NewShoppingListItem ======": "",
+
+  "pages.newShoppingListItem.title": "Добавить элемент(ы)",
+  "pages.newShoppingListItem.items": "Элементы",
+  "pages.newShoppingListItem.recipe": "Рецепт",
+  "pages.newShoppingListItem.itemTitle": "Название элемента",
+  "pages.newShoppingListItem.add": "Добавить в список",
+
+  "====== Pages.NewShoppingList ======": "",
+
+  "pages.newShoppingList.title": "Новый список покупок",
+  "pages.newShoppingList.listTitle": "Название",
+  "pages.newShoppingList.create": "Создать",
+  "pages.newShoppingList.share": "и поделиться",
+
+  "====== Pages.ShoppingList ======": "",
+
+  "pages.shoppingList.title": "Список покупок — {{title}}",
+  "pages.shoppingList.nullState.1": "В этом списке покупок нет элементов.",
+  "pages.shoppingList.nullState.2": "Используйте меню в верхнем правом углу, чтобы включить или отключить автоматическую группировку.",
+  "pages.shoppingList.nullState.add": "Добавьте первый элемент",
+  "pages.shoppingList.recipes": "Рецепты в этом списке",
+  "pages.shoppingList.completed": "Выполненные элементы",
+
+  "pages.shoppingList.removeMultiple.header": "Подтвердить удаление",
+  "pages.shoppingList.removeMultiple.message": "Эти элементы будут удалены из этого списка навсегда.",
+
+  "pages.shoppingList.removed": "Удалено {{itemCount}} элемент(ов)",
+  "pages.shoppingList.removed.undo": "Отменить",
+
+  "====== Pages.ShoppingListPopover ======": "",
+
+  "pages.shoppingListPopover.title": "Параметры",
+
+  "pages.shoppingListPopover.sortBy": "Сортировать по",
+  "pages.shoppingListPopover.sortBy.title": "Название",
+  "pages.shoppingList Popover.sort By.created Desc": "Создано (сначала самые новые)",
+  "pages.shoppingListPopover.sort By.created Asc": "Создано (сначала самые старые)",
+
+  "pages.shoppingListPopover.groupCategories": "Группировать элементы по категориям",
+  "pages.shoppingListPopover.groupSimilar": "Группировать похожие элементы",
+  "pages.shoppingListPopover.showTitle": "Показать название рецепта",
+  "pages.shoppingListPopover.showAddedBy": "Показать кто добавил",
+  "pages.shoppingListPopover.showAddedOn": "Показать дату добавления",
+  "pages.shoppingListPopover.preferDelete": "Удалить после завершения",
+  "pages.shoppingListPopover.print": "Печать",
+  "pages.shoppingListPopover.removeAll": "Удалить все элементы",
+  "pages.shoppingListPopover.delete": "Удалить список",
+
+  "pages.shoppingListPopover.removeAll.header": "Подтвердить удаление",
+  "pages.shoppingListPopover.removeAll.message": "Это приведет к безвозвратному удалению всех элементов из этого списка. Это действие необратимо.",
+
+  "pages.shoppingListPopover.deleteList.header": "Подтвердить удаление",
+  "pages.shoppingListPopover.deleteList.message": "Этот список покупок будет навсегда удален из вашей учетной записи. Примечание. Если вы являетесь только соавтором этого списка, он будет удален только из вашей учетной записи. Если вы являетесь владельцем этого списка , оно будет удалено со всех аккаунтов других соавторов.",
+
+  "====== Pages.ShoppingLists ======": "",
+
+  "pages.shoppingLists.title": "Списки покупок",
+  "pages.shoppingLists.editIgnore": "Редактировать игнорируемые элементы списка",
+  "pages.shoppingLists.created": "Создано {{date}}",
+  "pages.shoppingLists.collaboration": "В сотрудничестве с:",
+  "pages.shoppingLists.createdBy": "Создано {{name}}",
+  "pages.shoppingLists.owner": "Этот список принадлежит вам",
+  "pages.shoppingLists.nullState.1": "У вас нет списков покупок.",
+  "pages.shoppingLists.nullState.2": "Чтобы создать список покупок, нажмите кнопку + в нижнем углу.",
+
+  "====== Pages.ShoppingListItemIgnoreModal ======": "",
+
+  "pages.shoppingListIgnoreModal.title": "Игнорированые элемента списка покупок",
+  "pages.shoppingListIgnoreModal.description": "Элементы, перечисленные здесь, будут автоматически исключены при добавлении рецепта в список покупок. Это особенно удобно для таких ингредиентов, как соль, которую вам, вероятно, не нужно добавлять каждый раз, когда вы добавляете элемент в список покупок.",
+  "pages.shoppingListIgnoreModal.instructions": "Каждая запись должна находиться в отдельной строке. Записи будут соответствовать ингредиенту, если ингредиент содержит любую часть строки. Если вы введете \"соль\", это будет соответствовать \"1 столовой ложке морской соли мелкого помола\".",
+  "pages.shoppingListIgnoreModal.label": "Список игнорирования",
+  "pages.shoppingListIgnoreModal.placeholder": "Ключевые слова, которые следует игнорировать, каждое в отдельной строке",
+
+  "====== Pages.AddFriendModal ======": "",
+
+  "pages.addFriendModal.title": "Найти пользователя",
+  "pages.addFriendModal.profileWarning": "Примечание: искомый пользователь должен включить свой профиль.",
+  "pages.addFriendModal.send": "Отправить запрос на добавление в друзья",
+  "pages.addFriendModal.open": "Открыть профиль",
+
+  "pages.addFriendModal.profileDisabled.header": "Профиль не включен",
+  "pages.addFriendModal.profileDisabled.message": "Этот пользователь отключил свой профиль и поэтому является приватным/недоступным.",
+  "pages.addFriendModal.success": "Приглашение в друзья отправлено!",
+
+  "====== Pages.AddProfileItem ======": "",
+
+  "pages.addProfileItem.title": "Добавить элемент профиля",
+  "pages.addProfileItem.prompt": "Чем бы вы хотели поделиться?",
+  "pages.addProfileItem.recipe": "Рецепт",
+  "pages.addProfileItem.label": "Метка",
+  "pages.addProfileItem.allRecipes": "Все мои рецепты",
+
+  "pages.addProfileItem.type": "Тип элемента профиля:",
+  "pages.addProfileItem.type.recipe": "Рецепт",
+  "pages.addProfileItem.type.label": "Метка",
+  "pages.add Profile Item.type.all Рецепты": "Все рецепты",
+
+  "pages.addProfileItem.change": "Нажмите, чтобы изменить",
+  "pages.addProfileItem.selectRecipe": "Выберите рецепт",
+  "pages.addProfileItem.selectLabel": "Выберите метку",
+
+  "pages.addProfileItem.selectVisibility": "Кто должен иметь возможность это видеть?",
+  "pages.addProfileItem.selectVisibility.public": "Любой (публичный)",
+  "pages.addProfileItem.selectVisibility.friends": "Только мои друзья",
+  "pages.addProfileItem.visibilityPublic": "Видимость: общедоступная",
+  "pages.addProfileItem.visibilityFriends": "Видимость: только друзья",
+
+  "pages.addProfileItem.itemTitle": "Рекомендуемый заголовок",
+  "pages.addProfileItem.tos": "Добавляя этот элемент, вы соглашаетесь с Политикой обмена RecipeSage",
+  "pages.addProfileItem.done": "Готово",
+
+  "====== Pages.MyProfile ======": "",
+
+  "pages.myProfile.title": "Редактировать профиль",
+  "pages.myProfile.welcome": "Добро пожаловать в ваш профиль!",
+  "pages.myProfile.setup1": "Прежде чем начать, вам необходимо настроить несколько вещей.",
+  "pages.myProfile.setup.name": "Сначала выберите имя или псевдоним, которые будут отображаться в вашем профиле.",
+  "pages.myProfile.name": "Имя/Псевдоним",
+  "pages.myProfile.setup2": "Теперь выберите дескриптор вашего профиля, например: @superchef",
+  "pages.myProfile.handle": "Уникальный @handle",
+  "pages.myProfile.handle.taken": "Этот дескриптор занят",
+  "pages.myProfile.handle.invalid": "Неверный дескриптор",
+  "pages.myProfile.handle.unique": "Примечание: дескриптор должен быть уникальным и не должен содержать специальных символов.",
+  "pages.myProfile.enable": "Включить профиль",
+  "pages.myProfile.share": "Поделиться",
+  "pages.myProfile.view": "Просмотреть профиль",
+  "pages.myProfile.pinned": "Закрепленные рецепты и метки",
+  "pages.myProfile.add": "Добавить",
+  "pages.myProfile.nullState.1": "В вашем профиле пока ничего нет.",
+  "pages.myProfile.nullState.2": "Чтобы добавить свой первый элемент профиля, нажмите кнопку «Добавить» справа.",
+  "pages.myProfile.save": "Сохранить",
+
+  "pages.myProfile.notEnabled.header": "Профиль не включен",
+  "pages.myProfile.notEnabled.message": "Вам необходимо включить свой профиль для взаимодействия с функциями обмена, такими как отправка запросов на добавление в друзья.",
+  "pages.myProfile.ignore": "Игнорировать",
+  "pages.myProfile.enable": "Включить",
+
+  "pages.myProfile.share.unsaved.header": "Несохраненные изменения",
+  "pages.myProfile.share.unsaved.message": "Вам необходимо сохранить изменения, прежде чем вы сможете поделиться своим профилем.",
+
+  "pages.myProfile.share.unsaved.header": "Несохраненные изменения",
+  "pages.myProfile.share.unsaved.message": "Вам необходимо сохранить изменения, прежде чем вы сможете просмотреть, как выглядит ваш профиль.",
+
+  "====== Pages.People ======": "",
+
+  "pages.people.title": "Люди",
+  "pages.people.nullState.1": "Вы не настроили профиль.",
+  "pages.people.nullState.2": "Создание профиля позволяет вам делиться коллекциями рецептов с друзьями и публикой.",
+  "pages.people.create": "Создать",
+  "pages.people.edit": "Просмотреть/редактировать мой профиль",
+  "pages.people.friends": "Друзья",
+  "pages.people.unfriend": "Удалить из друзей",
+  "pages.people.invites": "Приглашения друзей (входящие)",
+  "pages.people.accept": "Принять",
+  "pages.people.decline": "Отклонить",
+  "pages.people.sentInvites": "Ожидающие (отправленные) запросы на добавление в друзья",
+  "pages.people.cancel": "Отменить",
+  "pages.people.noFriends.1": "У вас нет добавленных друзей.",
+  "pages.people.noFriends.2": "Добавив кого-нибудь в друзья, вы сможете совместно работать над рецептами, планами питания и списками покупок.",
+  "pages.people.noFriends.3": "Чтобы добавить кого-то, щелкните значок поиска.",
+
+  "pages.people.setup.header": "Профиль не настроен",
+  "pages.people.setup.message": "Вам необходимо настроить свой профиль, прежде чем вы сможете добавлять друзей.",
+  "pages.people.setup.confirm": "Настройка",
+
+  "====== Pages.Profile ======": "",
+
+  "pages.profile.title": "Профиль пользователя {{name}}",
+  "pages.profile.pinned": "Закрепленные рецепты и этикетки",
+  "pages.profile.nullState": "Пользователь {{name}} еще ничего не добавил в свой профиль.",
+  "pages.profile.send": "Отправить запрос на добавление в друзья",
+  "pages.profile.cancel": "Отменить запрос на добавление в друзья",
+  "pages.profile.accept": "Принять запрос на добавление в друзья",
+  "pages.profile.decline": "Отклонить запрос на добавление в друзья",
+  "pages.profile.unfriend": "Удалить из друзей",
+  "pages.profile.setup": "Настройте свой профиль, чтобы добавить друга",
+  "pages.profile.login": "Войдите/зарегистрируйтесь, чтобы добавить друга",
+
+  "pages.profile.disabled.header": "Профиль не включен",
+  "pages.profile.disabled.message": "Этот пользователь отключил свой профиль и поэтому является приватным/недоступным.",
+
+  "pages.profile.inviteSent": "Приглашение в друзья отправлено!",
+  "pages.profile.inviteRemoved": "Дружба удалена",
+
+  "pages.profile.setup.header": "Ваш профиль еще не настроен",
+  "pages.profile.setup.message": "Чтобы добавить этого пользователя в друзья, вам необходимо настроить свой профиль.",
+  "pages.profile.setup.confirm": "Настройка",
+
+  "pages.profile.already Requested": "Похоже, у вас уже есть дружба. Пожалуйста, попробуйте еще раз.",
+
+  "====== Pages.ShareProfileModal ======": "",
+
+  "pages.shareProfileModal.title": "Поделиться профилем пользователя {{name}}",
+  "pages.shareProfileModal.close": "Закрыть",
+
+  "pages.shareProfileModal.shareTitle": "Профиль RecipeSage пользователя {{name}}",
+  "pages.shareProfileModal.shareBody": "Нажмите, чтобы просмотреть общедоступный профиль RecipeSage пользователя {{name}}:",
+
+  "====== Components.CookingToolbar ======": "",
+
+  "comComponents.cookingToolbar.clear": "Очистить все закрепленные рецепты?",
+
+  "====== Components.CopyWithWebshare ======": "",
+
+  "comComponents.copyWithWebshare.instructions": "Чтобы поделиться, скопируйте ссылку ниже",
+  "comComponents.copyWithWebshare.shareIcon": "или нажмите значок общего доступа",
+
+  "====== Components.MealCalendar ======": "",
+
+  "comComponents.mealCalendar.recipes": "Рецепты, запланированные на этот день",
+  "comComponents.meal Calendar.no Recipes": "На этот день не запланировано ни одного рецепта.",
+  "comComponents.mealCalendar.meals": "ПитаПлан питания на этот день",
+  "comComponents.mealCalendar.selectDay": "Выберите дату, чтобы просмотреть блюда на этот день.",
+  "comComponents.mealCalendar.noMeals": "На этот день не запланировано питание.",
+
+  "====== Components.MealCalendar ======": "",
+
+  "comComponents.multiImageUpload.add": "Нажмите, чтобы добавить изображение",
+  "comComponents.multiImageUpload.imageLimit": "Вы можете прикрепить до 10 изображений",
+  "comComponents.multiImageUpload.imageError": "Произошла ошибка при обработке одного или нескольких выбранных вами изображений",
+
+  "====== Components.SelectCollaborators ======": "",
+
+  "comComponents.selectCollaborators.added": "Уже добавлено",
+  "comComponents.select Collaborators.add": "Нажмите, чтобы добавить",
+  "comComponents.select Collaborators.searching": "Поиск...",
+  "comComponents.selectCollaborators.notFound": "Пользователь не найден",
+  "comComponents.selectCollaborators.notFoundError": "Не удалось найти пользователя с таким адресом электронной почты.",
+  "comComponents.selectCollaborators.invalidEmail": "Введите действительный адрес электронной почты и нажмите Enter.",
+
+  "====== Components.SelectIngredients ======": "",
+
+  "comComponents.selectIngredients.title": "Выберите ингредиенты, которые вы хотите добавить:",
+  "comComponents.selectIngredients.toggleAll": "Выбрать/отменить выбор всего",
+  "comComponents.selectIngredients.scale": "Кратность x {{scale}} (нажмите, чтобы изменить)",
+  "comComponents.selectIngredients.null": "В этом рецепте нет ингредиентов.",
+
+  "====== Components.SelectLabel ======": "",
+
+  "comComponents.selectLabel.change": "Нажмите, чтобы изменить",
+  "comComponents.selectLabel.select": "Нажмите, чтобы выбрать",
+  "comComponents.selectLabel.search": "Введите текст для поиска метки...",
+  "comComponents.selectLabel.null": "Нет меток с именем \"{{name}}\"",
+
+  "====== Components.SelectMultipleItems ======": "",
+
+  "comComponents.selectMultipleItems.null": "Нет результатов для {{searchText}}",
+  "comComponents.selectMultipleItems.select": "Нажмите, чтобы выбрать",
+  "comComponents.selectMultipleItems.create": "Нажмите, чтобы создать",
+  "comComponents.selectMultipleItems.noItems": "Нет элементов",
+  "comComponents.selectMultipleItems.alreadyAdded": "Уже добавлено",
+  "comComponents.selectMultipleItems.searchPlaceholder": "Найти элемент для добавления",
+
+  "====== Components.SelectMeal ======": "",
+
+  "comComponents.selectMeal.title": "Выбрать блюдо",
+
+  "====== Components.SelectRecipe ======": "",
+
+  "comComponents.selectRecipe.change": "Нажмите, чтобы изменить",
+  "comComponents.selectRecipe.select": "Нажмите, чтобы выбрать",
+  "comComponents.selectRecipe.search": "Введите текст для поиска рецепта...",
+  "comComponents.selectRecipe.searching": "Поиск \"{{searchText}}\"...",
+  "comComponents.selectRecipe.null": "Нет результатов для \"{{searchText}}\"",
+
+  "====== Components.SelectUser ======": "",
+
+  "comComponents.selectUser.placeholder": "Поиск по электронной почте или дескриптору",
+  "comComponents.selectUser.change": "Нажмите, чтобы изменить",
+  "comComponents.selectUser.select": "Нажмите, чтобы выбрать",
+  "comComponents.selectUser.searching": "Поиск \"{{name}}\"...",
+  "comComponents.selectUser.null": "Нет результатов для \"{{name}}\"",
+
+  "====== Components.SelectKnownUser ======": "",
+
+  "comComponents.selectKnownUser.friends": "Друзья",
+  "comComponents.selectKnownUser.conversations": "Треды сообщений",
+
+  "====== Components.SelfhostWarning ======": "",
+
+  "comComponents.selfhostWarning.1": "Примечание. Это локальная версия RecipeSage, поэтому она не связана с RecipeSage.com",
+  "comComponents.selfhostWarning.2": "или какой-либо учетной записью, расположенной на основном сайте.",
+
+  "====== Components.ShoppingListItem ======": "",
+
+  "comComponents.shoppingListItem.recipe": "Для рецепта:",
+  "comComponents.shoppingListItem.added": "Добавлено",
+  "comComponents.shoppingListItem.addedBy": "Добавил",
+
+  "====== Components.TosClickwrap ======": "",
+
+  "comComponents.tos.warning": "Продолжая, вы соглашаетесь с RecipeSage",
+  "comComponents.tos.title": "Условия обслуживания",
+
+  "====== Components.RatingFilter ======": "",
+
+  "comComponents.ratingFilter.title": "Фильтровать по рейтингу",
+
+  "comComponents.ratingFilter.unrated": "Без рейтинга",
+
+  "comComponents.ratingFilter.reset": "Сбросить",
+
+  "====== Modals.ScaleRecipe ======": "",
+
+  "comComponents.scaleRecipe.title": "Кратность рецепта",
+  "comComponents.scaleRecipe.change": "Отрегулируйте кратность рецепта",
+  "comComponents.scaleRecipe.click": "Нажмите кнопку или введите кратность вручную",
+  "comComponents.scaleRecipe.manual": "Или введите число или дробь",
+  "comComponents.scaleRecipe.cancel": "Отмена",
+  "comComponents.scaleRecipe.apply": "Применить",
+
+  "====== Modals.FontSize ======": "",
+
+  "comComponents.fontSize.title": "Отрегулировать размер шрифта",
+  "comComponents.fontSize.option.X1_0": "Использовать системные настройки",
+  "comComponents.fontSize.option.PX14": "14px (Маленький)",
+  "comComponents.fontSize.option.PX16": "16px (Нормальный)",
+  "comComponents.fontSize.option.PX18": "18px (Большой)",
+  "comComponents.fontSize.option.PX20": "20px (Большой)",
+  "comComponents.fontSize.option.PX22": "22px (Большой)",
+  "comComponents.fontSize.option.PX24": "24px (Большой)",
+  "comComponents.fontSize.reset": "Сброс",
+
+  "====== Services.QuickTutorial ======": "",
+
+  "services.quickTutorial.multipleRecipeSelection.header": "Выбор нескольких рецептов",
+  "services.quickTutorial.multipleRecipeSelection.message": "Теперь вы находитесь в режиме выбора нескольких рецептов. Вы можете щелкнуть столько рецептов, сколько хотите выбрать, а затем использовать кнопки, которые появляются в заголовке, для выполнения массовых действий, таких как маркировка или удаление. Вы можете выйти из режима выбора нескольких рецептов в любой момент, нажав X в заголовке или через меню параметров.",
+  "services.quickTutorial.multipleLabelSelection.header": "Выбор нескольких меток",
+  "services.quickTutorial.multipleLabelSelection.message": "Теперь вы находитесь в режиме выбора нескольких меток. Вы можете щелкнуть столько меток, сколько хотите выбрать, а затем использовать кнопки, которые появляются в заголовке, для выполнения массовых действий. Вы может выйти из нескольких ярлыковрежим выбора в любое время, нажав X в заголовке или через меню параметров.",
+  "services.quickTutorial.splitPaneView.header": "Просмотр разделенной панели",
+  "services.quickTutorial.splitPaneView.message": "Просмотр разделенной панели виден только на устройствах с большими экранами (ноутбуки, большие планшеты и т. д.). Когда просмотр разделенной панели включен, боковое меню всегда будет видно. Эта функция полезна для работы на больших устройствах.",
+  "services.quickTutorial.experimentalOfflineCache.header": "Экспериментальный автономный кеш",
+  "services.quickTutorial.experimentalOfflineCache.message": "Экспериментальный автономный кеш — это тестовая функция. RecipeSage обычно кэширует рецепты, к которым вы получаете доступ автоматически, но теперь все ваши рецепты будут загружаться в фоновом режиме. Ваша система может удалить автоматически кэшируемые рецепты, если требуется хранилище или если вы не используете приложение в течение длительного времени. Важное примечание: фильтрация по метке и поиск не будут работать. Это может работать в будущих реализациях, но не в этой тестовой реализации.",
+  "services.quickTutorial.pinnedRecipes.header": "Закрепленные рецепты",
+  "services.quickTutorial.pinnedRecipes.message": "Этот рецепт теперь закреплен! Закрепление рецептов позволяет быстро переключаться между несколькими рецептами во время приготовления. Закрепленные рецепты отображаются на панели инструментов в нижней части экрана. Вы увидите значок пузырь с изображением рецепта и первой буквой названия рецепта. Закрепленные рецепты останутся открытыми, пока их не открепят или пока вы не закроете приложение.",
+
+  "====== Services.Util ======": "",
+
+  "services.util.justNow": "только сейчас",
+  "services.util.today": "сегодня",
+
+  "====== Errors ======": "",
+
+  "errors.offline": "Похоже, вы не в сети. В автономном режиме мы можем получать только те данные, к которым вы ранее обращались на этом устройстве.",
+  "errors.unexpected": "Произошла непредвиденная ошибка. Повторите попытку. Если проблема продолжит возникать, свяжитесь со мной.",
+
+  "====== Generic ======": "",
+
+  "generic.delete": "Удалить",
+  "generic.cancel": "Отмена",
+  "generic.confirm": "Подтвердить",
+  "generic.close": "Закрыть",
+  "generic.save": "Сохранить",
+  "generic.okay": "Хорошо",
+  "generic.ignore": "Игнорировать",
+  "generic.options": "Параметры",
+
+  "====== Trailing Comma Placeholder ======": ""
+}
