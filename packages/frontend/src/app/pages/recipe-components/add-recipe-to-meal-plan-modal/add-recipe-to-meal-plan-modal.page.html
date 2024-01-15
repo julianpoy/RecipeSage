@@ -26,6 +26,8 @@
       label="{{ 'pages.addRecipeToMealPlanModal.selectDestination' | translate }}"
       [(ngModel)]="selectedMealPlan"
       (ngModelChange)="selectedMealPlan && loadMealPlan(selectedMealPlan.id)"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option *ngFor="let mealPlan of mealPlans" [value]="mealPlan"
         >{{ mealPlan.title }}</ion-select-option

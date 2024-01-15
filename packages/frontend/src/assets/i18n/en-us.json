@@ -1058,6 +1058,7 @@
   "generic.close": "Close",
   "generic.save": "Save",
   "generic.okay": "Okay",
+  "generic.ok": "Ok",
   "generic.ignore": "Ignore",
   "generic.options": "Options"
 }

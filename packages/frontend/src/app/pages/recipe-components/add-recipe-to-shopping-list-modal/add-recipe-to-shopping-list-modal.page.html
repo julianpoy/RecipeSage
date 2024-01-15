@@ -28,6 +28,8 @@
     <ion-select
       label="{{ 'pages.addRecipeToShoppingListModal.destination' | translate }}"
       [(ngModel)]="destinationShoppingList"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option *ngFor="let list of shoppingLists" [value]="list"
         >{{ list.title }}</ion-select-option

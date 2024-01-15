@@ -55,6 +55,8 @@
       label="{{ 'pages.homeSearchFilterPopover.includeFriends' | translate }}"
       [(ngModel)]="preferences[preferenceKeys.IncludeFriends]"
       (ngModelChange)="savePreferences(true);"
+      okText="{{ 'generic.ok' | translate }}"
+      cancelText="{{ 'generic.cancel' | translate }}"
     >
       <ion-select-option value="yes"
         >{{ 'pages.homeSearchFilterPopover.includeFriends.yes' | translate
