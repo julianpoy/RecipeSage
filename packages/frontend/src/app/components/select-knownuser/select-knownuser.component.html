@@ -20,10 +20,10 @@
           />
         </ion-avatar>
         <ion-radio labelPlacement="end" justify="start" [value]="friendship">
-          <ion-label>
+          <div class="ion-radio-label">
             {{ friendship.otherUser.name }}
             <p>&commat;{{ friendship.otherUser.handle }}</p>
-          </ion-label>
+          </div>
         </ion-radio>
       </ion-item>
     </ion-radio-group>
@@ -40,10 +40,10 @@
 
       <ion-item *ngFor="let thread of threads">
         <ion-radio labelPlacement="end" justify="start" [value]="thread">
-          <ion-label>
+          <div class="ion-radio-label">
             {{ thread.otherUser.name }}
             <p>{{ thread.otherUser.email }}</p>
-          </ion-label>
+          </div>
         </ion-radio>
       </ion-item>
     </ion-radio-group>
