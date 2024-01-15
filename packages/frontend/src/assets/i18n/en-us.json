@@ -1049,6 +1049,8 @@
   "services.util.justNow": "just now",
   "services.util.today": "today",
 
+  "services.unsavedChanges.message": "It looks like you have been editing something. If you leave before saving, your changes will be lost.",
+
   "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
   "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
 
