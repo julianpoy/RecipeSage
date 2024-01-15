@@ -1,17 +1,25 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
-
-export const UNSAVED_CHANGES_MESSAGE =
-  "It looks like you have been editing something. " +
-  "If you leave before saving, your changes will be lost.";
+import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class UnsavedChangesService {
   private pendingChanges = false;
+  public unsavedChangesMessage = "";
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private translate: TranslateService,
+  ) {
+    this.translate
+      .get("services.unsavedChanges.message")
+      .toPromise()
+      .then((unsavedChangesMessage) => {
+        this.unsavedChangesMessage = unsavedChangesMessage;
+      });
+
     // Reset pending changes after every navigation event
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -23,8 +31,8 @@ export class UnsavedChangesService {
     window.addEventListener("beforeunload", (e) => {
       if (!this.pendingChanges) return undefined;
 
-      (e || window.event).returnValue = UNSAVED_CHANGES_MESSAGE; // Gecko + IE
-      return UNSAVED_CHANGES_MESSAGE; // Gecko + Webkit, Safari, Chrome etc.
+      (e || window.event).returnValue = this.unsavedChangesMessage; // Gecko + IE
+      return this.unsavedChangesMessage; // Gecko + Webkit, Safari, Chrome etc.
     });
   }
 
