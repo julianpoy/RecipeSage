@@ -3,6 +3,7 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { validateSession } from "../../utils/validateSession";
+import { deleteRecipes } from "../../services/search";
 
 export const deleteRecipe = publicProcedure
   .input(
@@ -33,6 +34,8 @@ export const deleteRecipe = publicProcedure
         id: recipe.id,
       },
     });
+
+    await deleteRecipes([recipe.id]);
 
     return "Ok";
   });
