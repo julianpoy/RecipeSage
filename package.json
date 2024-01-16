@@ -76,7 +76,7 @@
     "sequelize": "^6.35.0",
     "sharp": "^0.32.6",
     "sqlite3": "^5.1.6",
-    "stripe": "^14.5.0",
+    "stripe": "^11.9.1",
     "superjson": "^1.12.3",
     "swiper": "^11.0.4",
     "ts-dedent": "^2.2.0",
