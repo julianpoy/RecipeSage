@@ -17,7 +17,6 @@
     "pages.app.nav.shopping": "Список покупок",
     "pages.app.nav.meals": "Планы питания",
     "pages.app.nav.settings": "Настройки",
-
     "pages.welcome.selfhostTitle": "РецептSage на собственном хостинге!",
     "pages.welcome.selfhostSubtitle": "Неофициальная локальная версия RecipeSage.com, бесплатного хранилища рецептов, планировщика питания и органайзера списков покупок для Web, IOS и Android.",
     "pages.welcome.title": "Все ваши рецепты в одном месте",
@@ -27,7 +26,6 @@
     "pages.welcome.description.welcome": "Добро пожаловать в RecipeSage!",
     "pages.welcome.description.1": "RecipeSage — это бесплатный (на основе пожертвований и с открытым исходным кодом) персональный органайзер рецептов, планировщик питания и менеджер списков покупок для Web, IOS и Android.",
     "pages.welcome.description.2": "Просто захватывайте и сохраняйте рецепты с любого веб-сайта, просто введя URL-адрес веб-сайта. Синхронизируйте свои рецепты, планы питания и списки покупок между всеми вашими устройствами. Поделитесь своими рецептами, списками покупок и планами питания с семьей и друзьями.",
-    "pages.welcome.description.features": "Что может RecipeSage?",
     "pages.welcome.description.features": "Что может RecipeSage?",
     "pages.welcome.description.features.1.title": "Импорт с любого URL:",
     "pages.welcome.description.features.1.description": "Создайте рецепт, просто введя URL-адрес.",
@@ -51,7 +49,6 @@
     "pages.welcome.description.cta.3": "Простой в использовании",
     "pages.welcome.description.cta.4": "Доступно на настольном компьютере и всех мобильных устройствах",
     "pages.welcome.description.cta.5": "Импорт рецептов с любого URL-адреса.",
-    
     "pages.auth.title.login": "Войти",
     "pages.auth.title.register": "Создать учетную запись",
     "pages.auth.selfhostWarning": "Примечание. Это локальная версия RecipeSage, поэтому она не связана с RecipeSage.com или какой-либо учетной записью, расположенной на основном сайте.",
@@ -79,7 +76,6 @@
     "pages.auth.error.incorrectLogin": "Похоже, адрес электронной почты или пароль неверны.",
     "pages.auth.error.emailTaken": "Учетная запись с таким адресом электронной почты уже существует.",
     "pages.auth.forgot.toast": "Если с этим адресом электронной почты связана учетная запись RecipeSage, вы должны получить ссылку для сброса пароля в течение следующих нескольких минут.",
-
     "pages.home.title.selectionMode": "Выбрано: {{count}}",
     "pages.home.title.main": "Мои рецепты",
     "pages.home.title.inbox": "Входящие рецепты",
@@ -114,7 +110,6 @@
     "pages.home.addLabel.message": "Введите имя метки",
     "pages.home.addLabel.placeholder": "Имя метки",
     "pages.home.deleteSelected.header": "Подтвердить удаление",
-    "pages.home.deleteSelected.message": "Выбранные рецепты будут удалены из вашей учетной записи навсегда. Это действие необратимо.",
     "pages.home.deleteSelected.message": "Выбранные рецепты будут удалены из вашей учетной записи навсегда. Это действие необратимо. Следующие рецепты будут удалены: {{recipeNames}}",
     "pages.homeSearchFilterPopover.title": "Поисковые фильтры",
     "pages.homeSearchFilterPopover.filterByRating": "Фильтровать по рейтингу",
@@ -126,7 +121,6 @@
     "pages.homeSearchFilterPopover.includeFriends.browse": "Только когда не выполняется поиск",
     "pages.homeSearchFilterPopover.includeFriends.no": "Никогда",
     "pages.homeSearchFilterPopover.optionsHidden": "Примечание: некоторые параметры скрыты, поскольку это общая коллекция",
-
     "pages.notfound.title": "Страница не найдена",
     "pages.notfound.error.title": "Страница не найдена!",
     "pages.notfound.error.message1": "Похоже, страница, которую вы ищете, не существует.",
@@ -134,7 +128,6 @@
     "pages.notfound.error.message3": "Если у вас все еще возникают проблемы или если где-то в приложении вы оказались здесь, свяжитесь со мной.",
     "pages.notfound.error.contact": "Свяжитесь со мной",
     "pages.notfound.error.goHome": "Нажмите здесь, чтобы перейти к своим рецептам",
-
     "pages.homepopover.options": "Параметры",
     "pages.homepopover.options.layout": "Макет",
     "pages.homepopover.options.layout.tiles": "Плитки",
@@ -155,7 +148,6 @@
     "pages.homepopover.warning.optionsHidden": "Примечание: некоторые параметры скрыты, поскольку это общая коллекция",
     "pages.homepopover.labelNull": "У вас нет меток. Вы можете создавать метки на странице сведений о рецепте.",
     "pages.homepopover.unlabeled": "Только без метки",
-
     "pages.recipeDetails.pageTitle": "Подробности рецепта",
     "pages.recipeDetails.rating": "Рейтинг",
     "pages.recipeDetails.source": "Источник",
@@ -181,7 +173,6 @@
     "pages.recipeDetails.requiresAccountToSave": "Создайте учетную запись или войдите, чтобы сохранить этот рецепт в свою коллекцию.",
     "pages.recipeDetails.registerOrLoginToSave": "Зарегистрируйтесь/войдите, чтобы сохранить этот рецепт",
     "pages.recipeDetails.edit": "Изменить",
-    "pages.recipeDetails.delete": "Удалить",
     "pages.recipeDetails.addToShoppingList": "Добавить в список покупок",
     "pages.recipeDetails.addToMealPlan": "Добавить в план питания",
     "pages.recipeDetails.share": "Поделиться",
@@ -193,7 +184,6 @@
     "pages.recipeDetails.delete.message": "Это приведет к окончательному удалению рецепта из вашей учетной записи. Это действие необратимо.",
     "pages.recipeDetails.cloned": "Рецепт сохранен в вашей учетной записи",
     "pages.recipeDetails.similar": "Похожие рецепты в вашей коллекции",
-
     "pages.recipeDetailsPopover.options": "Параметры",
     "pages.recipeDetailsPopover.keepScreenOn": "Оставлять экран включенным",
     "pages.recipeDetailsPopover.actions": "Действия",
@@ -207,10 +197,8 @@
     "pages.recipeDetailsPopover.makeACopy": "Сделать копию",
     "pages.recipeDetailsPopover.dangerZone": "Будьте внимательны!",
     "pages.recipeDetailsPopover.delete": "Удалить рецепт",
-
     "pages.rselectpopover.resetAll": "Сбросить все",
     "pages.rselectpopover.done": "Готово",
-
     "pages.about.title": "О программе и поддержка",
     "pages.about.links.details": "Обо мне и RecipeSage",
     "pages.about.links.contact": "Контакт",
@@ -219,13 +207,11 @@
     "pages.about.links.releaseNotes": "Примечания к выпуску",
     "pages.about.links.legal": "Юридическая информация, соглашения и отказ от ответственности",
     "pages.about.socialTitle": "Социальные сети",
-
     "pages.contact.title": "Свяжитесь со мной",
     "pages.contact.subtitle": "Контактная информация",
     "pages.contact.pleaseUserGuide": "По любым вопросам, пожалуйста, обратитесь к руководству пользователя, прежде чем отправлять электронное письмо:",
     "pages.contact.emailMe": "По любым вопросам, ошибкам или предложениям по функциям вы можете написать мне по адресу",
     "pages.contact.socialTitle": "Социальные сети",
-
     "pages.contribute.title": "Внести вклад",
     "pages.contribute.subtitle": "Внести свой вклад в RecipeSage",
     "pages.contribute.mission": "Моя цель — сделать RecipeSage открытым для всех, не обременяя его рекламой.",
@@ -244,19 +230,12 @@
     "pages.contribute.cta.1": "Изначально я создал RecipeSage для своей семьи, чтобы размещать рецепты, которыми мы любим делиться. С тех пор RecipeSage превратился в полноценный проект с открытым исходным кодом.",
     "pages.contribute.cta.2": "Пожалуйста, рассмотрите возможность внести свой вклад в постоянное обслуживание RecipeSage.",
     "pages.contribute.minimum": "К сожалению, минимальная сумма составляет ${{amount}} из-за комиссий за транзакцию — приносим извинения",
-
-    "pages.contributethankYou.title": "Спасибо!",
-    "pages.contribute Спасибо.спасибо": "Спасибо за то, что вы являетесь частью семьи RecipeSage и помогаете поддерживать ее!",
-    "pages.contributethankYou.bonus": "Бонусные функции должны быть разблокированы для вашей учетной записи в ближайшее время.",
-    "pages.contributethankYou.questions": "Пожалуйста, не стесняйтесь обращаться ко мне с любыми вопросами, проблемами или комментариями.",
-
     "pages.contributeCancel.title": "Нам нужна ваша помощь!",
     "pages.contributeCancel.cta.1": "RecipeSage основан на пожертвованиях — каждый вклад помогает!",
     "pages.contributeCancel.cta.2": "К сожалению, RecipeSage не получает много пожертвований, поскольку это довольно маленькая платформа.",
     "pages.contributeCancel.cta.3": "Чтобы сохранить бесплатность при оплате расходов на сервер, нам нужна ваша помощь.",
     "pages.contributeCancel.cta.4": "Пожалуйста, подумайте еще раз — ваш вклад действительно ценен!",
     "pages.contributeCancel.contribute": "Внести вклад",
-
     "pages.downloadAndInstall.title": "Загрузить и установить",
     "pages.downloadAndInstall.subtitle": "Приложение RecipeSage",
     "pages.downloadAndInstall.done": "При этом RecipeSage будет установлен как собственное приложение на вашем устройстве.",
@@ -282,12 +261,10 @@
     "pages.downloadAndInstall.bookmark.description": "Автоматически извлекает содержимое рецептов с веб-страниц. Вместо этой закладки рекомендуется использовать расширение для браузера.",
     "pages.downloadAndInstall.extension": "Браузерное расширение RecipeSage Clip Tool",
     "pages.downloadAndInstall.extension.description": "Автоматически извлекает содержимое рецептов с веб-страниц и обеспечивает большую совместимость с веб-сайтами, которые могут не импортироваться через импортер в приложении.",
-
     "pages.labelsPopover.title": "Параметры",
     "pages.labelsPopover.options.showCreatedAt": "Показать дату создания",
     "pages.labelsPopover.options.selectMultipleLabels": "Выбрать несколько меток",
     "pages.labelsPopover.options.unselectLabels": "Отменить выбор всех меток",
-
     "pages.labels.title": "Управление метками и категориями",
     "pages.labels.selectionModeTitle": "Выбрано: {{count}}",
     "pages.labels.label.sectionTitle": "Ваши метки",
@@ -307,7 +284,6 @@
     "pages.labels.group.createdAt": "Создано {{dateString}}",
     "pages.labels.group.nullState.1": "У вас пока нет категорий меток.",
     "pages.labels.group.nullState.2": "Нажмите кнопку +, чтобы создать новую категорию меток.",
-
     "pages.newLabelItemModal.title": "Новая метка или категория меток",
     "pages.newLabelItemModal.categoryTitle": "Новая категория меток",
     "pages.newLabelItemModal.labelTitle": "Новая метка",
@@ -318,7 +294,6 @@
     "pages.newLabelItemModal.labelTitleInput": "Имя метки",
     "pages.newLabelItemModal.labelTitleInputPlaceholder": "Введите имя метки",
     "pages.newLabelItemModal.labelTitleInputHint": "Многие люди начинают использовать простые метки, такие как \"завтрак\", \"десерт\" или \"вегетарианское\"",
-
     "pages.manageLabelGroupModal.title": "Управление категорией меток",
     "pages.manageLabelGroupModal.groupTitle": "Имя категории меток",
     "pages.manageLabelGroupModal.groupTitlePlaceholder": "Введите название категории меток",
@@ -333,7 +308,6 @@
     "pages.manageLabelGroupModal.conflictMessage": "Категория меток с таким заголовком уже существует",
     "pages.manageLabelGroupModal.delete.header": "Подтвердить удаление категории меток",
     "pages.manageLabelGroupModal.delete.message": "Категория меток \"{{title}}\" будет удалена. Примечание. Это действие не повлияет ни на какие метки в этой категории.",
-
     "pages.manageLabelModal.title": "Управление меткой: {{name}}",
     "pages.manageLabelModal.recipeCount": "Назначена {{count}} рецептам",
     "pages.manageLabelModal.group": "Назначена категории меток: {{title}}",
@@ -363,7 +337,6 @@
     "pages.manageLabelModal.merge.subHeader": "С какой меткой вы хотите объединить \"{{title}}\"?",
     "pages.manageLabelModal.merge.message": "Все рецепты в \"{{title}}\" вместо этого будут переименованы в целевую метку, а метка \"{{title}}\" будет удалена.",
     "pages.manageLabelModal.merge.placeholder": "Имя целевой метки",
-
     "pages.mealPlan.title": "План питания — {{name}}",
     "pages.mealPlan.modal.emptyDays.header": "Выбраны пустые дни",
     "pages.mealPlan.modal.emptyDays.message": "Выбранные вами дни не содержат никаких элементов плана питания. Вам нужно будет выбрать хотя бы один день с элементами плана питания.",
@@ -383,7 +356,6 @@
     "pages.mealPlan.modal.moveConfirm.messageSingle": "Это переместит блюда из {{selectedDayList}} в {{destDay}}",
     "pages.mealPlan.modal.moveConfirm.messageMultiple": "При этом блюда из {{selectedDayList}} будут перенесены на дни, начиная с {{destDay}} и следующие за ним",
     "pages.mealPlan.modal.moveConfirm.change": "Выберите другой день",
-
     "pages.mealPlanBulkPinModal.title": "Закрепленные блюда",
     "pages.mealPlanBulkPinModal.instructions1": "Выберите блюда, которые вы хотите закрепить открытыми.",
     "pages.mealPlanBulkPinModal.instructions2": "Примечание: вы можете закреплять только те элементы, которые связаны с рецептами.",
@@ -392,7 +364,6 @@
     "pages.mealPlanBulkPinModal.notLinkedToRecipe": "(не связана с рецептом)",
     "pages.mealPlanBulkPinModal.cancel": "Отмена",
     "pages.mealPlanBulkPinModal.pin": "Прикрепить",
-
     "pages.mealPlanItemDetailsModal.title": "Информация об элементе плана питания",
     "pages.mealPlanItemDetailsModal.scheduled": "Запланировано на {{meal}} на {{date}}",
     "pages.mealPlanItemDetailsModal.lastModified": "Последнее изменение пользователем {{name}} {{date}}",
@@ -406,7 +377,6 @@
     "pages.mealPlanItemDetailsModal.actions.close": "Закрыть",
     "pages.mealPlanItemDetailsModal.delete.header": "Подтвердить удаление",
     "pages.mealPlanItemDetailsModal.delete.message": "Это приведет к удалению \"{{title}}\" из этого плана питания.",
-
     "pages.mealPlanPopover.options.title": "Параметры",
     "pages.mealPlanPopover.options.startWeekOn.title": "Начало недели",
     "pages.mealPlanPopover.options.startWeekOn.monday": "Понедельник",
@@ -422,7 +392,6 @@
     "pages.mealPlanPopover.dangerZone.delete": "Удалить план питания",
     "pages.mealPlanPopover.delete.header": "Подтвердить удаление",
     "pages.mealPlanPopover.delete.message": "Этот план питания будет навсегда удален из вашей учетной записи. Примечание. Если вы являетесь только соавтором этого плана питания, он будет удален только из вашей учетной записи. Если вы являетесь владельцем этого плана питания, он будет удален из всех аккаунтов других соавторов.",
-
     "pages.mealPlans.title": "Планы питания",
     "pages.mealPlans.metadata.createdOn": "Создан {{date}}",
     "pages.mealPlans.metadata.collaborators": "В сотрудничестве с:",
@@ -430,7 +399,6 @@
     "pages.mealPlans.metadata.youOwn": "Этот план питания принадлежит вам",
     "pages.mealPlans.noPlans": "У вас нет планов питания.",
     "pages.mealPlans.toCreate": "Чтобы создать план питания, нажмите кнопку + в нижнем углу.",
-
     "pages.newMealPlanItemModal.title.update": "Обновить элемент плана питания",
     "pages.newMealPlanItemModal.title.new": "Добавить элемент плана питания",
     "pages.newMealPlanItemModal.inputType.recipe": "Выбрать рецепт",
@@ -439,21 +407,17 @@
     "pages.newMealPlanItemModal.date": "Дата",
     "pages.newMealPlanItemModal.save": "Сохранить изменения",
     "pages.newMealPlanItemModal.create": "Добавить в план питания",
-
     "pages.newMealPlanModal.title": "Новый планировщик еды",
     "pages.newMealPlanModal.input.title": "Название",
     "pages.newMealPlanModal.createAndShare": "Создавать и Поделиться",
     "pages.newMealPlanModal.create": "Создать",
-
     "pages.shareMealPlanModal.title": "Поделиться планом питания",
     "pages.shareMealPlanModal.description": "Ссылку iCal/ICS ниже можно использовать практически в любой программе-календаре для синхронизации вашего плана питания за пределами RecipeSage",
-
     "pages.assistant.title": "Помощник по кулинарии",
     "pages.assistant.welcome.1": "Добро пожаловать в кулинарный помощник RecipeSage!",
     "pages.assistant.welcome.2": "Помощник по приготовлению пищи — это модель искусственного интеллекта, которая может отвечать на ваши вопросы о кулинарии и помогать создавать рецепты.",
     "pages.assistant.welcome.3": "Помощник по приготовлению пищи имеет ограничение на количество сообщений в 5 сообщений в день из-за высоких затрат на запуск ИИ. Для участников этот лимит увеличивается до 50 сообщений в день.",
     "pages.assistant.messageLimit": "Достигнуто максимальное количество сообщений (извините, это дорого!). Счетчик сообщений сбрасывается в 0:00GMT.",
-
     "pages.messageThread.title": "Беседа с {{name}}",
     "pages.messageThread.clickToOpen": "Нажмите, чтобы открыть",
     "pages.messageThread.recipeDeleted": "Рецепт удален",
@@ -462,7 +426,6 @@
     "pages.messageThread.sending": "Отправка...",
     "pages.messageThread.sent": "Отправлено!",
     "pages.messageThread.messagePlaceholder": "Сообщение...",
-
     "pages.messages.title": "Сообщения",
     "pages.messages.history.you": "Вы",
     "pages.messages.history.sentRecipe": "Отправил рецепт",
@@ -471,14 +434,12 @@
     "pages.messages.warning": "Предупреждение:",
     "pages.messages.notificationsRequired": "Для правильной работы обмена сообщениями уведомления должны быть включены.",
     "pages.messages.notificationsInstructions": "Узнайте, как снова включить уведомления здесь",
-
     "pages.newMessageModal.title": "Новая ветка сообщений",
     "pages.newMessageModal.input.target": "Введите адрес электронной почты пользователя RecipeSage или @handle",
     "pages.newMessageModal.compose": "Составьте сообщение",
     "pages.newMessageModal.input.messagePlaceholder": "Привет! Я бы хотел пообщаться в RecipeSage",
     "pages.newMessageModal.send": "Отправить",
     "pages.newMessageModal.defaultMessage": "Привет! Я бы хотел пообщаться в RecipeSage",
-
     "pages.addRecipeToMealPlanModal.title": "Добавить рецепт в план питания",
     "pages.addRecipeToMealPlanModal.instructions1": "Сначала выберите целевой план питания:",
     "pages.addRecipeToMealPlanModal.loading": "Загрузка планов питания...",
@@ -489,7 +450,6 @@
     "pages.addRecipeToMealPlanModal.selectMealPlan": "Выберите план питания",
     "pages.addRecipeToMealPlanModal.selectMeal": "Выберите блюдо",
     "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Отлично! Теперь выберите только что созданный план питания.",
-
     "pages.addRecipeToShoppingListModal.title.singular": "Добавить рецепт в список покупок",
     "pages.addRecipeToShoppingListModal.title.plural": "Добавить рецепты в список покупок",
     "pages.addRecipeToShoppingListModal.selectDestination": "Выберите целевой список покупок:",
@@ -499,7 +459,6 @@
     "pages.addRecipeToShoppingListModal.createShoppingList": "Создать список покупок",
     "pages.addRecipeToShoppingListModal.add": "Добавить в список",
     "pages.addRecipeToShoppingListModal.newListSuccess": "Отлично! Теперь выберите список покупок, который вы только что создали.",
-
     "pages.editRecipe.title.edit": "Изменить рецепт",
     "pages.editRecipe.title.new": "Новый рецепт",
     "pages.editRecipe.autoclip": "Автозаполнение полей из URL (бета)",
@@ -539,17 +498,14 @@
     "pages.editRecipe.addImage.placeholder": "URL-адрес изображения",
     "pages.editRecipe.addImage.downloading": "Загрузка изображения...",
     "pages.editRecipe.addImage.invalidUrl": "Пожалуйста, введите действительный URL-адрес изображения",
-
     "pages.editRecipePopover.actions": "Действия",
     "pages.editRecipePopover.addImage": "Добавить изображение по URL",
-
     "pages.printRecipeModal.title": "Выберите макет печати",
     "pages.printRecipeModal.print": "Печать",
     "pages.printRecipeModal.template.standard": "Стандарт",
     "pages.printRecipeModal.template.standardNoImg": "Стандартное без изображения",
     "pages.printRecipeModal.template.halfSheetCols": "Половина листа, столбцы",
     "pages.printRecipeModal.template.halfSheetCompactNoCols": "Половина листа, компактно, без столбцов",
-
     "pages.account.title": "Учетная запись и учетные данные",
     "pages.account.description": "Здесь вы можете обновить и изменить аспекты своей учетной записи",
     "pages.account.creds.title": "Учетные данные и детали",
@@ -580,8 +536,6 @@
     "pages.account.dangerZone.title": "Будьте внимательны!",
     "pages.account.dangerZone.warning1": "Будьте осторожны с этими действиями — они необратимы.",
     "pages.account.dangerZone.warning2": "Вам будет предложено подтвердить любые действия, которые вы совершаете здесь.",
-    "pages.account.dangerZone.delete AllRecipes": "Удалить все рецепты",
-    "pages.account.dangerZone.delete Account": "Удалить аккаунт и все данные",
     "pages.account.dangerZone.description": "Эти действия необратимы и могут занять несколько минут.",
     "pages.account.nameRequired": "Имя/псевдоним не должно быть пустым.",
     "pages.account.nameUpdated": "Имя профиля обновлено.",
@@ -599,7 +553,6 @@
     "pages.account.deleteAllRecipes.success": "Данные рецептов были удалены.",
     "pages.account.deleteAccount.header": "Удалить аккаунт и все данные",
     "pages.account.deleteAccount.message": "Это НЕОБРАТИМО и приведет к полному удалению всех ваших данных из RecipeSage. Это может занять несколько минут.",
-
     "pages.export.title": "Экспорт",
     "pages.export.description1": "После выбора экспорта данных начнется загрузка файла. Возможно, вам придется нажать \"разрешить\".",
     "pages.export.description2": "Экспортированный файл будет содержать все ваши рецепты в выбранном формате.",
@@ -608,7 +561,6 @@
     "pages.export.xml": "Экспортировать как XML",
     "pages.export.txt": "Экспортировать как обычный текст",
     "pages.export.pdf": "Экспортировать в PDF",
-
     "pages.import.title": "Импорт",
     "pages.import.description1": "RecipeSage поддерживает импорт из Pepperplate, Living Cookbook и Paprika.",
     "pages.import.description2": "При импорте рецептов все рецепты из выбранного вами файла/учетной записи будут добавлены в вашу учетную запись RecipeSage.",
@@ -618,7 +570,6 @@
     "pages.import.pepperplate": "Импортировать из Pepperplate",
     "pages.import.livingCookbook": "Импортировать файл Living Cookbook",
     "pages.import.paprika": "Импортировать файл рецептов Paprika",
-
     "pages.importJsonLD.title": "Импорт рецептов из файла JSON-LD",
     "pages.importJsonLD.description1": "Это позволит импортировать файл JSON-LD (оканчивается на .json) в RecipeSage (это один из форматов файлов, экспортируемых RecipeSage).",
     "pages.importJsonLD.description2": "Задача импорта может занять несколько минут",
@@ -637,7 +588,6 @@
     "pages.importJsonLD.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате JSON-LD. Если у вас возникли проблемы, пришлите мне электронное письмо.",
     "pages.importJsonLD.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
     "pages.importJsonLD.success": "Импорт прошел успешно!",
-
     "pages.importCookmate.title": "Импорт рецептов из файла Cookmate",
     "pages.importCookmate.description1": "Это позволит импортировать файл Cookmate (оканчивается на .mcb) в RecipeSage.",
     "pages.importCookmate.description2": "Задача импорта может занять несколько минут",
@@ -656,7 +606,6 @@
     "pages.importCookmate.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате Cookmate. Если у вас возникли проблемы, пришлите мне электронное письмо.",
     "pages.importCookmate.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
     "pages.importCookmate.success": "Импорт прошел успешно!",
-
     "pages.importLivingCookbook.title": "Импорт рецептов из Living Cookbook",
     "pages.importLivingCookbook.description1": "Это позволит импортировать базу данных вашей Living Cookbook в RecipeSage.",
     "pages.importLivingCookbook.betaWarning": "Обратите внимание, что эта функция находится в стадии бета-тестирования.",
@@ -694,7 +643,6 @@
     "pages.importLivingCookbook.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате .lcb. Если у вас возникли проблемы, пришлите мне электронное письмо.",
     "pages.importLivingCookbook.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
     "pages.importLivingCookbook.success": "Импорт прошел успешно!",
-
     "pages.importPaprika.title": "Импорт рецептов из файла Paprika",
     "pages.importPaprika.description1": "Этот файл экспорта Paprika будет импортирован в RecipeSage. Обратите внимание, что эта функция находится в стадии бета-тестирования.",
     "pages.importPaprika.description2": "Все файлы должны быть в формате .paprikarecipes (экспортировать как формат рецепта паприки в настройках Paprika). Другие форматы не будут работать.",
@@ -710,7 +658,6 @@
     "pages.importPaprika.error": "Хм, у нас возникли проблемы с извлечением этого файла. Убедитесь, что он в формате рецепта паприки прямо из приложения. Если у вас возникли проблемы, пришлите мне электронное письмо.",
     "pages.importPaprika.timeout": "Импорт занимает некоторое время (это может произойти, если ваша база данных очень большая) — пожалуйста, зайдите снова через 5 минут. Если ваши рецепты не отображаются, пришлите мне электронное письмо.",
     "pages.importPaprika.success": "Импорт прошел успешно!",
-
     "pages.importPepperplate.title": "Импортировать рецепты из Pepperplate",
     "pages.importPepperplate.description1": "Задача импорта может занять несколько минут и зависит от доступности серверов Pepperplate.",
     "pages.importPepperplate.description2": "Вы увидите импортированные рецепты в своей библиотеке только после завершения полной задачи импорта.",
@@ -731,7 +678,6 @@
     "pages.importPepperplate.timeout.message": "Это может произойти, когда Pepperplate находится под большой нагрузкой. Импорт все еще продолжается. Если вы не видите свои рецепты, напишите мне по электронной почте.",
     "pages.importPepperplate.error.message": "Произошла ошибка. Пожалуйста, проверьте страницу «Мои рецепты» перед началом нового импорта, чтобы избежать создания дубликатов.",
     "pages.importPepperplate.success": "Импорт завершен!",
-
     "pages.settings.title": "Настройки",
     "pages.settings.section1.title": "Данные и учетная запись",
     "pages.settings.import": "Импортировать данные",
@@ -758,7 +704,6 @@
     "pages.settings.offline.error": "При синхронизации произошла ошибка. Сообщите об этом.",
     "pages.settings.preferencesSync.header": "Синхронизировать настройки",
     "pages.settings.preferencesSync.message": "Вы должны выбрать, хотите ли вы перезаписать настройки в облаке локальными настройками на этом устройстве или перезаписать настройки на этом устройстве настройками из облака.",
-    "pages.settings.preferences Sync.local": "Сохранить локальные настройки",
     "pages.settings.preferencesSync.remote": "Сохранить настройки в облаке",
     "pages.settings.resetPrefs.header": "Предупреждение о сбросе настроек",
     "pages.settings.resetPrefs.message": "Сброс настроек вернет все настройки приложения в состояние по умолчанию. Это включает в себя настройки, установленные через меню на главной странице, странице планов питания, странице списка покупок и т.д. Примечание. Это касается только этого устройства.",
@@ -766,7 +711,6 @@
     "pages.settings.oled.message": "Черная (OLED) тема может затруднить различение элементов и предупреждений. Тени и другая визуальная анимация также не будут отображаться.",
     "pages.settings.update.header": "Приложение перезагрузится",
     "pages.settings.update.subHeader": "Приложение перезагрузится, чтобы проверить наличие обновлений.",
-
     "pages.share.title": "Поделиться рецептом",
     "pages.share.description": "При публикации копия этого рецепта будет отправлена ​​получателю. Ваша копия не будет затронута.",
     "pages.share.byAccount": "RecipeSage",
@@ -784,18 +728,15 @@
     "pages.share.byEmbed.copy": "Скопируйте приведенный ниже код и вставьте его в HTML своего сайта",
     "pages.share.send": "Отправить",
     "pages.share.close": "Закрыть",
-
     "pages.newShoppingListItem.title": "Добавить элемент(ы)",
     "pages.newShoppingListItem.items": "Элементы",
     "pages.newShoppingListItem.recipe": "Рецепт",
     "pages.newShoppingListItem.itemTitle": "Название элемента",
     "pages.newShoppingListItem.add": "Добавить в список",
-
     "pages.newShoppingList.title": "Новый список покупок",
     "pages.newShoppingList.listTitle": "Название",
     "pages.newShoppingList.create": "Создать",
     "pages.newShoppingList.share": "и поделиться",
-
     "pages.shoppingList.title": "Список покупок — {{title}}",
     "pages.shoppingList.nullState.1": "В этом списке покупок нет элементов.",
     "pages.shoppingList.nullState.2": "Используйте меню в верхнем правом углу, чтобы включить или отключить автоматическую группировку.",
@@ -806,7 +747,6 @@
     "pages.shoppingList.removeMultiple.message": "Эти элементы будут удалены из этого списка навсегда.",
     "pages.shoppingList.removed": "Удалено {{itemCount}} элемент(ов)",
     "pages.shoppingList.removed.undo": "Отменить",
-
     "pages.shoppingListPopover.title": "Параметры",
     "pages.shoppingListPopover.sortBy": "Сортировать по",
     "pages.shoppingListPopover.sortBy.title": "Название",
@@ -825,7 +765,6 @@
     "pages.shoppingListPopover.removeAll.message": "Это приведет к безвозвратному удалению всех элементов из этого списка. Это действие необратимо.",
     "pages.shoppingListPopover.deleteList.header": "Подтвердить удаление",
     "pages.shoppingListPopover.deleteList.message": "Этот список покупок будет навсегда удален из вашей учетной записи. Примечание. Если вы являетесь только соавтором этого списка, он будет удален только из вашей учетной записи. Если вы являетесь владельцем этого списка , оно будет удалено со всех аккаунтов других соавторов.",
-
     "pages.shoppingLists.title": "Списки покупок",
     "pages.shoppingLists.editIgnore": "Редактировать игнорируемые элементы списка",
     "pages.shoppingLists.created": "Создано {{date}}",
@@ -834,13 +773,11 @@
     "pages.shoppingLists.owner": "Этот список принадлежит вам",
     "pages.shoppingLists.nullState.1": "У вас нет списков покупок.",
     "pages.shoppingLists.nullState.2": "Чтобы создать список покупок, нажмите кнопку + в нижнем углу.",
-
     "pages.shoppingListIgnoreModal.title": "Игнорированые элемента списка покупок",
     "pages.shoppingListIgnoreModal.description": "Элементы, перечисленные здесь, будут автоматически исключены при добавлении рецепта в список покупок. Это особенно удобно для таких ингредиентов, как соль, которую вам, вероятно, не нужно добавлять каждый раз, когда вы добавляете элемент в список покупок.",
     "pages.shoppingListIgnoreModal.instructions": "Каждая запись должна находиться в отдельной строке. Записи будут соответствовать ингредиенту, если ингредиент содержит любую часть строки. Если вы введете \"соль\", это будет соответствовать \"1 столовой ложке морской соли мелкого помола\".",
     "pages.shoppingListIgnoreModal.label": "Список игнорирования",
     "pages.shoppingListIgnoreModal.placeholder": "Ключевые слова, которые следует игнорировать, каждое в отдельной строке",
-
     "pages.addFriendModal.title": "Найти пользователя",
     "pages.addFriendModal.profileWarning": "Примечание: искомый пользователь должен включить свой профиль.",
     "pages.addFriendModal.send": "Отправить запрос на добавление в друзья",
@@ -848,7 +785,6 @@
     "pages.addFriendModal.profileDisabled.header": "Профиль не включен",
     "pages.addFriendModal.profileDisabled.message": "Этот пользователь отключил свой профиль и поэтому является приватным/недоступным.",
     "pages.addFriendModal.success": "Приглашение в друзья отправлено!",
-
     "pages.addProfileItem.title": "Добавить элемент профиля",
     "pages.addProfileItem.prompt": "Чем бы вы хотели поделиться?",
     "pages.addProfileItem.recipe": "Рецепт",
@@ -869,7 +805,6 @@
     "pages.addProfileItem.itemTitle": "Рекомендуемый заголовок",
     "pages.addProfileItem.tos": "Добавляя этот элемент, вы соглашаетесь с Политикой обмена RecipeSage",
     "pages.addProfileItem.done": "Готово",
-
     "pages.myProfile.title": "Редактировать профиль",
     "pages.myProfile.welcome": "Добро пожаловать в ваш профиль!",
     "pages.myProfile.setup1": "Прежде чем начать, вам необходимо настроить несколько вещей.",
@@ -891,12 +826,8 @@
     "pages.myProfile.notEnabled.header": "Профиль не включен",
     "pages.myProfile.notEnabled.message": "Вам необходимо включить свой профиль для взаимодействия с функциями обмена, такими как отправка запросов на добавление в друзья.",
     "pages.myProfile.ignore": "Игнорировать",
-    "pages.myProfile.enable": "Включить",
-    "pages.myProfile.share.unsaved.header": "Несохраненные изменения",
-    "pages.myProfile.share.unsaved.message": "Прежде чем вы сможете поделиться своим профилем, вам необходимо сохранить изменения.",
     "pages.myProfile.share.unsaved.header": "Несохраненные изменения",
     "pages.myProfile.share.unsaved.message": "Вам необходимо сохранить изменения, прежде чем вы сможете просмотреть, как выглядит ваш профиль.",
-
     "pages.people.title": "Люди",
     "pages.people.nullState.1": "Вы не настроили профиль.",
     "pages.people.nullState.2": "Создание профиля позволяет вам делиться коллекциями рецептов с друзьями и публикой.",
@@ -915,7 +846,6 @@
     "pages.people.setup.header": "Профиль не настроен",
     "pages.people.setup.message": "Вам необходимо настроить свой профиль, прежде чем вы сможете добавлять друзей.",
     "pages.people.setup.confirm": "Настройка",
-
     "pages.profile.title": "Профиль пользователя {{name}}",
     "pages.profile.pinned": "Закрепленные рецепты и этикетки",
     "pages.profile.nullState": "Пользователь {{name}} еще ничего не добавил в свой профиль.",
@@ -934,27 +864,21 @@
     "pages.profile.setup.message": "Чтобы добавить этого пользователя в друзья, вам необходимо настроить свой профиль.",
     "pages.profile.setup.confirm": "Настройка",
     "pages.profile.alreadyRequested": "Похоже, у вас уже есть дружеские отношения. Пожалуйста, попробуйте еще раз.",
-
     "pages.shareProfileModal.title": "Поделиться профилем пользователя {{name}}",
     "pages.shareProfileModal.close": "Закрыть",
     "pages.shareProfileModal.shareTitle": "Профиль RecipeSage пользователя {{name}}",
     "pages.shareProfileModal.shareBody": "Нажмите, чтобы просмотреть общедоступный профиль RecipeSage пользователя {{name}}:",
-
     "components.cookingToolbar.clear": "Очистить все закрепленные рецепты?",
-
     "components.copyWithWebshare.instructions": "Чтобы поделиться, скопируйте ссылку ниже",
     "components.copyWithWebshare.shareIcon": "или нажмите значок «Поделиться»",
-
     "components.mealCalendar.recipes": "Рецепты, запланированные на этот день",
     "components.mealCalendar.noRecipes": "На этот день рецептов не запланировано.",
     "components.mealCalendar.meals": "Питание на этот день",
     "components.mealCalendar.selectDay": "Выберите день, чтобы просмотреть блюда на этот день.",
     "components.mealCalendar.noMeals": "На этот день питание не запланировано.",
-
     "components.multiImageUpload.add": "Нажмите, чтобы добавить изображение",
     "components.multiImageUpload.imageLimit": "Вы можете прикрепить до 10 изображений",
     "components.multiImageUpload.imageError": "Произошла ошибка при обработке одного или нескольких выбранных вами изображений.",
-
     "components.selectCollaborators.title": "Соавторы",
     "components.selectCollaborators.placeholder": "Добавить соавторов по адресу электронной почты",
     "components.selectCollaborators.added": "Уже добавлено",
@@ -963,67 +887,54 @@
     "components.selectCollaborators.notFound": "Пользователь не найден",
     "components.selectCollaborators.notFoundError": "Не удалось найти пользователя с таким адресом электронной почты.",
     "components.selectCollaborators.invalidEmail": "Пожалуйста, введите действительный адрес электронной почты и нажмите Enter.",
-
     "components.selectIngredients.title": "Выберите ингредиенты, которые вы хотите добавить:",
     "components.selectIngredients.toggleAll": "Выбрать/отменить выбор всего",
     "components.selectIngredients.scale": "Кратность x {{scale}} (нажмите, чтобы изменить)",
     "components.selectIngredients.null": "В этом рецепте нет ингредиентов.",
-
     "components.selectLabel.change": "Нажмите, чтобы изменить",
     "components.selectLabel.select": "Нажмите, чтобы выбрать",
     "components.selectLabel.search": "Введите текст для поиска метки...",
     "components.selectLabel.null": "Нет меток с именем \"{{name}}\"",
-
     "components.selectMultipleItems.null": "Нет результатов для {{searchText}}",
     "components.selectMultipleItems.select": "Нажмите, чтобы выбрать",
     "components.selectMultipleItems.create": "Нажмите, чтобы создать",
     "components.selectMultipleItems.noItems": "Нет элементов",
     "components.selectMultipleItems.alreadyAdded": "Уже добавлено",
     "components.selectMultipleItems.searchPlaceholder": "Найти элемент и добавить",
-
     "components.selectMeal.title": "Выбрать блюдо",
     "components.selectMeal.breakfast": "Завтрак",
     "components.selectMeal.lunch": "Обед",
     "components.selectMeal.dinner": "Ужин",
     "components.selectMeal.snack": "Закуска",
     "components.selectMeal.other": "Другое",
-
     "components.selectRecipe.change": "Нажмите, чтобы изменить",
     "components.selectRecipe.select": "Нажмите, чтобы выбрать",
     "components.selectRecipe.search": "Введите текст для поиска рецепта...",
     "components.selectRecipe.searching": "Поиск \"{{searchText}}\"...",
     "components.selectRecipe.null": "Нет результатов для \"{{searchText}}\"",
-
     "components.selectUser.placeholder": "Поиск по электронной почте или дескриптору",
     "components.selectUser.change": "Нажмите, чтобы изменить",
     "components.selectUser.select": "Нажмите, чтобы выбрать",
     "components.selectUser.searching": "Поиск \"{{name}}\"...",
     "components.selectUser.null": "Нет результатов для \"{{name}}\"",
-
     "components.selectKnownUser.friends": "Друзья",
     "components.selectKnownUser.conversations": "Потоки сообщений",
-
     "components.selfhostWarning.1": "Примечание. Это локальная версия RecipeSage, поэтому она не связана с RecipeSage.com",
     "components.selfhostWarning.2": "или какой-либо учетной записью, расположенной на основном сайте.",
-
     "components.shoppingListItem.recipe": "Для рецепта:",
     "components.shoppingListItem.added": "Добавлено",
     "components.shoppingListItem.addedBy": "Добавил",
-
     "components.tos.warning": "Продолжая, вы соглашаетесь с RecipeSage",
     "components.tos.title": "Условия обслуживания",
-
     "components.ratingFilter.title": "Фильтровать по рейтингу",
     "components.ratingFilter.unrated": "Без рейтинга",
     "components.ratingFilter.reset": "Сбросить",
-
     "components.scaleRecipe.title": "Кратность рецепта",
     "components.scaleRecipe.change": "Отрегулируйте кратность рецепта",
     "components.scaleRecipe.click": "Нажмите кнопку или введите кратность вручную",
     "components.scaleRecipe.manual": "Или введите число или дробь",
     "components.scaleRecipe.cancel": "Отмена",
     "components.scaleRecipe.apply": "Применить",
-
     "components.fontSize.title": "Отрегулировать размер шрифта",
     "components.fontSize.option.X1_0": "Системные настройки шрифта",
     "components.fontSize.option.PX14": "14px (Маленький)",
@@ -1033,7 +944,6 @@
     "components.fontSize.option.PX22": "22px (Большой)",
     "components.fontSize.option.PX24": "24px (Большой)",
     "components.fontSize.reset": "Сброс",
-
     "services.quickTutorial.multipleRecipeSelection.header": "Выбор нескольких рецептов",
     "services.quickTutorial.multipleRecipeSelection.message": "Теперь вы находитесь в режиме выбора нескольких рецептов. Вы можете щелкнуть столько рецептов, сколько хотите выбрать, а затем использовать кнопки, которые появляются в заголовке, для выполнения массовых действий, таких как маркировка или удаление. Вы можете выйти из режима выбора нескольких рецептов в любой момент, нажав X в заголовке или через меню параметров.",
     "services.quickTutorial.multipleLabelSelection.header": "Выбор нескольких меток",
@@ -1044,15 +954,11 @@
     "services.quickTutorial.experimentalOfflineCache.message": "Экспериментальный автономный кеш — это тестовая функция. RecipeSage обычно кэширует рецепты, к которым вы получаете доступ автоматически, но теперь все ваши рецепты будут загружаться в фоновом режиме. Ваша система может удалить автоматически кэшируемые рецепты, если требуется хранилище или если вы не используете приложение в течение длительного времени. Важное примечание: фильтрация по метке и поиск не будут работать. Это может работать в будущих реализациях, но не в этой тестовой реализации.",
     "services.quickTutorial.pinnedRecipes.header": "Закрепленные рецепты",
     "services.quickTutorial.pinnedRecipes.message": "Этот рецепт теперь закреплен! Закрепление рецептов позволяет быстро переключаться между несколькими рецептами во время приготовления. Закрепленные рецепты отображаются на панели инструментов в нижней части экрана. Вы увидите значок пузырь с изображением рецепта и первой буквой названия рецепта. Закрепленные рецепты останутся открытыми, пока их не открепят или пока вы не закроете приложение.",
-
     "services.util.justNow": "только сейчас",
     "services.util.today": "сегодня",
-
     "services.unsavedChanges.message": "Похоже, вы что-то редактировали. Если вы выйдете до сохранения, ваши изменения будут потеряны.",
-
     "errors.offline": "Похоже, вы не в сети. В автономном режиме мы можем получать только те данные, к которым вы ранее обращались на этом устройстве.",
     "errors.unexpected": "Произошла непредвиденная ошибка. Повторите попытку. Если проблема продолжит возникать, свяжитесь со мной.",
-
     "generic.delete": "Удалить",
     "generic.cancel": "Отмена",
     "generic.confirm": "Подтвердить",
