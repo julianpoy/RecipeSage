@@ -8,6 +8,7 @@ import {
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
 } from "../../services/capabilities";
+import { indexRecipes } from "../../services/search";
 
 export const createRecipe = publicProcedure
   .input(
@@ -98,6 +99,8 @@ export const createRecipe = publicProcedure
         },
       },
     });
+
+    await indexRecipes([recipe]);
 
     return recipe;
   });
