@@ -6,6 +6,7 @@ import {
   userHasCapability as _userHasCapability,
   Capabilities as _Capabilities,
   SubscriptionModels as _SubscriptionModels,
+  SUBSCRIPTION_MODELS,
 } from "@recipesage/trpc";
 
 // DB
@@ -19,7 +20,7 @@ export const SubscriptionModels = _SubscriptionModels;
 export const Capabilities = _Capabilities;
 
 export const extend = async (userId, subscriptionName, transaction) => {
-  const renewalLength = SubscriptionModels[subscriptionName].expiresIn;
+  const renewalLength = SUBSCRIPTION_MODELS[subscriptionName].expiresIn;
 
   const existingSubscription = await UserSubscription.findOne({
     where: {
