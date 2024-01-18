@@ -144,7 +144,7 @@
     "pages.homepopover.options.sortBy.updatedNewest": "Обновлено (сначала новые)",
     "pages.homepopover.options.sortBy.updatedOldest": "Обновлено (сначала старые)",
     "pages.homepopover.options.unselectAllRecipes": "Отменить выбор всех рецептов",
-    "pages.homepopover.options.selectMultipleRecipes": "Выбрать несколько рецептов",
+    "pages.homepopover.options.selectMultipleRecipes": "Мультивыбор рецептов",
     "pages.homepopover.warning.optionsHidden": "Примечание: некоторые параметры скрыты, поскольку это общая коллекция",
     "pages.homepopover.labelNull": "У вас нет меток. Вы можете создавать метки на странице сведений о рецепте.",
     "pages.homepopover.unlabeled": "Только без метки",
