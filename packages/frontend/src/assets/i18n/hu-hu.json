@@ -81,7 +81,7 @@
     "pages.auth.forgot.toast": "Ha az e-mail címhez RecipeSage-fiók is tartozik, néhány percen belül meg kell kapnia a jelszó-visszaállítási hivatkozást.",
     "pages.home.recipe.from": "Feladó:",
     "pages.home.title.selectionMode": "{{count}} Kijelölve",
-    "pages.home.title.main": "Saját receptjeim",
+    "pages.home.title.main": "Receptjeim",
     "pages.home.title.inbox": "Recept Beérkezett üzenetek",
     "pages.home.title.sharedAll": "Megosztott receptek",
     "pages.home.title.sharedLabel": "Megosztott címke: {{label}}",
@@ -964,5 +964,8 @@
     "pages.myProfile.handle.invalid": "Ez az egyedi név nem érvényes",
     "pages.myProfile.handle.unique": "Megjegyzés: A névnek egyedinek kell lennie, és nem tartalmazhat speciális karaktereket és ékezeteket.",
     "components.selectUser.placeholder": "Keresés email címre, vagy egyedi névre",
-    "components.fontSize.option.X1_0": "Rendszernek megfelelő"
+    "components.fontSize.option.X1_0": "Rendszernek megfelelő",
+    "pages.recipeDetails.yield": "Adag",
+    "pages.recipeDetailsPopover.keepScreenOn": "Képernyő bekapcsolva tartása",
+    "pages.editRecipe.input.yield": "Adag"
 }
