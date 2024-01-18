@@ -17,7 +17,7 @@ export enum SubscriptionModels {
   Forever = "forever",
 }
 
-const SUBSCRIPTION_MODELS = {
+export const SUBSCRIPTION_MODELS = {
   [SubscriptionModels.PyoMonthly]: {
     title: "Choose your own price",
     expiresIn: 31,
