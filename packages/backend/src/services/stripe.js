@@ -101,7 +101,6 @@ export const createPYOSession = async (
 
   return await stripe.checkout.sessions.create({
     customer: stripeCustomerId || undefined,
-    payment_method_types: ["card"],
     success_url: successUrl,
     cancel_url: cancelUrl,
     ...checkoutData,
