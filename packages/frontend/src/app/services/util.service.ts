@@ -266,6 +266,7 @@ const defaultLocality = {
   fr: SupportedLanguages.FR_FR,
   ru: SupportedLanguages.RU_RU,
   hu: SupportedLanguages.HU_HU,
+  da: SupportedLanguages.DA_DK,
 };
 
 const rtlLanguages = [SupportedLanguages.HE];
