@@ -485,7 +485,6 @@
     "pages.editRecipe.create": "Crea",
     "pages.editRecipe.titleRequired": "Indica il titolo della ricetta (unico campo obbligatorio).",
     "pages.editRecipe.clip.header": "Autocompleta campi da un URL",
-    "pages.editRecipe.clip.subHeader": "Inserisci l’URL di un sito web per estrarre i dati della ricetta",
     "pages.editRecipe.clip.message": "Nota: Questa funzionalità è in beta",
     "pages.editRecipe.clip.placeholder": "URL ricetta",
     "pages.editRecipe.clip.invalidUrl": "Errore: URL non valido",

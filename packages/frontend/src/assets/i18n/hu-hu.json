@@ -413,7 +413,6 @@
     "pages.editRecipe.save": "Mentés",
     "pages.editRecipe.create": "Létrehoz",
     "pages.editRecipe.clip.header": "Mezők automatikus kitöltése az URL-ből",
-    "pages.editRecipe.clip.subHeader": "Adja meg a webhely URL-címét a receptadatok megszerzéséhez",
     "pages.editRecipe.clip.message": "Megjegyzés: Ez a funkció béta állapotban van",
     "pages.editRecipe.clip.placeholder": "Recept URL-je",
     "pages.editRecipe.clip.invalidUrl": "Hiba: Érvényes URL-t kell megadnia",

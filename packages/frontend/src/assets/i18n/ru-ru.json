@@ -481,7 +481,6 @@
     "pages.editRecipe.create": "Создать",
     "pages.editRecipe.titleRequired": "Укажите название рецепта (единственное обязательное поле).",
     "pages.editRecipe.clip.header": "Автозаполнение полей из URL",
-    "pages.editRecipe.clip.subHeader": "Введите URL-адрес веб-сайта, чтобы получить данные рецепта",
     "pages.editRecipe.clip.message": "Примечание: эта функция находится в стадии бета-тестирования",
     "pages.editRecipe.clip.placeholder": "URL-адрес рецепта",
     "pages.editRecipe.clip.invalidUrl": "Ошибка: необходимо указать действительный URL-адрес",
