@@ -216,6 +216,10 @@
           (selectedItemsChange)="selectedLabelsChange(null, $event)"
           (newItem)="addLabel($event, null)"
           [disallowedTitles]="disallowedTitleMap(labels, null)"
+          [reserveSearchResultsHeight]="false"
+          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
+          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
+          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
         ></select-multiple-items>
       </div>
 
@@ -231,6 +235,10 @@
           (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
           (newItem)="addLabel($event, labelGroup.id)"
           [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
+          [reserveSearchResultsHeight]="false"
+          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
+          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
+          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
         ></select-multiple-items>
       </div>
     </div>
