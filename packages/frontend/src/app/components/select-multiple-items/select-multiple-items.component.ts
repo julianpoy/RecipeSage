@@ -153,9 +153,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
 
   resetSearch() {
     this.searchText = "";
-    this.searchResults = [];
-    this.exactItemMatch = undefined;
-    this.searchFocused = false;
+    this.updateResults();
   }
 
   selectItem(item: T) {
