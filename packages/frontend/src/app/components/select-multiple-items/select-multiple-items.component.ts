@@ -90,6 +90,24 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     }, 500);
   }
 
+  onEnter() {
+    if (this.disallowedTitles[this.searchText]) return;
+
+    const isAlreadyAdded = this.selectedItems.some((item) =>
+      this.isExactMatch(item),
+    );
+    if (isAlreadyAdded) return;
+
+    const existingItem = this.items.find((item) => this.isExactMatch(item));
+    if (existingItem) {
+      return this.selectItem(existingItem);
+    }
+
+    if (!this.enableCreateNew) return;
+
+    return this.create();
+  }
+
   getUnselectedItems() {
     const selectedItemIds = new Set(
       this.selectedItems.map((selectedItem) => selectedItem.id),

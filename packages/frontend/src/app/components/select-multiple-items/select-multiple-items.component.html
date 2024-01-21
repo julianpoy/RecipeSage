@@ -19,6 +19,8 @@
     (ionInput)="onSearchInputChange($event)"
     (ionFocus)="onSearchFocus()"
     (ionBlur)="onSearchBlur()"
+    (keydown.enter)="onEnter()"
+    enterkeyhint="go"
     [value]="searchText"
     placeholder="{{
       searchPlaceholderText ||
