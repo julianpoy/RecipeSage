@@ -507,9 +507,6 @@ export class EditRecipePage {
     const header = await this.translate
       .get("pages.editRecipe.clip.header")
       .toPromise();
-    const subHeader = await this.translate
-      .get("pages.editRecipe.clip.subHeader")
-      .toPromise();
     const message = await this.translate
       .get("pages.editRecipe.clip.message")
       .toPromise();
@@ -522,12 +519,13 @@ export class EditRecipePage {
       .get("pages.editRecipe.clip.invalidUrl")
       .toPromise();
 
+    const clipInputId = "autoclip-prompt-url-input";
     const clipPrompt = await this.alertCtrl.create({
       header,
-      subHeader,
       message,
       inputs: [
         {
+          id: clipInputId,
           name: "url",
           type: "text",
           placeholder,
@@ -558,6 +556,8 @@ export class EditRecipePage {
     });
 
     await clipPrompt.present();
+
+    document.getElementById(clipInputId)?.focus();
   }
 
   async _clipFromUrl(url: string) {
