@@ -16,3 +16,11 @@
 .results-list-container {
   position: relative;
 }
+
+.selected-container.reserve-height {
+  min-height: 40px; /* Should be the height of a chip */
+}
+
+.search-container.reserve-height {
+  height: 210px; /* Should be results height + searchbar height */
+}

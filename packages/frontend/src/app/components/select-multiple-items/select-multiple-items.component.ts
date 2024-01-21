@@ -21,7 +21,10 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
 
   @Input() enableCreateNew = false;
   @Input() noItemsText?: string;
+  @Input() noSelectedItemsText?: string;
   @Input() searchPlaceholderText?: string;
+  @Input() reserveSelectedItemsHeight = true;
+  @Input() reserveSearchResultsHeight = true;
 
   @Input({
     required: true,
@@ -70,7 +73,7 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     this.updateResults();
   }
 
-  onSearchFocus() {
+  onSearchFocus(event: any) {
     if (this.searchFocusTimeout) {
       clearTimeout(this.searchFocusTimeout);
     }
@@ -78,6 +81,13 @@ export class SelectMultipleItemsComponent<T extends SelectableItem> {
     this.updateResults();
 
     this.searchFocused = true;
+
+    setTimeout(() => {
+      event.target.scrollIntoView({
+        behavior: "instant",
+        block: "start",
+      });
+    }, 200);
   }
 
   onSearchBlur() {

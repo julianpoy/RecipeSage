@@ -97,6 +97,7 @@
   <select-multiple-items
     [items]="mapLabelsToSelectableItems(ungroupedLabels)"
     (selectedItemsChange)="selectedLabelsChange($event)"
+    noSelectedItemsText="{{ 'pages.manageLabelGroupModal.labels.noSelectedItems' | translate }}"
     noItemsText="{{ 'pages.manageLabelGroupModal.labels.noItems' | translate }}"
     searchPlaceholderText="{{ 'pages.manageLabelGroupModal.labels.search' | translate }}"
   ></select-multiple-items>
