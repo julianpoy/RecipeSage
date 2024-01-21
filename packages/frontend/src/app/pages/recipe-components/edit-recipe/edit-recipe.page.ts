@@ -507,9 +507,6 @@ export class EditRecipePage {
     const header = await this.translate
       .get("pages.editRecipe.clip.header")
       .toPromise();
-    const subHeader = await this.translate
-      .get("pages.editRecipe.clip.subHeader")
-      .toPromise();
     const message = await this.translate
       .get("pages.editRecipe.clip.message")
       .toPromise();
@@ -525,7 +522,6 @@ export class EditRecipePage {
     const clipInputId = "autoclip-prompt-url-input";
     const clipPrompt = await this.alertCtrl.create({
       header,
-      subHeader,
       message,
       inputs: [
         {
