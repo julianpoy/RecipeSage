@@ -60,6 +60,13 @@ Core.getGroup("teaspoon").addUnits({
   tsk: Plurality.EITHER,
 });
 
+Core.getGroup("cup").setPreferred("cups").setDenominators([2, 3, 4, 8]);
+// Core.setCommon('c', false);
+// Core.setDenominators('cup', [2, 3, 4, 8]);
+// Core.setPreferred('cup');
+Core.setDenominators("tablespoon", [2, 3, 4, 8]);
+Core.setDenominators("teaspoon", [2, 3, 4, 8, 16, 32]);
+
 export const unitNames: string[] = Object.keys(Core.classMap)
   .map((className) => Object.keys(Core.classMap[className].groupMap))
   .flat();
