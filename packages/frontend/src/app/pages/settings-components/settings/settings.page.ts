@@ -73,14 +73,21 @@ export class SettingsPage {
     }
 
     try {
-      const locale = new Intl.DisplayNames(window.navigator.languages, {
-        type: "language",
-      });
+      this.languageOptions = [];
+      for (const supportedLanguage of Object.values(SupportedLanguages)) {
+        const locale = new Intl.DisplayNames(supportedLanguage, {
+          type: "language",
+          fallback: "code",
+        });
 
-      this.languageOptions = Object.values(SupportedLanguages).map((code) => [
-        code,
-        locale.of(code) || code,
-      ]);
+        this.languageOptions.push([
+          supportedLanguage,
+          locale.of(supportedLanguage) || supportedLanguage,
+        ]);
+      }
+      this.languageOptions = this.languageOptions.sort((a, b) =>
+        a[1].localeCompare(b[1]),
+      );
     } catch (e) {
       console.error("Intl not supported");
       this.languageOptions = Object.values(SupportedLanguages).map((code) => [
@@ -92,6 +99,7 @@ export class SettingsPage {
     (async () => {
       this.languageSelectInterfaceOptions = {
         header: await this.translate.get("pages.settings.language").toPromise(),
+        cssClass: "language-select-alert",
       };
     })();
   }
