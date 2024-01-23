@@ -1055,9 +1055,12 @@
 
   "services.unsavedChanges.message": "It looks like you have been editing something. If you leave before saving, your changes will be lost.",
 
-  "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
+  "errors.offline": "A connectivity error occurred. While offline, we're only able to fetch data you've previously accessed on this device.",
+  "errors.unexpected": "An unexpected error occurred and the app may not work correctly. Please reload the app and try again. If this continues to occur, please contact me.",
+  "errors.unexpected.selfhost": "An unexpected error occurred. Please check your server logs as well as the self hosting FAQ.",
 
+  "generic.error": "Error",
+  "generic.reload": "Reload",
   "generic.delete": "Delete",
   "generic.cancel": "Cancel",
   "generic.confirm": "Confirm",
