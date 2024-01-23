@@ -572,7 +572,7 @@
     "pages.editRecipe.save": "Enregistrer",
     "pages.editRecipe.create": "Créer",
     "pages.editRecipe.clip.header": "Remplir automatiquement les champs depuis l'URL",
-    "pages.editRecipe.clip.message": "Remarque : cette fonctionnalité est en version bêta",
+    "pages.editRecipe.clip.message": "Entrer l'URL d'un site Web pour collecter le contenu de la recette",
     "pages.editRecipe.clip.placeholder": "URL de la recette",
     "pages.editRecipe.clip.invalidUrl": "Erreur : vous devez fournir une URL valide",
     "pages.editRecipe.clip.loading": "Veuillez patienter...",
@@ -973,5 +973,10 @@
     "components.selectMeal.other": "Autre",
     "components.selectMeal.snack": "Casse-croûte",
     "generic.ok": "Ok",
-    "services.unsavedChanges.message": "Il semble que vous ayez modifié quelque chose. Si vous quittez avant de sauvegarder, vos modifications seront perdues."
+    "services.unsavedChanges.message": "Il semble que vous ayez modifié quelque chose. Si vous quittez avant de sauvegarder, vos modifications seront perdues.",
+    "pages.manageLabelGroupModal.labels.noSelectedItems": "PAs d'étiquette sélectionnée",
+    "components.selectMultipleItems.noSelected": "Pas d'élément sélectionné",
+    "pages.editRecipe.input.labels.noSelectedItems": "Pas d'étiquette sélectionnée",
+    "pages.editRecipe.input.labels.noItems": "PAs d'étiquette non catégorisée",
+    "pages.editRecipe.input.labels.search": "Rechercher une étiquette"
 }
