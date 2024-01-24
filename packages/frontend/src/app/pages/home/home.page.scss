@@ -1,4 +1,4 @@
-@import "src/theme/shared-variables.scss";
+@import "../../../theme/shared-variables.scss";
 
 .homegrid {
   display: grid;
@@ -39,7 +39,7 @@
       background-color: var(
         --ion-item-background-hover,
         rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04)
-      ); // Pulled from ion-item button hover
+      ); /* Pulled from ion-item button hover */
     }
 
     &.selected {
@@ -60,7 +60,7 @@ ion-badge {
   text-overflow: ellipsis;
   overflow: hidden;
 
-  // When in "list" mode
+  /* When in "list" mode */
   .recipe-item & {
     top: 8px;
     left: initial;
@@ -151,14 +151,14 @@ ion-badge {
     --paragraph-line-height: 1.188rem;
     --content-padding-leeway: 1.375rem;
 
-    // The following should be set to their initial value with all preferences OFF
+    /* The following should be set to their initial value with all preferences OFF */
     --image-size: 1.25rem;
     --header-height: 2.25rem;
     --description-height: 0px;
     --source-height: 0px;
     --fromuser-height: 0px;
     --labels-height: 0px;
-    // ===
+    /* === */
 
     --content-height: calc(
       var(--content-padding-leeway) + var(--header-height) +
@@ -218,9 +218,9 @@ ion-badge {
         font-size: 1rem;
         font-weight: normal;
 
-        //white-space: nowrap;
-        //overflow: hidden;
-        //text-overflow: ellipsis;
+        /* white-space: nowrap; */
+        /* overflow: hidden; */
+        /* text-overflow: ellipsis; */
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
