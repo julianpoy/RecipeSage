@@ -481,7 +481,7 @@
     "pages.editRecipe.create": "Создать",
     "pages.editRecipe.titleRequired": "Укажите название рецепта (единственное обязательное поле).",
     "pages.editRecipe.clip.header": "Автозаполнение полей из URL",
-    "pages.editRecipe.clip.message": "Примечание: эта функция находится в стадии бета-тестирования",
+    "pages.editRecipe.clip.message": "Введите URL-адрес веб-сайта, чтобы получить содержимое рецепта",
     "pages.editRecipe.clip.placeholder": "URL-адрес рецепта",
     "pages.editRecipe.clip.invalidUrl": "Ошибка: необходимо указать действительный URL-адрес",
     "pages.editRecipe.clip.loading": "Пожалуйста, подождите...",
@@ -973,5 +973,10 @@
     "pages.contributeThankYou.bonus": "Бонусные функции должны быть разблокированы для вашей учетной записи в ближайшее время.",
     "pages.account.dangerZone.deleteAllRecipes": "Удалить все рецепты",
     "pages.account.dangerZone.deleteAccount": "Удалить учетную запись и все данные",
-    "pages.settings.preferencesSync.local": "Сохранить локальные настройки"
+    "pages.settings.preferencesSync.local": "Сохранить локальные настройки",
+    "pages.editRecipe.input.labels.noSelectedItems": "Нет выбранных меток",
+    "components.selectMultipleItems.noSelected": "Нет выбранных элементов",
+    "pages.manageLabelGroupModal.labels.noSelectedItems": "Нет выбранных меток",
+    "pages.editRecipe.input.labels.noItems": "Нет меток без категорий",
+    "pages.editRecipe.input.labels.search": "Поиск метки"
 }
