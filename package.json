@@ -47,6 +47,7 @@
     "firebase-admin": "^11.11.0",
     "fraction.js": "^4.3.7",
     "fs-extra": "^11.1.1",
+    "google-auth-library": "^9.4.2",
     "grip": "^1.5.0",
     "he": "^1.2.0",
     "https-proxy-agent": "^7.0.2",

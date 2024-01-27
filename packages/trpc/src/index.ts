@@ -27,6 +27,7 @@ import { getPreferences } from "./procedures/users/getPreferences";
 import { getRecipeFromOCR } from "./procedures/ml/getRecipeFromOCR";
 import { getRecipesByTitle } from "./procedures/recipes/getRecipesByTitle";
 import { getUniqueRecipeTitle } from "./procedures/recipes/getUniqueRecipeTitle";
+import { signInWithGoogle } from "./procedures/users/signInWithGoogle";
 
 export * from "./types/assistantMessageSummary";
 export * from "./types/labelGroupSummary";
@@ -70,6 +71,7 @@ const appRouter = router({
     getMe,
     updatePreferences,
     getPreferences,
+    signInWithGoogle,
   }),
   ml: router({
     getRecipeFromOCR,

@@ -1039,6 +1039,8 @@
   "components.fontSize.option.PX24": "24px (Larger)",
   "components.fontSize.reset": "Reset",
 
+  "components.signInWithGoogle.button": "Sign in with Google",
+
   "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
   "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",
   "services.quickTutorial.multipleLabelSelection.header": "Multiple Label Selection",
