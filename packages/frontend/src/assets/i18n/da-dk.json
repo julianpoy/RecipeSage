@@ -499,5 +499,8 @@
     "pages.editRecipe.save": "Gem",
     "pages.editRecipe.create": "Opret",
     "pages.editRecipe.clip.placeholder": "Opskrift-URL",
-    "pages.editRecipe.clip.invalidUrl": "Fejl: Du skal angive en gyldig URL"
+    "pages.editRecipe.clip.invalidUrl": "Fejl: Du skal angive en gyldig URL",
+    "pages.editRecipe.addImage.header": "Tilføj billede via URL",
+    "pages.editRecipe.addImage.message": "Indtast en billed-URL, der skal føjes til opskriften",
+    "pages.editRecipe.addImage.placeholder": "Billed-URL"
 }
