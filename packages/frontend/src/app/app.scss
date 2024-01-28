@@ -223,3 +223,11 @@ ion-button.button-outline {
 .language-select-alert .select-interface-option {
   text-transform: capitalize;
 }
+
+/* Must be added globally, since iframe is loaded outside of the context of Angular CSS encapsulation */
+.gsi-container iframe {
+  /* Center the "continue as XYZ" button */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color-scheme: light;
+}

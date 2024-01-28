@@ -99,6 +99,21 @@
         >
       </div>
 
+      <div class="divider" *ngIf="!isSelfHost">
+        <div class="divider-segment"></div>
+        <p class="ion-text-center">{{ 'pages.auth.or' | translate }}</p>
+        <div class="divider-segment"></div>
+      </div>
+
+      <div
+        class="ion-padding-start ion-padding-end ion-padding-bottom"
+        *ngIf="!isSelfHost"
+      >
+        <sign-in-with-google
+          (signInComplete)="signInWithGoogleComplete($event)"
+        ></sign-in-with-google>
+      </div>
+
       <div>
         <ion-button
           fill="clear"
