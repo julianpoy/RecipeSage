@@ -301,30 +301,28 @@ const importStandardizedRecipes = async (userId, recipesToImport) => {
       });
     });
 
-    await Promise.all(
-      Object.keys(labelMap).map((labelTitle) => {
-        return Label.findOrCreate({
-          where: {
-            userId,
-            title: labelTitle,
-          },
+    for (const labelTitle of Object.keys(labelMap)) {
+      const [label] = await Label.findOrCreate({
+        where: {
+          userId,
+          title: labelTitle.substring(0, 255),
+        },
+        transaction,
+      });
+
+      await Recipe_Label.bulkCreate(
+        labelMap[labelTitle].map((recipeId) => {
+          return {
+            labelId: label.id,
+            recipeId,
+          };
+        }),
+        {
+          ignoreDuplicates: true,
           transaction,
-        }).then((labels) => {
-          return Recipe_Label.bulkCreate(
-            labelMap[labelTitle].map((recipeId) => {
-              return {
-                labelId: labels[0].id,
-                recipeId,
-              };
-            }),
-            {
-              ignoreDuplicates: true,
-              transaction,
-            },
-          );
-        });
-      }),
-    );
+        },
+      );
+    }
 
     const imagesByRecipeIdx = await Promise.all(
       recipesToImport.map(async (el) => {
