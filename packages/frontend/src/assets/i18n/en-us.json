@@ -70,6 +70,7 @@
   "pages.auth.button.forgotPassword": "Forgot password",
   "pages.auth.button.registerInstead": "Create an account instead",
   "pages.auth.button.loginInstead": "Log in instead",
+  "pages.auth.or": "OR",
   "pages.auth.error.invalidEmail": "Please enter a valid email address.",
   "pages.auth.error.noName": "Please enter a name (you can enter a nickname!)",
   "pages.auth.error.noPassword": "Please enter a password.",

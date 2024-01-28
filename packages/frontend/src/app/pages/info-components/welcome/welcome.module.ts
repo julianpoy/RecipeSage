@@ -6,6 +6,7 @@ import { RouterModule } from "@angular/router";
 import { WelcomePage } from "./welcome.page";
 
 import { GlobalModule } from "~/global.module";
+import { SignInWithGoogleModule } from "../../../components/sign-in-with-google/sign-in-with-google.module";
 
 @NgModule({
   declarations: [WelcomePage],
@@ -19,6 +20,7 @@ import { GlobalModule } from "~/global.module";
       },
     ]),
     GlobalModule,
+    SignInWithGoogleModule,
   ],
 })
 export class WelcomePageModule {}
