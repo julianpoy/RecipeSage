@@ -978,5 +978,7 @@
     "components.selectMultipleItems.noSelected": "Pas d'élément sélectionné",
     "pages.editRecipe.input.labels.noSelectedItems": "Pas d'étiquette sélectionnée",
     "pages.editRecipe.input.labels.noItems": "PAs d'étiquette non catégorisée",
-    "pages.editRecipe.input.labels.search": "Rechercher une étiquette"
+    "pages.editRecipe.input.labels.search": "Rechercher une étiquette",
+    "pages.auth.or": "OU",
+    "components.signInWithGoogle.button": "Se connecter avec Google"
 }
