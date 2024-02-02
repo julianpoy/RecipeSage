@@ -979,5 +979,6 @@
     "pages.manageLabelGroupModal.labels.noSelectedItems": "Нет выбранных меток",
     "pages.editRecipe.input.labels.noItems": "Нет меток без категорий",
     "pages.editRecipe.input.labels.search": "Поиск метки",
-    "components.signInWithGoogle.button": "Войти через Google"
+    "components.signInWithGoogle.button": "Войти через Google",
+    "pages.auth.or": "ИЛИ"
 }
