@@ -11,8 +11,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
-    nginx.ingress.kubernetes.io/limit-rps: "5"
-    nginx.ingress.kubernetes.io/limit-burst-multiplier: "4"
+    nginx.ingress.kubernetes.io/limit-rps: "7"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "6"
     nginx.ingress.kubernetes.io/server-snippet: |
       gzip on;
       gzip_vary on;
@@ -49,47 +49,69 @@ metadata:
       text/x-cross-domain-policy;
 spec:
   rules:
-  - http:
-  - host: api.recipesage.com
-    http:
-      paths:
-      - path: /(api/?)?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-api
-            port:
-              number: 3000
-  - host: api.beta.recipesage.com
-    http:
-      paths:
-      - path: /(api/?)?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-api-beta
-            port:
-              number: 3000
-  - host: grip.recipesage.com
-    http:
-      paths:
-      - path: /(grip/)?(ws)
-        pathType: Prefix
-        backend:
-          service:
-            name: rs-pushpin
-            port:
-              number: 7999
+    - http:
+    - host: api.recipesage.com
+      http:
+        paths:
+          - path: /(api/?)?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-api
+                port:
+                  number: 3000
+    - host: api.beta.recipesage.com
+      http:
+        paths:
+          - path: /(api/?)?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-api-beta
+                port:
+                  number: 3000
+    - host: grip.recipesage.com
+      http:
+        paths:
+          - path: /(grip/)?(ws)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-pushpin
+                port:
+                  number: 7999
+    - host: grafana.recipesage.com
+      http:
+        paths:
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-grafana
+                port:
+                  number: 3000
+    - host: weblate.recipesage.com
+      http:
+        paths:
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: rs-weblate
+                port:
+                  number: 8080
   tls:
-  - hosts:
-    - recipesage.com
-    - www.recipesage.com
-    - beta.recipesage.com
-    - staging.recipesage.com
-    - api.recipesage.com
-    - api.beta.recipesage.com
-    - grip.recipesage.com
-    secretName: rs-tls
+    - hosts:
+        - recipesage.com
+        - www.recipesage.com
+        - beta.recipesage.com
+        - staging.recipesage.com
+        - api.recipesage.com
+        - api.beta.recipesage.com
+        - grip.recipesage.com
+        - grafana.recipesage.com
+        - weblate.recipesage.com
+      secretName: rs-tls
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -103,11 +125,11 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    - selector: {}
-      dns01:
-        route53:
-          region: us-east-1
-          accessKeyID: AKIAZLFSMAZJ7MRMVGFN
-          secretAccessKeySecretRef:
-            name: cert-manager-aws
-            key: secret-access-key
+      - selector: {}
+        dns01:
+          route53:
+            region: us-east-1
+            accessKeyID: AKIAZLFSMAZJ7MRMVGFN
+            secretAccessKeySecretRef:
+              name: cert-manager-aws
+              key: secret-access-key

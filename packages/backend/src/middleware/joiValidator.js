@@ -1,12 +1,15 @@
-const joiValidator = (joiSchema) => {
+export const joiValidator = (joiSchema) => {
   return (req, res, next) => {
-    const { error } = joiSchema.validate({
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    }, {
-      allowUnknown: true,
-    });
+    const { error } = joiSchema.validate(
+      {
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      },
+      {
+        allowUnknown: true,
+      },
+    );
 
     if (error) {
       return res.status(400).send(error.message);
@@ -14,8 +17,4 @@ const joiValidator = (joiSchema) => {
 
     next();
   };
-};
-
-module.exports = {
-  joiValidator,
 };

@@ -1,28 +1,40 @@
 <div>
   <div *ngIf="scaledIngredients && scaledIngredients.length > 0">
     <p>
-      {{ 'components.selectIngredients.title' | translate }}
+      {{ "components.selectIngredients.title" | translate }}
     </p>
 
     <ion-item>
-      <ion-label>
-        {{ 'components.selectIngredients.toggleAll' | translate }}
-      </ion-label>
-      <ion-checkbox [(ngModel)]="allSelected" (ngModelChange)="resetAll()" checked="true"></ion-checkbox>
+      <ion-checkbox
+        labelPlacement="end"
+        justify="start"
+        [(ngModel)]="allSelected"
+        (ngModelChange)="resetAll()"
+        checked="true"
+      >
+        {{ "components.selectIngredients.toggleAll" | translate }}
+      </ion-checkbox>
     </ion-item>
-    <ion-item *ngFor="let ingredient of scaledIngredients; let i = index;">
-      <ion-label>{{ ingredient.content }}</ion-label>
-      <ion-checkbox [(ngModel)]="ingredientBinders[i]" (ngModelChange)="toggleIngredient(i)" checked="true"></ion-checkbox>
+    <ion-item *ngFor="let ingredient of scaledIngredients; let i = index">
+      <ion-checkbox
+        labelPlacement="end"
+        justify="start"
+        [(ngModel)]="ingredientBinders[i]"
+        (ngModelChange)="toggleIngredient(i)"
+        checked="true"
+      >
+        {{ ingredient.content }}
+      </ion-checkbox>
     </ion-item>
     <br />
     <a class="scale" (click)="changeScale()">
-      {{ 'components.selectIngredients.scale' | translate:{scale:scale} }}
+      {{ "components.selectIngredients.scale" | translate: { scale: scale } }}
     </a>
   </div>
   <div *ngIf="!scaledIngredients || scaledIngredients.length === 0">
     <p>
       <b>
-        {{ 'components.selectIngredients.null' | translate }}
+        {{ "components.selectIngredients.null" | translate }}
       </b>
     </p>
   </div>

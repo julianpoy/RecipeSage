@@ -1,24 +1,33 @@
-import { Component, ViewChild, Input } from '@angular/core';
-import { ToastController, ModalController, IonSelect, PopoverController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, Input } from "@angular/core";
+import { ToastController, PopoverController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { UtilService } from '~/services/util.service';
-import { QuickTutorialService, QuickTutorialOptions } from '~/services/quick-tutorial.service';
-import { PreferencesService, MyRecipesPreferenceKey } from '~/services/preferences.service';
+import { UtilService } from "~/services/util.service";
+import {
+  QuickTutorialService,
+  QuickTutorialOptions,
+} from "~/services/quick-tutorial.service";
+import { PreferencesService } from "~/services/preferences.service";
+import { MyRecipesPreferenceKey } from "@recipesage/util";
 
 @Component({
-  selector: 'page-home-popover',
-  templateUrl: 'home-popover.page.html',
-  styleUrls: ['home-popover.page.scss']
+  selector: "page-home-popover",
+  templateUrl: "home-popover.page.html",
+  styleUrls: ["home-popover.page.scss"],
 })
 export class HomePopoverPage {
-
   preferences = this.preferencesService.preferences;
   preferenceKeys = MyRecipesPreferenceKey;
 
-  @Input() selectionMode: boolean;
+  @Input({
+    required: true,
+  })
+  selectionMode!: boolean;
 
-  @Input() guestMode: boolean;
+  @Input({
+    required: true,
+  })
+  guestMode!: boolean;
 
   constructor(
     public translate: TranslateService,
@@ -32,11 +41,13 @@ export class HomePopoverPage {
   toggleSelectionMode() {
     const enteringSelectionMode = !this.selectionMode;
     if (enteringSelectionMode) {
-      this.quickTutorialService.triggerQuickTutorial(QuickTutorialOptions.MultipleRecipeSelection);
+      this.quickTutorialService.triggerQuickTutorial(
+        QuickTutorialOptions.MultipleRecipeSelection,
+      );
     }
 
     this.popoverCtrl.dismiss({
-      selectionMode: enteringSelectionMode
+      selectionMode: enteringSelectionMode,
     });
   }
 

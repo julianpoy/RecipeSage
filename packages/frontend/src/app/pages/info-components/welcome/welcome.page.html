@@ -5,13 +5,17 @@
     </ion-buttons>
     <ion-title>
       <span *ngIf="isSelfHost">RecipeSage Self Hosted</span>
-      <img *ngIf="!isSelfHost" src="assets/recipesage-white-trimmed.png" alt="RecipeSage Logo" style="display:inline-block" height="40px" />
+      <img
+        *ngIf="!isSelfHost"
+        src="assets/recipesage-white-trimmed.png"
+        alt="RecipeSage Logo"
+        style="display: inline-block"
+        height="40px"
+      />
       <!--RecipeSage-->
     </ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content>
   <div class="intro-container">
@@ -24,9 +28,7 @@
         {{ 'pages.welcome.selfhostTitle' | translate }}
       </h1>
 
-      <h1 *ngIf="!isSelfHost">
-        {{ 'pages.welcome.title' | translate }}
-      </h1>
+      <h1 *ngIf="!isSelfHost">{{ 'pages.welcome.title' | translate }}</h1>
 
       <p class="subtitle" *ngIf="isSelfHost">
         {{ 'pages.welcome.selfhostSubtitle' | translate }}
@@ -38,7 +40,7 @@
 
       <br />
 
-      <ion-button (click)="goToAuth('register')" style="margin: 0;">
+      <ion-button (click)="goToAuth('register')" style="margin: 0">
         <ion-icon name="leaf" slot="start"></ion-icon>
         <ion-label>
           {{ 'pages.welcome.registerButton' | translate }}
@@ -49,22 +51,31 @@
       <br />
 
       <ion-button (click)="goToAuth('login')" size="small">
-        <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
-        <ion-label>
-          {{ 'pages.welcome.loginButton' | translate }}
-        </ion-label>
+        <ion-icon src="assets/icon/carrot.svg" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.welcome.loginButton' | translate }} </ion-label>
       </ion-button>
     </div>
 
     <div class="screen">
-      <picture>
-        <img *ngIf="!isIOS" src="assets/stockphotos/my-recipes-cap-dec-22.jpg" alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}">
-        <img *ngIf="isIOS" class="ios" src="assets/stockphotos/my-recipes-ios.jpg" alt="{{ 'pages.welcome.appDemoImageAlt' | translate }}">
-      </picture>
+      <video
+        width="100%"
+        controls
+        loop
+        preload="none"
+        muted
+        poster="https://static.recipesage.com/assets/{{ isIOS ? 'ios' : 'android' }}-autoimport-demo.png"
+      >
+        <source
+          src="https://static.recipesage.com/assets/{{ isIOS ? 'ios' : 'android' }}-autoimport-demo.mp4"
+          type="video/mp4"
+        />
+      </video>
     </div>
 
     <div class="ion-padding welcomeContent">
-      <span class="sectionHeader">{{ 'pages.welcome.description.welcome' | translate }}</span><br />
+      <span class="sectionHeader"
+        >{{ 'pages.welcome.description.welcome' | translate }}</span
+      ><br />
 
       <br />
 
@@ -74,20 +85,48 @@
 
       <br /><br /><br />
 
-      <span class="sectionHeader">{{ 'pages.welcome.description.features' | translate }}</span><br />
+      <span class="sectionHeader"
+        >{{ 'pages.welcome.description.features' | translate }}</span
+      ><br />
 
       <ul>
-        <li><b>{{ 'pages.welcome.description.features.1.title' | translate }}</b> {{ 'pages.welcome.description.features.1.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.2.title' | translate }}</b> {{ 'pages.welcome.description.features.2.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.3.title' | translate }}</b> {{ 'pages.welcome.description.features.3.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.4.title' | translate }}</b> {{ 'pages.welcome.description.features.4.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.5.title' | translate }}</b> {{ 'pages.welcome.description.features.5.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.6.title' | translate }}</b> {{ 'pages.welcome.description.features.6.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.7.title' | translate }}</b> {{ 'pages.welcome.description.features.7.description' | translate }}</li>
-        <li><b>{{ 'pages.welcome.description.features.8.title' | translate }}</b> {{ 'pages.welcome.description.features.8.description' | translate }}</li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.1.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.1.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.2.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.2.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.3.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.3.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.4.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.4.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.5.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.5.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.6.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.6.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.7.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.7.description' | translate }}
+        </li>
+        <li>
+          <b>{{ 'pages.welcome.description.features.8.title' | translate }}</b>
+          {{ 'pages.welcome.description.features.8.description' | translate }}
+        </li>
       </ul>
 
-      <span class="sectionHeader">{{ 'pages.welcome.description.cta' | translate }}</span><br />
+      <span class="sectionHeader"
+        >{{ 'pages.welcome.description.cta' | translate }}</span
+      ><br />
 
       <ul>
         <li>{{ 'pages.welcome.description.cta.1' | translate }}</li>
@@ -100,7 +139,7 @@
       <br /><br />
 
       <div class="footer-action">
-        <ion-button (click)="goToAuth('register')" style="margin: 0;">
+        <ion-button (click)="goToAuth('register')" style="margin: 0">
           <ion-icon name="leaf" slot="start"></ion-icon>
           <ion-label>
             {{ 'pages.welcome.registerButton' | translate }}
@@ -110,10 +149,8 @@
         <br /><br />
 
         <ion-button (click)="goToAuth('login')" size="small">
-          <ion-icon src="/assets/icon/carrot.svg" slot="start"></ion-icon>
-          <ion-label>
-            {{ 'pages.welcome.loginButton' | translate }}
-          </ion-label>
+          <ion-icon src="assets/icon/carrot.svg" slot="start"></ion-icon>
+          <ion-label> {{ 'pages.welcome.loginButton' | translate }} </ion-label>
         </ion-button>
       </div>
 

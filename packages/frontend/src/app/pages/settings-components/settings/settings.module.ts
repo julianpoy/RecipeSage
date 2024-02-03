@@ -1,29 +1,27 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { RouterModule } from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { SettingsPage } from './settings.page';
+import { SettingsPage } from "./settings.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    SettingsPage,
-  ],
+  declarations: [SettingsPage],
   imports: [
     GlobalModule,
     CommonModule,
     IonicModule,
     RouterModule.forChild([
       {
-        path: '',
-        component: SettingsPage
-      }
+        path: "",
+        component: SettingsPage,
+      },
     ]),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class SettingsPageModule {}

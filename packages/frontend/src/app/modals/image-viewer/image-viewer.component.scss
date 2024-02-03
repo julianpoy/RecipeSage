@@ -1,5 +1,5 @@
 ion-content {
-  ion-slides {
+  swiper-container {
     height: 100%;
   }
 
@@ -9,7 +9,7 @@ ion-content {
     font-size: 50px;
     position: absolute;
     top: 50%;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
     border-radius: 40px;
     transform: translateY(-50%);
   }

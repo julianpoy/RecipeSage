@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -7,9 +6,7 @@
 
     <ion-title>{{ 'pages.export.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <ion-item lines="none">
@@ -20,11 +17,19 @@
   </ion-item>
 
   <div class="ion-padding">
-    <ion-button (click)="exportAsJSONLD()">{{ 'pages.export.jsonld' | translate }}</ion-button><br />
-    <ion-button (click)="exportAsXML()">{{ 'pages.export.xml' | translate }}</ion-button><br />
-    <ion-button (click)="exportAsTXT()">{{ 'pages.export.txt' | translate }}</ion-button><br />
-    <ion-button (click)="exportAsPDF()">{{ 'pages.export.pdf' | translate }}</ion-button>
-	</div>
+    <ion-button (click)="exportAsJSONLD()"
+      >{{ 'pages.export.jsonld' | translate }}</ion-button
+    ><br />
+    <ion-button (click)="exportAsXML()"
+      >{{ 'pages.export.xml' | translate }}</ion-button
+    ><br />
+    <ion-button (click)="exportAsTXT()"
+      >{{ 'pages.export.txt' | translate }}</ion-button
+    ><br />
+    <ion-button (click)="exportAsPDF()"
+      >{{ 'pages.export.pdf' | translate }}</ion-button
+    >
+  </div>
 
   <ion-item lines="none">
     <ion-label>

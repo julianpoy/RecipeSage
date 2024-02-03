@@ -1,33 +1,26 @@
-import { Component, Input } from '@angular/core';
-import { NavController, ModalController, ToastController, AlertController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component, Input } from "@angular/core";
+import { ModalController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { UserService } from '~/services/user.service';
-import { LoadingService } from '~/services/loading.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { UserService } from "~/services/user.service";
+import { RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'page-share-profile-modal',
-  templateUrl: 'share-profile-modal.page.html',
-  styleUrls: ['share-profile-modal.page.scss']
+  selector: "page-share-profile-modal",
+  templateUrl: "share-profile-modal.page.html",
+  styleUrls: ["share-profile-modal.page.scss"],
 })
 export class ShareProfileModalPage {
+  @Input() handle!: string;
+  @Input() userId!: string;
+  @Input() profile!: any;
 
-  @Input() handle;
-  @Input() userId;
-  @Input() profile;
-
-  profileUrl;
+  profileUrl?: string;
 
   constructor(
-    private navCtrl: NavController,
     private translate: TranslateService,
-    private toastCtrl: ToastController,
-    private alertCtrl: AlertController,
-    private utilService: UtilService,
-    private loadingService: LoadingService,
     private userService: UserService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     setTimeout(() => {
       if (this.handle) this.loadFromHandle(this.handle);
@@ -36,6 +29,10 @@ export class ShareProfileModalPage {
         this.profileUrl = this.getProfileUrl();
       }
     });
+  }
+
+  ngOnInit() {
+    this.handle = "";
   }
 
   async loadFromHandle(handle: string) {
@@ -53,41 +50,61 @@ export class ShareProfileModalPage {
   }
 
   getProfileUrl() {
-    if (!this.profile) return 'Error loading profile url';
-    return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(`@${this.profile.handle}`)}`;
+    if (!this.profile) return "Error loading profile url";
+    return `https://${window.location.host}/#/${RouteMap.ProfilePage.getPath(
+      `@${this.profile.handle}`,
+    )}`;
   }
 
   openFacebook() {
     const win = window.open() as any;
     win.opener = null;
-    win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.getProfileUrl())}`;
+    win.location = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      this.getProfileUrl(),
+    )}`;
   }
 
   async openTwitter() {
-    const message = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
+    const message = await this.translate
+      .get("pages.shareProfileModal.shareTitle", { name: this.profile.name })
+      .toPromise();
 
     const win = window.open() as any;
     win.opener = null;
-    win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(this.getProfileUrl())}&text=${encodeURIComponent(message)}`;
+    win.location = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      this.getProfileUrl(),
+    )}&text=${encodeURIComponent(message)}`;
   }
 
   async openPinterest() {
-    const message = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
+    const message = await this.translate
+      .get("pages.shareProfileModal.shareTitle", { name: this.profile.name })
+      .toPromise();
 
-    const imageUrl = encodeURIComponent(this.profile.profileImages?.[0]?.location || '');
+    const imageUrl = encodeURIComponent(
+      this.profile.profileImages?.[0]?.location || "",
+    );
     const url = encodeURIComponent(this.getProfileUrl());
     const win = window.open() as any;
     win.opener = null;
-    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(message)}`;
+    win.location = `https://pinterest.com/pin/create/button/?url=${url}&media=${imageUrl}&description=${encodeURIComponent(
+      message,
+    )}`;
   }
 
   async openEmail() {
-    const subject = await this.translate.get('pages.shareProfileModal.shareTitle', {name:this.profile.name}).toPromise();
-    const message = await this.translate.get('pages.shareProfileModal.shareBody', {name:this.profile.name}).toPromise();
+    const subject = await this.translate
+      .get("pages.shareProfileModal.shareTitle", { name: this.profile.name })
+      .toPromise();
+    const message = await this.translate
+      .get("pages.shareProfileModal.shareBody", { name: this.profile.name })
+      .toPromise();
     const url = encodeURIComponent(` ${this.getProfileUrl()}`);
 
     const win = window.open() as any;
     win.opener = null;
-    win.location = `mailto:info@example.com?&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}${url}`;
+    win.location = `mailto:info@example.com?&subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(message)}${url}`;
   }
 }

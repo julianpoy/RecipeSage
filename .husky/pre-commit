@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx nx affected -t lint,typecheck --parallel 6
+npx lint-staged

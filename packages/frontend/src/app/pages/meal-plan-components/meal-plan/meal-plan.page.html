@@ -26,8 +26,9 @@
       (itemMoved)="itemMoved($event)"
       (dayClicked)="dayClicked($event)"
       (mealsByDateChange)="setMealsByDate($event)"
-      enableEditing="true"
-      mode="{{calendarMode}}"></meal-calendar>
+      [enableEditing]="true"
+      mode="{{calendarMode}}"
+    ></meal-calendar>
   </div>
 
   <br /><br /><br /><br />

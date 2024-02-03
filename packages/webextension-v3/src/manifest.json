@@ -1,0 +1,46 @@
+{
+  "name": "RecipeSage Automatic Recipe Clipper",
+  "short_name": "RecipeSage",
+  "version": "2.1.2",
+  "manifest_version": 3,
+  "description": "An extension for clipping recipes to your RecipeSage account",
+  "homepage_url": "https://recipesage.com",
+  "author": "Julian Poyourow",
+  "action": {
+    "default_icon": {
+      "128": "icons/android-chrome-512x512.png"
+    },
+    "default_title": "RecipeSage",
+    "default_popup": "action/action.html"
+  },
+  "default_locale": "en",
+  "icons": {
+    "16": "icons/favicon-16x16.png",
+    "48": "icons/icon-48x48.png",
+    "128": "icons/icon-128x128.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "options_ui": {
+    "page": "settings/settings.html",
+    "open_in_tab": false
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{1bd6f0af-1e56-4ecd-903b-495f25057d55}",
+      "strict_min_version": "109.0"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "inject/alert.css",
+        "inject/clipTool.css",
+        "inject/inject.js",
+        "inject/clip.js",
+        "icons/android-chrome-512x512.png",
+        "images/recipesage-black-trimmed.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

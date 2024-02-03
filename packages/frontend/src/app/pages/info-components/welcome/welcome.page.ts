@@ -1,30 +1,30 @@
-import { Component } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
-import { RouteMap, AuthType } from '~/services/util.service';
+import { Component } from "@angular/core";
+import { NavController, Platform } from "@ionic/angular";
+import { RouteMap, AuthType } from "~/services/util.service";
 
-import { IS_SELFHOST } from 'src/environments/environment';
+import { IS_SELFHOST } from "../../../../environments/environment";
 
 @Component({
-  selector: 'page-welcome',
-  templateUrl: 'welcome.page.html',
-  styleUrls: ['welcome.page.scss']
+  selector: "page-welcome",
+  templateUrl: "welcome.page.html",
+  styleUrls: ["welcome.page.scss"],
 })
 export class WelcomePage {
   isSelfHost = IS_SELFHOST;
-  isIOS: boolean = this.platform.is('ios');
-  isCapacitor: boolean = this.platform.is('capacitor');
+  isIOS: boolean = this.platform.is("ios");
+  isCapacitor: boolean = this.platform.is("capacitor");
 
   constructor(
     public navCtrl: NavController,
-    public platform: Platform
+    public platform: Platform,
   ) {
-    if (localStorage.getItem('token')) {
-      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+    if (localStorage.getItem("token")) {
+      this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
     }
   }
 
-  goToAuth(type) {
-    const register = type === 'register';
+  goToAuth(type: "login" | "register") {
+    const register = type === "register";
 
     if (register) {
       this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Register));
@@ -32,5 +32,4 @@ export class WelcomePage {
       this.navCtrl.navigateRoot(RouteMap.AuthPage.getPath(AuthType.Login));
     }
   }
-
 }

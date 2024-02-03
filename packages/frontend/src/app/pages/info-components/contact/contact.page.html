@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -7,18 +6,22 @@
 
     <ion-title>{{ 'pages.contact.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <p><b>{{ 'pages.contact.subtitle' | translate }}</b></p>
 
   <p>
-    {{ 'pages.contact.pleaseUserGuide' | translate }} <a href="https://docs.recipesage.com">https://docs.recipesage.com</a>
+    {{ 'pages.contact.pleaseUserGuide' | translate }}
+    <a href="https://docs.recipesage.com">https://docs.recipesage.com</a>
   </p>
 
-  <p>{{ 'pages.contact.emailMe' | translate }} <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">julian@recipesage.com</a></p>
+  <p>
+    {{ 'pages.contact.emailMe' | translate }}
+    <a href="mailto:julian@recipesage.com?subject=RecipeSage Support"
+      >julian@recipesage.com</a
+    >
+  </p>
 
   <br />
   <p><b>{{ 'pages.contact.socialTitle' | translate }}</b></p>

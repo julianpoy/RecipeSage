@@ -1,21 +1,21 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import { NavController, ToastController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { RecipeService } from '~/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { LoadingRef, LoadingService } from "~/services/loading.service";
+import { RecipeService } from "~/services/recipe.service";
+import { UtilService, RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'page-import-paprika',
-  templateUrl: 'import-paprika.page.html',
-  styleUrls: ['import-paprika.page.scss']
+  selector: "page-import-paprika",
+  templateUrl: "import-paprika.page.html",
+  styleUrls: ["import-paprika.page.scss"],
 })
 export class ImportPaprikaPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  loading = null;
-  imageFile = null;
+  loading?: LoadingRef;
+  imageFile?: File;
 
   ignoreLargeFiles: boolean;
 
@@ -25,12 +25,12 @@ export class ImportPaprikaPage {
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
-    public utilService: UtilService) {
-
-    this.ignoreLargeFiles = !!localStorage.getItem('largeFileOverride');
+    public utilService: UtilService,
+  ) {
+    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
 
-  setFile(event) {
+  setFile(event: any) {
     const files = (event.srcElement || event.target).files;
     if (!files) {
       return;
@@ -40,11 +40,15 @@ export class ImportPaprikaPage {
   }
 
   filePicker() {
-    document.getElementById('filePicker').click();
+    document.getElementById("filePicker")?.click();
   }
 
   isFileTooLarge() {
-    if (!this.ignoreLargeFiles && this.imageFile && this.imageFile.size / 1024 / 1024 > 550) {
+    if (
+      !this.ignoreLargeFiles &&
+      this.imageFile &&
+      this.imageFile.size / 1024 / 1024 > 550
+    ) {
       // File is larger than 550MB
       return true;
     }
@@ -53,56 +57,74 @@ export class ImportPaprikaPage {
 
   showFileTypeWarning() {
     if (!this.imageFile || !this.imageFile.name) return false;
-    return !this.imageFile.name.toLowerCase().endsWith('.paprikarecipes');
+    return !this.imageFile.name.toLowerCase().endsWith(".paprikarecipes");
   }
 
   async presentToast(msg: string) {
-    (await this.toastCtrl.create({
-      message: msg,
-      duration: 6000
-    })).present();
+    (
+      await this.toastCtrl.create({
+        message: msg,
+        duration: 6000,
+      })
+    ).present();
   }
 
   async submit() {
+    if (!this.imageFile) return;
+
     this.loading = this.loadingService.start();
 
     const response = await this.recipeService.importPaprika(this.imageFile, {
       406: async () => {
-        const message = await this.translate.get('pages.importPaprika.error').toPromise();
-        const close = await this.translate.get('generic.close').toPromise();
+        const message = await this.translate
+          .get("pages.importPaprika.error")
+          .toPromise();
+        const close = await this.translate.get("generic.close").toPromise();
 
-        (await this.toastCtrl.create({
-          message,
-          buttons: [{
-            text: close,
-            role: 'cancel'
-          }]
-        })).present();
+        (
+          await this.toastCtrl.create({
+            message,
+            buttons: [
+              {
+                text: close,
+                role: "cancel",
+              },
+            ],
+          })
+        ).present();
       },
       504: async () => {
         setTimeout(async () => {
-          const message = await this.translate.get('pages.importPaprika.timeout').toPromise();
-          const close = await this.translate.get('generic.close').toPromise();
+          const message = await this.translate
+            .get("pages.importPaprika.timeout")
+            .toPromise();
+          const close = await this.translate.get("generic.close").toPromise();
 
-          (await this.toastCtrl.create({
-            message,
-            buttons: [{
-              text: close,
-              role: 'cancel'
-            }]
-          })).present();
-          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+          (
+            await this.toastCtrl.create({
+              message,
+              buttons: [
+                {
+                  text: close,
+                  role: "cancel",
+                },
+              ],
+            })
+          ).present();
+          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
         }, 20000);
       },
     });
     this.loading.dismiss();
-    this.loading = null;
+    this.loading = undefined;
     if (!response.success) return;
 
-    const message = await this.translate.get('pages.importPaprika.success').toPromise();
+    const message = await this.translate
+      .get("pages.importPaprika.success")
+      .toPromise();
 
     this.presentToast(message);
 
-    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
   }
 }

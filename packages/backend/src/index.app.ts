@@ -1,22 +1,25 @@
-import './services/sentry-init';
-import * as Sentry from '@sentry/node';
-import { program } from 'commander';
+import "./services/sentry-init";
+import * as Sentry from "@sentry/node";
+import { program } from "commander";
 
-import { indexRecipes } from './services/search';
-import * as SQ from 'sequelize';
-const Op = SQ.Op;
+import { indexRecipes } from "@recipesage/trpc";
 
-import * as Models from './models';
-const Recipe = Models.Recipe;
+import { prisma } from "@recipesage/prisma";
 
 program
-  .option('-b, --batch-size [size]', 'Batch size', '1000')
-  .option('-i, --batch-interval [interval]', 'Batch interval in seconds', '1')
+  .option("-b, --batch-size [size]", "Batch size", "1000")
+  .option("-i, --batch-interval [interval]", "Batch interval in seconds", "1")
   .parse(process.argv);
 const opts = program.opts();
 const options = {
   batchSize: parseInt(opts.batchSize, 10),
-  batchInterval: parseFloat(opts.batchInterval)
+  batchInterval: parseFloat(opts.batchInterval),
+};
+
+const waitFor = async (timeout: number) => {
+  new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
 };
 
 const runIndexOp = async () => {
@@ -28,47 +31,57 @@ const runIndexOp = async () => {
       lt = new Date(process.env.INDEX_BEFORE); // Must be in '2020-03-01 22:20' format
     }
 
-    const recipes = await Recipe.findAll({
+    const recipes = await prisma.recipe.findMany({
       where: {
-        [Op.or]: [
-          { indexedAt: null },
-          { indexedAt: { [Op.lt]: lt } }
-        ]
+        OR: [
+          {
+            indexedAt: null,
+          },
+          {
+            indexedAt: {
+              lt,
+            },
+          },
+        ],
       },
-      limit: options.batchSize,
+      take: options.batchSize,
     });
 
     if (!recipes || recipes.length === 0) {
-      clearInterval(runInterval);
-      console.log('Index complete!');
+      console.log("Index complete!");
       process.exit(0);
     }
 
     await indexRecipes(recipes);
 
     const ids = recipes.map((r) => r.id);
-    await Recipe.update(
-      { indexedAt: new Date() },
-      {
-        where: {
-          id: ids
+    await prisma.recipe.updateMany({
+      data: {
+        indexedAt: new Date(),
+      },
+      where: {
+        id: {
+          in: ids,
         },
-        silent: true,
-        hooks: false
-      }
-    );
-  } catch(e) {
-    clearInterval(runInterval);
+      },
+    });
+  } catch (e) {
     Sentry.captureException(e);
-    console.log('Error while indexing', e);
+    console.log("Error while indexing", e);
     process.exit(1);
   }
 };
 
-const runInterval = setInterval(runIndexOp, options.batchInterval * 1000);
+const run = async () => {
+  const always = true;
+  while (always) {
+    await runIndexOp();
+    await waitFor(options.batchInterval * 1000);
+  }
+};
+run();
 
-process.on('SIGTERM', () => {
-  console.log('RECEIVED SIGTERM - STOPPING JOB');
+process.on("SIGTERM", () => {
+  console.log("RECEIVED SIGTERM - STOPPING JOB");
   process.exit(0);
 });
-

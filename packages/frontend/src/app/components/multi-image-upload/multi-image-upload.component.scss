@@ -23,13 +23,19 @@
 
     margin: 8px 16px;
 
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    @media only screen and (max-width:450px) {
+    background-color: var(--ion-card-background);
+
+    &:hover {
+      background-color: var(--ion-card-background-hover);
+    }
+
+    @media only screen and (max-width: 450px) {
       width: 150px;
       height: 150px;
     }
@@ -39,7 +45,7 @@
       top: 0;
       right: 0;
       transform: translate(40%, -40%);
-      font-size: 20px;
+      font-size: 1.25rem;
       background: var(--ion-background-color);
       border-radius: 100%;
     }
@@ -49,7 +55,7 @@
       height: 200px;
       object-fit: cover;
 
-      @media only screen and (max-width:450px) {
+      @media only screen and (max-width: 450px) {
         width: 150px;
         height: 150px;
       }
@@ -67,7 +73,7 @@
     margin-top: 4px;
 
     ion-icon {
-      font-size: 28px;
+      font-size: 1.75rem;
       margin: 0 8px;
     }
 

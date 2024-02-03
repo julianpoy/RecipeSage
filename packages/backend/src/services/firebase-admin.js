@@ -1,18 +1,30 @@
-const admin = require('firebase-admin');
+import admin from "firebase-admin";
+import * as fs from "fs/promises";
+import { join } from "path";
 
-try {
-  const serviceAccount = require('../config/firebase-credentials.json');
+const init = async () => {
+  try {
+    const serviceAccount = JSON.parse(
+      await fs.readFile(
+        join(__dirname, "../../../../.credentials/firebase.json"),
+        "utf-8",
+      ),
+    );
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://chef-book.firebaseio.com'
-  });
-} catch(e) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.error('Error while initializing firebase for notifications');
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      databaseURL: "https://chef-book.firebaseio.com",
+    });
+  } catch (e) {
+    if (
+      process.env.NODE_ENV !== "test" &&
+      process.env.NODE_ENV !== "selfhost"
+    ) {
+      console.error("Error while initializing firebase for notifications", e);
+    }
   }
-}
-
-module.exports = {
-  admin,
 };
+
+init();
+
+export { admin };

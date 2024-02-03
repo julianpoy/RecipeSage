@@ -11,9 +11,7 @@
     "128": "icons/icon-128x128.png"
   },
   "background": {
-    "scripts": [
-      "bg/background.js"
-    ],
+    "scripts": ["bg/background.js"],
     "persistent": true
   },
   "browser_action": {
@@ -29,11 +27,7 @@
     "activeTab",
     "webRequest"
   ],
-  "web_accessible_resources": [
-    "images/*.png",
-    "icons/*.png",
-    "inject/*.css"
-  ],
+  "web_accessible_resources": ["images/*.png", "icons/*.png", "inject/*.css"],
   "options_ui": {
     "page": "settings/settings.html",
     "open_in_tab": false

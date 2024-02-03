@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import { NavController } from "@ionic/angular";
 
-import { RouteMap } from '~/services/util.service';
+import { RouteMap } from "~/services/util.service";
 
 @Component({
-  selector: 'page-about',
-  templateUrl: 'about.page.html',
-  styleUrls: ['about.page.scss']
+  selector: "page-about",
+  templateUrl: "about.page.html",
+  styleUrls: ["about.page.scss"],
 })
 export class AboutPage {
-
   constructor(public navCtrl: NavController) {}
 
   goToAboutDetails() {
@@ -25,11 +24,11 @@ export class AboutPage {
   }
 
   goToReleaseNotes() {
-    window.open('https://docs.recipesage.com/docs/release-notes');
+    window.open("https://docs.recipesage.com/docs/release-notes");
   }
 
   goToUserGuide() {
-    window.open('https://docs.recipesage.com');
+    window.open("https://docs.recipesage.com");
   }
 
   goToLegal() {

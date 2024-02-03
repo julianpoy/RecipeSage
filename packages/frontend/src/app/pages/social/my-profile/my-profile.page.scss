@@ -30,7 +30,8 @@ multi-image-upload {
       flex-basis: 100%;
     }
 
-    .username-preview, .handle-preview {
+    .username-preview,
+    .handle-preview {
       cursor: pointer;
 
       ion-icon {
@@ -46,14 +47,15 @@ multi-image-upload {
     .handle-preview {
       margin-top: 0.5rem;
       margin-bottom: 2rem;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
   }
 }
 
 .profile-items-list {
   ion-item {
-    ion-button, ion-reorder {
+    ion-button,
+    ion-reorder {
       margin-left: 16px;
     }
   }

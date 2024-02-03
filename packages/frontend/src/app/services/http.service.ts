@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Injectable } from "@angular/core";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-import { API_BASE_URL } from 'src/environments/environment';
-import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
-import {UtilService} from './util.service';
+import { API_BASE_URL } from "../../environments/environment";
+import {
+  HttpErrorHandlerService,
+  ErrorHandlers,
+} from "./http-error-handler.service";
+import { UtilService } from "./util.service";
 
 export interface HttpResponse<ResponseType> {
   success: boolean;
@@ -23,11 +26,7 @@ export class HttpError<ResponseType> extends Error {
     super(message);
 
     this.response = response;
-    const {
-      success,
-      status,
-      data
-    } = response;
+    const { success, status, data } = response;
     this.success = success;
     this.status = status;
     this.data = data;
@@ -37,10 +36,9 @@ export class HttpError<ResponseType> extends Error {
 const REQUEST_TIMEOUT_FALLBACK = 10 * 60 * 1000; // 10 minutes
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class HttpService {
-
   axiosClient: AxiosInstance;
 
   constructor(
@@ -50,14 +48,15 @@ export class HttpService {
     this.axiosClient = axios.create({
       timeout: REQUEST_TIMEOUT_FALLBACK,
       headers: {
-        'X-Initialized-At': Date.now().toString(),
-        'Content-Type': 'application/json'
-      }
+        "X-Initialized-At": Date.now().toString(),
+        "Content-Type": "application/json",
+      },
     });
   }
 
   getBase(): string {
-    if (window.location.hostname === 'beta.recipesage.com') return 'https://api.beta.recipesage.com/';
+    if (window.location.hostname === "beta.recipesage.com")
+      return "https://api.beta.recipesage.com/";
 
     const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
 
@@ -69,7 +68,7 @@ export class HttpService {
     method: string,
     payload?: any,
     query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this._requestWithWrapper<ResponseType>(
       {},
@@ -86,12 +85,12 @@ export class HttpService {
     method: string,
     payload?: any,
     query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ) {
     return this._requestWithWrapper<ResponseType>(
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          "Content-Type": "multipart/form-data",
         },
       },
       path,
@@ -108,17 +107,17 @@ export class HttpService {
     method: string,
     payload: any,
     query: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers
+    errorHandlers?: ErrorHandlers,
   ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
     let url = this.getBase() + path + this.utilService.getTokenQuery();
 
     if (query) {
       const params = Object.entries(query)
-        .filter(([key, value]) => value !== undefined && value !== null)
+        .filter(([_, value]) => value !== undefined && value !== null)
         .map(([key, value]) => {
-          return encodeURIComponent(key) + '=' + encodeURIComponent(value)
+          return encodeURIComponent(key) + "=" + encodeURIComponent(value);
         })
-        .join('&');
+        .join("&");
       url += `&${params}`;
     }
 
@@ -131,7 +130,7 @@ export class HttpService {
       });
 
       return response;
-    } catch(err) {
+    } catch (err) {
       this.httpErrorHandlerService.handleError(err, errorHandlers);
 
       if (err instanceof HttpError) return err as HttpError<ResponseType>;
@@ -141,18 +140,19 @@ export class HttpService {
 
   async request<ResponseType>(requestConfig: AxiosRequestConfig) {
     try {
-      const { status, data } = await this.axiosClient.request<ResponseType>(requestConfig);
+      const { status, data } =
+        await this.axiosClient.request<ResponseType>(requestConfig);
 
       return {
         success: true,
         status,
-        data
+        data,
       };
-    } catch(err) {
+    } catch (err: any) {
       const response = {
         success: false,
         status: err.response ? err.response.status : 0, // 0 For no network
-        data: err.response ? err.response.data : null
+        data: err.response ? err.response.data : null,
       };
 
       const httpError = new HttpError<ResponseType>(err.message, response);

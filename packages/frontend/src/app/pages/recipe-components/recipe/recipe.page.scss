@@ -1,4 +1,4 @@
-@import 'src/theme/shared-variables.scss';
+@import "src/theme/shared-variables.scss";
 
 @media only screen and (max-width: $desktop-breakpoint) {
   .metacontainer-desktop {
@@ -13,7 +13,7 @@
 }
 
 ion-thumbnail {
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.35);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
   cursor: pointer;
 }
 
@@ -22,6 +22,7 @@ ion-thumbnail {
 }
 
 h2.recipeTitle {
+  font-size: 1.125rem;
   margin-top: 0 !important;
 }
 
@@ -33,12 +34,15 @@ h2.recipeTitle {
   .ingredientsCol {
     flex-shrink: 0;
     max-width: 100%;
-    margin-bottom: 8px;
   }
 
   .instructionsCol {
     min-width: 100%; // Force instructions column to wrap
-    max-width: 700px;
+    flex-grow: 1;
+
+    .instruction {
+      max-width: 900px;
+    }
   }
 
   @media (min-width: 576px) {
@@ -60,10 +64,6 @@ h2.recipeTitle {
   }
 
   @media (min-width: 1200px) {
-    .instructionsCol {
-      max-width: 900px;
-    }
-
     .ingredientsCol {
       width: 325px;
     }
@@ -140,13 +140,14 @@ h2.recipeTitle {
 }
 
 .meta {
-  border-top: 1px solid grey;
-  border-bottom: 1px solid grey;
+  border-top: 1px solid var(--ion-border-color);
+  border-bottom: 1px solid var(--ion-border-color);
   margin-top: 15px;
   margin-bottom: 15px;
 
   ion-col {
     padding: 5px;
+    font-size: 0.875rem;
 
     p {
       margin-top: 0;
@@ -159,4 +160,18 @@ h2.recipeTitle {
     font-size: 18px;
     line-height: 14px; /* Should match other meta items */
   }
+}
+
+.label {
+  font-size: 0.875rem;
+}
+
+.dropdownSelect input {
+  font-size: 0.875rem;
+}
+
+.label-group-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
 }

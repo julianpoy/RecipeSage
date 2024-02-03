@@ -1,27 +1,24 @@
-import {StorageObjectRecord} from './index';
-import {ObjectTypes} from './shared';
-import * as fs from 'fs/promises';
-import * as crypto from 'crypto';
-import { join, dirname } from 'path';
+import { StorageObjectRecord } from "./index";
+import { ObjectTypes } from "./shared";
+import * as fs from "fs/promises";
+import * as crypto from "crypto";
+import { join, dirname } from "path";
 
-if (process.env.STORAGE_TYPE === 'filesystem' &&
-  (
-    !process.env.FILESYSTEM_STORAGE_PATH
-  )
+if (
+  process.env.STORAGE_TYPE === "filesystem" &&
+  !process.env.FILESYSTEM_STORAGE_PATH
 ) {
-  throw new Error('FILESYSTEM_STORAGE_PATH not set');
+  throw new Error("FILESYSTEM_STORAGE_PATH not set");
 }
 
-const FILESYSTEM_STORAGE_PATH = process.env.FILESYSTEM_STORAGE_PATH || '';
+const FILESYSTEM_STORAGE_PATH = process.env.FILESYSTEM_STORAGE_PATH || "";
 
 // Generate a unique key for the object
-export const generateKey = (
-  objectType: ObjectTypes,
-): string => {
+export const generateKey = (objectType: ObjectTypes): string => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const rand = crypto.randomBytes(7).toString('hex');
+  const rand = crypto.randomBytes(7).toString("hex");
 
   const key = `${objectType}/${year}/${month}/${Date.now()}-${rand}`;
 
@@ -35,7 +32,7 @@ export const generateStorageLocation = (
   // Generate the location of the object for the browser to resolve
   // this won't refer to the file, but rather the URL that the browser
   // will use to fetch the file
-  const location = `/api/images/filesystem/${key}`;
+  const location = `api/images/filesystem/${key}`;
 
   return location;
 };
@@ -59,31 +56,26 @@ export const writeBuffer = async (
     objectType,
     mimetype,
     size: Buffer.byteLength(buffer).toString(),
-    bucket: 'filesystem',
+    bucket: "filesystem",
     key,
-    acl: 'public-read',
+    acl: "public-read",
     location,
-    etag: '',
+    etag: "",
   };
 
   return result;
 };
 
 // Delete a file from the filesystem
-export const deleteObject = async (
-  key: string,
-): Promise<void> => {
+export const deleteObject = async (key: string): Promise<void> => {
   try {
     await fs.unlink(key);
-  } catch(e) {
+  } catch (e) {
     console.warn(e);
   }
 };
 
 // Delete multiple files from the filesystem
-export const deleteObjects = async (
-  keys: string[],
-): Promise<void> => {
-  await Promise.all(keys.map(key => deleteObject(key)));
+export const deleteObjects = async (keys: string[]): Promise<void> => {
+  await Promise.all(keys.map((key) => deleteObject(key)));
 };
-

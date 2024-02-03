@@ -4,9 +4,13 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ 'pages.shoppingLists.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.shoppingLists.title' | translate }} </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button id="popover-trigger">
+        <ion-icon name="options" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -14,22 +18,46 @@
   <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-popover trigger="popover-trigger" triggerAction="click">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <ion-list-header> {{ 'generic.options' | translate }} </ion-list-header>
+
+        <ion-button
+          (click)="showIgnoreModal()"
+          expand="block"
+          size="small"
+          class="ion-margin"
+        >
+          <ion-icon name="ban" slot="start"></ion-icon>
+          {{ 'pages.shoppingLists.editIgnore' | translate }}
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+
   <ion-list>
-    <ion-item button
+    <ion-item
+      button
       class="ion-text-wrap"
       *ngFor="let shoppingList of shoppingLists"
-      (click)="openShoppingList(shoppingList.id)">
+      (click)="openShoppingList(shoppingList.id)"
+    >
       <ion-icon name="list" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ shoppingList.title }}</h2>
         <p>
-          {{ 'pages.shoppingLists.created' | translate:{date:formatItemCreationDate(shoppingList.createdAt)} }}
+          {{ 'pages.shoppingLists.created' |
+          translate:{date:formatItemCreationDate(shoppingList.createdAt)} }}
         </p>
         <p *ngIf="shoppingList.collaborators.length > 0">
           {{ 'pages.shoppingLists.collaboration' | translate }}
           <span *ngFor="let user of shoppingList.collaborators; last as isLast">
             <span *ngIf="shoppingList.myUserId !== user.id">
-              {{ user.name || user.email }}<span *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id">,</span>
+              {{ user.name || user.email }}<span
+                *ngIf="!isLast || shoppingList.myUserId !== shoppingList.owner.id"
+                >,</span
+              >
             </span>
           </span>
           <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
@@ -38,7 +66,9 @@
         </p>
         <p>
           <span *ngIf="shoppingList.myUserId !== shoppingList.owner.id">
-            {{ 'pages.shoppingLists.createdBy' | translate:{name:(shoppingList.owner.name || shoppingList.owner.email)} }}
+            {{ 'pages.shoppingLists.createdBy' |
+            translate:{name:(shoppingList.owner.name ||
+            shoppingList.owner.email)} }}
           </span>
           <span *ngIf="shoppingList.myUserId === shoppingList.owner.id">
             {{ 'pages.shoppingLists.owner' | translate }}

@@ -1,11 +1,14 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="recipe.id">{{ 'pages.editRecipe.title.edit' | translate }}</ion-title>
-    <ion-title *ngIf="!recipe.id">{{ 'pages.editRecipe.title.new' | translate }}</ion-title>
+    <ion-title *ngIf="recipe.id"
+      >{{ 'pages.editRecipe.title.edit' | translate }}</ion-title
+    >
+    <ion-title *ngIf="!recipe.id"
+      >{{ 'pages.editRecipe.title.new' | translate }}</ion-title
+    >
 
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
@@ -13,39 +16,44 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
-
 <ion-content>
-  <multi-image-upload [images]="images" (onImageAdded)="markAsDirty();"></multi-image-upload>
+  <multi-image-upload
+    [images]="images"
+    (onImageAdded)="markAsDirty();"
+  ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
-    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()" size="small">
-      <ion-icon name="clipboard" slot="start"></ion-icon>
+    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()">
+      <ion-icon name="link" slot="start"></ion-icon>
       {{ 'pages.editRecipe.autoclip' | translate }}
+    </ion-button>
+    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()">
+      <ion-icon name="camera" slot="start"></ion-icon>
+      {{ 'pages.editRecipe.scan' | translate }}
     </ion-button>
     <br />
     <br />
+    <br />
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.title' | translate }}
-      </ion-label>
       <ion-input
+        label="{{ 'pages.editRecipe.input.title' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.title"
         (ngModelChange)="markAsDirty()"
         type="text"
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-input>
+        spellcheck="true"
+      ></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.description' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.description' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.description"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -53,93 +61,97 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <div class="miniflex">
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.yield' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.yield' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.yield"
           (ngModelChange)="markAsDirty()"
           type="text"
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.activeTime' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.activeTime' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.activeTime"
           (ngModelChange)="markAsDirty()"
           type="text"
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.totalTime' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.totalTime' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.totalTime"
           (ngModelChange)="markAsDirty()"
           type="text"
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.source' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.source' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.source"
           (ngModelChange)="markAsDirty()"
           type="text"
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">
-          {{ 'pages.editRecipe.input.sourceUrl' | translate }}
-        </ion-label>
         <ion-input
+          label="{{ 'pages.editRecipe.input.sourceUrl' | translate }}"
+          labelPlacement="stacked"
           [(ngModel)]="recipe.url"
           (ngModelChange)="markAsDirty()"
           type="url"
           value=""
           autocapitalize="on"
           autocorrect="on"
-          spellcheck="true"></ion-input>
+          spellcheck="true"
+        ></ion-input>
       </ion-item>
 
       <div class="rating">
         <div class="rating-title">
           {{ 'pages.editRecipe.input.rating' | translate }}
         </div>
-        <rating [rating]="recipe.rating" (ratingChanged)="recipe.rating = $event" [enableEdit]="true"></rating>
+        <rating
+          [rating]="recipe.rating"
+          (ratingChanged)="recipe.rating = $event"
+          [enableEdit]="true"
+        ></rating>
       </div>
     </div>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.ingredients' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.ingredients' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.ingredients"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -147,14 +159,14 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.instructions' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.instructions' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.instructions"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -162,14 +174,14 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">
-        {{ 'pages.editRecipe.input.notes' | translate }}
-      </ion-label>
       <ion-textarea
+        label="{{ 'pages.editRecipe.input.notes' | translate }}"
+        labelPlacement="stacked"
         [(ngModel)]="recipe.notes"
         (ngModelChange)="markAsDirty()"
         auto-grow="true"
@@ -177,16 +189,60 @@
         value=""
         autocapitalize="on"
         autocorrect="on"
-        spellcheck="true"></ion-textarea>
+        spellcheck="true"
+      ></ion-textarea>
     </ion-item>
 
     <br />
 
-    <ion-item *ngIf="!recipe.id" class="ion-text-wrap">
-      <p>
-        {{ 'pages.editRecipe.labelNotice' | translate }}
-      </p>
+    <ion-item lines="none">
+      <ion-label>
+        <h2>{{ 'pages.editRecipe.input.labels' | translate }}</h2>
+      </ion-label>
     </ion-item>
+
+    <div class="label-input-group-container">
+      <div class="label-input-group">
+        <ion-item *ngIf="labelGroups.length" lines="none">
+          <ion-label>
+            {{ 'pages.editRecipe.input.uncatLabels' | translate }}
+          </ion-label>
+        </ion-item>
+
+        <select-multiple-items
+          [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, null))"
+          [enableCreateNew]="true"
+          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, null))"
+          (selectedItemsChange)="selectedLabelsChange(null, $event)"
+          (newItem)="addLabel($event, null)"
+          [disallowedTitles]="disallowedTitleMap(labels, null)"
+          [reserveSearchResultsHeight]="false"
+          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
+          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
+          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
+        ></select-multiple-items>
+      </div>
+
+      <div class="label-input-group" *ngFor="let labelGroup of labelGroups">
+        <ion-item lines="none">
+          <ion-label> {{labelGroup.title}} </ion-label>
+        </ion-item>
+
+        <select-multiple-items
+          [items]="mapLabelsToSelectableItems(labelsForGroupId(labels, labelGroup.id))"
+          [enableCreateNew]="true"
+          [selectedItems]="mapLabelsToSelectableItems(labelsForGroupId(selectedLabels, labelGroup.id))"
+          (selectedItemsChange)="selectedLabelsChange(labelGroup.id, $event)"
+          (newItem)="addLabel($event, labelGroup.id)"
+          [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
+          [reserveSearchResultsHeight]="false"
+          noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
+          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
+          searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
+        ></select-multiple-items>
+      </div>
+    </div>
+
     <div class="ion-padding">
       <ion-button *ngIf="recipe.id" expand="block" (click)="save()">
         {{ 'pages.editRecipe.save' | translate }}

@@ -1,4 +1,4 @@
-import { dedent } from 'ts-dedent';
+import { dedent } from "ts-dedent";
 
 export const signatureHtml = dedent`
   <br /><br />Best,
@@ -23,4 +23,3 @@ export const signaturePlain = dedent`
   https://www.instagram.com/recipesageofficial/
   https://twitter.com/RecipeSageO
 `;
-

@@ -1,18 +1,24 @@
 <ion-item class="shopping-list-item">
-  <ion-label class="ion-text-wrap ion-no-margin">
-    {{ title }}
-    <p *ngIf="recipeTitle">
-      {{ 'components.shoppingListItem.recipe' | translate }}
-      <span>{{ recipeTitle }}</span>
-    </p>
-    <p *ngIf="createdAt">
-      {{ 'components.shoppingListItem.added' | translate }}
-      <span>{{ formatItemCreationDate(createdAt) }}</span>
-    </p>
-    <p *ngIf="ownerName">
-      {{ 'components.shoppingListItem.addedBy' | translate }}
-      <span>{{ ownerName }}</span>
-    </p>
-  </ion-label>
-  <ion-checkbox slot="start" [checked]="completed" (ionChange)="onComplete()"></ion-checkbox>
+  <ion-checkbox
+    labelPlacement="end"
+    justify="start"
+    [checked]="completed"
+    (ionChange)="onComplete()"
+  >
+    <div class="ion-checkbox-label ion-text-wrap">
+      {{ title }}
+      <p *ngIf="recipeTitle">
+        {{ "components.shoppingListItem.recipe" | translate }}
+        <span>{{ recipeTitle }}</span>
+      </p>
+      <p *ngIf="createdAt">
+        {{ "components.shoppingListItem.added" | translate }}
+        <span>{{ formatItemCreationDate(createdAt) }}</span>
+      </p>
+      <p *ngIf="ownerName">
+        {{ "components.shoppingListItem.addedBy" | translate }}
+        <span>{{ ownerName }}</span>
+      </p>
+    </div>
+  </ion-checkbox>
 </ion-item>

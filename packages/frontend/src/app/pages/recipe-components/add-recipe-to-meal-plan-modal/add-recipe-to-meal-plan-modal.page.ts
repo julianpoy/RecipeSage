@@ -1,31 +1,38 @@
-import { Component, Input } from '@angular/core';
-import { NavController, ToastController, ModalController, AlertController } from '@ionic/angular';
-import dayjs, { Dayjs } from 'dayjs';
+import { Component, Input } from "@angular/core";
+import {
+  NavController,
+  ToastController,
+  ModalController,
+  AlertController,
+} from "@ionic/angular";
 
-import { LoadingService } from '~/services/loading.service';
-import { RecipeService } from '~/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
-import { MealPlanService } from '~/services/meal-plan.service';
+import { LoadingService } from "~/services/loading.service";
+import { RecipeService } from "~/services/recipe.service";
+import { UtilService } from "~/services/util.service";
+import {
+  MealPlan,
+  MealPlans,
+  MealPlanService,
+} from "~/services/meal-plan.service";
 
-import { NewMealPlanModalPage } from '~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page';
-import {TranslateService} from '@ngx-translate/core';
+import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-  selector: 'page-add-recipe-to-meal-plan-modal',
-  templateUrl: 'add-recipe-to-meal-plan-modal.page.html',
-  styleUrls: ['add-recipe-to-meal-plan-modal.page.scss']
+  selector: "page-add-recipe-to-meal-plan-modal",
+  templateUrl: "add-recipe-to-meal-plan-modal.page.html",
+  styleUrls: ["add-recipe-to-meal-plan-modal.page.scss"],
 })
 export class AddRecipeToMealPlanModalPage {
-
   @Input() recipe: any;
 
-  mealPlans: any;
+  mealPlans?: MealPlans;
 
-  selectedMealPlan: any;
-  destinationMealPlan: any;
-  meal: string;
+  selectedMealPlan?: MealPlans[0];
+  destinationMealPlan?: MealPlan;
+  meal?: string;
 
-  @Input() reference: any;
+  @Input() reference?: string;
 
   selectedDays: number[] = [];
 
@@ -38,21 +45,28 @@ export class AddRecipeToMealPlanModalPage {
     public utilService: UtilService,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
   ) {}
 
   ionViewWillEnter() {
     const loading = this.loadingService.start();
-    this.loadMealPlans().then(() => {
-      loading.dismiss();
-    }, () => {
-      loading.dismiss();
-    });
+    this.loadMealPlans().then(
+      () => {
+        loading.dismiss();
+      },
+      () => {
+        loading.dismiss();
+      },
+    );
   }
 
   selectLastUsedMealPlan() {
-    const lastUsedMealPlanId = localStorage.getItem('lastUsedMealPlanId');
-    const matchingPlans = this.mealPlans.filter(mealPlan => mealPlan.id === lastUsedMealPlanId);
+    if (!this.mealPlans) return;
+
+    const lastUsedMealPlanId = localStorage.getItem("lastUsedMealPlanId");
+    const matchingPlans = this.mealPlans.filter(
+      (mealPlan) => mealPlan.id === lastUsedMealPlanId,
+    );
     if (matchingPlans.length > 0 || this.mealPlans.length === 1) {
       this.selectedMealPlan = this.mealPlans[0];
       this.loadMealPlan(this.selectedMealPlan.id);
@@ -60,7 +74,9 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   saveLastUsedMealPlan() {
-    localStorage.setItem('lastUsedMealPlanId', this.selectedMealPlan.id);
+    if (!this.selectedMealPlan) return;
+
+    localStorage.setItem("lastUsedMealPlanId", this.selectedMealPlan.id);
   }
 
   async loadMealPlans() {
@@ -86,26 +102,33 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async save() {
+    if (!this.destinationMealPlan || !this.meal) return;
+
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
 
-    const response = await this.mealPlanService.addItem(this.destinationMealPlan.id, {
-      title: this.recipe.title,
-      recipeId: this.recipe.id,
-      meal: this.meal,
-      scheduled: new Date(this.selectedDays[0]).toISOString()
-    });
+    const response = await this.mealPlanService.addItem(
+      this.destinationMealPlan.id,
+      {
+        title: this.recipe.title,
+        recipeId: this.recipe.id,
+        meal: this.meal,
+        scheduled: new Date(this.selectedDays[0]).toISOString(),
+      },
+    );
     loading.dismiss();
 
     if (response.success) this.modalCtrl.dismiss();
   }
 
   async createMealPlan() {
-    const message = await this.translate.get('pages.addRecipeToMealPlanModal.newMealPlanSuccess').toPromise();
+    const message = await this.translate
+      .get("pages.addRecipeToMealPlanModal.newMealPlanSuccess")
+      .toPromise();
 
     const modal = await this.modalCtrl.create({
-      component: NewMealPlanModalPage
+      component: NewMealPlanModalPage,
     });
     modal.present();
     modal.onDidDismiss().then(({ data }) => {
@@ -113,14 +136,16 @@ export class AddRecipeToMealPlanModalPage {
 
       // Check for new meal plans
       this.loadMealPlans().then(async () => {
-        if (this.mealPlans.length === 1) {
+        if (this.mealPlans?.length === 1) {
           this.selectedMealPlan = this.mealPlans[0];
           this.loadMealPlan(this.mealPlans[0].id);
         } else {
-          (await this.toastCtrl.create({
-            message,
-            duration: 6000
-          })).present();
+          (
+            await this.toastCtrl.create({
+              message,
+              duration: 6000,
+            })
+          ).present();
         }
       });
     });

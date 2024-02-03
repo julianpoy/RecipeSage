@@ -1,319 +1,331 @@
-import { Injectable } from '@angular/core';
-import { UtilService } from './util.service';
-import { HttpService } from './http.service';
-import { HttpErrorHandlerService, ErrorHandlers } from './http-error-handler.service';
+import { Injectable } from "@angular/core";
+import { UtilService } from "./util.service";
+import { HttpService } from "./http.service";
+import {
+  HttpErrorHandlerService,
+  ErrorHandlers,
+} from "./http-error-handler.service";
 
-import { Recipe } from './recipe.service';
-import { Label } from './label.service';
+import { Recipe } from "./recipe.service";
+import { Label } from "./label.service";
 
 export interface ProfileItem {
-  title: string,
-  type: 'all-recipes' | 'label' | 'recipe',
-  visibility: 'public' | 'friends-only',
-  order: number,
-  recipe: Partial<Recipe>,
-  label: Partial<Label>,
+  title: string;
+  type: "all-recipes" | "label" | "recipe";
+  visibility: "public" | "friends-only";
+  order: number;
+  recipe: Partial<Recipe>;
+  label: Partial<Label>;
 }
 
 export interface EditProfileItem {
-  title?: string,
-  type?: 'all-recipes' | 'label' | 'recipe',
-  recipeId?: string,
-  labelId?: string,
-  visibility?: 'public' | 'friends-only',
+  title?: string;
+  type?: "all-recipes" | "label" | "recipe";
+  recipeId?: string;
+  labelId?: string;
+  visibility?: "public" | "friends-only";
 }
 
 export interface ProfileImage {
-  id: string,
-  location: string,
+  id: string;
+  location: string;
 }
 
 export interface User {
-  id: string,
-  name: string,
-  email: string,
+  id: string;
+  name: string;
+  email: string;
+  enableProfile?: boolean;
 }
 
 export interface UserProfile {
-  id: string,
-  name: string,
-  handle?: string,
-  incomingFriendship: boolean,
-  outgoingFriendship: boolean,
-  isMe: boolean,
-  profileImages: ProfileImage[],
-  enableProfile: boolean,
-  profileVisibility: 'public' | 'friends-only',
-  profileItems: ProfileItem[],
+  id: string;
+  name: string;
+  handle?: string;
+  incomingFriendship: boolean;
+  outgoingFriendship: boolean;
+  isMe: boolean;
+  profileImages: ProfileImage[];
+  enableProfile: boolean;
+  profileVisibility: "public" | "friends-only";
+  profileItems: ProfileItem[];
 }
 
 export interface EditUserProfile {
-  name?: string,
-  handle?: string,
-  profileImageIds?: string[],
-  enableProfile?: boolean,
-  profileVisibility?: 'public' | 'friends-only',
-  profileItems?: EditProfileItem[],
+  name?: string;
+  handle?: string;
+  profileImageIds?: string[];
+  enableProfile?: boolean;
+  profileVisibility?: "public" | "friends-only";
+  profileItems?: EditProfileItem[];
 }
 
 export interface HandleInfo {
-  available: boolean,
+  available: boolean;
 }
 
 export interface Capabilities {
-  highResImages: boolean,
-  multipleImages: boolean,
-  expandablePreviews: boolean,
+  highResImages: boolean;
+  multipleImages: boolean;
+  expandablePreviews: boolean;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UserService {
-  constructor(
-    private utilService: UtilService,
-    private httpService: HttpService,
-    private httpErrorHandlerService: HttpErrorHandlerService,
-  ) {}
+  constructor(private httpService: HttpService) {}
 
-  register(payload: {
-    name: string,
-    email: string,
-    password: string
-  }, errorHandlers?: ErrorHandlers) {
+  register(
+    payload: {
+      name: string;
+      email: string;
+      password: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<{ token: string }>(
-      'users/register',
-      'POST',
+      "users/register",
+      "POST",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
-  login(payload: {
-    email: string,
-    password: string
-  }, errorHandlers?: ErrorHandlers) {
+  login(
+    payload: {
+      email: string;
+      password: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<{ token: string }>(
-      'users/login',
-      'POST',
+      "users/login",
+      "POST",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
   logout(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
-      'users/logout',
-      'POST',
+      "users/logout",
+      "POST",
       {},
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
-  forgot(payload: {
-    email: string
-  }, errorHandlers?: ErrorHandlers) {
+  forgot(
+    payload: {
+      email: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<void>(
-      'users/forgot',
-      'POST',
+      "users/forgot",
+      "POST",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
-  update(payload: {
-    name?: string,
-    email?: string,
-    password?: string,
-  }, errorHandlers?: ErrorHandlers) {
+  update(
+    payload: {
+      name?: string;
+      email?: string;
+      password?: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<void>(
-      'users/',
-      'PUT',
+      "users/",
+      "PUT",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
-  saveFCMToken(payload: {
-    fcmToken: string,
-  }, errorHandlers?: ErrorHandlers) {
+  saveFCMToken(
+    payload: {
+      fcmToken: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<void>(
-      'users/fcm/token',
-      'POST',
+      "users/fcm/token",
+      "POST",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
-  removeFCMToken(params: {
-    fcmToken: string,
-  }, errorHandlers?: ErrorHandlers) {
+  removeFCMToken(
+    params: {
+      fcmToken: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<void>(
-      'users/fcm/token',
-      'DELETE',
-      null,
+      "users/fcm/token",
+      "DELETE",
+      undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
-  getUserByEmail(params: {
-    email: string,
-  }, errorHandlers?: ErrorHandlers) {
+  getUserByEmail(
+    params: {
+      email: string;
+    },
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<User>(
-      'users/by-email',
-      'GET',
-      null,
+      "users/by-email",
+      "GET",
+      undefined,
       params,
-      errorHandlers
+      errorHandlers,
     );
   }
 
   me(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<User>(
-      'users/',
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "users/",
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   getMyProfile(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<UserProfile>(
-      'users/profile',
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "users/profile",
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   getUserById(userId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<User>(
       `users/${userId}`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
-  updateMyProfile(payload: Partial<EditUserProfile>, errorHandlers?: ErrorHandlers) {
+  updateMyProfile(
+    payload: Partial<EditUserProfile>,
+    errorHandlers?: ErrorHandlers,
+  ) {
     return this.httpService.requestWithWrapper<void>(
-      'users/profile',
-      'PUT',
+      "users/profile",
+      "PUT",
       payload,
-      null,
-      errorHandlers
+      undefined,
+      errorHandlers,
     );
   }
 
   getProfileByUserId(userId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/${userId}`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   getProfileByHandle(handle: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<UserProfile>(
       `users/profile/by-handle/${encodeURIComponent(handle)}`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   getHandleInfo(handle: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<HandleInfo>(
       `users/handle-info/${encodeURIComponent(handle)}`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   getMyFriends(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<any>(
       `users/friends`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   addFriend(friendId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<any>(
       `users/friends/${friendId}`,
-      'POST',
-      null,
-      null,
-      errorHandlers
+      "POST",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   deleteFriend(friendId: string, errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `users/friends/${friendId}`,
-      'DELETE',
-      null,
-      null,
-      errorHandlers
+      "DELETE",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   myStats(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<any>(
       `users/stats`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   capabilities(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<Capabilities>(
       `users/capabilities`,
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "GET",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 
   delete(errorHandlers?: ErrorHandlers) {
     return this.httpService.requestWithWrapper<void>(
       `users/`,
-      'DELETE',
-      null,
-      null,
-      errorHandlers
-    );
-  }
-
-  checkForUpdate(payload: {
-    version: string,
-  }, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
-      'info',
-      'GET',
-      null,
-      null,
-      errorHandlers
+      "DELETE",
+      undefined,
+      undefined,
+      errorHandlers,
     );
   }
 }

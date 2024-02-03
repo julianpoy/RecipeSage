@@ -3,8 +3,14 @@
     {{ 'pages.editRecipePopover.actions' | translate }}
   </ion-list-header>
 
-  <ion-button [disabled]="!canAddImages" (click)="dismiss(); addImageByUrlPrompt()" expand="block" size="small" class="ion-margin">
-    <ion-icon name='image' slot="start"></ion-icon>
+  <ion-button
+    [disabled]="!canAddImages"
+    (click)="dismiss(); addImageByUrlPrompt()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="image" slot="start"></ion-icon>
     {{ 'pages.editRecipePopover.addImage' | translate }}
   </ion-button>
 </ion-list>

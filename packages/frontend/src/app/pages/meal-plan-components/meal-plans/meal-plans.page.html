@@ -4,9 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>
-      {{ 'pages.mealPlans.title' | translate }}
-    </ion-title>
+    <ion-title> {{ 'pages.mealPlans.title' | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,21 +13,27 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item button
+    <ion-item
+      button
       class="ion-text-wrap"
       *ngFor="let mealPlan of mealPlans"
-      (click)="openMealPlan(mealPlan.id)">
+      (click)="openMealPlan(mealPlan.id)"
+    >
       <ion-icon name="calendar" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ mealPlan.title }}</h2>
         <p>
-          {{ 'pages.mealPlans.metadata.createdOn' | translate:{date:formatItemCreationDate(mealPlan.createdAt)} }}
+          {{ 'pages.mealPlans.metadata.createdOn' |
+          translate:{date:formatItemCreationDate(mealPlan.createdAt)} }}
         </p>
         <p *ngIf="mealPlan.collaborators.length > 0">
           {{ 'pages.mealPlans.metadata.collaborators' | translate }}
           <span *ngFor="let user of mealPlan.collaborators; last as isLast">
             <span *ngIf="mealPlan.myUserId !== user.id">
-              {{ user.name || user.email }}<span *ngIf="!isLast || mealPlan.myUserId !== mealPlan.owner.id">,</span>
+              {{ user.name || user.email }}<span
+                *ngIf="!isLast || mealPlan.myUserId !== mealPlan.owner.id"
+                >,</span
+              >
             </span>
           </span>
           <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">
@@ -38,7 +42,8 @@
         </p>
         <p>
           <span *ngIf="mealPlan.myUserId !== mealPlan.owner.id">
-            {{ 'pages.mealPlans.metadata.createdBy' | translate:{name:(mealPlan.owner.name || mealPlan.owner.email)} }}
+            {{ 'pages.mealPlans.metadata.createdBy' |
+            translate:{name:(mealPlan.owner.name || mealPlan.owner.email)} }}
           </span>
           <span *ngIf="mealPlan.myUserId === mealPlan.owner.id">
             {{ 'pages.mealPlans.metadata.youOwn' | translate }}
@@ -48,7 +53,11 @@
       <ion-badge slot="end">{{ mealPlan.itemCount }}</ion-badge>
     </ion-item>
     <null-state *ngIf="mealPlans.length === 0 && initialLoadComplete">
-      <ion-icon name="calendar" class="big-icon" virtualSlot="header"></ion-icon>
+      <ion-icon
+        name="calendar"
+        class="big-icon"
+        virtualSlot="header"
+      ></ion-icon>
       <ion-label virtualSlot="body">
         <p>
           {{ 'pages.mealPlans.noPlans' | translate }}<br />

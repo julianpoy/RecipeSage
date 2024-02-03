@@ -1,30 +1,33 @@
-const Sequelize = require('sequelize');
-const { Umzug, SequelizeStorage } = require('umzug');
-const path = require('path');
-const { program } = require('commander');
+import Sequelize from "sequelize";
+import { Umzug, SequelizeStorage } from "umzug";
+import * as path from "path";
+import { program } from "commander";
 
-let config = require('./config/sequelize-config.js')[process.env.NODE_ENV];
+import * as sequelizeConfig from "./config/sequelize-config.js";
+const config = sequelizeConfig[process.env.NODE_ENV];
 
-program
-  .arguments('[direction] [count]')
-  .parse(process.argv);
+program.arguments("[direction] [count]").parse(process.argv);
 
 const options = {
-  direction: program.args.at(0) || 'up',
+  direction: program.args.at(0) || "up",
   count: program.args.at(1),
 };
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config,
+);
 
 const umzug = new Umzug({
   migrations: {
-    glob: path.join(__dirname, 'migrations/*.js'),
+    glob: path.join(__dirname, "migrations/*.js"),
     resolve: ({ name, path, context }) => {
-      const migration = require(path);
       return {
         name,
-        up: async () => migration.up(context, Sequelize),
-        down: async () => migration.down(context, Sequelize),
+        up: async () => (await import(path)).default.up(context, Sequelize),
+        down: async () => (await import(path)).default.down(context, Sequelize),
       };
     },
   },
@@ -34,7 +37,7 @@ const umzug = new Umzug({
 });
 
 (async () => {
-  if (options.direction === 'up') {
+  if (options.direction === "up") {
     await umzug.up({
       step: options.count || undefined,
     });
@@ -44,6 +47,6 @@ const umzug = new Umzug({
       to: options.count ? undefined : 0,
     });
   }
-  console.log('All migrations performed successfully');
+  console.log("All migrations performed successfully");
   process.exit(0);
 })();

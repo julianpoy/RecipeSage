@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{ 'components.scaleRecipe.title' | translate }}
+      {{ "components.scaleRecipe.title" | translate }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,9 @@
 <ion-content>
   <ion-item lines="none">
     <ion-label>
-      <p>
-        {{ 'components.scaleRecipe.change' | translate }}<br />
-        {{ 'components.scaleRecipe.click' | translate }}
+      <p class="ion-text-wrap">
+        {{ "components.scaleRecipe.change" | translate }}<br />
+        {{ "components.scaleRecipe.click" | translate }}
       </p>
     </ion-label>
   </ion-item>
@@ -25,10 +25,11 @@
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">
-      {{ 'components.scaleRecipe.manual' | translate }}
-    </ion-label>
-    <ion-input [(ngModel)]="scale"></ion-input>
+    <ion-input
+      label="{{ 'components.scaleRecipe.manual' | translate }}"
+      labelPlacement="stacked"
+      [(ngModel)]="scale"
+    ></ion-input>
   </ion-item>
 
   <br />
@@ -37,12 +38,12 @@
 <ion-footer>
   <ion-button (click)="close()" fill="clear" class="ion-float-end">
     <ion-label>
-      {{ 'components.scaleRecipe.cancel' | translate }}
+      {{ "components.scaleRecipe.cancel" | translate }}
     </ion-label>
   </ion-button>
   <ion-button (click)="apply()" fill="clear" class="ion-float-end">
     <ion-label>
-      {{ 'components.scaleRecipe.apply' | translate }}
+      {{ "components.scaleRecipe.apply" | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

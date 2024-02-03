@@ -5,26 +5,49 @@
   [recipeTitle]="showRecipeTitle && group.items[0].recipe?.title"
   [createdAt]="showAddedOn && group.items[0].createdAt"
   [ownerName]="showAddedBy && group.items[0].owner?.name"
-  (completeToggle)="completeToggle.emit(group.items)"></shopping-list-item>
+  (completeToggle)="completeToggle.emit(group.items)"
+></shopping-list-item>
 <div *ngIf="group.items.length > 1">
   <ion-grid class="ion-no-padding">
     <ion-row class="ion-align-items-center">
       <ion-col class="ion-no-padding">
         <ion-item class="groupedItem">
-          <ion-label class="ion-text-wrap ion-no-margin">
-            {{ group.title }}
-          </ion-label>
-          <ion-checkbox slot="start" [(ngModel)]="group.items[0].completed" (ngModelChange)="completeToggle.emit(group.items)"></ion-checkbox>
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [(ngModel)]="group.items[0].completed"
+            (ngModelChange)="completeToggle.emit(group.items)"
+          >
+            <div class="ion-text-wrap">
+              {{ group.title }}
+            </div>
+          </ion-checkbox>
         </ion-item>
       </ion-col>
       <ion-col size="auto">
-        <ion-button (click)="groupTitleExpanded[categoryTitle + group.title] = !groupTitleExpanded[categoryTitle + group.title]" fill="clear" color="medium">
-          <ion-icon *ngIf="groupTitleExpanded[categoryTitle + group.title]" name="caret-down"></ion-icon>
-          <ion-icon *ngIf="!groupTitleExpanded[categoryTitle + group.title]" name="caret-up"></ion-icon>
+        <ion-button
+          (click)="
+            groupTitleExpanded[categoryTitle + group.title] =
+              !groupTitleExpanded[categoryTitle + group.title]
+          "
+          fill="clear"
+          color="medium"
+        >
+          <ion-icon
+            *ngIf="groupTitleExpanded[categoryTitle + group.title]"
+            name="caret-down"
+          ></ion-icon>
+          <ion-icon
+            *ngIf="!groupTitleExpanded[categoryTitle + group.title]"
+            name="caret-up"
+          ></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="groupTitleExpanded[categoryTitle + group.title]" class="indented-item">
+    <ion-row
+      *ngIf="groupTitleExpanded[categoryTitle + group.title]"
+      class="indented-item"
+    >
       <ion-col size="12">
         <shopping-list-item
           *ngFor="let item of group.items"
@@ -33,9 +56,9 @@
           [recipeTitle]="showRecipeTitle && item.recipe?.title"
           [createdAt]="showAddedOn && item.createdAt"
           [ownerName]="showAddedBy && item.owner?.name"
-          (completeToggle)="completeToggle.emit([item])"></shopping-list-item>
+          (completeToggle)="completeToggle.emit([item])"
+        ></shopping-list-item>
       </ion-col>
     </ion-row>
   </ion-grid>
 </div>
-

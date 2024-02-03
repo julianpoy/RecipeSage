@@ -1,9 +1,0 @@
-{
-  "name": "@recipesage/util",
-  "version": "0.0.0",
-  "main": "src/index.js",
-  "dependencies": {
-    "fraction.js": "^4.0.12",
-    "unitz-ts": "^1.0.1"
-  }
-}

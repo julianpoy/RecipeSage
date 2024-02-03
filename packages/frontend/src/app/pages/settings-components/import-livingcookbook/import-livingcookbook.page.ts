@@ -1,21 +1,21 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { Component } from "@angular/core";
+import { NavController, ToastController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingService } from '~/services/loading.service';
-import { RecipeService } from '~/services/recipe.service';
-import { UtilService, RouteMap, AuthType } from '~/services/util.service';
+import { LoadingRef, LoadingService } from "~/services/loading.service";
+import { RecipeService } from "~/services/recipe.service";
+import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 
 @Component({
-  selector: 'page-import-livingcookbook',
-  templateUrl: 'import-livingcookbook.page.html',
-  styleUrls: ['import-livingcookbook.page.scss']
+  selector: "page-import-livingcookbook",
+  templateUrl: "import-livingcookbook.page.html",
+  styleUrls: ["import-livingcookbook.page.scss"],
 })
 export class ImportLivingcookbookPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  loading = null;
-  imageFile = null;
+  loading?: LoadingRef;
+  imageFile?: File;
 
   ignoreLargeFiles: boolean;
   includeTechniques = false;
@@ -30,12 +30,12 @@ export class ImportLivingcookbookPage {
     public loadingService: LoadingService,
     public toastCtrl: ToastController,
     public recipeService: RecipeService,
-    public utilService: UtilService) {
-
-    this.ignoreLargeFiles = !!localStorage.getItem('largeFileOverride');
+    public utilService: UtilService,
+  ) {
+    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
   }
 
-  setFile(event) {
+  setFile(event: any) {
     const files = (event.srcElement || event.target).files;
     if (!files) {
       return;
@@ -45,7 +45,7 @@ export class ImportLivingcookbookPage {
   }
 
   filePicker() {
-    document.getElementById('filePicker').click();
+    document.getElementById("filePicker")?.click();
   }
 
   isFileLargerThanMB(size: number) {
@@ -71,13 +71,20 @@ export class ImportLivingcookbookPage {
   }
 
   isLCBFormat() {
+    if (!this.imageFile) return false;
+
     if (!this.isFileSelected()) return false;
-    return this.imageFile.name.toLowerCase().endsWith('.lcb');
+    return this.imageFile.name.toLowerCase().endsWith(".lcb");
   }
 
   isFDXZFormat() {
+    if (!this.imageFile) return false;
+
     if (!this.isFileSelected()) return false;
-    return this.imageFile.name.toLowerCase().endsWith('.fdx') || this.imageFile.name.toLowerCase().endsWith('.fdxz');
+    return (
+      this.imageFile.name.toLowerCase().endsWith(".fdx") ||
+      this.imageFile.name.toLowerCase().endsWith(".fdxz")
+    );
   }
 
   showFileTypeWarning() {
@@ -86,67 +93,93 @@ export class ImportLivingcookbookPage {
   }
 
   async presentToast(msg: string) {
-    (await this.toastCtrl.create({
-      message: msg,
-      duration: 6000
-    })).present();
+    (
+      await this.toastCtrl.create({
+        message: msg,
+        duration: 6000,
+      })
+    ).present();
   }
 
   async submit() {
+    if (!this.imageFile) return;
+
     this.loading = this.loadingService.start();
 
     const errorHandlers = {
       406: async () => {
-        const message = await this.translate.get('pages.importLivingCookbook.error').toPromise();
-        const close = await this.translate.get('generic.close').toPromise();
+        const message = await this.translate
+          .get("pages.importLivingCookbook.error")
+          .toPromise();
+        const close = await this.translate.get("generic.close").toPromise();
 
-        (await this.toastCtrl.create({
-          message,
-          buttons: [{
-            text: close,
-            role: 'cancel'
-          }]
-        })).present();
+        (
+          await this.toastCtrl.create({
+            message,
+            buttons: [
+              {
+                text: close,
+                role: "cancel",
+              },
+            ],
+          })
+        ).present();
       },
       504: async () => {
         setTimeout(async () => {
-          const message = await this.translate.get('pages.importLivingCookbook.timeout').toPromise();
-          const close = await this.translate.get('generic.close').toPromise();
+          const message = await this.translate
+            .get("pages.importLivingCookbook.timeout")
+            .toPromise();
+          const close = await this.translate.get("generic.close").toPromise();
 
-          (await this.toastCtrl.create({
-            message,
-            buttons: [{
-              text: close,
-              role: 'cancel'
-            }]
-          })).present();
-          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+          (
+            await this.toastCtrl.create({
+              message,
+              buttons: [
+                {
+                  text: close,
+                  role: "cancel",
+                },
+              ],
+            })
+          ).present();
+          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
         }, 20000);
-      }
+      },
     };
 
     let importPromise;
     if (this.isFDXZFormat()) {
-      importPromise = this.recipeService.importFDXZ(this.imageFile, {
-        excludeImages: this.excludeImages || null,
-      }, errorHandlers);
+      importPromise = this.recipeService.importFDXZ(
+        this.imageFile,
+        {
+          excludeImages: this.excludeImages || undefined,
+        },
+        errorHandlers,
+      );
     } else {
-      importPromise = this.recipeService.importLCB(this.imageFile, {
-        includeStockRecipes: this.includeStockRecipes || null,
-        includeTechniques: this.includeTechniques || null,
-        excludeImages: this.excludeImages || null
-      }, errorHandlers);
+      importPromise = this.recipeService.importLCB(
+        this.imageFile,
+        {
+          includeStockRecipes: this.includeStockRecipes || undefined,
+          includeTechniques: this.includeTechniques || undefined,
+          excludeImages: this.excludeImages || undefined,
+        },
+        errorHandlers,
+      );
     }
 
     const response = await importPromise;
     this.loading.dismiss();
-    this.loading = null;
+    this.loading = undefined;
     if (!response.success) return;
 
-    const message = await this.translate.get('pages.importLivingCookbook.success').toPromise();
+    const message = await this.translate
+      .get("pages.importLivingCookbook.success")
+      .toPromise();
 
     this.presentToast(message);
 
-    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath('main'));
+    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
   }
 }

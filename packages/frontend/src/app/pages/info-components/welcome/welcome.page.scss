@@ -4,10 +4,11 @@ $content-layer: 2;
 
 .intro-container {
   position: relative;
-  background-color: rgba(0,0,0,0.025);
+  background-color: rgba(0, 0, 0, 0.025);
   z-index: $container-layer; // Move this below
 
-  .intro-fold, .intro-fold-dimmer {
+  .intro-fold,
+  .intro-fold-dimmer {
     position: absolute;
     left: 0;
     right: 0;
@@ -15,35 +16,37 @@ $content-layer: 2;
     bottom: 62%;
     z-index: $bg-layer; // Move this below all other layers
 
-    @media only screen and (min-width:450px) {
+    @media only screen and (min-width: 450px) {
       bottom: 55%;
     }
   }
 
   .intro-fold {
     overflow: hidden;
-    box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
 
-    background-image: url("/assets/stockphotos/chicken-salad-640.jpg");
+    background-image: url("../../../../assets/stockphotos/chicken-salad-640.jpg");
     background-position: top;
     background-size: cover;
 
-    @media only screen and (min-width:641px) {
-      background-image: url('/assets/stockphotos/chicken-salad-1280.jpg');
+    @media only screen and (min-width: 641px) {
+      background-image: url("../../../../assets/stockphotos/chicken-salad-1280.jpg");
     }
-    @media only screen and (min-width:1281px) {
-      background-image: url('/assets/stockphotos/chicken-salad-1920.jpg');
+    @media only screen and (min-width: 1281px) {
+      background-image: url("../../../../assets/stockphotos/chicken-salad-1920.jpg");
     }
-    @media only screen and (min-width:1921px) {
-      background-image: url('/assets/stockphotos/chicken-salad-original.jpg');
+    @media only screen and (min-width: 1921px) {
+      background-image: url("../../../../assets/stockphotos/chicken-salad-original.jpg");
     }
   }
 
   .intro-fold-dimmer {
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
-  .title, .screen, .welcomeContent {
+  .title,
+  .screen,
+  .welcomeContent {
     position: relative;
     z-index: $content-layer;
   }
@@ -62,7 +65,7 @@ $content-layer: 2;
     h1 {
       font-size: 2.5rem;
 
-      @media only screen and (min-width:450px) {
+      @media only screen and (min-width: 450px) {
         font-size: 3.5rem;
       }
     }
@@ -86,11 +89,11 @@ $content-layer: 2;
     margin-right: auto;
     max-width: 200px;
 
-    @media only screen and (min-width:350px) {
+    @media only screen and (min-width: 350px) {
       max-width: 300px;
     }
 
-    @media only screen and (min-width:500px) {
+    @media only screen and (min-width: 500px) {
       max-width: 400px;
     }
 

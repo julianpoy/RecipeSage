@@ -1,11 +1,9 @@
-'use strict';
-
 module.exports = {
   up: (queryInterface) => {
-    return queryInterface.addIndex('Recipes', ['userId']);
+    return queryInterface.addIndex("Recipes", ["userId"]);
   },
 
   down: (queryInterface) => {
-    return queryInterface.removeIndex('Recipes', ['userId']);
-  }
+    return queryInterface.removeIndex("Recipes", ["userId"]);
+  },
 };

@@ -1,4 +1,4 @@
-@import 'src/theme/shared-variables.scss';
+@import "src/theme/shared-variables.scss";
 
 .homegrid {
   display: grid;
@@ -36,7 +36,10 @@
     transition: box-shadow 0.1s ease-in-out;
 
     &:hover {
-      background-color: var(--ion-item-background-hover,rgba(var(--ion-text-color-rgb,0,0,0),0.04)); // Pulled from ion-item button hover
+      background-color: var(
+        --ion-item-background-hover,
+        rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.04)
+      ); // Pulled from ion-item button hover
     }
 
     &.selected {
@@ -51,11 +54,17 @@ ion-badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+  max-width: 90px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   // When in "list" mode
   .recipe-item & {
-    top: 20px;
+    top: 8px;
+    left: initial;
+    right: 10px;
   }
 
   &:nth-of-type(2) {
@@ -72,7 +81,7 @@ ion-badge {
   grid-template-columns: var(--image-size) auto;
   height: calc(var(--image-size) + calc(var(--padding) * 2));
   overflow: hidden;
-  margin-left: 16px;
+  padding-left: 8px;
   cursor: pointer;
 
   &:hover {
@@ -100,7 +109,10 @@ ion-badge {
     margin-left: 16px;
     padding-right: 16px;
     border-bottom: 1px solid;
-    border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    border-color: var(
+      --ion-item-border-color,
+      var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
+    );
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -111,7 +123,7 @@ ion-badge {
       margin-right: 0;
       margin-top: 2px;
       margin-bottom: 2px;
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: normal;
 
       white-space: nowrap;
@@ -123,9 +135,9 @@ ion-badge {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 14px;
+      font-size: 0.875rem;
       margin: 0;
-      color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+      color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
     }
   }
 }
@@ -136,30 +148,35 @@ ion-badge {
   padding: 10px;
 
   .recipe-card {
-    --paragraph-line-height: 19px;
-    --content-padding-leeway: 22px;
+    --paragraph-line-height: 1.188rem;
+    --content-padding-leeway: 1.375rem;
 
     // The following should be set to their initial value with all preferences OFF
-    --image-size: 0px;
-    --header-height: 36px;
+    --image-size: 1.25rem;
+    --header-height: 2.25rem;
     --description-height: 0px;
     --source-height: 0px;
     --fromuser-height: 0px;
     --labels-height: 0px;
     // ===
 
-    --content-height: calc(var(--content-padding-leeway) + var(--header-height) + var(--description-height) + var(--source-height) + var(--fromuser-height) + var(--labels-height));
+    --content-height: calc(
+      var(--content-padding-leeway) + var(--header-height) +
+        var(--description-height) + var(--source-height) +
+        var(--fromuser-height) + var(--labels-height)
+    );
 
     position: relative;
     width: 200px;
     height: calc(var(--image-size) + var(--content-height));
-    box-shadow: 1px 1px 8px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 5px;
     overflow: hidden;
+    background-color: var(--ion-card-background);
 
     &:hover {
-      background-color: var(--ion-item-background-hover);
+      background-color: var(--ion-card-background-hover);
     }
 
     &.showImage {
@@ -188,13 +205,17 @@ ion-badge {
       padding: 5px;
       padding-left: 12px;
 
+      .no-image-padding {
+        height: 1.25rem;
+      }
+
       h2 {
         line-height: calc(var(--header-height) / 2);
         margin-left: 0;
         margin-right: 0;
         margin-top: 2px;
         margin-bottom: 2px;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: normal;
 
         //white-space: nowrap;
@@ -212,13 +233,18 @@ ion-badge {
         -webkit-box-orient: vertical;
         overflow: hidden;
 
-        font-size: 14px;
+        font-size: 0.875rem;
         margin: 0;
         margin-top: 2px;
         margin-bottom: 2px;
-        color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+        color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+      }
+    }
+
+    ion-badge {
+      &.no-image {
+        top: 5px;
       }
     }
   }
 }
-

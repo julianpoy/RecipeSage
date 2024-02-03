@@ -1,5 +1,5 @@
-import { Readable, Writable } from 'stream';
-import sharp from 'sharp';
+import { Readable, Writable } from "stream";
+import * as sharp from "sharp";
 
 export const transformImageStream = async (
   inputStream: Readable,
@@ -12,7 +12,7 @@ export const transformImageStream = async (
   const transformer = sharp()
     .rotate() // Rotates based on EXIF data
     .resize(width, height, {
-      fit
+      fit,
     })
     .jpeg({
       quality,
@@ -33,7 +33,7 @@ export const transformImageBuffer = async (
   return sharp(buffer)
     .rotate() // Rotates based on EXIF data
     .resize(width, height, {
-      fit
+      fit,
     })
     .jpeg({
       quality,
@@ -41,4 +41,3 @@ export const transformImageBuffer = async (
     })
     .toBuffer();
 };
-

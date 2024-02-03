@@ -1,0 +1,161 @@
+<div>
+  <div
+    class="selected-container ion-padding-start ion-padding-end"
+    [class.reserve-height]="reserveSelectedItemsHeight"
+  >
+    <ion-chip *ngIf="reserveSelectedItemsHeight && selectedItems.length === 0">
+      {{
+        noSelectedItemsText || "components.selectMultipleItems.noSelected"
+          | translate
+      }}
+    </ion-chip>
+
+    <ion-chip
+      *ngFor="let selectedItem of selectedItems; trackBy: itemTrackBy"
+      (click)="deselectItem(selectedItem)"
+    >
+      <ion-avatar *ngIf="selectedItem.image" aria-hidden="true">
+        <img alt="Selected item image" [src]="selectedItem.image" />
+      </ion-avatar>
+      <ion-icon *ngIf="selectedItem.icon" [name]="selectedItem.icon"></ion-icon>
+      <ion-label>
+        {{ selectedItem.title }}
+      </ion-label>
+      <ion-icon name="trash" color="danger"></ion-icon>
+    </ion-chip>
+  </div>
+
+  <div
+    class="search-container"
+    [class.reserve-height]="reserveSearchResultsHeight"
+  >
+    <ion-searchbar
+      (ionInput)="onSearchInputChange($event)"
+      (ionFocus)="onSearchFocus($event)"
+      (ionBlur)="onSearchBlur()"
+      (keydown.enter)="onEnter()"
+      enterkeyhint="go"
+      [value]="searchText"
+      placeholder="{{
+        searchPlaceholderText ||
+          'components.selectMultipleItems.searchPlaceholder' | translate
+      }}"
+      autocomplete="off"
+    ></ion-searchbar>
+    <div class="ion-padding-start ion-padding-end">
+      <div
+        class="results-list-container"
+        *ngIf="searchText.length || searchFocused"
+      >
+        <div class="results-list">
+          <ion-item *ngIf="!searchResults.length && !searchText.length">
+            <ion-label *ngIf="noItemsText">
+              {{ noItemsText }}
+            </ion-label>
+            <ion-label *ngIf="!noItemsText">
+              {{ "components.selectMultipleItems.noItems" | translate }}
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngFor="let result of searchResults; trackBy: itemTrackBy"
+            (mousedown)="$event.preventDefault()"
+            (click)="selectItem(result)"
+            button
+          >
+            <ion-avatar *ngIf="result.image" aria-hidden="true" slot="start">
+              <img alt="Image of selectable item" [src]="result.image" />
+            </ion-avatar>
+            <ion-icon
+              *ngIf="result.icon"
+              aria-hidden="true"
+              [name]="result.icon"
+              slot="start"
+            ></ion-icon>
+            <ion-label>
+              <h2>{{ result.title }}</h2>
+              <p>{{ "components.selectMultipleItems.select" | translate }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngIf="exactItemMatch && isSelected(exactItemMatch)">
+            <ion-avatar
+              *ngIf="exactItemMatch.image"
+              aria-hidden="true"
+              slot="start"
+            >
+              <img
+                alt="Image of selectable item"
+                [src]="exactItemMatch.image"
+              />
+            </ion-avatar>
+            <ion-icon
+              *ngIf="exactItemMatch.icon"
+              aria-hidden="true"
+              [name]="exactItemMatch.icon"
+              slot="start"
+            ></ion-icon>
+            <ion-label>
+              <h2>{{ exactItemMatch.title }}</h2>
+              <p>
+                {{ "components.selectMultipleItems.alreadyAdded" | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="
+              !enableCreateNew && !searchResults.length && searchText.length > 0
+            "
+          >
+            <ion-icon
+              aria-hidden="true"
+              name="folder-open"
+              slot="start"
+            ></ion-icon>
+            <ion-label>
+              <h2>
+                {{
+                  "components.selectMultipleItems.null"
+                    | translate: { searchText: searchText }
+                }}
+              </h2>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="
+              enableCreateNew &&
+              !exactItemMatch &&
+              searchText.length > 0 &&
+              !disallowedTitles[searchText]
+            "
+            (mousedown)="$event.preventDefault()"
+            (click)="create()"
+            button
+          >
+            <ion-icon aria-hidden="true" name="add" slot="start"></ion-icon>
+            <ion-label>
+              <h2>{{ searchText }}</h2>
+              <p>
+                {{ "components.selectMultipleItems.create" | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item
+            *ngIf="
+              enableCreateNew &&
+              !exactItemMatch &&
+              searchText.length > 0 &&
+              disallowedTitles[searchText]
+            "
+          >
+            <ion-icon aria-hidden="true" name="ban" slot="start"></ion-icon>
+            <ion-label>
+              <h2>{{ searchText }}</h2>
+              <p>
+                {{ disallowedTitles[searchText] | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

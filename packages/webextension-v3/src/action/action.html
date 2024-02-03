@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+  <head>
+    <title>RecipeSage</title>
+    <style type="text/css">
+      html {
+        display: none;
+      }
+
+      body {
+        padding: 16px;
+        font-size: 14px;
+
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .container {
+        min-width: 400px;
+        min-height: 200px;
+      }
+
+      .container h2 {
+        margin-top: 0;
+        margin-bottom: 32px;
+      }
+
+      input,
+      textarea {
+        width: calc(100% - 16px);
+        background: none;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        transition: 0.3s;
+        background: transparent;
+        color: initial;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-bottom: 1px solid #00a8ff;
+        outline: none;
+      }
+
+      button {
+        height: 32px;
+        padding: 0 11px;
+        margin: 4px;
+
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+
+        background: #00a8ff;
+        color: white;
+        cursor: pointer;
+
+        border: none;
+        border-radius: 2px;
+        box-shadow:
+          0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2),
+          0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      }
+
+      #tutorial {
+        display: none;
+      }
+
+      #importing {
+        display: none;
+      }
+
+      #message {
+        display: inline-block;
+        padding-top: 10px;
+      }
+
+      .headline {
+        text-align: center;
+      }
+
+      .headline h2 {
+        text-align: left;
+      }
+
+      .headline img {
+        height: 45px;
+      }
+    </style>
+    <script type="text/javascript" src="action.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div id="start">
+        <div class="headline">
+          <img class="logo" /><br /><br />
+          <h2>Import Site</h2>
+        </div>
+        <button id="auto-import">&nbsp;Auto Import&nbsp;</button>&nbsp;
+        <button id="interactive-import">&nbsp;Interactive Import&nbsp;</button
+        >&nbsp;
+      </div>
+      <div id="importing">
+        <div class="headline">
+          <img class="logo" /><br /><br />
+          <h2>Importing, please wait...</h2>
+        </div>
+      </div>
+      <div id="login">
+        <div class="headline">
+          <img class="logo" /><br />
+          <h2>Login</h2>
+        </div>
+        <label>
+          Email<br />
+          <input id="email" type="email" />
+        </label>
+        <br /><br />
+
+        <label>
+          Password<br />
+          <input id="password" type="password" />
+        </label>
+        <br /><br />
+        <button id="login-submit">&nbsp;Login&nbsp;</button>&nbsp;
+        <a href="https://recipesage.com/#/auth/register" target="_blank"
+          >Create an account</a
+        >
+      </div>
+      <div id="tutorial">
+        <div class="headline">
+          <img class="logo" /><br />
+          <h2>Tutorial</h2>
+        </div>
+
+        The RecipeSage browser extension allows you to quickly snip recipes from
+        the internet.
+
+        <br />
+
+        <ol>
+          <li>Navigate to a page that contains a recipe.</li>
+          <li>
+            Activate the RecipeSage clip tool by clicking the RecipeSage icon in
+            your browser's toolbar (you've already done this to view this
+            popup).
+          </li>
+          <li>
+            The clip tool will automatically grab the contents of the page and
+            find recipe content within it.
+          </li>
+          <li>
+            The saved recipe will open in a new tab once the process is
+            complete.
+          </li>
+        </ol>
+
+        To get started, click the dismiss button below and then start with step
+        1.
+
+        <br />
+        <button id="tutorial-submit">Dismiss</button>
+      </div>
+      <span id="message"></span>
+    </div>
+  </body>
+</html>

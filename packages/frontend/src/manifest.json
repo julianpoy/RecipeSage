@@ -83,10 +83,9 @@
   "background_color": "#353b48",
   "theme_color": "#353b48",
   "gcm_sender_id": "103953800507",
-  "categories": [
-    "books",
-    "food",
-    "productivity",
-    "shopping"
-  ]
+  "categories": ["books", "food", "productivity", "shopping"],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

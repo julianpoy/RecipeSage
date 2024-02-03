@@ -1,61 +1,66 @@
 <!doctype html>
 <html>
-	<head>
-		<title>RecipeSage</title>
+  <head>
+    <title>RecipeSage</title>
     <style type="text/css">
       html {
         display: none;
       }
 
-			body {
+      body {
         padding: 16px;
         font-size: 14px;
 
-        font-family: Arial,Helvetica,sans-serif;
-			}
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
-			.container {
-				min-width: 400px;
-				min-height: 200px;
-			}
+      .container {
+        min-width: 400px;
+        min-height: 200px;
+      }
 
-			.container h2 {
-				margin-top: 0;
-    		margin-bottom: 32px;
-			}
+      .container h2 {
+        margin-top: 0;
+        margin-bottom: 32px;
+      }
 
-			input, textarea {
-				width: calc(100% - 16px);
-				background: none;
-				border: none;
-				border-bottom: 1px solid rgba(0,0,0,0.1);
-				padding: 10px;
-				transition: 0.3s;
-				background: transparent;
-				color: initial;
-			}
+      input,
+      textarea {
+        width: calc(100% - 16px);
+        background: none;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        transition: 0.3s;
+        background: transparent;
+        color: initial;
+      }
 
-			input:focus, textarea:focus {
-				border-bottom: 1px solid #00a8ff;
-				outline: none;
-			}
+      input:focus,
+      textarea:focus {
+        border-bottom: 1px solid #00a8ff;
+        outline: none;
+      }
 
-			button {
-				height: 32px;
-				padding: 0 11px;
-				margin: 4px;
+      button {
+        height: 32px;
+        padding: 0 11px;
+        margin: 4px;
 
-				font-size: 14px;
-				font-weight: 500;
-				text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
 
-				background: #00a8ff;
-				color: white;
-				cursor: pointer;
+        background: #00a8ff;
+        color: white;
+        cursor: pointer;
 
-				border: none;
-				border-radius: 2px;
-				box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+        border: none;
+        border-radius: 2px;
+        box-shadow:
+          0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2),
+          0 1px 5px 0 rgba(0, 0, 0, 0.12);
       }
 
       #tutorial {
@@ -73,57 +78,65 @@
       .headline img {
         height: 45px;
       }
-		</style>
-		<script type="text/javascript" src="browser_action.js"></script>
-	</head>
-	<body>
-		<div class="container">
+    </style>
+    <script type="text/javascript" src="browser_action.js"></script>
+  </head>
+  <body>
+    <div class="container">
       <div id="login">
         <div class="headline">
           <img id="login-logo" /><br />
           <h2>Login</h2>
         </div>
-				<label>
-					Email<br />
-					<input id="email" type="email" />
-				</label>
-				<br /><br />
+        <label>
+          Email<br />
+          <input id="email" type="email" />
+        </label>
+        <br /><br />
 
-				<label>
-					Password<br />
-					<input id="password" type="password" />
-				</label>
-				<br /><br />
-				<button id="login-submit">Login</button>
-				<span id="message"></span>
+        <label>
+          Password<br />
+          <input id="password" type="password" />
+        </label>
+        <br /><br />
+        <button id="login-submit">Login</button>
+        <span id="message"></span>
       </div>
       <div id="tutorial">
         <div class="headline">
           <img id="tutorial-logo" /><br />
           <h2>Tutorial</h2>
         </div>
-        To view a full version of this tutorial, <a href="https://docs.recipesage.com" target="_blank">click here</a>
+        To view a full version of this tutorial,
+        <a href="https://docs.recipesage.com" target="_blank">click here</a>
         <br />
         <br />
 
-        The RecipeSage browser extension allows you to quickly snip recipes from the internet. It's fairly simple:
+        The RecipeSage browser extension allows you to quickly snip recipes from
+        the internet. It's fairly simple:
 
         <br />
 
         <ol>
-          <li>Activate the RecipeSage clip tool by clicking the RecipeSage icon (you've already done this)</li>
+          <li>
+            Activate the RecipeSage clip tool by clicking the RecipeSage icon
+            (you've already done this)
+          </li>
           <li>Highlight some text on the page</li>
-          <li>In the RecipeSage clip tool, press the scissors icon next to the corresponding field</li>
+          <li>
+            In the RecipeSage clip tool, press the scissors icon next to the
+            corresponding field
+          </li>
           <li>Edit the text as desired</li>
           <li>Repeat for all fields you want to clip</li>
-          <li>Press the save button to save the recipe directly to your account</li>
+          <li>
+            Press the save button to save the recipe directly to your account
+          </li>
         </ol>
 
         <br />
         <button id="tutorial-submit">Dismiss</button>
       </div>
-		</div>
-	</body>
+    </div>
+  </body>
 </html>
-
-

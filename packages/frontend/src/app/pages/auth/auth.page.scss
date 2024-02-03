@@ -10,13 +10,14 @@
 
   label {
     color: var(--ion-text-color);
-    font-size: 12px;
+    font-size: 0.75rem;
     margin: 5px;
   }
 
   input {
-    width: 100%;
+    width: 90%;
     background: none;
+    margin-right: 10px;
     border: none;
     border-bottom: 1px solid;
     border-color: var(--ion-border-color);
@@ -35,5 +36,20 @@
   logo-icon {
     text-align: center;
   }
-}
 
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .divider-segment {
+      width: 200px;
+      border-bottom: 1px solid var(--ion-text-color);
+    }
+
+    p {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+}

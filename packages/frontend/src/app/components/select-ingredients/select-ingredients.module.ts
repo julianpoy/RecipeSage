@@ -1,16 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { SelectIngredientsComponent } from './select-ingredients.component';
-import { ScaleRecipeModule } from '~/modals/scale-recipe/scale-recipe.module';
-import {GlobalModule} from '~/global.module';
+import { SelectIngredientsComponent } from "./select-ingredients.component";
+import { ScaleRecipeModule } from "~/modals/scale-recipe/scale-recipe.module";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    SelectIngredientsComponent
-  ],
+  declarations: [SelectIngredientsComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -19,8 +17,6 @@ import {GlobalModule} from '~/global.module';
     ScaleRecipeModule,
     GlobalModule,
   ],
-  exports: [
-    SelectIngredientsComponent
-  ]
+  exports: [SelectIngredientsComponent],
 })
-export class SelectIngredientsModule { }
+export class SelectIngredientsModule {}

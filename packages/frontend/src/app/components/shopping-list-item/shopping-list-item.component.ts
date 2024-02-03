@@ -1,19 +1,35 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
-import { UtilService } from '~/services/util.service';
+import { UtilService } from "~/services/util.service";
 
 @Component({
-  selector: 'shopping-list-item',
-  templateUrl: 'shopping-list-item.component.html',
-  styleUrls: ['./shopping-list-item.component.scss']
+  selector: "shopping-list-item",
+  templateUrl: "shopping-list-item.component.html",
+  styleUrls: ["./shopping-list-item.component.scss"],
 })
 export class ShoppingListItemComponent {
-  @Input() title: string;
-  @Input() completed: boolean;
-  @Input() recipeTitle: string;
-  @Input() createdAt: string;
-  @Input() ownerName: string;
+  @Input({
+    required: true,
+  })
+  title!: string;
+  @Input({
+    required: true,
+  })
+  completed!: boolean;
+  @Input({
+    required: true,
+  })
+  recipeTitle!: string;
+  @Input({
+    required: true,
+  })
+  createdAt!: string;
+  @Input({
+    required: true,
+  })
+  ownerName!: string;
   @Output() completeToggle = new EventEmitter<null>();
+
   constructor(private utilService: UtilService) {}
 
   onComplete() {

@@ -1,12 +1,10 @@
-require('./services/sentry-init.js');
-const Sentry = require('@sentry/node');
+import "./services/sentry-init.js";
+import * as Sentry from "@sentry/node";
 
-const { deleteObjects } = require('./services/storage');
+import { deleteObjects } from "./services/storage";
 
-const Op = require('sequelize').Op;
-const SQ = require('./models').sequelize;
-const Image = require('./models').Image;
-const Recipe_Image = require('./models').Recipe_Image;
+import { Op } from "sequelize";
+import { sequelize, Image, Recipe_Image } from "./models/index.js";
 
 const cleanupStaleImages = async () => {
   try {
@@ -14,37 +12,35 @@ const cleanupStaleImages = async () => {
     lt.setDate(lt.getDate() - 7); // Only remove images older than 7 days
 
     const staleImages = await Image.findAll({
-      include: [{
-        model: Recipe_Image,
-        required: false,
-        attributes: ['id']
-      }],
+      include: [
+        {
+          model: Recipe_Image,
+          required: false,
+          attributes: ["id"],
+        },
+      ],
       where: {
         [Op.and]: [
-          SQ.where(
-            SQ.col('Recipe_Images.id'),
-            'IS',
-            null
-          ),
+          sequelize.where(sequelize.col("Recipe_Images.id"), "IS", null),
           {
-            createdAt: { [Op.lt]: lt }
-          }
-        ]
+            createdAt: { [Op.lt]: lt },
+          },
+        ],
       },
       subQuery: false,
-      limit: 50
+      limit: 50,
     });
 
     if (staleImages.length === 0) return process.exit(0);
 
-    await deleteObjects(staleImages.map(image => image.key));
+    await deleteObjects(staleImages.map((image) => image.key));
 
     await Image.destroy({
       where: {
         id: {
-          [Op.in]: staleImages.map(image => image.id)
-        }
-      }
+          [Op.in]: staleImages.map((image) => image.id),
+        },
+      },
     });
 
     process.exit(0);

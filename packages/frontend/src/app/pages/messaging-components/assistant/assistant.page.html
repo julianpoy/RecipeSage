@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title> {{ 'pages.assistant.title' | translate }} </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button
+        class="reload"
+        [ngClass]="{ reloading: reloading }"
+        (click)="reload()"
+      >
+        <ion-icon name="refresh" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div>
+    <null-state>
+      <logo-icon virtualSlot="header"></logo-icon>
+      <ion-label virtualSlot="body">
+        <h2>{{ 'pages.assistant.welcome.1' | translate }}</h2>
+        <br /><br />
+        <p>
+          {{ 'pages.assistant.welcome.2' | translate }}<br />
+          {{ 'pages.assistant.welcome.3' | translate }}<br />
+          <br /><br />
+        </p>
+      </ion-label>
+    </null-state>
+    <div
+      class="message"
+      [ngClass]="{'me': message.role === 'user', 'blue': message.role !== 'user' }"
+      *ngFor="let message of messages; let i = index; trackBy: trackByFn"
+      [id]="'message-' + message.id"
+    >
+      <div class="time-divider" *ngIf="message.deservesDateDiff">
+        {{ message.dateDiff }}
+      </div>
+      <div class="chat" *ngIf="!message.recipeId" (click)="setSelectedChat(i)">
+        <span [innerHTML]="message.content"></span>
+      </div>
+      <div class="recipe" *ngIf="message.recipe && message.role !== 'user'">
+        <!-- RECIPIENT -->
+        <ion-item
+          *ngIf="message.recipe"
+          (click)="openRecipe(message.recipe)"
+          lines="none"
+          button="true"
+        >
+          <ion-avatar
+            *ngIf="message.recipe.recipeImages && message.recipe.recipeImages.length > 0"
+            slot="start"
+          >
+            <img src="{{ message.recipe.recipeImages[0].image.location }}" />
+          </ion-avatar>
+          <ion-avatar
+            class="assistant-recipe-image"
+            *ngIf="!message.recipe.recipeImages || message.recipe.recipeImages.length === 0"
+            slot="start"
+          >
+            <img src="assets/imgs/logo_green.png" />
+          </ion-avatar>
+          <ion-label>
+            <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
+            <p class="description">
+              {{ 'pages.messageThread.clickToOpen' | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item
+          *ngIf="!message.recipe"
+          (click)="setSelectedChat(i)"
+          lines="none"
+        >
+          <ion-label>
+            <h2 class="ion-text-wrap">
+              {{ 'pages.messageThread.recipeDeleted' | translate }}
+            </h2>
+            <p class="description">
+              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </div>
+
+      <div class="recipe" *ngIf="message.recipe && message.role === 'user'">
+        <!-- SENDER -->
+        <ion-item
+          *ngIf="message.recipe"
+          (click)="openRecipe(message.recipe)"
+          lines="none"
+          button="true"
+        >
+          <ion-avatar
+            *ngIf="message.recipe.recipeImages && message.recipe.recipeImages.length > 0"
+            slot="start"
+          >
+            <img src="{{ message.recipe.recipeImages[0].image.location }}" />
+          </ion-avatar>
+          <ion-label>
+            <h2 class="ion-text-wrap">{{ message.recipe.title }}</h2>
+            <p class="description">
+              {{ 'pages.messageThread.recipeCopySent' | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item
+          *ngIf="!message.recipe"
+          (click)="setSelectedChat(i)"
+          lines="none"
+        >
+          <ion-label>
+            <h2 class="ion-text-wrap">
+              {{ 'pages.messageThread.recipeDeleted' | translate }}
+            </h2>
+            <p class="description">
+              {{ 'pages.messageThread.yourRecipeDeleted' | translate }}
+            </p>
+          </ion-label>
+        </ion-item>
+      </div>
+
+      <div class="chatDetails" *ngIf="selectedChatIdx === i">
+        {{ message.formattedDate }}
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <form ng-submit="sendMessage()">
+    <ion-item>
+      <ion-textarea
+        id="assistant-message-textarea"
+        autocomplete="true"
+        spellcheck="true"
+        autocorrect="on"
+        autocapitalize="on"
+        name="body"
+        [(ngModel)]="pendingMessage"
+        (keydown)="onMessageKeyDown($event)"
+        type="text"
+        placeholder="{{ 'pages.messageThread.messagePlaceholder' | translate }}"
+        (ionFocus)="keyboardOpened()"
+        [disabled]="processing"
+      ></ion-textarea>
+      <ion-button
+        type="submit"
+        (click)="sendMessage()"
+        fill="clear"
+        slot="end"
+        class="submit"
+      >
+        <ion-icon *ngIf="!processing" name="send" slot="icon-only"></ion-icon>
+        <ion-spinner *ngIf="processing" name="crescent"></ion-spinner>
+      </ion-button>
+    </ion-item>
+  </form>
+</ion-footer>

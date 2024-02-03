@@ -1,4 +1,13 @@
 # Add files here to ignore them from prettier formatting
 
-/dist
-/coverage
+build
+dist
+coverage
+www
+.angular
+
+
+/.nx/cache
+
+packages/frontend/src/assets/i18n/*.json
+!packages/frontend/src/assets/i18n/en-us.json

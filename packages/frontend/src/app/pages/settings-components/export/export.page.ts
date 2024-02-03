@@ -1,17 +1,23 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { RecipeService, ExportFormat } from '~/services/recipe.service';
-import { RouteMap } from '~/services/util.service';
+import { RecipeService, ExportFormat } from "~/services/recipe.service";
+import { RouteMap } from "~/services/util.service";
+import { UserService } from "../../../services/user.service";
 
 @Component({
-  selector: 'page-export',
-  templateUrl: 'export.page.html',
-  styleUrls: ['export.page.scss']
+  selector: "page-export",
+  templateUrl: "export.page.html",
+  styleUrls: ["export.page.scss"],
 })
 export class ExportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
 
-  constructor(public recipeService: RecipeService) {}
+  constructor(
+    private userService: UserService,
+    private recipeService: RecipeService,
+  ) {}
+
+  ionViewWillEnter() {}
 
   getExportURL(format: ExportFormat) {
     return this.recipeService.getExportURL(format);
@@ -22,19 +28,32 @@ export class ExportPage {
     window.open(exportUrl);
   }
 
-  exportAsJSONLD() {
+  async exportAsJSONLD() {
+    // Fetch user account to validate user is logged in
+    const me = await this.userService.me();
+    if (!me.success) return;
+
     this.export(ExportFormat.JSONLD);
   }
 
-  exportAsXML() {
+  async exportAsXML() {
+    const me = await this.userService.me();
+    if (!me.success) return;
+
     this.export(ExportFormat.XML);
   }
 
-  exportAsTXT() {
+  async exportAsTXT() {
+    const me = await this.userService.me();
+    if (!me.success) return;
+
     this.export(ExportFormat.TXT);
   }
 
-  exportAsPDF() {
+  async exportAsPDF() {
+    const me = await this.userService.me();
+    if (!me.success) return;
+
     this.export(ExportFormat.PDF);
   }
 }

@@ -1,0 +1,17 @@
+.results-list ion-item {
+  --background: var(--ion-background-tint-color);
+}
+
+.results-list {
+  position: absolute;
+  width: 100%;
+  overflow-y: auto;
+  margin-top: -6px;
+  z-index: 2;
+  background-color: var(--ion-background-tint-color);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.4);
+}
+
+.results-list-container {
+  position: relative;
+}

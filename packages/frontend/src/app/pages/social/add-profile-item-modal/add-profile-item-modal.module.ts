@@ -1,17 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { AddProfileItemModalPage } from './add-profile-item-modal.page';
-import { SelectRecipeModule } from '../../../components/select-recipe/select-recipe.module';
-import { SelectLabelModule } from '../../../components/select-label/module';
-import {GlobalModule} from '~/global.module';
+import { AddProfileItemModalPage } from "./add-profile-item-modal.page";
+import { SelectRecipeModule } from "../../../components/select-recipe/select-recipe.module";
+import { SelectLabelModule } from "../../../components/select-label/select-label.module";
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    AddProfileItemModalPage,
-  ],
+  declarations: [AddProfileItemModalPage],
   imports: [
     CommonModule,
     IonicModule,
@@ -19,10 +17,7 @@ import {GlobalModule} from '~/global.module';
     ReactiveFormsModule,
     SelectRecipeModule,
     SelectLabelModule,
-    GlobalModule
-  ],
-  entryComponents: [
-    AddProfileItemModalPage,
+    GlobalModule,
   ],
 })
 export class AddProfileItemModalModule {}

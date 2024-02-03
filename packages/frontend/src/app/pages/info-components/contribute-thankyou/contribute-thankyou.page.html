@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -7,9 +6,7 @@
 
     <ion-title>{{ 'pages.contributeThankYou.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content class="ion-padding ion-text-center">
   <p class="headline">{{ 'pages.contributeThankYou.title' | translate }}</p>
@@ -19,7 +16,11 @@
 
     <p>{{ 'pages.contributeThankYou.thanks' | translate }}</p>
 
-    <p><a [routerLink]="accountPath">{{ 'pages.contributeThankYou.bonus' | translate }}</a></p>
+    <p>
+      <a [routerLink]="accountPath"
+        >{{ 'pages.contributeThankYou.bonus' | translate }}</a
+      >
+    </p>
 
     <br />
 

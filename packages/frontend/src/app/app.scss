@@ -1,4 +1,4 @@
-@import 'src/theme/shared-variables.scss';
+@import "src/theme/shared-variables.scss";
 
 // App Styles
 // ----------------------------------------------------------------------------
@@ -7,11 +7,35 @@
 // file can hold Sass mixins, functions, and placeholder classes to be imported
 // and used throughout the application.
 
-ion-router-outlet.cookingToolbarOpen {
-  bottom: 60px;
+ion-searchbar {
+  .searchbar-input-container {
+    input.searchbar-input {
+      font-size: 1rem;
+    }
+  }
 }
 
-.bar-button-default-md:hover:not(.disable-hover), .bar-button-clear-md-default:hover:not(.disable-hover), .bar-button-md-default:hover:not(.disable-hover) {
+ion-router-outlet.cookingToolbarOpen,
+ion-menu.cookingToolbarOpen {
+  height: calc(100% - 60px);
+}
+
+.ion-checkbox-label,
+.ion-radio-label {
+  line-height: 24px;
+}
+
+.ion-checkbox-label p,
+.ion-radio-label p {
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 20px;
+}
+
+.bar-button-default-md:hover:not(.disable-hover),
+.bar-button-clear-md-default:hover:not(.disable-hover),
+.bar-button-md-default:hover:not(.disable-hover) {
   color: lightgrey;
 }
 
@@ -19,7 +43,16 @@ ion-router-outlet.cookingToolbarOpen {
   font-size: 40px;
 }
 
-ion-popover, .alert-wrapper {
+.medium-icon {
+  font-size: 2em;
+}
+
+.eye-icon {
+  vertical-align: middle;
+}
+
+ion-popover,
+.alert-wrapper {
   --width: 280px;
   --max-width: 280px;
 }
@@ -39,7 +72,8 @@ ion-thumbnail {
     height: 200px;
   }
 
-  .popover-content, .alert-wrapper {
+  .popover-content,
+  .alert-wrapper {
     --width: 350px;
     --max-width: 350px;
   }
@@ -95,11 +129,13 @@ ion-thumbnail {
     }
 
     html[mode="ios"] & .label {
-      background: rgba(0,0,0,0.12);
+      background: rgba(0, 0, 0, 0.12);
       border-radius: 10px;
     }
     html:not([mode="ios"]) & .label {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 1px 2px rgba(0, 0, 0, 0.24);
       border-radius: 2px;
     }
   }
@@ -116,7 +152,9 @@ ion-thumbnail {
   }
 
   .autocomplete {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.12),
+      0 1px 2px rgba(0, 0, 0, 0.24);
     max-width: 600px;
     max-height: 200px;
     overflow-y: auto;
@@ -132,16 +170,15 @@ ion-thumbnail {
 }
 
 // For floating input placeholders
-ion-label[position=floating] {
+ion-label[position="floating"] {
   color: #999 !important;
 }
 
 // Fix floating label vertical position issue.
 // This prop is overriden when label is in the floating state
 .label-floating.sc-ion-label-md-h {
-  transform: translate3d(0,122%,0);
+  transform: translate3d(0, 122%, 0);
 }
-
 
 .invisible {
   position: absolute;
@@ -159,6 +196,8 @@ ion-label[position=floating] {
 ion-toast {
   --background: var(--ion-color-dark-tint);
   --color: var(--ion-color-light);
+  /* Override button color, must be done this way because they don't otherwise allow you to... */
+  --ion-color-step-100: var(--ion-color-light);
 }
 
 ion-button.button-outline {
@@ -169,8 +208,9 @@ ion-button.button-outline {
   max-width: 300px;
 }
 
-.sc-ion-label-ios-s > p, .sc-ion-label-md-s > p {
-  color: rgba(var(--ion-text-color-rgb,0,0,0),.8);
+.sc-ion-label-ios-s > p,
+.sc-ion-label-md-s > p {
+  color: rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.8);
 }
 
 .rs-date {
@@ -178,4 +218,16 @@ ion-button.button-outline {
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+.language-select-alert .select-interface-option {
+  text-transform: capitalize;
+}
+
+/* Must be added globally, since iframe is loaded outside of the context of Angular CSS encapsulation */
+.gsi-container iframe {
+  /* Center the "continue as XYZ" button */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color-scheme: light;
 }

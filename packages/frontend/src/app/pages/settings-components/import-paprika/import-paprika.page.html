@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar color="nav">
     <ion-buttons slot="start">
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
@@ -7,9 +6,7 @@
 
     <ion-title>{{ 'pages.importPaprika.title' | translate }}</ion-title>
   </ion-toolbar>
-
 </ion-header>
-
 
 <ion-content>
   <ion-item lines="none">
@@ -21,9 +18,7 @@
       </p>
       <br />
       <p>
-        <b>
-          {{ 'pages.importPaprika.description3' | translate }}
-        </b><br />
+        <b> {{ 'pages.importPaprika.description3' | translate }} </b><br />
         {{ 'pages.importPaprika.description4' | translate }}<br />
       </p>
       <br />
@@ -33,19 +28,24 @@
       </p>
       <br />
       <br />
-      <p>
-        {{ 'pages.importPaprika.description7' | translate }}
-      </p>
+      <p>{{ 'pages.importPaprika.description7' | translate }}</p>
     </ion-label>
   </ion-item>
 
   <br />
 
   <div class="ion-text-center ion-padding">
-    <input id="filePicker" type="file" (change)="setFile($event)" style="display: none;" accept=".paprikarecipes" />
+    <input
+      id="filePicker"
+      type="file"
+      (change)="setFile($event)"
+      style="display: none"
+      accept=".paprikarecipes"
+    />
     <ion-button fill="outline" (click)="filePicker()">
       <span *ngIf="imageFile">
-        {{ 'pages.importPaprika.filePicker.file' | translate:{fileName:imageFile.name} }}
+        {{ 'pages.importPaprika.filePicker.file' |
+        translate:{fileName:imageFile.name} }}
       </span>
       <span *ngIf="!imageFile">
         {{ 'pages.importPaprika.filePicker.noFile' | translate }}
@@ -61,7 +61,8 @@
 
     <div class="ion-padding" *ngIf="isFileTooLarge()">
       <p>
-        <b>{{ 'pages.importLivingCookbook.step2.sizeError' | translate }}</b><br />
+        <b>{{ 'pages.importLivingCookbook.step2.sizeError' | translate }}</b
+        ><br />
         <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
           {{ 'pages.importLivingCookbook.step2.sizeError.contact' | translate }}
         </a>
@@ -73,7 +74,8 @@
         {{ 'pages.importLivingCookbook.step3.upload' | translate }}
       </ion-button>
       <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">
-        {{ 'pages.importLivingCookbook.step3.upload.ignoreWarning' | translate }}
+        {{ 'pages.importLivingCookbook.step3.upload.ignoreWarning' | translate
+        }}
       </ion-button>
       <ion-button *ngIf="loading">
         {{ 'pages.importLivingCookbook.step3.loading' | translate }}

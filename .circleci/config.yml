@@ -10,7 +10,7 @@ commands:
             - dependency-cache-
       - run:
           name: install-deps
-          command: 'npm install'
+          command: "npm install"
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
@@ -33,12 +33,13 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_SSL: false
           POSTGRES_LOGGING: false
+          DATABASE_URL: postgresql://chefbook:admin@localhost:5432/chefbook_test?connection_limit=5
           SEARCH_PROVIDER: none
           STORAGE_TYPE: filesystem
           FILESYSTEM_STORAGE_PATH: ~/project/rsdata
           GRIP_URL: http://localhost:5561/
           GRIP_KEY: changeme
-      - image: postgres:9.6.9
+      - image: postgres:16.1
         environment:
           POSTGRES_USER: chefbook
           POSTGRES_PASSWORD: admin
@@ -47,11 +48,21 @@ jobs:
       - checkout
       - install-dependencies
       - run:
-          name: lint, typecheck, test, build
-          command: npx nx run-many --targets=lint,ngx-translate-lint,typecheck,test,build
+          name: prettier
+          command: npx prettier --check .
       - run:
-          name: tmp
-          command: ls packages/frontend
+          name: migrate
+          command: npx prisma migrate dev
+      - run:
+          name: start api
+          command: npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www
+          background: true
+      - run:
+          name: wait for api
+          command: dockerize -wait tcp://localhost:3000 -timeout 30s
+      - run:
+          name: lint, typecheck, test, build
+          command: npx nx run-many --targets=lint,typecheck,test,build
   push_backend:
     resource_class: large
     docker:
@@ -98,16 +109,16 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: npx nx build @recipesage/frontend
+          command: npx nx build frontend
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
       - run:
           name: set-frontend-version
-          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
+          command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
       - run:
           name: set-service-worker-version
-          command: sed -i "s/APP_VERSION = 'development';/APP_VERSION = '${CIRCLE_TAG:=stg}';/" www/service-worker.js
+          command: sed -i "s/APP_VERSION = \"development\";/APP_VERSION = \"${CIRCLE_TAG:=stg}\";/" www/service-worker.js
       - run:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
@@ -130,16 +141,16 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: npx nx build:selfhost @recipesage/frontend
+          command: npx nx build:selfhost frontend
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
       - run:
           name: set-frontend-version
-          command: sed -i "s/window.version = 'development';/window.version = '${CIRCLE_TAG:=stg}';/" www/index.html
+          command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
       - run:
           name: set-service-worker-version
-          command: sed -i "s/APP_VERSION = 'development';/APP_VERSION = '${CIRCLE_TAG:=stg}';/" www/service-worker.js
+          command: sed -i "s/APP_VERSION = \"development\";/APP_VERSION = \"${CIRCLE_TAG:=stg}\";/" www/service-worker.js
       - run:
           name: webapp-selfhost.sh
           command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}
@@ -186,4 +197,3 @@ workflows:
               only: /^v[0-9]+(\.[0-9]+)*.*/
             branches:
               ignore: /.*/
-

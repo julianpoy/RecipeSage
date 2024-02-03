@@ -1,8 +1,8 @@
-import {StorageObjectRecord, writeBuffer} from './index';
-import {ObjectTypes} from './shared';
-import * as fs from 'fs/promises';
-import {transformImageBuffer} from '../file-transformer';
-import {fetchURL} from '../fetch';
+import { StorageObjectRecord, writeBuffer } from "./index";
+import { ObjectTypes } from "./shared";
+import * as fs from "fs/promises";
+import { transformImageBuffer } from "../file-transformer";
+import { fetchURL } from "../fetch";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -18,6 +18,8 @@ export const writeImageURL = async (
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
   const response = await fetchURL(url);
+  if (response.status !== 200)
+    throw new Error(`Could not fetch image: ${response.status}`);
   const buffer = await response.buffer();
 
   return writeImageBuffer(objectType, buffer, highResConversion);
@@ -38,24 +40,25 @@ export const writeImageBuffer = async (
   buffer: Buffer,
   highResConversion: boolean,
 ): Promise<StorageObjectRecord> => {
-  const height = highResConversion ? HIGH_RES_IMG_CONVERSION_HEIGHT : LOW_RES_IMG_CONVERSION_HEIGHT;
-  const width = highResConversion ? HIGH_RES_IMG_CONVERSION_WIDTH : LOW_RES_IMG_CONVERSION_WIDTH;
-  const quality = highResConversion ? HIGH_RES_IMG_CONVERSION_QUALITY : LOW_RES_IMG_CONVERSION_QUALITY;
+  const height = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_HEIGHT
+    : LOW_RES_IMG_CONVERSION_HEIGHT;
+  const width = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_WIDTH
+    : LOW_RES_IMG_CONVERSION_WIDTH;
+  const quality = highResConversion
+    ? HIGH_RES_IMG_CONVERSION_QUALITY
+    : LOW_RES_IMG_CONVERSION_QUALITY;
 
   const converted = await transformImageBuffer(
     buffer,
     width,
     height,
     quality,
-    highResConversion ? 'inside' : 'cover',
+    highResConversion ? "inside" : "cover",
   );
 
-  const result = await writeBuffer(
-    objectType,
-    converted,
-    'image/jpeg'
-  );
+  const result = await writeBuffer(objectType, converted, "image/jpeg");
 
   return result;
 };
-

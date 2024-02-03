@@ -1,25 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 
-import { MealPlanPopoverPage } from './meal-plan-popover.page';
+import { MealPlanPopoverPage } from "./meal-plan-popover.page";
 
-import { GlobalModule } from '~/global.module';
+import { GlobalModule } from "~/global.module";
 
 @NgModule({
-  declarations: [
-    MealPlanPopoverPage,
-  ],
+  declarations: [MealPlanPopoverPage],
   imports: [
     GlobalModule,
     CommonModule,
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
-  entryComponents: [
-    MealPlanPopoverPage
   ],
 })
 export class MealPlanPopoverPageModule {}
