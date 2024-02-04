@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { UtilService } from "../../services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MealPlanPreferenceKey } from "@recipesage/util";
+import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import {
   MealName,
   MealPlan,

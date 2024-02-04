@@ -19,7 +19,7 @@ import {
   ShoppingListSortOptions,
   SupportedFontSize,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 
 export const updatePreferences = publicProcedure
   .input(

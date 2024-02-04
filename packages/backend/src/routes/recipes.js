@@ -18,7 +18,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import * as Util from "@recipesage/util";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
 import * as SearchService from "@recipesage/trpc";
 import * as SubscriptionsService from "../services/subscriptions.js";

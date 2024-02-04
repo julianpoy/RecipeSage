@@ -4,7 +4,7 @@ import { validateSession } from "../../utils/validateSession";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { labelSummary } from "../../types/labelSummary";
-import { cleanLabelTitle } from "@recipesage/util";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const createLabel = publicProcedure
   .input(

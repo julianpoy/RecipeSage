@@ -4,7 +4,7 @@ import { RecipeService, ParsedIngredient } from "../../services/recipe.service";
 
 import { ScaleRecipeComponent } from "~/modals/scale-recipe/scale-recipe.component";
 import { PreferencesService } from "../../services/preferences.service";
-import { ShoppingListPreferenceKey } from "@recipesage/util";
+import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 
 @Component({
   selector: "select-ingredients",

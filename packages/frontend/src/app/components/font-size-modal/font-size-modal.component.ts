@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { PreferencesService } from "../../services/preferences.service";
-import { GlobalPreferenceKey, SupportedFontSize } from "@recipesage/util";
+import {
+  GlobalPreferenceKey,
+  SupportedFontSize,
+} from "@recipesage/util/shared";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({

@@ -1,13 +1,13 @@
 {
-  "name": "util",
+  "name": "express",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/util/src",
+  "sourceRoot": "packages/express/src",
   "projectType": "library",
   "targets": {
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "packages/util",
+        "cwd": "packages/express",
         "command": "tsc --noEmit"
       }
     },
@@ -15,7 +15,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/util/**/*.ts"],
+        "lintFilePatterns": ["packages/express/**/*.ts"],
         "maxWarnings": 0
       }
     }

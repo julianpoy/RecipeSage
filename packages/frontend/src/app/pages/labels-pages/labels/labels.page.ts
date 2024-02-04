@@ -15,7 +15,7 @@ import { LabelService, Label } from "~/services/label.service";
 import { LabelsPopoverPage } from "~/pages/labels-pages/labels-popover/labels-popover.page";
 import { ManageLabelModalPage } from "~/pages/labels-pages/manage-label-modal/manage-label-modal.page";
 import { PreferencesService } from "~/services/preferences.service";
-import { ManageLabelsPreferenceKey } from "@recipesage/util";
+import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
 import { TRPCService } from "../../../services/trpc.service";
 import { LabelSummary } from "packages/trpc/src/types/labelSummary";
 import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";

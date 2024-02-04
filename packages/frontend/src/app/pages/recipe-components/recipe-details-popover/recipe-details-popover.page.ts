@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
 import { PreferencesService } from "~/services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util";
+import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { WakeLockService } from "~/services/wakelock.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 

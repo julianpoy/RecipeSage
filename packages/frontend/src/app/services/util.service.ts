@@ -5,7 +5,7 @@ import {
   AppTheme,
   SupportedFontSize,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import { NavController } from "@ionic/angular";
 
 export interface RecipeTemplateModifiers {

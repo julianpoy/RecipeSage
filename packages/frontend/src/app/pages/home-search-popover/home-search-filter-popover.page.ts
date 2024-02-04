@@ -6,7 +6,7 @@ import { Label, LabelService } from "~/services/label.service";
 import { UtilService } from "~/services/util.service";
 import { QuickTutorialService } from "~/services/quick-tutorial.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MyRecipesPreferenceKey } from "@recipesage/util";
+import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
 import {
   ResettableSelectGroupedOptions,
   ResettableSelectOption,

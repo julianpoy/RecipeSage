@@ -15,7 +15,7 @@ import {
   ShoppingListPreferenceKey,
   ShoppingListSortOptions,
   SupportedFontSize,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import { TRPCService } from "./trpc.service";
 import { UtilService } from "./util.service";
 import { TranslateService } from "@ngx-translate/core";

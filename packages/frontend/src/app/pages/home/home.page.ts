@@ -22,7 +22,10 @@ import { RouteMap, UtilService } from "~/services/util.service";
 
 import { LabelService, Label } from "~/services/label.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MyRecipesPreferenceKey, GlobalPreferenceKey } from "@recipesage/util";
+import {
+  MyRecipesPreferenceKey,
+  GlobalPreferenceKey,
+} from "@recipesage/util/shared";
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";

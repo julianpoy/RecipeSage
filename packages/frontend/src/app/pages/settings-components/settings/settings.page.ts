@@ -15,7 +15,7 @@ import {
   GlobalPreferenceKey,
   PreferencesSync,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import {
   FeatureFlagService,
   FeatureFlagKeys,
