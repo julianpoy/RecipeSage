@@ -8,6 +8,7 @@ import { faker } from "@faker-js/faker";
 describe("deleteRecipe", () => {
   let user: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
+  jest.setTimeout(50000);
 
   beforeAll(async () => {
     ({ user, trpc } = await trpcSetup());
@@ -49,4 +50,12 @@ describe("deleteRecipe", () => {
     });
     expect(response2).toEqual(null);
   });
+
+  it("must throw on recipe not found", async () => {
+    return expect(async () => {
+     await trpc.recipes.deleteRecipe.mutate({
+       id: "00000000-0c70-4718-aacc-05add19096b5",
+     });
+    }).rejects.toThrow("Recipe not found");
+ });
 });

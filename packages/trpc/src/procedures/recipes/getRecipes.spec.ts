@@ -1,27 +1,9 @@
-import { trpcSetup, tearDown, createTrpcClient } from "../../testutils";
+import { trpcSetup, tearDown, createTrpcClient, getRecipeStats } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
 import { faker } from "@faker-js/faker";
-
-function getRecipeStats(userId: string) {
-  return {
-    userId,
-    title: faker.string.alphanumeric(10),
-    description: faker.string.alphanumeric(10),
-    yield: faker.string.alphanumeric(10),
-    folder: "main",
-    activeTime: faker.string.alphanumeric(10),
-    totalTime: faker.string.alphanumeric(10),
-    source: faker.string.alphanumeric(10),
-    url: faker.string.alphanumeric(10),
-    notes: faker.string.alphanumeric(10),
-    ingredients: faker.string.alphanumeric(10),
-    instructions: faker.string.alphanumeric(10),
-    rating: faker.number.int({ min: 1, max: 5 }),
-  };
-}
 
 describe("getRecipes", () => {
   jest.setTimeout(50000);
@@ -130,7 +112,7 @@ describe("getRecipes - error cases", () => {
   jest.setTimeout(50000);
   it("invalid session", async () => {
     const trpcNotLoggedIn = await createTrpcClient("12345");
-    expect(async () => {
+    return expect(async () => {
       await trpcNotLoggedIn.recipes.getRecipes.query({
         limit: 3,
         folder: "main",
