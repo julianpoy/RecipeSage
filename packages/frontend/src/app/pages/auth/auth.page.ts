@@ -38,6 +38,8 @@ export class AuthPage {
 
   isInModal = false;
 
+  revealPassword = false;
+
   constructor(
     public events: EventService,
     public translate: TranslateService,

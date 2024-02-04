@@ -223,3 +223,7 @@ ion-button.button-outline {
 .language-select-alert .select-interface-option {
   text-transform: capitalize;
 }
+
+.ion-valid {
+  --highlight-color: var(--ion-text-color) !important;
+}
