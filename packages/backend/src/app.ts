@@ -1,6 +1,8 @@
 import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
+import { NotFoundError, ServerError, typesafeExpressIndexRouter } from '@recipesage/express';
+
 import * as express from "express";
 import * as path from "path";
 import * as logger from "morgan";
@@ -26,6 +28,7 @@ import data from "./routes/data.js";
 import proxy from "./routes/proxy.js";
 
 import ws from "./routes/ws.js";
+import { ErrorRequestHandler } from "express";
 
 const app = express();
 
@@ -39,13 +42,10 @@ const corsWhitelist = [
 ];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (corsWhitelist.indexOf(origin) !== -1) {
-      callback(null, true); // Enable CORS for whitelisted domains
-    } else {
-      callback(null, { origin: false }); // Disable CORS, domain not on whitelist
-    }
+    const enableCors = origin && corsWhitelist.indexOf(origin) !== -1;
+    callback(null, enableCors);
   },
-};
+} satisfies cors.CorsOptions;
 
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
@@ -60,9 +60,9 @@ app.use(
   bodyParser.json({
     limit: "250MB",
     verify: (req, res, buf) => {
-      const url = req.originalUrl;
+      const url = (req as any).originalUrl;
       if (url.startsWith("/payments/stripe/webhooks")) {
-        req.rawBody = buf.toString();
+        (req as any).rawBody = buf.toString();
       }
     },
   }),
@@ -70,6 +70,7 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");
+app.use("/", typesafeExpressIndexRouter);
 app.use("/", index);
 app.use("/trpc", trpcExpressMiddleware);
 app.use("/users", users);
@@ -88,14 +89,13 @@ app.use("/ws", ws);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  const err = new Error("Not Found");
-  err.status = 404;
+  const err = new NotFoundError("Not Found");
   next(err);
 });
 
-let logError = (err) => {
+let logError = (err: ServerError) => {
   // Do not log expected RESTful errors
-  let isExpectedError = err.status < 500 || err > 599;
+  let isExpectedError = err.status < 500 || err.status > 599;
   if (isExpectedError) return;
 
   console.error(err);
@@ -103,21 +103,22 @@ let logError = (err) => {
   Sentry.captureException(err);
 };
 
-// error handler
-app.use(function (err, req, res) {
+const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
+  const err = _err as ServerError;
+  if (!err.status) err.status = 500;
+
   // set locals, only providing error in development
   res.locals.message = err.message;
-
-  if (!err.status) err.status = 500;
 
   res.locals.error = process.env.NODE_ENV === "production" ? {} : err;
 
   logError(err);
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status);
   res.render("error");
-});
+}
+app.use(appErrorHandler);
 
 export { app };
 
