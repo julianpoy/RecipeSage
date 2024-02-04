@@ -1,7 +1,11 @@
 import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
-import { NotFoundError, ServerError, typesafeExpressIndexRouter } from '@recipesage/express';
+import {
+  NotFoundError,
+  ServerError,
+  typesafeExpressIndexRouter,
+} from "@recipesage/express";
 
 import * as express from "express";
 import * as path from "path";
@@ -60,8 +64,10 @@ app.use(
   bodyParser.json({
     limit: "250MB",
     verify: (req, res, buf) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const url = (req as any).originalUrl;
       if (url.startsWith("/payments/stripe/webhooks")) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (req as any).rawBody = buf.toString();
       }
     },
@@ -93,9 +99,9 @@ app.use(function (req, res, next) {
   next(err);
 });
 
-let logError = (err: ServerError) => {
+const logError = (err: ServerError) => {
   // Do not log expected RESTful errors
-  let isExpectedError = err.status < 500 || err.status > 599;
+  const isExpectedError = err.status < 500 || err.status > 599;
   if (isExpectedError) return;
 
   console.error(err);
@@ -117,7 +123,7 @@ const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
   // render the error page
   res.status(err.status);
   res.render("error");
-}
+};
 app.use(appErrorHandler);
 
 export { app };

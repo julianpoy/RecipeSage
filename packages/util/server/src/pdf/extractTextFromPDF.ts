@@ -15,7 +15,7 @@ const getPageText = async (pdf: PDFDocumentProxy, pageNum: number) => {
   return pageText;
 };
 
-export const getPDFText = async (
+export const extractTextFromPDF = async (
   source: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters,
   maxPages?: number,
 ): Promise<string> => {
