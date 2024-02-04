@@ -589,5 +589,7 @@
     "pages.importJsonLD.description6": "Overvej venligst at donere, hvis din fil indeholder et stort antal opskrifter eller billeder.",
     "pages.importJsonLD.fileTypeWarning": "Advarsel! Denne filtype ender ikke på .json. Den virker måske ikke!",
     "pages.importJsonLD.fileTooLarge": "Denne fil er for stor til at blive uploadet direkte.",
-    "pages.importJsonLD.fileTooLarge.contact": "Kontakt mig for at få din database importeret manuelt."
+    "pages.importJsonLD.fileTooLarge.contact": "Kontakt mig for at få din database importeret manuelt.",
+    "pages.importJsonLD.upload": "Upload og import",
+    "pages.importJsonLD.upload.ignoreWarning": "Upload og import alligevel"
 }
