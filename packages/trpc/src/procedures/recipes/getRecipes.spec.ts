@@ -1,4 +1,9 @@
-import { trpcSetup, tearDown, createTrpcClient, getRecipeStats } from "../../testutils";
+import {
+  trpcSetup,
+  tearDown,
+  createTrpcClient,
+  getRecipeStats,
+} from "../../testutils";
 import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";

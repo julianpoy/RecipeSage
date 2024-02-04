@@ -53,9 +53,9 @@ describe("deleteRecipe", () => {
 
   it("must throw on recipe not found", async () => {
     return expect(async () => {
-     await trpc.recipes.deleteRecipe.mutate({
-       id: "00000000-0c70-4718-aacc-05add19096b5",
-     });
+      await trpc.recipes.deleteRecipe.mutate({
+        id: "00000000-0c70-4718-aacc-05add19096b5",
+      });
     }).rejects.toThrow("Recipe not found");
- });
+  });
 });
