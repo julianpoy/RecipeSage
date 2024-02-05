@@ -1,12 +1,12 @@
-import { ocrImageToRecipe } from "@recipesage/util/server";
+import { pdfToRecipe } from "@recipesage/util/server";
 import { publicProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const getRecipeFromOCR = publicProcedure
+export const getRecipeFromPDF = publicProcedure
   .input(
     z.object({
-      image: z.string(),
+      pdf: z.string(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -18,9 +18,9 @@ export const getRecipeFromOCR = publicProcedure
       });
     }
 
-    const imageBuffer = Buffer.from(input.image, "base64");
+    const pdf = new Uint8Array(Buffer.from(input.pdf, "base64"));
 
-    const recognizedRecipe = await ocrImageToRecipe(imageBuffer);
+    const recognizedRecipe = await pdfToRecipe(pdf, 2);
     if (!recognizedRecipe) {
       throw new TRPCError({
         message: "Could not parse recipe from OCR results",

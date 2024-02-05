@@ -1,4 +1,5 @@
-import type { PDFDocumentProxy } from "pdfjs-dist";
+const PDFJSPromise = import("pdfjs-dist");
+import { PDFDocumentProxy } from "pdfjs-dist";
 import type {
   DocumentInitParameters,
   TextItem,
@@ -19,7 +20,6 @@ export const extractTextFromPDF = async (
   source: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters,
   maxPages?: number,
 ): Promise<string> => {
-  const PDFJSPromise = import("pdfjs-dist");
   const PDFJS = await PDFJSPromise;
   const pdf: PDFDocumentProxy = await PDFJS.getDocument(source).promise;
   maxPages ||= pdf.numPages;

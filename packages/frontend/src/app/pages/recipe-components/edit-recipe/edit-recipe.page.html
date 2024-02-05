@@ -25,14 +25,54 @@
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
-    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()">
-      <ion-icon name="link" slot="start"></ion-icon>
-      {{ 'pages.editRecipe.autoclip' | translate }}
+    <ion-button *ngIf="!recipe.id" id="autoclip-popover-trigger">
+      <ion-icon name="cut-outline" slot="start"></ion-icon>
+      {{ 'pages.editRecipe.showClipOptions' | translate }}
     </ion-button>
-    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()">
-      <ion-icon name="camera" slot="start"></ion-icon>
-      {{ 'pages.editRecipe.scan' | translate }}
-    </ion-button>
+    <ion-popover
+      trigger="autoclip-popover-trigger"
+      triggerAction="click"
+      [showBackdrop]="false"
+      [isOpen]="isAutoclipPopoverOpen"
+      (didPresent)="isAutoclipPopoverOpen = true"
+      (didDismiss)="isAutoclipPopoverOpen = false"
+    >
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-button
+            (click)="isAutoclipPopoverOpen = false; clipFromUrl()"
+            size="block"
+          >
+            <ion-icon name="link" slot="start"></ion-icon>
+            {{ 'pages.editRecipe.autoclip' | translate }}
+          </ion-button>
+          <ion-button
+            *ngIf="enableOCR"
+            (click)="isAutoclipPopoverOpen = false; clipFromText()"
+            size="block"
+          >
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            {{ 'pages.editRecipe.clipText' | translate }}
+          </ion-button>
+          <ion-button
+            *ngIf="enableOCR"
+            (click)="isAutoclipPopoverOpen = false; scanImage()"
+            size="block"
+          >
+            <ion-icon name="camera" slot="start"></ion-icon>
+            {{ 'pages.editRecipe.scanImage' | translate }}
+          </ion-button>
+          <ion-button
+            *ngIf="enableOCR"
+            (click)="isAutoclipPopoverOpen = false; scanPDF()"
+            size="block"
+          >
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            {{ 'pages.editRecipe.scanPDF' | translate }}
+          </ion-button>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
     <br />
     <br />
     <br />
