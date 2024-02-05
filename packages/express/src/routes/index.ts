@@ -1,7 +1,8 @@
-import express from "express";
+import * as express from "express";
+import { importRouter } from "./import";
 
 const router = express.Router();
 
-export {
-  router as typesafeExpressIndexRouter,
-}
+router.use("/import", importRouter);
+
+export { router as typesafeExpressIndexRouter };

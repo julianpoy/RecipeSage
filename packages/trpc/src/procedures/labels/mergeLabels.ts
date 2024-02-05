@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
+import { validateSession } from "@recipesage/util/server";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 

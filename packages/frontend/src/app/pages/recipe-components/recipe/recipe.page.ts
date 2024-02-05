@@ -40,7 +40,7 @@ import type {
   RecipeSummary,
   RecipeSummaryLite,
   UserPublic,
-} from "@recipesage/trpc";
+} from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({

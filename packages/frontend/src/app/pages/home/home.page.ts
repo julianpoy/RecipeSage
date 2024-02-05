@@ -29,7 +29,7 @@ import {
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
 import { TRPCService } from "~/services/trpc.service";
-import type { LabelSummary, RecipeSummaryLite } from "@recipesage/trpc";
+import type { LabelSummary, RecipeSummaryLite } from "@recipesage/prisma";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;

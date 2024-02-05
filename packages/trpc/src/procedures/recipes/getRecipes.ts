@@ -1,8 +1,10 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { getRecipesWithConstraints } from "../../dbHelpers/getRecipesWithConstraints";
+import {
+  getRecipesWithConstraints,
+  getFriendshipIds,
+} from "@recipesage/util/server";
 import { TRPCError } from "@trpc/server";
-import { getFriendshipIds } from "../../dbHelpers/getFriendshipIds";
 
 export const getRecipes = publicProcedure
   .input(

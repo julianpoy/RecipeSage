@@ -1,7 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
-import { labelGroupSummary } from "../../types/labelGroupSummary";
+import { validateSession } from "@recipesage/util/server";
+import { labelGroupSummary } from "@recipesage/prisma";
 
 export const getLabelGroups = publicProcedure.query(async ({ ctx }) => {
   const session = ctx.session;

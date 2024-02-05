@@ -26,10 +26,9 @@ import { Image, ImageService } from "~/services/image.service";
 import { getQueryParam } from "~/utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
-import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
-import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
 import { FeatureFlagService } from "../../../services/feature-flag.service";
 
 @Component({

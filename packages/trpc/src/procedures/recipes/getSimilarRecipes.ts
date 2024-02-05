@@ -1,7 +1,7 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { getSimilarRecipes as _getSimilarRecipes } from "../../dbHelpers/getSimilarRecipes";
+import { getSimilarRecipes as _getSimilarRecipes } from "@recipesage/util/server";
 
 export const getSimilarRecipes = publicProcedure
   .input(

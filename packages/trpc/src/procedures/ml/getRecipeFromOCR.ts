@@ -1,10 +1,12 @@
 import { publicProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { OpenAIHelper } from "../../services/chat/openai";
-import { initOCRFormatRecipe } from "../../services/chat/chatFunctions";
+import {
+  OpenAIHelper,
+  initOCRFormatRecipe,
+  ocrImageBuffer,
+} from "@recipesage/util/server";
 import { Prisma } from "@prisma/client";
-import { ocrImageBuffer } from "../../services/ml/ocr";
 
 /**
  * If OCR returns very little text, we're not going to get

@@ -1,4 +1,8 @@
-import { prisma } from "@recipesage/prisma";
+import {
+  prisma,
+  AssistantMessageSummary,
+  assistantMessageSummary,
+} from "@recipesage/prisma";
 import {
   ChatCompletionMessageParam,
   ChatCompletionMessageToolCall,
@@ -7,10 +11,6 @@ import {
 import { OpenAIHelper } from "./openai";
 import { AssistantMessage, Prisma } from "@prisma/client";
 import { initBuildRecipe } from "./chatFunctions";
-import {
-  AssistantMessageSummary,
-  assistantMessageSummary,
-} from "../../types/assistantMessageSummary";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 import * as Sentry from "@sentry/node";

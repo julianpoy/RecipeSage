@@ -13,7 +13,7 @@ import {
   ResettableSelectPopoverPage,
 } from "~/pages/resettable-select-popover/resettable-select-popover.page";
 import { RatingFilterPopoverComponent } from "~/components/rating-filter-popover/rating-filter-popover.component";
-import type { LabelSummary } from "@recipesage/trpc";
+import type { LabelSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-home-search-filter-popover",

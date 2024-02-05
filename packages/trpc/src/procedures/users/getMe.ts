@@ -1,7 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
-import { userPublic } from "../../types/userPublic";
+import { validateSession } from "@recipesage/util/server";
+import { userPublic } from "@recipesage/prisma";
 
 export const getMe = publicProcedure.query(async ({ ctx }) => {
   const session = ctx.session;
