@@ -67,7 +67,7 @@
     "node-fetch": "^2.6.7",
     "openai": "^4.24.1",
     "p-limit": "^3.1.0",
-    "pdfjs-dist": "^4.0.379",
+    "pdfjs-dist": "^3.11.174",
     "pdfmake": "^0.2.8",
     "pg": "8.11.3",
     "pg-hstore": "^2.3.4",
