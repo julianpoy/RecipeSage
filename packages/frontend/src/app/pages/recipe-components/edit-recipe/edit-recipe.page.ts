@@ -29,7 +29,6 @@ import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { FeatureFlagService } from "../../../services/feature-flag.service";
-import { ImportService } from "../../../services/import.service";
 
 @Component({
   selector: "page-edit-recipe",
@@ -62,7 +61,7 @@ export class EditRecipePage {
   labelGroups: LabelGroupSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
-  enableOCR = this.featureFlagService.flags.enableOCR;
+  enableOCR = this.featureFlagService.flags.enableOCR && true;
   isAutoclipPopoverOpen = false;
 
   constructor(
@@ -72,14 +71,12 @@ export class EditRecipePage {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private popoverCtrl: PopoverController,
-    private utilService: UtilService,
     private trpcService: TRPCService,
     private unsavedChangesService: UnsavedChangesService,
     private loadingCtrl: LoadingController,
     private loadingService: LoadingService,
     private recipeService: RecipeService,
     private imageService: ImageService,
-    private importService: ImportService,
     private capabilitiesService: CapabilitiesService,
     private featureFlagService: FeatureFlagService,
   ) {
@@ -494,15 +491,21 @@ export class EditRecipePage {
   }
 
   async scanImage() {
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Prompt,
-      direction: CameraDirection.Rear,
-      quality: 100,
-      allowEditing: true,
-      width: 2160,
-      webUseInput: true,
-    });
+    let capturedPhoto;
+
+    try {
+      capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+        direction: CameraDirection.Rear,
+        quality: 100,
+        allowEditing: true,
+        width: 2160,
+        webUseInput: true,
+      });
+    } catch (e) {
+      return;
+    }
 
     if (!capturedPhoto.base64String) {
       throw new Error("Photo did not return base64String");
