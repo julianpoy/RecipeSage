@@ -41,20 +41,20 @@ describe("getRecipes", () => {
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
-          rating: 3,
+          rating: 1,
         },
       });
 
       await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
-          rating: 4,
+          rating: 5,
         },
       });
 
       const response = await trpc.recipes.getRecipes.query({
         userIds: [user.id],
-        ratings: [3],
+        ratings: [5],
         limit: 3,
         folder: "main",
         orderBy: "title",
