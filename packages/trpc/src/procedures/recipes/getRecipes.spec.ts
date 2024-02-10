@@ -63,7 +63,7 @@ describe("getRecipes", () => {
       });
 
       expect(response.totalCount).toEqual(1);
-      expect(response.recipes[0].rating).toEqual(3);
+      expect(response.recipes[0].rating).toEqual(5);
     });
 
     it("filters by labels", async () => {
