@@ -10,15 +10,15 @@ describe("getRecipes", () => {
   let user: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     ({ user, trpc } = await trpcSetup());
   });
 
-  afterAll(() => {
+  afterEach(() => {
     return tearDown(user.id);
   });
 
-  describe("sucess", () => {
+  describe("success", () => {
     it("returns a list of recipes given no filters", async () => {
       await prisma.recipe.create({
         data: {

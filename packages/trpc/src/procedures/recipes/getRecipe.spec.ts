@@ -17,7 +17,7 @@ describe("getRecipe", () => {
     return tearDown(user.id);
   });
 
-  describe("sucess", () => {
+  describe("success", () => {
     it("gets a valid recipe", async () => {
       const recipe = await prisma.recipe.create({
         data: {
