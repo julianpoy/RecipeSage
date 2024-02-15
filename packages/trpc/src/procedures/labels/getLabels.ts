@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "@recipesage/util/server";
+import { validateSession } from "@recipesage/util/server/general";
 import { labelSummary } from "@recipesage/prisma";
 
 export const getLabels = publicProcedure.query(async ({ ctx }) => {

@@ -1,7 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { validateSession } from "@recipesage/util/server";
+import { validateSession } from "@recipesage/util/server/general";
 import { labelSummary } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
 import { cleanLabelTitle } from "@recipesage/util/shared";

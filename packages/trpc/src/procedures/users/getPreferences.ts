@@ -1,7 +1,7 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "@recipesage/util/server";
 import { AppPreferenceTypes } from "@recipesage/util/shared";
+import { validateSession } from "@recipesage/util/server/general";
 
 export const getPreferences = publicProcedure.query(async ({ ctx }) => {
   const session = ctx.session;

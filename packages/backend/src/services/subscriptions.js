@@ -7,7 +7,7 @@ import {
   Capabilities as _Capabilities,
   SubscriptionModels as _SubscriptionModels,
   SUBSCRIPTION_MODELS,
-} from "@recipesage/util/server";
+} from "@recipesage/util/server/capabilities";
 
 // DB
 import { UserSubscription } from "../models/index.js";

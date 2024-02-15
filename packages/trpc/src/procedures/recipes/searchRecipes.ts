@@ -2,10 +2,10 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import {
   getRecipesWithConstraints,
-  sortRecipeImages,
   getFriendshipIds,
-  searchRecipes as _searchRecipes,
-} from "@recipesage/util/server";
+} from "@recipesage/util/server/db";
+import { sortRecipeImages } from "@recipesage/util/server/general";
+import { searchRecipes as _searchRecipes } from "@recipesage/util/server/search";
 import { TRPCError } from "@trpc/server";
 
 export const searchRecipes = publicProcedure

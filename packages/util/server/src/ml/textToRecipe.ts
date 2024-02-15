@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { initOCRFormatRecipe } from "../chat/chatFunctions";
-import { OpenAIHelper } from "../chat/openai";
+import { initOCRFormatRecipe } from "../ml/chatFunctions";
+import { OpenAIHelper } from "../ml/openai";
 
 const openAiHelper = new OpenAIHelper();
 

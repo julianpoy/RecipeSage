@@ -4,7 +4,7 @@ import { prisma } from "@recipesage/prisma";
 import {
   validateSession,
   stripNumberedRecipeTitle,
-} from "@recipesage/util/server";
+} from "@recipesage/util/server/general";
 import { recipeSummaryLite } from "@recipesage/prisma";
 
 /**

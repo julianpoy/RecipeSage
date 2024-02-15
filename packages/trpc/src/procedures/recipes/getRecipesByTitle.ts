@@ -1,7 +1,7 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
-import { validateSession } from "@recipesage/util/server";
+import { validateSession } from "@recipesage/util/server/general";
 import { recipeSummaryLite } from "@recipesage/prisma";
 
 export const getRecipesByTitle = publicProcedure

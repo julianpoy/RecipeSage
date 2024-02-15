@@ -1,4 +1,4 @@
-import { ocrImageToRecipe } from "@recipesage/util/server";
+import { ocrImageToRecipe } from "@recipesage/util/server/ml";
 import { publicProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";

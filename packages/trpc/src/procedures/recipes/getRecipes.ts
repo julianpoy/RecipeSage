@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   getRecipesWithConstraints,
   getFriendshipIds,
-} from "@recipesage/util/server";
+} from "@recipesage/util/server/db";
 import { TRPCError } from "@trpc/server";
 
 export const getRecipes = publicProcedure

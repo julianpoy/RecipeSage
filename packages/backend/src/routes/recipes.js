@@ -20,7 +20,7 @@ import {
 import * as MiddlewareService from "../services/middleware.js";
 import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
-import * as SearchService from "@recipesage/trpc";
+import * as Search from "@recipesage/util/server/search";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JSONLDService from "../services/json-ld.js";
 import { getRecipesWithConstraints } from "../services/database/getRecipesWithConstraints";
@@ -217,7 +217,7 @@ router.post(
         );
       }
 
-      await SearchService.indexRecipes([recipe]);
+      await Search.indexRecipes([recipe]);
 
       return recipe;
     });
@@ -372,10 +372,7 @@ router.get(
     }
 
     console.log(userIds);
-    const recipeIds = await SearchService.searchRecipes(
-      userIds,
-      req.query.query,
-    );
+    const recipeIds = await Search.searchRecipes(userIds, req.query.query);
 
     const recipeIdsMap = recipeIds.reduce((acc, recipeId, idx) => {
       acc[recipeId] = idx + 1;
@@ -720,7 +717,7 @@ router.put(
         );
       }
 
-      await SearchService.indexRecipes([updatedRecipe]);
+      await Search.indexRecipes([updatedRecipe]);
 
       return updatedRecipe;
     });
@@ -762,7 +759,7 @@ router.delete(
 
       // TODO: Remove this when we have a way of mocking
       if (process.env.NODE_ENV !== "test") {
-        await SearchService.deleteRecipes(recipeIds);
+        await Search.deleteRecipes(recipeIds);
 
         await deleteHangingImagesForUser(userId, transaction);
       }
@@ -854,7 +851,7 @@ const deleteRecipes = async (userId, { recipeIds, labelIds }, transaction) => {
     transaction,
   });
 
-  await SearchService.deleteRecipes(recipeIds);
+  await Search.deleteRecipes(recipeIds);
 };
 
 router.post(
