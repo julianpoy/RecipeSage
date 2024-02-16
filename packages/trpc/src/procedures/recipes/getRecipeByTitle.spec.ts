@@ -4,7 +4,6 @@ import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
-import { faker } from "@faker-js/faker";
 
 describe("getRecipe", () => {
   let user: User;
