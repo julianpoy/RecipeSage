@@ -7,6 +7,7 @@ import * as fs from "fs-extra";
 import * as fsPromises from "fs/promises";
 import * as extract from "extract-zip";
 import * as path from "path";
+import * as jsdom from "jsdom";
 
 import * as MiddlewareService from "../services/middleware.js";
 import * as SubscriptionsService from "../services/subscriptions.js";
@@ -533,6 +534,135 @@ router.post(
           folder: "main",
           fromUserId: null,
           url: recipeData.source_url,
+
+          labels,
+          images,
+        });
+      }
+
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
+
+      const recipesToIndex = await Recipe.findAll({
+        where: {
+          userId: res.locals.session.userId,
+        },
+      });
+
+      await SearchService.indexRecipes(recipesToIndex);
+
+      res.status(201).send("Import complete");
+    } catch (err) {
+      if (err.message === "end of central directory record signature not found")
+        err.status = 406;
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+      next(err);
+    }
+  },
+);
+
+router.post(
+  "/import/recipe-keeper",
+  MiddlewareService.validateSession(["user"]),
+  multer({
+    dest: "/tmp/import/",
+  }).single("file"),
+  async (req, res, next) => {
+    let zipPath, extractPath;
+    try {
+      if (!req.file) {
+        const badFormatError = new Error(
+          "Request must include multipart file under the 'file' field",
+        );
+        badFormatError.status = 400;
+        throw badFormatError;
+      }
+
+      zipPath = req.file.path;
+      extractPath = zipPath + "-extract";
+
+      await extract(zipPath, { dir: extractPath });
+
+      const recipeHtml = await fs.readFile(extractPath + "/recipes.html");
+
+      const dom = new jsdom.JSDOM(recipeHtml);
+
+      const recipes = [];
+      const domList =
+        dom.window.document.getElementsByClassName("recipe-details");
+      for (const domItem of domList) {
+        const title =
+          domItem.querySelector('[itemprop="name"]')?.textContent.trim() ||
+          "Untitled";
+        const source = domItem
+          .querySelector('[itemprop="recipeSource"]')
+          ?.textContent.trim();
+        const rating =
+          parseInt(
+            domItem
+              .querySelector('[itemprop="recipeRating"]')
+              ?.getAttribute("content")
+              .trim(),
+          ) || null;
+        const servings = domItem
+          .querySelector('[itemprop="recipeYield"]')
+          ?.textContent.trim();
+        const activeTime = domItem
+          .querySelector('[itemprop="prepTime"]')
+          ?.textContent.trim();
+        let totalTime = domItem
+          .querySelector('[itemprop="cookTime"]')
+          ?.textContent.trim();
+        if (totalTime.trim()) {
+          // Recipe keeper does not track total time, just active and cook. We simulate that here.
+          totalTime += " Cook Time";
+        }
+        const ingredients = domItem
+          .querySelector('[itemprop="recipeIngredients"]')
+          ?.textContent.trim();
+        const instructions = domItem
+          .querySelector('[itemprop="recipeDirections"]')
+          ?.textContent.trim();
+
+        const categories = [
+          ...domItem.querySelectorAll('[itemprop="recipeCategory"]'),
+        ].map((el) => el.getAttribute("content"));
+        const courses = [
+          ...domItem.querySelectorAll('[itemprop="recipeCourse"]'),
+        ].map((el) => el.textContent);
+        const isFavorite =
+          domItem
+            .querySelector('[itemprop="recipeIsFavourite"]')
+            ?.getAttribute("content") === "True";
+        const labels = [...categories, ...courses, isFavorite ? `favorite` : ""]
+          .map((e) => Util.cleanLabelTitle(e))
+          .filter((e) => e);
+
+        const notes = domItem.querySelector(
+          '[itemprop="recipeNotes"]',
+        )?.textContent;
+
+        const images = [
+          ...new Set(
+            [...domItem.getElementsByTagName("img")].map((el) => el.src),
+          ),
+        ].map((src) => extractPath + "/" + src);
+
+        recipes.push({
+          title,
+          ingredients,
+          instructions,
+          yield: servings,
+          totalTime,
+          activeTime,
+          notes,
+          source,
+          folder: "main",
+          fromUserId: null,
+          rating,
 
           labels,
           images,
