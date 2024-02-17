@@ -24,7 +24,7 @@ import {
 } from "../models/index.js";
 
 import { validateSession, validateUser } from "../services/middleware.js";
-import * as Util from "@recipesage/util";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";

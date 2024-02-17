@@ -13,7 +13,7 @@ import {
   parseIngredients,
   parseInstructions,
   parseNotes,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 
 export type RecipeFolderName = "main" | "inbox";
 

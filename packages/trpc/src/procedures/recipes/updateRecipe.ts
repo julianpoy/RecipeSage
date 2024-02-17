@@ -1,14 +1,14 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { validateSession } from "@recipesage/util/server/general";
 import {
   Capabilities,
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
-} from "../../services/capabilities";
-import { indexRecipes } from "../../services/search";
+} from "@recipesage/util/server/capabilities";
+import { indexRecipes } from "@recipesage/util/server/search";
 
 export const updateRecipe = publicProcedure
   .input(

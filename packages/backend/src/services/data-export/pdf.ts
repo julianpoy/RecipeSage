@@ -7,7 +7,7 @@ import {
   parseIngredients,
   parseInstructions,
   parseNotes,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../fetch";
 import * as fs from "fs";

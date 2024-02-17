@@ -11,9 +11,8 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import { RecipeService } from "~/services/recipe.service";
-import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
-import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
 
 @Component({

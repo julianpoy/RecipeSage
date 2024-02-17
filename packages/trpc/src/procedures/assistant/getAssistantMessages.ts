@@ -1,5 +1,5 @@
 import { publicProcedure } from "../../trpc";
-import { Assistant } from "../../services/chat/assistant";
+import { Assistant } from "@recipesage/util/server/ml";
 import { TRPCError } from "@trpc/server";
 
 const assistant = new Assistant();

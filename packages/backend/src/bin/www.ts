@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app from "../app.js";
+import { app } from "../app";
 import Debug from "debug";
 const debug = Debug("chefbook-backend:server");
 import { getRunningJobs } from "../services/job-tracker.js";
