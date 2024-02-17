@@ -70,7 +70,7 @@ spec:
             - name: TYPESENSE_NODES
               value: '[{"host": "rs-typesense", "port": 8108, "protocol": "http"}]'
             - name: OPENAI_GPT_MODEL
-              value: gpt-3.5-turbo-1106
+              value: gpt-3.5-turbo-0125
           volumeMounts:
             - name: firebase-credentials
               mountPath: /app/.credentials/firebase.json
