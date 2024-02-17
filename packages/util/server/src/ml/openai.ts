@@ -7,7 +7,7 @@ import { RSRunnableFunction } from "./chatFunctions";
 
 export class OpenAIHelper {
   private openAi: OpenAI;
-  private gptModel = process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo-1106";
+  private gptModel = process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo-0125";
 
   constructor() {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;

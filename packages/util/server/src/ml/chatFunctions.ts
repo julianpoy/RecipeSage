@@ -5,10 +5,6 @@ export type RSRunnableFunction =
   | ReturnType<typeof initOCRFormatRecipe>
   | ReturnType<typeof initBuildRecipe>;
 
-const parseUTF8 = (str: string) => {
-  return JSON.parse(JSON.stringify(str));
-};
-
 export const initBuildRecipe = (
   userId: string,
   result: Prisma.RecipeUncheckedCreateInput[],
@@ -33,25 +29,21 @@ export const initBuildRecipe = (
         const recipe: Prisma.RecipeUncheckedCreateInput = {
           userId,
           fromUserId: null,
-          title:
-            typeof args.title === "string" ? parseUTF8(args.title) : "Unnamed",
+          title: typeof args.title === "string" ? args.title : "Unnamed",
           description: "",
           folder: "main",
           source: "RecipeSage Cooking Assistant",
           url: "",
           rating: null,
-          yield: typeof args.yield === "string" ? parseUTF8(args.yield) : "",
+          yield: typeof args.yield === "string" ? args.yield : "",
           activeTime:
-            typeof args.activeTime === "string"
-              ? parseUTF8(args.activeTime)
-              : "",
-          totalTime:
-            typeof args.totalTime === "string" ? parseUTF8(args.totalTime) : "",
+            typeof args.activeTime === "string" ? args.activeTime : "",
+          totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
           ingredients: Array.isArray(args.ingredients)
-            ? parseUTF8(args.ingredients.join("\n"))
+            ? args.ingredients.join("\n")
             : "",
           instructions: Array.isArray(args.instructions)
-            ? parseUTF8(args.instructions.join("\n"))
+            ? args.instructions.join("\n")
             : "",
           notes: "",
         };
@@ -130,28 +122,22 @@ export const initOCRFormatRecipe = (
         const recipe: Prisma.RecipeUncheckedCreateInput = {
           userId,
           fromUserId: null,
-          title:
-            typeof args.title === "string" ? parseUTF8(args.title) : "Unnamed",
+          title: typeof args.title === "string" ? args.title : "Unnamed",
           description:
-            typeof args.description === "string"
-              ? parseUTF8(args.description)
-              : "",
+            typeof args.description === "string" ? args.description : "",
           folder: "main",
           source: "",
           url: "",
           rating: null,
-          yield: typeof args.yield === "string" ? parseUTF8(args.yield) : "",
+          yield: typeof args.yield === "string" ? args.yield : "",
           activeTime:
-            typeof args.activeTime === "string"
-              ? parseUTF8(args.activeTime)
-              : "",
-          totalTime:
-            typeof args.totalTime === "string" ? parseUTF8(args.totalTime) : "",
+            typeof args.activeTime === "string" ? args.activeTime : "",
+          totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
           ingredients: Array.isArray(args.ingredients)
-            ? parseUTF8(args.ingredients.join("\n"))
+            ? args.ingredients.join("\n")
             : "",
           instructions: Array.isArray(args.instructions)
-            ? parseUTF8(args.instructions.join("\n"))
+            ? args.instructions.join("\n")
             : "",
           notes: typeof args.notes === "string" ? args.notes : "",
         };
