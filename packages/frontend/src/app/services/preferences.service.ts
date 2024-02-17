@@ -155,8 +155,10 @@ export class PreferencesService {
 
     // Do not sync remote preferences if not logged in
     if (!localStorage.getItem("token")) return;
-    this.trpcService.trpc.users.getPreferences
-      .query()
+    this.trpcService
+      .handle(this.trpcService.trpc.users.getPreferences.query(), {
+        "*": () => {},
+      })
       .then((remotePreferences) => {
         if (remotePreferences) {
           const patchedPreferences = this.patchPreferences(remotePreferences);

@@ -70,6 +70,7 @@
   "pages.auth.button.forgotPassword": "Forgot password",
   "pages.auth.button.registerInstead": "Create an account instead",
   "pages.auth.button.loginInstead": "Log in instead",
+  "pages.auth.or": "OR",
   "pages.auth.error.invalidEmail": "Please enter a valid email address.",
   "pages.auth.error.noName": "Please enter a name (you can enter a nickname!)",
   "pages.auth.error.noPassword": "Please enter a password.",
@@ -1046,6 +1047,8 @@
   "components.fontSize.option.PX24": "24px (Larger)",
   "components.fontSize.reset": "Reset",
 
+  "components.signInWithGoogle.button": "Sign in with Google",
+
   "services.quickTutorial.multipleRecipeSelection.header": "Multiple Recipe Selection",
   "services.quickTutorial.multipleRecipeSelection.message": "You're now in multiple recipe selection mode. You can click as many recipes as you'd like to select, then use the buttons that appear in the header to take bulk actions such as labelling or deleting. You can exit multiple recipe selection mode at any time by clicking the X in the header, or via the options menu.",
   "services.quickTutorial.multipleLabelSelection.header": "Multiple Label Selection",
@@ -1062,9 +1065,12 @@
 
   "services.unsavedChanges.message": "It looks like you have been editing something. If you leave before saving, your changes will be lost.",
 
-  "errors.offline": "It looks like you're offline. While offline, we're only able to fetch data you've previously accessed on this device.",
-  "errors.unexpected": "An unexpected error occurred. Please try again. If the problem continues to occur, please contact me.",
+  "errors.offline": "A connectivity error occurred. While offline, we're only able to fetch data you've previously accessed on this device.",
+  "errors.unexpected": "An unexpected error occurred and the app may not work correctly. Please reload the app and try again. If this continues to occur, please contact me.",
+  "errors.unexpected.selfhost": "An unexpected error occurred. Please check your server logs as well as the self hosting FAQ.",
 
+  "generic.error": "Error",
+  "generic.reload": "Reload",
   "generic.delete": "Delete",
   "generic.cancel": "Cancel",
   "generic.confirm": "Confirm",

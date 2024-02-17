@@ -29,6 +29,7 @@ import { getRecipesByTitle } from "./procedures/recipes/getRecipesByTitle";
 import { getUniqueRecipeTitle } from "./procedures/recipes/getUniqueRecipeTitle";
 import { getRecipeFromPDF } from "./procedures/ml/getRecipeFromPDF";
 import { getRecipeFromText } from "./procedures/ml/getRecipeFromText";
+import { signInWithGoogle } from "./procedures/users/signInWithGoogle";
 
 const appRouter = router({
   labelGroups: router({
@@ -62,6 +63,7 @@ const appRouter = router({
     getMe,
     updatePreferences,
     getPreferences,
+    signInWithGoogle,
   }),
   ml: router({
     getRecipeFromOCR,

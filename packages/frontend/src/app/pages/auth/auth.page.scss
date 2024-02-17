@@ -36,4 +36,20 @@
   logo-icon {
     text-align: center;
   }
+
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .divider-segment {
+      width: 200px;
+      border-bottom: 1px solid var(--ion-text-color);
+    }
+
+    p {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
 }

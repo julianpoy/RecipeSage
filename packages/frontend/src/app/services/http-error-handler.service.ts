@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import { ToastController, ModalController } from "@ionic/angular";
+import {
+  ToastController,
+  ModalController,
+  AlertController,
+} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";
@@ -7,6 +11,7 @@ import { AxiosError } from "axios";
 import * as Sentry from "@sentry/browser";
 
 import { AuthPage } from "~/pages/auth/auth.page";
+import { IS_SELFHOST } from "../../environments/environment";
 
 export interface ErrorHandlers {
   [code: string]: () => any;
@@ -18,14 +23,20 @@ export interface ErrorHandlers {
 export class HttpErrorHandlerService {
   isAuthOpen: boolean = false; // Track auth modal so we don't open multiple stacks
   defaultErrorHandlers = {
-    0: () => this.presentToast("errors.offline"),
+    0: () => this.presentAlert("generic.error", "errors.offline"),
     401: () => this.promptForAuth(),
-    500: () => this.presentToast("errors.unexpected"),
+    500: () =>
+      this.presentAlert(
+        "generic.error",
+        IS_SELFHOST ? "errors.unexpected.selfhost" : "errors.unexpected",
+      ),
   };
+  isErrorAlertOpen = false;
 
   constructor(
     private toastCtrl: ToastController,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
     private translate: TranslateService,
   ) {}
 
@@ -56,6 +67,42 @@ export class HttpErrorHandlerService {
     });
 
     toast.present();
+  }
+
+  async presentAlert(headerKey: string, messageKey: string) {
+    if (this.isErrorAlertOpen) return;
+    this.isErrorAlertOpen = true;
+
+    try {
+      const header = await this.translate.get(headerKey).toPromise();
+      const message = await this.translate.get(messageKey).toPromise();
+      const reload = await this.translate.get("generic.reload").toPromise();
+      const ignore = await this.translate.get("generic.ignore").toPromise();
+
+      const toast = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: reload,
+            cssClass: "alertDanger",
+            handler: () => {
+              window.location.reload();
+            },
+          },
+          {
+            text: ignore,
+          },
+        ],
+      });
+
+      await toast.present();
+      await toast.onDidDismiss();
+      this.isErrorAlertOpen = false;
+    } catch (e) {
+      this.isErrorAlertOpen = false;
+      throw e;
+    }
   }
 
   _handleError(statusCode: number, errorHandlers?: ErrorHandlers) {
