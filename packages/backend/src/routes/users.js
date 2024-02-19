@@ -40,7 +40,7 @@ import {
   PreconditionFailed,
 } from "../utils/errors.js";
 import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
-import { indexRecipes } from "@recipesage/trpc";
+import { indexRecipes } from "@recipesage/util/server/search";
 
 router.get(
   "/",
