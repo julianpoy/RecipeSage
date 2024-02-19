@@ -1,0 +1,6 @@
+{
+  "name": "frontend",
+  "devDependencies": {
+    "@angular/cli": "17.2.0"
+  }
+}
