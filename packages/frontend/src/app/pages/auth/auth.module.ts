@@ -10,6 +10,7 @@ import { TosClickwrapAgreementModule } from "~/components/tos-clickwrap-agreemen
 
 import { GlobalModule } from "~/global.module";
 import { ToggleablePasswordDirective } from "../../directives/toggleable-password.directive";
+import { SignInWithGoogleModule } from "../../components/sign-in-with-google/sign-in-with-google.module";
 
 @NgModule({
   declarations: [AuthPage, ToggleablePasswordDirective],
@@ -27,6 +28,7 @@ import { ToggleablePasswordDirective } from "../../directives/toggleable-passwor
     ReactiveFormsModule,
     LogoIconModule,
     TosClickwrapAgreementModule,
+    SignInWithGoogleModule,
   ],
 })
 export class AuthPageModule {}

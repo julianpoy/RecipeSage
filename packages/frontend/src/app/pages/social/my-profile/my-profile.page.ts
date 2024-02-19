@@ -7,7 +7,7 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { isHandleValid } from "@recipesage/util";
+import { isHandleValid } from "@recipesage/util/shared";
 
 import { AddProfileItemModalPage } from "../add-profile-item-modal/add-profile-item-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";

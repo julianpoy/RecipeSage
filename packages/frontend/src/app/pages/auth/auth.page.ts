@@ -38,6 +38,8 @@ export class AuthPage {
 
   isInModal = false;
 
+  revealPassword = false;
+
   constructor(
     public events: EventService,
     public translate: TranslateService,
@@ -164,6 +166,21 @@ export class AuthPage {
     if (!response.success) return;
 
     localStorage.setItem("token", response.data.token);
+    this.capabilitiesService.updateCapabilities();
+
+    if (
+      "Notification" in window &&
+      (Notification as any).permission === "granted"
+    ) {
+      this.messagingService.requestNotifications();
+    }
+
+    this.events.publish(EventName.Auth);
+    this.close();
+  }
+
+  signInWithGoogleComplete(token: string) {
+    localStorage.setItem("token", token);
     this.capabilitiesService.updateCapabilities();
 
     if (

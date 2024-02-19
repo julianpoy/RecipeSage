@@ -8,32 +8,27 @@
     text-align: center;
   }
 
-  label {
-    color: var(--ion-text-color);
-    font-size: 0.75rem;
-    margin: 5px;
-  }
-
-  input {
-    width: 90%;
-    background: none;
-    margin-right: 10px;
-    border: none;
-    border-bottom: 1px solid;
-    border-color: var(--ion-border-color);
-    border-radius: 0;
-    padding: 10px;
-    transition: 0.3s;
-    background: transparent;
-    color: var(--ion-text-color);
-    outline: none;
-
-    &:focus {
-      border-color: var(--ion-color-primary);
-    }
-  }
-
   logo-icon {
     text-align: center;
   }
+
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .divider-segment {
+      width: 200px;
+      border-bottom: 1px solid var(--ion-text-color);
+    }
+
+    p {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+}
+
+ion-item {
+  --min-height: 66px;
 }

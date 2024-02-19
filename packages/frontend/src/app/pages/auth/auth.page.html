@@ -46,40 +46,77 @@
         <br /><br /><br /><br />
 
         <div *ngIf="!showLogin">
-          <label>
-            {{ 'pages.auth.input.name' | translate }}<br />
-            <input [(ngModel)]="name" type="text" />
-          </label>
-          <br /><br />
+          <ion-item>
+            <ion-input
+              label="{{ 'pages.auth.input.name' | translate }}"
+              labelPlacement="stacked"
+              [(ngModel)]="name"
+              type="text"
+            ></ion-input>
+          </ion-item>
+          <br />
         </div>
 
-        <label>
-          {{ 'pages.auth.input.email' | translate }}<br />
-          <input [(ngModel)]="email" type="email" />
-        </label>
-        <br /><br />
+        <ion-item>
+          <ion-input
+            label="{{ 'pages.auth.input.email' | translate }}"
+            labelPlacement="stacked"
+            [(ngModel)]="email"
+            type="email"
+          ></ion-input>
+        </ion-item>
+        <br />
 
-        <label>
-          {{ 'pages.auth.input.password' | translate }}<br />
-          <input
+        <ion-item>
+          <ion-input
+            label="{{ 'pages.auth.input.password' | translate }}"
+            labelPlacement="stacked"
             [(ngModel)]="password"
+            [type]="revealPassword ? 'text' : 'password'"
             (keyup.enter)="showLogin && auth()"
-            type="password"
-            appToggleablePassword
-          />
-        </label>
-        <br /><br />
+          >
+            <ion-button
+              fill="clear"
+              slot="end"
+              aria-label="Show/hide password"
+              (click)="revealPassword = !revealPassword"
+            >
+              <ion-icon
+                slot="icon-only"
+                [name]="revealPassword ? 'eye-off' : 'eye'"
+                aria-hidden="true"
+                color="medium"
+              ></ion-icon>
+            </ion-button>
+          </ion-input>
+        </ion-item>
+        <br />
 
         <div *ngIf="!showLogin">
-          <label>
-            {{ 'pages.auth.input.confirmPassword' | translate }}<br />
-            <input
+          <ion-item>
+            <ion-input
+              label="{{ 'pages.auth.input.confirmPassword' | translate }}"
+              labelPlacement="stacked"
               [(ngModel)]="confirmPassword"
+              [type]="revealPassword ? 'text' : 'password'"
               (keyup.enter)="auth()"
-              type="password"
-              appToggleablePassword
-            />
-          </label>
+            >
+              <ion-button
+                fill="clear"
+                slot="end"
+                aria-label="Show/hide password"
+                (click)="revealPassword = !revealPassword"
+              >
+                <ion-icon
+                  slot="icon-only"
+                  [name]="revealPassword ? 'eye-off' : 'eye'"
+                  aria-hidden="true"
+                  color="medium"
+                  size="small"
+                ></ion-icon>
+              </ion-button>
+            </ion-input>
+          </ion-item>
           <br /><br />
         </div>
       </div>
@@ -97,6 +134,21 @@
         <ion-button *ngIf="!showLogin" expand="block" (click)="auth()"
           >{{ 'pages.auth.button.register' | translate }}</ion-button
         >
+      </div>
+
+      <div class="divider" *ngIf="!isSelfHost">
+        <div class="divider-segment"></div>
+        <p class="ion-text-center">{{ 'pages.auth.or' | translate }}</p>
+        <div class="divider-segment"></div>
+      </div>
+
+      <div
+        class="ion-padding-start ion-padding-end ion-padding-bottom"
+        *ngIf="!isSelfHost"
+      >
+        <sign-in-with-google
+          (signInComplete)="signInWithGoogleComplete($event)"
+        ></sign-in-with-google>
       </div>
 
       <div>

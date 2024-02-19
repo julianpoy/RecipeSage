@@ -44,7 +44,7 @@ spec:
               path: /healthz
               port: 3000
             failureThreshold: 2
-            periodSeconds: 5
+            periodSeconds: 10
           resources:
             requests:
               cpu: 100m
@@ -71,7 +71,7 @@ spec:
             - name: TYPESENSE_NODES
               value: '[{"host": "rs-typesense", "port": 8108, "protocol": "http"}]'
             - name: OPENAI_GPT_MODEL
-              value: gpt-3.5-turbo-1106
+              value: gpt-3.5-turbo-0125
           volumeMounts:
             - name: firebase-credentials
               mountPath: /app/.credentials/firebase.json
@@ -82,7 +82,7 @@ spec:
             name: firebase-credentials
       imagePullSecrets:
         - name: myregistrykey
-      terminationGracePeriodSeconds: 900
+      terminationGracePeriodSeconds: 300
 ---
 apiVersion: v1
 kind: Service

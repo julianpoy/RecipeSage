@@ -33,7 +33,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_SSL: false
           POSTGRES_LOGGING: false
-          DATABASE_URL: postgresql://chefbook:admin@localhost:5432/chefbook_test
+          DATABASE_URL: postgresql://chefbook:admin@localhost:5432/chefbook_test?connection_limit=5
           SEARCH_PROVIDER: none
           STORAGE_TYPE: filesystem
           FILESYSTEM_STORAGE_PATH: ~/project/rsdata

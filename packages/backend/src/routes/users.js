@@ -29,7 +29,7 @@ import { sendWelcome } from "../services/email/welcome.ts";
 import { sendPasswordReset } from "../services/email/passwordReset.ts";
 import { getFriendships } from "../utils/getFriendships.js";
 
-import * as SharedUtils from "@recipesage/util";
+import * as SharedUtils from "@recipesage/util/shared";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
@@ -40,7 +40,7 @@ import {
   PreconditionFailed,
 } from "../utils/errors.js";
 import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
-import { indexRecipes } from "@recipesage/trpc";
+import { indexRecipes } from "@recipesage/util/server/search";
 
 router.get(
   "/",
