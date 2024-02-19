@@ -69,7 +69,9 @@ export class AddRecipeToShoppingListModalPage {
     const matchingLists = this.shoppingLists.filter(
       (shoppingList) => shoppingList.id === lastUsedShoppingListId,
     );
-    if (matchingLists.length > 0 || this.shoppingLists.length === 1) {
+    if (matchingLists.length > 0) {
+      this.destinationShoppingList = matchingLists[0];
+    } else if (this.shoppingLists.length === 1) {
       this.destinationShoppingList = this.shoppingLists[0];
     }
   }
