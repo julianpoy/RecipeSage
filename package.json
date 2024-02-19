@@ -22,7 +22,7 @@
     "@capawesome/capacitor-file-picker": "^5.3.0",
     "@elastic/elasticsearch": "~8.10.0",
     "@google-cloud/vision": "^4.0.2",
-    "@ionic/angular": "^7.5.7",
+    "@ionic/angular": "^7.7.2",
     "@julianpoy/recipe-clipper": "^3.1.0",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-translate/core": "^14.0.0",
