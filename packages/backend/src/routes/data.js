@@ -13,7 +13,7 @@ import * as MiddlewareService from "../services/middleware.js";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
-import * as SearchService from "@recipesage/trpc";
+import { indexRecipes } from "@recipesage/util/server/search";
 import {
   writeImageFile,
   writeImageURL,
@@ -452,7 +452,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(200).send("Imported");
     } catch (e) {
@@ -551,7 +551,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {
@@ -586,7 +586,10 @@ router.post(
 
       await extract(zipPath, { dir: extractPath });
 
-      const recipeHtml = await fs.readFile(extractPath + "/recipes.html");
+      const recipeHtml = await fs.readFile(
+        extractPath + "/recipes.html",
+        "utf-8",
+      );
 
       const dom = new jsdom.JSDOM(recipeHtml);
 
@@ -622,10 +625,21 @@ router.post(
         }
         const ingredients = domItem
           .querySelector('[itemprop="recipeIngredients"]')
-          ?.textContent.trim();
+          ?.textContent.split("\n")
+          .map((ingredient) => ingredient.trim())
+          .join("\n");
+
         const instructions = domItem
           .querySelector('[itemprop="recipeDirections"]')
-          ?.textContent.trim();
+          ?.textContent.trim()
+          .split("\n")
+          .map((instruction) =>
+            instruction
+              .trim()
+              .replaceAll(/^\d+. /g, "")
+              .trim(),
+          )
+          .join("\n");
 
         const categories = [
           ...domItem.querySelectorAll('[itemprop="recipeCategory"]'),
@@ -645,11 +659,21 @@ router.post(
           '[itemprop="recipeNotes"]',
         )?.textContent;
 
-        const images = [
+        const unconfirmedImagePaths = [
           ...new Set(
             [...domItem.getElementsByTagName("img")].map((el) => el.src),
           ),
         ].map((src) => extractPath + "/" + src);
+
+        const imagePaths = [];
+        for (const imagePath of unconfirmedImagePaths) {
+          try {
+            await fs.stat(imagePath);
+            imagePaths.push(imagePath);
+          } catch (e) {
+            // Do nothing, image excluded
+          }
+        }
 
         recipes.push({
           title,
@@ -665,14 +689,14 @@ router.post(
           rating,
 
           labels,
-          images,
+          images: imagePaths,
         });
       }
 
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
+
       await fs.remove(zipPath);
       await fs.remove(extractPath);
-
-      await importStandardizedRecipes(res.locals.session.userId, recipes);
 
       const recipesToIndex = await Recipe.findAll({
         where: {
@@ -680,7 +704,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {
@@ -813,7 +837,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {
