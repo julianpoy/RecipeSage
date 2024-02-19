@@ -36,14 +36,16 @@ spec:
             httpGet:
               path: /healthz
               port: 3000
+            timeoutSeconds: 5
             failureThreshold: 10
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /healthz
               port: 3000
-            failureThreshold: 2
-            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 3
+            periodSeconds: 10
           resources:
             requests:
               cpu: 250m
@@ -81,7 +83,7 @@ spec:
             name: firebase-credentials
       imagePullSecrets:
         - name: myregistrykey
-      terminationGracePeriodSeconds: 900
+      terminationGracePeriodSeconds: 300
 ---
 apiVersion: v1
 kind: Service
@@ -105,8 +107,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rs-api
-  minReplicas: 4
-  maxReplicas: 6
+  minReplicas: 2
+  maxReplicas: 4
   metrics:
     - type: Resource
       resource:
