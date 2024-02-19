@@ -388,6 +388,19 @@ export class RecipeService {
     );
   }
 
+  importRecipeKeeper(file: Blob, errorHandlers?: ErrorHandlers) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<void>(
+      "data/import/recipe-keeper",
+      "POST",
+      formData,
+      undefined,
+      errorHandlers,
+    );
+  }
+
   parseIngredients(
     ingredients: string,
     scale: number,

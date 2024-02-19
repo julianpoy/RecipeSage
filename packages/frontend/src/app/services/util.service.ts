@@ -234,6 +234,12 @@ export const RouteMap = {
     },
     path: "settings/import/cookmate",
   },
+  ImportRecipeKeeperPage: {
+    getPath() {
+      return `/settings/import/recipe-keeper`;
+    },
+    path: "settings/import/recipe-keeper",
+  },
   ImportPepperplatePage: {
     getPath() {
       return `/settings/import/pepperplate`;
