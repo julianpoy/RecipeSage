@@ -39,7 +39,7 @@ spec:
               cpu: 2
               memory: 4Gi
             limits:
-              cpu: 2
+              cpu: 3
               memory: 4Gi
           volumeMounts:
             - name: data
