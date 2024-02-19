@@ -155,6 +155,8 @@
   "pages.homepopover.options.unselectAllRecipes": "Unselect All Recipes",
   "pages.homepopover.options.selectMultipleRecipes": "Select Multiple Recipes",
   "pages.homepopover.warning.optionsHidden": "Note: some options are hidden, since this is a shared collection",
+  "pages.homepopover.labelShared": "Shared",
+  "pages.homepopover.labelSharedCollection": "Labels marked with \"Shared\" are owned by other users",
   "pages.homepopover.labelNull": "You don't have any labels. You can create labels on the recipe details page.",
   "pages.homepopover.unlabeled": "Unlabeled Only",
 

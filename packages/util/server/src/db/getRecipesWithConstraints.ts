@@ -101,9 +101,7 @@ export const getRecipesWithConstraints = async (args: {
           userId,
           recipeLabels: {
             some: {
-              label: {
-                id: labelId,
-              },
+              labelId,
             },
           },
         });

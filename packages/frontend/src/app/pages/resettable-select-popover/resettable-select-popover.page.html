@@ -5,6 +5,12 @@
 </ion-header>
 
 <ion-list>
+  <ion-item *ngIf="message" lines="none">
+    <ion-label>
+      <p>{{ message }}</p>
+    </ion-label>
+  </ion-item>
+
   <ion-item *ngFor="let option of ungroupedOptions">
     <ion-checkbox
       labelPlacement="end"

@@ -297,13 +297,17 @@ export class HomePage {
     this.lastRecipeCount = 0;
   }
 
-  async loadRecipes(offset: number, numToFetch: number) {
-    this.lastRecipeCount += numToFetch;
-
+  isIncludeFriendsEnabled() {
     const includeAllFriends =
       !this.userId &&
       (this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "yes" ||
         this.preferences[MyRecipesPreferenceKey.IncludeFriends] === "browse");
+
+    return includeAllFriends;
+  }
+
+  async loadRecipes(offset: number, numToFetch: number) {
+    this.lastRecipeCount += numToFetch;
 
     const sortPreference = this.preferences[MyRecipesPreferenceKey.SortBy];
 
@@ -320,7 +324,7 @@ export class HomePage {
         labels: this.selectedLabels.length ? this.selectedLabels : undefined,
         labelIntersection:
           this.preferences[MyRecipesPreferenceKey.EnableLabelIntersection],
-        includeAllFriends,
+        includeAllFriends: this.isIncludeFriendsEnabled(),
         ratings: this.ratingFilter.length ? this.ratingFilter : undefined,
         userIds: this.userId ? [this.userId] : undefined,
       }),
@@ -333,15 +337,39 @@ export class HomePage {
   }
 
   async loadLabels() {
-    const response = await this.trpcService.handle(
-      this.trpcService.trpc.labels.getLabels.query(),
-      {
-        401: () => {},
-      },
-    );
-    if (!response) return;
+    if (this.userId) {
+      const response = await this.trpcService.handle(
+        this.trpcService.trpc.labels.getLabelsByUserId.query({
+          userIds: [this.userId],
+        }),
+        {
+          401: () => {},
+        },
+      );
+      if (!response) return;
 
-    this.labels = response;
+      this.labels = response;
+    } else if (this.isIncludeFriendsEnabled()) {
+      const response = await this.trpcService.handle(
+        this.trpcService.trpc.labels.getAllVisibleLabels.query(),
+        {
+          401: () => {},
+        },
+      );
+      if (!response) return;
+
+      this.labels = response;
+    } else {
+      const response = await this.trpcService.handle(
+        this.trpcService.trpc.labels.getLabels.query(),
+        {
+          401: () => {},
+        },
+      );
+      if (!response) return;
+
+      this.labels = response;
+    }
   }
 
   async fetchMyProfile() {
@@ -594,6 +622,7 @@ export class HomePage {
       event,
       component: HomeSearchFilterPopoverPage,
       componentProps: {
+        contextUserId: this.myProfile?.id || null,
         guestMode: !!this.userId,
         labels: this.labels,
         selectedLabels: this.selectedLabels,
@@ -608,6 +637,6 @@ export class HomePage {
 
     if (data.selectedLabels) this.selectedLabels = data.selectedLabels;
     if (data.ratingFilter) this.ratingFilter = data.ratingFilter;
-    if (data.refreshSearch) this.resetAndLoadRecipes();
+    if (data.refreshSearch) this.resetAndLoadAll();
   }
 }
