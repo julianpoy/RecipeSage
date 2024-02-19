@@ -67,7 +67,10 @@ export class AddRecipeToMealPlanModalPage {
     const matchingPlans = this.mealPlans.filter(
       (mealPlan) => mealPlan.id === lastUsedMealPlanId,
     );
-    if (matchingPlans.length > 0 || this.mealPlans.length === 1) {
+    if (matchingPlans.length > 0) {
+      this.selectedMealPlan = matchingPlans[0];
+      this.loadMealPlan(this.selectedMealPlan.id);
+    } else if (this.mealPlans.length === 1) {
       this.selectedMealPlan = this.mealPlans[0];
       this.loadMealPlan(this.selectedMealPlan.id);
     }
