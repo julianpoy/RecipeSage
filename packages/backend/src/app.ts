@@ -1,0 +1,131 @@
+import "./services/sentry-init.js";
+import * as Sentry from "@sentry/node";
+
+import {
+  NotFoundError,
+  ServerError,
+  typesafeExpressIndexRouter,
+} from "@recipesage/express";
+
+import * as express from "express";
+import * as path from "path";
+import * as logger from "morgan";
+import * as cookieParser from "cookie-parser";
+import * as bodyParser from "body-parser";
+import * as cors from "cors";
+
+import { trpcExpressMiddleware } from "@recipesage/trpc";
+
+// Routes
+import index from "./routes/index.js";
+import users from "./routes/users.js";
+import recipes from "./routes/recipes.js";
+import labels from "./routes/labels.js";
+import messages from "./routes/messages.js";
+import shoppingLists from "./routes/shoppingLists.js";
+import mealPlans from "./routes/mealPlans.js";
+import print from "./routes/print.js";
+import payments from "./routes/payments.js";
+import images from "./routes/images.js";
+import clip from "./routes/clip.js";
+import data from "./routes/data.js";
+import proxy from "./routes/proxy.js";
+
+import ws from "./routes/ws.js";
+import { ErrorRequestHandler } from "express";
+
+const app = express();
+
+const corsWhitelist = [
+  "https://www.recipesage.com",
+  "https://recipesage.com",
+  "https://beta.recipesage.com",
+  "https://api.recipesage.com",
+  "https://localhost",
+  "capacitor://localhost",
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    const enableCors = origin && corsWhitelist.indexOf(origin) !== -1;
+    callback(null, enableCors);
+  },
+} satisfies cors.CorsOptions;
+
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
+app.use(cookieParser());
+
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+
+if (process.env.NODE_ENV !== "test") app.use(logger("dev"));
+app.use(
+  bodyParser.json({
+    limit: "250MB",
+    verify: (req, res, buf) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const url = (req as any).originalUrl;
+      if (url.startsWith("/payments/stripe/webhooks")) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (req as any).rawBody = buf.toString();
+      }
+    },
+  }),
+);
+app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
+app.use(cookieParser());
+app.disable("x-powered-by");
+app.use("/", typesafeExpressIndexRouter);
+app.use("/", index);
+app.use("/trpc", trpcExpressMiddleware);
+app.use("/users", users);
+app.use("/recipes", recipes);
+app.use("/labels", labels);
+app.use("/messages", messages);
+app.use("/shoppingLists", shoppingLists);
+app.use("/mealPlans", mealPlans);
+app.use("/print", print);
+app.use("/payments", payments);
+app.use("/images", images);
+app.use("/clip", clip);
+app.use("/proxy", proxy);
+app.use("/data", data);
+app.use("/ws", ws);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  const err = new NotFoundError("Not Found");
+  next(err);
+});
+
+const logError = (err: ServerError) => {
+  // Do not log expected RESTful errors
+  const isExpectedError = err.status < 500 || err.status > 599;
+  if (isExpectedError) return;
+
+  console.error(err);
+
+  Sentry.captureException(err);
+};
+
+const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
+  const err = _err as ServerError;
+  if (!err.status) err.status = 500;
+
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+
+  res.locals.error = process.env.NODE_ENV === "production" ? {} : err;
+
+  logError(err);
+
+  // render the error page
+  res.status(err.status);
+  res.render("error");
+};
+app.use(appErrorHandler);
+
+export { app };
+
+export default app;

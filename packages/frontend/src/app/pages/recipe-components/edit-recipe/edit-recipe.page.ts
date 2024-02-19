@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DomSanitizer } from "@angular/platform-browser";
+import { FilePicker } from "@capawesome/capacitor-file-picker";
 import {
   NavController,
   ToastController,
@@ -14,7 +14,6 @@ import {
   CameraDirection,
   CameraResultType,
   CameraSource,
-  Photo,
 } from "@capacitor/camera";
 
 import { UtilService, RouteMap } from "~/services/util.service";
@@ -26,10 +25,9 @@ import { Image, ImageService } from "~/services/image.service";
 import { getQueryParam } from "~/utils/queryParams";
 
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
-import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
-import { LabelGroupSummary } from "packages/trpc/src/types/labelGroupSummary";
 import { FeatureFlagService } from "../../../services/feature-flag.service";
 
 @Component({
@@ -63,7 +61,8 @@ export class EditRecipePage {
   labelGroups: LabelGroupSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
-  enableOCR = this.featureFlagService.flags.enableOCR;
+  enableOCR = this.featureFlagService.flags.enableOCR && true;
+  isAutoclipPopoverOpen = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -72,7 +71,6 @@ export class EditRecipePage {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private popoverCtrl: PopoverController,
-    private utilService: UtilService,
     private trpcService: TRPCService,
     private unsavedChangesService: UnsavedChangesService,
     private loadingCtrl: LoadingController,
@@ -95,6 +93,8 @@ export class EditRecipePage {
       ? RouteMap.RecipePage.getPath(this.recipeId)
       : RouteMap.HomePage.getPath("main");
   }
+
+  ionViewWillEnter() {}
 
   async load() {
     const loading = this.loadingService.start();
@@ -446,16 +446,66 @@ export class EditRecipePage {
     return url.protocol.startsWith("http");
   }
 
-  async scan() {
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Prompt,
-      direction: CameraDirection.Rear,
-      quality: 100,
-      allowEditing: true,
-      width: 2160,
-      webUseInput: true,
+  async scanPDF() {
+    let filePickerResult;
+    try {
+      filePickerResult = await FilePicker.pickFiles({
+        types: ["application/pdf"],
+        multiple: false,
+        readData: true,
+      });
+    } catch (e) {
+      return;
+    }
+
+    const file = filePickerResult.files.at(0);
+    if (!file || !file.data) return;
+
+    const pleaseWait = await this.translate
+      .get("pages.editRecipe.clip.loading")
+      .toPromise();
+    const loading = await this.loadingCtrl.create({
+      message: pleaseWait,
     });
+    await loading.present();
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.ml.getRecipeFromPDF.mutate({
+        pdf: file.data,
+      }),
+    );
+
+    loading.dismiss();
+
+    if (!response) return;
+
+    this.recipe.title = response.title || "";
+    this.recipe.description = response.description || "";
+    this.recipe.source = response.source || "";
+    this.recipe.yield = response.yield || "";
+    this.recipe.activeTime = response.activeTime || "";
+    this.recipe.totalTime = response.totalTime || "";
+    this.recipe.ingredients = response.ingredients || "";
+    this.recipe.instructions = response.instructions || "";
+    this.recipe.notes = response.notes || "";
+  }
+
+  async scanImage() {
+    let capturedPhoto;
+
+    try {
+      capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Prompt,
+        direction: CameraDirection.Rear,
+        quality: 100,
+        allowEditing: true,
+        width: 2160,
+        webUseInput: true,
+      });
+    } catch (e) {
+      return;
+    }
 
     if (!capturedPhoto.base64String) {
       throw new Error("Photo did not return base64String");
@@ -479,15 +529,15 @@ export class EditRecipePage {
 
     if (!response) return;
 
-    if (response.title) this.recipe.title = response.title;
-    if (response.description) this.recipe.description = response.description;
-    if (response.source) this.recipe.source = response.source;
-    if (response.yield) this.recipe.yield = response.yield;
-    if (response.activeTime) this.recipe.activeTime = response.activeTime;
-    if (response.totalTime) this.recipe.totalTime = response.totalTime;
-    if (response.ingredients) this.recipe.ingredients = response.ingredients;
-    if (response.instructions) this.recipe.instructions = response.instructions;
-    if (response.notes) this.recipe.notes = response.notes;
+    this.recipe.title = response.title || "";
+    this.recipe.description = response.description || "";
+    this.recipe.source = response.source || "";
+    this.recipe.yield = response.yield || "";
+    this.recipe.activeTime = response.activeTime || "";
+    this.recipe.totalTime = response.totalTime || "";
+    this.recipe.ingredients = response.ingredients || "";
+    this.recipe.instructions = response.instructions || "";
+    this.recipe.notes = response.notes || "";
 
     const imageResponse = await this.imageService.createFromB64(
       {
@@ -503,20 +553,123 @@ export class EditRecipePage {
     }
   }
 
-  async clipFromUrl() {
+  async clipFromText() {
     const header = await this.translate
-      .get("pages.editRecipe.clip.header")
+      .get("pages.editRecipe.clipText.header")
       .toPromise();
     const message = await this.translate
-      .get("pages.editRecipe.clip.message")
+      .get("pages.editRecipe.clipText.message")
       .toPromise();
     const placeholder = await this.translate
-      .get("pages.editRecipe.clip.placeholder")
+      .get("pages.editRecipe.clipText.placeholder")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+    const invalid = await this.translate
+      .get("pages.editRecipe.clipText.invalid")
+      .toPromise();
+
+    const clipInputId = "autoclip-prompt-text-input";
+    const clipPrompt = await this.alertCtrl.create({
+      header,
+      message,
+      inputs: [
+        {
+          id: clipInputId,
+          name: "text",
+          type: "textarea",
+          placeholder,
+        },
+      ],
+      buttons: [
+        {
+          text: cancel,
+          role: "cancel",
+        },
+        {
+          text: okay,
+          handler: async (data) => {
+            const { text } = data;
+            if (!text || text.length < 10) {
+              (
+                await this.toastCtrl.create({
+                  message: invalid,
+                  duration: 5000,
+                })
+              ).present();
+              return;
+            }
+            this._clipFromText(text);
+          },
+        },
+      ],
+    });
+
+    await clipPrompt.present();
+
+    document.getElementById(clipInputId)?.focus();
+  }
+
+  async _clipFromText(text: string) {
+    const pleaseWait = await this.translate
+      .get("pages.editRecipe.clip.loading")
+      .toPromise();
+    const failed = await this.translate
+      .get("pages.editRecipe.clip.failed")
+      .toPromise();
+
+    const loading = await this.loadingCtrl.create({
+      message: pleaseWait,
+    });
+    await loading.present();
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.ml.getRecipeFromText.mutate({
+        text,
+      }),
+      {
+        400: async () => {
+          (
+            await this.toastCtrl.create({
+              message: failed,
+              duration: 5000,
+            })
+          ).present();
+        },
+      },
+    );
+
+    if (!response) {
+      loading.dismiss();
+      return;
+    }
+
+    this.recipe.title = response.title || "";
+    this.recipe.description = response.description || "";
+    this.recipe.source = response.source || "";
+    this.recipe.yield = response.yield || "";
+    this.recipe.activeTime = response.activeTime || "";
+    this.recipe.totalTime = response.totalTime || "";
+    this.recipe.ingredients = response.ingredients || "";
+    this.recipe.instructions = response.instructions || "";
+    this.recipe.notes = response.notes || "";
+
+    loading.dismiss();
+  }
+
+  async clipFromUrl() {
+    const header = await this.translate
+      .get("pages.editRecipe.clipURL.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.editRecipe.clipURL.message")
+      .toPromise();
+    const placeholder = await this.translate
+      .get("pages.editRecipe.clipURL.placeholder")
       .toPromise();
     const cancel = await this.translate.get("generic.cancel").toPromise();
     const okay = await this.translate.get("generic.okay").toPromise();
     const invalidUrl = await this.translate
-      .get("pages.editRecipe.clip.invalidUrl")
+      .get("pages.editRecipe.clipURL.invalidUrl")
       .toPromise();
 
     const clipInputId = "autoclip-prompt-url-input";
@@ -592,21 +745,15 @@ export class EditRecipePage {
       return;
     }
 
-    if (response.data.title) this.recipe.title = response.data.title;
-    if (response.data.description)
-      this.recipe.description = response.data.description;
-    if (response.data.source) this.recipe.source = response.data.source;
-    if (response.data.yield) this.recipe.yield = response.data.yield;
-    if (response.data.activeTime)
-      this.recipe.activeTime = response.data.activeTime;
-    if (response.data.totalTime)
-      this.recipe.totalTime = response.data.totalTime;
-    if (response.data.ingredients)
-      this.recipe.ingredients = response.data.ingredients;
-    if (response.data.instructions)
-      this.recipe.instructions = response.data.instructions;
-    if (response.data.notes) this.recipe.notes = response.data.notes;
-
+    this.recipe.title = response.data.title || "";
+    this.recipe.description = response.data.description || "";
+    this.recipe.source = response.data.source || "";
+    this.recipe.yield = response.data.yield || "";
+    this.recipe.activeTime = response.data.activeTime || "";
+    this.recipe.totalTime = response.data.totalTime || "";
+    this.recipe.ingredients = response.data.ingredients || "";
+    this.recipe.instructions = response.data.instructions || "";
+    this.recipe.notes = response.data.notes || "";
     this.recipe.url = url;
 
     if (response.data.imageURL?.trim().length) {

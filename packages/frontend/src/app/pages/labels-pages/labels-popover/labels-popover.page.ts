@@ -7,7 +7,7 @@ import {
   QuickTutorialOptions,
 } from "~/services/quick-tutorial.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { ManageLabelsPreferenceKey } from "@recipesage/util";
+import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
 
 @Component({
   selector: "page-labels-popover",

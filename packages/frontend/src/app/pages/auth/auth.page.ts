@@ -179,6 +179,21 @@ export class AuthPage {
     this.close();
   }
 
+  signInWithGoogleComplete(token: string) {
+    localStorage.setItem("token", token);
+    this.capabilitiesService.updateCapabilities();
+
+    if (
+      "Notification" in window &&
+      (Notification as any).permission === "granted"
+    ) {
+      this.messagingService.requestNotifications();
+    }
+
+    this.events.publish(EventName.Auth);
+    this.close();
+  }
+
   async forgotPassword() {
     if (!this.email) {
       const invalidEmail = await this.translate

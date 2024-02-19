@@ -1,4 +1,5 @@
-import { trpcSetup, tearDown } from "../../testutils";
+import { trpcSetup, tearDown, createTrpcClient } from "../../testutils";
+import { recipeFactory } from "../../factories/recipeFactory";
 import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
@@ -9,41 +10,117 @@ describe("getRecipes", () => {
   let user: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     ({ user, trpc } = await trpcSetup());
   });
 
-  afterAll(() => {
+  afterEach(() => {
     return tearDown(user.id);
   });
 
-  it("returns a list of recipes given no filters", async () => {
-    await prisma.recipe.create({
-      data: {
-        userId: user.id,
-        title: faker.string.alphanumeric(10),
-        description: faker.string.alphanumeric(10),
-        yield: faker.string.alphanumeric(10),
+  describe("success", () => {
+    it("returns a list of recipes given no filters", async () => {
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+        },
+      });
+
+      const response = await trpc.recipes.getRecipes.query({
+        limit: 3,
         folder: "main",
-        activeTime: faker.string.alphanumeric(10),
-        totalTime: faker.string.alphanumeric(10),
-        source: faker.string.alphanumeric(10),
-        url: faker.string.alphanumeric(10),
-        notes: faker.string.alphanumeric(10),
-        ingredients: faker.string.alphanumeric(10),
-        instructions: faker.string.alphanumeric(10),
-        rating: faker.number.int({ min: 1, max: 5 }),
-      },
+        orderBy: "title",
+        orderDirection: "asc",
+        offset: 0,
+      });
+
+      expect(typeof response.recipes[0].id).toBe("string");
     });
 
-    const response = await trpc.recipes.getRecipes.query({
-      limit: 3,
-      folder: "main",
-      orderBy: "title",
-      orderDirection: "asc",
-      offset: 0,
+    it("filters by ratings", async () => {
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          rating: 1,
+        },
+      });
+
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          rating: 5,
+        },
+      });
+
+      const response = await trpc.recipes.getRecipes.query({
+        userIds: [user.id],
+        ratings: [5],
+        limit: 3,
+        folder: "main",
+        orderBy: "title",
+        orderDirection: "asc",
+        offset: 0,
+      });
+
+      expect(response.totalCount).toEqual(1);
+      expect(response.recipes[0].rating).toEqual(5);
     });
 
-    expect(typeof response.recipes[0].id).toBe("string");
+    it("filters by labels", async () => {
+      const label = await prisma.label.create({
+        data: {
+          title: faker.string.alphanumeric(10),
+          userId: user.id,
+          labelGroupId: null,
+        },
+      });
+
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+          title: "myTitle",
+          recipeLabels: {
+            createMany: {
+              data: [{ labelId: label.id }],
+            },
+          },
+          rating: faker.number.int({ min: 1, max: 5 }),
+        },
+      });
+
+      await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+        },
+      });
+
+      const response = await trpc.recipes.getRecipes.query({
+        userIds: [user.id],
+        labels: [label.title],
+        limit: 3,
+        folder: "main",
+        orderBy: "title",
+        orderDirection: "asc",
+        offset: 0,
+      });
+
+      expect(response.totalCount).toEqual(1);
+      expect(response.recipes[0].title).toEqual("myTitle");
+    });
+  });
+});
+
+describe("error", () => {
+  it("invalid session", async () => {
+    const trpcNotLoggedIn = await createTrpcClient("12345");
+    return expect(async () => {
+      await trpcNotLoggedIn.recipes.getRecipes.query({
+        limit: 3,
+        folder: "main",
+        orderBy: "title",
+        orderDirection: "asc",
+        offset: 0,
+      });
+    }).rejects.toThrow("Must pass userIds or be logged in");
   });
 });

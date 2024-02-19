@@ -5,6 +5,10 @@ WORKDIR /app
 # node-gyp
 RUN apk add --no-cache python3 make clang build-base
 
+# node canvas
+RUN apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev
+
+# dev watch script
 RUN apk add --no-cache inotify-tools
 
 RUN npm install -g tsx

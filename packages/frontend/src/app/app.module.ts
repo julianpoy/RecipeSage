@@ -23,7 +23,7 @@ import {
   IS_SELFHOST,
   SENTRY_SAMPLE_RATE,
 } from "../environments/environment";
-import { SupportedLanguages } from "@recipesage/util";
+import { SupportedLanguages } from "@recipesage/util/shared";
 
 const checkChunkLoadError = (error: Error) => {
   const chunkFailedErrorRegExp = /Loading chunk [\d]+ failed/;

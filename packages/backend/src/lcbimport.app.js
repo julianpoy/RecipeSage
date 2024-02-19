@@ -17,7 +17,7 @@ import {
   Image,
 } from "./models/index.js";
 
-import * as Util from "@recipesage/util";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
 import { writeImageFile } from "./services/storage/image";
 import { ObjectTypes } from "./services/storage/shared";

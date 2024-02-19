@@ -5,7 +5,7 @@ import {
   AppTheme,
   SupportedFontSize,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import { NavController } from "@ionic/angular";
 
 export interface RecipeTemplateModifiers {
@@ -233,6 +233,12 @@ export const RouteMap = {
       return `/settings/import/cookmate`;
     },
     path: "settings/import/cookmate",
+  },
+  ImportRecipeKeeperPage: {
+    getPath() {
+      return `/settings/import/recipe-keeper`;
+    },
+    path: "settings/import/recipe-keeper",
   },
   ImportPepperplatePage: {
     getPath() {

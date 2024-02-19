@@ -12,7 +12,7 @@ import { LoadingService } from "~/services/loading.service";
 import { MealPlanService } from "~/services/meal-plan.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MealPlanPreferenceKey } from "@recipesage/util";
+import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
 
 @Component({

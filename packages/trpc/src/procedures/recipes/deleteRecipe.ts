@@ -2,8 +2,8 @@ import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { validateSession } from "../../utils/validateSession";
-import { deleteRecipes } from "../../services/search";
+import { validateSession } from "@recipesage/util/server/general";
+import { deleteRecipes } from "@recipesage/util/server/search";
 
 export const deleteRecipe = publicProcedure
   .input(

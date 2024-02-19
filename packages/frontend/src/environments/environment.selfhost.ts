@@ -18,3 +18,5 @@ const extraSlash = path.endsWith("/") ? "" : "/";
 export const GRIP_WS_URL = `${wsProto}//${window.location.host}${path}${extraSlash}grip/ws`;
 
 export const SENTRY_SAMPLE_RATE = 0;
+
+export const GOOGLE_GSI_CLIENT_ID = null;
