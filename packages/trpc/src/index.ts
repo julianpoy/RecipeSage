@@ -10,6 +10,8 @@ import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
 import { sendAssistantMessage } from "./procedures/assistant/sendAssistantMessage";
 import { getAssistantMessages } from "./procedures/assistant/getAssistantMessages";
 import { getLabels } from "./procedures/labels/getLabels";
+import { getAllVisibleLabels } from "./procedures/labels/getAllVisibleLabels";
+import { getLabelsByUserId } from "./procedures/labels/getLabelsByUserId";
 import { getLabelGroups } from "./procedures/labelGroups/getLabelGroups";
 import { createLabelGroup } from "./procedures/labelGroups/createLabelGroup";
 import { createLabel } from "./procedures/labels/createLabel";
@@ -40,7 +42,9 @@ const appRouter = router({
   }),
   labels: router({
     createLabel,
+    getAllVisibleLabels,
     getLabels,
+    getLabelsByUserId,
     updateLabel,
     deleteLabel,
   }),

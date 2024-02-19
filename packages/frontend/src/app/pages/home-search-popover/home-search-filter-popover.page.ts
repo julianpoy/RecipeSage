@@ -47,6 +47,11 @@ export class HomeSearchFilterPopoverPage {
   })
   guestMode!: boolean;
 
+  @Input({
+    required: true,
+  })
+  contextUserId!: string | null;
+
   constructor(
     public translate: TranslateService,
     public popoverCtrl: PopoverController,
@@ -71,6 +76,12 @@ export class HomeSearchFilterPopoverPage {
   }
 
   async openLabelFilter() {
+    const sharedLabelMessage = await this.translate
+      .get("pages.homepopover.labelShared")
+      .toPromise();
+    const sharedCollectionMessage = await this.translate
+      .get("pages.homepopover.labelSharedCollection")
+      .toPromise();
     const nullMessage = await this.translate
       .get("pages.homepopover.labelNull")
       .toPromise();
@@ -80,13 +91,17 @@ export class HomeSearchFilterPopoverPage {
 
     const groupCount = this.labels.filter((label) => label.labelGroupId).length;
 
+    let hasSharedLabels = false;
     const ungroupedOptions: ResettableSelectOption[] = [];
     let groupedOptions = this.labels
       .sort((a, b) => a.title.localeCompare(b.title))
       .reduce((acc, label) => {
+        if (this.contextUserId !== label.userId) {
+          hasSharedLabels = true;
+        }
         acc[label.labelGroup?.title || ungroupedTitle] ||= [];
         acc[label.labelGroup?.title || ungroupedTitle].push({
-          title: `${label.title} (${label.recipeLabels.length})`,
+          title: `${label.title} (${this.contextUserId === label.userId ? label.recipeLabels.length : sharedLabelMessage})`,
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1,
         });
@@ -114,6 +129,7 @@ export class HomeSearchFilterPopoverPage {
     const labelFilterPopover = await this.popoverCtrl.create({
       component: ResettableSelectPopoverPage,
       componentProps: {
+        message: hasSharedLabels ? sharedCollectionMessage : undefined,
         ungroupedOptions,
         groupedOptions,
         nullMessage,
