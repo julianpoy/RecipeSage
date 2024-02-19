@@ -12,11 +12,11 @@ export enum InputType {
 
 const prompts = {
   [InputType.OCR]:
-    "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Here's the OCR text:\n\n",
+    "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the OCR text:\n\n",
   [InputType.Document]:
-    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format. Here's the document text:\n\n",
+    "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the document text:\n\n",
   [InputType.Text]:
-    "I have copied some recipe text from the internet. Please fix any odd capitalization and save the recipe in JSON format. Here's the copied text:\n\n",
+    "I have copied some recipe text from the internet. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the copied text:\n\n",
 } satisfies Record<InputType, string>;
 
 /**
