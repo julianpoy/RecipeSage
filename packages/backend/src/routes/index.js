@@ -28,7 +28,7 @@ import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
 import { writeImageURL, writeImageBuffer } from "../services/storage/image.ts";
 import { ObjectTypes } from "../services/storage/shared.ts";
-import * as SearchService from "@recipesage/trpc";
+import { indexRecipes } from "@recipesage/util/server/search";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JobTrackerService from "../services/job-tracker.js";
 
@@ -414,7 +414,7 @@ router.get(
 
         const savedRecipeData = savedRecipes.map((e) => e.toJSON());
         if (savedRecipeData.length) {
-          await SearchService.indexRecipes(savedRecipeData);
+          await indexRecipes(savedRecipeData);
         }
       });
 
@@ -487,7 +487,7 @@ router.post(
 
           const recipeData = recipes.map((e) => e.toJSON());
           if (recipeData.length) {
-            await SearchService.indexRecipes(recipeData);
+            await indexRecipes(recipeData);
           }
 
           res.status(200).json({
@@ -572,7 +572,7 @@ router.post(
 
           const recipeData = recipes.map((e) => e.toJSON());
           if (recipeData.length) {
-            await SearchService.indexRecipes(recipeData);
+            await indexRecipes(recipeData);
           }
 
           res.status(200).json({
@@ -773,7 +773,7 @@ router.post(
 
         const recipeData = recipes.map((e) => e.toJSON());
         if (recipeData.length) {
-          await SearchService.indexRecipes(recipeData);
+          await indexRecipes(recipeData);
         }
 
         res.status(201).json({});
