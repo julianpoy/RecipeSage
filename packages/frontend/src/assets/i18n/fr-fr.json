@@ -1009,5 +1009,7 @@
     "pages.editRecipe.clipURL.placeholder": "URL de la recette",
     "pages.editRecipe.clipText.header": "Remplir automatiquement la recette depuis un bloc de texte",
     "pages.editRecipe.clipText.message": "Entrer un bloc de texte contenant une recette",
-    "pages.editRecipe.clipText.placeholder": "Text qui inclut la recette..."
+    "pages.editRecipe.clipText.placeholder": "Text qui inclut la recette...",
+    "pages.homepopover.labelSharedCollection": "Les étiquettes marquées \"Partagée\" appartiennent à d'autres utilisateurs.",
+    "pages.homepopover.labelShared": "Partagée"
 }
