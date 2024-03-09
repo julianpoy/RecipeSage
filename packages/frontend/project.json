@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
+        "command": "ng run app:serve-ssr --host 0.0.0.0 --port 8100"
       }
     },
     "build": {

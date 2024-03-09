@@ -1,5 +1,8 @@
 import { NgModule, ErrorHandler, Injectable } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import {
+  BrowserModule,
+  provideClientHydration,
+} from "@angular/platform-browser";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { RouteReuseStrategy } from "@angular/router";
 
@@ -128,6 +131,7 @@ export class SentryErrorHandler extends ErrorHandler {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     DefaultPageGuardService,
     UnsavedChangesGuardService,
+    provideClientHydration(),
   ],
   bootstrap: [AppComponent],
 })
