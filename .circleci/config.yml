@@ -6,13 +6,13 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - dependency-cache-{{ checksum "package-lock.json" }}
-            - dependency-cache-
+            - dependency-cache-v2-{{ checksum "package-lock.json" }}
+            - dependency-cache-v2-
       - run:
           name: install-deps
           command: "npm install"
       - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v2-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
 jobs:
