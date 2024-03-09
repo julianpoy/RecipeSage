@@ -1,6 +1,9 @@
-FROM julianpoy/node-with-mdbtools:18-0.7.1
+FROM node:20-alpine
 
 WORKDIR /app
+
+# mdbtools
+RUN apk add --no-cache mdbtools sqlite
 
 # node-gyp
 RUN apk add --no-cache python3 make clang build-base

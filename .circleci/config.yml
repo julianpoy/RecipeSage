@@ -19,7 +19,7 @@ jobs:
   build_and_test:
     resource_class: large
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:20.11
         environment:
           RS_TEST_DB_USERNAME: chefbook
           RS_TEST_DB_PASSWORD: admin
@@ -66,11 +66,11 @@ jobs:
   push_backend:
     resource_class: large
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:20.11
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          version: docker24
           docker_layer_caching: true
       - run:
           name: docker-login
@@ -81,11 +81,11 @@ jobs:
   push_backend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:20.11
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          version: docker24
           docker_layer_caching: true
       - run:
           name: docker-login
@@ -99,12 +99,12 @@ jobs:
   push_frontend:
     resource_class: large
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:20.11
     steps:
       - checkout
       - aws-cli/setup
       - setup_remote_docker:
-          version: 20.10.14
+          version: docker24
           docker_layer_caching: true
       - install-dependencies
       - run:
@@ -125,12 +125,12 @@ jobs:
   push_frontend_selfhost:
     resource_class: large
     docker:
-      - image: cimg/node:18.15
+      - image: cimg/node:20.11
     steps:
       - checkout
       - aws-cli/setup
       - setup_remote_docker:
-          version: 20.10.14
+          version: docker24
           docker_layer_caching: true
       - run:
           name: docker-login
