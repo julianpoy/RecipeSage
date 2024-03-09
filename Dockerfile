@@ -5,6 +5,9 @@ WORKDIR /app
 # prisma
 RUN apk add --no-cache openssl
 
+# node-gyp
+RUN apk add --no-cache python3 make clang build-base
+
 # mdbtools
 RUN apk add --no-cache mdbtools mdbtools-utils
 

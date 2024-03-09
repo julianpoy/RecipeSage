@@ -15,11 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "commands": [
-          "webpack -c sw-webpack.config.js --watch",
-          "webpack -c sw-webpack.config.js && ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
-        ],
-        "parallel": true
+        "command": "ng run app:serve-ssr --host 0.0.0.0 --port 8100"
       }
     },
     "build": {
