@@ -5,9 +5,14 @@ import {
 } from "openai/resources/chat/completions";
 import { RSRunnableFunction } from "./chatFunctions";
 
+export enum SupportedGPTModel {
+  GPT35Turbo = "gpt-3.5-turbo-0125",
+  GPT4Turbo = "gpt-4-0125-preview",
+  GPT4Vision = "gpt-4-vision-preview",
+}
+
 export class OpenAIHelper {
   private openAi: OpenAI;
-  private gptModel = process.env.OPENAI_GPT_MODEL || "gpt-3.5-turbo-0125";
 
   constructor() {
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -25,13 +30,14 @@ export class OpenAIHelper {
   }
 
   async getJsonResponseWithTools(
+    model: SupportedGPTModel,
     context: ChatCompletionMessageParam[],
     tools: RSRunnableFunction[],
     toolChoice?: ChatCompletionToolChoiceOption,
   ): Promise<ChatCompletionMessageParam[]> {
     const runner = this.openAi.beta.chat.completions.runTools({
       messages: context,
-      model: this.gptModel,
+      model,
       tools,
       tool_choice: toolChoice,
       response_format: {
@@ -52,12 +58,13 @@ export class OpenAIHelper {
   }
 
   async getChatResponseWithTools(
+    model: SupportedGPTModel,
     context: ChatCompletionMessageParam[],
     tools: RSRunnableFunction[],
   ): Promise<ChatCompletionMessageParam[]> {
     const runner = this.openAi.beta.chat.completions.runTools({
       messages: context,
-      model: this.gptModel,
+      model,
       tools,
     });
 

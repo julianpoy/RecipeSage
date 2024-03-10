@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { initOCRFormatRecipe } from "../ml/chatFunctions";
-import { OpenAIHelper } from "../ml/openai";
+import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
 
 const openAiHelper = new OpenAIHelper();
 
@@ -36,6 +36,7 @@ export const textToRecipe = async (text: string, inputType: InputType) => {
     throw new Error("GPT function must have name for mandated tool call");
 
   await openAiHelper.getJsonResponseWithTools(
+    SupportedGPTModel.GPT35Turbo,
     [
       {
         role: "system",

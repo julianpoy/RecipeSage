@@ -8,7 +8,7 @@ import {
   ChatCompletionMessageToolCall,
   ChatCompletionUserMessageParam,
 } from "openai/resources/chat/completions";
-import { OpenAIHelper } from "./openai";
+import { OpenAIHelper, SupportedGPTModel } from "./openai";
 import { AssistantMessage, Prisma } from "@prisma/client";
 import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
@@ -163,9 +163,11 @@ export class Assistant {
 
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
-    const response = await this.openAiHelper.getChatResponseWithTools(context, [
-      initBuildRecipe(assistantUser.id, recipes),
-    ]);
+    const response = await this.openAiHelper.getChatResponseWithTools(
+      SupportedGPTModel.GPT35Turbo,
+      context,
+      [initBuildRecipe(assistantUser.id, recipes)],
+    );
 
     await prisma.$transaction(async (tx) => {
       await tx.assistantMessage.create({
