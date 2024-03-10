@@ -132,6 +132,42 @@ export class NewLabelItemModalPage {
   async saveLabelGroup() {
     if (!this.title) return;
 
+    if (!this.selectedLabels.length) {
+      const header = await this.translate
+        .get("pages.manageLabelGroupModal.noLabelsSelected")
+        .toPromise();
+      const message = await this.translate
+        .get("pages.manageLabelGroupModal.noLabelsSelectedMessage")
+        .toPromise();
+      const ignore = await this.translate.get("generic.ignore").toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+
+      const alert = await this.alertCtrl.create({
+        header,
+        message,
+        buttons: [
+          {
+            text: ignore,
+            handler: () => this._saveLabelGroup(),
+          },
+          {
+            text: cancel,
+            role: "cancel",
+          },
+        ],
+      });
+
+      await alert.present();
+
+      return;
+    }
+
+    return this._saveLabelGroup();
+  }
+
+  async _saveLabelGroup() {
+    if (!this.title) return;
+
     const loading = this.loadingService.start();
     const result = await this.trpcService.handle(
       this.trpcService.trpc.labelGroups.createLabelGroup.mutate({
