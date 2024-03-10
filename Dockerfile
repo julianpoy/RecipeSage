@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # mdbtools
-RUN apk add --no-cache mdbtools sqlite
+RUN apk add --no-cache mdbtools mdbtools-utils
 
 # node-gyp
 RUN apk add --no-cache python3 make clang build-base
