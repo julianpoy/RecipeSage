@@ -2,11 +2,8 @@ import "./services/sentry-init.js";
 import * as Sentry from "@sentry/node";
 
 import * as fs from "fs-extra";
-import * as mdb from "mdb";
 import * as extract from "extract-zip";
-import * as sqlite3 from "sqlite3";
-import { performance } from "perf_hooks";
-import { exec, spawn } from "child_process";
+import { spawn } from "child_process";
 
 import {
   sequelize,
@@ -92,38 +89,13 @@ let tablesNeeded = [
   // "t_recipemedia" //2x unused (or barely used)
 ];
 
-let sqliteDB;
-let lcbDB;
 let zipPath = runConfig.path;
-let sqlitePath = zipPath + "-sqlite.db";
 let extractPath = zipPath + "-extract";
-let dbPath = zipPath + "-livingcookbook.mdb";
-let lcbTables;
 let tableMap = {};
 
-let metrics = {
-  t0: performance.now(),
-  tExtracted: null,
-  tExported: null,
-  tSqliteStored: null,
-  tSqliteFetched: null,
-  tRecipeDataAssembled: null,
-  tImagesUploaded: null,
-  tRecipesProcessed: null,
-  tRecipesSaved: null,
-  tLabelsSaved: null,
-};
-
 const cleanup = () => {
-  try {
-    sqliteDB.close();
-  } catch (e) {
-    // Do nothing
-  }
-  fs.removeSync(sqlitePath);
   fs.removeSync(zipPath);
   fs.removeSync(extractPath);
-  fs.removeSync(dbPath);
 };
 
 async function main() {
@@ -146,83 +118,32 @@ async function main() {
       });
     }
 
-    metrics.tExtracted = performance.now();
+    for (const tableName of tablesNeeded) {
+      const jsonl = await new Promise((resolve, reject) => {
+        const process = spawn("mdb-json", [potentialDbPaths[0], tableName]);
 
-    await new Promise((resolve, reject) => {
-      let mv = spawn("mv", [potentialDbPaths[0], dbPath]);
-      mv.on("close", (code) => {
-        code === 0 ? resolve() : reject("Move");
-      });
-    });
+        let stdout = "";
+        let stderr = "";
+        process.stdout.on("data", (data) => {
+          stdout += data;
+        });
 
-    // Load mdb
-    lcbDB = mdb(dbPath);
+        process.stderr.on("data", (data) => {
+          stderr += data;
+        });
 
-    // Load lcb schema
-    await new Promise((resolve, reject) => {
-      exec(
-        `mdb-schema ${dbPath} sqlite | sqlite3 ${sqlitePath}`,
-        (err, stdout, stderr) => {
-          console.log(err, stderr);
-          err ? reject(err) : resolve();
-        },
-      );
-    });
-
-    // Load table list
-    await new Promise((resolve, reject) => {
-      lcbDB.tables((err, tables) => {
-        if (err) {
-          reject(err);
-        }
-        lcbTables = tables.filter(
-          (table) => tablesNeeded.indexOf(table) !== -1,
-        );
-
-        resolve();
-      });
-    });
-
-    for (let i = 0; i < lcbTables.length; i++) {
-      let table = lcbTables[i];
-      await new Promise((resolve, reject) => {
-        // CRITICAL: Wrap call in a transaction for sqlite speed
-        let cmd = `{ echo 'BEGIN;'; mdb-export -I sqlite ${dbPath} ${table}; echo 'COMMIT;'; } | sqlite3 ${sqlitePath}`;
-        console.log(cmd);
-        exec(cmd, (err, stdout, stderr) => {
-          console.log(err, stderr, table);
-          err ? reject() : resolve();
+        process.on("close", (code) => {
+          code > 0 ? reject(stderr) : resolve(stdout);
         });
       });
+
+      const json = jsonl
+        .split("\n")
+        .filter((line) => line.trim())
+        .map((line) => JSON.parse(line));
+
+      tableMap[tableName] = json;
     }
-
-    metrics.tExported = performance.now();
-
-    await new Promise((resolve, reject) => {
-      sqliteDB = new sqlite3.Database(sqlitePath, (err) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
-
-    metrics.tSqliteStored = performance.now();
-
-    await Promise.all(
-      lcbTables.map((tableName) => {
-        return new Promise((resolve) => {
-          sqliteDB.all("SELECT * FROM " + tableName, [], (err, results) => {
-            if (err) throw err;
-
-            tableMap[tableName] = results;
-
-            resolve();
-          });
-        });
-      }),
-    );
-
-    metrics.tSqliteFetched = performance.now();
-    // return await fs.writeFile('output', JSON.stringify(tableMap))
 
     let labelMap = {};
 
@@ -324,8 +245,6 @@ async function main() {
       {},
     );
 
-    metrics.tRecipeDataAssembled = performance.now();
-
     await sequelize.transaction(async (t) => {
       let recipesWithImages = runConfig.excludeImages
         ? []
@@ -379,8 +298,6 @@ async function main() {
           );
         });
       }, Promise.resolve());
-
-      metrics.tImagesUploaded = performance.now();
 
       await Promise.all(
         tableMap.t_recipe.map(async (lcbRecipe) => {
@@ -488,8 +405,6 @@ async function main() {
         }),
       );
 
-      metrics.tRecipesProcessed = performance.now();
-
       let recipes = await Recipe.bulkCreate(
         pendingRecipes.map((el) => el.model),
         {
@@ -539,8 +454,6 @@ async function main() {
         },
       );
 
-      metrics.tRecipesSaved = performance.now();
-
       await Promise.all(
         Object.keys(labelMap).map((lcbLabelName) => {
           return Label.findOrCreate({
@@ -565,29 +478,7 @@ async function main() {
           });
         }),
       );
-
-      metrics.tLabelsSaved = performance.now();
     });
-
-    metrics.performance = {
-      tExtract: Math.floor(metrics.tExtracted - metrics.t0),
-      tExport: Math.floor(metrics.tExported - metrics.tExtracted),
-      tSqliteStore: Math.floor(metrics.tSqliteStored - metrics.tExported),
-      tSqliteFetch: Math.floor(metrics.tSqliteFetched - metrics.tSqliteStored),
-      tRecipeDataAssemble: Math.floor(
-        metrics.tRecipeDataAssembled - metrics.tSqliteFetched,
-      ),
-      tImagesUpload: Math.floor(
-        metrics.tImagesUploaded - metrics.tRecipeDataAssembled,
-      ),
-      tRecipesProcess: Math.floor(
-        metrics.tRecipesProcessed - metrics.tImagesUploaded,
-      ),
-      tRecipesSave: Math.floor(
-        metrics.tRecipesSaved - metrics.tRecipesProcessed,
-      ),
-      tLabelsSave: Math.floor(metrics.tLabelsSaved - metrics.tRecipesSaved),
-    };
 
     exit(0);
   } catch (e) {
