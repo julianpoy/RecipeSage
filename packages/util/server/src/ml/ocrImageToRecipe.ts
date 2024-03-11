@@ -1,7 +1,12 @@
+import { IS_FIREBASE_AVAILABLE } from "../general/isFirebaseAvailable";
 import { ocrImageBuffer } from "./ocr";
-import { InputType, textToRecipe } from "./textToRecipe";
+import { TextToRecipeInputType, textToRecipe } from "./textToRecipe";
 
 export const ocrImageToRecipe = async (imageBuffer: Buffer) => {
+  if (!IS_FIREBASE_AVAILABLE) {
+    throw new Error("Firebase configuration required for OCR");
+  }
+
   const ocrResults = await ocrImageBuffer(imageBuffer);
 
   const stringifiedOCRResults = ocrResults.join("\n");
@@ -10,7 +15,7 @@ export const ocrImageToRecipe = async (imageBuffer: Buffer) => {
 
   const recognizedRecipe = await textToRecipe(
     stringifiedOCRResults,
-    InputType.OCR,
+    TextToRecipeInputType.OCR,
   );
 
   return recognizedRecipe;

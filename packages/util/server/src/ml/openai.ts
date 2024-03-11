@@ -1,5 +1,6 @@
 import { OpenAI } from "openai";
 import {
+  ChatCompletion,
   ChatCompletionMessageParam,
   ChatCompletionToolChoiceOption,
 } from "openai/resources/chat/completions";
@@ -78,6 +79,18 @@ export class OpenAIHelper {
     console.log("cost", await runner.totalUsage());
 
     return chats;
+  }
+
+  async getChatResponse(
+    model: SupportedGPTModel,
+    context: ChatCompletionMessageParam[],
+  ): Promise<ChatCompletion> {
+    const response = await this.openAi.chat.completions.create({
+      messages: context,
+      model,
+    });
+
+    return response;
   }
 
   async generateImage(prompt: string, userId: string) {

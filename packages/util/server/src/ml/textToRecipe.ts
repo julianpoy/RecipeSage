@@ -4,20 +4,20 @@ import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
 
 const openAiHelper = new OpenAIHelper();
 
-export enum InputType {
+export enum TextToRecipeInputType {
   OCR,
   Document,
   Text,
 }
 
 const prompts = {
-  [InputType.OCR]:
+  [TextToRecipeInputType.OCR]:
     "I have scanned a recipe via OCR and this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the OCR text:\n\n",
-  [InputType.Document]:
+  [TextToRecipeInputType.Document]:
     "I have scanned a recipe from a document this block of text is the result. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the document text:\n\n",
-  [InputType.Text]:
+  [TextToRecipeInputType.Text]:
     "I have copied some recipe text from the internet. Please fix any odd capitalization and save the recipe in JSON format in it's original language. Here's the copied text:\n\n",
-} satisfies Record<InputType, string>;
+} satisfies Record<TextToRecipeInputType, string>;
 
 /**
  * If passed very little text, we're not going to get
@@ -26,7 +26,10 @@ const prompts = {
  */
 const OCR_MIN_VALID_TEXT = 20;
 
-export const textToRecipe = async (text: string, inputType: InputType) => {
+export const textToRecipe = async (
+  text: string,
+  inputType: TextToRecipeInputType,
+) => {
   if (text.length < OCR_MIN_VALID_TEXT) return;
 
   const recognizedRecipes: Prisma.RecipeUncheckedCreateInput[] = [];

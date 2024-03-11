@@ -1,7 +1,7 @@
 import { extractTextFromPDF } from "../pdf/extractTextFromPDF";
 import { getImagesFromPDF } from "../pdf/getImagesFromPDF";
 import { ocrImageToRecipe } from "./ocrImageToRecipe";
-import { InputType, textToRecipe } from "./textToRecipe";
+import { TextToRecipeInputType, textToRecipe } from "./textToRecipe";
 
 export const pdfToRecipe = async (pdf: Uint8Array, maxPages?: number) => {
   const text = await extractTextFromPDF(pdf, maxPages);
@@ -16,6 +16,6 @@ export const pdfToRecipe = async (pdf: Uint8Array, maxPages?: number) => {
     return recipe;
   }
 
-  const recipe = await textToRecipe(text, InputType.Document);
+  const recipe = await textToRecipe(text, TextToRecipeInputType.Document);
   return recipe;
 };
