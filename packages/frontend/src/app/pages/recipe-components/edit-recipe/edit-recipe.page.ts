@@ -63,7 +63,6 @@ export class EditRecipePage {
   labelGroups: LabelGroupSummary[] = [];
   selectedLabels: LabelSummary[] = [];
 
-  enableOCR = this.featureFlagService.flags.enableOCR && true;
   isAutoclipPopoverOpen = false;
 
   constructor(
