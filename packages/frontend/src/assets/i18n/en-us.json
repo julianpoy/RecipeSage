@@ -459,6 +459,7 @@
   "pages.assistant.welcome.1": "Welcome to the RecipeSage cooking assistant!",
   "pages.assistant.welcome.2": "The cooking assistant is an AI model that can respond to your cooking questions and help create recipes.",
   "pages.assistant.welcome.3": "The cooking assistant has a message limit of 5 messages/day because of the high costs to run the AI. This limit is increased to 50 messages/day for contributors.",
+  "pages.assistant.welcome.documentation": "Please read the assistant documentation",
   "pages.assistant.messageLimit": "Maximum messages reached (sorry, it's costly!). Message count resets at 0:00GMT.",
 
   "pages.messageThread.title": "Conversation with {{name}}",
@@ -545,6 +546,7 @@
   "pages.editRecipe.clipText.invalid": "Error: Text too short or could not recognize recipe",
   "pages.editRecipe.clip.loading": "Please wait...",
   "pages.editRecipe.clip.failed": "Failed to autofill from that URL",
+  "pages.editRecipe.clip.failedSelfhost": "Please check your OpenAI credentials as described in the selfhosting readme",
   "pages.editRecipe.missingLabelGroup.title": "Missing label group",
   "pages.editRecipe.missingLabelGroup.message": "You've specified that the label group \"{{groupName}}\" should be required. You can turn this off via the my labels page.",
   "pages.editRecipe.conflict.title": "Duplicate Title",

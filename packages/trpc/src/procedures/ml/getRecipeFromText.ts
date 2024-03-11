@@ -1,4 +1,7 @@
-import { InputType, textToRecipe } from "@recipesage/util/server/ml";
+import {
+  TextToRecipeInputType,
+  textToRecipe,
+} from "@recipesage/util/server/ml";
 import { publicProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -18,7 +21,10 @@ export const getRecipeFromText = publicProcedure
       });
     }
 
-    const recognizedRecipe = await textToRecipe(input.text, InputType.Text);
+    const recognizedRecipe = await textToRecipe(
+      input.text,
+      TextToRecipeInputType.Text,
+    );
     if (!recognizedRecipe) {
       throw new TRPCError({
         message: "Could not parse recipe from OCR results",

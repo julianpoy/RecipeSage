@@ -1,7 +1,9 @@
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { join } from "path";
 
-export const ocrImageBuffer = async (imageBuffer: Buffer) => {
+export const ocrImageBuffer = async (
+  imageBuffer: Buffer,
+): Promise<string[]> => {
   const imageAnnotationClient = new ImageAnnotatorClient({
     keyFile: join(__dirname, "../../../../../.credentials/firebase.json"),
   });

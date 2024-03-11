@@ -90,16 +90,19 @@ const attemptExit = () => {
   if (jobsWaiting === 0) exit();
 };
 
-process.on("SIGTERM", () => {
+const termHandler = () => {
   if (process.env.NODE_ENV !== "production") {
     process.exit(0);
   }
 
-  console.log("RECEIVED SIGTERM - CLOSING SERVER");
+  console.log("RECEIVED SIGNAL - CLOSING SERVER");
   server.close(() => {
     console.log("SERVER CLOSED - RESTING");
 
     setInterval(attemptExit, 5 * 1000); // Job check interval
     setTimeout(exit, 300 * 1000); // Max job wait
   });
-});
+};
+
+process.on("SIGTERM", termHandler);
+process.on("SIGINT", termHandler);
