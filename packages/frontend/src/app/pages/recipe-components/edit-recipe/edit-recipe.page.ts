@@ -29,6 +29,8 @@ import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
 import { FeatureFlagService } from "../../../services/feature-flag.service";
+import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
+import { ErrorHandlers } from "../../../services/http-error-handler.service";
 
 @Component({
   selector: "page-edit-recipe",
@@ -446,6 +448,35 @@ export class EditRecipePage {
     return url.protocol.startsWith("http");
   }
 
+  getSelfhostErrorHandlers(): ErrorHandlers {
+    return IS_SELFHOST
+      ? {
+          500: async () => {
+            const header = await this.translate
+              .get("generic.error")
+              .toPromise();
+            const message = await this.translate
+              .get("pages.editRecipe.clip.failedSelfhost")
+              .toPromise();
+            const okay = await this.translate.get("generic.okay").toPromise();
+
+            const errorAlert = await this.alertCtrl.create({
+              header,
+              message,
+              buttons: [
+                {
+                  text: okay,
+                  role: "cancel",
+                },
+              ],
+            });
+
+            errorAlert.present();
+          },
+        }
+      : {};
+  }
+
   async scanPDF() {
     let filePickerResult;
     try {
@@ -473,6 +504,7 @@ export class EditRecipePage {
       this.trpcService.trpc.ml.getRecipeFromPDF.mutate({
         pdf: file.data,
       }),
+      this.getSelfhostErrorHandlers(),
     );
 
     loading.dismiss();
@@ -523,6 +555,7 @@ export class EditRecipePage {
       this.trpcService.trpc.ml.getRecipeFromOCR.mutate({
         image: capturedPhoto.base64String,
       }),
+      this.getSelfhostErrorHandlers(),
     );
 
     loading.dismiss();
@@ -627,6 +660,7 @@ export class EditRecipePage {
         text,
       }),
       {
+        ...this.getSelfhostErrorHandlers(),
         400: async () => {
           (
             await this.toastCtrl.create({
