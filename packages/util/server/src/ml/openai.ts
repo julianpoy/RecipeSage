@@ -88,6 +88,7 @@ export class OpenAIHelper {
     const response = await this.openAi.chat.completions.create({
       messages: context,
       model,
+      max_tokens: 4000,
     });
 
     return response;
