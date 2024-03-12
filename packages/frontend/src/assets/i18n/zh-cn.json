@@ -304,5 +304,17 @@
     "pages.manageLabelGroupModal.title": "管理标签分类",
     "pages.manageLabelGroupModal.groupTitle": "标签分类名",
     "pages.manageLabelGroupModal.groupTitlePlaceholder": "输入标签分类名",
-    "pages.manageLabelGroupModal.groupTitleHint": "很多用户从创建\"膳食\",\"减肥餐\"或者\"小食\""
+    "pages.manageLabelGroupModal.groupTitleHint": "很多用户从创建\"膳食\",\"减肥餐\"或者\"小食\"",
+    "pages.manageLabelGroupModal.warnDescription": "选中时,如果您保存的菜谱没有标签,您将会被提醒",
+    "pages.manageLabelGroupModal.warn": "如果没有创建请提醒我",
+    "pages.manageLabelGroupModal.labels": "选择标签",
+    "pages.manageLabelGroupModal.labelsHint": "将选中的标签组成小组.一个标签最多只能属于一个分类.",
+    "pages.manageLabelGroupModal.labels.noSelectedItems": "没有选中的标签",
+    "pages.manageLabelGroupModal.labels.noItems": "没有标签,也许您应该优先添加标签而非标签分类!",
+    "pages.manageLabelGroupModal.labels.search": "修改一个标签",
+    "pages.manageLabelGroupModal.conflict": "出错了",
+    "pages.manageLabelGroupModal.noLabelsSelected": "警告!",
+    "pages.manageLabelGroupModal.noLabelsSelectedMessage": "您还没有选择任何的标签组成这个分类.只有标签分类其实是没有什么用途的 - 您应该优先创建标签.",
+    "pages.manageLabelGroupModal.conflictMessage": "标签分类名称已经存在",
+    "pages.manageLabelGroupModal.delete.header": "确认删除标签分类"
 }
