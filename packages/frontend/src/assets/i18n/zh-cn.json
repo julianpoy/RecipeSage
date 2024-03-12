@@ -293,5 +293,16 @@
     "pages.labels.group.nullState.2": "点击+号来创建一个标签分类.",
     "pages.newLabelItemModal.title": "新的标签和标签分类",
     "pages.newLabelItemModal.categoryTitle": "新的标签分类",
-    "pages.newLabelItemModal.labelTitle": "新的标签"
+    "pages.newLabelItemModal.labelTitle": "新的标签",
+    "pages.newLabelItemModal.label": "创建一个标签",
+    "pages.newLabelItemModal.labelDescription": "标签是 RecipeSage 中的管理菜谱的主要方法。 它们可以把标签附加到菜谱中以便稍后管理和查找。 一些常见的标签示例有“早餐”、“甜点”和“素食”。",
+    "pages.newLabelItemModal.group": "创建一个标签分类(高级选项)",
+    "pages.newLabelItemModal.groupDescription": "标签分类是“标签的类别”，可用于将多个不同的标签分成不同的小组。 常见标签类别的一些示例有：“膳食”或“饮食”。 例如，您可以将标签“早餐”、“午餐”和“晚餐”放在名为“膳食”的标签类别下。",
+    "pages.newLabelItemModal.labelTitleInput": "标签名",
+    "pages.newLabelItemModal.labelTitleInputPlaceholder": "输入一个标签名",
+    "pages.newLabelItemModal.labelTitleInputHint": "有很多用户从创建简单的标签开始例如\"早餐\",\"甜点\",或者\"素食\"",
+    "pages.manageLabelGroupModal.title": "管理标签分类",
+    "pages.manageLabelGroupModal.groupTitle": "标签分类名",
+    "pages.manageLabelGroupModal.groupTitlePlaceholder": "输入标签分类名",
+    "pages.manageLabelGroupModal.groupTitleHint": "很多用户从创建\"膳食\",\"减肥餐\"或者\"小食\""
 }
