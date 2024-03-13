@@ -11,6 +11,7 @@ export enum EventName {
   ImportPepperplateFailed = "import:pepperplate:failed",
   ImportPepperplateWorking = "import:pepperplate:working",
   ApplicationMultitaskingResumed = "application:multitasking:resumed",
+  ApplicationLanguageChanged = "application:language:changed",
   Auth = "auth",
 }
 

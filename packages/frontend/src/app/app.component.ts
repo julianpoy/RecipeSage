@@ -191,6 +191,10 @@ export class AppComponent {
       },
     );
 
+    this.events.subscribe(EventName.ApplicationLanguageChanged, () => {
+      this.updateNavList();
+    });
+
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();
       this.updateNavList();
