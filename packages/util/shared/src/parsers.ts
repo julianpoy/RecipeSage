@@ -45,7 +45,7 @@ const replaceFractionsInText = (rawText: string): string => {
 // Starts with [, anything inbetween, ends with ]
 const headerRegexp = /^\[.*\]$/;
 
-const multipartQuantifierRegexp = / \+ | plus /;
+const multipartQuantifierRegexp = / \+ | plus | or /;
 
 const measurementRegexp =
   /((\d+ )?\d+([/.]\d+)?((-)|( to )|( - ))(\d+ )?\d+([/.]\d+)?)|((\d+ )?\d+[/.]\d+)|\d+/;
