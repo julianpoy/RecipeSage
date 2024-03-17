@@ -813,5 +813,7 @@
     "pages.settings.language": "语言",
     "pages.settings.fontSize": "字体大小",
     "pages.shoppingList.title": "购物清单 - {{title}}",
-    "pages.shoppingList.nullState.1": "购物清单为空."
+    "pages.shoppingList.nullState.1": "购物清单为空.",
+    "pages.settings.preferencesSync.message": "您需要选择是否需要把盖云上的设置同步为在此设备上的本地设置,或者从云同步设置至此设备.",
+    "pages.editRecipe.missingLabelGroup.message": "您已经设置包括标签组\"{{groupName}}\" .您可以在我的标签管理页面关闭."
 }
