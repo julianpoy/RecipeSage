@@ -21,7 +21,10 @@ import { MessagingService } from "~/services/messaging.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UserService } from "~/services/user.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { GlobalPreferenceKey, SupportedLanguages } from "@recipesage/util";
+import {
+  GlobalPreferenceKey,
+  SupportedLanguages,
+} from "@recipesage/util/shared";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { EventName, EventService } from "~/services/event.service";
 import {
@@ -187,6 +190,10 @@ export class AppComponent {
         this.loadInboxCount();
       },
     );
+
+    this.events.subscribe(EventName.ApplicationLanguageChanged, () => {
+      this.updateNavList();
+    });
 
     this.events.subscribe(EventName.Auth, () => {
       this.updateIsLoggedIn();

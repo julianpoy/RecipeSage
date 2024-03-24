@@ -10,7 +10,7 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import { RecipeService } from "~/services/recipe.service";
-import { LabelSummary } from "packages/trpc/src/types/labelSummary";
+import type { LabelSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-manage-label-modal",

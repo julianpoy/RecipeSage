@@ -37,7 +37,7 @@ services:
       - ./.credentials:/app/.credentials
     ports:
       - "3000:3000"
-    command: ./scripts/watchandrun.sh 'npx ts-node --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/prisma
+    command: ./scripts/watchandrun.sh 'node node_modules/ts-node/dist/bin.js --swc --project packages/backend/tsconfig.json packages/backend/src/bin/www' ./packages/backend ./packages/trpc ./packages/util ./packages/express ./packages/prisma
     environment:
       - AWS_REGION=us-west-2
       - AWS_BUCKET=chefbook-dev
@@ -54,7 +54,6 @@ services:
       - POSTGRES_SSL=false
       - POSTGRES_LOGGING=true
       - DATABASE_URL=postgresql://recipesage_dev:recipesage_dev@postgres:5432/recipesage_dev
-      - OPENAI_GPT_MODEL=gpt-3.5-turbo-1106
       - GCM_KEYPAIR
       - SENTRY_SAMPLE_RATE=0
       - GRIP_URL=http://pushpin:5561/

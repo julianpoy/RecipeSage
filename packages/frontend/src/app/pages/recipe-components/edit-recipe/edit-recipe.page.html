@@ -25,14 +25,50 @@
   ></multi-image-upload>
 
   <div class="ion-padding edit-contents-container">
-    <ion-button *ngIf="!recipe.id" (click)="clipFromUrl()">
-      <ion-icon name="link" slot="start"></ion-icon>
-      {{ 'pages.editRecipe.autoclip' | translate }}
+    <ion-button *ngIf="!recipe.id" id="autoclip-popover-trigger">
+      <ion-icon name="cut-outline" slot="start"></ion-icon>
+      {{ 'pages.editRecipe.showClipOptions' | translate }}
     </ion-button>
-    <ion-button *ngIf="!recipe.id && enableOCR" (click)="scan()">
-      <ion-icon name="camera" slot="start"></ion-icon>
-      {{ 'pages.editRecipe.scan' | translate }}
-    </ion-button>
+    <ion-popover
+      trigger="autoclip-popover-trigger"
+      triggerAction="click"
+      [isOpen]="isAutoclipPopoverOpen"
+      (didPresent)="isAutoclipPopoverOpen = true"
+      (didDismiss)="isAutoclipPopoverOpen = false"
+      [showBackdrop]="false"
+    >
+      <ng-template>
+        <ion-content>
+          <ion-list>
+            <ion-item
+              button
+              (click)="isAutoclipPopoverOpen = false; clipFromUrl()"
+            >
+              <ion-icon name="link" slot="start"></ion-icon>
+              {{ 'pages.editRecipe.autoclip' | translate }}
+            </ion-item>
+            <ion-item
+              button
+              (click)="isAutoclipPopoverOpen = false; clipFromText()"
+            >
+              <ion-icon name="document-text-outline" slot="start"></ion-icon>
+              {{ 'pages.editRecipe.clipText' | translate }}
+            </ion-item>
+            <ion-item
+              button
+              (click)="isAutoclipPopoverOpen = false; scanImage()"
+            >
+              <ion-icon name="camera" slot="start"></ion-icon>
+              {{ 'pages.editRecipe.scanImage' | translate }}
+            </ion-item>
+            <ion-item button (click)="isAutoclipPopoverOpen = false; scanPDF()">
+              <ion-icon name="document-text-outline" slot="start"></ion-icon>
+              {{ 'pages.editRecipe.scanPDF' | translate }}
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
     <br />
     <br />
     <br />
@@ -237,7 +273,7 @@
           [disallowedTitles]="disallowedTitleMap(labels, labelGroup.id)"
           [reserveSearchResultsHeight]="false"
           noSelectedItemsText="{{ 'pages.editRecipe.input.labels.noSelectedItems' | translate }}"
-          noItemsText="{{ 'pages.editRecipe.input.labels.noItems' | translate }}"
+          noItemsText="{{ 'pages.editRecipe.input.labels.noItemsGroup' | translate }}"
           searchPlaceholderText="{{ 'pages.editRecipe.input.labels.search' | translate }}"
         ></select-multiple-items>
       </div>

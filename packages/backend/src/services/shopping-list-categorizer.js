@@ -7,7 +7,7 @@ import {
   parseUnit,
   getTitleForIngredient,
   getMeasurementsForIngredient,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 
 let ingredientsList = [];
 let itemCategories = {};

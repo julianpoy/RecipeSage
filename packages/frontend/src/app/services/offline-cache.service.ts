@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { PreferencesService } from "~/services/preferences.service";
-import { GlobalPreferenceKey } from "@recipesage/util";
+import { GlobalPreferenceKey } from "@recipesage/util/shared";
 import {
   FeatureFlagService,
   FeatureFlagKeys,

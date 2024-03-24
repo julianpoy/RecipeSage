@@ -80,9 +80,11 @@ router.post(
 
       // Allow invoice payment_succeeded to handle subscription payments
       if (session.mode !== "subscription") {
+        const stripeEmail =
+          session.customer_email || session.customer_details?.email;
         const user = await StripeService.findCheckoutUser(
           session.customer,
-          session.customer_email,
+          stripeEmail,
         );
 
         const amountPaid = session.display_items
@@ -95,8 +97,7 @@ router.post(
               userId: user ? user.id : null,
               amountPaid,
               customerId: session.customer,
-              customerEmail:
-                session.customer_email || (user || {}).email || null,
+              customerEmail: stripeEmail || (user || {}).email || null,
               paymentIntentId: session.payment_intent,
               invoiceBlob: session,
             },
@@ -111,6 +112,13 @@ router.post(
               "pyo-single",
               transaction,
             );
+          } else {
+            Sentry.captureMessage("Payment collected for unknown user", {
+              extra: {
+                type: event.type,
+                stripeSession: session,
+              },
+            });
           }
         });
       }
@@ -152,6 +160,13 @@ router.post(
               );
             }),
           );
+        } else {
+          Sentry.captureMessage("Payment collected for unknown user", {
+            extra: {
+              type: event.type,
+              stripeInvoice: invoice,
+            },
+          });
         }
       });
     }

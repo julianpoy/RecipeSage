@@ -1,4 +1,4 @@
-@import "src/theme/shared-variables.scss";
+@import "../theme/shared-variables.scss";
 
 // App Styles
 // ----------------------------------------------------------------------------
@@ -222,6 +222,10 @@ ion-button.button-outline {
 
 .language-select-alert .select-interface-option {
   text-transform: capitalize;
+}
+
+.ion-valid {
+  --highlight-color: var(--ion-text-color) !important;
 }
 
 /* Must be added globally, since iframe is loaded outside of the context of Angular CSS encapsulation */

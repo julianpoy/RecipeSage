@@ -256,6 +256,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportRecipeKeeperPage.path,
+    loadChildren: () =>
+      import(
+        "~/pages/settings-components/import-recipekeeper/import-recipekeeper.module"
+      ).then((module) => module.ImportRecipeKeeperPageModule),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ImportPepperplatePage.path,
     loadChildren: () =>
       import(

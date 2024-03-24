@@ -13,7 +13,7 @@ import {
   parseIngredients,
   parseInstructions,
   parseNotes,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 
 export type RecipeFolderName = "main" | "inbox";
 
@@ -381,6 +381,19 @@ export class RecipeService {
 
     return this.httpService.multipartRequestWithWrapper<void>(
       "data/import/cookmate",
+      "POST",
+      formData,
+      undefined,
+      errorHandlers,
+    );
+  }
+
+  importRecipeKeeper(file: Blob, errorHandlers?: ErrorHandlers) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<void>(
+      "data/import/recipe-keeper",
       "POST",
       formData,
       undefined,

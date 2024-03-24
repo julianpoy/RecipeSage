@@ -32,4 +32,8 @@ export class ImportPage {
   goToImportCookmate() {
     this.navCtrl.navigateForward(RouteMap.ImportCookmatePage.getPath());
   }
+
+  goToImportRecipeKeeper() {
+    this.navCtrl.navigateForward(RouteMap.ImportRecipeKeeperPage.getPath());
+  }
 }

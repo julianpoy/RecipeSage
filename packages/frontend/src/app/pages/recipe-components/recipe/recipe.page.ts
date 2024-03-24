@@ -25,7 +25,7 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
 import { WakeLockService } from "~/services/wakelock.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { RecipeDetailsPreferenceKey } from "@recipesage/util";
+import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "~/services/recipe-completion-tracker.service";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
@@ -40,7 +40,7 @@ import type {
   RecipeSummary,
   RecipeSummaryLite,
   UserPublic,
-} from "@recipesage/trpc";
+} from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({

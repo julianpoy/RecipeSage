@@ -1,5 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 
+export * from "./types";
+
 const log: Prisma.LogDefinition[] = [
   {
     level: "error",

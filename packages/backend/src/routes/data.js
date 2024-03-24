@@ -7,12 +7,13 @@ import * as fs from "fs-extra";
 import * as fsPromises from "fs/promises";
 import * as extract from "extract-zip";
 import * as path from "path";
+import * as jsdom from "jsdom";
 
 import * as MiddlewareService from "../services/middleware.js";
 import * as SubscriptionsService from "../services/subscriptions.js";
-import * as Util from "@recipesage/util";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
-import * as SearchService from "@recipesage/trpc";
+import { indexRecipes } from "@recipesage/util/server/search";
 import {
   writeImageFile,
   writeImageURL,
@@ -451,7 +452,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(200).send("Imported");
     } catch (e) {
@@ -550,7 +551,160 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
+
+      res.status(201).send("Import complete");
+    } catch (err) {
+      if (err.message === "end of central directory record signature not found")
+        err.status = 406;
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+      next(err);
+    }
+  },
+);
+
+router.post(
+  "/import/recipe-keeper",
+  MiddlewareService.validateSession(["user"]),
+  multer({
+    dest: "/tmp/import/",
+  }).single("file"),
+  async (req, res, next) => {
+    let zipPath, extractPath;
+    try {
+      if (!req.file) {
+        const badFormatError = new Error(
+          "Request must include multipart file under the 'file' field",
+        );
+        badFormatError.status = 400;
+        throw badFormatError;
+      }
+
+      zipPath = req.file.path;
+      extractPath = zipPath + "-extract";
+
+      await extract(zipPath, { dir: extractPath });
+
+      const recipeHtml = await fs.readFile(
+        extractPath + "/recipes.html",
+        "utf-8",
+      );
+
+      const dom = new jsdom.JSDOM(recipeHtml);
+
+      const recipes = [];
+      const domList =
+        dom.window.document.getElementsByClassName("recipe-details");
+      for (const domItem of domList) {
+        const title =
+          domItem.querySelector('[itemprop="name"]')?.textContent.trim() ||
+          "Untitled";
+        const source = domItem
+          .querySelector('[itemprop="recipeSource"]')
+          ?.textContent.trim();
+        const rating =
+          parseInt(
+            domItem
+              .querySelector('[itemprop="recipeRating"]')
+              ?.getAttribute("content")
+              .trim(),
+          ) || null;
+        const servings = domItem
+          .querySelector('[itemprop="recipeYield"]')
+          ?.textContent.trim();
+        const activeTime = domItem
+          .querySelector('[itemprop="prepTime"]')
+          ?.textContent.trim();
+        let totalTime = domItem
+          .querySelector('[itemprop="cookTime"]')
+          ?.textContent.trim();
+        if (totalTime.trim()) {
+          // Recipe keeper does not track total time, just active and cook. We simulate that here.
+          totalTime += " Cook Time";
+        }
+        const ingredients = domItem
+          .querySelector('[itemprop="recipeIngredients"]')
+          ?.textContent.split("\n")
+          .map((ingredient) => ingredient.trim())
+          .join("\n");
+
+        const instructions = domItem
+          .querySelector('[itemprop="recipeDirections"]')
+          ?.textContent.trim()
+          .split("\n")
+          .map((instruction) =>
+            instruction
+              .trim()
+              .replaceAll(/^\d+. /g, "")
+              .trim(),
+          )
+          .join("\n");
+
+        const categories = [
+          ...domItem.querySelectorAll('[itemprop="recipeCategory"]'),
+        ].map((el) => el.getAttribute("content"));
+        const courses = [
+          ...domItem.querySelectorAll('[itemprop="recipeCourse"]'),
+        ].map((el) => el.textContent);
+        const isFavorite =
+          domItem
+            .querySelector('[itemprop="recipeIsFavourite"]')
+            ?.getAttribute("content") === "True";
+        const labels = [...categories, ...courses, isFavorite ? `favorite` : ""]
+          .map((e) => Util.cleanLabelTitle(e))
+          .filter((e) => e);
+
+        const notes = domItem.querySelector(
+          '[itemprop="recipeNotes"]',
+        )?.textContent;
+
+        const unconfirmedImagePaths = [
+          ...new Set(
+            [...domItem.getElementsByTagName("img")].map((el) => el.src),
+          ),
+        ].map((src) => extractPath + "/" + src);
+
+        const imagePaths = [];
+        for (const imagePath of unconfirmedImagePaths) {
+          try {
+            await fs.stat(imagePath);
+            imagePaths.push(imagePath);
+          } catch (e) {
+            // Do nothing, image excluded
+          }
+        }
+
+        recipes.push({
+          title,
+          ingredients,
+          instructions,
+          yield: servings,
+          totalTime,
+          activeTime,
+          notes,
+          source,
+          folder: "main",
+          fromUserId: null,
+          rating,
+
+          labels,
+          images: imagePaths,
+        });
+      }
+
+      await importStandardizedRecipes(res.locals.session.userId, recipes);
+
+      await fs.remove(zipPath);
+      await fs.remove(extractPath);
+
+      const recipesToIndex = await Recipe.findAll({
+        where: {
+          userId: res.locals.session.userId,
+        },
+      });
+
+      await indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {
@@ -683,7 +837,7 @@ router.post(
         },
       });
 
-      await SearchService.indexRecipes(recipesToIndex);
+      await indexRecipes(recipesToIndex);
 
       res.status(201).send("Import complete");
     } catch (err) {

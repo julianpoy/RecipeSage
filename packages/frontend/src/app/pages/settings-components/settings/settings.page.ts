@@ -15,7 +15,7 @@ import {
   GlobalPreferenceKey,
   PreferencesSync,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import {
   FeatureFlagService,
   FeatureFlagKeys,
@@ -28,6 +28,7 @@ import { OfflineCacheService } from "~/services/offline-cache.service";
 import { FontSizeModalComponent } from "../../../components/font-size-modal/font-size-modal.component";
 import { MessagingService } from "../../../services/messaging.service";
 import { UserService } from "../../../services/user.service";
+import { EventName, EventService } from "../../../services/event.service";
 
 @Component({
   selector: "page-settings",
@@ -52,6 +53,7 @@ export class SettingsPage {
   isLoggedIn: boolean = false;
 
   constructor(
+    private events: EventService,
     private navCtrl: NavController,
     private translate: TranslateService,
     private toastCtrl: ToastController,
@@ -259,6 +261,8 @@ export class SettingsPage {
     const language = newLang || this.utilService.getAppBrowserLang();
     this.translate.use(language);
     this.utilService.setHtmlBrowserLang(language);
+
+    this.events.publish(EventName.ApplicationLanguageChanged);
   }
 
   fontSizeChanged() {

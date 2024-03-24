@@ -1,10 +1,10 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
 import { z } from "zod";
+import { validateSession } from "@recipesage/util/server/general";
+import { labelSummary } from "@recipesage/prisma";
 import { TRPCError } from "@trpc/server";
-import { labelSummary } from "../../types/labelSummary";
-import { cleanLabelTitle } from "@recipesage/util";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 
 export const createLabel = publicProcedure
   .input(

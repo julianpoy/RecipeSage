@@ -13,7 +13,7 @@ import { TRPCService } from "../../../services/trpc.service";
 import type {
   AssistantMessageSummary,
   RecipeSummaryLite,
-} from "@recipesage/trpc";
+} from "@recipesage/prisma";
 
 @Component({
   selector: "page-assistant",

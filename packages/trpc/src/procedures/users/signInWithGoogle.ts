@@ -6,8 +6,8 @@ import { TRPCError } from "@trpc/server";
 import {
   SessionType,
   generateSession,
-} from "../../services/user/generateSession";
-import { config } from "../../services/config";
+  config,
+} from "@recipesage/util/server/general";
 
 export const signInWithGoogle = publicProcedure
   .input(
