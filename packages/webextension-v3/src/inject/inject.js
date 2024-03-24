@@ -15,10 +15,10 @@ if (window[extensionContainerId]) {
 
   console.log("Loading RecipeSage Browser Extension");
 
-  const fetchToken = () => {
+  const fetchTokenAndUrls = () => {
     return new Promise((resolve) => {
-      chrome.storage.local.get(["token"], (result) => {
-        resolve(result.token);
+      chrome.storage.local.get(["token", "api_url", "base_url"], (result) => {
+        resolve(result);
       });
     });
   };
@@ -55,10 +55,8 @@ if (window[extensionContainerId]) {
       autoSnipPending.innerText = "Grabbing Recipe Content...";
       autoSnipPendingContainer.appendChild(autoSnipPending);
 
-      autoSnipPromise = fetchToken().then((token) => {
-        window.RC_ML_CLASSIFY_ENDPOINT =
-          "https://api.recipesage.com/proxy/ingredient-instruction-classifier?token=" +
-          token;
+      autoSnipPromise = fetchTokenAndUrls().then((result) => {
+        window.RC_ML_CLASSIFY_ENDPOINT = `${result.api_url}proxy/ingredient-instruction-classifier?token=${result.token}`;
 
         return clipRecipe().catch(() => {
           alert(
@@ -424,7 +422,7 @@ if (window[extensionContainerId]) {
 
       let submit = async () => {
         try {
-          const token = await fetchToken();
+          const result = await fetchTokenAndUrls();
 
           let imageId;
           try {
@@ -435,7 +433,7 @@ if (window[extensionContainerId]) {
             formData.append("image", imageBlob);
 
             const imageCreateResponse = await fetch(
-              `https://api.recipesage.com/images?token=${token}`,
+              `${result.api_url}images?token=${result.token}`,
               {
                 method: "POST",
                 body: formData,
@@ -452,7 +450,7 @@ if (window[extensionContainerId]) {
           }
 
           const recipeCreateResponse = await fetch(
-            `https://api.recipesage.com/recipes?token=${token}`,
+            `${result.api_url}recipes?token=${result.token}`,
             {
               method: "POST",
               headers: {
@@ -472,19 +470,22 @@ if (window[extensionContainerId]) {
                 `Recipe Saved!`,
                 `Click to open`,
                 4000,
-                `https://recipesage.com/#/recipe/${data.id}`,
+                `${result.base_url}#/recipe/${data.id}`,
               );
             });
           } else {
             switch (recipeCreateResponse.status) {
               case 401:
-                chrome.storage.local.set({ token: null }, () => {
-                  displayAlert(
-                    "Please Login",
-                    `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
-                    4000,
-                  );
-                });
+                chrome.storage.local.set(
+                  { token: null, api_url: null, base_url: null },
+                  () => {
+                    displayAlert(
+                      "Please Login",
+                      `It looks like you're logged out. Please click the RecipeSage icon to login again.`,
+                      4000,
+                    );
+                  },
+                );
                 break;
               case 412:
                 displayAlert(

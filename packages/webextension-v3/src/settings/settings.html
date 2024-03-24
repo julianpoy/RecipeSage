@@ -12,11 +12,36 @@
         text-align: center;
 
         font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
-      #loggedInMessage,
-      #loggedOutMessage {
+      input,
+      textarea {
+        width: calc(100% - 16px);
+        background: none;
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        transition: 0.3s;
+        background: transparent;
+        color: initial;
+      }
+
+      input:disabled {
+        background-color: lightgray;
+      }
+
+      #loggedInView,
+      #loggedOutView {
         display: none;
+      }
+
+      #serverDetails {
+        text-align: left;
+      }
+
+      label p {
+        font-size: 12px;
       }
 
       button {
@@ -44,13 +69,38 @@
   <body>
     <h2>RecipeSage Browser Extension Settings</h2>
     <br />
-    <div id="loggedInMessage">
-      You're currently logged in as <span id="loggedInEmail">loading...</span>
+    <div id="loggedInView">
+      You're currently logged in as
+      <span id="loggedInEmail">loading...</span> on
+      <span id="loggedInServer">loading...</span>.
       <br />
       <br />
       <button id="logoutButton">Logout</button>
+      <div id="serverDetails">
+        <h3>Server Details</h3>
+        <label
+          >Base URL<br />
+          <input id="baseUrl" type="url" value="loading..." />
+          <p>
+            <b>Note:</b> The 'Base URL' field controls where the user is
+            redirected to after a successful recipe clip. Only edit if you know
+            what you are doing for a self-hosted instance.
+          </p>
+        </label>
+        <br />
+        <label
+          >API URL<br />
+          <input id="apiUrl" type="url" value="loading..." disabled />
+          <p>
+            <b>Note:</b> Read-only. API address set on initial login.
+          </p> </label
+        ><br />
+        <button id="serverDetailsUpdate">&nbsp;Update&nbsp;</button>&nbsp;
+        <br />
+        <span id="message"></span>
+      </div>
     </div>
-    <div id="loggedOutMessage">
+    <div id="loggedOutView">
       You're not logged in. Click the RecipeSage icon next to the address bar to
       log in.<br /><br />
       Note: If you don't see the RecipeSage icon next to the address bar, you
