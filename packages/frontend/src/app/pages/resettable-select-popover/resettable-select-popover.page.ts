@@ -19,6 +19,10 @@ export type ResettableSelectGroupedOptions = Record<
 export class ResettableSelectPopoverPage {
   resetToggled = false; // Stores current state of reset all checkbox
 
+  message?: string;
+  @Input({
+    required: false,
+  })
   @Input({
     required: true,
   })
@@ -36,11 +40,7 @@ export class ResettableSelectPopoverPage {
 
   @Output() selectedValueChange = new EventEmitter();
 
-  constructor(private popoverCtrl: PopoverController) {
-    setTimeout(() => {
-      console.log(this.ungroupedOptions, this.groupedOptions);
-    }, 2000);
-  }
+  constructor(private popoverCtrl: PopoverController) {}
 
   getSelectedValues() {
     const selectedValues = new Set<string>();

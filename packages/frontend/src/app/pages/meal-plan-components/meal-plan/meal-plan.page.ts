@@ -20,7 +20,7 @@ import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { MealPlanPreferenceKey } from "@recipesage/util";
+import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 
 import { MealCalendarComponent } from "~/components/meal-calendar/meal-calendar.component";
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";

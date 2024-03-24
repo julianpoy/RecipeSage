@@ -15,7 +15,7 @@ import {
   ShoppingListPreferenceKey,
   ShoppingListSortOptions,
   SupportedFontSize,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 import { TRPCService } from "./trpc.service";
 import { UtilService } from "./util.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -155,8 +155,10 @@ export class PreferencesService {
 
     // Do not sync remote preferences if not logged in
     if (!localStorage.getItem("token")) return;
-    this.trpcService.trpc.users.getPreferences
-      .query()
+    this.trpcService
+      .handle(this.trpcService.trpc.users.getPreferences.query(), {
+        "*": () => {},
+      })
       .then((remotePreferences) => {
         if (remotePreferences) {
           const patchedPreferences = this.patchPreferences(remotePreferences);

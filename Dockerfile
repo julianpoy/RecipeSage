@@ -1,10 +1,17 @@
-FROM julianpoy/node-with-mdbtools:18-0.7.1
+FROM node:20-alpine
 
 WORKDIR /app
+
+# mdbtools
+RUN apk add --no-cache mdbtools mdbtools-utils
 
 # node-gyp
 RUN apk add --no-cache python3 make clang build-base
 
+# node canvas
+RUN apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev
+
+# dev watch script
 RUN apk add --no-cache inotify-tools
 
 RUN npm install -g tsx

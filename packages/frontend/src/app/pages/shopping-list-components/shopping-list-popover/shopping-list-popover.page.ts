@@ -11,7 +11,7 @@ import { LoadingService } from "~/services/loading.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { ShoppingListPreferenceKey } from "@recipesage/util";
+import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 
 @Component({
   selector: "page-shopping-list-popover",

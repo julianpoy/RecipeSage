@@ -1,10 +1,12 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
-import { getRecipesWithConstraints } from "../../dbHelpers/getRecipesWithConstraints";
+import {
+  getRecipesWithConstraints,
+  getFriendshipIds,
+} from "@recipesage/util/server/db";
+import { sortRecipeImages } from "@recipesage/util/server/general";
+import { searchRecipes as _searchRecipes } from "@recipesage/util/server/search";
 import { TRPCError } from "@trpc/server";
-import * as SearchService from "../../services/search";
-import { sortRecipeImages } from "../../utils/sort";
-import { getFriendshipIds } from "../../dbHelpers/getFriendshipIds";
 
 export const searchRecipes = publicProcedure
   .input(
@@ -35,10 +37,7 @@ export const searchRecipes = publicProcedure
       userIds.push(...friendships.friends);
     }
 
-    const recipeIds = await SearchService.searchRecipes(
-      userIds,
-      input.searchTerm,
-    );
+    const recipeIds = await _searchRecipes(userIds, input.searchTerm);
 
     const recipeIdsMap = recipeIds.reduce(
       (acc, recipeId, idx) => {

@@ -2,7 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { recipeSummary } from "../../types/recipeSummary";
+import { recipeSummary } from "@recipesage/prisma";
 
 export const getRecipe = publicProcedure
   .input(

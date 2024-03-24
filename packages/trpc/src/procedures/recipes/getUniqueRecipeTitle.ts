@@ -1,9 +1,11 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
-import { stripNumberedRecipeTitle } from "../../utils/stripNumberedRecipeTitle";
-import { recipeSummaryLite } from "../../types/recipeSummaryLite";
-import { validateSession } from "../../utils/validateSession";
+import {
+  validateSession,
+  stripNumberedRecipeTitle,
+} from "@recipesage/util/server/general";
+import { recipeSummaryLite } from "@recipesage/prisma";
 
 /**
  * An arbitrary upper limit for rename attempts so we don't spin forever

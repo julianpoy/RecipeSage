@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "../../utils/validateSession";
+import { validateSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 import {
   AppPreferenceTypes,
@@ -19,7 +19,7 @@ import {
   ShoppingListSortOptions,
   SupportedFontSize,
   SupportedLanguages,
-} from "@recipesage/util";
+} from "@recipesage/util/shared";
 
 export const updatePreferences = publicProcedure
   .input(

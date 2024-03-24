@@ -10,6 +10,8 @@ import { getSimilarRecipes } from "./procedures/recipes/getSimilarRecipes";
 import { sendAssistantMessage } from "./procedures/assistant/sendAssistantMessage";
 import { getAssistantMessages } from "./procedures/assistant/getAssistantMessages";
 import { getLabels } from "./procedures/labels/getLabels";
+import { getAllVisibleLabels } from "./procedures/labels/getAllVisibleLabels";
+import { getLabelsByUserId } from "./procedures/labels/getLabelsByUserId";
 import { getLabelGroups } from "./procedures/labelGroups/getLabelGroups";
 import { createLabelGroup } from "./procedures/labelGroups/createLabelGroup";
 import { createLabel } from "./procedures/labels/createLabel";
@@ -27,17 +29,9 @@ import { getPreferences } from "./procedures/users/getPreferences";
 import { getRecipeFromOCR } from "./procedures/ml/getRecipeFromOCR";
 import { getRecipesByTitle } from "./procedures/recipes/getRecipesByTitle";
 import { getUniqueRecipeTitle } from "./procedures/recipes/getUniqueRecipeTitle";
+import { getRecipeFromPDF } from "./procedures/ml/getRecipeFromPDF";
+import { getRecipeFromText } from "./procedures/ml/getRecipeFromText";
 import { signInWithGoogle } from "./procedures/users/signInWithGoogle";
-
-export * from "./types/assistantMessageSummary";
-export * from "./types/labelGroupSummary";
-export * from "./types/labelSummary";
-export * from "./types/recipeSummary";
-export * from "./types/recipeSummaryLite";
-export * from "./types/userPublic";
-
-export * from "./services/search"; // Legacy while old backend still needs it
-export * from "./services/capabilities"; // Legacy while old backend still needs it
 
 const appRouter = router({
   labelGroups: router({
@@ -48,7 +42,9 @@ const appRouter = router({
   }),
   labels: router({
     createLabel,
+    getAllVisibleLabels,
     getLabels,
+    getLabelsByUserId,
     updateLabel,
     deleteLabel,
   }),
@@ -75,6 +71,8 @@ const appRouter = router({
   }),
   ml: router({
     getRecipeFromOCR,
+    getRecipeFromPDF,
+    getRecipeFromText,
   }),
 
   // TODO: Legacy compat remove
