@@ -23,7 +23,9 @@ const generateKey = (objectType: ObjectTypes): string => {
 
 // Generate a public URL for the object
 const generateStorageLocation = (key: string): string => {
-  const location = `https://firebasestorage.googleapis.com/v0/b/${BUCKET}/o/${key}?alt=media`;
+  const location = `https://firebasestorage.googleapis.com/v0/b/${BUCKET}/o/${encodeURIComponent(
+    key,
+  )}?alt=media`;
 
   return location;
 };
