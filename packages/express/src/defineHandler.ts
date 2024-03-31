@@ -106,7 +106,11 @@ export const defineHandler = <
       } else {
         logError(e);
 
-        res.status(500).send(e);
+        if (process.env.NODE_ENV !== "production") {
+          res.status(500).send(e);
+        } else {
+          res.status(500).send("Internal server error");
+        }
       }
     }
   };
