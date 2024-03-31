@@ -46,10 +46,10 @@ export const defineHandler = <
       GResponse,
       {
         session: SessionPresent[GAuthentication];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }
     >,
     next: NextFunction,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any,
 ) => {
   return async (req: Request, res: Response, next: NextFunction) => {

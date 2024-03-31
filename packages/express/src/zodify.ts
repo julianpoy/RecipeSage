@@ -16,6 +16,8 @@ export const zodify = <P, Q, B, R>(
   ) => void,
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
+    schema.params?.parse(req.params);
+    schema.query?.parse(req.query);
     schema.body?.parse(req.body);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
