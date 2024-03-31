@@ -32,6 +32,19 @@ import { getUniqueRecipeTitle } from "./procedures/recipes/getUniqueRecipeTitle"
 import { getRecipeFromPDF } from "./procedures/ml/getRecipeFromPDF";
 import { getRecipeFromText } from "./procedures/ml/getRecipeFromText";
 import { signInWithGoogle } from "./procedures/users/signInWithGoogle";
+import { getMealPlan } from "./procedures/mealPlans/getMealPlan";
+import { getMealPlanItems } from "./procedures/mealPlans/getMealPlanItems";
+import { getMealPlans } from "./procedures/mealPlans/getMealPlans";
+import { createMealPlan } from "./procedures/mealPlans/createMealPlan";
+import { createMealPlanItem } from "./procedures/mealPlans/createMealPlanItem";
+import { deleteMealPlan } from "./procedures/mealPlans/deleteMealPlan";
+import { deleteMealPlanItem } from "./procedures/mealPlans/deleteMealPlanItem";
+import { detachMealPlan } from "./procedures/mealPlans/detachMealPlan";
+import { updateMealPlan } from "./procedures/mealPlans/updateMealPlan";
+import { updateMealPlanItem } from "./procedures/mealPlans/updateMealPlanItem";
+import { createMealPlanItems } from "./procedures/mealPlans/createMealPlanItems";
+import { deleteMealPlanItems } from "./procedures/mealPlans/deleteMealPlanItems";
+import { updateMealPlanItems } from "./procedures/mealPlans/updateMealPlanItems";
 
 const appRouter = router({
   labelGroups: router({
@@ -59,6 +72,21 @@ const appRouter = router({
     getRecipesByTitle,
     getUniqueRecipeTitle,
   }),
+  mealPlans: router({
+    createMealPlan,
+    createMealPlanItem,
+    createMealPlanItems,
+    deleteMealPlan,
+    deleteMealPlanItem,
+    deleteMealPlanItems,
+    detachMealPlan,
+    getMealPlan,
+    getMealPlanItems,
+    getMealPlans,
+    updateMealPlan,
+    updateMealPlanItem,
+    updateMealPlanItems,
+  }),
   assistant: router({
     sendAssistantMessage,
     getAssistantMessages,
@@ -74,11 +102,6 @@ const appRouter = router({
     getRecipeFromPDF,
     getRecipeFromText,
   }),
-
-  // TODO: Legacy compat remove
-  getRecipes,
-  searchRecipes,
-  getSimilarRecipes,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({

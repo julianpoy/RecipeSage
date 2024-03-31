@@ -14,7 +14,14 @@ if (process.env.SEARCH_PROVIDER === "typesense") {
     connectionTimeoutSeconds: 10,
   });
 
-  init();
+  init()
+    .then(() => {
+      console.log("Typesense initialized");
+    })
+    .catch((e) => {
+      console.error("Typesense init failure");
+      console.error(e);
+    });
 }
 
 async function init() {

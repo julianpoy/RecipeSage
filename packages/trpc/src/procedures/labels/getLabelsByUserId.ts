@@ -1,6 +1,6 @@
 import { publicProcedure } from "../../trpc";
 import { getVisibleLabels } from "@recipesage/util/server/db";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 
 export const getLabelsByUserId = publicProcedure
@@ -11,7 +11,7 @@ export const getLabelsByUserId = publicProcedure
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const visibleLabels = await getVisibleLabels(session.userId, {
       userIds: input.userIds,

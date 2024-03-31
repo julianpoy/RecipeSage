@@ -15,7 +15,7 @@ import {
 } from "../services/util.js";
 
 import * as FirebaseService from "../services/firebase.js";
-import * as GripService from "../services/grip.js";
+import * as ServerUtil from "@recipesage/util/server/general";
 
 describe("utils", () => {
   beforeAll(async () => {
@@ -135,7 +135,7 @@ describe("utils", () => {
         .stub(FirebaseService, "sendMessages")
         .returns(Promise.resolve());
       gripBroadcastStub = sinon
-        .stub(GripService, "broadcast")
+        .stub(ServerUtil, "broadcastWSEvent")
         .returns(Promise.resolve());
     });
 
@@ -246,7 +246,7 @@ describe("utils", () => {
         .stub(FirebaseService, "sendMessages")
         .returns(Promise.resolve());
       gripBroadcastStub = sinon
-        .stub(GripService, "broadcast")
+        .stub(ServerUtil, "broadcastWSEvent")
         .returns(Promise.resolve());
 
       await dispatchMessageNotification({ id: userId, fcmTokens }, message);

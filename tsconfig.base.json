@@ -20,6 +20,7 @@
       "@recipesage/frontend/*": ["packages/frontend/*"],
       "@recipesage/prisma": ["packages/prisma/src/index.ts"],
       "@recipesage/trpc": ["packages/trpc/src/index.ts"],
+      "@recipesage/socketio": ["packages/socketio/src/index.ts"],
       "@recipesage/express": ["packages/express/src/index.ts"],
       "@recipesage/util/shared": ["packages/util/shared/src/index.ts"],
       "@recipesage/util/server": ["packages/util/server/src/index.ts"],

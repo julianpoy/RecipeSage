@@ -1,4 +1,5 @@
 import { Input, Component } from "@angular/core";
+import dayjs from "dayjs";
 import {
   NavController,
   ModalController,
@@ -19,9 +20,7 @@ export class NewMealPlanItemModalPage {
   @Input() recipe?: Recipe;
   @Input() title: string = "";
   @Input() meal?: string;
-  @Input() scheduled = new Date();
-
-  sanitizedScheduled: string = "";
+  @Input() scheduledDate = dayjs().format("YYYY-MM-DD");
 
   constructor(
     public navCtrl: NavController,
@@ -30,28 +29,10 @@ export class NewMealPlanItemModalPage {
     public loadingService: LoadingService,
     public utilService: UtilService,
     public toastCtrl: ToastController,
-  ) {
-    setTimeout(() => {
-      this.setSanitizedScheduled();
-    });
-  }
-
-  setSanitizedScheduled() {
-    const scheduled = new Date(this.scheduled);
-    const year = scheduled.getFullYear();
-    const month = (scheduled.getMonth() + 1).toString().padStart(2, "0");
-    const date = scheduled.getDate().toString().padStart(2, "0");
-
-    this.sanitizedScheduled = `${year}-${month}-${date}`;
-  }
+  ) {}
 
   scheduledDateChange(event: any) {
-    const [year, month, date] = event.target.value.split("-");
-    const scheduled = new Date();
-    scheduled.setDate(date);
-    scheduled.setMonth(month - 1);
-    scheduled.setFullYear(year);
-    this.scheduled = scheduled;
+    this.scheduledDate = dayjs(event.target.value).format("YYYY-MM-DD");
   }
 
   isFormValid() {
@@ -69,7 +50,7 @@ export class NewMealPlanItemModalPage {
   }
 
   save() {
-    if (!this.meal || !this.scheduled) return;
+    if (!this.meal || !this.scheduledDate) return;
 
     const item = {
       title:
@@ -77,9 +58,9 @@ export class NewMealPlanItemModalPage {
           ? this.recipe.title
           : this.title,
       recipeId:
-        this.inputType === "recipe" && this.recipe ? this.recipe.id : undefined,
+        this.inputType === "recipe" && this.recipe ? this.recipe.id : null,
       meal: this.meal,
-      scheduled: this.scheduled,
+      scheduledDate: this.scheduledDate,
     };
 
     this.modalCtrl.dismiss({

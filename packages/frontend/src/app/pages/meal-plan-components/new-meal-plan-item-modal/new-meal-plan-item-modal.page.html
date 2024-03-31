@@ -57,7 +57,7 @@
       class="rs-date"
       type="date"
       autofill="true"
-      value="{{ sanitizedScheduled }}"
+      [value]="scheduledDate"
       (change)="scheduledDateChange($event)"
     />
   </ion-item>

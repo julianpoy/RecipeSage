@@ -4,7 +4,7 @@ import * as zlib from "zlib";
 
 // Service
 import * as FirebaseService from "./firebase.js";
-import * as GripService from "./grip.js";
+import * as ServerUtil from "@recipesage/util/server/general";
 
 /**
  * DO NOT ADD ANYTHING TO THIS FILE
@@ -40,7 +40,7 @@ export const dispatchImportNotification = (user, status, reason) => {
     );
   }
 
-  sendQueues.push(GripService.broadcast(user.id, type, message));
+  sendQueues.push(ServerUtil.broadcastWSEvent(user.id, type, message));
 
   return Promise.all(sendQueues);
 };
@@ -101,7 +101,9 @@ export const dispatchMessageNotification = (user, fullMessage) => {
     );
   }
 
-  sendQueues.push(GripService.broadcast(user.id, "messages:new", message));
+  sendQueues.push(
+    ServerUtil.broadcastWSEvent(user.id, "messages:new", message),
+  );
 
   return Promise.all(sendQueues);
 };

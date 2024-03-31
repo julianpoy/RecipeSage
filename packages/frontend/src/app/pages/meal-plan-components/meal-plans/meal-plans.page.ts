@@ -10,6 +10,8 @@ import { WebsocketService } from "~/services/websocket.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
+import { TRPCService } from "../../../services/trpc.service";
+import { MealPlanSummary, UserPublic } from "@recipesage/prisma";
 
 @Component({
   selector: "page-meal-plans",
@@ -17,18 +19,16 @@ import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan
   styleUrls: ["meal-plans.page.scss"],
 })
 export class MealPlansPage {
-  mealPlans: any = [];
-
-  initialLoadComplete = false;
+  me?: UserPublic;
+  mealPlans?: MealPlanSummary[] = [];
 
   constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public toastCtrl: ToastController,
-    public mealPlanService: MealPlanService,
-    public websocketService: WebsocketService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
+    private navCtrl: NavController,
+    private modalCtrl: ModalController,
+    private trpcService: TRPCService,
+    private websocketService: WebsocketService,
+    private loadingService: LoadingService,
+    private utilService: UtilService,
   ) {
     this.websocketService.register(
       "mealPlan:received",
@@ -52,11 +52,10 @@ export class MealPlansPage {
   ionViewWillEnter() {
     const loading = this.loadingService.start();
 
-    this.initialLoadComplete = false;
+    this.mealPlans = undefined;
 
-    this.loadPlans().finally(() => {
+    Promise.all([this.loadPlans(), this.loadMe()]).finally(() => {
       loading.dismiss();
-      this.initialLoadComplete = true;
     });
   }
 
@@ -71,11 +70,22 @@ export class MealPlansPage {
     );
   }
 
-  async loadPlans() {
-    const response = await this.mealPlanService.fetch();
-    if (!response.success) return;
+  async loadMe() {
+    const me = await this.trpcService.handle(
+      this.trpcService.trpc.users.getMe.query(),
+    );
+    if (!me) return;
 
-    this.mealPlans = response.data.sort((a, b) => {
+    this.me = me;
+  }
+
+  async loadPlans() {
+    const mealPlans = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.getMealPlans.query(),
+    );
+    if (!mealPlans) return;
+
+    this.mealPlans = mealPlans.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
   }
@@ -94,7 +104,7 @@ export class MealPlansPage {
     this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(mealPlanId));
   }
 
-  formatItemCreationDate(plainTextDate: string) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
+  formatItemCreationDate(date: string | Date) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }

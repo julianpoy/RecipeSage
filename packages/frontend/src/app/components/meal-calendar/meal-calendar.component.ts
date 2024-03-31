@@ -9,6 +9,7 @@ import {
   MealPlan,
   MealPlanItem,
 } from "../../services/meal-plan.service";
+import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "meal-calendar",
@@ -16,31 +17,31 @@ import {
   styleUrls: ["./meal-calendar.component.scss"],
 })
 export class MealCalendarComponent {
-  private _mealPlan!: MealPlan;
+  private _mealPlanItems!: MealPlanItemSummary[];
 
   @Input({
     required: true,
   })
-  set mealPlan(mealPlan: MealPlan) {
-    this._mealPlan = mealPlan;
+  set mealPlanItems(mealPlanItems: MealPlanItemSummary[]) {
+    this._mealPlanItems = mealPlanItems;
     this.processIncomingMealPlan();
   }
-  get mealPlan() {
-    return this._mealPlan;
+  get mealPlanItems() {
+    return this._mealPlanItems;
   }
 
   @Input() enableEditing = false;
   @Input() mode = "outline";
 
-  @Output() mealsByDateChange = new EventEmitter<any>();
+  @Output() mealsByDateChange = new EventEmitter<typeof this._mealsByDate>();
   _mealsByDate: {
     [year: number]: {
       [month: number]: {
         [day: number]: {
           itemsByMeal: {
-            [key in MealName]: MealPlanItem[];
+            [key in MealName]: MealPlanItemSummary[];
           };
-          items: MealPlanItem[];
+          items: MealPlanItemSummary[];
           meals: MealName[];
         };
       };
@@ -62,13 +63,13 @@ export class MealCalendarComponent {
   center: Date = new Date(this.today);
   dayTitles?: string[];
 
-  @Output() selectedDaysChange = new EventEmitter<number[]>();
+  @Output() selectedDaysChange = new EventEmitter<string[]>();
 
   @Output() itemMoved = new EventEmitter<any>();
   @Output() itemClicked = new EventEmitter<any>();
   @Output() dayClicked = new EventEmitter<any>();
 
-  private _selectedDays: number[] = [this.getToday().getTime()];
+  private _selectedDays: string[] = [this.getToday()];
   highlightedDay?: Dayjs;
   dayDragInProgress = false;
 
@@ -144,9 +145,8 @@ export class MealCalendarComponent {
     return new Date(this.center.getFullYear(), newMonth, 1);
   }
 
-  getToday(): Date {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  getToday(): string {
+    return dayjs().format("YYYY-MM-DD");
   }
 
   // Moves the calendar. Positive = next month, negative = last month
@@ -158,7 +158,7 @@ export class MealCalendarComponent {
       dayjs(this.selectedDays[0]).isBefore(bounds[0]) ||
       dayjs(this.selectedDays[0]).isAfter(bounds[1])
     ) {
-      this.selectedDays = [this.center.getTime()];
+      this.selectedDays = [dayjs(this.center).format("YYYY-MM-DD")];
     }
   }
 
@@ -175,6 +175,22 @@ export class MealCalendarComponent {
     return date.toLocaleString(window.navigator.language, { month: "long" });
   }
 
+  getYMD(stamp: string | Date | Dayjs) {
+    let dateString;
+    if (typeof stamp === "string") {
+      dateString = stamp;
+    } else {
+      const scheduledDayjs = dayjs(stamp);
+      dateString = `${scheduledDayjs.year()}-${scheduledDayjs.month() + 1}-${scheduledDayjs.date()}`;
+    }
+
+    const [year, month, day] = dateString
+      .split("-")
+      .map((el) => parseInt(el, 10));
+
+    return [year, month, day];
+  }
+
   processIncomingMealPlan() {
     this.mealsByDate = {};
 
@@ -185,7 +201,7 @@ export class MealCalendarComponent {
       snacks: 4,
       other: 5,
     };
-    this.mealPlan.items
+    this.mealPlanItems
       .sort((a, b) => {
         const comp =
           (mealSortOrder[a.meal as keyof typeof mealSortOrder] || 6) -
@@ -194,23 +210,25 @@ export class MealCalendarComponent {
         return comp;
       })
       .forEach((item) => {
-        const day = dayjs(item.scheduled);
-        this.mealsByDate[day.year()] = this.mealsByDate[day.year()] || {};
-        this.mealsByDate[day.year()][day.month()] =
-          this.mealsByDate[day.year()][day.month()] || {};
-        const dayData = (this.mealsByDate[day.year()][day.month()][day.date()] =
-          this.mealsByDate[day.year()][day.month()][day.date()] || {
-            itemsByMeal: {
-              breakfast: [],
-              lunch: [],
-              dinner: [],
-              snacks: [],
-              other: [],
-            },
-            items: [],
-            meals: Object.values(MealName),
-          });
-        console.log(dayData, day.year(), day.month(), day.date());
+        const [year, month, day] = this.getYMD(
+          item.scheduled || item.scheduledDate,
+        );
+        this.mealsByDate[year] = this.mealsByDate[year] || {};
+        this.mealsByDate[year][month] = this.mealsByDate[year][month] || {};
+        const dayData = (this.mealsByDate[year][month][day] = this.mealsByDate[
+          year
+        ][month][day] || {
+          itemsByMeal: {
+            breakfast: [],
+            lunch: [],
+            dinner: [],
+            snacks: [],
+            other: [],
+          },
+          items: [],
+          meals: Object.values(MealName),
+        });
+        console.log(dayData, year, month, day);
         dayData.itemsByMeal[
           item.meal as keyof typeof dayData.itemsByMeal
         ]?.push(item);
@@ -218,19 +236,19 @@ export class MealCalendarComponent {
       });
   }
 
-  mealItemsByDay(date: Dayjs | Date | string | number) {
-    const day = dayjs(date);
+  mealItemsByDay(dateStamp: string | Date | Dayjs) {
+    const [year, month, day] = this.getYMD(dateStamp);
     return (
-      this.mealsByDate[day.year()]?.[day.month()]?.[day.date()] || {
+      this.mealsByDate[year]?.[month]?.[day] || {
         meals: [],
         items: [],
       }
     );
   }
 
-  mealItemTitlesByDay(date: Date | string | number) {
-    const mealItems = this.mealItemsByDay(date);
-    return mealItems.items.map((item: MealPlanItem) => item.title);
+  mealItemTitlesByDay(dateStamp: string) {
+    const mealItems = this.mealItemsByDay(dateStamp);
+    return mealItems.items.map((item) => item.title);
   }
 
   formatItemCreationDate(date: Date | string | number) {
@@ -238,7 +256,7 @@ export class MealCalendarComponent {
   }
 
   isSelected(day: Dayjs) {
-    return this.selectedDays.includes(day.toDate().getTime());
+    return this.selectedDays.includes(day.format("YYYY-MM-DD"));
   }
 
   dayKeyEnter(event: any, day: Dayjs) {
@@ -249,34 +267,31 @@ export class MealCalendarComponent {
   dayMouseDown(event: any, day: Dayjs) {
     this.dayDragInProgress = true;
     if (event.shiftKey)
-      this.selectedDays = this.getDaysBetween(
-        this.selectedDays[0],
-        day.valueOf(),
-      );
-    else this.selectedDays = [day.toDate().getTime()];
+      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
+    else this.selectedDays = [day.format("YYYY-MM-DD")];
     this.dayClicked.emit(day.toDate());
   }
 
-  getDaysBetween(day1: number, day2: number): number[] {
-    const days: number[] = [];
+  getDaysBetween(
+    dateStamp1: string | Dayjs,
+    dateStamp2: string | Dayjs,
+  ): string[] {
+    const dateStamps: string[] = [];
 
-    const iterDate = new Date(day1);
+    let iterDate = dayjs(dateStamp1);
 
-    while (iterDate <= new Date(day2)) {
-      days.push(iterDate.getTime());
+    while (iterDate <= dayjs(dateStamp2)) {
+      dateStamps.push(iterDate.format("YYYY-MM-DD"));
 
-      iterDate.setDate(iterDate.getDate() + 1);
+      iterDate = dayjs(iterDate).add(1, "day");
     }
 
-    return days;
+    return dateStamps;
   }
 
   dayMouseOver(_: any, day: Dayjs) {
     if (this.dayDragInProgress) {
-      this.selectedDays = this.getDaysBetween(
-        this.selectedDays[0],
-        day.valueOf(),
-      );
+      this.selectedDays = this.getDaysBetween(this.selectedDays[0], day);
     }
   }
 
@@ -289,22 +304,16 @@ export class MealCalendarComponent {
     this.dayDragInProgress = false;
     this.highlightedDay = undefined;
     const mealItemId = event.dataTransfer.getData("text");
-    const mealItem = this.mealPlan.items.find((item) => item.id === mealItemId);
+    const mealItem = this.mealPlanItems.find((item) => item.id === mealItemId);
     if (!mealItem) return;
 
-    const currDate = new Date(mealItem.scheduled);
-    const newDate = day.toDate();
+    const newDate = day.format("YYYY-MM-DD");
     // Do not trigger event if the item has not moved to a different day
-    if (
-      currDate.getFullYear() === newDate.getFullYear() &&
-      currDate.getMonth() === newDate.getMonth() &&
-      currDate.getDate() === newDate.getDate()
-    )
-      return;
+    if (mealItem.scheduledDate === newDate) return;
 
     this.itemMoved.emit({
       mealItem,
-      day: day.toString(),
+      dateStamp: newDate,
     });
   }
 

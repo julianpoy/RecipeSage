@@ -312,7 +312,7 @@ export class HomePage {
     const sortPreference = this.preferences[MyRecipesPreferenceKey.SortBy];
 
     const result = await this.trpcService.handle(
-      this.trpcService.trpc.getRecipes.query({
+      this.trpcService.trpc.recipes.getRecipes.query({
         folder: this.folder,
         orderBy: sortPreference.replace("-", "") as
           | "title"
@@ -460,7 +460,7 @@ export class HomePage {
 
     const result = await this.trpcService
       .handle(
-        this.trpcService.trpc.searchRecipes.query({
+        this.trpcService.trpc.recipes.searchRecipes.query({
           searchTerm: text,
           folder: this.folder,
           labels: this.selectedLabels.length ? this.selectedLabels : undefined,

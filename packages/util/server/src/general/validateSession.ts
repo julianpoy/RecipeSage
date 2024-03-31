@@ -1,13 +1,14 @@
 import { Session } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
+import { prisma } from "@recipesage/prisma";
 
-export function validateSession(
-  session: Session | null,
-): asserts session is Session {
-  if (!session) {
-    throw new TRPCError({
-      message: "Must be logged in",
-      code: "UNAUTHORIZED",
-    });
-  }
+export async function validateSession(
+  token: string,
+): Promise<Session | undefined> {
+  const session = await prisma.session.findFirst({
+    where: {
+      token,
+    },
+  });
+
+  return session || undefined;
 }
