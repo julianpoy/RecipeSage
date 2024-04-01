@@ -18,7 +18,7 @@ export const getRecipeFromPDF = publicProcedure
       });
     }
 
-    const pdf = new Uint8Array(Buffer.from(input.pdf, "base64"));
+    const pdf = Buffer.from(input.pdf, "base64");
 
     const recognizedRecipe = await pdfToRecipe(pdf, 2);
     if (!recognizedRecipe) {

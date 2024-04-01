@@ -27,6 +27,8 @@ export const broadcastWSEvent = function <T extends WSBoardcastEventType>(
   type: T,
   data: WSBoardcastEventData[T],
 ) {
+  if (process.env.NODE_ENV === "test") return;
+
   const body = {
     type: type,
     data: data || {},
