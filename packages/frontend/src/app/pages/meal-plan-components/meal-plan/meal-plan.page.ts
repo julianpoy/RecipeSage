@@ -11,11 +11,6 @@ import dayjs from "dayjs";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import {
-  MealPlan,
-  MealPlanItem,
-  MealPlanService,
-} from "~/services/meal-plan.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { ShoppingListService } from "~/services/shopping-list.service";
@@ -28,6 +23,8 @@ import { MealPlanPopoverPage } from "~/pages/meal-plan-components/meal-plan-popo
 import { MealPlanItemDetailsModalPage } from "~/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page";
 import { MealPlanBulkPinModalPage } from "~/pages/meal-plan-components/meal-plan-bulk-pin-modal";
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
+import { TRPCService } from "../../../services/trpc.service";
+import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-meal-plan",
@@ -40,28 +37,29 @@ export class MealPlanPage {
   calendarMode: string = window.innerWidth > 600 ? "full" : "split";
   dayCopyInProgress = false;
   dayMoveInProgress = false;
-  selectedDaysInProgress?: number[];
+  selectedDaysInProgress?: string[];
 
   mealPlanId: string; // From nav params
-  mealPlan: any = { items: [], collaborators: [] };
+  mealPlan?: MealPlanSummary;
+  mealPlanItems?: MealPlanItemSummary[];
 
   mealsByDate: {
     [year: number]: {
       [month: number]: {
         [day: number]: {
-          items: MealPlanItem[];
+          items: MealPlanItemSummary[];
         };
       };
     };
   } = {};
 
-  itemsByRecipeId: { [key: string]: MealPlanItem } = {};
+  itemsByRecipeId: { [key: string]: MealPlanItemSummary } = {};
   recipeIds: string[] = [];
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
 
-  selectedDays: number[] = [];
+  selectedDays: string[] = [];
 
   @ViewChild(MealCalendarComponent, { static: true })
   mealPlanCalendar?: MealCalendarComponent;
@@ -71,7 +69,7 @@ export class MealPlanPage {
     public translate: TranslateService,
     public navCtrl: NavController,
     public loadingService: LoadingService,
-    public mealPlanService: MealPlanService,
+    public trpcService: TRPCService,
     public shoppingListService: ShoppingListService,
     public websocketService: WebsocketService,
     public utilService: UtilService,
@@ -122,25 +120,40 @@ export class MealPlanPage {
   }
 
   async loadMealPlan() {
-    const response = await this.mealPlanService.fetchById(this.mealPlanId);
-    if (!response.success) return;
-    this.mealPlan = response.data;
+    const mealPlan = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.getMealPlan.query({
+        id: this.mealPlanId,
+      }),
+    );
+    if (!mealPlan) return;
+    this.mealPlan = mealPlan;
+
+    const mealPlanItems = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.getMealPlanItems.query({
+        mealPlanId: this.mealPlanId,
+      }),
+    );
+    if (!mealPlanItems) return;
+    this.mealPlanItems = mealPlanItems;
   }
 
   async _addItem(item: {
     title: string;
     recipeId?: string;
     meal: string;
-    scheduled: string;
+    scheduledDate: string;
   }) {
     const loading = this.loadingService.start();
 
-    await this.mealPlanService.addItem(this.mealPlanId, {
-      title: item.title,
-      recipeId: item.recipeId || null,
-      meal: item.meal,
-      scheduled: item.scheduled,
-    });
+    await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.createMealPlanItem.mutate({
+        mealPlanId: this.mealPlanId,
+        title: item.title,
+        recipeId: item.recipeId || null,
+        meal: item.meal as any, // TODO: Refine this type so that it aligns with Zod
+        scheduledDate: item.scheduledDate,
+      }),
+    );
 
     await this.loadMealPlan();
 
@@ -151,7 +164,7 @@ export class MealPlanPage {
     const modal = await this.modalCtrl.create({
       component: NewMealPlanItemModalPage,
       componentProps: {
-        scheduled: new Date(this.selectedDays[0]),
+        scheduledDate: this.selectedDays[0],
       },
     });
     modal.present();
@@ -183,7 +196,7 @@ export class MealPlanPage {
     if (data?.bulkAddToShoppingList) this.bulkAddToShoppingList();
   }
 
-  async itemClicked(mealItem: MealPlanItem) {
+  async itemClicked(mealItem: MealPlanItemSummary) {
     const modal = await this.modalCtrl.create({
       component: MealPlanItemDetailsModalPage,
       componentProps: {
@@ -197,8 +210,14 @@ export class MealPlanPage {
     if (data?.refresh) this.loadWithProgress();
   }
 
-  async itemMoved({ day, mealItem }: { day: number; mealItem: MealPlanItem }) {
-    console.log(day, mealItem);
+  async itemMoved({
+    dateStamp,
+    mealItem,
+  }: {
+    dateStamp: string;
+    mealItem: MealPlanItemSummary;
+  }) {
+    console.log(dateStamp, mealItem);
     const modal = await this.modalCtrl.create({
       component: NewMealPlanItemModalPage,
       componentProps: {
@@ -206,7 +225,7 @@ export class MealPlanPage {
         inputType: mealItem.recipe ? "recipe" : "manualEntry",
         title: mealItem.title,
         recipe: mealItem.recipe,
-        scheduled: day,
+        scheduledDate: dateStamp,
         meal: mealItem.meal,
       },
     });
@@ -217,23 +236,21 @@ export class MealPlanPage {
     const item = data.item;
 
     const loading = this.loadingService.start();
-    await this.mealPlanService.updateItems(this.mealPlanId, {
-      items: [
-        {
-          id: mealItem.id,
-          title: item.title,
-          recipeId: item.recipeId,
-          scheduled: item.scheduled,
-          meal: item.meal,
-        },
-      ],
-    });
+    await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.updateMealPlanItem.mutate({
+        id: mealItem.id,
+        title: item.title,
+        recipeId: item.recipeId,
+        scheduledDate: item.scheduledDate,
+        meal: item.meal,
+      }),
+    );
     loading.dismiss();
     this.loadWithProgress();
   }
 
-  getItemsOnDay(unix: number) {
-    const day = dayjs(unix);
+  getItemsOnDay(dateStamp: string) {
+    const day = dayjs(dateStamp);
     return (
       this.mealsByDate?.[day.year()]?.[day.month()]?.[day.date()]?.items || []
     );
@@ -241,7 +258,7 @@ export class MealPlanPage {
 
   getSelectedMealItemCount(): number {
     return this.selectedDays
-      .map((unix) => this.getItemsOnDay(unix).length)
+      .map((dateStamp) => this.getItemsOnDay(dateStamp).length)
       .reduce((acc, el) => acc + el, 0);
   }
 
@@ -445,12 +462,12 @@ export class MealPlanPage {
     modal.present();
   }
 
-  async dayClicked(day: Date | string | number) {
+  async dayClicked(dateStamp: string) {
     if (this.dayMoveInProgress || this.dayCopyInProgress) {
       const selectedDayList = (this.selectedDaysInProgress || [])
         .map((selectedDay) => dayjs(selectedDay).format("MMM D"))
         .join(", ");
-      const destDay = dayjs(day).format("MMM D");
+      const destDay = dayjs(dateStamp).format("MMM D");
 
       if (this.dayCopyInProgress) {
         const header = await this.translate
@@ -492,7 +509,7 @@ export class MealPlanPage {
               text: okay,
               handler: async () => {
                 this.dayCopyInProgress = false;
-                this._copySelectedTo(day);
+                this._copySelectedTo(dateStamp);
               },
             },
           ],
@@ -540,7 +557,7 @@ export class MealPlanPage {
               text: okay,
               handler: async () => {
                 this.dayMoveInProgress = false;
-                this._moveSelectedTo(day);
+                this._moveSelectedTo(dateStamp);
               },
             },
           ],
@@ -550,59 +567,69 @@ export class MealPlanPage {
     }
   }
 
-  async _moveSelectedTo(day: Date | string | number) {
+  async _moveSelectedTo(dateStamp: string) {
     if (!this.selectedDaysInProgress)
       throw new Error("Move initiated with no selected days");
 
-    const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], "day");
+    const dayDiff = dayjs(dateStamp).diff(
+      this.selectedDaysInProgress[0],
+      "day",
+    );
 
     const updatedItems = this.selectedDaysInProgress
       .map((selectedDay) =>
         this.getItemsOnDay(selectedDay).map((item) => ({
           id: item.id,
           title: item.title,
-          recipeId: item.recipeId || item.recipe?.id,
-          scheduled: dayjs(item.scheduled)
+          recipeId: item.recipeId,
+          scheduledDate: dayjs(item.scheduledDate)
             .add(dayDiff, "day")
-            .toDate()
-            .toISOString(),
-          meal: item.meal,
+            .format("YYYY-MM-DD"),
+          meal: item.meal as any, // TODO: Refine this type so that it aligns with Zod
         })),
       )
       .flat();
 
     const loading = this.loadingService.start();
-    await this.mealPlanService.updateItems(this.mealPlanId, {
-      items: updatedItems,
-    });
+    await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.updateMealPlanItems.mutate({
+        mealPlanId: this.mealPlanId,
+        items: updatedItems,
+      }),
+    );
     loading.dismiss();
     this.loadWithProgress();
   }
 
-  async _copySelectedTo(day: Date | string | number) {
+  async _copySelectedTo(dateStamp: string) {
     if (!this.selectedDaysInProgress)
       throw new Error("Move initiated with no selected days");
 
-    const dayDiff = dayjs(day).diff(this.selectedDaysInProgress[0], "day");
+    const dayDiff = dayjs(dateStamp).diff(
+      this.selectedDaysInProgress[0],
+      "day",
+    );
 
     const newItems = this.selectedDaysInProgress
       .map((selectedDay) =>
         this.getItemsOnDay(selectedDay).map((item) => ({
           title: item.title,
-          recipeId: item.recipeId || item.recipe?.id,
-          scheduled: dayjs(item.scheduled)
+          recipeId: item.recipeId,
+          scheduledDate: dayjs(item.scheduled)
             .add(dayDiff, "day")
-            .toDate()
-            .toISOString(),
-          meal: item.meal,
+            .format("YYYY-MM-DD"),
+          meal: item.meal as any, // TODO: Refine this type so that it aligns with Zod
         })),
       )
       .flat();
 
     const loading = this.loadingService.start();
-    await this.mealPlanService.addItems(this.mealPlanId, {
-      items: newItems,
-    });
+    await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.createMealPlanItems.mutate({
+        mealPlanId: this.mealPlanId,
+        items: newItems,
+      }),
+    );
     loading.dismiss();
     this.loadWithProgress();
   }
@@ -613,9 +640,12 @@ export class MealPlanPage {
       .flat();
 
     const loading = this.loadingService.start();
-    await this.mealPlanService.deleteItems(this.mealPlanId, {
-      itemIds: itemIds.join(","),
-    });
+    await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.deleteMealPlanItems.mutate({
+        mealPlanId: this.mealPlanId,
+        ids: itemIds,
+      }),
+    );
     loading.dismiss();
     this.loadWithProgress();
   }
@@ -624,7 +654,7 @@ export class MealPlanPage {
     this.mealsByDate = mealsByDate;
   }
 
-  setSelectedDays(selectedDays: number[]) {
+  setSelectedDays(selectedDays: string[]) {
     this.selectedDays = selectedDays;
   }
 }

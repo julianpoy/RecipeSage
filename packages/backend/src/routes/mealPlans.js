@@ -1,7 +1,6 @@
 import * as express from "express";
 const router = express.Router();
 import * as cors from "cors";
-import ical from "ical-generator";
 
 // DB
 import { Op } from "sequelize";
@@ -18,7 +17,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import * as GripService from "../services/grip.js";
+import { broadcastWSEvent } from "@recipesage/util/server/general";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
@@ -49,7 +48,7 @@ router.post(
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
-      GripService.broadcast(req.body.collaborators[i], "mealPlan:received", {
+      broadcastWSEvent(req.body.collaborators[i], "mealPlan:received", {
         mealPlanId: mealPlan.id,
         from: {
           id: res.locals.user.id,
@@ -165,9 +164,14 @@ router.post(
       );
     }
 
+    // REST api does not support new date format
+    const legacyScheduled = new Date(req.body.scheduled);
+    const legacyScheduledDate = legacyScheduled.toISOString().split("T")[0];
+
     await MealPlanItem.create({
       title: req.body.title,
-      scheduled: new Date(req.body.scheduled),
+      scheduled: legacyScheduled,
+      scheduledDate: legacyScheduledDate,
       meal: req.body.meal,
       recipeId: req.body.recipeId || null,
       userId: res.locals.session.userId,
@@ -186,13 +190,13 @@ router.post(
       reference,
     };
 
-    GripService.broadcast(
+    broadcastWSEvent(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
       broadcastPayload,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         broadcastPayload,
@@ -236,7 +240,7 @@ router.delete(
     if (mealPlan.userId === res.locals.session.userId) {
       await mealPlan.destroy();
       for (let i = 0; i < (mealPlan.collaborators || []).length; i++) {
-        GripService.broadcast(mealPlan.collaborators[i], "mealPlan:removed", {
+        broadcastWSEvent(mealPlan.collaborators[i], "mealPlan:removed", {
           mealPlanId: mealPlan.id,
           updatedBy: {
             id: res.locals.user.id,
@@ -300,13 +304,13 @@ router.delete(
       reference,
     };
 
-    GripService.broadcast(
+    broadcastWSEvent(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
       deletedItemBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         deletedItemBroadcast,
@@ -382,13 +386,9 @@ router.put(
       reference,
     };
 
-    GripService.broadcast(
-      mealPlan.userId,
-      "mealPlan:itemsUpdated",
-      updateBroadcast,
-    );
+    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,
@@ -460,13 +460,9 @@ router.post(
       reference,
     };
 
-    GripService.broadcast(
-      mealPlan.userId,
-      "mealPlan:itemsUpdated",
-      updateBroadcast,
-    );
+    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,
@@ -536,13 +532,9 @@ router.delete(
       reference,
     };
 
-    GripService.broadcast(
-      mealPlan.userId,
-      "mealPlan:itemsUpdated",
-      updateBroadcast,
-    );
+    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,
@@ -605,6 +597,7 @@ router.get(
             "id",
             "title",
             "scheduled",
+            "scheduledDate",
             "meal",
             "createdAt",
             "updatedAt",
@@ -647,99 +640,5 @@ router.get(
     res.status(200).json(mealPlanSummary);
   }),
 );
-
-// Get ical for meal plan
-router.get(
-  "/:mealPlanId/ical",
-  cors(),
-  wrapRequestWithErrorHandler(async (req, res) => {
-    const mealPlan = await MealPlan.findOne({
-      where: {
-        id: req.params.mealPlanId,
-      },
-      include: [
-        {
-          model: MealPlanItem,
-          as: "items",
-          attributes: [
-            "id",
-            "title",
-            "scheduled",
-            "meal",
-            "createdAt",
-            "updatedAt",
-          ],
-          include: [
-            {
-              model: Recipe,
-              as: "recipe",
-              attributes: ["id", "title", "ingredients"],
-            },
-          ],
-        },
-      ],
-    });
-
-    if (!mealPlan) {
-      throw NotFound("Meal plan not found or you do not have access");
-    }
-
-    const icalEvents = mealPlan.items.map((item) => ({
-      start: new Date(item.scheduled),
-      allDay: true,
-      summary: item.recipe?.title || item.title,
-      url: `https://recipesage.com/#/meal-planners/${mealPlan.id}`,
-    }));
-
-    const mealPlanICal = ical({
-      name: `RecipeSage ${mealPlan.title}`,
-      events: icalEvents,
-    });
-
-    res.writeHead(200, {
-      "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="calendar.ics"',
-    });
-
-    res.end(mealPlanICal.toString());
-  }),
-);
-
-// Update a meal plan meta info (NOT INCLUDING ITEMS)
-// router.put(
-//   '/:mealPlanId',
-//   cors(),
-//   MiddlewareService.validateSession(['user']),
-//   MiddlewareService.validateUser,
-//   function(req, res) {
-
-//   MealPlan.findOne({
-//     _id: req.params.mealPlanId,
-//     accountId: res.locals.accountId
-//   }, function(err, mealPlan) {
-//     if (err) {
-//       res.status(500).json({
-//         msg: "Couldn't search the database for meal plan!"
-//       });
-//     } else if (!mealPlan) {
-//       res.status(404).json({
-//         msg: "Meal plan with that ID does not exist or you do not have access!"
-//       });
-//     } else {
-//       if (typeof req.body.title === 'string') mealPlan.title = req.body.title;
-//       if (req.body.collaborators) mealPlan.collaborators = req.body.collaborators;
-
-//       mealPlan.updated = Date.now();
-
-//       mealPlan.save(function (err, mealPlan) {
-//         if (err) {
-//           res.status(500).send("Could not save updated meal plan!");
-//         } else {
-//           res.status(200).json(mealPlan);
-//         }
-//       });
-//     }
-//   });
-// });
 
 export default router;

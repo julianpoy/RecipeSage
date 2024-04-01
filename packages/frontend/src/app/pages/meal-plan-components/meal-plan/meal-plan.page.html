@@ -5,7 +5,7 @@
     </ion-buttons>
 
     <ion-title>
-      {{ 'pages.mealPlan.title' | translate:{name:mealPlan.title} }}
+      {{ 'pages.mealPlan.title' | translate:{name:mealPlan?.title} }}
     </ion-title>
 
     <ion-buttons slot="end">
@@ -18,9 +18,9 @@
 
 <ion-content>
   <br />
-  <div class="mealplan-flex">
+  <div class="mealplan-flex" *ngIf="mealPlanItems">
     <meal-calendar
-      [mealPlan]="mealPlan"
+      [mealPlanItems]="mealPlanItems"
       (selectedDaysChange)="setSelectedDays($event)"
       (itemClicked)="itemClicked($event)"
       (itemMoved)="itemMoved($event)"

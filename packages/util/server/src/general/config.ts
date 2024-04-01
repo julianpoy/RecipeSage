@@ -6,18 +6,29 @@ enum Environment {
   All = "all",
 }
 
-const getEnvString = (name: string, requiredEnvironments: Environment[]) => {
+const getEnvString = <
+  T extends Exclude<Environment, Environment.All>[] | Environment.All,
+  R extends T extends Environment.All ? string : string | undefined,
+>(
+  name: string,
+  requiredEnvironments: T,
+): R => {
   const value = process.env[name];
 
-  const isRequired =
-    requiredEnvironments.includes(
-      (process.env.NODE_ENV || "production") as Environment,
-    ) || requiredEnvironments.includes(Environment.All);
+  let isRequired;
+  if (requiredEnvironments === Environment.All) {
+    isRequired = true;
+  } else {
+    const _requiredEnvironments = requiredEnvironments as Environment[];
+    const nodeEnv = process.env.NODE_ENV || "production";
+    isRequired = _requiredEnvironments.includes(nodeEnv as Environment);
+  }
+
   if (!value && isRequired) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
 
-  return value;
+  return value as R;
 };
 
 export const config = {
@@ -28,5 +39,9 @@ export const config = {
         Environment.Prod,
       ]),
     },
+  },
+  grip: {
+    url: getEnvString("GRIP_URL", Environment.All),
+    key: getEnvString("GRIP_KEY", Environment.All),
   },
 };

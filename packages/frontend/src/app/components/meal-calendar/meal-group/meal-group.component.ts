@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { MealName, MealPlanItem } from "../../../services/meal-plan.service";
+import { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "meal-group",
@@ -12,7 +13,7 @@ export class MealGroupComponent {
   })
   mealItems!: {
     meals: MealName[];
-    itemsByMeal: Record<MealName, MealPlanItem[]>;
+    itemsByMeal: Record<MealName, MealPlanItemSummary[]>;
   };
   @Input() enableEditing: boolean = false;
 
@@ -23,7 +24,7 @@ export class MealGroupComponent {
 
   constructor() {}
 
-  dragStart(event: any, mealItem: MealPlanItem) {
+  dragStart(event: any, mealItem: MealPlanItemSummary) {
     this.mealItemsDragging[mealItem.id] = true;
     event.dataTransfer.setData("text", mealItem.id); // Must set 'text' prop for Android dragndrop, otherwise evt will be cancelled
   }

@@ -31,7 +31,6 @@ import clip from "./routes/clip.js";
 import data from "./routes/data.js";
 import proxy from "./routes/proxy.js";
 
-import ws from "./routes/ws.js";
 import { ErrorRequestHandler } from "express";
 
 const app = express();
@@ -91,7 +90,6 @@ app.use("/images", images);
 app.use("/clip", clip);
 app.use("/proxy", proxy);
 app.use("/data", data);
-app.use("/ws", ws);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

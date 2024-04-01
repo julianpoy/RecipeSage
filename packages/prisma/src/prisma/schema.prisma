@@ -10,7 +10,7 @@ datasource db {
 model FCMToken {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
-  token     String?
+  token     String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -34,9 +34,9 @@ model Friendship {
 model Image {
   id            String             @id @default(uuid()) @db.Uuid
   userId        String?            @db.Uuid
-  location      String?            @db.VarChar(255)
-  key           String?            @db.VarChar(255)
-  json          Json?
+  location      String             @db.VarChar(255)
+  key           String             @db.VarChar(255)
+  json          Json
   createdAt     DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime           @updatedAt @db.Timestamptz(6)
   user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -85,9 +85,10 @@ model MealPlanItem {
   userId            String             @db.Uuid
   mealPlanId        String             @db.Uuid
   recipeId          String?            @db.Uuid
-  title             String?
+  title             String
+  scheduledDate     DateTime           @db.Date
   scheduled         DateTime?          @db.Timestamptz(6)
-  meal              String?            @db.VarChar(255)
+  meal              String             @db.VarChar(255)
   createdAt         DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime           @updatedAt @db.Timestamptz(6)
   mealPlan          MealPlan           @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
@@ -116,7 +117,7 @@ model MealPlanCollaborator {
 model MealPlan {
   id                String                 @id @default(uuid()) @db.Uuid
   userId            String                 @db.Uuid
-  title             String?
+  title             String
   createdAt         DateTime               @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime               @updatedAt @db.Timestamptz(6)
   items             MealPlanItem[]
@@ -247,14 +248,14 @@ model Recipe {
 }
 
 model Session {
-  id        String    @id @default(uuid()) @db.Uuid
-  userId    String    @db.Uuid
-  type      String?   @db.VarChar(255)
-  token     String?   @db.VarChar(255)
-  expires   DateTime? @db.Timestamptz(6)
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  type      String   @db.VarChar(255)
+  token     String   @db.VarChar(255)
+  expires   DateTime @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("Sessions")
 }
@@ -295,7 +296,7 @@ model ShoppingListCollaborator {
 model ShoppingList {
   id                String                     @id @default(uuid()) @db.Uuid
   userId            String                     @db.Uuid
-  title             String?
+  title             String
   createdAt         DateTime                   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime                   @updatedAt @db.Timestamptz(6)
   items             ShoppingListItem[]
@@ -324,7 +325,7 @@ model StripePayment {
 model UserSubscription {
   id        String    @id @default(uuid()) @db.Uuid
   userId    String    @db.Uuid
-  name      String?   @db.VarChar(255)
+  name      String    @db.VarChar(255)
   expires   DateTime? @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime  @updatedAt @db.Timestamptz(6)
@@ -348,8 +349,8 @@ model UserProfileImage {
 
 model User {
   id                        String                     @id @default(uuid()) @db.Uuid
-  name                      String?
-  email                     String?                    @unique(map: "Users_email_uk")
+  name                      String
+  email                     String                     @unique(map: "Users_email_uk")
   passwordHash              String?
   passwordSalt              String?
   passwordVersion           Int?

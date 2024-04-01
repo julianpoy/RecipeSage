@@ -1,11 +1,11 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { AppPreferenceTypes } from "@recipesage/util/shared";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 
 export const getPreferences = publicProcedure.query(async ({ ctx }) => {
   const session = ctx.session;
-  validateSession(session);
+  validateTrpcSession(session);
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {

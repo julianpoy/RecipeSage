@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p *ngIf="!destinationMealPlan">
+  <p *ngIf="!selectedMealPlan">
     {{ 'pages.addRecipeToMealPlanModal.instructions1' | translate }}
   </p>
 
@@ -47,9 +47,9 @@
     </p>
   </div>
 
-  <div *ngIf="destinationMealPlan">
+  <div *ngIf="selectedMealPlanItems">
     <meal-calendar
-      [mealPlan]="destinationMealPlan"
+      [mealPlanItems]="selectedMealPlanItems"
       (selectedDaysChange)="selectedDays = $event"
     ></meal-calendar>
   </div>
@@ -64,11 +64,11 @@
         <span *ngIf="isFormValid()"
           >{{ 'pages.addRecipeToMealPlanModal.add' | translate }}</span
         >
-        <span *ngIf="!destinationMealPlan"
+        <span *ngIf="!selectedMealPlan"
           >{{ 'pages.addRecipeToMealPlanModal.selectMealPlan' | translate
           }}</span
         >
-        <span *ngIf="destinationMealPlan && !meal"
+        <span *ngIf="selectedMealPlan && (!selectedDays[0] || !meal)"
           >{{ 'pages.addRecipeToMealPlanModal.selectMeal' | translate }}</span
         >
       </ion-label>

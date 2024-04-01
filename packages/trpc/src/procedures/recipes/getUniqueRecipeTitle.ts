@@ -2,7 +2,7 @@ import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
 import {
-  validateSession,
+  validateTrpcSession,
   stripNumberedRecipeTitle,
 } from "@recipesage/util/server/general";
 import { recipeSummaryLite } from "@recipesage/prisma";
@@ -22,7 +22,7 @@ export const getUniqueRecipeTitle = publicProcedure
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const strippedRecipeTitle = stripNumberedRecipeTitle(input.title);
 

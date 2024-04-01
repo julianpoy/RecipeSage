@@ -1,22 +1,12 @@
 import { Component, Input } from "@angular/core";
-import {
-  NavController,
-  ToastController,
-  ModalController,
-  AlertController,
-} from "@ionic/angular";
+import { ToastController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
-import { RecipeService } from "~/services/recipe.service";
-import { UtilService } from "~/services/util.service";
-import {
-  MealPlan,
-  MealPlans,
-  MealPlanService,
-} from "~/services/meal-plan.service";
 
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";
+import { TRPCService } from "../../../services/trpc.service";
+import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-add-recipe-to-meal-plan-modal",
@@ -26,26 +16,22 @@ import { TranslateService } from "@ngx-translate/core";
 export class AddRecipeToMealPlanModalPage {
   @Input() recipe: any;
 
-  mealPlans?: MealPlans;
+  mealPlans?: MealPlanSummary[];
 
-  selectedMealPlan?: MealPlans[0];
-  destinationMealPlan?: MealPlan;
+  selectedMealPlan?: MealPlanSummary;
+  selectedMealPlanItems?: MealPlanItemSummary[];
   meal?: string;
 
   @Input() reference?: string;
 
-  selectedDays: number[] = [];
+  selectedDays: string[] = [];
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public mealPlanService: MealPlanService,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
+    private translate: TranslateService,
+    private trpcService: TRPCService,
+    private loadingService: LoadingService,
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController,
   ) {}
 
   ionViewWillEnter() {
@@ -83,46 +69,53 @@ export class AddRecipeToMealPlanModalPage {
   }
 
   async loadMealPlans() {
-    const response = await this.mealPlanService.fetch();
-    if (!response.success) return;
+    const mealPlans = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.getMealPlans.query(),
+    );
+    if (!mealPlans) return;
 
-    this.mealPlans = response.data;
+    this.mealPlans = mealPlans;
 
     this.selectLastUsedMealPlan();
   }
 
   async loadMealPlan(id: string) {
-    const response = await this.mealPlanService.fetchById(id);
-    if (!response.success) return;
+    const mealPlanItems = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.getMealPlanItems.query({
+        mealPlanId: id,
+      }),
+    );
 
-    this.destinationMealPlan = response.data;
+    if (!mealPlanItems) return;
+
+    this.selectedMealPlanItems = mealPlanItems;
   }
 
   isFormValid() {
-    if (!this.destinationMealPlan) return false;
+    if (!this.selectedMealPlan || !this.selectedDays[0]) return false;
 
     return this.meal && this.meal.length > 0;
   }
 
   async save() {
-    if (!this.destinationMealPlan || !this.meal) return;
+    if (!this.selectedMealPlan || !this.selectedDays[0] || !this.meal) return;
 
     const loading = this.loadingService.start();
 
     this.saveLastUsedMealPlan();
 
-    const response = await this.mealPlanService.addItem(
-      this.destinationMealPlan.id,
-      {
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.createMealPlanItem.mutate({
+        mealPlanId: this.selectedMealPlan.id,
         title: this.recipe.title,
         recipeId: this.recipe.id,
-        meal: this.meal,
-        scheduled: new Date(this.selectedDays[0]).toISOString(),
-      },
+        meal: this.meal as any, // TODO: Refine this type so that it aligns with Zod
+        scheduledDate: this.selectedDays[0],
+      }),
     );
     loading.dismiss();
 
-    if (response.success) this.modalCtrl.dismiss();
+    if (result) this.modalCtrl.dismiss();
   }
 
   async createMealPlan() {
