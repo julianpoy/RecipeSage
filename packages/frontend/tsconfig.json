@@ -2,10 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2021",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist/out-tsc"
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
-    "strictInjectionParameters": true,
-  },
+    "strictInjectionParameters": true
+  }
 }
