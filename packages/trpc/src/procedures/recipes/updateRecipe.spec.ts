@@ -34,10 +34,48 @@ describe("updateRecipe", () => {
         folder: "main",
       });
       expect(response.title).toEqual("marmelad");
+
+      const updatedRecipe = await prisma.recipe.findUnique({
+        where: {
+          id: recipe.id
+        },
+      });
+      expect(updatedRecipe?.title).toEqual("marmelad");
+    });
+
+    it("allows to update recipe with image", async () => {
+      const image = await prisma.image.create({
+        data: {
+          location: "somehosting.com/1",
+          userId: user.id,
+          key: "someKey",
+          json: {},
+        },
+      });
+  
+      const recipe = await prisma.recipe.create({
+        data: {
+          ...recipeFactory(user.id),
+        },
+      });
+      await trpc.recipes.updateRecipe.mutate({
+        ...recipeFactory(user.id),
+        id: recipe.id,
+        labelIds: [],
+        imageIds: [image.id],
+        folder: "main",
+      });
+  
+      const recipeImage = await prisma.recipeImage.findFirst({
+        where: {
+          recipeId: recipe.id,
+        },
+      });
+      expect(typeof recipeImage?.id).toBe("string");
     });
   });
   describe("error", () => {
-    it("can not update unexisting recipe", async () => {
+    it("throws an error when updating a recipe that does not exist", async () => {
       return expect(async () => {
         await trpc.recipes.updateRecipe.mutate({
           ...recipeFactory(user.id),
@@ -71,7 +109,7 @@ describe("updateRecipe", () => {
     }).rejects.toThrow("Recipe not found");
     return tearDown(user2.id);
   });
-  it("must throw on invalid ownership", async () => {
+  it("throws an error when updating a recipe with label ids the user does not own", async () => {
     const { user: user2 } = await trpcSetup();
 
     const recipe = await prisma.recipe.create({
@@ -99,36 +137,5 @@ describe("updateRecipe", () => {
       });
     }).rejects.toThrow("You do not own one of the specified label ids");
     return tearDown(user2.id);
-  });
-
-  it("allows to update recipe with image", async () => {
-    const image = await prisma.image.create({
-      data: {
-        location: "somehosting.com/1",
-        userId: user.id,
-        key: "someKey",
-        json: {},
-      },
-    });
-
-    const recipe = await prisma.recipe.create({
-      data: {
-        ...recipeFactory(user.id),
-      },
-    });
-    await trpc.recipes.updateRecipe.mutate({
-      ...recipeFactory(user.id),
-      id: recipe.id,
-      labelIds: [],
-      imageIds: [image.id],
-      folder: "main",
-    });
-
-    const recipeImage = await prisma.recipeImage.findFirst({
-      where: {
-        recipeId: recipe.id,
-      },
-    });
-    expect(typeof recipeImage?.id).toBe("string");
   });
 });
