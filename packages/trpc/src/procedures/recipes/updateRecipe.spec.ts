@@ -37,7 +37,7 @@ describe("updateRecipe", () => {
 
       const updatedRecipe = await prisma.recipe.findUnique({
         where: {
-          id: recipe.id
+          id: recipe.id,
         },
       });
       expect(updatedRecipe?.title).toEqual("marmelad");
@@ -52,7 +52,7 @@ describe("updateRecipe", () => {
           json: {},
         },
       });
-  
+
       const recipe = await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
@@ -65,7 +65,7 @@ describe("updateRecipe", () => {
         imageIds: [image.id],
         folder: "main",
       });
-  
+
       const recipeImage = await prisma.recipeImage.findFirst({
         where: {
           recipeId: recipe.id,
