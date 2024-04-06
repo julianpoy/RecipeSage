@@ -1,14 +1,9 @@
 import { Component } from "@angular/core";
-import {
-  NavController,
-  ModalController,
-  ToastController,
-} from "@ionic/angular";
+import { NavController, ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
-import { MessagingService } from "~/services/messaging.service";
-import { MealPlanService } from "~/services/meal-plan.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { RouteMap } from "~/services/util.service";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-new-meal-plan-modal",
@@ -21,31 +16,28 @@ export class NewMealPlanModalPage {
   selectedCollaboratorIds: any = [];
 
   constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public loadingService: LoadingService,
-    public mealPlanService: MealPlanService,
-    public messagingService: MessagingService,
-    public utilService: UtilService,
-    public toastCtrl: ToastController,
+    private navCtrl: NavController,
+    private modalCtrl: ModalController,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
   ) {}
 
   async save() {
     const loading = this.loadingService.start();
 
-    const response = await this.mealPlanService.create({
-      title: this.mealPlanTitle,
-      collaborators: this.selectedCollaboratorIds,
-    });
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.createMealPlan.mutate({
+        title: this.mealPlanTitle,
+        collaboratorUserIds: this.selectedCollaboratorIds,
+      }),
+    );
     loading.dismiss();
-    if (!response.success) return;
+    if (!result) return;
 
     this.modalCtrl.dismiss({
       success: true,
     });
-    this.navCtrl.navigateForward(
-      RouteMap.MealPlanPage.getPath(response.data.id),
-    );
+    this.navCtrl.navigateForward(RouteMap.MealPlanPage.getPath(result.id));
   }
 
   cancel() {

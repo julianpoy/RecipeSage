@@ -5,11 +5,8 @@ WORKDIR /app
 # mdbtools
 RUN apk add --no-cache mdbtools mdbtools-utils
 
-# node-gyp
-RUN apk add --no-cache python3 make clang build-base
-
-# node canvas
-RUN apk add --no-cache build-base g++ cairo-dev jpeg-dev pango-dev giflib-dev
+# pdftotext
+RUN apk add --no-cache poppler-utils
 
 # dev watch script
 RUN apk add --no-cache inotify-tools

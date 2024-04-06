@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { labelSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -14,7 +14,7 @@ export const deleteLabel = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const label = await prisma.label.findUnique({
       where: {

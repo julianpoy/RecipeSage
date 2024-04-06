@@ -14,8 +14,8 @@
 
 <ion-content class="ion-padding">
   <ion-item (click)="mealItem.recipe ? openRecipe() : null" button>
-    <ion-avatar *ngIf="mealItem.recipe?.images?.length" slot="start">
-      <img src="{{ mealItem.recipe?.images?.at(0)?.location }}" />
+    <ion-avatar *ngIf="mealItem.recipe?.recipeImages?.length" slot="start">
+      <img src="{{ mealItem.recipe?.recipeImages?.at(0)?.image?.location }}" />
     </ion-avatar>
     <ion-label>
       <h2>{{ mealItem.title }}</h2>
@@ -23,14 +23,15 @@
         <ion-icon name="calendar"></ion-icon>
         <span>
           {{ 'pages.mealPlanItemDetailsModal.scheduled' |
-          translate:{meal:mealItem.meal,date:formatDate(mealItem.scheduled)} }}
+          translate:{meal:mealItem.meal,date:formatDate(mealItem.scheduledDate)}
+          }}
         </span>
       </p>
       <p class="mealItem-meta">
         <ion-icon name="person"></ion-icon>
         <span>
           {{ 'pages.mealPlanItemDetailsModal.lastModified' |
-          translate:{name:mealItem.owner.name,date:formatDate(mealItem.updatedAt)}
+          translate:{name:mealItem.user.name,date:formatDate(mealItem.updatedAt)}
           }}
         </span>
       </p>

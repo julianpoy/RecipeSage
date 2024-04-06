@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { MealPlanItem } from "../../../services/meal-plan.service";
+import { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "calendar-item",
@@ -10,7 +10,7 @@ export class CalendarItemComponent {
   @Input({
     required: true,
   })
-  mealItem!: MealPlanItem;
+  mealItem!: MealPlanItemSummary;
 
   constructor() {}
 }

@@ -14,6 +14,7 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-meal-plan-popover",
@@ -28,16 +29,14 @@ export class MealPlanPopoverPage {
   mealPlan: any; // From nav params
 
   constructor(
-    public popoverCtrl: PopoverController,
-    public modalCtrl: ModalController,
-    public translate: TranslateService,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public loadingService: LoadingService,
-    public mealPlanService: MealPlanService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
+    private modalCtrl: ModalController,
+    private translate: TranslateService,
+    private navCtrl: NavController,
+    private preferencesService: PreferencesService,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
+    private alertCtrl: AlertController,
   ) {}
 
   savePreferences() {
@@ -128,9 +127,13 @@ export class MealPlanPopoverPage {
   async _deleteMealPlan() {
     const loading = this.loadingService.start();
 
-    const response = await this.mealPlanService.delete(this.mealPlanId);
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.mealPlans.deleteMealPlan.mutate({
+        id: this.mealPlanId,
+      }),
+    );
     loading.dismiss();
-    if (!response.success) return;
+    if (!result) return;
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());

@@ -1,6 +1,6 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { labelGroupSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -15,7 +15,7 @@ export const createLabelGroup = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const existingLabelGroup = await prisma.labelGroup.findFirst({
       where: {

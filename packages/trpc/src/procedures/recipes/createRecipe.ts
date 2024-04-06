@@ -6,7 +6,7 @@ import {
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
 } from "@recipesage/util/server/capabilities";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -31,7 +31,7 @@ export const createRecipe = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const labelIds = input.labelIds || [];
     const doesNotOwnAssignedLabel = !!(await prisma.label.findFirst({

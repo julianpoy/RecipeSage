@@ -14,6 +14,10 @@ export const MealPlanItemInit = (sequelize, DataTypes) => {
       },
       scheduled: {
         type: DataTypes.DATE,
+        allowNull: true,
+      },
+      scheduledDate: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
       meal: {

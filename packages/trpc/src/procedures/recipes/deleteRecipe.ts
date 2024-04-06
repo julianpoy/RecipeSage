@@ -2,7 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { deleteRecipes } from "@recipesage/util/server/search";
 
 export const deleteRecipe = publicProcedure
@@ -13,7 +13,7 @@ export const deleteRecipe = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const recipe = await prisma.recipe.findUnique({
       where: {

@@ -1,7 +1,7 @@
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { prisma } from "@recipesage/prisma";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { recipeSummaryLite } from "@recipesage/prisma";
 
 export const getRecipesByTitle = publicProcedure
@@ -12,7 +12,7 @@ export const getRecipesByTitle = publicProcedure
   )
   .query(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const recipes = prisma.recipe.findMany({
       where: {

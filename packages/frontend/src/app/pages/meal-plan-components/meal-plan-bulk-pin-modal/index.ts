@@ -10,6 +10,7 @@ import { RecipeService } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { UtilService } from "~/services/util.service";
+import { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-meal-plan-bulk-pin-modal",
@@ -20,7 +21,7 @@ export class MealPlanBulkPinModalPage {
   @Input({
     required: true,
   })
-  mealItems!: MealPlanItem[];
+  mealItems!: MealPlanItemSummary[];
 
   allSelected = true;
   recipeIdSelectionMap: Record<string, boolean> = {};
@@ -67,7 +68,7 @@ export class MealPlanBulkPinModalPage {
         this.cookingToolbarService.pinRecipe({
           id: mealItem.recipe.id,
           title: mealItem.recipe.title,
-          imageUrl: mealItem.recipe.images[0]?.location,
+          imageUrl: mealItem.recipe.recipeImages.at(0)?.image.location,
         });
       }
     });

@@ -2,7 +2,7 @@ import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
   Capabilities,
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
@@ -32,7 +32,7 @@ export const updateRecipe = publicProcedure
   )
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
-    validateSession(session);
+    validateTrpcSession(session);
 
     const initialRecipe = await prisma.recipe.findUnique({
       where: {

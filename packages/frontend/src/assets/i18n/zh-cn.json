@@ -1003,5 +1003,10 @@
     "generic.okay": "OK",
     "generic.ok": "Ok",
     "generic.ignore": "忽略",
-    "generic.options": "选项"
+    "generic.options": "选项",
+    "pages.settings.resetPrefs.message": "重置您的偏好选项可以让所有的设置恢复初始设置.包括在主页的,膳食计划页面偏好,购物清单页面.请注意:这个设置只会在本设备生效.",
+    "pages.shoppingListIgnoreModal.title": "购物清单例外项目列表",
+    "pages.profile.alreadyRequested": "看上去您有一个好友关系在进行中.请再次尝试.",
+    "components.selectIngredients.scale": "{{scale}}x 倍大小 (点击修改)",
+    "components.selectUser.placeholder": "根据email或者handle搜索"
 }

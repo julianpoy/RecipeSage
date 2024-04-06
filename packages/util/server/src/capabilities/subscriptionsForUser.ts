@@ -14,9 +14,6 @@ export const subscriptionsForUser = async (
   const subscriptions = prisma.userSubscription.findMany({
     where: {
       userId,
-      name: {
-        not: null,
-      },
       OR: [
         {
           expires: {

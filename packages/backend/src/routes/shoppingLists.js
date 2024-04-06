@@ -16,7 +16,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import * as GripService from "../services/grip.js";
+import { broadcastWSEvent } from "@recipesage/util/server/general";
 import * as ShoppingListCategorizerService from "../services/shopping-list-categorizer.js";
 import { joiValidator } from "../middleware/joiValidator.js";
 
@@ -54,18 +54,14 @@ router.post(
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
-      GripService.broadcast(
-        req.body.collaborators[i],
-        "shoppingList:received",
-        {
-          shoppingListId: shoppingList.id,
-          from: {
-            id: res.locals.user.id,
-            name: res.locals.user.name,
-            email: res.locals.user.email,
-          },
+      broadcastWSEvent(req.body.collaborators[i], "shoppingList:received", {
+        shoppingListId: shoppingList.id,
+        from: {
+          id: res.locals.user.id,
+          name: res.locals.user.name,
+          email: res.locals.user.email,
         },
-      );
+      });
     }
 
     res.status(200).json(shoppingList);
@@ -197,13 +193,13 @@ router.post(
       reference,
     };
 
-    GripService.broadcast(
+    broadcastWSEvent(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       broadcastPayload,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         broadcastPayload,
@@ -248,7 +244,7 @@ router.delete(
       await shoppingList.destroy();
 
       for (let i = 0; i < (shoppingList.collaborators || []).length; i++) {
-        GripService.broadcast(
+        broadcastWSEvent(
           shoppingList.collaborators[i],
           "shoppingList:removed",
           {
@@ -320,13 +316,13 @@ router.delete(
       reference,
     };
 
-    GripService.broadcast(
+    broadcastWSEvent(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       deletedItemBroadcast,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         deletedItemBroadcast,
@@ -511,13 +507,13 @@ router.put(
       reference,
     };
 
-    GripService.broadcast(
+    broadcastWSEvent(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       broadcast,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      GripService.broadcast(
+      broadcastWSEvent(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         broadcast,

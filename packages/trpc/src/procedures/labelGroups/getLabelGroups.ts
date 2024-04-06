@@ -1,11 +1,11 @@
 import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
-import { validateSession } from "@recipesage/util/server/general";
+import { validateTrpcSession } from "@recipesage/util/server/general";
 import { labelGroupSummary } from "@recipesage/prisma";
 
 export const getLabelGroups = publicProcedure.query(async ({ ctx }) => {
   const session = ctx.session;
-  validateSession(session);
+  validateTrpcSession(session);
 
   const labelGroups = await prisma.labelGroup.findMany({
     where: {

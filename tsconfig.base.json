@@ -31,7 +31,6 @@
         "packages/util/server/src/general/index.ts"
       ],
       "@recipesage/util/server/ml": ["packages/util/server/src/ml/index.ts"],
-      "@recipesage/util/server/pdf": ["packages/util/server/src/pdf/index.ts"],
       "@recipesage/util/server/search": [
         "packages/util/server/src/search/index.ts"
       ],
