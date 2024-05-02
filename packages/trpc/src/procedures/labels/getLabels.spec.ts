@@ -18,7 +18,7 @@ describe("getLabels", () => {
 
   describe("success", () => {
     it("get label", async () => {
-      const label = await prisma.label.create({
+      await prisma.label.create({
         data: {
           userId: user.id,
           title: "meat",
