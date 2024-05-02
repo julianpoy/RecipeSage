@@ -1,12 +1,8 @@
 import { trpcSetup, tearDown } from "../../testutils";
-import { recipeFactory } from "../../factories/recipeFactory";
 import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
-import { getLabelsByUserId } from "./getLabelsByUserId";
-import { title } from "process";
-import { rootCertificates } from "tls";
 
 describe("getLabels", () => {
   let user: User;

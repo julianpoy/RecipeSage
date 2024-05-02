@@ -19,7 +19,7 @@ describe("getRecipe", () => {
 
   describe("success", () => {
     it("gets a unique recipe title", async () => {
-      const r1 = await prisma.recipe.create({
+      await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
           title: "Spagetti",
@@ -31,7 +31,7 @@ describe("getRecipe", () => {
       });
       expect(response).toEqual("Spagetti (1)");
 
-      const r2 = await prisma.recipe.create({
+      await prisma.recipe.create({
         data: {
           ...recipeFactory(user.id),
           title: "Spagetti (1)",
@@ -46,14 +46,14 @@ describe("getRecipe", () => {
   });
 
   it("gets a unique recipe title with ignoring ID", async () => {
-    const r1 = await prisma.recipe.create({
+    await prisma.recipe.create({
       data: {
         ...recipeFactory(user.id),
         title: "Spagetti with meatballs",
       },
     });
 
-    const r2 = await prisma.recipe.create({
+    const recipe2 = await prisma.recipe.create({
       data: {
         ...recipeFactory(user.id),
         title: "Spagetti with meatballs (1)",
@@ -61,7 +61,7 @@ describe("getRecipe", () => {
     });
     const response2 = await trpc.recipes.getUniqueRecipeTitle.query({
       title: "Spagetti with meatballs",
-      ignoreIds: [r2.id],
+      ignoreIds: [recipe2.id],
     });
     expect(response2).toEqual("Spagetti with meatballs (1)");
   });
