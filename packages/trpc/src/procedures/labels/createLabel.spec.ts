@@ -30,7 +30,7 @@ describe("create Label", () => {
         },
       });
       expect(typeof response?.id).toBe("string");
-      
+
       const updatedLabel = await prisma.label.findUnique({
         where: {
           id: label.id,

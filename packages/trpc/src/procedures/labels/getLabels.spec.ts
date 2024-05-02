@@ -24,9 +24,9 @@ describe("getLabels", () => {
     it("get label", async () => {
       const label = await prisma.label.create({
         data: {
-            userId: user.id,
-            title: "meat",
-        }
+          userId: user.id,
+          title: "meat",
+        },
       });
       const response = await trpc.labels.getLabels.query();
       expect(response[0].title).toEqual("meat");
