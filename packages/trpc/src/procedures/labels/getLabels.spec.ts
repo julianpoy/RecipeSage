@@ -27,5 +27,17 @@ describe("getLabels", () => {
       const response = await trpc.labels.getLabels.query();
       expect(response[0].title).toEqual("meat");
     });
+
+    it("throws on invalid ownership", async () => {
+      const { user: user2 } = await trpcSetup();
+      await prisma.label.create({
+        data: {
+          userId: user2.id,
+          title: "meat",
+        },
+      });
+      const response = await trpc.labels.getLabels.query();
+      expect(response.length).toEqual(0);
+    });
   });
 });
