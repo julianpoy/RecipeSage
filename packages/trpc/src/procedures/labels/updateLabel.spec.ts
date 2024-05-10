@@ -3,7 +3,6 @@ import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
-import { response } from "express";
 
 describe("updates label", () => {
   let user: User;
@@ -51,13 +50,13 @@ describe("updates label", () => {
             title: "meat",
           },
         });
-        const label2 = await prisma.label.create({
+        await prisma.label.create({
           data: {
             userId: user.id,
             title: "fish",
           },
         });
-        const response = await trpc.labels.updateLabel.mutate({
+        await trpc.labels.updateLabel.mutate({
           id: label.id,
           title: "fish",
           labelGroupId: null,
