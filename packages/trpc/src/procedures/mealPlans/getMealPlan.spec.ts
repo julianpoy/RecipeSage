@@ -51,7 +51,7 @@ describe("getMealPlan", () => {
     it("must throw on meal plan not owned", async () => {
       const { user: user2 } = await trpcSetup();
       const collaboratorUsers = [user2];
-      const createdMealPlan = await prisma.mealPlan.create({
+      await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
