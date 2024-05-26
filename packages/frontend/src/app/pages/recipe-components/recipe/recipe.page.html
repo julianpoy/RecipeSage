@@ -29,7 +29,7 @@
         <img src="{{ sortedRecipeImages()[0].image.location }}" />
       </ion-thumbnail>
 
-      <ion-label>
+      <ion-label [dir]="isTitleRtl ? 'rtl' : 'ltr'">
         <h2 class="recipeTitle ion-text-wrap">{{ recipe.title }}</h2>
 
         <ion-grid
@@ -91,7 +91,12 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-        <p class="ion-text-wrap">{{ recipe.description }}</p>
+        <p
+          [style.text-align]="isDescriptionRtl ? 'right' : 'left'"
+          class="ion-text-wrap"
+        >
+          {{ recipe.description }}
+        </p>
       </ion-label>
     </ion-item>
 
@@ -170,10 +175,11 @@
           </ion-label>
         </ion-item>
         <ion-item class="ingredients ion-text-wrap" lines="none">
-          <ion-label>
+          <ion-label [dir]="isIngredientsRtl ? 'rtl' : 'ltr'">
             <p
               *ngFor="let ingredient of ingredients; index as ingredientIdx"
               [innerHTML]="ingredient.content"
+              [style.text-align]="ingredient.isRtl ? 'right' : 'left'"
               class="ingredient ion-text-wrap"
               [ngClass]="{ ingredientContent: !ingredient.isHeader, complete: getIngredientComplete(ingredientIdx) }"
               (click)="ingredientClicked($event, ingredient, ingredientIdx)"
@@ -199,24 +205,28 @@
           </ion-label>
         </ion-item>
         <ion-item class="instructions ion-text-wrap" lines="none">
-          <ion-label>
+          <ion-label [dir]="isInstructionRtl ? 'rtl' : 'ltr'">
             <p
               *ngFor="let instruction of instructions; index as instructionIdx"
               class="instruction ion-text-wrap"
+              [style.text-align]="instruction.isRtl ? 'right' : 'left'"
             >
-              <span *ngIf="instruction.isHeader"
-                ><b class="sectionHeader">{{instruction.content}}</b></span
-              >
+              <span *ngIf="instruction.isHeader">
+                <b class="sectionHeader">{{instruction.content}}</b>
+              </span>
               <span
                 *ngIf="!instruction.isHeader"
                 (click)="instructionClicked($event, instruction, instructionIdx)"
                 [ngClass]="{ complete: getInstructionComplete(instructionIdx) }"
+                [style.text-align]="instruction.isRtl ? 'right' : 'left'"
               >
                 <b>{{instruction.count}} &nbsp;</b>
                 <span
                   class="instructionContent"
                   [innerHTML]="instruction.content"
+                  [style.text-align]="instruction.isRtl ? 'right' : 'left'"
                 ></span>
+                <!-- <b *ngIf="instruction.isRtl">&nbsp; {{instruction.count}}</b> -->
               </span>
             </p>
             <p *ngIf="!instructions || instructions.length === 0">
@@ -235,9 +245,10 @@
         </ion-label>
       </ion-item>
       <ion-item lines="none" class="ion-text-wrap">
-        <ion-label>
+        <ion-label [dir]="isNotesRtl ? 'rtl' : 'ltr'">
           <p
             *ngFor="let note of notes; index as noteIdx"
+            [style.text-align]="note.isRtl ? 'right' : 'left'"
             [innerHTML]="note.content"
             [ngClass]="{ header: note.isHeader }"
             class="ion-text-wrap"
