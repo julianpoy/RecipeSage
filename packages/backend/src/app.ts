@@ -40,6 +40,9 @@ const corsWhitelist = [
   "https://recipesage.com",
   "https://beta.recipesage.com",
   "https://api.recipesage.com",
+  "https://windows.recipesage.com",
+  "https://android.recipesage.com",
+  "https://ios.recipesage.com",
   "https://localhost",
   "capacitor://localhost",
 ];
