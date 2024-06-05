@@ -17,11 +17,10 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["esnext", "dom"],
     "paths": {
+      "@recipesage/express": ["packages/express/src/index.ts"],
       "@recipesage/frontend/*": ["packages/frontend/*"],
       "@recipesage/prisma": ["packages/prisma/src/index.ts"],
       "@recipesage/trpc": ["packages/trpc/src/index.ts"],
-      "@recipesage/express": ["packages/express/src/index.ts"],
-      "@recipesage/util/shared": ["packages/util/shared/src/index.ts"],
       "@recipesage/util/server": ["packages/util/server/src/index.ts"],
       "@recipesage/util/server/capabilities": [
         "packages/util/server/src/capabilities/index.ts"
@@ -34,6 +33,7 @@
       "@recipesage/util/server/search": [
         "packages/util/server/src/search/index.ts"
       ],
+      "@recipesage/util/shared": ["packages/util/shared/src/index.ts"],
       "~/*": ["packages/frontend/src/app/*"]
     }
   },

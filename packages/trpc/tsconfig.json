@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "allowJs": true,
-    "module": "commonjs",
+    "module": "commonjs"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts"]
 }

@@ -27,9 +27,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/webextension-v3/**/*.js"],
         "maxWarnings": 0
       }
     }
