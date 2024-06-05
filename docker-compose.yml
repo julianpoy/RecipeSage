@@ -1,5 +1,3 @@
-version: "3.7"
-
 # NOTE: If you're selfhosting, you'll find it much easier (and more performant) to use the proper selfhosted
 # dockerfile that exists here: https://github.com/julianpoy/recipesage-selfhost
 
