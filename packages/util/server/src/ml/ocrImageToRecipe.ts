@@ -1,20 +1,21 @@
 import { IS_FIREBASE_AVAILABLE } from "../general/isFirebaseAvailable";
 import { ocrImageBuffer } from "./ocr";
 import { TextToRecipeInputType, textToRecipe } from "./textToRecipe";
-import { VisionToTextInputType, visionToText } from "./visionToText";
+import { VisionToRecipeInputType, visionToRecipe } from "./visionToRecipe";
 
 export const ocrImageToRecipe = async (imageBuffer: Buffer) => {
-  let recipeText;
-  if (IS_FIREBASE_AVAILABLE) {
-    const ocrResults = await ocrImageBuffer(imageBuffer);
-    recipeText = ocrResults.join("\n");
-  } else {
-    // Selfhosted environments may not have firebase available. We fallback to GPT4 vision.
-    recipeText = await visionToText(
+  if (!IS_FIREBASE_AVAILABLE) {
+    // Selfhosted environments do not have firebase available.
+    // We fallback to using ChatGPT vision which is less capable at OCR than Google Cloud Vision.
+    const recognizedRecipe = await visionToRecipe(
       imageBuffer.toString("base64"),
-      VisionToTextInputType.Photo,
+      VisionToRecipeInputType.Photo,
     );
+    return recognizedRecipe;
   }
+
+  const ocrResults = await ocrImageBuffer(imageBuffer);
+  const recipeText = ocrResults.join("\n");
 
   console.log("OCR results", recipeText);
 

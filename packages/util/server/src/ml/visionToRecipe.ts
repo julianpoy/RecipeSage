@@ -11,14 +11,13 @@ export enum VisionToRecipeInputType {
 
 const prompts = {
   [VisionToRecipeInputType.Photo]:
-    "I took this photo of a recipe. Please fix any odd capitalization and save the recipe in JSON format in it's original language.",
+    "I took this photo of a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions.",
   [VisionToRecipeInputType.Document]:
-    "I scanned a document containing a recipe. Please fix any odd capitalization and save the recipe in JSON format in it's original language.",
+    "I scanned a document containing a recipe. Please save the recipe in JSON format in it's original language. Please include all of the original measurements and instructions. Do not add additional information. Do not number instructions.",
 } satisfies Record<VisionToRecipeInputType, string>;
 
 /**
- * Converts an image to a recipe using function calling against GPT4Vision.
- * Currently does not work due to GPT4Vision not supporting function calling.
+ * Converts an image to a recipe using function calling against GPT4O.
  */
 export const visionToRecipe = async (
   imageB64: string,
@@ -31,7 +30,7 @@ export const visionToRecipe = async (
     throw new Error("GPT function must have name for mandated tool call");
 
   await openAiHelper.getJsonResponseWithTools(
-    SupportedGPTModel.GPT4Vision,
+    SupportedGPTModel.GPT4O,
     [
       {
         role: "system",
