@@ -102,6 +102,10 @@ const appRouter = router({
     getRecipeFromPDF,
     getRecipeFromText,
   }),
+
+  getRecipes,
+  searchRecipes,
+  getSimilarRecipes,
 });
 
 export const trpcExpressMiddleware = createExpressMiddleware({
