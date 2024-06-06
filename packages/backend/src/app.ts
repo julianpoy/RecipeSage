@@ -50,6 +50,11 @@ const corsWhitelist = [
 ];
 const corsOptions = {
   origin: (origin, callback) => {
+    if (process.env.NODE_ENV === "selfhost") {
+      // Always allow any origin for selfhost
+      callback(null, true);
+      return;
+    }
     const enableCors = origin && corsWhitelist.indexOf(origin) !== -1;
     callback(null, enableCors);
   },
