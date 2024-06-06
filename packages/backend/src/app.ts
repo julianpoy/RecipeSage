@@ -45,6 +45,8 @@ const corsWhitelist = [
   "https://ios.recipesage.com",
   "https://localhost",
   "capacitor://localhost",
+  "moz-extension://5d18e06b-c0ef-4566-8c94-8ec47d7776e5",
+  "chrome-extension://oepplnnfceidfaaacjpdpobnjkcpgcpo",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
