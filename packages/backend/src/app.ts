@@ -45,14 +45,24 @@ const defaultCorsAllowlist = [
   "https://ios.recipesage.com",
   "https://localhost",
   "capacitor://localhost",
-  "moz-extension://5d18e06b-c0ef-4566-8c94-8ec47d7776e5",
+  "moz-extension://*",
   "chrome-extension://oepplnnfceidfaaacjpdpobnjkcpgcpo",
 ];
+
+const hostMatch = (pattern: string, origin: string) => {
+  if (pattern.endsWith("*")) {
+    return origin.startsWith(pattern.substring(0, pattern.length - 1));
+  }
+
+  return origin === pattern;
+};
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (process.env.CORS_ALLOWLIST) {
       const allowList = process.env.CORS_ALLOWLIST.split(",");
-      const allowCors = origin && allowList.indexOf(origin) !== -1;
+      const allowCors =
+        origin && allowList.some((pattern) => hostMatch(pattern, origin));
       callback(null, allowCors);
       return;
     }
@@ -64,7 +74,9 @@ const corsOptions = {
       return;
     }
 
-    const allowCors = origin && defaultCorsAllowlist.indexOf(origin) !== -1;
+    const allowCors =
+      origin &&
+      defaultCorsAllowlist.some((pattern) => hostMatch(pattern, origin));
     callback(null, allowCors);
   },
 } satisfies cors.CorsOptions;
