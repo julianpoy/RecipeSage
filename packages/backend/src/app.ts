@@ -35,7 +35,7 @@ import { ErrorRequestHandler } from "express";
 
 const app = express();
 
-const corsWhitelist = [
+const defaultCorsAllowlist = [
   "https://www.recipesage.com",
   "https://recipesage.com",
   "https://beta.recipesage.com",
@@ -50,13 +50,22 @@ const corsWhitelist = [
 ];
 const corsOptions = {
   origin: (origin, callback) => {
+    if (process.env.CORS_ALLOWLIST) {
+      const allowList = process.env.CORS_ALLOWLIST.split(",");
+      const allowCors = origin && allowList.indexOf(origin) !== -1;
+      callback(null, allowCors);
+      return;
+    }
+
     if (process.env.NODE_ENV === "selfhost") {
-      // Always allow any origin for selfhost
+      // No default allowlist, so we do not know selfhost user's origin
+      // we allow all.
       callback(null, true);
       return;
     }
-    const enableCors = origin && corsWhitelist.indexOf(origin) !== -1;
-    callback(null, enableCors);
+
+    const allowCors = origin && defaultCorsAllowlist.indexOf(origin) !== -1;
+    callback(null, allowCors);
   },
 } satisfies cors.CorsOptions;
 
