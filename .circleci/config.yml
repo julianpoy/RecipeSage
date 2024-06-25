@@ -178,7 +178,8 @@ workflows:
             - build_and_test
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*.*/
+              # We do not publish -beta versions for selfhost
+              only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/
       - push_frontend:
@@ -194,6 +195,7 @@ workflows:
             - build_and_test
           filters:
             tags:
-              only: /^v[0-9]+(\.[0-9]+)*.*/
+              # We do not publish -beta versions for selfhost
+              only: /^v[0-9]+(\.[0-9]+)*/
             branches:
               ignore: /.*/

@@ -13,9 +13,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/util/shared/**/*.ts"],
         "maxWarnings": 0
       }
     }

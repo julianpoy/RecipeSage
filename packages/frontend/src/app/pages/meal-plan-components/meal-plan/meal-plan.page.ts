@@ -252,7 +252,8 @@ export class MealPlanPage {
   getItemsOnDay(dateStamp: string) {
     const day = dayjs(dateStamp);
     return (
-      this.mealsByDate?.[day.year()]?.[day.month()]?.[day.date()]?.items || []
+      this.mealsByDate?.[day.year()]?.[day.month() + 1]?.[day.date()]?.items ||
+      []
     );
   }
 
@@ -577,8 +578,8 @@ export class MealPlanPage {
     );
 
     const updatedItems = this.selectedDaysInProgress
-      .map((selectedDay) =>
-        this.getItemsOnDay(selectedDay).map((item) => ({
+      .map((selectedDay) => {
+        return this.getItemsOnDay(selectedDay).map((item) => ({
           id: item.id,
           title: item.title,
           recipeId: item.recipeId,
@@ -586,8 +587,8 @@ export class MealPlanPage {
             .add(dayDiff, "day")
             .format("YYYY-MM-DD"),
           meal: item.meal as any, // TODO: Refine this type so that it aligns with Zod
-        })),
-      )
+        }));
+      })
       .flat();
 
     const loading = this.loadingService.start();
@@ -611,16 +612,16 @@ export class MealPlanPage {
     );
 
     const newItems = this.selectedDaysInProgress
-      .map((selectedDay) =>
-        this.getItemsOnDay(selectedDay).map((item) => ({
+      .map((selectedDay) => {
+        return this.getItemsOnDay(selectedDay).map((item) => ({
           title: item.title,
           recipeId: item.recipeId,
-          scheduledDate: dayjs(item.scheduled)
+          scheduledDate: dayjs(item.scheduledDate)
             .add(dayDiff, "day")
             .format("YYYY-MM-DD"),
           meal: item.meal as any, // TODO: Refine this type so that it aligns with Zod
-        })),
-      )
+        }));
+      })
       .flat();
 
     const loading = this.loadingService.start();

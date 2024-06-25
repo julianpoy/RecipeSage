@@ -35,18 +35,50 @@ import { ErrorRequestHandler } from "express";
 
 const app = express();
 
-const corsWhitelist = [
+const defaultCorsAllowlist = [
   "https://www.recipesage.com",
   "https://recipesage.com",
   "https://beta.recipesage.com",
   "https://api.recipesage.com",
+  "https://windows.recipesage.com",
+  "https://android.recipesage.com",
+  "https://ios.recipesage.com",
   "https://localhost",
   "capacitor://localhost",
+  "moz-extension://*",
+  "chrome-extension://oepplnnfceidfaaacjpdpobnjkcpgcpo",
+  "*", // Temporary fix for 1401, circle back and fix webextension manifests
 ];
+
+const hostMatch = (pattern: string, origin: string) => {
+  if (pattern.endsWith("*")) {
+    return origin.startsWith(pattern.substring(0, pattern.length - 1));
+  }
+
+  return origin === pattern;
+};
+
 const corsOptions = {
   origin: (origin, callback) => {
-    const enableCors = origin && corsWhitelist.indexOf(origin) !== -1;
-    callback(null, enableCors);
+    if (process.env.CORS_ALLOWLIST) {
+      const allowList = process.env.CORS_ALLOWLIST.split(",");
+      const allowCors =
+        origin && allowList.some((pattern) => hostMatch(pattern, origin));
+      callback(null, allowCors);
+      return;
+    }
+
+    if (process.env.NODE_ENV === "selfhost") {
+      // No default allowlist, so we do not know selfhost user's origin
+      // we allow all.
+      callback(null, true);
+      return;
+    }
+
+    const allowCors =
+      origin &&
+      defaultCorsAllowlist.some((pattern) => hostMatch(pattern, origin));
+    callback(null, allowCors);
   },
 } satisfies cors.CorsOptions;
 

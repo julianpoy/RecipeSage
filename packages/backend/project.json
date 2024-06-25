@@ -20,12 +20,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/backend/**/*.ts",
-          "packages/backend/**/*.js"
-        ],
         "maxWarnings": 0
       }
     },

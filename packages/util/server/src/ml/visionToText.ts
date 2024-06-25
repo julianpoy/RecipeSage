@@ -15,34 +15,30 @@ const prompts = {
 } satisfies Record<VisionToTextInputType, string>;
 
 /**
- * Converts an image to text using function calling against GPT4Vision.
- * Note: This has very, very poor accuracy for OCR purposes.
+ * Converts an image to text using function calling against GPT4O.
  */
 export const visionToText = async (
   imageB64: string,
   inputType: VisionToTextInputType,
 ): Promise<string> => {
-  const response = await openAiHelper.getChatResponse(
-    SupportedGPTModel.GPT4Vision,
-    [
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: prompts[inputType],
+  const response = await openAiHelper.getChatResponse(SupportedGPTModel.GPT4O, [
+    {
+      role: "user",
+      content: [
+        {
+          type: "text",
+          text: prompts[inputType],
+        },
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:image/jpeg;base64,${imageB64}`,
+            detail: "high",
           },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${imageB64}`,
-              detail: "high",
-            },
-          },
-        ],
-      },
-    ],
-  );
+        },
+      ],
+    },
+  ]);
 
   return response.choices.map((el) => el.message.content).join("") || "";
 };

@@ -27,10 +27,10 @@ fi
 
 if [ "$1" == "static" ] || [ "$1" == "all" ]
 then
-    aws s3 sync s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/prod
+    aws s3 cp --recursive s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/prod
 fi
 
 if [ "$1" == "static-beta" ] || [ "$1" == "all" ]
 then
-    aws s3 sync s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/beta
+    aws s3 cp --recursive s3://chefbook-static/frontend/$RELEASE_TAG/ s3://chefbook-static/frontend/beta
 fi
