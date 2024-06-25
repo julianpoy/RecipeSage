@@ -25,7 +25,7 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
 import { WakeLockService } from "~/services/wakelock.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { RecipeDetailsPreferenceKey, isRtlText } from "@recipesage/util/shared";
+import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { RecipeCompletionTrackerService } from "~/services/recipe-completion-tracker.service";
 
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
@@ -63,11 +63,6 @@ export class RecipePage {
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
   notes?: ParsedNote[];
-  isInstructionRtl?: boolean;
-  isIngredientsRtl?: boolean;
-  isTitleRtl?: boolean;
-  isDescriptionRtl?: boolean;
-  isNotesRtl?: boolean;
   scale = 1;
 
   labelGroupIds: string[] = [];
@@ -160,10 +155,7 @@ export class RecipePage {
     if (!response) return;
 
     this.recipe = response;
-    this.isTitleRtl =
-      this.recipe.title != "" && isRtlText(this.recipe.title, true);
-    this.isDescriptionRtl =
-      this.recipe.description != "" && isRtlText(this.recipe.description, true);
+
     if (this.recipe.url && !this.recipe.url.trim().startsWith("http")) {
       this.recipe.url = "http://" + this.recipe.url.trim();
     }
@@ -172,13 +164,6 @@ export class RecipePage {
       this.instructions = this.recipeService.parseInstructions(
         this.recipe.instructions,
       );
-      let rtlCount = 0;
-      this.instructions.forEach((instruction) => {
-        if (instruction.isRtl) {
-          rtlCount++;
-        }
-      });
-      this.isInstructionRtl = rtlCount > this.instructions.length / 2;
     }
 
     if (this.recipe.notes && this.recipe.notes.length > 0) {
@@ -188,13 +173,6 @@ export class RecipePage {
           ...note,
           content: linkifyStr(note.content),
         }));
-      let count = 0;
-      this.notes.forEach((note) => {
-        if (note.isRtl) {
-          count++;
-        }
-      });
-      this.isNotesRtl = count > this.notes.length / 2;
     }
 
     const groupIdsSet = new Set<string>();
@@ -364,13 +342,6 @@ export class RecipePage {
       this.scale,
       true,
     );
-    let rtlCount = 0;
-    this.ingredients.forEach((ingredient) => {
-      if (ingredient.isRtl) {
-        rtlCount++;
-      }
-    });
-    this.isIngredientsRtl = rtlCount > this.ingredients.length / 2;
   }
 
   editRecipe() {
