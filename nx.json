@@ -28,15 +28,18 @@
           "codeCoverage": true
         }
       }
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default"],
+      "cache": true
     }
   },
   "workspaceLayout": {
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
   "useDaemonProcess": false,
-  "nxCloudAccessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ=="
+  "nxCloudAccessToken": "OGY4NDE3OTItYWViMS00YWM0LTk4ODgtYmI2ZWNhYjY1OGMyfHJlYWQtb25seQ==",
+  "useInferencePlugins": false,
+  "defaultBase": "master"
 }

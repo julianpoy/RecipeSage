@@ -27,9 +27,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/prisma/**/*.ts"],
         "maxWarnings": 0
       }
     }

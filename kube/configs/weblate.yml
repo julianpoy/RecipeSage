@@ -29,7 +29,7 @@ spec:
               mountPath: /app/cache
       containers:
         - name: rs-weblate
-          image: weblate/weblate:5.3.1.1
+          image: weblate/weblate:5.4.3.1
           env:
             - name: WEBLATE_DEBUG
               value: "0"
@@ -49,6 +49,8 @@ spec:
               value: "RecipeSage Weblate Bot"
             - name: WEBLATE_ALLOWED_HOSTS
               value: "*"
+            - name: WEBLATE_ENABLE_HTTPS
+              value: "true"
             - name: WEBLATE_REGISTRATION_OPEN
               value: "1"
             - name: POSTGRES_HOST

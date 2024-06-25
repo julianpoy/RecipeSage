@@ -8,8 +8,8 @@ import { RSRunnableFunction } from "./chatFunctions";
 
 export enum SupportedGPTModel {
   GPT35Turbo = "gpt-3.5-turbo-0125",
-  GPT4Turbo = "gpt-4-0125-preview",
-  GPT4Vision = "gpt-4-vision-preview",
+  GPT4Turbo = "gpt-4-turbo-2024-04-09",
+  GPT4O = "gpt-4o-2024-05-13",
 }
 
 export class OpenAIHelper {

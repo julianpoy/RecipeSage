@@ -8,13 +8,13 @@ Share and collaborate on recipes, manage household shopping lists and meal plann
 
 ## :fork_and_knife: What can RecipeSage do?
 
-- **Import from any URL**: Create a recipe simply by punching in a web URL
+- **Import from any URL, Image, PDF, or Text**: Create recipes quickly and automatically from pretty much any source
 - **Powerful search**: Search every field within your recipes including misspellings and similar words
 - **Labelling/categorization system**: Tag your recipes and filter by tags
 - **Drag and drop meal planning**: Schedule your meals interactively, quickly and easily
 - **Shopping lists**: Automatically categorized and intelligently grouped - add your recipes directly to a shopping list and similar items will be combined
 - **Sharing and public profiles**: Share your recipe collection and collaborate on meal plans/shopping lists with your family or friends
-- **Import**: Supports Pepperplate, Living Cookbook, and Paprika
+- **Import**: Supports JSON-LD, Pepperplate, Living Cookbook, Paprika, Cookmate, and Recipe Keeper as import formats
 - **Export**: Back up your recipes in multiple formats for data portability
 - **Dark mode**: Never blind yourself at night again! _(or leave dark mode enabled all the time like I do)_
 
@@ -50,6 +50,14 @@ Meal plans support drag and drop, shopping lists support automatic item categori
 
 <img src="Assets/mealplan.gif"></img>
 
+# :globe_with_meridians: Supported Languages
+
+<a href="https://weblate.recipesage.com/engage/recipesage-app/">
+<img src="https://weblate.recipesage.com/widget/recipesage-app/app-frontend/horizontal-auto.svg" alt="Translation status" />
+</a>
+
+See the [translations section](#Translations) below if you'd like to contribute!
+
 # :ramen: Self Hosting
 
 To selfhost RecipeSage, I recommend that you use the preconfigured docker compose files available here: https://github.com/julianpoy/recipesage-selfhost
@@ -78,8 +86,6 @@ When contributing or suggesting code for RecipeSage, you irrevocably grant Recip
 ## Translations
 
 Translations can be contributed via the RecipeSage Weblate instance at [https://weblate.recipesage.com](https://weblate.recipesage.com) which automatically syncs to this repository. You can login there with a Github account and get started translating.
-
-If you'd rather translate the JSON files directly, you're welcome to do that as well. You can find all of the corresponding language files [here](https://github.com/julianpoy/RecipeSage/tree/master/packages/frontend/src/assets/i18n).
 
 Entirely AI-generated translations are not currently accepted, since they very frequently produce low-quality and inaccurate results. When using AI to assist in your translation efforts, please use DeepL or Google Translate - do not translate using ChatGPT.
 
