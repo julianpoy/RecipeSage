@@ -322,10 +322,7 @@ export const parseNotes = (
 };
 
 /* eslint-disable no-control-regex */
-export const isRtlText = (
-  text: string,
-  onlyFirstWord: boolean = true,
-): boolean => {
+export const isRtlText = (text: string, onlyFirstWord = true): boolean => {
   const rtlChars = new RegExp("[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]");
   const ltrChars = new RegExp(
     "[\u0000-\u0590\u2000-\u202E\u202A-\u202E\uFB00-\uFB4F]",
