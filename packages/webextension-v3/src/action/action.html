@@ -71,6 +71,21 @@
         display: none;
       }
 
+      #default-server-desc {
+        color: rgba(0, 0, 0, 0.8);
+        font-size: 12px;
+      }
+
+      #default-server-desc input {
+        width: initial;
+        padding: initial;
+        margin-left: 0;
+      }
+
+      #custom-server-input {
+        display: none;
+      }
+
       #message {
         display: inline-block;
         padding-top: 10px;
@@ -122,9 +137,29 @@
           Password<br />
           <input id="password" type="password" />
         </label>
-        <br /><br />
+        <br />
+
+        <label id="default-server-desc">
+          <input id="default-server-checkbox" type="checkbox" checked /> Use
+          default https://api.recipesage.com/ instance.
+        </label>
+        <br />
+
+        <div id="custom-server-input">
+          <br />
+          <label>
+            Custom Server API URL<br />
+            <input id="server" type="url" value="https://api.recipesage.com/" />
+          </label>
+          <br />
+        </div>
+
+        <br />
         <button id="login-submit">&nbsp;Login&nbsp;</button>&nbsp;
-        <a href="https://recipesage.com/#/auth/register" target="_blank"
+        <a
+          id="register-link"
+          href="https://recipesage.com/#/auth/register"
+          target="_blank"
           >Create an account</a
         >
       </div>
