@@ -49,6 +49,7 @@ export interface ParsedIngredient {
   originalContent: string;
   isHeader: boolean;
   complete: boolean;
+  isRtl: boolean;
 }
 
 export interface ParsedInstruction {
@@ -56,11 +57,13 @@ export interface ParsedInstruction {
   isHeader: boolean;
   complete: boolean;
   count: number;
+  isRtl: boolean;
 }
 
 export interface ParsedNote {
   content: string;
   isHeader: boolean;
+  isRtl: boolean;
 }
 
 export enum ExportFormat {

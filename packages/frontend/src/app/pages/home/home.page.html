@@ -120,8 +120,9 @@
                 *ngIf="!preferences[preferenceKeys.ShowImages]"
                 class="no-image-padding"
               ></div>
-              <h2 [title]="recipe.title">{{ recipe.title }}</h2>
+              <h2 dir="auto" [title]="recipe.title">{{ recipe.title }}</h2>
               <p
+                dir="auto"
                 *ngIf="recipe.description?.length && preferences[preferenceKeys.ShowRecipeDescription]"
                 [title]="recipe.description"
               >

@@ -63,7 +63,6 @@ export class RecipePage {
   ingredients?: ParsedIngredient[];
   instructions?: ParsedInstruction[];
   notes?: ParsedNote[];
-
   scale = 1;
 
   labelGroupIds: string[] = [];
