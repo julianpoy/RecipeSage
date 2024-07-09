@@ -28,14 +28,36 @@
     width: 90%;
     max-width: 600px;
 
-    span {
-      white-space: pre-wrap;
-      color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-primary-contrast);
 
-      a {
-        color: var(--ion-color-primary-contrast);
-        opacity: 1;
-      }
+    // ng-deep for the innerHTML (since ng scopes css)
+    ::ng-deep h1 {
+      font-size: 1.35rem;
+    }
+    ::ng-deep h2 {
+      font-size: 1.3rem;
+    }
+    ::ng-deep h3 {
+      font-size: 1.25rem;
+    }
+    ::ng-deep h4 {
+      font-size: 1.2rem;
+    }
+    ::ng-deep h5 {
+      font-size: 1.15rem;
+    }
+    ::ng-deep h6 {
+      font-size: 1.1rem;
+    }
+    ::ng-deep p:first-child {
+      margin-top: 3px;
+    }
+    ::ng-deep p:last-child {
+      margin-bottom: 3px;
+    }
+    ::ng-deep a {
+      color: var(--ion-color-primary-contrast);
+      opacity: 1;
     }
   }
 
@@ -72,13 +94,10 @@
   &.blue {
     .chat {
       background-color: var(--ion-background-tint-color);
+      color: var(--ion-text-color, #000);
 
-      span {
+      ::ng-deep a {
         color: var(--ion-text-color, #000);
-
-        a {
-          color: var(--ion-text-color, #000);
-        }
       }
     }
 

@@ -14,6 +14,11 @@ import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 import * as Sentry from "@sentry/node";
+import { Converter } from "showdown";
+const showdown = new Converter({
+  simplifiedAutoLink: true,
+  openLinksInNewWindow: true,
+});
 
 export class Assistant {
   private openAiHelper: OpenAIHelper;
@@ -243,6 +248,12 @@ export class Assistant {
       },
       take: this.chatHistoryLimit,
     });
+
+    for (const message of messages) {
+      if (message.content) {
+        message.content = showdown.makeHtml(message.content);
+      }
+    }
 
     return messages;
   }
