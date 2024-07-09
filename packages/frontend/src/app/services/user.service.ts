@@ -68,6 +68,7 @@ export interface Capabilities {
   highResImages: boolean;
   multipleImages: boolean;
   expandablePreviews: boolean;
+  assistantMoreMessages: boolean;
 }
 
 @Injectable({

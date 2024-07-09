@@ -7,6 +7,10 @@ import { IS_SELFHOST } from "../../../../environments/environment";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PaymentsService } from "~/services/payments.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
+import {
+  FeatureFlagKeys,
+  FeatureFlagService,
+} from "../../../services/feature-flag.service";
 
 @Component({
   selector: "page-contribute",
@@ -21,8 +25,12 @@ export class ContributePage {
   amount?: number;
   customAmount?: string;
 
+  enableAssistant =
+    this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
+
   constructor(
     public capabilitiesService: CapabilitiesService,
+    private featureFlagService: FeatureFlagService,
     private translate: TranslateService,
     private utilService: UtilService,
     private paymentsService: PaymentsService,

@@ -117,6 +117,13 @@
             >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
           >
         </li>
+        <li *ngIf="enableAssistant">
+          {{ 'pages.contribute.bonus.feature.3' | translate }} &nbsp;<ion-badge
+            *ngIf="capabilitiesService.capabilities.assistantMoreMessages"
+            slot="end"
+            >{{ 'pages.contribute.bonus.enabled' | translate }}</ion-badge
+          >
+        </li>
       </ul>
     </div>
 
