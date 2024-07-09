@@ -994,6 +994,9 @@
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
   "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
 
+  "components.messaging.notificationPermission.header": "Requires Notification Permissions",
+  "components.messaging.notificationPermission.message": "To notify you when your contacts send you messages, we need notification access. After dismissing this popup, you will be prompted to enable notification access.",
+
   "components.selectCollaborators.title": "Collaborators",
   "components.selectCollaborators.placeholder": "Add collaborators by email address",
   "components.selectCollaborators.added": "Already added",
