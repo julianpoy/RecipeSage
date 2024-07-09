@@ -164,7 +164,7 @@ export class Assistant {
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
     const response = await this.openAiHelper.getChatResponseWithTools(
-      SupportedGPTModel.GPT35Turbo,
+      SupportedGPTModel.GPT4O,
       context,
       [initBuildRecipe(assistantUser.id, recipes)],
     );
