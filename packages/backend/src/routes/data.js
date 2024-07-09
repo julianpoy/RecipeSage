@@ -755,7 +755,7 @@ router.post(
 
       const grabFieldText = (field) => {
         if (!field) return "";
-        if (field.li) {
+        if (field.li && Array.isArray(field.li)) {
           return field.li.map((item) => item._text).join("\n");
         }
 
@@ -765,7 +765,7 @@ router.post(
       const grabLabelTitles = (field) => {
         if (!field) return [];
         if (field._text) return [Util.cleanLabelTitle(field._text)];
-        if (field.length)
+        if (Array.isArray(field) && field.length)
           return field.map((item) => Util.cleanLabelTitle(item._text));
 
         return [];
@@ -777,7 +777,7 @@ router.post(
         let originalPaths;
         if (field.path?._text || field._text)
           originalPaths = [field.path?._text || field._text];
-        if (field.length)
+        if (Array.isArray(field) && field.length)
           originalPaths = field.map((item) => item.path?._text || item._text);
 
         if (!originalPaths) return [];
