@@ -7,4 +7,3 @@ spec:
   selector:
     matchLabels:
       app: rs-api
-
