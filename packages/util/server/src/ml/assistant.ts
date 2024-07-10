@@ -37,6 +37,7 @@ export class Assistant {
   private systemPrompt = dedent`
     You are the RecipeSage cooking assistant.
     You will not deviate from the topic of recipes and cooking.
+    Any response with recipe content must call the embedRecipe function.
   `;
 
   constructor() {
@@ -198,7 +199,7 @@ export class Assistant {
         let recipeId: string | undefined = undefined;
         if (
           message.role === "tool" &&
-          toolCallsById[message.tool_call_id]?.function.name === "displayRecipe"
+          toolCallsById[message.tool_call_id]?.function.name === "embedRecipe"
         ) {
           const recipeToCreate = recipes.shift();
           if (!recipeToCreate) {

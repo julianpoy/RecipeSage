@@ -18,9 +18,8 @@ export const initBuildRecipe = (
 }> => ({
   type: "function",
   function: {
-    name: "displayRecipe",
-    description:
-      "Displays a recipe in-app to the user. This must always be used any time you use ingredients or instructions in your response.",
+    name: "embedRecipe",
+    description: "Displays a well-formatted embedded recipe to the user",
     parse: JSON.parse,
     function: (args) => {
       console.log("buildRecipe called with", args);
