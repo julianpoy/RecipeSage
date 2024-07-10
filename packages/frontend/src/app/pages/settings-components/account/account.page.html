@@ -198,7 +198,7 @@
           {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
         </span>
         <span
-          *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['multipleImages'].enabled"
+          *ngIf="capabilitySubscriptions['highResImages'].expires && capabilitySubscriptions['highResImages'].enabled"
         >
           {{ 'pages.account.bonus.automaticRenewal' | translate }}
         </span>
@@ -235,6 +235,42 @@
         </span>
         <span
           *ngIf="capabilitySubscriptions['multipleImages'].expires && capabilitySubscriptions['multipleImages'].enabled"
+        >
+          {{ 'pages.account.bonus.automaticRenewal' | translate }}
+        </span>
+      </p>
+    </ion-label>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-text-wrap" *ngIf="enableAssistant">
+    <ion-label class="ion-text-wrap">
+      <h2>{{ 'pages.account.bonus.assistantMoreMessages' | translate }}</h2>
+      <p *ngIf="capabilitySubscriptions['assistantMoreMessages']?.enabled">
+        {{ 'pages.account.bonus.enabled' | translate }}
+      </p>
+      <p *ngIf="!capabilitySubscriptions['assistantMoreMessages']?.enabled">
+        {{ 'pages.account.bonus.notEnabled' | translate }}
+      </p>
+      <p
+        *ngIf="capabilitySubscriptions['assistantMoreMessages'] && capabilitySubscriptions['assistantMoreMessages'].expired !== null"
+      >
+        <span
+          *ngIf="capabilitySubscriptions['assistantMoreMessages'].expires && capabilitySubscriptions['assistantMoreMessages'].expired"
+        >
+          {{ 'pages.account.bonus.subscriptionExpired' | translate:{date:
+          capabilitySubscriptions['assistantMoreMessages'].expires} }}
+        </span>
+        <span
+          *ngIf="capabilitySubscriptions['assistantMoreMessages'].expires && capabilitySubscriptions['assistantMoreMessages'].expired"
+        >
+          {{ 'pages.account.bonus.subscriptionExpires' | translate:{date:
+          capabilitySubscriptions['assistantMoreMessages'].expires} }}
+        </span>
+        <span *ngIf="!capabilitySubscriptions['assistantMoreMessages'].expires">
+          {{ 'pages.account.bonus.subscriptionNeverExpires' | translate }}
+        </span>
+        <span
+          *ngIf="capabilitySubscriptions['assistantMoreMessages'].expires && capabilitySubscriptions['multipleImages'].enabled"
         >
           {{ 'pages.account.bonus.automaticRenewal' | translate }}
         </span>

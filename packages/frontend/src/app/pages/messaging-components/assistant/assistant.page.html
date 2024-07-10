@@ -49,9 +49,12 @@
       <div class="time-divider" *ngIf="message.deservesDateDiff">
         {{ message.dateDiff }}
       </div>
-      <div class="chat" *ngIf="!message.recipeId" (click)="setSelectedChat(i)">
-        <span [innerHTML]="message.content"></span>
-      </div>
+      <div
+        class="chat"
+        *ngIf="!message.recipeId"
+        (click)="setSelectedChat(i)"
+        [innerHTML]="message.content"
+      ></div>
       <div class="recipe" *ngIf="message.recipe && message.role !== 'user'">
         <!-- RECIPIENT -->
         <ion-item

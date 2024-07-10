@@ -14,6 +14,7 @@ export class CapabilitiesService {
     highResImages: false,
     multipleImages: false,
     expandablePreviews: false,
+    assistantMoreMessages: false,
   };
 
   constructor(

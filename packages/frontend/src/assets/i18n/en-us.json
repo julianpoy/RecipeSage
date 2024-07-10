@@ -141,6 +141,7 @@
   "pages.homepopover.options.layout": "Layout",
   "pages.homepopover.options.layout.tiles": "Tiles",
   "pages.homepopover.options.layout.list": "List",
+  "pages.homepopover.options.layout.compact": "Compact",
   "pages.homepopover.options.showLabels": "Show Labels",
   "pages.homepopover.options.showLabelToggles": "Show Label Toggles",
   "pages.homepopover.options.showImages": "Show Images",
@@ -243,6 +244,7 @@
   "pages.contribute.bonus.title": "As a thank you to those who make RecipeSage possible, your contributions will unlock some bonus features for your account. You will be able to:",
   "pages.contribute.bonus.feature.1": "Upload images in high-resolution",
   "pages.contribute.bonus.feature.2": "Upload multiple images for each recipe",
+  "pages.contribute.bonus.feature.3": "Increased assistant message limit",
   "pages.contribute.bonus.enabled": "Enabled",
   "pages.contribute.bonus.reason": "Bonus features features are accessible only to contributors because these particular features are costly for me to host.",
   "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
@@ -590,6 +592,7 @@
   "pages.account.bonus.description": "Contributors unlock certain features that are costly to host:",
   "pages.account.bonus.highResImages": "High Resolution Images",
   "pages.account.bonus.multipleImages": "Multiple Images Per Recipe",
+  "pages.account.bonus.assistantMoreMessages": "Increased Assistant Message Limit",
   "pages.account.bonus.enabled": "Enabled",
   "pages.account.bonus.notEnabled": "Not Enabled",
   "pages.account.bonus.subscriptionExpired": "Expired {{date}}",
@@ -993,6 +996,9 @@
   "components.multiImageUpload.add": "Click to Add Image",
   "components.multiImageUpload.imageLimit": "You can attach attach up to 10 images",
   "components.multiImageUpload.imageError": "There was an error processing one or more of the images that you selected",
+
+  "components.messaging.notificationPermission.header": "Requires Notification Permissions",
+  "components.messaging.notificationPermission.message": "To notify you when your contacts send you messages, we need notification access. After dismissing this popup, you will be prompted to enable notification access.",
 
   "components.selectCollaborators.title": "Collaborators",
   "components.selectCollaborators.placeholder": "Add collaborators by email address",

@@ -46,6 +46,7 @@ export enum PreferencesSync {
 export enum MyRecipesViewTypeOptions {
   Tiles = "tiles",
   List = "list",
+  Compact = "compact",
 }
 
 export enum MyRecipesSortOptions {

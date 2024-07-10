@@ -14,6 +14,11 @@ import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 import * as Sentry from "@sentry/node";
+import { Converter } from "showdown";
+const showdown = new Converter({
+  simplifiedAutoLink: true,
+  openLinksInNewWindow: true,
+});
 
 export class Assistant {
   private openAiHelper: OpenAIHelper;
@@ -32,6 +37,7 @@ export class Assistant {
   private systemPrompt = dedent`
     You are the RecipeSage cooking assistant.
     You will not deviate from the topic of recipes and cooking.
+    Any response with recipe content must call the embedRecipe function.
   `;
 
   constructor() {
@@ -120,6 +126,8 @@ export class Assistant {
   }
 
   async checkMessageLimit(userId: string) {
+    if (process.env.NODE_ENV === "development") return false;
+
     const moreMessages = await userHasCapability(
       userId,
       Capabilities.AssistantMoreMessages,
@@ -164,7 +172,7 @@ export class Assistant {
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
     const response = await this.openAiHelper.getChatResponseWithTools(
-      SupportedGPTModel.GPT35Turbo,
+      SupportedGPTModel.GPT4O,
       context,
       [initBuildRecipe(assistantUser.id, recipes)],
     );
@@ -193,7 +201,7 @@ export class Assistant {
         let recipeId: string | undefined = undefined;
         if (
           message.role === "tool" &&
-          toolCallsById[message.tool_call_id]?.function.name === "displayRecipe"
+          toolCallsById[message.tool_call_id]?.function.name === "embedRecipe"
         ) {
           const recipeToCreate = recipes.shift();
           if (!recipeToCreate) {
@@ -243,6 +251,12 @@ export class Assistant {
       },
       take: this.chatHistoryLimit,
     });
+
+    for (const message of messages) {
+      if (message.content) {
+        message.content = showdown.makeHtml(message.content);
+      }
+    }
 
     return messages;
   }

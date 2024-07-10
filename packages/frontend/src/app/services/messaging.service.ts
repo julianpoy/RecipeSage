@@ -16,6 +16,7 @@ import { UtilService } from "./util.service";
 import { HttpService } from "./http.service";
 import { EventName, EventService } from "./event.service";
 import { ErrorHandlers } from "./http-error-handler.service";
+import { TranslateService } from "@ngx-translate/core";
 
 export interface Message {
   id: string;
@@ -77,6 +78,7 @@ export class MessagingService {
 
   constructor(
     public events: EventService,
+    public translate: TranslateService,
     public utilService: UtilService,
     public httpService: HttpService,
     public userService: UserService,
@@ -200,16 +202,24 @@ export class MessagingService {
     if (!localStorage.getItem("notificationExplainationShown")) {
       localStorage.setItem("notificationExplainationShown", "true");
 
+      const header = await this.translate
+        .get("components.messaging.notificationPermission.header")
+        .toPromise();
+      const message = await this.translate
+        .get("components.messaging.notificationPermission.message")
+        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
+
       const alert = await this.alertCtrl.create({
-        header: "Requires Notification Permissions",
-        message: `To notify you when your contacts send you messages, we need notification access.<br /><br />
-                    <b>After dismissing this popup, you will be prompted to enable notification access.</b>`,
+        header,
+        message,
         buttons: [
           {
-            text: "Cancel",
+            text: cancel,
           },
           {
-            text: "Continue",
+            text: okay,
             handler: () => {
               this.enableNotifications();
             },

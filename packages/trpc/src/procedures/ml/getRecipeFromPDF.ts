@@ -20,7 +20,7 @@ export const getRecipeFromPDF = publicProcedure
 
     const pdf = Buffer.from(input.pdf, "base64");
 
-    const recognizedRecipe = await pdfToRecipe(pdf, 2);
+    const recognizedRecipe = await pdfToRecipe(pdf, 3);
     if (!recognizedRecipe) {
       throw new TRPCError({
         message: "Could not parse recipe from OCR results",

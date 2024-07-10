@@ -1,4 +1,4 @@
-import { ocrImageToRecipe } from "@recipesage/util/server/ml";
+import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
 import { publicProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -20,7 +20,7 @@ export const getRecipeFromOCR = publicProcedure
 
     const imageBuffer = Buffer.from(input.image, "base64");
 
-    const recognizedRecipe = await ocrImageToRecipe(imageBuffer);
+    const recognizedRecipe = await ocrImagesToRecipe([imageBuffer]);
     if (!recognizedRecipe) {
       throw new TRPCError({
         message: "Could not parse recipe from OCR results",

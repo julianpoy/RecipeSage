@@ -20,7 +20,7 @@ const prompts = {
  * Converts an image to a recipe using function calling against GPT4O.
  */
 export const visionToRecipe = async (
-  imageB64: string,
+  imageB64: string[],
   inputType: VisionToRecipeInputType,
 ) => {
   const recognizedRecipes: Prisma.RecipeUncheckedCreateInput[] = [];
@@ -43,13 +43,16 @@ export const visionToRecipe = async (
             type: "text",
             text: prompts[inputType],
           },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${imageB64}`,
-              detail: "high",
-            },
-          },
+          ...imageB64.map(
+            (imageB64) =>
+              ({
+                type: "image_url",
+                image_url: {
+                  url: `data:image/jpeg;base64,${imageB64}`,
+                  detail: "high",
+                },
+              }) as const,
+          ),
         ],
       },
     ],

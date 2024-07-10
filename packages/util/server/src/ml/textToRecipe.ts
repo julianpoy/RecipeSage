@@ -24,7 +24,7 @@ const prompts = {
  * a meaningful result from ChatGPT. If returned text length is less
  * than this number, processing will abort early.
  */
-const OCR_MIN_VALID_TEXT = 20;
+export const OCR_MIN_VALID_TEXT = 20;
 
 export const textToRecipe = async (
   text: string,

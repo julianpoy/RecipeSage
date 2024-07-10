@@ -14,6 +14,10 @@ import { RecipeService } from "~/services/recipe.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
 import { getQueryParam } from "~/utils/queryParams";
 import { TranslateService } from "@ngx-translate/core";
+import {
+  FeatureFlagKeys,
+  FeatureFlagService,
+} from "../../../services/feature-flag.service";
 
 @Component({
   selector: "page-account",
@@ -34,6 +38,8 @@ export class AccountPage {
   emailChanged = false;
   passwordChanged = false;
 
+  enableAssistant =
+    this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
   capabilitySubscriptions: any = {};
 
   constructor(
@@ -46,6 +52,7 @@ export class AccountPage {
     public recipeService: RecipeService,
     public userService: UserService,
     public capabilitiesService: CapabilitiesService,
+    private featureFlagService: FeatureFlagService,
   ) {
     const resetToken = getQueryParam("token");
     if (resetToken) localStorage.setItem("token", resetToken);

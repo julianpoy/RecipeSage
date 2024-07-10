@@ -97,12 +97,38 @@ ion-badge {
     --image-size: 200px;
   }
 
+  &.compact {
+    --image-size: 38px;
+    --padding: 2px;
+
+    .recipe-item-content .recipe-item-content-meta {
+      display: flex;
+
+      p {
+        margin-right: 10px;
+      }
+
+      .description {
+        max-width: 30%;
+      }
+    }
+  }
+
+  &.list {
+    .recipe-item-content {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+
   img {
     width: var(--image-size);
     height: var(--image-size);
     margin-bottom: var(--padding);
     margin-top: var(--padding);
     object-fit: cover;
+    border-radius: 4px;
   }
 
   .recipe-item-content {
@@ -113,10 +139,6 @@ ion-badge {
       --ion-item-border-color,
       var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13)))
     );
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 
     h2 {
       margin-left: 0;

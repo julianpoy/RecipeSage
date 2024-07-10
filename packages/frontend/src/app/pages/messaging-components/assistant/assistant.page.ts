@@ -2,7 +2,6 @@ import { Component, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { NavController, ToastController } from "@ionic/angular";
 
-import { linkifyStr } from "~/utils/linkify";
 import { MessagingService } from "~/services/messaging.service";
 import { LoadingService } from "~/services/loading.service";
 import { WebsocketService } from "~/services/websocket.service";
@@ -169,13 +168,6 @@ export class AssistantPage {
         continue;
       }
 
-      // Reuse messages that have already been parsed for performance. Otherwise, send it through linkify
-      if (this.messagesById[message.id]) {
-        message.content = this.messagesById[message.id].content;
-      } else {
-        message.content = this.parseMessage(message.content);
-      }
-
       if (!this.messagesById[message.id] && !firstNewMessage)
         firstNewMessage = message;
       this.messagesById[message.id] = message;
@@ -306,9 +298,5 @@ export class AssistantPage {
     } else {
       this.selectedChatIdx = idx;
     }
-  }
-
-  parseMessage(message: string) {
-    return linkifyStr(message);
   }
 }
