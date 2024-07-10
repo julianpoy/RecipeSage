@@ -24,6 +24,7 @@
     margin: 8px 16px;
 
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
 
     display: flex;
     justify-content: center;
@@ -54,6 +55,7 @@
       width: 200px;
       height: 200px;
       object-fit: cover;
+      border-radius: 4px;
 
       @media only screen and (max-width: 450px) {
         width: 150px;
