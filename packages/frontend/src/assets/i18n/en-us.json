@@ -141,6 +141,7 @@
   "pages.homepopover.options.layout": "Layout",
   "pages.homepopover.options.layout.tiles": "Tiles",
   "pages.homepopover.options.layout.list": "List",
+  "pages.homepopover.options.layout.compact": "Compact",
   "pages.homepopover.options.showLabels": "Show Labels",
   "pages.homepopover.options.showLabelToggles": "Show Label Toggles",
   "pages.homepopover.options.showImages": "Show Images",
