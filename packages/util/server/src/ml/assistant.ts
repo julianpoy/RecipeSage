@@ -126,6 +126,8 @@ export class Assistant {
   }
 
   async checkMessageLimit(userId: string) {
+    if (process.env.NODE_ENV === "development") return false;
+
     const moreMessages = await userHasCapability(
       userId,
       Capabilities.AssistantMoreMessages,
