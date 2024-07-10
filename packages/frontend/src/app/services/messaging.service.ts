@@ -208,12 +208,8 @@ export class MessagingService {
       const message = await this.translate
         .get("components.messaging.notificationPermission.message")
         .toPromise();
-      const cancel = await this.translate
-        .get("generic.cancel")
-        .toPromise();
-      const okay = await this.translate
-        .get("generic.okay")
-        .toPromise();
+      const cancel = await this.translate.get("generic.cancel").toPromise();
+      const okay = await this.translate.get("generic.okay").toPromise();
 
       const alert = await this.alertCtrl.create({
         header,
