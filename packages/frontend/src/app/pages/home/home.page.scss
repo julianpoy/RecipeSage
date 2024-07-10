@@ -129,6 +129,7 @@ ion-badge {
     margin-top: var(--padding);
     object-fit: cover;
     border-radius: 4px;
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
   }
 
   .recipe-item-content {
