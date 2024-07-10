@@ -24,6 +24,13 @@ export const initBuildRecipe = (
     function: (args) => {
       console.log("buildRecipe called with", args);
 
+      const filterInstruction = (str: string) => {
+        return str.replaceAll("**", "").replace(/^\d+./, "").trim();
+      };
+      const filterIngredient = (str: string) => {
+        return str.replaceAll("**", "").trim();
+      };
+
       try {
         const recipe: Prisma.RecipeUncheckedCreateInput = {
           userId,
@@ -39,10 +46,10 @@ export const initBuildRecipe = (
             typeof args.activeTime === "string" ? args.activeTime : "",
           totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
           ingredients: Array.isArray(args.ingredients)
-            ? args.ingredients.join("\n")
+            ? args.ingredients.map(filterIngredient).join("\n")
             : "",
           instructions: Array.isArray(args.instructions)
-            ? args.instructions.join("\n")
+            ? args.instructions.map(filterInstruction).join("\n")
             : "",
           notes: "",
         };
