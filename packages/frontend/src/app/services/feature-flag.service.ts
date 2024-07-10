@@ -22,8 +22,7 @@ export class FeatureFlagService {
   flags = {
     [FeatureFlagKeys.EnableExperimentalOfflineCache]:
       this.isHost("beta.recipesage.com") || !environment.production,
-    [FeatureFlagKeys.EnableAssistant]:
-      this.isHost("beta.recipesage.com") || !environment.production,
+    [FeatureFlagKeys.EnableAssistant]: true,
     [FeatureFlagKeys.EnableContribution]:
       !IS_SELFHOST &&
       !this.isHost(["ios.recipesage.com", "android.recipesage.com"]),
