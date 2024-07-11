@@ -1016,5 +1016,10 @@
     "pages.editRecipe.clip.failedSelfhost": "Пожалуйста, проверьте свои учетные данные OpenAI, как описано в файле readme для самостоятельного хостинга",
     "pages.manageLabelGroupModal.noLabelsSelected": "Внимание!",
     "pages.manageLabelGroupModal.noLabelsSelectedMessage": "Вы не выбрали ни одной метки, которая была бы сгруппирована в этой категории. Категории меток сами по себе не очень полезны - возможно, Вам нужно создать метку.",
-    "pages.editRecipe.input.labels.noItemsGroup": "В этой категории нет меток. Введите текст, чтобы создать метку"
+    "pages.editRecipe.input.labels.noItemsGroup": "В этой категории нет меток. Введите текст, чтобы создать метку",
+    "pages.homepopover.options.layout.compact": "Компактно",
+    "pages.contribute.bonus.feature.3": "Увеличение лимита сообщений помощника",
+    "components.messaging.notificationPermission.header": "Требуются разрешения на получение уведомлений",
+    "components.messaging.notificationPermission.message": "Чтобы уведомлять вас, когда ваши контакты отправляют вам сообщения, нам необходим доступ к уведомлениям. После удаления этого всплывающего окна вам будет предложено включить доступ к уведомлениям.",
+    "pages.account.bonus.assistantMoreMessages": "Увеличение лимита сообщений помощника"
 }
