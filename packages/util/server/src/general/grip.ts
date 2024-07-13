@@ -13,12 +13,17 @@ export const serveGrip = new ServeGrip({
 
 export enum WSBoardcastEventType {
   MealPlanUpdated = "mealplan:updated",
+  ShoppingListUpdated = "shoppinglist:updated",
 }
 
 export type WSBoardcastEventData = {
   [WSBoardcastEventType.MealPlanUpdated]: {
     reference: string;
     mealPlanId: string;
+  };
+  [WSBoardcastEventType.ShoppingListUpdated]: {
+    reference: string;
+    shoppingListId: string;
   };
 };
 

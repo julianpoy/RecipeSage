@@ -7,15 +7,10 @@ import {
 import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import {
-  MealPlanAccessLevel,
-  getAccessToMealPlan,
-} from "@recipesage/util/server/db";
 
-export const updateMealPlan = publicProcedure
+export const createShoppingList = publicProcedure
   .input(
     z.object({
-      id: z.string().uuid(),
       title: z.string(),
       collaboratorUserIds: z.array(z.string().uuid()),
     }),
@@ -23,15 +18,6 @@ export const updateMealPlan = publicProcedure
   .mutation(async ({ ctx, input }) => {
     const session = ctx.session;
     validateTrpcSession(session);
-
-    const access = await getAccessToMealPlan(session.userId, input.id);
-
-    if (access.level !== MealPlanAccessLevel.Owner) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Meal plan not found or you do not own it",
-      });
-    }
 
     const collaboratorUsers = await prisma.user.findMany({
       where: {
@@ -51,16 +37,7 @@ export const updateMealPlan = publicProcedure
       });
     }
 
-    await prisma.mealPlanCollaborator.deleteMany({
-      where: {
-        mealPlanId: input.id,
-      },
-    });
-
-    const updatedMealPlan = await prisma.mealPlan.update({
-      where: {
-        id: input.id,
-      },
+    const createdShoppingList = await prisma.shoppingList.create({
       data: {
         title: input.title,
         userId: session.userId,
@@ -75,23 +52,19 @@ export const updateMealPlan = publicProcedure
     });
 
     const reference = crypto.randomUUID();
-    const subscriberIds = [
-      ...new Set([
-        updatedMealPlan.userId,
-        // We need to notify both the old collaborators and the new collaborators of the update
-        ...access.subscriberIds,
-        ...input.collaboratorUserIds,
-      ]),
+    const notifyUsers = [
+      createdShoppingList.userId,
+      ...input.collaboratorUserIds,
     ];
-    for (const subscriberId of subscriberIds) {
-      broadcastWSEvent(subscriberId, WSBoardcastEventType.MealPlanUpdated, {
+    for (const notifyUser of notifyUsers) {
+      broadcastWSEvent(notifyUser, WSBoardcastEventType.ShoppingListUpdated, {
         reference,
-        mealPlanId: updatedMealPlan.id,
+        shoppingListId: createdShoppingList.id,
       });
     }
 
     return {
       reference,
-      id: updatedMealPlan.id,
+      id: createdShoppingList.id,
     };
   });

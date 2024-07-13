@@ -8,28 +8,21 @@ import { prisma } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
-  MealPlanAccessLevel,
-  getAccessToMealPlan,
+  ShoppingListAccessLevel,
+  getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 
-export const updateMealPlanItems = publicProcedure
+export const updateShoppingListItems = publicProcedure
   .input(
     z.object({
-      mealPlanId: z.string().uuid(),
+      shoppingListId: z.string().uuid(),
       items: z
         .array(
           z.object({
             id: z.string().uuid(),
             title: z.string(),
-            scheduledDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-            meal: z.union([
-              z.literal("breakfast"),
-              z.literal("lunch"),
-              z.literal("dinner"),
-              z.literal("snacks"),
-              z.literal("other"),
-            ]),
             recipeId: z.string().uuid().nullable(),
+            completed: z.boolean().optional(),
           }),
         )
         .min(1)
@@ -40,48 +33,49 @@ export const updateMealPlanItems = publicProcedure
     const session = ctx.session;
     validateTrpcSession(session);
 
-    const mealPlanItems = await prisma.mealPlanItem.findMany({
+    const shoppingListItems = await prisma.shoppingListItem.findMany({
       where: {
         id: {
           in: input.items.map((el) => el.id),
         },
-        mealPlanId: input.mealPlanId,
+        shoppingListId: input.shoppingListId,
       },
       select: {
         id: true,
       },
     });
 
-    if (mealPlanItems.length !== input.items.length) {
+    if (shoppingListItems.length !== input.items.length) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message:
-          "One or more of the items you've passed do not exist, or do not belong to the meal plan id",
+          "One or more of the items you've passed do not exist, or do not belong to the shopping list id",
       });
     }
 
-    const access = await getAccessToMealPlan(session.userId, input.mealPlanId);
+    const access = await getAccessToShoppingList(
+      session.userId,
+      input.shoppingListId,
+    );
 
-    if (access.level === MealPlanAccessLevel.None) {
+    if (access.level === ShoppingListAccessLevel.None) {
       throw new TRPCError({
         code: "NOT_FOUND",
         message:
-          "Meal plan with that id does not exist or you do not have access",
+          "Shopping list with that id does not exist or you do not have access",
       });
     }
 
     await prisma.$transaction(async (tx) => {
       for (const item of input.items) {
-        await tx.mealPlanItem.update({
+        await tx.shoppingListItem.update({
           where: {
             id: item.id,
           },
           data: {
             title: item.title,
-            scheduled: null, // Remove legacy scheduling
-            scheduledDate: new Date(item.scheduledDate),
-            meal: item.meal,
             recipeId: item.recipeId,
+            completed: item.completed,
           },
         });
       }
@@ -89,9 +83,9 @@ export const updateMealPlanItems = publicProcedure
 
     const reference = crypto.randomUUID();
     for (const subscriberId of access.subscriberIds) {
-      broadcastWSEvent(subscriberId, WSBoardcastEventType.MealPlanUpdated, {
+      broadcastWSEvent(subscriberId, WSBoardcastEventType.ShoppingListUpdated, {
         reference,
-        mealPlanId: input.mealPlanId,
+        shoppingListId: input.shoppingListId,
       });
     }
 
