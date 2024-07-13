@@ -836,7 +836,12 @@
   "pages.newShoppingList.title": "New shopping list",
   "pages.newShoppingList.listTitle": "Title",
   "pages.newShoppingList.create": "Create",
-  "pages.newShoppingList.share": "and Share",
+  "pages.newShoppingList.createAndShare": "Create and Share",
+
+  "pages.updateShoppingList.title": "Update shopping list",
+  "pages.updateShoppingList.listTitle": "Title",
+  "pages.updateShoppingList.update": "Update",
+  "pages.updateShoppingList.updateAndShare": "Update and Share",
 
   "pages.shoppingList.title": "Shopping List - {{title}}",
   "pages.shoppingList.nullState.1": "There are no items in this shopping list.",
@@ -849,7 +854,7 @@
   "pages.shoppingList.removed": "Removed {{itemCount}} item(s)",
   "pages.shoppingList.removed.undo": "Undo",
 
-  "pages.shoppingListPopover.title": "Options",
+  "pages.shoppingListPopover.options.title": "Options",
   "pages.shoppingListPopover.sortBy": "Sort by",
   "pages.shoppingListPopover.sortBy.title": "Title",
   "pages.shoppingListPopover.sortBy.createdDesc": "Created (newest first)",
@@ -860,7 +865,10 @@
   "pages.shoppingListPopover.showAddedBy": "Show Added By",
   "pages.shoppingListPopover.showAddedOn": "Show Added On",
   "pages.shoppingListPopover.preferDelete": "Delete Upon Completion",
+  "pages.shoppingListPopover.actions.title": "Actions",
   "pages.shoppingListPopover.print": "Print",
+  "pages.shoppingListPopover.update": "Edit/Rename List",
+  "pages.shoppingListPopover.dangerZone.title": "Danger Zone",
   "pages.shoppingListPopover.removeAll": "Remove all items",
   "pages.shoppingListPopover.delete": "Delete list",
   "pages.shoppingListPopover.removeAll.header": "Confirm Removal",

@@ -4,6 +4,7 @@ import {
   AlertController,
   NavController,
   PopoverController,
+  ModalController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -12,6 +13,7 @@ import { ShoppingListService } from "~/services/shopping-list.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
 
 @Component({
   selector: "page-shopping-list-popover",
@@ -35,6 +37,7 @@ export class ShoppingListPopoverPage {
     public toastCtrl: ToastController,
     public popoverCtrl: PopoverController,
     public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
   ) {}
 
   savePreferences() {
@@ -150,5 +153,19 @@ export class ShoppingListPopoverPage {
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
+  }
+
+  async updateList(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: UpdateShoppingListModalPage,
+      componentProps: {
+        shoppingListId: this.shoppingListId,
+      },
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+
+    this.dismiss();
   }
 }
