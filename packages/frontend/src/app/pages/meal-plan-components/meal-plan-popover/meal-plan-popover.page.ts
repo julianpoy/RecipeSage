@@ -15,6 +15,7 @@ import { PreferencesService } from "~/services/preferences.service";
 import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
+import { UpdateMealPlanModalPage } from "../update-meal-plan-modal/update-meal-plan-modal.page";
 
 @Component({
   selector: "page-meal-plan-popover",
@@ -137,5 +138,21 @@ export class MealPlanPopoverPage {
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.MealPlansPage.getPath());
+  }
+
+  async updateMealPlan(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: UpdateMealPlanModalPage,
+      componentProps: {
+        mealPlanId: this.mealPlanId,
+      },
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+
+    this.popoverCtrl.dismiss({
+      reload: true,
+    });
   }
 }

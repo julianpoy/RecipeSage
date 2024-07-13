@@ -427,6 +427,7 @@
   "pages.mealPlanPopover.actions.copyDays": "Copy selected day(s)",
   "pages.mealPlanPopover.actions.moveDays": "Move selected day(s)",
   "pages.mealPlanPopover.actions.deleteDays": "Delete selected day(s)",
+  "pages.mealPlanPopover.actions.update": "Edit/Rename Meal Plan",
   "pages.mealPlanPopover.dangerZone.title": "Danger Zone",
   "pages.mealPlanPopover.dangerZone.delete": "Delete meal plan",
   "pages.mealPlanPopover.delete.header": "Confirm Delete",
@@ -453,6 +454,11 @@
   "pages.newMealPlanModal.input.title": "Title",
   "pages.newMealPlanModal.createAndShare": "Create and Share",
   "pages.newMealPlanModal.create": "Create",
+
+  "pages.updateMealPlanModal.title": "Update meal plan",
+  "pages.updateMealPlanModal.input.title": "Title",
+  "pages.updateMealPlanModal.update": "Update",
+  "pages.updateMealPlanModal.updateAndShare": "Update and Share",
 
   "pages.shareMealPlanModal.title": "Share Meal Plan",
   "pages.shareMealPlanModal.description": "The iCal/ICS link below can be used in almost any calendar program to sync your meal plan outside of RecipeSage",

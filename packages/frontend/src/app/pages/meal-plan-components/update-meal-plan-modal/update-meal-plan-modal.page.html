@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'pages.updateMealPlanModal.title' | translate }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="loaded">
+  <ion-item>
+    <ion-input
+      label="{{ 'pages.updateMealPlanModal.input.title' | translate }}"
+      labelPlacement="stacked"
+      [(ngModel)]="mealPlanTitle"
+      type="text"
+      autocapitalize="on"
+      autocomplete="on"
+      autocorrect="on"
+      spellcheck="true"
+    ></ion-input>
+  </ion-item>
+
+  <br /><br />
+
+  <select-collaborators
+    [selectedCollaboratorIds]="selectedCollaboratorIds"
+    (selectedCollaboratorIdsChanged)="selectedCollaboratorIds = $event"
+  ></select-collaborators>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" (click)="save()" [disabled]="!mealPlanTitle">
+    <ion-icon name="list" slot="start"></ion-icon>
+    <ion-label *ngIf="selectedCollaboratorIds.length > 0">
+      {{ 'pages.updateMealPlanModal.updateAndShare' | translate }}
+    </ion-label>
+    <ion-label *ngIf="selectedCollaboratorIds.length === 0">
+      {{ 'pages.updateMealPlanModal.update' | translate }}
+    </ion-label>
+  </ion-button>
+</ion-footer>
