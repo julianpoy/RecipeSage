@@ -55,9 +55,7 @@ describe("updateMealPlan", () => {
           title: "Protein",
           collaboratorUserIds: [user.id],
         });
-      }).rejects.toThrow(
-        "Meal plan with that id does not exist or you do not have access",
-      );
+      }).rejects.toThrow("Meal plan not found or you do not own it");
     });
     it("must throw on meal plan not owned", async () => {
       const { user: user2 } = await trpcSetup();
@@ -81,9 +79,7 @@ describe("updateMealPlan", () => {
           title: "Protein",
           collaboratorUserIds: [user2.id],
         });
-      }).rejects.toThrow(
-        "Meal plan with that id does not exist or you do not have access",
-      );
+      }).rejects.toThrow("Meal plan not found or you do not own it");
     });
   });
 });

@@ -46,7 +46,7 @@ describe("getMealPlan", () => {
         await trpc.mealPlans.getMealPlan.query({
           id: "00000000-0c70-4718-aacc-05add19096b5",
         });
-      }).rejects.toThrow("Meal plan with that id not found");
+      }).rejects.toThrow("Meal plan not found or you do not have access to it");
     });
     it("must throw on meal plan not owned", async () => {
       const { user: user2 } = await trpcSetup();
@@ -68,9 +68,7 @@ describe("getMealPlan", () => {
         await trpc.mealPlans.getMealPlan.query({
           id: user2.id,
         });
-      }).rejects.toThrow(
-        "Meal plan with that id not found or you do not have access",
-      );
+      }).rejects.toThrow("Meal plan not found or you do not have access to it");
     });
   });
 });
