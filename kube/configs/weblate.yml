@@ -29,7 +29,7 @@ spec:
               mountPath: /app/cache
       containers:
         - name: rs-weblate
-          image: weblate/weblate:5.4.3.1
+          image: weblate/weblate:5.6.2.0
           env:
             - name: WEBLATE_DEBUG
               value: "0"
