@@ -332,11 +332,14 @@ export class ShoppingListPage {
       event,
     });
 
-    popover.onDidDismiss().then(() => {
-      this.processList();
-    });
+    await popover.present();
+    await popover.onDidDismiss();
 
-    popover.present();
+    const loading = this.loadingService.start();
+
+    this.loadList().finally(() => {
+      loading.dismiss();
+    });
   }
 
   openRecipe(id: string): void {

@@ -45,6 +45,19 @@ import { updateMealPlanItem } from "./procedures/mealPlans/updateMealPlanItem";
 import { createMealPlanItems } from "./procedures/mealPlans/createMealPlanItems";
 import { deleteMealPlanItems } from "./procedures/mealPlans/deleteMealPlanItems";
 import { updateMealPlanItems } from "./procedures/mealPlans/updateMealPlanItems";
+import { createShoppingList } from "./procedures/shoppingLists/createShoppingList";
+import { createShoppingListItem } from "./procedures/shoppingLists/createShoppingListItem";
+import { createShoppingListItems } from "./procedures/shoppingLists/createShoppingListItems";
+import { deleteShoppingList } from "./procedures/shoppingLists/deleteShoppingList";
+import { deleteShoppingListItem } from "./procedures/shoppingLists/deleteShoppingListItem";
+import { deleteShoppingListItems } from "./procedures/shoppingLists/deleteShoppingListItems";
+import { detachShoppingList } from "./procedures/shoppingLists/detachShoppingList";
+import { getShoppingList } from "./procedures/shoppingLists/getShoppingList";
+import { getShoppingListItems } from "./procedures/shoppingLists/getShoppingListItems";
+import { getShoppingLists } from "./procedures/shoppingLists/getShoppingLists";
+import { updateShoppingList } from "./procedures/shoppingLists/updateShoppingList";
+import { updateShoppingListItem } from "./procedures/shoppingLists/updateShoppingListItem";
+import { updateShoppingListItems } from "./procedures/shoppingLists/updateShoppingListItems";
 
 const appRouter = router({
   labelGroups: router({
@@ -86,6 +99,21 @@ const appRouter = router({
     updateMealPlan,
     updateMealPlanItem,
     updateMealPlanItems,
+  }),
+  shoppingLists: router({
+    createShoppingList,
+    createShoppingListItem,
+    createShoppingListItems,
+    deleteShoppingList,
+    deleteShoppingListItem,
+    deleteShoppingListItems,
+    detachShoppingList,
+    getShoppingList,
+    getShoppingListItems,
+    getShoppingLists,
+    updateShoppingList,
+    updateShoppingListItem,
+    updateShoppingListItems,
   }),
   assistant: router({
     sendAssistantMessage,

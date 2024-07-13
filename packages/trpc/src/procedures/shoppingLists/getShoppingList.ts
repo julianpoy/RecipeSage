@@ -1,14 +1,14 @@
 import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { mealPlanSummary, prisma } from "@recipesage/prisma";
+import { prisma, shoppingListSummary } from "@recipesage/prisma";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
-  MealPlanAccessLevel,
-  getAccessToMealPlan,
+  ShoppingListAccessLevel,
+  getAccessToShoppingList,
 } from "@recipesage/util/server/db";
 
-export const getMealPlan = publicProcedure
+export const getShoppingList = publicProcedure
   .input(
     z.object({
       id: z.string().uuid(),
@@ -18,21 +18,21 @@ export const getMealPlan = publicProcedure
     const session = ctx.session;
     validateTrpcSession(session);
 
-    const access = await getAccessToMealPlan(session.userId, input.id);
+    const access = await getAccessToShoppingList(session.userId, input.id);
 
-    if (access.level === MealPlanAccessLevel.None) {
+    if (access.level === ShoppingListAccessLevel.None) {
       throw new TRPCError({
         code: "NOT_FOUND",
-        message: "Meal plan not found or you do not have access to it",
+        message: "Shopping list not found or you do not have access",
       });
     }
 
-    const mealPlan = await prisma.mealPlan.findUniqueOrThrow({
+    const shoppingList = await prisma.shoppingList.findUniqueOrThrow({
       where: {
         id: input.id,
       },
-      ...mealPlanSummary,
+      ...shoppingListSummary,
     });
 
-    return mealPlan;
+    return shoppingList;
   });

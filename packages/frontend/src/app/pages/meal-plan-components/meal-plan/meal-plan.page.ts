@@ -112,9 +112,9 @@ export class MealPlanPage {
     );
   }
 
-  loadWithProgress() {
+  async loadWithProgress() {
     const loading = this.loadingService.start();
-    this.loadMealPlan().finally(() => {
+    await this.loadMealPlan().finally(() => {
       loading.dismiss();
     });
   }
@@ -188,7 +188,10 @@ export class MealPlanPage {
 
     const { data } = await popover.onDidDismiss();
 
-    if (data?.reload) this.mealPlanCalendar?.generateCalendar();
+    if (data?.reload) {
+      await this.loadWithProgress();
+      this.mealPlanCalendar?.generateCalendar();
+    }
     if (data?.copy) this.startBulkCopy();
     if (data?.move) this.startBulkMove();
     if (data?.delete) this.bulkDelete();

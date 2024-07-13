@@ -94,6 +94,16 @@
     {{ 'pages.mealPlanPopover.actions.deleteDays' | translate }}
   </ion-button>
 
+  <ion-button
+    (click)="updateMealPlan()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="pencil" slot="start"></ion-icon>
+    {{ 'pages.mealPlanPopover.actions.update' | translate }}
+  </ion-button>
+
   <ion-list-header>
     {{ 'pages.mealPlanPopover.dangerZone.title' | translate }}
   </ion-list-header>

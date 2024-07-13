@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> {{ 'pages.newShoppingList.title' | translate }} </ion-title>
+    <ion-title>{{ 'pages.updateMealPlanModal.title' | translate }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
@@ -10,14 +10,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *ngIf="loaded">
   <ion-item>
     <ion-input
-      label="{{ 'pages.newShoppingList.listTitle' | translate }}"
+      label="{{ 'pages.updateMealPlanModal.input.title' | translate }}"
       labelPlacement="stacked"
-      [(ngModel)]="listTitle"
+      [(ngModel)]="mealPlanTitle"
       type="text"
-      value=""
       autocapitalize="on"
       autocomplete="on"
       autocorrect="on"
@@ -34,15 +33,13 @@
 </ion-content>
 
 <ion-footer class="ion-padding">
-  <ion-button expand="block" (click)="save()" [disabled]="!listTitle">
+  <ion-button expand="block" (click)="save()" [disabled]="!mealPlanTitle">
     <ion-icon name="list" slot="start"></ion-icon>
-    <ion-label>
-      <span *ngIf="selectedCollaboratorIds.length === 0">
-        {{ 'pages.newShoppingList.create' | translate }}
-      </span>
-      <span *ngIf="selectedCollaboratorIds.length > 0">
-        {{ 'pages.newShoppingList.createAndShare' | translate }}
-      </span>
+    <ion-label *ngIf="selectedCollaboratorIds.length > 0">
+      {{ 'pages.updateMealPlanModal.updateAndShare' | translate }}
+    </ion-label>
+    <ion-label *ngIf="selectedCollaboratorIds.length === 0">
+      {{ 'pages.updateMealPlanModal.update' | translate }}
     </ion-label>
   </ion-button>
 </ion-footer>

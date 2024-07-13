@@ -1,6 +1,6 @@
 <ion-list no-border>
   <ion-list-header>
-    {{ 'pages.shoppingListPopover.title' | translate }}
+    {{ 'pages.shoppingListPopover.options.title' | translate }}
   </ion-list-header>
 
   <ion-item lines="full">
@@ -89,10 +89,28 @@
     </ion-toggle>
   </ion-item>
 
+  <ion-list-header>
+    {{ 'pages.shoppingListPopover.actions.title' | translate }}
+  </ion-list-header>
+
   <ion-button (click)="print()" expand="block" size="small" class="ion-margin">
     <ion-icon name="print" slot="start"></ion-icon>
     {{ 'pages.shoppingListPopover.print' | translate }}
   </ion-button>
+
+  <ion-button
+    (click)="updateList()"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="pencil" slot="start"></ion-icon>
+    {{ 'pages.shoppingListPopover.update' | translate }}
+  </ion-button>
+
+  <ion-list-header>
+    {{ 'pages.shoppingListPopover.dangerZone.title' | translate }}
+  </ion-list-header>
 
   <ion-button
     (click)="removeAllItems()"
