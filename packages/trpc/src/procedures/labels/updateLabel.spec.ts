@@ -1,0 +1,67 @@
+import { trpcSetup, tearDown } from "../../testutils";
+import { prisma } from "@recipesage/prisma";
+import { User } from "@prisma/client";
+import type { CreateTRPCProxyClient } from "@trpc/client";
+import type { AppRouter } from "../../index";
+
+describe("updates label", () => {
+  let user: User;
+  let trpc: CreateTRPCProxyClient<AppRouter>;
+
+  beforeEach(async () => {
+    ({ user, trpc } = await trpcSetup());
+  });
+
+  afterEach(() => {
+    return tearDown(user.id);
+  });
+
+  describe("success", () => {
+    it("updates label", async () => {
+      const label = await prisma.label.create({
+        data: {
+          userId: user.id,
+          title: "meat",
+        },
+      });
+
+      const response = await trpc.labels.updateLabel.mutate({
+        id: label.id,
+        title: "fish",
+        labelGroupId: null,
+      });
+      expect(response.title).toEqual("fish");
+
+      const updatedLabel = await prisma.label.findUnique({
+        where: {
+          id: label.id,
+        },
+      });
+      expect(updatedLabel?.title).toEqual("fish");
+    });
+  });
+
+  describe("error", () => {
+    it("throws on conflicting label title", async () => {
+      return expect(async () => {
+        const label = await prisma.label.create({
+          data: {
+            userId: user.id,
+            title: "meat",
+          },
+        });
+        await prisma.label.create({
+          data: {
+            userId: user.id,
+            title: "fish",
+          },
+        });
+        await trpc.labels.updateLabel.mutate({
+          id: label.id,
+          title: "fish",
+          labelGroupId: null,
+        });
+      }).rejects.toThrow("Conflicting label title");
+    });
+  });
+});
