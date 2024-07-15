@@ -1019,5 +1019,19 @@
     "pages.contribute.bonus.feature.3": "Увеличение лимита сообщений помощника",
     "components.messaging.notificationPermission.header": "Требуются разрешения на получение уведомлений",
     "components.messaging.notificationPermission.message": "Чтобы уведомлять вас, когда ваши контакты отправляют вам сообщения, нам необходим доступ к уведомлениям. После удаления этого всплывающего окна вам будет предложено включить доступ к уведомлениям.",
-    "pages.account.bonus.assistantMoreMessages": "Увеличение лимита сообщений помощника"
+    "pages.account.bonus.assistantMoreMessages": "Увеличение лимита сообщений помощника",
+    "pages.shoppingListPopover.options.title": "Параметры",
+    "pages.shoppingListPopover.dangerZone.title": "Предупреждение",
+    "pages.mealPlanPopover.actions.update": "Редактировать/Переименовать план питания",
+    "pages.updateMealPlanModal.title": "Обновить план питания",
+    "pages.newShoppingList.createAndShare": "Создать и поделиться",
+    "pages.updateMealPlanModal.input.title": "Заголовок",
+    "pages.updateMealPlanModal.update": "Обновить",
+    "pages.updateMealPlanModal.updateAndShare": "Обновить и поделиться",
+    "pages.updateShoppingList.title": "Обновить список покупок",
+    "pages.updateShoppingList.listTitle": "Заголовок",
+    "pages.updateShoppingList.update": "Обновить",
+    "pages.updateShoppingList.updateAndShare": "Обновить и поделиться",
+    "pages.shoppingListPopover.actions.title": "Действия",
+    "pages.shoppingListPopover.update": "Редактировать/Переименовать список"
 }
