@@ -21,93 +21,170 @@
     {{ 'pages.recipeDetailsPopover.actions' | translate }}
   </ion-list-header>
 
-  <ion-button
-    (click)="closeWithAction('addToShoppingList')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="list" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.addToShoppingList' | translate }}
-  </ion-button>
+  <div *ngIf="recipe.userId === me?.id && recipe.folder === 'inbox'">
+    <ion-item lines="none">
+      <ion-label>
+        <p class="ion-text-wrap">
+          {{ 'pages.recipeDetails.inInbox' | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
 
-  <ion-button
-    (click)="closeWithAction('addToMealPlan')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="calendar" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.addToMealPlan' | translate }}
-  </ion-button>
+    <ion-button
+      (click)="closeWithAction('moveToMain')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.saveToMyRecipes' | translate }}
+    </ion-button>
 
-  <ion-button
-    (click)="closeWithAction('share')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="share" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.share' | translate }}
-  </ion-button>
+    <ion-list-header>
+      {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
+    </ion-list-header>
 
-  <ion-button
-    (click)="closeWithAction('print')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="print" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.print' | translate }}
-  </ion-button>
+    <ion-button
+      (click)="closeWithAction('delete')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+      color="danger"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.delete' | translate }}
+    </ion-button>
+  </div>
 
-  <ion-button
-    (click)="cookingToolbarService.isPinned(recipeId) ? closeWithAction('unpin') : closeWithAction('pin')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="pin" slot="start"></ion-icon>
-    <span *ngIf="cookingToolbarService.isPinned(recipeId)">
-      {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
-    </span>
-    <span *ngIf="!cookingToolbarService.isPinned(recipeId)">
-      {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }}
-    </span>
-  </ion-button>
+  <div *ngIf="recipe.userId !== me?.id && isLoggedIn">
+    <ion-item lines="none">
+      <ion-label>
+        <p class="ion-text-wrap">
+          {{ 'pages.recipeDetails.doesNotBelongToYou' | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
 
-  <ion-button
-    (click)="closeWithAction('edit')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="create" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.edit' | translate }}
-  </ion-button>
+    <ion-button
+      (click)="closeWithAction('clone')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.saveToMyRecipes' | translate }}
+    </ion-button>
+  </div>
 
-  <ion-button
-    (click)="closeWithAction('clone')"
-    expand="block"
-    size="small"
-    class="ion-margin"
-  >
-    <ion-icon name="copy" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.makeACopy' | translate }}
-  </ion-button>
+  <div *ngIf="recipe.userId !== me?.id && !isLoggedIn">
+    <ion-item lines="none">
+      <ion-label>
+        <p class="ion-text-wrap">
+          {{ 'pages.recipeDetails.requiresAccountToSave' | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
 
-  <ion-list-header>
-    {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
-  </ion-list-header>
+    <ion-button
+      (click)="closeWithAction('authAndClone')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="cloud-download" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.registerOrLoginToSave' | translate }}
+    </ion-button>
+  </div>
 
-  <ion-button
-    (click)="closeWithAction('delete')"
-    expand="block"
-    size="small"
-    color="danger"
-    class="ion-margin"
-  >
-    <ion-icon name="trash" slot="start"></ion-icon>
-    {{ 'pages.recipeDetailsPopover.delete' | translate }}
-  </ion-button>
+  <div *ngIf="recipe.userId === me?.id && recipe.folder === 'main'">
+    <ion-button
+      (click)="closeWithAction('addToShoppingList')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="list" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.addToShoppingList' | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('addToMealPlan')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="calendar" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.addToMealPlan' | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('share')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="share" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.share' | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('print')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="print" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.print' | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="cookingToolbarService.isPinned(recipe.id) ? closeWithAction('unpin') : closeWithAction('pin')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <span *ngIf="cookingToolbarService.isPinned(recipe.id)">
+        {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
+      </span>
+      <span *ngIf="!cookingToolbarService.isPinned(recipe.id)">
+        {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }}
+      </span>
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('edit')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.edit' | translate }}
+    </ion-button>
+
+    <ion-button
+      (click)="closeWithAction('clone')"
+      expand="block"
+      size="small"
+      class="ion-margin"
+    >
+      <ion-icon name="copy" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.makeACopy' | translate }}
+    </ion-button>
+
+    <ion-list-header>
+      {{ 'pages.recipeDetailsPopover.dangerZone' | translate }}
+    </ion-list-header>
+
+    <ion-button
+      (click)="closeWithAction('delete')"
+      expand="block"
+      size="small"
+      color="danger"
+      class="ion-margin"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      {{ 'pages.recipeDetailsPopover.delete' | translate }}
+    </ion-button>
+  </div>
 </ion-list>

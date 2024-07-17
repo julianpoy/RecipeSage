@@ -4,6 +4,21 @@ import { PreferencesService } from "~/services/preferences.service";
 import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { WakeLockService } from "~/services/wakelock.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
+import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
+
+export type RecipeDetailsPopoverActionTypes =
+  | "delete"
+  | "clone"
+  | "authAndClone"
+  | "addToShoppingList"
+  | "addToMealPlan"
+  | "moveToMain"
+  | "share"
+  | "print"
+  | "pin"
+  | "unpin"
+  | "edit"
+  | "updateWakeLock";
 
 @Component({
   selector: "page-recipe-details-popover",
@@ -14,7 +29,15 @@ export class RecipeDetailsPopoverPage {
   @Input({
     required: true,
   })
-  recipeId!: string;
+  recipe!: RecipeSummary;
+  @Input({
+    required: true,
+  })
+  me: UserPublic | null = null;
+  @Input({
+    required: true,
+  })
+  isLoggedIn!: boolean;
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = RecipeDetailsPreferenceKey;
@@ -34,7 +57,7 @@ export class RecipeDetailsPopoverPage {
     this.preferencesService.save();
   }
 
-  closeWithAction(name: string) {
+  closeWithAction(name: RecipeDetailsPopoverActionTypes) {
     this.popoverCtrl.dismiss({
       action: name,
     });

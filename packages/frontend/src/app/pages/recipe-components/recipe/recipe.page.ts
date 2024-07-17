@@ -31,7 +31,10 @@ import { RecipeCompletionTrackerService } from "~/services/recipe-completion-tra
 import { AddRecipeToShoppingListModalPage } from "../add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { AddRecipeToMealPlanModalPage } from "../add-recipe-to-meal-plan-modal/add-recipe-to-meal-plan-modal.page";
 import { PrintRecipeModalPage } from "../print-recipe-modal/print-recipe-modal.page";
-import { RecipeDetailsPopoverPage } from "../recipe-details-popover/recipe-details-popover.page";
+import {
+  RecipeDetailsPopoverPage,
+  type RecipeDetailsPopoverActionTypes,
+} from "../recipe-details-popover/recipe-details-popover.page";
 import { ShareModalPage } from "~/pages/share-modal/share-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
 import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.component";
@@ -235,7 +238,9 @@ export class RecipePage {
     const popover = await this.popoverCtrl.create({
       component: RecipeDetailsPopoverPage,
       componentProps: {
-        recipeId: this.recipeId,
+        recipe: this.recipe,
+        me: this.me,
+        isLoggedIn: this.isLoggedIn,
       },
       event,
     });
@@ -244,41 +249,39 @@ export class RecipePage {
 
     const { data } = await popover.onWillDismiss();
     if (!data || !data.action) return;
-    switch (data.action) {
+    const action = data.action as RecipeDetailsPopoverActionTypes;
+    switch (action) {
       case "updateWakeLock":
         const wlEnabled =
           this.preferencesService.preferences[
             RecipeDetailsPreferenceKey.EnableWakeLock
           ];
-        wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
-        break;
+        return wlEnabled ? this.setupWakeLock() : this.releaseWakeLock();
       case "addToShoppingList":
-        this.addRecipeToShoppingList();
-        break;
+        return this.addRecipeToShoppingList();
       case "addToMealPlan":
-        this.addRecipeToMealPlan();
-        break;
+        return this.addRecipeToMealPlan();
       case "share":
-        this.shareRecipe();
-        break;
+        return this.shareRecipe();
       case "print":
-        this.printRecipe();
-        break;
+        return this.printRecipe();
       case "unpin":
-        this.unpinRecipe();
-        break;
+        return this.unpinRecipe();
       case "pin":
-        this.pinRecipe();
-        break;
+        return this.pinRecipe();
       case "edit":
-        this.editRecipe();
-        break;
+        return this.editRecipe();
       case "clone":
-        this.cloneRecipe();
-        break;
+        return this.cloneRecipe();
+      case "authAndClone":
+        return this.authAndClone();
+      case "moveToMain":
+        return this.moveToFolder("main");
       case "delete":
-        this.deleteRecipe();
-        break;
+        return this.deleteRecipe();
+      default:
+        const exhaustiveCheck: never = action;
+        throw new Error(`Unhandled action case: ${exhaustiveCheck}`);
     }
   }
 
