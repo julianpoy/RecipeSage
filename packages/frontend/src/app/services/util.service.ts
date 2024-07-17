@@ -274,6 +274,7 @@ const defaultLocality = {
   hu: SupportedLanguages.HU_HU,
   da: SupportedLanguages.DA_DK,
   zh: SupportedLanguages.ZH_CN,
+  pt: SupportedLanguages.PT_PT,
   nl: SupportedLanguages.NL,
 };
 
