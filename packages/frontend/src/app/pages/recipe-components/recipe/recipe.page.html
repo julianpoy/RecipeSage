@@ -307,7 +307,17 @@
       <br />
     </div>
 
-    <div *ngIf="recipe.folder === 'inbox'" class="ion-padding">
+    <div
+      *ngIf="recipe.userId === me?.id && recipe.folder === 'inbox'"
+      class="ion-padding"
+    >
+      <ion-item lines="none" class="ion-no-padding">
+        <ion-label>
+          <p class="ion-text-wrap">
+            {{ 'pages.recipeDetails.inInbox' | translate }}
+          </p>
+        </ion-label>
+      </ion-item>
       <ion-grid>
         <ion-row>
           <ion-col col-12 col-md-12 col-lg-6 col-xl-6>
@@ -326,10 +336,7 @@
       </ion-grid>
     </div>
 
-    <div
-      *ngIf="recipe && recipe.id && recipe.userId !== me?.id && isLoggedIn"
-      class="ion-padding"
-    >
+    <div *ngIf="recipe.userId !== me?.id && isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -343,10 +350,7 @@
       </ion-button>
     </div>
 
-    <div
-      *ngIf="recipe && recipe.id && recipe.userId !== me?.id && !isLoggedIn"
-      class="ion-padding"
-    >
+    <div *ngIf="recipe.userId !== me?.id && !isLoggedIn" class="ion-padding">
       <ion-item lines="none" class="ion-no-padding">
         <ion-label>
           <p class="ion-text-wrap">
@@ -376,7 +380,7 @@
     <br />
 
     <ion-row
-      *ngIf="recipe.folder === 'main' && recipe.userId === me?.id"
+      *ngIf="recipe.userId === me?.id && recipe.folder === 'main'"
       class="action-buttons ion-justify-content-around"
     >
       <ion-col class="ion-text-center" size="auto">
