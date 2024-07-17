@@ -18,6 +18,7 @@ export enum SupportedLanguages {
   HU_HU = "hu-hu",
   DA_DK = "da-dk",
   ZH_CN = "zh-cn",
+  NL = "nl",
 }
 
 export enum SupportedFontSize {
