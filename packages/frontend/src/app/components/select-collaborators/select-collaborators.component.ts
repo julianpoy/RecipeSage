@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  type AfterViewInit,
+} from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "../../services/loading.service";
@@ -6,16 +12,19 @@ import { MessagingService } from "../../services/messaging.service";
 import { ToastController, ModalController } from "@ionic/angular";
 import { UtilService } from "../../services/util.service";
 import { UserService } from "../../services/user.service";
+import { TRPCService } from "../../services/trpc.service";
+import type { UserPublic } from "@recipesage/prisma";
 
 @Component({
   selector: "select-collaborators",
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],
 })
-export class SelectCollaboratorsComponent {
+export class SelectCollaboratorsComponent implements AfterViewInit {
   @Input() selectedCollaboratorIds: string[] = [];
   @Output() selectedCollaboratorIdsChanged = new EventEmitter<string[]>();
 
+  userProfilesById: Map<string, UserPublic> = new Map();
   threadsByUserId: any = {};
   existingThreads: any = [];
   pendingThread = "";
@@ -31,14 +40,34 @@ export class SelectCollaboratorsComponent {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     public userService: UserService,
+    public trpcService: TRPCService,
     public utilService: UtilService,
     public loadingService: LoadingService,
     public messagingService: MessagingService,
     public translate: TranslateService,
-  ) {
+  ) {}
+
+  ngAfterViewInit() {
     this.loadThreads().then(
       () => {},
       () => {},
+    );
+
+    this.loadUserProfiles();
+  }
+
+  async loadUserProfiles() {
+    if (!this.selectedCollaboratorIds.length) return;
+
+    const userProfiles = await this.trpcService.handle(
+      this.trpcService.trpc.users.getUserProfilesById.query({
+        ids: this.selectedCollaboratorIds,
+      }),
+    );
+
+    if (!userProfiles) return;
+    this.userProfilesById = new Map(
+      userProfiles.map((userProfile) => [userProfile.id, userProfile]),
     );
   }
 

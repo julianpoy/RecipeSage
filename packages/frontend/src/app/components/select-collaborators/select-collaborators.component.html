@@ -10,7 +10,13 @@
           name="trash"
           slot="start"
         ></ion-icon>
-        {{ threadsByUserId[userId].name || threadsByUserId[userId].email }}
+        {{
+          userProfilesById.get(userId)?.name ||
+            userProfilesById.get(userId)?.email ||
+            threadsByUserId[userId]?.name ||
+            threadsByUserId[userId]?.email ||
+            "--"
+        }}
       </span>
     </div>
 

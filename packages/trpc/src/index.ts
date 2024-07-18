@@ -58,6 +58,7 @@ import { getShoppingLists } from "./procedures/shoppingLists/getShoppingLists";
 import { updateShoppingList } from "./procedures/shoppingLists/updateShoppingList";
 import { updateShoppingListItem } from "./procedures/shoppingLists/updateShoppingListItem";
 import { updateShoppingListItems } from "./procedures/shoppingLists/updateShoppingListItems";
+import { getUserProfilesById } from "./procedures/users/getUserProfilesById";
 
 const appRouter = router({
   labelGroups: router({
@@ -121,6 +122,7 @@ const appRouter = router({
   }),
   users: router({
     getMe,
+    getUserProfilesById,
     updatePreferences,
     getPreferences,
     signInWithGoogle,
