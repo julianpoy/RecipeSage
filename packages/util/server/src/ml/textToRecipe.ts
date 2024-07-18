@@ -39,7 +39,7 @@ export const textToRecipe = async (
     throw new Error("GPT function must have name for mandated tool call");
 
   await openAiHelper.getJsonResponseWithTools(
-    SupportedGPTModel.GPT35Turbo,
+    SupportedGPTModel.GPT4OMini,
     [
       {
         role: "system",
