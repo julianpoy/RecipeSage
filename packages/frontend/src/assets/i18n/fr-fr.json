@@ -171,7 +171,7 @@
     "pages.recipeDetails.updated": "Dernière édition",
     "pages.recipeDetails.delete": "Supprimer",
     "pages.recipeDetails.doesNotBelongToYou": "Cette recette ne vous appartient pas encore.",
-    "pages.recipeDetails.registerOrLoginToSave": "Inscrivez-vous/Connectez-vous pour enregistrer cette recette",
+    "pages.recipeDetails.registerOrLoginToSave": "Inscrivez-vous/Connectez-vous pour enregistrer",
     "pages.recipeDetails.edit": "Modifier",
     "pages.recipeDetails.addToShoppingList": "Ajouter à la liste d'achats",
     "pages.recipeDetails.addToMealPlan": "Ajouter au plan de repas",
@@ -388,7 +388,7 @@
     "pages.homeSearchFilterPopover.title": "Filtres de recherche",
     "pages.notfound.error.message3": "Si vous avez encore des problèmes, ou si vous avez été redirigé ici depuis l'application, veuillez me contacter.",
     "pages.homepopover.options.showRecipeDescription": "Afficher la description",
-    "pages.recipeDetails.saveToMyRecipes": "Enregistrer cette recette dans Mes recettes",
+    "pages.recipeDetails.saveToMyRecipes": "Enregistrer dans Mes recettes",
     "pages.contact.subtitle": "Coordonnées",
     "pages.contact.pleaseUserGuide": "Pour toute question, veuillez consulter le guide de l'utilisateur avant d'envoyer un courriel :",
     "pages.contributeCancel.cta.2": "Malheureusement, RecipeSage ne reçoit pas beaucoup de dons car c'est une plateforme assez petite.",
@@ -1033,5 +1033,6 @@
     "pages.shoppingListPopover.options.title": "Options",
     "pages.shoppingListPopover.actions.title": "Actions",
     "pages.shoppingListPopover.update": "Editer/Renommer la liste",
-    "pages.shoppingListPopover.dangerZone.title": "Zone Dangereuse"
+    "pages.shoppingListPopover.dangerZone.title": "Zone Dangereuse",
+    "pages.recipeDetails.inInbox": "Cette recette est dans votre boite de réception, partagée avec vous par un autre utilisateur."
 }
