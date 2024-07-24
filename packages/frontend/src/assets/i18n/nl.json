@@ -207,5 +207,12 @@
     "pages.downloadAndInstall.android.instructionHeader": "Om RecipeSage op Android te installeren:",
     "pages.downloadAndInstall.ios.step.3": "Klip op \"Aan Thuisscherm Toevoegen\"",
     "pages.labelsPopover.options.selectMultipleLabels": "Selecteer Meerdere Labels",
-    "pages.labels.title": "Beheer Labels & Categorieën"
+    "pages.labels.title": "Beheer Labels & Categorieën",
+    "pages.welcome.selfhostTitle": "RecipeSage Zelf Gehost!",
+    "pages.welcome.description.2": "Leg snel recepten van elke website vast en sla deze op door simpelweg de website-URL in te voeren. Synchroniseer uw recepten, maaltijdplannen en boodschappenlijstjes tussen al uw apparaten. Deel uw recepten, boodschappenlijstjes en maaltijdplannen met familie en vrienden.",
+    "pages.welcome.description.features.3.title": "Label en categorisatiesysteem:",
+    "pages.welcome.description.features.5.description": "Automatisch gecategoriseerd en intelligent gegroepeerd - voeg uw recepten rechtstreeks toe aan een boodschappenlijstje en vergelijkbare items worden gecombineerd",
+    "pages.home.errors.noRecipes.message7": "Bezoek de documentatie voor gedetailleerde tutorials over het gebruik van de app",
+    "pages.home.errors.noSearchResults.message2": "Zoeken omvat:",
+    "pages.home.deleteSelected.message": "Hierdoor worden de geselecteerde recepten definitief uit uw account verwijderd. Deze actie is onomkeerbaar. De volgende recepten worden verwijderd: {{recipeNames}}"
 }
