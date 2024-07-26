@@ -167,11 +167,11 @@
     "pages.recipeDetails.labels.uncatLabels": "Общие",
     "pages.recipeDetails.created": "Создано",
     "pages.recipeDetails.updated": "Последнее редактирование",
-    "pages.recipeDetails.saveToMyRecipes": "Сохранить этот рецепт в моих рецептах",
+    "pages.recipeDetails.saveToMyRecipes": "Сохранить в Моих рецептах",
     "pages.recipeDetails.delete": "Удалить",
     "pages.recipeDetails.doesNotBelongToYou": "Этот рецепт вам еще не принадлежит.",
     "pages.recipeDetails.requiresAccountToSave": "Создайте учетную запись или войдите, чтобы сохранить этот рецепт в свою коллекцию.",
-    "pages.recipeDetails.registerOrLoginToSave": "Зарегистрируйтесь/войдите, чтобы сохранить этот рецепт",
+    "pages.recipeDetails.registerOrLoginToSave": "Регистрация/Вход для сохранения",
     "pages.recipeDetails.edit": "Изменить",
     "pages.recipeDetails.addToShoppingList": "Добавить в список покупок",
     "pages.recipeDetails.addToMealPlan": "Добавить в план питания",
@@ -1033,5 +1033,6 @@
     "pages.updateShoppingList.update": "Обновить",
     "pages.updateShoppingList.updateAndShare": "Обновить и поделиться",
     "pages.shoppingListPopover.actions.title": "Действия",
-    "pages.shoppingListPopover.update": "Редактировать/Переименовать список"
+    "pages.shoppingListPopover.update": "Редактировать/Переименовать список",
+    "pages.recipeDetails.inInbox": "Этот рецепт находится в вашем почтовом ящике, им поделился с вами другой пользователь."
 }
