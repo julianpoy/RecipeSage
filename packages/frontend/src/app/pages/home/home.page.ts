@@ -25,6 +25,7 @@ import { PreferencesService } from "~/services/preferences.service";
 import {
   MyRecipesPreferenceKey,
   GlobalPreferenceKey,
+  isRtlText,
 } from "@recipesage/util/shared";
 import { HomePopoverPage } from "~/pages/home-popover/home-popover.page";
 import { HomeSearchFilterPopoverPage } from "~/pages/home-search-popover/home-search-filter-popover.page";
@@ -496,6 +497,10 @@ export class HomePage {
   clearSelectedRecipes() {
     this.selectionMode = false;
     this.selectedRecipeIds = [];
+  }
+
+  isRtlText(text: string, firstWordOnly = false): boolean {
+    return isRtlText(text, firstWordOnly);
   }
 
   async addLabelToSelectedRecipes() {

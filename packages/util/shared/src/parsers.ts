@@ -136,6 +136,7 @@ export const parseIngredients = (
   originalContent: string;
   complete: boolean;
   isHeader: boolean;
+  isRtl: boolean;
 }[] => {
   if (!ingredients) return [];
 
@@ -147,6 +148,7 @@ export const parseIngredients = (
       originalContent: match,
       complete: false,
       isHeader: false,
+      isRtl: isRtlText(match),
     })) || [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -226,8 +228,10 @@ export const parseIngredients = (
             acc + ingredientPart + (ingredientPartDelimiters[idx] || ""),
           "",
         );
+        lines[i].isRtl = isRtlText(lines[i].originalContent);
       } else {
         lines[i].content = updatedIngredientParts.join(" + ");
+        lines[i].isRtl = isRtlText(lines[i].originalContent);
       }
 
       lines[i].isHeader = false;
@@ -244,6 +248,7 @@ export const parseInstructions = (
   isHeader: boolean;
   count: number;
   complete: boolean;
+  isRtl: boolean;
 }[] => {
   instructions = replaceFractionsInText(instructions);
 
@@ -269,6 +274,7 @@ export const parseInstructions = (
           isHeader: true,
           count: 0,
           complete: false,
+          isRtl: isRtlText(headerContent, true),
         };
       } else {
         return {
@@ -276,6 +282,7 @@ export const parseInstructions = (
           isHeader: false,
           count: stepCount++,
           complete: false,
+          isRtl: isRtlText(line, true),
         };
       }
     });
@@ -286,6 +293,7 @@ export const parseNotes = (
 ): {
   content: string;
   isHeader: boolean;
+  isRtl: boolean;
 }[] => {
   // Starts with [, anything inbetween, ends with ]
   const headerRegexp = /^\[.*\]$/;
@@ -301,12 +309,46 @@ export const parseNotes = (
       return {
         content: headerContent,
         isHeader: true,
+        isRtl: isRtlText(headerContent),
       };
     } else {
       return {
         content: line,
         isHeader: false,
+        isRtl: isRtlText(line),
       };
     }
   });
+};
+
+/* eslint-disable no-control-regex */
+export const isRtlText = (text: string, onlyFirstWord = true): boolean => {
+  const rtlChars = new RegExp("[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]");
+  const ltrChars = new RegExp(
+    "[\u0000-\u0590\u2000-\u202E\u202A-\u202E\uFB00-\uFB4F]",
+  );
+  const aToZ = new RegExp("[a-zA-Z]");
+  let rtlCount = 0;
+  let ltrCount = 0;
+  if (onlyFirstWord) {
+    const splits = text.split(" ");
+    for (let i = 0; i < splits.length; i++) {
+      if (
+        rtlChars.test(splits[i].charAt(0)) ||
+        aToZ.test(splits[i].charAt(0))
+      ) {
+        text = splits[i];
+        break;
+      }
+    }
+  }
+  for (let i = 0; i < text.length; i++) {
+    if (rtlChars.test(text[i])) {
+      rtlCount++;
+    } else if (ltrChars.test(text[i])) {
+      ltrCount++;
+    }
+  }
+
+  return rtlCount > ltrCount;
 };
