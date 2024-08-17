@@ -3,6 +3,7 @@ import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
+import { response } from "express";
 
 describe("createMealPlan", () => {
   let user: User;
@@ -19,9 +20,9 @@ describe("createMealPlan", () => {
   });
 
   describe("success", () => {
-    it("creates a meal plan", async () => {
+    it("creates a meal plan item", async () => {
       const collaboratorUsers = [user2];
-      const response = await prisma.mealPlan.create({
+      const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
@@ -34,14 +35,21 @@ describe("createMealPlan", () => {
           },
         },
       });
-      expect(typeof response?.id).toBe("string");
-
-      const updatedMealPlan = await prisma.mealPlan.findUnique({
+      expect(typeof mealPlan?.id).toBe("string");
+      const mealPlanItem = await trpc.mealPlans.createMealPlanItem.mutate({
+        mealPlanId: mealPlan.id,
+        title: "Protein",
+        scheduledDate: "2024-05-26",
+        meal: "dinner",
+        recipeId: null,
+      });
+      expect(typeof mealPlanItem?.id).toBe("string");
+      const updatedMealPlanItem = await prisma.mealPlanItem.findUnique({
         where: {
-          id: response.id,
+          id: mealPlanItem.id,
         },
       });
-      expect(updatedMealPlan?.title).toEqual("Protein");
+      expect(updatedMealPlanItem?.title).toEqual("Protein");
 
       await tearDown(user2.id);
     });
@@ -49,12 +57,15 @@ describe("createMealPlan", () => {
   describe("error", () => {
     it("must throw on meal plan not found", async () => {
       return expect(async () => {
-        await trpc.mealPlans.createMealPlan.mutate({
+        await trpc.mealPlans.createMealPlanItem.mutate({
+          mealPlanId: "00008495-d189-4a99-98bb-8888442de945",
           title: "Protein",
-          collaboratorUserIds: ["00000ca5-50e7-4144-bc11-e82925837a14"],
+          scheduledDate: "2024-05-26",
+          meal: "dinner",
+          recipeId: null,
         });
       }).rejects.toThrow(
-        "One or more of the collaborators you specified are not valid",
+        "Meal plan with that id does not exist or you do not have access",
       );
     });
   });
