@@ -8,10 +8,9 @@ describe("createMealPlan", () => {
   let user: User;
   let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
-  let trpc2: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {

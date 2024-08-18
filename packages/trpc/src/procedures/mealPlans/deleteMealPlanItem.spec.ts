@@ -1,9 +1,8 @@
 import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
-import { MealPlanItem, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
-import { response } from "express";
 
 describe("createMealPlan", () => {
   let user: User;
@@ -99,7 +98,7 @@ describe("createMealPlan", () => {
   describe("error", () => {
     it("must throw on meal plan not found", async () => {
       const collaboratorUsers = [user2];
-      const mealPlan = await prisma.mealPlan.create({
+      await prisma.mealPlan.create({
         data: {
           title: "Protein",
           userId: user.id,
@@ -119,8 +118,6 @@ describe("createMealPlan", () => {
       }).rejects.toThrow("NOT_FOUND");
     });
     it("must throw on meal without access", async () => {
-      const collaboratorUsers = [user2];
-
       const mealPlan = await prisma.mealPlan.create({
         data: {
           title: "Protein",
