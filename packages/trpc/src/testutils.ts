@@ -14,10 +14,15 @@ export async function trpcSetup() {
   return { user, session, trpc, user2, session2, trpc2 };
 }
 
-export async function tearDown(userId: string) {
+export async function tearDown(userId: string, userId2: string) {
   await prisma.user.delete({
     where: {
       id: userId,
+    },
+  });
+  await prisma.user.delete({
+    where: {
+      id: userId2,
     },
   });
 }

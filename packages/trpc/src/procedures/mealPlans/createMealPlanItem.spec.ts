@@ -16,7 +16,7 @@ describe("createMealPlan", () => {
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {
@@ -50,8 +50,6 @@ describe("createMealPlan", () => {
         },
       });
       expect(updatedMealPlanItem?.title).toEqual("Protein");
-
-      await tearDown(user2.id);
     });
   });
   describe("error", () => {

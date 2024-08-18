@@ -16,7 +16,7 @@ describe("createMealPlan", () => {
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {

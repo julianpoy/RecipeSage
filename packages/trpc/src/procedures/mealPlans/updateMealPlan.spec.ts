@@ -8,15 +8,15 @@ describe("updateMealPlan", () => {
   let user: User;
   let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
-  let trpc2: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, user2, trpc, trpc2 } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
+
   describe("success", () => {
     it("updates a meal plan", async () => {
       const collaboratorUsers = [user2];
@@ -44,8 +44,6 @@ describe("updateMealPlan", () => {
         },
       });
       expect(updatedMealPlan?.title).toEqual("not protein");
-
-      await tearDown(user2.id);
     });
   });
   describe("error", () => {
