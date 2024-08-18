@@ -62,7 +62,7 @@ describe("createMealPlan", () => {
     describe("error", () => {
       it("must throw on meal plan not found", async () => {
         const collaboratorUsers = [user2];
-        const mealPlan = await prisma.mealPlan.create({
+        await prisma.mealPlan.create({
           data: {
             title: "Protein",
             userId: user.id,
