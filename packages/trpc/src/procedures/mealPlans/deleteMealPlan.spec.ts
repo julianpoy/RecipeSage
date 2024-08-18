@@ -11,7 +11,7 @@ describe("deleteMealPlan", () => {
   let trpc2: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, user2, trpc, trpc2} = await trpcSetup());
+    ({ user, user2, trpc, trpc2 } = await trpcSetup());
   });
 
   afterAll(() => {
@@ -49,7 +49,6 @@ describe("deleteMealPlan", () => {
   });
   describe("error", () => {
     it("must throw on meal plan not found", async () => {
-
       await trpc.mealPlans.createMealPlan.mutate({
         title: "Protein",
         collaboratorUserIds: [user2.id],
@@ -64,7 +63,6 @@ describe("deleteMealPlan", () => {
     });
 
     it("must throw on meal plan not owned", async () => {
-
       const response = await trpc.mealPlans.createMealPlan.mutate({
         title: "Protein",
         collaboratorUserIds: [user2.id],
