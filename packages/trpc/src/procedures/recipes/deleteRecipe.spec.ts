@@ -7,10 +7,11 @@ import { faker } from "@faker-js/faker";
 
 describe("deleteRecipe", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
@@ -87,8 +88,6 @@ describe("deleteRecipe", () => {
           id: recipe.id,
         });
       }).rejects.toThrow("Recipe not found");
-
-      return tearDown(user2.id);
     });
   });
 });
