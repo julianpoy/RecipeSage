@@ -522,7 +522,7 @@
     "pages.assistant.welcome.3": "De kookhulp heeft een berichten limiet van 5 berichten per dag door de hoge kosten van het gebruik van de AI. Voor bijdragers is deze limiet 50 berichten per dag.",
     "pages.assistant.welcome.documentation": "Lees a.u.b. de kookhulp documentatie",
     "pages.assistant.messageLimit": "Het maximale aantal berichten is bereikt (sorry, het is duur). De berichten teller reset om 0:00GMT.",
-    "pages.newMessageModal.title": "Nieuwe berichtenthread",
+    "pages.newMessageModal.title": "Nieuw Gesprek",
     "pages.editRecipe.clip.failedSelfhost": "Check a.u.b. de OpenAI credentials zoals beschreven de selfhosting readme",
     "pages.editRecipe.missingLabelGroup.message": "U heeft aangegeven dat de label groep \"{{groupName}}\" verplicht is. U kunt dit uitzetten in de Labels Beheren pagina.",
     "pages.editRecipe.conflict.message": "Een recept met de titel \"{{title}}\" bestaat al in uw recepten collectie. U kunt kiezen dit recept toch op te slaan, of te hernoemen naar \"{{uniqueTitle}}\".",
