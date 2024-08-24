@@ -970,5 +970,21 @@
     "components.selectCollaborators.invalidEmail": "Voer een geldig e-mailadres in en druk op enter.",
     "components.selectIngredients.title": "Selecteer de ingrediënten die u wilt toevoegen:",
     "components.selectIngredients.toggleAll": "Alles selecteren/deselecteren",
-    "components.selectIngredients.scale": "{{scale}}x schaal (klik om te wijzigen)"
+    "components.selectIngredients.scale": "{{scale}}x schaal (klik om te wijzigen)",
+    "pages.myProfile.share": "Deel",
+    "pages.myProfile.view": "Bekijk profiel",
+    "pages.myProfile.pinned": "vastgezette recepten en labels",
+    "pages.myProfile.add": "Voeg toe",
+    "pages.myProfile.nullState.1": "Er staat nog niets op uw profiel.",
+    "pages.myProfile.nullState.2": "Om uw eerste profielitem toe te voegen, klikt u op de knop 'Toevoegen' aan de rechterkant.",
+    "pages.myProfile.save": "Opslaan",
+    "components.selectIngredients.null": "Dit recept heeft geen ingrediënten.",
+    "components.selectLabel.search": "Typ om naar een label te zoeken...",
+    "components.selectLabel.null": "Geen labels met \"{{name}}\"",
+    "components.selectMultipleItems.null": "Geen resultaten voor {{searchText}}",
+    "components.selectMultipleItems.create": "Klik om te maken",
+    "components.selectMultipleItems.noSelected": "Geen Items geselecteerd",
+    "components.selectMultipleItems.noItems": "Geen items",
+    "components.selectRecipe.searching": "Zoeken naar \"{{searchText}}\"...",
+    "components.selectRecipe.search": "Typ om een recept te zoeken..."
 }
