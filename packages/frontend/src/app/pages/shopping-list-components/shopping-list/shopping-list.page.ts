@@ -10,18 +10,24 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import {
-  ShoppingList,
-  ShoppingListService,
-} from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
-import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import {
+  ShoppingListPreferenceKey,
+  GroupableItemsByGroupAndCategory,
+  type GroupableItem,
+  type ItemWithGroupTitle,
+} from "@recipesage/util/shared";
 import { getShoppingListItemGroupings } from "@recipesage/util/shared";
 
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
+import { TRPCService } from "../../../services/trpc.service";
+import type {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+} from "@recipesage/prisma";
 
 @Component({
   selector: "page-shopping-list",
@@ -32,19 +38,27 @@ export class ShoppingListPage {
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
 
   shoppingListId: string;
-  list?: ShoppingList;
+  list?: ShoppingListSummary;
 
-  items: any[] = [];
-  completedItems: any[] = [];
+  items: ItemWithGroupTitle<ShoppingListItemSummary>[] = [];
+  completedItems: ItemWithGroupTitle<ShoppingListItemSummary>[] = [];
   groupTitles: string[] = [];
   categoryTitles: string[] = [];
   categoryTitleCollapsed: Record<string, boolean> = {};
-  itemsByGroupTitle: any = {};
-  itemsByCategoryTitle: any = {};
-  groupsByCategoryTitle: any = {};
+  itemsByGroupTitle: {
+    [key: string]: ItemWithGroupTitle<ShoppingListItemSummary>[];
+  } = {};
+  itemsByCategoryTitle: {
+    [key: string]: ItemWithGroupTitle<ShoppingListItemSummary>[];
+  } = {};
+  groupsByCategoryTitle: GroupableItemsByGroupAndCategory<
+    ItemWithGroupTitle<ShoppingListItemSummary>
+  > = {};
   groupTitleExpanded: Record<string, boolean> = {};
-  itemsByRecipeId: any = {};
-  recipeIds: any = [];
+  itemsByRecipeId: {
+    [key: string]: ShoppingListItemSummary[];
+  } = {};
+  recipeIds: string[] = [];
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
@@ -54,18 +68,18 @@ export class ShoppingListPage {
   reference = "0";
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public websocketService: WebsocketService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
-    public alertCtrl: AlertController,
-    public popoverCtrl: PopoverController,
-    public route: ActivatedRoute,
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
+    private websocketService: WebsocketService,
+    private utilService: UtilService,
+    private preferencesService: PreferencesService,
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
+    private route: ActivatedRoute,
   ) {
     const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
     if (shoppingListId) {
@@ -94,16 +108,10 @@ export class ShoppingListPage {
     const loading = this.loadingService.start();
 
     this.initialLoadComplete = false;
-    this.loadList().then(
-      () => {
-        loading.dismiss();
-        this.initialLoadComplete = true;
-      },
-      () => {
-        loading.dismiss();
-        this.initialLoadComplete = true;
-      },
-    );
+    this.loadList().finally(() => {
+      loading.dismiss();
+      this.initialLoadComplete = true;
+    });
   }
 
   refresh(loader: any) {
@@ -117,14 +125,9 @@ export class ShoppingListPage {
     );
   }
 
-  processList(list?: ShoppingList) {
-    if (list) this.list = list;
-    if (!this.list) return;
-
-    const items = this.list.items.filter((item: any) => !item.completed);
-    const completedItems = this.list.items.filter(
-      (item: any) => item.completed,
-    );
+  processList(listItemSummaries: ShoppingListItemSummary[]) {
+    const items = listItemSummaries.filter((item) => !item.completed);
+    const completedItems = listItemSummaries.filter((item) => item.completed);
 
     this.recipeIds = [];
     this.itemsByRecipeId = {};
@@ -150,7 +153,7 @@ export class ShoppingListPage {
       itemsByCategoryTitle,
       groupsByCategoryTitle,
     } = getShoppingListItemGroupings(
-      items as any,
+      items,
       this.preferences[ShoppingListPreferenceKey.SortBy],
     );
 
@@ -162,7 +165,7 @@ export class ShoppingListPage {
     this.groupsByCategoryTitle = groupsByCategoryTitle;
 
     const { items: sortedCompletedItems } = getShoppingListItemGroupings(
-      completedItems as any,
+      completedItems,
       this.preferences[ShoppingListPreferenceKey.SortBy],
     );
 
@@ -170,15 +173,27 @@ export class ShoppingListPage {
   }
 
   async loadList() {
-    const response = await this.shoppingListService.fetchById(
-      this.shoppingListId,
+    const shoppingList = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.getShoppingList.query({
+        id: this.shoppingListId,
+      }),
     );
-    if (!response.success) return;
 
-    this.processList(response.data);
+    if (!shoppingList) return;
+    this.list = shoppingList;
+
+    const shoppingListItems = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.getShoppingListItems.query({
+        shoppingListId: this.shoppingListId,
+      }),
+    );
+
+    if (!shoppingListItems) return;
+
+    this.processList(shoppingListItems);
   }
 
-  async completeItems(items: any[], completed: boolean) {
+  async completeItems(items: ShoppingListItemSummary[], completed: boolean) {
     if (!this.list) return;
 
     if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
@@ -187,35 +202,29 @@ export class ShoppingListPage {
 
     const loading = this.loadingService.start();
 
-    const itemIds = items
-      .map((el) => {
-        return el.id;
-      })
-      .join(",");
-
-    const response = await this.shoppingListService.updateItems(
-      this.list.id,
-      {
-        itemIds,
-      },
-      {
-        completed,
-      },
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.updateShoppingListItems.mutate({
+        shoppingListId: this.shoppingListId,
+        items: items.map((item) => ({
+          ...item,
+          completed,
+        })),
+      }),
     );
-
-    if (response.success && this.reference !== response.data.reference) {
-      this.reference = response.data.reference;
-      await this.loadList();
-    }
-
     loading.dismiss();
+
+    if (!response) return;
+    if (this.reference === response.reference) return;
+    this.reference = response.reference;
+
+    await this.loadList();
   }
 
   removeRecipe(recipeId: string) {
     this.removeItems(this.itemsByRecipeId[recipeId]);
   }
 
-  async removeItemsConfirm(items: any[]) {
+  async removeItemsConfirm(items: ShoppingListItemSummary[]) {
     const header = await this.translate
       .get("pages.shoppingList.removeMultiple.header")
       .toPromise();
@@ -246,23 +255,19 @@ export class ShoppingListPage {
     alert.present();
   }
 
-  async removeItems(items: any[]) {
-    if (!this.list) return;
-
+  async removeItems(items: ShoppingListItemSummary[]) {
     const loading = this.loadingService.start();
 
-    const itemIds = items.map((el) => {
-      return el.id;
-    });
-
-    const response = await this.shoppingListService.deleteItems(this.list.id, {
-      itemIds: itemIds.join(","),
-    });
-
-    await this.loadList();
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.deleteShoppingListItems.mutate({
+        shoppingListId: this.shoppingListId,
+        ids: items.map((item) => item.id),
+      }),
+    );
     loading.dismiss();
 
-    if (!response.success) return;
+    if (!response) return;
+    await this.loadList();
 
     const message = await this.translate
       .get("pages.shoppingList.removed", { itemCount: items.length })
@@ -282,9 +287,8 @@ export class ShoppingListPage {
               items.map((el) => ({
                 title: el.title,
                 completed: el.completed,
-                id: el.shoppingListId,
-                mealPlanItemId: (el.mealPlanItem || {}).id || null,
-                recipeId: (el.recipe || {}).id || null,
+                mealPlanItemId: el.mealPlanItemId,
+                recipeId: el.recipeId,
               })),
             );
           },
@@ -294,17 +298,29 @@ export class ShoppingListPage {
     toast.present();
   }
 
-  async _addItems(items: any[]) {
-    if (!this.list) return;
-
+  async _addItems(
+    items: {
+      title: string;
+      completed: boolean;
+      mealPlanItemId: string | null;
+      recipeId: string | null;
+    }[],
+  ) {
     const loading = this.loadingService.start();
 
-    await this.shoppingListService.addItems(this.list.id, {
-      items,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.createShoppingListItems.mutate({
+        shoppingListId: this.shoppingListId,
+        items,
+      }),
+    );
+    loading.dismiss();
+
+    if (!response) return;
+    if (this.reference === response.reference) return;
+    this.reference = response.reference;
 
     await this.loadList();
-    loading.dismiss();
   }
 
   async newShoppingListItem(): Promise<void> {
@@ -326,8 +342,8 @@ export class ShoppingListPage {
     const popover = await this.popoverCtrl.create({
       component: ShoppingListPopoverPage,
       componentProps: {
-        shoppingListId: this.shoppingListId,
         shoppingList: this.list,
+        shoppingListItems: this.items,
       },
       event,
     });

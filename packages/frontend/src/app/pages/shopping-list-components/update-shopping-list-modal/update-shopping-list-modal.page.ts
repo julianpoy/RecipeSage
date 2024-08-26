@@ -1,14 +1,7 @@
 import { Component, Input } from "@angular/core";
-import {
-  ModalController,
-  ToastController,
-  NavController,
-} from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
-import { MessagingService } from "~/services/messaging.service";
-import { UserService } from "~/services/user.service";
-import { UtilService } from "~/services/util.service";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
@@ -27,14 +20,9 @@ export class UpdateShoppingListModalPage {
   selectedCollaboratorIds: string[] = [];
 
   constructor(
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public trpcService: TRPCService,
-    public messagingService: MessagingService,
-    public userService: UserService,
-    public toastCtrl: ToastController,
+    private modalCtrl: ModalController,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
   ) {}
 
   async load() {

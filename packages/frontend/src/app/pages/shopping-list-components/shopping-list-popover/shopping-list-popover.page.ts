@@ -1,6 +1,5 @@
 import { Component, Input } from "@angular/core";
 import {
-  ToastController,
   AlertController,
   NavController,
   PopoverController,
@@ -9,11 +8,15 @@ import {
 import { TranslateService } from "@ngx-translate/core";
 
 import { LoadingService } from "~/services/loading.service";
-import { ShoppingListService } from "~/services/shopping-list.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
+import type {
+  ShoppingListItemSummary,
+  ShoppingListSummary,
+} from "@recipesage/prisma";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-shopping-list-popover",
@@ -21,23 +24,28 @@ import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/updat
   styleUrls: ["shopping-list-popover.page.scss"],
 })
 export class ShoppingListPopoverPage {
-  @Input() shoppingListId: any;
-  @Input() shoppingList: any;
+  @Input({
+    required: true,
+  })
+  shoppingList!: ShoppingListSummary;
+  @Input({
+    required: true,
+  })
+  shoppingListItems!: ShoppingListItemSummary[];
 
   preferences = this.preferencesService.preferences;
   preferenceKeys = ShoppingListPreferenceKey;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public utilService: UtilService,
-    public preferencesService: PreferencesService,
-    public loadingService: LoadingService,
-    public shoppingListService: ShoppingListService,
-    public toastCtrl: ToastController,
-    public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController,
-    public modalCtrl: ModalController,
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private utilService: UtilService,
+    private preferencesService: PreferencesService,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
+    private popoverCtrl: PopoverController,
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
   ) {}
 
   savePreferences() {
@@ -52,7 +60,7 @@ export class ShoppingListPopoverPage {
 
   print() {
     window.open(
-      this.utilService.generatePrintShoppingListURL(this.shoppingListId, {
+      this.utilService.generatePrintShoppingListURL(this.shoppingList.id, {
         groupSimilar: this.preferences[ShoppingListPreferenceKey.GroupSimilar],
         groupCategories:
           this.preferences[ShoppingListPreferenceKey.GroupCategories],
@@ -93,21 +101,22 @@ export class ShoppingListPopoverPage {
   }
 
   async _removeAllItems() {
-    if (this.shoppingList.items.length === 0) return;
+    if (!this.shoppingListItems.length) return;
 
     const loading = this.loadingService.start();
 
-    const itemIds = this.shoppingList.items.map((el: any) => el.id);
+    const itemIds = this.shoppingListItems.map((el) => el.id);
 
-    const response = await this.shoppingListService.deleteItems(
-      this.shoppingListId,
-      {
-        itemIds,
-      },
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.deleteShoppingListItems.mutate({
+        shoppingListId: this.shoppingList.id,
+        ids: itemIds,
+      }),
     );
 
     loading.dismiss();
-    if (!response.success) return;
+
+    if (!response) return;
 
     this.popoverCtrl.dismiss();
   }
@@ -146,10 +155,14 @@ export class ShoppingListPopoverPage {
   async _deleteList() {
     const loading = this.loadingService.start();
 
-    const response = await this.shoppingListService.delete(this.shoppingListId);
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.deleteShoppingList.mutate({
+        id: this.shoppingList.id,
+      }),
+    );
     loading.dismiss();
 
-    if (!response.success) return;
+    if (!response) return;
 
     this.popoverCtrl.dismiss();
     this.navCtrl.navigateBack(RouteMap.ShoppingListsPage.getPath());
@@ -159,7 +172,7 @@ export class ShoppingListPopoverPage {
     const modal = await this.modalCtrl.create({
       component: UpdateShoppingListModalPage,
       componentProps: {
-        shoppingListId: this.shoppingListId,
+        shoppingListId: this.shoppingList.id,
       },
     });
 

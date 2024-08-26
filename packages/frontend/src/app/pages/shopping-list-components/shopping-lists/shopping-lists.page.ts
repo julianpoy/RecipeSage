@@ -11,6 +11,8 @@ import { UtilService, RouteMap } from "~/services/util.service";
 
 import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shopping-list-modal.page";
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
+import type { ShoppingListSummary, UserPublic } from "@recipesage/prisma";
+import { TRPCService } from "../../../services/trpc.service";
 
 @Component({
   selector: "page-shopping-lists",
@@ -18,18 +20,18 @@ import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopp
   styleUrls: ["shopping-lists.page.scss"],
 })
 export class ShoppingListsPage {
-  shoppingLists: any = [];
+  me?: UserPublic;
+  shoppingLists: ShoppingListSummary[] = [];
 
   initialLoadComplete = false;
 
   constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    public toastCtrl: ToastController,
-    public shoppingListService: ShoppingListService,
-    public websocketService: WebsocketService,
-    public loadingService: LoadingService,
-    public utilService: UtilService,
+    private navCtrl: NavController,
+    private modalCtrl: ModalController,
+    private trpcService: TRPCService,
+    private websocketService: WebsocketService,
+    private loadingService: LoadingService,
+    private utilService: UtilService,
   ) {
     this.websocketService.register(
       "shoppingList:received",
@@ -52,7 +54,7 @@ export class ShoppingListsPage {
     const loading = this.loadingService.start();
     this.initialLoadComplete = false;
 
-    await this.loadLists();
+    await Promise.all([this.loadLists(), this.loadMe()]);
 
     loading.dismiss();
     this.initialLoadComplete = true;
@@ -64,12 +66,23 @@ export class ShoppingListsPage {
   }
 
   async loadLists() {
-    const response = await this.shoppingListService.fetch();
-    if (!response.success) return;
+    const shoppingLists = await this.trpcService.handle(
+      this.trpcService.trpc.shoppingLists.getShoppingLists.query(),
+    );
+    if (!shoppingLists) return;
 
-    this.shoppingLists = response.data.sort((a, b) => {
+    this.shoppingLists = shoppingLists.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
+  }
+
+  async loadMe() {
+    const me = await this.trpcService.handle(
+      this.trpcService.trpc.users.getMe.query(),
+    );
+    if (!me) return;
+
+    this.me = me;
   }
 
   async newShoppingList() {
@@ -90,7 +103,7 @@ export class ShoppingListsPage {
     this.navCtrl.navigateForward(RouteMap.ShoppingListPage.getPath(listId));
   }
 
-  formatItemCreationDate(plainTextDate: string) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
+  formatItemCreationDate(date: Date | string) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }

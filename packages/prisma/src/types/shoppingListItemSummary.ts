@@ -11,6 +11,8 @@ export const shoppingListItemSummary =
       title: true,
       createdAt: true,
       updatedAt: true,
+      completed: true,
+      category: true,
       user: userPublic,
       recipeId: true,
       recipe: {
@@ -30,6 +32,7 @@ export const shoppingListItemSummary =
           },
         },
       },
+      mealPlanItemId: true,
     },
   });
 

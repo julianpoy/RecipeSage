@@ -1,5 +1,8 @@
-import { ShoppingListItem } from "@prisma/client";
 import { ShoppingListSortOptions } from "./preferences";
+import {
+  groupIngredientsByTitle,
+  type ItemWithGroupTitle,
+} from "./groupIngredientsByTitle";
 
 interface SortableItem {
   title: string;
@@ -74,68 +77,86 @@ const groupAndSort = <T extends SortableItem>(
   return groupedAndSorted;
 };
 
-type GroupableShoppingListItem = ShoppingListItem & {
-  categoryTitle: string;
-  groupTitle: string;
+export type GroupableItem = {
+  title: string;
+  category: string;
+  createdAt: string | Date;
 };
 
-// This whole thing needs to be redone
-interface GroupableShoppingListItemsByGroupAndCategory {
+export interface GroupableItemsByGroupAndCategory<T> {
   [key: string]: {
+    id: string;
     title: string;
-    items: ShoppingListItem[];
+    items: T[];
   }[];
 }
 
 // items must be an array of objects with the properties groupTitle, categoryTitle, createdAt, and title
 // sortBy must be one of 'createdAt', '-createdAt', '-title'
 // Result will be items grouped by group/category/groupcategory
-export const getShoppingListItemGroupings = (
-  items: GroupableShoppingListItem[],
+export const getShoppingListItemGroupings = <T extends GroupableItem>(
+  items: T[],
   sortBy: ShoppingListSortOptions,
 ): {
-  items: GroupableShoppingListItem[];
+  items: ItemWithGroupTitle<T>[];
   groupTitles: string[];
   categoryTitles: string[];
-  itemsByGroupTitle: { [key: string]: GroupableShoppingListItem[] };
-  itemsByCategoryTitle: { [key: string]: GroupableShoppingListItem[] };
-  groupsByCategoryTitle: GroupableShoppingListItemsByGroupAndCategory;
+  itemsByGroupTitle: { [key: string]: ItemWithGroupTitle<T>[] };
+  itemsByCategoryTitle: { [key: string]: ItemWithGroupTitle<T>[] };
+  groupsByCategoryTitle: GroupableItemsByGroupAndCategory<
+    ItemWithGroupTitle<T>
+  >;
 } => {
-  const sortedItems = items.sort((a, b) => {
+  const { groups, items: itemsWithGroupTitles } =
+    groupIngredientsByTitle(items);
+
+  const sortedItems = itemsWithGroupTitles.sort((a, b) => {
     return itemSort(a, b, sortBy);
   });
 
-  const groupTitles = Array.from(
-    new Set<string>(items.map((item) => item.groupTitle)),
-  ).sort((a, b) => {
-    // Sort groups by title (always)
-    return a.localeCompare(b);
-  });
+  const groupTitles = groups
+    .map((item) => item.title)
+    .sort((a, b) => {
+      // Sort groups by title (always)
+      return a.localeCompare(b);
+    });
 
   const categoryTitles = Array.from(
-    new Set<string>(items.map((item) => item.categoryTitle)),
+    new Set(items.map((item) => item.category)),
   ).sort((a, b) => {
     // Sort categories by title (always)
     return a.localeCompare(b);
   });
 
-  const itemsByGroupTitle = groupAndSort(items, "groupTitle", sortBy);
-  const itemsByCategoryTitle = groupAndSort(items, "categoryTitle", sortBy);
+  const itemsByGroupTitle = groupAndSort(
+    itemsWithGroupTitles,
+    "groupTitle",
+    sortBy,
+  );
+  const itemsByCategoryTitle = groupAndSort(
+    itemsWithGroupTitles,
+    "category",
+    sortBy,
+  );
 
-  const groupsByCategoryTitle = items.reduce((acc, item) => {
-    acc[item.categoryTitle] = acc[item.categoryTitle] || [];
-    const arr = acc[item.categoryTitle];
-    let grouping = arr.find((el) => el.title === item.groupTitle);
-    if (!grouping) {
-      grouping = {
-        title: item.groupTitle,
-        items: [],
-      };
-      arr.push(grouping);
-    }
-    grouping.items.push(item);
-    return acc;
-  }, {} as GroupableShoppingListItemsByGroupAndCategory);
+  const groupsByCategoryTitle = itemsWithGroupTitles.reduce(
+    (acc, item) => {
+      acc[item.category] = acc[item.category] || [];
+      const arr = acc[item.category];
+      let grouping = arr.find((el) => el.id === item.groupId);
+      if (!grouping) {
+        grouping = {
+          id: item.groupId,
+          title: item.groupTitle,
+          items: [],
+        };
+        arr.push(grouping);
+      }
+      grouping.items.push(item);
+      return acc;
+    },
+    {} as GroupableItemsByGroupAndCategory<ItemWithGroupTitle<T>>,
+  );
 
   return {
     items: sortedItems,

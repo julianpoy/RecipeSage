@@ -11,6 +11,11 @@ import {
   ShoppingListAccessLevel,
   getAccessToShoppingList,
 } from "@recipesage/util/server/db";
+import {
+  categorizeShoppingListItem,
+  ShoppingListCategory,
+} from "@recipesage/util/server/ml";
+import * as Sentry from "@sentry/node";
 
 export const createShoppingListItem = publicProcedure
   .input(
@@ -18,7 +23,9 @@ export const createShoppingListItem = publicProcedure
       shoppingListId: z.string().uuid(),
       title: z.string(),
       recipeId: z.string().uuid().nullable(),
+      mealPlanItemId: z.string().uuid().nullable(),
       completed: z.boolean().optional(),
+      category: z.string().optional(),
     }),
   )
   .mutation(async ({ ctx, input }) => {
@@ -38,13 +45,45 @@ export const createShoppingListItem = publicProcedure
       });
     }
 
+    let category = input.category;
+    if (!category) {
+      try {
+        const gptCategory = await categorizeShoppingListItem(input.title);
+        if (Object.values(ShoppingListCategory).includes(gptCategory)) {
+          category = gptCategory;
+        } else {
+          console.error(
+            `Invalid category returned by GPT ${category} for item with text "${input.title}"`,
+          );
+          Sentry.captureMessage("Invalid category returned by GPT", {
+            extra: {
+              title: input.title,
+              category: gptCategory,
+            },
+          });
+        }
+      } catch (e) {
+        console.error(
+          `Unable to categorize shopping list item: ${input.title}`,
+          e,
+        );
+        Sentry.captureException(e, {
+          extra: {
+            title: input.title,
+          },
+        });
+      }
+    }
+
     const createdShoppingListItem = await prisma.shoppingListItem.create({
       data: {
         shoppingListId: input.shoppingListId,
         title: input.title,
         userId: session.userId,
         recipeId: input.recipeId,
+        mealPlanItemId: input.mealPlanItemId,
         completed: input.completed || false,
+        category,
       },
     });
 

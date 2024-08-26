@@ -1,4 +1,5 @@
 export * from "./assistant";
+export * from "./categorizeShoppingListItem";
 export * from "./chatFunctions";
 export * from "./ocr";
 export * from "./ocrImagesToRecipe";

@@ -1,8 +1,6 @@
 import { Component } from "@angular/core";
-import { ModalController, ToastController } from "@ionic/angular";
-import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService } from "~/services/util.service";
+import { ModalController } from "@ionic/angular";
+import { ParsedIngredient, type Recipe } from "~/services/recipe.service";
 
 @Component({
   selector: "page-new-shopping-list-item-modal",
@@ -12,26 +10,28 @@ import { UtilService } from "~/services/util.service";
 export class NewShoppingListItemModalPage {
   inputType = "items";
 
-  itemFields: any = [{}];
+  itemFields: {
+    title: string;
+  }[] = [
+    {
+      title: "",
+    },
+  ];
 
-  selectedRecipe: any;
+  selectedRecipe: Recipe | undefined;
   selectedIngredients: ParsedIngredient[] = [];
 
-  constructor(
-    public modalCtrl: ModalController,
-    public utilService: UtilService,
-    public recipeService: RecipeService,
-    public loadingService: LoadingService,
-    public toastCtrl: ToastController,
-  ) {}
+  constructor(private modalCtrl: ModalController) {}
 
   inputTypeChanged(event: any) {
     this.inputType = event.detail.value;
   }
 
   addOrRemoveTextFields() {
-    if ((this.itemFields[this.itemFields.length - 1].title || "").length > 0) {
-      this.itemFields.push({});
+    if (this.itemFields.at(-1)?.title?.length) {
+      this.itemFields.push({
+        title: "",
+      });
     }
   }
 
@@ -44,31 +44,37 @@ export class NewShoppingListItemModalPage {
       return this.selectedIngredients.length > 0;
     }
     if (this.inputType === "items") {
-      for (const itemField of this.itemFields) {
-        if (itemField.title) return true;
+      if (this.itemFields.some((field) => field.title.length)) {
+        return true;
       }
     }
     return false;
   }
 
   save() {
-    let items;
+    let items: {
+      title: string;
+      completed: boolean;
+      mealPlanItemId: string | null;
+      recipeId: string | null;
+    }[];
+
     if (this.inputType === "recipe") {
       items = this.selectedIngredients.map((ingredient) => ({
         title: ingredient.content,
-        recipeId: this.selectedRecipe.id,
+        recipeId: this.selectedRecipe?.id || null,
+        mealPlanItemId: null,
+        completed: false,
       }));
     } else {
-      // Redundant for now. Kept for sterilization
       items = this.itemFields
-        .filter((e: any) => {
-          return (e.title || "").length > 0;
-        })
-        .map((e: any) => {
-          return {
-            title: e.title,
-          };
-        });
+        .filter((item) => item.title.length)
+        .map((item) => ({
+          title: item.title,
+          recipeId: null,
+          mealPlanItemId: null,
+          completed: false,
+        }));
     }
 
     this.modalCtrl.dismiss({

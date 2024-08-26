@@ -59,6 +59,30 @@ export class OpenAIHelper {
     return chats;
   }
 
+  async getJsonResponse(
+    model: SupportedGPTModel,
+    context: ChatCompletionMessageParam[],
+  ): Promise<ChatCompletionMessageParam[]> {
+    const runner = this.openAi.beta.chat.completions.stream({
+      messages: context,
+      model,
+      response_format: {
+        type: "json_object",
+      },
+    });
+
+    await runner.done();
+
+    // Messages includes the context passed in for some reason. We only want to return new messages
+    const chats = runner.messages.slice(context.length);
+
+    console.log("messages", chats);
+
+    console.log("cost", await runner.totalUsage());
+
+    return chats;
+  }
+
   async getChatResponseWithTools(
     model: SupportedGPTModel,
     context: ChatCompletionMessageParam[],

@@ -19,15 +19,15 @@ export class ShoppingListItemComponent {
   @Input({
     required: true,
   })
-  recipeTitle!: string;
+  recipeTitle!: string | null;
   @Input({
     required: true,
   })
-  createdAt!: string;
+  createdAt!: Date | string | null;
   @Input({
     required: true,
   })
-  ownerName!: string;
+  ownerName!: string | null;
   @Output() completeToggle = new EventEmitter<null>();
 
   constructor(private utilService: UtilService) {}
@@ -36,7 +36,7 @@ export class ShoppingListItemComponent {
     this.completeToggle.emit();
   }
 
-  formatItemCreationDate(plainTextDate: string) {
-    return this.utilService.formatDate(plainTextDate, { now: true });
+  formatItemCreationDate(date: Date | string) {
+    return this.utilService.formatDate(date, { now: true });
   }
 }
