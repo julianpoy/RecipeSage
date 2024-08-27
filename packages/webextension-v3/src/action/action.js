@@ -1,9 +1,17 @@
-const API_BASE = "https://api.recipesage.com/";
+let api_url;
+let base_url;
+
+const getServerUrls = () => {
+  chrome.storage.local.get(["api_url", "base_url"], (result) => {
+    api_url = result.api_url || "https://api.recipesage.com/";
+    base_url = result.base_url || "https://recipesage.com/";
+  });
+};
+
+getServerUrls();
 
 chrome.runtime.onMessage.addListener((request) => {
   const clipData = request;
-  console.log(clipData);
-
   saveClip(clipData);
 });
 
@@ -11,7 +19,7 @@ let token;
 
 const login = async () => {
   try {
-    const loginResponse = await fetch(API_BASE + "users/login", {
+    const loginResponse = await fetch(api_url + "users/login", {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
@@ -41,8 +49,11 @@ const login = async () => {
 
     const data = await loginResponse.json();
     const { token } = data;
+    // Assumes API URL is Base URL with "api." prepended. User can override in
+    // extension settings.
+    base_url = api_url.replace("api.", "");
 
-    chrome.storage.local.set({ token }, () => {
+    chrome.storage.local.set({ token, api_url, base_url }, () => {
       chrome.storage.local.get(["seenTutorial"], (result) => {
         if (result.seenTutorial) {
           document.getElementById("message").innerText =
@@ -95,11 +106,21 @@ const showLogin = () => {
   document.getElementById("start").style.display = "none";
 };
 
+const showServerInput = () => {
+  document.getElementById("custom-server-input").style.display = "block";
+  document.getElementById("register-link").style.display = "none";
+};
+
+const hideServerInput = () => {
+  document.getElementById("custom-server-input").style.display = "none";
+  document.getElementById("register-link").style.display = "initial";
+};
+
 const createImageFromBlob = async (imageBlob) => {
   const formData = new FormData();
   formData.append("image", imageBlob);
 
-  const imageCreateResponse = await fetch(`${API_BASE}images?token=${token}`, {
+  const imageCreateResponse = await fetch(`${api_url}images?token=${token}`, {
     method: "POST",
     body: formData,
   });
@@ -112,6 +133,7 @@ const createImageFromBlob = async (imageBlob) => {
 };
 
 const interactiveClip = async () => {
+  getServerUrls();
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   await chrome.scripting.executeScript({
@@ -123,6 +145,7 @@ const interactiveClip = async () => {
 };
 
 const autoClip = async () => {
+  getServerUrls();
   showLoading();
 
   try {
@@ -138,7 +161,6 @@ const autoClip = async () => {
 
 const clipWithInject = async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
     files: ["/inject/clip.js"],
@@ -153,7 +175,7 @@ const clipWithAPI = async () => {
     func: () => document.documentElement.innerHTML,
   });
 
-  const clipResponse = await fetch(`${API_BASE}clip?token=${token}`, {
+  const clipResponse = await fetch(`${api_url}clip?token=${token}`, {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
@@ -188,31 +210,31 @@ const saveClip = async (clipData) => {
     }
   }
 
-  const recipeCreateResponse = await fetch(
-    `${API_BASE}recipes?token=${token}`,
-    {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...clipData,
-        imageIds: imageId ? [imageId] : [],
-      }),
+  const recipeCreateResponse = await fetch(`${api_url}recipes?token=${token}`, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      ...clipData,
+      imageIds: imageId ? [imageId] : [],
+    }),
+  });
 
   if (!recipeCreateResponse.ok) {
     switch (recipeCreateResponse.status) {
       case 401:
-        chrome.storage.local.set({ token: null }, () => {
-          window.alert(
-            "Please Login. It looks like you're logged out. Please click the\
+        chrome.storage.local.set(
+          { token: null, api_url: null, base_url: null },
+          () => {
+            window.alert(
+              "Please Login. It looks like you're logged out. Please click the\
              RecipeSage icon to login again.",
-          );
-        });
+            );
+          },
+        );
         break;
       default:
         window.alert(
@@ -225,8 +247,7 @@ const saveClip = async (clipData) => {
   }
 
   const recipeData = await recipeCreateResponse.json();
-
-  const url = `https://recipesage.com/#/recipe/${recipeData.id}`;
+  const url = `${base_url}#/recipe/${recipeData.id}`;
   chrome.tabs.create({
     url,
     active: true,
@@ -237,14 +258,53 @@ const saveClip = async (clipData) => {
   }, 500);
 };
 
+const userDetailsValid = () => {
+  const username = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const server = document.getElementById("server").value;
+
+  if (!username || !password) {
+    document.getElementById("message").innerText =
+      "Please enter a username and password";
+    return false;
+  }
+
+  if (!server) {
+    document.getElementById("message").innerText =
+      "Please enter a server address";
+    return false;
+  }
+
+  if (!server.startsWith("https://")) {
+    document.getElementById("message").innerText =
+      "Please enter a valid https:// URL";
+    return false;
+  }
+
+  return true;
+};
+
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("default-server-checkbox").onchange = (event) => {
+    if (event.target.checked) {
+      hideServerInput();
+    } else {
+      showServerInput();
+    }
+  };
+  document.getElementById("server").onchange = (event) => {
+    // replace ensures that the api_url ends with a forward slash
+    api_url = event.target.value.replace(/\/?$/, "/");
+  };
   [...document.getElementsByClassName("logo")].forEach(
     (logo) =>
       (logo.src = chrome.runtime.getURL(
         "./images/recipesage-black-trimmed.png",
       )),
   );
-  document.getElementById("login-submit").onclick = login;
+  document.getElementById("login-submit").onclick = () => {
+    if (userDetailsValid()) login();
+  };
   document.getElementById("password").onkeydown = (event) => {
     if (event.key === "Enter") login();
   };
