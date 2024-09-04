@@ -766,7 +766,7 @@
     "pages.profile.unfriend": "Ontvrienden",
     "pages.profile.setup": "Stel je profiel in om vrienden toe te voegen",
     "pages.profile.login": "Log in of registreer om vrienden toe te voegen",
-    "pages.profile.disabled.header": "Profiel is niet ingesteld",
+    "pages.profile.disabled.header": "Profiel is niet ingeschakeld",
     "pages.profile.disabled.message": "Deze gebruiker heeft hun profiel uitgezet en is daarom privé/ontoegankelijk.",
     "pages.profile.inviteSent": "Vrienschapsverzoek verstuurd!",
     "pages.profile.inviteRemoved": "Vriendschap verwijderd",
