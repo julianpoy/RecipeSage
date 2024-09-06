@@ -1,0 +1,21 @@
+{
+    "pages.app.oldBrowserAlert.message": "Panašu, kad naudojate seną naršyklę, kuri nepalaikoma. Kai kurios funkcijos gali neveikti arba sugesti. Norėdami naudotis visomis funkcijomis, naudokite modernią naršyklę, pvz., Firefox.",
+    "pages.app.oldBrowserAlert.header": "Nepalaikoma naršyklė",
+    "pages.app.nav.welcome": "Sveiki atvykę",
+    "pages.app.nav.login": "Prisijungti",
+    "pages.app.nav.register": "Sukurti paskyrą",
+    "pages.app.nav.download": "Parsisiųsti ir įdiegti",
+    "pages.app.nav.home": "Mano receptai",
+    "pages.app.nav.messages": "Žinutės",
+    "pages.app.nav.newrecipe": "Kurti receptą",
+    "pages.app.nav.settings": "Nustatymai",
+    "pages.app.nav.contribute": "Prisidėti!",
+    "pages.app.nav.about": "Apie ir Palaikymas",
+    "pages.app.nav.labels": "Valdyti etiketes",
+    "pages.app.nav.people": "Žmonės ir Profilis",
+    "pages.app.nav.assistant": "Maisto gaminimo asistentas",
+    "pages.app.nav.inbox": "Gauti receptai",
+    "pages.app.nav.shopping": "Pirkinių sąrašai",
+    "pages.app.nav.meals": "Valgymo planai",
+    "pages.welcome.selfhostTitle": "RecipeSag talpinamas savarankiškai!"
+}
