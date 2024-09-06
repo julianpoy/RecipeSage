@@ -87,7 +87,7 @@ When contributing or suggesting code for RecipeSage, you irrevocably grant Recip
 
 Translations can be contributed via the RecipeSage Weblate instance at [https://weblate.recipesage.com](https://weblate.recipesage.com) which automatically syncs to this repository. You can login there with a Github account and get started translating.
 
-Entirely AI-generated translations are not currently accepted, since they very frequently produce low-quality and inaccurate results. When using AI to assist in your translation efforts, please use DeepL or Google Translate - do not translate using ChatGPT.
+Entirely AI-generated translations are not currently accepted, since they very frequently produce low-quality and inaccurate results. When using AI to assist in your translation efforts, please use [DeepL](https://www.deepl.com/) or [Google Translate](https://translate.google.com/) - do not translate using ChatGPT.
 
 ## Code
 
