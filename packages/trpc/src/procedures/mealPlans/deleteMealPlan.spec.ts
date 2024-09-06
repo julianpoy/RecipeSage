@@ -6,19 +6,20 @@ import type { AppRouter } from "../../index";
 
 describe("deleteMealPlan", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
+  let trpc2: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc, trpc2 } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {
     it("deletes a meal plan", async () => {
-      const { user: user2 } = await trpcSetup();
       const collaboratorUsers = [user2];
       const response = await prisma.mealPlan.create({
         data: {
@@ -48,8 +49,6 @@ describe("deleteMealPlan", () => {
   });
   describe("error", () => {
     it("must throw on meal plan not found", async () => {
-      const { user: user2 } = await trpcSetup();
-
       await trpc.mealPlans.createMealPlan.mutate({
         title: "Protein",
         collaboratorUserIds: [user2.id],
@@ -64,8 +63,6 @@ describe("deleteMealPlan", () => {
     });
 
     it("must throw on meal plan not owned", async () => {
-      const { user: user2, trpc: trpc2 } = await trpcSetup();
-
       const response = await trpc.mealPlans.createMealPlan.mutate({
         title: "Protein",
         collaboratorUserIds: [user2.id],

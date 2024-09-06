@@ -6,15 +6,23 @@ import { faker } from "@faker-js/faker";
 
 export async function trpcSetup() {
   const user = await createUser();
+  const user2 = await createUser();
   const session = await createSession(user.id);
+  const session2 = await createSession(user2.id);
   const trpc = await createTrpcClient(session.token as string);
-  return { user, session, trpc };
+  const trpc2 = await createTrpcClient(session2.token as string);
+  return { user, session, trpc, user2, session2, trpc2 };
 }
 
-export async function tearDown(userId: string) {
+export async function tearDown(userId: string, userId2: string) {
   await prisma.user.delete({
     where: {
       id: userId,
+    },
+  });
+  await prisma.user.delete({
+    where: {
+      id: userId2,
     },
   });
 }

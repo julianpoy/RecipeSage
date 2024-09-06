@@ -8,14 +8,15 @@ import { faker } from "@faker-js/faker";
 
 describe("getRecipes", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeEach(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterEach(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {

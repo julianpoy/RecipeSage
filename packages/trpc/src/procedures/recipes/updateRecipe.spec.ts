@@ -7,14 +7,15 @@ import { recipeFactory } from "../../factories/recipeFactory";
 
 describe("updateRecipe", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {
@@ -107,7 +108,6 @@ describe("updateRecipe", () => {
         id: recipe.id,
       });
     }).rejects.toThrow("Recipe not found");
-    return tearDown(user2.id);
   });
   it("throws an error when updating a recipe with label ids the user does not own", async () => {
     const { user: user2 } = await trpcSetup();
@@ -136,6 +136,5 @@ describe("updateRecipe", () => {
         id: recipe.id,
       });
     }).rejects.toThrow("You do not own one of the specified label ids");
-    return tearDown(user2.id);
   });
 });

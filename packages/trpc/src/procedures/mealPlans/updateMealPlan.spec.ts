@@ -6,18 +6,19 @@ import type { AppRouter } from "../../index";
 
 describe("updateMealPlan", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
+
   describe("success", () => {
     it("updates a meal plan", async () => {
-      const { user: user2 } = await trpcSetup();
       const collaboratorUsers = [user2];
       const createdMealPlan = await prisma.mealPlan.create({
         data: {
@@ -43,8 +44,6 @@ describe("updateMealPlan", () => {
         },
       });
       expect(updatedMealPlan?.title).toEqual("not protein");
-
-      await tearDown(user2.id);
     });
   });
   describe("error", () => {
@@ -58,7 +57,6 @@ describe("updateMealPlan", () => {
       }).rejects.toThrow("Meal plan not found or you do not own it");
     });
     it("must throw on meal plan not owned", async () => {
-      const { user: user2 } = await trpcSetup();
       const collaboratorUsers = [user2];
       await prisma.mealPlan.create({
         data: {

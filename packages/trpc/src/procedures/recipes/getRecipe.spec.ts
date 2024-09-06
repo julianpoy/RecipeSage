@@ -7,14 +7,15 @@ import type { AppRouter } from "../../index";
 
 describe("getRecipe", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {
