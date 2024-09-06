@@ -186,6 +186,7 @@ if (window[extensionContainerId]) {
 
         let logoLink = document.createElement("a");
         logoLink.href = "https://recipesage.com";
+        logoLink.target = "_blank";
         logoLink.onmousedown = (e) => e.stopPropagation();
         leftHeadline.appendChild(logoLink);
 
@@ -427,28 +428,29 @@ if (window[extensionContainerId]) {
           const token = await fetchToken();
 
           let imageId;
-          try {
-            const imageResponse = await fetch(currentSnip.imageURL);
-            const imageBlob = await imageResponse.blob();
+          if (currentSnip.imageURL?.trim().length) {
+            try {
+              const imageResponse = await fetch(currentSnip.imageURL);
+              const imageBlob = await imageResponse.blob();
 
-            const formData = new FormData();
-            formData.append("image", imageBlob);
+              const formData = new FormData();
+              formData.append("image", imageBlob);
 
-            const imageCreateResponse = await fetch(
-              `https://api.recipesage.com/images?token=${token}`,
-              {
-                method: "POST",
-                body: formData,
-              },
-            );
+              const imageCreateResponse = await fetch(
+                `https://api.recipesage.com/images?token=${token}`,
+                {
+                  method: "POST",
+                  body: formData,
+                },
+              );
 
-            if (!imageCreateResponse.ok) return;
-
-            const imageData = await imageCreateResponse.json();
-
-            imageId = imageData.id;
-          } catch (e) {
-            console.error("Error creating image", e);
+              if (imageCreateResponse.ok) {
+                const imageData = await imageCreateResponse.json();
+                imageId = imageData.id;
+              }
+            } catch (e) {
+              console.error("Error creating image", e);
+            }
           }
 
           const recipeCreateResponse = await fetch(
