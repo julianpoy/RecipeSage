@@ -7,14 +7,15 @@ import type { AppRouter } from "../../index";
 
 describe("getRecipe", () => {
   let user: User;
+  let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
 
   beforeAll(async () => {
-    ({ user, trpc } = await trpcSetup());
+    ({ user, user2, trpc } = await trpcSetup());
   });
 
   afterAll(() => {
-    return tearDown(user.id);
+    return tearDown(user.id, user2.id);
   });
 
   describe("success", () => {
@@ -67,7 +68,7 @@ describe("getRecipe", () => {
   });
 
   it("seperate recipies by user", async () => {
-    const { user: user2 } = await trpcSetup();
+    const { user: user2, user2: user3 } = await trpcSetup();
     await prisma.recipe.create({
       data: {
         ...recipeFactory(user2.id),
@@ -80,6 +81,6 @@ describe("getRecipe", () => {
     });
     expect(response).toEqual("Spagetti with tomatos");
 
-    return tearDown(user2.id);
+    return tearDown(user2.id, user3.id);
   });
 });
