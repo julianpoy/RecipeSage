@@ -209,15 +209,13 @@ const saveClip = async (clipData) => {
       case 401:
         chrome.storage.local.set({ token: null }, () => {
           window.alert(
-            "Please Login. It looks like you're logged out. Please click the\
-             RecipeSage icon to login again.",
+            "Please Login. It looks like you're logged out. Please close and re-open the clip tool to login.",
           );
         });
         break;
       default:
         window.alert(
-          "Could Not Save Recipe. An error occurred while saving the recipe.\
-           Please try again.",
+          "An error occurred while saving the recipe. Please try again.",
         );
         break;
     }
