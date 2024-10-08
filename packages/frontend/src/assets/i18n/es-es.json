@@ -973,5 +973,9 @@
     "pages.updateMealPlanModal.title": "Actualizar plan de comidas",
     "pages.updateMealPlanModal.input.title": "Título",
     "pages.updateMealPlanModal.update": "Actualizar",
-    "pages.updateMealPlanModal.updateAndShare": "Actualizar y Compartir"
+    "pages.updateMealPlanModal.updateAndShare": "Actualizar y Compartir",
+    "pages.editRecipe.clipText": "Autocompletar a partir de texto",
+    "pages.editRecipe.scanImage": "Escanear desde una foto",
+    "pages.editRecipe.showClipOptions": "Autocompletar receta desde...",
+    "pages.assistant.welcome.documentation": "Por favor, lea la documentación del asistente"
 }
