@@ -300,7 +300,7 @@
     "pages.manageLabelGroupModal.warnDescription": "Cuando esté activo, se lanzará una advertencia si se guarda una receta sin asignarle una etiqueta de esta categoría",
     "pages.manageLabelGroupModal.labels": "Elegir etiquetas",
     "pages.manageLabelGroupModal.labelsHint": "Las etiquetas seleccionadas serán agrupadas en esta categoría. Una etiqueta sólo puede pertenecer a una categoría como máximo.",
-    "pages.manageLabelGroupModal.labels.noItems": "No hay etiquetas sin categoría",
+    "pages.manageLabelGroupModal.labels.noItems": "No hay etiquetas. ¡Probablemente deberías crear etiquetas, no categorías de etiquetas!",
     "pages.manageLabelGroupModal.labels.search": "Busca una categoría",
     "pages.manageLabelGroupModal.conflict": "Error",
     "pages.manageLabelGroupModal.conflictMessage": "Ya existe una categoría de etiquetas con este nombre",
@@ -966,5 +966,16 @@
     "components.selectMeal.dinner": "Cena",
     "components.selectMeal.lunch": "Comida",
     "pages.recipeDetails.inInbox": "Esta receta está en tu bandeja de entrada, compartida contigo por otro usuario.",
-    "pages.contribute.bonus.feature.3": "Aumentado el límite de mensajes del asistente"
+    "pages.contribute.bonus.feature.3": "Aumentado el límite de mensajes del asistente",
+    "pages.mealPlanPopover.actions.update": "Editar/Renombrar plan de comidas",
+    "pages.newLabelItemModal.title": "Nueva etiqueta o categoría de etiqueta",
+    "pages.manageLabelGroupModal.noLabelsSelectedMessage": "No ha seleccionado ninguna etiqueta para agrupar dentro de esta categoría. Las categorías de etiquetas no son útiles por sí solas; es posible que desee crear una etiqueta en su lugar.",
+    "pages.updateMealPlanModal.title": "Actualizar plan de comidas",
+    "pages.updateMealPlanModal.input.title": "Título",
+    "pages.updateMealPlanModal.update": "Actualizar",
+    "pages.updateMealPlanModal.updateAndShare": "Actualizar y Compartir",
+    "pages.editRecipe.clipText": "Autocompletar a partir de texto",
+    "pages.editRecipe.scanImage": "Escanear desde una foto",
+    "pages.editRecipe.showClipOptions": "Autocompletar receta desde...",
+    "pages.assistant.welcome.documentation": "Por favor, lea la documentación del asistente"
 }
