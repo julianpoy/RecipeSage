@@ -260,8 +260,8 @@ export class HomePage {
     return this.resetAndLoadLabels().then(() => {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
-      this.selectedLabels = this.selectedLabels.filter((e) =>
-        labelNames.has(e),
+      this.selectedLabels = this.selectedLabels.filter(
+        (e) => labelNames.has(e) || e === "unlabeled",
       );
 
       return this.resetAndLoadRecipes(scrollToIndex);

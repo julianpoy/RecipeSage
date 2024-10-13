@@ -72,6 +72,7 @@ export class HomeSearchFilterPopoverPage {
     this.popoverCtrl.dismiss({
       refreshSearch,
       ratingFilter: this.ratingFilter,
+      selectedLabels: this.selectedLabels,
     });
   }
 
