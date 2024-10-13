@@ -148,7 +148,7 @@ export class Assistant {
       },
     });
 
-    const messageLimit = moreMessages ? 50 : 5;
+    const messageLimit = moreMessages ? 75 : 5;
 
     const isOverLimit = todayMessageCount >= messageLimit;
 

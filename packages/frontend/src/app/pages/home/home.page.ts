@@ -195,9 +195,11 @@ export class HomePage {
 
     if (this.reloadPending) {
       const loading = this.loadingService.start();
-      this.resetAndLoadAll().finally(() => {
-        loading.dismiss();
-      });
+      this.resetAndLoadAll(this.datasource.adapter.firstVisible.$index).finally(
+        () => {
+          loading.dismiss();
+        },
+      );
     }
 
     this.fetchMyProfile();
@@ -225,6 +227,8 @@ export class HomePage {
     if (tileColCount !== this.tileColCount) {
       this.tileColCount = tileColCount;
 
+      // We set to zero since we don't know what the relative position would be now
+      this.datasource.settings!.startIndex = 0;
       this.datasource.adapter.reset();
     }
   }
@@ -241,7 +245,7 @@ export class HomePage {
     }
   }
 
-  async resetAndLoadAll(): Promise<any> {
+  async resetAndLoadAll(scrollToIndex?: number): Promise<any> {
     this.reloadPending = false;
 
     // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
@@ -249,18 +253,18 @@ export class HomePage {
     if (this.selectedLabels.length === 0 || this.userId) {
       return Promise.all([
         this.resetAndLoadLabels(),
-        this.resetAndLoadRecipes(),
+        this.resetAndLoadRecipes(scrollToIndex),
       ]);
     }
 
     return this.resetAndLoadLabels().then(() => {
       const labelNames = new Set(this.labels.map((e) => e.title));
 
-      this.selectedLabels = this.selectedLabels.filter((e) =>
-        labelNames.has(e),
+      this.selectedLabels = this.selectedLabels.filter(
+        (e) => labelNames.has(e) || e === "unlabeled",
       );
 
-      return this.resetAndLoadRecipes();
+      return this.resetAndLoadRecipes(scrollToIndex);
     });
   }
 
@@ -269,11 +273,11 @@ export class HomePage {
     return this.loadLabels();
   }
 
-  resetAndLoadRecipes() {
+  resetAndLoadRecipes(scrollToIndex?: number) {
     this.loading = true;
     this.resetRecipes();
 
-    return this._resetAndLoadRecipes().then(
+    return this._resetAndLoadRecipes(scrollToIndex).then(
       () => {
         this.loading = false;
       },
@@ -283,17 +287,19 @@ export class HomePage {
     );
   }
 
-  async _resetAndLoadRecipes() {
+  async _resetAndLoadRecipes(scrollToIndex?: number) {
     if (this.searchText && this.searchText.trim().length > 0) {
       await this.search(this.searchText);
     } else {
       await this.loadRecipes(0, this.fetchPerPage);
     }
 
-    return this.datasource.adapter.reset();
+    this.datasource.settings!.startIndex = scrollToIndex || 0;
+    await this.datasource.adapter.reset();
   }
 
   resetRecipes() {
+    this.datasource.settings!.startIndex = 0;
     this.recipes = [];
     this.lastRecipeCount = 0;
   }
