@@ -20,6 +20,10 @@ const showdown = new Converter({
   openLinksInNewWindow: true,
 });
 
+const FREE_MESSAGE_CAP = 5;
+const CONTRIB_MESSAGE_CAP = 50;
+const ABUSE_MESSAGE_CAP = 1440;
+
 export class Assistant {
   private openAiHelper: OpenAIHelper;
   /**
@@ -126,8 +130,6 @@ export class Assistant {
   }
 
   async checkMessageLimit(userId: string) {
-    if (process.env.NODE_ENV === "development") return false;
-
     const moreMessages = await userHasCapability(
       userId,
       Capabilities.AssistantMoreMessages,
@@ -148,14 +150,23 @@ export class Assistant {
       },
     });
 
-    const messageLimit = moreMessages ? 75 : 5;
+    const isOverLimit =
+      (!moreMessages && todayMessageCount >= FREE_MESSAGE_CAP) ||
+      todayMessageCount >= ABUSE_MESSAGE_CAP;
+    const useLowQualityModel =
+      moreMessages && todayMessageCount >= CONTRIB_MESSAGE_CAP;
 
-    const isOverLimit = todayMessageCount >= messageLimit;
-
-    return isOverLimit;
+    return {
+      isOverLimit,
+      useLowQualityModel,
+    };
   }
 
-  async sendChat(content: string, userId: string): Promise<void> {
+  async sendChat(
+    content: string,
+    userId: string,
+    useLowQualityModel: boolean,
+  ): Promise<void> {
     const assistantUser = await prisma.user.findUniqueOrThrow({
       where: {
         email: "assistant@recipesage.com",
@@ -172,7 +183,9 @@ export class Assistant {
     const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
 
     const response = await this.openAiHelper.getChatResponseWithTools(
-      SupportedGPTModel.GPT4O,
+      useLowQualityModel
+        ? SupportedGPTModel.GPT4OMini
+        : SupportedGPTModel.GPT4O,
       context,
       [initBuildRecipe(assistantUser.id, recipes)],
     );
