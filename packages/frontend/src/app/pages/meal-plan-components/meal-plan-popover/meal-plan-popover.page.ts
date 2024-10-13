@@ -16,6 +16,7 @@ import { MealPlanPreferenceKey } from "@recipesage/util/shared";
 import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
 import { UpdateMealPlanModalPage } from "../update-meal-plan-modal/update-meal-plan-modal.page";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: "page-meal-plan-popover",
@@ -25,6 +26,8 @@ import { UpdateMealPlanModalPage } from "../update-meal-plan-modal/update-meal-p
 export class MealPlanPopoverPage {
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
+  isOwner: boolean = false;
+  loading: boolean = true;
 
   mealPlanId: any; // From nav params
   mealPlan: any; // From nav params
@@ -35,10 +38,27 @@ export class MealPlanPopoverPage {
     private translate: TranslateService,
     private navCtrl: NavController,
     private preferencesService: PreferencesService,
+    private userService: UserService,
     private loadingService: LoadingService,
     private trpcService: TRPCService,
     private alertCtrl: AlertController,
   ) {}
+
+  ngAfterViewInit() {
+    this.loading = true;
+    this.loadUser().finally(() => {
+      this.loading = false;
+    });
+  }
+
+  async loadUser() {
+    const response = await this.userService.getMyProfile({
+      401: () => {},
+    });
+    if (!response.success) return;
+
+    this.isOwner = response.data.id === this.mealPlan.userId;
+  }
 
   savePreferences() {
     this.preferencesService.save();
