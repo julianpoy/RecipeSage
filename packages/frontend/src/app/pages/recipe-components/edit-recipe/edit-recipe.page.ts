@@ -31,6 +31,7 @@ import { SelectableItem } from "../../../components/select-multiple-items/select
 import { FeatureFlagService } from "../../../services/feature-flag.service";
 import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
 import { ErrorHandlers } from "../../../services/http-error-handler.service";
+import { EventName, EventService } from "../../../services/event.service";
 
 @Component({
   selector: "page-edit-recipe",
@@ -79,6 +80,7 @@ export class EditRecipePage {
     private recipeService: RecipeService,
     private imageService: ImageService,
     private capabilitiesService: CapabilitiesService,
+    private events: EventService,
     private featureFlagService: FeatureFlagService,
   ) {
     const recipeId = this.route.snapshot.paramMap.get("recipeId") || "new";
@@ -215,7 +217,7 @@ export class EditRecipePage {
   }
 
   async _create(title: string) {
-    return this.trpcService.handle(
+    const response = await this.trpcService.handle(
       this.trpcService.trpc.recipes.createRecipe.mutate({
         title,
         description: this.recipe.description || "",
@@ -233,10 +235,14 @@ export class EditRecipePage {
         labelIds: this.selectedLabels.map((label) => label.id),
       }),
     );
+
+    this.events.publish(EventName.RecipeCreated);
+
+    return response;
   }
 
   async _update(id: string, title: string) {
-    return this.trpcService.handle(
+    const response = await this.trpcService.handle(
       this.trpcService.trpc.recipes.updateRecipe.mutate({
         id,
         title,
@@ -255,6 +261,10 @@ export class EditRecipePage {
         labelIds: this.selectedLabels.map((label) => label.id),
       }),
     );
+
+    this.events.publish(EventName.RecipeUpdated);
+
+    return response;
   }
 
   async _save() {
@@ -271,7 +281,9 @@ export class EditRecipePage {
 
     this.markAsClean();
 
-    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id));
+    this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(response.id), {
+      replaceUrl: true,
+    });
   }
 
   async _saveCheckConflict() {
