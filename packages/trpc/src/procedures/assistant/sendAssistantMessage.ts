@@ -20,17 +20,16 @@ export const sendAssistantMessage = publicProcedure
       });
     }
 
-    const isOverMessageLimit = await assistant.checkMessageLimit(
-      session.userId,
-    );
-    if (isOverMessageLimit) {
+    const { isOverLimit, useLowQualityModel } =
+      await assistant.checkMessageLimit(session.userId);
+    if (isOverLimit) {
       throw new TRPCError({
         message: "Over daily message limit",
         code: "TOO_MANY_REQUESTS",
       });
     }
 
-    await assistant.sendChat(input.content, session.userId);
+    await assistant.sendChat(input.content, session.userId, useLowQualityModel);
 
     return "ok";
   });
