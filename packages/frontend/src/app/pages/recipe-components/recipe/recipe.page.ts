@@ -317,15 +317,16 @@ export class RecipePage {
   }
 
   async changeScale() {
-    const popover = await this.popoverCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: ScaleRecipeComponent,
       componentProps: {
         scale: this.scale.toString(),
       },
+      cssClass: "scaleRecipeModal",
     });
 
-    await popover.present();
-    const { data } = await popover.onDidDismiss();
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
 
     if (data?.scale) {
       this.scale = data.scale;

@@ -1,4 +1,4 @@
-<ion-list no-border>
+<ion-list no-border *ngIf="!loading">
   <ion-list-header>
     {{ 'pages.mealPlanPopover.options.title' | translate }}
   </ion-list-header>
@@ -96,6 +96,7 @@
 
   <ion-button
     (click)="updateMealPlan()"
+    *ngIf="isOwner"
     expand="block"
     size="small"
     class="ion-margin"
