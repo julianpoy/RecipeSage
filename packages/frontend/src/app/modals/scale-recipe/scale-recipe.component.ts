@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { PopoverController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import fractionjs from "fraction.js";
 
 @Component({
@@ -10,7 +10,7 @@ import fractionjs from "fraction.js";
 export class ScaleRecipeComponent {
   @Input() scale: string = "1";
 
-  constructor(private popoverCtrl: PopoverController) {}
+  constructor(private modalCtrl: ModalController) {}
 
   format(input: string) {
     // Support fractions
@@ -26,11 +26,11 @@ export class ScaleRecipeComponent {
   }
 
   close() {
-    this.popoverCtrl.dismiss();
+    this.modalCtrl.dismiss();
   }
 
   apply() {
-    this.popoverCtrl.dismiss({
+    this.modalCtrl.dismiss({
       scale: this.format(this.scale),
     });
   }
