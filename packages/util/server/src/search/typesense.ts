@@ -79,6 +79,8 @@ async function init() {
 }
 
 export const indexRecipes = async (recipes: Recipe[]) => {
+  if (!recipes.length) return;
+
   const formattedRecipes = recipes.map((recipe) => ({
     id: recipe.id,
     userId: recipe.userId,
@@ -96,6 +98,8 @@ export const indexRecipes = async (recipes: Recipe[]) => {
 };
 
 export const deleteRecipes = async (recipeIds: string[]) => {
+  if (!recipeIds.length) return;
+
   await client
     .collections("recipes")
     .documents()
@@ -105,6 +109,8 @@ export const deleteRecipes = async (recipeIds: string[]) => {
 };
 
 export const searchRecipes = async (userIds: string[], queryString: string) => {
+  if (!userIds.length) return [];
+
   const results = await client
     .collections("recipes")
     .documents()
