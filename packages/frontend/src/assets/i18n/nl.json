@@ -292,7 +292,7 @@
     "pages.contribute.monthly.description": "Je krijgt bonusfunctionaliteit voor de maanden dat je geabonneerd bent.",
     "pages.contribute.oneTime.description": "Je krijg bonusfunctionaliteit voor één jaar.",
     "pages.contribute.custom": "Aangepast",
-    "pages.contribute.bonus.feature.3": "Hogere limiet voor assistentberichten",
+    "pages.contribute.bonus.feature.3": "Ongelimiteerd aantal kookhulp berichten",
     "pages.contribute.bonus.reason": "Bonusfuncties zijn alleen toegankelijk voor bijdragers gezien deze prijzig zijn om te hosten.",
     "pages.contribute.cta.2": "Overweeg alsjeblieft om bij te dragen aan het continue onderhoud van RecipeSage.",
     "pages.contribute.minimum": "Helaas is het minimum aantal ${{amount}} vanwege transactiekosten - excuses",
@@ -519,7 +519,7 @@
     "pages.export.description1": "Na het selecteren van de te exporteren gegevens zal een bestands download beginnen. Het kan nodig zijn om op \"toestaan\" te klikken.",
     "pages.account.dangerZone.warning1": "Wees voorzichtig met deze acties - ze zijn permanent.",
     "pages.account.emailConflict": "Sorry, een account met dit e-mail address bestaat al.",
-    "pages.assistant.welcome.3": "De kookhulp heeft een berichten limiet van 5 berichten per dag door de hoge kosten van het gebruik van de AI. Voor bijdragers is deze limiet 50 berichten per dag.",
+    "pages.assistant.welcome.3": "De kookhulp heeft een berichten limiet van 5 berichten per dag door de hoge kosten van het gebruik van de AI. Voor bijdragers is er geen limiet.",
     "pages.assistant.welcome.documentation": "Lees a.u.b. de kookhulp documentatie",
     "pages.assistant.messageLimit": "Het maximale aantal berichten is bereikt (sorry, het is duur). De berichten teller reset om 0:00GMT.",
     "pages.newMessageModal.title": "Nieuw Gesprek",
@@ -571,7 +571,7 @@
     "pages.account.bonus.title": "Bonus feature status",
     "pages.account.bonus.highResImages": "Hoge resolutie afbeeldingen",
     "pages.account.bonus.multipleImages": "Meerdere afbeeldigen per recept",
-    "pages.account.bonus.assistantMoreMessages": "Hogere kookassistent berichten limiet",
+    "pages.account.bonus.assistantMoreMessages": "Ongelimiteerde kookhulp berichten limiet",
     "pages.account.bonus.enabled": "Ingeschakeld",
     "pages.account.bonus.notEnabled": "Niet Ingeschakeld",
     "pages.account.bonus.description": "Specifieke functies zijn allen beschikbaar/ingeschakeld voor bijdragers ivm met de hoge exploitatie kosten:",
@@ -1034,5 +1034,6 @@
     "errors.unexpected": "Er is een onverwachte fout opgetreden en de app werkt mogelijk niet correct. Laad de app opnieuw en probeer het opnieuw. Als dit blijft gebeuren, neem dan contact met mij op.",
     "components.fontSize.option.X1_0": "Systeemvoorkeuren respecteren",
     "errors.unexpected.selfhost": "Er is een onverwachte fout opgetreden. Controleer je serverlogs en de selfhosting FAQ.",
-    "components.fontSize.option.PX18": "18px (groter)"
+    "components.fontSize.option.PX18": "18px (groter)",
+    "pages.assistant.welcome.4": "Deze limiet is geld alleen voor verzonden berichten, de antwoorden van de AI tellen niet mee."
 }
