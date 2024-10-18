@@ -30,7 +30,8 @@ export const signInWithGoogle = publicProcedure
       audience: input.clientId,
     });
     const payload = ticket.getPayload();
-    if (!payload?.email) {
+    const email = payload?.email;
+    if (!email) {
       throw new TRPCError({
         message: "Invalid clientId or credential",
         code: "BAD_REQUEST",
@@ -39,11 +40,11 @@ export const signInWithGoogle = publicProcedure
 
     const user = await prisma.user.upsert({
       where: {
-        email: payload.email,
+        email: email.toLowerCase(),
       },
       create: {
-        name: payload.email.split("@")[0],
-        email: payload.email,
+        name: email.split("@")[0],
+        email: email.toLowerCase(),
       },
       update: {
         lastLogin: new Date(),
