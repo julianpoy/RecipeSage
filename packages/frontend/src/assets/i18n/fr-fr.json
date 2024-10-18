@@ -516,7 +516,7 @@
     "pages.assistant.title": "Assistant de cuisine",
     "pages.assistant.welcome.1": "Bienvenue dans l'assistant de cuisine RecipeSage !",
     "pages.assistant.welcome.2": "L'assistant de cuisine est un modèle d'IA qui peut répondre à vos questions de cuisine et vous aider à créer des recettes.",
-    "pages.assistant.welcome.3": "L'assistant de cuisine a une limite de messages de 5 messages/jour en raison des coûts élevés de l'IA. Cette limite est augmentée à 50 messages/jour pour les contributeurs.",
+    "pages.assistant.welcome.3": "L'assistant de cuisine a une limite de messages de 5 messages/jour en raison des coûts élevés de l'IA. Cette limite est supprimée pour les contributeurs.",
     "pages.assistant.messageLimit": "Limite maximale de messages atteinte (désolé, c'est coûteux !). Le compteur de messages est réinitialisé à 0:00 GMT.",
     "pages.messageThread.title": "Conversation avec {{name}}",
     "pages.messageThread.clickToOpen": "Cliquez pour ouvrir",
@@ -1020,12 +1020,12 @@
     "components.messaging.notificationPermission.header": "Nécessite les permissions de notification",
     "components.messaging.notificationPermission.message": "Pour vous avertir lorsque vos contacts vous envoient des messages, nous avons besoin d'un accès aux notifications. Après avoir fermé cette fenêtre contextuelle, vous serez invité à activer l'accès aux notifications.",
     "pages.homepopover.options.layout.compact": "Compact",
-    "pages.contribute.bonus.feature.3": "Augmenter la limite des messages de l'assistant",
+    "pages.contribute.bonus.feature.3": "Messages illimités de l'assistant de cuisine",
     "pages.mealPlanPopover.actions.update": "Modifier/Renommer le plan de repas",
     "pages.updateMealPlanModal.title": "Modifier le plan de repas",
     "pages.updateMealPlanModal.input.title": "Titre",
     "pages.updateMealPlanModal.update": "Mettre à jour",
-    "pages.account.bonus.assistantMoreMessages": "Augmentation de la limite de messages de l'assistant",
+    "pages.account.bonus.assistantMoreMessages": "Messages illimités de l'assistant de cuisine",
     "pages.newShoppingList.createAndShare": "Créer et Partager",
     "pages.updateShoppingList.title": "Mettre à jour la liste de courses",
     "pages.updateShoppingList.listTitle": "Titre",
@@ -1034,5 +1034,6 @@
     "pages.shoppingListPopover.actions.title": "Actions",
     "pages.shoppingListPopover.update": "Editer/Renommer la liste",
     "pages.shoppingListPopover.dangerZone.title": "Zone Dangereuse",
-    "pages.recipeDetails.inInbox": "Cette recette est dans votre boite de réception, partagée avec vous par un autre utilisateur."
+    "pages.recipeDetails.inInbox": "Cette recette est dans votre boite de réception, partagée avec vous par un autre utilisateur.",
+    "pages.assistant.welcome.4": "Cette limite s'applique uniquement aux messages que vous envoyez, et non aux réponses de l'IA."
 }

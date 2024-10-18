@@ -416,7 +416,7 @@
     "pages.assistant.title": "Помощник по кулинарии",
     "pages.assistant.welcome.1": "Добро пожаловать в кулинарный помощник RecipeSage!",
     "pages.assistant.welcome.2": "Помощник по приготовлению пищи — это модель искусственного интеллекта, которая может отвечать на ваши вопросы о кулинарии и помогать создавать рецепты.",
-    "pages.assistant.welcome.3": "Помощник по приготовлению пищи имеет ограничение на количество сообщений в 5 сообщений в день из-за высоких затрат на запуск ИИ. Для участников этот лимит увеличивается до 50 сообщений в день.",
+    "pages.assistant.welcome.3": "Помощник по приготовлению пищи имеет ограничение на количество сообщений — 5 сообщений в день из-за высоких затрат на эксплуатацию ИИ. Это ограничение снято для участников.",
     "pages.assistant.messageLimit": "Достигнуто максимальное количество сообщений (извините, это дорого!). Счетчик сообщений сбрасывается в 0:00GMT.",
     "pages.messageThread.title": "Беседа с {{name}}",
     "pages.messageThread.clickToOpen": "Нажмите, чтобы открыть",
@@ -1016,10 +1016,10 @@
     "pages.manageLabelGroupModal.noLabelsSelectedMessage": "Вы не выбрали ни одной метки, которая была бы сгруппирована в этой категории. Категории меток сами по себе не очень полезны - возможно, Вам нужно создать метку.",
     "pages.editRecipe.input.labels.noItemsGroup": "В этой категории нет меток. Введите текст, чтобы создать метку",
     "pages.homepopover.options.layout.compact": "Компактно",
-    "pages.contribute.bonus.feature.3": "Увеличение лимита сообщений помощника",
+    "pages.contribute.bonus.feature.3": "Неограниченное количество сообщений кулинарного помощника",
     "components.messaging.notificationPermission.header": "Требуются разрешения на получение уведомлений",
     "components.messaging.notificationPermission.message": "Чтобы уведомлять вас, когда ваши контакты отправляют вам сообщения, нам необходим доступ к уведомлениям. После удаления этого всплывающего окна вам будет предложено включить доступ к уведомлениям.",
-    "pages.account.bonus.assistantMoreMessages": "Увеличение лимита сообщений помощника",
+    "pages.account.bonus.assistantMoreMessages": "Неограниченное количество сообщений кулинарного помощника",
     "pages.shoppingListPopover.options.title": "Параметры",
     "pages.shoppingListPopover.dangerZone.title": "Предупреждение",
     "pages.mealPlanPopover.actions.update": "Редактировать/Переименовать план питания",
@@ -1034,5 +1034,6 @@
     "pages.updateShoppingList.updateAndShare": "Обновить и поделиться",
     "pages.shoppingListPopover.actions.title": "Действия",
     "pages.shoppingListPopover.update": "Редактировать/Переименовать список",
-    "pages.recipeDetails.inInbox": "Этот рецепт находится в вашем почтовом ящике, им поделился с вами другой пользователь."
+    "pages.recipeDetails.inInbox": "Этот рецепт находится в вашем почтовом ящике, им поделился с вами другой пользователь.",
+    "pages.assistant.welcome.4": "Это ограничение распространяется только на сообщения, отправленные вами, но не на ответы ИИ."
 }
