@@ -22,7 +22,7 @@ describe("create Label", () => {
       const label = await prisma.label.create({
         data: {
           userId: user.id,
-          title: "meat",
+          title: "burger",
         },
       });
       const labelGroup = await trpc.labelGroups.createLabelGroup.mutate({
@@ -61,11 +61,11 @@ describe("create Label", () => {
       },
     });
     const labelGroup = await trpc.labelGroups.createLabelGroup.mutate({
-      title: "soup",
+      title: "pizza",
       labelIds: [label.id, label2.id],
       warnWhenNotPresent: true,
     });
-    expect(labelGroup.title).toEqual("soup");
+    expect(labelGroup.title).toEqual("pizza");
     const response = await prisma.labelGroup.findFirst({
       where: {
         id: labelGroup.id,
@@ -79,13 +79,13 @@ describe("create Label", () => {
       await prisma.labelGroup.create({
         data: {
           userId: user.id,
-          title: "soup",
+          title: "hotdog",
           warnWhenNotPresent: true,
         },
       });
       return expect(async () => {
         await trpc.labelGroups.createLabelGroup.mutate({
-          title: "soup",
+          title: "hotdog",
           labelIds: ["00008495-d189-4a99-98bb-8888442de945"],
           warnWhenNotPresent: true,
         });
