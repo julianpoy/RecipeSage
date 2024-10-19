@@ -37,6 +37,13 @@ describe("create Label", () => {
         },
       });
       expect(typeof response?.id).toBe("string");
+
+      const updatedLabelGroup = await prisma.labelGroup.findUnique({
+        where: {
+          id: labelGroup.id,
+        },
+      });
+      expect(updatedLabelGroup?.title).toEqual("soup");
     });
   });
 
@@ -68,8 +75,8 @@ describe("create Label", () => {
   });
 
   describe("error", () => {
-    it.only("fails to create a label group with not existing label", async () => {
-       await prisma.labelGroup.create({
+    it("fails to create a label group with not existing label", async () => {
+      await prisma.labelGroup.create({
         data: {
           userId: user.id,
           title: "soup",
