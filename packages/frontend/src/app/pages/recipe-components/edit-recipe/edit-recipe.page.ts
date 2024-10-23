@@ -765,6 +765,9 @@ export class EditRecipePage {
     const failed = await this.translate
       .get("pages.editRecipe.clip.failed")
       .toPromise();
+    const unique = await this.translate
+      .get("pages.editRecipe.clipURL.uniqueUrl")
+      .toPromise();
 
     const loading = await this.loadingCtrl.create({
       message: pleaseWait,
@@ -775,6 +778,14 @@ export class EditRecipePage {
         url,
       },
       {
+        406: async () => {
+          (
+            await this.toastCtrl.create({
+              message: unique,
+              duration: 5000,
+            })
+          ).present();
+        },
         400: async () => {
           (
             await this.toastCtrl.create({

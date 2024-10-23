@@ -2,12 +2,24 @@ import * as express from "express";
 const router = express.Router();
 
 import { clipHtml, clipUrl } from "../services/clip";
+import { Recipe } from "../models";
 
 router.get("/", async (req, res, next) => {
   try {
     const url = (req.query.url || "").trim();
     if (!url) {
       return res.status(400).send("Must provide a URL");
+    }
+
+    let recipe = await Recipe.findOne({
+      where: {
+        url: req.query.url,
+      },
+    });
+
+    if (recipe) {
+      res.status(406).send("URL must be unique");
+      return;
     }
 
     const results = await clipUrl(url);

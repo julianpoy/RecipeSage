@@ -550,6 +550,7 @@
   "pages.editRecipe.clipURL.message": "Enter a website URL to grab recipe contents",
   "pages.editRecipe.clipURL.placeholder": "Recipe URL",
   "pages.editRecipe.clipURL.invalidUrl": "Error: You must provide a valid URL",
+  "pages.editRecipe.clipURL.uniqueUrl": "Error: You must provide a unique URL",
   "pages.editRecipe.clipText.header": "Autofill recipe from block of text",
   "pages.editRecipe.clipText.message": "Enter a block of text with a recipe somewhere in it",
   "pages.editRecipe.clipText.placeholder": "Text that includes recipe...",
