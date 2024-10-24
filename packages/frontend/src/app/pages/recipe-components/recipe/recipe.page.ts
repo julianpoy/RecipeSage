@@ -45,6 +45,7 @@ import type {
   UserPublic,
 } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "page-recipe",
@@ -96,6 +97,7 @@ export class RecipePage {
     public capabilitiesService: CapabilitiesService,
     public translate: TranslateService,
     public trpcService: TRPCService,
+    private titleService: Title,
   ) {
     this.updateIsLoggedIn();
 
@@ -158,6 +160,7 @@ export class RecipePage {
     if (!response) return;
 
     this.recipe = response;
+    this.titleService.setTitle(`${this.recipe.title} - RecipeSage`);
 
     if (this.recipe.url && !this.recipe.url.trim().startsWith("http")) {
       this.recipe.url = "http://" + this.recipe.url.trim();

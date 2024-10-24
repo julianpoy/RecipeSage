@@ -31,6 +31,7 @@ import {
   FeatureFlagKeys,
   FeatureFlagService,
 } from "./services/feature-flag.service";
+import { Title } from "@angular/platform-browser";
 
 interface NavPage {
   id: string;
@@ -85,6 +86,7 @@ export class AppComponent {
     private userService: UserService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
+    private titleService: Title,
     public cookingToolbarService: CookingToolbarService, // Required by template
   ) {
     const languagePref =
@@ -515,6 +517,8 @@ export class AppComponent {
       this.updateNavList();
 
       this.checkBrowserCompatibility();
+
+      this.titleService.setTitle(`RecipeSage - The Personal Recipe Keeper`);
 
       try {
         const viewName = event.url;
