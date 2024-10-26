@@ -335,7 +335,7 @@
   "pages.manageLabelGroupModal.labels": "Select Labels",
   "pages.manageLabelGroupModal.labelsHint": "Selected labels will be grouped under this category. A given label can belong to at maximum 1 category at a time.",
   "pages.manageLabelGroupModal.labels.noSelectedItems": "No selected labels",
-  "pages.manageLabelGroupModal.labels.noItems": "No labels. You should probaby be creating labels, not label categories!",
+  "pages.manageLabelGroupModal.labels.noItems": "No labels. You should probably be creating labels, not label categories!",
   "pages.manageLabelGroupModal.labels.search": "Search for a label",
   "pages.manageLabelGroupModal.noLabelsSelected": "Warning!",
   "pages.manageLabelGroupModal.noLabelsSelectedMessage": "You haven't selected any labels to be grouped within this category. Label categories are not useful on their own - you may be looking to create a label instead.",
