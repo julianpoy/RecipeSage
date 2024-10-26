@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import type { CreateTRPCProxyClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
 
-describe("getRecipe", () => {
+describe("getUniqueRecipeTitle", () => {
   let user: User;
   let user2: User;
   let trpc: CreateTRPCProxyClient<AppRouter>;
