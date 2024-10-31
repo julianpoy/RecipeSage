@@ -22,6 +22,7 @@ import { getShoppingListItemGroupings } from "@recipesage/util/shared";
 
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "page-shopping-list",
@@ -66,6 +67,7 @@ export class ShoppingListPage {
     public alertCtrl: AlertController,
     public popoverCtrl: PopoverController,
     public route: ActivatedRoute,
+    private titleService: Title,
   ) {
     const shoppingListId = this.route.snapshot.paramMap.get("shoppingListId");
     if (shoppingListId) {
@@ -117,9 +119,20 @@ export class ShoppingListPage {
     );
   }
 
+  async setPageTitle(list?: ShoppingList) {
+    const title = await this.translate
+      .get("generic.labeledPageTitle", {
+        title: list?.title,
+      })
+      .toPromise();
+    this.titleService.setTitle(title);
+  }
+
   processList(list?: ShoppingList) {
     if (list) this.list = list;
     if (!this.list) return;
+
+    this.setPageTitle(list);
 
     const items = this.list.items.filter((item: any) => !item.completed);
     const completedItems = this.list.items.filter(

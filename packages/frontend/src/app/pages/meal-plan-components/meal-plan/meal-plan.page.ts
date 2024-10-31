@@ -25,6 +25,7 @@ import { MealPlanBulkPinModalPage } from "~/pages/meal-plan-components/meal-plan
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
 import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "page-meal-plan",
@@ -78,6 +79,7 @@ export class MealPlanPage {
     public modalCtrl: ModalController,
     public popoverCtrl: PopoverController,
     public alertCtrl: AlertController,
+    private titleService: Title,
   ) {
     const mealPlanId = this.route.snapshot.paramMap.get("mealPlanId");
     if (!mealPlanId) {
@@ -127,6 +129,13 @@ export class MealPlanPage {
     );
     if (!mealPlan) return;
     this.mealPlan = mealPlan;
+
+    const title = await this.translate
+      .get("generic.labeledPageTitle", {
+        title: this.mealPlan.title,
+      })
+      .toPromise();
+    this.titleService.setTitle(title);
 
     const mealPlanItems = await this.trpcService.handle(
       this.trpcService.trpc.mealPlans.getMealPlanItems.query({

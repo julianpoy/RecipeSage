@@ -119,6 +119,7 @@ export class AppComponent {
       this.messagingService.requestNotifications();
     }
 
+    this.setTitle();
     this.updateNavList();
     this.updateIsLoggedIn();
   }
@@ -242,6 +243,13 @@ export class AppComponent {
 
   updateIsLoggedIn() {
     this.isLoggedIn = this.utilService.isLoggedIn();
+  }
+
+  async setTitle() {
+    const title = await this.translate
+      .get("pages.app.browser.title")
+      .toPromise();
+    this.titleService.setTitle(title);
   }
 
   async updateNavList() {
@@ -517,8 +525,6 @@ export class AppComponent {
       this.updateNavList();
 
       this.checkBrowserCompatibility();
-
-      this.titleService.setTitle(`RecipeSage - The Personal Recipe Keeper`);
 
       try {
         const viewName = event.url;

@@ -1,6 +1,7 @@
 {
   "pages.app.oldBrowserAlert.header": "Unsupported Browser",
   "pages.app.oldBrowserAlert.message": "It looks like you're using an old browser that isn't supported. Some functionality may not work or may be broken. Please switch to a modern browser such as Firefox for full functionality.",
+  "pages.app.browser.title": "RecipeSage - The Personal Recipe Keeper",
   "pages.app.nav.welcome": "Welcome",
   "pages.app.nav.login": "Log In",
   "pages.app.nav.register": "Create an Account",
@@ -1128,5 +1129,6 @@
   "generic.okay": "Okay",
   "generic.ok": "Ok",
   "generic.ignore": "Ignore",
-  "generic.options": "Options"
+  "generic.options": "Options",
+  "generic.labeledPageTitle": "{{title}} - RecipeSage"
 }
