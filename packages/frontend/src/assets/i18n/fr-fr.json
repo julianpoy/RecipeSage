@@ -1035,5 +1035,7 @@
     "pages.shoppingListPopover.update": "Editer/Renommer la liste",
     "pages.shoppingListPopover.dangerZone.title": "Zone Dangereuse",
     "pages.recipeDetails.inInbox": "Cette recette est dans votre boite de réception, partagée avec vous par un autre utilisateur.",
-    "pages.assistant.welcome.4": "Cette limite s'applique uniquement aux messages que vous envoyez, et non aux réponses de l'IA."
+    "pages.assistant.welcome.4": "Cette limite s'applique uniquement aux messages que vous envoyez, et non aux réponses de l'IA.",
+    "pages.app.browser.title": "RecipeSage – Le gardien de recettes personnel",
+    "generic.labeledPageTitle": "{{title}} - RecipeSage"
 }
