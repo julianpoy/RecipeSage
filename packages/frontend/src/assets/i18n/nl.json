@@ -1035,5 +1035,7 @@
     "components.fontSize.option.X1_0": "Systeemvoorkeuren respecteren",
     "errors.unexpected.selfhost": "Er is een onverwachte fout opgetreden. Controleer je serverlogs en de selfhosting FAQ.",
     "components.fontSize.option.PX18": "18px (groter)",
-    "pages.assistant.welcome.4": "Deze limiet is geld alleen voor verzonden berichten, de antwoorden van de AI tellen niet mee."
+    "pages.assistant.welcome.4": "Deze limiet is geld alleen voor verzonden berichten, de antwoorden van de AI tellen niet mee.",
+    "pages.app.browser.title": "RecipeSage - De persoonlijke receptenmanager",
+    "generic.labeledPageTitle": "{{title}} - RecipeSage"
 }
