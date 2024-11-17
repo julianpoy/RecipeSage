@@ -57,10 +57,10 @@ export class ImportPepperplatePage {
 
   async alertIncorrectCredentials() {
     const header = await this.translate
-      .get("pages.importPepperplate.incorrectCredentials")
+      .get("pages.importPepperplate.incorrectCredentials.header")
       .toPromise();
     const message = await this.translate
-      .get("pages.importPepperplate.incorrectCredentials")
+      .get("pages.importPepperplate.incorrectCredentials.message")
       .toPromise();
     const okay = await this.translate.get("generic.okay").toPromise();
 

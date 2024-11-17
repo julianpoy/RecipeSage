@@ -694,6 +694,8 @@
   "pages.importPepperplate.title": "Import Recipes from Pepperplate",
   "pages.importPepperplate.description": "This will import all recipes from your Pepperplate account into your RecipeSage account. Please consider contributing if you have a large number of recipes or images.",
   "pages.importPepperplate.username": "Pepperplate Email/Username",
+  "pages.importPepperplate.incorrectCredentials.header": "Incorrect Credentials",
+  "pages.importPepperplate.incorrectCredentials.message": "It looks like the username or password you entered for Pepperplate is incorrect.",
   "pages.importPepperplate.username.helperText": "The email or username for your Pepperplate account",
   "pages.importPepperplate.password": "Pepperplate Password",
   "pages.importPepperplate.password.helperText": "The password for your Pepperplate account",
