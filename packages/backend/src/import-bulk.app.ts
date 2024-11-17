@@ -3,8 +3,7 @@ import { program } from "commander";
 import { clipUrl } from "./services/clip";
 
 import * as Models from "./models";
-import { writeImageURL } from "./services/storage/image";
-import { ObjectTypes } from "./services/storage/shared";
+import { writeImageURL, ObjectTypes } from "@recipesage/util/server/storage";
 const User = Models.User;
 const Recipe = Models.Recipe;
 const Image = Models.Image;

@@ -46,3 +46,6 @@ if (!storageProvider) throw new Error("Invalid STORAGE_TYPE");
 export const writeBuffer = storageProvider.writeBuffer;
 export const deleteObject = storageProvider.deleteObject;
 export const deleteObjects = storageProvider.deleteObjects;
+export * from "./image";
+export * from "./shared";
+export * from "./gunzipPromise";

@@ -32,13 +32,13 @@ export class LabelService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<Label[]>(
-      `labels`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<Label[]>({
+      path: `labels`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   async create(
@@ -68,13 +68,13 @@ export class LabelService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `labels/${labelId}`,
-      "PUT",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `labels/${labelId}`,
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.LabelUpdated);
 
@@ -82,13 +82,13 @@ export class LabelService {
   }
 
   async createBulk(payload: any, errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<Label>(
-      `labels`,
-      "POST",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<Label>({
+      path: `labels`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.LabelCreated);
 
@@ -103,13 +103,13 @@ export class LabelService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `labels`,
-      "DELETE",
-      undefined,
-      params,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `labels`,
+      method: "DELETE",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.LabelUpdated);
 
@@ -123,13 +123,13 @@ export class LabelService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `labels/delete-bulk`,
-      "POST",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `labels/delete-bulk`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.LabelDeleted);
 
@@ -143,13 +143,13 @@ export class LabelService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `labels/merge`,
-      "POST",
-      undefined,
-      params,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `labels/merge`,
+      method: "POST",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.LabelUpdated);
 

@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
 import { initOCRFormatRecipe } from "../ml/chatFunctions";
 import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
+import { StandardizedRecipeImportEntry } from "../db";
 
 const openAiHelper = new OpenAIHelper();
 
@@ -23,8 +23,8 @@ export const visionToRecipe = async (
   imageB64: string[],
   inputType: VisionToRecipeInputType,
 ) => {
-  const recognizedRecipes: Prisma.RecipeUncheckedCreateInput[] = [];
-  const gptFn = initOCRFormatRecipe("no-user-id", recognizedRecipes);
+  const recognizedRecipes: StandardizedRecipeImportEntry[] = [];
+  const gptFn = initOCRFormatRecipe(recognizedRecipes);
   const gptFnName = gptFn.function.name;
   if (!gptFnName)
     throw new Error("GPT function must have name for mandated tool call");

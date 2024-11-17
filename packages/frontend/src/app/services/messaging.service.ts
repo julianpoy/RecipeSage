@@ -145,13 +145,13 @@ export class MessagingService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<Message[]>(
-      `messages`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<Message[]>({
+      path: `messages`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   threads(
@@ -160,13 +160,13 @@ export class MessagingService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<MessageThread[]>(
-      `messages/threads`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<MessageThread[]>({
+      path: `messages/threads`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   create(
@@ -177,13 +177,13 @@ export class MessagingService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `messages`,
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `messages`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   async requestNotifications() {

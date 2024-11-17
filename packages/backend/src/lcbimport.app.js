@@ -16,8 +16,7 @@ import {
 
 import * as Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
-import { writeImageFile } from "./services/storage/image";
-import { ObjectTypes } from "./services/storage/shared";
+import { writeImageFile, ObjectTypes } from "@recipesage/util/server/storage";
 
 let runConfig = {
   path: process.argv[2],

@@ -2,7 +2,7 @@ import Sequelize, { Op } from "sequelize";
 
 import { Image, Recipe_Image } from "../../models/index.js";
 
-import { deleteObjects } from "../../services/storage";
+import { deleteObjects } from "@recipesage/util/server/storage";
 
 export const deleteHangingImagesForUser = async (userId, transaction) => {
   const userImages = await Image.findAll({

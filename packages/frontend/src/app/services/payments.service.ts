@@ -35,13 +35,13 @@ export class PaymentsService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<any>(
-      `payments/stripe/custom-session`,
-      "POST",
+    return this.httpService.requestWithWrapper<any>({
+      path: `payments/stripe/custom-session`,
+      method: "POST",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   async launchStripeCheckout(sessionId: string) {

@@ -1,13 +1,12 @@
-import { Prisma } from "@prisma/client";
 import { RunnableToolFunction } from "openai/lib/RunnableFunction";
+import { StandardizedRecipeImportEntry } from "../db";
 
 export type RSRunnableFunction =
   | ReturnType<typeof initOCRFormatRecipe>
   | ReturnType<typeof initBuildRecipe>;
 
 export const initBuildRecipe = (
-  userId: string,
-  result: Prisma.RecipeUncheckedCreateInput[],
+  result: StandardizedRecipeImportEntry[],
 ): RunnableToolFunction<{
   title: unknown;
   yield: unknown;
@@ -32,26 +31,28 @@ export const initBuildRecipe = (
       };
 
       try {
-        const recipe: Prisma.RecipeUncheckedCreateInput = {
-          userId,
-          fromUserId: null,
-          title: typeof args.title === "string" ? args.title : "Unnamed",
-          description: "",
-          folder: "main",
-          source: "RecipeSage Cooking Assistant",
-          url: "",
-          rating: null,
-          yield: typeof args.yield === "string" ? args.yield : "",
-          activeTime:
-            typeof args.activeTime === "string" ? args.activeTime : "",
-          totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
-          ingredients: Array.isArray(args.ingredients)
-            ? args.ingredients.map(filterIngredient).join("\n")
-            : "",
-          instructions: Array.isArray(args.instructions)
-            ? args.instructions.map(filterInstruction).join("\n")
-            : "",
-          notes: "",
+        const recipe: StandardizedRecipeImportEntry = {
+          recipe: {
+            title: typeof args.title === "string" ? args.title : "Unnamed",
+            description: "",
+            folder: "main",
+            source: "RecipeSage Cooking Assistant",
+            url: "",
+            rating: undefined,
+            yield: typeof args.yield === "string" ? args.yield : "",
+            activeTime:
+              typeof args.activeTime === "string" ? args.activeTime : "",
+            totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
+            ingredients: Array.isArray(args.ingredients)
+              ? args.ingredients.map(filterIngredient).join("\n")
+              : "",
+            instructions: Array.isArray(args.instructions)
+              ? args.instructions.map(filterInstruction).join("\n")
+              : "",
+            notes: "",
+          },
+          labels: [],
+          images: [],
         };
 
         result.push(recipe);
@@ -104,8 +105,7 @@ export const initBuildRecipe = (
 });
 
 export const initOCRFormatRecipe = (
-  userId: string,
-  result: Prisma.RecipeUncheckedCreateInput[],
+  result: StandardizedRecipeImportEntry[],
 ): RunnableToolFunction<{
   title: unknown;
   description: unknown;
@@ -125,30 +125,32 @@ export const initOCRFormatRecipe = (
       console.log("buildRecipe called with", args);
 
       try {
-        const recipe: Prisma.RecipeUncheckedCreateInput = {
-          userId,
-          fromUserId: null,
-          title: typeof args.title === "string" ? args.title : "Unnamed",
-          description:
-            typeof args.description === "string" ? args.description : "",
-          folder: "main",
-          source: "",
-          url: "",
-          rating: null,
-          yield: typeof args.yield === "string" ? args.yield : "",
-          activeTime:
-            typeof args.activeTime === "string" ? args.activeTime : "",
-          totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
-          ingredients: Array.isArray(args.ingredients)
-            ? args.ingredients.join("\n")
-            : "",
-          instructions: Array.isArray(args.instructions)
-            ? args.instructions.join("\n")
-            : "",
-          notes: typeof args.notes === "string" ? args.notes : "",
+        const entry: StandardizedRecipeImportEntry = {
+          recipe: {
+            title: typeof args.title === "string" ? args.title : "Unnamed",
+            description:
+              typeof args.description === "string" ? args.description : "",
+            folder: "main",
+            source: "",
+            url: "",
+            rating: undefined,
+            yield: typeof args.yield === "string" ? args.yield : "",
+            activeTime:
+              typeof args.activeTime === "string" ? args.activeTime : "",
+            totalTime: typeof args.totalTime === "string" ? args.totalTime : "",
+            ingredients: Array.isArray(args.ingredients)
+              ? args.ingredients.join("\n")
+              : "",
+            instructions: Array.isArray(args.instructions)
+              ? args.instructions.join("\n")
+              : "",
+            notes: typeof args.notes === "string" ? args.notes : "",
+          },
+          labels: [],
+          images: [],
         };
 
-        result.push(recipe);
+        result.push(entry);
       } catch (e) {
         console.error("failed to construct a recipe", e);
       }

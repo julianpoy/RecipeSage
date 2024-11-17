@@ -94,13 +94,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<{ count: number }>(
-      `recipes/count`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<{ count: number }>({
+      path: `recipes/count`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   fetch(
@@ -120,7 +120,13 @@ export class RecipeService {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
       totalCount: number;
-    }>(`recipes/by-page`, "GET", null, params, errorHandlers);
+    }>({
+      path: `recipes/by-page`,
+      method: "GET",
+      payload: null,
+      query: params,
+      errorHandlers,
+    });
   }
 
   search(
@@ -136,27 +142,33 @@ export class RecipeService {
   ) {
     return this.httpService.requestWithWrapper<{
       data: Recipe[];
-    }>(`recipes/search`, "GET", undefined, params, errorHandlers);
+    }>({
+      path: `recipes/search`,
+      method: "GET",
+      payload: undefined,
+      query: params,
+      errorHandlers,
+    });
   }
 
   fetchById(recipeId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<Recipe>(
-      `recipes/${recipeId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<Recipe>({
+      path: `recipes/${recipeId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getRecipeById(recipeId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<Recipe>(
-      `recipes/${recipeId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<Recipe>({
+      path: `recipes/${recipeId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   async create(
@@ -167,13 +179,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<Recipe>(
-      `recipes`,
-      "POST",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<Recipe>({
+      path: `recipes`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeCreated);
 
@@ -187,13 +199,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<Recipe>(
-      `recipes/${payload.id}`,
-      "PUT",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<Recipe>({
+      path: `recipes/${payload.id}`,
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeUpdated);
 
@@ -206,13 +218,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `recipes/delete-by-labelIds`,
-      "POST",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `recipes/delete-by-labelIds`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeDeleted);
 
@@ -225,13 +237,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `recipes/delete-bulk`,
-      "POST",
-      payload,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `recipes/delete-bulk`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeDeleted);
 
@@ -239,13 +251,13 @@ export class RecipeService {
   }
 
   async delete(recipeId: string, errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `recipes/${recipeId}`,
-      "DELETE",
-      undefined,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `recipes/${recipeId}`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeDeleted);
 
@@ -253,13 +265,13 @@ export class RecipeService {
   }
 
   async deleteAll(errorHandlers?: ErrorHandlers) {
-    const response = await this.httpService.requestWithWrapper<void>(
-      `recipes/all`,
-      "DELETE",
-      undefined,
-      undefined,
+    const response = await this.httpService.requestWithWrapper<void>({
+      path: `recipes/all`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
 
     this.events.publish(EventName.RecipeDeleted);
 
@@ -272,13 +284,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<any>(
-      `clip`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<any>({
+      path: `clip`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   print(recipe: Recipe, template: { name: string; modifiers: string }) {
@@ -303,13 +315,13 @@ export class RecipeService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<Recipe>(
-      `scrape/pepperplate`,
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<Recipe>({
+      path: `scrape/pepperplate`,
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   importFDXZ(
@@ -322,13 +334,13 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append("fdxzdb", fdxzFile);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "import/fdxz",
-      "POST",
-      formData,
-      payload,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "import/fdxz",
+      method: "POST",
+      payload: formData,
+      query: payload,
       errorHandlers,
-    );
+    });
   }
 
   importLCB(
@@ -343,65 +355,65 @@ export class RecipeService {
     const formData: FormData = new FormData();
     formData.append("lcbdb", lcbFile);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "import/livingcookbook",
-      "POST",
-      formData,
-      payload,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "import/livingcookbook",
+      method: "POST",
+      payload: formData,
+      query: payload,
       errorHandlers,
-    );
+    });
   }
 
   importPaprika(paprikaFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("paprikadb", paprikaFile);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "data/import/paprika",
-      "POST",
-      formData,
-      undefined,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "data/import/paprika",
+      method: "POST",
+      payload: formData,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   importJSONLD(jsonLDFile: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("jsonLD", jsonLDFile);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "data/import/json-ld",
-      "POST",
-      formData,
-      undefined,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "data/import/json-ld",
+      method: "POST",
+      payload: formData,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   importCookmate(file: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("cookmatedb", file);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "data/import/cookmate",
-      "POST",
-      formData,
-      undefined,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "data/import/cookmate",
+      method: "POST",
+      payload: formData,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   importRecipeKeeper(file: Blob, errorHandlers?: ErrorHandlers) {
     const formData: FormData = new FormData();
     formData.append("file", file);
 
-    return this.httpService.multipartRequestWithWrapper<void>(
-      "data/import/recipe-keeper",
-      "POST",
-      formData,
-      undefined,
+    return this.httpService.multipartRequestWithWrapper<void>({
+      path: "data/import/recipe-keeper",
+      method: "POST",
+      payload: formData,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   parseIngredients(

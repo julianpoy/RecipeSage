@@ -59,6 +59,8 @@ import { updateShoppingList } from "./procedures/shoppingLists/updateShoppingLis
 import { updateShoppingListItem } from "./procedures/shoppingLists/updateShoppingListItem";
 import { updateShoppingListItems } from "./procedures/shoppingLists/updateShoppingListItems";
 import { getUserProfilesById } from "./procedures/users/getUserProfilesById";
+import { getJobs } from "./procedures/jobs/getJobs";
+import { getJob } from "./procedures/jobs/getJob";
 
 const appRouter = router({
   labelGroups: router({
@@ -131,6 +133,10 @@ const appRouter = router({
     getRecipeFromOCR,
     getRecipeFromPDF,
     getRecipeFromText,
+  }),
+  jobs: router({
+    getJobs,
+    getJob,
   }),
 
   getRecipes,

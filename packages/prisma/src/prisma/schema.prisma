@@ -384,10 +384,35 @@ model User {
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
   profileImages             UserProfileImage[]
+  Job                       Job[]
 
   @@map("Users")
 }
 
 model SequelizeMeta {
   name String @id @db.VarChar(255)
+}
+
+model Job {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  type       JobType
+  status     JobStatus
+  progress   Int
+  resultCode Int?
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime  @updatedAt @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum JobType {
+  IMPORT
+}
+
+enum JobStatus {
+  CREATE
+  RUN
+  FAIL
+  SUCCESS
 }

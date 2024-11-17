@@ -1,4 +1,5 @@
 export * from "./assistantMessageSummary";
+export * from "./jobSummary";
 export * from "./labelGroupSummary";
 export * from "./labelSummary";
 export * from "./mealPlanSummary";

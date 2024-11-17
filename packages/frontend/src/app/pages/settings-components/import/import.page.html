@@ -9,44 +9,82 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none">
-    <ion-label class="ion-text-center ion-text-wrap">
-      <br /><br />
-      <p>{{ 'pages.import.description1' | translate }}</p>
-      <br />
-      <p>
-        {{ 'pages.import.description2' | translate }}<br />
-        {{ 'pages.import.description3' | translate }}
-      </p>
-    </ion-label>
-  </ion-item>
+  <div *ngIf="importJobs.length">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        {{ 'pages.import.jobs' | translate }}
+        <p>{{ 'pages.import.jobs.subtitle' | translate }}<br /></p>
+      </ion-label>
+    </ion-item>
+    <div *ngFor="let importJob of importJobs">
+      <ion-item>
+        <ion-icon name="file-tray-full" slot="start" />
+        <ion-label>
+          {{ 'pages.import.jobs.item' | translate:{ created:
+          formatItemCreationDate(importJob.createdAt) } }}
+          <p>
+            <span *ngIf="importJob.status === 'CREATE'"
+              >{{ 'pages.import.status.create' | translate }}</span
+            >
+            <span *ngIf="importJob.status === 'RUN'"
+              >{{ 'pages.import.status.run' | translate }}</span
+            >
+            <span *ngIf="importJob.status === 'FAIL'">
+              {{ 'pages.import.status.fail' | translate }} {{
+              getJobFailureI18n(importJob) | translate }}
+            </span>
+            <span *ngIf="importJob.status === 'SUCCESS'"
+              >{{ 'pages.import.status.success' | translate }}</span
+            >
+            <ion-progress-bar
+              *ngIf="importJob.status === 'RUN'"
+              type="determinate"
+              [value]="(getRunningJob()?.progress || 0) * 0.01"
+            ></ion-progress-bar>
+          </p>
+        </ion-label>
+      </ion-item>
+    </div>
+  </div>
 
-  <br />
+  <div *ngIf="!getRunningJob()">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <br />
+        <p>{{ 'pages.import.description1' | translate }}</p>
+        <br />
+        <p>
+          {{ 'pages.import.description2' | translate }}<br />
+          {{ 'pages.import.description3' | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
 
-  <ion-list>
-    <ion-item (click)="goToImportJSONLD()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.jsonld' | translate }} </ion-label>
-    </ion-item>
-    <ion-item (click)="goToImportPepperplate()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.pepperplate' | translate }} </ion-label>
-    </ion-item>
-    <ion-item (click)="goToImportLC()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.livingCookbook' | translate }} </ion-label>
-    </ion-item>
-    <ion-item (click)="goToImportPaprika()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.paprika' | translate }} </ion-label>
-    </ion-item>
-    <ion-item (click)="goToImportCookmate()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.cookmate' | translate }} </ion-label>
-    </ion-item>
-    <ion-item (click)="goToImportRecipeKeeper()" class="cursor-pointer">
-      <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      <ion-label> {{ 'pages.import.recipeKeeper' | translate }} </ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-list>
+      <ion-item (click)="startImport('jsonld')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.jsonld' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('pepperplate')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.pepperplate' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('livingcookbook')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.livingCookbook' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('paprika')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.paprika' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('cookmate')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.cookmate' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('recipekeeper')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.recipeKeeper' | translate }} </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

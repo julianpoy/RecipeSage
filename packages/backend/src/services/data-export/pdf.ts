@@ -9,7 +9,7 @@ import {
   parseNotes,
 } from "@recipesage/util/shared";
 import * as sanitizeHtml from "sanitize-html";
-import { fetchURL } from "../fetch";
+import { fetchURL } from "@recipesage/util/server/general";
 import * as fs from "fs";
 import { Image, Recipe } from "@prisma/client";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";

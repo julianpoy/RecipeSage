@@ -11,7 +11,7 @@ import * as RecipeClipper from "@julianpoy/recipe-clipper";
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 import * as sanitizeHtml from "sanitize-html";
-import { fetchURL } from "../services/fetch";
+import { fetchURL } from "@recipesage/util/server/general";
 
 const disconnectPuppeteer = (browser) => {
   try {

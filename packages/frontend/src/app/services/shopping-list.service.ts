@@ -58,23 +58,23 @@ export class ShoppingListService {
   ) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<ShoppingLists>(
-      `shoppingLists`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<ShoppingLists>({
+      path: `shoppingLists`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   fetchById(listId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<ShoppingList>(
-      `shoppingLists/${listId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<ShoppingList>({
+      path: `shoppingLists/${listId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   create(
@@ -84,13 +84,13 @@ export class ShoppingListService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<ShoppingList>(
-      `shoppingLists`,
-      "POST",
+    return this.httpService.requestWithWrapper<ShoppingList>({
+      path: `shoppingLists`,
+      method: "POST",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   addItems(
@@ -104,13 +104,13 @@ export class ShoppingListService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `shoppingLists/${shoppingListId}`,
-      "POST",
+    return this.httpService.requestWithWrapper<void>({
+      path: `shoppingLists/${shoppingListId}`,
+      method: "POST",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   update(
@@ -120,13 +120,13 @@ export class ShoppingListService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `shoppingLists/${shoppingListId}`,
-      "PUT",
+    return this.httpService.requestWithWrapper<void>({
+      path: `shoppingLists/${shoppingListId}`,
+      method: "PUT",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   updateItems(
@@ -140,13 +140,13 @@ export class ShoppingListService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<{ reference: string }>(
-      `shoppingLists/${shoppingListId}/items`,
-      "PUT",
+    return this.httpService.requestWithWrapper<{ reference: string }>({
+      path: `shoppingLists/${shoppingListId}/items`,
+      method: "PUT",
       payload,
       query,
       errorHandlers,
-    );
+    });
   }
 
   deleteItems(
@@ -156,22 +156,22 @@ export class ShoppingListService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `shoppingLists/${shoppingListId}/items`,
-      "DELETE",
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `shoppingLists/${shoppingListId}/items`,
+      method: "DELETE",
+      payload: undefined,
       query,
       errorHandlers,
-    );
+    });
   }
 
   delete(shoppingListId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      `shoppingLists/${shoppingListId}`,
-      "DELETE",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `shoppingLists/${shoppingListId}`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 }

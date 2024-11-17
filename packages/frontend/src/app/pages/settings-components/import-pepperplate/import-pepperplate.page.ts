@@ -1,157 +1,135 @@
 import { Component } from "@angular/core";
-import {
-  NavController,
-  ToastController,
-  AlertController,
-} from "@ionic/angular";
+
+import { RouteMap, UtilService } from "~/services/util.service";
+import { ImportService } from "../../../services/import.service";
+import type { JobSummary } from "@recipesage/prisma";
+import { getJobFailureI18n } from "../../../utils/getJobFailureI18n";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RecipeService } from "~/services/recipe.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap } from "~/services/util.service";
+const MAX_FILE_SIZE_MB = 1000;
 
 @Component({
   selector: "page-import-pepperplate",
   templateUrl: "import-pepperplate.page.html",
   styleUrls: ["import-pepperplate.page.scss"],
-  providers: [RecipeService],
 })
 export class ImportPepperplatePage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  username = "";
-  password = "";
-
-  errorMessage = "";
-
-  loading = false;
+  username: string = "";
+  password: string = "";
+  file?: File;
+  progress?: number;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public loadingService: LoadingService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public utilService: UtilService,
-    public recipeService: RecipeService,
+    private importService: ImportService,
+    private utilService: UtilService,
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
+    private navCtrl: NavController,
   ) {}
 
-  async scrapePepperplate() {
-    if (this.username.trim().length === 0) {
-      const message = await this.translate
-        .get("pages.importPepperplate.usernameRequired")
-        .toPromise();
-      this.errorMessage = message;
+  setFile(event: any) {
+    const files = (event.srcElement || event.target).files;
+    if (!files) {
       return;
     }
 
-    if (this.password.trim().length === 0) {
-      const message = await this.translate
-        .get("pages.importPepperplate.passwordRequired")
-        .toPromise();
-      this.errorMessage = message;
-      return;
+    this.file = files[0];
+  }
+
+  filePicker() {
+    document.getElementById("filePicker")?.click();
+  }
+
+  isFileTooLarge() {
+    if (this.file && this.file.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
+      return true;
     }
+    return false;
+  }
 
-    const loading = this.loadingService.start();
+  showFileTypeWarning() {
+    if (!this.file || !this.file.name) return false;
+    return !this.file.name.toLowerCase().endsWith(".zip");
+  }
 
-    this.loading = true;
+  async alertIncorrectCredentials() {
+    const header = await this.translate
+      .get("pages.importPepperplate.incorrectCredentials")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.importPepperplate.incorrectCredentials")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
-    const response = await this.recipeService.scrapePepperplate(
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async submit() {
+    if (!this.file) return;
+
+    const response = await this.importService.importPepperplate(
       {
         username: this.username,
         password: this.password,
       },
       {
-        406: async () => {
-          const header = await this.translate
-            .get("pages.importPepperplate.invalid.header")
-            .toPromise();
-          const message = await this.translate
-            .get("pages.importPepperplate.invalid.message")
-            .toPromise();
-          const okay = await this.translate.get("generic.okay").toPromise();
-
-          (
-            await this.alertCtrl.create({
-              header,
-              message,
-              buttons: [
-                {
-                  text: okay,
-                },
-              ],
-            })
-          ).present();
-        },
-        504: () => {
-          setTimeout(async () => {
-            const header = await this.translate
-              .get("pages.importPepperplate.timeout.header")
-              .toPromise();
-            const message = await this.translate
-              .get("pages.importPepperplate.timeout.message")
-              .toPromise();
-            const okay = await this.translate.get("generic.okay").toPromise();
-
-            (
-              await this.alertCtrl.create({
-                header,
-                message,
-                buttons: [
-                  {
-                    text: okay,
-                    handler: () => {},
-                  },
-                ],
-              })
-            ).present();
-          }, 20000);
-        },
-        "*": () => {
-          setTimeout(async () => {
-            const message = await this.translate
-              .get("pages.importPepperplate.error.message")
-              .toPromise();
-            const okay = await this.translate.get("generic.okay").toPromise();
-
-            (
-              await this.toastCtrl.create({
-                message,
-                buttons: [
-                  {
-                    text: okay,
-                    role: "cancel",
-                  },
-                ],
-              })
-            ).present();
-          }, 10000);
-        },
+        406: () => this.alertIncorrectCredentials(),
+      },
+      (event) => {
+        this.progress = event.progress;
       },
     );
-    this.loading = false;
-    loading.dismiss();
+    this.progress = undefined;
 
     if (!response.success) return;
 
-    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
-
-    const message = await this.translate
-      .get("pages.importPepperplate.success")
+    const header = await this.translate
+      .get("pages.import.jobCreated.header")
       .toPromise();
-    const close = await this.translate.get("generic.close").toPromise();
+    const message = await this.translate
+      .get("pages.import.jobCreated.message")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
-    (
-      await this.toastCtrl.create({
-        message,
-        buttons: [
-          {
-            text: close,
-            role: "cancel",
-          },
-        ],
-      })
-    ).present();
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
+
+    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+      replaceUrl: true,
+    });
+  }
+
+  getJobFailureI18n(job: JobSummary) {
+    return getJobFailureI18n(job);
+  }
+
+  formatItemCreationDate(plainTextDate: string | Date) {
+    return this.utilService.formatDate(plainTextDate, {
+      now: true,
+      times: true,
+    });
   }
 }

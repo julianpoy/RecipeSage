@@ -9,9 +9,12 @@ import { Image } from "../models/index.js";
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import { writeImageBuffer, writeImageURL } from "../services/storage/image";
+import {
+  writeImageBuffer,
+  writeImageURL,
+  ObjectTypes,
+} from "@recipesage/util/server/storage";
 import * as SubscriptionsService from "../services/subscriptions.js";
-import { ObjectTypes } from "../services/storage/shared.ts";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
