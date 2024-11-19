@@ -16,26 +16,30 @@
         <p>{{ 'pages.import.jobs.subtitle' | translate }}<br /></p>
       </ion-label>
     </ion-item>
-    <div *ngFor="let importJob of importJobs">
+    <div *ngFor="let importJob of importJobs.slice(0, showJobs)">
       <ion-item>
         <ion-icon name="file-tray-full" slot="start" />
         <ion-label>
-          {{ 'pages.import.jobs.item' | translate:{ created:
-          formatItemCreationDate(importJob.createdAt) } }}
+          {{ getJobTitleI18n(importJob) | translate }}
           <p>
-            <span *ngIf="importJob.status === 'CREATE'"
-              >{{ 'pages.import.status.create' | translate }}</span
-            >
-            <span *ngIf="importJob.status === 'RUN'"
-              >{{ 'pages.import.status.run' | translate }}</span
-            >
-            <span *ngIf="importJob.status === 'FAIL'">
+            <span>
+              {{ 'pages.import.jobs.job.created' | translate:{
+              timestamp:formatItemCreationDate(importJob.createdAt) } }}
+            </span>
+            <br />
+            <span *ngIf="importJob.status === 'CREATE'" class="job-create">
+              {{ 'pages.import.status.create' | translate }}
+            </span>
+            <span *ngIf="importJob.status === 'RUN'" class="job-run">
+              {{ 'pages.import.status.run' | translate }}
+            </span>
+            <span *ngIf="importJob.status === 'FAIL'" class="job-fail">
               {{ 'pages.import.status.fail' | translate }} {{
               getJobFailureI18n(importJob) | translate }}
             </span>
-            <span *ngIf="importJob.status === 'SUCCESS'"
-              >{{ 'pages.import.status.success' | translate }}</span
-            >
+            <span *ngIf="importJob.status === 'SUCCESS'" class="job-success">
+              {{ 'pages.import.status.success' | translate }}
+            </span>
             <ion-progress-bar
               *ngIf="importJob.status === 'RUN'"
               type="determinate"
@@ -45,6 +49,11 @@
         </ion-label>
       </ion-item>
     </div>
+    <ion-item *ngIf="importJobs.length > showJobs" lines="none">
+      <ion-button (click)="showMoreJobs()" fill="clear">
+        {{ 'generic.showMore' | translate }}
+      </ion-button>
+    </ion-item>
   </div>
 
   <div *ngIf="!getRunningJob()">

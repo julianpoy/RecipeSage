@@ -20,6 +20,12 @@ export class ImportLivingcookbookPage {
   file?: File;
   progress?: number;
 
+  options = {
+    excludeImages: false,
+    includeStockRecipes: false,
+    includeTechniques: false,
+  };
+
   constructor(
     private importService: ImportService,
     private utilService: UtilService,
@@ -49,23 +55,49 @@ export class ImportLivingcookbookPage {
   }
 
   showFileTypeWarning() {
-    if (!this.file || !this.file.name) return false;
-    return !this.file.name.toLowerCase().endsWith(".mcb");
+    return this.file && !this.isLCB() && !this.isFDX() && !this.isFDXZ();
+  }
+
+  isLCB() {
+    return !!this.file?.name.toLowerCase().endsWith(".lcb");
+  }
+
+  isFDX() {
+    return !!this.file?.name.toLowerCase().endsWith(".fdx");
+  }
+
+  isFDXZ() {
+    return !!this.file?.name.toLowerCase().endsWith(".fdxz");
   }
 
   async submit() {
     if (!this.file) return;
 
-    const response = await this.importService.importLivingcookbook(
-      this.file,
-      undefined,
-      (event) => {
-        this.progress = event.progress;
-      },
-    );
-    this.progress = undefined;
+    if (this.isFDXZ() || this.isFDX()) {
+      const response = await this.importService.importFdxz(
+        this.file,
+        this.options,
+        undefined,
+        (event) => {
+          this.progress = event.progress;
+        },
+      );
+      this.progress = undefined;
 
-    if (!response.success) return;
+      if (!response.success) return;
+    } else {
+      const response = await this.importService.importLivingcookbook(
+        this.file,
+        this.options,
+        undefined,
+        (event) => {
+          this.progress = event.progress;
+        },
+      );
+      this.progress = undefined;
+
+      if (!response.success) return;
+    }
 
     const header = await this.translate
       .get("pages.import.jobCreated.header")
@@ -85,12 +117,11 @@ export class ImportLivingcookbookPage {
       ],
     });
 
-    await alert.present();
-    await alert.onDidDismiss();
-
-    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
       replaceUrl: true,
     });
+
+    await alert.present();
   }
 
   getJobFailureI18n(job: JobSummary) {

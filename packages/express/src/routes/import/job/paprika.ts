@@ -14,7 +14,7 @@ import {
   importStandardizedRecipes,
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import * as path from "path";
@@ -49,6 +49,9 @@ export const paprikaHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "paprika",
+        } satisfies JobMeta,
       },
     });
 
@@ -185,7 +188,11 @@ export const paprikaHandler = defineHandler(
         });
 
         if (!isBadFormatError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
           console.error(e);
         }
       })

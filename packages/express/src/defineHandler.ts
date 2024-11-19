@@ -13,6 +13,26 @@ import {
 } from "@recipesage/util/server/general";
 import { Session } from "@prisma/client";
 
+const handleServerError = (e: unknown, res: Response) => {
+  if (e instanceof ServerError) {
+    logError(e);
+
+    if (process.env.NODE_ENV !== "production") {
+      res.status(e.status).send(e);
+    } else {
+      res.status(e.status).send(e.name);
+    }
+  } else {
+    logError(e);
+
+    if (process.env.NODE_ENV !== "production") {
+      res.status(500).send(e);
+    } else {
+      res.status(500).send("Internal server error");
+    }
+  }
+};
+
 export enum AuthenticationEnforcement {
   Required = "required",
   Optional = "optional",
@@ -61,12 +81,11 @@ export const defineHandler = <
   ) => Promise<HandlerResult | void>,
 ) => {
   return [
-    ...(opts.beforeHandlers || []),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         try {
           opts.schema.params?.parse(req.params);
-          opts.schema.query?.parse(req.params);
+          opts.schema.query?.parse(req.query);
           opts.schema.body?.parse(req.body);
         } catch (e) {
           if (e instanceof ZodError) {
@@ -104,6 +123,14 @@ export const defineHandler = <
 
         res.locals.session = session;
 
+        next();
+      } catch (e) {
+        handleServerError(e, res);
+      }
+    },
+    ...(opts.beforeHandlers || []),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await handler(req as any, res as any, next);
 
@@ -111,23 +138,7 @@ export const defineHandler = <
           res.status(result.statusCode).send(result.data);
         }
       } catch (e) {
-        if (e instanceof ServerError) {
-          logError(e);
-
-          if (process.env.NODE_ENV !== "production") {
-            res.status(e.status).send(e);
-          } else {
-            res.status(e.status).send(e.name);
-          }
-        } else {
-          logError(e);
-
-          if (process.env.NODE_ENV !== "production") {
-            res.status(500).send(e);
-          } else {
-            res.status(500).send("Internal server error");
-          }
-        }
+        handleServerError(e, res);
       }
     },
     ...(opts.afterHandlers || []),

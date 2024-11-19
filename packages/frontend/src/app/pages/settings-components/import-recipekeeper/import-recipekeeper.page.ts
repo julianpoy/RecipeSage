@@ -56,7 +56,7 @@ export class ImportRecipeKeeperPage {
   async submit() {
     if (!this.file) return;
 
-    const response = await this.importService.importLivingcookbook(
+    const response = await this.importService.importRecipekeeper(
       this.file,
       undefined,
       (event) => {
@@ -85,12 +85,11 @@ export class ImportRecipeKeeperPage {
       ],
     });
 
-    await alert.present();
-    await alert.onDidDismiss();
-
-    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
       replaceUrl: true,
     });
+
+    await alert.present();
   }
 
   getJobFailureI18n(job: JobSummary) {

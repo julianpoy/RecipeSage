@@ -50,7 +50,7 @@ export class ImportJSONLDPage {
 
   showFileTypeWarning() {
     if (!this.file || !this.file.name) return false;
-    return !this.file.name.toLowerCase().endsWith(".mcb");
+    return !this.file.name.toLowerCase().endsWith(".json");
   }
 
   async submit() {
@@ -85,12 +85,11 @@ export class ImportJSONLDPage {
       ],
     });
 
-    await alert.present();
-    await alert.onDidDismiss();
-
-    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
       replaceUrl: true,
     });
+
+    await alert.present();
   }
 
   getJobFailureI18n(job: JobSummary) {

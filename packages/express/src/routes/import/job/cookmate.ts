@@ -14,7 +14,7 @@ import {
   importStandardizedRecipes,
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
@@ -48,6 +48,9 @@ export const cookmateHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "cookmate",
+        } satisfies JobMeta,
       },
     });
 
@@ -158,8 +161,6 @@ export const cookmateHandler = defineHandler(
         },
       });
 
-      await deletePathsSilent(cleanupPaths);
-
       const createdRecipeIds = await importStandardizedRecipes(
         res.locals.session.userId,
         standardizedRecipeImportInput,
@@ -216,7 +217,12 @@ export const cookmateHandler = defineHandler(
         });
 
         if (!isBadFormatError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
         }
       })
       .finally(async () => {

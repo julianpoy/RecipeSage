@@ -1,4 +1,4 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, prismaJobSummaryToJobSummary } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { jobSummary } from "@recipesage/prisma";
 import { validateTrpcSession } from "@recipesage/util/server/general";
@@ -29,5 +29,5 @@ export const getJob = publicProcedure
       });
     }
 
-    return job;
+    return prismaJobSummaryToJobSummary(job);
   });

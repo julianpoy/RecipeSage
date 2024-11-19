@@ -6,6 +6,7 @@ import { ImportService } from "../../../services/import.service";
 import { TRPCService } from "../../../services/trpc.service";
 import type { JobSummary } from "@recipesage/prisma";
 import { getJobFailureI18n } from "../../../utils/getJobFailureI18n";
+import { TranslateService } from "@ngx-translate/core";
 
 const JOB_POLL_INTERVAL_MS = 7500;
 
@@ -27,11 +28,17 @@ export class ImportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   jobPollInterval?: NodeJS.Timeout;
 
+  /**
+   * We show this many historical jobs
+   */
+  showJobs = 5;
+
   constructor(
     private navCtrl: NavController,
     private importService: ImportService,
     private trpcService: TRPCService,
     private utilService: UtilService,
+    private translate: TranslateService,
   ) {}
 
   ionViewWillEnter() {
@@ -56,9 +63,13 @@ export class ImportPage {
       this.trpcService.trpc.jobs.getJobs.query(),
     );
     if (response) {
-      this.importJobs = response.filter((job) => {
-        return job.type === "IMPORT";
-      });
+      this.importJobs = response
+        .sort((a, b) => {
+          return b.createdAt.getTime() - a.createdAt.getTime();
+        })
+        .filter((job) => {
+          return job.type === "IMPORT";
+        });
     }
   }
 
@@ -71,6 +82,10 @@ export class ImportPage {
       now: true,
       times: true,
     });
+  }
+
+  showMoreJobs() {
+    this.showJobs += 5;
   }
 
   startImport(format: ImportFormat) {
@@ -106,5 +121,35 @@ export class ImportPage {
 
   getJobFailureI18n(job: JobSummary) {
     return getJobFailureI18n(job);
+  }
+
+  getJobTitleI18n(job: JobSummary) {
+    const importType = job.meta?.importType;
+    if (!importType) return "pages.import.jobs.job";
+
+    switch (importType) {
+      case "fdxz":
+      case "lcb": {
+        return "pages.import.livingCookbook";
+      }
+      case "pepperplate": {
+        return "pages.import.pepperplate";
+      }
+      case "paprika": {
+        return "pages.import.paprika";
+      }
+      case "jsonld": {
+        return "pages.import.jsonld";
+      }
+      case "recipekeeper": {
+        return "pages.import.recipeKeeper";
+      }
+      case "cookmate": {
+        return "pages.import.cookmate";
+      }
+      case "textFiles": {
+        return "pages.import.textFiles";
+      }
+    }
   }
 }

@@ -12,7 +12,7 @@ import {
   importStandardizedRecipes,
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import * as jsdom from "jsdom";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
@@ -46,6 +46,9 @@ export const recipekeeperHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "recipekeeper",
+        } satisfies JobMeta,
       },
     });
 
@@ -232,7 +235,12 @@ export const recipekeeperHandler = defineHandler(
         });
 
         if (!isBadFormatError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
         }
       })
       .finally(async () => {

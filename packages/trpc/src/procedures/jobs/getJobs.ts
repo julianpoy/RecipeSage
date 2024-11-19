@@ -1,4 +1,4 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, prismaJobSummaryToJobSummary } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { jobSummary } from "@recipesage/prisma";
 import { validateTrpcSession } from "@recipesage/util/server/general";
@@ -14,5 +14,5 @@ export const getJobs = publicProcedure.query(async ({ ctx }) => {
     ...jobSummary,
   });
 
-  return jobs;
+  return jobs.map((job) => prismaJobSummaryToJobSummary(job));
 });

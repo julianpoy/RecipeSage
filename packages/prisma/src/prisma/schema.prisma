@@ -400,6 +400,7 @@ model Job {
   status     JobStatus
   progress   Int
   resultCode Int?
+  meta       Json?
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime  @updatedAt @db.Timestamptz(6)
 

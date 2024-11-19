@@ -17,7 +17,7 @@ import {
   textToRecipe,
   TextToRecipeInputType,
 } from "@recipesage/util/server/ml";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { deletePathsSilent } from "@recipesage/util/server/general";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
@@ -50,6 +50,9 @@ export const textfilesHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "textFiles",
+        } satisfies JobMeta,
       },
     });
 
@@ -173,7 +176,12 @@ export const textfilesHandler = defineHandler(
         });
 
         if (!isBadZipError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
         }
       })
       .finally(async () => {

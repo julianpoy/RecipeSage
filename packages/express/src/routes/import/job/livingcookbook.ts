@@ -6,7 +6,7 @@ import {
 import * as multer from "multer";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import {
   Capabilities,
@@ -18,10 +18,10 @@ import { deletePathsSilent } from "@recipesage/util/server/general";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
-  body: z.object({
-    excludeImages: z.boolean(),
-    includeStockRecipes: z.boolean(),
-    includeTechniques: z.boolean(),
+  query: z.object({
+    excludeImages: z.union([z.literal("true"), z.literal("false")]),
+    includeStockRecipes: z.union([z.literal("true"), z.literal("false")]),
+    includeTechniques: z.union([z.literal("true"), z.literal("false")]),
   }),
 };
 
@@ -51,6 +51,9 @@ export const livingcookbookHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "lcb",
+        } satisfies JobMeta,
       },
     });
 
@@ -64,10 +67,12 @@ export const livingcookbookHandler = defineHandler(
       );
 
       const optionalFlags = [];
-      if (req.body.excludeImages) optionalFlags.push("--excludeImages");
-      if (req.body.includeStockRecipes)
+      if (req.query.excludeImages === "true")
+        optionalFlags.push("--excludeImages");
+      if (req.query.includeStockRecipes === "true")
         optionalFlags.push("--includeStockRecipes");
-      if (req.body.includeTechniques) optionalFlags.push("--includeTechniques");
+      if (req.query.includeTechniques === "true")
+        optionalFlags.push("--includeTechniques");
       if (canImportMultipleImages) optionalFlags.push("--multipleImages");
 
       const lcbImportJob = spawn("node_modules/ts-node/dist/bin.js", [
@@ -156,7 +161,12 @@ export const livingcookbookHandler = defineHandler(
         });
 
         if (!isBadFormatError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
         }
       })
       .finally(async () => {

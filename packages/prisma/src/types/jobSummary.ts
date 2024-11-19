@@ -8,9 +8,33 @@ export const jobSummary = Prisma.validator<Prisma.JobArgs>()({
     userId: true,
     resultCode: true,
     progress: true,
+    meta: true,
     createdAt: true,
     updatedAt: true,
   },
 });
 
-export type JobSummary = Prisma.JobGetPayload<typeof jobSummary>;
+export interface JobMeta {
+  importType?:
+    | "lcb"
+    | "fdxz"
+    | "textFiles"
+    | "pepperplate"
+    | "recipekeeper"
+    | "paprika"
+    | "cookmate"
+    | "jsonld";
+}
+
+export type JobSummary = Omit<
+  Prisma.JobGetPayload<typeof jobSummary>,
+  "meta"
+> & {
+  meta?: JobMeta;
+};
+
+export const prismaJobSummaryToJobSummary = (
+  _jobSummary: Prisma.JobGetPayload<typeof jobSummary>,
+) => {
+  return _jobSummary as JobSummary;
+};

@@ -63,6 +63,11 @@ export class ImportService {
 
   importFdxz(
     file: Blob,
+    options: {
+      excludeImages: boolean;
+      includeStockRecipes: boolean;
+      includeTechniques: boolean;
+    },
     errorHandlers?: ErrorHandlers,
     onUploadProgress?: UploadProgressHandler,
   ) {
@@ -75,7 +80,7 @@ export class ImportService {
       path: "import/job/fdxz",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: options,
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -85,6 +90,9 @@ export class ImportService {
 
   importLivingcookbook(
     file: Blob,
+    options: {
+      excludeImages: boolean;
+    },
     errorHandlers?: ErrorHandlers,
     onUploadProgress?: UploadProgressHandler,
   ) {
@@ -97,7 +105,7 @@ export class ImportService {
       path: "import/job/livingcookbook",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: options,
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -133,9 +141,8 @@ export class ImportService {
       password: string;
     },
     errorHandlers?: ErrorHandlers,
-    onUploadProgress?: UploadProgressHandler,
   ) {
-    return this.httpService.multipartRequestWithWrapper<{
+    return this.httpService.requestWithWrapper<{
       jobId: string;
     }>({
       path: "import/job/pepperplate",
@@ -143,9 +150,6 @@ export class ImportService {
       payload,
       query: undefined,
       errorHandlers,
-      listeners: {
-        onUploadProgress,
-      },
     });
   }
 

@@ -7,7 +7,7 @@ import * as multer from "multer";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
 import { importStandardizedRecipes } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { z } from "zod";
 import {
@@ -47,12 +47,15 @@ export const jsonldHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "jsonld",
+        } satisfies JobMeta,
       },
     });
 
     // We complete this work outside of the scope of the request
     const start = async () => {
-      const input = file as JsonLD | JsonLD[];
+      const input = JSON.parse(file) as JsonLD | JsonLD[];
 
       let jsonLD: JsonLD[];
       if (Array.isArray(input)) jsonLD = input;
@@ -133,7 +136,12 @@ export const jsonldHandler = defineHandler(
       });
 
       if (!isBadFormatError) {
-        Sentry.captureException(e);
+        Sentry.captureException(e, {
+          extra: {
+            jobId: job.id,
+          },
+        });
+        console.error(e);
       }
     });
 

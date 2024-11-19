@@ -6,7 +6,7 @@ import {
 import * as multer from "multer";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import {
   Capabilities,
@@ -18,8 +18,8 @@ import { deletePathsSilent } from "@recipesage/util/server/general";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
-  body: z.object({
-    excludeImages: z.boolean(),
+  query: z.object({
+    excludeImages: z.union([z.literal("true"), z.literal("false")]),
   }),
 };
 
@@ -49,6 +49,9 @@ export const fdxzHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "fdxz",
+        } satisfies JobMeta,
       },
     });
 
@@ -62,7 +65,8 @@ export const fdxzHandler = defineHandler(
       );
 
       const optionalFlags = [];
-      if (req.body.excludeImages) optionalFlags.push("--excludeImages");
+      if (req.query.excludeImages === "true")
+        optionalFlags.push("--excludeImages");
       if (canImportMultipleImages) optionalFlags.push("--multipleImages");
 
       const lcbImportJob = spawn("node_modules/ts-node/dist/bin.js", [
@@ -151,7 +155,12 @@ export const fdxzHandler = defineHandler(
         });
 
         if (!isBadFormatError) {
-          Sentry.captureException(e);
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
         }
       })
       .finally(async () => {

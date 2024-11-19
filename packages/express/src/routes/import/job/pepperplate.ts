@@ -11,7 +11,7 @@ import {
   importStandardizedRecipes,
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
-import { prisma } from "@recipesage/prisma";
+import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { z } from "zod";
@@ -91,6 +91,9 @@ export const pepperplateHandler = defineHandler(
         type: JobType.IMPORT,
         status: JobStatus.RUN,
         progress: 1,
+        meta: {
+          importType: "pepperplate",
+        } satisfies JobMeta,
       },
     });
 
@@ -318,7 +321,12 @@ export const pepperplateHandler = defineHandler(
       });
 
       if (!isBadCredentialsError) {
-        Sentry.captureException(e);
+        Sentry.captureException(e, {
+          extra: {
+            jobId: job.id,
+          },
+        });
+        console.error(e);
       }
     });
 

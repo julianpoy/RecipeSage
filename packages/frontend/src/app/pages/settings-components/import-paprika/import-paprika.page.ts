@@ -85,12 +85,11 @@ export class ImportPaprikaPage {
       ],
     });
 
-    await alert.present();
-    await alert.onDidDismiss();
-
-    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
       replaceUrl: true,
     });
+
+    await alert.present();
   }
 
   getJobFailureI18n(job: JobSummary) {

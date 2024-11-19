@@ -6,8 +6,7 @@ import type { JobSummary } from "@recipesage/prisma";
 import { getJobFailureI18n } from "../../../utils/getJobFailureI18n";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-
-const MAX_FILE_SIZE_MB = 1000;
+import { LoadingService } from "../../../services/loading.service";
 
 @Component({
   selector: "page-import-pepperplate",
@@ -19,41 +18,15 @@ export class ImportPepperplatePage {
 
   username: string = "";
   password: string = "";
-  file?: File;
-  progress?: number;
 
   constructor(
+    private loadingService: LoadingService,
     private importService: ImportService,
     private utilService: UtilService,
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private navCtrl: NavController,
   ) {}
-
-  setFile(event: any) {
-    const files = (event.srcElement || event.target).files;
-    if (!files) {
-      return;
-    }
-
-    this.file = files[0];
-  }
-
-  filePicker() {
-    document.getElementById("filePicker")?.click();
-  }
-
-  isFileTooLarge() {
-    if (this.file && this.file.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
-      return true;
-    }
-    return false;
-  }
-
-  showFileTypeWarning() {
-    if (!this.file || !this.file.name) return false;
-    return !this.file.name.toLowerCase().endsWith(".zip");
-  }
 
   async alertIncorrectCredentials() {
     const header = await this.translate
@@ -78,8 +51,7 @@ export class ImportPepperplatePage {
   }
 
   async submit() {
-    if (!this.file) return;
-
+    const loading = this.loadingService.start();
     const response = await this.importService.importPepperplate(
       {
         username: this.username,
@@ -88,11 +60,8 @@ export class ImportPepperplatePage {
       {
         406: () => this.alertIncorrectCredentials(),
       },
-      (event) => {
-        this.progress = event.progress;
-      },
     );
-    this.progress = undefined;
+    loading.dismiss();
 
     if (!response.success) return;
 
@@ -114,12 +83,11 @@ export class ImportPepperplatePage {
       ],
     });
 
-    await alert.present();
-    await alert.onDidDismiss();
-
-    this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
       replaceUrl: true,
     });
+
+    await alert.present();
   }
 
   getJobFailureI18n(job: JobSummary) {

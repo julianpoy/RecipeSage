@@ -69,6 +69,33 @@
         {{ 'pages.import.step' | translate:{ number: 2 } }}
 
         <div class="ion-padding">
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.excludeImages"
+            (ionChange)="options.excludeImages = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.excludeImages' | translate }}
+          </ion-checkbox>
+          <ion-checkbox
+            *ngIf="isLCB()"
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.includeStockRecipes"
+            (ionChange)="options.includeStockRecipes = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.includeStock' | translate }}
+          </ion-checkbox>
+          <ion-checkbox
+            *ngIf="isLCB()"
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.includeTechniques"
+            (ionChange)="options.includeTechniques = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.includeTechniques' | translate }}
+          </ion-checkbox>
+
           <ion-button
             slot="start"
             *ngIf="!showFileTypeWarning()"

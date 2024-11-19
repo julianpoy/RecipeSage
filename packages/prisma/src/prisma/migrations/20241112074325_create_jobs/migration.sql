@@ -12,6 +12,9 @@ CREATE TABLE "Job" (
     "status" "JobStatus" NOT NULL,
     "progress" INTEGER NOT NULL,
     "resultCode" INTEGER,
+    "meta" JSONB,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
 );
