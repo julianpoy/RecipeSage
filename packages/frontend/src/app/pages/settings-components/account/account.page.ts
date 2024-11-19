@@ -345,7 +345,11 @@ export class AccountPage {
     const confirm = await this.translate
       .get("pages.account.deleteAllRecipes.confirm")
       .toPromise();
-    const success = await this.translate
+    const okay = await this.translate.get("generic.okay").toPromise();
+    const successHeader = await this.translate
+      .get("pages.account.deleteAllRecipes.success.header")
+      .toPromise();
+    const successMessage = await this.translate
       .get("pages.account.deleteAllRecipes.success")
       .toPromise();
     const cancel = await this.translate.get("generic.cancel").toPromise();
@@ -370,9 +374,14 @@ export class AccountPage {
             if (!response.success) return;
 
             (
-              await this.toastCtrl.create({
-                message: success,
-                duration: 5000,
+              await this.alertCtrl.create({
+                header: successHeader,
+                message: successMessage,
+                buttons: [
+                  {
+                    text: okay,
+                  },
+                ],
               })
             ).present();
           },

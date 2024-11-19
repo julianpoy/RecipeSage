@@ -80,7 +80,8 @@
   "pages.auth.error.passwordMatch": "The password and confirmation you entered do not match.",
   "pages.auth.error.incorrectLogin": "It looks like that email or password isn't correct.",
   "pages.auth.error.emailTaken": "An account with that email address already exists.",
-  "pages.auth.forgot.toast": "If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.",
+  "pages.auth.forgot.alert.header": "Password Reset Triggered",
+  "pages.auth.forgot.alert.message": "If there is a RecipeSage account associated with that email address, you should receive a password reset link within the next few minutes.",
 
   "pages.home.title.selectionMode": "{{count}} Selected",
   "pages.home.title.main": "My Recipes",
@@ -627,7 +628,8 @@
   "pages.account.deleteAllRecipes.header": "Warning - You're about to delete all of your recipes!",
   "pages.account.deleteAllRecipes.message": "This action is PERMANENT. All of your recipes and associated labels will be removed from the RecipeSage system.",
   "pages.account.deleteAllRecipes.confirm": "Yes, continue",
-  "pages.account.deleteAllRecipes.success": "Your recipe data has been deleted.",
+  "pages.account.deleteAllRecipes.success.header": "Recipe Data Deleted",
+  "pages.account.deleteAllRecipes.success": "Your recipe data has been permanently deleted.",
   "pages.account.deleteAccount.header": "Delete Account & All Data",
   "pages.account.deleteAccount.message": "This is IRREVERSIBLE and will completely remove all of your data from RecipeSage. This may take several minutes.",
 
