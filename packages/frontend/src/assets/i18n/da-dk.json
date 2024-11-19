@@ -383,7 +383,7 @@
     "pages.addRecipeToMealPlanModal.newMealPlanSuccess": "Fremragende! Vælg nu den madplan, du lige har oprettet.",
     "pages.newMealPlanItemModal.inputType.manual": "Manuel indtastning",
     "pages.shareMealPlanModal.description": "Nedenstående iCal/ICS-link kan bruges i næsten ethvert kalenderprogram til at synkronisere din madplan uden for RecipeSage",
-    "pages.assistant.welcome.3": "Madlavningsassistenten har en meddelelsesgrænse på 5 meddelelser/dag på grund af de høje omkostninger ved at drive AI'en. Denne grænse er øget til 50 beskeder/dag for bidragydere.",
+    "pages.assistant.welcome.3": "Madlavningsassistenten har en beskedgrænse på 5 beskeder/dag på grund af de høje omkostninger ved at drive AI'en. Denne grænse er fjernet for bidragydere.",
     "pages.messages.instructions": "For at starte en samtale med nogen skal du trykke på plusknappen i nederste hjørne.",
     "pages.addRecipeToMealPlanModal.selectDestination": "Vælg madplan",
     "pages.editRecipe.input.labels.noSelectedItems": "Ingen valgte labels",
@@ -1020,8 +1020,8 @@
     "pages.shoppingListPopover.actions.title": "Handlinger",
     "pages.shoppingListPopover.update": "Rediger/omdøb liste",
     "pages.shoppingListPopover.dangerZone.title": "Farezonen",
-    "pages.contribute.bonus.feature.3": "Øget grænse for assistentbeskeder",
-    "pages.account.bonus.assistantMoreMessages": "Øget grænse for assistentbeskeder",
+    "pages.contribute.bonus.feature.3": "Ubegrænset antal beskeder fra madlavningsassistenten",
+    "pages.account.bonus.assistantMoreMessages": "Ubegrænset antal beskeder fra madlavningsassistenten",
     "components.messaging.notificationPermission.header": "Kræver notifikationstilladelser",
     "components.messaging.notificationPermission.message": "For at give dig besked, når dine kontakter sender dig beskeder, har vi brug for notifikationsadgang. Når du har afvist denne popup, bliver du bedt om at aktivere notifikationsadgang.",
     "pages.recipeDetails.inInbox": "Denne opskrift ligger i din indbakke og er delt med dig af en anden bruger.",
@@ -1034,5 +1034,8 @@
     "pages.updateShoppingList.title": "Opdater indkøbsliste",
     "pages.updateShoppingList.listTitle": "Titel",
     "pages.updateShoppingList.update": "Opdatering",
-    "pages.updateShoppingList.updateAndShare": "Opdater og del"
+    "pages.updateShoppingList.updateAndShare": "Opdater og del",
+    "pages.app.browser.title": "RecipeSage - den personlige opskriftsholder",
+    "generic.labeledPageTitle": "{{title}} - RecipeSage",
+    "pages.assistant.welcome.4": "Denne grænse gælder kun for beskeder, som du har sendt, og ikke for AI'ens svar."
 }

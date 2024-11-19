@@ -98,7 +98,7 @@
     "pages.home.errors.noRecipes.message4": "También puedes importar recetas desde otras plataformas.",
     "pages.home.errors.noRecipes.message5": "Utilice el menú lateral para ir a configuración -> importar",
     "pages.home.errors.noRecipes.message6": "Puede instalar la extensión de clip tool en los navegadores de escritorio:",
-    "pages.home.errors.noRecipes.message7": "Para más información, visite la página de Consejos, Trucos y Tutoriales.",
+    "pages.home.errors.noRecipes.message7": "Para más tutoriales de como usar la app, visite la documentación",
     "pages.home.errors.inboxEmpty.message1": "Tu bandeja de entrada de recetas está vacía.",
     "pages.home.errors.inboxEmpty.message2": "Cuando alguien te envíe una receta, ¡Aparecerá aquí!",
     "pages.home.errors.noResultsFilters": "No hay recetas que coincidan con los filtros actuales",
@@ -966,7 +966,7 @@
     "components.selectMeal.dinner": "Cena",
     "components.selectMeal.lunch": "Comida",
     "pages.recipeDetails.inInbox": "Esta receta está en tu bandeja de entrada, compartida contigo por otro usuario.",
-    "pages.contribute.bonus.feature.3": "Aumentado el límite de mensajes del asistente",
+    "pages.contribute.bonus.feature.3": "Mensajes ilimitados del asistente de cocina",
     "pages.mealPlanPopover.actions.update": "Editar/Renombrar plan de comidas",
     "pages.newLabelItemModal.title": "Nueva etiqueta o categoría de etiqueta",
     "pages.manageLabelGroupModal.noLabelsSelectedMessage": "No ha seleccionado ninguna etiqueta para agrupar dentro de esta categoría. Las categorías de etiquetas no son útiles por sí solas; es posible que desee crear una etiqueta en su lugar.",
@@ -977,5 +977,6 @@
     "pages.editRecipe.clipText": "Autocompletar a partir de texto",
     "pages.editRecipe.scanImage": "Escanear desde una foto",
     "pages.editRecipe.showClipOptions": "Autocompletar receta desde...",
-    "pages.assistant.welcome.documentation": "Por favor, lea la documentación del asistente"
+    "pages.assistant.welcome.documentation": "Por favor, lea la documentación del asistente",
+    "pages.app.browser.title": "RecipeSage - El gestor personal de recetas"
 }

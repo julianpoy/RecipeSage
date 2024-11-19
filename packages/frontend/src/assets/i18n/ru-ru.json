@@ -1035,5 +1035,7 @@
     "pages.shoppingListPopover.actions.title": "Действия",
     "pages.shoppingListPopover.update": "Редактировать/Переименовать список",
     "pages.recipeDetails.inInbox": "Этот рецепт находится в вашем почтовом ящике, им поделился с вами другой пользователь.",
-    "pages.assistant.welcome.4": "Это ограничение распространяется только на сообщения, отправленные вами, но не на ответы ИИ."
+    "pages.assistant.welcome.4": "Это ограничение распространяется только на сообщения, отправленные вами, но не на ответы ИИ.",
+    "generic.labeledPageTitle": "{{title}} - RecipeSage",
+    "pages.app.browser.title": "RecipeSage - Личный хранитель рецептов"
 }
