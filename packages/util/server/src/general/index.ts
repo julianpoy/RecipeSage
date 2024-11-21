@@ -10,3 +10,5 @@ export * from "./grip";
 export * from "./fetch";
 export * from "./jsonLD";
 export * from "./deletePathsSilent";
+export * from "./exportDataAsync";
+export * from "./throttleDropPromise";

@@ -61,6 +61,7 @@ import { updateShoppingListItems } from "./procedures/shoppingLists/updateShoppi
 import { getUserProfilesById } from "./procedures/users/getUserProfilesById";
 import { getJobs } from "./procedures/jobs/getJobs";
 import { getJob } from "./procedures/jobs/getJob";
+import { startExportJob } from "./procedures/jobs/startExportJob";
 
 const appRouter = router({
   labelGroups: router({
@@ -137,6 +138,7 @@ const appRouter = router({
   jobs: router({
     getJobs,
     getJob,
+    startExportJob,
   }),
 
   getRecipes,

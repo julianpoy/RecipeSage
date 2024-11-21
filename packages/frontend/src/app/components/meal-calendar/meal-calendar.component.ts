@@ -9,7 +9,7 @@ import {
   MealPlan,
   MealPlanItem,
 } from "../../services/meal-plan.service";
-import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "meal-calendar",

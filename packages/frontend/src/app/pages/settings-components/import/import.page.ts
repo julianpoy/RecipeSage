@@ -1,12 +1,21 @@
 import { Component } from "@angular/core";
 import { NavController } from "@ionic/angular";
+import * as Sentry from "@sentry/browser";
 
 import { RouteMap, UtilService } from "~/services/util.service";
-import { ImportService } from "../../../services/import.service";
 import { TRPCService } from "../../../services/trpc.service";
 import type { JobSummary } from "@recipesage/prisma";
-import { getJobFailureI18n } from "../../../utils/getJobFailureI18n";
-import { TranslateService } from "@ngx-translate/core";
+
+export const getJobFailureI18n = (importJob: JobSummary) => {
+  switch (importJob.resultCode) {
+    case 5: {
+      return "pages.import.jobs.status.fail.badFile";
+    }
+    default: {
+      return "pages.import.jobs.status.fail.unknown";
+    }
+  }
+};
 
 const JOB_POLL_INTERVAL_MS = 7500;
 
@@ -24,21 +33,19 @@ type ImportFormat =
   styleUrls: ["import.page.scss"],
 })
 export class ImportPage {
-  importJobs: JobSummary[] = [];
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
-  jobPollInterval?: NodeJS.Timeout;
 
   /**
    * We show this many historical jobs
    */
   showJobs = 5;
+  importJobs: JobSummary[] = [];
+  jobPollInterval?: NodeJS.Timeout;
 
   constructor(
     private navCtrl: NavController,
-    private importService: ImportService,
     private trpcService: TRPCService,
     private utilService: UtilService,
-    private translate: TranslateService,
   ) {}
 
   ionViewWillEnter() {
@@ -70,6 +77,8 @@ export class ImportPage {
         .filter((job) => {
           return job.type === "IMPORT";
         });
+    } else {
+      clearInterval(this.jobPollInterval);
     }
   }
 
@@ -149,6 +158,14 @@ export class ImportPage {
       }
       case "textFiles": {
         return "pages.import.textFiles";
+      }
+      default: {
+        Sentry.captureMessage("Job ImportType not handled", {
+          extra: {
+            importType,
+          },
+        });
+        return "pages.export.jobs.job";
       }
     }
   }

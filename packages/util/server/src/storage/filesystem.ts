@@ -3,6 +3,7 @@ import { ObjectTypes } from "./shared";
 import * as fs from "fs/promises";
 import * as crypto from "crypto";
 import { join, dirname } from "path";
+import { PassThrough } from "stream";
 
 if (
   process.env.STORAGE_TYPE === "filesystem" &&
@@ -56,6 +57,34 @@ export const writeBuffer = async (
     objectType,
     mimetype,
     size: Buffer.byteLength(buffer).toString(),
+    bucket: "filesystem",
+    key,
+    acl: "public-read",
+    location,
+    etag: "",
+  };
+
+  return result;
+};
+
+export const writeStream = async (
+  objectType: ObjectTypes,
+  stream: PassThrough,
+  mimetype: string,
+): Promise<StorageObjectRecord> => {
+  const key = generateKey(objectType);
+  const location = generateStorageLocation(objectType, key);
+
+  const fsLocation = join(FILESYSTEM_STORAGE_PATH, key);
+  await fs.mkdir(dirname(fsLocation), {
+    recursive: true,
+  });
+  await fs.writeFile(fsLocation, stream);
+
+  const result = {
+    objectType,
+    mimetype,
+    size: "-1",
     bucket: "filesystem",
     key,
     acl: "public-read",

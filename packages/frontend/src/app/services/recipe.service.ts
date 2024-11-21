@@ -67,10 +67,9 @@ export interface ParsedNote {
 }
 
 export enum ExportFormat {
-  XML = "xml",
   PDF = "pdf",
   TXT = "txt",
-  JSONLD = "json-ld",
+  JSONLD = "jsonld",
 }
 
 @Injectable({

@@ -6,12 +6,15 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import * as crypto from "crypto";
+import { PassThrough } from "stream";
 
 // Must begin and end with a /
 const ObjectTypesToSubpath = {
   [ObjectTypes.RECIPE_IMAGE]: "",
   [ObjectTypes.PROFILE_IMAGE]: "",
+  [ObjectTypes.DATA_EXPORT]: "data-export/",
 };
 
 const AWS_BUCKET = process.env.AWS_BUCKET || "";
@@ -87,6 +90,41 @@ export const writeBuffer = async (
     objectType,
     mimetype,
     size: Buffer.byteLength(buffer).toString(),
+    bucket: AWS_BUCKET,
+    key,
+    acl: S3_DEFAULT_ACL,
+    location: generateStorageLocation(key),
+    etag: s3Response.ETag || "",
+  };
+};
+
+export const writeStream = async (
+  objectType: ObjectTypes,
+  stream: PassThrough,
+  mimetype: string,
+): Promise<StorageObjectRecord> => {
+  const key = generateKey(objectType);
+
+  const uploadRef = new Upload({
+    client: s3,
+    params: {
+      Bucket: AWS_BUCKET,
+      Key: key,
+      ACL: S3_DEFAULT_ACL,
+      CacheControl: S3_DEFAULT_CACHECONTROL,
+      Body: stream,
+      ContentType: mimetype,
+    },
+    //queueSize: 4, // optional concurrency configuration
+    //leavePartsOnError: true, // optional manually handle dropped parts
+  });
+
+  const s3Response = await uploadRef.done();
+
+  return {
+    objectType,
+    mimetype,
+    size: "-1",
     bucket: AWS_BUCKET,
     key,
     acl: S3_DEFAULT_ACL,

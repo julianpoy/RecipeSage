@@ -10,7 +10,7 @@ import { RecipeService } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { UtilService } from "~/services/util.service";
-import { MealPlanItemSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-meal-plan-bulk-pin-modal",

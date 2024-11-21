@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "JobType" AS ENUM ('IMPORT');
+CREATE TYPE "JobType" AS ENUM ('IMPORT', 'EXPORT');
 
 -- CreateEnum
 CREATE TYPE "JobStatus" AS ENUM ('CREATE', 'RUN', 'FAIL', 'SUCCESS');

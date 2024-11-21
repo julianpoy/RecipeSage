@@ -1,6 +1,7 @@
 // PDFMake must be imported via import xyz = require('xyz') because pdfmake
 // uses the `export =` syntax
 // See TypeScript documentation here: https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
+// @ts-expect-error See descrip above
 import pdfmake = require("pdfmake");
 import { Writable } from "stream";
 import {
@@ -9,11 +10,32 @@ import {
   parseNotes,
 } from "@recipesage/util/shared";
 import * as sanitizeHtml from "sanitize-html";
-import { fetchURL } from "@recipesage/util/server/general";
+import { fetchURL } from "../general/fetch";
 import * as fs from "fs";
-import { Image, Recipe } from "@prisma/client";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 import * as path from "path";
+import { RecipeSummary } from "@recipesage/prisma";
+
+const fonts = {
+  NotoSans: {
+    normal: path.join(
+      __dirname,
+      "../../../../backend/fonts/Noto_Sans/NotoSans-Regular.ttf",
+    ),
+    bold: path.join(
+      __dirname,
+      "../../../../backend/fonts/Noto_Sans/NotoSans-Bold.ttf",
+    ),
+    italics: path.join(
+      __dirname,
+      "../../../../backend/fonts/Noto_Sans/NotoSans-Italic.ttf",
+    ),
+    bolditalics: path.join(
+      __dirname,
+      "../../../../backend/fonts/Noto_Sans/NotoSans-BoldItalic.ttf",
+    ),
+  },
+};
 
 export interface ExportOptions {
   includeImages?: boolean;
@@ -36,7 +58,7 @@ const parsedToSchema = (
 };
 
 const recipeToSchema = async (
-  recipe: Recipe & { images: Image[] },
+  recipe: RecipeSummary,
   options?: ExportOptions,
 ): Promise<Content> => {
   const schema: Content[] = [];
@@ -84,7 +106,7 @@ const recipeToSchema = async (
     });
   }
 
-  const imageUrl = recipe.images[0]?.location;
+  const imageUrl = recipe.recipeImages[0]?.image.location;
   if (imageUrl && options?.includeImages) {
     try {
       let buffer: Buffer;
@@ -193,29 +215,11 @@ const recipeToSchema = async (
 };
 
 // TODO: Support multi language
-export const exportToPDF = async (
-  recipes: (Recipe & { images: Image[] })[],
+export const recipeSummariesToPDF = async (
+  recipes: RecipeSummary[],
   writeStream: Writable,
   options?: ExportOptions,
 ): Promise<void> => {
-  const fonts = {
-    NotoSans: {
-      normal: path.join(
-        __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-Regular.ttf",
-      ),
-      bold: path.join(__dirname, "../../../fonts/Noto_Sans/NotoSans-Bold.ttf"),
-      italics: path.join(
-        __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-Italic.ttf",
-      ),
-      bolditalics: path.join(
-        __dirname,
-        "../../../fonts/Noto_Sans/NotoSans-BoldItalic.ttf",
-      ),
-    },
-  };
-
   const content: Content[] = [];
   for (let i = 0; i < recipes.length; i++) {
     const recipe = recipes[i];
@@ -244,3 +248,41 @@ export const exportToPDF = async (
   doc.pipe(writeStream);
   doc.end();
 };
+
+export async function* recipeAsyncIteratorToPDF(
+  recipes: AsyncIterable<RecipeSummary>,
+  options?: ExportOptions,
+) {
+  for await (const recipe of recipes) {
+    const content: Content[] = [await recipeToSchema(recipe, options)];
+
+    const docDefinition: TDocumentDefinitions = {
+      content,
+      defaultStyle: {
+        font: "NotoSans",
+        fontSize: 10,
+        lineHeight: 1.2,
+      },
+    };
+
+    const printer = new pdfmake(fonts);
+    const doc = printer.createPdfKitDocument(docDefinition);
+
+    yield await new Promise<{
+      recipe: RecipeSummary;
+      pdf: Buffer;
+    }>((resolve) => {
+      const buffs: unknown[] = [];
+      doc.on("data", function (d) {
+        buffs.push(d as readonly Uint8Array[]);
+      });
+      doc.on("end", function () {
+        resolve({
+          recipe,
+          pdf: Buffer.concat(buffs as readonly Uint8Array[]),
+        });
+      });
+      doc.end();
+    });
+  }
+}

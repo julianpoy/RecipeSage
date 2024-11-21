@@ -11,7 +11,7 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
-import { MealPlanSummary, UserPublic } from "@recipesage/prisma";
+import type { MealPlanSummary, UserPublic } from "@recipesage/prisma";
 
 @Component({
   selector: "page-meal-plans",

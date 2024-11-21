@@ -2,8 +2,6 @@ import { Component } from "@angular/core";
 
 import { RouteMap, UtilService } from "~/services/util.service";
 import { ImportService } from "../../../services/import.service";
-import type { JobSummary } from "@recipesage/prisma";
-import { getJobFailureI18n } from "../../../utils/getJobFailureI18n";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -90,16 +88,5 @@ export class ImportRecipeKeeperPage {
     });
 
     await alert.present();
-  }
-
-  getJobFailureI18n(job: JobSummary) {
-    return getJobFailureI18n(job);
-  }
-
-  formatItemCreationDate(plainTextDate: string | Date) {
-    return this.utilService.formatDate(plainTextDate, {
-      now: true,
-      times: true,
-    });
   }
 }

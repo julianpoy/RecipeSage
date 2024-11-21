@@ -2,6 +2,7 @@ import * as S3Storage from "./s3";
 import * as FirebaseStorage from "./firebase";
 import * as FilesystemStorage from "./filesystem";
 import { ObjectTypes } from "./shared";
+import { PassThrough } from "stream";
 
 export interface StorageObjectRecord {
   objectType: ObjectTypes;
@@ -18,6 +19,12 @@ export interface StorageProvider {
   writeBuffer: (
     objectType: ObjectTypes,
     buffer: Buffer,
+    mimetype: string,
+  ) => Promise<StorageObjectRecord>;
+
+  writeStream: (
+    objectType: ObjectTypes,
+    stream: PassThrough,
     mimetype: string,
   ) => Promise<StorageObjectRecord>;
 
@@ -44,6 +51,7 @@ const storageProvider =
 if (!storageProvider) throw new Error("Invalid STORAGE_TYPE");
 
 export const writeBuffer = storageProvider.writeBuffer;
+export const writeStream = storageProvider.writeStream;
 export const deleteObject = storageProvider.deleteObject;
 export const deleteObjects = storageProvider.deleteObjects;
 export * from "./image";

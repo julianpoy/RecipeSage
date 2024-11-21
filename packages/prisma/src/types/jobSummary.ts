@@ -24,6 +24,8 @@ export interface JobMeta {
     | "paprika"
     | "cookmate"
     | "jsonld";
+  exportType?: "txt" | "jsonld" | "pdf";
+  exportDownloadUrl?: string;
 }
 
 export type JobSummary = Omit<

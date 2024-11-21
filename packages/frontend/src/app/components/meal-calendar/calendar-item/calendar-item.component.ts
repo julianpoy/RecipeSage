@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { MealPlanItemSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "calendar-item",
