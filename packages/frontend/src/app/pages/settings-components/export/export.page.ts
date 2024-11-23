@@ -93,7 +93,7 @@ export class ExportPage {
 
   async export(format: ExportFormat) {
     const response = await this.trpcService.handle(
-      this.trpcService.trpc.jobs.startExportJob.query({
+      this.trpcService.trpc.jobs.startExportJob.mutate({
         format,
       }),
     );

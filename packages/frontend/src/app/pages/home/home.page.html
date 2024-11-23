@@ -54,6 +54,13 @@
 
       <ion-button
         *ngIf="selectionMode && selectedRecipeIds.length > 0"
+        (click)="exportSelectedRecipes()"
+      >
+        <ion-icon slot="icon-only" name="download"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        *ngIf="selectionMode && selectedRecipeIds.length > 0"
         (click)="deleteSelectedRecipes()"
       >
         <ion-icon slot="icon-only" name="trash"></ion-icon>

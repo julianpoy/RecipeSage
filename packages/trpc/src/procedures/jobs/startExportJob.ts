@@ -23,9 +23,10 @@ export const startExportJob = publicProcedure
         z.literal("pdf"),
         z.literal("jsonld"),
       ]),
+      recipeIds: z.array(z.string()).optional(),
     }),
   )
-  .query(async ({ input, ctx }) => {
+  .mutation(async ({ input, ctx }) => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -37,6 +38,7 @@ export const startExportJob = publicProcedure
         progress: 1,
         meta: {
           exportType: input.format,
+          exportScope: input.recipeIds ? "recipeids" : "all",
         } satisfies JobMeta,
       },
     });
@@ -65,6 +67,11 @@ export const startExportJob = publicProcedure
       format: input.format,
       where: {
         userId: session.userId,
+        id: input.recipeIds
+          ? {
+              in: input.recipeIds,
+            }
+          : undefined,
       },
       onProgress,
     })
@@ -77,7 +84,7 @@ export const startExportJob = publicProcedure
             status: JobStatus.SUCCESS,
             progress: 100,
             meta: {
-              exportType: input.format,
+              ...(job.meta as JobMeta),
               exportDownloadUrl: s3Record.location,
             } satisfies JobMeta,
           },
