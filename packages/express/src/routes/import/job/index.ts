@@ -7,6 +7,7 @@ import { livingcookbookHandler } from "./livingcookbook";
 import { paprikaHandler } from "./paprika";
 import { pepperplateHandler } from "./pepperplate";
 import { recipekeeperHandler } from "./recipekeeper";
+import { urlsHandler } from "./urls";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.post("/paprika", ...paprikaHandler);
 router.post("/pepperplate", ...pepperplateHandler);
 router.post("/recipekeeper", ...recipekeeperHandler);
 router.post("/textfiles", ...textfilesHandler);
+router.post("/urls", ...urlsHandler);
 
 export { router as importJobRouter };

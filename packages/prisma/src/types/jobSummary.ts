@@ -23,7 +23,8 @@ export interface JobMeta {
     | "recipekeeper"
     | "paprika"
     | "cookmate"
-    | "jsonld";
+    | "jsonld"
+    | "urls";
   exportType?: "txt" | "jsonld" | "pdf";
   exportScope?: "all" | "recipeids";
   exportDownloadUrl?: string;

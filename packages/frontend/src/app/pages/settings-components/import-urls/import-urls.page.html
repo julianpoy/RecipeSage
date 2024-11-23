@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="nav">
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ 'pages.importUrls.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.importUrls.description' | translate }}
+    </ion-label>
+  </ion-item>
+
+  <br />
+
+  <ion-item lines="none">
+    <ion-textarea
+      [autoGrow]="true"
+      labelPlacement="stacked"
+      label="{{ 'pages.importUrls.urls' | translate }}"
+      helperText="{{ 'pages.importUrls.urls.helperText' | translate }}"
+      (ionInput)="urls = $event.detail.value || ''"
+      [value]="urls"
+      autocomplete="off"
+    ></ion-textarea>
+  </ion-item>
+
+  <ion-item lines="none" [disabled]="!urls.trim().length">
+    <ion-label>
+      <ion-button (click)="submit()">
+        {{ 'generic.submit' | translate }}
+      </ion-button>
+    </ion-label>
+  </ion-item>
+</ion-content>

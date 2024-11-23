@@ -26,7 +26,8 @@ type ImportFormat =
   | "paprika"
   | "cookmate"
   | "recipekeeper"
-  | "textfiles";
+  | "textfiles"
+  | "urls";
 
 @Component({
   selector: "page-import",
@@ -130,6 +131,10 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportTextfilesPage.getPath());
         break;
       }
+      case "urls": {
+        this.navCtrl.navigateForward(RouteMap.ImportUrlsPage.getPath());
+        break;
+      }
     }
   }
 
@@ -164,13 +169,16 @@ export class ImportPage {
       case "textFiles": {
         return "pages.import.textFiles";
       }
+      case "urls": {
+        return "pages.import.urls";
+      }
       default: {
         Sentry.captureMessage("Job ImportType not handled", {
           extra: {
             importType,
           },
         });
-        return "pages.export.jobs.job";
+        return "pages.import.jobs.job";
       }
     }
   }

@@ -98,6 +98,10 @@
         <ion-icon name="cloud-upload" slot="start"></ion-icon>
         <ion-label> {{ 'pages.import.textFiles' | translate }} </ion-label>
       </ion-item>
+      <ion-item (click)="startImport('urls')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.urls' | translate }} </ion-label>
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>

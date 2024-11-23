@@ -153,6 +153,20 @@ export class ImportService {
     });
   }
 
+  importUrls(urls: string[], errorHandlers?: ErrorHandlers) {
+    return this.httpService.requestWithWrapper<{
+      jobId: string;
+    }>({
+      path: "import/job/urls",
+      method: "POST",
+      payload: {
+        urls,
+      },
+      query: undefined,
+      errorHandlers,
+    });
+  }
+
   importRecipekeeper(
     file: Blob,
     errorHandlers?: ErrorHandlers,

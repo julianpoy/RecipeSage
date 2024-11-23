@@ -280,6 +280,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportUrlsPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-urls/import-urls.module").then(
+        (module) => module.ImportUrlsPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ShoppingListsPage.path,
     loadChildren: () =>
       import(
