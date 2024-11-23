@@ -721,6 +721,9 @@
   "pages.importPepperplate.password": "Pepperplate Password",
   "pages.importPepperplate.password.helperText": "The password for your Pepperplate account",
 
+  "pages.importTextfiles.title": "Import Recipes from Zip of Text Files",
+  "pages.importTextfiles.description": "This will import a set of text files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+
   "pages.settings.title": "Settings",
   "pages.settings.section1.title": "Data & Account",
   "pages.settings.import": "Import Recipe Data",

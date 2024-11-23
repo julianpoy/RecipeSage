@@ -246,6 +246,12 @@ export const RouteMap = {
     },
     path: "settings/import/pepperplate",
   },
+  ImportTextfilesPage: {
+    getPath() {
+      return `/settings/import/textfiles`;
+    },
+    path: "settings/import/textfiles",
+  },
   ShoppingListsPage: {
     getPath() {
       return `/shopping-lists`;

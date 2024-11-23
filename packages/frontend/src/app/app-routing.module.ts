@@ -272,6 +272,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportTextfilesPage.path,
+    loadChildren: () =>
+      import(
+        "~/pages/settings-components/import-textfiles/import-textfiles.module"
+      ).then((module) => module.ImportTextfilesPageModule),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ShoppingListsPage.path,
     loadChildren: () =>
       import(

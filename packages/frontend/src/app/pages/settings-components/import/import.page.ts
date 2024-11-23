@@ -25,7 +25,8 @@ type ImportFormat =
   | "livingcookbook"
   | "paprika"
   | "cookmate"
-  | "recipekeeper";
+  | "recipekeeper"
+  | "textfiles";
 
 @Component({
   selector: "page-import",
@@ -123,6 +124,10 @@ export class ImportPage {
       }
       case "recipekeeper": {
         this.navCtrl.navigateForward(RouteMap.ImportRecipeKeeperPage.getPath());
+        break;
+      }
+      case "textfiles": {
+        this.navCtrl.navigateForward(RouteMap.ImportTextfilesPage.getPath());
         break;
       }
     }
