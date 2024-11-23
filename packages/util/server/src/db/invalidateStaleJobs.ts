@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/node";
 /**
  * Stale after minutes applies to the jobs last updatedAt time
  */
-const STALE_AFTER_MINUTES = 20;
+const STALE_AFTER_MINUTES = 15;
 const INVALIDATION_PERIOD_MINUTES = 10;
 /**
  * Introduce some random variance between pods

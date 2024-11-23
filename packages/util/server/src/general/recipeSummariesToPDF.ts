@@ -1,7 +1,8 @@
 // PDFMake must be imported via import xyz = require('xyz') because pdfmake
 // uses the `export =` syntax
 // See TypeScript documentation here: https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-// @ts-expect-error See descrip above
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore See descrip above
 import pdfmake = require("pdfmake");
 import { Writable } from "stream";
 import {
@@ -15,6 +16,7 @@ import * as fs from "fs";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
 import * as path from "path";
 import { RecipeSummary } from "@recipesage/prisma";
+import { setTimeout } from "timers/promises";
 
 const fonts = {
   NotoSans: {
@@ -249,10 +251,16 @@ export const recipeSummariesToPDF = async (
   doc.end();
 };
 
+/**
+ * Forces a break between generating PDFs
+ */
+const COOLDOWN_MS = 100;
 export async function* recipeAsyncIteratorToPDF(
   recipes: AsyncIterable<RecipeSummary>,
   options?: ExportOptions,
 ) {
+  const printer = new pdfmake(fonts);
+
   for await (const recipe of recipes) {
     const content: Content[] = [await recipeToSchema(recipe, options)];
 
@@ -265,7 +273,6 @@ export async function* recipeAsyncIteratorToPDF(
       },
     };
 
-    const printer = new pdfmake(fonts);
     const doc = printer.createPdfKitDocument(docDefinition);
 
     yield await new Promise<{
@@ -284,5 +291,7 @@ export async function* recipeAsyncIteratorToPDF(
       });
       doc.end();
     });
+
+    await setTimeout(COOLDOWN_MS);
   }
 }

@@ -50,7 +50,7 @@ export const startExportJob = publicProcedure
               status: JobStatus.RUN,
             },
             data: {
-              progress: Math.floor((processed / totalCount) * 100),
+              progress: Math.max(Math.floor((processed / totalCount) * 100), 1),
             },
           });
         } catch (e) {

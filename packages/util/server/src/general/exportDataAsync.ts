@@ -137,7 +137,13 @@ const recipeSummariesToJSONLDStream = async (
     recipes: passthrough,
   });
 
-  jsonStream.once("error", () => console.error("oh noes", jsonStream.errored));
+  jsonStream.on("error", () => {
+    console.error(jsonStream.errored);
+    throw (
+      jsonStream.errored ||
+      new Error("Error while processing JSONStream export")
+    );
+  });
   jsonStream.pipe(outputStream);
   const endP = once(jsonStream, "end");
 
@@ -217,7 +223,11 @@ const recipeSummariesToPDFZipStream = async (
   outputStream: PassThrough,
   onRecipeProcessed: () => void,
 ): Promise<unknown> => {
-  const zipStream = new (ZipStream as unknown as typeof _ZipStream)();
+  const zipStream = new (ZipStream as unknown as typeof _ZipStream)({
+    zlib: {
+      level: 0,
+    },
+  });
   zipStream.pipe(outputStream);
 
   zipStream.on("error", function (err) {
