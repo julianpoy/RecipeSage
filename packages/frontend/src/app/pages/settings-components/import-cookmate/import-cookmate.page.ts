@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
-import { NavController, ToastController } from "@ionic/angular";
+
+import { RouteMap, UtilService } from "~/services/util.service";
+import { ImportService } from "../../../services/import.service";
+import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { LoadingRef, LoadingService } from "~/services/loading.service";
-import { RecipeService } from "~/services/recipe.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+const MAX_FILE_SIZE_MB = 1000;
 
 @Component({
   selector: "page-import-cookmate",
@@ -14,21 +15,16 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 export class ImportCookmatePage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();
 
-  loading?: LoadingRef;
-  imageFile?: File;
-
-  ignoreLargeFiles: boolean;
+  file?: File;
+  progress?: number;
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public loadingService: LoadingService,
-    public toastCtrl: ToastController,
-    public recipeService: RecipeService,
-    public utilService: UtilService,
-  ) {
-    this.ignoreLargeFiles = !!localStorage.getItem("largeFileOverride");
-  }
+    private importService: ImportService,
+    private utilService: UtilService,
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
+    private navCtrl: NavController,
+  ) {}
 
   setFile(event: any) {
     const files = (event.srcElement || event.target).files;
@@ -36,7 +32,7 @@ export class ImportCookmatePage {
       return;
     }
 
-    this.imageFile = files[0];
+    this.file = files[0];
   }
 
   filePicker() {
@@ -44,87 +40,53 @@ export class ImportCookmatePage {
   }
 
   isFileTooLarge() {
-    if (
-      !this.ignoreLargeFiles &&
-      this.imageFile &&
-      this.imageFile.size / 1024 / 1024 > 550
-    ) {
-      // File is larger than 550MB
+    if (this.file && this.file.size / 1024 / 1024 > MAX_FILE_SIZE_MB) {
       return true;
     }
     return false;
   }
 
   showFileTypeWarning() {
-    if (!this.imageFile || !this.imageFile.name) return false;
-    return !this.imageFile.name.toLowerCase().endsWith(".mcb");
-  }
-
-  async presentToast(msg: string) {
-    (
-      await this.toastCtrl.create({
-        message: msg,
-        duration: 6000,
-      })
-    ).present();
+    if (!this.file || !this.file.name) return false;
+    return !this.file.name.toLowerCase().endsWith(".mcb");
   }
 
   async submit() {
-    if (!this.imageFile) return;
+    if (!this.file) return;
 
-    this.loading = this.loadingService.start();
-
-    const response = await this.recipeService.importCookmate(this.imageFile, {
-      406: async () => {
-        const message = await this.translate
-          .get("pages.importCookmate.error")
-          .toPromise();
-        const close = await this.translate.get("generic.close").toPromise();
-
-        (
-          await this.toastCtrl.create({
-            message,
-            buttons: [
-              {
-                text: close,
-                role: "cancel",
-              },
-            ],
-          })
-        ).present();
+    const response = await this.importService.importCookmate(
+      this.file,
+      undefined,
+      (event) => {
+        this.progress = event.progress;
       },
-      504: async () => {
-        setTimeout(async () => {
-          const message = await this.translate
-            .get("pages.importCookmate.timeout")
-            .toPromise();
-          const close = await this.translate.get("generic.close").toPromise();
+    );
+    this.progress = undefined;
 
-          (
-            await this.toastCtrl.create({
-              message,
-              buttons: [
-                {
-                  text: close,
-                  role: "cancel",
-                },
-              ],
-            })
-          ).present();
-          this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
-        }, 20000);
-      },
-    });
-    this.loading.dismiss();
-    this.loading = undefined;
     if (!response.success) return;
 
-    const message = await this.translate
-      .get("pages.importCookmate.success")
+    const header = await this.translate
+      .get("pages.import.jobCreated.header")
       .toPromise();
+    const message = await this.translate
+      .get("pages.import.jobCreated.message")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
 
-    this.presentToast(message);
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
 
-    this.navCtrl.navigateRoot(RouteMap.HomePage.getPath("main"));
+    await this.navCtrl.navigateForward(RouteMap.ImportPage.getPath(), {
+      replaceUrl: true,
+    });
+
+    await alert.present();
   }
 }

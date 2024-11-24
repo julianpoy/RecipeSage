@@ -1,9 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  ToastController,
-  ModalController,
-  AlertController,
-} from "@ionic/angular";
+import { ModalController, AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import type { AppRouter } from "@recipesage/trpc";
 import { TRPCClientError } from "@trpc/client";
@@ -34,7 +30,6 @@ export class HttpErrorHandlerService {
   isErrorAlertOpen = false;
 
   constructor(
-    private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private translate: TranslateService,
@@ -56,17 +51,6 @@ export class HttpErrorHandlerService {
     this.isAuthOpen = false;
 
     window.location.reload();
-  }
-
-  async presentToast(messageKey: string) {
-    const message = await this.translate.get(messageKey).toPromise();
-
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 5000,
-    });
-
-    toast.present();
   }
 
   async presentAlert(headerKey: string, messageKey: string) {

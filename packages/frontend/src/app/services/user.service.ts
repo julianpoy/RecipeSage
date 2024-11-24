@@ -85,13 +85,13 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<{ token: string }>(
-      "users/register",
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<{ token: string }>({
+      path: "users/register",
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   login(
@@ -101,23 +101,23 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<{ token: string }>(
-      "users/login",
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<{ token: string }>({
+      path: "users/login",
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   logout(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/logout",
-      "POST",
-      {},
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/logout",
+      method: "POST",
+      payload: {},
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   forgot(
@@ -126,13 +126,13 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/forgot",
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/forgot",
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   update(
@@ -143,13 +143,13 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/",
-      "PUT",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/",
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   saveFCMToken(
@@ -158,13 +158,13 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/fcm/token",
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/fcm/token",
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   removeFCMToken(
@@ -173,13 +173,13 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/fcm/token",
-      "DELETE",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/fcm/token",
+      method: "DELETE",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   getUserByEmail(
@@ -188,145 +188,145 @@ export class UserService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<User>(
-      "users/by-email",
-      "GET",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<User>({
+      path: "users/by-email",
+      method: "GET",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   me(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<User>(
-      "users/",
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<User>({
+      path: "users/",
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getMyProfile(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<UserProfile>(
-      "users/profile",
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<UserProfile>({
+      path: "users/profile",
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getUserById(userId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<User>(
-      `users/${userId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<User>({
+      path: `users/${userId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   updateMyProfile(
     payload: Partial<EditUserProfile>,
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      "users/profile",
-      "PUT",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: "users/profile",
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getProfileByUserId(userId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<UserProfile>(
-      `users/profile/${userId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<UserProfile>({
+      path: `users/profile/${userId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getProfileByHandle(handle: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<UserProfile>(
-      `users/profile/by-handle/${encodeURIComponent(handle)}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<UserProfile>({
+      path: `users/profile/by-handle/${encodeURIComponent(handle)}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getHandleInfo(handle: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<HandleInfo>(
-      `users/handle-info/${encodeURIComponent(handle)}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<HandleInfo>({
+      path: `users/handle-info/${encodeURIComponent(handle)}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getMyFriends(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
-      `users/friends`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<any>({
+      path: `users/friends`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   addFriend(friendId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
-      `users/friends/${friendId}`,
-      "POST",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<any>({
+      path: `users/friends/${friendId}`,
+      method: "POST",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   deleteFriend(friendId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      `users/friends/${friendId}`,
-      "DELETE",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `users/friends/${friendId}`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   myStats(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<any>(
-      `users/stats`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<any>({
+      path: `users/stats`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   capabilities(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<Capabilities>(
-      `users/capabilities`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<Capabilities>({
+      path: `users/capabilities`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   delete(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      `users/`,
-      "DELETE",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `users/`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 }

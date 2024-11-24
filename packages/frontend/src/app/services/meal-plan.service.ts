@@ -65,23 +65,23 @@ export class MealPlanService {
   constructor(private httpService: HttpService) {}
 
   fetch(errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<MealPlans>(
-      "mealPlans",
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<MealPlans>({
+      path: "mealPlans",
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   fetchById(mealPlanId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<MealPlan>(
-      `mealPlans/${mealPlanId}`,
-      "GET",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<MealPlan>({
+      path: `mealPlans/${mealPlanId}`,
+      method: "GET",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   create(
@@ -91,13 +91,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<{ id: string }>(
-      `mealPlans`,
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<{ id: string }>({
+      path: `mealPlans`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   addItem(
@@ -110,13 +110,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}`,
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   update(
@@ -126,13 +126,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}`,
-      "PUT",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}`,
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   updateItems(
@@ -148,13 +148,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}/items/bulk`,
-      "PUT",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}/items/bulk`,
+      method: "PUT",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   addItems(
@@ -169,13 +169,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}/items/bulk`,
-      "POST",
-      payload,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}/items/bulk`,
+      method: "POST",
+      payload: payload,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   deleteItems(
@@ -185,13 +185,13 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}/items/bulk`,
-      "DELETE",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}/items/bulk`,
+      method: "DELETE",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   deleteItem(
@@ -201,23 +201,23 @@ export class MealPlanService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}/items`,
-      "DELETE",
-      undefined,
-      params,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}/items`,
+      method: "DELETE",
+      payload: undefined,
+      query: params,
       errorHandlers,
-    );
+    });
   }
 
   delete(mealPlanId: string, errorHandlers?: ErrorHandlers) {
-    return this.httpService.requestWithWrapper<void>(
-      `mealPlans/${mealPlanId}`,
-      "DELETE",
-      undefined,
-      undefined,
+    return this.httpService.requestWithWrapper<void>({
+      path: `mealPlans/${mealPlanId}`,
+      method: "DELETE",
+      payload: undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   getICalUrl(mealPlanId: string) {

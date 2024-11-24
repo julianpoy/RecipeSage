@@ -18,13 +18,13 @@ export class ImageService {
     const formData: FormData = new FormData();
     formData.append("image", file, file.name);
 
-    return this.httpService.multipartRequestWithWrapper<Image>(
-      "images",
-      "POST",
-      formData,
-      {},
+    return this.httpService.multipartRequestWithWrapper<Image>({
+      path: "images",
+      method: "POST",
+      payload: formData,
+      query: {},
       errorHandlers,
-    );
+    });
   }
 
   createFromUrl(
@@ -33,13 +33,13 @@ export class ImageService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<Image>(
-      "images/url",
-      "POST",
+    return this.httpService.requestWithWrapper<Image>({
+      path: "images/url",
+      method: "POST",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 
   createFromB64(
@@ -48,12 +48,12 @@ export class ImageService {
     },
     errorHandlers?: ErrorHandlers,
   ) {
-    return this.httpService.requestWithWrapper<Image>(
-      "images/b64",
-      "POST",
+    return this.httpService.requestWithWrapper<Image>({
+      path: "images/b64",
+      method: "POST",
       payload,
-      undefined,
+      query: undefined,
       errorHandlers,
-    );
+    });
   }
 }

@@ -16,12 +16,12 @@ import {
 
 import * as Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
-import { writeImageFile } from "./services/storage/image";
-import { ObjectTypes } from "./services/storage/shared";
+import { writeImageFile, ObjectTypes } from "@recipesage/util/server/storage";
 
 let runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
+  labels: process.argv[4],
   includeStockRecipes: process.argv.indexOf("--includeStockRecipes") > -1,
   excludeImages: process.argv.indexOf("--excludeImages") > -1,
   includeTechniques: process.argv.indexOf("--includeTechniques") > -1,
@@ -100,6 +100,9 @@ const cleanup = () => {
 
 async function main() {
   try {
+    const labels =
+      runConfig.labels === "null" ? [] : runConfig.labels.split(",");
+
     await extract(zipPath, { dir: extractPath });
 
     fs.unlinkSync(zipPath);
@@ -428,6 +431,11 @@ async function main() {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
         });
+
+        for (const label of labels) {
+          labelMap[label] = labelMap[label] || [];
+          labelMap[label].push(recipe.id);
+        }
       });
 
       const savedImages = await Image.bulkCreate(

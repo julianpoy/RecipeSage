@@ -1,8 +1,7 @@
 import { StorageObjectRecord, writeBuffer } from "./index";
 import { ObjectTypes } from "./shared";
 import * as fs from "fs/promises";
-import { transformImageBuffer } from "../file-transformer";
-import { fetchURL } from "../fetch";
+import { fetchURL, transformImageBuffer } from "../general";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;

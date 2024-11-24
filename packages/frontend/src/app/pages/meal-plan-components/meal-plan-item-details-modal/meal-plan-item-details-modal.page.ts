@@ -17,7 +17,7 @@ import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-p
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 
 import dayjs from "dayjs";
-import { MealPlanItemSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 
 @Component({

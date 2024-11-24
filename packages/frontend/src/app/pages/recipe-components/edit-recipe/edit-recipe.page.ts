@@ -522,15 +522,15 @@ export class EditRecipePage {
 
     if (!response) return;
 
-    this.recipe.title = response.title || "";
-    this.recipe.description = response.description || "";
-    this.recipe.source = response.source || "";
-    this.recipe.yield = response.yield || "";
-    this.recipe.activeTime = response.activeTime || "";
-    this.recipe.totalTime = response.totalTime || "";
-    this.recipe.ingredients = response.ingredients || "";
-    this.recipe.instructions = response.instructions || "";
-    this.recipe.notes = response.notes || "";
+    this.recipe.title = response.recipe.title || "";
+    this.recipe.description = response.recipe.description || "";
+    this.recipe.source = response.recipe.source || "";
+    this.recipe.yield = response.recipe.yield || "";
+    this.recipe.activeTime = response.recipe.activeTime || "";
+    this.recipe.totalTime = response.recipe.totalTime || "";
+    this.recipe.ingredients = response.recipe.ingredients || "";
+    this.recipe.instructions = response.recipe.instructions || "";
+    this.recipe.notes = response.recipe.notes || "";
   }
 
   async scanImage() {
@@ -573,15 +573,15 @@ export class EditRecipePage {
 
     if (!response) return;
 
-    this.recipe.title = response.title || "";
-    this.recipe.description = response.description || "";
-    this.recipe.source = response.source || "";
-    this.recipe.yield = response.yield || "";
-    this.recipe.activeTime = response.activeTime || "";
-    this.recipe.totalTime = response.totalTime || "";
-    this.recipe.ingredients = response.ingredients || "";
-    this.recipe.instructions = response.instructions || "";
-    this.recipe.notes = response.notes || "";
+    this.recipe.title = response.recipe.title || "";
+    this.recipe.description = response.recipe.description || "";
+    this.recipe.source = response.recipe.source || "";
+    this.recipe.yield = response.recipe.yield || "";
+    this.recipe.activeTime = response.recipe.activeTime || "";
+    this.recipe.totalTime = response.recipe.totalTime || "";
+    this.recipe.ingredients = response.recipe.ingredients || "";
+    this.recipe.instructions = response.recipe.instructions || "";
+    this.recipe.notes = response.recipe.notes || "";
 
     const imageResponse = await this.imageService.createFromB64(
       {
@@ -688,15 +688,15 @@ export class EditRecipePage {
       return;
     }
 
-    this.recipe.title = response.title || "";
-    this.recipe.description = response.description || "";
-    this.recipe.source = response.source || "";
-    this.recipe.yield = response.yield || "";
-    this.recipe.activeTime = response.activeTime || "";
-    this.recipe.totalTime = response.totalTime || "";
-    this.recipe.ingredients = response.ingredients || "";
-    this.recipe.instructions = response.instructions || "";
-    this.recipe.notes = response.notes || "";
+    this.recipe.title = response.recipe.title || "";
+    this.recipe.description = response.recipe.description || "";
+    this.recipe.source = response.recipe.source || "";
+    this.recipe.yield = response.recipe.yield || "";
+    this.recipe.activeTime = response.recipe.activeTime || "";
+    this.recipe.totalTime = response.recipe.totalTime || "";
+    this.recipe.ingredients = response.recipe.ingredients || "";
+    this.recipe.instructions = response.recipe.instructions || "";
+    this.recipe.notes = response.recipe.notes || "";
 
     loading.dismiss();
   }

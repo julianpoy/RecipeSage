@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { MealName, MealPlanItem } from "../../../services/meal-plan.service";
-import { MealPlanItemSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "meal-group",

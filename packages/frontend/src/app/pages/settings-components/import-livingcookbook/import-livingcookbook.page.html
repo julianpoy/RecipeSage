@@ -8,170 +8,138 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ion-item lines="none">
-    <ion-label class="ion-text-center ion-text-wrap">
-      <br /><br />
-      <p>
-        {{ 'pages.importLivingCookbook.description1' | translate }}<br />
-        <b>{{ 'pages.importLivingCookbook.betaWarning' | translate }}</b><br />
-        {{ 'pages.importLivingCookbook.description2' | translate }}
-      </p>
-      <br />
-      <p>
-        <b>{{ 'pages.importLivingCookbook.timeWarning' | translate }}</b><br />
-        {{ 'pages.importLivingCookbook.timeWarning.description' | translate
-        }}<br />
-      </p>
-      <br />
-      <p>
-        {{ 'pages.importLivingCookbook.contactMe' | translate }}<br />
-        {{ 'pages.importLivingCookbook.sizeWarning' | translate }}
-      </p>
-      <br />
-      <br />
-      <p>{{ 'pages.importLivingCookbook.donate' | translate }}</p>
-
-      <br /><br />
-      <b>{{ 'pages.importLivingCookbook.step1' | translate }}</b>
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.importLivingCookbook.description' | translate }}
     </ion-label>
-  </ion-item>
-
-  <ion-item lines="none" class="option">
-    <ion-checkbox
-      labelPlacement="end"
-      justify="start"
-      [(ngModel)]="excludeImages"
-    >
-      {{ 'pages.importLivingCookbook.step1.excludeImages' | translate }}
-    </ion-checkbox>
-  </ion-item>
-
-  <ion-item lines="none" class="option">
-    <ion-checkbox
-      labelPlacement="end"
-      justify="start"
-      [(ngModel)]="includeStockRecipes"
-    >
-      {{ 'pages.importLivingCookbook.step1.includeStock' | translate }}
-    </ion-checkbox>
-  </ion-item>
-
-  <ion-item lines="none" class="option">
-    <ion-checkbox
-      labelPlacement="end"
-      justify="start"
-      [(ngModel)]="includeTechniques"
-    >
-      {{ 'pages.importLivingCookbook.step1.includeTechniques' | translate }}
-    </ion-checkbox>
   </ion-item>
 
   <br />
 
-  <ion-item lines="none">
-    <ion-label class="ion-text-center ion-text-wrap">
-      <b>{{ 'pages.importLivingCookbook.step2' | translate }}</b>
-    </ion-label>
-  </ion-item>
-
-  <div class="ion-text-center ion-padding">
+  <div>
     <input
       id="filePicker"
       type="file"
       (change)="setFile($event)"
       style="display: none"
+      accept=".lcb,.fdx,.fdxz"
     />
-    <ion-button fill="outline" (click)="filePicker()">
-      <span *ngIf="imageFile">
-        {{ 'pages.importLivingCookbook.filePicker.file' |
-        translate:{fileName:imageFile.name} }}
-      </span>
-      <span *ngIf="!imageFile">
-        {{ 'pages.importLivingCookbook.filePicker.noFile' | translate }}
-      </span>
-    </ion-button>
 
-    <div class="ion-padding" *ngIf="showFileTypeWarning()">
-      <p>
-        {{ 'pages.importLivingCookbook.step2.fileTypeWarning' | translate }}
-      </p>
-    </div>
+    <ion-item lines="none" [disabled]="progress !== undefined">
+      <ion-label>
+        {{ 'pages.import.step' | translate:{ number: 1 } }}
 
-    <div class="ion-padding" *ngIf="!isFileTooLarge() && isFileLarge()">
-      <p>
-        <b>{{ 'pages.importLivingCookbook.step2.sizeWarning' | translate }}</b
-        ><br />
-        {{ 'pages.importLivingCookbook.step2.sizeWarning.time' | translate }}<br />
-        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          {{ 'pages.importLivingCookbook.step2.sizeWarning.contact' | translate
-          }}<br />
-        </a>
-      </p>
-    </div>
+        <div class="ion-padding">
+          <ion-button fill="outline" (click)="filePicker()">
+            <span *ngIf="file">
+              {{ 'pages.import.filePicker.file' | translate:{fileName:file.name}
+              }}
+            </span>
+            <span *ngIf="!file">
+              {{ 'pages.import.filePicker.noFile' |
+              translate:{acceptableFiletypes:'.lcb, .fdx, .fdxz'} }}
+            </span>
+          </ion-button>
 
-    <div class="ion-padding" *ngIf="isFileTooLarge()">
-      <p>
-        <b>{{ 'pages.importLivingCookbook.step2.sizeError' | translate }}</b
-        ><br />
-        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          {{ 'pages.importLivingCookbook.step2.sizeError.contact' | translate }}
-        </a>
-      </p>
-    </div>
+          <div *ngIf="showFileTypeWarning()">
+            <p>
+              {{ 'pages.import.fileTypeWarning' |
+              translate:{acceptableFiletypes:'.lcb, .fdx, .fdxz'} }}
+            </p>
+          </div>
 
-    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
-      <ion-item lines="none">
-        <ion-label class="ion-text-center ion-text-wrap">
-          <b>{{ 'pages.importLivingCookbook.step3' | translate }}</b>
-        </ion-label>
-      </ion-item>
+          <div *ngIf="isFileTooLarge()">
+            <p>
+              <b>{{ 'pages.import.fileTooLarge' | translate }}</b><br />
+              <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+                {{ 'pages.import.fileTooLarge.contact' | translate }}
+              </a>
+            </p>
+          </div>
+        </div>
+      </ion-label>
+    </ion-item>
 
-      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()"
-        >{{ 'pages.importLivingCookbook.step3.upload' | translate }}</ion-button
-      >
-      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()"
-        >{{ 'pages.importLivingCookbook.step3.upload.ignoreWarning' | translate
-        }}</ion-button
-      >
-      <ion-button *ngIf="loading"
-        >{{ 'pages.importLivingCookbook.step3.loading' | translate
-        }}</ion-button
-      >
-    </div>
+    <ion-item
+      lines="none"
+      [disabled]="!file || progress !== undefined || isFileTooLarge()"
+    >
+      <ion-label>
+        {{ 'pages.import.step' | translate:{ number: 2 } }}
 
-    <br /><br /><br /><br />
+        <div class="ion-padding">
+          <ion-checkbox
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.excludeImages"
+            (ionChange)="options.excludeImages = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.excludeImages' | translate }}
+          </ion-checkbox>
+          <ion-checkbox
+            *ngIf="isLCB()"
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.includeStockRecipes"
+            (ionChange)="options.includeStockRecipes = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.includeStock' | translate }}
+          </ion-checkbox>
+          <ion-checkbox
+            *ngIf="isLCB()"
+            labelPlacement="end"
+            justify="start"
+            [checked]="options.includeTechniques"
+            (ionChange)="options.includeTechniques = $event.detail.checked"
+          >
+            {{ 'pages.importLivingCookbook.includeTechniques' | translate }}
+          </ion-checkbox>
 
-    <ion-item lines="none">
-      <ion-label class="ion-text-center ion-text-wrap">
-        <a href="" (click)="troubleshoot = true; $event.preventDefault()"
-          >{{ 'pages.importLivingCookbook.troubleshooting' | translate }}</a
-        >
-        <br /><br />
-        <div *ngIf="troubleshoot">
-          <p>
-            {{ 'pages.importLivingCookbook.troubleshooting.missing.1' |
-            translate }}<br />
-            {{ 'pages.importLivingCookbook.troubleshooting.missing.2' |
-            translate }}<br />
-            {{ 'pages.importLivingCookbook.troubleshooting.missing.3' |
-            translate }}
-          </p>
-          <br />
-          <p>
-            {{ 'pages.importLivingCookbook.troubleshooting.longTime.1' |
-            translate }}<br />
-            {{ 'pages.importLivingCookbook.troubleshooting.longTime.2' |
-            translate }}
-          </p>
-          <br />
-          <p>
-            {{ 'pages.importLivingCookbook.troubleshooting.tooLarge.1' |
-            translate }}<br />
-            {{ 'pages.importLivingCookbook.troubleshooting.tooLarge.2' |
-            translate }}
-          </p>
-          <br />
+          <ion-button
+            slot="start"
+            *ngIf="!showFileTypeWarning()"
+            (click)="submit()"
+          >
+            {{ 'pages.import.upload' | translate }}
+          </ion-button>
+          <ion-button
+            slot="start"
+            *ngIf="showFileTypeWarning()"
+            (click)="submit()"
+          >
+            {{ 'pages.import.upload.ignoreWarning' | translate }}
+          </ion-button>
+        </div>
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" [disabled]="progress === undefined">
+      <ion-label slot="start">
+        {{ 'pages.import.step' | translate:{ number: 3 } }}
+
+        <div class="ion-padding" *ngIf="progress === undefined">
+          {{ 'pages.import.uploading.hint' | translate }}<br />
+          <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
+        </div>
+
+        <div class="ion-padding" *ngIf="progress !== undefined">
+          {{ 'pages.import.uploading' | translate }}<br />
+          <ion-progress-bar
+            type="determinate"
+            [value]="progress"
+          ></ion-progress-bar>
+        </div>
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" [disabled]="true">
+      <ion-label slot="start">
+        {{ 'pages.import.step' | translate:{ number: 4 } }}
+
+        <div class="ion-padding">
+          {{ 'pages.import.processing' | translate }}<br />
+          <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
         </div>
       </ion-label>
     </ion-item>

@@ -33,6 +33,10 @@ export class HttpError<ResponseType> extends Error {
   }
 }
 
+export type UploadProgressHandler = NonNullable<
+  AxiosRequestConfig<any>["onUploadProgress"]
+>;
+
 const REQUEST_TIMEOUT_FALLBACK = 10 * 60 * 1000; // 10 minutes
 
 @Injectable({
@@ -63,52 +67,68 @@ export class HttpService {
     return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
   }
 
-  requestWithWrapper<ResponseType>(
-    path: string,
-    method: string,
-    payload?: any,
-    query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this._requestWithWrapper<ResponseType>(
-      {},
-      path,
-      method,
-      payload || {},
-      query || {},
-      errorHandlers,
-    );
-  }
-
-  multipartRequestWithWrapper<ResponseType>(
-    path: string,
-    method: string,
-    payload?: any,
-    query?: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers,
-  ) {
-    return this._requestWithWrapper<ResponseType>(
-      {
+  requestWithWrapper<ResponseType>(opts: {
+    path: string;
+    method: string;
+    payload?: any;
+    query?: { [key: string]: QueryVal };
+    errorHandlers?: ErrorHandlers;
+  }) {
+    return this._requestWithWrapper<ResponseType>({
+      axiosOverrides: {
         headers: {
-          "Content-Type": "multipart/form-data",
+          Authorization: this.utilService.getToken()
+            ? `Bearer ${this.utilService.getToken()}`
+            : undefined,
         },
       },
-      path,
-      method,
-      payload || {},
-      query || {},
-      errorHandlers,
-    );
+      path: opts.path,
+      method: opts.method,
+      payload: opts.payload || {},
+      query: opts.query || {},
+      errorHandlers: opts.errorHandlers,
+    });
   }
 
-  async _requestWithWrapper<ResponseType>(
-    axiosOverrides: AxiosRequestConfig,
-    path: string,
-    method: string,
-    payload: any,
-    query: { [key: string]: QueryVal },
-    errorHandlers?: ErrorHandlers,
-  ): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
+  multipartRequestWithWrapper<ResponseType>(opts: {
+    path: string;
+    method: string;
+    payload?: any;
+    query?: { [key: string]: QueryVal };
+    errorHandlers?: ErrorHandlers;
+    listeners?: {
+      onUploadProgress?: UploadProgressHandler;
+    };
+  }) {
+    return this._requestWithWrapper<ResponseType>({
+      axiosOverrides: {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: this.utilService.getToken()
+            ? `Bearer ${this.utilService.getToken()}`
+            : undefined,
+        },
+        onUploadProgress: opts.listeners?.onUploadProgress,
+      },
+      path: opts.path,
+      method: opts.method,
+      payload: opts.payload || {},
+      query: opts.query || {},
+      errorHandlers: opts.errorHandlers,
+    });
+  }
+
+  async _requestWithWrapper<ResponseType>(opts: {
+    axiosOverrides: AxiosRequestConfig;
+    path: string;
+    method: string;
+    payload: any;
+    query: { [key: string]: QueryVal };
+    errorHandlers?: ErrorHandlers;
+  }): Promise<HttpResponse<ResponseType> | HttpError<ResponseType>> {
+    const { axiosOverrides, path, method, payload, query, errorHandlers } =
+      opts;
+
     let url = this.getBase() + path + this.utilService.getTokenQuery();
 
     if (query) {

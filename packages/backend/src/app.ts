@@ -16,6 +16,9 @@ import * as cors from "cors";
 
 import { trpcExpressMiddleware } from "@recipesage/trpc";
 
+import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
+setupInvalidateStaleJobsInterval();
+
 // Routes
 import index from "./routes/index.js";
 import users from "./routes/users.js";

@@ -272,6 +272,30 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportTextfilesPage.path,
+    loadChildren: () =>
+      import(
+        "~/pages/settings-components/import-textfiles/import-textfiles.module"
+      ).then((module) => module.ImportTextfilesPageModule),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.ImportUrlsPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-urls/import-urls.module").then(
+        (module) => module.ImportUrlsPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.ImportCSVPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-csv/import-csv.module").then(
+        (module) => module.ImportCSVPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ShoppingListsPage.path,
     loadChildren: () =>
       import(

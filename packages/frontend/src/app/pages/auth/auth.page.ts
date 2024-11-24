@@ -2,7 +2,6 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
-  ToastController,
   AlertController,
   ModalController,
 } from "@ionic/angular";
@@ -50,7 +49,6 @@ export class AuthPage {
     public messagingService: MessagingService,
     public capabilitiesService: CapabilitiesService,
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController,
     public route: ActivatedRoute,
     public userService: UserService,
   ) {
@@ -79,64 +77,48 @@ export class AuthPage {
     this.showLogin = !this.showLogin;
   }
 
-  async presentToast(message: string) {
-    (
-      await this.toastCtrl.create({
-        message,
-        duration: 6000,
-      })
-    ).present();
+  async presentAlert(headerI18n: string, messageI18n: string) {
+    const header = await this.translate.get(headerI18n).toPromise();
+    const message = await this.translate.get(messageI18n).toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   async auth() {
-    const invalidEmail = await this.translate
-      .get("pages.auth.error.invalidEmail")
-      .toPromise();
-    const noName = await this.translate
-      .get("pages.auth.error.noName")
-      .toPromise();
-    const noPassword = await this.translate
-      .get("pages.auth.error.noPassword")
-      .toPromise();
-    const noEmail = await this.translate
-      .get("pages.auth.error.noEmail")
-      .toPromise();
-    const passwordLength = await this.translate
-      .get("pages.auth.error.passwordLength")
-      .toPromise();
-    const passwordMatch = await this.translate
-      .get("pages.auth.error.passwordMatch")
-      .toPromise();
-    const incorrectLogin = await this.translate
-      .get("pages.auth.error.incorrectLogin")
-      .toPromise();
-    const emailTaken = await this.translate
-      .get("pages.auth.error.emailTaken")
-      .toPromise();
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!this.showLogin && !emailRegex.test(this.email)) {
-      this.presentToast(invalidEmail);
+      this.presentAlert("generic.error", "pages.auth.error.invalidEmail");
       return;
     }
     if (!this.showLogin && this.name.length < 1) {
-      this.presentToast(noName);
+      this.presentAlert("generic.error", "pages.auth.error.noName");
       return;
     }
     if (this.password.length === 0) {
-      this.presentToast(noPassword);
+      this.presentAlert("generic.error", "pages.auth.error.noPassword");
       return;
     }
     if (!this.showLogin && this.password.length < 6) {
-      this.presentToast(passwordLength);
+      this.presentAlert("generic.error", "pages.auth.error.passwordLength");
       return;
     }
     if (this.email.length === 0) {
-      this.presentToast(noEmail);
+      this.presentAlert("generic.error", "pages.auth.error.noEmail");
       return;
     }
     if (!this.showLogin && this.password !== this.confirmPassword) {
-      this.presentToast(passwordMatch);
+      this.presentAlert("generic.error", "pages.auth.error.passwordMatch");
       return;
     }
 
@@ -149,7 +131,11 @@ export class AuthPage {
             password: this.password,
           },
           {
-            412: () => this.presentToast(incorrectLogin),
+            412: () =>
+              this.presentAlert(
+                "generic.error",
+                "pages.auth.error.incorrectLogin",
+              ),
           },
         )
       : await this.userService.register(
@@ -159,7 +145,8 @@ export class AuthPage {
             password: this.password,
           },
           {
-            406: () => this.presentToast(emailTaken),
+            406: () =>
+              this.presentAlert("generic.error", "pages.auth.error.emailTaken"),
           },
         );
     loading.dismiss();
@@ -196,20 +183,7 @@ export class AuthPage {
 
   async forgotPassword() {
     if (!this.email) {
-      const invalidEmail = await this.translate
-        .get("pages.auth.error.invalidEmail")
-        .toPromise();
-      const okay = await this.translate.get("generic.okay").toPromise();
-
-      const invalidEmailAlert = await this.alertCtrl.create({
-        message: invalidEmail,
-        buttons: [
-          {
-            text: okay,
-          },
-        ],
-      });
-      invalidEmailAlert.present();
+      await this.presentAlert("generic.error", "pages.auth.error.invalidEmail");
       return;
     }
 
@@ -223,20 +197,10 @@ export class AuthPage {
 
     if (!response) return;
 
-    const message = await this.translate
-      .get("pages.auth.forgot.toast")
-      .toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
-
-    const successAlert = await this.alertCtrl.create({
-      message,
-      buttons: [
-        {
-          text: okay,
-        },
-      ],
-    });
-    successAlert.present();
+    await this.presentAlert(
+      "pages.auth.forgot.alert.header",
+      "pages.auth.forgot.alert.message",
+    );
   }
 
   showLegal(e: Event) {

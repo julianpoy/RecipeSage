@@ -8,66 +8,43 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="slimPage">
-    <ion-item lines="none">
-      <ion-label class="ion-text-center ion-text-wrap">
-        <br /><br />
-        <p>
-          {{ 'pages.importPepperplate.description1' | translate }}<br />
-          {{ 'pages.importPepperplate.description2' | translate }}<br />
-        </p>
-        <br />
-        <p>
-          {{ 'pages.importPepperplate.description3' | translate }}<br />
-          {{ 'pages.importPepperplate.description4' | translate }}<br />
-          {{ 'pages.importPepperplate.description5' | translate }}<br />
-          {{ 'pages.importPepperplate.description6' | translate }}<br />
-        </p>
-        <br />
-        <p>{{ 'pages.importPepperplate.description7' | translate }}<br /></p>
-      </ion-label>
-    </ion-item>
+<ion-content class="ion-padding">
+  <ion-item lines="none">
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.importPepperplate.description' | translate }}
+    </ion-label>
+  </ion-item>
 
-    <ion-list>
-      <ion-item>
-        <ion-input
-          label="{{ 'pages.importPepperplate.username' | translate }}"
-          labelPlacement="stacked"
-          autocomplete="off"
-          autofill="off"
-          [(ngModel)]="username"
-          type="text"
-        ></ion-input>
-      </ion-item>
+  <br />
 
-      <ion-item>
-        <ion-input
-          label="{{ 'pages.importPepperplate.password' | translate }}"
-          labelPlacement="stacked"
-          autocomplete="new-password"
-          autofill="off"
-          [(ngModel)]="password"
-          type="password"
-        ></ion-input>
-      </ion-item>
+  <ion-item lines="none">
+    <ion-input
+      labelPlacement="stacked"
+      label="{{ 'pages.importPepperplate.username' | translate }}"
+      helperText="{{ 'pages.importPepperplate.username.helperText' | translate }}"
+      (ionInput)="username = $event.detail.value || ''"
+      [value]="username"
+      autocomplete="off"
+    ></ion-input>
+  </ion-item>
 
-      <br /><br />
+  <ion-item lines="none">
+    <ion-input
+      labelPlacement="stacked"
+      label="{{ 'pages.importPepperplate.password' | translate }}"
+      helperText="{{ 'pages.importPepperplate.password.helperText' | translate }}"
+      (ionInput)="password = $event.detail.value || ''"
+      [value]="password"
+      type="password"
+      autocomplete="off"
+    ></ion-input>
+  </ion-item>
 
-      <div class="ion-padding">
-        <ion-button
-          expand="block"
-          (click)="scrapePepperplate()"
-          *ngIf="!loading"
-        >
-          {{ 'pages.importPepperplate.start' | translate }}<br />
-        </ion-button>
-        <ion-button expand="block" *ngIf="loading">
-          {{ 'pages.importPepperplate.loading' | translate }}<br />
-        </ion-button>
-      </div>
-
-      <div class="ion-padding">{{ errorMessage }}</div>
-    </ion-list>
-  </div>
+  <ion-item lines="none">
+    <ion-label>
+      <ion-button (click)="submit()">
+        {{ 'generic.submit' | translate }}
+      </ion-button>
+    </ion-label>
+  </ion-item>
 </ion-content>

@@ -9,31 +9,84 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item lines="none">
-    <ion-label>
-      <p>{{ 'pages.export.description1' | translate }}</p>
-      <p>{{ 'pages.export.description2' | translate }}</p>
-    </ion-label>
-  </ion-item>
-
-  <div class="ion-padding">
-    <ion-button (click)="exportAsJSONLD()"
-      >{{ 'pages.export.jsonld' | translate }}</ion-button
-    ><br />
-    <ion-button (click)="exportAsXML()"
-      >{{ 'pages.export.xml' | translate }}</ion-button
-    ><br />
-    <ion-button (click)="exportAsTXT()"
-      >{{ 'pages.export.txt' | translate }}</ion-button
-    ><br />
-    <ion-button (click)="exportAsPDF()"
-      >{{ 'pages.export.pdf' | translate }}</ion-button
-    >
+  <div *ngIf="exportJobs.length">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        {{ 'pages.export.jobs' | translate }}
+        <p>{{ 'pages.export.jobs.subtitle' | translate }}<br /></p>
+      </ion-label>
+    </ion-item>
+    <div *ngFor="let exportJob of exportJobs.slice(0, showJobs)">
+      <ion-item
+        [href]="exportJob.meta?.exportDownloadUrl"
+        target="_blank"
+        [detail]="exportJob.meta?.exportDownloadUrl"
+        detailIcon="cloud-download"
+      >
+        <ion-icon name="document" slot="start" />
+        <ion-label>
+          {{ getJobTitleI18n(exportJob) | translate }}
+          <p>
+            <span>
+              {{ 'pages.export.jobs.job.created' | translate:{
+              timestamp:formatItemCreationDate(exportJob.createdAt) } }}
+            </span>
+            <br />
+            <span *ngIf="exportJob.status === 'CREATE'" class="job-create">
+              {{ 'pages.export.status.create' | translate }}
+            </span>
+            <span *ngIf="exportJob.status === 'RUN'" class="job-run">
+              {{ 'pages.export.status.run' | translate }}
+            </span>
+            <span *ngIf="exportJob.status === 'FAIL'" class="job-fail">
+              {{ 'pages.export.status.fail' | translate }} {{
+              getJobFailureI18n(exportJob) | translate }}
+            </span>
+            <span *ngIf="exportJob.status === 'SUCCESS'" class="job-success">
+              {{ 'pages.export.status.success' | translate }}
+            </span>
+            <ion-progress-bar
+              *ngIf="exportJob.status === 'RUN'"
+              type="determinate"
+              [value]="(getRunningJob()?.progress || 0) * 0.01"
+            ></ion-progress-bar>
+          </p>
+        </ion-label>
+      </ion-item>
+    </div>
+    <ion-item *ngIf="exportJobs.length > showJobs" lines="none">
+      <ion-button (click)="showMoreJobs()" fill="clear">
+        {{ 'generic.showMore' | translate }}
+      </ion-button>
+    </ion-item>
   </div>
 
-  <ion-item lines="none">
-    <ion-label>
-      <p>{{ 'pages.export.description3' | translate }}</p>
-    </ion-label>
-  </ion-item>
+  <div *ngIf="!getRunningJob()">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap">
+        <br />
+        <p>{{ 'pages.export.description1' | translate }}</p>
+        <br />
+        <p>
+          {{ 'pages.export.description2' | translate }}<br />
+          {{ 'pages.export.description3' | translate }}
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-list>
+      <ion-item (click)="exportAsJSONLD()" detail button>
+        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.export.jsonld' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="exportAsTXT()" detail button>
+        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.export.txt' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="exportAsPDF()" detail button>
+        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.export.pdf' | translate }} </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

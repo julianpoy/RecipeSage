@@ -15,7 +15,7 @@
       [ngClass]="{
         full: mode === 'full',
         split: mode === 'split',
-        outline: mode === 'outline'
+        outline: mode === 'outline',
       }"
     >
       <ion-row class="week-title">
@@ -38,7 +38,7 @@
               today.getFullYear() === day.year() &&
               today.getMonth() === day.month() &&
               today.getDate() === day.date(),
-            highlighted: day === highlightedDay || isSelected(day)
+            highlighted: day === highlightedDay || isSelected(day),
           }"
           tabindex="0"
         >
@@ -50,7 +50,7 @@
                 today.getFullYear() === day.year() &&
                 today.getMonth() === day.month() &&
                 today.getDate() === day.date(),
-              highlighted: day === highlightedDay || isSelected(day)
+              highlighted: day === highlightedDay || isSelected(day),
             }"
           >
             {{ day.date() }}

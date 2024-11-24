@@ -24,7 +24,7 @@ import { MealPlanItemDetailsModalPage } from "~/pages/meal-plan-components/meal-
 import { MealPlanBulkPinModalPage } from "~/pages/meal-plan-components/meal-plan-bulk-pin-modal";
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
-import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 import { Title } from "@angular/platform-browser";
 
 @Component({

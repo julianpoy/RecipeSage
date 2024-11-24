@@ -1,3 +1,4 @@
+import { PassThrough } from "stream";
 import { StorageObjectRecord } from "./";
 import { ObjectTypes } from "./shared";
 import * as crypto from "crypto";
@@ -11,6 +12,7 @@ if (!BUCKET && process.env.STORAGE_TYPE === "firebase")
 const ObjectTypesToSubpath = {
   [ObjectTypes.RECIPE_IMAGE]: ObjectTypes.RECIPE_IMAGE,
   [ObjectTypes.PROFILE_IMAGE]: ObjectTypes.PROFILE_IMAGE,
+  [ObjectTypes.DATA_EXPORT]: ObjectTypes.DATA_EXPORT,
 };
 
 // Generate a unique key for the object
@@ -61,6 +63,36 @@ export const writeBuffer = async (
   };
 
   return result;
+};
+
+export const writeStream = async (
+  objectType: ObjectTypes,
+  stream: PassThrough,
+  mimetype: string,
+): Promise<StorageObjectRecord> => {
+  const bucket = getStorage().bucket(BUCKET);
+
+  const key = generateKey(objectType);
+
+  await bucket.file(key).save(stream, {
+    contentType: mimetype,
+    metadata: {
+      cacheControl: "public, max-age=31536000",
+    },
+  });
+
+  await bucket.file(key).makePublic();
+
+  return {
+    objectType,
+    mimetype,
+    size: "-1",
+    bucket: BUCKET,
+    key,
+    acl: "public-read",
+    location: generateStorageLocation(key),
+    etag: "",
+  };
 };
 
 // Delete an object from firebase storage

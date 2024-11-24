@@ -6,7 +6,7 @@ import { LoadingService } from "~/services/loading.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
-import { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 
 @Component({
   selector: "page-add-recipe-to-meal-plan-modal",

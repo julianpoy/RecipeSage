@@ -8,30 +8,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <ion-item lines="none">
-    <ion-label class="ion-text-center ion-text-wrap">
-      <br /><br />
-      <p>{{ 'pages.importRecipeKeeper.description1' | translate }}</p>
-      <br />
-      <p>
-        <b>{{ 'pages.importRecipeKeeper.description2' | translate }}</b><br />
-        {{ 'pages.importRecipeKeeper.description3' | translate }}<br />
-      </p>
-      <br />
-      <p>
-        {{ 'pages.importRecipeKeeper.description4' | translate }}<br />
-        {{ 'pages.importRecipeKeeper.description5' | translate }}
-      </p>
-      <br />
-      <br />
-      <p>{{ 'pages.importRecipeKeeper.description6' | translate }}</p>
+    <ion-label class="ion-text-wrap">
+      {{ 'pages.importRecipeKeeper.description' | translate }}
     </ion-label>
   </ion-item>
 
   <br />
 
-  <div class="ion-text-center ion-padding">
+  <div>
     <input
       id="filePicker"
       type="file"
@@ -39,39 +25,96 @@
       style="display: none"
       accept=".zip"
     />
-    <ion-button fill="outline" (click)="filePicker()">
-      <span *ngIf="imageFile">
-        {{ 'pages.importRecipeKeeper.filePicker.file' |
-        translate:{fileName:imageFile.name} }}
-      </span>
-      <span *ngIf="!imageFile">
-        {{ 'pages.importRecipeKeeper.filePicker.noFile' | translate }}
-      </span>
-    </ion-button>
 
-    <div class="ion-padding" *ngIf="showFileTypeWarning()">
-      <p>{{ 'pages.importRecipeKeeper.fileTypeWarning' | translate }}</p>
-    </div>
+    <ion-item lines="none" [disabled]="progress !== undefined">
+      <ion-label>
+        {{ 'pages.import.step' | translate:{ number: 1 } }}
 
-    <div class="ion-padding" *ngIf="isFileTooLarge()">
-      <p>
-        <b>{{ 'pages.importRecipeKeeper.fileTooLarge' | translate }}</b><br />
-        <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
-          {{ 'pages.importRecipeKeeper.fileTooLarge.contact' | translate }}
-        </a>
-      </p>
-    </div>
+        <div class="ion-padding">
+          <ion-button fill="outline" (click)="filePicker()">
+            <span *ngIf="file">
+              {{ 'pages.import.filePicker.file' | translate:{fileName:file.name}
+              }}
+            </span>
+            <span *ngIf="!file">
+              {{ 'pages.import.filePicker.noFile' |
+              translate:{acceptableFiletypes:'.zip'} }}
+            </span>
+          </ion-button>
 
-    <div class="ion-padding" *ngIf="imageFile && !isFileTooLarge()">
-      <ion-button *ngIf="!loading && !showFileTypeWarning()" (click)="submit()">
-        {{ 'pages.importRecipeKeeper.upload' | translate }}
-      </ion-button>
-      <ion-button *ngIf="!loading && showFileTypeWarning()" (click)="submit()">
-        {{ 'pages.importRecipeKeeper.upload.ignoreWarning' | translate }}
-      </ion-button>
-      <ion-button *ngIf="loading">
-        {{ 'pages.importRecipeKeeper.loading' | translate }}
-      </ion-button>
-    </div>
+          <div *ngIf="showFileTypeWarning()">
+            <p>
+              {{ 'pages.import.fileTypeWarning' |
+              translate:{acceptableFiletypes:'.zip'} }}
+            </p>
+          </div>
+
+          <div *ngIf="isFileTooLarge()">
+            <p>
+              <b>{{ 'pages.import.fileTooLarge' | translate }}</b><br />
+              <a href="mailto:julian@recipesage.com?subject=RecipeSage Support">
+                {{ 'pages.import.fileTooLarge.contact' | translate }}
+              </a>
+            </p>
+          </div>
+        </div>
+      </ion-label>
+    </ion-item>
+
+    <ion-item
+      lines="none"
+      [disabled]="!file || progress !== undefined || isFileTooLarge()"
+    >
+      <ion-label>
+        {{ 'pages.import.step' | translate:{ number: 2 } }}
+
+        <div class="ion-padding">
+          <ion-button
+            slot="start"
+            *ngIf="!showFileTypeWarning()"
+            (click)="submit()"
+          >
+            {{ 'pages.import.upload' | translate }}
+          </ion-button>
+          <ion-button
+            slot="start"
+            *ngIf="showFileTypeWarning()"
+            (click)="submit()"
+          >
+            {{ 'pages.import.upload.ignoreWarning' | translate }}
+          </ion-button>
+        </div>
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" [disabled]="progress === undefined">
+      <ion-label slot="start">
+        {{ 'pages.import.step' | translate:{ number: 3 } }}
+
+        <div class="ion-padding" *ngIf="progress === undefined">
+          {{ 'pages.import.uploading.hint' | translate }}<br />
+          <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
+        </div>
+
+        <div class="ion-padding" *ngIf="progress !== undefined">
+          {{ 'pages.import.uploading' | translate }}<br />
+          <ion-progress-bar
+            type="determinate"
+            [value]="progress"
+          ></ion-progress-bar>
+        </div>
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none" [disabled]="true">
+      <ion-label slot="start">
+        {{ 'pages.import.step' | translate:{ number: 4 } }}
+
+        <div class="ion-padding">
+          {{ 'pages.import.processing' | translate }}<br />
+          <ion-progress-bar type="determinate" [value]="0"></ion-progress-bar>
+        </div>
+      </ion-label>
+    </ion-item>
   </div>
 </ion-content>

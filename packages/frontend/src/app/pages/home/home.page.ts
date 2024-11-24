@@ -553,6 +553,88 @@ export class HomePage {
     prompt.present();
   }
 
+  async exportSelectedRecipes() {
+    const header = await this.translate
+      .get("pages.home.exportSelected.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.home.exportSelected.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const pdfFormat = await this.translate
+      .get("pages.home.exportSelected.pdf")
+      .toPromise();
+    const textFormat = await this.translate
+      .get("pages.home.exportSelected.text")
+      .toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+          role: "cancel",
+          handler: () => {},
+        },
+        {
+          text: pdfFormat,
+          handler: () => {
+            this.startExport(this.selectedRecipeIds, "pdf");
+          },
+        },
+        {
+          text: textFormat,
+          handler: () => {
+            this.startExport(this.selectedRecipeIds, "txt");
+          },
+        },
+      ],
+    });
+    await alert.present();
+    await alert.onDidDismiss();
+  }
+
+  async startExport(recipeIds: string[], format: "txt" | "pdf" | "jsonld") {
+    const result = await this.trpcService.handle(
+      this.trpcService.trpc.jobs.startExportJob.mutate({
+        format,
+        recipeIds,
+      }),
+    );
+
+    if (!result) return;
+
+    const header = await this.translate
+      .get("pages.home.exportSelected.processing.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.home.exportSelected.processing.message")
+      .toPromise();
+    const dismiss = await this.translate.get("generic.close").toPromise();
+    const view = await this.translate
+      .get("pages.home.exportSelected.processing.view")
+      .toPromise();
+
+    const processingAlert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: dismiss,
+          role: "cancel",
+        },
+        {
+          text: view,
+          handler: async () => {
+            this.navCtrl.navigateForward(RouteMap.ExportPage.getPath());
+          },
+        },
+      ],
+    });
+    await processingAlert.present();
+  }
+
   async deleteSelectedRecipes() {
     const recipeNames = this.selectedRecipeIds
       .map(

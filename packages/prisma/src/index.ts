@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import cursorStream from "prisma-cursorstream";
 
 export * from "./types";
 
@@ -24,15 +25,17 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-export const prisma = new PrismaClient({
+const _prisma = new PrismaClient({
   log,
 });
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.PRISMA_DEBUG_ENABLE === "true") {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (prisma.$on as any)("query", (e: any) => {
+  (_prisma.$on as any)("query", (e: any) => {
     console.log("Query: " + e.query);
     console.log("Params: " + e.params);
     console.log("Duration: " + e.duration + "ms");
   });
 }
+
+export const prisma = _prisma.$extends(cursorStream);

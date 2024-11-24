@@ -31,6 +31,12 @@ export class NotFoundError extends ServerError {
   }
 }
 
+export class NotAcceptableError extends ServerError {
+  constructor(...args: ConstructorParameters<typeof Error>) {
+    super(406, ...args);
+  }
+}
+
 export class InternalServerError extends ServerError {
   constructor(...args: ConstructorParameters<typeof Error>) {
     super(500, ...args);

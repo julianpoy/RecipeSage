@@ -9,12 +9,13 @@ import {
   ChatCompletionUserMessageParam,
 } from "openai/resources/chat/completions";
 import { OpenAIHelper, SupportedGPTModel } from "./openai";
-import { AssistantMessage, Prisma } from "@prisma/client";
+import { AssistantMessage } from "@prisma/client";
 import { initBuildRecipe } from "./chatFunctions";
 import dedent from "ts-dedent";
 import { Capabilities, userHasCapability } from "../capabilities";
 import * as Sentry from "@sentry/node";
 import { Converter } from "showdown";
+import { StandardizedRecipeImportEntry } from "../db";
 const showdown = new Converter({
   simplifiedAutoLink: true,
   openLinksInNewWindow: true,
@@ -180,14 +181,14 @@ export class Assistant {
 
     const context = [...(await this.getChatContext(userId)), userMessage];
 
-    const recipes: Prisma.RecipeUncheckedCreateInput[] = [];
+    const recipes: StandardizedRecipeImportEntry[] = [];
 
     const response = await this.openAiHelper.getChatResponseWithTools(
       useLowQualityModel
         ? SupportedGPTModel.GPT4OMini
         : SupportedGPTModel.GPT4O,
       context,
-      [initBuildRecipe(assistantUser.id, recipes)],
+      [initBuildRecipe(recipes)],
     );
 
     await prisma.$transaction(async (tx) => {
@@ -224,7 +225,11 @@ export class Assistant {
           }
 
           const recipe = await tx.recipe.create({
-            data: recipeToCreate,
+            data: {
+              ...recipeToCreate.recipe,
+              userId: assistantUser.id,
+              folder: "main",
+            },
           });
 
           recipeId = recipe.id;
@@ -232,9 +237,17 @@ export class Assistant {
 
         const content = Array.isArray(message.content)
           ? message.content
-              .map((part) =>
-                part.type === "text" ? part.text : part.image_url,
-              )
+              .map((part) => {
+                switch (part.type) {
+                  case "text":
+                    return part.text;
+                  case "image_url":
+                    return part.image_url;
+                  case "input_audio":
+                  case "refusal":
+                    return "";
+                }
+              })
               .join("\n")
           : message.content;
 
