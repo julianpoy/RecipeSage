@@ -27,7 +27,8 @@ type ImportFormat =
   | "cookmate"
   | "recipekeeper"
   | "textfiles"
-  | "urls";
+  | "urls"
+  | "csv";
 
 @Component({
   selector: "page-import",
@@ -90,7 +91,7 @@ export class ImportPage {
 
   formatItemCreationDate(plainTextDate: string | Date) {
     return this.utilService.formatDate(plainTextDate, {
-      now: true,
+      now: false,
       times: true,
     });
   }
@@ -133,6 +134,10 @@ export class ImportPage {
       }
       case "urls": {
         this.navCtrl.navigateForward(RouteMap.ImportUrlsPage.getPath());
+        break;
+      }
+      case "csv": {
+        this.navCtrl.navigateForward(RouteMap.ImportCSVPage.getPath());
         break;
       }
     }
@@ -187,6 +192,9 @@ export class ImportPage {
       }
       case "urls": {
         return "pages.import.urls";
+      }
+      case "csv": {
+        return "pages.import.csv";
       }
       default: {
         Sentry.captureMessage("Job ImportType not handled", {

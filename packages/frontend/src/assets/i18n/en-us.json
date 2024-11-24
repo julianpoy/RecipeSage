@@ -687,6 +687,7 @@
   "pages.import.paprika": "Import from Paprika Recipes file",
   "pages.import.textFiles": "Import from text files",
   "pages.import.urls": "Import from a list of URLs",
+  "pages.import.csv": "Import from CSV (PlanToEat & others)",
   "pages.import.fileTooLarge": "This file is too large to upload directly.",
   "pages.import.fileTooLarge.contact": "Please contact me to have your database imported manually.",
   "pages.import.upload": "Upload and Import",
@@ -730,6 +731,9 @@
   "pages.importUrls.description": "This will attempt to import all of the URLs specified into your RecipeSage account using the autoclip functionality. Please keep in mind that some URLs may be unreachable or unparseable, and will not be imported. Please refer to the user guide for any issues. Please consider contributing if your file contains a large number of recipes or images.",
   "pages.importUrls.urls": "Recipe URLs",
   "pages.importUrls.urls.helperText": "Each URL must be on it's own separate line. Only URLs starting with http:// and https:// are supported.",
+
+  "pages.importCSV.title": "Import Recipes from a CSV file",
+  "pages.importCSV.description": "This will import all of the recipes contained in a CSV file into your RecipeSage account. Many programs output this format, but the internal structure can be somewhat arbitrary. Please refer to the user guide if you have any issues, otherwise contact me. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.settings.title": "Settings",
   "pages.settings.section1.title": "Data & Account",

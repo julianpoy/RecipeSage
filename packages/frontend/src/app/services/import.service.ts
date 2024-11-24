@@ -240,4 +240,28 @@ export class ImportService {
       },
     });
   }
+
+  importCSV(
+    file: Blob,
+    errorHandlers?: ErrorHandlers,
+    onUploadProgress?: UploadProgressHandler,
+  ) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<{
+      jobId: string;
+    }>({
+      path: "import/job/csv",
+      method: "POST",
+      payload: formData,
+      query: {
+        labels: this.getImportLabel(),
+      },
+      errorHandlers,
+      listeners: {
+        onUploadProgress,
+      },
+    });
+  }
 }

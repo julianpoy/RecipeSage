@@ -24,6 +24,7 @@ export interface JobMeta {
     | "paprika"
     | "cookmate"
     | "jsonld"
+    | "csv"
     | "urls";
   importLabels?: string[];
   exportType?: "txt" | "jsonld" | "pdf";

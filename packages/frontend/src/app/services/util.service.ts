@@ -258,6 +258,12 @@ export const RouteMap = {
     },
     path: "settings/import/urls",
   },
+  ImportCSVPage: {
+    getPath() {
+      return `/settings/import/csv`;
+    },
+    path: "settings/import/csv",
+  },
   ShoppingListsPage: {
     getPath() {
       return `/shopping-lists`;

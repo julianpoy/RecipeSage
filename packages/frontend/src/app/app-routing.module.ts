@@ -288,6 +288,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportCSVPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-csv/import-csv.module").then(
+        (module) => module.ImportCSVPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ShoppingListsPage.path,
     loadChildren: () =>
       import(

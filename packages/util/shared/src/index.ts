@@ -1,3 +1,4 @@
+export * from "./capitalizeEachWord";
 export * from "./parsers";
 export * from "./handles";
 export * from "./units";
