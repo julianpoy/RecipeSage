@@ -127,6 +127,7 @@ export const csvHandler = defineHandler(
               );
               const url = getSimilarFields(["url"], record);
               const source = getSimilarFields(["source"], record);
+              const notes = getSimilarFields(["notes"], record);
               const imageURLs = negotiateUrls(
                 getSimilarFields(
                   [
@@ -169,6 +170,7 @@ export const csvHandler = defineHandler(
                   url,
                   source,
                   rating,
+                  notes,
                 },
                 images: imageURLs,
                 labels: [...labels, ...userLabels],
