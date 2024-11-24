@@ -1,0 +1,22 @@
+{
+    "pages.app.oldBrowserAlert.header": "非対応ブラウザー",
+    "pages.app.browser.title": "RecipeSage - 個人レシピ管理",
+    "pages.app.nav.welcome": "ようこそ",
+    "pages.app.nav.login": "ログイン",
+    "pages.app.nav.register": "アカウント作成",
+    "pages.app.nav.download": "ダウンロードしてインストール",
+    "pages.app.nav.contribute": "コントリビューション！",
+    "pages.app.nav.about": "概要＆サポート",
+    "pages.app.nav.labels": "ラベル管理",
+    "pages.app.nav.people": "友達＆プロフィール",
+    "pages.app.nav.assistant": "調理アシスタント",
+    "pages.app.nav.messages": "メッセージ",
+    "pages.app.nav.newrecipe": "レシピを作成",
+    "pages.app.nav.shopping": "買い物リスト",
+    "pages.app.nav.meals": "ミールプラン",
+    "pages.app.nav.settings": "設定",
+    "pages.welcome.selfhostTitle": "RecipeSage を独自ホスティング！",
+    "pages.app.oldBrowserAlert.message": "古いブラウザーを使用されているようです。一部の機能が正常に動作しない可能性があります。全機能を使用するには Firefox のような新しいブラウザーをご利用ください。",
+    "pages.app.nav.home": "レシピー",
+    "pages.app.nav.inbox": "レシピ受信箱"
+}
