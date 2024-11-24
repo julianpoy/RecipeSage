@@ -17,8 +17,13 @@ import * as Sentry from "@sentry/node";
 import * as jsdom from "jsdom";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { deletePathsSilent } from "@recipesage/util/server/general";
+import { z } from "zod";
 
-const schema = {};
+const schema = {
+  query: z.object({
+    labels: z.string().optional(),
+  }),
+};
 
 export const recipekeeperHandler = defineHandler(
   {
@@ -31,6 +36,9 @@ export const recipekeeperHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -48,6 +56,7 @@ export const recipekeeperHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "recipekeeper",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -165,7 +174,7 @@ export const recipekeeperHandler = defineHandler(
             rating,
           },
 
-          labels,
+          labels: [...labels, ...userLabels],
           images: imagePaths,
         });
       }

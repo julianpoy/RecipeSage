@@ -15,13 +15,14 @@ import {
 import { z } from "zod";
 import { spawn } from "child_process";
 import { deletePathsSilent } from "@recipesage/util/server/general";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
   query: z.object({
     excludeImages: z.union([z.literal("true"), z.literal("false")]),
     includeStockRecipes: z.union([z.literal("true"), z.literal("false")]),
     includeTechniques: z.union([z.literal("true"), z.literal("false")]),
+    labels: z.string().optional(),
   }),
 };
 
@@ -36,6 +37,9 @@ export const livingcookbookHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -53,6 +57,7 @@ export const livingcookbookHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "lcb",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -81,6 +86,7 @@ export const livingcookbookHandler = defineHandler(
         "packages/backend/src/lcbimport.app.js",
         file.path,
         res.locals.session.userId,
+        userLabels.join(",") || "null",
         ...optionalFlags,
       ]);
       let errData = "";

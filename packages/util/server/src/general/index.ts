@@ -13,3 +13,4 @@ export * from "./jsonLD";
 export * from "./deletePathsSilent";
 export * from "./exportDataAsync";
 export * from "./throttleDropPromise";
+export * from "./translate";

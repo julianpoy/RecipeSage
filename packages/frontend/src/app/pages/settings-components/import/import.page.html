@@ -17,7 +17,11 @@
       </ion-label>
     </ion-item>
     <div *ngFor="let importJob of importJobs.slice(0, showJobs)">
-      <ion-item>
+      <ion-item
+        [button]="getImportJobPath(importJob)"
+        (click)="goToImportPath(importJob)"
+        [detail]="getImportJobPath(importJob)"
+      >
         <ion-icon name="file-tray-full" slot="start" />
         <ion-label>
           {{ getJobTitleI18n(importJob) | translate }}

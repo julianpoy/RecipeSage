@@ -25,6 +25,7 @@ import {
 const runConfig = {
   path: process.argv[2],
   userId: process.argv[3],
+  labels: process.argv[4],
   excludeImages: process.argv.indexOf("--excludeImages") > -1,
   multipleImages: process.argv.indexOf("--multipleImages") > -1,
 };
@@ -72,6 +73,8 @@ function fetchDeepProp(base, propName) {
 }
 
 async function main() {
+  const labels = runConfig.labels === "null" ? [] : runConfig.labels.split(",");
+
   try {
     try {
       await extract(zipPath, { dir: extractPath });
@@ -318,6 +321,11 @@ async function main() {
           labelMap[lcbLabelName] = labelMap[lcbLabelName] || [];
           labelMap[lcbLabelName].push(recipe.id);
         });
+
+        for (const label of labels) {
+          labelMap[label] = labelMap[label] || [];
+          labelMap[label].push(recipe.id);
+        }
       });
 
       await Promise.all(

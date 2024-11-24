@@ -11,7 +11,7 @@ import {
 import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { z } from "zod";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { clipUrl, throttleDropPromise } from "@recipesage/util/server/general";
 
 const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
@@ -19,6 +19,9 @@ const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
 const schema = {
   body: z.object({
     urls: z.array(z.string()),
+  }),
+  query: z.object({
+    labels: z.string().optional(),
   }),
 };
 
@@ -28,6 +31,9 @@ export const urlsHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const urls = req.body.urls;
 
     const job = await prisma.job.create({
@@ -38,6 +44,7 @@ export const urlsHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "urls",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -74,7 +81,10 @@ export const urlsHandler = defineHandler(
 
         try {
           const clipResults = await clipUrl(url);
-          standardizedRecipeImportInput.push(clipResults);
+          standardizedRecipeImportInput.push({
+            ...clipResults,
+            labels: userLabels,
+          });
         } catch (e) {
           // Skip entry
         }

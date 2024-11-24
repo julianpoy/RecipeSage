@@ -19,8 +19,13 @@ import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { deletePathsSilent } from "@recipesage/util/server/general";
+import { z } from "zod";
 
-const schema = {};
+const schema = {
+  query: z.object({
+    labels: z.string().optional(),
+  }),
+};
 
 export const cookmateHandler = defineHandler(
   {
@@ -33,6 +38,9 @@ export const cookmateHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -50,6 +58,7 @@ export const cookmateHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "cookmate",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -138,7 +147,7 @@ export const cookmateHandler = defineHandler(
             folder: "main",
             url: grabFieldText(cookmateRecipe.url),
           },
-          labels: grabLabelTitles(cookmateRecipe.category),
+          labels: [...grabLabelTitles(cookmateRecipe.category), ...userLabels],
           images: [
             ...(await grabImagePaths(
               extractPath + "/images",

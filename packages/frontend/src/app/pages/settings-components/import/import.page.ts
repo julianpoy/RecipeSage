@@ -142,6 +142,22 @@ export class ImportPage {
     return getJobFailureI18n(job);
   }
 
+  getImportJobPath(job: JobSummary) {
+    const importLabels = job.meta?.importLabels;
+    if (!importLabels?.length || job.status !== "SUCCESS") return null;
+
+    return RouteMap.HomePage.getPath("main", {
+      selectedLabels: importLabels,
+    });
+  }
+
+  goToImportPath(job: JobSummary) {
+    const importPath = this.getImportJobPath(job);
+    if (!importPath) return;
+
+    this.navCtrl.navigateForward(importPath);
+  }
+
   getJobTitleI18n(job: JobSummary) {
     const importType = job.meta?.importType;
     if (!importType) return "pages.import.jobs.job";

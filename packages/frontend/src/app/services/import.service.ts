@@ -5,17 +5,27 @@ import { HttpService, UploadProgressHandler } from "./http.service";
 import { ErrorHandlers } from "./http-error-handler.service";
 import { UtilService } from "./util.service";
 import { EventService } from "./event.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class ImportService {
   constructor(
-    public alertCtrl: AlertController,
-    public events: EventService,
-    public httpService: HttpService,
-    public utilService: UtilService,
+    private alertCtrl: AlertController,
+    private events: EventService,
+    private httpService: HttpService,
+    private utilService: UtilService,
+    private translate: TranslateService,
   ) {}
+
+  getImportLabel() {
+    const date = new Date();
+
+    return this.translate.instant("pages.import.defaultLabel", {
+      dateStamp: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+    });
+  }
 
   importTextfiles(
     file: Blob,
@@ -31,7 +41,9 @@ export class ImportService {
       path: "import/job/textfiles",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -53,7 +65,9 @@ export class ImportService {
       path: "import/job/jsonld",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -80,7 +94,10 @@ export class ImportService {
       path: "import/job/fdxz",
       method: "POST",
       payload: formData,
-      query: options,
+      query: {
+        ...options,
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -105,7 +122,10 @@ export class ImportService {
       path: "import/job/livingcookbook",
       method: "POST",
       payload: formData,
-      query: options,
+      query: {
+        ...options,
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -127,7 +147,9 @@ export class ImportService {
       path: "import/job/paprika",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -148,7 +170,9 @@ export class ImportService {
       path: "import/job/pepperplate",
       method: "POST",
       payload,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
     });
   }
@@ -162,7 +186,9 @@ export class ImportService {
       payload: {
         urls,
       },
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
     });
   }
@@ -181,7 +207,9 @@ export class ImportService {
       path: "import/job/recipekeeper",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,
@@ -203,7 +231,9 @@ export class ImportService {
       path: "import/job/cookmate",
       method: "POST",
       payload: formData,
-      query: undefined,
+      query: {
+        labels: this.getImportLabel(),
+      },
       errorHandlers,
       listeners: {
         onUploadProgress,

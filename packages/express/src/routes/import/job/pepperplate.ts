@@ -15,12 +15,15 @@ import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { z } from "zod";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
   body: z.object({
     username: z.string(),
     password: z.string(),
+  }),
+  query: z.object({
+    labels: z.string().optional(),
   }),
 };
 
@@ -44,6 +47,9 @@ export const pepperplateHandler = defineHandler(
     authentication: AuthenticationEnforcement.Required,
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const username = escapeXml(req.body.username.trim());
     const password = escapeXml(req.body.password);
 
@@ -93,6 +99,7 @@ export const pepperplateHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "pepperplate",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -252,9 +259,12 @@ export const pepperplateHandler = defineHandler(
             yield: (pepperRecipe.Yield || {})._text || "",
             folder: "main",
           },
-          labels: objToArr((pepperRecipe.Tags || {}).TagSync).map(
-            (tag: any) => tag.Text._text,
-          ),
+          labels: [
+            ...objToArr((pepperRecipe.Tags || {}).TagSync).map(
+              (tag: any) => tag.Text._text,
+            ),
+            ...userLabels,
+          ],
           images: imageUrl ? [imageUrl] : [],
         });
       }

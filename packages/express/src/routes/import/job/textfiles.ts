@@ -20,9 +20,14 @@ import {
 import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import { deletePathsSilent } from "@recipesage/util/server/general";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { z } from "zod";
 
-const schema = {};
+const schema = {
+  query: z.object({
+    labels: z.string().optional(),
+  }),
+};
 
 export const textfilesHandler = defineHandler(
   {
@@ -35,6 +40,9 @@ export const textfilesHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -52,6 +60,7 @@ export const textfilesHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "textFiles",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -108,6 +117,7 @@ export const textfilesHandler = defineHandler(
         standardizedRecipeImportInput.push({
           ...recipe,
           images,
+          labels: userLabels,
         });
       }
 

@@ -14,11 +14,14 @@ import {
   JsonLD,
   jsonLDToStandardizedRecipeImportEntry,
 } from "@recipesage/util/server/general";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
   body: z.object({
     jsonLD: z.any(),
+  }),
+  query: z.object({
+    labels: z.string().optional(),
   }),
 };
 
@@ -34,6 +37,9 @@ export const jsonldHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const file = req.file?.buffer.toString() || req.body.jsonLD;
     if (!file) {
       throw new BadRequestError(
@@ -49,6 +55,7 @@ export const jsonldHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "jsonld",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -70,9 +77,13 @@ export const jsonldHandler = defineHandler(
         );
       }
 
-      const standardizedRecipeImportInput = jsonLD.map((ld: JsonLD) =>
-        jsonLDToStandardizedRecipeImportEntry(ld),
-      );
+      const standardizedRecipeImportInput = jsonLD.map((ld: JsonLD) => {
+        const result = jsonLDToStandardizedRecipeImportEntry(ld);
+        return {
+          ...result,
+          labels: [...result.labels, ...userLabels],
+        };
+      });
 
       await prisma.job.update({
         where: {

@@ -17,7 +17,12 @@
       </ion-label>
     </ion-item>
     <div *ngFor="let exportJob of exportJobs.slice(0, showJobs)">
-      <ion-item [href]="exportJob.meta?.exportDownloadUrl" target="_blank">
+      <ion-item
+        [href]="exportJob.meta?.exportDownloadUrl"
+        target="_blank"
+        [detail]="exportJob.meta?.exportDownloadUrl"
+        detailIcon="cloud-download"
+      >
         <ion-icon name="document" slot="start" />
         <ion-label>
           {{ getJobTitleI18n(exportJob) | translate }}

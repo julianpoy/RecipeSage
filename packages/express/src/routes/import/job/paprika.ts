@@ -20,8 +20,13 @@ import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import * as path from "path";
 import { gunzipPromise } from "@recipesage/util/server/storage";
 import { deletePathsSilent } from "@recipesage/util/server/general";
+import { z } from "zod";
 
-const schema = {};
+const schema = {
+  query: z.object({
+    labels: z.string().optional(),
+  }),
+};
 
 export const paprikaHandler = defineHandler(
   {
@@ -34,6 +39,9 @@ export const paprikaHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -51,6 +59,7 @@ export const paprikaHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "paprika",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -118,7 +127,7 @@ export const paprikaHandler = defineHandler(
             url: recipeData.source_url,
           },
 
-          labels,
+          labels: [...labels, ...userLabels],
           images,
         });
       }

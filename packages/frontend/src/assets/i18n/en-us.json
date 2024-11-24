@@ -694,6 +694,7 @@
   "pages.import.filePicker.file": "{{fileName}} Selected",
   "pages.import.filePicker.noFile": "Choose {{ acceptableFiletypes }} file",
   "pages.import.fileTypeWarning": "Warning! This filetype does not end with: {{ acceptableFiletypes }}. It may not work.",
+  "pages.import.defaultLabel": "Import on {{dateStamp}}",
 
   "pages.importJsonLD.title": "Import Recipes from JSON-LD File",
   "pages.importJsonLD.description": "This will import a JSON-LD file (ends in .json) file into your RecipeSage account. Please note that JSON-LD is a very specific file format, and not all .json files have the correct contents to be compatible with this import method. If you're having trouble with the import, please refer to the user guide. Please consider contributing if your file contains a large number of recipes or images.",

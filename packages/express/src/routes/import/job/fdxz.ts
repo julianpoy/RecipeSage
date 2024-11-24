@@ -15,11 +15,12 @@ import {
 import { z } from "zod";
 import { spawn } from "child_process";
 import { deletePathsSilent } from "@recipesage/util/server/general";
-import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
   query: z.object({
     excludeImages: z.union([z.literal("true"), z.literal("false")]),
+    labels: z.string().optional(),
   }),
 };
 
@@ -34,6 +35,9 @@ export const fdxzHandler = defineHandler(
     ],
   },
   async (req, res) => {
+    const userLabels =
+      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+
     const cleanupPaths: string[] = [];
 
     const file = req.file;
@@ -51,6 +55,7 @@ export const fdxzHandler = defineHandler(
         progress: 1,
         meta: {
           importType: "fdxz",
+          importLabels: userLabels,
         } satisfies JobMeta,
       },
     });
@@ -75,6 +80,7 @@ export const fdxzHandler = defineHandler(
         "packages/backend/src/fdxzimport.app.js",
         file.path,
         res.locals.session.userId,
+        userLabels.join(",") || "null",
         ...optionalFlags,
       ]);
       let errData = "";
