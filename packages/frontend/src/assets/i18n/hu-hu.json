@@ -859,5 +859,13 @@
     "components.fontSize.option.X1_0": "Rendszernek megfelelő",
     "pages.recipeDetails.yield": "Adag",
     "pages.recipeDetailsPopover.keepScreenOn": "Képernyő bekapcsolva tartása",
-    "pages.editRecipe.input.yield": "Adag"
+    "pages.editRecipe.input.yield": "Adag",
+    "pages.auth.forgot.alert.header": "Jelszó visszaállítás kérvényezve",
+    "pages.home.exportSelected.header": "Formátum kiválasztása",
+    "pages.home.exportSelected.message": "Milyen formátumban szeretné letölteni ezeket a recepteket?",
+    "pages.home.exportSelected.pdf": "PDF formátum",
+    "pages.auth.or": "VAGY",
+    "pages.auth.forgot.alert.message": "Ha van egy RecipeSage-fiók az adott e-mail címhez társítva, akkor a következő néhány percben kapni fog egy jelszó-visszaállítási linket.",
+    "pages.home.exportSelected.text": "Egyszerű szöveges formátum",
+    "pages.app.browser.title": "RecipeSage - A személyes receptőrző"
 }
