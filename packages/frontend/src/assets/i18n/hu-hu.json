@@ -839,7 +839,7 @@
     "pages.settings.preferencesSync.message": "Ki kell választania, hogy felül kívánja-e írni a felhőben szinkronizált beállításokat az eszköz helyi beállításaival, vagy felül kívánja-e írni az eszköz beállításait a felhő beállításaival.",
     "pages.shoppingListIgnoreModal.description": "Az itt felsorolt hozzávalók automatikusan kizárásra kerülnek, ha receptet ad hozzá a bevásárlólistához. Ez különösen hasznos az olyan tételek esetében, mint pl. a só, amelyet valószínűleg nem kell minden alkalommal hozzáadnia a bevásárlólistához.",
     "pages.addProfileItem.selectVisibility": "Ki láthatja?",
-    "pages.myProfile.enable": "Engedélyezze",
+    "pages.myProfile.enable": "Engedélyezés",
     "pages.myProfile.nullState.1": "Még nincs semmi a profilodon.",
     "pages.home.errors.noRecipes.message6": "Importálást segítő kiegészítőt telepítheti az asztali böngészőkre:",
     "pages.downloadAndInstall.extension": "RecipeSage importálást segítő böngészőbővítmény",
