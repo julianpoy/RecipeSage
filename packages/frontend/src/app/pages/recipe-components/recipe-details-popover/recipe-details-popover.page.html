@@ -21,6 +21,21 @@
     {{ 'pages.recipeDetailsPopover.actions' | translate }}
   </ion-list-header>
 
+  <ion-button
+    (click)="cookingToolbarService.isPinned(recipe.id) ? closeWithAction('unpin') : closeWithAction('pin')"
+    expand="block"
+    size="small"
+    class="ion-margin"
+  >
+    <ion-icon name="pin" slot="start"></ion-icon>
+    <span *ngIf="cookingToolbarService.isPinned(recipe.id)">
+      {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
+    </span>
+    <span *ngIf="!cookingToolbarService.isPinned(recipe.id)">
+      {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }}
+    </span>
+  </ion-button>
+
   <div *ngIf="recipe.userId === me?.id && recipe.folder === 'inbox'">
     <ion-item lines="none">
       <ion-label>
@@ -135,21 +150,6 @@
     >
       <ion-icon name="print" slot="start"></ion-icon>
       {{ 'pages.recipeDetailsPopover.print' | translate }}
-    </ion-button>
-
-    <ion-button
-      (click)="cookingToolbarService.isPinned(recipe.id) ? closeWithAction('unpin') : closeWithAction('pin')"
-      expand="block"
-      size="small"
-      class="ion-margin"
-    >
-      <ion-icon name="pin" slot="start"></ion-icon>
-      <span *ngIf="cookingToolbarService.isPinned(recipe.id)">
-        {{ 'pages.recipeDetailsPopover.unPinRecipe' | translate }}
-      </span>
-      <span *ngIf="!cookingToolbarService.isPinned(recipe.id)">
-        {{ 'pages.recipeDetailsPopover.pinRecipe' | translate }}
-      </span>
     </ion-button>
 
     <ion-button
