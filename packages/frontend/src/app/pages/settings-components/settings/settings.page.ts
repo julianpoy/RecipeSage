@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import {
   NavController,
-  ToastController,
   AlertController,
   LoadingController,
   ModalController,
@@ -29,6 +28,7 @@ import { FontSizeModalComponent } from "../../../components/font-size-modal/font
 import { MessagingService } from "../../../services/messaging.service";
 import { UserService } from "../../../services/user.service";
 import { EventName, EventService } from "../../../services/event.service";
+import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 
 @Component({
   selector: "page-settings",
@@ -56,7 +56,6 @@ export class SettingsPage {
     private events: EventService,
     private navCtrl: NavController,
     private translate: TranslateService,
-    private toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
@@ -67,6 +66,7 @@ export class SettingsPage {
     private quickTutorialService: QuickTutorialService,
     private messagingService: MessagingService,
     private userService: UserService,
+    private recipeCompletionTrackerService: RecipeCompletionTrackerService,
   ) {
     try {
       this.showSplitPaneOption = screen.width >= 1200;
@@ -222,6 +222,35 @@ export class SettingsPage {
       }
       await loading.dismiss();
     }
+  }
+
+  async resetCompletion() {
+    const header = await this.translate
+      .get("pages.settings.resetCompletion.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.settings.resetCompletion.message")
+      .toPromise();
+    const cancel = await this.translate.get("generic.cancel").toPromise();
+    const del = await this.translate.get("generic.delete").toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: cancel,
+        },
+        {
+          text: del,
+          handler: () => {
+            this.recipeCompletionTrackerService.reset();
+          },
+        },
+      ],
+    });
+
+    alert.present();
   }
 
   async resetPreferences() {

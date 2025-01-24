@@ -36,6 +36,14 @@
       <ion-icon name="sync" slot="start"></ion-icon>
       <ion-label> {{ 'pages.settings.update' | translate }} </ion-label>
     </ion-item>
+
+    <ion-item lines="inset" (click)="resetCompletion()" button>
+      <ion-icon name="trash-bin" slot="start"></ion-icon>
+      <ion-label>
+        {{ 'pages.settings.resetCompletion' | translate }}
+      </ion-label>
+    </ion-item>
+
     <ion-item lines="inset" *ngIf="showSplitPaneOption">
       <ion-icon name="tablet-landscape" slot="start"></ion-icon>
       <ion-toggle
