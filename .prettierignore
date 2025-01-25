@@ -11,3 +11,5 @@ www
 
 packages/frontend/src/assets/i18n/*.json
 !packages/frontend/src/assets/i18n/en-us.json
+
+/.nx/workspace-data

@@ -5,7 +5,7 @@ import { userPublic } from "./userPublic";
  * Provides fields necessary for displaying a summary about a shopping list
  **/
 export const shoppingListSummaryWithItems =
-  Prisma.validator<Prisma.ShoppingListArgs>()({
+  Prisma.validator<Prisma.ShoppingListFindFirstArgs>()({
     select: {
       id: true,
       userId: true,

@@ -5,7 +5,7 @@ import { recipeSummaryLite } from "./recipeSummaryLite";
  * Provides assistant chat history with recipe summary included
  **/
 export const assistantMessageSummary =
-  Prisma.validator<Prisma.AssistantMessageArgs>()({
+  Prisma.validator<Prisma.AssistantMessageFindFirstArgs>()({
     select: {
       id: true,
       userId: true,

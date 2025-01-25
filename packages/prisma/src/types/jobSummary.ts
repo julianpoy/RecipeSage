@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export const jobSummary = Prisma.validator<Prisma.JobArgs>()({
+export const jobSummary = Prisma.validator<Prisma.JobFindFirstArgs>()({
   select: {
     id: true,
     status: true,
