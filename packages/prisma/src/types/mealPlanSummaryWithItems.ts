@@ -4,8 +4,8 @@ import { userPublic } from "./userPublic";
 /**
  * Provides fields necessary for displaying a summary about a meal plan
  **/
-export const mealPlanSummaryWithItems = Prisma.validator<Prisma.MealPlanArgs>()(
-  {
+export const mealPlanSummaryWithItems =
+  Prisma.validator<Prisma.MealPlanFindFirstArgs>()({
     select: {
       id: true,
       userId: true,
@@ -61,8 +61,7 @@ export const mealPlanSummaryWithItems = Prisma.validator<Prisma.MealPlanArgs>()(
         },
       },
     },
-  },
-);
+  });
 
 /**
  * Provides fields necessary for displaying a summary about a meal plan,

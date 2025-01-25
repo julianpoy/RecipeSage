@@ -5,7 +5,7 @@ import { labelSummary } from "./labelSummary";
 /**
  * All recipe fields including labels, user profile, images, etc
  **/
-export const recipeSummary = Prisma.validator<Prisma.RecipeArgs>()({
+export const recipeSummary = Prisma.validator<Prisma.RecipeFindFirstArgs>()({
   select: {
     id: true,
     userId: true,

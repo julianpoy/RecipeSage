@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export const userPublic = Prisma.validator<Prisma.UserArgs>()({
+export const userPublic = Prisma.validator<Prisma.UserFindFirstArgs>()({
   select: {
     id: true,
     email: true,

@@ -41,5 +41,6 @@
   "useDaemonProcess": false,
   "neverConnectToCloud": true,
   "useInferencePlugins": false,
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "useLegacyCache": true
 }

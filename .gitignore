@@ -50,3 +50,4 @@ kube/secrets.yml
 .angular
 
 .nx/cache
+.nx/workspace-data
