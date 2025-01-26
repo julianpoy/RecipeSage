@@ -410,7 +410,7 @@
     "pages.editRecipe.addLabel.otherGroup": "Más kategóriában már létezik",
     "pages.editRecipe.save": "Mentés",
     "pages.editRecipe.create": "Létrehoz",
-    "pages.editRecipe.clip.loading": "Kérem várjon...",
+    "pages.editRecipe.clip.loading": "Kérem, várjon...",
     "pages.editRecipe.missingLabelGroup.title": "Hiányzó címkecsoport",
     "pages.editRecipe.conflict.title": "Ismétlődő cím",
     "pages.editRecipe.conflict.message": "A „{{title}}” című recept már létezik a gyűjteményében. Dönthet úgy is, hogy menti, vagy átnevezheti a receptet a következőre: „{{uniqueTitle}}”.",
