@@ -8,14 +8,15 @@ import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
 import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
-import {
-  Capabilities,
-  userHasCapability,
-} from "@recipesage/util/server/capabilities";
+import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { z } from "zod";
 import { spawn } from "child_process";
 import { deletePathsSilent } from "@recipesage/util/server/general";
-import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
+import {
+  Capabilities,
+  cleanLabelTitle,
+  JOB_RESULT_CODES,
+} from "@recipesage/util/shared";
 
 const schema = {
   query: z.object({

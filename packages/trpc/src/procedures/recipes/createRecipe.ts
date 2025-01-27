@@ -2,10 +2,10 @@ import { prisma } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { indexRecipes } from "@recipesage/util/server/search";
 import {
-  Capabilities,
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
 } from "@recipesage/util/server/capabilities";
+import { Capabilities } from "@recipesage/util/shared";
 import { validateTrpcSession } from "@recipesage/util/server/general";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";

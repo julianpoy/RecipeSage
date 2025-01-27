@@ -1,12 +1,7 @@
+import { Capabilities } from "@recipesage/util/shared";
+
 export const CAPABILITY_GRACE_PERIOD = 7;
 export const MULTIPLE_IMAGES_UNLOCKED_LIMIT = 10;
-
-export enum Capabilities {
-  HighResImages = "highResImages",
-  MultipleImages = "multipleImages",
-  ExpandablePreviews = "expandablePreviews",
-  AssistantMoreMessages = "assistantMoreMessages",
-}
 
 export enum SubscriptionModels {
   PyoMonthly = "pyo-monthly",

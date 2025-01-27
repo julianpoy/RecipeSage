@@ -57,3 +57,4 @@ export const deleteObjects = storageProvider.deleteObjects;
 export * from "./image";
 export * from "./shared";
 export * from "./gunzipPromise";
+export * from "./deleteHangingImagesForUser";

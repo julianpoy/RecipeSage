@@ -27,7 +27,6 @@ export const updatePreferences = publicProcedure
       preferencesVersion: z.number().min(0),
 
       [GlobalPreferenceKey.EnableSplitPane]: z.boolean(),
-      [GlobalPreferenceKey.EnableExperimentalOfflineCache]: z.boolean(),
       [GlobalPreferenceKey.Language]: z
         .nativeEnum(SupportedLanguages)
         .nullable(),

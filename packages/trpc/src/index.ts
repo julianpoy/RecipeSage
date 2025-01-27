@@ -55,6 +55,7 @@ import { detachShoppingList } from "./procedures/shoppingLists/detachShoppingLis
 import { getShoppingList } from "./procedures/shoppingLists/getShoppingList";
 import { getShoppingListItems } from "./procedures/shoppingLists/getShoppingListItems";
 import { getShoppingLists } from "./procedures/shoppingLists/getShoppingLists";
+import { getShoppingListsWithItems } from "./procedures/shoppingLists/getShoppingListsWithItems";
 import { updateShoppingList } from "./procedures/shoppingLists/updateShoppingList";
 import { updateShoppingListItem } from "./procedures/shoppingLists/updateShoppingListItem";
 import { updateShoppingListItems } from "./procedures/shoppingLists/updateShoppingListItems";
@@ -62,6 +63,18 @@ import { getUserProfilesById } from "./procedures/users/getUserProfilesById";
 import { getJobs } from "./procedures/jobs/getJobs";
 import { getJob } from "./procedures/jobs/getJob";
 import { startExportJob } from "./procedures/jobs/startExportJob";
+import { getRecipesByIds } from "./procedures/recipes/getRecipesByIds";
+import { getAllVisibleRecipesManifest } from "./procedures/recipes/getAllVisibleRecipesManifest";
+import { getMealPlansWithItems } from "./procedures/mealPlans/getMealPlansWithItems";
+import { login } from "./procedures/users/login";
+import { register } from "./procedures/users/register";
+import { forgotPassword } from "./procedures/users/forgotPassword";
+import { getMyStats } from "./procedures/users/getMyStats";
+import { deleteAllRecipes } from "./procedures/recipes/deleteAllRecipes";
+import { deleteRecipesByIds } from "./procedures/recipes/deleteRecipesByIds";
+import { deleteRecipesByLabelIds } from "./procedures/recipes/deleteRecipesByLabelIds";
+import { deleteUser } from "./procedures/users/deleteUser";
+import { updateUser } from "./procedures/users/updateUser";
 
 const appRouter = router({
   labelGroups: router({
@@ -83,7 +96,12 @@ const appRouter = router({
     getRecipe,
     updateRecipe,
     deleteRecipe,
+    deleteRecipesByIds,
+    deleteRecipesByLabelIds,
+    deleteAllRecipes,
     getRecipes,
+    getRecipesByIds,
+    getAllVisibleRecipesManifest,
     searchRecipes,
     getSimilarRecipes,
     getRecipesByTitle,
@@ -100,6 +118,7 @@ const appRouter = router({
     getMealPlan,
     getMealPlanItems,
     getMealPlans,
+    getMealPlansWithItems,
     updateMealPlan,
     updateMealPlanItem,
     updateMealPlanItems,
@@ -115,6 +134,7 @@ const appRouter = router({
     getShoppingList,
     getShoppingListItems,
     getShoppingLists,
+    getShoppingListsWithItems,
     updateShoppingList,
     updateShoppingListItem,
     updateShoppingListItems,
@@ -125,10 +145,16 @@ const appRouter = router({
   }),
   users: router({
     getMe,
+    getMyStats,
     getUserProfilesById,
     updatePreferences,
     getPreferences,
     signInWithGoogle,
+    login,
+    register,
+    forgotPassword,
+    deleteUser,
+    updateUser,
   }),
   ml: router({
     getRecipeFromOCR,

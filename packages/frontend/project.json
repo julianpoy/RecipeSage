@@ -15,21 +15,35 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
+        "commands": [
+          "webpack -c sw-webpack.config.js --watch",
+          "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
+        ],
+        "parallel": true
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ng build --configuration=production && workbox injectManifest"
+        "commands": [
+          "ng build --configuration=production",
+          "webpack -c sw-webpack.config.js",
+          "workbox injectManifest"
+        ],
+        "parallel": false
       }
     },
     "build:selfhost": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/frontend",
-        "command": "ng build --configuration=selfhost && workbox injectManifest"
+        "commands": [
+          "webpack -c sw-webpack.config.js",
+          "ng build --configuration=selfhost",
+          "workbox injectManifest"
+        ],
+        "parallel": false
       }
     },
     "typecheck": {

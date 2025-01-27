@@ -13,7 +13,6 @@ export enum QuickTutorialOptions {
   MultipleRecipeSelection = "multipleRecipeSelection",
   MultipleLabelSelection = "multipleLabelSelection",
   SplitPaneView = "splitPaneView",
-  ExperimentalOfflineCache = "experimentalOfflineCache",
   PinnedRecipes = "pinnedRecipes",
 }
 
@@ -33,10 +32,6 @@ const quickTutorialBlurbs: QuickTutorialBlurbs = {
   [QuickTutorialOptions.SplitPaneView]: {
     header: "services.quickTutorial.splitPaneView.header",
     message: "services.quickTutorial.splitPaneView.message",
-  },
-  [QuickTutorialOptions.ExperimentalOfflineCache]: {
-    header: "services.quickTutorial.experimentalOfflineCache.header",
-    message: "services.quickTutorial.experimentalOfflineCache.message",
   },
   [QuickTutorialOptions.PinnedRecipes]: {
     header: "services.quickTutorial.pinnedRecipes.header",

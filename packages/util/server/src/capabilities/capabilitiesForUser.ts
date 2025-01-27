@@ -1,6 +1,7 @@
 import { capabilitiesForSubscription } from "./capabilitiesForSubscription";
-import { Capabilities, SubscriptionModels } from "./constants";
+import { SubscriptionModels } from "./constants";
 import { subscriptionsForUser } from "./subscriptionsForUser";
+import { Capabilities } from "@recipesage/util/shared";
 
 export const capabilitiesForUser = async (userId: string) => {
   const activeSubscriptions = await subscriptionsForUser(userId);

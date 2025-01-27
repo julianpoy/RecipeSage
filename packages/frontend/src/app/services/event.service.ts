@@ -23,7 +23,10 @@ export class EventService {
 
   constructor() {}
 
-  subscribe(_eventNames: EventName | EventName[], listener: () => void): void {
+  subscribe(
+    _eventNames: EventName | EventName[],
+    listener: (data?: any) => void,
+  ): void {
     const eventNames = [];
     if (Array.isArray(_eventNames)) eventNames.push(..._eventNames);
     else eventNames.push(_eventNames);

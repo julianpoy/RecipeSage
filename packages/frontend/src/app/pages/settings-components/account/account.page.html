@@ -8,7 +8,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="me && myStats">
   <br />
 
   <ion-item lines="none">
@@ -33,7 +33,7 @@
       autocomplete="off"
       autofill="off"
       type="text"
-      [(ngModel)]="account.name"
+      [(ngModel)]="me.name"
       (ionFocus)="nameChanged = true"
       (ngModelChange)="nameChanged = true"
     ></ion-input>
@@ -54,7 +54,7 @@
       autocomplete="off"
       autofill="off"
       type="email"
-      [(ngModel)]="account.email"
+      [(ngModel)]="me.email"
       (ionFocus)="emailChanged = true"
       (ngModelChange)="emailChanged = true"
     ></ion-input>
@@ -75,8 +75,8 @@
       autocomplete="new-password"
       autofill="off"
       type="password"
-      [(ngModel)]="account.password"
-      (ionFocus)="account.password = ''; passwordChanged = true;"
+      [(ngModel)]="password"
+      (ionFocus)="password = ''; passwordChanged = true;"
       (ngModelChange)="passwordChanged = true;"
     ></ion-input>
   </ion-item>
@@ -88,7 +88,7 @@
       autocomplete="new-password"
       autofill="off"
       type="password"
-      [(ngModel)]="account.confirmPassword"
+      [(ngModel)]="confirmPassword"
     ></ion-input>
     <ion-button
       (click)="savePassword()"
@@ -119,35 +119,35 @@
   <ion-item lines="none" class="ion-text-wrap">
     <ion-label>
       <h2>{{ 'pages.account.stats.recipeCount' | translate }}</h2>
-      <p>{{stats.recipeCount}}</p>
+      <p>{{myStats.recipeCount}}</p>
     </ion-label>
   </ion-item>
 
   <ion-item lines="none" class="ion-text-wrap">
     <ion-label>
       <h2>{{ 'pages.account.stats.recipeImageCount' | translate }}</h2>
-      <p>{{stats.recipeImageCount}}</p>
+      <p>{{myStats.recipeImageCount}}</p>
     </ion-label>
   </ion-item>
 
   <ion-item lines="none" class="ion-text-wrap">
     <ion-label>
       <h2>{{ 'pages.account.stats.messageCount' | translate }}</h2>
-      <p>{{stats.messageCount}}</p>
+      <p>{{myStats.messageCount}}</p>
     </ion-label>
   </ion-item>
 
   <ion-item lines="none" class="ion-text-wrap">
     <ion-label>
       <h2>{{ 'pages.account.stats.createdAt' | translate }}</h2>
-      <p>{{stats.createdAt}}</p>
+      <p>{{formatDate(myStats.createdAt)}}</p>
     </ion-label>
   </ion-item>
 
   <ion-item lines="none" class="ion-text-wrap">
     <ion-label>
       <h2>{{ 'pages.account.stats.lastLogin' | translate }}</h2>
-      <p>{{stats.lastLogin}}</p>
+      <p>{{formatDate(myStats.lastLogin || myStats.createdAt)}}</p>
     </ion-label>
   </ion-item>
 
@@ -242,7 +242,7 @@
     </ion-label>
   </ion-item>
 
-  <ion-item lines="none" class="ion-text-wrap" *ngIf="enableAssistant">
+  <ion-item lines="none" class="ion-text-wrap">
     <ion-label class="ion-text-wrap">
       <h2>{{ 'pages.account.bonus.assistantMoreMessages' | translate }}</h2>
       <p *ngIf="capabilitySubscriptions['assistantMoreMessages']?.enabled">

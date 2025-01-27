@@ -1,4 +1,4 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, SessionDTO } from "@recipesage/prisma";
 import { publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { OAuth2Client } from "google-auth-library";
@@ -53,5 +53,9 @@ export const signInWithGoogle = publicProcedure
 
     const session = await generateSession(user.id, SessionType.User);
 
-    return session.token;
+    return {
+      token: session.token,
+      userId: session.userId,
+      email: user.email,
+    } satisfies SessionDTO;
   });

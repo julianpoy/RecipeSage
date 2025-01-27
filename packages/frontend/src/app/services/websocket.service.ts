@@ -6,10 +6,16 @@ import { GRIP_WS_URL } from "../../environments/environment";
   providedIn: "root",
 })
 export class WebsocketService {
-  connection: any;
-  reconnectTimeout: any;
+  connection: WebSocket | undefined;
+  reconnectTimeout: NodeJS.Timeout | undefined;
 
-  listeners: any = {};
+  listeners: Record<
+    string,
+    {
+      cb: (msg: Record<string, any>) => void;
+      ctx: unknown;
+    }[]
+  > = {};
 
   constructor(public utilService: UtilService) {
     this.connect();
@@ -17,8 +23,10 @@ export class WebsocketService {
     // Before tab close, cleanup WS handler and connection
     window.addEventListener("beforeunload", () => {
       try {
-        this.connection.onclose = () => {};
-        this.connection.close();
+        if (this.connection) {
+          this.connection.onclose = () => {};
+          this.connection.close();
+        }
       } catch (e) {}
     });
   }
@@ -31,7 +39,7 @@ export class WebsocketService {
   // Listeners
   register(
     eventName: string,
-    cb: (payload: Record<string, any>) => void,
+    cb: (msg: Record<string, any>) => void,
     ctx: any,
   ) {
     if (!this.listeners[eventName]) this.listeners[eventName] = [];
@@ -44,7 +52,7 @@ export class WebsocketService {
 
   // Outgoing
   send(msg: Record<string, any>) {
-    this.connection.send(JSON.stringify(msg));
+    this.connection?.send(JSON.stringify(msg));
   }
 
   // Connection
@@ -72,7 +80,7 @@ export class WebsocketService {
     };
 
     this.connection.onerror = () => {
-      if (this.connection.readyState === WebSocket.OPEN)
+      if (this.connection?.readyState === WebSocket.OPEN)
         this.connection.close();
       this.queueReconnect();
     };
@@ -83,13 +91,13 @@ export class WebsocketService {
   }
 
   public queueReconnect() {
-    const RECONNECT_TIMEOUT_WAIT = 2000 + Math.floor(Math.random() * 2000); // Time to wait before attempting reconnect in MS
+    const RECONNECT_TIMEOUT_WAIT = 2000 + Math.floor(Math.random() * 5000); // Time to wait before attempting reconnect in MS
 
     if (this.reconnectTimeout) return;
 
     this.reconnectTimeout = setTimeout(() => {
       this.connect();
-      this.reconnectTimeout = null;
+      this.reconnectTimeout = undefined;
     }, RECONNECT_TIMEOUT_WAIT);
   }
 
@@ -97,7 +105,7 @@ export class WebsocketService {
     this.broadcast(payload.type, payload.data);
   }
 
-  private broadcast(eventName: string, msg?: Record<string, any>) {
+  private broadcast(eventName: string, msg: Record<string, any> = {}) {
     const queue = this.listeners[eventName];
 
     if (!queue) return;

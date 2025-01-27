@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
-import { API_BASE_URL } from "../../environments/environment";
 import {
   AppTheme,
   SupportedFontSize,
   SupportedLanguages,
 } from "@recipesage/util/shared";
 import { NavController } from "@ionic/angular";
+import { getBase } from "../utils/getBase";
 
 export interface RecipeTemplateModifiers {
   version?: string;
@@ -340,13 +340,8 @@ export class UtilService {
     }
   }
 
-  getBase(): string {
-    if (window.location.hostname === "beta.recipesage.com")
-      return "https://api.beta.recipesage.com/";
-
-    const subpathBase = `${window.location.protocol}//${window.location.hostname}/api/`;
-
-    return (window as any).API_BASE_OVERRIDE || API_BASE_URL || subpathBase;
+  getBase() {
+    return getBase();
   }
 
   setFontSize(fontSize: SupportedFontSize) {
@@ -356,14 +351,6 @@ export class UtilService {
   setAppTheme(theme: AppTheme) {
     const bodyClasses = document.body.className.replace(/theme-\S*/, "");
     document.body.className = `${bodyClasses} theme-${theme}`;
-  }
-
-  removeToken(): void {
-    localStorage.removeItem("token");
-  }
-
-  setToken(token: string): void {
-    localStorage.setItem("token", token);
   }
 
   getToken(): string | null {
