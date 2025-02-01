@@ -3,10 +3,9 @@ import superjson from "superjson";
 export const getTrpcResponseBodyForFetchResponse = async <T>(
   response: Response,
 ) => {
-  const clone = response.clone();
-  const responseJson = await clone.json();
+  const text = await response.clone().text();
 
-  const output = superjson.parse<T>(responseJson);
+  const output = superjson.parse<T>(text);
 
   return output;
 };
