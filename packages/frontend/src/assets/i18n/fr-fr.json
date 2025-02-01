@@ -983,5 +983,10 @@
     "pages.importCSV.title": "Importation des recettes à partir d'un fichier CSV",
     "pages.importCSV.description": "Cela importera toutes les recettes contenues dans un fichier CSV dans votre compte RecipeSage. De nombreux programmes produisent ce format, mais la structure interne peut être quelque peu arbitraire. Veuillez vous référer au guide de l'utilisateur si vous rencontrez des problèmes, sinon contactez-moi. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
     "generic.showMore": "Afficher plus",
-    "generic.submit": "Soumettre"
+    "generic.submit": "Soumettre",
+    "pages.auth.error.invalidEmailPassword": "Veuillez entrer une adresse e-mail valide et un mot de passe d'au moins 6 caractères.",
+    "pages.auth.error.incorrectEmail": "Aucun compte n'existe avec cette adresse e-mail.",
+    "pages.auth.error.incorrectPassword": "Le mot de passe fourni ne correspond pas au compte enregistré.",
+    "pages.auth.error.ssoAccount": "Le compte auquel vous essayez de vous connecter n'a pas de mot de passe défini. Veuillez vous connecter avec Google ou utiliser le bouton de réinitialisation du mot de passe pour en définir un.",
+    "pages.auth.error.registrationDisabled": "L'enregistrement est désactivé via la variable d'environnement DISABLE_REGISTRATION"
 }
