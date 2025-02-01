@@ -25,9 +25,5 @@ export const getRecipe = publicProcedure
       });
     }
 
-    if (input.id) {
-      throw new Error("boom");
-    }
-
     return recipe;
   });
