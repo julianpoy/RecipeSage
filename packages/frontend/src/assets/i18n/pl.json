@@ -98,7 +98,6 @@
     "pages.homeSearchFilterPopover.matchAllLabels": "Dopasuj wszystkie etykiety",
     "pages.app.oldBrowserAlert.message": "Wygląda na to, że używasz starej przeglądarki, która nie jest obsługiwana. Niektóre funkcje mogą nie działać lub mogą być działać nieprawidłowo. Aby uzyskać pełną funkcjonalność aplikacji, przełącz się na nowoczesną przeglądarkę, taką jak Firefox.",
     "pages.welcome.subtitle": "Bezpłatna aplikacja do zapisywania przepisów, planowania posiłków i list zakupów działaca w przeglądarce, i urządzeniach mobilnych iOS i Android",
-    "pages.auth.error.incorrectLogin": "Wygląda na to, że podany adres e-mail lub hasło są nieprawidłowe.",
     "pages.auth.forgot.alert.message": "Jeśli z tym adresem e-mail powiązane jest konto RecipeSage, w ciągu kilku minut powinieneś otrzymać link umożliwiający zresetowanie hasła.",
     "pages.home.errors.noRecipes.message1": "Tutaj będą pojawiać się Twoje przepisy.",
     "pages.home.errors.noRecipes.message4": "Możesz również importować przepisy z innych platform.",
