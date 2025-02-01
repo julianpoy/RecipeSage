@@ -248,7 +248,7 @@ export class HomePage {
     }
   }
 
-  async resetAndLoadAll(scrollToIndex?: number): Promise<any> {
+  async resetAndLoadAll(scrollToIndex?: number): Promise<[void, void] | void> {
     this.reloadPending = false;
 
     // Load labels & recipes in parallel if user hasn't selected labels that need to be verified for existence
@@ -403,10 +403,13 @@ export class HomePage {
     );
     if (!response) return;
 
-    this.friendsById = response.friends.reduce((acc: any, friendEntry: any) => {
-      acc[friendEntry.otherUser.id] = friendEntry.otherUser;
-      return acc;
-    }, {});
+    this.friendsById = response.friends.reduce(
+      (acc, friendEntry) => {
+        acc[friendEntry.id] = friendEntry;
+        return acc;
+      },
+      {} as Record<string, UserPublic>,
+    );
   }
 
   toggleLabel(labelTitle: string) {

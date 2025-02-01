@@ -21,6 +21,7 @@ import {
   registerUpdateRecipeRoute,
   registerCreateRecipeRoute,
   registerRecipeMutationWildcardRoute,
+  registerGetSimilarRecipesRoute,
 } from "./app/utils/serviceWorker/routes/recipes";
 import {
   registerGetShoppingListsRoute,
@@ -122,6 +123,7 @@ registerRoute(
 
 registerGetRecipesRoute();
 registerGetRecipeRoute();
+registerGetSimilarRecipesRoute();
 registerSearchRecipesRoute(searchManagerP);
 registerUpdateRecipeRoute(syncManagerP);
 registerCreateRecipeRoute(syncManagerP);
