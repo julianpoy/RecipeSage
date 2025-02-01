@@ -17,7 +17,7 @@
         "cwd": "packages/frontend",
         "commands": [
           "webpack -c sw-webpack.config.js --watch",
-          "ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
+          "webpack -c sw-webpack.config.js && ng serve --host 0.0.0.0 --disable-host-check --no-live-reload --port 8100"
         ],
         "parallel": true
       }
