@@ -24,11 +24,10 @@
   <br /><br />
 
   <ion-item>
-    <ion-label position="floating">
-      {{ 'pages.newMessageModal.compose' | translate }}
-    </ion-label>
     <ion-textarea
       [(ngModel)]="message"
+      label="{{ 'pages.newMessageModal.compose' | translate }}"
+      labelPlacement="stacked"
       placeholder="{{ 'pages.newMessageModal.input.messagePlaceholder' | translate }}"
     ></ion-textarea>
   </ion-item>

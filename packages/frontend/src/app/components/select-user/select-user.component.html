@@ -5,11 +5,13 @@
     *ngIf="selectedUser"
     button
   >
-    <ion-avatar *ngIf="selectedUser.profileImages?.length" slot="start">
-      <img src="{{ selectedUser.profileImages?.at(0)?.location }}" />
-    </ion-avatar>
-    <ion-avatar *ngIf="!selectedUser.profileImages?.length" slot="start">
-      <img src="assets/avatar.svg" />
+    <ion-avatar slot="start">
+      <img
+        [src]="
+          getFirstProfileImage(selectedUser)?.image?.location ||
+          'assets/avatar.svg'
+        "
+      />
     </ion-avatar>
     <ion-label>
       <h2>
@@ -24,6 +26,7 @@
   <div *ngIf="!selectedUser">
     <ion-searchbar
       (ionInput)="onSearchInputChange($event)"
+      [value]="searchText"
       placeholder="{{ 'components.selectUser.placeholder' | translate }}"
       autocomplete="off"
     ></ion-searchbar>
@@ -35,11 +38,13 @@
             (click)="selectUser(user)"
             button
           >
-            <ion-avatar *ngIf="user.profileImages?.length" slot="start">
-              <img src="{{ user.profileImages?.at(0)?.location }}" />
-            </ion-avatar>
-            <ion-avatar *ngIf="!user.profileImages?.length" slot="start">
-              <img src="assets/avatar.svg" />
+            <ion-avatar slot="start">
+              <img
+                [src]="
+                  getFirstProfileImage(user)?.image?.location ||
+                  'assets/avatar.svg'
+                "
+              />
             </ion-avatar>
             <ion-label>
               <h2>

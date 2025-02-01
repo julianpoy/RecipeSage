@@ -6,9 +6,10 @@ import {
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { User, UserService } from "~/services/user.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UtilService, RouteMap } from "~/services/util.service";
+import { TRPCService } from "../../../services/trpc.service";
+import { UserPublic } from "@recipesage/prisma";
 
 @Component({
   selector: "page-new-message-modal",
@@ -18,7 +19,7 @@ import { UtilService, RouteMap } from "~/services/util.service";
 export class NewMessageModalPage {
   @Input() initialRecipientId?: string;
   recipientId?: string;
-  recipientInfo?: User;
+  recipientInfo?: UserPublic;
 
   message = "";
 
@@ -27,7 +28,7 @@ export class NewMessageModalPage {
     public translate: TranslateService,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
-    public userService: UserService,
+    public trpcService: TRPCService,
     public utilService: UtilService,
     public messagingService: MessagingService,
   ) {
@@ -39,10 +40,15 @@ export class NewMessageModalPage {
   }
 
   async setSelectedUser(recipientId: string) {
-    const response = await this.userService.getUserById(recipientId);
-    if (!response.success) return;
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.getUserProfilesById.query({
+        ids: [recipientId],
+      }),
+    );
+    const profile = response?.at(0);
+    if (!profile) return;
 
-    this.recipientInfo = response.data;
+    this.recipientInfo = profile;
   }
 
   onSelectedUserChange(event: any) {
