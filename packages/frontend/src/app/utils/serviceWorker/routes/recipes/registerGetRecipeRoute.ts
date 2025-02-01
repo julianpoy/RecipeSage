@@ -4,7 +4,7 @@ import {
   swCacheReject,
 } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
-import { RecipeSummary } from "@recipesage/prisma";
+import type { RecipeSummary } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";

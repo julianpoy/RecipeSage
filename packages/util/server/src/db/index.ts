@@ -1,6 +1,6 @@
 export * from "./convertPrismaDateToDatestamp";
 export * from "./getFriendshipIds";
-export * from "./getFriendshipUsers";
+export * from "./getFriendshipUserProfiles";
 export * from "./getRecipesWithConstraints";
 export * from "./getRecipeVisibilityQueryFilter";
 export * from "./getSimilarRecipes";

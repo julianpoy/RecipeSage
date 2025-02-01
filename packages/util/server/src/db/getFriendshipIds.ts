@@ -1,4 +1,4 @@
-import { prisma } from "@recipesage/prisma";
+import { prisma, PrismaTransactionClient } from "@recipesage/prisma";
 
 /**
  * Use to get list of user IDs in each of the 3 possible states of friendship given a userId.
@@ -6,12 +6,13 @@ import { prisma } from "@recipesage/prisma";
  */
 export const getFriendshipIds = async (
   userId: string,
+  tx: PrismaTransactionClient = prisma,
 ): Promise<{
   incomingRequests: string[];
   outgoingRequests: string[];
   friends: string[];
 }> => {
-  const friendships = await prisma.friendship.findMany({
+  const friendships = await tx.friendship.findMany({
     where: {
       OR: [
         {

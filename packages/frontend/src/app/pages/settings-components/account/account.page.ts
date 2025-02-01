@@ -221,9 +221,9 @@ export class AccountPage {
         email: this.email,
       }),
       {
-        406: async () => {
+        400: async () => {
           const message = await this.translate
-            .get("pages.account.emailConflict")
+            .get("pages.account.emailInvalid")
             .toPromise();
 
           (
@@ -232,9 +232,9 @@ export class AccountPage {
             })
           ).present();
         },
-        412: async () => {
+        409: async () => {
           const message = await this.translate
-            .get("pages.account.emailInvalid")
+            .get("pages.account.emailConflict")
             .toPromise();
 
           (
@@ -315,6 +315,7 @@ export class AccountPage {
 
     this.password = "*".repeat(this.password.length);
     this.passwordChanged = false;
+    this.confirmPassword = "";
 
     localStorage.removeItem("token");
     await appIdbStorageManager.removeSession();

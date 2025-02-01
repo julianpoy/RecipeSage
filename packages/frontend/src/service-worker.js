@@ -4939,7 +4939,12 @@
       }
       async deleteAllData() {
         const e = await Ge();
-        await e.clear(Ve.KV), await e.clear(Ve.Recipes);
+        await e.clear(Ve.KV),
+          await e.clear(Ve.Recipes),
+          await e.clear(Ve.Labels),
+          await e.clear(Ve.LabelGroups),
+          await e.clear(Ve.ShoppingLists),
+          await e.clear(Ve.MealPlans);
       }
     })(),
     cr =
@@ -5159,7 +5164,6 @@
     constructor(e, t) {
       (this.localDb = e),
         (this.searchManager = t),
-        (this.currentSyncPromise = null),
         pr.addEventListener("message", (e) => {
           "triggerFullSync" === e.data.type && this.syncAll(),
             "triggerRecipeSyncById" === e.data.type &&
@@ -5167,69 +5171,20 @@
         });
     }
     async syncAll() {
-      return this.currentSyncPromise
-        ? (console.log("Sync already in progress"), this.currentSyncPromise)
-        : ((this.currentSyncPromise = this._syncAll().finally(() => {
-            this.currentSyncPromise = null;
-          })),
-          this.currentSyncPromise);
-    }
-    async _syncAll() {
       const e = await ar.getSession();
       if (e) {
         performance.mark("startSync"),
           console.log(`Beginning sync for ${e.email}`),
           await this.searchManager.onReady();
         try {
-          {
-            const e = (
-                await cr.recipes.getAllVisibleRecipesManifest.query()
-              ).reduce((e, t) => e.add(t.id), new Set()),
-              t = new Set(await this.localDb.getAllKeys(Ve.Recipes)),
-              n = this.searchManager.getKnownIndexIds(),
-              r = new Set();
-            for (const t of e) n.has(t) || r.add(t);
-            for (const t of n.keys())
-              e.has(t) || (await this.searchManager.unindexRecipe(t));
-            for (const n of t)
-              e.has(n.toString()) ||
-                (await this.localDb.delete(Ve.Recipes, n),
-                await this.searchManager.unindexRecipe(n.toString()));
-            const s = [...r];
-            for (; s.length; ) {
-              const e = s.splice(0, 50),
-                t = await cr.recipes.getRecipesByIds.query({ ids: e });
-              for (const e of t)
-                await this.localDb.put(Ve.Recipes, e),
-                  await this.searchManager.indexRecipe(e);
-              await dr(fr);
-            }
-          }
-          await dr(fr);
-          {
-            const e = await cr.labels.getAllVisibleLabels.query();
-            await this.localDb.clear(Ve.Labels);
-            for (const t of e) await this.localDb.put(Ve.Labels, t);
-          }
-          await dr(fr);
-          {
-            const e = await cr.labelGroups.getLabelGroups.query();
-            await this.localDb.clear(Ve.LabelGroups);
-            for (const t of e) await this.localDb.put(Ve.LabelGroups, t);
-          }
-          await dr(fr);
-          {
-            const e = await cr.shoppingLists.getShoppingListsWithItems.query();
-            await this.localDb.clear(Ve.ShoppingLists);
-            for (const t of e) await this.localDb.put(Ve.ShoppingLists, t);
-          }
-          await dr(fr);
-          {
-            const e = await cr.mealPlans.getMealPlansWithItems.query();
-            await this.localDb.clear(Ve.MealPlans);
-            for (const t of e) await this.localDb.put(Ve.MealPlans, t);
-          }
-          performance.mark("endSync");
+          await this.syncRecipes(),
+            await dr(fr),
+            await this.syncLabels(),
+            await dr(fr),
+            await this.syncShoppingLists(),
+            await dr(fr),
+            await this.syncMealPlans(),
+            performance.mark("endSync");
           const e = performance.measure("syncTime", "startSync", "endSync");
           console.log(`Syncing completed in ${e.duration}ms`);
         } catch (e) {
@@ -5241,6 +5196,53 @@
       const t = await cr.recipes.getRecipe.query({ id: e });
       await this.localDb.put(Ve.Recipes, t),
         await this.searchManager.indexRecipe(t);
+    }
+    async syncRecipes() {
+      const e = (await cr.recipes.getAllVisibleRecipesManifest.query()).reduce(
+          (e, t) => e.add(t.id),
+          new Set(),
+        ),
+        t = new Set(await this.localDb.getAllKeys(Ve.Recipes)),
+        n = this.searchManager.getKnownIndexIds(),
+        r = new Set();
+      for (const t of e) n.has(t) || r.add(t);
+      for (const t of n.keys())
+        e.has(t) || (await this.searchManager.unindexRecipe(t));
+      for (const n of t)
+        e.has(n.toString()) ||
+          (await this.localDb.delete(Ve.Recipes, n),
+          await this.searchManager.unindexRecipe(n.toString()));
+      const s = [...r];
+      for (; s.length; ) {
+        const e = s.splice(0, 50),
+          t = await cr.recipes.getRecipesByIds.query({ ids: e });
+        for (const e of t)
+          await this.localDb.put(Ve.Recipes, e),
+            await this.searchManager.indexRecipe(e);
+        await dr(fr);
+      }
+    }
+    async syncLabels() {
+      const e = await cr.labels.getAllVisibleLabels.query();
+      await this.localDb.clear(Ve.Labels);
+      for (const t of e) await this.localDb.put(Ve.Labels, t);
+      await dr(fr);
+      const t = await cr.labelGroups.getLabelGroups.query();
+      await this.localDb.clear(Ve.LabelGroups);
+      for (const e of t) await this.localDb.put(Ve.LabelGroups, e);
+    }
+    async syncLabelGroups() {
+      return this.syncLabels();
+    }
+    async syncShoppingLists() {
+      const e = await cr.shoppingLists.getShoppingListsWithItems.query();
+      await this.localDb.clear(Ve.ShoppingLists);
+      for (const t of e) await this.localDb.put(Ve.ShoppingLists, t);
+    }
+    async syncMealPlans() {
+      const e = await cr.mealPlans.getMealPlansWithItems.query();
+      await this.localDb.clear(Ve.MealPlans);
+      for (const t of e) await this.localDb.put(Ve.MealPlans, t);
     }
   }
   const mr = function (e) {
@@ -7664,10 +7666,10 @@
     })(_o),
     ((e) => {
       u(
-        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\.delete.*/,
+        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/recipes\.delete.*/,
         async (t) => {
           const n = await fetch(t.request);
-          return (await e).syncAll(), n;
+          return (await e).syncRecipes(), n;
         },
         "POST",
       );
@@ -7722,10 +7724,10 @@
     ),
     ((e) => {
       u(
-        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/shoppingLists\.(create|update|delete).*/,
+        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/shoppingLists\..*/,
         async (t) => {
           const n = await fetch(t.request);
-          return (await e).syncAll(), n;
+          return (await e).syncShoppingLists(), n;
         },
         "POST",
       );
@@ -7780,10 +7782,10 @@
     ),
     ((e) => {
       u(
-        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\.(create|update|delete).*/,
+        /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\..*/,
         async (t) => {
           const n = await fetch(t.request);
-          return (await e).syncAll(), n;
+          return (await e).syncMealPlans(), n;
         },
         "POST",
       );
