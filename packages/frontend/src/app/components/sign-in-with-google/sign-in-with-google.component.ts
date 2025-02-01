@@ -11,6 +11,7 @@ import {
   GOOGLE_GSI_CLIENT_ID,
   IS_SELFHOST,
 } from "@recipesage/frontend/src/environments/environment";
+import type { SessionDTO } from "@recipesage/prisma";
 
 const getGoogleRef = () => {
   return (window as any).google;
@@ -26,7 +27,7 @@ export class SignInWithGoogleComponent {
   @Input() showButton = true;
   @Input() autoPrompt = false;
 
-  @Output() signInComplete = new EventEmitter<string>();
+  @Output() signInComplete = new EventEmitter<SessionDTO>();
 
   @ViewChild("googleButtonContainer", { static: true })
   googleButtonContainer!: ElementRef<HTMLDivElement>;

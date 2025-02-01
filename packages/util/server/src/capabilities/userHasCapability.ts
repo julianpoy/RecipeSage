@@ -1,5 +1,5 @@
 import { capabilitiesForUser } from "./capabilitiesForUser";
-import { Capabilities } from "./constants";
+import { Capabilities } from "@recipesage/util/shared";
 
 export const userHasCapability = async (
   userId: string,

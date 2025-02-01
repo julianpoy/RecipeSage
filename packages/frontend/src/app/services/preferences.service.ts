@@ -31,7 +31,6 @@ export class PreferencesService {
     preferencesVersion: 0,
 
     [GlobalPreferenceKey.EnableSplitPane]: false,
-    [GlobalPreferenceKey.EnableExperimentalOfflineCache]: false,
     [GlobalPreferenceKey.Language]: null,
     [GlobalPreferenceKey.FontSize]: SupportedFontSize.X1_0,
     [GlobalPreferenceKey.Theme]: AppTheme.Default,

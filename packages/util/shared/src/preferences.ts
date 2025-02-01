@@ -80,7 +80,6 @@ export enum ShoppingListSortOptions {
 
 export enum GlobalPreferenceKey {
   EnableSplitPane = "global.enableSplitPane",
-  EnableExperimentalOfflineCache = "global.enableExperimentalOfflineCache",
   Language = "global.language",
   FontSize = "global.fontSize",
   Theme = "global.theme",
@@ -128,7 +127,6 @@ export interface AppPreferenceTypes {
   preferencesVersion: number;
 
   [GlobalPreferenceKey.EnableSplitPane]: boolean;
-  [GlobalPreferenceKey.EnableExperimentalOfflineCache]: boolean;
   [GlobalPreferenceKey.Language]: null | SupportedLanguages;
   [GlobalPreferenceKey.FontSize]: SupportedFontSize;
   [GlobalPreferenceKey.Theme]: AppTheme;

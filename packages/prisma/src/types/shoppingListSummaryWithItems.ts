@@ -18,6 +18,11 @@ export const shoppingListSummaryWithItems =
       title: true,
       createdAt: true,
       updatedAt: true,
+      _count: {
+        select: {
+          items: true,
+        },
+      },
       items: {
         select: {
           id: true,
@@ -25,6 +30,7 @@ export const shoppingListSummaryWithItems =
           createdAt: true,
           updatedAt: true,
           user: userPublic,
+          recipeId: true,
           recipe: {
             select: {
               id: true,

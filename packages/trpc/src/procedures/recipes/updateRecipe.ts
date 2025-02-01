@@ -4,10 +4,10 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { validateTrpcSession } from "@recipesage/util/server/general";
 import {
-  Capabilities,
   MULTIPLE_IMAGES_UNLOCKED_LIMIT,
   userHasCapability,
 } from "@recipesage/util/server/capabilities";
+import { Capabilities } from "@recipesage/util/shared";
 import { indexRecipes } from "@recipesage/util/server/search";
 
 export const updateRecipe = publicProcedure

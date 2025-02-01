@@ -55,20 +55,6 @@
         </div>
       </ion-toggle>
     </ion-item>
-    <ion-item
-      lines="inset"
-      *ngIf="featureFlags[featureFlagKeys.EnableExperimentalOfflineCache]"
-    >
-      <ion-icon name="cloud-download" slot="start"></ion-icon>
-      <ion-toggle
-        [(ngModel)]="preferences[preferenceKeys.EnableExperimentalOfflineCache]"
-        (ngModelChange)="toggleOfflineCache(); savePreferences()"
-      >
-        <div class="ion-text-wrap">
-          {{ 'pages.settings.cache' | translate }}
-        </div>
-      </ion-toggle>
-    </ion-item>
     <ion-item lines="inset">
       <ion-icon name="brush" slot="start"></ion-icon>
       <ion-select

@@ -2,13 +2,12 @@ import { Component } from "@angular/core";
 import {
   NavController,
   AlertController,
-  LoadingController,
   ModalController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
-import { RouteMap, UtilService } from "~/services/util.service";
-import { PreferencesService } from "~/services/preferences.service";
+import { RouteMap, UtilService } from "../../../services/util.service";
+import { PreferencesService } from "../../../services/preferences.service";
 import {
   AppTheme,
   GlobalPreferenceKey,
@@ -18,17 +17,18 @@ import {
 import {
   FeatureFlagService,
   FeatureFlagKeys,
-} from "~/services/feature-flag.service";
+} from "../../../services/feature-flag.service";
 import {
   QuickTutorialService,
   QuickTutorialOptions,
-} from "~/services/quick-tutorial.service";
-import { OfflineCacheService } from "~/services/offline-cache.service";
+} from "../../../services/quick-tutorial.service";
+import { SwCommunicationService } from "../../../services/sw-communication.service";
 import { FontSizeModalComponent } from "../../../components/font-size-modal/font-size-modal.component";
 import { MessagingService } from "../../../services/messaging.service";
 import { UserService } from "../../../services/user.service";
 import { EventName, EventService } from "../../../services/event.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
+import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
 
 @Component({
   selector: "page-settings",
@@ -58,9 +58,8 @@ export class SettingsPage {
     private translate: TranslateService,
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController,
     private utilService: UtilService,
-    private offlineCacheService: OfflineCacheService,
+    private swCommunicationService: SwCommunicationService,
     private preferencesService: PreferencesService,
     private featureFlagService: FeatureFlagService,
     private quickTutorialService: QuickTutorialService,
@@ -110,8 +109,9 @@ export class SettingsPage {
     this.isLoggedIn = this.utilService.isLoggedIn();
   }
 
-  _logout() {
-    this.utilService.removeToken();
+  async _logout() {
+    localStorage.removeItem("token");
+    await appIdbStorageManager.deleteAllData();
 
     this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
   }
@@ -196,32 +196,6 @@ export class SettingsPage {
     });
 
     alert.present();
-  }
-
-  async toggleOfflineCache() {
-    if (this.preferences[GlobalPreferenceKey.EnableExperimentalOfflineCache]) {
-      const message = await this.translate
-        .get("pages.settings.offline.loading")
-        .toPromise();
-
-      await this.quickTutorialService.triggerQuickTutorial(
-        QuickTutorialOptions.ExperimentalOfflineCache,
-      );
-      const loading = await this.loadingCtrl.create({
-        message,
-      });
-      await loading.present();
-      try {
-        await this.offlineCacheService.fullSync();
-      } catch (e) {
-        const error = await this.translate
-          .get("pages.settings.offline.error")
-          .toPromise();
-        setTimeout(() => alert(error));
-        throw e;
-      }
-      await loading.dismiss();
-    }
   }
 
   async resetCompletion() {

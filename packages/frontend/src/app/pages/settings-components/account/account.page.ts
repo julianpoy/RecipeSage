@@ -1,23 +1,18 @@
 import { Component } from "@angular/core";
-import {
-  ToastController,
-  AlertController,
-  NavController,
-} from "@ionic/angular";
-
+import { AlertController, NavController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 import dayjs from "dayjs";
 
-import { UserService } from "~/services/user.service";
-import { LoadingService } from "~/services/loading.service";
-import { UtilService, RouteMap, AuthType } from "~/services/util.service";
-import { RecipeService } from "~/services/recipe.service";
-import { CapabilitiesService } from "~/services/capabilities.service";
-import { getQueryParam } from "~/utils/queryParams";
-import { TranslateService } from "@ngx-translate/core";
+import { LoadingService } from "../../../services/loading.service";
 import {
-  FeatureFlagKeys,
-  FeatureFlagService,
-} from "../../../services/feature-flag.service";
+  UtilService,
+  RouteMap,
+  AuthType,
+} from "../../../services/util.service";
+import { CapabilitiesService } from "../../../services/capabilities.service";
+import { getQueryParam } from "../../../utils/queryParams";
+import { TRPCService } from "../../../services/trpc.service";
+import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
 
 @Component({
   selector: "page-account",
@@ -28,31 +23,39 @@ export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();
   contributePath: string = RouteMap.ContributePage.getPath();
 
-  account: any = {
-    password: "123456",
-  };
+  me: Awaited<
+    ReturnType<typeof this.trpcService.trpc.users.getMe.query>
+  > | null = null;
 
-  stats: any = {};
+  myStats: Awaited<
+    ReturnType<typeof this.trpcService.trpc.users.getMyStats.query>
+  > | null = null;
 
+  name = "";
   nameChanged = false;
+  email = "";
   emailChanged = false;
+  password = "123456";
+  confirmPassword = "";
   passwordChanged = false;
 
-  enableAssistant =
-    this.featureFlagService.flags[FeatureFlagKeys.EnableAssistant];
-  capabilitySubscriptions: any = {};
+  capabilitySubscriptions: Record<
+    string,
+    {
+      enabled: boolean;
+      expires: string | null;
+      expired: boolean | null;
+    }
+  > = {};
 
   constructor(
-    public navCtrl: NavController,
-    public translate: TranslateService,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public recipeService: RecipeService,
-    public userService: UserService,
-    public capabilitiesService: CapabilitiesService,
-    private featureFlagService: FeatureFlagService,
+    private navCtrl: NavController,
+    private translate: TranslateService,
+    private alertCtrl: AlertController,
+    private utilService: UtilService,
+    private loadingService: LoadingService,
+    private trpcService: TRPCService,
+    private capabilitiesService: CapabilitiesService,
   ) {
     const resetToken = getQueryParam("token");
     if (resetToken) localStorage.setItem("token", resetToken);
@@ -60,24 +63,32 @@ export class AccountPage {
     const loading = this.loadingService.start();
 
     Promise.all([
-      this.userService.me(),
-      this.userService.myStats(),
+      this.trpcService.handle(this.trpcService.trpc.users.getMe.query()),
+      this.trpcService.handle(this.trpcService.trpc.users.getMyStats.query()),
       this.capabilitiesService.updateCapabilities(),
-    ]).then(([account, stats]) => {
+    ]).then(async ([me, myStats]) => {
       loading.dismiss();
 
-      if (!account.success || !stats.success) return;
+      if (!me || !myStats) return;
 
-      this.account = account.data;
-      this.account.password = "123456";
+      this.me = me;
 
-      this.stats = stats.data;
-      this.stats.createdAt = this.utilService.formatDate(stats.data.createdAt, {
-        now: true,
-      });
-      this.stats.lastLogin = stats.data.lastLogin
-        ? this.utilService.formatDate(stats.data.lastLogin, { now: true })
-        : this.stats.createdAt;
+      if (resetToken) {
+        const lastUserId = await appIdbStorageManager.getLastSessionUserId();
+        if (lastUserId !== me.id) {
+          await appIdbStorageManager.deleteAllData();
+        }
+        await appIdbStorageManager.setSession({
+          userId: me.id,
+          email: me.email,
+          token: resetToken,
+        });
+      }
+
+      this.name = me.name;
+      this.email = me.email;
+
+      this.myStats = myStats;
 
       Object.entries(this.capabilitiesService.capabilities).map(
         ([name, enabled]) => {
@@ -92,17 +103,19 @@ export class AccountPage {
   }
 
   getSubscriptionForCapability(capabilityName: string) {
-    if (!this.account || !this.account.subscriptions) return null;
+    if (!this.me || !this.me.subscriptions) return null;
 
     try {
-      const matchingSubscriptions = this.account.subscriptions
-        .filter((subscription: any) =>
-          subscription.capabilities.includes(capabilityName),
+      const matchingSubscriptions = this.me.subscriptions
+        .filter((subscription) =>
+          subscription.capabilities.includes(
+            capabilityName as (typeof subscription.capabilities)[0],
+          ),
         )
-        .sort((a: any, b: any) => {
+        .sort((a, b) => {
           if (a.expires == null) return -1;
           if (b.expires == null) return 1;
-          return new Date(a.expires) < new Date(b.expires);
+          return new Date(a.expires).getTime() - new Date(b.expires).getTime();
         });
       if (matchingSubscriptions) return matchingSubscriptions[0];
     } catch (e) {
@@ -131,14 +144,22 @@ export class AccountPage {
   }
 
   async saveName() {
-    if (!this.account.name || this.account.name.length === 0) {
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    if (!this.name.trim()) {
+      const header = await this.translate.get("generic.error").toPromise();
       const message = await this.translate
         .get("pages.account.nameRequired")
         .toPromise();
 
-      const errorToast = await this.toastCtrl.create({
+      const errorToast = await this.alertCtrl.create({
+        header,
         message,
-        duration: 5000,
+        buttons: [
+          {
+            text: okay,
+          },
+        ],
       });
       errorToast.present();
       return;
@@ -146,12 +167,14 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.userService.update({
-      name: this.account.name,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.updateUser.mutate({
+        name: this.name,
+      }),
+    );
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.nameChanged = false;
 
@@ -159,23 +182,33 @@ export class AccountPage {
       .get("pages.account.nameUpdated")
       .toPromise();
 
-    const tst = await this.toastCtrl.create({
+    const tst = await this.alertCtrl.create({
       message,
-      duration: 5000,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
     });
     tst.present();
   }
 
   async saveEmail() {
-    if (!this.account.email || this.account.email.length === 0) {
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    if (!this.email.trim()) {
       const message = await this.translate
         .get("pages.account.emailRequired")
         .toPromise();
 
       (
-        await this.toastCtrl.create({
+        await this.alertCtrl.create({
           message,
-          duration: 5000,
+          buttons: [
+            {
+              text: okay,
+            },
+          ],
         })
       ).present();
       return;
@@ -183,32 +216,30 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.userService.update(
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.updateUser.mutate({
+        email: this.email,
+      }),
       {
-        email: this.account.email,
-      },
-      {
-        406: async () => {
-          const message = await this.translate
-            .get("pages.account.emailConflict")
-            .toPromise();
-
-          (
-            await this.toastCtrl.create({
-              message,
-              duration: 5000,
-            })
-          ).present();
-        },
-        412: async () => {
+        400: async () => {
           const message = await this.translate
             .get("pages.account.emailInvalid")
             .toPromise();
 
           (
-            await this.toastCtrl.create({
+            await this.alertCtrl.create({
               message,
-              duration: 5000,
+            })
+          ).present();
+        },
+        409: async () => {
+          const message = await this.translate
+            .get("pages.account.emailConflict")
+            .toPromise();
+
+          (
+            await this.alertCtrl.create({
+              message,
             })
           ).present();
         },
@@ -216,7 +247,7 @@ export class AccountPage {
     );
 
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
     this.emailChanged = false;
 
@@ -224,35 +255,49 @@ export class AccountPage {
       .get("pages.account.emailUpdated")
       .toPromise();
 
-    const tst = await this.toastCtrl.create({
+    const tst = await this.alertCtrl.create({
       message,
-      duration: 5000,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
     });
     tst.present();
   }
 
   async savePassword() {
-    if (this.account.password !== this.account.confirmPassword) {
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    if (this.password !== this.confirmPassword) {
       const message = await this.translate
         .get("pages.account.passwordMatch")
         .toPromise();
 
-      const tst = await this.toastCtrl.create({
+      const tst = await this.alertCtrl.create({
         message,
-        duration: 5000,
+        buttons: [
+          {
+            text: okay,
+          },
+        ],
       });
       tst.present();
       return;
     }
 
-    if (this.account.password.length < 6) {
+    if (this.password.length < 6) {
       const message = await this.translate
         .get("pages.account.passwordLength")
         .toPromise();
 
-      const tst = await this.toastCtrl.create({
+      const tst = await this.alertCtrl.create({
         message,
-        duration: 5000,
+        buttons: [
+          {
+            text: okay,
+          },
+        ],
       });
       tst.present();
       return;
@@ -260,16 +305,20 @@ export class AccountPage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.userService.update({
-      password: this.account.password,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.updateUser.mutate({
+        password: this.password,
+      }),
+    );
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
-    this.account.password = "*".repeat(this.account.password.length);
+    this.password = "*".repeat(this.password.length);
     this.passwordChanged = false;
+    this.confirmPassword = "";
 
     localStorage.removeItem("token");
+    await appIdbStorageManager.removeSession();
 
     const header = await this.translate
       .get("pages.account.passwordUpdated.header")
@@ -277,7 +326,6 @@ export class AccountPage {
     const message = await this.translate
       .get("pages.account.passwordUpdated.message")
       .toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
 
     const alert = await this.alertCtrl.create({
       header,
@@ -320,12 +368,15 @@ export class AccountPage {
           handler: async () => {
             const loading = this.loadingService.start();
 
-            const response = await this.userService.delete();
+            const response = await this.trpcService.handle(
+              this.trpcService.trpc.users.deleteUser.mutate(),
+            );
 
             loading.dismiss();
-            if (!response.success) return;
+            if (!response) return;
 
-            this.utilService.removeToken();
+            localStorage.removeItem("token");
+            await appIdbStorageManager.removeSession();
 
             this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
           },
@@ -368,10 +419,12 @@ export class AccountPage {
           handler: async () => {
             const loading = this.loadingService.start();
 
-            const response = await this.recipeService.deleteAll();
+            const response = await this.trpcService.handle(
+              this.trpcService.trpc.recipes.deleteAllRecipes.mutate(),
+            );
 
             loading.dismiss();
-            if (!response.success) return;
+            if (!response) return;
 
             (
               await this.alertCtrl.create({
@@ -389,5 +442,11 @@ export class AccountPage {
       ],
     });
     alert.present();
+  }
+
+  formatDate(date: Date) {
+    return this.utilService.formatDate(date, {
+      now: true,
+    });
   }
 }

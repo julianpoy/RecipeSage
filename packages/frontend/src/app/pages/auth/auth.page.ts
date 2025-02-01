@@ -15,6 +15,10 @@ import { LoadingService } from "~/services/loading.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
+import { TRPCService } from "../../services/trpc.service";
+import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
+import type { SessionDTO } from "@recipesage/prisma";
+import { SwCommunicationService } from "../../services/sw-communication.service";
 
 @Component({
   selector: "page-auth",
@@ -40,17 +44,18 @@ export class AuthPage {
   revealPassword = false;
 
   constructor(
-    public events: EventService,
-    public translate: TranslateService,
-    public modalCtrl: ModalController,
-    public navCtrl: NavController,
-    public utilService: UtilService,
-    public loadingService: LoadingService,
-    public messagingService: MessagingService,
-    public capabilitiesService: CapabilitiesService,
-    public alertCtrl: AlertController,
-    public route: ActivatedRoute,
-    public userService: UserService,
+    private events: EventService,
+    private translate: TranslateService,
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
+    private utilService: UtilService,
+    private loadingService: LoadingService,
+    private messagingService: MessagingService,
+    private capabilitiesService: CapabilitiesService,
+    private swCommunicationService: SwCommunicationService,
+    private alertCtrl: AlertController,
+    private route: ActivatedRoute,
+    private trpcService: TRPCService,
   ) {
     if (this.route.snapshot.paramMap.get("authType") === AuthType.Register) {
       this.showLogin = false;
@@ -125,34 +130,58 @@ export class AuthPage {
     const loading = this.loadingService.start();
 
     const response = this.showLogin
-      ? await this.userService.login(
-          {
+      ? await this.trpcService.handle(
+          this.trpcService.trpc.users.login.mutate({
             email: this.email,
             password: this.password,
-          },
+          }),
           {
-            412: () =>
+            403: () =>
               this.presentAlert(
                 "generic.error",
-                "pages.auth.error.incorrectLogin",
+                "pages.auth.error.incorrectPassword",
               ),
+            404: () =>
+              this.presentAlert(
+                "generic.error",
+                "pages.auth.error.incorrectEmail",
+              ),
+            409: () =>
+              this.presentAlert("generic.error", "pages.auth.error.ssoAccount"),
           },
         )
-      : await this.userService.register(
-          {
+      : await this.trpcService.handle(
+          this.trpcService.trpc.users.register.mutate({
             name: this.name,
             email: this.email,
             password: this.password,
-          },
+          }),
           {
-            406: () =>
+            400: () =>
+              this.presentAlert(
+                "generic.error",
+                "pages.auth.error.invalidEmailPassword",
+              ),
+            403: () =>
+              this.presentAlert(
+                "generic.error",
+                "pages.auth.error.registrationDisabled",
+              ),
+            409: () =>
               this.presentAlert("generic.error", "pages.auth.error.emailTaken"),
           },
         );
     loading.dismiss();
-    if (!response.success) return;
+    if (!response) return;
 
-    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("token", response.token);
+    const lastUserId = await appIdbStorageManager.getLastSessionUserId();
+    if (lastUserId !== response.userId) {
+      await appIdbStorageManager.deleteAllData();
+    }
+    await appIdbStorageManager.setSession(response);
+    this.swCommunicationService.triggerFullCacheSync();
+
     this.capabilitiesService.updateCapabilities();
 
     if (
@@ -166,8 +195,15 @@ export class AuthPage {
     this.close();
   }
 
-  signInWithGoogleComplete(token: string) {
-    localStorage.setItem("token", token);
+  async signInWithGoogleComplete(session: SessionDTO) {
+    localStorage.setItem("token", session.token);
+    const lastUserId = await appIdbStorageManager.getLastSessionUserId();
+    if (lastUserId !== session.userId) {
+      await appIdbStorageManager.deleteAllData();
+    }
+    await appIdbStorageManager.setSession(session);
+    this.swCommunicationService.triggerFullCacheSync();
+
     this.capabilitiesService.updateCapabilities();
 
     if (
@@ -189,9 +225,15 @@ export class AuthPage {
 
     const loading = this.loadingService.start();
 
-    const response = await this.userService.forgot({
-      email: this.email,
-    });
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.forgotPassword.mutate({
+        email: this.email,
+      }),
+      {
+        404: () =>
+          this.presentAlert("generic.error", "pages.auth.error.incorrectEmail"),
+      },
+    );
 
     loading.dismiss();
 
@@ -219,8 +261,9 @@ export class AuthPage {
     }
   }
 
-  logout() {
-    this.utilService.removeToken();
+  async logout() {
+    localStorage.removeItem("token");
+    await appIdbStorageManager.deleteAllData();
 
     this.navCtrl.navigateRoot(RouteMap.WelcomePage.getPath());
 

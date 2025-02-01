@@ -23,6 +23,8 @@ www/
 node_modules/
 tmp/
 temp/
+src/service-worker.js
+src/service-worker.js.LICENSE.txt
 platforms/
 plugins/
 plugins/android.json

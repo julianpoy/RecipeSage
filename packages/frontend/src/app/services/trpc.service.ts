@@ -1,36 +1,18 @@
-import { TRPCClientError, createTRPCProxyClient, httpLink } from "@trpc/client";
-import type { AppRouter } from "@recipesage/trpc";
+import { TRPCClientError } from "@trpc/client";
 import { Injectable } from "@angular/core";
-import superjson from "superjson";
 import {
   ErrorHandlers,
   HttpErrorHandlerService,
 } from "./http-error-handler.service";
-import { UtilService } from "./util.service";
+import { trpcClient } from "../utils/trpcClient";
 
 @Injectable({
   providedIn: "root",
 })
 export class TRPCService {
-  public trpc = createTRPCProxyClient<AppRouter>({
-    links: [
-      httpLink({
-        url: this.utilService.getBase() + "trpc",
-        headers: () => {
-          const token = localStorage.getItem("token");
-          return {
-            Authorization: token ? `Bearer ${token}` : undefined,
-          };
-        },
-      }),
-    ],
-    transformer: superjson,
-  });
+  public trpc = trpcClient;
 
-  constructor(
-    private httpErrorHandler: HttpErrorHandlerService,
-    private utilService: UtilService,
-  ) {}
+  constructor(private httpErrorHandler: HttpErrorHandlerService) {}
 
   async handle<T>(result: Promise<T>, errorHandlers?: ErrorHandlers) {
     return result.catch((e) => {

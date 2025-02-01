@@ -9,7 +9,6 @@ export const signatureHtml = dedent`
   Discord: <a href="https://discord.gg/yCfzBft">https://discord.gg/yCfzBft</a><br />
   Facebook: <a href="https://www.facebook.com/recipesageofficial/">https://www.facebook.com/recipesageofficial/</a><br />
   Instagram: <a href="https://www.instagram.com/recipesageofficial/">https://www.instagram.com/recipesageofficial/</a><br />
-  Twitter: <a href="https://twitter.com/RecipeSageO">https://twitter.com/RecipeSageO</a>
 `;
 
 export const signaturePlain = dedent`
@@ -21,5 +20,4 @@ export const signaturePlain = dedent`
   https://discord.gg/yCfzBft
   https://www.facebook.com/recipesageofficial/
   https://www.instagram.com/recipesageofficial/
-  https://twitter.com/RecipeSageO
 `;

@@ -11,6 +11,7 @@ export const labelSummary = Prisma.validator<Prisma.LabelFindFirstArgs>()({
     labelGroup: {
       select: {
         id: true,
+        userId: true,
         title: true,
         warnWhenNotPresent: true,
         createdAt: true,

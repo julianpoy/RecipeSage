@@ -1,4 +1,4 @@
-import { labelSummary, prisma } from "@recipesage/prisma";
+import { LabelSummary, labelSummary, prisma } from "@recipesage/prisma";
 import { getFriendshipIds } from "./getFriendshipIds";
 import { Prisma } from "@prisma/client";
 import { getVisibleProfileItems } from "./getVisibleProfileItems";
@@ -14,7 +14,7 @@ export const getVisibleLabels = async (
     includeAllFriends?: boolean;
     includeSelf?: boolean;
   },
-) => {
+): Promise<LabelSummary[]> => {
   const includeIds = new Set<string>();
   if (options.userIds) options.userIds.forEach((el) => includeIds.add(el));
 

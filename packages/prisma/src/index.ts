@@ -39,3 +39,7 @@ if (process.env.PRISMA_DEBUG_ENABLE === "true") {
 }
 
 export const prisma = _prisma.$extends(cursorStream);
+
+export type PrismaTransactionClient = Parameters<
+  Parameters<typeof prisma.$transaction>[0]
+>[0];
