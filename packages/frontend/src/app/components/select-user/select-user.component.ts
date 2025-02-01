@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter, Input } from "@angular/core";
 
-import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
+import { TRPCService } from "../../services/trpc.service";
+import type { UserPublic } from "@recipesage/prisma";
 
 const PAUSE_BEFORE_SEARCH = 500; // Ms
 
@@ -11,21 +12,12 @@ const PAUSE_BEFORE_SEARCH = 500; // Ms
   styleUrls: ["./select-user.component.scss"],
 })
 export class SelectUserComponent {
-  _selectedUser?: any;
-  @Input()
-  get selectedUser(): any | undefined {
-    return this._selectedUser;
-  }
+  @Input() selectedUser?: UserPublic;
+  @Input() enableSelectedMode = true;
+  @Output() selectedUserChange = new EventEmitter<UserPublic>();
+  @Output() searchInputChange = new EventEmitter<string>();
 
-  set selectedUser(val: any | undefined) {
-    this._selectedUser = val;
-    this.selectedUserChange.emit(this._selectedUser);
-  }
-
-  @Output() selectedUserChange = new EventEmitter();
-  @Output() searchInputChange = new EventEmitter();
-
-  results: any[] = [];
+  results: UserPublic[] = [];
   searchTimeout?: NodeJS.Timeout;
   searching = false;
 
@@ -39,12 +31,12 @@ export class SelectUserComponent {
   }
 
   constructor(
-    private userService: UserService,
+    private trpcService: TRPCService,
     private loadingService: LoadingService,
   ) {}
 
   onSearchInputChange(event: any) {
-    this.searchText = event.detail.value;
+    this.searchText = event.detail.value || "";
     if (!this.searchText) return;
 
     this.results = [];
@@ -65,48 +57,68 @@ export class SelectUserComponent {
     input = input || "";
     const loading = this.loadingService.start();
 
-    const results = [];
+    const results: UserPublic[] = [];
 
     const handle = input.startsWith("@") ? input.substring(1) : input;
-    const profileResponse = await this.userService.getProfileByHandle(handle, {
-      403: () => {},
-      404: () => {},
-    });
-    if (profileResponse.success && profileResponse.data) {
-      results.push(profileResponse.data);
+    const profileResponse = await this.trpcService.handle(
+      this.trpcService.trpc.users.getUserProfileByHandle.query({
+        handle,
+      }),
+      {
+        404: () => {},
+      },
+    );
+    if (profileResponse) {
+      results.push(profileResponse);
     }
 
-    const userResponse = await this.userService.getUserByEmail(
-      {
+    const userResponse = await this.trpcService.handle(
+      this.trpcService.trpc.users.getUserProfileByEmail.query({
         email: input,
-      },
+      }),
       {
         404: () => {},
       },
     );
 
-    if (userResponse.success && userResponse.data)
-      results.push(userResponse.data);
+    if (userResponse) results.push(userResponse);
 
-    // TODO: Searching by email should fetch user profiles instead
-    // Refactor this and it's usage
     this.results = results;
 
     loading.dismiss();
   }
 
-  selectUser(user: any) {
-    this.selectedUser = user;
+  selectUser(user: UserPublic) {
+    if (this.enableSelectedMode) {
+      this.selectedUser = user;
+    } else {
+      this.results = [];
+      this.searchText = "";
+      this.searching = false;
+    }
+    this.selectedUserChange.emit(user);
   }
 
   clearSelectedUser() {
     this.selectedUser = undefined;
+    this.selectedUserChange.emit(undefined);
     this.results = [];
     this.searchText = "";
     this.searching = false;
   }
 
-  userTrackBy(index: number, user: any) {
+  userTrackBy(index: number, user: UserPublic) {
     return user.id;
+  }
+
+  getFirstProfileImage(user: UserPublic) {
+    let firstImage: UserPublic["profileImages"][0] | undefined;
+
+    for (const image of user.profileImages) {
+      if (!firstImage) firstImage = image;
+      else if (firstImage.order > image.order) firstImage = image;
+    }
+
+    return firstImage;
   }
 }

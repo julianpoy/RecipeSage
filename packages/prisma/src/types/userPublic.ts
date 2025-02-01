@@ -6,8 +6,19 @@ export const userPublic = Prisma.validator<Prisma.UserFindFirstArgs>()({
     email: true,
     name: true,
     handle: true,
-    profileVisibility: true,
     enableProfile: true,
+    profileImages: {
+      select: {
+        order: true,
+        imageId: true,
+        image: {
+          select: {
+            id: true,
+            location: true,
+          },
+        },
+      },
+    },
   },
 });
 

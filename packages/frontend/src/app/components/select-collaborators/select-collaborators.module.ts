@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PipesModule } from "~/pipes/pipes.module";
 import { SelectCollaboratorsComponent } from "./select-collaborators.component";
 import { GlobalModule } from "~/global.module";
+import { SelectUserModule } from "../select-user/select-user.module";
 
 @NgModule({
   declarations: [SelectCollaboratorsComponent],
@@ -16,6 +17,7 @@ import { GlobalModule } from "~/global.module";
     ReactiveFormsModule,
     PipesModule,
     GlobalModule,
+    SelectUserModule,
   ],
   exports: [SelectCollaboratorsComponent],
 })

@@ -5,6 +5,8 @@ import { getMe } from "./getMe";
 import { getMyFriends } from "./getMyFriends";
 import { getMyStats } from "./getMyStats";
 import { getPreferences } from "./getPreferences";
+import { getUserProfileByEmail } from "./getUserProfileByEmail";
+import { getUserProfileByHandle } from "./getUserProfileByHandle";
 import { getUserProfilesById } from "./getUserProfilesById";
 import { login } from "./login";
 import { register } from "./register";
@@ -16,6 +18,8 @@ export const usersRouter = router({
   getMe,
   getMyStats,
   getMyFriends,
+  getUserProfileByEmail,
+  getUserProfileByHandle,
   getUserProfilesById,
   updatePreferences,
   getPreferences,

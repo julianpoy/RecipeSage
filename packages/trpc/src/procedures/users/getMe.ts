@@ -51,9 +51,9 @@ export const getMe = publicProcedure.query(
       email: profile.email,
       handle: profile.handle,
       enableProfile: profile.enableProfile,
-      profileVisibility: profile.profileVisibility,
       createdAt: profile.createdAt,
       updatedAt: profile.updatedAt,
+      profileImages: profile.profileImages,
       subscriptions,
     };
   },

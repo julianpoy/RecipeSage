@@ -483,7 +483,7 @@ export class RecipePage {
     loading.dismiss();
     if (!response) return;
 
-    this.navCtrl.navigateRoot(RouteMap.RecipePage.getPath(response.id)); // TODO: Check that this "refresh" works with new router
+    window.location.reload();
   }
 
   async cloneRecipe() {

@@ -1,0 +1,18 @@
+.labels {
+  padding-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  background: var(--ion-background-tint-color);
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 8px 10px;
+
+  ion-icon {
+    margin-right: 8px;
+  }
+}

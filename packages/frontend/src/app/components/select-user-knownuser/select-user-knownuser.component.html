@@ -2,7 +2,7 @@
   <select-user
     [selectedUser]="_userSelectState"
     (selectedUserChange)="selectedUser = $event"
-    (searchInputChange)="manualSelect = !!$event?.trim()"
+    (searchInputChange)="manualSelect = !!$event.trim()"
   ></select-user>
   <select-knownuser
     *ngIf="!manualSelect"
