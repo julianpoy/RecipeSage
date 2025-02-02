@@ -149,6 +149,10 @@
     <ion-item>
       <ion-textarea
         id="assistant-message-textarea"
+        class="textarea-autogrow-max400-40vh"
+        [autoGrow]="true"
+        [counter]="true"
+        [maxlength]="maxMessageLength"
         autocomplete="true"
         spellcheck="true"
         autocorrect="on"

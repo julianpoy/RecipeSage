@@ -483,6 +483,7 @@
   "pages.assistant.welcome.4": "This limit only applies to messages sent by you, and not to the AI's responses.",
   "pages.assistant.welcome.documentation": "Please read the assistant documentation",
   "pages.assistant.messageLimit": "Maximum messages reached (sorry, it's costly!). Message count resets at 0:00GMT.",
+  "pages.assistant.messageSize": "Your message is too long. Please send a shorter message.",
 
   "pages.messageThread.title": "Conversation with {{name}}",
   "pages.messageThread.clickToOpen": "Click to open",
