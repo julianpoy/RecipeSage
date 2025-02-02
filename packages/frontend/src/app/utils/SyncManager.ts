@@ -1,15 +1,10 @@
 import { IDBPDatabase } from "idb";
+import pThrottle from "p-throttle";
 import type { SearchManager } from "./SearchManager";
 import { trpcClient as trpc } from "./trpcClient";
-import { ObjectStoreName } from "./localDb";
+import { KVStoreKeys, ObjectStoreName, RSLocalDB } from "./localDb";
 import { appIdbStorageManager } from "./appIdbStorageManager";
 import { SW_BROADCAST_CHANNEL_NAME } from "./SW_BROADCAST_CHANNEL_NAME";
-
-const waitFor = (time: number): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-};
 
 const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
@@ -18,13 +13,19 @@ const ENABLE_VERBOSE_SYNC_LOGGING = false;
 const SYNC_BATCH_SIZE = 200;
 
 /**
- * How long to wait between syncing each recipe
+ * We cannot exceed the rate limit of the API (is limited per-IP),
+ * so we throttle to 4 requests/sec to allow the browser some buffer as well in case
+ * the user is doing activities during a sync.
+ * Due to OPTIONS requests, the number of requests that actually go through will be doubled
  */
-const SYNC_BATCH_RATE_LIMIT_WAIT_MS = 250;
+const throttle = pThrottle({
+  limit: 3,
+  interval: 1000,
+});
 
 export class SyncManager {
   constructor(
-    private localDb: IDBPDatabase,
+    private localDb: IDBPDatabase<RSLocalDB>,
     private searchManager: SearchManager,
   ) {
     broadcastChannel.addEventListener("message", (event) => {
@@ -58,15 +59,12 @@ export class SyncManager {
 
     try {
       await this.syncRecipes();
-      await waitFor(SYNC_BATCH_RATE_LIMIT_WAIT_MS);
-
       await this.syncLabels();
-      await waitFor(SYNC_BATCH_RATE_LIMIT_WAIT_MS);
-
       await this.syncShoppingLists();
-      await waitFor(SYNC_BATCH_RATE_LIMIT_WAIT_MS);
-
       await this.syncMealPlans();
+      await this.syncMyUserProfile();
+      await this.syncMyFriends();
+      await this.syncMyStats();
 
       performance.mark("endSync");
       const measure = performance.measure("syncTime", "startSync", "endSync");
@@ -77,17 +75,20 @@ export class SyncManager {
   }
 
   async syncRecipe(recipeId: string): Promise<void> {
-    const recipe = await trpc.recipes.getRecipe.query({
-      id: recipeId,
-    });
+    const recipe = await throttle(() =>
+      trpc.recipes.getRecipe.query({
+        id: recipeId,
+      }),
+    )();
 
     await this.localDb.put(ObjectStoreName.Recipes, recipe);
     await this.searchManager.indexRecipe(recipe);
   }
 
   async syncRecipes(): Promise<void> {
-    const allVisibleRecipesManifest =
-      await trpc.recipes.getAllVisibleRecipesManifest.query();
+    const allVisibleRecipesManifest = await throttle(() =>
+      trpc.recipes.getAllVisibleRecipesManifest.query(),
+    )();
     const serverRecipeIds = allVisibleRecipesManifest.reduce(
       (acc, el) => acc.add(el.id),
       new Set<string>(),
@@ -136,29 +137,31 @@ export class SyncManager {
     while (remainingRecipeIdsToSync.length) {
       const ids = remainingRecipeIdsToSync.splice(0, SYNC_BATCH_SIZE);
 
-      const recipes = await trpc.recipes.getRecipesByIds.query({
-        ids,
-      });
+      const recipes = await throttle(() =>
+        trpc.recipes.getRecipesByIds.query({
+          ids,
+        }),
+      )();
 
       for (const recipe of recipes) {
         await this.localDb.put(ObjectStoreName.Recipes, recipe);
         await this.searchManager.indexRecipe(recipe);
       }
-
-      await waitFor(SYNC_BATCH_RATE_LIMIT_WAIT_MS);
     }
   }
 
   async syncLabels() {
-    const allLabels = await trpc.labels.getAllVisibleLabels.query();
+    const allLabels = await throttle(() =>
+      trpc.labels.getAllVisibleLabels.query(),
+    )();
     await this.localDb.clear(ObjectStoreName.Labels);
     for (const label of allLabels) {
       await this.localDb.put(ObjectStoreName.Labels, label);
     }
 
-    await waitFor(SYNC_BATCH_RATE_LIMIT_WAIT_MS);
-
-    const labelGroups = await trpc.labelGroups.getLabelGroups.query();
+    const labelGroups = await throttle(() =>
+      trpc.labelGroups.getLabelGroups.query(),
+    )();
     await this.localDb.clear(ObjectStoreName.LabelGroups);
     for (const labelGroup of labelGroups) {
       await this.localDb.put(ObjectStoreName.LabelGroups, labelGroup);
@@ -170,8 +173,9 @@ export class SyncManager {
   }
 
   async syncShoppingLists() {
-    const shoppingLists =
-      await trpc.shoppingLists.getShoppingListsWithItems.query();
+    const shoppingLists = await throttle(() =>
+      trpc.shoppingLists.getShoppingListsWithItems.query(),
+    )();
     await this.localDb.clear(ObjectStoreName.ShoppingLists);
     for (const shoppingList of shoppingLists) {
       await this.localDb.put(ObjectStoreName.ShoppingLists, shoppingList);
@@ -179,10 +183,46 @@ export class SyncManager {
   }
 
   async syncMealPlans() {
-    const mealPlans = await trpc.mealPlans.getMealPlansWithItems.query();
+    const mealPlans = await throttle(() =>
+      trpc.mealPlans.getMealPlansWithItems.query(),
+    )();
     await this.localDb.clear(ObjectStoreName.MealPlans);
     for (const mealPlan of mealPlans) {
       await this.localDb.put(ObjectStoreName.MealPlans, mealPlan);
     }
+  }
+
+  async syncMyUserProfile() {
+    const myProfile = await throttle(() => trpc.users.getMe.query())();
+    await this.localDb.put(ObjectStoreName.KV, {
+      key: KVStoreKeys.MyUserProfile,
+      value: myProfile,
+    });
+  }
+
+  async syncMyFriends() {
+    const myFriends = await throttle(() => trpc.users.getMyFriends.query())();
+    await this.localDb.put(ObjectStoreName.KV, {
+      key: KVStoreKeys.MyFriends,
+      value: myFriends,
+    });
+
+    const userProfiles = [
+      myFriends.friends,
+      myFriends.incomingRequests,
+      myFriends.outgoingRequests,
+    ].flat();
+
+    for (const userProfile of userProfiles) {
+      await this.localDb.put(ObjectStoreName.UserProfiles, userProfile);
+    }
+  }
+
+  async syncMyStats() {
+    const myStats = await throttle(() => trpc.users.getMyStats.query())();
+    await this.localDb.put(ObjectStoreName.KV, {
+      key: KVStoreKeys.MyStats,
+      value: myStats,
+    });
   }
 }

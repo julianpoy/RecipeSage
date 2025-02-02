@@ -2,9 +2,9 @@ import { registerRoute } from "workbox-routing";
 import {
   swAssertStatusCacheDivert,
   swCacheReject,
+  SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
-import type { RecipeSummary } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
@@ -24,19 +24,16 @@ export const registerGetRecipeRoute = () => {
           getTrpcInputForEvent<
             Parameters<typeof trpc.recipes.getRecipe.query>[0]
           >(event);
-        if (!input) return swCacheReject("No input provided", e);
+        if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
         const { id } = input;
 
         const localDb = await getLocalDb();
 
-        const recipe: RecipeSummary | undefined = await localDb.get(
-          ObjectStoreName.Recipes,
-          id,
-        );
+        const recipe = await localDb.get(ObjectStoreName.Recipes, id);
 
         if (!recipe) {
-          return swCacheReject("No cache result found", e);
+          return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
         }
 
         return encodeCacheResultForTrpc(

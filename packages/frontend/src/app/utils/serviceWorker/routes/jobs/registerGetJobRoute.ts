@@ -5,13 +5,13 @@ import {
   SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
-import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
+import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 
-export const registerGetMealPlanItemsRoute = () => {
+export const registerGetJobRoute = () => {
   registerRoute(
-    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\.getMealPlanItems/,
+    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/jobs\.getJob/,
     async (event) => {
       try {
         const response = await fetch(event.request);
@@ -21,28 +21,23 @@ export const registerGetMealPlanItemsRoute = () => {
         return response;
       } catch (e) {
         const input =
-          getTrpcInputForEvent<
-            Parameters<typeof trpc.mealPlans.getMealPlanItems.query>[0]
-          >(event);
+          getTrpcInputForEvent<Parameters<typeof trpc.jobs.getJob.query>[0]>(
+            event,
+          );
         if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
-        const { mealPlanId } = input;
+        const { id } = input;
 
         const localDb = await getLocalDb();
 
-        const mealPlan = await localDb.get(
-          ObjectStoreName.MealPlans,
-          mealPlanId,
-        );
+        const job = await localDb.get(ObjectStoreName.Jobs, id);
 
-        if (!mealPlan) {
+        if (!job) {
           return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
         }
 
         return encodeCacheResultForTrpc(
-          mealPlan.items satisfies Awaited<
-            ReturnType<typeof trpc.mealPlans.getMealPlanItems.query>
-          >,
+          job satisfies Awaited<ReturnType<typeof trpc.jobs.getJob.query>>,
         );
       }
     },

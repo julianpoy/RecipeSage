@@ -22,6 +22,9 @@ import {
   registerCreateRecipeRoute,
   registerRecipeMutationWildcardRoute,
   registerGetSimilarRecipesRoute,
+  registerGetRecipesByTitleRoute,
+  registerGetUniqueRecipeTitleRoute,
+  registerGetRecipesByIdsRoute,
 } from "./app/utils/serviceWorker/routes/recipes";
 import {
   registerGetShoppingListsRoute,
@@ -36,6 +39,16 @@ import {
   registerMealPlanMutationWildcardRoute,
 } from "./app/utils/serviceWorker/routes/mealPlans";
 import { SW_BROADCAST_CHANNEL_NAME } from "./app/utils/SW_BROADCAST_CHANNEL_NAME";
+import { registerGetAssistantMessagesRoute } from "./app/utils/serviceWorker/routes/assistant";
+import {
+  registerGetJobRoute,
+  registerGetJobsRoute,
+} from "./app/utils/serviceWorker/routes/jobs";
+import {
+  registerGetMeRoute,
+  registerGetMyFriendsRoute,
+  registerGetMyStatsRoute,
+} from "./app/utils/serviceWorker/routes/users";
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
@@ -152,6 +165,9 @@ registerRoute(
 registerGetRecipesRoute();
 registerGetRecipeRoute();
 registerGetSimilarRecipesRoute();
+registerGetRecipesByIdsRoute();
+registerGetRecipesByTitleRoute();
+registerGetUniqueRecipeTitleRoute();
 registerSearchRecipesRoute(searchManagerP);
 registerUpdateRecipeRoute(syncManagerP);
 registerCreateRecipeRoute(syncManagerP);
@@ -166,6 +182,15 @@ registerGetMealPlansRoute();
 registerGetMealPlanRoute();
 registerGetMealPlanItemsRoute();
 registerMealPlanMutationWildcardRoute(syncManagerP);
+
+registerGetAssistantMessagesRoute();
+
+registerGetJobRoute();
+registerGetJobsRoute();
+
+registerGetMeRoute();
+registerGetMyFriendsRoute();
+registerGetMyStatsRoute();
 
 // API calls should always fetch the newest if available. Fall back on cache for offline support.
 // Limit the maxiumum age so that requests aren't too stale.

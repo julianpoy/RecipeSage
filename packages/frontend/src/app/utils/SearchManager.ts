@@ -4,7 +4,12 @@ import MiniSearch, {
   type SearchResult,
 } from "minisearch";
 import { IDBPDatabase } from "idb";
-import { KVStoreKeys, ObjectStoreName } from "./localDb";
+import {
+  getKvStoreEntry,
+  KVStoreKeys,
+  ObjectStoreName,
+  RSLocalDB,
+} from "./localDb";
 import type { RecipeSummary } from "@recipesage/prisma";
 
 /**
@@ -39,7 +44,7 @@ export class SearchManager {
   private saveTimeout: NodeJS.Timeout | undefined;
   private maxSaveTimeout: NodeJS.Timeout | undefined;
 
-  constructor(private localDb: IDBPDatabase) {
+  constructor(private localDb: IDBPDatabase<RSLocalDB>) {
     this.miniSearch = new MiniSearch(this.miniSearchOptions);
   }
 
@@ -54,16 +59,13 @@ export class SearchManager {
   async populateFromLocalDb() {
     performance.mark("startIndexLoad");
 
-    const indexRecord = await this.localDb.get(
-      ObjectStoreName.KV,
-      KVStoreKeys.RecipeSearchIndex,
-    );
+    const indexRecord = await getKvStoreEntry(KVStoreKeys.RecipeSearchIndex);
 
     if (!indexRecord) return;
 
     try {
       this.miniSearch = MiniSearch.loadJSON(
-        indexRecord.value,
+        indexRecord,
         this.miniSearchOptions,
       );
 
@@ -168,19 +170,10 @@ export class SearchManager {
     clearTimeout(this.saveTimeout);
     clearTimeout(this.maxSaveTimeout);
 
-    if (
-      await this.localDb.get(ObjectStoreName.KV, KVStoreKeys.RecipeSearchIndex)
-    ) {
-      await this.localDb.put(ObjectStoreName.KV, {
-        key: KVStoreKeys.RecipeSearchIndex,
-        value: JSON.stringify(this.miniSearch),
-      });
-    } else {
-      await this.localDb.add(ObjectStoreName.KV, {
-        key: KVStoreKeys.RecipeSearchIndex,
-        value: JSON.stringify(this.miniSearch),
-      });
-    }
+    await this.localDb.put(ObjectStoreName.KV, {
+      key: KVStoreKeys.RecipeSearchIndex,
+      value: JSON.stringify(this.miniSearch),
+    });
   }
 
   async destroy(): Promise<void> {

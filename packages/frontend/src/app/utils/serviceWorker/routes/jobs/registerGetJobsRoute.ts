@@ -9,9 +9,9 @@ import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
 
-export const registerGetLabelsRoute = () => {
+export const registerGetJobsRoute = () => {
   registerRoute(
-    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/labels\.getLabels/,
+    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/jobs\.getJobs/,
     async (event) => {
       try {
         const response = await fetch(event.request);
@@ -27,14 +27,12 @@ export const registerGetLabelsRoute = () => {
           return swCacheReject(SWCacheRejectReason.NoSession, e);
         }
 
-        let labels = await localDb.getAll(ObjectStoreName.Labels);
+        let jobs = await localDb.getAll(ObjectStoreName.Jobs);
 
-        labels = labels.filter((label) => label.userId === session.userId);
+        jobs = jobs.filter((job) => job.userId === session.userId);
 
         return encodeCacheResultForTrpc(
-          labels satisfies Awaited<
-            ReturnType<typeof trpc.labels.getLabels.query>
-          >,
+          jobs satisfies Awaited<ReturnType<typeof trpc.jobs.getJobs.query>>,
         );
       }
     },

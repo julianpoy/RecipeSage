@@ -24,7 +24,17 @@ export const swAssertStatusCacheDivert = (response: Response) => {
   }
 };
 
-export const swCacheReject = (reason: string, httpCapturedError: unknown) => {
+export enum SWCacheRejectReason {
+  NoInput = "No input provided",
+  NoCacheResult = "No cache result found",
+  NoSession = "Not logged in, can't operate offline",
+  NonOp = "This function is not available offline",
+}
+
+export const swCacheReject = (
+  reason: SWCacheRejectReason,
+  httpCapturedError: unknown,
+) => {
   if (httpCapturedError instanceof SWHttpCapturedError) {
     return httpCapturedError.originalResponse;
   }
