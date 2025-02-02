@@ -8,6 +8,7 @@ import type { RecipeSummary } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
+import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
 
 export const registerGetSimilarRecipesRoute = () => {
   registerRoute(
@@ -40,9 +41,15 @@ export const registerGetSimilarRecipesRoute = () => {
           );
 
           if (recipe) {
-            originRecipeTitles.add(recipe.title);
-            originRecipeIngredients.add(recipe.ingredients);
-            originRecipeInstructions.add(recipe.instructions);
+            originRecipeTitles.add(stripNumberedRecipeTitle(recipe.title));
+
+            if (recipe.ingredients.trim().length) {
+              originRecipeIngredients.add(recipe.ingredients);
+            }
+
+            if (recipe.instructions.trim().length) {
+              originRecipeInstructions.add(recipe.instructions);
+            }
           }
         }
 
@@ -52,7 +59,7 @@ export const registerGetSimilarRecipesRoute = () => {
 
         const similarRecipes = recipes.filter((recipe) => {
           return (
-            originRecipeTitles.has(recipe.title) ||
+            originRecipeTitles.has(stripNumberedRecipeTitle(recipe.title)) ||
             originRecipeIngredients.has(recipe.ingredients) ||
             originRecipeInstructions.has(recipe.instructions)
           );

@@ -12,7 +12,6 @@ export * from "./email/sendPasswordResetEmail";
 export * from "./clip";
 export * from "./sortRecipeImages";
 export * from "./fileTransformer";
-export * from "./stripNumberedRecipeTitle";
 export * from "./config";
 export * from "./grip";
 export * from "./fetch";
