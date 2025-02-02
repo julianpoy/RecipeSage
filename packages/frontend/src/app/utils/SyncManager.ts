@@ -15,7 +15,7 @@ const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 const ENABLE_VERBOSE_SYNC_LOGGING = false;
 
-const SYNC_BATCH_SIZE = 50;
+const SYNC_BATCH_SIZE = 200;
 
 /**
  * How long to wait between syncing each recipe
