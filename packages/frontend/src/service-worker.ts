@@ -35,8 +35,13 @@ import {
   registerGetMealPlanItemsRoute,
   registerMealPlanMutationWildcardRoute,
 } from "./app/utils/serviceWorker/routes/mealPlans";
+import { SW_BROADCAST_CHANNEL_NAME } from "./app/utils/SW_BROADCAST_CHANNEL_NAME";
+
+const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
 const APP_VERSION = "development";
+
+const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST || []);
@@ -77,6 +82,29 @@ const syncManagerP = Promise.all([getLocalDb(), searchManagerP]).then(
 );
 syncManagerP.then((syncManager) => {
   syncManager.syncAll();
+});
+
+broadcastChannel.addEventListener("message", async (event) => {
+  if (event.data.type === "triggerFullSync") {
+    const syncManager = await syncManagerP;
+    await syncManager.syncAll();
+
+    if (event.data.notification) {
+      await self.registration.showNotification(event.data.notification.title, {
+        tag: event.data.notification.tag || "syncCompleted",
+        icon: RS_LOGO_URL,
+        body: event.data.notification.body,
+      });
+    }
+
+    return;
+  }
+
+  if (event.data.type === "triggerRecipeSyncById") {
+    syncManagerP.then((syncManager) => {
+      syncManager.syncRecipe(event.data.recipeId);
+    });
+  }
 });
 
 // Index should be cached networkFirst - this way, users will always get the newest application version
@@ -172,8 +200,6 @@ registerRoute(
 // ==== FIREBASE MESSAGING ====
 
 try {
-  const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
-
   const firebaseApp = initializeApp({
     appId: "1:1064631313987:android:b6ca7a14265a6a01",
     apiKey: "AIzaSyANy7PbiPae7dmi4yYockrlvQz3tEEIkL0",
@@ -224,11 +250,11 @@ try {
               return client.focus();
             }
           }
-          if (event.notification.data.recipeId) {
+          if (event.notification.data?.recipeId) {
             return self.clients.openWindow(
               `${self.registration.scope}#/recipe/${event.notification.data.recipeId}`,
             );
-          } else if (event.notification.data.otherUserId) {
+          } else if (event.notification.data?.otherUserId) {
             return self.clients.openWindow(
               `${self.registration.scope}#/messages/${event.notification.data.otherUserId}`,
             );

@@ -138,6 +138,30 @@ export class SettingsPage {
     }
   }
 
+  async triggerSync() {
+    await this.swCommunicationService.triggerFullCacheSync(true);
+
+    const header = await this.translate
+      .get("pages.settings.sync.header")
+      .toPromise();
+    const message = await this.translate
+      .get("pages.settings.sync.message")
+      .toPromise();
+    const okay = await this.translate.get("generic.okay").toPromise();
+
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: okay,
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
   async togglePreferencesSync(event: any) {
     const value = event.detail.checked
       ? PreferencesSync.Enabled
@@ -346,40 +370,5 @@ export class SettingsPage {
 
   goToAccount() {
     this.navCtrl.navigateForward(RouteMap.AccountPage.getPath());
-  }
-
-  async checkForUpdate() {
-    const header = await this.translate
-      .get("pages.settings.update.header")
-      .toPromise();
-    const subHeader = await this.translate
-      .get("pages.settings.update.subHeader")
-      .toPromise();
-    const cancel = await this.translate.get("generic.cancel").toPromise();
-    const okay = await this.translate.get("generic.okay").toPromise();
-
-    const alert = await this.alertCtrl.create({
-      header,
-      subHeader,
-      buttons: [
-        {
-          text: cancel,
-          handler: () => {},
-        },
-        {
-          text: okay,
-          handler: () => {
-            try {
-              (window as any).forceSWUpdate().then(() => {
-                (window as any).location.reload(true);
-              });
-            } catch (e) {
-              (window as any).location.reload(true);
-            }
-          },
-        },
-      ],
-    });
-    alert.present();
   }
 }
