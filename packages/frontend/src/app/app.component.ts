@@ -33,6 +33,8 @@ import {
 } from "./services/feature-flag.service";
 import { Title } from "@angular/platform-browser";
 
+const SW_UPDATE_CHECK_INTERVAL_MINUTES = 5;
+
 interface NavPage {
   id: string;
   title: string;
@@ -180,6 +182,11 @@ export class AppComponent {
 
   initUpdateListeners() {
     (window as any).appLoaded = true;
+
+    (window as any).swRegistration?.update();
+    setInterval(() => {
+      (window as any).swRegistration?.update();
+    }, SW_UPDATE_CHECK_INTERVAL_MINUTES);
   }
 
   initEventListeners() {
