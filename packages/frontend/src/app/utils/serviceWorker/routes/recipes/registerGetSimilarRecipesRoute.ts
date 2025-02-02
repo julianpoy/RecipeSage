@@ -2,6 +2,7 @@ import { registerRoute } from "workbox-routing";
 import {
   swAssertStatusCacheDivert,
   swCacheReject,
+  SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import type { RecipeSummary } from "@recipesage/prisma";
@@ -9,6 +10,7 @@ import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
 import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
+import { appIdbStorageManager } from "../../../appIdbStorageManager";
 
 export const registerGetSimilarRecipesRoute = () => {
   registerRoute(
@@ -25,11 +27,16 @@ export const registerGetSimilarRecipesRoute = () => {
           getTrpcInputForEvent<
             Parameters<typeof trpc.recipes.getSimilarRecipes.query>[0]
           >(event);
-        if (!input) return swCacheReject("No input provided", e);
+        if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
         const { recipeIds } = input;
 
         const localDb = await getLocalDb();
+
+        const session = await appIdbStorageManager.getSession();
+        if (!session) {
+          return swCacheReject(SWCacheRejectReason.NoSession, e);
+        }
 
         const originRecipeTitles = new Set<string>();
         const originRecipeIngredients = new Set<string>();
@@ -53,17 +60,17 @@ export const registerGetSimilarRecipesRoute = () => {
           }
         }
 
-        const recipes: RecipeSummary[] = await localDb.getAll(
-          ObjectStoreName.Recipes,
-        );
+        const recipes = await localDb.getAll(ObjectStoreName.Recipes);
 
-        const similarRecipes = recipes.filter((recipe) => {
-          return (
-            originRecipeTitles.has(stripNumberedRecipeTitle(recipe.title)) ||
-            originRecipeIngredients.has(recipe.ingredients) ||
-            originRecipeInstructions.has(recipe.instructions)
-          );
-        });
+        const similarRecipes = recipes
+          .filter((recipe) => recipe.userId === session.userId)
+          .filter((recipe) => {
+            return (
+              originRecipeTitles.has(stripNumberedRecipeTitle(recipe.title)) ||
+              originRecipeIngredients.has(recipe.ingredients) ||
+              originRecipeInstructions.has(recipe.instructions)
+            );
+          });
 
         return encodeCacheResultForTrpc(
           similarRecipes satisfies Awaited<

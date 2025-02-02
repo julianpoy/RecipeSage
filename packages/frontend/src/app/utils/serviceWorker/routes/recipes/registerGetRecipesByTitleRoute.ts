@@ -8,10 +8,11 @@ import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
+import { appIdbStorageManager } from "../../../appIdbStorageManager";
 
-export const registerGetMealPlanItemsRoute = () => {
+export const registerGetRecipesByTitleRoute = () => {
   registerRoute(
-    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\.getMealPlanItems/,
+    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/recipes\.getRecipesByTitle/,
     async (event) => {
       try {
         const response = await fetch(event.request);
@@ -22,26 +23,28 @@ export const registerGetMealPlanItemsRoute = () => {
       } catch (e) {
         const input =
           getTrpcInputForEvent<
-            Parameters<typeof trpc.mealPlans.getMealPlanItems.query>[0]
+            Parameters<typeof trpc.recipes.getRecipesByTitle.query>[0]
           >(event);
         if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
-        const { mealPlanId } = input;
+        const { title } = input;
 
         const localDb = await getLocalDb();
 
-        const mealPlan = await localDb.get(
-          ObjectStoreName.MealPlans,
-          mealPlanId,
-        );
-
-        if (!mealPlan) {
-          return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+        const session = await appIdbStorageManager.getSession();
+        if (!session) {
+          return swCacheReject(SWCacheRejectReason.NoSession, e);
         }
 
+        let recipes = await localDb.getAll(ObjectStoreName.Recipes);
+
+        recipes = recipes.filter((recipe) => {
+          return recipe.userId === session.userId && recipe.title === title;
+        });
+
         return encodeCacheResultForTrpc(
-          mealPlan.items satisfies Awaited<
-            ReturnType<typeof trpc.mealPlans.getMealPlanItems.query>
+          recipes satisfies Awaited<
+            ReturnType<typeof trpc.recipes.getRecipesByTitle.query>
           >,
         );
       }

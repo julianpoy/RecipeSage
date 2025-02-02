@@ -184,9 +184,12 @@ export class AppComponent {
     (window as any).appLoaded = true;
 
     (window as any).swRegistration?.update();
-    setInterval(() => {
-      (window as any).swRegistration?.update();
-    }, SW_UPDATE_CHECK_INTERVAL_MINUTES);
+    setInterval(
+      () => {
+        (window as any).swRegistration?.update();
+      },
+      SW_UPDATE_CHECK_INTERVAL_MINUTES * 60 * 1000,
+    );
   }
 
   initEventListeners() {

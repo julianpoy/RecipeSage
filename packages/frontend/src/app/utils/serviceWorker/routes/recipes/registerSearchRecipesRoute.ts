@@ -2,9 +2,15 @@ import { registerRoute } from "workbox-routing";
 import {
   swAssertStatusCacheDivert,
   swCacheReject,
+  SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { appIdbStorageManager } from "../../../appIdbStorageManager";
-import { getLocalDb, ObjectStoreName } from "../../../localDb";
+import {
+  getKvStoreEntry,
+  getLocalDb,
+  KVStoreKeys,
+  ObjectStoreName,
+} from "../../../localDb";
 import { SearchManager } from "../../../SearchManager";
 import type { RecipeSummary } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
@@ -28,7 +34,7 @@ export const registerSearchRecipesRoute = (
           getTrpcInputForEvent<
             Parameters<typeof trpc.recipes.searchRecipes.query>[0]
           >(event);
-        if (!input) return swCacheReject("No input provided", e);
+        if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
         const {
           searchTerm,
@@ -40,15 +46,11 @@ export const registerSearchRecipesRoute = (
           ratings,
         } = input;
 
-        if (userIds) {
-          return swCacheReject("Cannot query other userIds while offline", e);
-        }
-
         const localDb = await getLocalDb();
 
         const session = await appIdbStorageManager.getSession();
         if (!session) {
-          return swCacheReject("Not logged in, can't operate offline", e);
+          return swCacheReject(SWCacheRejectReason.NoSession, e);
         }
 
         const searchManager = await searchManagerP;
@@ -64,6 +66,26 @@ export const registerSearchRecipesRoute = (
             recipes.push(recipe);
           }
         }
+
+        // userIds (only partially functional, since we only have friends recipes cached)
+        if (userIds) {
+          const friendships = await getKvStoreEntry(KVStoreKeys.MyFriends);
+
+          if (!friendships) {
+            return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+          }
+
+          const friendUserIds = new Set(
+            friendships.friends.map((friend) => friend.id),
+          );
+          const allQueriedAreFriends = userIds.every((userId) =>
+            friendUserIds.has(userId),
+          );
+          if (!allQueriedAreFriends) {
+            return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+          }
+        }
+        const queriedUserIdsSet = new Set(userIds || [session.userId]);
 
         // folder
         recipes = recipes.filter((recipe) => recipe.folder === folder);
@@ -93,7 +115,7 @@ export const registerSearchRecipesRoute = (
         // includeAllFriends
         if (!includeAllFriends) {
           recipes = recipes.filter((recipe) => {
-            return recipe.userId === session.userId;
+            return queriedUserIdsSet.has(recipe.userId);
           });
         }
 

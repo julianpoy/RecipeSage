@@ -4,14 +4,16 @@ import {
   swCacheReject,
   SWCacheRejectReason,
 } from "../../swErrorHandling";
+import { appIdbStorageManager } from "../../../appIdbStorageManager";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
+import type { RecipeSummary } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
 
-export const registerGetMealPlanItemsRoute = () => {
+export const registerGetRecipesByIdsRoute = () => {
   registerRoute(
-    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/mealPlans\.getMealPlanItems/,
+    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/recipes\.getRecipesByIds/,
     async (event) => {
       try {
         const response = await fetch(event.request);
@@ -22,26 +24,31 @@ export const registerGetMealPlanItemsRoute = () => {
       } catch (e) {
         const input =
           getTrpcInputForEvent<
-            Parameters<typeof trpc.mealPlans.getMealPlanItems.query>[0]
+            Parameters<typeof trpc.recipes.getRecipesByIds.query>[0]
           >(event);
         if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
-        const { mealPlanId } = input;
+        const { ids } = input;
 
         const localDb = await getLocalDb();
 
-        const mealPlan = await localDb.get(
-          ObjectStoreName.MealPlans,
-          mealPlanId,
-        );
+        const session = await appIdbStorageManager.getSession();
+        if (!session) {
+          return swCacheReject(SWCacheRejectReason.NoSession, e);
+        }
 
-        if (!mealPlan) {
-          return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+        const recipes: RecipeSummary[] = [];
+        for (const id of ids) {
+          const recipe = await localDb.get(ObjectStoreName.Recipes, id);
+
+          if (recipe) {
+            recipes.push(recipe);
+          }
         }
 
         return encodeCacheResultForTrpc(
-          mealPlan.items satisfies Awaited<
-            ReturnType<typeof trpc.mealPlans.getMealPlanItems.query>
+          recipes satisfies Awaited<
+            ReturnType<typeof trpc.recipes.getRecipesByIds.query>
           >,
         );
       }

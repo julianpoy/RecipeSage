@@ -1,0 +1,1 @@
+export { registerGetAssistantMessagesRoute } from "./registerGetAssistantMessagesRoute";

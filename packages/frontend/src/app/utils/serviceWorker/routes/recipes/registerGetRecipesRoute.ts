@@ -2,10 +2,15 @@ import { registerRoute } from "workbox-routing";
 import {
   swAssertStatusCacheDivert,
   swCacheReject,
+  SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { appIdbStorageManager } from "../../../appIdbStorageManager";
-import { getLocalDb, ObjectStoreName } from "../../../localDb";
-import type { RecipeSummary } from "@recipesage/prisma";
+import {
+  getKvStoreEntry,
+  getLocalDb,
+  KVStoreKeys,
+  ObjectStoreName,
+} from "../../../localDb";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
@@ -25,7 +30,7 @@ export const registerGetRecipesRoute = () => {
           getTrpcInputForEvent<
             Parameters<typeof trpc.recipes.getRecipes.query>[0]
           >(event);
-        if (!input) return swCacheReject("No input provided", e);
+        if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
         const {
           userIds,
@@ -41,20 +46,34 @@ export const registerGetRecipesRoute = () => {
           ratings,
         } = input;
 
-        if (userIds) {
-          return swCacheReject("Cannot query other userIds while offline", e);
-        }
-
         const localDb = await getLocalDb();
 
         const session = await appIdbStorageManager.getSession();
         if (!session) {
-          return swCacheReject("Not logged in, can't operate offline", e);
+          return swCacheReject(SWCacheRejectReason.NoSession, e);
         }
 
-        let recipes: RecipeSummary[] = await localDb.getAll(
-          ObjectStoreName.Recipes,
-        );
+        let recipes = await localDb.getAll(ObjectStoreName.Recipes);
+
+        // userIds (only partially functional, since we only have friends recipes cached)
+        if (userIds) {
+          const friendships = await getKvStoreEntry(KVStoreKeys.MyFriends);
+
+          if (!friendships) {
+            return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+          }
+
+          const friendUserIds = new Set(
+            friendships.friends.map((friend) => friend.id),
+          );
+          const allQueriedAreFriends = userIds.every((userId) =>
+            friendUserIds.has(userId),
+          );
+          if (!allQueriedAreFriends) {
+            return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
+          }
+        }
+        const queriedUserIdsSet = new Set(userIds || [session.userId]);
 
         // folder
         recipes = recipes.filter((recipe) => recipe.folder === folder);
@@ -110,7 +129,7 @@ export const registerGetRecipesRoute = () => {
         // includeAllFriends
         if (!includeAllFriends) {
           recipes = recipes.filter((recipe) => {
-            return recipe.userId === session.userId;
+            return queriedUserIdsSet.has(recipe.userId);
           });
         }
 

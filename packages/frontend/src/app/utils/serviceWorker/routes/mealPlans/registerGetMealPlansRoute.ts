@@ -3,7 +3,6 @@ import { swAssertStatusCacheDivert } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
-import type { MealPlanSummaryWithItems } from "@recipesage/prisma";
 
 export const registerGetMealPlansRoute = () => {
   registerRoute(
@@ -18,9 +17,7 @@ export const registerGetMealPlansRoute = () => {
       } catch (_e) {
         const localDb = await getLocalDb();
 
-        const mealPlans: MealPlanSummaryWithItems[] = await localDb.getAll(
-          ObjectStoreName.MealPlans,
-        );
+        const mealPlans = await localDb.getAll(ObjectStoreName.MealPlans);
 
         return encodeCacheResultForTrpc(
           mealPlans satisfies Awaited<

@@ -1,12 +1,16 @@
-import { getLocalDb, KVStoreKeys, ObjectStoreName } from "./localDb";
+import {
+  getKvStoreEntry,
+  getLocalDb,
+  KVStoreKeys,
+  ObjectStoreName,
+} from "./localDb";
 import type { SessionDTO } from "@recipesage/prisma";
 
 export class AppIdbStorageManager {
   async getSession(): Promise<SessionDTO | null> {
-    const localDb = await getLocalDb();
-    const session = await localDb.get(ObjectStoreName.KV, KVStoreKeys.Session);
+    const session = await getKvStoreEntry(KVStoreKeys.Session);
 
-    return session?.value || null;
+    return session || null;
   }
 
   async setSession(session: SessionDTO): Promise<void> {
@@ -33,12 +37,8 @@ export class AppIdbStorageManager {
   }
 
   async getLastSessionUserId(): Promise<string | null> {
-    const localDb = await getLocalDb();
-    const record = await localDb.get(
-      ObjectStoreName.KV,
-      KVStoreKeys.LastSessionUserId,
-    );
-    return record?.value || null;
+    const record = await getKvStoreEntry(KVStoreKeys.LastSessionUserId);
+    return record || null;
   }
 
   async deleteAllData(): Promise<void> {
@@ -49,6 +49,8 @@ export class AppIdbStorageManager {
     await localDb.clear(ObjectStoreName.LabelGroups);
     await localDb.clear(ObjectStoreName.ShoppingLists);
     await localDb.clear(ObjectStoreName.MealPlans);
+    await localDb.clear(ObjectStoreName.AssistantMessages);
+    await localDb.clear(ObjectStoreName.Jobs);
   }
 }
 

@@ -2,11 +2,11 @@ import { registerRoute } from "workbox-routing";
 import {
   swAssertStatusCacheDivert,
   swCacheReject,
+  SWCacheRejectReason,
 } from "../../swErrorHandling";
 import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
-import type { ShoppingListSummaryWithItems } from "@recipesage/prisma";
 import { getTrpcInputForEvent } from "../../getTrpcInputForEvent";
 
 export const registerGetShoppingListItemsRoute = () => {
@@ -24,17 +24,19 @@ export const registerGetShoppingListItemsRoute = () => {
           getTrpcInputForEvent<
             Parameters<typeof trpc.shoppingLists.getShoppingListItems.query>[0]
           >(event);
-        if (!input) return swCacheReject("No input provided", e);
+        if (!input) return swCacheReject(SWCacheRejectReason.NoInput, e);
 
         const { shoppingListId } = input;
 
         const localDb = await getLocalDb();
 
-        const shoppingList: ShoppingListSummaryWithItems | undefined =
-          await localDb.get(ObjectStoreName.ShoppingLists, shoppingListId);
+        const shoppingList = await localDb.get(
+          ObjectStoreName.ShoppingLists,
+          shoppingListId,
+        );
 
         if (!shoppingList) {
-          return swCacheReject("No cache result found", e);
+          return swCacheReject(SWCacheRejectReason.NoCacheResult, e);
         }
 
         return encodeCacheResultForTrpc(

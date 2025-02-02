@@ -4,9 +4,9 @@ import { getLocalDb, ObjectStoreName } from "../../../localDb";
 import { trpcClient as trpc } from "../../../trpcClient";
 import { encodeCacheResultForTrpc } from "../../encodeCacheResultForTrpc";
 
-export const registerGetAllVisibleLabelsRoute = () => {
+export const registerGetAssistantMessagesRoute = () => {
   registerRoute(
-    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/labels\.getAllVisibleLabels/,
+    /((https:\/\/api(\.beta)?\.recipesage\.com)|(\/api))\/trpc\/assistant\.getAssistantMessages/,
     async (event) => {
       try {
         const response = await fetch(event.request);
@@ -17,11 +17,13 @@ export const registerGetAllVisibleLabelsRoute = () => {
       } catch (e) {
         const localDb = await getLocalDb();
 
-        const labels = await localDb.getAll(ObjectStoreName.Labels);
+        const assistantMessages = await localDb.getAll(
+          ObjectStoreName.AssistantMessages,
+        );
 
         return encodeCacheResultForTrpc(
-          labels satisfies Awaited<
-            ReturnType<typeof trpc.labels.getAllVisibleLabels.query>
+          assistantMessages satisfies Awaited<
+            ReturnType<typeof trpc.assistant.getAssistantMessages.query>
           >,
         );
       }
