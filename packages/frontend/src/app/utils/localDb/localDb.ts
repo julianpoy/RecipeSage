@@ -127,26 +127,19 @@ export interface RSLocalDB extends DBSchema {
 }
 
 const connect = () => {
-  return openDB<RSLocalDB>(`localDb`, 1, {
+  const migrations = [localDBMigration_1, localDBMigration_2];
+
+  return openDB<RSLocalDB>(`localDb`, migrations.length, {
     upgrade: (db, previousVersion, newVersion) => {
       console.log(
         `Local DB upgrading from ${previousVersion} to ${newVersion}`,
       );
 
       try {
-        // TODO: automate this
-        switch (previousVersion) {
-          case 0: {
-            localDBMigration_1(db);
-            localDBMigration_2(db);
-
-            return;
-          }
-          case 1: {
-            localDBMigration_2(db);
-
-            return;
-          }
+        let i = previousVersion;
+        while (i < migrations.length) {
+          migrations[i](db);
+          i++;
         }
       } catch (e) {
         console.error(e);
