@@ -10,7 +10,7 @@ import { prisma, RecipeSummary, recipeSummary } from "@recipesage/prisma";
 export const getRecipesByIds = publicProcedure
   .input(
     z.object({
-      ids: z.array(z.string()).max(50),
+      ids: z.array(z.string()).max(200),
     }),
   )
   .query(async ({ ctx, input }): Promise<RecipeSummary[]> => {

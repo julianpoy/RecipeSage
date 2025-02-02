@@ -8,7 +8,7 @@ const assistant = new Assistant();
 export const sendAssistantMessage = publicProcedure
   .input(
     z.object({
-      content: z.string().max(500),
+      content: z.string().max(1500),
     }),
   )
   .query(async ({ ctx, input }) => {

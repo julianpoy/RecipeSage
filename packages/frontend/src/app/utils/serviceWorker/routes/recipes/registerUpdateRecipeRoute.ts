@@ -16,8 +16,10 @@ export const registerUpdateRecipeRoute = (
           ReturnType<typeof trpc.recipes.updateRecipe.mutate>
         >(response);
 
-      const syncManager = await syncManagerP;
-      syncManager.syncRecipe(output.id);
+      if (output) {
+        const syncManager = await syncManagerP;
+        syncManager.syncRecipe(output.id);
+      }
 
       return response;
     },

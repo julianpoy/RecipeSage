@@ -1,5 +1,5 @@
 import { prisma, recipeSummaryLite } from "@recipesage/prisma";
-import { stripNumberedRecipeTitle } from "../general/stripNumberedRecipeTitle";
+import { stripNumberedRecipeTitle } from "@recipesage/util/shared";
 
 export const getSimilarRecipes = async (
   userId: string,

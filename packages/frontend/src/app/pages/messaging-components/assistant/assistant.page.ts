@@ -22,6 +22,8 @@ import type {
 export class AssistantPage {
   @ViewChild("content", { static: true }) content: any;
 
+  maxMessageLength = 1500;
+
   messages: (AssistantMessageSummary & {
     formattedDate?: string;
     deservesDateDiff?: boolean;
@@ -205,6 +207,26 @@ export class AssistantPage {
 
   async sendMessage() {
     const pendingMessage = this.pendingMessage;
+
+    if (pendingMessage.length > this.maxMessageLength) {
+      const message = await this.translate
+        .get("pages.assistant.messageSize")
+        .toPromise();
+      const close = await this.translate.get("generic.okay").toPromise();
+
+      const toast = await this.toastCtrl.create({
+        message,
+        buttons: [
+          {
+            text: close,
+            role: "cancel",
+          },
+        ],
+      });
+      await toast.present();
+      return;
+    }
+
     if (this.processing || !pendingMessage) return;
 
     this.processing = true;
