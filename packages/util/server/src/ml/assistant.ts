@@ -85,10 +85,21 @@ export class Assistant {
 
     const chatGPTContext = assistantMessageContext
       .reverse() // Oldest first
-      .map(
-        (assistantMessage) =>
-          assistantMessage.json as unknown as ChatCompletionMessageParam,
-      );
+      .map((assistantMessage) => {
+        const message =
+          assistantMessage.json as unknown as ChatCompletionMessageParam;
+        if (message.role === "assistant") {
+          return {
+            ...message,
+            // Fix for https://github.com/openai/openai-python/issues/2061
+            tool_calls: message.tool_calls?.length
+              ? message.tool_calls
+              : undefined,
+          };
+        }
+
+        return message;
+      });
 
     let expectedToolCalls = 0;
     let toolCallingError = false;
