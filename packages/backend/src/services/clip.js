@@ -13,9 +13,9 @@ const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
 import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../services/fetch";
 
-const disconnectPuppeteer = (browser) => {
+const disconnectPuppeteer = async (browser) => {
   try {
-    browser.disconnect();
+    await browser.disconnect();
   } catch (e) {
     Sentry.captureException(e);
   }
@@ -24,17 +24,33 @@ const disconnectPuppeteer = (browser) => {
 const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
   let browser;
   try {
-    let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
-
-    if (process.env.BROWSERLESS_TOKEN) {
-      browserWSEndpoint += `&token=${process.env.BROWSERLESS_TOKEN}`;
+    if (
+      !process.env.BROWSERLESS_HOST
+      || !process.env.BROWSERLESS_PORT
+      || !process.env.BROWSERLESS_TOKEN
+    ) {
+      throw new Error("BROWSERLESS_HOST, BROWSERLESS_PORT, and BROWSERLESS_TOKEN must be defined in environment variables to enable browserless");
     }
+
+    let browserWSEndpoint = new URL(`ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`)
+    browserWSEndpoint.searchParams.append('token', process.env.BROWSERLESS_TOKEN);
+    browserWSEndpoint.searchParams.append('blockAds', 'true');
+
+    const chromeLaunchArgs = [
+      '--disable-web-security',
+    ]
 
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
-      console.log(proxyUrl);
-      browserWSEndpoint += `&--proxy-server="https=${proxyUrl.host}"`;
+      chromeLaunchArgs.push(`--proxy-server="https=${proxyUrl.host}"`);
     }
+
+    const launchArgs = JSON.stringify({
+      stealth: true,
+      args: chromeLaunchArgs
+    });
+    browserWSEndpoint.searchParams.append('launch', launchArgs);
+
 
     browser = await puppeteer.connect({
       browserWSEndpoint,
@@ -204,7 +220,7 @@ export const clipUrl = async (url) => {
 
 export const clipHtml = async (document) => {
   const results = await clipRecipeHtmlWithJSDOM(document).catch((e) => {
-    console.log(e);
+    console.error(e);
     Sentry.captureException(e);
   });
 
