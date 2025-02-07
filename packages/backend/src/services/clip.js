@@ -25,20 +25,25 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
   let browser;
   try {
     if (
-      !process.env.BROWSERLESS_HOST
-      || !process.env.BROWSERLESS_PORT
-      || !process.env.BROWSERLESS_TOKEN
+      !process.env.BROWSERLESS_HOST ||
+      !process.env.BROWSERLESS_PORT ||
+      !process.env.BROWSERLESS_TOKEN
     ) {
-      throw new Error("BROWSERLESS_HOST, BROWSERLESS_PORT, and BROWSERLESS_TOKEN must be defined in environment variables to enable browserless");
+      throw new Error(
+        "BROWSERLESS_HOST, BROWSERLESS_PORT, and BROWSERLESS_TOKEN must be defined in environment variables to enable browserless",
+      );
     }
 
-    let browserWSEndpoint = new URL(`ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`)
-    browserWSEndpoint.searchParams.append('token', process.env.BROWSERLESS_TOKEN);
-    browserWSEndpoint.searchParams.append('blockAds', 'true');
+    let browserWSEndpoint = new URL(
+      `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`,
+    );
+    browserWSEndpoint.searchParams.append(
+      "token",
+      process.env.BROWSERLESS_TOKEN,
+    );
+    browserWSEndpoint.searchParams.append("blockAds", "true");
 
-    const chromeLaunchArgs = [
-      '--disable-web-security',
-    ]
+    const chromeLaunchArgs = ["--disable-web-security"];
 
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
@@ -47,10 +52,9 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl) => {
 
     const launchArgs = JSON.stringify({
       stealth: true,
-      args: chromeLaunchArgs
+      args: chromeLaunchArgs,
     });
-    browserWSEndpoint.searchParams.append('launch', launchArgs);
-
+    browserWSEndpoint.searchParams.append("launch", launchArgs);
 
     browser = await puppeteer.connect({
       browserWSEndpoint,
