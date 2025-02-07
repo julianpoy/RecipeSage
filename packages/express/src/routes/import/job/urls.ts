@@ -18,7 +18,7 @@ const JOB_PROGRESS_UPDATE_PERIOD_SECONDS = 3;
 
 const schema = {
   body: z.object({
-    urls: z.array(z.string()),
+    urls: z.array(z.string()).min(1).max(5000),
   }),
   query: z.object({
     labels: z.string().optional(),

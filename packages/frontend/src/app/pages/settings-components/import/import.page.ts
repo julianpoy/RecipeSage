@@ -5,11 +5,18 @@ import * as Sentry from "@sentry/browser";
 import { RouteMap, UtilService } from "~/services/util.service";
 import { TRPCService } from "../../../services/trpc.service";
 import type { JobSummary } from "@recipesage/prisma";
+import { JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 export const getJobFailureI18n = (importJob: JobSummary) => {
   switch (importJob.resultCode) {
-    case 5: {
+    case JOB_RESULT_CODES.badFile: {
       return "pages.import.jobs.status.fail.badFile";
+    }
+    case JOB_RESULT_CODES.emptyFile: {
+      return "pages.import.jobs.status.fail.emptyFile";
+    }
+    case JOB_RESULT_CODES.badCredentials: {
+      return "pages.import.jobs.status.fail.badCredentials";
     }
     default: {
       return "pages.import.jobs.status.fail.unknown";
@@ -28,7 +35,9 @@ type ImportFormat =
   | "recipekeeper"
   | "textfiles"
   | "urls"
-  | "csv";
+  | "csv"
+  | "pdfs"
+  | "images";
 
 @Component({
   selector: "page-import",
@@ -140,6 +149,14 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportCSVPage.getPath());
         break;
       }
+      case "pdfs": {
+        this.navCtrl.navigateForward(RouteMap.ImportPDFsPage.getPath());
+        break;
+      }
+      case "images": {
+        this.navCtrl.navigateForward(RouteMap.ImportImagesPage.getPath());
+        break;
+      }
     }
   }
 
@@ -195,6 +212,12 @@ export class ImportPage {
       }
       case "csv": {
         return "pages.import.csv";
+      }
+      case "pdfs": {
+        return "pages.import.pdfs";
+      }
+      case "images": {
+        return "pages.import.images";
       }
       default: {
         Sentry.captureMessage("Job ImportType not handled", {

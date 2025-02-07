@@ -13,10 +13,7 @@ import {
   importStandardizedRecipes,
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
-import {
-  textToRecipe,
-  TextToRecipeInputType,
-} from "@recipesage/util/server/ml";
+import { pdfToRecipe, TextToRecipeInputType } from "@recipesage/util/server/ml";
 import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import {
@@ -32,7 +29,7 @@ const schema = {
   }),
 };
 
-export const textfilesHandler = defineHandler(
+export const pdfsHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
@@ -62,7 +59,7 @@ export const textfilesHandler = defineHandler(
         status: JobStatus.RUN,
         progress: 1,
         meta: {
-          importType: "textFiles",
+          importType: "pdfs",
           importLabels: userLabels,
         } satisfies JobMeta,
       },
@@ -83,11 +80,11 @@ export const textfilesHandler = defineHandler(
       for (const fileName of fileNames) {
         const filePath = path.join(extractPath, fileName);
 
-        if (!filePath.endsWith(".txt")) {
+        if (!filePath.endsWith(".pdf")) {
           continue;
         }
 
-        const recipeText = await fs.readFile(filePath, "utf-8");
+        const recipePDF = await fs.readFile(filePath);
 
         const images = [];
         const baseName = path.basename(fileName);
@@ -109,8 +106,8 @@ export const textfilesHandler = defineHandler(
           }
         }
 
-        const recipe = await textToRecipe(
-          recipeText,
+        const recipe = await pdfToRecipe(
+          recipePDF,
           TextToRecipeInputType.Document,
         );
         if (!recipe) {
@@ -196,7 +193,7 @@ export const textfilesHandler = defineHandler(
           },
         });
 
-        if (!isBadZipError && !isNoRecipesError) {
+        if (!isBadZipError) {
           Sentry.captureException(e, {
             extra: {
               jobId: job.id,

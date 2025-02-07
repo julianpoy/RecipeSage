@@ -106,6 +106,14 @@
         <ion-icon name="cloud-upload" slot="start"></ion-icon>
         <ion-label> {{ 'pages.import.urls' | translate }} </ion-label>
       </ion-item>
+      <ion-item (click)="startImport('pdfs')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.pdfs' | translate }} </ion-label>
+      </ion-item>
+      <ion-item (click)="startImport('images')" detail button>
+        <ion-icon name="cloud-upload" slot="start"></ion-icon>
+        <ion-label> {{ 'pages.import.images' | translate }} </ion-label>
+      </ion-item>
       <ion-item (click)="startImport('csv')" detail button>
         <ion-icon name="cloud-upload" slot="start"></ion-icon>
         <ion-label> {{ 'pages.import.csv' | translate }} </ion-label>

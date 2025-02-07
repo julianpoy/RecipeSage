@@ -18,7 +18,10 @@ import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
-import { deletePathsSilent } from "@recipesage/util/server/general";
+import {
+  deletePathsSilent,
+  getImportJobResultCode,
+} from "@recipesage/util/server/general";
 import { z } from "zod";
 
 const schema = {
@@ -161,6 +164,10 @@ export const cookmateHandler = defineHandler(
         });
       }
 
+      if (standardizedRecipeImportInput.length === 0) {
+        throw new Error("No recipes");
+      }
+
       await prisma.job.update({
         where: {
           id: job.id,
@@ -213,19 +220,23 @@ export const cookmateHandler = defineHandler(
           e instanceof BadRequestError &&
           e.message === "Bad cookmate file format";
 
+        const isNoRecipesError =
+          e instanceof Error && e.message === "No recipes";
+
         await prisma.job.update({
           where: {
             id: job.id,
           },
           data: {
             status: JobStatus.FAIL,
-            resultCode: isBadFormatError
-              ? JOB_RESULT_CODES.badFile
-              : JOB_RESULT_CODES.unknown,
+            resultCode: getImportJobResultCode({
+              isBadFormat: isBadFormatError,
+              isNoRecipes: isNoRecipesError,
+            }),
           },
         });
 
-        if (!isBadFormatError) {
+        if (!isBadFormatError && !isNoRecipesError) {
           Sentry.captureException(e, {
             extra: {
               jobId: job.id,

@@ -674,7 +674,9 @@
   "pages.import.status.create": "Created, will begin soon.",
   "pages.import.status.run": "Importing recipes and images...",
   "pages.import.status.fail": "Import failed.",
-  "pages.import.jobs.status.fail.badFile": "Incompatible file. Please re-export from the app in question and try again.",
+  "pages.import.jobs.status.fail.badFile": "Incompatible format.",
+  "pages.import.jobs.status.fail.emptyFile": "The submitted import does not contain any recognizable recipes.",
+  "pages.import.jobs.status.fail.badCredentials": "The submitted credentials are incorrect.",
   "pages.import.jobs.status.fail.unknown": "An unknown error occurred. Please contact me.",
   "pages.import.status.success": "Import succesfully completed.",
   "pages.import.step": "Step {{number}}",
@@ -693,6 +695,8 @@
   "pages.import.textFiles": "Import from text files",
   "pages.import.urls": "Import from a list of URLs",
   "pages.import.csv": "Import from CSV (PlanToEat & others)",
+  "pages.import.pdfs": "Import from PDFs",
+  "pages.import.images": "Import from images",
   "pages.import.fileTooLarge": "This file is too large to upload directly.",
   "pages.import.fileTooLarge.contact": "Please contact me to have your database imported manually.",
   "pages.import.upload": "Upload and Import",
@@ -739,6 +743,12 @@
 
   "pages.importCSV.title": "Import Recipes from a CSV file",
   "pages.importCSV.description": "This will import all of the recipes contained in a CSV file into your RecipeSage account. Many programs output this format, but the internal structure can be somewhat arbitrary. Please refer to the user guide if you have any issues, otherwise contact me. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importPDFs.title": "Import Recipes from PDF files",
+  "pages.importPDFs.description": "This will import a set of PDF files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importImages.title": "Import Recipes from image files",
+  "pages.importImages.description": "This will import a set of image files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.settings.title": "Settings",
   "pages.settings.section1.title": "Data & Account",

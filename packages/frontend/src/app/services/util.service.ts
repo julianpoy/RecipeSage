@@ -264,6 +264,18 @@ export const RouteMap = {
     },
     path: "settings/import/csv",
   },
+  ImportPDFsPage: {
+    getPath() {
+      return `/settings/import/pdfs`;
+    },
+    path: "settings/import/pdfs",
+  },
+  ImportImagesPage: {
+    getPath() {
+      return `/settings/import/images`;
+    },
+    path: "settings/import/images",
+  },
   ShoppingListsPage: {
     getPath() {
       return `/shopping-lists`;

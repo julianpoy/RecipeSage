@@ -9,6 +9,8 @@ import { pepperplateHandler } from "./pepperplate";
 import { recipekeeperHandler } from "./recipekeeper";
 import { urlsHandler } from "./urls";
 import { csvHandler } from "./csv";
+import { pdfsHandler } from "./pdfs";
+import { imagesHandler } from "./images";
 
 const router = express.Router();
 
@@ -22,5 +24,7 @@ router.post("/recipekeeper", ...recipekeeperHandler);
 router.post("/textfiles", ...textfilesHandler);
 router.post("/urls", ...urlsHandler);
 router.post("/csv", ...csvHandler);
+router.post("/pdfs", ...pdfsHandler);
+router.post("/images", ...imagesHandler);
 
 export { router as importJobRouter };
