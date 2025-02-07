@@ -123,25 +123,15 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
       }
     });
 
+    await page.goto(clipUrl);
+
     try {
-      await page.goto(clipUrl, {
-        waitUntil: "networkidle2",
-        timeout: 20000,
+      await page.waitForNetworkIdle({
+        concurrency: 2,
+        timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
       });
     } catch (err) {
-      try {
-        (err as any).status = 400;
-      } catch (e) {
-        // Do nothing
-      }
-
-      Sentry.captureException(err, {
-        extra: {
-          clipUrl,
-        },
-      });
-
-      throw err;
+      console.error("Page did not enter idle state, proceeding anyway.", err);
     }
 
     await page.evaluate(dedent`() => {
@@ -206,7 +196,11 @@ const clipRecipeHtmlWithJSDOM = async (document: string) => {
 };
 
 const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
-  const response = await fetchURL(clipUrl);
+  const response = await fetchURL(clipUrl, {
+    requestConfig: {
+      timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
+    },
+  });
 
   const document = await response.text();
 
@@ -216,29 +210,34 @@ const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
 export const clipUrl = async (
   url: string,
 ): Promise<StandardizedRecipeImportEntry> => {
-  const recipeDataBrowser = await clipRecipeUrlWithPuppeteer(url).catch((e) => {
-    console.log(e);
-    Sentry.captureException(e);
-  });
+  const [recipeDataBrowser, recipeDataJSDOM] = await Promise.all([
+    clipRecipeUrlWithPuppeteer(url).catch((e) => {
+      console.error(e);
+      Sentry.captureException(e);
+    }),
+    clipRecipeUrlWithJSDOM(url).catch((e) => {
+      console.error(e);
+      Sentry.captureException(e);
+    }),
+  ]);
 
-  let results = recipeDataBrowser;
+  let results = recipeDataBrowser || {};
   if (
     !recipeDataBrowser ||
     !recipeDataBrowser.ingredients ||
     !recipeDataBrowser.instructions
   ) {
-    const recipeDataJSDOM = await clipRecipeUrlWithJSDOM(url).catch((e) => {
-      console.log(e);
-      Sentry.captureException(e);
-    });
-
     if (recipeDataJSDOM) {
       results = recipeDataJSDOM;
 
-      // Merge results (browser overrides JSDOM due to accuracy)
-      Object.entries(recipeDataBrowser || {}).forEach((entry) => {
-        if (entry[1]) results[entry[0]] = entry[1];
-      });
+      if (recipeDataBrowser) {
+        // Merge results (browser overrides JSDOM due to accuracy)
+        Object.entries(recipeDataBrowser as RecipeClipperResult).forEach(
+          ([key, value]) => {
+            if (value?.trim()) results[key] = value;
+          },
+        );
+      }
     }
   }
 
