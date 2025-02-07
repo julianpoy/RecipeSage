@@ -42,20 +42,40 @@ const disconnectPuppeteer = async (browser: Browser) => {
 const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
   let browser;
   try {
-    let browserWSEndpoint = `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}?stealth&blockAds&--disable-web-security`;
-
-    if (process.env.BROWSERLESS_TOKEN) {
-      browserWSEndpoint += `&token=${process.env.BROWSERLESS_TOKEN}`;
+    if (
+      !process.env.BROWSERLESS_HOST ||
+      !process.env.BROWSERLESS_PORT ||
+      !process.env.BROWSERLESS_TOKEN
+    ) {
+      throw new Error(
+        "BROWSERLESS_HOST, BROWSERLESS_PORT, and BROWSERLESS_TOKEN must be defined in environment variables to enable browserless",
+      );
     }
+
+    const browserWSEndpoint = new URL(
+      `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`,
+    );
+    browserWSEndpoint.searchParams.append(
+      "token",
+      process.env.BROWSERLESS_TOKEN,
+    );
+    browserWSEndpoint.searchParams.append("blockAds", "true");
+
+    const chromeLaunchArgs = ["--disable-web-security"];
 
     if (process.env.CLIP_PROXY_URL) {
       const proxyUrl = url.parse(process.env.CLIP_PROXY_URL);
-      console.log(proxyUrl);
-      browserWSEndpoint += `&--proxy-server="https=${proxyUrl.host}"`;
+      chromeLaunchArgs.push(`--proxy-server="https=${proxyUrl.host}"`);
     }
 
-    browser = await puppeteer.connect({
-      browserWSEndpoint,
+    const launchArgs = JSON.stringify({
+      stealth: true,
+      args: chromeLaunchArgs,
+    });
+    browserWSEndpoint.searchParams.append("launch", launchArgs);
+
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: browserWSEndpoint.href,
     });
 
     const page = await browser.newPage();
@@ -250,7 +270,7 @@ export const clipHtml = async (
   document: string,
 ): Promise<StandardizedRecipeImportEntry> => {
   const results = await clipRecipeHtmlWithJSDOM(document).catch((e) => {
-    console.log(e);
+    console.error(e);
     Sentry.captureException(e);
   });
 

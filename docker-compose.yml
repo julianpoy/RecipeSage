@@ -93,18 +93,12 @@ services:
       - POSTGRES_USER=recipesage_dev
       - POSTGRES_PASSWORD=recipesage_dev
   browserless:
-    image: browserless/chrome:1.61.0-puppeteer-21.4.1
+    image: ghcr.io/browserless/chromium:v2.24.3
     environment:
-      - MAX_CONCURRENT_SESSIONS=3
-      - MAX_QUEUE_LENGTH=10
-      - DEFAULT_BLOCK_ADS=true
-      - DEFAULT_LAUNCH_ARGS=["--disable-web-security"]
-      - WORKSPACE_DELETE_EXPIRED=true
-      - WORKSPACE_EXPIRE_DAYS=1
-      - EXIT_ON_HEALTH_FAILURE=true
-      - PREBOOT_CHROME=true
-      - KEEP_ALIVE=true
-      - FUNCTION_ENABLE_INCOGNITO_MODE=true
+      - CONCURRENT=3
+      - QUEUED=10
+      - HEALTH=true
+      - MAX_MEMORY_PERCENT=80
       - TOKEN=recipesage_dev
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
