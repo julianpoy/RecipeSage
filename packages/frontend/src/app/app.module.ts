@@ -65,6 +65,7 @@ if (!IS_SELFHOST) {
     release: (window as any).version,
     environment: environment.production ? "production" : "dev",
     dsn: "https://f1c0027c08fd438cb3beac8b658cc645@glitchtip.poyourow.com/2",
+    transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
     tracesSampleRate: SENTRY_SAMPLE_RATE,
     beforeSend(event, hint) {
       const error = hint.originalException as Error;

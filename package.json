@@ -33,6 +33,7 @@
     "@prisma/client": "^6.2.1",
     "@sentry/browser": "^8.54.0",
     "@sentry/node": "^8.54.0",
+    "@sentry/profiling-node": "^8.54.0",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
     "axios": "^1.7.7",

@@ -11,6 +11,8 @@ if (process.env.ENVIRONMENT !== "selfhost") {
     release: process.env.APP_VERSION,
     environment: process.env.ENVIRONMENT,
     dsn: "https://48261723ca12448e9b44836dd82effe1@glitchtip.poyourow.com/3",
+    transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
+
     tracesSampleRate: 1,
   });
 }
