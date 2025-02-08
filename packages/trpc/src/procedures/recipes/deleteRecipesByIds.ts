@@ -21,7 +21,7 @@ export const deleteRecipesByIds = publicProcedure
       },
     };
 
-    prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       const recipes = await tx.recipe.findMany({
         where,
         select: {
