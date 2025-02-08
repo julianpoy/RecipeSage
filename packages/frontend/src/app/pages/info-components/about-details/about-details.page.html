@@ -4,68 +4,35 @@
       <ion-back-button [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>More About Me &amp; RecipeSage</ion-title>
+    <ion-title> {{ 'pages.aboutDetails.title' | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p><b>A little about me</b></p>
   <p>
-    I'm a software developer in southern California. I do a lot of work on open
-    source code and I spend a lot of time working on small projects.
+    <b> {{ 'pages.aboutDetails.1.title' | translate }} </b>
   </p>
+  <p>{{ 'pages.aboutDetails.1.1' | translate }}</p>
+  <p>{{ 'pages.aboutDetails.1.2' | translate }}</p>
+
+  <br />
   <p>
-    RecipeSage is one of my hobbies - I work on it in my free time. I have been
-    working on RecipeSage since 2017 - It's exciting to see how it has grown and
-    changed over time.
+    <b> {{ 'pages.aboutDetails.2.title' | translate }} </b>
+  </p>
+  <p>{{ 'pages.aboutDetails.2.1' | translate }}</p>
+  <p>{{ 'pages.aboutDetails.2.2' | translate }}</p>
+  <p>
+    {{ 'pages.aboutDetails.2.3' | translate }}
+
+    <a (click)="$event.preventDefault(); goToDonate()" href="">
+      {{ 'pages.aboutDetails.contribute' | translate }}
+    </a>
   </p>
 
-  <p><b>Why create RecipeSage?</b></p>
-  <p>
-    I created RecipeSage to host recipes for me and my family. After trying
-    multiple recipe programs online, I felt it would be best to create a recipe
-    program that worked exactly as I wanted it to.
-  </p>
-  <p>
-    I'm a believer in freeware - I want RecipeSage to be free to use. Everyone
-    should be able to access and use this software. Please, feel free to suggest
-    new features and improvements. I want RecipeSage to grow and improve.
-  </p>
-  <p>
-    If you'd like to
-    <a (click)="$event.preventDefault(); goToDonate()" href=""
-      >contribute to support development</a
-    >, I'd really appreciate it. It's costly to run servers and host images, and
-    I'd love help! Contributing also unlocks some features for your account
-    (features that are cost-prohibitive to offer for free) as a thank you.
-  </p>
+  <br />
 
-  <p><b>Links</b></p>
   <p>
-    Feel free to shoot me an email at
-    <a href="mailto:julian@recipesage.com?subject=RecipeSage Support"
-      >julian&#64;recipesage.com</a
-    >
+    <b> {{ 'pages.aboutDetails.social' | translate }} </b>
   </p>
-  <p>
-    My Github profile is
-    <a
-      href="https://github.com/julianpoy"
-      target="_blank"
-      rel="noreferrer noopener"
-      >julianpoy</a
-    >
-  </p>
-  <p>
-    My personal website is
-    <a
-      href="https://julianpoyourow.com"
-      target="_blank"
-      rel="noreferrer noopener"
-      >julianpoyourow.com</a
-    >
-  </p>
-
-  <p><b>Social Media</b></p>
   <social-links></social-links>
 </ion-content>

@@ -238,10 +238,25 @@
   "pages.about.links.legal": "Legal, agreements and disclaimers",
   "pages.about.socialTitle": "Social Media",
 
+  "pages.aboutDetails.title": "More About Me & RecipeSage",
+  "pages.aboutDetails.1.title": "A little about me",
+  "pages.aboutDetails.1.1": "I'm a software developer in southern California. I do a lot of work on open source code and I spend a lot of time working on small projects.",
+  "pages.aboutDetails.1.2": "RecipeSage is one of my hobbies, and I work on it in my free time alongside a lot of other projects. It's not my job and I don't make a living off of it, but it brings me a lot of joy to work on the project.",
+
+  "pages.aboutDetails.2.title": "Why create RecipeSage?",
+  "pages.aboutDetails.2.1": "I created RecipeSage to host recipes for me and my family. After trying multiple recipe programs online, I felt it would be best to create a recipe program that worked exactly as me, my mother, my girlfriend (now wife!), and my sibling wanted it to.",
+  "pages.aboutDetails.2.2": "I'm a believer in open source software, and I want RecipeSage to be free to use. Everyone should be able to access and use this software, and I never want to subject RecipeSage users to ads or charge to be able to use the app.",
+  "pages.aboutDetails.2.3": "If you'd like to contribute to support development, I'd really appreciate it. It's costly to run servers and host images. Contributing also unlocks some features for your account (features that are cost-prohibitive to offer for free) as a thank you.",
+  "pages.aboutDetails.contribute": "Contribute page",
+  "pages.aboutDetails.social": "Social Media",
+
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
-  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide before emailing:",
-  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, you can email me at",
+  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide:",
+  "pages.contact.discord": "For any issues, bugs, or feature suggestions, please contact me via our Discord: ",
+  "pages.contact.discord.link": "Discord Link",
+
+  "pages.contact.emailMe": "Although I prefer contact via Discord since I get a lot of email, you can email me for urgent or sensitive issues at",
   "pages.contact.socialTitle": "Social Media",
 
   "pages.contribute.title": "Contribute",
