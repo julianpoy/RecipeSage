@@ -18,7 +18,10 @@ import {
   cleanLabelTitle,
   JOB_RESULT_CODES,
 } from "@recipesage/util/shared";
-import { deletePathsSilent } from "@recipesage/util/server/general";
+import {
+  deletePathsSilent,
+  getImportJobResultCode,
+} from "@recipesage/util/server/general";
 import { z } from "zod";
 import { parse } from "csv-parse";
 
@@ -194,6 +197,10 @@ export const csvHandler = defineHandler(
 
       await done;
 
+      if (standardizedRecipeImportInput.length === 0) {
+        throw new Error("No recipes");
+      }
+
       await prisma.job.update({
         where: {
           id: job.id,
@@ -246,19 +253,23 @@ export const csvHandler = defineHandler(
           e instanceof Error &&
           e.message === "end of central directory record signature not found";
 
+        const isNoRecipesError =
+          e instanceof Error && e.message === "No recipes";
+
         await prisma.job.update({
           where: {
             id: job.id,
           },
           data: {
             status: JobStatus.FAIL,
-            resultCode: isBadFormatError
-              ? JOB_RESULT_CODES.badFile
-              : JOB_RESULT_CODES.unknown,
+            resultCode: getImportJobResultCode({
+              isBadFormat: isBadFormatError,
+              isNoRecipes: isNoRecipesError,
+            }),
           },
         });
 
-        if (!isBadFormatError) {
+        if (!isBadFormatError && !isNoRecipesError) {
           Sentry.captureException(e, {
             extra: {
               jobId: job.id,

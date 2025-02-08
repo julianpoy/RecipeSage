@@ -238,10 +238,25 @@
   "pages.about.links.legal": "Legal, agreements and disclaimers",
   "pages.about.socialTitle": "Social Media",
 
+  "pages.aboutDetails.title": "More About Me & RecipeSage",
+  "pages.aboutDetails.1.title": "A little about me",
+  "pages.aboutDetails.1.1": "I'm a software developer in southern California. I do a lot of work on open source code and I spend a lot of time working on small projects.",
+  "pages.aboutDetails.1.2": "RecipeSage is one of my hobbies, and I work on it in my free time alongside a lot of other projects. It's not my job and I don't make a living off of it, but it brings me a lot of joy to work on the project.",
+
+  "pages.aboutDetails.2.title": "Why create RecipeSage?",
+  "pages.aboutDetails.2.1": "I created RecipeSage to host recipes for me and my family. After trying multiple recipe programs online, I felt it would be best to create a recipe program that worked exactly as me, my mother, my girlfriend (now wife!), and my sibling wanted it to.",
+  "pages.aboutDetails.2.2": "I'm a believer in open source software, and I want RecipeSage to be free to use. Everyone should be able to access and use this software, and I never want to subject RecipeSage users to ads or charge to be able to use the app.",
+  "pages.aboutDetails.2.3": "If you'd like to contribute to support development, I'd really appreciate it. It's costly to run servers and host images. Contributing also unlocks some features for your account (features that are cost-prohibitive to offer for free) as a thank you.",
+  "pages.aboutDetails.contribute": "Contribute page",
+  "pages.aboutDetails.social": "Social Media",
+
   "pages.contact.title": "Contact Me",
   "pages.contact.subtitle": "Contact Info",
-  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide before emailing:",
-  "pages.contact.emailMe": "For any issues, bugs, or feature suggestions, you can email me at",
+  "pages.contact.pleaseUserGuide": "For any questions, please refer to the user guide:",
+  "pages.contact.discord": "For any issues, bugs, or feature suggestions, please contact me via our Discord: ",
+  "pages.contact.discord.link": "Discord Link",
+
+  "pages.contact.emailMe": "Although I prefer contact via Discord since I get a lot of email, you can email me for urgent or sensitive issues at",
   "pages.contact.socialTitle": "Social Media",
 
   "pages.contribute.title": "Contribute",
@@ -674,7 +689,9 @@
   "pages.import.status.create": "Created, will begin soon.",
   "pages.import.status.run": "Importing recipes and images...",
   "pages.import.status.fail": "Import failed.",
-  "pages.import.jobs.status.fail.badFile": "Incompatible file. Please re-export from the app in question and try again.",
+  "pages.import.jobs.status.fail.badFile": "Incompatible format.",
+  "pages.import.jobs.status.fail.emptyFile": "The submitted import does not contain any recognizable recipes.",
+  "pages.import.jobs.status.fail.badCredentials": "The submitted credentials are incorrect.",
   "pages.import.jobs.status.fail.unknown": "An unknown error occurred. Please contact me.",
   "pages.import.status.success": "Import succesfully completed.",
   "pages.import.step": "Step {{number}}",
@@ -693,6 +710,8 @@
   "pages.import.textFiles": "Import from text files",
   "pages.import.urls": "Import from a list of URLs",
   "pages.import.csv": "Import from CSV (PlanToEat & others)",
+  "pages.import.pdfs": "Import from PDFs",
+  "pages.import.images": "Import from images",
   "pages.import.fileTooLarge": "This file is too large to upload directly.",
   "pages.import.fileTooLarge.contact": "Please contact me to have your database imported manually.",
   "pages.import.upload": "Upload and Import",
@@ -739,6 +758,12 @@
 
   "pages.importCSV.title": "Import Recipes from a CSV file",
   "pages.importCSV.description": "This will import all of the recipes contained in a CSV file into your RecipeSage account. Many programs output this format, but the internal structure can be somewhat arbitrary. Please refer to the user guide if you have any issues, otherwise contact me. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importPDFs.title": "Import Recipes from PDF files",
+  "pages.importPDFs.description": "This will import a set of PDF files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importImages.title": "Import Recipes from image files",
+  "pages.importImages.description": "This will import a set of image files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.settings.title": "Settings",
   "pages.settings.section1.title": "Data & Account",

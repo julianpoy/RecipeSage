@@ -10,10 +10,6 @@
 
 <ion-content class="ion-padding">
   <ion-list>
-    <ion-item button (click)="goToAboutDetails()">
-      <ion-icon name="person" slot="start"></ion-icon>
-      {{ 'pages.about.links.details' | translate }}
-    </ion-item>
     <ion-item button (click)="goToUserGuide()">
       <ion-icon name="help" slot="start"></ion-icon>
       {{ 'pages.about.links.userGuide' | translate }}
@@ -29,6 +25,10 @@
     <ion-item button (click)="goToReleaseNotes()">
       <ion-icon name="archive" slot="start"></ion-icon>
       {{ 'pages.about.links.releaseNotes' | translate }}
+    </ion-item>
+    <ion-item button (click)="goToAboutDetails()">
+      <ion-icon name="person" slot="start"></ion-icon>
+      {{ 'pages.about.links.details' | translate }}
     </ion-item>
     <ion-item button (click)="goToLegal()">
       <ion-icon name="list" slot="start"></ion-icon>

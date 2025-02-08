@@ -18,7 +18,9 @@ export const sendWelcomeEmail = async (args: {
 
     <br /><br />
 
-    Please feel free to contact me if you have questions, concerns or comments at <a href="mailto:julian@recipesage.com?subject=RecipeSage%20Support">julian@recipesage.com</a>.
+    Please feel free to contact me if you have questions, concerns or comments via <a href="https://discord.gg/yCfzBft">Discord</a>.
+
+    For any sensitive or urgent matters, you can contact me at julian@recipesage.com.
 
     <br />
 
@@ -33,7 +35,9 @@ export const sendWelcomeEmail = async (args: {
 
     You can access the RecipeSage user guide for more information about using the application: https://docs.recipesage.com
 
-    Please feel free to contact me if you have questions, concerns or comments at julian@recipesage.com.
+    Please feel free to contact me if you have questions, concerns or comments via Discord https://discord.gg/yCfzBft.
+
+    For any sensitive or urgent matters, you can contact me at julian@recipesage.com.
 
 
     ${emailSignaturePlain}

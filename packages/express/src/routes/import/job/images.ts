@@ -4,36 +4,38 @@ import {
   defineHandler,
 } from "../../../defineHandler";
 import * as multer from "multer";
+import * as fs from "fs/promises";
+import * as extract from "extract-zip";
+import * as path from "path";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
-import { importStandardizedRecipes } from "@recipesage/util/server/db";
+import {
+  importStandardizedRecipes,
+  StandardizedRecipeImportEntry,
+} from "@recipesage/util/server/db";
+import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
 import { JobMeta, prisma } from "@recipesage/prisma";
 import * as Sentry from "@sentry/node";
-import { z } from "zod";
 import {
+  deletePathsSilent,
   getImportJobResultCode,
-  JsonLD,
-  jsonLDToStandardizedRecipeImportEntry,
 } from "@recipesage/util/server/general";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { z } from "zod";
 
 const schema = {
-  body: z.object({
-    jsonLD: z.any(),
-  }),
   query: z.object({
     labels: z.string().optional(),
   }),
 };
 
-export const jsonldHandler = defineHandler(
+export const imagesHandler = defineHandler(
   {
     schema,
     authentication: AuthenticationEnforcement.Required,
     beforeHandlers: [
       multer({
-        storage: multer.memoryStorage(),
-        limits: { fileSize: 1e8, files: 1 },
+        dest: "/tmp/import/",
       }).single("file"),
     ],
   },
@@ -41,7 +43,9 @@ export const jsonldHandler = defineHandler(
     const userLabels =
       req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
 
-    const file = req.file?.buffer.toString() || req.body.jsonLD;
+    const cleanupPaths: string[] = [];
+
+    const file = req.file;
     if (!file) {
       throw new BadRequestError(
         "Request must include multipart file under the 'file' field",
@@ -55,7 +59,7 @@ export const jsonldHandler = defineHandler(
         status: JobStatus.RUN,
         progress: 1,
         meta: {
-          importType: "jsonld",
+          importType: "images",
           importLabels: userLabels,
         } satisfies JobMeta,
       },
@@ -63,28 +67,43 @@ export const jsonldHandler = defineHandler(
 
     // We complete this work outside of the scope of the request
     const start = async () => {
-      const input = JSON.parse(file) as JsonLD | JsonLD[];
+      const zipPath = file.path;
+      cleanupPaths.push(zipPath);
+      const extractPath = zipPath + "-extract";
+      cleanupPaths.push(extractPath);
 
-      let jsonLD: JsonLD[];
-      if (Array.isArray(input)) jsonLD = input;
-      else jsonLD = [input];
+      await extract(zipPath, { dir: extractPath });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      jsonLD = jsonLD.filter((el: any) => el["@type"] === "Recipe");
+      const fileNames = await fs.readdir(extractPath);
 
-      if (!jsonLD.length) {
-        throw new BadRequestError(
-          "Only supports JSON-LD or array of JSON-LD with type 'Recipe'",
-        );
+      const standardizedRecipeImportInput: StandardizedRecipeImportEntry[] = [];
+      for (const fileName of fileNames) {
+        const filePath = path.join(extractPath, fileName);
+
+        if (
+          !filePath.endsWith(".jpg") &&
+          !filePath.endsWith(".jpeg") &&
+          !filePath.endsWith(".png")
+        ) {
+          continue;
+        }
+
+        const recipeImageBuffer = await fs.readFile(filePath);
+        const recipeImageBase64 = await fs.readFile(filePath, "base64");
+        const images = [];
+        images.push(recipeImageBase64);
+
+        const recipe = await ocrImagesToRecipe([recipeImageBuffer]);
+        if (!recipe) {
+          continue;
+        }
+
+        standardizedRecipeImportInput.push({
+          ...recipe,
+          images,
+          labels: userLabels,
+        });
       }
-
-      const standardizedRecipeImportInput = jsonLD.map((ld: JsonLD) => {
-        const result = jsonLDToStandardizedRecipeImportEntry(ld);
-        return {
-          ...result,
-          labels: [...result.labels, ...userLabels],
-        };
-      });
 
       if (standardizedRecipeImportInput.length === 0) {
         throw new Error("No recipes");
@@ -136,33 +155,40 @@ export const jsonldHandler = defineHandler(
       });
     };
 
-    start().catch(async (e) => {
-      const isBadFormatError = e instanceof BadRequestError;
+    start()
+      .catch(async (e) => {
+        const isBadZipError =
+          e instanceof Error &&
+          e.message === "end of central directory record signature not found";
 
-      const isNoRecipesError = e instanceof Error && e.message === "No recipes";
+        const isNoRecipesError =
+          e instanceof Error && e.message === "No recipes";
 
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          status: JobStatus.FAIL,
-          resultCode: getImportJobResultCode({
-            isBadFormat: isBadFormatError,
-            isNoRecipes: isNoRecipesError,
-          }),
-        },
-      });
-
-      if (!isBadFormatError && !isNoRecipesError) {
-        Sentry.captureException(e, {
-          extra: {
-            jobId: job.id,
+        await prisma.job.update({
+          where: {
+            id: job.id,
+          },
+          data: {
+            status: JobStatus.FAIL,
+            resultCode: getImportJobResultCode({
+              isBadFormat: isBadZipError,
+              isNoRecipes: isNoRecipesError,
+            }),
           },
         });
-        console.error(e);
-      }
-    });
+
+        if (!isBadZipError && !isNoRecipesError) {
+          Sentry.captureException(e, {
+            extra: {
+              jobId: job.id,
+            },
+          });
+          console.error(e);
+        }
+      })
+      .finally(async () => {
+        await deletePathsSilent(cleanupPaths);
+      });
 
     return {
       statusCode: 201,

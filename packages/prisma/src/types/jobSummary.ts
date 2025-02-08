@@ -25,7 +25,9 @@ export interface JobMeta {
     | "cookmate"
     | "jsonld"
     | "csv"
-    | "urls";
+    | "urls"
+    | "pdfs"
+    | "images";
   importLabels?: string[];
   exportType?: "txt" | "jsonld" | "pdf";
   exportScope?: "all" | "recipeids";

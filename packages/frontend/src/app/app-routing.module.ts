@@ -296,6 +296,22 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportPDFsPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-pdfs/import-pdfs.module").then(
+        (module) => module.ImportPDFsPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
+    path: RouteMap.ImportImagesPage.path,
+    loadChildren: () =>
+      import(
+        "~/pages/settings-components/import-images/import-images.module"
+      ).then((module) => module.ImportImagesPageModule),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ShoppingListsPage.path,
     loadChildren: () =>
       import(

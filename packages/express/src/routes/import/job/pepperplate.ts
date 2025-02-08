@@ -16,6 +16,7 @@ import * as Sentry from "@sentry/node";
 import * as xmljs from "xml-js";
 import { z } from "zod";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { getImportJobResultCode } from "@recipesage/util/server/general";
 
 const schema = {
   body: z.object({
@@ -324,9 +325,9 @@ export const pepperplateHandler = defineHandler(
         },
         data: {
           status: JobStatus.FAIL,
-          resultCode: isBadCredentialsError
-            ? JOB_RESULT_CODES.badFile
-            : JOB_RESULT_CODES.unknown,
+          resultCode: getImportJobResultCode({
+            isBadCredentials: isBadCredentialsError,
+          }),
         },
       });
 

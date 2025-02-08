@@ -11,7 +11,10 @@ import * as Sentry from "@sentry/node";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { z } from "zod";
 import { spawn } from "child_process";
-import { deletePathsSilent } from "@recipesage/util/server/general";
+import {
+  deletePathsSilent,
+  getImportJobResultCode,
+} from "@recipesage/util/server/general";
 import {
   Capabilities,
   cleanLabelTitle,
@@ -155,9 +158,9 @@ export const fdxzHandler = defineHandler(
           },
           data: {
             status: JobStatus.FAIL,
-            resultCode: isBadFormatError
-              ? JOB_RESULT_CODES.badFile
-              : JOB_RESULT_CODES.unknown,
+            resultCode: getImportJobResultCode({
+              isBadFormat: isBadFormatError,
+            }),
           },
         });
 

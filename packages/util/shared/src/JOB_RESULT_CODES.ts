@@ -3,4 +3,6 @@ export const JOB_RESULT_CODES = {
   unknown: 1,
   timeout: 2,
   badFile: 5,
+  emptyFile: 6,
+  badCredentials: 7,
 } as const;

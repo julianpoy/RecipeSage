@@ -7,19 +7,23 @@
  * 3. Add the language to the util service `defaultLocality`
  **/
 export enum SupportedLanguages {
-  EN_US = "en-us",
-  IT_IT = "it-it",
-  DE_DE = "de-de",
-  UK_UA = "uk-ua",
-  HE = "he",
-  ES_ES = "es-es",
-  FR_FR = "fr-fr",
-  RU_RU = "ru-ru",
-  HU_HU = "hu-hu",
-  DA_DK = "da-dk",
-  ZH_CN = "zh-cn",
-  PT_PT = "pt-pt",
-  NL = "nl",
+  EN_US = "en-us", // English, United States
+  IT_IT = "it-it", // Italian, Italy
+  DE_DE = "de-de", // German, Germany
+  UK_UA = "uk-ua", // Ukrainian, Ukraine
+  HE = "he", // Hebrew
+  ES_ES = "es-es", // Spanish, Spain
+  FR_FR = "fr-fr", // French, France
+  RU_RU = "ru-ru", // Russian, Russia
+  HU_HU = "hu-hu", // Hungarian, Hungary
+  DA_DK = "da-dk", // Danish, Denmark
+  ZH_CN = "zh-cn", // Chinese (Simplified), China
+  PT_PT = "pt-pt", // Portugese, Portugal
+  NL = "nl", // Dutch
+  PL_PL = "pl-pl", // Polish, Poland
+  JA_JP = "ja-jp", // Japanese, Japan
+  LT_LT = "lt-lt", // Lithuanian, Lithuania
+  EU = "eu", // Basque
 }
 
 export enum SupportedFontSize {

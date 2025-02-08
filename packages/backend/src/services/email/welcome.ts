@@ -15,7 +15,7 @@ export const sendWelcome = async (to: string[], ccTo: string[]) => {
 
     <br /><br />
 
-    Please feel free to contact me if you have questions, concerns or comments at <a href="mailto:julian@recipesage.com?subject=RecipeSage%20Support">julian@recipesage.com</a>.
+    Please feel free to contact me if you have questions, concerns or comments via <a href="https://discord.gg/yCfzBft">Discord</a>.
 
     <br />
 
@@ -30,7 +30,7 @@ export const sendWelcome = async (to: string[], ccTo: string[]) => {
 
     You can access the RecipeSage user guide for more information about using the application: https://docs.recipesage.com
 
-    Please feel free to contact me if you have questions, concerns or comments at julian@recipesage.com.
+    Please feel free to contact me if you have questions, concerns or comments via Discord https://discord.gg/yCfzBft.
 
 
     ${signaturePlain}
