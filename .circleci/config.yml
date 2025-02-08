@@ -109,16 +109,15 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: npx nx build frontend
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build frontend)
+          environment:
+            ENVIRONMENT: production
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
       - run:
           name: set-frontend-version
           command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
-      - run:
-          name: set-service-worker-version
-          command: sed -i "s/APP_VERSION = \"development\";/APP_VERSION = \"${CIRCLE_TAG:=stg}\";/" www/service-worker.js
       - run:
           name: webapp-hosted.sh
           command: ./scripts/build/webapp-hosted.sh ${CIRCLE_TAG:=stg}
@@ -141,16 +140,15 @@ jobs:
       - install-dependencies
       - run:
           name: build-frontend
-          command: npx nx build:selfhost frontend
+          command: (export APP_VERSION=${CIRCLE_TAG:=stg} && npx nx build:selfhost frontend)
+          environment:
+            ENVIRONMENT: production
       - run:
           name: move-frontend-build
           command: mv packages/frontend/www ./www
       - run:
           name: set-frontend-version
           command: sed -i "s/window.version = \"development\";/window.version = \"${CIRCLE_TAG:=stg}\";/" www/index.html
-      - run:
-          name: set-service-worker-version
-          command: sed -i "s/APP_VERSION = \"development\";/APP_VERSION = \"${CIRCLE_TAG:=stg}\";/" www/service-worker.js
       - run:
           name: webapp-selfhost.sh
           command: ./scripts/build/webapp-selfhost.sh ${CIRCLE_TAG:=stg}

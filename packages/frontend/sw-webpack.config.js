@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
       },
     ],
   },
+  plugins: [new webpack.EnvironmentPlugin(["ENVIRONMENT", "APP_VERSION"])],
   resolve: {
     extensions: [".ts", ".js"],
     plugins: [
@@ -27,5 +29,9 @@ module.exports = {
   },
   optimization: {
     minimize: true,
+  },
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
 };

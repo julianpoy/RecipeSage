@@ -4,6 +4,17 @@
 
 declare let self: ServiceWorkerGlobalScope;
 
+import * as Sentry from "@sentry/browser";
+
+if (process.env.ENVIRONMENT !== "selfhost") {
+  Sentry.init({
+    release: process.env.APP_VERSION,
+    environment: process.env.ENVIRONMENT,
+    dsn: "https://48261723ca12448e9b44836dd82effe1@glitchtip.poyourow.com/3",
+    tracesSampleRate: 1,
+  });
+}
+
 import { registerRoute } from "workbox-routing";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
@@ -52,8 +63,6 @@ import {
 
 const RS_LOGO_URL = "https://recipesage.com/assets/imgs/logo_green.png";
 
-const APP_VERSION = "development";
-
 const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 cleanupOutdatedCaches();
@@ -71,7 +80,7 @@ self.addEventListener("install", async (event) => {
   );
 
   const languagePrecacheUrls = [
-    `/assets/i18n/en-us.json?version=${APP_VERSION}`,
+    `/assets/i18n/en-us.json?version=${process.env.APP_VERSION}`,
   ];
   event.waitUntil(
     caches
