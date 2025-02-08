@@ -213,11 +213,19 @@ export const clipUrl = async (
   const [recipeDataBrowser, recipeDataJSDOM] = await Promise.all([
     clipRecipeUrlWithPuppeteer(url).catch((e) => {
       console.error(e);
-      Sentry.captureException(e);
+      Sentry.captureException(e, {
+        extra: {
+          url,
+        },
+      });
     }),
     clipRecipeUrlWithJSDOM(url).catch((e) => {
       console.error(e);
-      Sentry.captureException(e);
+      Sentry.captureException(e, {
+        extra: {
+          url,
+        },
+      });
     }),
   ]);
 

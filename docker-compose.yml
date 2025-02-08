@@ -22,6 +22,9 @@ services:
     ports:
       - "8100:8100"
     command: npx nx start frontend
+    environment:
+      - ENVIRONMENT=development
+      - APP_VERSION=development
   backend:
     depends_on:
       - postgres
