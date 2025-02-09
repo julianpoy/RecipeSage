@@ -7,6 +7,15 @@ declare let self: ServiceWorkerGlobalScope;
 import * as Sentry from "@sentry/browser";
 
 if (process.env.ENVIRONMENT !== "selfhost") {
+  const hostname = self.location.hostname;
+
+  let environment = process.env.ENVIRONMENT;
+  if (environment === "production" && hostname.startsWith("beta.")) {
+    // We don't do separate builds for beta/production, so hostname check is the best
+    // approach
+    environment = "beta";
+  }
+
   Sentry.init({
     release: process.env.APP_VERSION,
     environment: process.env.ENVIRONMENT,

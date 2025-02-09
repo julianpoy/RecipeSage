@@ -11,6 +11,6 @@ Sentry.init({
   tracesSampleRate: parseFloat(process.env.SENTRY_SAMPLE_RATE || 1.0, 10),
   profilesSampleRate: parseFloat(process.env.SENTRY_SAMPLE_RATE || 1.0, 10),
 
-  environment: process.env.NODE_ENV,
+  environment: process.env.ENVIRONMENT || "unknown",
   release: RS_VERSION,
 });
