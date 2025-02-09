@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
+import * as Sentry from "@sentry/browser";
 
 import {
   Platform,
@@ -32,6 +33,8 @@ import {
   FeatureFlagService,
 } from "./services/feature-flag.service";
 import { Title } from "@angular/platform-browser";
+import { TRPCService } from "./services/trpc.service";
+import { appIdbStorageManager } from "./utils/appIdbStorageManager";
 
 const SW_UPDATE_CHECK_INTERVAL_MINUTES = 5;
 
@@ -75,6 +78,7 @@ export class AppComponent {
     private translate: TranslateService,
     private navCtrl: NavController,
     private route: ActivatedRoute,
+    private trpcService: TRPCService,
     private router: Router,
     private platform: Platform,
     private menuCtrl: MenuController,
@@ -124,6 +128,7 @@ export class AppComponent {
     this.setTitle();
     this.updateNavList();
     this.updateIsLoggedIn();
+    this.migrateSession();
   }
 
   // Attached to pagechange so keep this light
@@ -561,5 +566,31 @@ export class AppComponent {
         console.warn(e);
       }
     });
+  }
+
+  async migrateSession() {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const currentIdbSession = await appIdbStorageManager.getSession();
+      if (currentIdbSession) return;
+
+      const me = await this.trpcService.trpc.users.getMe.query().catch((e) => {
+        Sentry.captureException(e);
+      });
+
+      if (!me) return;
+
+      await appIdbStorageManager.setSession({
+        userId: me.id,
+        email: me.email,
+        token,
+      });
+
+      Sentry.captureMessage("Session migration success");
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 }
