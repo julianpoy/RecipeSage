@@ -45,6 +45,7 @@ services:
       - FIRESTORE_BUCKET=
       - STORAGE_TYPE=s3 #POSSIBLE VALUES: s3, firebase, filesystem
       - NODE_ENV=development
+      - ENVIRONMENT=development
       - VERBOSE=false
       - VERSION=development
       - POSTGRES_DB=recipesage_dev
