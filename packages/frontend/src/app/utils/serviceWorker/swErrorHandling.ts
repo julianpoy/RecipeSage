@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/browser";
+
 /**
  * An error wrapper to keep the original http response
  * so that it can be passed back out of the service worker transparently
@@ -35,6 +37,20 @@ export const swCacheReject = (
   reason: SWCacheRejectReason,
   httpCapturedError: unknown,
 ) => {
+  console.log("Service worker is rejecting due to ", reason);
+  if (
+    [SWCacheRejectReason.NoInput, SWCacheRejectReason.NoCacheResult].includes(
+      reason,
+    )
+  ) {
+    Sentry.captureMessage(`Unexpected SW cache reject ${reason}`, {
+      extra: {
+        reason,
+        httpCapturedError,
+      },
+    });
+  }
+
   if (httpCapturedError instanceof SWHttpCapturedError) {
     return httpCapturedError.originalResponse;
   }
