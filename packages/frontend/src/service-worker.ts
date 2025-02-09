@@ -111,7 +111,8 @@ const searchManagerP = getLocalDb().then(
   (localDb) => new SearchManager(localDb),
 );
 const syncManagerP = Promise.all([getLocalDb(), searchManagerP]).then(
-  ([localDb, searchManager]) => new SyncManager(localDb, searchManager),
+  ([localDb, searchManager]) =>
+    new SyncManager(localDb, searchManager, broadcastChannel),
 );
 syncManagerP.then((syncManager) => {
   syncManager.syncAll();

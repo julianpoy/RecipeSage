@@ -37,4 +37,18 @@ export class SwCommunicationService {
       notification,
     });
   }
+
+  onRecipeSyncStatus(listener: (progress: number) => void) {
+    const cb = (message: MessageEvent) => {
+      if (message.data.type === "recipeSyncStatus") {
+        listener(message.data.progress);
+      }
+    };
+
+    broadcastChannel.addEventListener("message", cb);
+
+    return () => {
+      broadcastChannel.removeEventListener("message", cb);
+    };
+  }
 }

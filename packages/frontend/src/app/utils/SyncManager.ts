@@ -4,9 +4,6 @@ import type { SearchManager } from "./SearchManager";
 import { trpcClient as trpc } from "./trpcClient";
 import { KVStoreKeys, ObjectStoreName, RSLocalDB } from "./localDb";
 import { appIdbStorageManager } from "./appIdbStorageManager";
-import { SW_BROADCAST_CHANNEL_NAME } from "./SW_BROADCAST_CHANNEL_NAME";
-
-const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 const ENABLE_VERBOSE_SYNC_LOGGING = false;
 
@@ -27,6 +24,7 @@ export class SyncManager {
   constructor(
     private localDb: IDBPDatabase<RSLocalDB>,
     private searchManager: SearchManager,
+    private broadcastChannel: BroadcastChannel,
   ) {
     broadcastChannel.addEventListener("message", (event) => {
       if (event.data.type === "triggerFullSync") {
@@ -147,6 +145,11 @@ export class SyncManager {
         await this.localDb.put(ObjectStoreName.Recipes, recipe);
         await this.searchManager.indexRecipe(recipe);
       }
+
+      this.broadcastChannel.postMessage({
+        type: "recipeSyncStatus",
+        progress: remainingRecipeIdsToSync.length / recipeIdsToSync.size,
+      });
     }
   }
 

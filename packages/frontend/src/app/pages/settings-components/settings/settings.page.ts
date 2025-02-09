@@ -52,6 +52,8 @@ export class SettingsPage {
   fontSize = this.preferences[GlobalPreferenceKey.FontSize];
   isLoggedIn: boolean = false;
 
+  syncProgress: number | null = null;
+
   constructor(
     private events: EventService,
     private navCtrl: NavController,
@@ -139,6 +141,20 @@ export class SettingsPage {
   }
 
   async triggerSync() {
+    const cleanup = this.swCommunicationService.onRecipeSyncStatus(
+      (progress) => {
+        this.syncProgress = progress;
+
+        if (progress === 1) {
+          cleanup();
+        }
+      },
+    );
+
+    setTimeout(() => {
+      cleanup();
+    }, 120 * 1000);
+
     await this.swCommunicationService.triggerFullCacheSync(true);
 
     const header = await this.translate
