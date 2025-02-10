@@ -1,7 +1,7 @@
 import { publicProcedure } from "../../trpc";
 import {
   WSBoardcastEventType,
-  broadcastWSEvent,
+  broadcastWSEventIgnoringErrors,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
@@ -57,10 +57,14 @@ export const createShoppingList = publicProcedure
       ...input.collaboratorUserIds,
     ];
     for (const notifyUser of notifyUsers) {
-      broadcastWSEvent(notifyUser, WSBoardcastEventType.ShoppingListUpdated, {
-        reference,
-        shoppingListId: createdShoppingList.id,
-      });
+      broadcastWSEventIgnoringErrors(
+        notifyUser,
+        WSBoardcastEventType.ShoppingListUpdated,
+        {
+          reference,
+          shoppingListId: createdShoppingList.id,
+        },
+      );
     }
 
     return {
