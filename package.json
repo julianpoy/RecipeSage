@@ -26,7 +26,7 @@
     "@fanoutio/serve-grip": "^1.3.1",
     "@google-cloud/vision": "^4.1.0",
     "@ionic/angular": "^8.4.0",
-    "@julianpoy/recipe-clipper": "^3.1.0",
+    "@julianpoy/recipe-clipper": "^3.2.0",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
