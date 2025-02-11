@@ -4,9 +4,6 @@ import * as Sentry from "@sentry/node";
 import * as semver from "semver";
 import { prisma } from "@recipesage/prisma";
 
-// DB
-import { sequelize } from "../models/index.js";
-
 router.get("/", function (req, res) {
   res.render("index", { version: process.env.VERSION });
 });
@@ -29,16 +26,8 @@ router.get("/versioncheck", (req, res) => {
 // Health information in JSON response
 router.get("/health", async (req, res) => {
   const healthy = {
-    sequelize: false,
     prisma: false,
   };
-
-  try {
-    await sequelize.authenticate();
-    healthy.sequelize = true;
-  } catch (e) {
-    // Do nothing
-  }
 
   try {
     await prisma.$queryRaw`SELECT 1`;
@@ -57,7 +46,6 @@ router.get("/health", async (req, res) => {
 // 500 => unhealthy, roll pod
 router.get("/healthz", async (req, res) => {
   try {
-    await sequelize.authenticate();
     await prisma.$queryRaw`SELECT 1`;
 
     res.status(200).send("healthy");
