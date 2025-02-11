@@ -2,6 +2,16 @@
 
 import { join } from "path";
 import * as workerpool from "workerpool";
+import fetch from "node-fetch";
+import * as Sentry from "@sentry/node";
+import * as he from "he";
+import * as url from "url";
+import { dedent } from "ts-dedent";
+import puppeteer, { Browser } from "puppeteer-core";
+import { fetchURL } from "./fetch";
+import { StandardizedRecipeImportEntry } from "../db";
+import { readFileSync } from "fs";
+
 const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
   workerType: "thread",
   workerThreadOpts: {
@@ -13,18 +23,8 @@ const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
     ],
   },
 });
-import fetch from "node-fetch";
-import * as Sentry from "@sentry/node";
-import * as he from "he";
-import * as url from "url";
-import { dedent } from "ts-dedent";
-
-import puppeteer, { Browser } from "puppeteer-core";
 
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
-import { fetchURL } from "./fetch";
-import { StandardizedRecipeImportEntry } from "../db";
-import { readFileSync } from "fs";
 
 const recipeClipperUMD = readFileSync(
   "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
