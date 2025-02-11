@@ -1,5 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { join } from "path";
+import * as workerpool from "workerpool";
+const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
+  workerType: "thread",
+  workerThreadOpts: {
+    execArgv: [
+      "--require",
+      "ts-node/register",
+      "-r",
+      "tsconfig-paths/register",
+    ],
+  },
+});
 import fetch from "node-fetch";
 import * as Sentry from "@sentry/node";
 import * as he from "he";
@@ -8,15 +21,15 @@ import { dedent } from "ts-dedent";
 
 import puppeteer, { Browser } from "puppeteer-core";
 
-import * as jsdom from "jsdom";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore No typings available
-import * as RecipeClipper from "@julianpoy/recipe-clipper";
-
 const INTERCEPT_PLACEHOLDER_URL = "https://example.com/intercept-me";
-import * as sanitizeHtml from "sanitize-html";
 import { fetchURL } from "./fetch";
 import { StandardizedRecipeImportEntry } from "../db";
+import { readFileSync } from "fs";
+
+const recipeClipperUMD = readFileSync(
+  "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
+  "utf-8",
+);
 
 interface RecipeClipperResult {
   imageURL: string | undefined;
@@ -148,7 +161,7 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
     }`);
 
     await page.addScriptTag({
-      path: "./node_modules/@julianpoy/recipe-clipper/dist/recipe-clipper.umd.js",
+      content: recipeClipperUMD,
     });
     const recipeData = await page.evaluate((interceptUrl) => {
       return (window as any).RecipeClipper.clipRecipe({
@@ -167,32 +180,9 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
   }
 };
 
-const replaceBrWithBreak = (html: string) => {
-  return html.replaceAll(new RegExp(/<br( \/)?>/, "g"), "\n");
-};
-
 const clipRecipeHtmlWithJSDOM = async (document: string) => {
-  const dom = new jsdom.JSDOM(document);
-
-  const { window } = dom;
-
-  Object.defineProperty(window.Element.prototype, "innerText", {
-    get() {
-      const html = replaceBrWithBreak(this.innerHTML);
-      return sanitizeHtml(html, {
-        allowedTags: [], // remove all tags and return text content only
-        allowedAttributes: {}, // remove all tags and return text content only
-      });
-    },
-  });
-
-  (window.fetch as any) = fetch;
-
-  return await RecipeClipper.clipRecipe({
-    window,
-    mlClassifyEndpoint: process.env.INGREDIENT_INSTRUCTION_CLASSIFIER_URL,
-    ignoreMLClassifyErrors: true,
-  });
+  // We exec with pool because jsdom is blocking and can be slow for large pages
+  return pool.exec("clipRecipeHtmlWithJSDOM", [document]);
 };
 
 const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
@@ -210,24 +200,14 @@ const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
 export const clipUrl = async (
   url: string,
 ): Promise<StandardizedRecipeImportEntry> => {
-  const [recipeDataBrowser, recipeDataJSDOM] = await Promise.all([
-    clipRecipeUrlWithPuppeteer(url).catch((e) => {
-      console.error(e);
-      Sentry.captureException(e, {
-        extra: {
-          url,
-        },
-      });
-    }),
-    clipRecipeUrlWithJSDOM(url).catch((e) => {
-      console.error(e);
-      Sentry.captureException(e, {
-        extra: {
-          url,
-        },
-      });
-    }),
-  ]);
+  const recipeDataBrowser = await clipRecipeUrlWithPuppeteer(url).catch((e) => {
+    console.error(e);
+    Sentry.captureException(e, {
+      extra: {
+        url,
+      },
+    });
+  });
 
   let results = recipeDataBrowser || {};
   if (
@@ -235,6 +215,21 @@ export const clipUrl = async (
     !recipeDataBrowser.ingredients ||
     !recipeDataBrowser.instructions
   ) {
+    const recipeDataJSDOM = await clipRecipeUrlWithJSDOM(url).catch((e) => {
+      console.error(e);
+      Sentry.captureException(e, {
+        extra: {
+          url,
+        },
+      });
+    });
+
+    Sentry.captureMessage("Fell back to JSDOM", {
+      extra: {
+        url,
+      },
+    });
+
     if (recipeDataJSDOM) {
       results = recipeDataJSDOM;
 
