@@ -16,7 +16,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import { broadcastWSEvent } from "@recipesage/util/server/general";
+import { broadcastWSEventIgnoringErrors } from "@recipesage/util/server/general";
 import * as ShoppingListCategorizerService from "../services/shopping-list-categorizer.js";
 import { joiValidator } from "../middleware/joiValidator.js";
 
@@ -54,14 +54,18 @@ router.post(
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
-      broadcastWSEvent(req.body.collaborators[i], "shoppingList:received", {
-        shoppingListId: shoppingList.id,
-        from: {
-          id: res.locals.user.id,
-          name: res.locals.user.name,
-          email: res.locals.user.email,
+      broadcastWSEventIgnoringErrors(
+        req.body.collaborators[i],
+        "shoppingList:received",
+        {
+          shoppingListId: shoppingList.id,
+          from: {
+            id: res.locals.user.id,
+            name: res.locals.user.name,
+            email: res.locals.user.email,
+          },
         },
-      });
+      );
     }
 
     res.status(200).json(shoppingList);
@@ -193,13 +197,13 @@ router.post(
       reference,
     };
 
-    broadcastWSEvent(
+    broadcastWSEventIgnoringErrors(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       broadcastPayload,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         broadcastPayload,
@@ -244,7 +248,7 @@ router.delete(
       await shoppingList.destroy();
 
       for (let i = 0; i < (shoppingList.collaborators || []).length; i++) {
-        broadcastWSEvent(
+        broadcastWSEventIgnoringErrors(
           shoppingList.collaborators[i],
           "shoppingList:removed",
           {
@@ -316,13 +320,13 @@ router.delete(
       reference,
     };
 
-    broadcastWSEvent(
+    broadcastWSEventIgnoringErrors(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       deletedItemBroadcast,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         deletedItemBroadcast,
@@ -507,13 +511,13 @@ router.put(
       reference,
     };
 
-    broadcastWSEvent(
+    broadcastWSEventIgnoringErrors(
       shoppingList.userId,
       "shoppingList:itemsUpdated",
       broadcast,
     );
     for (let i = 0; i < shoppingList.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         shoppingList.collaborators[i].id,
         "shoppingList:itemsUpdated",
         broadcast,

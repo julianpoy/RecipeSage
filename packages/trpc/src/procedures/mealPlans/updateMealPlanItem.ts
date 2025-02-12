@@ -1,7 +1,7 @@
 import { publicProcedure } from "../../trpc";
 import {
   WSBoardcastEventType,
-  broadcastWSEvent,
+  broadcastWSEventIgnoringErrors,
   validateTrpcSession,
 } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
@@ -75,10 +75,14 @@ export const updateMealPlanItem = publicProcedure
 
     const reference = crypto.randomUUID();
     for (const subscriberId of access.subscriberIds) {
-      broadcastWSEvent(subscriberId, WSBoardcastEventType.MealPlanUpdated, {
-        reference,
-        mealPlanId: mealPlanItem.mealPlanId,
-      });
+      broadcastWSEventIgnoringErrors(
+        subscriberId,
+        WSBoardcastEventType.MealPlanUpdated,
+        {
+          reference,
+          mealPlanId: mealPlanItem.mealPlanId,
+        },
+      );
     }
 
     return {

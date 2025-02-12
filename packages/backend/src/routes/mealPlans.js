@@ -17,7 +17,7 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import { broadcastWSEvent } from "@recipesage/util/server/general";
+import { broadcastWSEventIgnoringErrors } from "@recipesage/util/server/general";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
@@ -48,14 +48,18 @@ router.post(
     });
 
     for (let i = 0; i < (req.body.collaborators || []).length; i++) {
-      broadcastWSEvent(req.body.collaborators[i], "mealPlan:received", {
-        mealPlanId: mealPlan.id,
-        from: {
-          id: res.locals.user.id,
-          name: res.locals.user.name,
-          email: res.locals.user.email,
+      broadcastWSEventIgnoringErrors(
+        req.body.collaborators[i],
+        "mealPlan:received",
+        {
+          mealPlanId: mealPlan.id,
+          from: {
+            id: res.locals.user.id,
+            name: res.locals.user.name,
+            email: res.locals.user.email,
+          },
         },
-      });
+      );
     }
 
     res.status(200).json(mealPlan);
@@ -190,13 +194,13 @@ router.post(
       reference,
     };
 
-    broadcastWSEvent(
+    broadcastWSEventIgnoringErrors(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
       broadcastPayload,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         broadcastPayload,
@@ -240,14 +244,18 @@ router.delete(
     if (mealPlan.userId === res.locals.session.userId) {
       await mealPlan.destroy();
       for (let i = 0; i < (mealPlan.collaborators || []).length; i++) {
-        broadcastWSEvent(mealPlan.collaborators[i], "mealPlan:removed", {
-          mealPlanId: mealPlan.id,
-          updatedBy: {
-            id: res.locals.user.id,
-            name: res.locals.user.name,
-            email: res.locals.user.email,
+        broadcastWSEventIgnoringErrors(
+          mealPlan.collaborators[i],
+          "mealPlan:removed",
+          {
+            mealPlanId: mealPlan.id,
+            updatedBy: {
+              id: res.locals.user.id,
+              name: res.locals.user.name,
+              email: res.locals.user.email,
+            },
           },
-        });
+        );
       }
     } else {
       await mealPlan.removeCollaborator(res.locals.session.userId);
@@ -304,13 +312,13 @@ router.delete(
       reference,
     };
 
-    broadcastWSEvent(
+    broadcastWSEventIgnoringErrors(
       mealPlan.userId,
       "mealPlan:itemsUpdated",
       deletedItemBroadcast,
     );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         deletedItemBroadcast,
@@ -386,9 +394,13 @@ router.put(
       reference,
     };
 
-    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
+    broadcastWSEventIgnoringErrors(
+      mealPlan.userId,
+      "mealPlan:itemsUpdated",
+      updateBroadcast,
+    );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,
@@ -460,9 +472,13 @@ router.post(
       reference,
     };
 
-    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
+    broadcastWSEventIgnoringErrors(
+      mealPlan.userId,
+      "mealPlan:itemsUpdated",
+      updateBroadcast,
+    );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,
@@ -532,9 +548,13 @@ router.delete(
       reference,
     };
 
-    broadcastWSEvent(mealPlan.userId, "mealPlan:itemsUpdated", updateBroadcast);
+    broadcastWSEventIgnoringErrors(
+      mealPlan.userId,
+      "mealPlan:itemsUpdated",
+      updateBroadcast,
+    );
     for (let i = 0; i < mealPlan.collaborators.length; i++) {
-      broadcastWSEvent(
+      broadcastWSEventIgnoringErrors(
         mealPlan.collaborators[i].id,
         "mealPlan:itemsUpdated",
         updateBroadcast,

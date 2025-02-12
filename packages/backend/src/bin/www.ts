@@ -90,7 +90,7 @@ const attemptExit = () => {
   if (jobsWaiting === 0) exit();
 };
 
-const termHandler = () => {
+const termHandler = async () => {
   if (process.env.NODE_ENV !== "production") {
     process.exit(0);
   }

@@ -40,7 +40,9 @@ export const dispatchImportNotification = (user, status, reason) => {
     );
   }
 
-  sendQueues.push(ServerUtil.broadcastWSEvent(user.id, type, message));
+  sendQueues.push(
+    ServerUtil.broadcastWSEventIgnoringErrors(user.id, type, message),
+  );
 
   return Promise.all(sendQueues);
 };
@@ -102,7 +104,7 @@ export const dispatchMessageNotification = (user, fullMessage) => {
   }
 
   sendQueues.push(
-    ServerUtil.broadcastWSEvent(user.id, "messages:new", message),
+    ServerUtil.broadcastWSEventIgnoringErrors(user.id, "messages:new", message),
   );
 
   return Promise.all(sendQueues);
