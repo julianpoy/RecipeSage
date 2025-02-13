@@ -1,5 +1,3 @@
-import superjson from "superjson";
-
 export const getTrpcResponseBodyForFetchResponse = async <T>(
   response: Response,
 ): Promise<T | undefined> => {
@@ -14,7 +12,7 @@ export const getTrpcResponseBodyForFetchResponse = async <T>(
       return undefined;
     }
 
-    const output = superjson.deserialize<T | undefined>(json.result.data);
+    const output = json.result.data;
 
     return output;
   } catch (e) {

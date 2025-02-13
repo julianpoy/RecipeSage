@@ -1,7 +1,7 @@
 import { inferAsyncReturnType, initTRPC } from "@trpc/server";
 import { createContext } from "./context";
-import superjson from "superjson";
 import { trace, SpanStatusCode } from "@opentelemetry/api";
+import { customTrpcTransformer } from "@recipesage/util/shared";
 
 /**
  * Initialization of tRPC backend
@@ -9,7 +9,7 @@ import { trace, SpanStatusCode } from "@opentelemetry/api";
  */
 type Context = inferAsyncReturnType<typeof createContext>;
 const t = initTRPC.context<Context>().create({
-  transformer: superjson,
+  transformer: customTrpcTransformer,
 });
 
 const otelMiddleware = t.middleware(async ({ path, next }) => {

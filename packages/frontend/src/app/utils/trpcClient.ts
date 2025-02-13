@@ -1,8 +1,8 @@
 import { createTRPCProxyClient, httpLink } from "@trpc/client";
 import { getBase } from "./getBase";
 import type { AppRouter } from "@recipesage/trpc";
-import superjson from "superjson";
 import { appIdbStorageManager } from "./appIdbStorageManager";
+import { customTrpcTransformer } from "@recipesage/util/shared";
 
 export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
@@ -23,5 +23,5 @@ export const trpcClient = createTRPCProxyClient<AppRouter>({
       },
     }),
   ],
-  transformer: superjson,
+  transformer: customTrpcTransformer,
 });
