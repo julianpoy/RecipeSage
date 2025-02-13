@@ -178,6 +178,7 @@ model ProfileItem {
   recipe     Recipe?  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId], map: "profile_item_user_id")
   @@map("ProfileItems")
 }
 

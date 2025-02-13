@@ -1,10 +1,8 @@
-import superjson from "superjson";
-
 export const encodeCacheResultForTrpc = (result: unknown) => {
   return new Response(
     JSON.stringify({
       result: {
-        data: superjson.serialize(result),
+        data: result,
       },
     }),
     {
