@@ -109,6 +109,14 @@ export class SyncManager {
             `Adding ${recipeId} to sync queue because it's missing in local search index`,
           );
       }
+      if (!localRecipeIds.has(recipeId)) {
+        // Exists on server but not in local database
+        recipeIdsToSync.add(recipeId);
+        if (ENABLE_VERBOSE_SYNC_LOGGING)
+          console.log(
+            `Adding ${recipeId} to sync queue because it's missing in the local database`,
+          );
+      }
     }
     for (const recipeId of searchIndexKnownRecipeIds.keys()) {
       if (!serverRecipeIds.has(recipeId)) {
