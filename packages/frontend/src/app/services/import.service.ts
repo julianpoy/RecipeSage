@@ -27,6 +27,30 @@ export class ImportService {
     });
   }
 
+  importEnex(
+    file: Blob,
+    errorHandlers?: ErrorHandlers,
+    onUploadProgress?: UploadProgressHandler,
+  ) {
+    const formData: FormData = new FormData();
+    formData.append("file", file);
+
+    return this.httpService.multipartRequestWithWrapper<{
+      jobId: string;
+    }>({
+      path: "import/job/enex",
+      method: "POST",
+      payload: formData,
+      query: {
+        labels: this.getImportLabel(),
+      },
+      errorHandlers,
+      listeners: {
+        onUploadProgress,
+      },
+    });
+  }
+
   importTextfiles(
     file: Blob,
     errorHandlers?: ErrorHandlers,

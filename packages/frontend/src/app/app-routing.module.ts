@@ -280,6 +280,14 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuardService],
   },
   {
+    path: RouteMap.ImportEnexPage.path,
+    loadChildren: () =>
+      import("~/pages/settings-components/import-enex/import-enex.module").then(
+        (module) => module.ImportEnexPageModule,
+      ),
+    canDeactivate: [UnsavedChangesGuardService],
+  },
+  {
     path: RouteMap.ImportUrlsPage.path,
     loadChildren: () =>
       import("~/pages/settings-components/import-urls/import-urls.module").then(

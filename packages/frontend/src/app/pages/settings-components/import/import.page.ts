@@ -37,7 +37,8 @@ type ImportFormat =
   | "urls"
   | "csv"
   | "pdfs"
-  | "images";
+  | "images"
+  | "enex";
 
 @Component({
   selector: "page-import",
@@ -141,6 +142,10 @@ export class ImportPage {
         this.navCtrl.navigateForward(RouteMap.ImportTextfilesPage.getPath());
         break;
       }
+      case "enex": {
+        this.navCtrl.navigateForward(RouteMap.ImportEnexPage.getPath());
+        break;
+      }
       case "urls": {
         this.navCtrl.navigateForward(RouteMap.ImportUrlsPage.getPath());
         break;
@@ -206,6 +211,9 @@ export class ImportPage {
       }
       case "textFiles": {
         return "pages.import.textFiles";
+      }
+      case "enex": {
+        return "pages.import.enex";
       }
       case "urls": {
         return "pages.import.urls";

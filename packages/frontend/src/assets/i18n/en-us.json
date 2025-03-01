@@ -708,6 +708,7 @@
   "pages.import.livingCookbook": "Import from Living Cookbook file",
   "pages.import.paprika": "Import from Paprika Recipes file",
   "pages.import.textFiles": "Import from text files",
+  "pages.import.enex": "Import from Evernote file",
   "pages.import.urls": "Import from a list of URLs",
   "pages.import.csv": "Import from CSV (PlanToEat & others)",
   "pages.import.pdfs": "Import from PDFs",
@@ -750,6 +751,9 @@
 
   "pages.importTextfiles.title": "Import Recipes from Zip of Text Files",
   "pages.importTextfiles.description": "This will import a set of text files compressed within a zip file (ends in .zip) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
+
+  "pages.importEnex.title": "Import Recipes from Evernote (enex) File",
+  "pages.importEnex.description": "This will import recipes from an Evernote export (ends in .enex) into your RecipeSage account. Please refer to the user guide for how to create a file in the correct format to be imported here. Please consider contributing if your file contains a large number of recipes or images.",
 
   "pages.importUrls.title": "Import Recipes from a list of URLs",
   "pages.importUrls.description": "This will attempt to import all of the URLs specified into your RecipeSage account using the autoclip functionality. Please keep in mind that some URLs may be unreachable or unparseable, and will not be imported. Please refer to the user guide for any issues. Please consider contributing if your file contains a large number of recipes or images.",
