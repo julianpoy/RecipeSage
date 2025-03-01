@@ -248,6 +248,17 @@ model Recipe {
   @@map("Recipes")
 }
 
+model RecipeTombstone {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "recipetombstones_user_id")
+  @@map("RecipeTombstones")
+}
+
 model Session {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
@@ -378,6 +389,7 @@ model User {
   profileItems              ProfileItem[]
   outgoingRecipes           Recipe[]                   @relation("Recipes_fromUserIdToUsers")
   recipes                   Recipe[]                   @relation("Recipes_userIdToUsers")
+  recipeTombstones          RecipeTombstone[]
   sessions                  Session[]
   shoppingListItems         ShoppingListItem[]
   shoppingListCollaborators ShoppingListCollaborator[]
@@ -385,7 +397,7 @@ model User {
   stripePayments            StripePayment[]
   subscriptions             UserSubscription[]
   profileImages             UserProfileImage[]
-  Job                       Job[]
+  jobs                      Job[]
 
   @@map("Users")
 }

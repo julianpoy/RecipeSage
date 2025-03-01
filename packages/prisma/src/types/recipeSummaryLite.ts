@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { userPublic } from "./userPublic";
 
 /**
  * Provides fields necessary for displaying a summary about a recipe,
@@ -41,8 +40,11 @@ export const recipeSummaryLite = Prisma.validator<Prisma.RecipeFindFirstArgs>()(
           },
         },
       },
-      fromUser: userPublic,
-      user: userPublic,
+      fromUser: {
+        select: {
+          name: true,
+        },
+      },
     },
   },
 );

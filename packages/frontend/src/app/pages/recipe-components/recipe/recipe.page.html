@@ -149,11 +149,11 @@
       </ion-grid>
     </ion-item>
 
-    <ion-item *ngIf="recipe.folder === 'inbox' && recipe.fromUser" lines="none">
+    <ion-item *ngIf="recipe.folder === 'inbox' && fromUser" lines="none">
       <p class="ion-text-wrap">
         <b
-          >{{ 'pages.recipeDetails.sentBy' | translate:{name:
-          recipe.fromUser.name} }}</b
+          >{{ 'pages.recipeDetails.sentBy' | translate:{name: fromUser.name}
+          }}</b
         ><br />
         {{ 'pages.recipeDetails.sentByAction' | translate }}<br /><br />
       </p>

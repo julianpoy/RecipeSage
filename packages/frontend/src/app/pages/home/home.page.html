@@ -144,11 +144,11 @@
 
               <p
                 *ngIf="recipe.folder === 'inbox' && recipe.fromUser"
-                [title]="recipe.fromUser.name || recipe.fromUser.email"
+                [title]="recipe.fromUser.name"
               >
                 <b
-                  >{{ 'pages.home.recipe.from' | translate }} {{
-                  recipe.fromUser.name || recipe.fromUser.email }}</b
+                  >{{ 'pages.home.recipe.from' | translate }}
+                  {{recipe.fromUser.name}}</b
                 >
               </p>
 

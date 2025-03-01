@@ -2,15 +2,23 @@ import { IDBPDatabase } from "idb";
 import pThrottle from "p-throttle";
 import type { SearchManager } from "./SearchManager";
 import { trpcClient as trpc } from "./trpcClient";
-import { KVStoreKeys, ObjectStoreName, RSLocalDB } from "./localDb";
+import {
+  getKvStoreEntry,
+  KVStoreKeys,
+  ObjectStoreName,
+  RSLocalDB,
+  setKvStoreEntry,
+} from "./localDb";
 import { appIdbStorageManager } from "./appIdbStorageManager";
-import { SW_BROADCAST_CHANNEL_NAME } from "./SW_BROADCAST_CHANNEL_NAME";
-
-const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
+import type {
+  MealPlanSummaryWithItems,
+  ShoppingListSummaryWithItems,
+} from "@recipesage/prisma";
 
 const ENABLE_VERBOSE_SYNC_LOGGING = false;
 
-const SYNC_BATCH_SIZE = 200;
+const SYNC_BATCH_SIZE = 50;
+const RESYNC_FETCH_COUNT = 500;
 
 /**
  * We cannot exceed the rate limit of the API (is limited per-IP),
@@ -27,22 +35,7 @@ export class SyncManager {
   constructor(
     private localDb: IDBPDatabase<RSLocalDB>,
     private searchManager: SearchManager,
-  ) {
-    broadcastChannel.addEventListener("message", (event) => {
-      if (event.data.type === "triggerFullSync") {
-        this.syncAll();
-
-        if (ENABLE_VERBOSE_SYNC_LOGGING) console.log("Full sync requested");
-      }
-
-      if (event.data.type === "triggerRecipeSyncById") {
-        this.syncRecipe(event.data.recipeId);
-
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(`Sync for recipeId ${event.data.recipeId} requested`);
-      }
-    });
-  }
+  ) {}
 
   async syncAll(): Promise<void> {
     const session = await appIdbStorageManager.getSession();
@@ -58,6 +51,8 @@ export class SyncManager {
     await this.searchManager.onReady();
 
     try {
+      const syncDate = new Date();
+
       await this.syncRecipes();
       await this.syncLabels();
       await this.syncShoppingLists();
@@ -65,6 +60,11 @@ export class SyncManager {
       await this.syncMyUserProfile();
       await this.syncMyFriends();
       await this.syncMyStats();
+
+      await setKvStoreEntry({
+        key: KVStoreKeys.LastSuccessfulSyncDate,
+        value: syncDate,
+      });
 
       performance.mark("endSync");
       const measure = performance.measure("syncTime", "startSync", "endSync");
@@ -86,58 +86,46 @@ export class SyncManager {
   }
 
   async syncRecipes(): Promise<void> {
-    const allVisibleRecipesManifest = await throttle(() =>
-      trpc.recipes.getAllVisibleRecipesManifest.query(),
+    const lastSyncDate =
+      (await getKvStoreEntry(KVStoreKeys.LastSuccessfulSyncDate)) ||
+      new Date("2000-01-01");
+
+    const syncManifest = await throttle(() =>
+      trpc.recipes.getRecipeSyncManifest.query({
+        lastSyncDate: lastSyncDate.toISOString(),
+      }),
     )();
-    const serverRecipeIds = allVisibleRecipesManifest.reduce(
-      (acc, el) => acc.add(el.id),
-      new Set<string>(),
-    );
-    const localRecipeIds = new Set(
-      await this.localDb.getAllKeys(ObjectStoreName.Recipes),
-    );
-    const searchIndexKnownRecipeIds = this.searchManager.getKnownIndexIds();
 
-    const recipeIdsToSync = new Set<string>();
+    const recipeIdsToSync = new Set<string>(
+      syncManifest.needsSync.map((el) => el.id),
+    );
 
-    for (const recipeId of serverRecipeIds) {
-      if (!searchIndexKnownRecipeIds.has(recipeId)) {
-        // Exists on server but not in local search index
-        recipeIdsToSync.add(recipeId);
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(
-            `Adding ${recipeId} to sync queue because it's missing in local search index`,
-          );
-      }
-      if (!localRecipeIds.has(recipeId)) {
-        // Exists on server but not in local database
-        recipeIdsToSync.add(recipeId);
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(
-            `Adding ${recipeId} to sync queue because it's missing in the local database`,
-          );
-      }
-    }
-    for (const recipeId of searchIndexKnownRecipeIds.keys()) {
-      if (!serverRecipeIds.has(recipeId)) {
-        // Exists in local search index but not on server
-        await this.searchManager.unindexRecipe(recipeId);
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(
-            `Deindexing ${recipeId} because it's not on the manifest`,
-          );
-      }
+    for (const tombstone of syncManifest.tombstones) {
+      await this.localDb.delete(ObjectStoreName.Recipes, tombstone.id);
+      await this.searchManager.unindexRecipe(tombstone.id);
+
+      if (ENABLE_VERBOSE_SYNC_LOGGING)
+        console.log(`Deleting ${tombstone.id} due to tombstone`);
     }
 
-    for (const recipeId of localRecipeIds) {
-      if (!serverRecipeIds.has(recipeId.toString())) {
-        // Exists on client, but does not exist on server
+    if (syncManifest.requiresFullSync) {
+      const serverRecipeIds = await this.getAllServerRecipeIds();
 
-        await this.localDb.delete(ObjectStoreName.Recipes, recipeId);
-        await this.searchManager.unindexRecipe(recipeId.toString());
+      const localDbIds = await this.localDb.getAllKeys(ObjectStoreName.Recipes);
+      for (const localDbId of localDbIds) {
+        if (!serverRecipeIds.has(localDbId)) {
+          await this.localDb.delete(ObjectStoreName.Recipes, localDbId);
+        }
+      }
+      const knownIndexIds = this.searchManager.getKnownIndexIds();
+      for (const knownIndexId of knownIndexIds) {
+        if (!serverRecipeIds.has(knownIndexId)) {
+          this.searchManager.unindexRecipe(knownIndexId);
+        }
+      }
 
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(`Deleting ${recipeId} because it's not on the manifest`);
+      for (const serverRecipeId of serverRecipeIds) {
+        recipeIdsToSync.add(serverRecipeId);
       }
     }
 
@@ -156,6 +144,29 @@ export class SyncManager {
         await this.searchManager.indexRecipe(recipe);
       }
     }
+  }
+
+  async getAllServerRecipeIds(): Promise<Set<string>> {
+    let offset = 0;
+    let totalCount = 0;
+
+    const ids = new Set<string>();
+    do {
+      const response = await throttle(() =>
+        trpc.recipes.getAllVisibleRecipesManifest.query({
+          offset,
+          limit: RESYNC_FETCH_COUNT,
+        }),
+      )();
+      totalCount = response.totalCount;
+      offset += RESYNC_FETCH_COUNT;
+
+      for (const entry of response.manifest) {
+        ids.add(entry.id);
+      }
+    } while (offset <= totalCount);
+
+    return ids;
   }
 
   async syncLabels() {
@@ -182,21 +193,52 @@ export class SyncManager {
 
   async syncShoppingLists() {
     const shoppingLists = await throttle(() =>
-      trpc.shoppingLists.getShoppingListsWithItems.query(),
+      trpc.shoppingLists.getShoppingLists.query(),
     )();
-    await this.localDb.clear(ObjectStoreName.ShoppingLists);
+    const shoppingListsWithItems: ShoppingListSummaryWithItems[] = [];
     for (const shoppingList of shoppingLists) {
-      await this.localDb.put(ObjectStoreName.ShoppingLists, shoppingList);
+      const items = await throttle(() =>
+        trpc.shoppingLists.getShoppingListItems.query({
+          shoppingListId: shoppingList.id,
+        }),
+      )();
+
+      shoppingListsWithItems.push({
+        ...shoppingList,
+        items,
+      });
+    }
+
+    await this.localDb.clear(ObjectStoreName.ShoppingLists);
+    for (const shoppingListWithItems of shoppingListsWithItems) {
+      await this.localDb.put(
+        ObjectStoreName.ShoppingLists,
+        shoppingListWithItems,
+      );
     }
   }
 
   async syncMealPlans() {
     const mealPlans = await throttle(() =>
-      trpc.mealPlans.getMealPlansWithItems.query(),
+      trpc.mealPlans.getMealPlans.query(),
     )();
-    await this.localDb.clear(ObjectStoreName.MealPlans);
+    const mealPlansWithItems: MealPlanSummaryWithItems[] = [];
     for (const mealPlan of mealPlans) {
-      await this.localDb.put(ObjectStoreName.MealPlans, mealPlan);
+      const items = await throttle(() =>
+        trpc.mealPlans.getMealPlanItems.query({
+          mealPlanId: mealPlan.id,
+        }),
+      )();
+
+      mealPlansWithItems.push({
+        ...mealPlan,
+        items,
+      });
+    }
+
+    await this.localDb.clear(ObjectStoreName.MealPlans);
+    for (const mealPlanWithItems of mealPlansWithItems) {
+      await this.localDb.put(ObjectStoreName.MealPlans, mealPlanWithItems);
     }
   }
 

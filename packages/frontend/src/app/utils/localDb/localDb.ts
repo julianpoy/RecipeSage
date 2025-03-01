@@ -34,6 +34,7 @@ export enum KVStoreKeys {
   MyUserProfile = "myUserProfile",
   MyFriends = "myFriends",
   MyStats = "myStats",
+  LastSuccessfulSyncDate = "lastSuccessfulSyncDate",
 }
 
 export interface KVSession {
@@ -60,6 +61,10 @@ export interface KVMyStats {
   key: KVStoreKeys.MyStats;
   value: Awaited<ReturnType<typeof trpc.users.getMyStats.query>>;
 }
+export interface KVLastSuccessfulSyncDate {
+  key: KVStoreKeys.LastSuccessfulSyncDate;
+  value: Date;
+}
 
 export type KVStoreValue = {
   [KVStoreKeys.Session]: KVSession;
@@ -68,6 +73,7 @@ export type KVStoreValue = {
   [KVStoreKeys.MyUserProfile]: KVMyUserProfile;
   [KVStoreKeys.MyFriends]: KVMyFriends;
   [KVStoreKeys.MyStats]: KVMyStats;
+  [KVStoreKeys.LastSuccessfulSyncDate]: KVLastSuccessfulSyncDate;
 };
 
 export interface RSLocalDB extends DBSchema {
@@ -76,6 +82,7 @@ export interface RSLocalDB extends DBSchema {
     value: RecipeSummary;
     indexes: {
       userId: string;
+      idUpdatedAt: [string, Date];
     };
   };
   [ObjectStoreName.Labels]: {
@@ -130,7 +137,7 @@ const connect = () => {
   const migrations = [localDBMigration_1, localDBMigration_2];
 
   return openDB<RSLocalDB>(`localDb`, migrations.length, {
-    upgrade: (db, previousVersion, newVersion) => {
+    upgrade: (db, previousVersion, newVersion, transaction) => {
       console.log(
         `Local DB upgrading from ${previousVersion} to ${newVersion}`,
       );
@@ -138,7 +145,7 @@ const connect = () => {
       try {
         let i = previousVersion;
         while (i < migrations.length) {
-          migrations[i](db);
+          migrations[i](db, transaction);
           i++;
         }
       } catch (e) {
@@ -159,7 +166,12 @@ const connect = () => {
 
 let localDbP: Promise<IDBPDatabase<RSLocalDB>> | undefined = undefined;
 export async function getLocalDb() {
-  if (!localDbP) localDbP = connect();
+  if (!localDbP) {
+    localDbP = connect().then((localDb) => {
+      console.log("LocalDB Opened", localDb);
+      return localDb;
+    });
+  }
 
   const localDb = await localDbP;
   return localDb;
@@ -175,4 +187,22 @@ export const getKvStoreEntry = async <T extends KVStoreKeys>(
   const typedResult = result as KVStoreValue[T] | undefined;
 
   return typedResult?.value;
+};
+
+export const setKvStoreEntry = async (
+  value: KVStoreValue[keyof KVStoreValue],
+): Promise<void> => {
+  const localDb = await getLocalDb();
+
+  await localDb.put(ObjectStoreName.KV, value);
+
+  return;
+};
+
+export const deleteKvStoreEntry = async (key: KVStoreKeys): Promise<void> => {
+  const localDb = await getLocalDb();
+
+  await localDb.delete(ObjectStoreName.KV, key);
+
+  return;
 };

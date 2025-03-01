@@ -1,6 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { userPublic } from "./userPublic";
-import { labelSummary } from "./labelSummary";
 
 /**
  * All recipe fields including labels, user profile, images, etc
@@ -31,7 +29,26 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeFindFirstArgs>()({
         recipeId: true,
         createdAt: true,
         updatedAt: true,
-        label: labelSummary,
+        label: {
+          select: {
+            id: true,
+            userId: true,
+            title: true,
+            createdAt: true,
+            updatedAt: true,
+            labelGroupId: true,
+            labelGroup: {
+              select: {
+                id: true,
+                userId: true,
+                title: true,
+                warnWhenNotPresent: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+        },
       },
     },
     recipeImages: {
@@ -47,8 +64,11 @@ export const recipeSummary = Prisma.validator<Prisma.RecipeFindFirstArgs>()({
         },
       },
     },
-    fromUser: userPublic,
-    user: userPublic,
+    fromUser: {
+      select: {
+        name: true,
+      },
+    },
   },
 });
 

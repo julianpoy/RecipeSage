@@ -62,6 +62,7 @@ export class RecipePage {
 
   me: UserPublic | null = null;
   recipe: RecipeSummary | null = null;
+  fromUser: UserPublic | null = null;
   similarRecipes: RecipeSummaryLite[] = [];
   recipeId: string;
   ingredients?: ParsedIngredient[];
@@ -196,9 +197,27 @@ export class RecipePage {
     }
     this.labelGroupIds = Array.from(groupIdsSet);
 
+    this.fetchFromUser();
     this.applyScale();
 
     this.updateRatingVisual();
+  }
+
+  async fetchFromUser() {
+    if (!this.recipe?.fromUserId) return;
+    if (this.recipe.folder !== "inbox") return;
+
+    const response = await this.trpcService.handle(
+      this.trpcService.trpc.users.getUserProfilesById.query({
+        ids: [this.recipe.fromUserId],
+      }),
+      {
+        "*": () => {},
+      },
+    );
+    if (!response) return;
+
+    this.fromUser = response.at(0) || null;
   }
 
   recipeLabelsForGroupId(labelGroupId: string | null) {
