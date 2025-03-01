@@ -67,6 +67,7 @@ services:
       - BROWSERLESS_PORT=3000
       - BROWSERLESS_TOKEN=recipesage_dev
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
+      - OTEL_LOG_LEVEL=info
     env_file:
       - ./.env
   typesense:

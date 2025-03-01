@@ -252,6 +252,12 @@ export const RouteMap = {
     },
     path: "settings/import/textfiles",
   },
+  ImportEnexPage: {
+    getPath() {
+      return `/settings/import/enex`;
+    },
+    path: "settings/import/enex",
+  },
   ImportUrlsPage: {
     getPath() {
       return `/settings/import/urls`;

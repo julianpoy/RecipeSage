@@ -27,7 +27,8 @@ export interface JobMeta {
     | "csv"
     | "urls"
     | "pdfs"
-    | "images";
+    | "images"
+    | "enex";
   importLabels?: string[];
   exportType?: "txt" | "jsonld" | "pdf";
   exportScope?: "all" | "recipeids";
