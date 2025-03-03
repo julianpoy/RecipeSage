@@ -1014,5 +1014,8 @@
     "pages.import.images": "Importálás képekből",
     "pages.importPDFs.title": "Receptek importálása PDF fájlokból",
     "pages.importImages.title": "Receptek importálása képfájlokból",
-    "pages.importImages.description": "Ez a művelet zip fájlba (.zip kiterjesztésű) tömörített képeket importál a RecipeSage fiókjába. Kérem, tekintse meg a felhasználói útmutatót, hogy hogyan hozhat létre egy fájlt a megfelelő formátumban, amely itt importálható. Kérem, fontolja meg a hozzájárulást, ha a fájlja nagyszámú receptet vagy képet tartalmaz."
+    "pages.importImages.description": "Ez a művelet zip fájlba (.zip kiterjesztésű) tömörített képeket importál a RecipeSage fiókjába. Kérem, tekintse meg a felhasználói útmutatót, hogy hogyan hozhat létre egy fájlt a megfelelő formátumban, amely itt importálható. Kérem, fontolja meg a hozzájárulást, ha a fájlja nagyszámú receptet vagy képet tartalmaz.",
+    "pages.importEnex.description": "Ez a művelet Evernote exportból (.enex kiterjesztésű) importál recepteket a RecipeSage fiókjába. Kérem, tekintse meg a felhasználói útmutatót, hogy hogyan hozhat létre egy fájlt a megfelelő formátumban, amely itt importálható. Kérem, fontolja meg a hozzájárulást, ha a fájlja nagyszámú receptet vagy képet tartalmaz.",
+    "pages.import.enex": "Importálás Evernote fájlból",
+    "pages.importEnex.title": "Receptek importálása Evernote (enex) fájlból"
 }
