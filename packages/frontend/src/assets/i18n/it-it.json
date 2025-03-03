@@ -952,7 +952,7 @@
     "pages.import.uploading.hint": "Avanzamento del caricamento dei file",
     "pages.import.processing": "Elaborazione e importazione di ricette...",
     "pages.import.textFiles": "Importa da file di testo",
-    "pages.import.urls": "Importazione da un elenco di URL",
+    "pages.import.urls": "Importa da un elenco di URL",
     "pages.import.csv": "Importa da CSV (PlanToEat e altri)",
     "pages.import.fileTooLarge": "Questo file è troppo grande per essere caricato direttamente.",
     "pages.import.fileTooLarge.contact": "Contattatemi per far importare manualmente il vostro database.",
@@ -1012,7 +1012,10 @@
     "pages.aboutDetails.social": "Social Media",
     "pages.import.jobs.status.fail.emptyFile": "L'importazione inviata non contiene ricette riconoscibili.",
     "pages.import.jobs.status.fail.badCredentials": "Le credenziali inviate sono errate.",
-    "pages.import.pdfs": "Importazione da PDF",
-    "pages.import.images": "Importazione da immagini",
-    "pages.importImages.title": "Importazione di ricette da file di immagine"
+    "pages.import.pdfs": "Importa da PDF",
+    "pages.import.images": "Importa da immagini",
+    "pages.importImages.title": "Importazione di ricette da file di immagine",
+    "pages.import.enex": "Importa da un file Evernote",
+    "pages.importEnex.title": "Importazione di ricette da un file Evernote (enex)",
+    "pages.importEnex.description": "Questa operazione consente di importare le ricette da un'esportazione di Evernote (che termina in .enex) nel proprio account RecipeSage. Per creare un file nel formato corretto da importare, consultare la guida per l'utente. Si prega di considerare la possibilità di contribuire se il file contiene un gran numero di ricette o immagini."
 }
