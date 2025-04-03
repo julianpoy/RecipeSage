@@ -875,5 +875,9 @@
     "pages.home.exportSelected.pdf": "Formato PDF",
     "pages.home.exportSelected.text": "Formato de texto plano",
     "pages.home.exportSelected.processing.header": "Exportación de recetas",
-    "pages.home.exportSelected.processing.message": "Estamos trabajando en la preparación de esas recetas para su descarga. Esto puede tardar unos minutos. La exportación será visible para su descarga en la página de exportación dentro de ajustes."
+    "pages.home.exportSelected.processing.message": "Estamos trabajando en la preparación de esas recetas para su descarga. Esto puede tardar unos minutos. La exportación será visible para su descarga en la página de exportación dentro de ajustes.",
+    "pages.auth.forgot.alert.header": "Restablecimiento de contraseña activado",
+    "pages.auth.error.registrationDisabled": "El registro se desactiva mediante la variable de entorno DISABLE_REGISTRATION",
+    "pages.auth.forgot.alert.message": "Si hay una cuenta RecipeSage asociada a esa dirección de correo electrónico, debería recibir un enlace para restablecer la contraseña en los próximos minutos.",
+    "pages.home.exportSelected.header": "Elegir Formato"
 }
