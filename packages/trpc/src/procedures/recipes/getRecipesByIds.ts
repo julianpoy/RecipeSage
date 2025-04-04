@@ -35,7 +35,6 @@ export const getRecipesByIds = publicProcedure
           },
         },
       },
-      relationLoadStrategy: "join",
       ...recipeSummary,
     });
 
