@@ -2,15 +2,17 @@ import { IDBPDatabase } from "idb";
 import pThrottle from "p-throttle";
 import type { SearchManager } from "./SearchManager";
 import { trpcClient as trpc } from "./trpcClient";
-import { KVStoreKeys, ObjectStoreName, RSLocalDB } from "./localDb";
+import {
+  getKvStoreEntry,
+  KVStoreKeys,
+  ObjectStoreName,
+  RSLocalDB,
+} from "./localDb";
 import { appIdbStorageManager } from "./appIdbStorageManager";
-import { SW_BROADCAST_CHANNEL_NAME } from "./SW_BROADCAST_CHANNEL_NAME";
-
-const broadcastChannel = new BroadcastChannel(SW_BROADCAST_CHANNEL_NAME);
 
 const ENABLE_VERBOSE_SYNC_LOGGING = false;
 
-const SYNC_BATCH_SIZE = 200;
+const SYNC_BATCH_SIZE = 100;
 
 /**
  * We cannot exceed the rate limit of the API (is limited per-IP),
@@ -27,22 +29,7 @@ export class SyncManager {
   constructor(
     private localDb: IDBPDatabase<RSLocalDB>,
     private searchManager: SearchManager,
-  ) {
-    broadcastChannel.addEventListener("message", (event) => {
-      if (event.data.type === "triggerFullSync") {
-        this.syncAll();
-
-        if (ENABLE_VERBOSE_SYNC_LOGGING) console.log("Full sync requested");
-      }
-
-      if (event.data.type === "triggerRecipeSyncById") {
-        this.syncRecipe(event.data.recipeId);
-
-        if (ENABLE_VERBOSE_SYNC_LOGGING)
-          console.log(`Sync for recipeId ${event.data.recipeId} requested`);
-      }
-    });
-  }
+  ) {}
 
   async syncAll(): Promise<void> {
     const session = await appIdbStorageManager.getSession();
@@ -58,6 +45,8 @@ export class SyncManager {
     await this.searchManager.onReady();
 
     try {
+      const syncStart = new Date();
+
       await this.syncRecipes();
       await this.syncLabels();
       await this.syncShoppingLists();
@@ -65,6 +54,10 @@ export class SyncManager {
       await this.syncMyUserProfile();
       await this.syncMyFriends();
       await this.syncMyStats();
+
+      await appIdbStorageManager.setLastSync({
+        datetime: syncStart,
+      });
 
       performance.mark("endSync");
       const measure = performance.measure("syncTime", "startSync", "endSync");
@@ -86,11 +79,14 @@ export class SyncManager {
   }
 
   async syncRecipes(): Promise<void> {
-    const allVisibleRecipesManifest = await throttle(() =>
-      trpc.recipes.getAllVisibleRecipesManifest.query(),
+    const lastSync = await getKvStoreEntry(KVStoreKeys.LastSync);
+    const lastSyncTime = lastSync?.datetime.getTime();
+
+    const serverRecipeManifest = await throttle(() =>
+      trpc.recipes.getSyncRecipesManifestV1.query(),
     )();
-    const serverRecipeIds = allVisibleRecipesManifest.reduce(
-      (acc, el) => acc.add(el.id),
+    const serverRecipeIds = serverRecipeManifest.reduce(
+      (acc, el) => acc.add(el[0]),
       new Set<string>(),
     );
     const localRecipeIds = new Set(
@@ -100,6 +96,11 @@ export class SyncManager {
 
     const recipeIdsToSync = new Set<string>();
 
+    for (const [recipeId, updatedAt] of serverRecipeManifest) {
+      if (!lastSyncTime || updatedAt >= lastSyncTime) {
+        recipeIdsToSync.add(recipeId);
+      }
+    }
     for (const recipeId of serverRecipeIds) {
       if (!searchIndexKnownRecipeIds.has(recipeId)) {
         // Exists on server but not in local search index

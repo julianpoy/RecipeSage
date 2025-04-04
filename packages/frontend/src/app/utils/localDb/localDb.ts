@@ -30,6 +30,7 @@ export enum ObjectStoreName {
 export enum KVStoreKeys {
   Session = "session",
   RecipeSearchIndex = "recipeSearchIndex",
+  LastSync = "lastSync",
   LastSessionUserId = "lastSessionUserId",
   MyUserProfile = "myUserProfile",
   MyFriends = "myFriends",
@@ -43,6 +44,12 @@ export interface KVSession {
 export interface KVRecipeSearchIndex {
   key: KVStoreKeys.RecipeSearchIndex;
   value: string;
+}
+export interface KVLastSync {
+  key: KVStoreKeys.LastSync;
+  value: {
+    datetime: Date;
+  };
 }
 export interface KVLastSessionUserId {
   key: KVStoreKeys.LastSessionUserId;
@@ -64,6 +71,7 @@ export interface KVMyStats {
 export type KVStoreValue = {
   [KVStoreKeys.Session]: KVSession;
   [KVStoreKeys.RecipeSearchIndex]: KVRecipeSearchIndex;
+  [KVStoreKeys.LastSync]: KVLastSync;
   [KVStoreKeys.LastSessionUserId]: KVLastSessionUserId;
   [KVStoreKeys.MyUserProfile]: KVMyUserProfile;
   [KVStoreKeys.MyFriends]: KVMyFriends;
@@ -129,7 +137,30 @@ export interface RSLocalDB extends DBSchema {
 const connect = () => {
   const migrations = [localDBMigration_1, localDBMigration_2];
 
-  return openDB<RSLocalDB>(`localDb`, migrations.length, {
+  const dbP = openDB<RSLocalDB>(`localDb`, migrations.length, {
+    blocking: async () => {
+      dbP.then((db) => {
+        db.close();
+
+        // This script can be used from a service worker, and if so we
+        // want to trigger an update of the service worker to the latest
+        // else reload the page.
+        if (
+          "registration" in self &&
+          self.registration instanceof ServiceWorkerRegistration
+        ) {
+          // We're in a service worker
+          self.registration.update();
+        } else {
+          // We're in a window
+          const confirmed = prompt(
+            "A new version of the app is available. The app will refresh to load the new version",
+          );
+          if (confirmed) self.location.reload();
+          else alert("The app will not work correctly until it is refreshed");
+        }
+      });
+    },
     upgrade: (db, previousVersion, newVersion) => {
       console.log(
         `Local DB upgrading from ${previousVersion} to ${newVersion}`,
@@ -155,6 +186,8 @@ const connect = () => {
       console.log(`Local DB upgraded from ${previousVersion} to ${newVersion}`);
     },
   });
+
+  return dbP;
 };
 
 let localDbP: Promise<IDBPDatabase<RSLocalDB>> | undefined = undefined;

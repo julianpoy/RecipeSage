@@ -82,6 +82,8 @@ precacheAndRoute(self.__WB_MANIFEST || []);
 const BASE_CACHE_NAME = "base-asset-cache";
 const LANG_CACHE_NAME = "language-cache";
 
+clientsClaim();
+
 self.addEventListener("install", async (event) => {
   const networkFirstPrecacheUrls = ["/", "/index.html"];
   event.waitUntil(
@@ -104,7 +106,6 @@ self.addEventListener("install", async (event) => {
   );
 
   self.skipWaiting();
-  clientsClaim();
 });
 
 const searchManagerP = getLocalDb().then(

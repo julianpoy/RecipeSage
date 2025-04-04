@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import cursorStream from "prisma-cursorstream";
+import cursorStream from "@julianpoy/prisma-cursorstream";
 
 export * from "./types";
 

@@ -102,7 +102,7 @@ export class HomeSearchFilterPopoverPage {
         }
         acc[label.labelGroup?.title || ungroupedTitle] ||= [];
         acc[label.labelGroup?.title || ungroupedTitle].push({
-          title: `${label.title} (${this.contextUserId === label.userId ? label.recipeLabels.length : sharedLabelMessage})`,
+          title: `${label.title} (${this.contextUserId === label.userId ? label._count.recipeLabels : sharedLabelMessage})`,
           value: label.title,
           selected: this.selectedLabels.indexOf(label.title) > -1,
         });

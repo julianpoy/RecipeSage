@@ -1,19 +1,13 @@
 import { publicProcedure } from "../../trpc";
-import { z } from "zod";
 import {
   getFriendshipIds,
   getRecipeVisibilityQueryFilter,
 } from "@recipesage/util/server/db";
 import { validateTrpcSession } from "@recipesage/util/server/general";
-import { prisma, RecipeSummary, recipeSummary } from "@recipesage/prisma";
+import { prisma } from "@recipesage/prisma";
 
-export const getRecipesByIds = publicProcedure
-  .input(
-    z.object({
-      ids: z.array(z.string()).max(100),
-    }),
-  )
-  .query(async ({ ctx, input }): Promise<RecipeSummary[]> => {
+export const getSyncRecipesManifestV1 = publicProcedure.query(
+  async ({ ctx }): Promise<[string, number][]> => {
     const session = ctx.session;
     validateTrpcSession(session);
 
@@ -26,18 +20,16 @@ export const getRecipesByIds = publicProcedure
       userIds,
     });
 
-    const recipes = await prisma.recipe.findMany({
+    const manifest = await prisma.recipe.findMany({
       where: {
-        AND: {
-          OR: queryFilters,
-          id: {
-            in: input.ids,
-          },
-        },
+        OR: queryFilters,
       },
-      relationLoadStrategy: "join",
-      ...recipeSummary,
+      select: {
+        id: true,
+        updatedAt: true,
+      },
     });
 
-    return recipes;
-  });
+    return manifest.map((recipe) => [recipe.id, recipe.updatedAt.getTime()]);
+  },
+);
