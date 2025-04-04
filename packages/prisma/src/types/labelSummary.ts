@@ -18,10 +18,9 @@ export const labelSummary = Prisma.validator<Prisma.LabelFindFirstArgs>()({
         updatedAt: true,
       },
     },
-    recipeLabels: {
+    _count: {
       select: {
-        // Note: Do not query recipe ID here, since that would transmit unshared IDs to shared users
-        labelId: true,
+        recipeLabels: true,
       },
     },
   },

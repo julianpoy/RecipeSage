@@ -41,6 +41,26 @@ export class AppIdbStorageManager {
     return record || null;
   }
 
+  async getLastSync(): Promise<{
+    datetime: Date;
+  } | null> {
+    const record = await getKvStoreEntry(KVStoreKeys.LastSync);
+    return record ? { datetime: new Date(record.datetime) } : null;
+  }
+
+  async setLastSync(info: { datetime: Date }): Promise<void> {
+    const localDb = await getLocalDb();
+    const tx = localDb.transaction(ObjectStoreName.KV, "readwrite");
+    const store = tx.objectStore(ObjectStoreName.KV);
+    await store.put({
+      key: KVStoreKeys.LastSync,
+      value: {
+        datetime: info.datetime,
+      },
+    });
+    await tx.done;
+  }
+
   async deleteAllData(): Promise<void> {
     const localDb = await getLocalDb();
     await localDb.clear(ObjectStoreName.KV);

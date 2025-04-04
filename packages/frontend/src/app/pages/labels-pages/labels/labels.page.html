@@ -66,7 +66,7 @@
     </null-state>
     <ion-item
       (click)="selectionMode ? selectLabel(label) : manageLabel(label)"
-      *ngFor="let label of labels"
+      *ngFor="let label of labels; trackBy: labelTrackBy"
       button
       class="ion-margin-start"
     >
@@ -75,7 +75,7 @@
         {{label.title}}
         <p>
           {{ 'pages.labels.label.recipeCount' |
-          translate:{count:label.recipeLabels.length} }}
+          translate:{count:label._count.recipeLabels} }}
           <span *ngIf="label.labelGroup">
             {{ 'pages.labels.label.group' |
             translate:{title:label.labelGroup.title} }}
@@ -120,7 +120,7 @@
     </null-state>
     <ion-item
       (click)="manageLabelGroup(labelGroup)"
-      *ngFor="let labelGroup of labelGroups"
+      *ngFor="let labelGroup of labelGroups; trackBy: labelGroupTrackBy"
       button
       class="ion-margin-start"
     >

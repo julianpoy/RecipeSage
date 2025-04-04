@@ -67,16 +67,18 @@ export class LabelsPage {
     this.labelGroups = [];
     this.loading = true;
 
-    const labelsResponse = await this.trpcService.handle(
-      this.trpcService.trpc.labels.getLabels.query(),
-    );
-    const labelGroupsResponse = await this.trpcService.handle(
-      this.trpcService.trpc.labelGroups.getLabelGroups.query(),
-    );
+    const [labelsResponse, labelGroupsResponse] = await Promise.all([
+      this.trpcService.handle(this.trpcService.trpc.labels.getLabels.query()),
+      this.trpcService.handle(
+        this.trpcService.trpc.labelGroups.getLabelGroups.query(),
+      ),
+    ]);
+
     this.loading = false;
     if (!labelsResponse || !labelGroupsResponse) return;
 
     this.labels = labelsResponse;
+    console.log("labelsResponse", labelsResponse);
     this.labelGroups = labelGroupsResponse;
   }
 
@@ -219,5 +221,13 @@ export class LabelsPage {
 
   formatDate(input: string | number | Date) {
     return this.utilService.formatDate(input);
+  }
+
+  labelTrackBy(_index: number, label: LabelSummary): any {
+    return label.id;
+  }
+
+  labelGroupTrackBy(_index: number, labelGroup: LabelGroupSummary): any {
+    return labelGroup.id;
   }
 }

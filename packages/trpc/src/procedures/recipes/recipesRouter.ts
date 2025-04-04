@@ -5,6 +5,7 @@ import { deleteRecipe } from "./deleteRecipe";
 import { deleteRecipesByIds } from "./deleteRecipesByIds";
 import { deleteRecipesByLabelIds } from "./deleteRecipesByLabelIds";
 import { getAllVisibleRecipesManifest } from "./getAllVisibleRecipesManifest";
+import { getSyncRecipesManifestV1 } from "./getSyncRecipesManifestV1";
 import { getRecipe } from "./getRecipe";
 import { getRecipes } from "./getRecipes";
 import { getRecipesByIds } from "./getRecipesByIds";
@@ -25,6 +26,7 @@ export const recipesRouter = router({
   getRecipes,
   getRecipesByIds,
   getAllVisibleRecipesManifest,
+  getSyncRecipesManifestV1,
   searchRecipes,
   getSimilarRecipes,
   getRecipesByTitle,

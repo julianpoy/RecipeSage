@@ -324,7 +324,16 @@ const rtlLanguages = [SupportedLanguages.HE];
   providedIn: "root",
 })
 export class UtilService {
-  constructor(private translate: TranslateService) {}
+  memoizedFormattedDates: Map<string, string> = new Map();
+
+  constructor(private translate: TranslateService) {
+    setInterval(
+      () => {
+        this.memoizedFormattedDates.clear();
+      },
+      1000 * 60 * 5,
+    ); // Clear every 5 minutes
+  }
 
   getAppBrowserLang(): string {
     const isSupported = (
@@ -424,9 +433,24 @@ export class UtilService {
 
   formatDate(
     date: string | number | Date,
-    options?: { now?: boolean; times?: boolean },
+    options: { now?: boolean; times?: boolean } = {},
+  ): string {
+    const memoKey = date.toString() + options.now + options.times;
+    const memoizedValue = this.memoizedFormattedDates.get(memoKey);
+    if (memoizedValue) return memoizedValue;
+
+    const calculatedValue = this._formatDate(date, options);
+
+    this.memoizedFormattedDates.set(memoKey, calculatedValue);
+    return calculatedValue;
+  }
+
+  private _formatDate(
+    date: string | number | Date,
+    options: { now?: boolean; times?: boolean } = {},
   ): string {
     options = options || {};
+
     const aFewMomentsAgoAfter = new Date();
     aFewMomentsAgoAfter.setMinutes(aFewMomentsAgoAfter.getMinutes() - 2);
 
