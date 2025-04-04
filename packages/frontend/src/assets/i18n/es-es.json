@@ -866,5 +866,18 @@
     "pages.editRecipe.scanImage": "Escanear desde una foto",
     "pages.editRecipe.showClipOptions": "Autocompletar receta desde...",
     "pages.assistant.welcome.documentation": "Por favor, lea la documentación del asistente",
-    "pages.app.browser.title": "RecipeSage - El gestor personal de recetas"
+    "pages.app.browser.title": "RecipeSage - El gestor personal de recetas",
+    "pages.home.exportSelected.processing.view": "Ver y descargar",
+    "pages.auth.error.invalidEmailPassword": "Introduzca una dirección de correo electrónico válida y una contraseña de al menos 6 caracteres.",
+    "pages.auth.error.incorrectEmail": "No existe ninguna cuenta con esa dirección de correo electrónico.",
+    "pages.auth.error.incorrectPassword": "La contraseña proporcionada no coincide con la cuenta registrada.",
+    "pages.auth.error.ssoAccount": "La cuenta a la que intentas acceder no tiene asignada una contraseña. Accede con Google o utiliza el botón de restablecimiento de contraseña para establecer una contraseña.",
+    "pages.home.exportSelected.pdf": "Formato PDF",
+    "pages.home.exportSelected.text": "Formato de texto plano",
+    "pages.home.exportSelected.processing.header": "Exportación de recetas",
+    "pages.home.exportSelected.processing.message": "Estamos trabajando en la preparación de esas recetas para su descarga. Esto puede tardar unos minutos. La exportación será visible para su descarga en la página de exportación dentro de ajustes.",
+    "pages.auth.forgot.alert.header": "Restablecimiento de contraseña activado",
+    "pages.auth.error.registrationDisabled": "El registro se desactiva mediante la variable de entorno DISABLE_REGISTRATION",
+    "pages.auth.forgot.alert.message": "Si hay una cuenta RecipeSage asociada a esa dirección de correo electrónico, debería recibir un enlace para restablecer la contraseña en los próximos minutos.",
+    "pages.home.exportSelected.header": "Elegir Formato"
 }
