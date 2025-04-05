@@ -37,9 +37,9 @@ export async function createTrpcClient(token: string) {
             Authorization: token ? `Bearer ${token}` : undefined,
           };
         },
+        transformer: customTrpcTransformer,
       }),
     ],
-    transformer: customTrpcTransformer,
   });
 }
 

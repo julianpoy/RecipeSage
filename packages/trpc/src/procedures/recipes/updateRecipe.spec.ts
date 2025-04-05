@@ -1,14 +1,14 @@
 import { trpcSetup, tearDown } from "../../testutils";
 import { prisma } from "@recipesage/prisma";
 import { User } from "@prisma/client";
-import type { CreateTRPCProxyClient } from "@trpc/client";
+import type { TRPCClient } from "@trpc/client";
 import type { AppRouter } from "../../index";
 import { recipeFactory } from "../../factories/recipeFactory";
 
 describe("updateRecipe", () => {
   let user: User;
   let user2: User;
-  let trpc: CreateTRPCProxyClient<AppRouter>;
+  let trpc: TRPCClient<AppRouter>;
 
   beforeAll(async () => {
     ({ user, user2, trpc } = await trpcSetup());
