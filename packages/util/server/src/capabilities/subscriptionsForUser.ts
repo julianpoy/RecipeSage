@@ -1,5 +1,5 @@
 import { prisma } from "@recipesage/prisma";
-import * as moment from "moment";
+import moment from "moment";
 import { CAPABILITY_GRACE_PERIOD } from "./constants";
 
 export const subscriptionsForUser = async (

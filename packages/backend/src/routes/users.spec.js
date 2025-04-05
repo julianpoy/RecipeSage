@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 
 import {
@@ -9,6 +9,7 @@ import {
   createUser,
   createSession,
   secureUserMatch,
+  superjsonResult,
 } from "../testutils";
 
 // DB
@@ -36,7 +37,7 @@ describe("users", () => {
       return request(server)
         .post("/users/register")
         .send(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) =>
           Session.findOne({
             where: {
@@ -65,7 +66,10 @@ describe("users", () => {
         password: "123456",
       };
 
-      return request(server).post("/users/register").send(payload).expect(412);
+      return request(server)
+        .post("/users/register")
+        .send(payload)
+        .expect(superjsonResult(412));
     });
 
     it("rejects short password", async () => {
@@ -75,7 +79,10 @@ describe("users", () => {
         password: "short",
       };
 
-      return request(server).post("/users/register").send(payload).expect(411);
+      return request(server)
+        .post("/users/register")
+        .send(payload)
+        .expect(superjsonResult(411));
     });
 
     it("rejects if email already registered", async () => {
@@ -87,7 +94,10 @@ describe("users", () => {
         password: "123456",
       };
 
-      return request(server).post("/users/register").send(payload).expect(406);
+      return request(server)
+        .post("/users/register")
+        .send(payload)
+        .expect(superjsonResult(406));
     });
   });
 
@@ -103,7 +113,7 @@ describe("users", () => {
       return request(server)
         .post("/users/login")
         .send(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) =>
           Session.findOne({
             where: {
@@ -124,7 +134,10 @@ describe("users", () => {
         password: "123456",
       };
 
-      return request(server).post("/users/login").send(payload).expect(412);
+      return request(server)
+        .post("/users/login")
+        .send(payload)
+        .expect(superjsonResult(412));
     });
 
     it("rejects incorrect password", async () => {
@@ -135,7 +148,10 @@ describe("users", () => {
         password: "incorrect",
       };
 
-      return request(server).post("/users/login").send(payload).expect(412);
+      return request(server)
+        .post("/users/login")
+        .send(payload)
+        .expect(superjsonResult(412));
     });
   });
 
@@ -151,7 +167,7 @@ describe("users", () => {
       return request(server)
         .post("/users/login")
         .send(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) =>
           Session.findOne({
             where: {
@@ -172,7 +188,10 @@ describe("users", () => {
         password: "123456",
       };
 
-      return request(server).post("/users/login").send(payload).expect(412);
+      return request(server)
+        .post("/users/login")
+        .send(payload)
+        .expect(superjsonResult(412));
     });
 
     it("rejects incorrect password", async () => {
@@ -183,7 +202,10 @@ describe("users", () => {
         password: "incorrect",
       };
 
-      return request(server).post("/users/login").send(payload).expect(412);
+      return request(server)
+        .post("/users/login")
+        .send(payload)
+        .expect(superjsonResult(412));
     });
   });
 
@@ -194,7 +216,7 @@ describe("users", () => {
       return request(server)
         .get("/users/by-email")
         .query({ email: user.email })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => secureUserMatch(body, user));
     });
 
@@ -204,7 +226,7 @@ describe("users", () => {
       return request(server)
         .get("/users/by-email")
         .query({ email: "a" + user.email })
-        .expect(404);
+        .expect(superjsonResult(404));
     });
   });
 
@@ -217,7 +239,7 @@ describe("users", () => {
       return request(server)
         .get("/users/")
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => {
           expect(body.id).to.equal(user.id);
           expect(body.name).to.equal(user.name);
@@ -241,14 +263,14 @@ describe("users", () => {
       return request(server)
         .get("/users/sessioncheck")
         .query({ token: session.token })
-        .expect(200);
+        .expect(superjsonResult(200));
     });
 
     it("denies invalid session", async () => {
       return request(server)
         .get("/users/sessioncheck")
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 });

@@ -1,9 +1,9 @@
 import "./services/sentry-init.js";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
-import * as fs from "fs-extra";
-import * as extract from "extract-zip";
-import * as xmljs from "xml-js";
+import fs from "fs-extra";
+import extract from "extract-zip";
+import xmljs from "xml-js";
 
 import {
   sequelize,

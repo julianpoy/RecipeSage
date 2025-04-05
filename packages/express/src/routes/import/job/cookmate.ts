@@ -5,9 +5,9 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
-import * as multer from "multer";
-import * as fs from "fs/promises";
-import * as extract from "extract-zip";
+import multer from "multer";
+import fs from "fs/promises";
+import extract from "extract-zip";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
 import {
@@ -15,8 +15,8 @@ import {
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
 import { JobMeta, prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
-import * as xmljs from "xml-js";
+import Sentry from "@sentry/node";
+import xmljs from "xml-js";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import {
   deletePathsSilent,

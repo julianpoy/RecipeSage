@@ -10,11 +10,11 @@ import {
   parseInstructions,
   parseNotes,
 } from "@recipesage/util/shared";
-import * as sanitizeHtml from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 import { fetchURL } from "../general/fetch";
-import * as fs from "fs";
+import fs from "fs";
 import { Content, Margins, TDocumentDefinitions } from "pdfmake/interfaces";
-import * as path from "path";
+import path from "path";
 import { RecipeSummary } from "@recipesage/prisma";
 import { setTimeout } from "timers/promises";
 

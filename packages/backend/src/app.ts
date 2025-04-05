@@ -1,5 +1,5 @@
 import "./services/sentry-init.js";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 import {
   NotFoundError,
@@ -7,12 +7,12 @@ import {
   typesafeExpressIndexRouter,
 } from "@recipesage/express";
 
-import * as express from "express";
-import * as path from "path";
-import * as logger from "morgan";
-import * as cookieParser from "cookie-parser";
-import * as bodyParser from "body-parser";
-import * as cors from "cors";
+import express from "express";
+import path from "path";
+import logger from "morgan";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 import { trpcExpressMiddleware } from "@recipesage/trpc";
 

@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import {
   subscriptionsForUser as _subscriptionsForUser,
   capabilitiesForUser as _capabilitiesForUser,

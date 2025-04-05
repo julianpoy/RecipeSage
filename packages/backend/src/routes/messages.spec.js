@@ -1,6 +1,6 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
-import * as sinon from "sinon";
+import sinon from "sinon";
 
 import {
   setup,
@@ -13,6 +13,7 @@ import {
   secureUserMatch,
   secureRecipeMatch,
   randomUuid,
+  superjsonResult,
 } from "../testutils";
 
 import * as UtilService from "../../src/services/util";
@@ -59,7 +60,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: session.token })
         .send(payload)
-        .expect(201)
+        .expect(superjsonResult(201))
         .then(({ body }) =>
           Message.findByPk(body.id, {
             include: [
@@ -109,7 +110,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: session.token })
         .send(payload)
-        .expect(201)
+        .expect(superjsonResult(201))
         .then(({ body }) =>
           Message.findByPk(body.id, {
             include: [
@@ -173,7 +174,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: session.token })
         .send(payload)
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("rejects if other user does not exist with recipe", async () => {
@@ -192,7 +193,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: session.token })
         .send(payload)
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("rejects if message and recipeId are falsy", async () => {
@@ -210,7 +211,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: session.token })
         .send(payload)
-        .expect(412);
+        .expect(superjsonResult(412));
     });
 
     it("requires valid token", async () => {
@@ -225,7 +226,7 @@ describe("messages", () => {
         .post("/messages")
         .query({ token: "invalid" })
         .send(payload)
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -260,7 +261,7 @@ describe("messages", () => {
         body = await request(server)
           .get("/messages/threads")
           .query(payload)
-          .expect(200)
+          .expect(superjsonResult(200))
           .then(({ body }) => body);
       });
 
@@ -338,7 +339,7 @@ describe("messages", () => {
         body = await request(server)
           .get("/messages/threads")
           .query(payload)
-          .expect(200)
+          .expect(superjsonResult(200))
           .then(({ body }) => body);
       });
 
@@ -375,12 +376,14 @@ describe("messages", () => {
       await request(server)
         .get("/messages/threads")
         .query(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => expect(body).to.have.length(0));
     });
 
     it("requires valid session", async () => {
-      await request(server).get("/messages/threads").expect(401);
+      await request(server)
+        .get("/messages/threads")
+        .expect(superjsonResult(401));
     });
   });
 
@@ -415,7 +418,7 @@ describe("messages", () => {
         body = await request(server)
           .get("/messages")
           .query(payload)
-          .expect(200)
+          .expect(superjsonResult(200))
           .then(({ body }) => body);
       });
 
@@ -468,7 +471,7 @@ describe("messages", () => {
       await request(server)
         .get("/messages")
         .query(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => expect(body).to.have.length(0));
     });
 
@@ -485,7 +488,7 @@ describe("messages", () => {
       await request(server)
         .get("/messages")
         .query(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => expect(body).to.have.length(0));
     });
 
@@ -498,11 +501,14 @@ describe("messages", () => {
         token: session.token,
       };
 
-      await request(server).get("/messages").query(payload).expect(400);
+      await request(server)
+        .get("/messages")
+        .query(payload)
+        .expect(superjsonResult(400));
     });
 
     it("requires valid session", async () => {
-      await request(server).get("/messages").expect(401);
+      await request(server).get("/messages").expect(superjsonResult(401));
     });
   });
 });

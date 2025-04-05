@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { importRouter } from "./import";
 import { mealPlansRouter } from "./mealPlans";
 import { wsRouter } from "./ws";

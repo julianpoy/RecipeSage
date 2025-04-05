@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
 
 import { serveGrip, validateSession } from "@recipesage/util/server/general";

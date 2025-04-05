@@ -1,6 +1,6 @@
-import * as S3Storage from "./s3";
-import * as FirebaseStorage from "./firebase";
-import * as FilesystemStorage from "./filesystem";
+import S3Storage from "./s3";
+import FirebaseStorage from "./firebase";
+import FilesystemStorage from "./filesystem";
 import { ObjectTypes } from "./shared";
 import { PassThrough } from "stream";
 

@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { textfilesHandler } from "./textfiles";
 import { cookmateHandler } from "./cookmate";
 import { fdxzHandler } from "./fdxz";

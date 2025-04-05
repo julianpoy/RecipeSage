@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 
 import {
@@ -11,10 +11,11 @@ import {
   createLabel,
   associateLabel,
   randomUuid,
+  superjsonResult,
 } from "../testutils";
 
 // DB
-import * as Models from "../models";
+import Models from "../models";
 const { Recipe, Label } = Models;
 
 describe("labels", () => {
@@ -44,7 +45,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(201)
+        .expect(superjsonResult(201))
         .then(({ body }) =>
           Label.findByPk(body.id, {
             include: [
@@ -79,7 +80,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(412);
+        .expect(superjsonResult(412));
     });
 
     it("rejects if no recipeId is present", async () => {
@@ -95,7 +96,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(412);
+        .expect(superjsonResult(412));
     });
 
     it("rejects if recipeId is empty", async () => {
@@ -112,7 +113,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(412);
+        .expect(superjsonResult(412));
     });
 
     it("rejects if recipeId is invalid", async () => {
@@ -131,7 +132,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(500)
+        .expect(superjsonResult(500))
         .then(async () => {
           const count = await Label.count();
           expect(count).to.equal(intialCount);
@@ -152,7 +153,7 @@ describe("labels", () => {
         .post("/labels")
         .query({ token: "invalid" })
         .send(payload)
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -184,7 +185,7 @@ describe("labels", () => {
         responseBody = await request(server)
           .get("/labels")
           .query({ token: session.token })
-          .expect(200)
+          .expect(superjsonResult(200))
           .then(({ body }) => {
             return body;
           });
@@ -212,7 +213,7 @@ describe("labels", () => {
       return request(server)
         .get("/labels")
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -239,7 +240,7 @@ describe("labels", () => {
       return request(server)
         .delete("/labels")
         .query(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() => {
           Label.findByPk(label.id, {
             include: [
@@ -277,7 +278,7 @@ describe("labels", () => {
       return request(server)
         .delete("/labels")
         .query(payload)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() => {
           // Does not remove the label anymore (should be done via label management)
           Label.findByPk(label.id, {
@@ -313,7 +314,10 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server).delete("/labels").query(payload).expect(404);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(404));
     });
 
     it("rejects if recipe does not exist", async () => {
@@ -333,7 +337,10 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
-      return request(server).delete("/labels").query(payload).expect(404);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(404));
     });
 
     it("rejects if label does not exist", async () => {
@@ -353,7 +360,10 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server).delete("/labels").query(payload).expect(404);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(404));
     });
 
     it("rejects if recipeid is falsy", async () => {
@@ -373,7 +383,10 @@ describe("labels", () => {
         recipeId: "",
       };
 
-      return request(server).delete("/labels").query(payload).expect(412);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(412));
     });
 
     it("rejects if labelid is falsy", async () => {
@@ -393,7 +406,10 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server).delete("/labels").query(payload).expect(412);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(412));
     });
 
     it("requires valid session", async () => {
@@ -411,7 +427,10 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server).delete("/labels").query(payload).expect(401);
+      return request(server)
+        .delete("/labels")
+        .query(payload)
+        .expect(superjsonResult(401));
     });
   });
 });

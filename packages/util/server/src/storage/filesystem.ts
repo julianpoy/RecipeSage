@@ -1,7 +1,7 @@
-import { StorageObjectRecord } from "./index";
+import { StorageObjectRecord, type StorageProvider } from "./";
 import { ObjectTypes } from "./shared";
-import * as fs from "fs/promises";
-import * as crypto from "crypto";
+import fs from "fs/promises";
+import crypto from "crypto";
 import { join, dirname } from "path";
 import { PassThrough } from "stream";
 
@@ -108,3 +108,10 @@ export const deleteObject = async (key: string): Promise<void> => {
 export const deleteObjects = async (keys: string[]): Promise<void> => {
   await Promise.all(keys.map((key) => deleteObject(key)));
 };
+
+export default {
+  writeBuffer,
+  writeStream,
+  deleteObject,
+  deleteObjects,
+} satisfies StorageProvider as StorageProvider;

@@ -3,11 +3,11 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
-import * as multer from "multer";
+import multer from "multer";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
 import { JobMeta, prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { z } from "zod";
 import { spawn } from "child_process";

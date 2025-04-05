@@ -1,6 +1,6 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as sanitizeHtml from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 
 // DB
 import { Op } from "sequelize";

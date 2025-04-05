@@ -1,8 +1,8 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as cors from "cors";
-import * as Sentry from "@sentry/node";
-import * as moment from "moment";
+import cors from "cors";
+import Sentry from "@sentry/node";
+import moment from "moment";
 
 // DB
 import { Op } from "sequelize";

@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { mealPlansIcalHandler } from "./ical";
 
 const router = express.Router();

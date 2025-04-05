@@ -1,4 +1,4 @@
-import * as fs from "fs/promises";
+import fs from "fs/promises";
 
 export const deletePathsSilent = async (paths: string[]) => {
   for (const path of paths) {

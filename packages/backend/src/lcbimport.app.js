@@ -1,8 +1,8 @@
 import "./services/sentry-init.js";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
-import * as fs from "fs-extra";
-import * as extract from "extract-zip";
+import fs from "fs-extra";
+import extract from "extract-zip";
 import { spawn } from "child_process";
 
 import {

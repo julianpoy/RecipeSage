@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 import Sequelize from "sequelize";
 const Op = Sequelize.Op;
@@ -13,6 +13,7 @@ import {
   createLabel,
   associateLabel,
   randomUuid,
+  superjsonResult,
 } from "../testutils";
 
 // DB
@@ -55,7 +56,7 @@ describe("recipes", () => {
         .post("/recipes")
         .query({ token: session.token })
         .send(payload)
-        .expect(201)
+        .expect(superjsonResult(201))
         .then(({ body }) =>
           Recipe.findOne({
             where: {
@@ -87,7 +88,7 @@ describe("recipes", () => {
         .post("/recipes")
         .query({ token: session.token })
         .send(payload)
-        .expect(201)
+        .expect(superjsonResult(201))
         .then(({ body }) =>
           Recipe.findOne({
             where: {
@@ -128,7 +129,7 @@ describe("recipes", () => {
         .post("/recipes")
         .query({ token: session.token })
         .send(payload)
-        .expect(412)
+        .expect(superjsonResult(412))
         .then(async () => {
           const count = await Recipe.count();
           expect(count).to.equal(initialCount);
@@ -160,7 +161,7 @@ describe("recipes", () => {
         .post("/recipes")
         .query({ token: session.token })
         .send(payload)
-        .expect(412)
+        .expect(superjsonResult(412))
         .then(async () => {
           const count = await Recipe.count();
           expect(count).to.equal(initialCount);
@@ -188,7 +189,7 @@ describe("recipes", () => {
         .post("/recipes")
         .send(payload)
         .query({ token: "invalid" })
-        .expect(401)
+        .expect(superjsonResult(401))
         .then(async () => {
           const count = await Recipe.count();
           expect(count).to.equal(initialCount);
@@ -211,7 +212,7 @@ describe("recipes", () => {
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id);
           expect(body.title).to.equal(recipe.title);
@@ -229,7 +230,7 @@ describe("recipes", () => {
       return request(server)
         .get(`/recipes/${randomUuid()}`)
         .query({ token: session.token })
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("returns recipes belonging to another user", async () => {
@@ -247,7 +248,7 @@ describe("recipes", () => {
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id);
           expect(body.title).to.equal(recipe.title);
@@ -268,7 +269,7 @@ describe("recipes", () => {
 
       return request(server)
         .get(`/recipes/${recipe.id}`)
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(({ body }) => {
           expect(body.id).to.equal(recipe.id);
           expect(body.title).to.equal(recipe.title);
@@ -286,7 +287,7 @@ describe("recipes", () => {
       return request(server)
         .get(`/recipes/${recipe.id}`)
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -317,7 +318,7 @@ describe("recipes", () => {
         .put(`/recipes/${recipe.id}`)
         .send(payload)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() =>
           Recipe.findByPk(recipe.id).then((updatedRecipe) => {
             expect(updatedRecipe.title).to.equal(payload.title);
@@ -344,7 +345,7 @@ describe("recipes", () => {
         .put(`/recipes/${randomUuid()}`)
         .send({})
         .query({ token: session.token })
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("rejects request if recipe does not belong to user", async () => {
@@ -359,7 +360,7 @@ describe("recipes", () => {
         .put(`/recipes/${recipe.id}`)
         .send({})
         .query({ token: session.token })
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("requires valid session", async () => {
@@ -371,7 +372,7 @@ describe("recipes", () => {
         .put(`/recipes/${recipe.id}`)
         .send({})
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -393,7 +394,7 @@ describe("recipes", () => {
       await request(server)
         .delete("/recipes/all")
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(async () => {
           await Recipe.findAll({
             where: {
@@ -451,7 +452,7 @@ describe("recipes", () => {
       return request(server)
         .delete("/recipes/all")
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 
@@ -466,7 +467,7 @@ describe("recipes", () => {
       return request(server)
         .delete(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() => {
           Recipe.findByPk(recipe.id).then((recipe) => {
             expect(recipe).to.be.null;
@@ -490,7 +491,7 @@ describe("recipes", () => {
       return request(server)
         .delete(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() =>
           Promise.all([
             Recipe.findByPk(recipe.id).then(
@@ -522,7 +523,7 @@ describe("recipes", () => {
       return request(server)
         .delete(`/recipes/${recipe1.id}`)
         .query({ token: session.token })
-        .expect(200)
+        .expect(superjsonResult(200))
         .then(() =>
           Promise.all([
             Recipe.findByPk(recipe1.id).then(
@@ -549,7 +550,7 @@ describe("recipes", () => {
       return request(server)
         .delete(`/recipes/${recipe.id}`)
         .query({ token: session.token })
-        .expect(404);
+        .expect(superjsonResult(404));
     });
 
     it("requires valid session", async () => {
@@ -560,7 +561,7 @@ describe("recipes", () => {
       return request(server)
         .delete(`/recipes/${recipe.id}`)
         .query({ token: "invalid" })
-        .expect(401);
+        .expect(superjsonResult(401));
     });
   });
 });

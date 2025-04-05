@@ -8,7 +8,7 @@ import {
   validatePasswordHash,
 } from "@recipesage/util/server/general";
 import { indexRecipes } from "@recipesage/util/server/search";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 export const login = publicProcedure
   .input(

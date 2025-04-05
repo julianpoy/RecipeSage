@@ -1,7 +1,7 @@
 import { JobStatus } from "@prisma/client";
 import { prisma } from "@recipesage/prisma";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 /**
  * Stale after minutes applies to the jobs last updatedAt time
