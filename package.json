@@ -59,7 +59,7 @@
     "google-auth-library": "^9.7.0",
     "he": "^1.2.0",
     "https-proxy-agent": "^7.0.4",
-    "ical-generator": "^7.0.0",
+    "ical-generator": "^8.1.1",
     "joi": "^17.12.2",
     "jsdom": "^26.0.0",
     "json-stream-stringify": "^3.1.6",
