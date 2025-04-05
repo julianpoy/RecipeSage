@@ -46,6 +46,9 @@ updates:
         patterns:
           - "@capacitor/*"
           - "@capawesome/*"
+      fanout:
+        patterns:
+          - "@fanoutio/*"
       angular:
         patterns:
           - "@angular/*"
