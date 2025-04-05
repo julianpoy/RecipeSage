@@ -145,7 +145,7 @@
     "@types/sanitize-html": "^2.15.0",
     "@types/sharp": "^0.31.1",
     "@types/showdown": "^2.0.6",
-    "@types/sinon": "^17.0.3",
+    "@types/sinon": "^17.0.4",
     "@types/supertest": "^6.0.2",
     "@types/zip-stream": "^7.0.0",
     "@typescript-eslint/eslint-plugin": "8.29.0",
