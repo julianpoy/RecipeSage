@@ -50,7 +50,7 @@
     "csv-parse": "^5.6.0",
     "dayjs": "^1.11.10",
     "debug": "~4.4.0",
-    "express": "~4.21.2",
+    "express": "~5.1.0",
     "extract-zip": "^2.0.1",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
