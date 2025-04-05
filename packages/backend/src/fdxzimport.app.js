@@ -14,7 +14,7 @@ import {
   Image,
 } from "./models/index.js";
 
-import Util from "@recipesage/util/shared";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
 import {
   writeImageBuffer,

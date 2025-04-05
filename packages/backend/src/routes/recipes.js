@@ -18,9 +18,9 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import Util from "@recipesage/util/shared";
+import * as Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
-import Search from "@recipesage/util/server/search";
+import * as Search from "@recipesage/util/server/search";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JSONLDService from "../services/json-ld.js";
 import { getRecipesWithConstraints } from "../services/database/getRecipesWithConstraints";

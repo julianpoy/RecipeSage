@@ -9,7 +9,7 @@ import { sequelize, Recipe, Label, Recipe_Label } from "../models/index.js";
 
 // Services
 import * as MiddlewareService from "../services/middleware.js";
-import Util from "@recipesage/util/shared";
+import * as Util from "@recipesage/util/shared";
 import { joiValidator } from "../middleware/joiValidator.js";
 
 // Util

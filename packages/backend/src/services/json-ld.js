@@ -1,4 +1,4 @@
-import SharedUtils from "@recipesage/util/shared";
+import * as SharedUtils from "@recipesage/util/shared";
 
 export const recipeToJSONLD = (recipe) => ({
   "@context": "http://schema.org",

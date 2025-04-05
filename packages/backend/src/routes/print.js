@@ -18,7 +18,7 @@ import * as MiddlewareService from "../services/middleware.js";
 import * as UtilService from "../services/util.js";
 import * as ShoppingListCategorizerService from "../services/shopping-list-categorizer.js";
 
-import SharedUtils from "@recipesage/util/shared";
+import * as SharedUtils from "@recipesage/util/shared";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";
