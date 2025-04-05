@@ -95,7 +95,7 @@
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.6.2",
     "tsx": "^4.19.3",
-    "typesense": "^1.8.2",
+    "typesense": "^2.0.3",
     "umzug": "^3.7.0",
     "unitz-ts": "^1.0.1",
     "uuid": "^9.0.1",
