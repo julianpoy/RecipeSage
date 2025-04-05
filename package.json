@@ -128,7 +128,7 @@
     "@nx/eslint-plugin": "20.3.3",
     "@nx/jest": "20.3.3",
     "@nx/js": "20.3.3",
-    "@swc/core": "1.5.7",
+    "@swc/core": "1.11.16",
     "@swc/helpers": "0.5.15",
     "@types/chai": "^4.3.14",
     "@types/cookie-parser": "^1.4.7",
