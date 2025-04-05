@@ -160,7 +160,7 @@ const recipeSummariesToJSONLDStream = async (
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function write(stream: PassThrough, chunk: any, encoding?: BufferEncoding) {
-  const res = stream.write(chunk, encoding);
+  const res = encoding ? stream.write(chunk, encoding) : stream.write(chunk);
   if (!res) {
     return once(stream, "drain");
   }

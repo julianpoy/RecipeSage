@@ -168,7 +168,7 @@ const getImageSRCsFromSchema = (jsonLD: JsonLD): (string | Buffer)[] => {
 
       return null;
     })
-    .filter((src): src is Buffer | string => !!src);
+    .filter((src): src is Buffer<ArrayBuffer> | string => !!src);
 };
 
 const getTitleFromSchema = (jsonLD: JsonLD) => {
