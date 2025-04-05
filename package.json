@@ -61,7 +61,7 @@
     "https-proxy-agent": "^7.0.4",
     "ical-generator": "^7.0.0",
     "joi": "^17.12.2",
-    "jsdom": "^25.0.1",
+    "jsdom": "^26.0.0",
     "json-stream-stringify": "^3.1.6",
     "linkify-string": "^4.2.0",
     "linkifyjs": "^4.1.3",
