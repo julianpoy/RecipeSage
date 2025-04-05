@@ -505,7 +505,7 @@ export class EditRecipePage {
     try {
       filePickerResult = await FilePicker.pickFiles({
         types: ["application/pdf"],
-        multiple: false,
+        limit: 1,
         readData: true,
       });
     } catch (e) {
