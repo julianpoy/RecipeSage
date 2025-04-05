@@ -52,7 +52,7 @@
     "debug": "~4.3.4",
     "express": "~4.21.2",
     "extract-zip": "^2.0.1",
-    "firebase": "^11.2.0",
+    "firebase": "^11.6.0",
     "firebase-admin": "^12.0.0",
     "fraction.js": "^4.3.7",
     "fs-extra": "^11.2.0",
