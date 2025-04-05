@@ -131,7 +131,7 @@
     "@swc/core": "1.11.16",
     "@swc/helpers": "0.5.15",
     "@types/chai": "^4.3.14",
-    "@types/cookie-parser": "^1.4.7",
+    "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/dom-screen-wake-lock": "^1.0.3",
     "@types/he": "^1.2.3",
