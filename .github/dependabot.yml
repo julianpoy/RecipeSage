@@ -57,3 +57,4 @@ updates:
           - "zone.js"
     ignore:
       - dependency-name: "@nx*" # Ignored because nx must be upgraded through CLI
+      - dependency-name: "nx" # Ignored because nx must be upgraded through CLI
