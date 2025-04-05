@@ -10,11 +10,14 @@ import {
   MealPlanItem,
 } from "../../services/meal-plan.service";
 import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { MealGroupComponent } from "./meal-group/meal-group.component";
 
 @Component({
   selector: "meal-calendar",
   templateUrl: "meal-calendar.component.html",
   styleUrls: ["./meal-calendar.component.scss"],
+  imports: [...SHARED_UI_IMPORTS, MealGroupComponent],
 })
 export class MealCalendarComponent {
   private _mealPlanItems!: MealPlanItemSummary[];

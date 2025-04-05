@@ -5,11 +5,13 @@ import { ImportService } from "../../../services/import.service";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { LoadingService } from "../../../services/loading.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-import-pepperplate",
   templateUrl: "import-pepperplate.page.html",
   styleUrls: ["import-pepperplate.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportPepperplatePage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();

@@ -8,11 +8,15 @@ import {
 import { Recipe, RecipeService } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
+import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 
 @Component({
   selector: "page-new-meal-plan-item-modal",
   templateUrl: "new-meal-plan-item-modal.page.html",
   styleUrls: ["new-meal-plan-item-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectMealComponent, SelectRecipeComponent],
 })
 export class NewMealPlanItemModalPage {
   @Input() isEditing = false;

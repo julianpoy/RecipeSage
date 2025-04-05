@@ -19,11 +19,13 @@ import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-
 import dayjs from "dayjs";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-meal-plan-item-details-modal",
   templateUrl: "meal-plan-item-details-modal.page.html",
   styleUrls: ["meal-plan-item-details-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanItemDetailsModalPage {
   @Input({

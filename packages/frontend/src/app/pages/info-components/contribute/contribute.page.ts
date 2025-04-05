@@ -11,11 +11,19 @@ import {
   FeatureFlagKeys,
   FeatureFlagService,
 } from "../../../services/feature-flag.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { TosClickwrapAgreementComponent } from "../../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
+import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.component";
 
 @Component({
   selector: "page-contribute",
   templateUrl: "contribute.page.html",
   styleUrls: ["contribute.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    TosClickwrapAgreementComponent,
+    LogoIconComponent,
+  ],
 })
 export class ContributePage {
   defaultBackHref: string = RouteMap.AboutPage.getPath();

@@ -1,9 +1,11 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "rating",
   templateUrl: "rating.component.html",
   styleUrls: ["./rating.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class RatingComponent {
   @Output() ratingChanged = new EventEmitter<number>();

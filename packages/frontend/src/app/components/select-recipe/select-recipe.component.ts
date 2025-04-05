@@ -3,11 +3,13 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Recipe, RecipeService } from "~/services/recipe.service";
 import { ToastController, NavController } from "@ionic/angular";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "select-recipe",
   templateUrl: "select-recipe.component.html",
   styleUrls: ["./select-recipe.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectRecipeComponent {
   searchTimeout?: NodeJS.Timeout;

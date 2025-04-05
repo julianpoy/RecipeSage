@@ -10,11 +10,13 @@ import { EventName, EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TranslateService } from "@ngx-translate/core";
 import { Recipe } from "../../../services/recipe.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-message-thread",
   templateUrl: "message-thread.page.html",
   styleUrls: ["message-thread.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class MessageThreadPage {
   defaultBackHref: string = RouteMap.MessagesPage.getPath();

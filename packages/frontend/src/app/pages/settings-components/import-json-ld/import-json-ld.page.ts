@@ -4,6 +4,7 @@ import { RouteMap, UtilService } from "~/services/util.service";
 import { ImportService } from "../../../services/import.service";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 const MAX_FILE_SIZE_MB = 1000;
 
@@ -11,6 +12,7 @@ const MAX_FILE_SIZE_MB = 1000;
   selector: "page-import-json-ld",
   templateUrl: "import-json-ld.page.html",
   styleUrls: ["import-json-ld.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportJSONLDPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();

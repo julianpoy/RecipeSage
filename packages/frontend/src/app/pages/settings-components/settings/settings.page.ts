@@ -29,11 +29,13 @@ import { UserService } from "../../../services/user.service";
 import { EventName, EventService } from "../../../services/event.service";
 import { RecipeCompletionTrackerService } from "../../../services/recipe-completion-tracker.service";
 import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-settings",
   templateUrl: "settings.page.html",
   styleUrls: ["settings.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class SettingsPage {
   preferences = this.preferencesService.preferences;

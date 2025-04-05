@@ -4,11 +4,13 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { RouteMap } from "~/services/util.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "cooking-toolbar",
   templateUrl: "cooking-toolbar.component.html",
   styleUrls: ["./cooking-toolbar.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class CookingToolbarComponent {
   constructor(

@@ -46,12 +46,15 @@ import type {
 } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
 import { Title } from "@angular/platform-browser";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { RatingComponent } from "../../../components/rating/rating.component";
 
 @Component({
   selector: "page-recipe",
   templateUrl: "recipe.page.html",
   styleUrls: ["recipe.page.scss"],
   providers: [RecipeService, LabelService],
+  imports: [...SHARED_UI_IMPORTS, RatingComponent],
 })
 export class RecipePage {
   defaultBackHref: string = RouteMap.HomePage.getPath("main");

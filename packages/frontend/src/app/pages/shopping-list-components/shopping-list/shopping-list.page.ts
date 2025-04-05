@@ -23,11 +23,21 @@ import { getShoppingListItemGroupings } from "@recipesage/util/shared";
 import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/new-shopping-list-item-modal.page";
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
 import { Title } from "@angular/platform-browser";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { ShoppingListItemComponent } from "../../../components/shopping-list-item/shopping-list-item.component";
+import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-shopping-list",
   templateUrl: "shopping-list.page.html",
   styleUrls: ["shopping-list.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    ShoppingListItemComponent,
+    ShoppingListGroupComponent,
+    NullStateComponent,
+  ],
 })
 export class ShoppingListPage {
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();

@@ -6,6 +6,7 @@ import { RouteMap, UtilService } from "~/services/util.service";
 import { TRPCService } from "../../../services/trpc.service";
 import type { JobSummary } from "@recipesage/prisma";
 import { JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 export const getJobFailureI18n = (importJob: JobSummary) => {
   switch (importJob.resultCode) {
@@ -44,6 +45,7 @@ type ImportFormat =
   selector: "page-import",
   templateUrl: "import.page.html",
   styleUrls: ["import.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

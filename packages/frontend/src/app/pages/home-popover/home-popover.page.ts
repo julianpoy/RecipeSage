@@ -9,11 +9,13 @@ import {
 } from "~/services/quick-tutorial.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { MyRecipesPreferenceKey } from "@recipesage/util/shared";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-home-popover",
   templateUrl: "home-popover.page.html",
   styleUrls: ["home-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class HomePopoverPage {
   preferences = this.preferencesService.preferences;

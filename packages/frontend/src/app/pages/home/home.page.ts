@@ -6,7 +6,7 @@ import {
   AlertController,
   PopoverController,
 } from "@ionic/angular";
-import { Datasource } from "ngx-ui-scroll";
+import { Datasource, UiScrollModule } from "ngx-ui-scroll";
 
 import { Recipe, RecipeFolderName } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
@@ -28,6 +28,9 @@ import type {
   RecipeSummaryLite,
   UserPublic,
 } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
+import { NullStateComponent } from "../../components/null-state/null-state.component";
 
 const TILE_WIDTH = 200;
 const TILE_PADD = 20;
@@ -36,6 +39,12 @@ const TILE_PADD = 20;
   selector: "page-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    LogoIconComponent,
+    NullStateComponent,
+    UiScrollModule,
+  ],
 })
 export class HomePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();

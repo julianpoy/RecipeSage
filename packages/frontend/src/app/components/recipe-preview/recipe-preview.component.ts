@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "recipe-preview",
   templateUrl: "recipe-preview.component.html",
   styleUrls: ["./recipe-preview.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class RecipePreviewComponent {
   @Input() selected: boolean = false;

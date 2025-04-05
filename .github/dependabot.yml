@@ -14,7 +14,8 @@ updates:
           - "@types/multer"
       eslint:
         patterns:
-          - "*eslint*"
+          - "eslint"
+          - "@typescript-eslint/*"
       prisma:
         patterns:
           - "@prisma/*"
@@ -50,5 +51,6 @@ updates:
           - "@angular/*"
           - "@angular-devkit/*"
           - "@angular-eslint/*"
+          - "zone.js"
     ignore:
       - dependency-name: "@nx*" # Ignored because nx must be upgraded through CLI

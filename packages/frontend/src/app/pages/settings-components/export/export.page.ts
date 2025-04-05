@@ -6,6 +6,7 @@ import { RouteMap, UtilService } from "~/services/util.service";
 import { UserService } from "../../../services/user.service";
 import type { JobSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 export const getJobFailureI18n = (exportJob: JobSummary) => {
   switch (exportJob.resultCode) {
@@ -21,6 +22,7 @@ const JOB_POLL_INTERVAL_MS = 7500;
   selector: "page-export",
   templateUrl: "export.page.html",
   styleUrls: ["export.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ExportPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

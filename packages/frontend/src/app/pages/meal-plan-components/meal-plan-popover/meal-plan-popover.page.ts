@@ -17,11 +17,13 @@ import { ShareMealPlanModalPage } from "../share-meal-plan-modal/share-meal-plan
 import { TRPCService } from "../../../services/trpc.service";
 import { UpdateMealPlanModalPage } from "../update-meal-plan-modal/update-meal-plan-modal.page";
 import { UserService } from "../../../services/user.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-meal-plan-popover",
   templateUrl: "meal-plan-popover.page.html",
   styleUrls: ["meal-plan-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanPopoverPage {
   preferences = this.preferencesService.preferences;

@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 export interface ResettableSelectOption {
   title: string;
@@ -15,6 +16,7 @@ export type ResettableSelectGroupedOptions = Record<
   selector: "resettable-select-popover-page",
   templateUrl: "resettable-select-popover.page.html",
   styleUrls: ["resettable-select-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ResettableSelectPopoverPage {
   resetToggled = false; // Stores current state of reset all checkbox

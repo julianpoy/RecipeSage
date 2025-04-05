@@ -1,10 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { PopoverController } from "@ionic/angular";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { RatingComponent } from "../rating/rating.component";
 
 @Component({
   selector: "rating-filter-popover",
   templateUrl: "rating-filter-popover.component.html",
   styleUrls: ["./rating-filter-popover.component.scss"],
+  imports: [...SHARED_UI_IMPORTS, RatingComponent],
 })
 export class RatingFilterPopoverComponent {
   possibleRatings: number[] = [1, 2, 3, 4, 5];

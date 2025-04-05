@@ -8,11 +8,13 @@ import {
 } from "~/services/quick-tutorial.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { ManageLabelsPreferenceKey } from "@recipesage/util/shared";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-labels-popover",
   templateUrl: "labels-popover.page.html",
   styleUrls: ["labels-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class LabelsPopoverPage {
   preferences = this.preferencesService.preferences;

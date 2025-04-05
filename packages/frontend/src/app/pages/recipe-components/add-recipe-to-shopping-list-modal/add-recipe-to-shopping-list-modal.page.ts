@@ -15,11 +15,14 @@ import { LoadingService } from "~/services/loading.service";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
 import { UtilService } from "~/services/util.service";
 import { NewShoppingListModalPage } from "~/pages/shopping-list-components/new-shopping-list-modal/new-shopping-list-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
 
 @Component({
   selector: "page-add-recipe-to-shopping-list-modal",
   templateUrl: "add-recipe-to-shopping-list-modal.page.html",
   styleUrls: ["add-recipe-to-shopping-list-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectIngredientsComponent],
 })
 export class AddRecipeToShoppingListModalPage {
   @Input({

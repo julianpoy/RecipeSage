@@ -18,11 +18,19 @@ import { ImageViewerComponent } from "~/modals/image-viewer/image-viewer.compone
 import { NewMessageModalPage } from "~/pages/messaging-components/new-message-modal/new-message-modal.page";
 import { ShareProfileModalPage } from "../share-profile-modal/share-profile-modal.page";
 import { AuthPage } from "~/pages/auth/auth.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
+import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";
 
 @Component({
   selector: "page-profile",
   templateUrl: "profile.page.html",
   styleUrls: ["profile.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    NullStateComponent,
+    SelfhostWarningItemComponent,
+  ],
 })
 export class ProfilePage {
   defaultBackHref: string = RouteMap.SocialPage.getPath();

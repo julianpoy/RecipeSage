@@ -10,11 +10,14 @@ import { MessagingService } from "~/services/messaging.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { TRPCService } from "../../../services/trpc.service";
 import { UserPublic } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 
 @Component({
   selector: "page-new-message-modal",
   templateUrl: "new-message-modal.page.html",
   styleUrls: ["new-message-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class NewMessageModalPage {
   @Input() initialRecipientId?: string;

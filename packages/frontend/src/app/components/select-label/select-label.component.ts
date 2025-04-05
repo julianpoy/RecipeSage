@@ -3,11 +3,13 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Label, LabelService } from "~/services/label.service";
 import { ToastController, NavController } from "@ionic/angular";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "select-label",
   templateUrl: "select-label.component.html",
   styleUrls: ["./select-label.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectLabelComponent {
   searchText = "";

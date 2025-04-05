@@ -13,11 +13,15 @@ import type {
   AssistantMessageSummary,
   RecipeSummaryLite,
 } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { LogoIconComponent } from "../../../components/logo-icon/logo-icon.component";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-assistant",
   templateUrl: "assistant.page.html",
   styleUrls: ["assistant.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, LogoIconComponent, NullStateComponent],
 })
 export class AssistantPage {
   @ViewChild("content", { static: true }) content: any;

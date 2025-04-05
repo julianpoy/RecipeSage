@@ -1,11 +1,14 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { MealName, MealPlanItem } from "../../../services/meal-plan.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { CalendarItemComponent } from "../calendar-item/calendar-item.component";
 
 @Component({
   selector: "meal-group",
   templateUrl: "meal-group.component.html",
   styleUrls: ["./meal-group.component.scss"],
+  imports: [...SHARED_UI_IMPORTS, CalendarItemComponent],
 })
 export class MealGroupComponent {
   @Input({
