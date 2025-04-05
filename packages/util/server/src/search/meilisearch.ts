@@ -20,7 +20,10 @@ async function init() {
   try {
     await client.getIndex("recipes");
   } catch (e) {
-    if (e instanceof MeiliSearchApiError && e.code === "index_not_found") {
+    if (
+      e instanceof MeiliSearchApiError &&
+      e.cause?.code === "index_not_found"
+    ) {
       console.log("Creating meilisearch index");
 
       await client.createIndex("recipes", {
