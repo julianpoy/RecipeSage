@@ -41,5 +41,8 @@ updates:
       swc:
         patterns:
           - "@swc*"
+      capacitor:
+        patterns:
+          - "@capacitor/*"
     ignore:
       - dependency-name: "@nx*" # Ignored because nx must be upgraded through CLI
