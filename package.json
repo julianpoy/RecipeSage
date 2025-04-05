@@ -13,7 +13,7 @@
     "@angular/forms": "18.2.11",
     "@angular/platform-browser": "18.2.11",
     "@angular/platform-browser-dynamic": "18.2.11",
-    "@angular/router": "18.2.11",
+    "@angular/router": "19.2.5",
     "@aws-sdk/client-s3": "^3.782.0",
     "@aws-sdk/client-ses": "^3.782.0",
     "@aws-sdk/lib-storage": "^3.782.0",
