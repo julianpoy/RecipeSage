@@ -1,0 +1,25 @@
+name: Update Nx
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 5" # every friday
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - run: npm ci
+      - uses: julianpoy/nx-migration-gh-action@v1.0.0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          prTitle: "chore: migrate nx to $VERSION"
+          includeMigrationsFile: false # `migrations.json` will not be included in this PR.
+          base: "main"
