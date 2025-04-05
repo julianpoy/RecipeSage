@@ -55,6 +55,9 @@ updates:
           - "@angular-devkit/*"
           - "@angular-eslint/*"
           - "zone.js"
+      opentelemetry:
+        patterns:
+          - "@opentelemetry/*"
     ignore:
       - dependency-name: "@nx*" # Ignored because nx must be upgraded through CLI
       - dependency-name: "nx" # Ignored because nx must be upgraded through CLI
