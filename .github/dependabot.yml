@@ -44,5 +44,11 @@ updates:
       capacitor:
         patterns:
           - "@capacitor/*"
+          - "@capawesome/*"
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
     ignore:
       - dependency-name: "@nx*" # Ignored because nx must be upgraded through CLI
