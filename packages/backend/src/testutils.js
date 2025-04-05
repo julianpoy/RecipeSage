@@ -147,3 +147,24 @@ export const secureRecipeMatch = (recipeHash, recipe) => {
 export const randomUuid = () => {
   return uuid();
 };
+
+export function superjsonResult(status) {
+  const s = new Error().stack.split("\n");
+  s.splice(1, 1);
+
+  return (err, res) => {
+    if ((res?.status || err.status) !== status) {
+      const e = new Error(
+        `Expected ${status}, got ${res?.status || err.status} resp: ${
+          res?.body ? JSON.stringify(res.body) : err.text
+        }`,
+      );
+      e.stack = e.stack
+        .split("\n")
+        .splice(0, 1)
+        .concat(s) // Remove this line not to show stack trace
+        .join("\n");
+      throw e;
+    }
+  };
+}

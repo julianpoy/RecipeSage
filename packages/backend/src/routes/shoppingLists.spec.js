@@ -10,6 +10,7 @@ import {
   createUser,
   createSession,
   createShoppingList,
+  superjsonResult,
 } from "../testutils";
 
 import Models from "../models";
@@ -40,7 +41,7 @@ describe("shopping Lists", () => {
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(200)
+      .expect(superjsonResult(200))
       .then(({ body }) =>
         ShoppingList.findOne({
           where: {
@@ -71,7 +72,7 @@ describe("shopping Lists", () => {
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(200)
+      .expect(superjsonResult(200))
       .then(({ body }) =>
         ShoppingList.findOne({
           where: {
@@ -98,7 +99,7 @@ describe("shopping Lists", () => {
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(412)
+      .expect(superjsonResult(412))
       .then(async () => {
         const count = await ShoppingList.count();
         expect(count).to.equal(initialCount);
@@ -116,7 +117,7 @@ describe("shopping Lists", () => {
       .post("/shoppingLists")
       .query({ token: "invalid" })
       .send(payload)
-      .expect(401)
+      .expect(superjsonResult(401))
       .then(async () => {
         const count = await ShoppingList.count();
         expect(count).to.equal(initialCount);
@@ -133,7 +134,7 @@ describe("shopping Lists", () => {
     return request(server)
       .get(`/shoppingLists/${shoppingList.id}`)
       .query({ token: session.token })
-      .expect(200)
+      .expect(superjsonResult(200))
       .then(({ body }) => {
         expect(body.id).to.equal(shoppingList.id);
         expect(body.title).to.equal(shoppingList.title);
