@@ -161,7 +161,7 @@
     "prettier": "^3.2.5",
     "regenerator-runtime": "^0.14.1",
     "sequelize-cli": "^6.6.2",
-    "sinon": "^17.0.1",
+    "sinon": "^20.0.0",
     "supertest": "6.3.4",
     "ts-jest": "29.1.2",
     "ts-loader": "^9.5.2",
