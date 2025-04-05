@@ -157,7 +157,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "lint-staged": "^15.5.0",
-    "nx": "20.3.3",
+    "nx": "20.7.1",
     "prettier": "^3.2.5",
     "regenerator-runtime": "^0.14.1",
     "sequelize-cli": "^6.6.2",
