@@ -3,6 +3,7 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
 import { Label, LabelService } from "~/services/label.service";
 import { ToastController, NavController } from "@ionic/angular";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 export interface SelectableItem {
   id: string;
@@ -15,6 +16,7 @@ export interface SelectableItem {
   selector: "select-multiple-items",
   templateUrl: "select-multiple-items.component.html",
   styleUrls: ["./select-multiple-items.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectMultipleItemsComponent<T extends SelectableItem> {
   searchText = "";

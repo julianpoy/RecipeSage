@@ -2,11 +2,13 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 import { UserService } from "~/services/user.service";
 import { MessageThread, MessagingService } from "~/services/messaging.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "select-knownuser",
   templateUrl: "select-knownuser.component.html",
   styleUrls: ["./select-knownuser.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class SelectKnownUserComponent {
   _radioFriendship: any;

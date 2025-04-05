@@ -12,11 +12,13 @@ import { UserService } from "~/services/user.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { PreferencesService } from "../../../services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-shopping-list-ignore-modal",
   templateUrl: "shopping-list-ignore-modal.page.html",
   styleUrls: ["shopping-list-ignore-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListIgnoreModalPage {
   preferenceKey = ShoppingListPreferenceKey;

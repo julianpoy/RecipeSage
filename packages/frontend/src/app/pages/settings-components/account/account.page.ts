@@ -13,11 +13,13 @@ import { CapabilitiesService } from "../../../services/capabilities.service";
 import { getQueryParam } from "../../../utils/queryParams";
 import { TRPCService } from "../../../services/trpc.service";
 import { appIdbStorageManager } from "../../../utils/appIdbStorageManager";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-account",
   templateUrl: "account.page.html",
   styleUrls: ["account.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class AccountPage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

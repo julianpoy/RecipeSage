@@ -14,11 +14,19 @@ import { LoadingService } from "~/services/loading.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
 import { AddFriendModalPage } from "../add-friend-modal/add-friend-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
+import { SelfhostWarningItemComponent } from "../../../components/selfhost-warning-item/selfhost-warning-item.component";
 
 @Component({
   selector: "page-people",
   templateUrl: "people.page.html",
   styleUrls: ["people.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    NullStateComponent,
+    SelfhostWarningItemComponent,
+  ],
 })
 export class PeoplePage {
   defaultBackHref: string = RouteMap.SettingsPage.getPath();

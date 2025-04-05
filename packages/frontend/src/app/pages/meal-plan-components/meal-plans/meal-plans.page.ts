@@ -12,11 +12,14 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan-modal/new-meal-plan-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
 import type { MealPlanSummary, UserPublic } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-meal-plans",
   templateUrl: "meal-plans.page.html",
   styleUrls: ["meal-plans.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class MealPlansPage {
   me?: UserPublic;

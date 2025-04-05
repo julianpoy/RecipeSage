@@ -5,6 +5,7 @@ import { RecipeDetailsPreferenceKey } from "@recipesage/util/shared";
 import { WakeLockService } from "~/services/wakelock.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import type { RecipeSummary, UserPublic } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 export type RecipeDetailsPopoverActionTypes =
   | "delete"
@@ -24,6 +25,7 @@ export type RecipeDetailsPopoverActionTypes =
   selector: "page-recipe-details-popover",
   templateUrl: "recipe-details-popover.page.html",
   styleUrls: ["recipe-details-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class RecipeDetailsPopoverPage {
   @Input({

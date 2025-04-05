@@ -5,11 +5,13 @@ import { TranslateService } from "@ngx-translate/core";
 import { Image, ImageService } from "~/services/image.service";
 import { LoadingService } from "~/services/loading.service";
 import { CapabilitiesService } from "~/services/capabilities.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "multi-image-upload",
   templateUrl: "multi-image-upload.component.html",
   styleUrls: ["./multi-image-upload.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class MultiImageUploadComponent {
   @Output() imageUpdate = new EventEmitter();

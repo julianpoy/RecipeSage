@@ -11,11 +11,13 @@ import { LoadingService } from "~/services/loading.service";
 import { CookingToolbarService } from "~/services/cooking-toolbar.service";
 import { UtilService } from "~/services/util.service";
 import type { MealPlanItemSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-meal-plan-bulk-pin-modal",
-  templateUrl: "index.html",
-  styleUrls: ["index.scss"],
+  templateUrl: "meal-plan-bulk-pin-modal.page.html",
+  styleUrls: ["meal-plan-bulk-pin-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class MealPlanBulkPinModalPage {
   @Input({

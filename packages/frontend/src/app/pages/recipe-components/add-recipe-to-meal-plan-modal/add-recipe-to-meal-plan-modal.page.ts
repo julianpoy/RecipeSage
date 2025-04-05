@@ -7,11 +7,15 @@ import { NewMealPlanModalPage } from "~/pages/meal-plan-components/new-meal-plan
 import { TranslateService } from "@ngx-translate/core";
 import { TRPCService } from "../../../services/trpc.service";
 import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { MealCalendarComponent } from "../../../components/meal-calendar/meal-calendar.component";
+import { SelectMealComponent } from "../../../components/select-meal/select-meal.component";
 
 @Component({
   selector: "page-add-recipe-to-meal-plan-modal",
   templateUrl: "add-recipe-to-meal-plan-modal.page.html",
   styleUrls: ["add-recipe-to-meal-plan-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, MealCalendarComponent, SelectMealComponent],
 })
 export class AddRecipeToMealPlanModalPage {
   @Input() recipe: any;

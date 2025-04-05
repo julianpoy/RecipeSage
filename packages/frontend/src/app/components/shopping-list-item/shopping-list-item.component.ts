@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 import { UtilService } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "shopping-list-item",
   templateUrl: "shopping-list-item.component.html",
   styleUrls: ["./shopping-list-item.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListItemComponent {
   @Input({

@@ -4,11 +4,13 @@ import { RouteMap, UtilService } from "~/services/util.service";
 import { ImportService } from "../../../services/import.service";
 import { AlertController, NavController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-import-urls",
   templateUrl: "import-urls.page.html",
   styleUrls: ["import-urls.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ImportUrlsPage {
   defaultBackHref: string = RouteMap.ImportPage.getPath();

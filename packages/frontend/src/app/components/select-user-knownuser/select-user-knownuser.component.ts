@@ -1,9 +1,17 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { SelectKnownUserComponent } from "../select-knownuser/select-knownuser.component";
+import { SelectUserComponent } from "../select-user/select-user.component";
 
 @Component({
   selector: "select-user-knownuser",
   templateUrl: "select-user-knownuser.component.html",
   styleUrls: ["./select-user-knownuser.component.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SelectKnownUserComponent,
+    SelectUserComponent,
+  ],
 })
 export class SelectUserKnownUserComponent {
   manualSelect: boolean = false;

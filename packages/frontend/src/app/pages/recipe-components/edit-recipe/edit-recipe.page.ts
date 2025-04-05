@@ -27,17 +27,29 @@ import { getQueryParam } from "~/utils/queryParams";
 import { EditRecipePopoverPage } from "../edit-recipe-popover/edit-recipe-popover.page";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
-import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
+import {
+  SelectableItem,
+  SelectMultipleItemsComponent,
+} from "../../../components/select-multiple-items/select-multiple-items.component";
 import { FeatureFlagService } from "../../../services/feature-flag.service";
 import { IS_SELFHOST } from "@recipesage/frontend/src/environments/environment";
 import { ErrorHandlers } from "../../../services/http-error-handler.service";
 import { EventName, EventService } from "../../../services/event.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { RatingComponent } from "../../../components/rating/rating.component";
+import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 
 @Component({
   selector: "page-edit-recipe",
   templateUrl: "edit-recipe.page.html",
   styleUrls: ["edit-recipe.page.scss"],
   providers: [RecipeService],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SelectMultipleItemsComponent,
+    RatingComponent,
+    MultiImageUploadComponent,
+  ],
 })
 export class EditRecipePage {
   defaultBackHref: string;

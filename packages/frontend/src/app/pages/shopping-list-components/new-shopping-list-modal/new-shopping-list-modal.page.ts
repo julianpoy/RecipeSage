@@ -10,11 +10,14 @@ import { ShoppingListService } from "~/services/shopping-list.service";
 import { MessagingService } from "~/services/messaging.service";
 import { UserService } from "~/services/user.service";
 import { UtilService, RouteMap, AuthType } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
 
 @Component({
   selector: "page-new-shopping-list-modal",
   templateUrl: "new-shopping-list-modal.page.html",
   styleUrls: ["new-shopping-list-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class NewShoppingListModalPage {
   listTitle = "";

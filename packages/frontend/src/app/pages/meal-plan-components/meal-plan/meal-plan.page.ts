@@ -21,16 +21,18 @@ import { MealCalendarComponent } from "~/components/meal-calendar/meal-calendar.
 import { NewMealPlanItemModalPage } from "../new-meal-plan-item-modal/new-meal-plan-item-modal.page";
 import { MealPlanPopoverPage } from "~/pages/meal-plan-components/meal-plan-popover/meal-plan-popover.page";
 import { MealPlanItemDetailsModalPage } from "~/pages/meal-plan-components/meal-plan-item-details-modal/meal-plan-item-details-modal.page";
-import { MealPlanBulkPinModalPage } from "~/pages/meal-plan-components/meal-plan-bulk-pin-modal";
+import { MealPlanBulkPinModalPage } from "@recipesage/frontend/src/app/pages/meal-plan-components/meal-plan-bulk-pin-modal/meal-plan-bulk-pin-modal.page";
 import { AddRecipeToShoppingListModalPage } from "~/pages/recipe-components/add-recipe-to-shopping-list-modal/add-recipe-to-shopping-list-modal.page";
 import { TRPCService } from "../../../services/trpc.service";
 import type { MealPlanItemSummary, MealPlanSummary } from "@recipesage/prisma";
 import { Title } from "@angular/platform-browser";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-meal-plan",
   templateUrl: "meal-plan.page.html",
   styleUrls: ["meal-plan.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, MealCalendarComponent],
 })
 export class MealPlanPage {
   defaultBackHref: string = RouteMap.MealPlansPage.getPath();

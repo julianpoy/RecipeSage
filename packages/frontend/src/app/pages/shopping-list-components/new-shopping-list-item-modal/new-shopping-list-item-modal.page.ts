@@ -3,11 +3,19 @@ import { ModalController, ToastController } from "@ionic/angular";
 import { RecipeService, ParsedIngredient } from "~/services/recipe.service";
 import { LoadingService } from "~/services/loading.service";
 import { UtilService } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectIngredientsComponent } from "../../../components/select-ingredients/select-ingredients.component";
+import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 
 @Component({
   selector: "page-new-shopping-list-item-modal",
   templateUrl: "new-shopping-list-item-modal.page.html",
   styleUrls: ["new-shopping-list-item-modal.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SelectIngredientsComponent,
+    SelectRecipeComponent,
+  ],
 })
 export class NewShoppingListItemModalPage {
   inputType = "items";

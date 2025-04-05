@@ -3,11 +3,15 @@ import { ModalController } from "@ionic/angular";
 
 import { Recipe } from "../../../services/recipe.service";
 import { Label } from "../../../services/label.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectLabelComponent } from "../../../components/select-label/select-label.component";
+import { SelectRecipeComponent } from "../../../components/select-recipe/select-recipe.component";
 
 @Component({
   selector: "page-add-profile-item-modal",
   templateUrl: "add-profile-item-modal.page.html",
   styleUrls: ["add-profile-item-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectLabelComponent, SelectRecipeComponent],
 })
 export class AddProfileItemModalPage {
   itemType = null;

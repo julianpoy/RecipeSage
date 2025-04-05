@@ -11,11 +11,14 @@ import { UtilService, RouteMap } from "~/services/util.service";
 
 import { NewShoppingListModalPage } from "../new-shopping-list-modal/new-shopping-list-modal.page";
 import { ShoppingListIgnoreModalPage } from "../shopping-list-ignore-modal/shopping-list-ignore-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-shopping-lists",
   templateUrl: "shopping-lists.page.html",
   styleUrls: ["shopping-lists.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class ShoppingListsPage {
   shoppingLists: any = [];

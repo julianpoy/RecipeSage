@@ -10,11 +10,14 @@ import { TranslateService } from "@ngx-translate/core";
 import { UserService } from "~/services/user.service";
 import { LoadingService } from "~/services/loading.service";
 import { RouteMap } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectUserComponent } from "../../../components/select-user/select-user.component";
 
 @Component({
   selector: "page-add-friend-modal",
   templateUrl: "add-friend-modal.page.html",
   styleUrls: ["add-friend-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class AddFriendModalPage {
   recipientId?: string;

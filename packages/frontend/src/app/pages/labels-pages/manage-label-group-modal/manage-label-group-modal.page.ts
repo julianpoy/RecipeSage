@@ -13,12 +13,17 @@ import { TranslateService } from "@ngx-translate/core";
 import { RecipeService } from "~/services/recipe.service";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { TRPCService } from "../../../services/trpc.service";
-import { SelectableItem } from "../../../components/select-multiple-items/select-multiple-items.component";
+import {
+  SelectableItem,
+  SelectMultipleItemsComponent,
+} from "../../../components/select-multiple-items/select-multiple-items.component";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-manage-label-group-modal",
   templateUrl: "manage-label-group-modal.page.html",
   styleUrls: ["manage-label-group-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectMultipleItemsComponent],
 })
 export class ManageLabelGroupModalPage {
   @Input({

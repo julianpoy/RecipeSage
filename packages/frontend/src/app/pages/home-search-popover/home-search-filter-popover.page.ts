@@ -14,11 +14,13 @@ import {
 } from "~/pages/resettable-select-popover/resettable-select-popover.page";
 import { RatingFilterPopoverComponent } from "~/components/rating-filter-popover/rating-filter-popover.component";
 import type { LabelSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-home-search-filter-popover",
   templateUrl: "home-search-filter-popover.page.html",
   styleUrls: ["home-search-filter-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class HomeSearchFilterPopoverPage {
   @ViewChild("filterByLabelSelect", { static: true })

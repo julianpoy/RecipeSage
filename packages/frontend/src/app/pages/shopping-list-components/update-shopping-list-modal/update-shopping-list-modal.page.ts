@@ -10,11 +10,14 @@ import { MessagingService } from "~/services/messaging.service";
 import { UserService } from "~/services/user.service";
 import { UtilService } from "~/services/util.service";
 import { TRPCService } from "../../../services/trpc.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
 
 @Component({
   selector: "page-update-shopping-list-modal",
   templateUrl: "update-shopping-list-modal.page.html",
   styleUrls: ["update-shopping-list-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class UpdateShoppingListModalPage {
   @Input({

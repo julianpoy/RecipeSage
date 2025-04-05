@@ -1,7 +1,13 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import {
+  ActivatedRoute,
+  Router,
+  NavigationEnd,
+  RouterOutlet,
+} from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import * as Sentry from "@sentry/browser";
+import { NgxLoadingBar } from "@ngx-loading-bar/core";
 
 import {
   Platform,
@@ -9,10 +15,8 @@ import {
   ToastController,
   AlertController,
   NavController,
+  IonicModule,
 } from "@ionic/angular";
-
-import { register } from "swiper/element/bundle";
-register();
 
 import { ENABLE_ANALYTICS, IS_SELFHOST } from "../environments/environment";
 
@@ -35,6 +39,9 @@ import {
 import { Title } from "@angular/platform-browser";
 import { TRPCService } from "./services/trpc.service";
 import { appIdbStorageManager } from "./utils/appIdbStorageManager";
+import { SHARED_UI_IMPORTS } from "./providers/shared-ui.provider";
+import { CookingToolbarComponent } from "./components/cooking-toolbar/cooking-toolbar.component";
+import { VersionCheckService } from "./services/versioncheck.service";
 
 const SW_UPDATE_CHECK_INTERVAL_MINUTES = 5;
 
@@ -48,6 +55,7 @@ interface NavPage {
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
+  imports: [...SHARED_UI_IMPORTS, CookingToolbarComponent, NgxLoadingBar],
 })
 export class AppComponent {
   isSelfHost = IS_SELFHOST;
@@ -94,6 +102,7 @@ export class AppComponent {
     private featureFlagService: FeatureFlagService,
     private titleService: Title,
     public cookingToolbarService: CookingToolbarService, // Required by template
+    private versionCheckService: VersionCheckService,
   ) {
     const languagePref =
       this.preferencesService.preferences[GlobalPreferenceKey.Language];
@@ -129,6 +138,8 @@ export class AppComponent {
     this.updateNavList();
     this.updateIsLoggedIn();
     this.migrateSession();
+
+    this.versionCheckService.checkVersion();
   }
 
   // Attached to pagechange so keep this light

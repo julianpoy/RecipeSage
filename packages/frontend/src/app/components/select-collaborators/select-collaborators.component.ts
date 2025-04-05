@@ -14,11 +14,14 @@ import { UtilService } from "../../services/util.service";
 import { UserService } from "../../services/user.service";
 import { TRPCService } from "../../services/trpc.service";
 import type { UserPublic } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { SelectUserComponent } from "../select-user/select-user.component";
 
 @Component({
   selector: "select-collaborators",
   templateUrl: "select-collaborators.component.html",
   styleUrls: ["./select-collaborators.component.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectUserComponent],
 })
 export class SelectCollaboratorsComponent implements AfterViewInit {
   @Input() selectedCollaboratorIds: string[] = [];

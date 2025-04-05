@@ -19,12 +19,22 @@ import { TRPCService } from "../../services/trpc.service";
 import { appIdbStorageManager } from "../../utils/appIdbStorageManager";
 import type { SessionDTO } from "@recipesage/prisma";
 import { SwCommunicationService } from "../../services/sw-communication.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { SignInWithGoogleComponent } from "../../components/sign-in-with-google/sign-in-with-google.component";
+import { LogoIconComponent } from "../../components/logo-icon/logo-icon.component";
+import { TosClickwrapAgreementComponent } from "../../components/tos-clickwrap-agreement/tos-clickwrap-agreement.component";
 
 @Component({
   selector: "page-auth",
   templateUrl: "auth.page.html",
   styleUrls: ["auth.page.scss"],
   providers: [UserService],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SignInWithGoogleComponent,
+    LogoIconComponent,
+    TosClickwrapAgreementComponent,
+  ],
 })
 export class AuthPage {
   @Input() startWithRegister?: boolean;

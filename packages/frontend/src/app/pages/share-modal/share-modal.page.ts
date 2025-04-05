@@ -14,11 +14,21 @@ import {
   RecipeTemplateModifiers,
   RouteMap,
 } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
+import { SelectUserKnownUserComponent } from "../../components/select-user-knownuser/select-user-knownuser.component";
+import { CopyWithWebshareComponent } from "../../components/copy-with-webshare/copy-with-webshare.component";
+import { RecipePreviewComponent } from "../../components/recipe-preview/recipe-preview.component";
 
 @Component({
   selector: "page-share-modal",
   templateUrl: "share-modal.page.html",
   styleUrls: ["share-modal.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    SelectUserKnownUserComponent,
+    CopyWithWebshareComponent,
+    RecipePreviewComponent,
+  ],
 })
 export class ShareModalPage {
   @Input({

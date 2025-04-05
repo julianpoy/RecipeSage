@@ -3,11 +3,14 @@ import { ModalController } from "@ionic/angular";
 
 import { LoadingService } from "~/services/loading.service";
 import { TRPCService } from "../../../services/trpc.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { SelectCollaboratorsComponent } from "../../../components/select-collaborators/select-collaborators.component";
 
 @Component({
   selector: "page-update-meal-plan-modal",
   templateUrl: "update-meal-plan-modal.page.html",
   styleUrls: ["update-meal-plan-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, SelectCollaboratorsComponent],
 })
 export class UpdateMealPlanModalPage {
   @Input({

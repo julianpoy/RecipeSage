@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, Input } from "@angular/core";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "copy-with-webshare",
   templateUrl: "copy-with-webshare.component.html",
   styleUrls: ["./copy-with-webshare.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class CopyWithWebshareComponent implements AfterViewInit {
   @Input() webshareTitle?: string;

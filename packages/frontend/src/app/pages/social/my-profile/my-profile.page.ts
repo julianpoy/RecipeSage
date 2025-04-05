@@ -23,11 +23,19 @@ import { UtilService, RouteMap, AuthType } from "~/services/util.service";
 import { RecipeService } from "~/services/recipe.service";
 import { ImageService } from "~/services/image.service";
 import { UnsavedChangesService } from "~/services/unsaved-changes.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
+import { MultiImageUploadComponent } from "../../../components/multi-image-upload/multi-image-upload.component";
 
 @Component({
   selector: "page-my-profile",
   templateUrl: "my-profile.page.html",
   styleUrls: ["my-profile.page.scss"],
+  imports: [
+    ...SHARED_UI_IMPORTS,
+    NullStateComponent,
+    MultiImageUploadComponent,
+  ],
 })
 export class MyProfilePage {
   defaultBackHref: string = RouteMap.PeoplePage.getPath();

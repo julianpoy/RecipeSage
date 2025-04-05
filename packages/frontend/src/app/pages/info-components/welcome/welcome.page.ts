@@ -3,11 +3,13 @@ import { NavController, Platform } from "@ionic/angular";
 import { RouteMap, AuthType } from "~/services/util.service";
 
 import { IS_SELFHOST } from "../../../../environments/environment";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-welcome",
   templateUrl: "welcome.page.html",
   styleUrls: ["welcome.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class WelcomePage {
   isSelfHost = IS_SELFHOST;

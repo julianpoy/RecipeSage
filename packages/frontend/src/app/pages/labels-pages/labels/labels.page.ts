@@ -20,11 +20,14 @@ import { TRPCService } from "../../../services/trpc.service";
 import type { LabelGroupSummary, LabelSummary } from "@recipesage/prisma";
 import { NewLabelItemModalPage } from "../new-label-item-modal/new-label-item-modal.page";
 import { ManageLabelGroupModalPage } from "../manage-label-group-modal/manage-label-group-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-labels",
   templateUrl: "labels.page.html",
   styleUrls: ["labels.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class LabelsPage {
   preferences = this.preferencesService.preferences;

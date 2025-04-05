@@ -11,9 +11,7 @@ export class VersionCheckService {
     private utilService: UtilService,
     private httpService: HttpService,
     private alertCtrl: AlertController,
-  ) {
-    this.checkVersion();
-  }
+  ) {}
 
   async checkVersion() {
     const version = (window as any).version;

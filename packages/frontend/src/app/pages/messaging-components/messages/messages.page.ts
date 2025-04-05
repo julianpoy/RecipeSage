@@ -11,11 +11,14 @@ import { WebsocketService } from "~/services/websocket.service";
 import { EventService } from "~/services/event.service";
 import { UtilService, RouteMap } from "~/services/util.service";
 import { NewMessageModalPage } from "~/pages/messaging-components/new-message-modal/new-message-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { NullStateComponent } from "../../../components/null-state/null-state.component";
 
 @Component({
   selector: "page-messages",
   templateUrl: "messages.page.html",
   styleUrls: ["messages.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, NullStateComponent],
 })
 export class MessagesPage {
   loading = true;

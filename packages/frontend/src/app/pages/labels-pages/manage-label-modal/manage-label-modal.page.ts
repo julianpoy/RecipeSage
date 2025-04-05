@@ -11,11 +11,13 @@ import { LoadingService } from "~/services/loading.service";
 import { TranslateService } from "@ngx-translate/core";
 import { RecipeService } from "~/services/recipe.service";
 import type { LabelSummary } from "@recipesage/prisma";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-manage-label-modal",
   templateUrl: "manage-label-modal.page.html",
   styleUrls: ["manage-label-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ManageLabelModalPage {
   @Input({

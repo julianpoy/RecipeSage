@@ -6,11 +6,13 @@ import {
   SupportedFontSize,
 } from "@recipesage/util/shared";
 import { TranslateService } from "@ngx-translate/core";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "font-size-modal",
   templateUrl: "font-size-modal.component.html",
   styleUrls: ["./font-size-modal.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class FontSizeModalComponent {
   preferences = this.preferencesService.preferences;

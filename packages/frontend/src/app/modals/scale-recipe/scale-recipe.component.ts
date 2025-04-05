@@ -1,11 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import fractionjs from "fraction.js";
+import { SHARED_UI_IMPORTS } from "../../providers/shared-ui.provider";
 
 @Component({
   selector: "scale-recipe",
   templateUrl: "scale-recipe.component.html",
   styleUrls: ["scale-recipe.component.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ScaleRecipeComponent {
   @Input() scale: string = "1";

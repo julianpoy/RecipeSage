@@ -4,11 +4,14 @@ import { TranslateService } from "@ngx-translate/core";
 
 import { UserService } from "~/services/user.service";
 import { RouteMap } from "~/services/util.service";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { CopyWithWebshareComponent } from "../../../components/copy-with-webshare/copy-with-webshare.component";
 
 @Component({
   selector: "page-share-profile-modal",
   templateUrl: "share-profile-modal.page.html",
   styleUrls: ["share-profile-modal.page.scss"],
+  imports: [...SHARED_UI_IMPORTS, CopyWithWebshareComponent],
 })
 export class ShareProfileModalPage {
   @Input() handle!: string;

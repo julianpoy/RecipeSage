@@ -14,11 +14,13 @@ import { UtilService, RouteMap } from "~/services/util.service";
 import { PreferencesService } from "~/services/preferences.service";
 import { ShoppingListPreferenceKey } from "@recipesage/util/shared";
 import { UpdateShoppingListModalPage } from "../update-shopping-list-modal/update-shopping-list-modal.page";
+import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
 
 @Component({
   selector: "page-shopping-list-popover",
   templateUrl: "shopping-list-popover.page.html",
   styleUrls: ["shopping-list-popover.page.scss"],
+  imports: [...SHARED_UI_IMPORTS],
 })
 export class ShoppingListPopoverPage {
   @Input() shoppingListId: any;
