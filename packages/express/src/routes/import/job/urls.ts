@@ -85,7 +85,7 @@ export const urlsHandler = defineHandler(
             ...clipResults,
             labels: userLabels,
           });
-        } catch (e) {
+        } catch (_e) {
           // Skip entry
         }
 

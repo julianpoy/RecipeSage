@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, type AfterViewInit } from "@angular/core";
 import {
   NavController,
   ToastController,
@@ -25,7 +25,7 @@ import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
   styleUrls: ["meal-plan-popover.page.scss"],
   imports: [...SHARED_UI_IMPORTS],
 })
-export class MealPlanPopoverPage {
+export class MealPlanPopoverPage implements AfterViewInit {
   preferences = this.preferencesService.preferences;
   preferenceKeys = MealPlanPreferenceKey;
   isOwner: boolean = false;

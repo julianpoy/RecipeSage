@@ -34,7 +34,7 @@ export const register = publicProcedure
     let sanitizedEmail = "";
     try {
       sanitizedEmail = sanitizeUserEmail(input.email);
-    } catch (e) {
+    } catch (_e) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Email is not in a valid format",

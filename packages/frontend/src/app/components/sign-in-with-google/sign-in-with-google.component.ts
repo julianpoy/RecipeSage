@@ -5,6 +5,7 @@ import {
   EventEmitter,
   ElementRef,
   ViewChild,
+  type AfterViewInit,
 } from "@angular/core";
 import { TRPCService } from "../../services/trpc.service";
 import {
@@ -24,7 +25,7 @@ const getGoogleRef = () => {
   styleUrls: ["./sign-in-with-google.component.scss"],
   imports: [...SHARED_UI_IMPORTS],
 })
-export class SignInWithGoogleComponent {
+export class SignInWithGoogleComponent implements AfterViewInit {
   // Can be use to hide the button and only use for prompting
   @Input() showButton = true;
   @Input() autoPrompt = false;

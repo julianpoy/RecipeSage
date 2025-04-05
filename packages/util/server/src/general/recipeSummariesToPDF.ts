@@ -134,7 +134,7 @@ const recipeToSchema = async (
         ],
         margin: [0, 0, 0, 10],
       });
-    } catch (e) {
+    } catch (_e) {
       schema.push(...headerContent);
     }
   } else {

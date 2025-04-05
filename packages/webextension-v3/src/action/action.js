@@ -56,7 +56,7 @@ const login = async () => {
         }
       });
     });
-  } catch (e) {
+  } catch (_e) {
     document.getElementById("message").innerText =
       "Something went wrong. Please check your internet connection and try\
        again.";
@@ -127,10 +127,10 @@ const autoClip = async () => {
 
   try {
     await clipWithInject();
-  } catch (e) {
+  } catch (_e) {
     try {
       await clipWithAPI();
-    } catch (e) {
+    } catch (_e) {
       window.alert("Failed to fetch page content");
     }
   }
