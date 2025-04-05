@@ -77,7 +77,7 @@
     "p-debounce": "^4.0.0",
     "p-limit": "^3.1.0",
     "p-throttle": "^7.0.0",
-    "pdfmake": "^0.2.15",
+    "pdfmake": "^0.2.18",
     "pg": "8.14.1",
     "pg-hstore": "^2.3.4",
     "prisma": "^6.5.0",
