@@ -52,7 +52,7 @@ export const createPYOSession = async (
 
     try {
       product = await stripe.products.retrieve(productId);
-    } catch (e) {
+    } catch (_e) {
       product = await stripe.products.create({
         id: productId,
         name: "RecipeSage Monthly Membership - Choose Your Own Price",
@@ -66,7 +66,7 @@ export const createPYOSession = async (
 
     try {
       plan = await stripe.plans.retrieve(planId);
-    } catch (e) {
+    } catch (_e) {
       plan = await stripe.plans.create({
         id: planId,
         amount: amount,

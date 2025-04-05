@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, type OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -13,7 +13,7 @@ import { CopyWithWebshareComponent } from "../../../components/copy-with-webshar
   styleUrls: ["share-profile-modal.page.scss"],
   imports: [...SHARED_UI_IMPORTS, CopyWithWebshareComponent],
 })
-export class ShareProfileModalPage {
+export class ShareProfileModalPage implements OnInit {
   @Input() handle!: string;
   @Input() userId!: string;
   @Input() profile!: any;

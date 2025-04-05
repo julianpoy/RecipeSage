@@ -5,7 +5,7 @@ if (window[extensionContainerId]) {
   // Looks like a popup already exists. Try to trigger it
   try {
     window.recipeSageBrowserExtensionRootTrigger();
-  } catch (e) {
+  } catch (_e) {
     // Do nothing
   }
 } else {

@@ -104,7 +104,7 @@ export const textfilesHandler = defineHandler(
               "base64",
             );
             images.push(fileContents);
-          } catch (e) {
+          } catch (_e) {
             // Do nothing
           }
         }

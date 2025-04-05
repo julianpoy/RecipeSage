@@ -126,7 +126,7 @@ export const cookmateHandler = defineHandler(
           try {
             await fs.stat(path);
             pathsOnDisk.push(path);
-          } catch (e) {
+          } catch (_e) {
             // Do nothing, image does not exist in backup
           }
         }

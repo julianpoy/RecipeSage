@@ -158,7 +158,7 @@ export const recipekeeperHandler = defineHandler(
           try {
             await fs.stat(imagePath);
             imagePaths.push(imagePath);
-          } catch (e) {
+          } catch (_e) {
             // Do nothing, image excluded
           }
         }

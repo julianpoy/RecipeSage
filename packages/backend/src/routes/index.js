@@ -32,7 +32,7 @@ router.get("/health", async (req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
     healthy.prisma = true;
-  } catch (e) {
+  } catch (_e) {
     // Do nothing
   }
 

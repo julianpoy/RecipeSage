@@ -17,7 +17,7 @@ export const pdfToRecipe = async (pdf: Buffer, maxPages = 1) => {
         const result = await pdfToImage(pdf, page);
         if (result.length === 0) continue;
         images.push(result);
-      } catch (e) {
+      } catch (_e) {
         // Do nothing
       }
     }
