@@ -1,5 +1,5 @@
 import { ServerError } from "./errors";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 export const logError = (e: unknown) => {
   console.error(e);

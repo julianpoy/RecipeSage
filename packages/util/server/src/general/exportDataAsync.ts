@@ -3,7 +3,7 @@ import { recipeToJSONLD } from "./jsonLD";
 import { ObjectTypes, writeStream } from "../storage";
 import { once, PassThrough } from "stream";
 import dedent from "ts-dedent";
-import * as ZipStream from "zip-stream";
+import ZipStream from "zip-stream";
 import _ZipStream from "zip-stream";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { recipeAsyncIteratorToPDF } from "./recipeSummariesToPDF";

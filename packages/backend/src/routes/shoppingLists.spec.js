@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 import Sequelize from "sequelize";
 const Op = Sequelize.Op;

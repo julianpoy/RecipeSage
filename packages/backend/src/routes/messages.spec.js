@@ -1,6 +1,6 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
-import * as sinon from "sinon";
+import sinon from "sinon";
 
 import {
   setup,

@@ -1,13 +1,13 @@
-import * as Typesense from "typesense";
+import { Client } from "typesense";
 import { Recipe } from "@prisma/client";
 import { SearchProvider } from "./";
 
-let client: Typesense.Client;
+let client: Client;
 if (process.env.SEARCH_PROVIDER === "typesense") {
   if (!process.env.TYPESENSE_NODES || !process.env.TYPESENSE_API_KEY)
     throw new Error("Missing Typesense configuration");
 
-  client = new Typesense.Client({
+  client = new Client({
     nodes: JSON.parse(process.env.TYPESENSE_NODES),
     apiKey: process.env.TYPESENSE_API_KEY,
     numRetries: 5,

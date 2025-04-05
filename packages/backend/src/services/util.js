@@ -1,10 +1,10 @@
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as zlib from "zlib";
+import fs from "fs-extra";
+import path from "path";
+import zlib from "zlib";
 
 // Service
 import * as FirebaseService from "./firebase.js";
-import * as ServerUtil from "@recipesage/util/server/general";
+import ServerUtil from "@recipesage/util/server/general";
 
 /**
  * DO NOT ADD ANYTHING TO THIS FILE

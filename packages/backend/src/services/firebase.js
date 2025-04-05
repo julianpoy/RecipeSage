@@ -1,5 +1,5 @@
 import { admin } from "./firebase-admin";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 // DB
 import { FCMToken } from "../models/index.js";

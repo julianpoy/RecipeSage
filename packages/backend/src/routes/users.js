@@ -1,8 +1,8 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as cors from "cors";
-import * as Sentry from "@sentry/node";
-import * as moment from "moment";
+import cors from "cors";
+import Sentry from "@sentry/node";
+import moment from "moment";
 
 // DB
 import { Op } from "sequelize";
@@ -29,7 +29,7 @@ import { sendWelcome } from "../services/email/welcome.ts";
 import { sendPasswordReset } from "../services/email/passwordReset.ts";
 import { getFriendships } from "../utils/getFriendships.js";
 
-import * as SharedUtils from "@recipesage/util/shared";
+import SharedUtils from "@recipesage/util/shared";
 
 // Util
 import { wrapRequestWithErrorHandler } from "../utils/wrapRequestWithErrorHandler.js";

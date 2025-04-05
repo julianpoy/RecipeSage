@@ -1,6 +1,6 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 // DB
 import { sequelize, StripePayment } from "../models/index.js";

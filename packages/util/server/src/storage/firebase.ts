@@ -1,7 +1,7 @@
 import { PassThrough } from "stream";
-import { StorageObjectRecord } from "./";
+import { StorageObjectRecord, type StorageProvider } from "./";
 import { ObjectTypes } from "./shared";
-import * as crypto from "crypto";
+import crypto from "crypto";
 import { getStorage } from "firebase-admin/storage";
 
 const BUCKET = process.env.FIREBASE_BUCKET || "";
@@ -116,3 +116,10 @@ export const deleteObjects = async (keys: string[]): Promise<void> => {
     ),
   );
 };
+
+export default {
+  writeBuffer,
+  writeStream,
+  deleteObject,
+  deleteObjects,
+} satisfies StorageProvider as StorageProvider;

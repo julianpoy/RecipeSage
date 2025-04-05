@@ -1,7 +1,7 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as Sentry from "@sentry/node";
-import * as semver from "semver";
+import Sentry from "@sentry/node";
+import semver from "semver";
 import { prisma } from "@recipesage/prisma";
 
 router.get("/", function (req, res) {

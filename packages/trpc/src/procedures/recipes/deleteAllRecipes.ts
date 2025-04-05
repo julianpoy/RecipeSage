@@ -3,7 +3,7 @@ import { publicProcedure } from "../../trpc";
 import { validateTrpcSession } from "@recipesage/util/server/general";
 import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
 import { deleteRecipes as deleteRecipesFromSearch } from "@recipesage/util/server/search";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 export const deleteAllRecipes = publicProcedure.mutation(async ({ ctx }) => {
   const session = ctx.session;

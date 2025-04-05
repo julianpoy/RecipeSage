@@ -1,6 +1,6 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as cors from "cors";
+import cors from "cors";
 
 // DB
 import { Op } from "sequelize";

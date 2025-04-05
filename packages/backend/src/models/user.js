@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+import crypto from "crypto";
 
 export const UserInit = (sequelize, DataTypes) => {
   let currentPasswordVersion = 2;

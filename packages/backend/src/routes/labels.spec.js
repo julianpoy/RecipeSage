@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 
 import {
@@ -14,7 +14,7 @@ import {
 } from "../testutils";
 
 // DB
-import * as Models from "../models";
+import Models from "../models";
 const { Recipe, Label } = Models;
 
 describe("labels", () => {

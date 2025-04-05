@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 import { Umzug, SequelizeStorage } from "umzug";
-import * as path from "path";
+import path from "path";
 import { program } from "commander";
 
 import * as sequelizeConfig from "./config/sequelize-config.js";

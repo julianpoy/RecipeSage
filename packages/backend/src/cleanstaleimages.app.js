@@ -1,5 +1,5 @@
 import "./services/sentry-init.js";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 import { deleteObjects } from "./services/storage";
 

@@ -3,10 +3,10 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
-import * as multer from "multer";
-import * as fs from "fs/promises";
-import * as extract from "extract-zip";
-import * as path from "path";
+import multer from "multer";
+import fs from "fs/promises";
+import extract from "extract-zip";
+import path from "path";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@recipesage/util/server/db";
 import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
 import { JobMeta, prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 import {
   deletePathsSilent,
   getImportJobResultCode,

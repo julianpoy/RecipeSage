@@ -12,8 +12,8 @@ import {
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
 import { JobMeta, prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
-import * as xmljs from "xml-js";
+import Sentry from "@sentry/node";
+import xmljs from "xml-js";
 import { z } from "zod";
 import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { getImportJobResultCode } from "@recipesage/util/server/general";

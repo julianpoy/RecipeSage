@@ -1,7 +1,7 @@
 import { WebSocketMessageFormat } from "@fanoutio/grip";
 import { ServeGrip } from "@fanoutio/serve-grip";
 import { config } from "./config";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 export const serveGrip = new ServeGrip({
   grip: [

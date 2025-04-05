@@ -1,6 +1,6 @@
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { getHTTPStatusCodeFromError } from "@trpc/server/http";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 import { router } from "./trpc";
 import { createContext } from "./context";
 import { TRPCError } from "@trpc/server";

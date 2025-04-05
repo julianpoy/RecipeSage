@@ -7,7 +7,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import * as crypto from "crypto";
+import crypto from "crypto";
 import { PassThrough } from "stream";
 
 // Must begin and end with a /
@@ -165,6 +165,7 @@ export const deleteObjects = async (keys: string[]) => {
 
 export default {
   writeBuffer,
+  writeStream,
   deleteObject,
   deleteObjects,
-} as StorageProvider;
+} satisfies StorageProvider as StorageProvider;

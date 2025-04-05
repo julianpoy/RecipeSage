@@ -1,8 +1,8 @@
-import * as express from "express";
-import * as multer from "multer";
+import express from "express";
+import multer from "multer";
 const router = express.Router();
-import * as Sentry from "@sentry/node";
-import * as Joi from "joi";
+import Sentry from "@sentry/node";
+import Joi from "joi";
 
 // DB
 import { Image } from "../models/index.js";

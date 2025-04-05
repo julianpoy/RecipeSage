@@ -1,8 +1,8 @@
-import * as express from "express";
+import express from "express";
 const router = express.Router();
-import * as cors from "cors";
-import * as xmljs from "xml-js";
-import * as moment from "moment";
+import cors from "cors";
+import xmljs from "xml-js";
+import moment from "moment";
 
 // DB
 import { Op } from "sequelize";
@@ -18,9 +18,9 @@ import {
 
 // Service
 import * as MiddlewareService from "../services/middleware.js";
-import * as Util from "@recipesage/util/shared";
+import Util from "@recipesage/util/shared";
 import * as UtilService from "../services/util.js";
-import * as Search from "@recipesage/util/server/search";
+import Search from "@recipesage/util/server/search";
 import * as SubscriptionsService from "../services/subscriptions.js";
 import * as JSONLDService from "../services/json-ld.js";
 import { getRecipesWithConstraints } from "../services/database/getRecipesWithConstraints";
@@ -35,7 +35,7 @@ import {
   InternalServerError,
 } from "../utils/errors.js";
 import { joiValidator } from "../middleware/joiValidator.js";
-import * as Joi from "joi";
+import Joi from "joi";
 import { deleteHangingImagesForUser } from "../utils/data/deleteHangingImages.js";
 import { getFriendships } from "../utils/getFriendships.js";
 

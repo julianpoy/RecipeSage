@@ -8,7 +8,7 @@ import { app } from "../app";
 import Debug from "debug";
 const debug = Debug("chefbook-backend:server");
 import { getRunningJobs } from "../services/job-tracker.js";
-import * as protocol from "http";
+import protocol from "http";
 
 /**
  * Get port from environment and store in Express.

@@ -3,7 +3,7 @@ import {
   AuthenticationEnforcement,
   defineHandler,
 } from "../../../defineHandler";
-import * as multer from "multer";
+import multer from "multer";
 import { createReadStream } from "fs";
 import { indexRecipes } from "@recipesage/util/server/search";
 import { JobStatus, JobType } from "@prisma/client";
@@ -12,7 +12,7 @@ import {
   StandardizedRecipeImportEntry,
 } from "@recipesage/util/server/db";
 import { JobMeta, prisma } from "@recipesage/prisma";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 import {
   capitalizeEachWord,
   cleanLabelTitle,

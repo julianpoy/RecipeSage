@@ -1,7 +1,7 @@
-import * as Meilisearch from "./meilisearch";
-import * as ElasticSearch from "./elasticsearch";
-import * as Typesense from "./typesense";
-import * as Stub from "./stub";
+import Meilisearch from "./meilisearch";
+import ElasticSearch from "./elasticsearch";
+import Typesense from "./typesense";
+import Stub from "./stub";
 import { Recipe } from "@prisma/client";
 
 export interface SearchProvider {

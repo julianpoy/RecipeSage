@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import * as fs from "fs/promises";
+import fs from "fs/promises";
 import { join } from "path";
 
 const init = async () => {

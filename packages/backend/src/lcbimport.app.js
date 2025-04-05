@@ -1,8 +1,8 @@
 import "./services/sentry-init.js";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
-import * as fs from "fs-extra";
-import * as extract from "extract-zip";
+import fs from "fs-extra";
+import extract from "extract-zip";
 import { spawn } from "child_process";
 
 import {
@@ -14,7 +14,7 @@ import {
   Image,
 } from "./models/index.js";
 
-import * as Util from "@recipesage/util/shared";
+import Util from "@recipesage/util/shared";
 import * as UtilService from "./services/util.js";
 import { writeImageFile, ObjectTypes } from "@recipesage/util/server/storage";
 

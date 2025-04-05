@@ -3,7 +3,7 @@ import { validateTrpcSession } from "@recipesage/util/server/general";
 import { prisma } from "@recipesage/prisma";
 import { deleteHangingImagesForUser } from "@recipesage/util/server/storage";
 import { deleteRecipes as deleteRecipesFromSearch } from "@recipesage/util/server/search";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 
 export const deleteUser = publicProcedure.mutation(
   async ({ ctx }): Promise<string> => {

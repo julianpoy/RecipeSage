@@ -1,5 +1,5 @@
 import _FractionJS from "fraction.js";
-import * as FractionJSModule from "fraction.js";
+import FractionJSModule from "fraction.js";
 import { unitNames } from "./units";
 
 // Fix for https://github.com/rawify/Fraction.js/issues/72

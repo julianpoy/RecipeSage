@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import * as path from "path";
+import path from "path";
 
 import { setup, cleanup } from "../testutils.js";
 

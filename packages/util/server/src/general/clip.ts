@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { join } from "path";
-import * as workerpool from "workerpool";
+import workerpool from "workerpool";
 import fetch from "node-fetch";
-import * as Sentry from "@sentry/node";
-import * as he from "he";
-import * as url from "url";
+import Sentry from "@sentry/node";
+import he from "he";
+import url from "url";
 import { dedent } from "ts-dedent";
 import puppeteer, { Browser } from "puppeteer-core";
 import { fetchURL } from "./fetch";

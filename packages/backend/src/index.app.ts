@@ -1,5 +1,5 @@
 import "./services/sentry-init";
-import * as Sentry from "@sentry/node";
+import Sentry from "@sentry/node";
 import { program } from "commander";
 
 import { indexRecipes } from "@recipesage/util/server/search";
