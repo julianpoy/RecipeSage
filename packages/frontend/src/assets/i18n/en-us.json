@@ -278,6 +278,7 @@
   "pages.contribute.cta.1": "I originally created RecipeSage for my own family to host recipes we enjoy sharing. Since then, RecipeSage has grown into a fully-fledged open source project.",
   "pages.contribute.cta.2": "Please consider contributing toward the ongoing maintenance of RecipeSage.",
   "pages.contribute.minimum": "Unfortunately the minimum amount is ${{amount}} due to transaction fees - apologies",
+  "pages.contribute.manage": "To manage an existing subscription, click here",
 
   "pages.contributeThankYou.title": "Thank You!",
   "pages.contributeThankYou.thanks": "Thank you for being a part of the RecipeSage family and helping to keep it alive!",
