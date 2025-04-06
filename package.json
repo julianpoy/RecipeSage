@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "postinstall": "[ -f 'packages/prisma/src/prisma/schema.prisma' ] && prisma generate || echo 'Prisma schema does not exist'"
   },
   "private": true,
