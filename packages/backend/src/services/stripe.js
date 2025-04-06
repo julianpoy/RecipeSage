@@ -1,5 +1,5 @@
 import stripeInit from "stripe";
-const stripe = stripeInit(process.env.STRIPE_SK);
+const stripe = stripeInit(process.env.STRIPE_SK || "no_key_provided");
 
 // DB
 import { User } from "../models/index.js";
