@@ -89,7 +89,7 @@
     "sequelize": "6.37.7",
     "sharp": "^0.34.0",
     "showdown": "^2.1.0",
-    "stripe": "^11.9.1",
+    "stripe": "^18.0.0",
     "swiper": "^11.1.0",
     "ts-dedent": "^2.2.0",
     "tsconfig-paths": "^4.2.0",
