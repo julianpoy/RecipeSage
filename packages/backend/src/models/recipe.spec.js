@@ -1,6 +1,3 @@
-import { expect } from "chai";
-import sinon from "sinon";
-
 import {
   setup,
   cleanup,
@@ -21,148 +18,153 @@ describe("recipe", () => {
   });
 
   describe("findTitle", () => {
-    let _findTitleStub;
+    let findTitleSpy;
 
     beforeAll(() => {
-      _findTitleStub = sinon
-        .stub(Recipe, "_findTitle")
-        .returns(Promise.resolve());
+      findTitleSpy = jest
+        .spyOn(Recipe, "_findTitle")
+        .mockResolvedValue(undefined);
     });
 
     afterAll(() => {
-      _findTitleStub.restore();
+      findTitleSpy.mockRestore();
     });
 
-    it("calls and returns result of _findTitle with proper args", () => {
-      let userId = randomString(20);
-      let recipeId = randomString(20);
-      let basename = randomString(20);
-      let transaction = randomString(20);
+    it("calls and returns result of _findTitle with proper args", async () => {
+      const userId = randomString(20);
+      const recipeId = randomString(20);
+      const basename = randomString(20);
+      const transaction = randomString(20);
 
-      return Recipe.findTitle(userId, recipeId, basename, transaction).then(
-        () => {
-          sinon.assert.calledOnce(_findTitleStub);
-          let opts = _findTitleStub.getCalls()[0].args;
+      await Recipe.findTitle(userId, recipeId, basename, transaction);
 
-          expect(opts[0]).to.equal(userId);
-          expect(opts[1]).to.equal(recipeId);
-          expect(opts[2]).to.equal(basename);
-          expect(opts[3]).to.equal(transaction);
-          expect(opts[4]).to.equal(1); // recursive start idx
-        },
-      );
+      expect(findTitleSpy).toHaveBeenCalledTimes(1);
+      const [argUserId, argRecipeId, argBasename, argTransaction, argIndex] =
+        findTitleSpy.mock.calls[0];
+
+      expect(argUserId).toBe(userId);
+      expect(argRecipeId).toBe(recipeId);
+      expect(argBasename).toBe(basename);
+      expect(argTransaction).toBe(transaction);
+      expect(argIndex).toBe(1);
     });
   });
 
   describe("_findTitle", () => {
     it("returns initial name when no conflicts arise", async () => {
-      let user = await createUser();
+      const user = await createUser();
+      const recipe = await createRecipe(user.id);
 
-      let recipe = await createRecipe(user.id);
-
-      return sequelize.transaction((t) => {
-        return Recipe.findTitle(user.id, recipe.id, recipe.title, t).then(
-          (adjustedTitle) => {
-            expect(adjustedTitle).to.equal(recipe.title);
-          },
+      await sequelize.transaction(async (t) => {
+        const adjustedTitle = await Recipe.findTitle(
+          user.id,
+          recipe.id,
+          recipe.title,
+          t,
         );
+        expect(adjustedTitle).toBe(recipe.title);
       });
     });
 
     it("returns incremented name when conflict arises", async () => {
-      let user = await createUser();
+      const user = await createUser();
+      const recipe1 = await createRecipe(user.id);
+      const recipe2 = await createRecipe(user.id);
 
-      let recipe1 = await createRecipe(user.id);
-      let recipe2 = await createRecipe(user.id);
-
-      return sequelize.transaction((t) => {
-        return Recipe.findTitle(user.id, recipe1.id, recipe2.title, t).then(
-          (adjustedTitle) => {
-            expect(adjustedTitle).to.equal(recipe2.title + " (2)");
-          },
+      await sequelize.transaction(async (t) => {
+        const adjustedTitle = await Recipe.findTitle(
+          user.id,
+          recipe1.id,
+          recipe2.title,
+          t,
         );
+        expect(adjustedTitle).toBe(recipe2.title + " (2)");
       });
     });
 
     it("returns initial name when no conflicts arise with no recipeId", async () => {
-      let user = await createUser();
+      const user = await createUser();
+      const desiredTitle = randomString(20);
 
-      return sequelize.transaction((t) => {
-        let desiredTitle = randomString(20);
-        return Recipe.findTitle(user.id, null, desiredTitle, t).then(
-          (adjustedTitle) => {
-            expect(adjustedTitle).to.equal(desiredTitle);
-          },
+      await sequelize.transaction(async (t) => {
+        const adjustedTitle = await Recipe.findTitle(
+          user.id,
+          null,
+          desiredTitle,
+          t,
         );
+        expect(adjustedTitle).toBe(desiredTitle);
       });
     });
 
     it("returns incremented name when conflict arises with no recipeId", async () => {
-      let user = await createUser();
+      const user = await createUser();
+      const recipe1 = await createRecipe(user.id);
 
-      let recipe1 = await createRecipe(user.id);
-
-      return sequelize.transaction((t) => {
-        return Recipe.findTitle(user.id, null, recipe1.title, t).then(
-          (adjustedTitle) => {
-            expect(adjustedTitle).to.equal(recipe1.title + " (2)");
-          },
+      await sequelize.transaction(async (t) => {
+        const adjustedTitle = await Recipe.findTitle(
+          user.id,
+          null,
+          recipe1.title,
+          t,
         );
+        expect(adjustedTitle).toBe(recipe1.title + " (2)");
       });
     });
   });
 
   describe("model.share", () => {
-    let _shareStub;
+    let shareSpy;
 
-    beforeAll(async () => {
-      _shareStub = sinon
-        .stub(Recipe.prototype, "share")
-        .returns(Promise.resolve());
+    beforeAll(() => {
+      shareSpy = jest
+        .spyOn(Recipe.prototype, "share")
+        .mockResolvedValue(undefined);
     });
 
     afterAll(() => {
-      _shareStub.restore();
+      shareSpy.mockRestore();
     });
 
     it("calls and returns result of share with proper args", async () => {
-      let user1 = await createUser();
-      let user2 = await createUser();
-      let recipe = await createRecipe(user1.id);
+      const user1 = await createUser();
+      const user2 = await createUser();
+      const recipe = await createRecipe(user1.id);
 
-      return sequelize.transaction((t) => {
-        return Recipe.share(recipe.id, user2.id, t).then(() => {
-          sinon.assert.calledOnce(_shareStub);
-          let { args, thisValue } = _shareStub.getCalls()[0];
+      await sequelize.transaction(async (t) => {
+        await Recipe.share(recipe.id, user2.id, t);
 
-          expect(args[0]).to.equal(user2.id);
-          expect(args[1]).to.equal(t);
-          expect(thisValue.id).to.equal(recipe.id);
-        });
+        expect(shareSpy).toHaveBeenCalledTimes(1);
+        const [argUserId, argTransaction] = shareSpy.mock.calls[0];
+        const thisContext = shareSpy.mock.instances[0];
+
+        expect(argUserId).toBe(user2.id);
+        expect(argTransaction).toBe(t);
+        expect(thisContext.id).toBe(recipe.id);
       });
     });
   });
 
   describe("instance.share", () => {
-    let findTitleStub;
-    beforeAll(async () => {
-      findTitleStub = sinon
-        .stub(Recipe, "findTitle")
-        .callsFake((a, b, title) => Promise.resolve(title));
+    let findTitleSpy;
+
+    beforeAll(() => {
+      findTitleSpy = jest
+        .spyOn(Recipe, "findTitle")
+        .mockImplementation((_, __, title) => Promise.resolve(title));
     });
 
     afterAll(() => {
-      findTitleStub.restore();
+      findTitleSpy.mockRestore();
     });
 
     describe("shares recipe to recipient", () => {
       let user1, user2, recipe, sharedRecipe, initialCount;
+
       beforeAll(async () => {
         user1 = await createUser();
         user2 = await createUser();
-
         recipe = await createRecipe(user1.id);
-
         initialCount = await Recipe.count();
 
         await sequelize.transaction(async (t) => {
@@ -171,44 +173,42 @@ describe("recipe", () => {
       });
 
       it("creates a new recipe", async () => {
-        expect(recipe.id).not.to.equal(sharedRecipe.id);
+        expect(recipe.id).not.toBe(sharedRecipe.id);
 
-        return Promise.all([
-          Recipe.count().then((count) =>
-            expect(count).to.equal(initialCount + 1),
-          ),
-          Recipe.findByPk(recipe.id).then((r) => expect(r).to.not.be.null),
-          Recipe.findByPk(sharedRecipe.id).then(
-            (r) => expect(r).to.not.be.null,
-          ),
-        ]);
+        const count = await Recipe.count();
+        const original = await Recipe.findByPk(recipe.id);
+        const shared = await Recipe.findByPk(sharedRecipe.id);
+
+        expect(count).toBe(initialCount + 1);
+        expect(original).not.toBeNull();
+        expect(shared).not.toBeNull();
       });
 
       it("creates the recipes under the proper owners", () => {
-        expect(recipe.userId).to.equal(user1.id);
-        expect(sharedRecipe.userId).to.equal(user2.id);
+        expect(recipe.userId).toBe(user1.id);
+        expect(sharedRecipe.userId).toBe(user2.id);
       });
 
       it("includes the same data as original recipe", () => {
-        expect(recipe.title).to.equal(sharedRecipe.title);
-        expect(recipe.description).to.equal(sharedRecipe.description);
-        expect(recipe.yield).to.equal(sharedRecipe.yield);
-        expect(recipe.activeTime).to.equal(sharedRecipe.activeTime);
-        expect(recipe.totalTime).to.equal(sharedRecipe.totalTime);
-        expect(recipe.source).to.equal(sharedRecipe.source);
-        expect(recipe.url).to.equal(sharedRecipe.url);
-        expect(recipe.notes).to.equal(sharedRecipe.notes);
-        expect(recipe.ingredients).to.equal(sharedRecipe.ingredients);
-        expect(recipe.instructions).to.equal(sharedRecipe.instructions);
-        // expect(recipe.image).to.equal(sharedRecipe.image)
+        expect(sharedRecipe.title).toBe(recipe.title);
+        expect(sharedRecipe.description).toBe(recipe.description);
+        expect(sharedRecipe.yield).toBe(recipe.yield);
+        expect(sharedRecipe.activeTime).toBe(recipe.activeTime);
+        expect(sharedRecipe.totalTime).toBe(recipe.totalTime);
+        expect(sharedRecipe.source).toBe(recipe.source);
+        expect(sharedRecipe.url).toBe(recipe.url);
+        expect(sharedRecipe.notes).toBe(recipe.notes);
+        expect(sharedRecipe.ingredients).toBe(recipe.ingredients);
+        expect(sharedRecipe.instructions).toBe(recipe.instructions);
+        // expect(sharedRecipe.image).toBe(recipe.image);
       });
 
       it("sets the fromUserId to the sending user", () => {
-        expect(sharedRecipe.fromUserId).to.equal(user1.id);
+        expect(sharedRecipe.fromUserId).toBe(user1.id);
       });
 
       it("sets the folder to inbox on new recipe", () => {
-        expect(sharedRecipe.folder).to.equal("inbox");
+        expect(sharedRecipe.folder).toBe("inbox");
       });
     });
   });

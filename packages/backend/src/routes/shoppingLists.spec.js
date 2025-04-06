@@ -1,5 +1,4 @@
 import request from "supertest";
-import { expect } from "chai";
 import Sequelize from "sequelize";
 const Op = Sequelize.Op;
 
@@ -28,39 +27,35 @@ describe("shopping Lists", () => {
 
   it("succeeds with no collaborators", async () => {
     const user = await createUser();
-
     const session = await createSession(user.id);
-
     const initialCount = await ShoppingList.count();
 
     const payload = {
       title: randomString(20),
     };
 
-    return request(server)
+    const { body } = await request(server)
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(superjsonResult(200))
-      .then(({ body }) =>
-        ShoppingList.findOne({
-          where: {
-            [Op.and]: [payload, { id: body.id, userId: user.id }],
-          },
-        }).then(async (shoppingList) => {
-          expect(shoppingList).not.to.be.null;
-          const count = await ShoppingList.count();
-          expect(count).to.equal(initialCount + 1);
-        }),
-      );
+      .expect(superjsonResult(200));
+
+    const shoppingList = await ShoppingList.findOne({
+      where: {
+        [Op.and]: [payload, { id: body.id, userId: user.id }],
+      },
+    });
+
+    expect(shoppingList).not.toBeNull();
+
+    const count = await ShoppingList.count();
+    expect(count).toBe(initialCount + 1);
   });
 
   it("succeeds with collaborators", async () => {
     const user = await createUser();
     const user2 = await createUser();
-
     const session = await createSession(user.id);
-
     const initialCount = await ShoppingList.count();
 
     const payload = {
@@ -68,42 +63,39 @@ describe("shopping Lists", () => {
       collaborators: [user2.id],
     };
 
-    return request(server)
+    const { body } = await request(server)
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(superjsonResult(200))
-      .then(({ body }) =>
-        ShoppingList.findOne({
-          where: {
-            id: body.id,
-          },
-        }).then(async (shoppingList) => {
-          expect(shoppingList).not.to.be.null;
-          const count = await ShoppingList.count();
-          expect(count).to.equal(initialCount + 1);
-        }),
-      );
+      .expect(superjsonResult(200));
+
+    const shoppingList = await ShoppingList.findOne({
+      where: {
+        id: body.id,
+      },
+    });
+
+    expect(shoppingList).not.toBeNull();
+
+    const count = await ShoppingList.count();
+    expect(count).toBe(initialCount + 1);
   });
 
   it("rejects if no title is present", async () => {
     const user = await createUser();
-
     const session = await createSession(user.id);
-
     const initialCount = await ShoppingList.count();
 
     const payload = {};
 
-    return request(server)
+    await request(server)
       .post("/shoppingLists")
       .query({ token: session.token })
       .send(payload)
-      .expect(superjsonResult(412))
-      .then(async () => {
-        const count = await ShoppingList.count();
-        expect(count).to.equal(initialCount);
-      });
+      .expect(superjsonResult(412));
+
+    const count = await ShoppingList.count();
+    expect(count).toBe(initialCount);
   });
 
   it("reject invalid token", async () => {
@@ -113,31 +105,27 @@ describe("shopping Lists", () => {
       title: randomString(20),
     };
 
-    return request(server)
+    await request(server)
       .post("/shoppingLists")
       .query({ token: "invalid" })
       .send(payload)
-      .expect(superjsonResult(401))
-      .then(async () => {
-        const count = await ShoppingList.count();
-        expect(count).to.equal(initialCount);
-      });
+      .expect(superjsonResult(401));
+
+    const count = await ShoppingList.count();
+    expect(count).toBe(initialCount);
   });
 
   it("return Shoppinglist", async () => {
     const user = await createUser();
-
     const session = await createSession(user.id);
-
     const shoppingList = await createShoppingList(user.id);
 
-    return request(server)
+    const { body } = await request(server)
       .get(`/shoppingLists/${shoppingList.id}`)
       .query({ token: session.token })
-      .expect(superjsonResult(200))
-      .then(({ body }) => {
-        expect(body.id).to.equal(shoppingList.id);
-        expect(body.title).to.equal(shoppingList.title);
-      });
+      .expect(superjsonResult(200));
+
+    expect(body.id).toBe(shoppingList.id);
+    expect(body.title).toBe(shoppingList.title);
   });
 });

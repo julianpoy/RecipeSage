@@ -1,5 +1,4 @@
 import request from "supertest";
-import { expect } from "chai";
 import Sequelize from "sequelize";
 const Op = Sequelize.Op;
 
@@ -16,7 +15,6 @@ import {
   superjsonResult,
 } from "../testutils";
 
-// DB
 import Models from "../models";
 const { Recipe, Label } = Models;
 
@@ -64,11 +62,11 @@ describe("recipes", () => {
             },
           })
             .then((recipe) => {
-              expect(recipe).not.to.be.null;
+              expect(recipe).not.toBeNull();
             })
             .then(async () => {
               const count = await Recipe.count();
-              expect(count).to.equal(initialCount + 1);
+              expect(count).toBe(initialCount + 1);
             }),
         );
     });
@@ -96,11 +94,11 @@ describe("recipes", () => {
             },
           })
             .then((recipe) => {
-              expect(recipe).not.to.be.null;
+              expect(recipe).not.toBeNull();
             })
             .then(async () => {
               const count = await Recipe.count();
-              expect(count).to.equal(initialCount + 1);
+              expect(count).toBe(initialCount + 1);
             }),
         );
     });
@@ -132,7 +130,7 @@ describe("recipes", () => {
         .expect(superjsonResult(412))
         .then(async () => {
           const count = await Recipe.count();
-          expect(count).to.equal(initialCount);
+          expect(count).toBe(initialCount);
         });
     });
 
@@ -164,7 +162,7 @@ describe("recipes", () => {
         .expect(superjsonResult(412))
         .then(async () => {
           const count = await Recipe.count();
-          expect(count).to.equal(initialCount);
+          expect(count).toBe(initialCount);
         });
     });
 
@@ -192,7 +190,7 @@ describe("recipes", () => {
         .expect(superjsonResult(401))
         .then(async () => {
           const count = await Recipe.count();
-          expect(count).to.equal(initialCount);
+          expect(count).toBe(initialCount);
         });
     });
   });
@@ -214,9 +212,9 @@ describe("recipes", () => {
         .query({ token: session.token })
         .expect(superjsonResult(200))
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id);
-          expect(body.title).to.equal(recipe.title);
-          expect(body.labels.length).to.equal(1);
+          expect(body.id).toBe(recipe.id);
+          expect(body.title).toBe(recipe.title);
+          expect(body.labels.length).toBe(1);
         });
     });
 
@@ -250,11 +248,11 @@ describe("recipes", () => {
         .query({ token: session.token })
         .expect(superjsonResult(200))
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id);
-          expect(body.title).to.equal(recipe.title);
-          expect(body.labels).to.be.an("array").that.is.empty;
-          expect(body.labels.length).to.equal(0);
-          expect(body.isOwner).to.equal(false);
+          expect(body.id).toBe(recipe.id);
+          expect(body.title).toBe(recipe.title);
+          expect(Array.isArray(body.labels)).toBe(true);
+          expect(body.labels.length).toBe(0);
+          expect(body.isOwner).toBe(false);
         });
     });
 
@@ -271,11 +269,11 @@ describe("recipes", () => {
         .get(`/recipes/${recipe.id}`)
         .expect(superjsonResult(200))
         .then(({ body }) => {
-          expect(body.id).to.equal(recipe.id);
-          expect(body.title).to.equal(recipe.title);
-          expect(body.labels).to.be.an("array").that.is.empty;
-          expect(body.labels.length).to.equal(0);
-          expect(body.isOwner).to.equal(false);
+          expect(body.id).toBe(recipe.id);
+          expect(body.title).toBe(recipe.title);
+          expect(Array.isArray(body.labels)).toBe(true);
+          expect(body.labels.length).toBe(0);
+          expect(body.isOwner).toBe(false);
         });
     });
 
@@ -321,17 +319,17 @@ describe("recipes", () => {
         .expect(superjsonResult(200))
         .then(() =>
           Recipe.findByPk(recipe.id).then((updatedRecipe) => {
-            expect(updatedRecipe.title).to.equal(payload.title);
-            expect(updatedRecipe.description).to.equal(payload.description);
-            expect(updatedRecipe.yield).to.equal(payload.yield);
-            expect(updatedRecipe.activeTime).to.equal(payload.activeTime);
-            expect(updatedRecipe.totalTime).to.equal(payload.totalTime);
-            expect(updatedRecipe.source).to.equal(payload.source);
-            expect(updatedRecipe.url).to.equal(payload.url);
-            expect(updatedRecipe.notes).to.equal(payload.notes);
-            expect(updatedRecipe.ingredients).to.equal(payload.ingredients);
-            expect(updatedRecipe.instructions).to.equal(payload.instructions);
-            expect(updatedRecipe.folder).to.equal(payload.folder);
+            expect(updatedRecipe.title).toBe(payload.title);
+            expect(updatedRecipe.description).toBe(payload.description);
+            expect(updatedRecipe.yield).toBe(payload.yield);
+            expect(updatedRecipe.activeTime).toBe(payload.activeTime);
+            expect(updatedRecipe.totalTime).toBe(payload.totalTime);
+            expect(updatedRecipe.source).toBe(payload.source);
+            expect(updatedRecipe.url).toBe(payload.url);
+            expect(updatedRecipe.notes).toBe(payload.notes);
+            expect(updatedRecipe.ingredients).toBe(payload.ingredients);
+            expect(updatedRecipe.instructions).toBe(payload.instructions);
+            expect(updatedRecipe.folder).toBe(payload.folder);
           }),
         );
     });
@@ -401,14 +399,14 @@ describe("recipes", () => {
               userId: user.id,
             },
           }).then(async (recipes) => {
-            expect(recipes).to.have.lengthOf(0);
+            expect(recipes).toHaveLength(0);
 
             await Label.findAll({
               where: {
                 userId: user.id,
               },
             }).then((labels) => {
-              expect(labels).to.have.lengthOf(0);
+              expect(labels).toHaveLength(0);
             });
           });
         });
@@ -435,14 +433,14 @@ describe("recipes", () => {
               userId: user2.id,
             },
           }).then(async (recipes) => {
-            expect(recipes).to.have.lengthOf(1);
+            expect(recipes).toHaveLength(1);
 
             await Label.findAll({
               where: {
                 userId: user2.id,
               },
             }).then((labels) => {
-              expect(labels).to.have.lengthOf(1);
+              expect(labels).toHaveLength(1);
             });
           });
         });
@@ -470,7 +468,7 @@ describe("recipes", () => {
         .expect(superjsonResult(200))
         .then(() => {
           Recipe.findByPk(recipe.id).then((recipe) => {
-            expect(recipe).to.be.null;
+            expect(recipe).toBeNull();
           });
         });
     });
@@ -494,14 +492,14 @@ describe("recipes", () => {
         .expect(superjsonResult(200))
         .then(() =>
           Promise.all([
-            Recipe.findByPk(recipe.id).then(
-              (deletedRecipe) => expect(deletedRecipe).to.be.null,
+            Recipe.findByPk(recipe.id).then((deletedRecipe) =>
+              expect(deletedRecipe).toBeNull(),
             ),
-            Label.findByPk(label1.id).then(
-              (deletedLabel1) => expect(deletedLabel1).to.be.null,
+            Label.findByPk(label1.id).then((deletedLabel1) =>
+              expect(deletedLabel1).toBeNull(),
             ),
-            Label.findByPk(label2.id).then(
-              (deletedLabel2) => expect(deletedLabel2).to.be.null,
+            Label.findByPk(label2.id).then((deletedLabel2) =>
+              expect(deletedLabel2).toBeNull(),
             ),
           ]),
         );
@@ -526,14 +524,14 @@ describe("recipes", () => {
         .expect(superjsonResult(200))
         .then(() =>
           Promise.all([
-            Recipe.findByPk(recipe1.id).then(
-              (deletedRecipe1) => expect(deletedRecipe1).to.be.null,
+            Recipe.findByPk(recipe1.id).then((deletedRecipe1) =>
+              expect(deletedRecipe1).toBeNull(),
             ),
-            Recipe.findByPk(recipe2.id).then(
-              (notDeletedRecipe2) => expect(notDeletedRecipe2).not.to.be.null,
+            Recipe.findByPk(recipe2.id).then((notDeletedRecipe2) =>
+              expect(notDeletedRecipe2).not.toBeNull(),
             ),
-            Label.findByPk(label.id).then(
-              (deletedLabel) => expect(deletedLabel).not.to.be.null,
+            Label.findByPk(label.id).then((deletedLabel) =>
+              expect(deletedLabel).not.toBeNull(),
             ),
           ]),
         );

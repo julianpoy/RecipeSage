@@ -13,6 +13,7 @@ services:
       - frontend
       - backend
       - pushpin
+    stop_grace_period: 1s
   frontend:
     build:
       context: .
@@ -25,6 +26,7 @@ services:
     environment:
       - ENVIRONMENT=development
       - APP_VERSION=development
+    stop_grace_period: 1s
   backend:
     depends_on:
       - postgres
@@ -70,6 +72,7 @@ services:
       - OTEL_LOG_LEVEL=info
     env_file:
       - ./.env
+    stop_grace_period: 1s
   typesense:
     image: typesense/typesense:0.24.1
     volumes:
@@ -85,6 +88,7 @@ services:
     environment:
       - GRIP_KEY=changeme
       - TARGET=backend:3000
+    stop_grace_period: 1s
   postgres:
     image: postgres:16.1
     command:
@@ -105,8 +109,10 @@ services:
       - HEALTH=true
       - MAX_MEMORY_PERCENT=80
       - TOKEN=recipesage_dev
+    stop_grace_period: 1s
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:1.4.9
+    stop_grace_period: 1s
 
 volumes:
   typesense-data:

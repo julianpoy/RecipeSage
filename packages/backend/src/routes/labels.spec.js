@@ -1,5 +1,4 @@
 import request from "supertest";
-import { expect } from "chai";
 
 import {
   setup,
@@ -31,9 +30,7 @@ describe("labels", () => {
   describe("create", () => {
     it("succeeds with valid data", async () => {
       const user = await createUser();
-
       const session = await createSession(user.id);
-
       const recipe = await createRecipe(user.id);
 
       const payload = {
@@ -41,34 +38,31 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      const { body } = await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(superjsonResult(201))
-        .then(({ body }) =>
-          Label.findByPk(body.id, {
-            include: [
-              {
-                model: Recipe,
-                as: "recipes",
-                attributes: ["id"],
-              },
-            ],
-          }).then((label) => {
-            expect(label).not.to.be.null;
-            expect(label.title).to.equal(payload.title);
-            expect(label.recipes.length).to.equal(1);
-            expect(label.recipes[0].id).to.equal(payload.recipeId);
-          }),
-        );
+        .expect(superjsonResult(201));
+
+      const label = await Label.findByPk(body.id, {
+        include: [
+          {
+            model: Recipe,
+            as: "recipes",
+            attributes: ["id"],
+          },
+        ],
+      });
+
+      expect(label).not.toBeNull();
+      expect(label.title).toBe(payload.title);
+      expect(label.recipes.length).toBe(1);
+      expect(label.recipes[0].id).toBe(payload.recipeId);
     });
 
     it("rejects if no title is present", async () => {
       const user = await createUser();
-
       const session = await createSession(user.id);
-
       const recipe = await createRecipe(user.id);
 
       const payload = {
@@ -76,7 +70,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
@@ -85,14 +79,13 @@ describe("labels", () => {
 
     it("rejects if no recipeId is present", async () => {
       const user = await createUser();
-
       const session = await createSession(user.id);
 
       const payload = {
         title: randomString(20),
       };
 
-      return request(server)
+      await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
@@ -101,7 +94,6 @@ describe("labels", () => {
 
     it("rejects if recipeId is empty", async () => {
       const user = await createUser();
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -109,7 +101,7 @@ describe("labels", () => {
         recipeId: "",
       };
 
-      return request(server)
+      await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
@@ -118,7 +110,6 @@ describe("labels", () => {
 
     it("rejects if recipeId is invalid", async () => {
       const user = await createUser();
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -126,22 +117,20 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
-      const intialCount = await Label.count();
+      const initialCount = await Label.count();
 
-      return request(server)
+      await request(server)
         .post("/labels")
         .query({ token: session.token })
         .send(payload)
-        .expect(superjsonResult(500))
-        .then(async () => {
-          const count = await Label.count();
-          expect(count).to.equal(intialCount);
-        });
+        .expect(superjsonResult(500));
+
+      const count = await Label.count();
+      expect(count).toBe(initialCount);
     });
 
     it("requires valid session", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
 
       const payload = {
@@ -149,7 +138,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .post("/labels")
         .query({ token: "invalid" })
         .send(payload)
@@ -159,15 +148,8 @@ describe("labels", () => {
 
   describe("get listing", () => {
     describe("succeeds with valid data", () => {
-      let user1;
-      let recipe1;
-      let label1;
-      let session;
-
-      let user2;
-      let recipe2;
-      let label2;
-
+      let user1, recipe1, label1, session;
+      let user2, recipe2, label2;
       let responseBody;
 
       beforeAll(async () => {
@@ -182,35 +164,34 @@ describe("labels", () => {
         label2 = await createLabel(user2.id);
         await associateLabel(label2.id, recipe2.id);
 
-        responseBody = await request(server)
+        const res = await request(server)
           .get("/labels")
           .query({ token: session.token })
-          .expect(superjsonResult(200))
-          .then(({ body }) => {
-            return body;
-          });
+          .expect(superjsonResult(200));
+
+        responseBody = res.body;
       });
 
       it("responds with an array", () => {
-        expect(responseBody).to.be.an("array");
+        expect(Array.isArray(responseBody)).toBe(true);
       });
 
       it("responds with user's labels", () => {
-        expect(responseBody[0].id).to.equal(label1.id);
-        expect(responseBody[0].title).to.equal(label1.title);
+        expect(responseBody[0].id).toBe(label1.id);
+        expect(responseBody[0].title).toBe(label1.title);
       });
 
       it("does not contain other user's labels", () => {
-        expect(responseBody.length).to.equal(1);
+        expect(responseBody.length).toBe(1);
       });
 
       it("responds with associated recipes", () => {
-        expect(responseBody[0].recipeCount).to.equal("1");
+        expect(responseBody[0].recipeCount).toBe("1");
       });
     });
 
     it("requires valid session", async () => {
-      return request(server)
+      await request(server)
         .get("/labels")
         .query({ token: "invalid" })
         .expect(superjsonResult(401));
@@ -220,15 +201,12 @@ describe("labels", () => {
   describe("delete", () => {
     it("succeeds when label has more than one recipe", async () => {
       const user = await createUser();
-
       const recipe1 = await createRecipe(user.id);
       const recipe2 = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe1.id);
       await associateLabel(label.id, recipe2.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -237,36 +215,31 @@ describe("labels", () => {
         recipeId: recipe1.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
-        .expect(superjsonResult(200))
-        .then(() => {
-          Label.findByPk(label.id, {
-            include: [
-              {
-                model: Recipe,
-                as: "recipes",
-                attributes: ["id"],
-              },
-            ],
-          }).then((label) => {
-            // Has removed the recipe
-            expect(label.recipes.length).to.equal(1);
-            expect(label.recipes[0].id).to.equal(recipe2.id);
-          });
-        });
+        .expect(superjsonResult(200));
+
+      const updatedLabel = await Label.findByPk(label.id, {
+        include: [
+          {
+            model: Recipe,
+            as: "recipes",
+            attributes: ["id"],
+          },
+        ],
+      });
+
+      expect(updatedLabel.recipes.length).toBe(1);
+      expect(updatedLabel.recipes[0].id).toBe(recipe2.id);
     });
 
     it("succeeds when label has only one recipe", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -275,33 +248,28 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
-        .expect(superjsonResult(200))
-        .then(() => {
-          // Does not remove the label anymore (should be done via label management)
-          Label.findByPk(label.id, {
-            include: [
-              {
-                model: Recipe,
-                as: "recipes",
-                attributes: ["id"],
-              },
-            ],
-          }).then((label) => {
-            // Has removed the recipe
-            expect(label.recipes.length).to.equal(0);
-          });
-        });
+        .expect(superjsonResult(200));
+
+      const updatedLabel = await Label.findByPk(label.id, {
+        include: [
+          {
+            model: Recipe,
+            as: "recipes",
+            attributes: ["id"],
+          },
+        ],
+      });
+
+      expect(updatedLabel.recipes.length).toBe(0);
     });
 
     it("rejects if user does not own recipe", async () => {
       const user1 = await createUser();
       const user2 = await createUser();
-
       const recipe = await createRecipe(user2.id);
-
       const label = await createLabel(user2.id);
 
       await associateLabel(label.id, recipe.id);
@@ -314,7 +282,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(404));
@@ -322,13 +290,10 @@ describe("labels", () => {
 
     it("rejects if recipe does not exist", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -337,7 +302,7 @@ describe("labels", () => {
         recipeId: "invalid",
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(404));
@@ -345,13 +310,10 @@ describe("labels", () => {
 
     it("rejects if label does not exist", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -360,7 +322,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(404));
@@ -368,13 +330,10 @@ describe("labels", () => {
 
     it("rejects if recipeid is falsy", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -383,7 +342,7 @@ describe("labels", () => {
         recipeId: "",
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(412));
@@ -391,13 +350,10 @@ describe("labels", () => {
 
     it("rejects if labelid is falsy", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
-
       const session = await createSession(user.id);
 
       const payload = {
@@ -406,7 +362,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(412));
@@ -414,9 +370,7 @@ describe("labels", () => {
 
     it("requires valid session", async () => {
       const user = await createUser();
-
       const recipe = await createRecipe(user.id);
-
       const label = await createLabel(user.id);
 
       await associateLabel(label.id, recipe.id);
@@ -427,7 +381,7 @@ describe("labels", () => {
         recipeId: recipe.id,
       };
 
-      return request(server)
+      await request(server)
         .delete("/labels")
         .query(payload)
         .expect(superjsonResult(401));

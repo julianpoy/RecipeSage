@@ -16,7 +16,7 @@ if (process.env.SEARCH_PROVIDER === "typesense") {
 
   init()
     .then(() => {
-      console.log("Typesense initialized");
+      if (process.env.NODE_ENV !== "test") console.log("Typesense initialized");
     })
     .catch((e) => {
       console.error("Typesense init failure");
