@@ -85,7 +85,6 @@ const corsOptions = {
   },
 } satisfies cors.CorsOptions;
 
-app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
