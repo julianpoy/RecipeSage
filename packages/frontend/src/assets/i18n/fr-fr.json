@@ -1017,5 +1017,6 @@
     "sync.notification.body": "Votre contenu a été mis en cache pour une utilisation hors ligne et sera automatiquement mis à jour.",
     "pages.import.enex": "Importer depuis un fichier Evernote",
     "pages.importEnex.title": "Importer des recettes à partir d'un fichier Evernote (enex)",
-    "pages.importEnex.description": "Cela importera des recettes à partir d'une exportation Evernote (se terminant par .enex) dans votre compte RecipeSage. Veuillez vous référer au guide de l'utilisateur pour savoir comment créer un fichier dans le format correct à importer ici. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images."
+    "pages.importEnex.description": "Cela importera des recettes à partir d'une exportation Evernote (se terminant par .enex) dans votre compte RecipeSage. Veuillez vous référer au guide de l'utilisateur pour savoir comment créer un fichier dans le format correct à importer ici. Veuillez envisager de contribuer si votre fichier contient un grand nombre de recettes ou d'images.",
+    "pages.contribute.manage": "Pour gérer un abonnement existant, cliquez ici"
 }
