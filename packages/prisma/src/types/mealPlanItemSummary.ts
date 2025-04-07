@@ -8,6 +8,7 @@ export const mealPlanItemSummary =
   Prisma.validator<Prisma.MealPlanItemFindFirstArgs>()({
     select: {
       id: true,
+      mealPlanId: true,
       title: true,
       scheduled: true,
       scheduledDate: true,
