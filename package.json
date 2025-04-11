@@ -87,7 +87,7 @@
     "sanitize-html": "^2.15.0",
     "semver": "7.7.1",
     "sequelize": "6.37.7",
-    "sharp": "^0.34.0",
+    "sharp": "^0.34.1",
     "showdown": "^2.1.0",
     "stripe": "^18.0.0",
     "swiper": "^11.1.0",
