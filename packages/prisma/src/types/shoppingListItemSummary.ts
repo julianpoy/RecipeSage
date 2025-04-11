@@ -8,6 +8,7 @@ export const shoppingListItemSummary =
   Prisma.validator<Prisma.ShoppingListItemFindFirstArgs>()({
     select: {
       id: true,
+      shoppingListId: true,
       title: true,
       createdAt: true,
       updatedAt: true,

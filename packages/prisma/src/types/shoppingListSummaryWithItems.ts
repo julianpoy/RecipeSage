@@ -26,6 +26,7 @@ export const shoppingListSummaryWithItems =
       items: {
         select: {
           id: true,
+          shoppingListId: true,
           title: true,
           createdAt: true,
           updatedAt: true,

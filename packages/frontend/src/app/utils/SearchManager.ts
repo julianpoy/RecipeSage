@@ -120,7 +120,9 @@ export class SearchManager {
   async unindexRecipe(recipeId: string): Promise<void> {
     await this.initPromise;
 
-    this.miniSearch.discard(recipeId);
+    if (this.miniSearch.has(recipeId)) {
+      this.miniSearch.discard(recipeId);
+    }
     this.knownRecipeIds.delete(recipeId);
 
     this.scheduleSave();
