@@ -83,7 +83,7 @@
     "prisma": "^6.5.0",
     "@julianpoy/prisma-cursorstream": "^0.4.1",
     "pug": "^3.0.3",
-    "puppeteer-core": "^24.6.0",
+    "puppeteer-core": "^24.6.1",
     "sanitize-html": "^2.15.0",
     "semver": "7.7.1",
     "sequelize": "6.37.7",
