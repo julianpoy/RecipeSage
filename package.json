@@ -102,7 +102,7 @@
     "workerpool": "^9.2.0",
     "xml-js": "^1.6.11",
     "zip-stream": "^6.0.1",
-    "zod": "^3.24.2",
+    "zod": "^3.24.3",
     "zone.js": "0.15.0"
   },
   "devDependencies": {
