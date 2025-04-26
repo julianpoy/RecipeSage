@@ -140,7 +140,7 @@
     "@types/node": "22.14.0",
     "@types/node-fetch": "^2.6.11",
     "@types/pdfkit": "^0.13.9",
-    "@types/pdfmake": "^0.2.9",
+    "@types/pdfmake": "^0.2.11",
     "@types/sanitize-html": "^2.15.0",
     "@types/sharp": "^0.31.1",
     "@types/showdown": "^2.0.6",
