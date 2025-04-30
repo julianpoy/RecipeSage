@@ -640,6 +640,7 @@
     "pages.shoppingListPopover.showAddedBy": "Показать кто добавил",
     "pages.shoppingListPopover.showAddedOn": "Показать дату добавления",
     "pages.shoppingListPopover.preferDelete": "Удалить после завершения",
+    "pages.shoppingListPopover.edit": "Редактировать категории ингредиентов",
     "pages.shoppingListPopover.print": "Печать",
     "pages.shoppingListPopover.removeAll": "Удалить все элементы",
     "pages.shoppingListPopover.delete": "Удалить список",

@@ -549,6 +549,7 @@
     "pages.shoppingListPopover.showTitle": "Recept címének megjelenítése",
     "pages.shoppingListPopover.showAddedBy": "Mutassa ki adta hozzá",
     "pages.shoppingListPopover.preferDelete": "Befejezés után törölje",
+    "pages.shoppingListPopover.edit": "Összetevők kategóriáinak szerkesztése",
     "pages.shoppingListPopover.print": "Nyomtatás",
     "pages.shoppingListPopover.removeAll": "Távolítsa el az összes elemet",
     "pages.shoppingListPopover.delete": "Lista törlése",
