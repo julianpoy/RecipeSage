@@ -8,6 +8,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "19.2.9",
     "@angular/common": "19.2.9",
     "@angular/core": "19.2.9",
     "@angular/forms": "19.2.9",

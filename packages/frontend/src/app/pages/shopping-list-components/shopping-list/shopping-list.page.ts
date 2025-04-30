@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChildren, QueryList } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   NavController,
@@ -8,11 +8,17 @@ import {
   AlertController,
 } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import {
+  CdkDropList,
+  CdkDragDrop,
+  DragDropModule,
+} from "@angular/cdk/drag-drop";
 
 import { LoadingService } from "~/services/loading.service";
 import {
   ShoppingList,
   ShoppingListService,
+  ShoppingListItem,
 } from "~/services/shopping-list.service";
 import { WebsocketService } from "~/services/websocket.service";
 import { UtilService, RouteMap } from "~/services/util.service";
@@ -37,10 +43,13 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
     ShoppingListItemComponent,
     ShoppingListGroupComponent,
     NullStateComponent,
+    DragDropModule,
   ],
 })
 export class ShoppingListPage {
   defaultBackHref: string = RouteMap.ShoppingListsPage.getPath();
+
+  @ViewChildren(CdkDropList) dropLists!: QueryList<CdkDropList>;
 
   shoppingListId: string;
   list?: ShoppingList;
@@ -61,7 +70,7 @@ export class ShoppingListPage {
   preferenceKeys = ShoppingListPreferenceKey;
 
   initialLoadComplete = false;
-
+  editMode = false;
   reference = "0";
 
   constructor(
@@ -202,7 +211,7 @@ export class ShoppingListPage {
   }
 
   async completeItems(items: any[], completed: boolean) {
-    if (!this.list) return;
+    if (!this.list || this.editMode) return;
 
     if (completed && this.preferences[ShoppingListPreferenceKey.PreferDelete]) {
       return this.removeItems(items);
@@ -351,12 +360,20 @@ export class ShoppingListPage {
       componentProps: {
         shoppingListId: this.shoppingListId,
         shoppingList: this.list,
+        editMode: this.editMode,
       },
       event,
     });
 
     await popover.present();
-    await popover.onDidDismiss();
+    const { data } = await popover.onDidDismiss();
+
+    if (data && data.editMode !== undefined) {
+      this.editMode = data.editMode;
+      if (this.editMode) {
+        this.setupDropListConnections();
+      }
+    }
 
     const loading = this.loadingService.start();
 
@@ -367,5 +384,88 @@ export class ShoppingListPage {
 
   openRecipe(id: string): void {
     this.navCtrl.navigateForward(RouteMap.RecipePage.getPath(id));
+  }
+
+  setupDropListConnections() {
+    if (!this.dropLists || this.dropLists.length === 0) {
+      console.warn("No drop lists found.");
+      return;
+    }
+
+    const dropListArray = this.dropLists.toArray();
+
+    this.dropLists.forEach((dropList) => {
+      // Connect each list to all others
+      dropList.connectedTo = dropListArray.filter((list) => list !== dropList);
+    });
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    const fromCategory =
+      event.previousContainer.element.nativeElement.dataset.categoryTitle;
+    const toCategory =
+      event.container.element.nativeElement.dataset.categoryTitle;
+
+    if (fromCategory && toCategory && fromCategory !== toCategory) {
+      const fromCategoryItems =
+        this.itemsByCategoryTitle[fromCategory as string];
+      const toCategoryItems =
+        this.itemsByCategoryTitle[toCategory as string] || [];
+      const draggedItem = fromCategoryItems[event.previousIndex];
+      draggedItem.categoryTitle = toCategory;
+      this.saveChanges(draggedItem);
+      this.setupDropListConnections();
+    }
+  }
+
+  updateItemArrays() {
+    const {
+      items: sortedItems,
+      groupTitles,
+      categoryTitles,
+      itemsByGroupTitle,
+      itemsByCategoryTitle,
+      groupsByCategoryTitle,
+    } = getShoppingListItemGroupings(
+      this.items,
+      this.preferences[ShoppingListPreferenceKey.SortBy],
+    );
+
+    this.items = sortedItems;
+    this.groupTitles = groupTitles;
+    this.categoryTitles = categoryTitles;
+    this.itemsByGroupTitle = itemsByGroupTitle;
+    this.itemsByCategoryTitle = itemsByCategoryTitle;
+    this.groupsByCategoryTitle = groupsByCategoryTitle;
+  }
+
+  async saveChanges(item: ShoppingListItem) {
+    if (!this.list) return;
+    const loading = this.loadingService.start();
+    try {
+      const itemIds = item.id;
+      const categoryTitle = item.categoryTitle;
+
+      const response = await this.shoppingListService.updateItems(
+        this.list.id,
+        {
+          itemIds,
+        },
+        {
+          categoryTitle: categoryTitle,
+        },
+      );
+      loading.dismiss();
+
+      if (!response) return;
+      if (this.reference === response.data.reference) return;
+      this.reference = response.data.reference;
+
+      await this.loadList();
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      loading.dismiss();
+      // Add error handling, such as displaying an error message to the user.
+    }
   }
 }
