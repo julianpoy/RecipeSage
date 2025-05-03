@@ -416,12 +416,13 @@ router.get(
 
     let s = shoppingListSummary.toJSON();
     ShoppingListCategorizerService.groupShoppingListItems(s.items);
-    s.items.forEach(
-      (item) =>
-        (item.categoryTitle = item.categoryTitle
-          ? item.categoryTitle
-          : ShoppingListCategorizerService.getCategoryTitle(item.title)),
-    );
+    for (const item in s) {
+      if (item.categoryTitle === null) {
+        item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
+          item.title,
+        );
+      }
+    }
 
     res.status(200).json(s);
   }),
