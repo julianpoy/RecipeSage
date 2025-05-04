@@ -119,7 +119,7 @@
     "@angular/compiler": "19.2.8",
     "@angular/compiler-cli": "19.2.8",
     "@angular/language-service": "19.2.8",
-    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-env": "^7.27.1",
     "@capacitor/cli": "7.2.0",
     "@faker-js/faker": "^9.7.0",
     "@ionic/angular-toolkit": "12.2.0",
