@@ -416,7 +416,7 @@ router.get(
 
     let s = shoppingListSummary.toJSON();
     ShoppingListCategorizerService.groupShoppingListItems(s.items);
-    for (const item in s) {
+    for (const item in s.items) {
       if (item.categoryTitle === null) {
         item.categoryTitle = ShoppingListCategorizerService.getCategoryTitle(
           item.title,
