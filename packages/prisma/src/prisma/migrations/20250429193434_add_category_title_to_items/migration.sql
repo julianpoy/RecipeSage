@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "ShoppingListItems" ADD COLUMN "categoryTitle" TEXT DEFAULT NULL;
+ALTER TABLE "ShoppingListItems" ADD COLUMN "categoryTitle" TEXT;
