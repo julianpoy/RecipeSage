@@ -1017,5 +1017,6 @@
     "pages.importImages.title": "Importazione di ricette da file di immagine",
     "pages.import.enex": "Importa da un file Evernote",
     "pages.importEnex.title": "Importazione di ricette da un file Evernote (enex)",
-    "pages.importEnex.description": "Questa operazione consente di importare le ricette da un'esportazione di Evernote (che termina in .enex) nel proprio account RecipeSage. Per creare un file nel formato corretto da importare, consultare la guida per l'utente. Si prega di considerare la possibilità di contribuire se il file contiene un gran numero di ricette o immagini."
+    "pages.importEnex.description": "Questa operazione consente di importare le ricette da un'esportazione di Evernote (che termina in .enex) nel proprio account RecipeSage. Per creare un file nel formato corretto da importare, consultare la guida per l'utente. Si prega di considerare la possibilità di contribuire se il file contiene un gran numero di ricette o immagini.",
+    "pages.contribute.manage": "Per gestire un abbonamento esistente, clicca qui"
 }
