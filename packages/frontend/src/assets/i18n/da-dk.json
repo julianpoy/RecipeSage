@@ -1014,5 +1014,7 @@
     "pages.auth.error.incorrectPassword": "Den angivne adgangskode stemmer ikke overens med den registrerede konto.",
     "pages.auth.error.ssoAccount": "Der er ikke angivet en adgangskode til den konto, du forsøger at logge ind på. Log ind med Google, eller brug knappen til nulstilling af adgangskode for at indstille en adgangskode.",
     "pages.auth.error.registrationDisabled": "Registrering deaktiveres via miljøvariablen DISABLE_REGISTRATION",
-    "pages.settings.resetCompletion": "Nulstil udfyldelse af ingredienser og instruktioner i opskrifter + vægt"
+    "pages.settings.resetCompletion": "Nulstil udfyldelse af ingredienser og instruktioner i opskrifter + vægt",
+    "pages.import.enex": "Import fra Evernote-fil",
+    "pages.contribute.manage": "Klik her for at administrere et eksisterende abonnement"
 }
