@@ -871,5 +871,22 @@
     "generic.save": "Зберегти",
     "generic.okay": "Ок",
     "generic.ignore": "Ігнорувати",
-    "generic.options": "Параметри"
+    "generic.options": "Параметри",
+    "pages.auth.forgot.alert.header": "Скидання пароля застосовано",
+    "pages.auth.error.invalidEmailPassword": "Будь ласка, введіть дійсну адресу електронної пошти та пароль, що містить щонайменше 6 символів.",
+    "pages.auth.error.incorrectEmail": "Облікового запису з такою електронною адресою не існує.",
+    "pages.auth.error.incorrectPassword": "Наданий пароль не збігається з обліковим записом.",
+    "pages.auth.error.ssoAccount": "Для облікового запису, в який ви намагаєтеся увійти, не встановлено пароль. Будь ласка, увійдіть за допомогою Google або скористайтеся кнопкою скидання пароля, щоб встановити пароль.",
+    "pages.home.exportSelected.header": "Виберіть формат",
+    "pages.home.exportSelected.message": "У якому форматі ви хотіли б завантажити ці рецепти?",
+    "pages.home.exportSelected.pdf": "Формат PDF",
+    "pages.home.exportSelected.text": "Звичайний текстовий формат",
+    "pages.home.exportSelected.processing.header": "Експортування рецептів",
+    "pages.home.exportSelected.processing.view": "Перегляд та завантаження",
+    "pages.auth.forgot.alert.message": "Якщо з цією адресою електронної пошти пов'язаний обліковий запис RecipeSage, ви отримаєте посилання для зміни пароля протягом наступних кількох хвилин.",
+    "pages.home.exportSelected.processing.message": "Ми працюємо над підготовкою цих рецептів для завантаження. Це може зайняти кілька хвилин. Експорт буде доступний для завантаження на сторінці експорту в налаштуваннях.",
+    "pages.contribute.manage": "Щоб керувати існуючою підпискою, натисніть тут",
+    "pages.contact.discord": "Якщо у вас виникли проблеми, помилки або побажання, будь ласка, зв'яжіться зі мною через наш Discord: ",
+    "pages.aboutDetails.1.title": "Трішки про мене",
+    "pages.aboutDetails.1.1": "Я розробник програмного забезпечення в Південної Каліфорнії. Я багато працюю з відкритим кодом і витрачаю багато часу на невеликі проекти."
 }
