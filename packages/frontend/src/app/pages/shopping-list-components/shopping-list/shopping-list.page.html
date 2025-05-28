@@ -43,20 +43,28 @@
             ></ion-icon>
           </ion-title>
         </ion-list-header>
-        <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-          <div
-            *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
-            class="shopping-list-item"
-          >
-            <shopping-list-group
-              [group]="group"
-              [categoryTitle]="categoryTitle"
-              [groupTitleExpanded]="groupTitleExpanded"
-              [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
-              [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
-              (completeToggle)="completeItems($event, true)"
-            ></shopping-list-group>
+        <div
+          cdkDropList
+          [cdkDropListData]="itemsByCategoryTitle[categoryTitle]"
+          attr.data-category-title="{{ categoryTitle }}"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
+            <div
+              *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
+              class="shopping-list-item"
+            >
+              <shopping-list-group
+                [group]="group"
+                [categoryTitle]="categoryTitle"
+                [groupTitleExpanded]="groupTitleExpanded"
+                [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+                [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+                [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+                (completeToggle)="completeItems($event, true)"
+                cdkDrag
+              ></shopping-list-group>
+            </div>
           </div>
         </div>
       </div>
@@ -97,19 +105,27 @@
             ></ion-icon>
           </ion-title>
         </ion-list-header>
-        <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-          <div
-            *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
-            class="shopping-list-item"
-          >
-            <shopping-list-item
-              [title]="item.title"
-              [completed]="item.completed"
-              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
-              (completeToggle)="completeItems([item], true)"
-            ></shopping-list-item>
+        <div
+          cdkDropList
+          [cdkDropListData]="itemsByCategoryTitle[categoryTitle]"
+          attr.data-category-title="{{ categoryTitle }}"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
+            <div
+              *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
+              class="shopping-list-item"
+            >
+              <shopping-list-item
+                [title]="item.title"
+                [completed]="item.completed"
+                [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+                [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+                [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+                (completeToggle)="completeItems([item], true)"
+                cdkDrag
+              ></shopping-list-item>
+            </div>
           </div>
         </div>
       </div>

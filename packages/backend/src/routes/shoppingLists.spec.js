@@ -128,4 +128,74 @@ describe("shopping Lists", () => {
     expect(body.id).toBe(shoppingList.id);
     expect(body.title).toBe(shoppingList.title);
   });
+
+  it("it categorizes ShoppinglistItems", async () => {
+    const user = await createUser();
+    const session = await createSession(user.id);
+    const shoppingList = await createShoppingList(user.id);
+    await request(server)
+      .post(`/shoppingLists/${shoppingList.id}`)
+      .query({ token: session.token })
+      .send({
+        items: [
+          { title: "1 lbs Boneless Chicken Breast", recipeId: null },
+          { title: "1 uncategorizable grocery", recipeId: null },
+        ],
+      });
+
+    const { body } = await request(server)
+      .get(`/shoppingLists/${shoppingList.id}`)
+      .query({ token: session.token })
+      .expect(superjsonResult(200));
+
+    expect(body.id).toBe(shoppingList.id);
+    expect(body.title).toBe(shoppingList.title);
+    const chickenItem = body.items.find(
+      (item) => item.title === "1 lbs Boneless Chicken Breast",
+    );
+    expect(chickenItem).toBeTruthy();
+    expect(chickenItem.categoryTitle).toBe("Meats");
+    const uncategorizableItem = body.items.find(
+      (item) => item.title === "1 uncategorizable grocery",
+    );
+    expect(uncategorizableItem).toBeTruthy();
+    expect(uncategorizableItem.categoryTitle).toBe("Uncategorized");
+  });
+
+  it("it categorizes ShoppinglistItems with assigned categories", async () => {
+    const user = await createUser();
+    const session = await createSession(user.id);
+    const shoppingList = await createShoppingList(user.id);
+    await request(server)
+      .post(`/shoppingLists/${shoppingList.id}`)
+      .query({ token: session.token })
+      .send({
+        items: [
+          { title: "1 lbs Boneless Chicken Breast", recipeId: null },
+          {
+            title: "1 Black Pepper",
+            recipeId: null,
+            categoryTitle: "Groceries",
+          },
+        ],
+      });
+
+    const { body } = await request(server)
+      .get(`/shoppingLists/${shoppingList.id}`)
+      .query({ token: session.token })
+      .expect(superjsonResult(200));
+
+    expect(body.id).toBe(shoppingList.id);
+    expect(body.title).toBe(shoppingList.title);
+    const chickenItem = body.items.find(
+      (item) => item.title === "1 lbs Boneless Chicken Breast",
+    );
+    expect(chickenItem).toBeTruthy();
+    expect(chickenItem.categoryTitle).toBe("Meats");
+    const uncategorizableItem = body.items.find(
+      (item) => item.title === "1 Black Pepper",
+    );
+    expect(uncategorizableItem).toBeTruthy();
+    expect(uncategorizableItem.categoryTitle).toBe("Groceries");
+  });
 });
