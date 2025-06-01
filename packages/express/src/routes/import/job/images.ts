@@ -89,9 +89,8 @@ export const imagesHandler = defineHandler(
         }
 
         const recipeImageBuffer = await fs.readFile(filePath);
-        const recipeImageBase64 = await fs.readFile(filePath, "base64");
         const images = [];
-        images.push(recipeImageBase64);
+        images.push(filePath);
 
         const recipe = await ocrImagesToRecipe([recipeImageBuffer]);
         if (!recipe) {
@@ -121,6 +120,7 @@ export const imagesHandler = defineHandler(
       const createdRecipeIds = await importStandardizedRecipes(
         res.locals.session.userId,
         standardizedRecipeImportInput,
+        extractPath,
       );
 
       const recipesToIndex = await prisma.recipe.findMany({

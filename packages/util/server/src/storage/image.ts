@@ -2,6 +2,7 @@ import { StorageObjectRecord, writeBuffer } from "./index";
 import { ObjectTypes } from "./shared";
 import fs from "fs/promises";
 import { fetchURL, transformImageBuffer } from "../general";
+import { sanitizeFilePath } from "./sanitizeFilePath";
 
 const HIGH_RES_IMG_CONVERSION_WIDTH = 1024;
 const HIGH_RES_IMG_CONVERSION_HEIGHT = 1024;
@@ -28,8 +29,14 @@ export const writeImageFile = async (
   objectType: ObjectTypes,
   filePath: string,
   highResConversion: boolean,
+  rootPath: string,
 ): Promise<StorageObjectRecord> => {
-  const buffer = await fs.readFile(filePath);
+  const normalizedPath = sanitizeFilePath({
+    mustStartWith: rootPath,
+    filePath: filePath,
+  });
+
+  const buffer = await fs.readFile(normalizedPath);
 
   return writeImageBuffer(objectType, buffer, highResConversion);
 };

@@ -137,6 +137,7 @@ export const pdfsHandler = defineHandler(
       const createdRecipeIds = await importStandardizedRecipes(
         res.locals.session.userId,
         standardizedRecipeImportInput,
+        extractPath,
       );
 
       const recipesToIndex = await prisma.recipe.findMany({

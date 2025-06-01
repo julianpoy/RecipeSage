@@ -291,6 +291,7 @@ async function main() {
                     ObjectTypes.RECIPE_IMAGE,
                     possibleImageFiles[0],
                     false,
+                    extractPath,
                   )
                     .then((image) => {
                       lcbRecipe.images = lcbRecipe.images || [];
