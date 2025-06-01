@@ -69,7 +69,7 @@
     "minisearch": "^7.1.2",
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
-    "multer": "v1.4.5-lts.2",
+    "multer": "v2.0.0",
     "ngx-ui-scroll": "^3.2.1",
     "node-cron": "^3.0.3",
     "node-fetch": "^2.6.7",
