@@ -1016,5 +1016,7 @@
     "pages.auth.error.registrationDisabled": "Registrering deaktiveres via miljøvariablen DISABLE_REGISTRATION",
     "pages.settings.resetCompletion": "Nulstil udfyldelse af ingredienser og instruktioner i opskrifter + vægt",
     "pages.import.enex": "Import fra Evernote-fil",
-    "pages.contribute.manage": "Klik her for at administrere et eksisterende abonnement"
+    "pages.contribute.manage": "Klik her for at administrere et eksisterende abonnement",
+    "pages.importEnex.title": "Importer opskrifter fra Evernote (enex)-fil",
+    "pages.importEnex.description": "Dette vil importere opskrifter fra en Evernote-eksport (ender på .enex) til din RecipeSage-konto. Se brugervejledningen for at finde ud af, hvordan du opretter en fil i det rigtige format, der kan importeres her. Overvej at bidrage, hvis din fil indeholder et stort antal opskrifter eller billeder."
 }
