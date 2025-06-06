@@ -17,58 +17,64 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+  <ion-refresher
+    slot="fixed"
+    [disabled]="editMode"
+    (ionRefresh)="refresh($event)"
+  >
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list lines="none">
     <div
       *ngIf="preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]"
     >
-      <div
-        *ngFor="let categoryTitle of categoryTitles"
-        class="category-container"
-      >
-        <ion-list-header
-          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
+      <div *ngIf="!editMode">
+        <collapsible-category
+          *ngFor="let categoryTitle of categoryTitles"
+          [categoryTitle]="categoryTitle"
+          [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+          (toggleCollapse)="onToggleCollapse($event)"
         >
-          <ion-title class="ion-no-padding">
-            {{ categoryTitle }}
-            <ion-icon
-              *ngIf="!categoryTitleCollapsed[categoryTitle]"
-              name="caret-down"
-            ></ion-icon>
-            <ion-icon
-              *ngIf="categoryTitleCollapsed[categoryTitle]"
-              name="caret-up"
-            ></ion-icon>
-          </ion-title>
-        </ion-list-header>
-        <div
-          cdkDropList
-          [cdkDropListData]="itemsByCategoryTitle[categoryTitle]"
-          attr.data-category-title="{{ categoryTitle }}"
-          (cdkDropListDropped)="drop($event)"
-        >
-          <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-            <div
-              *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
-              class="shopping-list-item"
-            >
-              <shopping-list-group
-                [group]="group"
-                [categoryTitle]="categoryTitle"
-                [groupTitleExpanded]="groupTitleExpanded"
-                [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
-                [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
-                [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
-                (completeToggle)="completeItems($event, true)"
-                cdkDrag
-              ></shopping-list-group>
-            </div>
+          <div
+            *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
+            class="shopping-list-item"
+          >
+            <shopping-list-group
+              [group]="group"
+              [categoryTitle]="categoryTitle"
+              [groupTitleExpanded]="groupTitleExpanded"
+              [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+              [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+              [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+              (completeToggle)="completeItems($event, true)"
+            ></shopping-list-group>
           </div>
-        </div>
+        </collapsible-category>
       </div>
     </div>
+
+    <ion-reorder-group disabled="!editMode" (ionItemReorder)="drop($event)">
+      <collapsible-category
+        *ngFor="let categoryTitle of categoryTitles"
+        [categoryTitle]="categoryTitle"
+        [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+        (toggleCollapse)="onToggleCollapse($event)"
+      >
+        <ion-reorder
+          *ngFor="let group of groupsByCategoryTitle[categoryTitle]"
+          class="draggable-shopping-list-group"
+        >
+          <draggable-shopping-list-group
+            [group]="group"
+            [categoryTitle]="categoryTitle"
+            [groupTitleExpanded]="groupTitleExpanded"
+            [showRecipeTitle]="preferences[preferenceKeys.ShowRecipeTitle]"
+            [showAddedOn]="preferences[preferenceKeys.ShowAddedOn]"
+            [showAddedBy]="preferences[preferenceKeys.ShowAddedBy] && !!list?.collaborators?.length"
+          ></draggable-shopping-list-group>
+        </ion-reorder>
+      </collapsible-category>
+    </ion-reorder-group>
     <div
       *ngIf="!preferences[preferenceKeys.GroupCategories] && preferences[preferenceKeys.GroupSimilar]"
     >
@@ -86,80 +92,79 @@
     <div
       *ngIf="preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
     >
-      <div
-        *ngFor="let categoryTitle of categoryTitles"
-        class="category-container"
-      >
-        <ion-list-header
-          (click)="categoryTitleCollapsed[categoryTitle] = !categoryTitleCollapsed[categoryTitle]"
+      <div *ngIf="!editMode">
+        <collapsible-category
+          *ngFor="let categoryTitle of categoryTitles"
+          [categoryTitle]="categoryTitle"
+          [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+          (toggleCollapse)="onToggleCollapse($event)"
         >
-          <ion-title class="ion-no-padding">
-            {{ categoryTitle }}
-            <ion-icon
-              *ngIf="!categoryTitleCollapsed[categoryTitle]"
-              name="caret-down"
-            ></ion-icon>
-            <ion-icon
-              *ngIf="categoryTitleCollapsed[categoryTitle]"
-              name="caret-up"
-            ></ion-icon>
-          </ion-title>
-        </ion-list-header>
-        <div
-          cdkDropList
-          [cdkDropListData]="itemsByCategoryTitle[categoryTitle]"
-          attr.data-category-title="{{ categoryTitle }}"
-          (cdkDropListDropped)="drop($event)"
-        >
-          <div *ngIf="!categoryTitleCollapsed[categoryTitle]">
-            <div
-              *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
-              class="shopping-list-item"
-            >
-              <shopping-list-item
-                [title]="item.title"
-                [completed]="item.completed"
-                [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-                [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-                [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
-                (completeToggle)="completeItems([item], true)"
-                cdkDrag
-              ></shopping-list-item>
-            </div>
+          <div
+            *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
+            class="shopping-list-item"
+          >
+            <shopping-list-item
+              [title]="item.title"
+              [completed]="item.completed"
+              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+              (completeToggle)="completeItems([item], true)"
+            ></shopping-list-item>
           </div>
+        </collapsible-category>
+      </div>
+      <ion-reorder-group disabled="!editMode" (ionItemReorder)="drop($event)">
+        <collapsible-category
+          *ngFor="let categoryTitle of categoryTitles"
+          [categoryTitle]="categoryTitle"
+          [isCollapsed]="categoryTitleCollapsed[categoryTitle]"
+          (toggleCollapse)="onToggleCollapse($event)"
+        >
+          <ion-reorder
+            *ngFor="let item of itemsByCategoryTitle[categoryTitle]"
+            class="draggable-shopping-list-item"
+          >
+            <draggable-shopping-list-item
+              [title]="item.title"
+              [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+              [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+              [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+            ></draggable-shopping-list-item>
+          </ion-reorder>
+        </collapsible-category>
+      </ion-reorder-group>
+      <div
+        *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
+      >
+        <div *ngFor="let item of items" class="shopping-list-item">
+          <shopping-list-item
+            [title]="item.title"
+            [completed]="item.completed"
+            [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
+            [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
+            [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
+            (completeToggle)="completeItems([item], true)"
+          ></shopping-list-item>
         </div>
       </div>
+      <null-state *ngIf="items.length === 0 && initialLoadComplete">
+        <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
+        <ion-label virtualSlot="body">
+          <p>
+            {{ 'pages.shoppingList.nullState.1' | translate }}<br />
+            {{ 'pages.shoppingList.nullState.2' | translate }}
+            <br /><br />
+            <ion-button (click)="newShoppingListItem()">
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>
+                {{ 'pages.shoppingList.nullState.add' | translate }}
+              </ion-label>
+            </ion-button>
+          </p>
+        </ion-label>
+      </null-state>
     </div>
-    <div
-      *ngIf="!preferences[preferenceKeys.GroupCategories] && !preferences[preferenceKeys.GroupSimilar]"
-    >
-      <div *ngFor="let item of items" class="shopping-list-item">
-        <shopping-list-item
-          [title]="item.title"
-          [completed]="item.completed"
-          [recipeTitle]="preferences[preferenceKeys.ShowRecipeTitle] && item.recipe?.title"
-          [createdAt]="preferences[preferenceKeys.ShowAddedOn] && item.createdAt"
-          [ownerName]="preferences[preferenceKeys.ShowAddedBy] && list?.collaborators?.length && item.owner?.name"
-          (completeToggle)="completeItems([item], true)"
-        ></shopping-list-item>
-      </div>
-    </div>
-    <null-state *ngIf="items.length === 0 && initialLoadComplete">
-      <ion-icon name="cart" class="big-icon" virtualSlot="header"></ion-icon>
-      <ion-label virtualSlot="body">
-        <p>
-          {{ 'pages.shoppingList.nullState.1' | translate }}<br />
-          {{ 'pages.shoppingList.nullState.2' | translate }}
-          <br /><br />
-          <ion-button (click)="newShoppingListItem()">
-            <ion-icon name="add" slot="start"></ion-icon>
-            <ion-label>
-              {{ 'pages.shoppingList.nullState.add' | translate }}
-            </ion-label>
-          </ion-button>
-        </p>
-      </ion-label>
-    </null-state>
   </ion-list>
 
   <br />

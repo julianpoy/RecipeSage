@@ -30,6 +30,7 @@ import { NewShoppingListItemModalPage } from "../new-shopping-list-item-modal/ne
 import { ShoppingListPopoverPage } from "../shopping-list-popover/shopping-list-popover.page";
 import { Title } from "@angular/platform-browser";
 import { SHARED_UI_IMPORTS } from "../../../providers/shared-ui.provider";
+import { DraggableShoppingListItemComponent } from "../../../components/draggable-shopping-list-item/draggable-shopping-list-item.component";
 import { ShoppingListItemComponent } from "../../../components/shopping-list-item/shopping-list-item.component";
 import { ShoppingListGroupComponent } from "../../../components/shopping-list-group/shopping-list-group.component";
 import { NullStateComponent } from "../../../components/null-state/null-state.component";
@@ -40,6 +41,7 @@ import { NullStateComponent } from "../../../components/null-state/null-state.co
   styleUrls: ["shopping-list.page.scss"],
   imports: [
     ...SHARED_UI_IMPORTS,
+    DraggableShoppingListItemComponent,
     ShoppingListItemComponent,
     ShoppingListGroupComponent,
     NullStateComponent,
@@ -128,14 +130,16 @@ export class ShoppingListPage {
   }
 
   refresh(loader: any) {
-    this.loadList().then(
-      () => {
-        loader.target.complete();
-      },
-      () => {
-        loader.target.complete();
-      },
-    );
+    if (!this.editMode) {
+      this.loadList().then(
+        () => {
+          loader.target.complete();
+        },
+        () => {
+          loader.target.complete();
+        },
+      );
+    }
   }
 
   async setPageTitle(list?: ShoppingList) {
@@ -208,6 +212,11 @@ export class ShoppingListPage {
     if (!response.success) return;
 
     this.processList(response.data);
+  }
+
+  onToggleCollapse(categoryTitle: string) {
+    this.categoryTitleCollapsed[categoryTitle] =
+      !this.categoryTitleCollapsed[categoryTitle];
   }
 
   async completeItems(items: any[], completed: boolean) {
