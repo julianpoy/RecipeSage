@@ -26,6 +26,7 @@ export class OpenAIHelper {
 
     this.openAi = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY || "selfhost-invalid-placeholder",
+      baseURL: process.env.OPENAI_API_BASE_URL || undefined,
     });
   }
 
