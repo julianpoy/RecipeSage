@@ -137,11 +137,9 @@ const logError = (err: ServerError) => {
   if (isExpectedError) return;
 
   console.error(err);
-
-  Sentry.captureException(err);
 };
 
-const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
+const appErrorHandler: ErrorRequestHandler = function (_err, req, res, _next) {
   const err = _err as ServerError;
   if (!err.status) err.status = 500;
 
@@ -156,6 +154,8 @@ const appErrorHandler: ErrorRequestHandler = function (_err, req, res) {
   res.status(err.status);
   res.render("error");
 };
+
+Sentry.setupExpressErrorHandler(app);
 app.use(appErrorHandler);
 
 export { app };
