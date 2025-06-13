@@ -73,7 +73,7 @@
     "ngx-ui-scroll": "^4.0.0",
     "node-cron": "^3.0.3",
     "node-fetch": "^2.6.7",
-    "openai": "^4.91.1",
+    "openai": "^5.3.0",
     "p-debounce": "^4.0.0",
     "p-limit": "^3.1.0",
     "p-throttle": "^7.0.0",
