@@ -7,6 +7,7 @@ import {
   SessionType,
   generatePasswordHash,
   generateSession,
+  metrics,
   sanitizeUserEmail,
   sendWelcomeEmail,
 } from "@recipesage/util/server/general";
@@ -81,6 +82,10 @@ export const register = publicProcedure
       ccAddresses: [],
     }).catch((err) => {
       Sentry.captureException(err);
+    });
+
+    metrics.userCreated.inc({
+      auth_type: "password",
     });
 
     return sessionDTO;

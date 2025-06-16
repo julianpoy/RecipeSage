@@ -7,20 +7,14 @@ import multer from "multer";
 import fs from "fs/promises";
 import extract from "extract-zip";
 import path from "path";
-import { indexRecipes } from "@recipesage/util/server/search";
-import { JobStatus, JobType } from "@prisma/client";
-import {
-  importStandardizedRecipes,
-  StandardizedRecipeImportEntry,
-} from "@recipesage/util/server/db";
+import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
 import { ocrImagesToRecipe } from "@recipesage/util/server/ml";
-import { JobMeta, prisma } from "@recipesage/prisma";
-import Sentry from "@sentry/node";
 import {
   deletePathsSilent,
-  getImportJobResultCode,
+  importJobFailCommon,
+  importJobFinishCommon,
+  importJobSetupCommon,
 } from "@recipesage/util/server/general";
-import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
 import { z } from "zod";
 
 const schema = {
@@ -40,8 +34,7 @@ export const imagesHandler = defineHandler(
     ],
   },
   async (req, res) => {
-    const userLabels =
-      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+    const userId = res.locals.session.userId;
 
     const cleanupPaths: string[] = [];
 
@@ -52,17 +45,10 @@ export const imagesHandler = defineHandler(
       );
     }
 
-    const job = await prisma.job.create({
-      data: {
-        userId: res.locals.session.userId,
-        type: JobType.IMPORT,
-        status: JobStatus.RUN,
-        progress: 1,
-        meta: {
-          importType: "images",
-          importLabels: userLabels,
-        } satisfies JobMeta,
-      },
+    const { job, timer, importLabels } = await importJobSetupCommon({
+      userId,
+      importType: "images",
+      labels: req.query.labels?.split(",") || [],
     });
 
     // We complete this work outside of the scope of the request
@@ -100,91 +86,26 @@ export const imagesHandler = defineHandler(
         standardizedRecipeImportInput.push({
           ...recipe,
           images,
-          labels: userLabels,
+          labels: importLabels,
         });
       }
 
-      if (standardizedRecipeImportInput.length === 0) {
-        throw new Error("No recipes");
-      }
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 50,
-        },
-      });
-
-      const createdRecipeIds = await importStandardizedRecipes(
-        res.locals.session.userId,
+      await importJobFinishCommon({
+        timer,
+        job,
+        userId,
         standardizedRecipeImportInput,
-        extractPath,
-      );
-
-      const recipesToIndex = await prisma.recipe.findMany({
-        where: {
-          id: {
-            in: createdRecipeIds,
-          },
-          userId: res.locals.session.userId,
-        },
-      });
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 75,
-        },
-      });
-
-      await indexRecipes(recipesToIndex);
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          status: JobStatus.SUCCESS,
-          resultCode: JOB_RESULT_CODES.success,
-          progress: 100,
-        },
+        importTempDirectory: extractPath,
       });
     };
 
     start()
-      .catch(async (e) => {
-        const isBadZipError =
-          e instanceof Error &&
-          e.message === "end of central directory record signature not found";
-
-        const isNoRecipesError =
-          e instanceof Error && e.message === "No recipes";
-
-        await prisma.job.update({
-          where: {
-            id: job.id,
-          },
-          data: {
-            status: JobStatus.FAIL,
-            resultCode: getImportJobResultCode({
-              isBadFormat: isBadZipError,
-              isNoRecipes: isNoRecipesError,
-            }),
-          },
+      .catch(async (error) => {
+        await importJobFailCommon({
+          timer,
+          job,
+          error,
         });
-
-        if (!isBadZipError && !isNoRecipesError) {
-          Sentry.captureException(e, {
-            extra: {
-              jobId: job.id,
-            },
-          });
-          console.error(e);
-        }
       })
       .finally(async () => {
         await deletePathsSilent(cleanupPaths);
