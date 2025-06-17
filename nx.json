@@ -38,8 +38,6 @@
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "useDaemonProcess": false,
-  "neverConnectToCloud": true,
   "useInferencePlugins": false,
   "defaultBase": "master",
   "tui": {
