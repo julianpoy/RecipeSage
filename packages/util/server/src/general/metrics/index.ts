@@ -1,5 +1,9 @@
 import client from "prom-client";
 
+client.register.setDefaultLabels({
+  environment: process.env.ENVIRONMENT || "development",
+});
+
 /**
  * All app-wide (server-side) metrics should live here.
  * All of these metrics are non-PII and only help monitor overall system health, especially when it comes to new releases.

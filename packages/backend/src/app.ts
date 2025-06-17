@@ -112,11 +112,12 @@ app.use(function (req, res, next) {
   const timer = metrics.apiRequest.startTimer();
   res.on("finish", function () {
     const time = timer();
+    const path = req.baseUrl + (req.route?.path || req.path);
     metrics.apiRequest.observe(
       {
         status_code: res.statusCode,
         method: req.method,
-        path: req.route?.path || req.path,
+        path,
       },
       time,
     );
