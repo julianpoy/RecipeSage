@@ -14,9 +14,11 @@ import {
 } from "@recipesage/util/server/general";
 
 const schema = {
-  body: z.object({
-    jsonLD: z.any(),
-  }),
+  body: z
+    .object({
+      jsonLD: z.any().optional(),
+    })
+    .optional(),
   query: z.object({
     labels: z.string().optional(),
   }),
@@ -36,7 +38,7 @@ export const jsonldHandler = defineHandler(
   async (req, res) => {
     const userId = res.locals.session.userId;
 
-    const file = req.file?.buffer.toString() || req.body.jsonLD;
+    const file = req.file?.buffer.toString() || req.body?.jsonLD;
     if (!file) {
       throw new BadRequestError(
         "Request must include multipart file under the 'file' field",
@@ -51,10 +53,14 @@ export const jsonldHandler = defineHandler(
 
     // We complete this work outside of the scope of the request
     const start = async () => {
-      const input = JSON.parse(file) as JsonLD | JsonLD[];
+      const input = JSON.parse(file) as
+        | JsonLD
+        | JsonLD[]
+        | { recipes: JsonLD[] };
 
       let jsonLD: JsonLD[];
       if (Array.isArray(input)) jsonLD = input;
+      else if ("recipes" in input) jsonLD = input.recipes;
       else jsonLD = [input];
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
