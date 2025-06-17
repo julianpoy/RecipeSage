@@ -249,6 +249,8 @@ export const clipUrl = async (
     Sentry.captureMessage("Fell back to JSDOM", {
       extra: {
         url,
+        recipeDataBrowser,
+        recipeDataJSDOM,
       },
     });
 
