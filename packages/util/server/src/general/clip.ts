@@ -196,9 +196,7 @@ const clipRecipeHtmlWithJSDOM = async (document: string) => {
 
 const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
   const response = await fetchURL(clipUrl, {
-    requestConfig: {
-      timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
-    },
+    timeout: parseInt(process.env.CLIP_BROWSER_NAVIGATE_TIMEOUT || "6000"),
   });
 
   const document = await response.text();
