@@ -11,6 +11,7 @@ import puppeteer, { Browser } from "puppeteer-core";
 import { fetchURL } from "./fetch";
 import { StandardizedRecipeImportEntry } from "../db";
 import { readFileSync } from "fs";
+import { metrics } from "./metrics";
 
 const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
   workerType: "thread",
@@ -64,6 +65,10 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
         "BROWSERLESS_HOST, BROWSERLESS_PORT, and BROWSERLESS_TOKEN must be defined in environment variables to enable browserless",
       );
     }
+
+    metrics.clipStartedProcessing.inc({
+      method: "puppeteer",
+    });
 
     const browserWSEndpoint = new URL(
       `ws://${process.env.BROWSERLESS_HOST}:${process.env.BROWSERLESS_PORT}`,
@@ -181,6 +186,10 @@ const clipRecipeUrlWithPuppeteer = async (clipUrl: string) => {
 };
 
 const clipRecipeHtmlWithJSDOM = async (document: string) => {
+  metrics.clipStartedProcessing.inc({
+    method: "jsdom",
+  });
+
   // We exec with pool because jsdom is blocking and can be slow for large pages
   return pool.exec("clipRecipeHtmlWithJSDOM", [document]);
 };
@@ -200,7 +209,15 @@ const clipRecipeUrlWithJSDOM = async (clipUrl: string) => {
 export const clipUrl = async (
   url: string,
 ): Promise<StandardizedRecipeImportEntry> => {
+  metrics.clipRequested.inc({
+    form: "url",
+  });
+
   const recipeDataBrowser = await clipRecipeUrlWithPuppeteer(url).catch((e) => {
+    metrics.clipError.inc({
+      form: "url",
+      method: "puppeteer",
+    });
     console.error(e);
     Sentry.captureException(e, {
       extra: {
@@ -216,6 +233,10 @@ export const clipUrl = async (
     !recipeDataBrowser.instructions
   ) {
     const recipeDataJSDOM = await clipRecipeUrlWithJSDOM(url).catch((e) => {
+      metrics.clipError.inc({
+        form: "url",
+        method: "jsdom",
+      });
       console.error(e);
       Sentry.captureException(e, {
         extra: {
@@ -224,9 +245,12 @@ export const clipUrl = async (
       });
     });
 
+    metrics.clipFallbackJsdom.inc();
     Sentry.captureMessage("Fell back to JSDOM", {
       extra: {
         url,
+        recipeDataBrowser,
+        recipeDataJSDOM,
       },
     });
 
@@ -271,7 +295,15 @@ export const clipUrl = async (
 export const clipHtml = async (
   document: string,
 ): Promise<StandardizedRecipeImportEntry> => {
+  metrics.clipRequested.inc({
+    form: "url",
+  });
+
   const results = await clipRecipeHtmlWithJSDOM(document).catch((e) => {
+    metrics.clipError.inc({
+      form: "html",
+      method: "jsdom",
+    });
     console.error(e);
     Sentry.captureException(e);
   });

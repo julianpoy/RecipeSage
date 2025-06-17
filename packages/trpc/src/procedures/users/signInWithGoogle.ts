@@ -7,6 +7,7 @@ import {
   SessionType,
   generateSession,
   config,
+  metrics,
 } from "@recipesage/util/server/general";
 
 export const signInWithGoogle = publicProcedure
@@ -38,6 +39,11 @@ export const signInWithGoogle = publicProcedure
       });
     }
 
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email: email.toLowerCase(),
+      },
+    });
     const user = await prisma.user.upsert({
       where: {
         email: email.toLowerCase(),
@@ -52,6 +58,16 @@ export const signInWithGoogle = publicProcedure
     });
 
     const session = await generateSession(user.id, SessionType.User);
+
+    if (existingUser) {
+      metrics.userLogin.inc({
+        auth_type: "google",
+      });
+    } else {
+      metrics.userCreated.inc({
+        auth_type: "google",
+      });
+    }
 
     return {
       token: session.token,

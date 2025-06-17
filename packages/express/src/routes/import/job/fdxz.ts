@@ -5,21 +5,18 @@ import {
 } from "../../../defineHandler";
 import multer from "multer";
 import { indexRecipes } from "@recipesage/util/server/search";
-import { JobStatus, JobType } from "@prisma/client";
-import { JobMeta, prisma } from "@recipesage/prisma";
-import Sentry from "@sentry/node";
+import { JobStatus } from "@prisma/client";
+import { prisma } from "@recipesage/prisma";
 import { userHasCapability } from "@recipesage/util/server/capabilities";
 import { z } from "zod";
 import { spawn } from "child_process";
 import {
   deletePathsSilent,
-  getImportJobResultCode,
+  importJobFailCommon,
+  importJobSetupCommon,
+  metrics,
 } from "@recipesage/util/server/general";
-import {
-  Capabilities,
-  cleanLabelTitle,
-  JOB_RESULT_CODES,
-} from "@recipesage/util/shared";
+import { Capabilities, JOB_RESULT_CODES } from "@recipesage/util/shared";
 
 const schema = {
   query: z.object({
@@ -39,8 +36,7 @@ export const fdxzHandler = defineHandler(
     ],
   },
   async (req, res) => {
-    const userLabels =
-      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+    const userId = res.locals.session.userId;
 
     const cleanupPaths: string[] = [];
 
@@ -51,17 +47,10 @@ export const fdxzHandler = defineHandler(
       );
     }
 
-    const job = await prisma.job.create({
-      data: {
-        userId: res.locals.session.userId,
-        type: JobType.IMPORT,
-        status: JobStatus.RUN,
-        progress: 1,
-        meta: {
-          importType: "fdxz",
-          importLabels: userLabels,
-        } satisfies JobMeta,
-      },
+    const { job, timer, importLabels } = await importJobSetupCommon({
+      userId,
+      importType: "fdxz",
+      labels: req.query.labels?.split(",") || [],
     });
 
     // We complete this work outside of the scope of the request
@@ -84,7 +73,7 @@ export const fdxzHandler = defineHandler(
         "packages/backend/src/fdxzimport.app.js",
         file.path,
         res.locals.session.userId,
-        userLabels.join(",") || "null",
+        importLabels.join(",") || "null",
         ...optionalFlags,
       ]);
       let errData = "";
@@ -145,33 +134,23 @@ export const fdxzHandler = defineHandler(
           progress: 100,
         },
       });
+
+      metrics.jobFinished.observe(
+        {
+          job_type: "import",
+          import_type: "fdxz",
+        },
+        timer(),
+      );
     };
 
     start()
-      .catch(async (e) => {
-        const isBadFormatError =
-          e instanceof Error && e.message === "Bad format";
-
-        await prisma.job.update({
-          where: {
-            id: job.id,
-          },
-          data: {
-            status: JobStatus.FAIL,
-            resultCode: getImportJobResultCode({
-              isBadFormat: isBadFormatError,
-            }),
-          },
+      .catch(async (error) => {
+        await importJobFailCommon({
+          timer,
+          job,
+          error,
         });
-
-        if (!isBadFormatError) {
-          Sentry.captureException(e, {
-            extra: {
-              jobId: job.id,
-            },
-          });
-          console.error(e);
-        }
       })
       .finally(async () => {
         await deletePathsSilent(cleanupPaths);

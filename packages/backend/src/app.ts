@@ -18,6 +18,7 @@ import { trpcExpressMiddleware } from "@recipesage/trpc";
 
 import { setupInvalidateStaleJobsInterval } from "@recipesage/util/server/db";
 setupInvalidateStaleJobsInterval();
+import { metrics } from "@recipesage/util/server/general";
 
 // Routes
 import index from "./routes/index.js";
@@ -106,6 +107,24 @@ app.use(
     },
   }),
 );
+
+app.use(function (req, res, next) {
+  const timer = metrics.apiRequest.startTimer();
+  res.on("finish", function () {
+    const time = timer();
+    metrics.apiRequest.observe(
+      {
+        status_code: res.statusCode,
+        method: req.method,
+        path: req.route?.path || req.path,
+      },
+      time,
+    );
+  });
+
+  next();
+});
+
 app.use(bodyParser.urlencoded({ limit: "250MB", extended: false }));
 app.use(cookieParser());
 app.disable("x-powered-by");

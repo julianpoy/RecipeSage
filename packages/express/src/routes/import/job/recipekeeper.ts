@@ -6,19 +6,14 @@ import {
 import multer from "multer";
 import fs from "fs/promises";
 import extract from "extract-zip";
-import { indexRecipes } from "@recipesage/util/server/search";
-import { JobStatus, JobType } from "@prisma/client";
-import {
-  importStandardizedRecipes,
-  StandardizedRecipeImportEntry,
-} from "@recipesage/util/server/db";
-import { JobMeta, prisma } from "@recipesage/prisma";
-import Sentry from "@sentry/node";
+import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
 import jsdom from "jsdom";
-import { cleanLabelTitle, JOB_RESULT_CODES } from "@recipesage/util/shared";
+import { cleanLabelTitle } from "@recipesage/util/shared";
 import {
   deletePathsSilent,
-  getImportJobResultCode,
+  importJobFailCommon,
+  importJobFinishCommon,
+  importJobSetupCommon,
 } from "@recipesage/util/server/general";
 import { z } from "zod";
 
@@ -39,8 +34,7 @@ export const recipekeeperHandler = defineHandler(
     ],
   },
   async (req, res) => {
-    const userLabels =
-      req.query.labels?.split(",").map((label) => cleanLabelTitle(label)) || [];
+    const userId = res.locals.session.userId;
 
     const cleanupPaths: string[] = [];
 
@@ -51,17 +45,10 @@ export const recipekeeperHandler = defineHandler(
       );
     }
 
-    const job = await prisma.job.create({
-      data: {
-        userId: res.locals.session.userId,
-        type: JobType.IMPORT,
-        status: JobStatus.RUN,
-        progress: 1,
-        meta: {
-          importType: "recipekeeper",
-          importLabels: userLabels,
-        } satisfies JobMeta,
-      },
+    const { job, timer, importLabels } = await importJobSetupCommon({
+      userId,
+      importType: "recipekeeper",
+      labels: req.query.labels?.split(",") || [],
     });
 
     // We complete this work outside of the scope of the request
@@ -177,92 +164,27 @@ export const recipekeeperHandler = defineHandler(
             rating,
           },
 
-          labels: [...labels, ...userLabels],
+          labels: [...labels, ...importLabels],
           images: imagePaths,
         });
       }
 
-      if (standardizedRecipeImportInput.length === 0) {
-        throw new Error("No recipes");
-      }
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 50,
-        },
-      });
-
-      const createdRecipeIds = await importStandardizedRecipes(
-        res.locals.session.userId,
+      await importJobFinishCommon({
+        timer,
+        job,
+        userId,
         standardizedRecipeImportInput,
-        extractPath,
-      );
-
-      const recipesToIndex = await prisma.recipe.findMany({
-        where: {
-          id: {
-            in: createdRecipeIds,
-          },
-          userId: res.locals.session.userId,
-        },
-      });
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          progress: 75,
-        },
-      });
-
-      await indexRecipes(recipesToIndex);
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          status: JobStatus.SUCCESS,
-          resultCode: JOB_RESULT_CODES.success,
-          progress: 100,
-        },
+        importTempDirectory: extractPath,
       });
     };
 
     start()
-      .catch(async (e) => {
-        const isBadFormatError =
-          e instanceof BadRequestError &&
-          e.message === "Bad cookmate file format";
-
-        const isNoRecipesError =
-          e instanceof Error && e.message === "No recipes";
-
-        await prisma.job.update({
-          where: {
-            id: job.id,
-          },
-          data: {
-            status: JobStatus.FAIL,
-            resultCode: getImportJobResultCode({
-              isBadFormat: isBadFormatError,
-              isNoRecipes: isNoRecipesError,
-            }),
-          },
+      .catch(async (error) => {
+        await importJobFailCommon({
+          timer,
+          job,
+          error,
         });
-
-        if (!isBadFormatError && !isNoRecipesError) {
-          Sentry.captureException(e, {
-            extra: {
-              jobId: job.id,
-            },
-          });
-          console.error(e);
-        }
       })
       .finally(async () => {
         await deletePathsSilent(cleanupPaths);
