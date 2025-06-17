@@ -38,7 +38,6 @@
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "useInferencePlugins": false,
   "defaultBase": "master",
   "tui": {
     "enabled": false

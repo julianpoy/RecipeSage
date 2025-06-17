@@ -62,7 +62,7 @@ jobs:
           command: dockerize -wait tcp://localhost:3000 -timeout 30s
       - run:
           name: lint, typecheck, test, build
-          command: npx nx run-many --targets=lint,typecheck,test,build --output-style=static
+          command: npx nx run-many --targets=lint,typecheck,test,build --output-style=static --verbose
           environment:
             APP_VERSION: ci
             ENVIRONMENT: production
