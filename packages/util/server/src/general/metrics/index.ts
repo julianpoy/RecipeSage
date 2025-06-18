@@ -77,10 +77,13 @@ export const metrics = {
       "method", // Either 'jsdom' or 'puppeteer'
     ],
   }),
-  clipFallbackJsdom: new client.Counter({
-    name: "clip_fallback_jsdom",
+  clipSuccess: new client.Counter({
+    name: "clip_success",
     help: "A clip request fell back to jsdom",
-    labelNames: [],
+    labelNames: [
+      "form", // Either 'html' or 'url'
+      "method", // One of: 'jsdom' | 'puppeteer' | 'gpt' | 'merged'
+    ],
   }),
   clipError: new client.Counter({
     name: "clip_error",
