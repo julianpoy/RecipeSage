@@ -1,3 +1,4 @@
+import { metrics } from "../general";
 import { IS_FIREBASE_AVAILABLE } from "../general/isFirebaseAvailable";
 import { ocrImageBuffer } from "./ocr";
 import { TextToRecipeInputType, textToRecipe } from "./textToRecipe";
@@ -15,6 +16,8 @@ export const ocrImagesToRecipe = async (imageBuffers: Buffer[]) => {
       imageBuffers.map((imageBuffer) => imageBuffer.toString("base64")),
       VisionToRecipeInputType.Photo,
     );
+    metrics.convertImagesToRecipe.inc();
+
     return recognizedRecipe;
   }
 
@@ -28,6 +31,8 @@ export const ocrImagesToRecipe = async (imageBuffers: Buffer[]) => {
     recipeText,
     TextToRecipeInputType.OCR,
   );
+
+  metrics.convertImagesToRecipe.inc();
 
   return recognizedRecipe;
 };

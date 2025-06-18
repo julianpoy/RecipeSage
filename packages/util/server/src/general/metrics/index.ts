@@ -90,6 +90,27 @@ export const metrics = {
       "method", // Either 'jsdom' or 'puppeteer'
     ],
   }),
+
+  convertImagesToRecipe: new client.Counter({
+    name: "convert_images_to_recipe",
+    help: "A image was converted to a recipe",
+    labelNames: [],
+  }),
+  convertTextToRecipe: new client.Counter({
+    name: "convert_text_to_recipe",
+    help: "Text was converted to a recipe",
+    labelNames: [],
+  }),
+  convertPDFToRecipe: new client.Counter({
+    name: "convert_pdf_to_recipe",
+    help: "PDF was converted to a recipe",
+    labelNames: [],
+  }),
+  convertImageToText: new client.Counter({
+    name: "convert_image_to_text",
+    help: "Image was converted to text",
+    labelNames: [],
+  }),
 };
 
 // Collect default system metrics (such as memory/cpu usage)
