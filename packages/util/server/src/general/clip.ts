@@ -17,10 +17,8 @@ const pool = workerpool.pool(join(__dirname, "./clipJsdomWorker.ts"), {
   workerType: "thread",
   workerThreadOpts: {
     execArgv: [
-      "--require",
-      "ts-node/register",
-      "-r",
-      "tsconfig-paths/register",
+      "--experimental-strip-types",
+      "--disable-warning=ExperimentalWarning",
     ],
   },
 });
