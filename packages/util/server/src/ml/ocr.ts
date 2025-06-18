@@ -1,5 +1,6 @@
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { join } from "path";
+import { metrics } from "../general";
 
 export const ocrImageBuffer = async (
   imageBuffer: Buffer,
@@ -16,6 +17,8 @@ export const ocrImageBuffer = async (
       return el.fullTextAnnotation?.text;
     })
     .filter((el): el is string => !!el);
+
+  metrics.convertImageToText.inc();
 
   return text;
 };

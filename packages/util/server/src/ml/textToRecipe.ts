@@ -1,6 +1,7 @@
 import { initOCRFormatRecipe } from "../ml/chatFunctions";
 import { OpenAIHelper, SupportedGPTModel } from "../ml/openai";
 import { StandardizedRecipeImportEntry } from "../db";
+import { metrics } from "../general";
 
 const openAiHelper = new OpenAIHelper();
 
@@ -54,6 +55,8 @@ export const textToRecipe = async (
       },
     },
   );
+
+  metrics.convertTextToRecipe.inc();
 
   const recognizedRecipe = recognizedRecipes[0];
 

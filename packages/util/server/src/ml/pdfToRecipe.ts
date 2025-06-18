@@ -1,3 +1,4 @@
+import { metrics } from "../general";
 import { extractTextFromPDF } from "../general/extractTextFromPDF";
 import { pdfToImage } from "../general/pdfToImage";
 import { ocrImagesToRecipe } from "./ocrImagesToRecipe";
@@ -23,6 +24,8 @@ export const pdfToRecipe = async (pdf: Buffer, maxPages = 1) => {
     }
     return ocrImagesToRecipe(images);
   }
+
+  metrics.convertPDFToRecipe.inc();
 
   const recipe = await textToRecipe(text, TextToRecipeInputType.Document);
 
