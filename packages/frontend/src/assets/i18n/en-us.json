@@ -711,7 +711,7 @@
   "pages.import.textFiles": "Import from text files",
   "pages.import.enex": "Import from Evernote file",
   "pages.import.urls": "Import from a list of URLs",
-  "pages.import.csv": "Import from CSV (PlanToEat & others)",
+  "pages.import.csv": "Import from CSV (PlanToEat, MyRecipeBox & others)",
   "pages.import.pdfs": "Import from PDFs",
   "pages.import.images": "Import from images",
   "pages.import.fileTooLarge": "This file is too large to upload directly.",
