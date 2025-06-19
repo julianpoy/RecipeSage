@@ -6,7 +6,12 @@ import {
 import multer from "multer";
 import { createReadStream } from "fs";
 import { StandardizedRecipeImportEntry } from "@recipesage/util/server/db";
-import { capitalizeEachWord, cleanLabelTitle } from "@recipesage/util/shared";
+import {
+  capitalizeEachWord,
+  cleanLabelTitle,
+  toCamelCase,
+  toPascalCase,
+} from "@recipesage/util/shared";
 import {
   deletePathsSilent,
   importJobFailCommon,
@@ -67,7 +72,9 @@ export const csvHandler = defineHandler(
           const val =
             record[entry] ||
             record[entry.toUpperCase()] ||
-            record[capitalizeEachWord(entry)];
+            record[capitalizeEachWord(entry)] ||
+            record[toCamelCase(entry)] ||
+            record[toPascalCase(entry)];
           if (val) return val;
         }
 
@@ -95,11 +102,11 @@ export const csvHandler = defineHandler(
               const title = getSimilarFields(["title", "name"], record);
               const description = getSimilarFields(["description"], record);
               const yld = getSimilarFields(
-                ["yield", "serves", "servings"],
+                ["yield", "serves", "servings", "quantity"],
                 record,
               );
               const activeTime = getSimilarFields(
-                ["active time", "prep time"],
+                ["active time", "prep time", "preparation time"],
                 record,
               );
               const totalTime = getSimilarFields(
@@ -113,7 +120,13 @@ export const csvHandler = defineHandler(
               );
               const url = getSimilarFields(["url"], record);
               const source = getSimilarFields(["source"], record);
-              const notes = getSimilarFields(["notes"], record);
+              const notes = [
+                getSimilarFields(["notes"], record),
+                getSimilarFields(["nutrition"], record),
+                getSimilarFields(["video", "videos"], record),
+              ]
+                .filter((el) => el.trim())
+                .join("\n");
               const imageURLs = negotiateUrls(
                 getSimilarFields(
                   [
@@ -124,6 +137,7 @@ export const csvHandler = defineHandler(
                     "photos",
                     "photo urls",
                     "photo url",
+                    "original picture",
                   ],
                   record,
                 ),
