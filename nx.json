@@ -38,8 +38,15 @@
     "appsDir": "packages",
     "libsDir": "packages"
   },
-  "useDaemonProcess": false,
-  "neverConnectToCloud": true,
-  "useInferencePlugins": false,
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "tui": {
+    "enabled": false
+  },
+  "s3": {
+    "region": "us-east-1",
+    "bucket": "recipesage-nx-cache",
+    "forcePathStyle": true,
+    "localMode": "no-cache",
+    "ciMode": "read-write"
+  }
 }
