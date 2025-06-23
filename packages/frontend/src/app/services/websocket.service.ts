@@ -114,12 +114,12 @@ export class WebsocketService {
   }
 
   private queueReconnect() {
-    const RECONNECT_TIMEOUT_WAIT = 2000 + Math.floor(Math.random() * 5000); // Time to wait before attempting reconnect in MS
+    const RECONNECT_TIMEOUT_WAIT = 1000 + Math.floor(Math.random() * 10000); // Time to wait before attempting reconnect in MS
 
     if (this.reconnectTimeout) return;
 
     this.reconnectTimeout = setTimeout(async () => {
-      this.connect();
+      this.triggerReconnect();
       this.reconnectTimeout = undefined;
     }, RECONNECT_TIMEOUT_WAIT);
   }
