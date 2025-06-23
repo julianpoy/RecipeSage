@@ -13,6 +13,7 @@ import { register } from "./register";
 import { signInWithGoogle } from "./signInWithGoogle";
 import { updatePreferences } from "./updatePreferences";
 import { updateUser } from "./updateUser";
+import { validateSession } from "./validateSession";
 
 export const usersRouter = router({
   getMe,
@@ -29,4 +30,5 @@ export const usersRouter = router({
   forgotPassword,
   deleteUser,
   updateUser,
+  validateSession,
 });
