@@ -112,7 +112,7 @@
     "pages.homeSearchFilterPopover.title": "Filter suchen",
     "pages.homeSearchFilterPopover.filterByRating": "Nach Bewertung filtern",
     "pages.homeSearchFilterPopover.filterByLabel": "Nach Label filtern",
-    "pages.homeSearchFilterPopover.matchAllLabels": "Alle Etiketten anpassen",
+    "pages.homeSearchFilterPopover.matchAllLabels": "Etiketten filtern mit 'und' statt mit 'oder'",
     "pages.homeSearchFilterPopover.includeFriends": "Freunde anzeigen Rezepte",
     "pages.homeSearchFilterPopover.includeFriends.yes": "Immer",
     "pages.homeSearchFilterPopover.includeFriends.search": "Nur in den Suchergebnissen",
